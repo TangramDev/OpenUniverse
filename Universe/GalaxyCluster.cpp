@@ -67,8 +67,6 @@ CGalaxyCluster::~CGalaxyCluster()
 #ifdef _DEBUG
 	g_pHubble->m_nTangram--;
 #endif	
-	//if(g_pHubble->m_nTangram==0)
-	//	return;
 
 	for (auto it2 : m_mapExternalObj)
 	{
