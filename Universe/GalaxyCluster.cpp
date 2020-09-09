@@ -21,7 +21,7 @@
 
 CStarCommonData::CStarCommonData()
 {
-	m_pOldQuasar			= nullptr;
+	m_pOldQuasar		= nullptr;
 	m_pTangramParse		= nullptr;
 	m_pHostClientView	= nullptr;
 #ifdef _DEBUG
@@ -52,7 +52,7 @@ CGalaxyCluster::CGalaxyCluster()
 	m_strPageFilePath					= _T("");
 	m_strConfigFileNodeName				= _T("tangramdefaultpage");
 	m_pBKFrame							= nullptr;
-	g_pHubble->m_pGalaxyCluster	= this;
+	g_pHubble->m_pGalaxyCluster			= this;
 	m_pUniverseAppProxy					= nullptr;
 
 #ifdef _DEBUG
