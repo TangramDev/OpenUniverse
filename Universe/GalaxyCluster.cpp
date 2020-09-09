@@ -54,7 +54,6 @@ CGalaxyCluster::CGalaxyCluster()
 	m_pBKFrame							= nullptr;
 	g_pHubble->m_pGalaxyCluster			= this;
 	m_pUniverseAppProxy					= nullptr;
-
 #ifdef _DEBUG
 	g_pHubble->m_nTangram++;
 #endif	
