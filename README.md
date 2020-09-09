@@ -1,2 +1,2 @@
 # OpenUniverse
-New StartPoint
+New Start Point
