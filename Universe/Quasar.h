@@ -14,7 +14,7 @@
 #pragma once
 #include "chromium/HtmlWnd.h"
 
-using namespace ChromePlus;
+using namespace World;
 #define WM_TANGRAMNOTIFY WM_NOTIFY+WM_REFLECT_BASE
 
 class CWinForm :

@@ -23,7 +23,7 @@
 #include "BrowserWnd.h"
 #include "../Markup.h" 
 
-namespace ChromePlus {
+namespace World {
 	CGalileo::CGalileo() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
@@ -57,7 +57,7 @@ namespace ChromePlus {
 		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
 		if (it != g_pHubble->m_mapBrowserWnd.end())
 		{
-			pParent = (ChromePlus::CHerschel*)it->second;
+			pParent = (World::CHerschel*)it->second;
 		}
 		HWND hPWnd = ::GetParent(pParent->m_hWnd);
 		if (hPWnd != NULL)
@@ -303,11 +303,11 @@ namespace ChromePlus {
 					hNewPWnd = hNewPWnd2;
 					bNewParent = true;
 				}
-				ChromePlus::CHerschel* pChromeBrowserWnd = nullptr;
+				World::CHerschel* pChromeBrowserWnd = nullptr;
 				auto it = g_pHubble->m_mapBrowserWnd.find(hNewPWnd);
 				if (it != g_pHubble->m_mapBrowserWnd.end())
 				{
-					pChromeBrowserWnd = (ChromePlus::CHerschel*)it->second;
+					pChromeBrowserWnd = (World::CHerschel*)it->second;
 					g_pHubble->m_pActiveBrowser = pChromeBrowserWnd->m_pBrowser;
 					if (pChromeBrowserWnd && m_hExtendWnd) {
 						if (::IsWindowVisible(m_hWnd)) {
@@ -332,7 +332,7 @@ namespace ChromePlus {
 				else
 				{
 					if (::IsWindowVisible(hNewPWnd)) {
-						pChromeBrowserWnd = new CComObject<ChromePlus::CHerschel>();
+						pChromeBrowserWnd = new CComObject<World::CHerschel>();
 						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
 						g_pHubble->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
 						pChromeBrowserWnd->m_pBrowser = g_pHubble->m_pActiveBrowser;
@@ -1320,4 +1320,4 @@ namespace ChromePlus {
 		}
 		return S_OK;
 	}
-}  // namespace ChromePlus
+}  // namespace Universe

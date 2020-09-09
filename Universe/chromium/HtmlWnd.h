@@ -16,7 +16,7 @@
 #include "../stdafx.h"
 
 class CWinForm;
-namespace ChromePlus
+namespace World
 {
 	/*About CGalileo:
 	* Galileo Galileo (1564-1642) was a great astronomer, mechanist, philosopher, 

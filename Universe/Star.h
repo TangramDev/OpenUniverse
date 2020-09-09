@@ -95,7 +95,7 @@ public:
 	IHubbleWindow*					m_pWindow;
 	CMDIChildFormInfo*				m_pChildFormsInfo;
 	CStarCommonData*				m_pStarCommonData;
-	ChromePlus::CHerschel*			m_pWebBrowser;
+	World::CHerschel*				m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CQuasar*						m_pHostQuasar;
 	CRuntimeClass*					m_pObjClsInfo;
@@ -119,7 +119,7 @@ public:
 	BOOL	AddChildNode(CStar* pNode);
 	BOOL	RemoveChildNode(CStar* pNode);
 	CString GetNames();
-	ChromePlus::CGalileo* GetHtmlWnd();
+	World::CGalileo* GetHtmlWnd();
 	void NodeCreated();
 
 	HRESULT Fire_OpenComplete();

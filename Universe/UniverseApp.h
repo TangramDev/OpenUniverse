@@ -15,13 +15,13 @@
 
 #pragma once
 
-namespace ChromePlus
+namespace World
 {
 	class CHerschel;
 	class CGalileo;
 }
 
-using namespace ChromePlus;
+using namespace World;
 
 typedef HRESULT(__stdcall* HubbleCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 

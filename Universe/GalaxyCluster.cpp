@@ -305,7 +305,7 @@ STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BS
 			if (it == m_mapQuasar.end())
 			{
 				DWORD dwID = ::GetWindowThreadProcessId(_hWnd, NULL);
-				TangramThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+				CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
 
 				CQuasar* m_pExtenderQuasar = new CComObject<CQuasar>();
 				CString strName = strFrameName;

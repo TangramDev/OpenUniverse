@@ -20,7 +20,7 @@
 #include "BrowserWnd.h"
 #include "HtmlWnd.h"
 
-namespace ChromePlus {
+namespace World {
 	CHerschel::CHerschel() {
 		m_hDrawWnd = 0;
 		m_heightfix = 0;
@@ -418,8 +418,8 @@ namespace ChromePlus {
 			g_pHubble->m_bChromeNeedClosed = true;
 			for (auto it : g_pHubble->m_mapBrowserWnd)
 			{
-				if (((ChromePlus::CHerschel*)it.second)->m_hWnd != m_hWnd)
-					((ChromePlus::CHerschel*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				if (((World::CHerschel*)it.second)->m_hWnd != m_hWnd)
+					((World::CHerschel*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
 			}
 		}
 
@@ -454,7 +454,7 @@ namespace ChromePlus {
 		return lRes;
 	}
 
-	LRESULT ChromePlus::CHerschel::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT World::CHerschel::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 		if (g_pHubble->m_pCLRProxy)
@@ -594,4 +594,4 @@ namespace ChromePlus {
 		}
 		return S_OK;
 	}
-}  // namespace ChromePlus
+}  // namespace Universe

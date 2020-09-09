@@ -48,7 +48,7 @@
 #include <sys/stat.h>
 #include "Markup.h"
 
-using namespace ChromePlus;
+using namespace World;
 
 // CHubble
 
@@ -850,9 +850,9 @@ void CHubble::ExitInstance()
 	m_mapValInfo.clear();
 }
 
-TangramThreadInfo* CHubble::GetThreadInfo(DWORD ThreadID)
+CommonThreadInfo* CHubble::GetThreadInfo(DWORD ThreadID)
 {
-	TangramThreadInfo* pInfo = nullptr;
+	CommonThreadInfo* pInfo = nullptr;
 
 	DWORD nThreadID = ThreadID;
 	if (nThreadID == 0)
@@ -864,7 +864,7 @@ TangramThreadInfo* CHubble::GetThreadInfo(DWORD ThreadID)
 	}
 	else
 	{
-		pInfo = new TangramThreadInfo();
+		pInfo = new CommonThreadInfo();
 		pInfo->m_hGetMessageHook = NULL;
 		m_mapThreadInfo[nThreadID] = pInfo;
 	}
@@ -901,7 +901,7 @@ void CHubble::ProcessMsg(LPMSG lpMsg)
 				HWND _hPWnd = ::GetParent(hPWnd);
 				if (_hPWnd == nullptr)
 				{
-					ChromePlus::CHerschel* pBrowserWnd = (ChromePlus::CHerschel*)it->second;
+					CHerschel* pBrowserWnd = (CHerschel*)it->second;
 					if (pBrowserWnd->m_pOmniboxViewViews && pBrowserWnd->m_pOmniboxViewViews->IsFocused() == false)
 						return;
 					CGalileo* pWnd = pBrowserWnd->m_pVisibleWebWnd;
@@ -2085,7 +2085,7 @@ STDMETHODIMP CHubble::GetQuasar(LONGLONG hHostWnd, IQuasar** ppQuasar)
 {
 	HWND m_hHostMain = (HWND)hHostWnd;
 	DWORD dwID = ::GetWindowThreadProcessId(m_hHostMain, NULL);
-	TangramThreadInfo* pThreadInfo = GetThreadInfo(dwID);
+	CommonThreadInfo* pThreadInfo = GetThreadInfo(dwID);
 
 	CQuasar* m_pQuasar = nullptr;
 	auto iter = pThreadInfo->m_mapQuasar.find(m_hHostMain);

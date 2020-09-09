@@ -242,7 +242,7 @@ CGalileo* CStar::GetHtmlWnd()
 			::GetClassName(hWnd, g_pHubble->m_szBuffer, 256);
 			CString strName = CString(g_pHubble->m_szBuffer);
 			if (strName == _T("Chrome Extended Window Class")) {
-				return (ChromePlus::CGalileo*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+				return (CGalileo*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			}
 		}
 		else
@@ -446,7 +446,7 @@ STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IS
 			m_mapExtendNode[pWindowNode] = strKey;
 			pWindowNode->m_pCurrentExNode = pRootNode;
 			::SetWindowLongPtr(pRootNode->m_pHostWnd->m_hWnd, GWLP_ID, dwID);
-			ChromePlus::CGalileo* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
+			CGalileo* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
 			if (pWebWnd)
 			{
 				if (pWindowNode->m_pHostQuasar->m_pBindingStar)
@@ -1052,7 +1052,7 @@ HWND CStar::CreateView(HWND hParentWnd, CString strTag)
 		::GetClassName(_hWnd, g_pHubble->m_szBuffer, 256);
 		CString strName = CString(g_pHubble->m_szBuffer);
 		if (strName == _T("Chrome Extended Window Class")) {
-			pHtmlWnd = (ChromePlus::CGalileo*)::GetWindowLongPtr(_hWnd, GWLP_USERDATA);
+			pHtmlWnd = (CGalileo*)::GetWindowLongPtr(_hWnd, GWLP_USERDATA);
 		}
 	}
 

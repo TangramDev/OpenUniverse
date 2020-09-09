@@ -13,7 +13,7 @@
 
 #pragma once
 
-namespace ChromePlus {
+namespace World {
 	using namespace ATL;
 	class CGalileo;
 

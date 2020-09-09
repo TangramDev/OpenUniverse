@@ -30,7 +30,7 @@
 #include "chromium\BrowserWnd.h"
 #include "chromium\HtmlWnd.h"
 
-using namespace ChromePlus;
+using namespace World;
 
 // Description  : the unique App object
 CUniverse theUniverse;
@@ -596,7 +596,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 {
 	LPMSG lpMsg = (LPMSG)lParam;
 	DWORD dwID = ::GetCurrentThreadId();
-	TangramThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
 	if (lpMsg->message == WM_TIMER)
 		return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 	if (nCode >= 0)
@@ -1052,7 +1052,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					g_pHubble->m_bChromeNeedClosed = true;
 					auto it = g_pHubble->m_mapBrowserWnd.begin();
-					((ChromePlus::CHerschel*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
+					((World::CHerschel*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
 				}
 			}
 			break;
@@ -1094,7 +1094,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 
 void CUniverse::SetHook(DWORD ThreadID)
 {
-	TangramThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(ThreadID);
+	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(ThreadID);
 	if (pThreadInfo && pThreadInfo->m_hGetMessageHook == NULL)
 	{
 		pThreadInfo->m_hGetMessageHook = SetWindowsHookEx(WH_GETMESSAGE, GetMessageProc, NULL, ThreadID);

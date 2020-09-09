@@ -352,7 +352,7 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			HWND hWnd = ::GetParent(m_hWnd);
 
 			DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
-			TangramThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+			CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
 
 			CQuasar* pQuasar = nullptr;
 			auto iter = pThreadInfo->m_mapQuasar.find(hWnd);
@@ -911,7 +911,7 @@ STDMETHODIMP CQuasar::ModifyHost(LONGLONG hHostWnd)
 			m_pGalaxyCluster->m_mapWnd[m_strQuasarName] = _hHostWnd;
 			DWORD dwID = ::GetWindowThreadProcessId(_hHostWnd, NULL);
 			TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
-			TangramThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+			CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
 			theUniverse.SetHook(dwID);
 			auto iter = pThreadInfo->m_mapQuasar.find(m_hWnd);
 			if (iter != pThreadInfo->m_mapQuasar.end()) {
@@ -987,7 +987,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 	}
 	DWORD dwID = ::GetWindowThreadProcessId(m_hHostWnd, NULL);
 	TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
-	TangramThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
 	theUniverse.SetHook(dwID);
 
 	CString strCurrentKey = OLE2T(bstrKey);
@@ -1408,7 +1408,7 @@ LRESULT CQuasar::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 	DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 	TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
-	TangramThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
 	if (pThreadInfo)
 	{
 		//theApp.SetHook(dwID);
@@ -1433,7 +1433,7 @@ LRESULT CQuasar::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case WM_BROWSERLAYOUT:
 	{
-		ChromePlus::CGalileo* pWebWnd = (ChromePlus::CGalileo*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		World::CGalileo* pWebWnd = (World::CGalileo*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 		::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
 	}
 	break;

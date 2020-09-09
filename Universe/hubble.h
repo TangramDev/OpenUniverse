@@ -20,10 +20,10 @@
 
 #pragma once
 
-using namespace ChromePlus;
+using namespace World;
 using namespace CommonUniverse;
 class CWinForm;
-struct TangramThreadInfo
+struct CommonThreadInfo
 {
 	HHOOK					m_hGetMessageHook;
 	map<HWND, CQuasar*>		m_mapQuasar;
@@ -246,7 +246,7 @@ public:
 	CString GetPropertyFromObject(IDispatch* pObj, CString strPropertyName);
 	LRESULT Close(void);
 	CStar* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
-	TangramThreadInfo* GetThreadInfo(DWORD dwInfo = 0);
+	CommonThreadInfo* GetThreadInfo(DWORD dwInfo = 0);
 
 	virtual void CreateCommonDesignerToolBar();
 	virtual void ProcessMsg(LPMSG lpMsg);
@@ -288,7 +288,7 @@ private:
 	CString								m_strExcludeAppExtenderIDs;
 	CWindow								m_HelperWnd;
 	CComObject<CStarCollection>*		m_pRootNodes;
-	map<DWORD, TangramThreadInfo*>		m_mapThreadInfo;
+	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
 
 	void HubbleLoad();
 	bool CheckUrl(CString&   url);

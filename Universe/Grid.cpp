@@ -437,7 +437,8 @@ void CGrid::StopTracking(BOOL bAccept)
 			g_pHubble->m_pDesignWindowNode->m_pRootObj->get_DocXml(&bstrXml);
 			g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
 		}
-		ChromePlus::CGalileo* pWebWnd = nullptr;
+
+		World::CGalileo* pWebWnd = nullptr;
 		if (pQuasar->m_pWebPageWnd)
 		{
 			pWebWnd = pQuasar->m_pWebPageWnd;
