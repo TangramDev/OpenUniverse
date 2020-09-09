@@ -1,0 +1,58 @@
+/********************************************************************************
+*					Open Universe - version 0.0.1								*
+*********************************************************************************
+* Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
+*
+* This SOURCE CODE is governed by a BSD - style license that can be
+* found in the LICENSE file.
+*
+* CONTACT INFORMATION:
+* mailto:tangramteam@outlook.com
+* https://www.tangram.dev
+********************************************************************************/
+
+#pragma once
+
+class CStarWnd : public CWnd
+{
+	DECLARE_DYNCREATE(CStarWnd)
+public:
+	BOOL					m_bNoMove;
+	BOOL					m_bBKWnd;
+	BOOL					m_bEraseBkgnd;
+	BOOL					m_bCreateExternal;
+	HWND					m_hFormWnd;
+
+	CString					m_strKey;
+	CString					m_strXml;
+
+	CStar*					m_pStar;
+	CStar*					m_pParentStar;
+
+	map<CString, HWND>		m_mapDockCtrl;
+	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
+
+	BOOL PreTranslateMessage(MSG* pMsg);
+	BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+
+protected:
+	CStarWnd();           // protected constructor used by dynamic creation
+	virtual ~CStarWnd();
+	void PostNcDestroy();
+	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+	afx_msg void OnDestroy();
+	afx_msg void OnWindowPosChanged(WINDOWPOS* lpwndpos);
+	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
+	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
+	afx_msg LRESULT OnHubbleMsg(WPARAM wParam,LPARAM lParam);
+	afx_msg LRESULT OnTabChange(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnGetTangramObj(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSplitterReposition(WPARAM wParam, LPARAM lParam);
+	DECLARE_MESSAGE_MAP()
+};

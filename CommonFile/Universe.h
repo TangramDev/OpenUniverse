@@ -1,0 +1,7247 @@
+
+
+/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+
+
+ /* File created by MIDL compiler version 8.01.0622 */
+/* at Tue Jan 19 11:14:07 2038
+ */
+/* Compiler settings for ..\CommonFile\Universe.idl:
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.01.0622 
+    protocol : all , ms_ext, c_ext, robust
+    error checks: allocation ref bounds_check enum stub_data 
+    VC __declspec() decoration level: 
+         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
+         DECLSPEC_UUID(), MIDL_INTERFACE()
+*/
+/* @@MIDL_FILE_HEADING(  ) */
+
+
+
+/* verify that the <rpcndr.h> version is high enough to compile this file*/
+#ifndef __REQUIRED_RPCNDR_H_VERSION__
+#define __REQUIRED_RPCNDR_H_VERSION__ 500
+#endif
+
+#include "rpc.h"
+#include "rpcndr.h"
+
+#ifndef __RPCNDR_H_VERSION__
+#error this stub requires an updated version of <rpcndr.h>
+#endif /* __RPCNDR_H_VERSION__ */
+
+#ifndef COM_NO_WINDOWS_H
+#include "windows.h"
+#include "ole2.h"
+#endif /*COM_NO_WINDOWS_H*/
+
+#ifndef __Universe_h__
+#define __Universe_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
+/* Forward Declarations */ 
+
+#ifndef __IHubbleExtender_FWD_DEFINED__
+#define __IHubbleExtender_FWD_DEFINED__
+typedef interface IHubbleExtender IHubbleExtender;
+
+#endif 	/* __IHubbleExtender_FWD_DEFINED__ */
+
+
+#ifndef __IEclipseExtender_FWD_DEFINED__
+#define __IEclipseExtender_FWD_DEFINED__
+typedef interface IEclipseExtender IEclipseExtender;
+
+#endif 	/* __IEclipseExtender_FWD_DEFINED__ */
+
+
+#ifndef __IOfficeExtender_FWD_DEFINED__
+#define __IOfficeExtender_FWD_DEFINED__
+typedef interface IOfficeExtender IOfficeExtender;
+
+#endif 	/* __IOfficeExtender_FWD_DEFINED__ */
+
+
+#ifndef __IVSExtender_FWD_DEFINED__
+#define __IVSExtender_FWD_DEFINED__
+typedef interface IVSExtender IVSExtender;
+
+#endif 	/* __IVSExtender_FWD_DEFINED__ */
+
+
+#ifndef __IVSDocument_FWD_DEFINED__
+#define __IVSDocument_FWD_DEFINED__
+typedef interface IVSDocument IVSDocument;
+
+#endif 	/* __IVSDocument_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleTreeNode_FWD_DEFINED__
+#define __IHubbleTreeNode_FWD_DEFINED__
+typedef interface IHubbleTreeNode IHubbleTreeNode;
+
+#endif 	/* __IHubbleTreeNode_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleTreeViewCallBack_FWD_DEFINED__
+#define __IHubbleTreeViewCallBack_FWD_DEFINED__
+typedef interface IHubbleTreeViewCallBack IHubbleTreeViewCallBack;
+
+#endif 	/* __IHubbleTreeViewCallBack_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleTreeView_FWD_DEFINED__
+#define __IHubbleTreeView_FWD_DEFINED__
+typedef interface IHubbleTreeView IHubbleTreeView;
+
+#endif 	/* __IHubbleTreeView_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleEventObj_FWD_DEFINED__
+#define __IHubbleEventObj_FWD_DEFINED__
+typedef interface IHubbleEventObj IHubbleEventObj;
+
+#endif 	/* __IHubbleEventObj_FWD_DEFINED__ */
+
+
+#ifndef __IStar_FWD_DEFINED__
+#define __IStar_FWD_DEFINED__
+typedef interface IStar IStar;
+
+#endif 	/* __IStar_FWD_DEFINED__ */
+
+
+#ifndef __IAppExtender_FWD_DEFINED__
+#define __IAppExtender_FWD_DEFINED__
+typedef interface IAppExtender IAppExtender;
+
+#endif 	/* __IAppExtender_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleEditor_FWD_DEFINED__
+#define __IHubbleEditor_FWD_DEFINED__
+typedef interface IHubbleEditor IHubbleEditor;
+
+#endif 	/* __IHubbleEditor_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleDoc_FWD_DEFINED__
+#define __IHubbleDoc_FWD_DEFINED__
+typedef interface IHubbleDoc IHubbleDoc;
+
+#endif 	/* __IHubbleDoc_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleDocTemplate_FWD_DEFINED__
+#define __IHubbleDocTemplate_FWD_DEFINED__
+typedef interface IHubbleDocTemplate IHubbleDocTemplate;
+
+#endif 	/* __IHubbleDocTemplate_FWD_DEFINED__ */
+
+
+#ifndef __IHubble_FWD_DEFINED__
+#define __IHubble_FWD_DEFINED__
+typedef interface IHubble IHubble;
+
+#endif 	/* __IHubble_FWD_DEFINED__ */
+
+
+#ifndef __IQuasar_FWD_DEFINED__
+#define __IQuasar_FWD_DEFINED__
+typedef interface IQuasar IQuasar;
+
+#endif 	/* __IQuasar_FWD_DEFINED__ */
+
+
+#ifndef __IStarCollection_FWD_DEFINED__
+#define __IStarCollection_FWD_DEFINED__
+typedef interface IStarCollection IStarCollection;
+
+#endif 	/* __IStarCollection_FWD_DEFINED__ */
+
+
+#ifndef __IGalaxyCluster_FWD_DEFINED__
+#define __IGalaxyCluster_FWD_DEFINED__
+typedef interface IGalaxyCluster IGalaxyCluster;
+
+#endif 	/* __IGalaxyCluster_FWD_DEFINED__ */
+
+
+#ifndef __IWorkBenchWindow_FWD_DEFINED__
+#define __IWorkBenchWindow_FWD_DEFINED__
+typedef interface IWorkBenchWindow IWorkBenchWindow;
+
+#endif 	/* __IWorkBenchWindow_FWD_DEFINED__ */
+
+
+#ifndef __IBrowser_FWD_DEFINED__
+#define __IBrowser_FWD_DEFINED__
+typedef interface IBrowser IBrowser;
+
+#endif 	/* __IBrowser_FWD_DEFINED__ */
+
+
+#ifndef __IWebPage_FWD_DEFINED__
+#define __IWebPage_FWD_DEFINED__
+typedef interface IWebPage IWebPage;
+
+#endif 	/* __IWebPage_FWD_DEFINED__ */
+
+
+#ifndef __IOfficeObject_FWD_DEFINED__
+#define __IOfficeObject_FWD_DEFINED__
+typedef interface IOfficeObject IOfficeObject;
+
+#endif 	/* __IOfficeObject_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleCtrl_FWD_DEFINED__
+#define __IHubbleCtrl_FWD_DEFINED__
+typedef interface IHubbleCtrl IHubbleCtrl;
+
+#endif 	/* __IHubbleCtrl_FWD_DEFINED__ */
+
+
+#ifndef __IHubbleAppCtrl_FWD_DEFINED__
+#define __IHubbleAppCtrl_FWD_DEFINED__
+typedef interface IHubbleAppCtrl IHubbleAppCtrl;
+
+#endif 	/* __IHubbleAppCtrl_FWD_DEFINED__ */
+
+
+#ifndef __IEclipseCtrl_FWD_DEFINED__
+#define __IEclipseCtrl_FWD_DEFINED__
+typedef interface IEclipseCtrl IEclipseCtrl;
+
+#endif 	/* __IEclipseCtrl_FWD_DEFINED__ */
+
+
+#ifndef ___IHubble_FWD_DEFINED__
+#define ___IHubble_FWD_DEFINED__
+typedef interface _IHubble _IHubble;
+
+#endif 	/* ___IHubble_FWD_DEFINED__ */
+
+
+#ifndef __Universe_FWD_DEFINED__
+#define __Universe_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class Universe Universe;
+#else
+typedef struct Universe Universe;
+#endif /* __cplusplus */
+
+#endif 	/* __Universe_FWD_DEFINED__ */
+
+
+#ifndef ___IStarEvents_FWD_DEFINED__
+#define ___IStarEvents_FWD_DEFINED__
+typedef interface _IStarEvents _IStarEvents;
+
+#endif 	/* ___IStarEvents_FWD_DEFINED__ */
+
+
+#ifndef ___IHubbleObjEvents_FWD_DEFINED__
+#define ___IHubbleObjEvents_FWD_DEFINED__
+typedef interface _IHubbleObjEvents _IHubbleObjEvents;
+
+#endif 	/* ___IHubbleObjEvents_FWD_DEFINED__ */
+
+
+#ifndef ___IHubbleAppEvents_FWD_DEFINED__
+#define ___IHubbleAppEvents_FWD_DEFINED__
+typedef interface _IHubbleAppEvents _IHubbleAppEvents;
+
+#endif 	/* ___IHubbleAppEvents_FWD_DEFINED__ */
+
+
+#ifndef __HubbleCtrl_FWD_DEFINED__
+#define __HubbleCtrl_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class HubbleCtrl HubbleCtrl;
+#else
+typedef struct HubbleCtrl HubbleCtrl;
+#endif /* __cplusplus */
+
+#endif 	/* __HubbleCtrl_FWD_DEFINED__ */
+
+
+#ifndef __UniverseExtender_FWD_DEFINED__
+#define __UniverseExtender_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class UniverseExtender UniverseExtender;
+#else
+typedef struct UniverseExtender UniverseExtender;
+#endif /* __cplusplus */
+
+#endif 	/* __UniverseExtender_FWD_DEFINED__ */
+
+
+/* header files for imported files */
+#include "oaidl.h"
+#include "ocidl.h"
+
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
+
+/* interface __MIDL_itf_Universe_0000_0000 */
+/* [local] */ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef /* [helpstring] */ 
+enum BrowserWndOpenDisposition
+    {
+        UNKNOWN	= 0,
+        CURRENT_TAB	= 0x1,
+        SINGLETON_TAB	= 0x2,
+        NEW_FOREGROUND_TAB	= 0x3,
+        NEW_BACKGROUND_TAB	= 0x4,
+        NEW_POPUP	= 0x5,
+        NEW_WINDOW	= 0x6,
+        SAVE_TO_DISK	= 0x7,
+        OFF_THE_RECORD	= 0x8,
+        IGNORE_ACTION	= 0x9,
+        SWITCH_TO_TAB	= 0xa
+    } 	BrowserWndOpenDisposition;
+
+typedef /* [helpstring] */ 
+enum QuasarType
+    {
+        MDIClientQuasar	= 0,
+        MDIChildQuasar	= 0x1,
+        SDIQuasar	= 0x2,
+        CtrlBarQuasar	= 0x3,
+        WinFormMDIClientQuasar	= 0x4,
+        WinFormMDIChildQuasar	= 0x5,
+        WinFormQuasar	= 0x6,
+        EclipseWorkBenchQuasar	= 0x7,
+        EclipseViewQuasar	= 0x8,
+        EclipseSWTQuasar	= 0x9,
+        WinFormControlQuasar	= 0xa,
+        TabbedMDIClientQuasar	= 0xb,
+        NOQuasar	= 0x10a
+    } 	QuasarType;
+
+typedef /* [helpstring] */ 
+enum ObjEventType
+    {
+        TangramNode	= 0,
+        TangramDocEvent	= 0x1,
+        TangramNodeAllChildNode	= 0x2,
+        TangramDocAllQuasarAllChildNode	= 0x3,
+        TangramDocAllQuasarAllTopNode	= 0x4,
+        TangramQuasarAllTopNodeAllChildNode	= 0x5,
+        TangramQuasarAllTopNode	= 0x6,
+        GalaxyClusterAllQuasarAllTopNodeAllChildNode	= 0x7,
+        GalaxyClusterAllQuasarAllTopNode	= 0x8,
+        GalaxyClusterCtrlBarQuasarAllTopNodeAllChildNode	= 0x9,
+        GalaxyClusterCtrlBarQuasarAllTopNode	= 0xa,
+        GalaxyClusterNotCtrlBarQuasarAllTopNodeAllChildNode	= 0xb,
+        GalaxyClusterNotCtrlBarQuasarAllTopNode	= 0xc,
+        TangramDocAllCtrlBarQuasarAllChildNode	= 0xd,
+        TangramDocAllCtrlBarQuasar	= 0xe
+    } 	ObjEventType;
+
+typedef /* [helpstring] */ 
+enum StarType
+    {
+        BlankView	= 0x1,
+        ActiveX	= 0x2,
+        Splitter	= 0x4,
+        TabbedWnd	= 0x8,
+        CLRCtrl	= 0x10,
+        CLRForm	= 0x20,
+        CLRWnd	= 0x40,
+        TangramView	= 0x80,
+        TangramTreeView	= 0x100,
+        TangramListView	= 0x200,
+        TabCtrl	= 0x400,
+        TangramWPFCtrl	= 0x800
+    } 	StarType;
+
+
+
+extern RPC_IF_HANDLE __MIDL_itf_Universe_0000_0000_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_Universe_0000_0000_v0_0_s_ifspec;
+
+#ifndef __IHubbleExtender_INTERFACE_DEFINED__
+#define __IHubbleExtender_INTERFACE_DEFINED__
+
+/* interface IHubbleExtender */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleExtender;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120160101")
+    IHubbleExtender : public IDispatch
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveWorkBenchWindow( 
+            BSTR bstrID,
+            /* [retval][out] */ IWorkBenchWindow **pVal) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleExtenderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleExtender * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleExtender * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleExtender * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleExtender * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleExtender * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleExtender * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleExtender * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IHubbleExtender * This);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveWorkBenchWindow )( 
+            IHubbleExtender * This,
+            BSTR bstrID,
+            /* [retval][out] */ IWorkBenchWindow **pVal);
+        
+        END_INTERFACE
+    } IHubbleExtenderVtbl;
+
+    interface IHubbleExtender
+    {
+        CONST_VTBL struct IHubbleExtenderVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleExtender_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleExtender_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleExtender_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleExtender_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleExtender_Close(This)	\
+    ( (This)->lpVtbl -> Close(This) ) 
+
+#define IHubbleExtender_get_ActiveWorkBenchWindow(This,bstrID,pVal)	\
+    ( (This)->lpVtbl -> get_ActiveWorkBenchWindow(This,bstrID,pVal) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleExtender_INTERFACE_DEFINED__ */
+
+
+#ifndef __IEclipseExtender_INTERFACE_DEFINED__
+#define __IEclipseExtender_INTERFACE_DEFINED__
+
+/* interface IEclipseExtender */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEclipseExtender;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120160918")
+    IEclipseExtender : public IHubbleExtender
+    {
+    public:
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IEclipseExtenderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEclipseExtender * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEclipseExtender * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEclipseExtender * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEclipseExtender * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEclipseExtender * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEclipseExtender * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEclipseExtender * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IEclipseExtender * This);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveWorkBenchWindow )( 
+            IEclipseExtender * This,
+            BSTR bstrID,
+            /* [retval][out] */ IWorkBenchWindow **pVal);
+        
+        END_INTERFACE
+    } IEclipseExtenderVtbl;
+
+    interface IEclipseExtender
+    {
+        CONST_VTBL struct IEclipseExtenderVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEclipseExtender_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IEclipseExtender_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IEclipseExtender_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IEclipseExtender_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IEclipseExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IEclipseExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IEclipseExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IEclipseExtender_Close(This)	\
+    ( (This)->lpVtbl -> Close(This) ) 
+
+#define IEclipseExtender_get_ActiveWorkBenchWindow(This,bstrID,pVal)	\
+    ( (This)->lpVtbl -> get_ActiveWorkBenchWindow(This,bstrID,pVal) ) 
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IEclipseExtender_INTERFACE_DEFINED__ */
+
+
+#ifndef __IOfficeExtender_INTERFACE_DEFINED__
+#define __IOfficeExtender_INTERFACE_DEFINED__
+
+/* interface IOfficeExtender */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IOfficeExtender;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119631222")
+    IOfficeExtender : public IHubbleExtender
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddVBAFormsScript( 
+            IDispatch *OfficeObject,
+            BSTR bstrKey,
+            BSTR bstrXml) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitVBAForm( 
+            /* [in] */ IDispatch *newVal,
+            /* [in] */ long nStyle,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarFromVBAForm( 
+            IDispatch *pForm,
+            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetActiveTopStar( 
+            IDispatch *pForm,
+            /* [retval][out] */ IStar **WndNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObjectFromWnd( 
+            LONG hWnd,
+            /* [retval][out] */ IDispatch **ppObjFromWnd) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IOfficeExtenderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOfficeExtender * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOfficeExtender * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOfficeExtender * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IOfficeExtender * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IOfficeExtender * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IOfficeExtender * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IOfficeExtender * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IOfficeExtender * This);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveWorkBenchWindow )( 
+            IOfficeExtender * This,
+            BSTR bstrID,
+            /* [retval][out] */ IWorkBenchWindow **pVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddVBAFormsScript )( 
+            IOfficeExtender * This,
+            IDispatch *OfficeObject,
+            BSTR bstrKey,
+            BSTR bstrXml);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitVBAForm )( 
+            IOfficeExtender * This,
+            /* [in] */ IDispatch *newVal,
+            /* [in] */ long nStyle,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarFromVBAForm )( 
+            IOfficeExtender * This,
+            IDispatch *pForm,
+            /* [retval][out] */ IQuasar **ppQuasar);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetActiveTopStar )( 
+            IOfficeExtender * This,
+            IDispatch *pForm,
+            /* [retval][out] */ IStar **WndNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObjectFromWnd )( 
+            IOfficeExtender * This,
+            LONG hWnd,
+            /* [retval][out] */ IDispatch **ppObjFromWnd);
+        
+        END_INTERFACE
+    } IOfficeExtenderVtbl;
+
+    interface IOfficeExtender
+    {
+        CONST_VTBL struct IOfficeExtenderVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IOfficeExtender_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IOfficeExtender_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IOfficeExtender_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IOfficeExtender_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IOfficeExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IOfficeExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IOfficeExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IOfficeExtender_Close(This)	\
+    ( (This)->lpVtbl -> Close(This) ) 
+
+#define IOfficeExtender_get_ActiveWorkBenchWindow(This,bstrID,pVal)	\
+    ( (This)->lpVtbl -> get_ActiveWorkBenchWindow(This,bstrID,pVal) ) 
+
+
+#define IOfficeExtender_AddVBAFormsScript(This,OfficeObject,bstrKey,bstrXml)	\
+    ( (This)->lpVtbl -> AddVBAFormsScript(This,OfficeObject,bstrKey,bstrXml) ) 
+
+#define IOfficeExtender_InitVBAForm(This,newVal,nStyle,bstrXml,ppNode)	\
+    ( (This)->lpVtbl -> InitVBAForm(This,newVal,nStyle,bstrXml,ppNode) ) 
+
+#define IOfficeExtender_GetQuasarFromVBAForm(This,pForm,ppQuasar)	\
+    ( (This)->lpVtbl -> GetQuasarFromVBAForm(This,pForm,ppQuasar) ) 
+
+#define IOfficeExtender_GetActiveTopStar(This,pForm,WndNode)	\
+    ( (This)->lpVtbl -> GetActiveTopStar(This,pForm,WndNode) ) 
+
+#define IOfficeExtender_GetObjectFromWnd(This,hWnd,ppObjFromWnd)	\
+    ( (This)->lpVtbl -> GetObjectFromWnd(This,hWnd,ppObjFromWnd) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IOfficeExtender_INTERFACE_DEFINED__ */
+
+
+#ifndef __IVSExtender_INTERFACE_DEFINED__
+#define __IVSExtender_INTERFACE_DEFINED__
+
+/* interface IVSExtender */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IVSExtender;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119890701")
+    IVSExtender : public IHubbleExtender
+    {
+    public:
+        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignNode( 
+            /* [retval][out] */ IStar **ppRetVal) = 0;
+        
+        virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentDesignNode( 
+            /* [in] */ IStar *newVal) = 0;
+        
+        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignRootNode( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_DesignRootNode( 
+            /* [in] */ IStar *newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramCLRProject( 
+            BSTR bstrPrjPath,
+            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TangramCLRProject( 
+            BSTR bstrPrjPath,
+            /* [in] */ VARIANT_BOOL newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentSelectedPrj( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ExtendXmlUI( 
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IVSExtenderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IVSExtender * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IVSExtender * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IVSExtender * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IVSExtender * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IVSExtender * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IVSExtender * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IVSExtender * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IVSExtender * This);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveWorkBenchWindow )( 
+            IVSExtender * This,
+            BSTR bstrID,
+            /* [retval][out] */ IWorkBenchWindow **pVal);
+        
+        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignNode )( 
+            IVSExtender * This,
+            /* [retval][out] */ IStar **ppRetVal);
+        
+        /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentDesignNode )( 
+            IVSExtender * This,
+            /* [in] */ IStar *newVal);
+        
+        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
+            IVSExtender * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignRootNode )( 
+            IVSExtender * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignRootNode )( 
+            IVSExtender * This,
+            /* [in] */ IStar *newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramCLRProject )( 
+            IVSExtender * This,
+            BSTR bstrPrjPath,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TangramCLRProject )( 
+            IVSExtender * This,
+            BSTR bstrPrjPath,
+            /* [in] */ VARIANT_BOOL newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentSelectedPrj )( 
+            IVSExtender * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ExtendXmlUI )( 
+            IVSExtender * This,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode);
+        
+        END_INTERFACE
+    } IVSExtenderVtbl;
+
+    interface IVSExtender
+    {
+        CONST_VTBL struct IVSExtenderVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IVSExtender_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IVSExtender_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IVSExtender_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IVSExtender_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IVSExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IVSExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IVSExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IVSExtender_Close(This)	\
+    ( (This)->lpVtbl -> Close(This) ) 
+
+#define IVSExtender_get_ActiveWorkBenchWindow(This,bstrID,pVal)	\
+    ( (This)->lpVtbl -> get_ActiveWorkBenchWindow(This,bstrID,pVal) ) 
+
+
+#define IVSExtender_get_CurrentDesignNode(This,ppRetVal)	\
+    ( (This)->lpVtbl -> get_CurrentDesignNode(This,ppRetVal) ) 
+
+#define IVSExtender_put_CurrentDesignNode(This,newVal)	\
+    ( (This)->lpVtbl -> put_CurrentDesignNode(This,newVal) ) 
+
+#define IVSExtender_get_DesignNode(This,pVal)	\
+    ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 
+
+#define IVSExtender_get_DesignRootNode(This,pVal)	\
+    ( (This)->lpVtbl -> get_DesignRootNode(This,pVal) ) 
+
+#define IVSExtender_put_DesignRootNode(This,newVal)	\
+    ( (This)->lpVtbl -> put_DesignRootNode(This,newVal) ) 
+
+#define IVSExtender_get_TangramCLRProject(This,bstrPrjPath,pVal)	\
+    ( (This)->lpVtbl -> get_TangramCLRProject(This,bstrPrjPath,pVal) ) 
+
+#define IVSExtender_put_TangramCLRProject(This,bstrPrjPath,newVal)	\
+    ( (This)->lpVtbl -> put_TangramCLRProject(This,bstrPrjPath,newVal) ) 
+
+#define IVSExtender_get_CurrentSelectedPrj(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentSelectedPrj(This,pVal) ) 
+
+#define IVSExtender_ExtendXmlUI(This,bstrKey,bstrXml,ppNode)	\
+    ( (This)->lpVtbl -> ExtendXmlUI(This,bstrKey,bstrXml,ppNode) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IVSExtender_INTERFACE_DEFINED__ */
+
+
+#ifndef __IVSDocument_INTERFACE_DEFINED__
+#define __IVSDocument_INTERFACE_DEFINED__
+
+/* interface IVSDocument */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IVSDocument;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120170824")
+    IVSDocument : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VSClass( 
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IDispatch **ppNode) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
+            /* [retval][out] */ IUnknown **ppVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
+            /* [retval][out] */ long *pCount) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IVSDocumentVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IVSDocument * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IVSDocument * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IVSDocument * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IVSDocument * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IVSDocument * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IVSDocument * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IVSDocument * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VSClass )( 
+            IVSDocument * This,
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IDispatch **ppNode);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IVSDocument * This,
+            /* [retval][out] */ IUnknown **ppVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IVSDocument * This,
+            /* [retval][out] */ long *pCount);
+        
+        END_INTERFACE
+    } IVSDocumentVtbl;
+
+    interface IVSDocument
+    {
+        CONST_VTBL struct IVSDocumentVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IVSDocument_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IVSDocument_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IVSDocument_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IVSDocument_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IVSDocument_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IVSDocument_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IVSDocument_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IVSDocument_get_VSClass(This,vIndex,ppNode)	\
+    ( (This)->lpVtbl -> get_VSClass(This,vIndex,ppNode) ) 
+
+#define IVSDocument_get__NewEnum(This,ppVal)	\
+    ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
+
+#define IVSDocument_get_Count(This,pCount)	\
+    ( (This)->lpVtbl -> get_Count(This,pCount) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IVSDocument_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleTreeNode_INTERFACE_DEFINED__
+#define __IHubbleTreeNode_INTERFACE_DEFINED__
+
+/* interface IHubbleTreeNode */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleTreeNode;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-06011982C951")
+    IHubbleTreeNode : public IDispatch
+    {
+    public:
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleTreeNodeVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleTreeNode * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleTreeNode * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleTreeNode * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleTreeNode * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleTreeNode * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleTreeNode * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleTreeNode * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        END_INTERFACE
+    } IHubbleTreeNodeVtbl;
+
+    interface IHubbleTreeNode
+    {
+        CONST_VTBL struct IHubbleTreeNodeVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleTreeNode_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleTreeNode_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleTreeNode_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleTreeNode_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleTreeNode_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleTreeNode_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleTreeNode_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleTreeNode_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleTreeViewCallBack_INTERFACE_DEFINED__
+#define __IHubbleTreeViewCallBack_INTERFACE_DEFINED__
+
+/* interface IHubbleTreeViewCallBack */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleTreeViewCallBack;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-0601198283A6")
+    IHubbleTreeViewCallBack : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_WndNode( 
+            IStar *newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Pages( 
+            long *retVal) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnInitTreeView( 
+            IHubbleTreeView *pTangramTreeView,
+            BSTR bstrXml) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnClick( 
+            BSTR bstrXml,
+            BSTR bstrXmlData) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnInit( 
+            BSTR bstrXml) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnNewPage( 
+            int nNewPage) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleAction( 
+            BSTR bstrXml,
+            /* [retval][out] */ BSTR *bstrRetXml) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleTreeViewCallBackVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleTreeViewCallBack * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleTreeViewCallBack * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleTreeViewCallBack * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleTreeViewCallBack * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleTreeViewCallBack * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleTreeViewCallBack * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleTreeViewCallBack * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WndNode )( 
+            IHubbleTreeViewCallBack * This,
+            IStar *newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Pages )( 
+            IHubbleTreeViewCallBack * This,
+            long *retVal);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnInitTreeView )( 
+            IHubbleTreeViewCallBack * This,
+            IHubbleTreeView *pTangramTreeView,
+            BSTR bstrXml);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnClick )( 
+            IHubbleTreeViewCallBack * This,
+            BSTR bstrXml,
+            BSTR bstrXmlData);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnInit )( 
+            IHubbleTreeViewCallBack * This,
+            BSTR bstrXml);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnNewPage )( 
+            IHubbleTreeViewCallBack * This,
+            int nNewPage);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleAction )( 
+            IHubbleTreeViewCallBack * This,
+            BSTR bstrXml,
+            /* [retval][out] */ BSTR *bstrRetXml);
+        
+        END_INTERFACE
+    } IHubbleTreeViewCallBackVtbl;
+
+    interface IHubbleTreeViewCallBack
+    {
+        CONST_VTBL struct IHubbleTreeViewCallBackVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleTreeViewCallBack_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleTreeViewCallBack_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleTreeViewCallBack_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleTreeViewCallBack_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleTreeViewCallBack_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleTreeViewCallBack_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleTreeViewCallBack_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleTreeViewCallBack_put_WndNode(This,newVal)	\
+    ( (This)->lpVtbl -> put_WndNode(This,newVal) ) 
+
+#define IHubbleTreeViewCallBack_get_Pages(This,retVal)	\
+    ( (This)->lpVtbl -> get_Pages(This,retVal) ) 
+
+#define IHubbleTreeViewCallBack_OnInitTreeView(This,pTangramTreeView,bstrXml)	\
+    ( (This)->lpVtbl -> OnInitTreeView(This,pTangramTreeView,bstrXml) ) 
+
+#define IHubbleTreeViewCallBack_OnClick(This,bstrXml,bstrXmlData)	\
+    ( (This)->lpVtbl -> OnClick(This,bstrXml,bstrXmlData) ) 
+
+#define IHubbleTreeViewCallBack_OnInit(This,bstrXml)	\
+    ( (This)->lpVtbl -> OnInit(This,bstrXml) ) 
+
+#define IHubbleTreeViewCallBack_OnNewPage(This,nNewPage)	\
+    ( (This)->lpVtbl -> OnNewPage(This,nNewPage) ) 
+
+#define IHubbleTreeViewCallBack_HubbleAction(This,bstrXml,bstrRetXml)	\
+    ( (This)->lpVtbl -> HubbleAction(This,bstrXml,bstrRetXml) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleTreeViewCallBack_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleTreeView_INTERFACE_DEFINED__
+#define __IHubbleTreeView_INTERFACE_DEFINED__
+
+/* interface IHubbleTreeView */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleTreeView;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-0601198283A5")
+    IHubbleTreeView : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TangramTreeViewCallBack( 
+            BSTR bstrKey,
+            /* [in] */ IHubbleTreeViewCallBack *newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FirstRoot( 
+            /* [retval][out] */ long *pVal) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddTreeNode( 
+            long hItem,
+            BSTR bstrXml) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertNode( 
+            BSTR bstrXml,
+            /* [retval][out] */ long *hItem) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleTreeViewVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleTreeView * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleTreeView * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleTreeView * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleTreeView * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleTreeView * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleTreeView * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleTreeView * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TangramTreeViewCallBack )( 
+            IHubbleTreeView * This,
+            BSTR bstrKey,
+            /* [in] */ IHubbleTreeViewCallBack *newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstRoot )( 
+            IHubbleTreeView * This,
+            /* [retval][out] */ long *pVal);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddTreeNode )( 
+            IHubbleTreeView * This,
+            long hItem,
+            BSTR bstrXml);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InsertNode )( 
+            IHubbleTreeView * This,
+            BSTR bstrXml,
+            /* [retval][out] */ long *hItem);
+        
+        END_INTERFACE
+    } IHubbleTreeViewVtbl;
+
+    interface IHubbleTreeView
+    {
+        CONST_VTBL struct IHubbleTreeViewVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleTreeView_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleTreeView_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleTreeView_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleTreeView_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleTreeView_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleTreeView_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleTreeView_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleTreeView_put_TangramTreeViewCallBack(This,bstrKey,newVal)	\
+    ( (This)->lpVtbl -> put_TangramTreeViewCallBack(This,bstrKey,newVal) ) 
+
+#define IHubbleTreeView_get_FirstRoot(This,pVal)	\
+    ( (This)->lpVtbl -> get_FirstRoot(This,pVal) ) 
+
+#define IHubbleTreeView_AddTreeNode(This,hItem,bstrXml)	\
+    ( (This)->lpVtbl -> AddTreeNode(This,hItem,bstrXml) ) 
+
+#define IHubbleTreeView_InsertNode(This,bstrXml,hItem)	\
+    ( (This)->lpVtbl -> InsertNode(This,bstrXml,hItem) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleTreeView_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleEventObj_INTERFACE_DEFINED__
+#define __IHubbleEventObj_INTERFACE_DEFINED__
+
+/* interface IHubbleEventObj */
+/* [unique][helpstring][nonextensible][hidden][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleEventObj;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120160928")
+    IHubbleEventObj : public IDispatch
+    {
+    public:
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_eventSource( 
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_eventSource( 
+            /* [in] */ IDispatch *eventSource) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Index( 
+            /* [retval][out] */ int *nVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Index( 
+            int newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EventName( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EventName( 
+            BSTR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Object( 
+            int nIndex,
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Object( 
+            int nIndex,
+            IDispatch *newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
+            int nIndex,
+            /* [retval][out] */ VARIANT *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Value( 
+            int nIndex,
+            VARIANT newVal) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleEventObjVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleEventObj * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleEventObj * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleEventObj * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleEventObj * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleEventObj * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleEventObj * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleEventObj * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_eventSource )( 
+            IHubbleEventObj * This,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_eventSource )( 
+            IHubbleEventObj * This,
+            /* [in] */ IDispatch *eventSource);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Index )( 
+            IHubbleEventObj * This,
+            /* [retval][out] */ int *nVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Index )( 
+            IHubbleEventObj * This,
+            int newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventName )( 
+            IHubbleEventObj * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventName )( 
+            IHubbleEventObj * This,
+            BSTR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Object )( 
+            IHubbleEventObj * This,
+            int nIndex,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Object )( 
+            IHubbleEventObj * This,
+            int nIndex,
+            IDispatch *newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+            IHubbleEventObj * This,
+            int nIndex,
+            /* [retval][out] */ VARIANT *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
+            IHubbleEventObj * This,
+            int nIndex,
+            VARIANT newVal);
+        
+        END_INTERFACE
+    } IHubbleEventObjVtbl;
+
+    interface IHubbleEventObj
+    {
+        CONST_VTBL struct IHubbleEventObjVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleEventObj_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleEventObj_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleEventObj_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleEventObj_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleEventObj_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleEventObj_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleEventObj_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleEventObj_get_eventSource(This,pVal)	\
+    ( (This)->lpVtbl -> get_eventSource(This,pVal) ) 
+
+#define IHubbleEventObj_put_eventSource(This,eventSource)	\
+    ( (This)->lpVtbl -> put_eventSource(This,eventSource) ) 
+
+#define IHubbleEventObj_get_Index(This,nVal)	\
+    ( (This)->lpVtbl -> get_Index(This,nVal) ) 
+
+#define IHubbleEventObj_put_Index(This,newVal)	\
+    ( (This)->lpVtbl -> put_Index(This,newVal) ) 
+
+#define IHubbleEventObj_get_EventName(This,pVal)	\
+    ( (This)->lpVtbl -> get_EventName(This,pVal) ) 
+
+#define IHubbleEventObj_put_EventName(This,newVal)	\
+    ( (This)->lpVtbl -> put_EventName(This,newVal) ) 
+
+#define IHubbleEventObj_get_Object(This,nIndex,pVal)	\
+    ( (This)->lpVtbl -> get_Object(This,nIndex,pVal) ) 
+
+#define IHubbleEventObj_put_Object(This,nIndex,newVal)	\
+    ( (This)->lpVtbl -> put_Object(This,nIndex,newVal) ) 
+
+#define IHubbleEventObj_get_Value(This,nIndex,pVal)	\
+    ( (This)->lpVtbl -> get_Value(This,nIndex,pVal) ) 
+
+#define IHubbleEventObj_put_Value(This,nIndex,newVal)	\
+    ( (This)->lpVtbl -> put_Value(This,nIndex,newVal) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleEventObj_INTERFACE_DEFINED__ */
+
+
+#ifndef __IStar_INTERFACE_DEFINED__
+#define __IStar_INTERFACE_DEFINED__
+
+/* interface IStar */
+/* [object][unique][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IStar;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119820004")
+    IStar : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChildNodes( 
+            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rows( 
+            /* [retval][out] */ long *nRows) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Cols( 
+            /* [retval][out] */ long *nCols) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Row( 
+            /* [retval][out] */ long *nRow) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Col( 
+            /* [retval][out] */ long *nCol) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StarType( 
+            /* [retval][out] */ StarType *nType) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentStar( 
+            /* [retval][out] */ IStar **ppStar) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_URL( 
+            /* [in] */ BSTR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootStar( 
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XObject( 
+            /* [retval][out] */ VARIANT *pVar) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AxPlugIn( 
+            /* [in] */ BSTR bstrPlugInName,
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Caption( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Caption( 
+            /* [in] */ BSTR bstrCaption) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
+            /* [in] */ BSTR bstrName) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Objects( 
+            /* [in] */ long nType,
+            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
+            /* [retval][out] */ LONGLONG *hWnd) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Attribute( 
+            /* [in] */ BSTR bstrKey,
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Attribute( 
+            /* [in] */ BSTR bstrKey,
+            /* [in] */ BSTR bstrVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tag( 
+            /* [retval][out] */ VARIANT *pVar) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Tag( 
+            /* [in] */ VARIANT vVar) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OuterXml( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Key( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DockObj( 
+            BSTR bstrName,
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DockObj( 
+            BSTR bstrName,
+            /* [in] */ LONGLONG newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NameAtWindowPage( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Width( 
+            /* [retval][out] */ LONG *pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Height( 
+            /* [retval][out] */ LONG *pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Quasar( 
+            /* [retval][out] */ IQuasar **pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XML( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
+            /* [in] */ IDispatch *newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocXml( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_rgbMiddle( 
+            /* [retval][out] */ OLE_COLOR *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_rgbMiddle( 
+            /* [in] */ OLE_COLOR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_rgbRightBottom( 
+            /* [retval][out] */ OLE_COLOR *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_rgbRightBottom( 
+            /* [in] */ OLE_COLOR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_rgbLeftTop( 
+            /* [retval][out] */ OLE_COLOR *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_rgbLeftTop( 
+            /* [in] */ OLE_COLOR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Hmin( 
+            /* [retval][out] */ int *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Hmin( 
+            /* [in] */ int newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Hmax( 
+            /* [retval][out] */ int *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Hmax( 
+            /* [in] */ int newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Vmin( 
+            /* [retval][out] */ int *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Vmin( 
+            /* [in] */ int newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Vmax( 
+            /* [retval][out] */ int *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Vmax( 
+            /* [in] */ int newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostStar( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostStar( 
+            /* [in] */ IStar *newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActivePage( 
+            /* [retval][out] */ int *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ActivePage( 
+            /* [in] */ int newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HostQuasar( 
+            /* [retval][out] */ IQuasar **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MasterRow( 
+            /* [retval][out] */ int *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MasterRow( 
+            /* [in] */ int newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MasterCol( 
+            /* [retval][out] */ int *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MasterCol( 
+            /* [in] */ int newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OfficeObj( 
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SaveToConfigFile( 
+            /* [in] */ VARIANT_BOOL newVal) = 0;
+        
+        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE ActiveTabPage( 
+            IStar *pNode) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStars( 
+            /* [in] */ BSTR bstrName,
+            /* [out] */ IStar **ppNode,
+            /* [out] */ IStarCollection **ppNodes,
+            /* [retval][out] */ long *pCount) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStar( 
+            /* [in] */ long nRow,
+            /* [in] */ long nCol,
+            /* [retval][out] */ IStar **ppWndmNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlByName( 
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ IDispatch **ppCtrlDisp) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadXML( 
+            int nType,
+            BSTR bstrXML) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
+            int nRow,
+            int nCol,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetStarByName( 
+            /* [in] */ BSTR bstrName,
+            /* [retval][out] */ IStarCollection **pVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlValueByName( 
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ BSTR *bstrVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetCtrlValueByName( 
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            BSTR bstrVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateURL( 
+            BSTR bstrURL,
+            IDispatch *dispObjforScript) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SendIPCMessage( 
+            BSTR bstrTo,
+            BSTR bstrPayload,
+            BSTR bstrExtra,
+            BSTR bstrMsgId,
+            /* [retval][out] */ BSTR *bstrRes) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IStarVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IStar * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IStar * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IStar * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IStar * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IStar * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IStar * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IStar * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ChildNodes )( 
+            IStar * This,
+            /* [retval][out] */ IStarCollection **ppNodeColletion);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rows )( 
+            IStar * This,
+            /* [retval][out] */ long *nRows);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cols )( 
+            IStar * This,
+            /* [retval][out] */ long *nCols);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Row )( 
+            IStar * This,
+            /* [retval][out] */ long *nRow);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Col )( 
+            IStar * This,
+            /* [retval][out] */ long *nCol);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StarType )( 
+            IStar * This,
+            /* [retval][out] */ StarType *nType);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentStar )( 
+            IStar * This,
+            /* [retval][out] */ IStar **ppStar);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_URL )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_URL )( 
+            IStar * This,
+            /* [in] */ BSTR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyCluster )( 
+            IStar * This,
+            /* [retval][out] */ IGalaxyCluster **pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootStar )( 
+            IStar * This,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XObject )( 
+            IStar * This,
+            /* [retval][out] */ VARIANT *pVar);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AxPlugIn )( 
+            IStar * This,
+            /* [in] */ BSTR bstrPlugInName,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
+            IStar * This,
+            /* [in] */ BSTR bstrCaption);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            IStar * This,
+            /* [in] */ BSTR bstrName);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Objects )( 
+            IStar * This,
+            /* [in] */ long nType,
+            /* [retval][out] */ IStarCollection **ppNodeColletion);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            IStar * This,
+            /* [retval][out] */ LONGLONG *hWnd);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Attribute )( 
+            IStar * This,
+            /* [in] */ BSTR bstrKey,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Attribute )( 
+            IStar * This,
+            /* [in] */ BSTR bstrKey,
+            /* [in] */ BSTR bstrVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tag )( 
+            IStar * This,
+            /* [retval][out] */ VARIANT *pVar);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tag )( 
+            IStar * This,
+            /* [in] */ VARIANT vVar);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OuterXml )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Key )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DockObj )( 
+            IStar * This,
+            BSTR bstrName,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DockObj )( 
+            IStar * This,
+            BSTR bstrName,
+            /* [in] */ LONGLONG newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NameAtWindowPage )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+            IStar * This,
+            /* [retval][out] */ LONG *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+            IStar * This,
+            /* [retval][out] */ LONG *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Quasar )( 
+            IStar * This,
+            /* [retval][out] */ IQuasar **pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XML )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
+            IStar * This,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
+            IStar * This,
+            /* [in] */ IDispatch *newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocXml )( 
+            IStar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_rgbMiddle )( 
+            IStar * This,
+            /* [retval][out] */ OLE_COLOR *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_rgbMiddle )( 
+            IStar * This,
+            /* [in] */ OLE_COLOR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_rgbRightBottom )( 
+            IStar * This,
+            /* [retval][out] */ OLE_COLOR *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_rgbRightBottom )( 
+            IStar * This,
+            /* [in] */ OLE_COLOR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_rgbLeftTop )( 
+            IStar * This,
+            /* [retval][out] */ OLE_COLOR *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_rgbLeftTop )( 
+            IStar * This,
+            /* [in] */ OLE_COLOR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hmin )( 
+            IStar * This,
+            /* [retval][out] */ int *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hmin )( 
+            IStar * This,
+            /* [in] */ int newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hmax )( 
+            IStar * This,
+            /* [retval][out] */ int *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hmax )( 
+            IStar * This,
+            /* [in] */ int newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Vmin )( 
+            IStar * This,
+            /* [retval][out] */ int *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Vmin )( 
+            IStar * This,
+            /* [in] */ int newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Vmax )( 
+            IStar * This,
+            /* [retval][out] */ int *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Vmax )( 
+            IStar * This,
+            /* [in] */ int newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostStar )( 
+            IStar * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostStar )( 
+            IStar * This,
+            /* [in] */ IStar *newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActivePage )( 
+            IStar * This,
+            /* [retval][out] */ int *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ActivePage )( 
+            IStar * This,
+            /* [in] */ int newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostQuasar )( 
+            IStar * This,
+            /* [retval][out] */ IQuasar **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MasterRow )( 
+            IStar * This,
+            /* [retval][out] */ int *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MasterRow )( 
+            IStar * This,
+            /* [in] */ int newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MasterCol )( 
+            IStar * This,
+            /* [retval][out] */ int *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MasterCol )( 
+            IStar * This,
+            /* [in] */ int newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfficeObj )( 
+            IStar * This,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SaveToConfigFile )( 
+            IStar * This,
+            /* [in] */ VARIANT_BOOL newVal);
+        
+        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *ActiveTabPage )( 
+            IStar * This,
+            IStar *pNode);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetStars )( 
+            IStar * This,
+            /* [in] */ BSTR bstrName,
+            /* [out] */ IStar **ppNode,
+            /* [out] */ IStarCollection **ppNodes,
+            /* [retval][out] */ long *pCount);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetStar )( 
+            IStar * This,
+            /* [in] */ long nRow,
+            /* [in] */ long nCol,
+            /* [retval][out] */ IStar **ppWndmNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
+            IStar * This,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ IDispatch **ppCtrlDisp);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IStar * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
+            IStar * This,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoadXML )( 
+            IStar * This,
+            int nType,
+            BSTR bstrXML);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
+            IStar * This,
+            int nRow,
+            int nCol,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetStarByName )( 
+            IStar * This,
+            /* [in] */ BSTR bstrName,
+            /* [retval][out] */ IStarCollection **pVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlValueByName )( 
+            IStar * This,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ BSTR *bstrVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetCtrlValueByName )( 
+            IStar * This,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            BSTR bstrVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateURL )( 
+            IStar * This,
+            BSTR bstrURL,
+            IDispatch *dispObjforScript);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SendIPCMessage )( 
+            IStar * This,
+            BSTR bstrTo,
+            BSTR bstrPayload,
+            BSTR bstrExtra,
+            BSTR bstrMsgId,
+            /* [retval][out] */ BSTR *bstrRes);
+        
+        END_INTERFACE
+    } IStarVtbl;
+
+    interface IStar
+    {
+        CONST_VTBL struct IStarVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IStar_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IStar_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IStar_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IStar_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IStar_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IStar_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IStar_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IStar_get_ChildNodes(This,ppNodeColletion)	\
+    ( (This)->lpVtbl -> get_ChildNodes(This,ppNodeColletion) ) 
+
+#define IStar_get_Rows(This,nRows)	\
+    ( (This)->lpVtbl -> get_Rows(This,nRows) ) 
+
+#define IStar_get_Cols(This,nCols)	\
+    ( (This)->lpVtbl -> get_Cols(This,nCols) ) 
+
+#define IStar_get_Row(This,nRow)	\
+    ( (This)->lpVtbl -> get_Row(This,nRow) ) 
+
+#define IStar_get_Col(This,nCol)	\
+    ( (This)->lpVtbl -> get_Col(This,nCol) ) 
+
+#define IStar_get_StarType(This,nType)	\
+    ( (This)->lpVtbl -> get_StarType(This,nType) ) 
+
+#define IStar_get_ParentStar(This,ppStar)	\
+    ( (This)->lpVtbl -> get_ParentStar(This,ppStar) ) 
+
+#define IStar_get_URL(This,pVal)	\
+    ( (This)->lpVtbl -> get_URL(This,pVal) ) 
+
+#define IStar_put_URL(This,newVal)	\
+    ( (This)->lpVtbl -> put_URL(This,newVal) ) 
+
+#define IStar_get_GalaxyCluster(This,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
+
+#define IStar_get_RootStar(This,ppNode)	\
+    ( (This)->lpVtbl -> get_RootStar(This,ppNode) ) 
+
+#define IStar_get_XObject(This,pVar)	\
+    ( (This)->lpVtbl -> get_XObject(This,pVar) ) 
+
+#define IStar_get_AxPlugIn(This,bstrPlugInName,pVal)	\
+    ( (This)->lpVtbl -> get_AxPlugIn(This,bstrPlugInName,pVal) ) 
+
+#define IStar_get_Caption(This,pVal)	\
+    ( (This)->lpVtbl -> get_Caption(This,pVal) ) 
+
+#define IStar_put_Caption(This,bstrCaption)	\
+    ( (This)->lpVtbl -> put_Caption(This,bstrCaption) ) 
+
+#define IStar_get_Name(This,pVal)	\
+    ( (This)->lpVtbl -> get_Name(This,pVal) ) 
+
+#define IStar_put_Name(This,bstrName)	\
+    ( (This)->lpVtbl -> put_Name(This,bstrName) ) 
+
+#define IStar_get_Objects(This,nType,ppNodeColletion)	\
+    ( (This)->lpVtbl -> get_Objects(This,nType,ppNodeColletion) ) 
+
+#define IStar_get_Handle(This,hWnd)	\
+    ( (This)->lpVtbl -> get_Handle(This,hWnd) ) 
+
+#define IStar_get_Attribute(This,bstrKey,pVal)	\
+    ( (This)->lpVtbl -> get_Attribute(This,bstrKey,pVal) ) 
+
+#define IStar_put_Attribute(This,bstrKey,bstrVal)	\
+    ( (This)->lpVtbl -> put_Attribute(This,bstrKey,bstrVal) ) 
+
+#define IStar_get_Tag(This,pVar)	\
+    ( (This)->lpVtbl -> get_Tag(This,pVar) ) 
+
+#define IStar_put_Tag(This,vVar)	\
+    ( (This)->lpVtbl -> put_Tag(This,vVar) ) 
+
+#define IStar_get_OuterXml(This,pVal)	\
+    ( (This)->lpVtbl -> get_OuterXml(This,pVal) ) 
+
+#define IStar_get_Key(This,pVal)	\
+    ( (This)->lpVtbl -> get_Key(This,pVal) ) 
+
+#define IStar_get_DockObj(This,bstrName,pVal)	\
+    ( (This)->lpVtbl -> get_DockObj(This,bstrName,pVal) ) 
+
+#define IStar_put_DockObj(This,bstrName,newVal)	\
+    ( (This)->lpVtbl -> put_DockObj(This,bstrName,newVal) ) 
+
+#define IStar_get_NameAtWindowPage(This,pVal)	\
+    ( (This)->lpVtbl -> get_NameAtWindowPage(This,pVal) ) 
+
+#define IStar_get_Width(This,pVal)	\
+    ( (This)->lpVtbl -> get_Width(This,pVal) ) 
+
+#define IStar_get_Height(This,pVal)	\
+    ( (This)->lpVtbl -> get_Height(This,pVal) ) 
+
+#define IStar_get_Quasar(This,pVal)	\
+    ( (This)->lpVtbl -> get_Quasar(This,pVal) ) 
+
+#define IStar_get_XML(This,pVal)	\
+    ( (This)->lpVtbl -> get_XML(This,pVal) ) 
+
+#define IStar_get_Extender(This,pVal)	\
+    ( (This)->lpVtbl -> get_Extender(This,pVal) ) 
+
+#define IStar_put_Extender(This,newVal)	\
+    ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
+
+#define IStar_get_DocXml(This,pVal)	\
+    ( (This)->lpVtbl -> get_DocXml(This,pVal) ) 
+
+#define IStar_get_rgbMiddle(This,pVal)	\
+    ( (This)->lpVtbl -> get_rgbMiddle(This,pVal) ) 
+
+#define IStar_put_rgbMiddle(This,newVal)	\
+    ( (This)->lpVtbl -> put_rgbMiddle(This,newVal) ) 
+
+#define IStar_get_rgbRightBottom(This,pVal)	\
+    ( (This)->lpVtbl -> get_rgbRightBottom(This,pVal) ) 
+
+#define IStar_put_rgbRightBottom(This,newVal)	\
+    ( (This)->lpVtbl -> put_rgbRightBottom(This,newVal) ) 
+
+#define IStar_get_rgbLeftTop(This,pVal)	\
+    ( (This)->lpVtbl -> get_rgbLeftTop(This,pVal) ) 
+
+#define IStar_put_rgbLeftTop(This,newVal)	\
+    ( (This)->lpVtbl -> put_rgbLeftTop(This,newVal) ) 
+
+#define IStar_get_Hmin(This,pVal)	\
+    ( (This)->lpVtbl -> get_Hmin(This,pVal) ) 
+
+#define IStar_put_Hmin(This,newVal)	\
+    ( (This)->lpVtbl -> put_Hmin(This,newVal) ) 
+
+#define IStar_get_Hmax(This,pVal)	\
+    ( (This)->lpVtbl -> get_Hmax(This,pVal) ) 
+
+#define IStar_put_Hmax(This,newVal)	\
+    ( (This)->lpVtbl -> put_Hmax(This,newVal) ) 
+
+#define IStar_get_Vmin(This,pVal)	\
+    ( (This)->lpVtbl -> get_Vmin(This,pVal) ) 
+
+#define IStar_put_Vmin(This,newVal)	\
+    ( (This)->lpVtbl -> put_Vmin(This,newVal) ) 
+
+#define IStar_get_Vmax(This,pVal)	\
+    ( (This)->lpVtbl -> get_Vmax(This,pVal) ) 
+
+#define IStar_put_Vmax(This,newVal)	\
+    ( (This)->lpVtbl -> put_Vmax(This,newVal) ) 
+
+#define IStar_get_HostStar(This,pVal)	\
+    ( (This)->lpVtbl -> get_HostStar(This,pVal) ) 
+
+#define IStar_put_HostStar(This,newVal)	\
+    ( (This)->lpVtbl -> put_HostStar(This,newVal) ) 
+
+#define IStar_get_ActivePage(This,pVal)	\
+    ( (This)->lpVtbl -> get_ActivePage(This,pVal) ) 
+
+#define IStar_put_ActivePage(This,newVal)	\
+    ( (This)->lpVtbl -> put_ActivePage(This,newVal) ) 
+
+#define IStar_get_HostQuasar(This,pVal)	\
+    ( (This)->lpVtbl -> get_HostQuasar(This,pVal) ) 
+
+#define IStar_get_MasterRow(This,pVal)	\
+    ( (This)->lpVtbl -> get_MasterRow(This,pVal) ) 
+
+#define IStar_put_MasterRow(This,newVal)	\
+    ( (This)->lpVtbl -> put_MasterRow(This,newVal) ) 
+
+#define IStar_get_MasterCol(This,pVal)	\
+    ( (This)->lpVtbl -> get_MasterCol(This,pVal) ) 
+
+#define IStar_put_MasterCol(This,newVal)	\
+    ( (This)->lpVtbl -> put_MasterCol(This,newVal) ) 
+
+#define IStar_get_OfficeObj(This,pVal)	\
+    ( (This)->lpVtbl -> get_OfficeObj(This,pVal) ) 
+
+#define IStar_put_SaveToConfigFile(This,newVal)	\
+    ( (This)->lpVtbl -> put_SaveToConfigFile(This,newVal) ) 
+
+#define IStar_ActiveTabPage(This,pNode)	\
+    ( (This)->lpVtbl -> ActiveTabPage(This,pNode) ) 
+
+#define IStar_GetStars(This,bstrName,ppNode,ppNodes,pCount)	\
+    ( (This)->lpVtbl -> GetStars(This,bstrName,ppNode,ppNodes,pCount) ) 
+
+#define IStar_GetStar(This,nRow,nCol,ppWndmNode)	\
+    ( (This)->lpVtbl -> GetStar(This,nRow,nCol,ppWndmNode) ) 
+
+#define IStar_GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp)	\
+    ( (This)->lpVtbl -> GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp) ) 
+
+#define IStar_Refresh(This)	\
+    ( (This)->lpVtbl -> Refresh(This) ) 
+
+#define IStar_Observe(This,bstrKey,bstrXml,ppRetNode)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetNode) ) 
+
+#define IStar_LoadXML(This,nType,bstrXML)	\
+    ( (This)->lpVtbl -> LoadXML(This,nType,bstrXML) ) 
+
+#define IStar_ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetNode)	\
+    ( (This)->lpVtbl -> ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetNode) ) 
+
+#define IStar_GetStarByName(This,bstrName,pVal)	\
+    ( (This)->lpVtbl -> GetStarByName(This,bstrName,pVal) ) 
+
+#define IStar_GetCtrlValueByName(This,bstrName,bFindInChild,bstrVal)	\
+    ( (This)->lpVtbl -> GetCtrlValueByName(This,bstrName,bFindInChild,bstrVal) ) 
+
+#define IStar_SetCtrlValueByName(This,bstrName,bFindInChild,bstrVal)	\
+    ( (This)->lpVtbl -> SetCtrlValueByName(This,bstrName,bFindInChild,bstrVal) ) 
+
+#define IStar_NavigateURL(This,bstrURL,dispObjforScript)	\
+    ( (This)->lpVtbl -> NavigateURL(This,bstrURL,dispObjforScript) ) 
+
+#define IStar_SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes)	\
+    ( (This)->lpVtbl -> SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IStar_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAppExtender_INTERFACE_DEFINED__
+#define __IAppExtender_INTERFACE_DEFINED__
+
+/* interface IAppExtender */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAppExtender;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119822007")
+    IAppExtender : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ProcessNotify( 
+            /* [in] */ BSTR bstrXmlNotify) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IAppExtenderVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAppExtender * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAppExtender * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAppExtender * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IAppExtender * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IAppExtender * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IAppExtender * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IAppExtender * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ProcessNotify )( 
+            IAppExtender * This,
+            /* [in] */ BSTR bstrXmlNotify);
+        
+        END_INTERFACE
+    } IAppExtenderVtbl;
+
+    interface IAppExtender
+    {
+        CONST_VTBL struct IAppExtenderVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAppExtender_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IAppExtender_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IAppExtender_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IAppExtender_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IAppExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IAppExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IAppExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IAppExtender_ProcessNotify(This,bstrXmlNotify)	\
+    ( (This)->lpVtbl -> ProcessNotify(This,bstrXmlNotify) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IAppExtender_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleEditor_INTERFACE_DEFINED__
+#define __IHubbleEditor_INTERFACE_DEFINED__
+
+/* interface IHubbleEditor */
+/* [unique][helpstring][nonextensible][oleautomation][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleEditor;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119826688")
+    IHubbleEditor : public IDispatch
+    {
+    public:
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleEditorVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleEditor * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleEditor * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleEditor * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleEditor * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleEditor * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleEditor * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleEditor * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        END_INTERFACE
+    } IHubbleEditorVtbl;
+
+    interface IHubbleEditor
+    {
+        CONST_VTBL struct IHubbleEditorVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleEditor_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleEditor_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleEditor_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleEditor_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleEditor_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleEditor_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleEditor_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleEditor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleDoc_INTERFACE_DEFINED__
+#define __IHubbleDoc_INTERFACE_DEFINED__
+
+/* interface IHubbleDoc */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleDoc;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120161101")
+    IHubbleDoc : public IDispatch
+    {
+    public:
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TemplateXml( 
+            /* [retval][out] */ BSTR *bstrVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TemplateXml( 
+            /* [in] */ BSTR newVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocType( 
+            /* [in] */ BSTR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocID( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocID( 
+            /* [in] */ LONGLONG newVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarWndXml( 
+            BSTR bstrWndID,
+            /* [retval][out] */ BSTR *bstrWndScriptVal) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleDocVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleDoc * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleDoc * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleDoc * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleDoc * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleDoc * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleDoc * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleDoc * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TemplateXml )( 
+            IHubbleDoc * This,
+            /* [retval][out] */ BSTR *bstrVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TemplateXml )( 
+            IHubbleDoc * This,
+            /* [in] */ BSTR newVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocType )( 
+            IHubbleDoc * This,
+            /* [in] */ BSTR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocID )( 
+            IHubbleDoc * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocID )( 
+            IHubbleDoc * This,
+            /* [in] */ LONGLONG newVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarWndXml )( 
+            IHubbleDoc * This,
+            BSTR bstrWndID,
+            /* [retval][out] */ BSTR *bstrWndScriptVal);
+        
+        END_INTERFACE
+    } IHubbleDocVtbl;
+
+    interface IHubbleDoc
+    {
+        CONST_VTBL struct IHubbleDocVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleDoc_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleDoc_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleDoc_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleDoc_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleDoc_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleDoc_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleDoc_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleDoc_get_TemplateXml(This,bstrVal)	\
+    ( (This)->lpVtbl -> get_TemplateXml(This,bstrVal) ) 
+
+#define IHubbleDoc_put_TemplateXml(This,newVal)	\
+    ( (This)->lpVtbl -> put_TemplateXml(This,newVal) ) 
+
+#define IHubbleDoc_put_DocType(This,newVal)	\
+    ( (This)->lpVtbl -> put_DocType(This,newVal) ) 
+
+#define IHubbleDoc_get_DocID(This,pVal)	\
+    ( (This)->lpVtbl -> get_DocID(This,pVal) ) 
+
+#define IHubbleDoc_put_DocID(This,newVal)	\
+    ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
+
+#define IHubbleDoc_GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal)	\
+    ( (This)->lpVtbl -> GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleDoc_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleDocTemplate_INTERFACE_DEFINED__
+#define __IHubbleDocTemplate_INTERFACE_DEFINED__
+
+/* interface IHubbleDocTemplate */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleDocTemplate;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120170707")
+    IHubbleDocTemplate : public IDispatch
+    {
+    public:
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TemplateXml( 
+            /* [retval][out] */ BSTR *bstrVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TemplateXml( 
+            /* [in] */ BSTR newVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocType( 
+            /* [in] */ BSTR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocID( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocID( 
+            /* [in] */ LONGLONG newVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarWndXml( 
+            BSTR bstrWndID,
+            /* [retval][out] */ BSTR *bstrWndScriptVal) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleDocTemplateVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleDocTemplate * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleDocTemplate * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleDocTemplate * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleDocTemplate * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleDocTemplate * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleDocTemplate * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleDocTemplate * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TemplateXml )( 
+            IHubbleDocTemplate * This,
+            /* [retval][out] */ BSTR *bstrVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TemplateXml )( 
+            IHubbleDocTemplate * This,
+            /* [in] */ BSTR newVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocType )( 
+            IHubbleDocTemplate * This,
+            /* [in] */ BSTR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocID )( 
+            IHubbleDocTemplate * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocID )( 
+            IHubbleDocTemplate * This,
+            /* [in] */ LONGLONG newVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarWndXml )( 
+            IHubbleDocTemplate * This,
+            BSTR bstrWndID,
+            /* [retval][out] */ BSTR *bstrWndScriptVal);
+        
+        END_INTERFACE
+    } IHubbleDocTemplateVtbl;
+
+    interface IHubbleDocTemplate
+    {
+        CONST_VTBL struct IHubbleDocTemplateVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleDocTemplate_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleDocTemplate_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleDocTemplate_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleDocTemplate_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleDocTemplate_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleDocTemplate_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleDocTemplate_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleDocTemplate_get_TemplateXml(This,bstrVal)	\
+    ( (This)->lpVtbl -> get_TemplateXml(This,bstrVal) ) 
+
+#define IHubbleDocTemplate_put_TemplateXml(This,newVal)	\
+    ( (This)->lpVtbl -> put_TemplateXml(This,newVal) ) 
+
+#define IHubbleDocTemplate_put_DocType(This,newVal)	\
+    ( (This)->lpVtbl -> put_DocType(This,newVal) ) 
+
+#define IHubbleDocTemplate_get_DocID(This,pVal)	\
+    ( (This)->lpVtbl -> get_DocID(This,pVal) ) 
+
+#define IHubbleDocTemplate_put_DocID(This,newVal)	\
+    ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
+
+#define IHubbleDocTemplate_GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal)	\
+    ( (This)->lpVtbl -> GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleDocTemplate_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubble_INTERFACE_DEFINED__
+#define __IHubble_INTERFACE_DEFINED__
+
+/* interface IHubble */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubble;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119820001")
+    IHubble : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Application( 
+            /* [in] */ IDispatch *newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AppKeyValue( 
+            BSTR bstrKey,
+            /* [retval][out] */ VARIANT *pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AppKeyValue( 
+            BSTR bstrKey,
+            /* [in] */ VARIANT newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AppExtender( 
+            BSTR bstrKey,
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AppExtender( 
+            BSTR bstrKey,
+            /* [in] */ IDispatch *newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootNodes( 
+            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWnd( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentActiveStar( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreatingStar( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHubble( 
+            BSTR bstrID,
+            /* [retval][out] */ IHubble **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
+            /* [retval][out] */ IHubbleExtender **pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
+            /* [in] */ IHubbleExtender *newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHelperHWND( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteHelperHWND( 
+            /* [in] */ LONGLONG newVal) = 0;
+        
+        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramDoc( 
+            LONGLONG AppProxy,
+            LONGLONG nDocID,
+            /* [retval][out] */ IHubbleDoc **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocTemplate( 
+            BSTR bstrID,
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveChromeBrowserWnd( 
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostChromeBrowserWnd( 
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateNode( 
+            IStar *pNode,
+            BSTR bstrBrowserID,
+            BSTR bstrXml) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxyCluster( 
+            LONGLONG hWnd,
+            /* [retval][out] */ IGalaxyCluster **ppGalaxyCluster) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateOfficeDocument( 
+            BSTR bstrXml) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateCLRObj( 
+            BSTR bstrObjID,
+            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartApplication( 
+            BSTR bstrAppID,
+            BSTR bstrXml) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetQuasar( 
+            LONGLONG hHostWnd,
+            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetItemText( 
+            IStar *pNode,
+            long nCtrlID,
+            LONG nMaxLengeh,
+            /* [retval][out] */ BSTR *bstrRet) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetItemText( 
+            IStar *pNode,
+            long nCtrlID,
+            BSTR bstrText) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCLRControl( 
+            IDispatch *CtrlDisp,
+            BSTR bstrName,
+            /* [retval][out] */ IDispatch **ppRetDisp) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MessageBox( 
+            LONGLONG hWnd,
+            BSTR bstrContext,
+            BSTR bstrCaption,
+            long nStyle,
+            /* [retval][out] */ int *nRet) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Encode( 
+            BSTR bstrSRC,
+            VARIANT_BOOL bEncode,
+            /* [retval][out] */ BSTR *bstrRet) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetHostFocus( void) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdareStar( 
+            IStar *pNode) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewGUID( 
+            /* [retval][out] */ BSTR *retVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ActiveCLRMethod( 
+            BSTR bstrObjID,
+            BSTR bstrMethod,
+            BSTR bstrParam,
+            BSTR bstrData) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DownLoadFile( 
+            BSTR strFileURL,
+            BSTR bstrTargetFile,
+            BSTR bstrActionXml) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlByName( 
+            IDispatch *pCtrl,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ IDispatch **ppCtrlDisp) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetStarFromHandle( 
+            LONGLONG hWnd,
+            /* [retval][out] */ IStar **ppRetNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlValueByName( 
+            IDispatch *pCtrl,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ BSTR *bstrVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetCtrlValueByName( 
+            IDispatch *pCtrl,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            BSTR bstrVal) = 0;
+        
+        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE CreateHubbleCtrl( 
+            BSTR bstrAppID,
+            /* [retval][out] */ IHubbleCtrl **ppRetCtrl) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetWindowClientDefaultNode( 
+            IDispatch *pAddDisp,
+            LONGLONG hParent,
+            BSTR bstrWndClaName,
+            BSTR bstrGalaxyClusterName,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDocTemplateXml( 
+            BSTR bstrCaption,
+            BSTR bstrPath,
+            BSTR bstrFilter,
+            /* [retval][out] */ BSTR *bstrTemplatePath) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenTangramFile( 
+            /* [retval][out] */ IHubbleDoc **ppDoc) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateHubbleEventObj( 
+            /* [retval][out] */ IHubbleEventObj **ppHubbleEventObj) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FireHubbleEventObj( 
+            IHubbleEventObj *pHubbleEventObj) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveQuasars( 
+            LONGLONG hWnd,
+            BSTR bstrQuasars,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfigFile) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeletePage( 
+            LONGLONG PageHandle) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE LoadDocComponent( 
+            BSTR bstrLib,
+            /* [retval][out] */ LONGLONG *llAppProxy) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenTangramDocFile( 
+            BSTR bstrFilePath,
+            /* [retval][out] */ IHubbleDoc **ppDoc) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
+            BSTR strInitXml,
+            /* [retval][out] */ LONGLONG *llHandle) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateOutLookObj( 
+            BSTR bstrObjType,
+            int nType,
+            BSTR bstrURL,
+            /* [retval][out] */ IDispatch **ppRetDisp) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NewWorkBench( 
+            BSTR bstrTangramDoc,
+            /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateBrowser( 
+            ULONGLONG hParentWnd,
+            BSTR strUrls,
+            /* [retval][out] */ IBrowser **ppRet) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE HubbleNotify( 
+            BSTR strXml1,
+            BSTR strXml2,
+            LONGLONG wParam,
+            LONGLONG lParam) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteQuasar( 
+            IQuasar *pQuasar) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEclipseApp( void) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SelectVSObj( 
+            BSTR bstrData,
+            IDispatch *pVSObj,
+            LONGLONG nHandle) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleCommand( 
+            IDispatch *RibbonControl) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetImage( 
+            BSTR strValue,
+            /* [retval][out] */ IPictureDisp **ppdispImage) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetVisible( 
+            IDispatch *RibbonControl,
+            /* [retval][out] */ VARIANT *varVisible) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleOnLoad( 
+            IDispatch *RibbonControl) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetItemCount( 
+            IDispatch *RibbonControl,
+            /* [retval][out] */ long *nCount) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetItemLabel( 
+            IDispatch *RibbonControl,
+            long nIndex,
+            /* [retval][out] */ BSTR *bstrLabel) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetItemID( 
+            IDispatch *RibbonControl,
+            long nIndex,
+            /* [retval][out] */ BSTR *bstrID) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubble * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubble * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubble * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubble * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubble * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubble * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubble * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IHubble * This,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Application )( 
+            IHubble * This,
+            /* [in] */ IDispatch *newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppKeyValue )( 
+            IHubble * This,
+            BSTR bstrKey,
+            /* [retval][out] */ VARIANT *pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppKeyValue )( 
+            IHubble * This,
+            BSTR bstrKey,
+            /* [in] */ VARIANT newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppExtender )( 
+            IHubble * This,
+            BSTR bstrKey,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppExtender )( 
+            IHubble * This,
+            BSTR bstrKey,
+            /* [in] */ IDispatch *newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootNodes )( 
+            IHubble * This,
+            /* [retval][out] */ IStarCollection **ppNodeColletion);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWnd )( 
+            IHubble * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveStar )( 
+            IHubble * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreatingStar )( 
+            IHubble * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHubble )( 
+            IHubble * This,
+            BSTR bstrID,
+            /* [retval][out] */ IHubble **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
+            IHubble * This,
+            /* [retval][out] */ IHubbleExtender **pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
+            IHubble * This,
+            /* [in] */ IHubbleExtender *newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHelperHWND )( 
+            IHubble * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteHelperHWND )( 
+            IHubble * This,
+            /* [in] */ LONGLONG newVal);
+        
+        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
+            IHubble * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramDoc )( 
+            IHubble * This,
+            LONGLONG AppProxy,
+            LONGLONG nDocID,
+            /* [retval][out] */ IHubbleDoc **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocTemplate )( 
+            IHubble * This,
+            BSTR bstrID,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveChromeBrowserWnd )( 
+            IHubble * This,
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostChromeBrowserWnd )( 
+            IHubble * This,
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateNode )( 
+            IHubble * This,
+            IStar *pNode,
+            BSTR bstrBrowserID,
+            BSTR bstrXml);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxyCluster )( 
+            IHubble * This,
+            LONGLONG hWnd,
+            /* [retval][out] */ IGalaxyCluster **ppGalaxyCluster);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateOfficeDocument )( 
+            IHubble * This,
+            BSTR bstrXml);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateCLRObj )( 
+            IHubble * This,
+            BSTR bstrObjID,
+            /* [retval][out] */ IDispatch **ppDisp);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartApplication )( 
+            IHubble * This,
+            BSTR bstrAppID,
+            BSTR bstrXml);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasar )( 
+            IHubble * This,
+            LONGLONG hHostWnd,
+            /* [retval][out] */ IQuasar **ppQuasar);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetItemText )( 
+            IHubble * This,
+            IStar *pNode,
+            long nCtrlID,
+            LONG nMaxLengeh,
+            /* [retval][out] */ BSTR *bstrRet);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetItemText )( 
+            IHubble * This,
+            IStar *pNode,
+            long nCtrlID,
+            BSTR bstrText);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCLRControl )( 
+            IHubble * This,
+            IDispatch *CtrlDisp,
+            BSTR bstrName,
+            /* [retval][out] */ IDispatch **ppRetDisp);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
+            IHubble * This,
+            LONGLONG hWnd,
+            BSTR bstrContext,
+            BSTR bstrCaption,
+            long nStyle,
+            /* [retval][out] */ int *nRet);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Encode )( 
+            IHubble * This,
+            BSTR bstrSRC,
+            VARIANT_BOOL bEncode,
+            /* [retval][out] */ BSTR *bstrRet);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetHostFocus )( 
+            IHubble * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdareStar )( 
+            IHubble * This,
+            IStar *pNode);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewGUID )( 
+            IHubble * This,
+            /* [retval][out] */ BSTR *retVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ActiveCLRMethod )( 
+            IHubble * This,
+            BSTR bstrObjID,
+            BSTR bstrMethod,
+            BSTR bstrParam,
+            BSTR bstrData);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownLoadFile )( 
+            IHubble * This,
+            BSTR strFileURL,
+            BSTR bstrTargetFile,
+            BSTR bstrActionXml);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
+            IHubble * This,
+            IDispatch *pCtrl,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ IDispatch **ppCtrlDisp);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetStarFromHandle )( 
+            IHubble * This,
+            LONGLONG hWnd,
+            /* [retval][out] */ IStar **ppRetNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlValueByName )( 
+            IHubble * This,
+            IDispatch *pCtrl,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            /* [retval][out] */ BSTR *bstrVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetCtrlValueByName )( 
+            IHubble * This,
+            IDispatch *pCtrl,
+            BSTR bstrName,
+            VARIANT_BOOL bFindInChild,
+            BSTR bstrVal);
+        
+        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *CreateHubbleCtrl )( 
+            IHubble * This,
+            BSTR bstrAppID,
+            /* [retval][out] */ IHubbleCtrl **ppRetCtrl);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetWindowClientDefaultNode )( 
+            IHubble * This,
+            IDispatch *pAddDisp,
+            LONGLONG hParent,
+            BSTR bstrWndClaName,
+            BSTR bstrGalaxyClusterName,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDocTemplateXml )( 
+            IHubble * This,
+            BSTR bstrCaption,
+            BSTR bstrPath,
+            BSTR bstrFilter,
+            /* [retval][out] */ BSTR *bstrTemplatePath);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenTangramFile )( 
+            IHubble * This,
+            /* [retval][out] */ IHubbleDoc **ppDoc);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateHubbleEventObj )( 
+            IHubble * This,
+            /* [retval][out] */ IHubbleEventObj **ppHubbleEventObj);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FireHubbleEventObj )( 
+            IHubble * This,
+            IHubbleEventObj *pHubbleEventObj);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveQuasars )( 
+            IHubble * This,
+            LONGLONG hWnd,
+            BSTR bstrQuasars,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfigFile);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeletePage )( 
+            IHubble * This,
+            LONGLONG PageHandle);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *LoadDocComponent )( 
+            IHubble * This,
+            BSTR bstrLib,
+            /* [retval][out] */ LONGLONG *llAppProxy);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenTangramDocFile )( 
+            IHubble * This,
+            BSTR bstrFilePath,
+            /* [retval][out] */ IHubbleDoc **ppDoc);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCLRApp )( 
+            IHubble * This,
+            BSTR strInitXml,
+            /* [retval][out] */ LONGLONG *llHandle);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateOutLookObj )( 
+            IHubble * This,
+            BSTR bstrObjType,
+            int nType,
+            BSTR bstrURL,
+            /* [retval][out] */ IDispatch **ppRetDisp);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NewWorkBench )( 
+            IHubble * This,
+            BSTR bstrTangramDoc,
+            /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateBrowser )( 
+            IHubble * This,
+            ULONGLONG hParentWnd,
+            BSTR strUrls,
+            /* [retval][out] */ IBrowser **ppRet);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *HubbleNotify )( 
+            IHubble * This,
+            BSTR strXml1,
+            BSTR strXml2,
+            LONGLONG wParam,
+            LONGLONG lParam);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteQuasar )( 
+            IHubble * This,
+            IQuasar *pQuasar);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
+            IHubble * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SelectVSObj )( 
+            IHubble * This,
+            BSTR bstrData,
+            IDispatch *pVSObj,
+            LONGLONG nHandle);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleCommand )( 
+            IHubble * This,
+            IDispatch *RibbonControl);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetImage )( 
+            IHubble * This,
+            BSTR strValue,
+            /* [retval][out] */ IPictureDisp **ppdispImage);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetVisible )( 
+            IHubble * This,
+            IDispatch *RibbonControl,
+            /* [retval][out] */ VARIANT *varVisible);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleOnLoad )( 
+            IHubble * This,
+            IDispatch *RibbonControl);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetItemCount )( 
+            IHubble * This,
+            IDispatch *RibbonControl,
+            /* [retval][out] */ long *nCount);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetItemLabel )( 
+            IHubble * This,
+            IDispatch *RibbonControl,
+            long nIndex,
+            /* [retval][out] */ BSTR *bstrLabel);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetItemID )( 
+            IHubble * This,
+            IDispatch *RibbonControl,
+            long nIndex,
+            /* [retval][out] */ BSTR *bstrID);
+        
+        END_INTERFACE
+    } IHubbleVtbl;
+
+    interface IHubble
+    {
+        CONST_VTBL struct IHubbleVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubble_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubble_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubble_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubble_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubble_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubble_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubble_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubble_get_Application(This,pVal)	\
+    ( (This)->lpVtbl -> get_Application(This,pVal) ) 
+
+#define IHubble_put_Application(This,newVal)	\
+    ( (This)->lpVtbl -> put_Application(This,newVal) ) 
+
+#define IHubble_get_AppKeyValue(This,bstrKey,pVal)	\
+    ( (This)->lpVtbl -> get_AppKeyValue(This,bstrKey,pVal) ) 
+
+#define IHubble_put_AppKeyValue(This,bstrKey,newVal)	\
+    ( (This)->lpVtbl -> put_AppKeyValue(This,bstrKey,newVal) ) 
+
+#define IHubble_get_AppExtender(This,bstrKey,pVal)	\
+    ( (This)->lpVtbl -> get_AppExtender(This,bstrKey,pVal) ) 
+
+#define IHubble_put_AppExtender(This,bstrKey,newVal)	\
+    ( (This)->lpVtbl -> put_AppExtender(This,bstrKey,newVal) ) 
+
+#define IHubble_get_RootNodes(This,ppNodeColletion)	\
+    ( (This)->lpVtbl -> get_RootNodes(This,ppNodeColletion) ) 
+
+#define IHubble_get_HostWnd(This,pVal)	\
+    ( (This)->lpVtbl -> get_HostWnd(This,pVal) ) 
+
+#define IHubble_get_CurrentActiveStar(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentActiveStar(This,pVal) ) 
+
+#define IHubble_get_CreatingStar(This,pVal)	\
+    ( (This)->lpVtbl -> get_CreatingStar(This,pVal) ) 
+
+#define IHubble_get_RemoteHubble(This,bstrID,pVal)	\
+    ( (This)->lpVtbl -> get_RemoteHubble(This,bstrID,pVal) ) 
+
+#define IHubble_get_Extender(This,pVal)	\
+    ( (This)->lpVtbl -> get_Extender(This,pVal) ) 
+
+#define IHubble_put_Extender(This,newVal)	\
+    ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
+
+#define IHubble_get_RemoteHelperHWND(This,pVal)	\
+    ( (This)->lpVtbl -> get_RemoteHelperHWND(This,pVal) ) 
+
+#define IHubble_put_RemoteHelperHWND(This,newVal)	\
+    ( (This)->lpVtbl -> put_RemoteHelperHWND(This,newVal) ) 
+
+#define IHubble_get_DesignNode(This,pVal)	\
+    ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 
+
+#define IHubble_get_TangramDoc(This,AppProxy,nDocID,pVal)	\
+    ( (This)->lpVtbl -> get_TangramDoc(This,AppProxy,nDocID,pVal) ) 
+
+#define IHubble_get_DocTemplate(This,bstrID,pVal)	\
+    ( (This)->lpVtbl -> get_DocTemplate(This,bstrID,pVal) ) 
+
+#define IHubble_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
+    ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
+
+#define IHubble_get_HostChromeBrowserWnd(This,ppChromeWebBrowser)	\
+    ( (This)->lpVtbl -> get_HostChromeBrowserWnd(This,ppChromeWebBrowser) ) 
+
+#define IHubble_NavigateNode(This,pNode,bstrBrowserID,bstrXml)	\
+    ( (This)->lpVtbl -> NavigateNode(This,pNode,bstrBrowserID,bstrXml) ) 
+
+#define IHubble_CreateGalaxyCluster(This,hWnd,ppGalaxyCluster)	\
+    ( (This)->lpVtbl -> CreateGalaxyCluster(This,hWnd,ppGalaxyCluster) ) 
+
+#define IHubble_CreateOfficeDocument(This,bstrXml)	\
+    ( (This)->lpVtbl -> CreateOfficeDocument(This,bstrXml) ) 
+
+#define IHubble_CreateCLRObj(This,bstrObjID,ppDisp)	\
+    ( (This)->lpVtbl -> CreateCLRObj(This,bstrObjID,ppDisp) ) 
+
+#define IHubble_StartApplication(This,bstrAppID,bstrXml)	\
+    ( (This)->lpVtbl -> StartApplication(This,bstrAppID,bstrXml) ) 
+
+#define IHubble_GetQuasar(This,hHostWnd,ppQuasar)	\
+    ( (This)->lpVtbl -> GetQuasar(This,hHostWnd,ppQuasar) ) 
+
+#define IHubble_GetItemText(This,pNode,nCtrlID,nMaxLengeh,bstrRet)	\
+    ( (This)->lpVtbl -> GetItemText(This,pNode,nCtrlID,nMaxLengeh,bstrRet) ) 
+
+#define IHubble_SetItemText(This,pNode,nCtrlID,bstrText)	\
+    ( (This)->lpVtbl -> SetItemText(This,pNode,nCtrlID,bstrText) ) 
+
+#define IHubble_GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp)	\
+    ( (This)->lpVtbl -> GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp) ) 
+
+#define IHubble_MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet)	\
+    ( (This)->lpVtbl -> MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet) ) 
+
+#define IHubble_Encode(This,bstrSRC,bEncode,bstrRet)	\
+    ( (This)->lpVtbl -> Encode(This,bstrSRC,bEncode,bstrRet) ) 
+
+#define IHubble_SetHostFocus(This)	\
+    ( (This)->lpVtbl -> SetHostFocus(This) ) 
+
+#define IHubble_UpdareStar(This,pNode)	\
+    ( (This)->lpVtbl -> UpdareStar(This,pNode) ) 
+
+#define IHubble_NewGUID(This,retVal)	\
+    ( (This)->lpVtbl -> NewGUID(This,retVal) ) 
+
+#define IHubble_ActiveCLRMethod(This,bstrObjID,bstrMethod,bstrParam,bstrData)	\
+    ( (This)->lpVtbl -> ActiveCLRMethod(This,bstrObjID,bstrMethod,bstrParam,bstrData) ) 
+
+#define IHubble_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
+    ( (This)->lpVtbl -> DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml) ) 
+
+#define IHubble_GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp)	\
+    ( (This)->lpVtbl -> GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp) ) 
+
+#define IHubble_GetStarFromHandle(This,hWnd,ppRetNode)	\
+    ( (This)->lpVtbl -> GetStarFromHandle(This,hWnd,ppRetNode) ) 
+
+#define IHubble_GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
+    ( (This)->lpVtbl -> GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal) ) 
+
+#define IHubble_SetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
+    ( (This)->lpVtbl -> SetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal) ) 
+
+#define IHubble_CreateHubbleCtrl(This,bstrAppID,ppRetCtrl)	\
+    ( (This)->lpVtbl -> CreateHubbleCtrl(This,bstrAppID,ppRetCtrl) ) 
+
+#define IHubble_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppNode)	\
+    ( (This)->lpVtbl -> GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppNode) ) 
+
+#define IHubble_GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath)	\
+    ( (This)->lpVtbl -> GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath) ) 
+
+#define IHubble_OpenTangramFile(This,ppDoc)	\
+    ( (This)->lpVtbl -> OpenTangramFile(This,ppDoc) ) 
+
+#define IHubble_CreateHubbleEventObj(This,ppHubbleEventObj)	\
+    ( (This)->lpVtbl -> CreateHubbleEventObj(This,ppHubbleEventObj) ) 
+
+#define IHubble_FireHubbleEventObj(This,pHubbleEventObj)	\
+    ( (This)->lpVtbl -> FireHubbleEventObj(This,pHubbleEventObj) ) 
+
+#define IHubble_ObserveQuasars(This,hWnd,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile)	\
+    ( (This)->lpVtbl -> ObserveQuasars(This,hWnd,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile) ) 
+
+#define IHubble_DeletePage(This,PageHandle)	\
+    ( (This)->lpVtbl -> DeletePage(This,PageHandle) ) 
+
+#define IHubble_LoadDocComponent(This,bstrLib,llAppProxy)	\
+    ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
+
+#define IHubble_OpenTangramDocFile(This,bstrFilePath,ppDoc)	\
+    ( (This)->lpVtbl -> OpenTangramDocFile(This,bstrFilePath,ppDoc) ) 
+
+#define IHubble_InitCLRApp(This,strInitXml,llHandle)	\
+    ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
+
+#define IHubble_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
+    ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
+
+#define IHubble_NewWorkBench(This,bstrTangramDoc,ppWorkBenchWindow)	\
+    ( (This)->lpVtbl -> NewWorkBench(This,bstrTangramDoc,ppWorkBenchWindow) ) 
+
+#define IHubble_CreateBrowser(This,hParentWnd,strUrls,ppRet)	\
+    ( (This)->lpVtbl -> CreateBrowser(This,hParentWnd,strUrls,ppRet) ) 
+
+#define IHubble_HubbleNotify(This,strXml1,strXml2,wParam,lParam)	\
+    ( (This)->lpVtbl -> HubbleNotify(This,strXml1,strXml2,wParam,lParam) ) 
+
+#define IHubble_DeleteQuasar(This,pQuasar)	\
+    ( (This)->lpVtbl -> DeleteQuasar(This,pQuasar) ) 
+
+#define IHubble_InitEclipseApp(This)	\
+    ( (This)->lpVtbl -> InitEclipseApp(This) ) 
+
+#define IHubble_SelectVSObj(This,bstrData,pVSObj,nHandle)	\
+    ( (This)->lpVtbl -> SelectVSObj(This,bstrData,pVSObj,nHandle) ) 
+
+#define IHubble_HubbleCommand(This,RibbonControl)	\
+    ( (This)->lpVtbl -> HubbleCommand(This,RibbonControl) ) 
+
+#define IHubble_HubbleGetImage(This,strValue,ppdispImage)	\
+    ( (This)->lpVtbl -> HubbleGetImage(This,strValue,ppdispImage) ) 
+
+#define IHubble_HubbleGetVisible(This,RibbonControl,varVisible)	\
+    ( (This)->lpVtbl -> HubbleGetVisible(This,RibbonControl,varVisible) ) 
+
+#define IHubble_HubbleOnLoad(This,RibbonControl)	\
+    ( (This)->lpVtbl -> HubbleOnLoad(This,RibbonControl) ) 
+
+#define IHubble_HubbleGetItemCount(This,RibbonControl,nCount)	\
+    ( (This)->lpVtbl -> HubbleGetItemCount(This,RibbonControl,nCount) ) 
+
+#define IHubble_HubbleGetItemLabel(This,RibbonControl,nIndex,bstrLabel)	\
+    ( (This)->lpVtbl -> HubbleGetItemLabel(This,RibbonControl,nIndex,bstrLabel) ) 
+
+#define IHubble_HubbleGetItemID(This,RibbonControl,nIndex,bstrID)	\
+    ( (This)->lpVtbl -> HubbleGetItemID(This,RibbonControl,nIndex,bstrID) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubble_INTERFACE_DEFINED__ */
+
+
+#ifndef __IQuasar_INTERFACE_DEFINED__
+#define __IQuasar_INTERFACE_DEFINED__
+
+/* interface IQuasar */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IQuasar;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119820003")
+    IQuasar : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Star( 
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
+            /* [retval][out] */ IUnknown **ppVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HWND( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VisibleStar( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentNavigateKey( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarData( 
+            BSTR bstrKey,
+            /* [retval][out] */ VARIANT *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_QuasarData( 
+            BSTR bstrKey,
+            /* [in] */ VARIANT newVal) = 0;
+        
+        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignerState( 
+            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        
+        virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_DesignerState( 
+            /* [in] */ VARIANT_BOOL newVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
+            /* [retval][out] */ long *pCount) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootStars( 
+            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarXML( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramDoc( 
+            /* [retval][out] */ IHubbleDoc **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarType( 
+            /* [retval][out] */ QuasarType *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostBrowser( 
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWebPage( 
+            /* [retval][out] */ IWebPage **ppChromeWebPage) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Detach( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Attach( void) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ModifyHost( 
+            LONGLONG hHostWnd) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetXml( 
+            BSTR bstrRootName,
+            /* [retval][out] */ BSTR *bstrRet) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IQuasarVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IQuasar * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IQuasar * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IQuasar * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IQuasar * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IQuasar * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IQuasar * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IQuasar * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Star )( 
+            IQuasar * This,
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IQuasar * This,
+            /* [retval][out] */ IUnknown **ppVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+            IQuasar * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VisibleStar )( 
+            IQuasar * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentNavigateKey )( 
+            IQuasar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyCluster )( 
+            IQuasar * This,
+            /* [retval][out] */ IGalaxyCluster **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarData )( 
+            IQuasar * This,
+            BSTR bstrKey,
+            /* [retval][out] */ VARIANT *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_QuasarData )( 
+            IQuasar * This,
+            BSTR bstrKey,
+            /* [in] */ VARIANT newVal);
+        
+        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignerState )( 
+            IQuasar * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
+        
+        /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignerState )( 
+            IQuasar * This,
+            /* [in] */ VARIANT_BOOL newVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IQuasar * This,
+            /* [retval][out] */ long *pCount);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootStars )( 
+            IQuasar * This,
+            /* [retval][out] */ IStarCollection **ppNodeColletion);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarXML )( 
+            IQuasar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramDoc )( 
+            IQuasar * This,
+            /* [retval][out] */ IHubbleDoc **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarType )( 
+            IQuasar * This,
+            /* [retval][out] */ QuasarType *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IQuasar * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostBrowser )( 
+            IQuasar * This,
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWebPage )( 
+            IQuasar * This,
+            /* [retval][out] */ IWebPage **ppChromeWebPage);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Detach )( 
+            IQuasar * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Attach )( 
+            IQuasar * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ModifyHost )( 
+            IQuasar * This,
+            LONGLONG hHostWnd);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
+            IQuasar * This,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetXml )( 
+            IQuasar * This,
+            BSTR bstrRootName,
+            /* [retval][out] */ BSTR *bstrRet);
+        
+        END_INTERFACE
+    } IQuasarVtbl;
+
+    interface IQuasar
+    {
+        CONST_VTBL struct IQuasarVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IQuasar_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IQuasar_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IQuasar_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IQuasar_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IQuasar_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IQuasar_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IQuasar_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IQuasar_get_Star(This,vIndex,ppNode)	\
+    ( (This)->lpVtbl -> get_Star(This,vIndex,ppNode) ) 
+
+#define IQuasar_get__NewEnum(This,ppVal)	\
+    ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
+
+#define IQuasar_get_HWND(This,pVal)	\
+    ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
+
+#define IQuasar_get_VisibleStar(This,pVal)	\
+    ( (This)->lpVtbl -> get_VisibleStar(This,pVal) ) 
+
+#define IQuasar_get_CurrentNavigateKey(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentNavigateKey(This,pVal) ) 
+
+#define IQuasar_get_GalaxyCluster(This,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
+
+#define IQuasar_get_QuasarData(This,bstrKey,pVal)	\
+    ( (This)->lpVtbl -> get_QuasarData(This,bstrKey,pVal) ) 
+
+#define IQuasar_put_QuasarData(This,bstrKey,newVal)	\
+    ( (This)->lpVtbl -> put_QuasarData(This,bstrKey,newVal) ) 
+
+#define IQuasar_get_DesignerState(This,pVal)	\
+    ( (This)->lpVtbl -> get_DesignerState(This,pVal) ) 
+
+#define IQuasar_put_DesignerState(This,newVal)	\
+    ( (This)->lpVtbl -> put_DesignerState(This,newVal) ) 
+
+#define IQuasar_get_Count(This,pCount)	\
+    ( (This)->lpVtbl -> get_Count(This,pCount) ) 
+
+#define IQuasar_get_RootStars(This,ppNodeColletion)	\
+    ( (This)->lpVtbl -> get_RootStars(This,ppNodeColletion) ) 
+
+#define IQuasar_get_QuasarXML(This,pVal)	\
+    ( (This)->lpVtbl -> get_QuasarXML(This,pVal) ) 
+
+#define IQuasar_get_TangramDoc(This,pVal)	\
+    ( (This)->lpVtbl -> get_TangramDoc(This,pVal) ) 
+
+#define IQuasar_get_QuasarType(This,pVal)	\
+    ( (This)->lpVtbl -> get_QuasarType(This,pVal) ) 
+
+#define IQuasar_get_Name(This,pVal)	\
+    ( (This)->lpVtbl -> get_Name(This,pVal) ) 
+
+#define IQuasar_get_HostBrowser(This,ppChromeWebBrowser)	\
+    ( (This)->lpVtbl -> get_HostBrowser(This,ppChromeWebBrowser) ) 
+
+#define IQuasar_get_HostWebPage(This,ppChromeWebPage)	\
+    ( (This)->lpVtbl -> get_HostWebPage(This,ppChromeWebPage) ) 
+
+#define IQuasar_Detach(This)	\
+    ( (This)->lpVtbl -> Detach(This) ) 
+
+#define IQuasar_Attach(This)	\
+    ( (This)->lpVtbl -> Attach(This) ) 
+
+#define IQuasar_ModifyHost(This,hHostWnd)	\
+    ( (This)->lpVtbl -> ModifyHost(This,hHostWnd) ) 
+
+#define IQuasar_Observe(This,bstrKey,bstrXml,ppRetNode)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetNode) ) 
+
+#define IQuasar_GetXml(This,bstrRootName,bstrRet)	\
+    ( (This)->lpVtbl -> GetXml(This,bstrRootName,bstrRet) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IQuasar_INTERFACE_DEFINED__ */
+
+
+#ifndef __IStarCollection_INTERFACE_DEFINED__
+#define __IStarCollection_INTERFACE_DEFINED__
+
+/* interface IStarCollection */
+/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IStarCollection;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119820017")
+    IStarCollection : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StarCount( 
+            /* [retval][out] */ long *pCount) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
+            /* [in] */ long iIndex,
+            /* [retval][out] */ IStar **ppTopWindow) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
+            /* [retval][out] */ IUnknown **ppVal) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IStarCollectionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IStarCollection * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IStarCollection * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IStarCollection * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IStarCollection * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IStarCollection * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IStarCollection * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IStarCollection * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StarCount )( 
+            IStarCollection * This,
+            /* [retval][out] */ long *pCount);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            IStarCollection * This,
+            /* [in] */ long iIndex,
+            /* [retval][out] */ IStar **ppTopWindow);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IStarCollection * This,
+            /* [retval][out] */ IUnknown **ppVal);
+        
+        END_INTERFACE
+    } IStarCollectionVtbl;
+
+    interface IStarCollection
+    {
+        CONST_VTBL struct IStarCollectionVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IStarCollection_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IStarCollection_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IStarCollection_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IStarCollection_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IStarCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IStarCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IStarCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IStarCollection_get_StarCount(This,pCount)	\
+    ( (This)->lpVtbl -> get_StarCount(This,pCount) ) 
+
+#define IStarCollection_get_Item(This,iIndex,ppTopWindow)	\
+    ( (This)->lpVtbl -> get_Item(This,iIndex,ppTopWindow) ) 
+
+#define IStarCollection_get__NewEnum(This,ppVal)	\
+    ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IStarCollection_INTERFACE_DEFINED__ */
+
+
+#ifndef __IGalaxyCluster_INTERFACE_DEFINED__
+#define __IGalaxyCluster_INTERFACE_DEFINED__
+
+/* interface IGalaxyCluster */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IGalaxyCluster;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119820002")
+    IGalaxyCluster : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Quasar( 
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
+            /* [retval][out] */ IUnknown **ppVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
+            /* [retval][out] */ long *pCount) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_xtml( 
+            BSTR strKey,
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_xtml( 
+            BSTR strKey,
+            /* [in] */ BSTR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
+            BSTR bstrExtenderName,
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
+            BSTR bstrExtenderName,
+            /* [in] */ IDispatch *newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Star( 
+            BSTR bstrNodeName,
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XObject( 
+            BSTR bstrName,
+            /* [retval][out] */ IDispatch **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarName( 
+            LONGLONG hHwnd,
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Width( 
+            /* [retval][out] */ long *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Width( 
+            /* [in] */ long newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Height( 
+            /* [retval][out] */ long *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Height( 
+            /* [in] */ long newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StarNames( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyClusterXML( 
+            /* [retval][out] */ BSTR *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ConfigName( 
+            /* [in] */ BSTR newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignQuasarType( 
+            /* [retval][out] */ QuasarType *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignNode( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateQuasar( 
+            VARIANT ParentObj,
+            VARIANT HostWnd,
+            BSTR bstrQuasarName,
+            /* [retval][out] */ IQuasar **pRetQuasar) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
+            IDispatch *Parent,
+            BSTR CtrlName,
+            BSTR QuasarName,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveCtrl( 
+            VARIANT Ctrl,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetStar( 
+            BSTR bstrQuasarName,
+            BSTR bstrNodeName,
+            /* [retval][out] */ IStar **pRetNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlInStar( 
+            BSTR NodeName,
+            BSTR CtrlName,
+            /* [retval][out] */ IDispatch **ppCtrl) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarFromCtrl( 
+            IDispatch *ctrl,
+            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectHubbleCtrl( 
+            IHubbleCtrl *eventSource) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateQuasarWithDefaultNode( 
+            ULONGLONG hQuasarWnd,
+            BSTR bstrQuasarName,
+            BSTR bstrDefaultNodeKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfig,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveQuasars( 
+            BSTR bstrQuasars,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfigFile) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IGalaxyClusterVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGalaxyCluster * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGalaxyCluster * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGalaxyCluster * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IGalaxyCluster * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IGalaxyCluster * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IGalaxyCluster * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IGalaxyCluster * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Quasar )( 
+            IGalaxyCluster * This,
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IQuasar **ppQuasar);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ IUnknown **ppVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ long *pCount);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xtml )( 
+            IGalaxyCluster * This,
+            BSTR strKey,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_xtml )( 
+            IGalaxyCluster * This,
+            BSTR strKey,
+            /* [in] */ BSTR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
+            IGalaxyCluster * This,
+            BSTR bstrExtenderName,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
+            IGalaxyCluster * This,
+            BSTR bstrExtenderName,
+            /* [in] */ IDispatch *newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Star )( 
+            IGalaxyCluster * This,
+            BSTR bstrNodeName,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XObject )( 
+            IGalaxyCluster * This,
+            BSTR bstrName,
+            /* [retval][out] */ IDispatch **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarName )( 
+            IGalaxyCluster * This,
+            LONGLONG hHwnd,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ long *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+            IGalaxyCluster * This,
+            /* [in] */ long newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ long *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+            IGalaxyCluster * This,
+            /* [in] */ long newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StarNames )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ IGalaxyCluster **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyClusterXML )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ BSTR *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ConfigName )( 
+            IGalaxyCluster * This,
+            /* [in] */ BSTR newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignQuasarType )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ QuasarType *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignNode )( 
+            IGalaxyCluster * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateQuasar )( 
+            IGalaxyCluster * This,
+            VARIANT ParentObj,
+            VARIANT HostWnd,
+            BSTR bstrQuasarName,
+            /* [retval][out] */ IQuasar **pRetQuasar);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
+            IGalaxyCluster * This,
+            IDispatch *Parent,
+            BSTR CtrlName,
+            BSTR QuasarName,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveCtrl )( 
+            IGalaxyCluster * This,
+            VARIANT Ctrl,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetStar )( 
+            IGalaxyCluster * This,
+            BSTR bstrQuasarName,
+            BSTR bstrNodeName,
+            /* [retval][out] */ IStar **pRetNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlInStar )( 
+            IGalaxyCluster * This,
+            BSTR NodeName,
+            BSTR CtrlName,
+            /* [retval][out] */ IDispatch **ppCtrl);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarFromCtrl )( 
+            IGalaxyCluster * This,
+            IDispatch *ctrl,
+            /* [retval][out] */ IQuasar **ppQuasar);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectHubbleCtrl )( 
+            IGalaxyCluster * This,
+            IHubbleCtrl *eventSource);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateQuasarWithDefaultNode )( 
+            IGalaxyCluster * This,
+            ULONGLONG hQuasarWnd,
+            BSTR bstrQuasarName,
+            BSTR bstrDefaultNodeKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfig,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveQuasars )( 
+            IGalaxyCluster * This,
+            BSTR bstrQuasars,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfigFile);
+        
+        END_INTERFACE
+    } IGalaxyClusterVtbl;
+
+    interface IGalaxyCluster
+    {
+        CONST_VTBL struct IGalaxyClusterVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IGalaxyCluster_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IGalaxyCluster_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IGalaxyCluster_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IGalaxyCluster_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IGalaxyCluster_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IGalaxyCluster_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IGalaxyCluster_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IGalaxyCluster_get_Quasar(This,vIndex,ppQuasar)	\
+    ( (This)->lpVtbl -> get_Quasar(This,vIndex,ppQuasar) ) 
+
+#define IGalaxyCluster_get__NewEnum(This,ppVal)	\
+    ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
+
+#define IGalaxyCluster_get_Count(This,pCount)	\
+    ( (This)->lpVtbl -> get_Count(This,pCount) ) 
+
+#define IGalaxyCluster_get_xtml(This,strKey,pVal)	\
+    ( (This)->lpVtbl -> get_xtml(This,strKey,pVal) ) 
+
+#define IGalaxyCluster_put_xtml(This,strKey,newVal)	\
+    ( (This)->lpVtbl -> put_xtml(This,strKey,newVal) ) 
+
+#define IGalaxyCluster_get_Extender(This,bstrExtenderName,pVal)	\
+    ( (This)->lpVtbl -> get_Extender(This,bstrExtenderName,pVal) ) 
+
+#define IGalaxyCluster_put_Extender(This,bstrExtenderName,newVal)	\
+    ( (This)->lpVtbl -> put_Extender(This,bstrExtenderName,newVal) ) 
+
+#define IGalaxyCluster_get_Star(This,bstrNodeName,pVal)	\
+    ( (This)->lpVtbl -> get_Star(This,bstrNodeName,pVal) ) 
+
+#define IGalaxyCluster_get_XObject(This,bstrName,pVal)	\
+    ( (This)->lpVtbl -> get_XObject(This,bstrName,pVal) ) 
+
+#define IGalaxyCluster_get_QuasarName(This,hHwnd,pVal)	\
+    ( (This)->lpVtbl -> get_QuasarName(This,hHwnd,pVal) ) 
+
+#define IGalaxyCluster_get_Handle(This,pVal)	\
+    ( (This)->lpVtbl -> get_Handle(This,pVal) ) 
+
+#define IGalaxyCluster_get_Width(This,pVal)	\
+    ( (This)->lpVtbl -> get_Width(This,pVal) ) 
+
+#define IGalaxyCluster_put_Width(This,newVal)	\
+    ( (This)->lpVtbl -> put_Width(This,newVal) ) 
+
+#define IGalaxyCluster_get_Height(This,pVal)	\
+    ( (This)->lpVtbl -> get_Height(This,pVal) ) 
+
+#define IGalaxyCluster_put_Height(This,newVal)	\
+    ( (This)->lpVtbl -> put_Height(This,newVal) ) 
+
+#define IGalaxyCluster_get_StarNames(This,pVal)	\
+    ( (This)->lpVtbl -> get_StarNames(This,pVal) ) 
+
+#define IGalaxyCluster_get_Parent(This,pVal)	\
+    ( (This)->lpVtbl -> get_Parent(This,pVal) ) 
+
+#define IGalaxyCluster_get_GalaxyClusterXML(This,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyClusterXML(This,pVal) ) 
+
+#define IGalaxyCluster_put_ConfigName(This,newVal)	\
+    ( (This)->lpVtbl -> put_ConfigName(This,newVal) ) 
+
+#define IGalaxyCluster_get_CurrentDesignQuasarType(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentDesignQuasarType(This,pVal) ) 
+
+#define IGalaxyCluster_get_CurrentDesignNode(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentDesignNode(This,pVal) ) 
+
+#define IGalaxyCluster_CreateQuasar(This,ParentObj,HostWnd,bstrQuasarName,pRetQuasar)	\
+    ( (This)->lpVtbl -> CreateQuasar(This,ParentObj,HostWnd,bstrQuasarName,pRetQuasar) ) 
+
+#define IGalaxyCluster_Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetNode)	\
+    ( (This)->lpVtbl -> Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetNode) ) 
+
+#define IGalaxyCluster_ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetNode)	\
+    ( (This)->lpVtbl -> ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetNode) ) 
+
+#define IGalaxyCluster_GetStar(This,bstrQuasarName,bstrNodeName,pRetNode)	\
+    ( (This)->lpVtbl -> GetStar(This,bstrQuasarName,bstrNodeName,pRetNode) ) 
+
+#define IGalaxyCluster_GetCtrlInStar(This,NodeName,CtrlName,ppCtrl)	\
+    ( (This)->lpVtbl -> GetCtrlInStar(This,NodeName,CtrlName,ppCtrl) ) 
+
+#define IGalaxyCluster_GetQuasarFromCtrl(This,ctrl,ppQuasar)	\
+    ( (This)->lpVtbl -> GetQuasarFromCtrl(This,ctrl,ppQuasar) ) 
+
+#define IGalaxyCluster_ConnectHubbleCtrl(This,eventSource)	\
+    ( (This)->lpVtbl -> ConnectHubbleCtrl(This,eventSource) ) 
+
+#define IGalaxyCluster_CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppNode)	\
+    ( (This)->lpVtbl -> CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppNode) ) 
+
+#define IGalaxyCluster_ObserveQuasars(This,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile)	\
+    ( (This)->lpVtbl -> ObserveQuasars(This,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IGalaxyCluster_INTERFACE_DEFINED__ */
+
+
+#ifndef __IWorkBenchWindow_INTERFACE_DEFINED__
+#define __IWorkBenchWindow_INTERFACE_DEFINED__
+
+/* interface IWorkBenchWindow */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IWorkBenchWindow;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119825D34")
+    IWorkBenchWindow : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Ctrl( 
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IEclipseCtrl **ppCtrl) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
+            /* [retval][out] */ IUnknown **ppVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
+            /* [retval][out] */ long *pCount) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HubbleCtrl( 
+            LONGLONG hWnd,
+            /* [retval][out] */ IEclipseCtrl **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Quasar( 
+            /* [retval][out] */ IQuasar **pVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Active( void) = 0;
+        
+        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE CloseTangramUI( void) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveInView( 
+            int nIndex,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IWorkBenchWindowVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWorkBenchWindow * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWorkBenchWindow * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWorkBenchWindow * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IWorkBenchWindow * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IWorkBenchWindow * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IWorkBenchWindow * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IWorkBenchWindow * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Ctrl )( 
+            IWorkBenchWindow * This,
+            /* [in] */ VARIANT vIndex,
+            /* [retval][out] */ IEclipseCtrl **ppCtrl);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IWorkBenchWindow * This,
+            /* [retval][out] */ IUnknown **ppVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IWorkBenchWindow * This,
+            /* [retval][out] */ long *pCount);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            IWorkBenchWindow * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HubbleCtrl )( 
+            IWorkBenchWindow * This,
+            LONGLONG hWnd,
+            /* [retval][out] */ IEclipseCtrl **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyCluster )( 
+            IWorkBenchWindow * This,
+            /* [retval][out] */ IGalaxyCluster **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Quasar )( 
+            IWorkBenchWindow * This,
+            /* [retval][out] */ IQuasar **pVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Active )( 
+            IWorkBenchWindow * This);
+        
+        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *CloseTangramUI )( 
+            IWorkBenchWindow * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
+            IWorkBenchWindow * This,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
+            IWorkBenchWindow * This,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveInView )( 
+            IWorkBenchWindow * This,
+            int nIndex,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppRetNode);
+        
+        END_INTERFACE
+    } IWorkBenchWindowVtbl;
+
+    interface IWorkBenchWindow
+    {
+        CONST_VTBL struct IWorkBenchWindowVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IWorkBenchWindow_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IWorkBenchWindow_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IWorkBenchWindow_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IWorkBenchWindow_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IWorkBenchWindow_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IWorkBenchWindow_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IWorkBenchWindow_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IWorkBenchWindow_get_Ctrl(This,vIndex,ppCtrl)	\
+    ( (This)->lpVtbl -> get_Ctrl(This,vIndex,ppCtrl) ) 
+
+#define IWorkBenchWindow_get__NewEnum(This,ppVal)	\
+    ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
+
+#define IWorkBenchWindow_get_Count(This,pCount)	\
+    ( (This)->lpVtbl -> get_Count(This,pCount) ) 
+
+#define IWorkBenchWindow_get_Handle(This,pVal)	\
+    ( (This)->lpVtbl -> get_Handle(This,pVal) ) 
+
+#define IWorkBenchWindow_get_HubbleCtrl(This,hWnd,pVal)	\
+    ( (This)->lpVtbl -> get_HubbleCtrl(This,hWnd,pVal) ) 
+
+#define IWorkBenchWindow_get_GalaxyCluster(This,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
+
+#define IWorkBenchWindow_get_Quasar(This,pVal)	\
+    ( (This)->lpVtbl -> get_Quasar(This,pVal) ) 
+
+#define IWorkBenchWindow_Active(This)	\
+    ( (This)->lpVtbl -> Active(This) ) 
+
+#define IWorkBenchWindow_CloseTangramUI(This)	\
+    ( (This)->lpVtbl -> CloseTangramUI(This) ) 
+
+#define IWorkBenchWindow_Observe(This,bstrKey,bstrXml,ppNode)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppNode) ) 
+
+#define IWorkBenchWindow_ObserveEx(This,bstrKey,bstrXml,ppNode)	\
+    ( (This)->lpVtbl -> ObserveEx(This,bstrKey,bstrXml,ppNode) ) 
+
+#define IWorkBenchWindow_ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetNode)	\
+    ( (This)->lpVtbl -> ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetNode) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IWorkBenchWindow_INTERFACE_DEFINED__ */
+
+
+#ifndef __IBrowser_INTERFACE_DEFINED__
+#define __IBrowser_INTERFACE_DEFINED__
+
+/* interface IBrowser */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IBrowser;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120180828")
+    IBrowser : public IDispatch
+    {
+    public:
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteStar( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteStar( 
+            /* [in] */ IStar *newVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenURL( 
+            BSTR bstrURL,
+            BrowserWndOpenDisposition nDisposition,
+            BSTR bstrKey,
+            BSTR bstrXml) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddURLs( 
+            BSTR bstrURLs) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IBrowserVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IBrowser * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IBrowser * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IBrowser * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IBrowser * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IBrowser * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IBrowser * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IBrowser * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteStar )( 
+            IBrowser * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteStar )( 
+            IBrowser * This,
+            /* [in] */ IStar *newVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenURL )( 
+            IBrowser * This,
+            BSTR bstrURL,
+            BrowserWndOpenDisposition nDisposition,
+            BSTR bstrKey,
+            BSTR bstrXml);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddURLs )( 
+            IBrowser * This,
+            BSTR bstrURLs);
+        
+        END_INTERFACE
+    } IBrowserVtbl;
+
+    interface IBrowser
+    {
+        CONST_VTBL struct IBrowserVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IBrowser_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IBrowser_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IBrowser_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IBrowser_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IBrowser_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IBrowser_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IBrowser_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IBrowser_get_RemoteStar(This,pVal)	\
+    ( (This)->lpVtbl -> get_RemoteStar(This,pVal) ) 
+
+#define IBrowser_put_RemoteStar(This,newVal)	\
+    ( (This)->lpVtbl -> put_RemoteStar(This,newVal) ) 
+
+#define IBrowser_OpenURL(This,bstrURL,nDisposition,bstrKey,bstrXml)	\
+    ( (This)->lpVtbl -> OpenURL(This,bstrURL,nDisposition,bstrKey,bstrXml) ) 
+
+#define IBrowser_AddURLs(This,bstrURLs)	\
+    ( (This)->lpVtbl -> AddURLs(This,bstrURLs) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IBrowser_INTERFACE_DEFINED__ */
+
+
+#ifndef __IWebPage_INTERFACE_DEFINED__
+#define __IWebPage_INTERFACE_DEFINED__
+
+/* interface IWebPage */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IWebPage;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120180903")
+    IWebPage : public IDispatch
+    {
+    public:
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWnd( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostWnd( 
+            /* [in] */ LONGLONG newVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateForm( 
+            BSTR bstrKey,
+            LONGLONG hParent,
+            /* [retval][out] */ IDispatch **pRetForm) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IWebPageVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWebPage * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWebPage * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWebPage * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IWebPage * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IWebPage * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IWebPage * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IWebPage * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWnd )( 
+            IWebPage * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostWnd )( 
+            IWebPage * This,
+            /* [in] */ LONGLONG newVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateForm )( 
+            IWebPage * This,
+            BSTR bstrKey,
+            LONGLONG hParent,
+            /* [retval][out] */ IDispatch **pRetForm);
+        
+        END_INTERFACE
+    } IWebPageVtbl;
+
+    interface IWebPage
+    {
+        CONST_VTBL struct IWebPageVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IWebPage_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IWebPage_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IWebPage_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IWebPage_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IWebPage_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IWebPage_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IWebPage_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IWebPage_get_HostWnd(This,pVal)	\
+    ( (This)->lpVtbl -> get_HostWnd(This,pVal) ) 
+
+#define IWebPage_put_HostWnd(This,newVal)	\
+    ( (This)->lpVtbl -> put_HostWnd(This,newVal) ) 
+
+#define IWebPage_CreateForm(This,bstrKey,hParent,pRetForm)	\
+    ( (This)->lpVtbl -> CreateForm(This,bstrKey,hParent,pRetForm) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IWebPage_INTERFACE_DEFINED__ */
+
+
+#ifndef __IOfficeObject_INTERFACE_DEFINED__
+#define __IOfficeObject_INTERFACE_DEFINED__
+
+/* interface IOfficeObject */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IOfficeObject;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119650606")
+    IOfficeObject : public IDispatch
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Show( 
+            VARIANT_BOOL bShow) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UnloadHubble( void) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IOfficeObjectVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOfficeObject * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOfficeObject * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOfficeObject * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IOfficeObject * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IOfficeObject * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IOfficeObject * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IOfficeObject * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Show )( 
+            IOfficeObject * This,
+            VARIANT_BOOL bShow);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
+            IOfficeObject * This,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UnloadHubble )( 
+            IOfficeObject * This);
+        
+        END_INTERFACE
+    } IOfficeObjectVtbl;
+
+    interface IOfficeObject
+    {
+        CONST_VTBL struct IOfficeObjectVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IOfficeObject_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IOfficeObject_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IOfficeObject_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IOfficeObject_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IOfficeObject_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IOfficeObject_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IOfficeObject_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IOfficeObject_Show(This,bShow)	\
+    ( (This)->lpVtbl -> Show(This,bShow) ) 
+
+#define IOfficeObject_Observe(This,bstrKey,bstrXml,ppNode)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppNode) ) 
+
+#define IOfficeObject_UnloadHubble(This)	\
+    ( (This)->lpVtbl -> UnloadHubble(This) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IOfficeObject_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleCtrl_INTERFACE_DEFINED__
+#define __IHubbleCtrl_INTERFACE_DEFINED__
+
+/* interface IHubbleCtrl */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleCtrl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-0601198231DC")
+    IHubbleCtrl : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HWND( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Hubble( 
+            /* [retval][out] */ IHubble **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_tag( 
+            /* [retval][out] */ VARIANT *pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_tag( 
+            /* [in] */ VARIANT newVal) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleCtrlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleCtrl * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleCtrl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleCtrl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleCtrl * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleCtrl * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleCtrl * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleCtrl * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+            IHubbleCtrl * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hubble )( 
+            IHubbleCtrl * This,
+            /* [retval][out] */ IHubble **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tag )( 
+            IHubbleCtrl * This,
+            /* [retval][out] */ VARIANT *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tag )( 
+            IHubbleCtrl * This,
+            /* [in] */ VARIANT newVal);
+        
+        END_INTERFACE
+    } IHubbleCtrlVtbl;
+
+    interface IHubbleCtrl
+    {
+        CONST_VTBL struct IHubbleCtrlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleCtrl_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleCtrl_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleCtrl_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleCtrl_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleCtrl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleCtrl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleCtrl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleCtrl_get_HWND(This,pVal)	\
+    ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
+
+#define IHubbleCtrl_get_Hubble(This,pVal)	\
+    ( (This)->lpVtbl -> get_Hubble(This,pVal) ) 
+
+#define IHubbleCtrl_get_tag(This,pVal)	\
+    ( (This)->lpVtbl -> get_tag(This,pVal) ) 
+
+#define IHubbleCtrl_put_tag(This,newVal)	\
+    ( (This)->lpVtbl -> put_tag(This,newVal) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleCtrl_INTERFACE_DEFINED__ */
+
+
+#ifndef __IHubbleAppCtrl_INTERFACE_DEFINED__
+#define __IHubbleAppCtrl_INTERFACE_DEFINED__
+
+/* interface IHubbleAppCtrl */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IHubbleAppCtrl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120161001")
+    IHubbleAppCtrl : public IHubbleCtrl
+    {
+    public:
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AppCtrl( 
+            /* [in] */ VARIANT_BOOL newVal) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IHubbleAppCtrlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHubbleAppCtrl * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHubbleAppCtrl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHubbleAppCtrl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IHubbleAppCtrl * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IHubbleAppCtrl * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IHubbleAppCtrl * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IHubbleAppCtrl * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+            IHubbleAppCtrl * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hubble )( 
+            IHubbleAppCtrl * This,
+            /* [retval][out] */ IHubble **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tag )( 
+            IHubbleAppCtrl * This,
+            /* [retval][out] */ VARIANT *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tag )( 
+            IHubbleAppCtrl * This,
+            /* [in] */ VARIANT newVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppCtrl )( 
+            IHubbleAppCtrl * This,
+            /* [in] */ VARIANT_BOOL newVal);
+        
+        END_INTERFACE
+    } IHubbleAppCtrlVtbl;
+
+    interface IHubbleAppCtrl
+    {
+        CONST_VTBL struct IHubbleAppCtrlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHubbleAppCtrl_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IHubbleAppCtrl_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IHubbleAppCtrl_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IHubbleAppCtrl_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IHubbleAppCtrl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IHubbleAppCtrl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IHubbleAppCtrl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IHubbleAppCtrl_get_HWND(This,pVal)	\
+    ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
+
+#define IHubbleAppCtrl_get_Hubble(This,pVal)	\
+    ( (This)->lpVtbl -> get_Hubble(This,pVal) ) 
+
+#define IHubbleAppCtrl_get_tag(This,pVal)	\
+    ( (This)->lpVtbl -> get_tag(This,pVal) ) 
+
+#define IHubbleAppCtrl_put_tag(This,newVal)	\
+    ( (This)->lpVtbl -> put_tag(This,newVal) ) 
+
+
+#define IHubbleAppCtrl_put_AppCtrl(This,newVal)	\
+    ( (This)->lpVtbl -> put_AppCtrl(This,newVal) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IHubbleAppCtrl_INTERFACE_DEFINED__ */
+
+
+#ifndef __IEclipseCtrl_INTERFACE_DEFINED__
+#define __IEclipseCtrl_INTERFACE_DEFINED__
+
+/* interface IEclipseCtrl */
+/* [unique][nonextensible][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEclipseCtrl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120160912")
+    IEclipseCtrl : public IHubbleCtrl
+    {
+    public:
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Handle( 
+            BSTR bstrHandleName,
+            /* [in] */ LONGLONG newVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EclipseViewHandle( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_WorkBenchWindow( 
+            /* [retval][out] */ IWorkBenchWindow **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TopGalaxyCluster( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TopQuasar( 
+            /* [retval][out] */ IQuasar **pVal) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveTopNode( 
+            /* [retval][out] */ IStar **pVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AppKeyValue( 
+            BSTR bstrKey,
+            /* [retval][out] */ VARIANT *pVal) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AppKeyValue( 
+            BSTR bstrKey,
+            /* [in] */ VARIANT newVal) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
+            BSTR bstrQuasarName,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
+            BSTR bstrQuasarName,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCtrl( 
+            BSTR bstrXml) = 0;
+        
+    };
+    
+    
+#else 	/* C style interface */
+
+    typedef struct IEclipseCtrlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEclipseCtrl * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEclipseCtrl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEclipseCtrl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEclipseCtrl * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEclipseCtrl * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEclipseCtrl * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEclipseCtrl * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hubble )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ IHubble **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tag )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ VARIANT *pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tag )( 
+            IEclipseCtrl * This,
+            /* [in] */ VARIANT newVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Handle )( 
+            IEclipseCtrl * This,
+            BSTR bstrHandleName,
+            /* [in] */ LONGLONG newVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EclipseViewHandle )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ LONGLONG *pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyCluster )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ IGalaxyCluster **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WorkBenchWindow )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ IWorkBenchWindow **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TopGalaxyCluster )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ IGalaxyCluster **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TopQuasar )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ IQuasar **pVal);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveTopNode )( 
+            IEclipseCtrl * This,
+            /* [retval][out] */ IStar **pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppKeyValue )( 
+            IEclipseCtrl * This,
+            BSTR bstrKey,
+            /* [retval][out] */ VARIANT *pVal);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppKeyValue )( 
+            IEclipseCtrl * This,
+            BSTR bstrKey,
+            /* [in] */ VARIANT newVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
+            IEclipseCtrl * This,
+            BSTR bstrQuasarName,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
+            IEclipseCtrl * This,
+            BSTR bstrQuasarName,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IStar **ppNode);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCtrl )( 
+            IEclipseCtrl * This,
+            BSTR bstrXml);
+        
+        END_INTERFACE
+    } IEclipseCtrlVtbl;
+
+    interface IEclipseCtrl
+    {
+        CONST_VTBL struct IEclipseCtrlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEclipseCtrl_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define IEclipseCtrl_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define IEclipseCtrl_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define IEclipseCtrl_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define IEclipseCtrl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define IEclipseCtrl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define IEclipseCtrl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+
+#define IEclipseCtrl_get_HWND(This,pVal)	\
+    ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
+
+#define IEclipseCtrl_get_Hubble(This,pVal)	\
+    ( (This)->lpVtbl -> get_Hubble(This,pVal) ) 
+
+#define IEclipseCtrl_get_tag(This,pVal)	\
+    ( (This)->lpVtbl -> get_tag(This,pVal) ) 
+
+#define IEclipseCtrl_put_tag(This,newVal)	\
+    ( (This)->lpVtbl -> put_tag(This,newVal) ) 
+
+
+#define IEclipseCtrl_put_Handle(This,bstrHandleName,newVal)	\
+    ( (This)->lpVtbl -> put_Handle(This,bstrHandleName,newVal) ) 
+
+#define IEclipseCtrl_get_EclipseViewHandle(This,pVal)	\
+    ( (This)->lpVtbl -> get_EclipseViewHandle(This,pVal) ) 
+
+#define IEclipseCtrl_get_GalaxyCluster(This,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
+
+#define IEclipseCtrl_get_WorkBenchWindow(This,pVal)	\
+    ( (This)->lpVtbl -> get_WorkBenchWindow(This,pVal) ) 
+
+#define IEclipseCtrl_get_TopGalaxyCluster(This,pVal)	\
+    ( (This)->lpVtbl -> get_TopGalaxyCluster(This,pVal) ) 
+
+#define IEclipseCtrl_get_TopQuasar(This,pVal)	\
+    ( (This)->lpVtbl -> get_TopQuasar(This,pVal) ) 
+
+#define IEclipseCtrl_get_ActiveTopNode(This,pVal)	\
+    ( (This)->lpVtbl -> get_ActiveTopNode(This,pVal) ) 
+
+#define IEclipseCtrl_get_AppKeyValue(This,bstrKey,pVal)	\
+    ( (This)->lpVtbl -> get_AppKeyValue(This,bstrKey,pVal) ) 
+
+#define IEclipseCtrl_put_AppKeyValue(This,bstrKey,newVal)	\
+    ( (This)->lpVtbl -> put_AppKeyValue(This,bstrKey,newVal) ) 
+
+#define IEclipseCtrl_Observe(This,bstrQuasarName,bstrKey,bstrXml,ppNode)	\
+    ( (This)->lpVtbl -> Observe(This,bstrQuasarName,bstrKey,bstrXml,ppNode) ) 
+
+#define IEclipseCtrl_ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppNode)	\
+    ( (This)->lpVtbl -> ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppNode) ) 
+
+#define IEclipseCtrl_InitCtrl(This,bstrXml)	\
+    ( (This)->lpVtbl -> InitCtrl(This,bstrXml) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IEclipseCtrl_INTERFACE_DEFINED__ */
+
+
+
+#ifndef __Universe_LIBRARY_DEFINED__
+#define __Universe_LIBRARY_DEFINED__
+
+/* library Universe */
+/* [helpstring][version][uuid] */ 
+
+
+EXTERN_C const IID LIBID_Universe;
+
+#ifndef ___IHubble_DISPINTERFACE_DEFINED__
+#define ___IHubble_DISPINTERFACE_DEFINED__
+
+/* dispinterface _IHubble */
+/* [helpstring][uuid] */ 
+
+
+EXTERN_C const IID DIID__IHubble;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119821002")
+    _IHubble : public IDispatch
+    {
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct _IHubbleVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            _IHubble * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            _IHubble * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            _IHubble * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            _IHubble * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            _IHubble * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            _IHubble * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            _IHubble * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        END_INTERFACE
+    } _IHubbleVtbl;
+
+    interface _IHubble
+    {
+        CONST_VTBL struct _IHubbleVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define _IHubble_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define _IHubble_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define _IHubble_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define _IHubble_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define _IHubble_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define _IHubble_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define _IHubble_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+#endif 	/* ___IHubble_DISPINTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_Universe;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("19631222-1992-0612-1965-060119990606")
+Universe;
+#endif
+
+#ifndef ___IStarEvents_DISPINTERFACE_DEFINED__
+#define ___IStarEvents_DISPINTERFACE_DEFINED__
+
+/* dispinterface _IStarEvents */
+/* [helpstring][uuid] */ 
+
+
+EXTERN_C const IID DIID__IStarEvents;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119821001")
+    _IStarEvents : public IDispatch
+    {
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct _IStarEventsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            _IStarEvents * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            _IStarEvents * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            _IStarEvents * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            _IStarEvents * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            _IStarEvents * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            _IStarEvents * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            _IStarEvents * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        END_INTERFACE
+    } _IStarEventsVtbl;
+
+    interface _IStarEvents
+    {
+        CONST_VTBL struct _IStarEventsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define _IStarEvents_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define _IStarEvents_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define _IStarEvents_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define _IStarEvents_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define _IStarEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define _IStarEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define _IStarEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+#endif 	/* ___IStarEvents_DISPINTERFACE_DEFINED__ */
+
+
+#ifndef ___IHubbleObjEvents_DISPINTERFACE_DEFINED__
+#define ___IHubbleObjEvents_DISPINTERFACE_DEFINED__
+
+/* dispinterface _IHubbleObjEvents */
+/* [helpstring][uuid] */ 
+
+
+EXTERN_C const IID DIID__IHubbleObjEvents;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+
+    MIDL_INTERFACE("19631222-1992-0612-1965-060119821992")
+    _IHubbleObjEvents : public IDispatch
+    {
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct _IHubbleObjEventsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            _IHubbleObjEvents * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            _IHubbleObjEvents * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            _IHubbleObjEvents * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            _IHubbleObjEvents * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            _IHubbleObjEvents * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            _IHubbleObjEvents * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            _IHubbleObjEvents * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        END_INTERFACE
+    } _IHubbleObjEventsVtbl;
+
+    interface _IHubbleObjEvents
+    {
+        CONST_VTBL struct _IHubbleObjEventsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define _IHubbleObjEvents_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define _IHubbleObjEvents_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define _IHubbleObjEvents_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define _IHubbleObjEvents_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define _IHubbleObjEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define _IHubbleObjEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define _IHubbleObjEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+#endif 	/* ___IHubbleObjEvents_DISPINTERFACE_DEFINED__ */
+
+
+#ifndef ___IHubbleAppEvents_DISPINTERFACE_DEFINED__
+#define ___IHubbleAppEvents_DISPINTERFACE_DEFINED__
+
+/* dispinterface _IHubbleAppEvents */
+/* [helpstring][uuid] */ 
+
+
+EXTERN_C const IID DIID__IHubbleAppEvents;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+
+    MIDL_INTERFACE("19631222-1992-0612-1965-060120160930")
+    _IHubbleAppEvents : public IDispatch
+    {
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct _IHubbleAppEventsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            _IHubbleAppEvents * This,
+            /* [in] */ REFIID riid,
+            /* [annotation][iid_is][out] */ 
+            _COM_Outptr_  void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            _IHubbleAppEvents * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            _IHubbleAppEvents * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            _IHubbleAppEvents * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            _IHubbleAppEvents * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            _IHubbleAppEvents * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [range][in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            _IHubbleAppEvents * This,
+            /* [annotation][in] */ 
+            _In_  DISPID dispIdMember,
+            /* [annotation][in] */ 
+            _In_  REFIID riid,
+            /* [annotation][in] */ 
+            _In_  LCID lcid,
+            /* [annotation][in] */ 
+            _In_  WORD wFlags,
+            /* [annotation][out][in] */ 
+            _In_  DISPPARAMS *pDispParams,
+            /* [annotation][out] */ 
+            _Out_opt_  VARIANT *pVarResult,
+            /* [annotation][out] */ 
+            _Out_opt_  EXCEPINFO *pExcepInfo,
+            /* [annotation][out] */ 
+            _Out_opt_  UINT *puArgErr);
+        
+        END_INTERFACE
+    } _IHubbleAppEventsVtbl;
+
+    interface _IHubbleAppEvents
+    {
+        CONST_VTBL struct _IHubbleAppEventsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define _IHubbleAppEvents_QueryInterface(This,riid,ppvObject)	\
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+
+#define _IHubbleAppEvents_AddRef(This)	\
+    ( (This)->lpVtbl -> AddRef(This) ) 
+
+#define _IHubbleAppEvents_Release(This)	\
+    ( (This)->lpVtbl -> Release(This) ) 
+
+
+#define _IHubbleAppEvents_GetTypeInfoCount(This,pctinfo)	\
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+
+#define _IHubbleAppEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+
+#define _IHubbleAppEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+
+#define _IHubbleAppEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+#endif 	/* ___IHubbleAppEvents_DISPINTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_HubbleCtrl;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("19631222-1992-0612-1965-060120071001")
+HubbleCtrl;
+#endif
+
+EXTERN_C const CLSID CLSID_UniverseExtender;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("19631222-1992-0612-1965-060100000000")
+UniverseExtender;
+#endif
+#endif /* __Universe_LIBRARY_DEFINED__ */
+
+/* Additional Prototypes for ALL interfaces */
+
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
+
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
+
+unsigned long             __RPC_USER  BSTR_UserSize64(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal64(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal64(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree64(     unsigned long *, BSTR * ); 
+
+unsigned long             __RPC_USER  VARIANT_UserSize64(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal64(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal64(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree64(     unsigned long *, VARIANT * ); 
+
+/* end of Additional Prototypes */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+
+

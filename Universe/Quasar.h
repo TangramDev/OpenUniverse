@@ -1,0 +1,190 @@
+/********************************************************************************
+*					Open Universe - version 0.0.1								*
+*********************************************************************************
+* Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
+*
+* This SOURCE CODE is governed by a BSD - style license that can be
+* found in the LICENSE file.
+*
+* CONTACT INFORMATION:
+* mailto:tangramteam@outlook.com
+* https://www.tangram.dev
+********************************************************************************/
+
+#pragma once
+#include "chromium/HtmlWnd.h"
+
+using namespace ChromePlus;
+#define WM_TANGRAMNOTIFY WM_NOTIFY+WM_REFLECT_BASE
+
+class CWinForm :
+	public CWindowImpl<CWinForm, CWindow>
+{
+public:
+	CWinForm(void);
+	virtual ~CWinForm(void);
+	int										m_nState;
+	BOOL									m_bMdiForm;
+	CString									m_strKey;
+	CString									m_strXml;
+	CString									m_strPath;
+	CString									m_strBKID;
+	CString									m_strChildFormPath;
+	
+	CGalileo*								m_pOwnerHtmlWnd;
+	CGalileo*								m_pParentHtmlWnd;
+	CMDIChildFormInfo*						m_pChildFormsInfo;
+
+	map<CString, CString>					m_mapKey;
+	map<CString, BindWebObj*>				m_mapBindWebObj;
+	BEGIN_MSG_MAP(CWinForm)
+		MESSAGE_HANDLER(WM_CLOSE, OnClose)
+		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+		MESSAGE_HANDLER(WM_TANGRAMDATA, OnGetMe)
+		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
+		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_WINFORMCREATED, OnFormCreated)
+		MESSAGE_HANDLER(WM_TANGRAMGETXML, OnTangramGetXml)
+		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
+		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
+		MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
+		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
+	END_MSG_MAP()
+
+	void OnFinalMessage(HWND hWnd);
+
+private:
+	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnTangramGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+public:
+	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+};
+
+class ATL_NO_VTABLE CQuasar : 
+	public CComObjectRootBase,	
+	public CWindowImpl<CQuasar, CWindow>,
+	public IDispatchImpl<IQuasar, &IID_IQuasar, &LIBID_Universe, 1, 0>
+{
+public:
+	CQuasar();           
+	virtual ~CQuasar();           
+
+	BOOL											m_bDetached;
+	BOOL											m_bMDIChild;
+	BOOL											m_bDesignerState;
+	QuasarType										m_nQuasarType;
+
+	HWND											m_hPWnd;
+	HWND											m_hHostWnd;
+	CString											m_strLastKey;
+	CString											m_strAsynKeys;
+	CString											m_strQuasarName;
+	CString											m_strCurrentKey;
+	CString											m_strCurrentXml;
+	CString											m_strHostWebBrowserNodeName = _T("");
+	map<IHubbleAppProxy*, CQuasarProxy*>			m_mapQuasarProxy;
+
+	IPCMsg*											m_pCurrentIPCMsg;
+	CGalileo*										m_pWebPageWnd;
+	CStar*											m_pHostWebBrowserNode = nullptr;
+	CHerschel*										m_pHostWebBrowserWnd = nullptr;
+	CGalaxyCluster*									m_pGalaxyCluster;
+	CStar*											m_pParentStar;
+	CStar*											m_pWorkNode;
+	CStar*											m_pContainerNode;
+	CStar*											m_pBindingStar;
+	CQuasar*										m_pSubQuasar;
+	QuasarInfo*										m_pQuasarInfo;
+	CCosmosEvent*									m_pInitEventObj;
+	map<CString, CStar*>							m_mapNode;
+	map<CString, CStar*>							m_mapNeedSaveToConfigNode;
+	map<CString, VARIANT>							m_mapVal;
+	map<CString, CStar*>							m_mapNodeScript;
+	CComObject<CStarCollection>*					m_pRootNodes;
+
+	void Lock(){}
+	void Unlock(){}
+	void Destroy();
+	void HostPosChanged();
+	void UpdateDesignerTreeInfo();
+
+	CTangramXmlParse* UpdareStar();
+	BOOL CreateGalaxyCluster();
+	CStar* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
+
+	STDMETHOD(get_QuasarXML)(BSTR* pVal);
+	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode);
+	STDMETHOD(GetXml)(BSTR bstrRootName, BSTR* bstrRet);
+
+	BEGIN_COM_MAP(CQuasar)
+		COM_INTERFACE_ENTRY(IDispatch)
+		COM_INTERFACE_ENTRY(IQuasar)
+	END_COM_MAP()
+
+	BEGIN_MSG_MAP(CQuasar)
+		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
+		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
+		MESSAGE_HANDLER(WM_DPICHANGED_BEFOREPARENT, OnBeforeParentDpiChanged)
+		MESSAGE_HANDLER(WM_DPICHANGED_AFTERPARENT, OnAfterParentDpiChanged)
+		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+		MESSAGE_HANDLER(WM_TANGRAMDATA, OnGetMe)
+		MESSAGE_HANDLER(WM_NCDESTROY, OnNcDestroy)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_PARENTNOTIFY, OnParentNotify)
+		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
+		MESSAGE_HANDLER(WM_TANGRAMACTIVEPAGE, OnTabChanged)
+		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
+	END_MSG_MAP()
+
+protected:
+	ULONG InternalAddRef(){ return 1; }
+	ULONG InternalRelease(){ return 1; }
+
+private:
+	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnBeforeParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnAfterParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnNcDestroy(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnTabChanged(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnHubbleMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnParentNotify(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
+
+	STDMETHOD(get_Count)(long* pCount);
+	STDMETHOD(get_Star)(VARIANT vIndex, IStar **ppNode);
+	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
+	STDMETHOD(get_HWND)(LONGLONG* pVal);
+	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
+	STDMETHOD(get_CurrentNavigateKey)(BSTR* pVal);
+	STDMETHOD(get_VisibleStar)(IStar** pVal);
+	STDMETHOD(get_RootStars)(IStarCollection** pNodeColletion);
+	STDMETHOD(get_QuasarData)(BSTR bstrKey, VARIANT* pVal);
+	STDMETHOD(put_QuasarData)(BSTR bstrKey, VARIANT newVal);
+	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);
+	STDMETHOD(put_DesignerState)(VARIANT_BOOL newVal);
+	STDMETHOD(get_TangramDoc)(IHubbleDoc** pVal);
+	STDMETHOD(get_QuasarType)(QuasarType* pVal);
+	STDMETHOD(get_Name)(BSTR* pVal);
+	STDMETHOD(get_HostBrowser)(IBrowser** ppChromeWebBrowser);
+	STDMETHOD(get_HostWebPage)(IWebPage** ppChromeWebPage);
+
+	STDMETHOD(Attach)(void);
+	STDMETHOD(Detach)(void);
+
+	void OnFinalMessage(HWND hWnd);
+};
