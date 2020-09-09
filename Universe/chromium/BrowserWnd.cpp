@@ -73,7 +73,6 @@ namespace ChromePlus {
 		if (hWnd==0||::IsWindowVisible(m_hWnd) == false || g_pHubble->m_bChromeNeedClosed == TRUE || g_pHubble->m_bOMNIBOXPOPUPVISIBLE) {
 			return;
 		}
-		//return;
 		if (m_hOldTab)
 		{
 			RECT rc;
@@ -97,9 +96,6 @@ namespace ChromePlus {
 				return;
 			}
 		}
-		//if (m_pVisibleWebWnd&&m_pVisibleWebWnd->m_pDevToolWnd)
-		//	m_pVisibleWebWnd = m_pVisibleWebWnd->m_pDevToolWnd;
-		//BrowserLayout();
 		if (m_pVisibleWebWnd)
 		{
 			if (m_pVisibleWebWnd->m_hExtendWnd == nullptr)
