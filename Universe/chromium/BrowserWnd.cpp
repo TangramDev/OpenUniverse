@@ -39,7 +39,9 @@ namespace ChromePlus {
 		}
 	}
 
-	CHerschel::~CHerschel() {}
+	CHerschel::~CHerschel() 
+	{
+	}
 
 	void CHerschel::ActiveChromeTab(HWND hActive, HWND hOldWnd)
 	{
