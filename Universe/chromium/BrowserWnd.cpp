@@ -65,7 +65,6 @@ namespace ChromePlus {
 			g_pHubble->m_bWinFormActived = false;
 		}
 		::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
-		//m_pBrowser->LayoutBrowser();
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}
