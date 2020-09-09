@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -29,8 +29,6 @@
 
 #include "chromium\BrowserWnd.h"
 #include "chromium\HtmlWnd.h"
-
-using namespace World;
 
 // Description  : the unique App object
 CUniverse theUniverse;
@@ -1052,7 +1050,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					g_pHubble->m_bChromeNeedClosed = true;
 					auto it = g_pHubble->m_mapBrowserWnd.begin();
-					((World::CHerschel*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
+					((CHerschel*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
 				}
 			}
 			break;

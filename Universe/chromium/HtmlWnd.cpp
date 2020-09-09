@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -23,7 +23,7 @@
 #include "BrowserWnd.h"
 #include "../Markup.h" 
 
-namespace World {
+namespace NewWorld {
 	CGalileo::CGalileo() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
@@ -57,7 +57,7 @@ namespace World {
 		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
 		if (it != g_pHubble->m_mapBrowserWnd.end())
 		{
-			pParent = (World::CHerschel*)it->second;
+			pParent = (CHerschel*)it->second;
 		}
 		HWND hPWnd = ::GetParent(pParent->m_hWnd);
 		if (hPWnd != NULL)
@@ -303,11 +303,11 @@ namespace World {
 					hNewPWnd = hNewPWnd2;
 					bNewParent = true;
 				}
-				World::CHerschel* pChromeBrowserWnd = nullptr;
+				CHerschel* pChromeBrowserWnd = nullptr;
 				auto it = g_pHubble->m_mapBrowserWnd.find(hNewPWnd);
 				if (it != g_pHubble->m_mapBrowserWnd.end())
 				{
-					pChromeBrowserWnd = (World::CHerschel*)it->second;
+					pChromeBrowserWnd = (CHerschel*)it->second;
 					g_pHubble->m_pActiveBrowser = pChromeBrowserWnd->m_pBrowser;
 					if (pChromeBrowserWnd && m_hExtendWnd) {
 						if (::IsWindowVisible(m_hWnd)) {
@@ -332,7 +332,7 @@ namespace World {
 				else
 				{
 					if (::IsWindowVisible(hNewPWnd)) {
-						pChromeBrowserWnd = new CComObject<World::CHerschel>();
+						pChromeBrowserWnd = new CComObject<CHerschel>();
 						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
 						g_pHubble->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
 						pChromeBrowserWnd->m_pBrowser = g_pHubble->m_pActiveBrowser;

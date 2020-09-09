@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1433,7 +1433,7 @@ LRESULT CQuasar::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case WM_BROWSERLAYOUT:
 	{
-		World::CGalileo* pWebWnd = (World::CGalileo*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		CGalileo* pWebWnd = (CGalileo*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 		::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
 	}
 	break;

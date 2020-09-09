@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -16,7 +16,7 @@
 #include "../stdafx.h"
 
 class CWinForm;
-namespace World
+namespace NewWorld
 {
 	/*About CGalileo:
 	* Galileo Galileo (1564-1642) was a great astronomer, mechanist, philosopher, 

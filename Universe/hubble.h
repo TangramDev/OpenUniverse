@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -20,7 +20,7 @@
 
 #pragma once
 
-using namespace World;
+using namespace NewWorld;
 using namespace CommonUniverse;
 class CWinForm;
 struct CommonThreadInfo

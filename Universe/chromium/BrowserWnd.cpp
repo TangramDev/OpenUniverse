@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -20,7 +20,7 @@
 #include "BrowserWnd.h"
 #include "HtmlWnd.h"
 
-namespace World {
+namespace NewWorld {
 	CHerschel::CHerschel() {
 		m_hDrawWnd = 0;
 		m_heightfix = 0;
@@ -418,8 +418,8 @@ namespace World {
 			g_pHubble->m_bChromeNeedClosed = true;
 			for (auto it : g_pHubble->m_mapBrowserWnd)
 			{
-				if (((World::CHerschel*)it.second)->m_hWnd != m_hWnd)
-					((World::CHerschel*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				if (((CHerschel*)it.second)->m_hWnd != m_hWnd)
+					((CHerschel*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
 			}
 		}
 
@@ -454,7 +454,7 @@ namespace World {
 		return lRes;
 	}
 
-	LRESULT World::CHerschel::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT CHerschel::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 		if (g_pHubble->m_pCLRProxy)

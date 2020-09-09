@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -438,7 +438,7 @@ void CGrid::StopTracking(BOOL bAccept)
 			g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
 		}
 
-		World::CGalileo* pWebWnd = nullptr;
+		CGalileo* pWebWnd = nullptr;
 		if (pQuasar->m_pWebPageWnd)
 		{
 			pWebWnd = pQuasar->m_pWebPageWnd;

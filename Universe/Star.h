@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -95,7 +95,7 @@ public:
 	IHubbleWindow*					m_pWindow;
 	CMDIChildFormInfo*				m_pChildFormsInfo;
 	CStarCommonData*				m_pStarCommonData;
-	World::CHerschel*				m_pWebBrowser;
+	NewWorld::CHerschel*			m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CQuasar*						m_pHostQuasar;
 	CRuntimeClass*					m_pObjClsInfo;
@@ -119,7 +119,7 @@ public:
 	BOOL	AddChildNode(CStar* pNode);
 	BOOL	RemoveChildNode(CStar* pNode);
 	CString GetNames();
-	World::CGalileo* GetHtmlWnd();
+	NewWorld::CGalileo* GetHtmlWnd();
 	void NodeCreated();
 
 	HRESULT Fire_OpenComplete();

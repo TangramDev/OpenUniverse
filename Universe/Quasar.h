@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -14,7 +14,7 @@
 #pragma once
 #include "chromium/HtmlWnd.h"
 
-using namespace World;
+using namespace NewWorld;
 #define WM_TANGRAMNOTIFY WM_NOTIFY+WM_REFLECT_BASE
 
 class CWinForm :

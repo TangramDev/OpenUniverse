@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -13,7 +13,7 @@
 
 #pragma once
 
-namespace World {
+namespace NewWorld {
 	using namespace ATL;
 	class CGalileo;
 

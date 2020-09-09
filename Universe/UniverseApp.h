@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.0.1								*
+*					Open Universe - version 0.1.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -15,13 +15,13 @@
 
 #pragma once
 
-namespace World
+namespace NewWorld
 {
 	class CHerschel;
 	class CGalileo;
 }
 
-using namespace World;
+using namespace NewWorld;
 
 typedef HRESULT(__stdcall* HubbleCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 
