@@ -122,19 +122,13 @@ namespace Cosmos
 		}
 	}
 
-	Galileo::Galileo(IWebPage* pChromeWebPage)
+	Galileo::Galileo(IWebPage* pWebPage)
 	{
-		m_pChromeWebPage = pChromeWebPage;
+		m_pWebPage = pWebPage;
 	}
 	
 	IntPtr Galileo::Handle::get()
 	{
-		//if (m_hWnd==NULL&&m_pChromeWebPage)
-		//{
-		//	__int64 nHandle = 0;
-		//	m_pChromeWebPage->get_HostWnd(&nHandle);
-		//	m_hWnd = (HWND)nHandle;
-		//}
 		return (IntPtr)m_hWnd;
 	}
 	
@@ -150,7 +144,7 @@ namespace Cosmos
 
 	Form^ Galileo::CreateForm(String^ strFormKey)
 	{
-		if (m_pChromeWebPage)
+		if (m_pWebPage)
 		{
 			IDispatch* pFormDisp = nullptr;
 			pFormDisp = theApp.m_pHubbleImpl->m_pCLRProxy->CreateWinForm(m_hWnd, STRING2BSTR(strFormKey));

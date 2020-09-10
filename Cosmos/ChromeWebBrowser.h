@@ -57,9 +57,10 @@ namespace Cosmos
 	public ref class Galileo : public IWin32Window
 	{
 	public:
-		HWND							m_hWnd;
-		IWebPage	*					m_pChromeWebPage;
-		CGalileoImpl*	m_pProxy;
+		HWND				m_hWnd;
+		IWebPage*			m_pWebPage;
+		CGalileoImpl*		m_pProxy;
+
 		Galileo(IWebPage* m_pChromeWebPage);
 
 		property IntPtr Handle

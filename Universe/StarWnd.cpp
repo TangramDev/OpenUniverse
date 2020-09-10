@@ -560,9 +560,9 @@ LRESULT CStarWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 			break;
 		case 20190602:
 		{
-			CWinForm* pTangramWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_TANGRAMDATA, 0, 20190214);
-			if (pTangramWinFormWnd)
-				return (LRESULT)pTangramWinFormWnd->m_pChildFormsInfo;
+			CWinForm* pWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_TANGRAMDATA, 0, 20190214);
+			if (pWinFormWnd)
+				return (LRESULT)pWinFormWnd->m_pChildFormsInfo;
 			return 0;
 		}
 		case 20200128:

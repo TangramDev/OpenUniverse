@@ -199,7 +199,7 @@ public:
 	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode);
 	STDMETHOD(ObserveEx)(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode);
 	STDMETHOD(ActiveTabPage)(IStar* pNode);
-	STDMETHOD(GetStar)(long nRow, long nCol,IStar** ppTangramNode);
+	STDMETHOD(GetStar)(long nRow, long nCol,IStar** ppStar);
 	STDMETHOD(GetStars)(BSTR bstrName, IStar** ppNode, IStarCollection** ppNodes, long* pCount);
 	STDMETHOD(GetCtrlByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
@@ -250,7 +250,7 @@ public:
 	END_COM_MAP()
 
 	STDMETHOD(get_StarCount)(long* pCount);
-	STDMETHOD(get_Item)(long iIndex, IStar **ppTangramNode);
+	STDMETHOD(get_Item)(long iIndex, IStar **ppStar);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	CStarVector*	m_pNodes;
 
