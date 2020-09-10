@@ -346,7 +346,7 @@ namespace CommonUniverse {
 
 		CString					m_strProviderID = _T("");
 		CString					m_strTangramContainer = _T("");
-		IHubble*				m_pTangram = nullptr;
+		IHubble*				m_pHubble = nullptr;
 		IStar*					m_pCreatingNode = nullptr;
 		map<CString, CString>	m_mapInnerObjStyle;
 		map<CString, void*>		m_mapInnerObjInfo;
@@ -474,7 +474,7 @@ namespace CommonUniverse {
 		virtual int OnDestroyMainFrame(CString strID, int nMainFrameCount, int nWndType) { return 0; }
 		virtual LRESULT OnForegroundIdleProc() { return 0; }
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
-		virtual void OnTangramClose() {}
+		virtual void OnHubbleClose() {}
 		virtual void OnOpenComplete(HWND hWnd, CString bstrUrl, IStar* pRootNode) {}
 		virtual void OnHubbleEvent(IHubbleEventObj* NotifyObj) {}
 		virtual void RegistWndClassToTangram() {}

@@ -69,7 +69,7 @@ public:
 	void InitTangramApp(bool bCrashReporting);
 private:
 	//CCosmosCoreEvents:
-	void OnTangramClose();
+	void OnHubbleClose();
 	void OnOpenComplete(HWND hWnd, CString strUrl, IStar* pRootNode);
 	HWND InitTangramApp();
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);

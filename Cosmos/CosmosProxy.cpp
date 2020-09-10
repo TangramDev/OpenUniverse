@@ -2980,7 +2980,7 @@ bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)
 	return false;
 };
 
-void CCosmos::OnTangramClose()
+void CCosmos::OnHubbleClose()
 {
 	AtlTrace(_T("*************Begin CCosmos::OnClose:  ****************\n"));
 	Cosmos::Hubble::GetHubble()->Fire_OnClose();

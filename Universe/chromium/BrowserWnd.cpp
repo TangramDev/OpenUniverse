@@ -430,7 +430,7 @@ namespace NewWorld {
 			if (g_pHubble->m_pCLRProxy)
 			{
 				if (g_pHubble->m_pCosmosAppProxy)
-					g_pHubble->m_pCosmosAppProxy->OnTangramClose();
+					g_pHubble->m_pCosmosAppProxy->OnHubbleClose();
 
 				g_pHubble->m_bClose = true;
 			}

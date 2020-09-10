@@ -205,7 +205,7 @@ LRESULT CALLBACK CUniverse::TangramWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM
 			if (g_pHubble->m_pCLRProxy)
 			{
 				if (g_pHubble->m_pCosmosAppProxy)
-					g_pHubble->m_pCosmosAppProxy->OnTangramClose();
+					g_pHubble->m_pCosmosAppProxy->OnHubbleClose();
 			}
 
 			if (::IsWindow(g_pHubble->m_hHostBrowserWnd))
@@ -615,7 +615,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						::DestroyWindow(g_pHubble->m_hTangramWnd);
 				}
 				if (g_pHubble->m_pCosmosAppProxy)
-					g_pHubble->m_pCosmosAppProxy->OnTangramClose();
+					g_pHubble->m_pCosmosAppProxy->OnHubbleClose();
 			}
 			break;
 			default:
