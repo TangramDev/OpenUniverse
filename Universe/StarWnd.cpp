@@ -188,7 +188,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if (pHtmlWnd)
 		{
-			CWormhole* pSession = m_pStar->m_pTangramCloudSession;
+			CWormhole* pSession = m_pStar->m_pHubbleCloudSession;
 			if (pSession)
 			{
 				pSession->InsertString(_T("msgID"), IPC_NODE_ONMOUSEACTIVATE_ID);
@@ -843,7 +843,7 @@ LRESULT CStarWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 			m_pStar->m_vChildNodes.push_back(((CStar*)pNode));
 		}
 
-		strXml = m_pStar->m_pStarCommonData->m_pTangramParse->xml();
+		strXml = m_pStar->m_pStarCommonData->m_pHubbleParse->xml();
 		g_pHubble->m_pDesignWindowNode = m_pStar;
 		g_pHubble->m_pHostDesignUINode = m_pStar->m_pRootObj;
 		auto it = m_pStar->m_pStarCommonData->m_pQuasar->m_pGalaxyCluster->m_mapQuasar.find(pOldNode->m_hChildHostWnd);

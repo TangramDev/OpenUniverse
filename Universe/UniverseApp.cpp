@@ -363,10 +363,10 @@ LRESULT CALLBACK CUniverse::TangramMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPA
 	{
 	break;
 	case 20170907:
-		if (g_pHubble->m_pTangramPackageProxy->m_hVSGridView)
+		if (g_pHubble->m_pHubblePackageProxy->m_hVSGridView)
 		{
-			::SetParent(g_pHubble->m_pTangramPackageProxy->m_hPropertyWnd, hWnd);
-			::SetWindowPos(g_pHubble->m_pTangramPackageProxy->m_hPropertyWnd, HWND_TOP, -1000, -1000, 0, 0, SWP_NOACTIVATE);
+			::SetParent(g_pHubble->m_pHubblePackageProxy->m_hPropertyWnd, hWnd);
+			::SetWindowPos(g_pHubble->m_pHubblePackageProxy->m_hPropertyWnd, HWND_TOP, -1000, -1000, 0, 0, SWP_NOACTIVATE);
 			::PostMessage(hWnd, WM_COSMOSMSG, 1, 20170907);
 		}
 		return ::DefWindowProc(hWnd, msg, wParam, lParam);

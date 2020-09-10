@@ -71,7 +71,7 @@ CStar::CStar()
 void CStar::InitWndNode()
 {
 	m_pParentWinFormWnd = nullptr;
-	m_pTangramCloudSession = nullptr;
+	m_pHubbleCloudSession = nullptr;
 	m_pStarCommonData = m_pRootObj->m_pStarCommonData;
 	ASSERT(m_pStarCommonData != nullptr);
 	m_nHeigh = m_pHostParse->attrInt(TGM_HEIGHT, 0);
@@ -598,7 +598,7 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 				ATLTRACE(_T("Modify CStar HostView Attribute: ID:%s Value: %s\n"), strID, strVal);
 				pOldNode->m_pHostWnd->Invalidate();
 				g_pHubble->UpdareStar(g_pHubble->m_pDesignWindowNode->m_pRootObj);
-				g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(g_pHubble->m_pDesignWindowNode->m_pRootObj->m_pStarCommonData->m_pTangramParse->xml()));
+				g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(g_pHubble->m_pDesignWindowNode->m_pRootObj->m_pStarCommonData->m_pHubbleParse->xml()));
 			}
 
 			m_strID = _T("nucleus");
@@ -670,7 +670,7 @@ STDMETHODIMP CStar::get_Handle(LONGLONG * pVal)
 
 STDMETHODIMP CStar::get_OuterXml(BSTR * pVal)
 {
-	*pVal = m_pStarCommonData->m_pTangramParse->xml().AllocSysString();
+	*pVal = m_pStarCommonData->m_pHubbleParse->xml().AllocSysString();
 	return S_OK;
 }
 
@@ -1031,7 +1031,7 @@ void CStar::NodeCreated()
 		pHtmlWnd = g_pHubble->m_pHostHtmlWnd;
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = g_pHubble->m_pMainHtmlWnd;
-	if (pHtmlWnd&&m_pTangramCloudSession == nullptr)
+	if (pHtmlWnd&&m_pHubbleCloudSession == nullptr)
 	{
 		::PostMessage(pHtmlWnd->m_hWnd, WM_COSMOSMSG, 20200310, (LPARAM)this);
 	}
@@ -1599,7 +1599,7 @@ STDMETHODIMP CStarCollection::get__NewEnum(IUnknown * *ppVal)
 STDMETHODIMP CStar::get_DocXml(BSTR * pVal)
 {
 	g_pHubble->UpdareStar(m_pRootObj);
-	CString strXml = m_pStarCommonData->m_pTangramParse->xml();
+	CString strXml = m_pStarCommonData->m_pHubbleParse->xml();
 	strXml.Replace(_T("/><"), _T("/>\r\n<"));
 	strXml.Replace(_T("/>"), _T("></node>"));
 	*pVal = strXml.AllocSysString();
@@ -1930,23 +1930,23 @@ HRESULT CStar::Fire_Destroy()
 					CString strXml = _T("");
 					CTangramXmlParse m_Parse;
 					CTangramXmlParse xml;
-					CTangramXmlParse* m_pTangramPageParse = nullptr;
+					CTangramXmlParse* m_pHubblePageParse = nullptr;
 					if (::PathFileExists(strFile))
 					{
 						if (m_Parse.LoadFile(strFile))
 						{
-							m_pTangramPageParse = m_Parse.GetChild(_T("tangrampage"));
-							if (m_pTangramPageParse == nullptr)
+							m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+							if (m_pHubblePageParse == nullptr)
 							{
 								m_Parse.AddNode(_T("tangrampage"));
-								m_pTangramPageParse = m_Parse.GetChild(_T("tangrampage"));
+								m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
 							}
-							if (m_pTangramPageParse)
+							if (m_pHubblePageParse)
 							{
-								CTangramXmlParse* pTangramPageParse = m_pTangramPageParse->GetChild(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
+								CTangramXmlParse* pTangramPageParse = m_pHubblePageParse->GetChild(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
 								if (pTangramPageParse == nullptr)
 								{
-									pTangramPageParse = m_pTangramPageParse->AddNode(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
+									pTangramPageParse = m_pHubblePageParse->AddNode(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
 								}
 								if (pTangramPageParse)
 								{
@@ -1980,8 +1980,8 @@ HRESULT CStar::Fire_Destroy()
 										if (pParse)
 											pTangramFrameParse->RemoveNode(m_strKey);
 
-										strXml = m_pStarCommonData->m_pTangramParse->xml();
-										CString _strName = m_pStarCommonData->m_pTangramParse->name();
+										strXml = m_pStarCommonData->m_pHubbleParse->xml();
+										CString _strName = m_pStarCommonData->m_pHubbleParse->name();
 										if (_strName != m_strKey)
 										{
 											CString strName = _T("<") + _strName;
@@ -2009,15 +2009,15 @@ HRESULT CStar::Fire_Destroy()
 						CTangramXmlParse m_Parse;
 						if (m_Parse.LoadFile(strFile))
 						{
-							m_pTangramPageParse = m_Parse.GetChild(_T("tangrampage"));
-							if (m_pTangramPageParse == nullptr)
+							m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+							if (m_pHubblePageParse == nullptr)
 							{
 								m_Parse.AddNode(_T("tangrampage"));
-								m_pTangramPageParse = m_Parse.GetChild(_T("tangrampage"));
+								m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
 							}
-							if (m_pTangramPageParse)
+							if (m_pHubblePageParse)
 							{
-								CTangramXmlParse* pPageParse = m_pTangramPageParse->GetChild(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
+								CTangramXmlParse* pPageParse = m_pHubblePageParse->GetChild(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
 								if (pPageParse)
 								{
 									CString strFrameName = m_pStarCommonData->m_pQuasar->m_strQuasarName;
@@ -2070,9 +2070,9 @@ HRESULT CStar::Fire_Destroy()
 	{
 		g_pHubble->m_pCLRProxy->ReleaseTangramObj((IStar*)this);
 	}
-	//if (m_pTangramCloudSession)
-	//	delete m_pTangramCloudSession;
-	//m_pTangramCloudSession = nullptr;
+	//if (m_pHubbleCloudSession)
+	//	delete m_pHubbleCloudSession;
+	//m_pHubbleCloudSession = nullptr;
 	return hr;
 }
 

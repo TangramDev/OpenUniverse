@@ -689,7 +689,7 @@ CTangramXmlParse* CQuasar::UpdareStar()
 		}
 	}
 	if (m_mapNode.size())
-		return m_mapNode.begin()->second->m_pStarCommonData->m_pTangramParse;
+		return m_mapNode.begin()->second->m_pStarCommonData->m_pHubbleParse;
 	return nullptr;
 }
 
@@ -705,7 +705,7 @@ CStar* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	m_pWorkNode->m_pStarCommonData = pCommonData;
 	pCommonData->m_pQuasar = this;
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
-	pCommonData->m_pTangramParse = _pParse;
+	pCommonData->m_pHubbleParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
 	m_pWorkNode->m_pHostParse = pParse->GetChild(TGM_NODE);
 
@@ -751,7 +751,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOACTIVATE);//|SWP_NOREDRAWSWP_NOZORDER);
 	}
 
-	CTangramXmlParse* pWndParse = m_pWorkNode->m_pStarCommonData->m_pTangramParse->GetChild(_T("docplugin"));
+	CTangramXmlParse* pWndParse = m_pWorkNode->m_pStarCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
 	if (pWndParse)
 	{
 		CString strPlugID = _T("");
@@ -1059,23 +1059,23 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 						}
 						else
 						{
-							CTangramXmlParse* m_pTangramPageParse = nullptr;
-							CTangramXmlParse* m_pTangramPageParse2 = nullptr;
+							CTangramXmlParse* m_pHubblePageParse = nullptr;
+							CTangramXmlParse* m_pHubblePageParse2 = nullptr;
 							if (m_pGalaxyCluster->m_bDoc == false && ::PathFileExists(m_pGalaxyCluster->m_strPageFilePath))
 							{
 								CTangramXmlParse m_Parse;
 								if (m_Parse.LoadFile(m_pGalaxyCluster->m_strPageFilePath))
 								{
-									m_pTangramPageParse = m_Parse.GetChild(_T("tangrampage"));
-									if (m_pTangramPageParse)
+									m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+									if (m_pHubblePageParse)
 									{
-										m_pTangramPageParse2 = m_pTangramPageParse->GetChild(m_pGalaxyCluster->m_strConfigFileNodeName);
-										if (m_pTangramPageParse2)
+										m_pHubblePageParse2 = m_pHubblePageParse->GetChild(m_pGalaxyCluster->m_strConfigFileNodeName);
+										if (m_pHubblePageParse2)
 										{
-											int nCount = m_pTangramPageParse2->GetCount();
+											int nCount = m_pHubblePageParse2->GetCount();
 											for (int i = 0; i < nCount; i++)
 											{
-												CTangramXmlParse* _pParse = m_pTangramPageParse2->GetChild(i);
+												CTangramXmlParse* _pParse = m_pHubblePageParse2->GetChild(i);
 												CString _str = _T("@") + _pParse->name() + _T("@") + m_pGalaxyCluster->m_strConfigFileNodeName;
 												int nCount2 = _pParse->GetCount();
 												for (int i = 0; i < nCount2; i++)
@@ -1293,9 +1293,9 @@ void CQuasar::Destroy()
 	for (auto it : m_mapNode)
 	{
 		pWndNode = it.second;
-		if (pWndNode->m_pStarCommonData->m_pTangramParse)
+		if (pWndNode->m_pStarCommonData->m_pHubbleParse)
 		{
-			CTangramXmlParse* pParse = pWndNode->m_pStarCommonData->m_pTangramParse->GetChild(_T("docplugin"));
+			CTangramXmlParse* pParse = pWndNode->m_pStarCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
 			if (pParse)
 			{
 				int nCount = pParse->GetCount();
@@ -1662,7 +1662,7 @@ STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 		if (str.CompareNoCase(_T("inDesigning")) == 0)
 		{
 			strName = strName.Left(nPos);
-			m_mapTemp[strName] = it.second->m_pStarCommonData->m_pTangramParse->xml();
+			m_mapTemp[strName] = it.second->m_pStarCommonData->m_pHubbleParse->xml();
 		}
 	}
 
@@ -1675,7 +1675,7 @@ STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 			if (it2 != m_mapTemp.end())
 				strXml = it2->second;
 			else
-				strXml = it.second->m_pStarCommonData->m_pTangramParse->xml();
+				strXml = it.second->m_pStarCommonData->m_pHubbleParse->xml();
 			strXmlData += strXml;
 		}
 	}
@@ -1802,7 +1802,7 @@ STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 				g_pHubble->UpdareStar(it2);
 			}
 		}
-		CString strXml = pWindowNode->m_pStarCommonData->m_pTangramParse->GetChild(TGM_CLUSTER)->xml();
+		CString strXml = pWindowNode->m_pStarCommonData->m_pHubbleParse->GetChild(TGM_CLUSTER)->xml();
 		CString s = _T("");
 		s.Format(_T("<%s>%s</%s>"), it.first, strXml, it.first);
 		CString strKey = it.second->m_strKey + _T("@") + this->m_strQuasarName + _T("@") + _T("tangramdefaultpage");

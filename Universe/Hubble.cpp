@@ -97,7 +97,7 @@ CHubble::CHubble()
 	m_pDocTemplateFrame = nullptr;
 	m_lpszSplitterClass = nullptr;
 	m_pGalaxyCluster = nullptr;
-	m_pTangramDocTemplateInfo = nullptr;
+	m_pHubbleDocTemplateInfo = nullptr;
 	m_pActiveStar = nullptr;
 	m_pQuasar = nullptr;
 	m_pDesignWindowNode = nullptr;
@@ -111,7 +111,7 @@ CHubble::CHubble()
 	m_pCosmosAppProxy = nullptr;
 	m_pActiveAppProxy = nullptr;
 	m_pCLRProxy = nullptr;
-	m_pTangramPackageProxy = nullptr;
+	m_pHubblePackageProxy = nullptr;
 	m_strStartupCLRObj = _T("");
 	m_strWorkBenchStrs = _T("");
 	m_strExeName = _T("");
@@ -975,7 +975,7 @@ CSession* CHubble::GetCloudSession(IStar* _pNode)
 	if (_pNode)
 	{
 		CStar* pNode = (CStar*)_pNode;
-		return pNode->m_pTangramCloudSession;
+		return pNode->m_pHubbleCloudSession;
 	}
 	return nullptr;
 }
@@ -2691,7 +2691,7 @@ STDMETHODIMP CHubble::ObserveQuasars(LONGLONG hWnd, BSTR bstrFrames, BSTR bstrKe
 						if (pWnd && pWnd->m_bMdiForm)
 						{
 							CStar* _pNode = (CStar*)pNode;
-							CString strXml = _pNode->m_pStarCommonData->m_pTangramParse->xml();
+							CString strXml = _pNode->m_pStarCommonData->m_pHubbleParse->xml();
 							strXml.Replace(_T("/><"), _T("/>\r\n<"));
 							strXml.Replace(_T("/>"), _T("></node>"));
 							CString s = _T("");

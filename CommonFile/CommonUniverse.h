@@ -616,7 +616,7 @@ namespace CommonUniverse {
 			m_pUniverseAppProxy = nullptr;
 			m_pCurMDIChildFormInfo = nullptr;
 			m_strNtpXml = _T("");
-			m_pTangramPackageProxy = nullptr;
+			m_pHubblePackageProxy = nullptr;
 			m_strAppCurrentFormTemplatePath = _T("");
 		}
 
@@ -724,7 +724,7 @@ namespace CommonUniverse {
 		IHubbleAppProxy*						m_pUniverseAppProxy;
 		IHubbleAppProxy*						m_pCosmosAppProxy;
 		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
-		CTangramPackageProxy*					m_pTangramPackageProxy;
+		CTangramPackageProxy*					m_pHubblePackageProxy;
 		IDispatch*								m_pMainFormDisp = nullptr;
 		IDispatch*								m_pAppDisp = nullptr;
 		IStar*									m_pHostViewDesignerNode = nullptr;

@@ -561,7 +561,7 @@ namespace Cosmos
 		/// </summary>
 
 		HWND m_hWnd;
-		Dictionary<String^, MethodInfo^>^ m_pTangramCLRMethodDic = nullptr;
+		Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = nullptr;
 		Dictionary<String^, Object^>^ m_pPlugInDic = nullptr;
 	};
 
@@ -664,14 +664,14 @@ namespace Cosmos
 		static bool IsChromeRunning = false;
 
 		static Hubble^ m_pHubble;
-		static Dictionary<String^, MethodInfo^>^ m_pTangramCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
-		static Dictionary<String^, Type^>^ m_pTangramCLRTypeDic = gcnew Dictionary<String^, Type^>();
+		static Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
+		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<Object^, Wormhole^>^ m_pCloudEventDic = gcnew Dictionary<Object^, Wormhole^>();
 	public:
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 		static Form^ m_pMainForm = nullptr;
-		static Dictionary<String^, Object^>^ m_pTangramCLRObjDic = gcnew Dictionary<String^, Object^>();
+		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
 		static Dictionary<Object^, Star^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Star^>();
 
 		static GalaxyCluster^ CreateGalaxyCluster(IntPtr nPageHandle);
@@ -1141,7 +1141,7 @@ namespace Cosmos
 		String^ GetPageXML();
 
 	protected:
-		CGalaxyClusterEvent* m_pTangramClrEvent;
+		CGalaxyClusterEvent* m_pHubbleClrEvent;
 
 		~GalaxyCluster();
 	};

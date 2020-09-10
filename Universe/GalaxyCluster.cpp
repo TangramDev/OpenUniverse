@@ -22,7 +22,7 @@
 CStarCommonData::CStarCommonData()
 {
 	m_pOldQuasar		= nullptr;
-	m_pTangramParse		= nullptr;
+	m_pHubbleParse		= nullptr;
 	m_pHostClientView	= nullptr;
 #ifdef _DEBUG
 	g_pHubble->m_nTangramNodeCommonData++;
@@ -31,8 +31,8 @@ CStarCommonData::CStarCommonData()
 
 CStarCommonData::~CStarCommonData()
 {
-	if (m_pTangramParse)
-		delete m_pTangramParse;
+	if (m_pHubbleParse)
+		delete m_pHubbleParse;
 #ifdef _DEBUG
 	g_pHubble->m_nTangramNodeCommonData--;
 #endif	
@@ -1369,26 +1369,26 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 		CTangramXmlParse m_Parse2;
 		if (m_Parse2.LoadFile(m_strPageFilePath))
 		{
-			CTangramXmlParse* m_pTangramPageParse = m_Parse2.GetChild(_T("tangrampage"));
-			if (m_pTangramPageParse == nullptr)
+			CTangramXmlParse* m_pHubblePageParse = m_Parse2.GetChild(_T("tangrampage"));
+			if (m_pHubblePageParse == nullptr)
 			{
 				m_Parse2.AddNode(_T("tangrampage"));
-				m_pTangramPageParse = m_Parse2.GetChild(_T("tangrampage"));
+				m_pHubblePageParse = m_Parse2.GetChild(_T("tangrampage"));
 			}
-			if (m_pTangramPageParse)
+			if (m_pHubblePageParse)
 			{
-				CTangramXmlParse* m_pTangramPageParse2 = m_pTangramPageParse->GetChild(m_strConfigFileNodeName);
-				if (m_pTangramPageParse2 == nullptr)
+				CTangramXmlParse* m_pHubblePageParse2 = m_pHubblePageParse->GetChild(m_strConfigFileNodeName);
+				if (m_pHubblePageParse2 == nullptr)
 				{
-					if(m_pTangramPageParse->AddNode(m_strConfigFileNodeName)!=nullptr)
+					if(m_pHubblePageParse->AddNode(m_strConfigFileNodeName)!=nullptr)
 						m_Parse2.SaveFile(m_strPageFilePath);
 				}
-				if (m_pTangramPageParse2)
+				if (m_pHubblePageParse2)
 				{
-					int nCount = m_pTangramPageParse2->GetCount();
+					int nCount = m_pHubblePageParse2->GetCount();
 					for (int i = 0; i < nCount; i++)
 					{
-						CTangramXmlParse* _pParse = m_pTangramPageParse2->GetChild(i);
+						CTangramXmlParse* _pParse = m_pHubblePageParse2->GetChild(i);
 						CString _str = _T("@") + _pParse->name() + _T("@") + m_strConfigFileNodeName;
 						int nCount2 = _pParse->GetCount();
 						for (int i = 0; i < nCount2; i++)

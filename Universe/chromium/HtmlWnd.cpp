@@ -91,10 +91,10 @@ namespace NewWorld {
 		case 20200310:
 		{
 			CStar* pNode = (CStar*)lParam;
-			if (pNode && pNode->m_pTangramCloudSession == nullptr)
+			if (pNode && pNode->m_pHubbleCloudSession == nullptr)
 			{
-				pNode->m_pTangramCloudSession = (CWormhole*)((CHubbleImpl*)g_pHubble)->CreateCloudSession(this);
-				CWormhole* pSession = pNode->m_pTangramCloudSession;
+				pNode->m_pHubbleCloudSession = (CWormhole*)((CHubbleImpl*)g_pHubble)->CreateCloudSession(this);
+				CWormhole* pSession = pNode->m_pHubbleCloudSession;
 				if (pSession)
 				{
 					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
@@ -110,7 +110,7 @@ namespace NewWorld {
 					pSession->Insertint64(_T("nodeobj"), (__int64)(IStar*)pNode);
 					pSession->Insertint64(_T("Quasarhandle"), (__int64)pNode->m_pStarCommonData->m_pQuasar->m_hWnd);
 					pSession->Insertint64(_T("rootnodehandle"), (__int64)pNode->m_pRootObj->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("domhandle"), (__int64)pNode->m_pTangramCloudSession);
+					pSession->Insertint64(_T("domhandle"), (__int64)pNode->m_pHubbleCloudSession);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
 					switch (pNode->m_nViewType)
 					{
@@ -152,7 +152,7 @@ namespace NewWorld {
 					}
 					if (pNode->m_pDisp)
 					{
-						pNode->m_pTangramCloudSession->Insertint64(_T("objectdisp"), (__int64)pNode->m_pDisp);
+						pNode->m_pHubbleCloudSession->Insertint64(_T("objectdisp"), (__int64)pNode->m_pDisp);
 						if (g_pHubble->m_pCLRProxy)
 						{
 							g_pHubble->m_pCLRProxy->ConnectNodeToWebPage(pNode, true);
@@ -167,10 +167,10 @@ namespace NewWorld {
 		{
 			if (m_pQuasar)
 			{
-				if (m_pQuasar->m_pWorkNode->m_pTangramCloudSession)
+				if (m_pQuasar->m_pWorkNode->m_pHubbleCloudSession)
 				{
-					m_pQuasar->m_pWorkNode->m_pTangramCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
-					m_pQuasar->m_pWorkNode->m_pTangramCloudSession->SendMessage();
+					m_pQuasar->m_pWorkNode->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
+					m_pQuasar->m_pWorkNode->m_pHubbleCloudSession->SendMessage();
 				}
 			}
 		}
@@ -1198,8 +1198,8 @@ namespace NewWorld {
 		IStar* pNode = (IStar*)pSession->Getint64(_T("nodeobj"));
 		if (pNode)
 		{
-			if(((CStar*)pNode)->m_pTangramCloudSession==nullptr) 
-				((CStar*)pNode)->m_pTangramCloudSession = (CWormhole*)pSession;
+			if(((CStar*)pNode)->m_pHubbleCloudSession==nullptr) 
+				((CStar*)pNode)->m_pHubbleCloudSession = (CWormhole*)pSession;
 		}
 		if (strMsgID == _T("CREATE_WINFORM"))
 		{

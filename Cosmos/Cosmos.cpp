@@ -184,7 +184,7 @@ namespace Cosmos
 
     Hubble::~Hubble(void)
     {
-        for each (KeyValuePair<String^, Object^>^ dic in Cosmos::Hubble::m_pTangramCLRObjDic)
+        for each (KeyValuePair<String^, Object^>^ dic in Cosmos::Hubble::m_pHubbleCLRObjDic)
         {
             if (dic->Value != nullptr)
             {
@@ -804,7 +804,7 @@ namespace Cosmos
         String^ strIndex = strObjID + L"|" + strMethod;
         MethodInfo^ mi = nullptr;
         Object^ pObj = nullptr;
-        if (pApp->m_pTangramCLRMethodDic->TryGetValue(strIndex, mi) == true)
+        if (pApp->m_pHubbleCLRMethodDic->TryGetValue(strIndex, mi) == true)
         {
             try
             {
@@ -816,10 +816,10 @@ namespace Cosmos
             return pRetObj;
         }
 
-        if (pApp->m_pTangramCLRObjDic->TryGetValue(strObjID, pObj) == false)
+        if (pApp->m_pHubbleCLRObjDic->TryGetValue(strObjID, pObj) == false)
         {
             pObj = CreateObject(strObjID);
-            pApp->m_pTangramCLRObjDic[strObjID] = pObj;
+            pApp->m_pHubbleCLRObjDic[strObjID] = pObj;
         }
         if (pObj != nullptr)
         {
@@ -827,7 +827,7 @@ namespace Cosmos
             try
             {
                 mi = pObj->GetType()->GetMethod(strMethod);
-                pApp->m_pTangramCLRMethodDic[strIndex] = mi;
+                pApp->m_pHubbleCLRMethodDic[strIndex] = mi;
             }
             catch (AmbiguousMatchException ^ e)
             {
@@ -930,9 +930,9 @@ namespace Cosmos
         if (m_strID != L"")
         {
             Hubble^ pApp = Hubble::GetHubble();
-            Monitor::Enter(pApp->m_pTangramCLRTypeDic);
+            Monitor::Enter(pApp->m_pHubbleCLRTypeDic);
             String^ strID = nullptr;
-            if (pApp->m_pTangramCLRTypeDic->TryGetValue(m_strID, pType) == false)
+            if (pApp->m_pHubbleCLRTypeDic->TryGetValue(m_strID, pType) == false)
             {
                 BSTR bstrID = STRING2BSTR(m_strID);
                 CString _strID = OLE2T(bstrID);
@@ -1040,13 +1040,13 @@ namespace Cosmos
                         {
                             if (pType != nullptr)
                             {
-                                pApp->m_pTangramCLRTypeDic->Add(m_strID, pType);
+                                pApp->m_pHubbleCLRTypeDic->Add(m_strID, pType);
                             }
                         }
                     }
                 }
             }
-            Monitor::Exit(pApp->m_pTangramCLRTypeDic);
+            Monitor::Exit(pApp->m_pHubbleCLRTypeDic);
         }
         return pType;
     }
@@ -1284,10 +1284,10 @@ namespace Cosmos
     //    if (m_pHostObj != nullptr)
     //    {
     //        MethodInfo^ mi = nullptr;
-    //        if (m_pTangramCLRMethodDic == nullptr)
-    //            m_pTangramCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
+    //        if (m_pHubbleCLRMethodDic == nullptr)
+    //            m_pHubbleCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
     //        Object^ pObj = nullptr;
-    //        if (m_pTangramCLRMethodDic->TryGetValue(strMethod, mi) == true)
+    //        if (m_pHubbleCLRMethodDic->TryGetValue(strMethod, mi) == true)
     //        {
     //            try
     //            {
@@ -1301,7 +1301,7 @@ namespace Cosmos
     //        try
     //        {
     //            mi = m_pHostObj->GetType()->GetMethod(strMethod);
-    //            m_pTangramCLRMethodDic[strMethod] = mi;
+    //            m_pHubbleCLRMethodDic[strMethod] = mi;
     //        }
     //        catch (AmbiguousMatchException ^ e)
     //        {
@@ -1338,20 +1338,20 @@ namespace Cosmos
         m_pGalaxyCluster = pGalaxyCluster;
         LONGLONG nValue = (LONGLONG)m_pGalaxyCluster;
         theAppProxy._insertObject(nValue, this);
-        m_pTangramClrEvent = new CGalaxyClusterEvent();
-        m_pTangramClrEvent->DispEventAdvise(m_pGalaxyCluster);
-        m_pTangramClrEvent->m_pGalaxyCluster = this;
+        m_pHubbleClrEvent = new CGalaxyClusterEvent();
+        m_pHubbleClrEvent->DispEventAdvise(m_pGalaxyCluster);
+        m_pHubbleClrEvent->m_pGalaxyCluster = this;
     }
 
     GalaxyCluster::~GalaxyCluster()
     {
-        if (m_pTangramClrEvent)
+        if (m_pHubbleClrEvent)
         {
-            m_pTangramClrEvent->DispEventUnadvise(m_pGalaxyCluster);
+            m_pHubbleClrEvent->DispEventUnadvise(m_pGalaxyCluster);
             LONGLONG nValue = (LONGLONG)m_pGalaxyCluster;
             theAppProxy._removeObject(nValue);
-            delete m_pTangramClrEvent;
-            m_pTangramClrEvent = nullptr;
+            delete m_pHubbleClrEvent;
+            m_pHubbleClrEvent = nullptr;
         }
     }
 

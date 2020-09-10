@@ -123,7 +123,7 @@ public:
 
 	CQuasar*							m_pDocTemplateFrame;
 	CWinForm*							m_pActiveWinFormWnd;
-	TangramDocTemplateInfo*				m_pTangramDocTemplateInfo;
+	TangramDocTemplateInfo*				m_pHubbleDocTemplateInfo;
 
 	CStar*								m_pActiveStar;
 	CStar*								m_pDesignRootNode;

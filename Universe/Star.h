@@ -30,7 +30,7 @@ public:
 	CQuasar*					m_pQuasar;
 	CQuasar*					m_pOldQuasar;
 	CStarWnd*					m_pHostClientView;
-	CTangramXmlParse*			m_pTangramParse;
+	CTangramXmlParse*			m_pHubbleParse;
 	CGalaxyCluster*				m_pGalaxyCluster;
 	map<CString, CStar*>		m_mapLayoutNodes;
 	map<CString, CStar*>		m_mapAxNodes;
@@ -106,7 +106,7 @@ public:
 	IDispatch*						m_pExtender;
 	CStarVector						m_vChildNodes;
 	CStar*							m_pCurrentExNode;
-	CWormhole*						m_pTangramCloudSession;
+	CWormhole*						m_pHubbleCloudSession;
 	map<CString, CQuasar*>			m_mapSubFrame;
 	map<CStar*, CString>			m_mapExtendNode;
 	CComObject<CStarCollection>*	m_pChildNodeCollection;
