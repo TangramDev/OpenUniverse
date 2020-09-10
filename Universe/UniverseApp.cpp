@@ -304,7 +304,7 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
 	for (auto it : g_pHubble->m_mapBrowserWnd)
 	{
-		CHerschel* pWnd = (CHerschel*)it.second;
+		CBrowser* pWnd = (CBrowser*)it.second;
 		if (pWnd && ::IsWindowVisible(it.first) && pWnd->m_pVisibleWebWnd)
 		{
 			HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
@@ -315,7 +315,7 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 					auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
 					if (it != g_pHubble->m_mapHtmlWnd.end())
 					{
-						pWnd->m_pVisibleWebWnd = (CGalileo*)it->second;
+						pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
 					}
 				}
 			}
@@ -420,7 +420,7 @@ LRESULT CALLBACK CUniverse::TangramExtendedWndProc(_In_ HWND hWnd, UINT msg, _In
 		{
 		case 20200627:
 		{
-			CHerschel* pWnd = (CHerschel*)wParam;
+			CBrowser* pWnd = (CBrowser*)wParam;
 			pWnd->BrowserLayout();
 		}
 		break;
@@ -435,7 +435,7 @@ LRESULT CALLBACK CUniverse::TangramExtendedWndProc(_In_ HWND hWnd, UINT msg, _In
 		case 20200202:
 		{
 			LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-			CGalileo* m_pHtmlWnd = (CGalileo*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			BindWebObj* pObj = (BindWebObj*)wParam;
 			auto it = m_pHtmlWnd->m_mapBindWebObj.find(pObj->m_strBindObjName);
 			if (it != m_pHtmlWnd->m_mapBindWebObj.end())
@@ -449,7 +449,7 @@ LRESULT CALLBACK CUniverse::TangramExtendedWndProc(_In_ HWND hWnd, UINT msg, _In
 		case 20200203:
 		{
 			LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-			CGalileo* m_pHtmlWnd = (CGalileo*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			if (m_pHtmlWnd->m_pChromeRenderFrameHost)
 			{
 				IPCMsg* pMsg = (IPCMsg*)wParam;
@@ -498,7 +498,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			{
 				auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
 				if (it == g_pHubble->m_mapBrowserWnd.end()) {
-					CHerschel* pChromeBrowserWnd = new CComObject<CHerschel>();
+					CBrowser* pChromeBrowserWnd = new CComObject<CBrowser>();
 					pChromeBrowserWnd->SubclassWindow(hPWnd);
 					g_pHubble->m_mapBrowserWnd[hPWnd] = pChromeBrowserWnd;
 					pChromeBrowserWnd->m_pBrowser = g_pHubble->m_pActiveBrowser;
@@ -1050,7 +1050,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					g_pHubble->m_bChromeNeedClosed = true;
 					auto it = g_pHubble->m_mapBrowserWnd.begin();
-					((CHerschel*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
+					((CBrowser*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
 				}
 			}
 			break;
@@ -1060,7 +1060,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				auto it = g_pHubble->m_mapBrowserWnd.find((HWND)lpMsg->wParam);
 				if (it != g_pHubble->m_mapBrowserWnd.end())
 				{
-					CGalileo* pWnd = ((CHerschel*)it->second)->m_pVisibleWebWnd;
+					CWebPage* pWnd = ((CBrowser*)it->second)->m_pVisibleWebWnd;
 					if (pWnd && ::IsWindow(pWnd->m_hWnd) && pWnd->m_pQuasar)
 					{
 						IStar* pNode = nullptr;

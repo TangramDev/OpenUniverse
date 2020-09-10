@@ -45,23 +45,23 @@ namespace Cosmos
 	/*
 	* 赫歇尔：现代天文学之父
 	*/
-	public ref class Herschel
+	public ref class Browser
 	{
 	public:
 		IBrowser*			m_pWebBrowser;
-		Herschel(IBrowser* pChromeWebBrowser);
+		Browser(IBrowser* pChromeWebBrowser);
 		void AddURLs(String^ urls);
 		void OpenURL(String^ url, Disposition disposition, String^ key, String^ xml);
 	};
 
-	public ref class Galileo : public IWin32Window
+	public ref class WebPage : public IWin32Window
 	{
 	public:
 		HWND				m_hWnd;
 		IWebPage*			m_pWebPage;
-		CGalileoImpl*		m_pProxy;
+		CWebPageImpl*		m_pProxy;
 
-		Galileo(IWebPage* m_pChromeWebPage);
+		WebPage(IWebPage* m_pChromeWebPage);
 
 		property IntPtr Handle
 		{

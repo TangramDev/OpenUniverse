@@ -65,11 +65,11 @@ public:
 	map<HWND, gcroot<MenuStrip^>>						m_mapFormMenuStrip;
 	map<HWND, FormInfo*>								m_mapFormInfo;
 	map<HWND, gcroot<MenuStrip^>>						m_mapFormMenuStrip2;
-	map<HWND, gcroot<Galileo^>>							m_mapChromeWebPage;
+	map<HWND, gcroot<WebPage^>>							m_mapChromeWebPage;
 	map<HWND, QuasarInfo*>								m_mapQuasarInfo;
 	map<HWND, CMenuHelperWnd*>							m_mapMenuHelperWnd;
 	map<HWND, CMenuHelperWnd*>							m_mapVisibleMenuHelperWnd;
-	map<IBrowser*, gcroot<Herschel^>>			m_mapChromeWebBrowser;
+	map<IBrowser*, gcroot<Browser^>>			m_mapChromeWebBrowser;
 	map<HWND, CString>									m_mapEventBindInfo;
 	map<CSession*, gcroot<Wormhole^>>					m_mapSession2Wormhole;
 
@@ -138,7 +138,7 @@ private:
 	bool IsSupportDesigner();
 	HICON GetAppIcon(int nIndex);
 	void OnWinFormActivate(HWND, int nState);
-	void OnWebPageCreated(HWND, CGalileoImpl*, IWebPage*, int nState);
+	void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage*, int nState);
 	void HideMenuStripPopup();
 	bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType);
 	void ConnectNodeToWebPage(IStar*, bool);

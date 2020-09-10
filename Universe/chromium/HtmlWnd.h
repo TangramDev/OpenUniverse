@@ -16,10 +16,10 @@
 #include "../stdafx.h"
 
 class CWinForm;
-namespace NewWorld
+namespace Web
 {
-	/*About CGalileo:
-	* Galileo Galileo (1564-1642) was a great astronomer, mechanist, philosopher, 
+	/*About CWebPage:
+	* WebPage WebPage (1564-1642) was a great astronomer, mechanist, philosopher, 
 	* physicist and mathematician in the late Renaissance of Italy. He is also the
 	* pioneer of modern experimental physics, known as "the father of modern science". 
 	* At the age of 17, he entered the University of Pisa to study medicine. Later, 
@@ -27,18 +27,18 @@ namespace NewWorld
 	* He is an indomitable fighter for the sake of truth. Engels called him "one of 
 	* the giants who can break down the old theory and create the new one regardless 
 	* of any obstacles.". He was born in Pisa on February 15, 1564 and died in Pisa 
-	* on January 8, 1642. The family name of Galileo is Galilei, and his full name is
-	* Galileo Galilei
+	* on January 8, 1642. The family name of WebPage is Galilei, and his full name is
+	* WebPage Galilei
 	*/
-	class ATL_NO_VTABLE CGalileo :
-		public CGalileoImpl,
-		public CWindowImpl<CGalileo, CWindow>,
+	class ATL_NO_VTABLE CWebPage :
+		public CWebPageImpl,
+		public CWindowImpl<CWebPage, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
 		public IDispatchImpl<IWebPage, &_uuidof(IWebPage), &LIBID_Universe, 1, 0>
 	{
 	public:
-		CGalileo();
-		~CGalileo() override;
+		CWebPage();
+		~CWebPage() override;
 
 		BOOL								m_bDevToolWnd;
 		bool								m_bWebContentVisible;
@@ -59,15 +59,15 @@ namespace NewWorld
 		IHubbleAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
 
-		CGalileo*							m_pWebWnd;
-		CGalileo*							m_pDevToolWnd;
+		CWebPage*							m_pWebWnd;
+		CWebPage*							m_pDevToolWnd;
 		map<CString, CString>				m_mapFormsInfo;
 		map<CString, CString>				m_mapUserControlsInfo;
 		map<HWND, CWinForm*>				m_mapWinForm;
 		map<HWND, CWinForm*>				m_mapSubWinForm;
 		map<CString, CMDIChildFormInfo*>	m_mapChildFormsInfo;
 
-		BEGIN_MSG_MAP(CGalileo)
+		BEGIN_MSG_MAP(CWebPage)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 			MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
 			MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
@@ -76,7 +76,7 @@ namespace NewWorld
 			MESSAGE_HANDLER(WM_CHROMEWNDPARENTCHANGED, OnParentChanged)
 		END_MSG_MAP()
 
-		BEGIN_COM_MAP(CGalileo)
+		BEGIN_COM_MAP(CWebPage)
 			COM_INTERFACE_ENTRY(IDispatch)
 			COM_INTERFACE_ENTRY(IWebPage)
 		END_COM_MAP()

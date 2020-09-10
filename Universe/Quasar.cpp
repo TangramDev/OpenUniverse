@@ -281,14 +281,14 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				CStar* pWndNode = (CStar*)pNode;
 				HWND hWnd = pWndNode->m_pStarCommonData->m_pQuasar->m_hWnd;
 				BindWebObj* pObj = (BindWebObj*)wParam;
-				CGalileo* m_pHtmlWnd = (CGalileo*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+				CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 				if (m_pHtmlWnd == nullptr)
 				{
 					delete pObj;
 					//for (auto it : g_pHubble->m_mapHtmlWnd)
 					//{
 					//	HWND hHtmlWnd = it.first;
-					//	CGalileo* pWebWnd = (CGalileo*)it.second;
+					//	CWebPage* pWebWnd = (CWebPage*)it.second;
 					//}
 				}
 				else
@@ -366,7 +366,7 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
 				if (it != g_pHubble->m_mapHtmlWnd.end())
 				{
-					CGalileo* pHtmlWnd = (CGalileo*)it->second;
+					CWebPage* pHtmlWnd = (CWebPage*)it->second;
 					CString strHandle = _T("");
 					strHandle.Format(_T("%d"), m_hWnd);
 					pHtmlWnd->SendChromeIPCMessage(_T("MdiWinForm_ActiveMdiChild"), m_strKey, strHandle, _T(""), m_strKey, _T(""));
@@ -1433,7 +1433,7 @@ LRESULT CQuasar::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case WM_BROWSERLAYOUT:
 	{
-		CGalileo* pWebWnd = (CGalileo*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		CWebPage* pWebWnd = (CWebPage*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 		::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
 	}
 	break;

@@ -1393,13 +1393,13 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		{
 			m_strCurrentWinFormTemplate = bstrObjID;
 			CString strTagName = m_Parse.name();
-			CGalileoImpl* pProxyBase = nullptr;
+			CWebPageImpl* pProxyBase = nullptr;
 			Cosmos::Wormhole^ pCloudSession = nullptr;
 			CSession* pTangramSession = nullptr;
 			__int64 nHandle = m_Parse.attrInt64(_T("renderframehostproxy"), 0);
 			if (nHandle)
 			{
-				pProxyBase = (CGalileoImpl*)nHandle;
+				pProxyBase = (CWebPageImpl*)nHandle;
 			}
 			CString strObjID = m_Parse.attr(_T("objid"), _T(""));
 			if (strObjID != _T(""))
@@ -1424,14 +1424,14 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							thisForm->Width = nWidth;
 							thisForm->Height = nHeight;
 						}
-						Galileo^ pPage = nullptr;
+						WebPage^ pPage = nullptr;
 						nHandle = m_Parse.attrInt64(_T("webpage"), 0);
 						if (nHandle)
 						{
 							IWebPage* pWebPage = (IWebPage*)nHandle;
 							if (pWebPage != nullptr)
 							{
-								pPage = gcnew Galileo(pWebPage);
+								pPage = gcnew WebPage(pWebPage);
 								pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
 							}
 						}
@@ -3110,11 +3110,11 @@ void CCosmosProxy::HideMenuStripPopup()
 	}
 }
 
-void CCosmosProxy::OnWebPageCreated(HWND hWnd, CGalileoImpl* pProxy, IWebPage* pChromeWebContent, int nState)
+void CCosmosProxy::OnWebPageCreated(HWND hWnd, CWebPageImpl* pProxy, IWebPage* pChromeWebContent, int nState)
 {
 	if (nState == 0)
 	{
-		Galileo^ pPage = gcnew Galileo(pChromeWebContent);
+		WebPage^ pPage = gcnew WebPage(pChromeWebContent);
 		pPage->m_hWnd = hWnd;
 		pPage->m_pProxy = pProxy;
 		m_mapChromeWebPage[hWnd] = pPage;

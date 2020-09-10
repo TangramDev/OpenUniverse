@@ -231,7 +231,7 @@ CString CStar::_GetNames(CStar * pStar)
 	return strRet;
 }
 
-CGalileo* CStar::GetHtmlWnd()
+CWebPage* CStar::GetHtmlWnd()
 {
 	if (m_pRootObj)
 	{
@@ -242,7 +242,7 @@ CGalileo* CStar::GetHtmlWnd()
 			::GetClassName(hWnd, g_pHubble->m_szBuffer, 256);
 			CString strName = CString(g_pHubble->m_szBuffer);
 			if (strName == _T("Chrome Extended Window Class")) {
-				return (CGalileo*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+				return (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			}
 		}
 		else
@@ -432,7 +432,7 @@ STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IS
 					::SetWindowLong(pWindowNode->m_pCurrentExNode->m_pHostWnd->m_hWnd, GWL_ID, dwID);
 				else
 					::SetWindowLong(pWindowNode->m_pHostWnd->m_hWnd, GWL_ID, dwID);
-				CGalileo* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
+				CWebPage* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
 				if (pWebWnd)
 				{
 					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 2);
@@ -446,7 +446,7 @@ STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IS
 			m_mapExtendNode[pWindowNode] = strKey;
 			pWindowNode->m_pCurrentExNode = pRootNode;
 			::SetWindowLongPtr(pRootNode->m_pHostWnd->m_hWnd, GWLP_ID, dwID);
-			CGalileo* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
+			CWebPage* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
 			if (pWebWnd)
 			{
 				if (pWindowNode->m_pHostQuasar->m_pBindingStar)
@@ -624,11 +624,11 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 			m_pStarCommonData->m_pQuasar->HostPosChanged();
 			if (m_pStarCommonData->m_pQuasar->m_pWebPageWnd)
 			{
-				CGalileo* pWebWnd = m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
+				CWebPage* pWebWnd = m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
 				auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(pWebWnd->m_hWnd));
 				if (it != g_pHubble->m_mapBrowserWnd.end()) {
-					((CHerschel*)it->second)->m_pBrowser->LayoutBrowser();
-					((CHerschel*)it->second)->BrowserLayout();
+					((CBrowser*)it->second)->m_pBrowser->LayoutBrowser();
+					((CBrowser*)it->second)->BrowserLayout();
 				}
 			}
 		}
@@ -690,7 +690,7 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 {
 	BOOL bRet = false;
 
-	CGalileo* pHtmlWnd = m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
+	CWebPage* pHtmlWnd = m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
 	HWND hWnd = 0;
 	CStarWnd* pTangramDesignView = (CStarWnd*)m_pHostWnd;
 	BOOL isAppWnd = false;
@@ -906,7 +906,7 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			auto it = g_pHubble->m_mapBrowserWnd.find(g_pHubble->m_hHostBrowserWnd);
 			if (it != g_pHubble->m_mapBrowserWnd.end())
 			{
-				m_pWebBrowser = (CHerschel*)it->second;
+				m_pWebBrowser = (CBrowser*)it->second;
 				m_pRootObj->m_pStarCommonData->m_pQuasar->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pStarCommonData->m_pQuasar->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = 12;
@@ -942,7 +942,7 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 				if (it != g_pHubble->m_mapBrowserWnd.end())
 				{
-					m_pWebBrowser = (CHerschel*)it->second;
+					m_pWebBrowser = (CBrowser*)it->second;
 				}
 			}
 			else
@@ -1024,7 +1024,7 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 void CStar::NodeCreated()
 {
-	CGalileo* pHtmlWnd = m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
+	CWebPage* pHtmlWnd = m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = GetHtmlWnd();
 	if (pHtmlWnd == nullptr)
@@ -1046,13 +1046,13 @@ HWND CStar::CreateView(HWND hParentWnd, CString strTag)
 	get_Attribute(CComBSTR("id"), &bstr2);
 	CString strName = OLE2T(bstr2);
 
-	CGalileo* pHtmlWnd = nullptr;
+	CWebPage* pHtmlWnd = nullptr;
 	HWND _hWnd = m_pStarCommonData->m_pQuasar->m_hWnd;
 	{
 		::GetClassName(_hWnd, g_pHubble->m_szBuffer, 256);
 		CString strName = CString(g_pHubble->m_szBuffer);
 		if (strName == _T("Chrome Extended Window Class")) {
-			pHtmlWnd = (CGalileo*)::GetWindowLongPtr(_hWnd, GWLP_USERDATA);
+			pHtmlWnd = (CWebPage*)::GetWindowLongPtr(_hWnd, GWLP_USERDATA);
 		}
 	}
 
@@ -2390,7 +2390,7 @@ STDMETHODIMP CStar::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
 		auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pHubble->m_mapBrowserWnd.end())
 		{
-			m_pWebBrowser = (CHerschel*)it->second;
+			m_pWebBrowser = (CBrowser*)it->second;
 			//m_pWebBrowser->m_pStar = this;
 		}
 		//g_pHubble->m_pCurWebNode = nullptr;
@@ -2452,7 +2452,7 @@ STDMETHODIMP CStar::put_URL(BSTR newVal)
 		auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pHubble->m_mapBrowserWnd.end())
 		{
-			m_pWebBrowser = (CHerschel*)it->second;
+			m_pWebBrowser = (CBrowser*)it->second;
 			m_pWebBrowser->m_pParentStar = this;
 		}
 
@@ -2471,7 +2471,7 @@ STDMETHODIMP CStar::put_URL(BSTR newVal)
 	//	auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 	//	if (it != g_pHubble->m_mapBrowserWnd.end())
 	//	{
-	//		m_pWebBrowser = (CHerschel*)it->second;
+	//		m_pWebBrowser = (CBrowser*)it->second;
 	//	}
 	//	return S_OK;
 	//}
@@ -2495,7 +2495,7 @@ STDMETHODIMP CStar::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra
 				{
 					if (::IsChild(hPWnd,it.first))
 					{
-						CGalileo* pWnd = (CGalileo*)it.second;
+						CWebPage* pWnd = (CWebPage*)it.second;
 						pWnd->SendChromeIPCMessage(_T("bstrMsgId"), OLE2T(bstrTo), OLE2T(bstrMsgId), OLE2T(bstrExtra), OLE2T(bstrMsgId), _T(""));
 					}
 				}

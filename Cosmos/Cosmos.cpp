@@ -352,7 +352,7 @@ namespace Cosmos
         return IsChromeRunning;
     }
 
-    Herschel^ Hubble::HostWebBrowser::get()
+    Browser^ Hubble::HostWebBrowser::get()
     {
         if (theApp.m_pHubble)
         {
@@ -594,7 +594,7 @@ namespace Cosmos
         return nullptr;
     }
 
-    Herschel^ Hubble::ActiveBrowser()
+    Browser^ Hubble::ActiveBrowser()
     {
         IBrowser* pChromeWebBrowser = nullptr;
         theApp.m_pHubble->get_ActiveChromeBrowserWnd(&pChromeWebBrowser);
@@ -605,7 +605,7 @@ namespace Cosmos
                 return it->second;
             else
             {
-                Herschel^ pBrowser = gcnew Herschel(pChromeWebBrowser);
+                Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
                 theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
                 return pBrowser;
             }
@@ -613,7 +613,7 @@ namespace Cosmos
         return nullptr;
     }
 
-    Herschel^ Hubble::GetHostBrowser(Object^ obj)
+    Browser^ Hubble::GetHostBrowser(Object^ obj)
     {
         if (obj == nullptr)
         {
@@ -668,7 +668,7 @@ namespace Cosmos
             return it->second;
         else
         {
-            Herschel^ pBrowser = gcnew Herschel(pChromeWebBrowser);
+            Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
             theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
             return pBrowser;
         }
@@ -737,7 +737,7 @@ namespace Cosmos
     void Hubble::BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ strWebName)
     {
         HWND hWnd = (HWND)hWebPage.ToPointer();
-        CGalileoImpl* pProxy = nullptr;
+        CWebPageImpl* pProxy = nullptr;
         auto it = theAppProxy.m_mapChromeWebPage.find(hWnd);
         if (it != theAppProxy.m_mapChromeWebPage.end())
         {
@@ -1051,7 +1051,7 @@ namespace Cosmos
         return pType;
     }
 
-    Herschel^ Hubble::CreateBrowser(IntPtr ParentHandle, String^ strUrls)
+    Browser^ Hubble::CreateBrowser(IntPtr ParentHandle, String^ strUrls)
     {
         HWND hPWnd = (HWND)ParentHandle.ToPointer();
         if (theApp.m_pHubbleImpl->m_pBrowserFactory)
@@ -1064,7 +1064,7 @@ namespace Cosmos
             if (it != theAppProxy.m_mapChromeWebBrowser.end())
                 return it->second;
             else
-                return gcnew Herschel(pBrowser);
+                return gcnew Browser(pBrowser);
         }
         return nullptr;
     }

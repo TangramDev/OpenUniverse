@@ -97,12 +97,12 @@ namespace Cosmos
 			return m_pWormhole->SendMessage();
 	}
 
-	Herschel::Herschel(IBrowser* pChromeWebBrowser)
+	Browser::Browser(IBrowser* pChromeWebBrowser)
 	{
 		m_pWebBrowser = pChromeWebBrowser;
 	}
 
-	void Herschel::AddURLs(String^ urls)
+	void Browser::AddURLs(String^ urls)
 	{
 		BSTR bstrUrl = STRING2BSTR(urls);
 		if (m_pWebBrowser)
@@ -111,7 +111,7 @@ namespace Cosmos
 		}
 	}
 
-	void Herschel::OpenURL(String^ url, Disposition disposition, String^ key, String^ xml)
+	void Browser::OpenURL(String^ url, Disposition disposition, String^ key, String^ xml)
 	{
 		BSTR bstrUrl = STRING2BSTR(url);
 		BSTR bstrKey = STRING2BSTR(key);
@@ -122,27 +122,27 @@ namespace Cosmos
 		}
 	}
 
-	Galileo::Galileo(IWebPage* pWebPage)
+	WebPage::WebPage(IWebPage* pWebPage)
 	{
 		m_pWebPage = pWebPage;
 	}
 	
-	IntPtr Galileo::Handle::get()
+	IntPtr WebPage::Handle::get()
 	{
 		return (IntPtr)m_hWnd;
 	}
 	
-	Star^ Galileo::ParentStar::get()
+	Star^ WebPage::ParentStar::get()
 	{
 		return theAppProxy._createObject<IStar, Star>(m_pProxy->GetParentNode());
 	}
 	
-	Quasar^ Galileo::HostQuasar::get()
+	Quasar^ WebPage::HostQuasar::get()
 	{
 		return theAppProxy._createObject<IQuasar, Quasar>(m_pProxy->GetQuasar());
 	}
 
-	Form^ Galileo::CreateForm(String^ strFormKey)
+	Form^ WebPage::CreateForm(String^ strFormKey)
 	{
 		if (m_pWebPage)
 		{

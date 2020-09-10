@@ -13,20 +13,20 @@
 
 #pragma once
 
-namespace NewWorld {
+namespace Web {
 	using namespace ATL;
-	class CGalileo;
+	class CWebPage;
 
-	class ATL_NO_VTABLE CHerschel :
-		public CHerschelImpl, 
-		public CWindowImpl<CHerschel, CWindow>,
+	class ATL_NO_VTABLE CBrowser :
+		public CBrowserImpl, 
+		public CWindowImpl<CBrowser, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
 		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_Universe, 1, 0>
 	{
 		friend class CStar;
 	public:
-		CHerschel();
-		~CHerschel() override;
+		CBrowser();
+		~CBrowser() override;
 
 		bool		m_bTabChange;
 		int			m_heightfix;
@@ -35,17 +35,17 @@ namespace NewWorld {
 		HWND		m_hOldTab;
 		CString		m_strCurKey;
 		CStar*		m_pParentStar;
-		CGalileo*	m_pVisibleWebWnd;
+		CWebPage*	m_pVisibleWebWnd;
 		IStar*		m_pRemoteStar;
 		LRESULT		BrowserLayout();
 
-		map<HWND, CGalileo*> m_mapNorifyPage;
+		map<HWND, CWebPage*> m_mapNorifyPage;
 
 		STDMETHOD(get_RemoteStar)(IStar** pVal);
 		STDMETHOD(put_RemoteStar)(IStar* newVal);
 		STDMETHOD(AddURLs)(BSTR bstrURLs);
 		STDMETHOD(OpenURL)(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml);
-		BEGIN_MSG_MAP(CHerschel)
+		BEGIN_MSG_MAP(CBrowser)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 			MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 			MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
@@ -56,7 +56,7 @@ namespace NewWorld {
 			MESSAGE_HANDLER(WM_DEVICESCALEFACTORCHANGED, OnDeviceScaleFactorChanged)
 		END_MSG_MAP()
 
-		BEGIN_COM_MAP(CHerschel)
+		BEGIN_COM_MAP(CBrowser)
 			COM_INTERFACE_ENTRY(IBrowser)
 			COM_INTERFACE_ENTRY(IDispatch)
 		END_COM_MAP()

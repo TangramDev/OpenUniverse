@@ -48,7 +48,7 @@
 #include <sys/stat.h>
 #include "Markup.h"
 
-using namespace NewWorld;
+using namespace Web;
 
 // CHubble
 
@@ -663,7 +663,7 @@ void CHubble::TangramInitFromeWeb()
 		auto it = m_mapBrowserWnd.find(m_hHostBrowserWnd);
 		if (it != m_mapBrowserWnd.end())
 		{
-			CHerschel* pWnd = (CHerschel*)it->second;
+			CBrowser* pWnd = (CBrowser*)it->second;
 			if (pWnd->m_pVisibleWebWnd)
 			{
 				m_pMainChromeRenderFrameHostProxy = pWnd->m_pVisibleWebWnd;
@@ -901,10 +901,10 @@ void CHubble::ProcessMsg(LPMSG lpMsg)
 				HWND _hPWnd = ::GetParent(hPWnd);
 				if (_hPWnd == nullptr)
 				{
-					CHerschel* pBrowserWnd = (CHerschel*)it->second;
+					CBrowser* pBrowserWnd = (CBrowser*)it->second;
 					if (pBrowserWnd->m_pOmniboxViewViews && pBrowserWnd->m_pOmniboxViewViews->IsFocused() == false)
 						return;
-					CGalileo* pWnd = pBrowserWnd->m_pVisibleWebWnd;
+					CWebPage* pWnd = pBrowserWnd->m_pVisibleWebWnd;
 					if (pWnd && lpMsg->hwnd != pWnd->m_hWnd)
 					{
 						CStar* pRetNode = (CStar*)::SendMessage(lpMsg->hwnd, WM_TANGRAMGETNODE, 0, 0);
@@ -960,7 +960,7 @@ long CHubble::GetIPCMsgIndex(CString strMsgID)
 		return 0;
 }
 
-CSession* CHubble::CreateCloudSession(CGalileoImpl* pOwner)
+CSession* CHubble::CreateCloudSession(CWebPageImpl* pOwner)
 {
 	CWormhole* pSession = new CWormhole();
 	pSession->m_pOwner = pOwner ? pOwner : m_pMainChromeRenderFrameHostProxy;
@@ -1433,7 +1433,7 @@ STDMETHODIMP CHubble::get_ActiveChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
 {
 	if (m_pActiveBrowser->m_pProxy)
 	{
-		CHerschel* pBrowserWnd = (CHerschel*)m_pActiveBrowser->m_pProxy;
+		CBrowser* pBrowserWnd = (CBrowser*)m_pActiveBrowser->m_pProxy;
 		pBrowserWnd->QueryInterface(__uuidof(IBrowser), (void**)ppChromeWebBrowser);
 	}
 	return S_OK;
@@ -2934,11 +2934,11 @@ void CHubble::OnRenderProcessCreated(CChromeRenderProcess* pProcess)
 
 CChromeBrowserBase* CHubble::GetChromeBrowserBase(HWND hHostWnd)
 {
-	CHerschel* pPWnd = nullptr;
+	CBrowser* pPWnd = nullptr;
 	auto it2 = g_pHubble->m_mapBrowserWnd.find(hHostWnd);
 	if (it2 != g_pHubble->m_mapBrowserWnd.end())
 	{
-		pPWnd = (CHerschel*)it2->second;
+		pPWnd = (CBrowser*)it2->second;
 		return pPWnd->m_pBrowser;
 	}
 	return nullptr;
@@ -2972,10 +2972,10 @@ void CHubble::OnDocumentOnLoadCompleted(CChromeRenderFrameHost* pFrameHostBase, 
 	auto it = g_pHubble->m_mapHtmlWnd.find(hHtmlWnd);
 	if (it != g_pHubble->m_mapHtmlWnd.end())
 	{
-		((CGalileo*)it->second)->m_pChromeRenderFrameHost = pFrameHostBase;
+		((CWebPage*)it->second)->m_pChromeRenderFrameHost = pFrameHostBase;
 		// Set m_pProxy to CChromeRenderFrameHostProxyBase
 		// TODO: Not work
-		pFrameHostBase->m_pProxy = (CGalileoImpl*)it->second;
+		pFrameHostBase->m_pProxy = (CWebPageImpl*)it->second;
 		if (pVoid)
 		{
 		}

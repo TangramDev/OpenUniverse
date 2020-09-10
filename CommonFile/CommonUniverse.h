@@ -171,7 +171,7 @@ namespace CommonUniverse {
 	class CSession;
 	class IHubbleDelegate;
 	class CChromeBrowserBase;
-	class CHerschelImpl;
+	class CBrowserImpl;
 	class CChromeRenderProcess;
 	class CChromeWebContentBase;
 	class CTangramMainDllLoader;
@@ -181,7 +181,7 @@ namespace CommonUniverse {
 	class CChromeWebContentProxyBase;
 	class CChromeRenderFrameHost;
 	class CChromeChildProcessHostImpl;
-	class CGalileoImpl;
+	class CWebPageImpl;
 	class CChromeChildProcessHostImplProxy;
 
 	class IHubbleCLRImpl;
@@ -295,7 +295,7 @@ namespace CommonUniverse {
 		CSession() {}
 		virtual ~CSession() {}
 		
-		CGalileoImpl* m_pOwner;
+		CWebPageImpl* m_pOwner;
 
 		virtual void InsertString(CString key, CString value) = 0;
 		virtual void InsertLong(CString key, long value) = 0;
@@ -589,7 +589,7 @@ namespace CommonUniverse {
 		virtual HICON GetAppIcon(int nIndex) = 0;
 		virtual void OnWinFormActivate(HWND, int nState) = 0;
 		virtual IDispatch* CreateWinForm(HWND hParent, BSTR strXML) = 0;
-		virtual void OnWebPageCreated(HWND, CGalileoImpl*, IWebPage* pChromeWebContent, int nState) = 0;
+		virtual void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage* pChromeWebContent, int nState) = 0;
 		virtual void HideMenuStripPopup() = 0;
 		virtual bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType) = 0;
 		virtual void OnCloudMsgReceived(CSession*) = 0;
@@ -735,7 +735,7 @@ namespace CommonUniverse {
 		IHubbleWindow*							m_pCreatingTangramWindow = nullptr;
 		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
 		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CGalileoImpl*			m_pMainChromeRenderFrameHostProxy = nullptr;
+		CWebPageImpl*			m_pMainChromeRenderFrameHostProxy = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapFramePage;
@@ -752,7 +752,7 @@ namespace CommonUniverse {
 		map<CString, TangramDocTemplateInfo*>	m_mapTangramDocTemplateInfo2;
 		map<CString, TangramDocTemplateInfo*>	m_mapTangramFormsTemplateInfo;
 		map<int, TangramDocTemplateInfo*>		m_mapTangramFormsTemplateInfo2;
-		map<HWND, CGalileoImpl*>	m_mapHtmlWnd;
+		map<HWND, CWebPageImpl*>	m_mapHtmlWnd;
 		map<HWND, IWebPage*>				m_mapFormWebPage;
 		map<HWND, IBrowser*>			m_mapBrowserWnd;
 		map<HWND, IWorkBenchWindow*>			m_mapWorkBenchWnd;
@@ -786,7 +786,7 @@ namespace CommonUniverse {
 		virtual void InserttoDataMap(int nType, CString strKey, void* pData) {}
 		virtual IWebPage* GetWebPageFromForm(HWND) { return nullptr; }
 		virtual long GetIPCMsgIndex(CString strMsgID) { return 0; }
-		virtual CSession* CreateCloudSession(CGalileoImpl*) { return nullptr; }
+		virtual CSession* CreateCloudSession(CWebPageImpl*) { return nullptr; }
 		virtual CSession* GetCloudSession(IStar*) { return nullptr; }
 		virtual void ReleaseCLR() {}
 		virtual void SetMainWnd(HWND hMain) {}
@@ -961,7 +961,7 @@ namespace CommonUniverse {
 		}
 		virtual ~CChromeBrowserBase() {}
 
-		CHerschelImpl* m_pProxy;
+		CBrowserImpl* m_pProxy;
 
 		virtual int GetType() = 0;
 		virtual void* GetBrowser() = 0;
@@ -973,10 +973,10 @@ namespace CommonUniverse {
 		virtual bool IsActiveWebContentWnd(HWND hWebWnd) = 0;
 	};
 
-	class CHerschelImpl {
+	class CBrowserImpl {
 	public:
-		CHerschelImpl() {}
-		virtual ~CHerschelImpl() {}
+		CBrowserImpl() {}
+		virtual ~CBrowserImpl() {}
 
 		CChromeBrowserBase*		m_pBrowser;
 		OmniboxViewViewsProxy*	m_pOmniboxViewViews;
@@ -1019,7 +1019,7 @@ namespace CommonUniverse {
 			m_mapTangramSession.erase(m_mapTangramSession.begin(), m_mapTangramSession.end());
 		}
 
-		CGalileoImpl* m_pProxy;
+		CWebPageImpl* m_pProxy;
 		map<CString, IPCSession*> m_mapTangramSession;
 		virtual void ShowWebPage(bool bShow) = 0;
 		virtual void SendTangramMessage(IPCMsg*) = 0;
@@ -1035,14 +1035,14 @@ namespace CommonUniverse {
 		virtual float GetFloat(IPCSession*, CString key) = 0;
 	};
 
-	class CGalileoImpl {
+	class CWebPageImpl {
 	public:
-		CGalileoImpl() { 
+		CWebPageImpl() { 
 			m_pRemoteHubble = nullptr;
 			m_pChromeRenderFrameHost = nullptr; 
 		}
 
-		virtual ~CGalileoImpl() 
+		virtual ~CWebPageImpl() 
 		{
 			for (auto it = m_mapBindWebObj.begin(); it != m_mapBindWebObj.end(); it++)
 			{

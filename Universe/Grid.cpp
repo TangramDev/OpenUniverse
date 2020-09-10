@@ -438,7 +438,7 @@ void CGrid::StopTracking(BOOL bAccept)
 			g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
 		}
 
-		CGalileo* pWebWnd = nullptr;
+		CWebPage* pWebWnd = nullptr;
 		if (pQuasar->m_pWebPageWnd)
 		{
 			pWebWnd = pQuasar->m_pWebPageWnd;

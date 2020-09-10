@@ -181,7 +181,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	}
 	g_pHubble->m_pQuasar = m_pStar->m_pStarCommonData->m_pQuasar;
 
-	CGalileo* pHtmlWnd = g_pHubble->m_pQuasar->m_pWebPageWnd;
+	CWebPage* pHtmlWnd = g_pHubble->m_pQuasar->m_pWebPageWnd;
 	CString strID = m_pStar->m_strName;
 
 	if ((m_pStar->m_nViewType == ActiveX || m_pStar->m_nViewType == CLRCtrl))
@@ -873,7 +873,7 @@ LRESULT CStarWnd::OnGetTangramObj(WPARAM wParam, LPARAM lParam)
 			auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 			if (it != g_pHubble->m_mapBrowserWnd.end())
 			{
-				m_pStar->m_pWebBrowser = (CHerschel*)it->second;
+				m_pStar->m_pWebBrowser = (CBrowser*)it->second;
 			}
 		}
 		return (LRESULT)m_pStar;

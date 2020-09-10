@@ -15,13 +15,13 @@
 
 #pragma once
 
-namespace NewWorld
+namespace Web
 {
-	class CHerschel;
-	class CGalileo;
+	class CBrowser;
+	class CWebPage;
 }
 
-using namespace NewWorld;
+using namespace Web;
 
 typedef HRESULT(__stdcall* HubbleCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 

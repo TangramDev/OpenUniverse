@@ -23,8 +23,8 @@
 #include "BrowserWnd.h"
 #include "../Markup.h" 
 
-namespace NewWorld {
-	CGalileo::CGalileo() {
+namespace Web {
+	CWebPage::CWebPage() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
 		m_pBindWinForm = nullptr;
@@ -44,20 +44,20 @@ namespace NewWorld {
 		g_pHubble->m_pCreatingChromeRenderFrameHostBase = nullptr;
 	}
 
-	CGalileo::~CGalileo() {
+	CWebPage::~CWebPage() {
 		for (auto it : m_mapChildFormsInfo)
 		{
 			delete it.second;
 		}
 	}
 
-	LRESULT CGalileo::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT CWebPage::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
-		CHerschel* pParent = nullptr;
+		CBrowser* pParent = nullptr;
 		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
 		if (it != g_pHubble->m_mapBrowserWnd.end())
 		{
-			pParent = (CHerschel*)it->second;
+			pParent = (CBrowser*)it->second;
 		}
 		HWND hPWnd = ::GetParent(pParent->m_hWnd);
 		if (hPWnd != NULL)
@@ -75,7 +75,7 @@ namespace NewWorld {
 		return DefWindowProc(uMsg, wParam, lParam);
 	}
 
-	LRESULT CGalileo::OnHubbleMsg(UINT uMsg,
+	LRESULT CWebPage::OnHubbleMsg(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
@@ -219,7 +219,7 @@ namespace NewWorld {
 				}
 				else
 				{
-					CHerschel* pWnd = (CHerschel*)lParam;
+					CBrowser* pWnd = (CBrowser*)lParam;
 					pWnd->m_pVisibleWebWnd = this;
 					::SetParent(m_hExtendWnd, pWnd->m_hWnd);
 					if (::IsWindow(pWnd->m_hOldTab))
@@ -231,7 +231,7 @@ namespace NewWorld {
 			}
 			else
 			{
-				CHerschel* pWnd = (CHerschel*)lParam;
+				CBrowser* pWnd = (CBrowser*)lParam;
 				if (pWnd)
 					::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 			}
@@ -242,7 +242,7 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CGalileo::OnParentChanged(UINT uMsg,
+	LRESULT CWebPage::OnParentChanged(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
@@ -264,12 +264,12 @@ namespace NewWorld {
 					hNewPWnd = hNewPWnd2;
 					bNewParent = true;
 				}
-				CHerschel* pChromeBrowserWnd = nullptr;
+				CBrowser* pChromeBrowserWnd = nullptr;
 				auto it = g_pHubble->m_mapBrowserWnd.find(hNewPWnd);
 				if (it == g_pHubble->m_mapBrowserWnd.end())
 				{
 					if (::IsWindowVisible(hNewPWnd)) {
-						pChromeBrowserWnd = new CComObject<CHerschel>();
+						pChromeBrowserWnd = new CComObject<CBrowser>();
 						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
 						g_pHubble->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
 						pChromeBrowserWnd->m_pBrowser = g_pHubble->m_pActiveBrowser;
@@ -303,11 +303,11 @@ namespace NewWorld {
 					hNewPWnd = hNewPWnd2;
 					bNewParent = true;
 				}
-				CHerschel* pChromeBrowserWnd = nullptr;
+				CBrowser* pChromeBrowserWnd = nullptr;
 				auto it = g_pHubble->m_mapBrowserWnd.find(hNewPWnd);
 				if (it != g_pHubble->m_mapBrowserWnd.end())
 				{
-					pChromeBrowserWnd = (CHerschel*)it->second;
+					pChromeBrowserWnd = (CBrowser*)it->second;
 					g_pHubble->m_pActiveBrowser = pChromeBrowserWnd->m_pBrowser;
 					if (pChromeBrowserWnd && m_hExtendWnd) {
 						if (::IsWindowVisible(m_hWnd)) {
@@ -332,7 +332,7 @@ namespace NewWorld {
 				else
 				{
 					if (::IsWindowVisible(hNewPWnd)) {
-						pChromeBrowserWnd = new CComObject<CHerschel>();
+						pChromeBrowserWnd = new CComObject<CBrowser>();
 						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
 						g_pHubble->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
 						pChromeBrowserWnd->m_pBrowser = g_pHubble->m_pActiveBrowser;
@@ -356,7 +356,7 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CGalileo::OnDestroy(UINT uMsg,
+	LRESULT CWebPage::OnDestroy(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL& /*bHandled*/) {
@@ -366,7 +366,7 @@ namespace NewWorld {
 		}
 
 		if (g_pHubble->m_pCLRProxy)
-			g_pHubble->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CGalileoImpl*)this, (IWebPage*)this, 1);
+			g_pHubble->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CWebPageImpl*)this, (IWebPage*)this, 1);
 
 		m_hExtendWnd = nullptr;
 
@@ -384,20 +384,20 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CGalileo::OnShowWindow(UINT uMsg,
+	LRESULT CWebPage::OnShowWindow(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
 		if (g_pHubble->m_bChromeNeedClosed == false && ::IsWindow(m_hExtendWnd))
 		{
 			if (wParam) {
-				CHerschel* pBrowserWnd = nullptr;
+				CBrowser* pBrowserWnd = nullptr;
 				HWND hPWnd = ::GetParent(m_hWnd);
 				if (!m_bDevToolWnd)
 				{
 					auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
 					if (it != g_pHubble->m_mapBrowserWnd.end()) {
-						pBrowserWnd = (CHerschel*)it->second;
+						pBrowserWnd = (CBrowser*)it->second;
 						pBrowserWnd->m_pVisibleWebWnd = this;
 					}
 				}
@@ -427,12 +427,12 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	void CGalileo::OnFinalMessage(HWND hWnd) {
-		CHerschel* pPWnd = nullptr;
+	void CWebPage::OnFinalMessage(HWND hWnd) {
+		CBrowser* pPWnd = nullptr;
 		auto it2 = g_pHubble->m_mapBrowserWnd.find(::GetParent(hWnd));
 		if (it2 != g_pHubble->m_mapBrowserWnd.end())
 		{
-			pPWnd = (CHerschel*)it2->second;
+			pPWnd = (CBrowser*)it2->second;
 			if (pPWnd->m_pVisibleWebWnd == this)
 				pPWnd->m_pVisibleWebWnd = nullptr;
 		}
@@ -447,7 +447,7 @@ namespace NewWorld {
 		delete this;
 	}
 
-	void CGalileo::SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
+	void CWebPage::SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (m_pChromeRenderFrameHost != nullptr)
 		{
@@ -463,7 +463,7 @@ namespace NewWorld {
 		g_pHubble->m_pCurrentIPCMsg = nullptr;
 	}
 
-	LRESULT CGalileo::OnChromeIPCMsgReceived(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CWebPage::OnChromeIPCMsgReceived(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		if (lParam)
 		{
@@ -500,12 +500,12 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	CChromeBrowserBase* CGalileo::GetChromeBrowserBase(HWND hHostWnd)
+	CChromeBrowserBase* CWebPage::GetChromeBrowserBase(HWND hHostWnd)
 	{
 		return nullptr;
 	}
 
-	void CGalileo::LoadDocument2Viewport(CString strName, CString strXML)
+	void CWebPage::LoadDocument2Viewport(CString strName, CString strXML)
 	{
 		HWND hPPWnd = ::GetParent(::GetParent(m_hWnd));
 		if (m_pRemoteHubble)
@@ -583,7 +583,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
+	void CWebPage::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
 		{
@@ -812,7 +812,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::HandleAggregatedMessage(CString strParam1, CString strParam2)
+	void CWebPage::HandleAggregatedMessage(CString strParam1, CString strParam2)
 	{
 		int nTokenPos = 0;
 		CString strToken = strParam1.Tokenize(_T("$$$"), nTokenPos);
@@ -824,7 +824,7 @@ namespace NewWorld {
 		}
 	}
 
-	CString CGalileo::FindToken(CString pszContent, CString pszDelimiter, int& nStart)
+	CString CWebPage::FindToken(CString pszContent, CString pszDelimiter, int& nStart)
 	{
 		if (nStart == -1) {
 			return _T("");
@@ -848,7 +848,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::HandleSingleMessage(CString strParam)
+	void CWebPage::HandleSingleMessage(CString strParam)
 	{
 		int nStart = 0;
 		CString strId = FindToken(strParam, _T("%%%"), nStart);
@@ -860,7 +860,7 @@ namespace NewWorld {
 		HandleChromeIPCMessage(strId, strParam1, strParam2, strParam3, strParam4, strParam5);
 	}
 
-	void CGalileo::RenderHTMLElement(CString strRuleName, CString strHTML)
+	void CWebPage::RenderHTMLElement(CString strRuleName, CString strHTML)
 	{
 		if (strRuleName.CompareNoCase(_T("application")) == 0)
 		{
@@ -908,7 +908,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLMainWindowElement(CString strHTML)
+	void CWebPage::RenderHTMLMainWindowElement(CString strHTML)
 	{
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
@@ -935,7 +935,7 @@ namespace NewWorld {
 			if (g_pHubble->m_pCLRProxy)
 			{
 				g_pHubble->m_pMainHtmlWnd = this;
-				CGalileoImpl* pChromeRenderFrameHostProxyBase = (CGalileoImpl*)this;
+				CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
 				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
 				IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 				g_pHubble->m_pMainHtmlWnd = nullptr;
@@ -943,7 +943,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLIndWindowElement(CString strHTML)
+	void CWebPage::RenderHTMLIndWindowElement(CString strHTML)
 	{
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
@@ -969,7 +969,7 @@ namespace NewWorld {
 				g_pHubble->LoadCLR();
 			if (g_pHubble->m_pCLRProxy)
 			{
-				CGalileoImpl* pProxyBase = (CGalileoImpl*)this;
+				CWebPageImpl* pProxyBase = (CWebPageImpl*)this;
 				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pProxyBase);
 				IWebPage* pChromeWebPage = (IWebPage*)this;
 				xmlParse.put_attr(_T("webpage"), (__int64)pChromeWebPage);
@@ -979,7 +979,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLWebBrowserElement(CString strHTML)
+	void CWebPage::RenderHTMLWebBrowserElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -1012,7 +1012,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLNodeDetailsElement(CString strHTML)
+	void CWebPage::RenderHTMLNodeDetailsElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -1033,7 +1033,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLObjectElement(CString strHTML)
+	void CWebPage::RenderHTMLObjectElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -1127,7 +1127,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLExtraElement(CString strHTML)
+	void CWebPage::RenderHTMLExtraElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -1140,7 +1140,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLDataElement(CString strHTML)
+	void CWebPage::RenderHTMLDataElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -1150,7 +1150,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::RenderHTMLDocElement(CString strHTML)
+	void CWebPage::RenderHTMLDocElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -1165,7 +1165,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::OnNTPLoaded()
+	void CWebPage::OnNTPLoaded()
 	{
 		if (g_pHubble->m_strNtpXml != _T(""))
 		{
@@ -1173,7 +1173,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::OnWinFormCreated(HWND hwnd)
+	void CWebPage::OnWinFormCreated(HWND hwnd)
 	{
 		if (hwnd)
 		{
@@ -1192,7 +1192,7 @@ namespace NewWorld {
 		}
 	}
 
-	void CGalileo::OnCloudMsgReceived(CSession* pSession)
+	void CWebPage::OnCloudMsgReceived(CSession* pSession)
 	{
 		CString strMsgID = pSession->GetString(L"msgID");
 		IStar* pNode = (IStar*)pSession->Getint64(_T("nodeobj"));
@@ -1231,7 +1231,7 @@ namespace NewWorld {
 					g_pHubble->LoadCLR();
 				if (g_pHubble->m_pCLRProxy)
 				{
-					CGalileoImpl* pProxyBase = (CGalileoImpl*)this;
+					CWebPageImpl* pProxyBase = (CWebPageImpl*)this;
 					xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pProxyBase);
 					xmlParse.put_attr(_T("ipcsession"), (__int64)pSession);
 					pSession->Insertint64(_T("domhandle"), (__int64)pSession);
@@ -1292,13 +1292,13 @@ namespace NewWorld {
 		}
 	}
 
-	STDMETHODIMP CGalileo::get_HostWnd(LONGLONG* Val)
+	STDMETHODIMP CWebPage::get_HostWnd(LONGLONG* Val)
 	{
 		*Val = (LONGLONG)m_hWebHostWnd;
 		return S_OK;
 	}
 
-	STDMETHODIMP CGalileo::put_HostWnd(LONGLONG newVal)
+	STDMETHODIMP CWebPage::put_HostWnd(LONGLONG newVal)
 	{
 		HWND hWnd = (HWND)newVal;
 		if (::IsWindow(hWnd))
@@ -1306,7 +1306,7 @@ namespace NewWorld {
 		return S_OK;
 	}
 
-	STDMETHODIMP CGalileo::CreateForm(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm)
+	STDMETHODIMP CWebPage::CreateForm(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm)
 	{
 		if (g_pHubble->m_pCLRProxy == nullptr)
 			g_pHubble->LoadCLR();

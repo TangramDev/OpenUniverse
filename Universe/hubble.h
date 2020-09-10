@@ -20,7 +20,7 @@
 
 #pragma once
 
-using namespace NewWorld;
+using namespace Web;
 using namespace CommonUniverse;
 class CWinForm;
 struct CommonThreadInfo
@@ -116,10 +116,10 @@ public:
 	//.NET Version 4: 
 	ICLRRuntimeHost*					m_pClrHost;
 
-	CGalileo*							m_pHostHtmlWnd;
-	CGalileo*							m_pHtmlWndCreated;
-	CGalileo*							m_pActiveHtmlWnd;
-	CGalileo*							m_pMainHtmlWnd = nullptr;
+	CWebPage*							m_pHostHtmlWnd;
+	CWebPage*							m_pHtmlWndCreated;
+	CWebPage*							m_pActiveHtmlWnd;
+	CWebPage*							m_pMainHtmlWnd = nullptr;
 
 	CQuasar*							m_pDocTemplateFrame;
 	CWinForm*							m_pActiveWinFormWnd;
@@ -318,7 +318,7 @@ private:
 	void InserttoDataMap(int nType, CString strKey, void* pData);
 	char* GetSchemeString(int nType, CString strKey);
 	long GetIPCMsgIndex(CString strMsgID);
-	CSession* CreateCloudSession(CGalileoImpl*);
+	CSession* CreateCloudSession(CWebPageImpl*);
 	CSession* GetCloudSession(IStar*);
 	void ReleaseCLR();
 	void SetMainWnd(HWND hMain);

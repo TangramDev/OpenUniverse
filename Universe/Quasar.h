@@ -14,7 +14,7 @@
 #pragma once
 #include "chromium/HtmlWnd.h"
 
-using namespace NewWorld;
+using namespace Web;
 #define WM_TANGRAMNOTIFY WM_NOTIFY+WM_REFLECT_BASE
 
 class CWinForm :
@@ -31,8 +31,8 @@ public:
 	CString									m_strBKID;
 	CString									m_strChildFormPath;
 	
-	CGalileo*								m_pOwnerHtmlWnd;
-	CGalileo*								m_pParentHtmlWnd;
+	CWebPage*								m_pOwnerHtmlWnd;
+	CWebPage*								m_pParentHtmlWnd;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
 
 	map<CString, CString>					m_mapKey;
@@ -95,9 +95,9 @@ public:
 	map<IHubbleAppProxy*, CQuasarProxy*>			m_mapQuasarProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
-	CGalileo*										m_pWebPageWnd;
+	CWebPage*										m_pWebPageWnd;
 	CStar*											m_pHostWebBrowserNode = nullptr;
-	CHerschel*										m_pHostWebBrowserWnd = nullptr;
+	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster;
 	CStar*											m_pParentStar;
 	CStar*											m_pWorkNode;

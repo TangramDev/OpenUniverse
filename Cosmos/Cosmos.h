@@ -42,7 +42,7 @@ namespace Cosmos
 
 	ref class Star;
 	ref class Quasar;
-	ref class Herschel;
+	ref class Browser;
 	ref class GalaxyCluster;
 
 	public enum class CosmosAppType
@@ -66,7 +66,7 @@ namespace Cosmos
 		CCosmosNodeEvent* m_pStarEvent;
 		CStarCLREvent* m_pStarCLREvent;
 		Cosmos::Wormhole^ m_pWormhole = nullptr;
-		CHerschelImpl* m_pChromeBrowserProxy;
+		CBrowserImpl* m_pChromeBrowserProxy;
 
 		delegate void NodeAddInCreated(Star^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
 		event NodeAddInCreated^ OnNodeAddInCreated;
@@ -683,8 +683,8 @@ namespace Cosmos
 		static Object^ ActiveObjectMethod(Object^ pObj, String^ strMethod, cli::array<Object^, 1>^ p);
 		static Control^ GetMDIClient(Form^ pForm);
 		static Star^ ExtendMDIClient(Form^ pForm, String^ strKey, String^ strXml);
-		static Herschel^ ActiveBrowser();
-		static Herschel^ GetHostBrowser(Object^ obj);
+		static Browser^ ActiveBrowser();
+		static Browser^ GetHostBrowser(Object^ obj);
 		static Star^ GetStarFromHandle(IntPtr handle);
 		static Star^ GetNodeFromControl(Control^ ctrl);
 		//static void RegComponentForTangram(String^ strIDs, Assembly^ a);
@@ -814,9 +814,9 @@ namespace Cosmos
 			void set(Form^ frm);
 		}
 
-		static property Herschel^ HostWebBrowser
+		static property Browser^ HostWebBrowser
 		{
-			Herschel^ get();
+			Browser^ get();
 		}
 
 		static property Object^ Application
@@ -852,7 +852,7 @@ namespace Cosmos
 			Star^ get();
 		}
 
-		static Herschel^ CreateBrowser(IntPtr ParentHandle, String^ strUrls);
+		static Browser^ CreateBrowser(IntPtr ParentHandle, String^ strUrls);
 
 		static property String^ AppDataPath
 		{

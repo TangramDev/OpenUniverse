@@ -20,8 +20,8 @@
 #include "BrowserWnd.h"
 #include "HtmlWnd.h"
 
-namespace NewWorld {
-	CHerschel::CHerschel() {
+namespace Web {
+	CBrowser::CBrowser() {
 		m_hDrawWnd = 0;
 		m_heightfix = 0;
 		m_hOldTab = NULL;
@@ -39,11 +39,11 @@ namespace NewWorld {
 		}
 	}
 
-	CHerschel::~CHerschel() 
+	CBrowser::~CBrowser() 
 	{
 	}
 
-	void CHerschel::ActiveChromeTab(HWND hActive, HWND hOldWnd)
+	void CBrowser::ActiveChromeTab(HWND hActive, HWND hOldWnd)
 	{
 		m_bTabChange = true;
 		if (g_pHubble->m_bChromeNeedClosed == false && m_pBrowser)
@@ -57,7 +57,7 @@ namespace NewWorld {
 		}
 	}
 
-	LRESULT CHerschel::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		g_pHubble->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 		if (m_pVisibleWebWnd && g_pHubble->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
 		{
@@ -69,7 +69,7 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	void CHerschel::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
+	void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
 		if (hWnd==0||::IsWindowVisible(m_hWnd) == false || g_pHubble->m_bChromeNeedClosed == TRUE || g_pHubble->m_bOMNIBOXPOPUPVISIBLE) {
 			return;
 		}
@@ -88,7 +88,7 @@ namespace NewWorld {
 			auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
 			if (it != g_pHubble->m_mapHtmlWnd.end())
 			{
-				m_pVisibleWebWnd = (CGalileo*)it->second;
+				m_pVisibleWebWnd = (CWebPage*)it->second;
 				if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
 					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 				if (m_bTabChange)
@@ -149,7 +149,7 @@ namespace NewWorld {
 		BrowserLayout();
 	};
 
-	LRESULT CHerschel::BrowserLayout() {
+	LRESULT CBrowser::BrowserLayout() {
 		if (m_pVisibleWebWnd == nullptr || m_bTabChange ||
 			!::IsWindowVisible(m_hWnd) ||
 			g_pHubble->m_bChromeNeedClosed == TRUE)
@@ -172,7 +172,7 @@ namespace NewWorld {
 			auto it = g_pHubble->m_mapHtmlWnd.find(m_pBrowser->GetActiveWebContentWnd());
 			if (it != g_pHubble->m_mapHtmlWnd.end())
 			{
-				m_pVisibleWebWnd = (CGalileo*)it->second;
+				m_pVisibleWebWnd = (CWebPage*)it->second;
 				if (m_pVisibleWebWnd->m_hExtendWnd)
 					::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);
 			}
@@ -214,7 +214,7 @@ namespace NewWorld {
 		return 0;
 	}
 
-	LRESULT CHerschel::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT CBrowser::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (LOWORD(wParam) != WA_INACTIVE) {
 			if (m_pBrowser) {
@@ -233,13 +233,13 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CHerschel::OnDeviceScaleFactorChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT CBrowser::OnDeviceScaleFactorChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		m_fdevice_scale_factor = (float)lParam / 100;
 		return lRes;
 	}
 
-	LRESULT CHerschel::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT CBrowser::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		if (g_pHubble->m_pCLRProxy)
 			g_pHubble->m_pCLRProxy->HideMenuStripPopup();
 		if (m_pVisibleWebWnd)
@@ -255,15 +255,15 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CHerschel::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT CBrowser::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		HWND hWnd = (HWND)lParam;
 		switch (wParam) {
 		case 0: {
-			g_pHubble->m_pHtmlWndCreated = new CComObject<CGalileo>;
+			g_pHubble->m_pHtmlWndCreated = new CComObject<CWebPage>;
 			g_pHubble->m_pHtmlWndCreated->SubclassWindow(hWnd);
 			if (g_pHubble->m_pCLRProxy)
-				g_pHubble->m_pCLRProxy->OnWebPageCreated(hWnd, (CGalileoImpl*)g_pHubble->m_pHtmlWndCreated, (IWebPage*)g_pHubble->m_pHtmlWndCreated, 0);
+				g_pHubble->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pHubble->m_pHtmlWndCreated, (IWebPage*)g_pHubble->m_pHtmlWndCreated, 0);
 			HWND hPWnd = ::GetParent(m_hWnd);
 			if (g_pHubble->m_bCreatingDevTool == false)
 			{
@@ -397,7 +397,7 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CHerschel::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+	LRESULT CBrowser::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (g_pHubble->m_pCLRProxy)
 		{
@@ -418,8 +418,8 @@ namespace NewWorld {
 			g_pHubble->m_bChromeNeedClosed = true;
 			for (auto it : g_pHubble->m_mapBrowserWnd)
 			{
-				if (((CHerschel*)it.second)->m_hWnd != m_hWnd)
-					((CHerschel*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
+					((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
 			}
 		}
 
@@ -454,7 +454,7 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CHerschel::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	LRESULT CBrowser::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 		if (g_pHubble->m_pCLRProxy)
@@ -478,7 +478,7 @@ namespace NewWorld {
 		return lRes;
 	}
 
-	LRESULT CHerschel::OnBrowserLayout(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+	LRESULT CBrowser::OnBrowserLayout(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		DefWindowProc(uMsg, wParam, lParam);
 		if (g_pHubble->m_bChromeNeedClosed == false && m_pVisibleWebWnd)
@@ -525,12 +525,12 @@ namespace NewWorld {
 		return 0;
 	}
 
-	void CHerschel::OnFinalMessage(HWND hWnd) {
+	void CBrowser::OnFinalMessage(HWND hWnd) {
 		CWindowImpl::OnFinalMessage(hWnd);
 		delete this;
 	}
 
-	STDMETHODIMP CHerschel::get_RemoteStar(IStar** pVal)
+	STDMETHODIMP CBrowser::get_RemoteStar(IStar** pVal)
 	{
 		if (m_pRemoteStar != nullptr)
 		{
@@ -539,7 +539,7 @@ namespace NewWorld {
 		return S_OK;
 	}
 
-	STDMETHODIMP CHerschel::put_RemoteStar(IStar* newVal)
+	STDMETHODIMP CBrowser::put_RemoteStar(IStar* newVal)
 	{
 		CComQIPtr<IStar>pNode(newVal);
 		if (pNode)
@@ -559,7 +559,7 @@ namespace NewWorld {
 		return S_OK;
 	}
 
-	STDMETHODIMP CHerschel::AddURLs(BSTR bstrURLs)
+	STDMETHODIMP CBrowser::AddURLs(BSTR bstrURLs)
 	{
 		if (m_pVisibleWebWnd)
 		{
@@ -577,7 +577,7 @@ namespace NewWorld {
 		return S_OK;
 	}
 
-	STDMETHODIMP CHerschel::OpenURL(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml)
+	STDMETHODIMP CBrowser::OpenURL(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml)
 	{
 		if (m_pVisibleWebWnd)
 		{

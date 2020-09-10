@@ -95,7 +95,7 @@ public:
 	IHubbleWindow*					m_pWindow;
 	CMDIChildFormInfo*				m_pChildFormsInfo;
 	CStarCommonData*				m_pStarCommonData;
-	NewWorld::CHerschel*			m_pWebBrowser;
+	Web::CBrowser*			m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CQuasar*						m_pHostQuasar;
 	CRuntimeClass*					m_pObjClsInfo;
@@ -119,7 +119,7 @@ public:
 	BOOL	AddChildNode(CStar* pNode);
 	BOOL	RemoveChildNode(CStar* pNode);
 	CString GetNames();
-	NewWorld::CGalileo* GetHtmlWnd();
+	Web::CWebPage* GetHtmlWnd();
 	void NodeCreated();
 
 	HRESULT Fire_OpenComplete();
