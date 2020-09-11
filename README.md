@@ -1,7 +1,6 @@
 # The goal of Universe
-It provides flexible and powerful dynamic layout engine for Win32 applications, and allows developers to provide users with dynamic application organization ability at runtime
+Provides a flexible, powerful, multi-level dynamic layout engine for Win32 applications, allowing developers to provide users with dynamic application organization at runtime
 
-It provides dynamic. Net framework support for Win32 applications, enabling developers to create. Net objects and. Net UI objects(WinForm, Usercontrol, WPF,…) dynamically at runtime
+Provides dynamic.NET Framework support for Win32 applications, enabling developers to dynamically create.NET objects and.NET UI objects at runtime (WinForm, Usercontrol, WPF...)
 
-It provides a full-featured modern browser model for the Win32 Application, so that developers can freely use the browser window or browser sub window. Combined with the dynamic layout engine, the Win32 Application can support a powerful extended web page, which makes the application system have the ability to support the modern Internet
-
+Provides a full-featured modern browser model for Win32 applications, enabling developers to use browser windows or browser subwindows freely. Combined with the dynamic layout engine, Win32 applications can support a powerful extended Web page, which enables the application system to support the modern Internet.
