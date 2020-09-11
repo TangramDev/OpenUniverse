@@ -42,9 +42,6 @@ namespace Cosmos
 		void SendMessage();
 	};
 
-	/*
-	* 赫歇尔：现代天文学之父
-	*/
 	public ref class Browser
 	{
 	public:

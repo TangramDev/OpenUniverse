@@ -2503,10 +2503,10 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 		//		int nPos = strXml.Find(strToken);
 		//		if (nPos != -1)
 		//		{
-		//			Universe::Hubble::Fire_OnTangramIPCMessage(pWindowNode, BSTR2STRING(strXml));
+		//			Universe::Hubble::Fire_OnHubbleIPCMessage(pWindowNode, BSTR2STRING(strXml));
 		//		}
 		//		else
-		//			Universe::Hubble::Fire_OnTangramLoadDocument2Viewport(pWindowNode, BSTR2STRING(strXml));
+		//			Universe::Hubble::Fire_OnHubbleLoadDocument2Viewport(pWindowNode, BSTR2STRING(strXml));
 		//	}
 		//}
 	}

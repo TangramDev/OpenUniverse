@@ -544,7 +544,7 @@ namespace Web {
 					pGalaxyCluster->m_hWnd = m_hExtendWnd;
 					g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 
-					for (auto it : g_pHubble->m_mapTangramAppProxy)
+					for (auto it : g_pHubble->m_mapHubbleAppProxy)
 					{
 						CGalaxyClusterProxy* pTangramProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 						if (pTangramProxy)

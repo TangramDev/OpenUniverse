@@ -359,16 +359,16 @@ CHubble::~CHubble()
 {
 	OutputDebugString(_T("------------------Begin Release CHubble------------------------\n"));
 
-	for (auto it : m_mapTangramDocTemplateInfo)
+	for (auto it : m_mapHubbleDocTemplateInfo)
 	{
 		delete it.second;
 	}
-	m_mapTangramDocTemplateInfo.clear();
-	for (auto it : m_mapTangramFormsTemplateInfo)
+	m_mapHubbleDocTemplateInfo.clear();
+	for (auto it : m_mapHubbleFormsTemplateInfo)
 	{
 		delete it.second;
 	}
-	m_mapTangramFormsTemplateInfo.clear();
+	m_mapHubbleFormsTemplateInfo.clear();
 
 	if (m_mapWindowPage.size())
 	{
@@ -497,7 +497,7 @@ void CHubble::FireNodeEvent(int nIndex, CStar* pNode, CCosmosEvent* pObj)
 		{
 			for (auto it : pNode->m_mapWndNodeProxy)
 			{
-				it.second->OnTangramDocEvent(pObj);
+				it.second->OnHubbleDocEvent(pObj);
 			}
 		}
 	}
@@ -506,7 +506,7 @@ void CHubble::FireNodeEvent(int nIndex, CStar* pNode, CCosmosEvent* pObj)
 	{
 		for (auto it : pNode->m_mapWndNodeProxy)
 		{
-			it.second->OnTangramDocEvent(pObj);
+			it.second->OnHubbleDocEvent(pObj);
 		}
 	}
 	break;
@@ -514,7 +514,7 @@ void CHubble::FireNodeEvent(int nIndex, CStar* pNode, CCosmosEvent* pObj)
 	{
 		for (auto it : pNode->m_mapWndNodeProxy)
 		{
-			it.second->OnTangramDocEvent(pObj);
+			it.second->OnHubbleDocEvent(pObj);
 		}
 	}
 	break;
@@ -527,7 +527,7 @@ void CHubble::FireAppEvent(CCosmosEvent* pObj)
 	{
 		if (m_pUniverseAppProxy)
 			m_pUniverseAppProxy->OnHubbleEvent(pObj);
-		for (auto it : m_mapTangramAppProxy)
+		for (auto it : m_mapHubbleAppProxy)
 		{
 			if (it.second != m_pUniverseAppProxy)
 				it.second->OnHubbleEvent(pObj);
@@ -817,27 +817,24 @@ void CHubble::ExitInstance()
 	}
 	m_mapThreadInfo.erase(m_mapThreadInfo.begin(), m_mapThreadInfo.end());
 	_clearObjects();
-	if (m_mapWindowPage.size())
+	if (m_mapWindowPage.size()>1)
 	{
 		for (auto it2 = m_mapWindowPage.begin(); it2 != m_mapWindowPage.end(); ++it2)
 		{
 			delete it2->second;
 		}
-		m_mapWindowPage.clear();
 	}
+	m_mapWindowPage.clear();
 
 	for (auto it : m_mapObjDic)
 	{
-		if (it.first.CompareNoCase(_T("dte")))
-		{
-			CString strKey = _T(",");
-			strKey += it.first;
-			strKey += _T(",");
-			if (m_strExcludeAppExtenderIDs.Find(strKey) == -1)
-				it.second->Release();
-			else
-				m_strExcludeAppExtenderIDs.Replace(strKey, _T(""));
-		}
+		CString strKey = _T(",");
+		strKey += it.first;
+		strKey += _T(",");
+		if (m_strExcludeAppExtenderIDs.Find(strKey) == -1)
+			it.second->Release();
+		else
+			m_strExcludeAppExtenderIDs.Replace(strKey, _T(""));
 	}
 
 	m_mapObjDic.erase(m_mapObjDic.begin(), m_mapObjDic.end());
@@ -873,14 +870,6 @@ CommonThreadInfo* CHubble::GetThreadInfo(DWORD ThreadID)
 
 ULONG CHubble::InternalRelease()
 {
-	if (m_bCanClose == false)
-		return 1;
-	else if (m_nAppID == 3)
-	{
-		m_nRef--;
-		return m_nRef;
-	}
-
 	return 1;
 }
 
@@ -2023,7 +2012,7 @@ STDMETHODIMP CHubble::LoadDocComponent(BSTR bstrLib, LONGLONG* llAppProxy)
 			{
 				LONGLONG llProxy = it->second.llVal;
 				*llAppProxy = llProxy;
-				m_mapTangramAppProxy[strLib] = (IHubbleAppProxy*)llProxy;
+				m_mapHubbleAppProxy[strLib] = (IHubbleAppProxy*)llProxy;
 			}
 			return S_OK;
 		}
@@ -2069,7 +2058,7 @@ STDMETHODIMP CHubble::CreateGalaxyCluster(LONGLONG hWnd, IGalaxyCluster** ppGala
 			pGalaxyCluster = new CComObject<CGalaxyCluster>();
 			pGalaxyCluster->m_hWnd = _hWnd;
 			m_mapWindowPage[_hWnd] = pGalaxyCluster;
-			for (auto it : m_mapTangramAppProxy)
+			for (auto it : m_mapHubbleAppProxy)
 			{
 				CGalaxyClusterProxy* pTangramProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 				if (pTangramProxy)
@@ -2601,7 +2590,7 @@ STDMETHODIMP CHubble::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 		pGalaxyCluster = new CComObject<CGalaxyCluster>;
 		pGalaxyCluster->m_hWnd = hPWnd;
 		m_mapWindowPage[hPWnd] = pGalaxyCluster;
-		for (auto it : m_mapTangramAppProxy)
+		for (auto it : m_mapHubbleAppProxy)
 		{
 			CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 			if (pProxy)
@@ -2904,7 +2893,7 @@ __declspec(dllexport) CHubbleImpl* __stdcall  GetHubbleImpl(IHubble** pHubble)
 	return static_cast<CHubbleImpl*>(g_pHubble);
 }
 
-__declspec(dllexport) void __stdcall  SetMainDllLoader(CTangramMainDllLoader* pLoader)
+__declspec(dllexport) void __stdcall  SetMainDllLoader(CHubbleMainDllLoader* pLoader)
 {
 	if (pLoader)
 		pLoader->LaunchEx(g_pHubble);
@@ -3038,13 +3027,13 @@ void CHubble::InserttoDataMap(int nType, CString strKey, void* pData)
 	case 0:
 	{
 		if (pData)
-			m_mapTangramAppProxy[strKey] = (IHubbleAppProxy*)pData;
+			m_mapHubbleAppProxy[strKey] = (IHubbleAppProxy*)pData;
 		else
 		{
-			auto it = m_mapTangramAppProxy.find(strKey);
-			if (it != m_mapTangramAppProxy.end())
+			auto it = m_mapHubbleAppProxy.find(strKey);
+			if (it != m_mapHubbleAppProxy.end())
 			{
-				m_mapTangramAppProxy.erase(it);
+				m_mapHubbleAppProxy.erase(it);
 			}
 		}
 	}

@@ -409,7 +409,7 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnTangramGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	CString strFrameName = (LPCTSTR)wParam;
 	CString currentKey = (LPCTSTR)lParam;
@@ -1117,7 +1117,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 
 	g_pHubble->m_strCurrentKey = _T("");
 	*ppRetNode = (IStar*)m_pWorkNode;
-	for (auto it : g_pHubble->m_mapTangramAppProxy)
+	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
 		it.second->OnOpenComplete(m_hHostWnd, strXml, m_pWorkNode);
 	}

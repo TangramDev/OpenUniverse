@@ -328,7 +328,7 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		g_pHubble->m_pHubbleDelegate->ForegroundIdleProc();
 	}
-	for (auto it : g_pHubble->m_mapTangramAppProxy)
+	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 		it.second->OnForegroundIdleProc();
 	return CallNextHookEx(g_pHubble->m_hForegroundIdleHook, nCode, wParam, lParam);
 }

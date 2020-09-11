@@ -793,11 +793,11 @@ namespace Cosmos
 			return strName;
 		}
 
-		delegate void TangramActionDelegate(Star^ SourceObj, String^ strInfo);
-		static event TangramActionDelegate^ OnTangramActionDelegate;
-		static void Fire_OnTangramActionDelegate(Star^ SourceObj, String^ strInfo)
+		delegate void HubbleActionDelegate(Star^ SourceObj, String^ strInfo);
+		static event HubbleActionDelegate^ OnHubbleActionDelegate;
+		static void Fire_OnHubbleActionDelegate(Star^ SourceObj, String^ strInfo)
 		{
-			OnTangramActionDelegate(SourceObj, strInfo);
+			OnHubbleActionDelegate(SourceObj, strInfo);
 		}
 
 		static property Dictionary<Object^, Cosmos::Wormhole^>^ WebBindEventDic
@@ -948,10 +948,10 @@ namespace Cosmos
 		}
 
 		//delegate void TangramAppData(String^ strAppData);
-		//static event TangramAppData^ OnTangramAppData;
-		//static void Fire_OnTangramAppData(String^ strAppData)
+		//static event TangramAppData^ OnHubbleAppData;
+		//static void Fire_OnHubbleAppData(String^ strAppData)
 		//{
-		//	OnTangramAppData(strAppData);
+		//	OnHubbleAppData(strAppData);
 		//}
 
 		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Star^ pNode);

@@ -121,9 +121,9 @@ void CStar::InitWndNode()
 	else
 		m_pObjClsInfo = RUNTIME_CLASS(CStarWnd);
 
-	for (auto it : g_pHubble->m_mapTangramAppProxy)
+	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
-		CTangramWndNodeProxy* pTangramWndNodeProxy = it.second->OnTangramNodeInit(this);
+		CTangramWndNodeProxy* pTangramWndNodeProxy = it.second->OnHubbleNodeInit(this);
 		if (pTangramWndNodeProxy)
 			m_mapWndNodeProxy[it.second] = pTangramWndNodeProxy;
 	}
@@ -741,8 +741,8 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			{
 				IHubbleAppProxy* pProxy = nullptr;
 				CString strKey = m_strID.Mid(nPos + 1);
-				auto it = g_pHubble->m_mapTangramAppProxy.find(strKey);
-				if (it != g_pHubble->m_mapTangramAppProxy.end())
+				auto it = g_pHubble->m_mapHubbleAppProxy.find(strKey);
+				if (it != g_pHubble->m_mapHubbleAppProxy.end())
 				{
 					pProxy = it->second;
 				}
@@ -763,8 +763,8 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					}
 					if (hHandle)
 					{
-						it = g_pHubble->m_mapTangramAppProxy.find(strKey.MakeLower());
-						if (it != g_pHubble->m_mapTangramAppProxy.end())
+						it = g_pHubble->m_mapHubbleAppProxy.find(strKey.MakeLower());
+						if (it != g_pHubble->m_mapHubbleAppProxy.end())
 						{
 							pProxy = it->second;
 						}

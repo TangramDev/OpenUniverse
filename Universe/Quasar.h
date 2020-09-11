@@ -45,7 +45,7 @@ public:
 		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
 		MESSAGE_HANDLER(WM_WINFORMCREATED, OnFormCreated)
-		MESSAGE_HANDLER(WM_TANGRAMGETXML, OnTangramGetXml)
+		MESSAGE_HANDLER(WM_TANGRAMGETXML, OnHubbleGetXml)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
 		MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
@@ -60,7 +60,7 @@ private:
 	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnTangramGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
