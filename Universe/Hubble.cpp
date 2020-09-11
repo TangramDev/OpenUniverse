@@ -702,7 +702,7 @@ void CHubble::TangramInitFromeWeb()
 							msg.m_strId = L"ADD_URL";
 							msg.m_strParam1 = strUrls;
 							msg.m_strParam2 = strDisposition;
-							pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendTangramMessage(&msg);
+							pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&msg);
 						}
 					}
 				}
@@ -714,9 +714,9 @@ void CHubble::TangramInitFromeWeb()
 
 void CHubble::HubbleInit()
 {
-	if (m_bTangramInit)
+	if (m_bHubbleInit)
 		return;
-	m_bTangramInit = true;
+	m_bHubbleInit = true;
 	CTangramXmlParse _m_Parse;
 	bool bLoad = false;
 	m_strConfigDataFile += m_strExeName;

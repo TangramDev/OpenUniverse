@@ -1086,23 +1086,6 @@ namespace Cosmos
                     CString strName = m_Parse.name();
                     if (strID != _T(""))
                     {
-                        CTangramXmlParse* pChild3 = m_Parse.GetChild(_T("mdichild"));
-                        if (pChild3)
-                        {
-                            CTangramXmlParse* pChild4 = m_Parse.GetChild(_T("mdiclient"));
-                            int nCount = pChild3->GetCount();
-                            if (nCount && pChild4)
-                            {
-                                CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
-                                theApp.m_pHubbleImpl->m_pCurMDIChildFormInfo = pInfo;
-                                for (int i = 0; i < nCount; i++)
-                                {
-                                    CString strName = pChild3->GetChild(i)->name().MakeLower();
-                                    if (pChild4->GetChild(strName))
-                                        pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
-                                }
-                            }
-                        }
                         Object^ pObj = CreateObject(BSTR2STRING(strID));
                         if (pObj != nullptr)
                         {
@@ -1157,23 +1140,6 @@ namespace Cosmos
                     CString strName = m_Parse.name();
                     if (strID != _T(""))
                     {
-                        CTangramXmlParse* pChild3 = m_Parse.GetChild(_T("mdichild"));
-                        if (pChild3)
-                        {
-                            CTangramXmlParse* pChild4 = m_Parse.GetChild(_T("mdiclient"));
-                            int nCount = pChild3->GetCount();
-                            if (nCount && pChild4)
-                            {
-                                CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
-                                theApp.m_pHubbleImpl->m_pCurMDIChildFormInfo = pInfo;
-                                for (int i = 0; i < nCount; i++)
-                                {
-                                    CString strName = pChild3->GetChild(i)->name().MakeLower();
-                                    if (pChild4->GetChild(strName))
-                                        pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
-                                }
-                            }
-                        }
                         Object^ pObj = CreateObject(BSTR2STRING(strID));
                         if (pObj != nullptr)
                         {

@@ -192,7 +192,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			if (pSession)
 			{
 				pSession->InsertString(_T("msgID"), IPC_NODE_ONMOUSEACTIVATE_ID);
-				pHtmlWnd->m_pChromeRenderFrameHost->SendTangramMessage(pSession->m_pSession);
+				pHtmlWnd->m_pChromeRenderFrameHost->SendHubbleMessage(pSession->m_pSession);
 			}
 		}
 		return MA_NOACTIVATE;
@@ -230,7 +230,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			pIPCInfo.m_strParam4 = strHandle;
 			//strHandle.Format(_T("%d"), m_pRootObj->m_pHostWnd->m_hWnd);
 			pIPCInfo.m_strParam5 = _T("wndnode");
-			pHtmlWnd->m_pChromeRenderFrameHost->SendTangramMessage(&pIPCInfo);
+			pHtmlWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
 		}
 		return MA_ACTIVATEANDEAT;
 	}

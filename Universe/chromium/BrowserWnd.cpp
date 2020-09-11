@@ -571,7 +571,7 @@ namespace Web {
 				msg.m_strId = L"ADD_URL";
 				msg.m_strParam1 = OLE2T(bstrURLs);
 				msg.m_strParam2 = strDisposition;
-				m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendTangramMessage(&msg);
+				m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&msg);
 			}
 		}
 		return S_OK;
@@ -589,7 +589,7 @@ namespace Web {
 				msg.m_strId = L"OPEN_URL";
 				msg.m_strParam1 = OLE2T(bstrURL);
 				msg.m_strParam2 = strDisposition;
-				m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendTangramMessage(&msg);
+				m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&msg);
 			}
 		}
 		return S_OK;

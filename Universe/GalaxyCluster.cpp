@@ -566,7 +566,7 @@ void CGalaxyCluster::BeforeDestory()
 
 		if (g_pHubble->m_pCLRProxy)
 		{
-			g_pHubble->m_pCLRProxy->ReleaseTangramObj((IGalaxyCluster*)this);
+			g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IGalaxyCluster*)this);
 		}
 	}
 }

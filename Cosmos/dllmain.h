@@ -71,7 +71,7 @@ private:
 	//CCosmosCoreEvents:
 	void OnHubbleClose();
 	void OnOpenComplete(HWND hWnd, CString strUrl, IStar* pRootNode);
-	HWND InitTangramApp();
+	HWND InitHubbleApp();
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
 	virtual bool EclipseAppInit() { return false; };
 	virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2);

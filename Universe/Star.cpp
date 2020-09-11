@@ -123,7 +123,7 @@ void CStar::InitWndNode()
 
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
-		CTangramWndNodeProxy* pTangramWndNodeProxy = it.second->OnHubbleNodeInit(this);
+		CStarProxy* pTangramWndNodeProxy = it.second->OnHubbleNodeInit(this);
 		if (pTangramWndNodeProxy)
 			m_mapWndNodeProxy[it.second] = pTangramWndNodeProxy;
 	}
@@ -860,10 +860,10 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					pViewFactoryDisp->m_pCreatingNode = this;
 					hWnd = pViewFactoryDisp->Create(pParentWnd ? pParentWnd->m_hWnd : 0, this);
 					pViewFactoryDisp->m_pCreatingNode = nullptr;
-					if (g_pHubble->m_pCreatingTangramWindow)
+					if (g_pHubble->m_pCreatingWindow)
 					{
-						m_pWindow = g_pHubble->m_pCreatingTangramWindow;
-						g_pHubble->m_pCreatingTangramWindow = nullptr;
+						m_pWindow = g_pHubble->m_pCreatingWindow;
+						g_pHubble->m_pCreatingWindow = nullptr;
 					}
 					m_nID = ::GetWindowLong(hWnd, GWL_ID);
 				}
@@ -2068,7 +2068,7 @@ HRESULT CStar::Fire_Destroy()
 
 	if (g_pHubble->m_pCLRProxy)
 	{
-		g_pHubble->m_pCLRProxy->ReleaseTangramObj((IStar*)this);
+		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IStar*)this);
 	}
 	//if (m_pHubbleCloudSession)
 	//	delete m_pHubbleCloudSession;

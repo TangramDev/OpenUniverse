@@ -346,7 +346,7 @@ typedef /* [helpstring] */
 enum ObjEventType
     {
         TangramNode	= 0,
-        TangramDocEvent	= 0x1,
+        HubbleDocEvent	= 0x1,
         TangramNodeAllChildNode	= 0x2,
         TangramDocAllQuasarAllChildNode	= 0x3,
         TangramDocAllQuasarAllTopNode	= 0x4,

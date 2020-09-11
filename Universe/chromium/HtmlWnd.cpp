@@ -158,7 +158,7 @@ namespace Web {
 							g_pHubble->m_pCLRProxy->ConnectNodeToWebPage(pNode, true);
 						}
 					}
-					m_pChromeRenderFrameHost->SendTangramMessage(pSession->m_pSession);
+					m_pChromeRenderFrameHost->SendHubbleMessage(pSession->m_pSession);
 				}
 			}
 		}
@@ -188,7 +188,7 @@ namespace Web {
 			IPCMsg* pMsg = (IPCMsg*)lParam;
 			if (pMsg && m_pChromeRenderFrameHost)
 			{
-				m_pChromeRenderFrameHost->SendTangramMessage(pMsg);
+				m_pChromeRenderFrameHost->SendHubbleMessage(pMsg);
 				g_pHubble->m_pCurrentIPCMsg = nullptr;
 			}
 		}
@@ -458,7 +458,7 @@ namespace Web {
 			pIPCInfo.m_strParam3 = strParam3;
 			pIPCInfo.m_strParam4 = strParam4;
 			pIPCInfo.m_strParam5 = strParam5;
-			m_pChromeRenderFrameHost->SendTangramMessage(&pIPCInfo);
+			m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
 		}
 		g_pHubble->m_pCurrentIPCMsg = nullptr;
 	}
@@ -696,7 +696,7 @@ namespace Web {
 							pIPCInfo.m_strParam4 = _pNode->m_strLastIPCParam4;
 							pIPCInfo.m_strParam5 = _pNode->m_strLastIPCParam5;
 							_pNode->m_strLastIPCMsgID = _T("");
-							m_pChromeRenderFrameHost->SendTangramMessage(&pIPCInfo);
+							m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
 						}
 						g_pHubble->m_pCurrentIPCMsg = nullptr;
 					}
@@ -913,23 +913,6 @@ namespace Web {
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
 		{
-			CTangramXmlParse* pMdiChildXmlParse = xmlParse.GetChild(_T("mdichild"));
-			if (pMdiChildXmlParse)
-			{
-				CTangramXmlParse* pMdiClientXmlParse = xmlParse.GetChild(_T("mdiclient"));
-				int nCount = pMdiChildXmlParse->GetCount();
-				if (nCount && pMdiClientXmlParse)
-				{
-					CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
-					g_pHubble->m_pCurMDIChildFormInfo = pInfo;
-					for (int i = 0; i < nCount; i++)
-					{
-						CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
-						if (pMdiClientXmlParse->GetChild(strName))
-							pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
-					}
-				}
-			}
 			if (g_pHubble->m_pCLRProxy == nullptr)
 				g_pHubble->LoadCLR();
 			if (g_pHubble->m_pCLRProxy)
@@ -948,23 +931,6 @@ namespace Web {
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
 		{
-			CTangramXmlParse* pMdiChildXmlParse = xmlParse.GetChild(_T("mdichild"));
-			if (pMdiChildXmlParse)
-			{
-				CTangramXmlParse* pMdiClientXmlParse = xmlParse.GetChild(_T("mdiclient"));
-				int nCount = pMdiChildXmlParse->GetCount();
-				if (nCount && pMdiClientXmlParse)
-				{
-					CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
-					g_pHubble->m_pCurMDIChildFormInfo = pInfo;
-					for (int i = 0; i < nCount; i++)
-					{
-						CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
-						if (pMdiClientXmlParse->GetChild(strName))
-							pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
-					}
-				}
-			}
 			if (g_pHubble->m_pCLRProxy == nullptr)
 				g_pHubble->LoadCLR();
 			if (g_pHubble->m_pCLRProxy)
@@ -1042,7 +1008,6 @@ namespace Web {
 			if (strType.CompareNoCase(_T("winform")) == 0)
 			{
 				CString strStartup = _T("");
-				CTangramXmlParse* pChild3 = m_Parse.GetChild(_T("mdichild"));
 				CString strID = m_Parse.attr(_T("uikey"), _T("")).MakeLower();
 				CString strName = m_Parse.name();
 				if (strID != _T(""))
@@ -1052,22 +1017,6 @@ namespace Web {
 				if (m_Parse.attrBool(_T("showstartup")))
 				{
 					strStartup = strID;
-				}
-				if (pChild3)
-				{
-					CTangramXmlParse* pChild4 = m_Parse.GetChild(_T("mdiclient"));
-					int nCount = pChild3->GetCount();
-					if (nCount && pChild4)
-					{
-						CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
-						g_pHubble->m_pCurMDIChildFormInfo = pInfo;
-						for (int i = 0; i < nCount; i++)
-						{
-							CString strName = pChild3->GetChild(i)->name().MakeLower();
-							if (pChild4->GetChild(strName))
-								pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
-						}
-					}
 				}
 				if (strStartup != _T(""))
 				{
@@ -1079,9 +1028,6 @@ namespace Web {
 						auto it = m_mapFormsInfo.find(strID);
 						if (it != m_mapFormsInfo.end())
 						{
-							auto it2 = m_mapChildFormsInfo.find(strID);
-							if (it2 != m_mapChildFormsInfo.end())
-								g_pHubble->m_pCurMDIChildFormInfo = it2->second;
 							IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(it->second);
 							HWND hwnd = g_pHubble->m_pCLRProxy->GetCtrlHandle(pDisp);
 							if (hwnd)
@@ -1210,23 +1156,6 @@ namespace Web {
 			CTangramXmlParse xmlParse;
 			if (xmlParse.LoadXml(strFormXml))
 			{
-				CTangramXmlParse* pMdiChildXmlParse = xmlParse.GetChild(_T("mdichild"));
-				if (pMdiChildXmlParse)
-				{
-					CTangramXmlParse* pMdiClientXmlParse = xmlParse.GetChild(_T("mdiclient"));
-					int nCount = pMdiChildXmlParse->GetCount();
-					if (nCount && pMdiClientXmlParse)
-					{
-						CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
-						g_pHubble->m_pCurMDIChildFormInfo = pInfo;
-						for (int i = 0; i < nCount; i++)
-						{
-							CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
-							if (pMdiClientXmlParse->GetChild(strName))
-								pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
-						}
-					}
-				}
 				if (g_pHubble->m_pCLRProxy == nullptr)
 					g_pHubble->LoadCLR();
 				if (g_pHubble->m_pCLRProxy)

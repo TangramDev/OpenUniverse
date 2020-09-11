@@ -111,7 +111,7 @@ public:
 	map<CStar*, CString>			m_mapExtendNode;
 	CComObject<CStarCollection>*	m_pChildNodeCollection;
 
-	map<IHubbleAppProxy*, CTangramWndNodeProxy*> m_mapWndNodeProxy;
+	map<IHubbleAppProxy*, CStarProxy*> m_mapWndNodeProxy;
 
 	void	InitWndNode();
 	BOOL	Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext);

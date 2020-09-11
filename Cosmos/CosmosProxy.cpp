@@ -199,7 +199,7 @@ bool CCosmos::DoIdleWork() {
 	return false;
 }
 
-HWND CCosmos::InitTangramApp()
+HWND CCosmos::InitHubbleApp()
 {
 	return 0;
 };
@@ -252,7 +252,7 @@ void CCosmosProxy::OnDestroyChromeBrowser(IBrowser* pChromeWebBrowser)
 	}
 };
 
-CTangramWPFObj* CCosmosProxy::CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID)
+CWPFObj* CCosmosProxy::CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID)
 {
 	return nullptr;
 }
@@ -752,23 +752,6 @@ Object^ CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, C
 							BSTR strName = STRING2BSTR(name->ToLower());
 							if (name == L"mdiclient")
 							{
-								CTangramXmlParse* pChildParse = pParse->GetChild(L"mdiclient");
-								CTangramXmlParse* pChildParse2 = nullptr;
-								if (pChildParse)
-									pChildParse2 = pChildParse->GetChild(_T("default"));
-								QuasarInfo* pInfo = new QuasarInfo;
-								pInfo->m_pDisp = nullptr;
-								pInfo->m_strNodeXml = _T("");
-								if (pChildParse2)
-									pInfo->m_strNodeXml = pChildParse2->xml();;
-								pInfo->m_pParentDisp = nullptr;
-								pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-								m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
-								pInfo->m_strCtrlName = name->ToLower();
-								pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-								IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
-								::SysFreeString(strName);
-
 							}
 							else
 							{
@@ -2034,7 +2017,7 @@ BSTR CCosmosProxy::GetCtrlName(IDispatch* _pCtrl)
 	return L"";
 }
 
-void CCosmosProxy::ReleaseTangramObj(IDispatch* pDisp)
+void CCosmosProxy::ReleaseHubbleObj(IDispatch* pDisp)
 {
 	LONGLONG nValue = (LONGLONG)pDisp;
 	Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)pDisp);

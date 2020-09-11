@@ -88,7 +88,7 @@ typedef
 enum ObjEventType
 {
 	TangramNode											= 0x00000000,
-	TangramDocEvent										= 0x00000001,
+	HubbleDocEvent										= 0x00000001,
 	TangramNodeAllChildNode								= 0x00000002,
 	TangramDocAllQuasarAllChildNode						= 0x00000003,
 	TangramDocAllQuasarAllTopNode						= 0x00000004,

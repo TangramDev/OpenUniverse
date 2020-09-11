@@ -109,7 +109,7 @@ private:
 	gcroot<EventHandler^>					m_pOnCtrlVisible;
 
 	virtual void OnCLRHostExit();
-	CTangramWPFObj* CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID);
+	CWPFObj* CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID);
 	HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	HRESULT ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey);
@@ -125,7 +125,7 @@ private:
 	BSTR GetCtrlType(IDispatch* pCtrl);
 	IDispatch* GetCtrlFromHandle(HWND hWnd);
 	HWND IsCtrlCanNavigate(IDispatch* ctrl);
-	void ReleaseTangramObj(IDispatch*);
+	void ReleaseHubbleObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);
 	HRESULT NavigateURL(IStar* pNode, CString strURL, IDispatch* dispObjforScript);

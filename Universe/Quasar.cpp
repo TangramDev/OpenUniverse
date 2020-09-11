@@ -29,17 +29,7 @@ CWinForm::CWinForm(void)
 	m_pOwnerHtmlWnd = nullptr;
 	m_pParentHtmlWnd = nullptr;
 	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
-	if (g_pHubble->m_pCurMDIChildFormInfo)
-	{
-		m_pChildFormsInfo = g_pHubble->m_pCurMDIChildFormInfo;
-		if (g_pHubble->m_pActiveStar)
-			g_pHubble->m_pActiveStar->m_pChildFormsInfo = m_pChildFormsInfo;
-		g_pHubble->m_pCurMDIChildFormInfo = nullptr;
-	}
-	else
-	{
-		m_pChildFormsInfo = nullptr;
-	}
+	m_pChildFormsInfo = nullptr;
 }
 
 CWinForm::~CWinForm(void)
@@ -1211,7 +1201,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 				pIPCInfo.m_strParam3 = pNode->m_strLastIPCParam5;
 				pIPCInfo.m_strParam4 = pNode->m_strLastIPCParam4;
 				pIPCInfo.m_strParam5 = pNode->m_strLastIPCParam3;
-				m_pWebPageWnd->m_pChromeRenderFrameHost->SendTangramMessage(&pIPCInfo);
+				m_pWebPageWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
 			}
 			g_pHubble->m_pCurrentIPCMsg = nullptr;
 		}
@@ -1373,7 +1363,7 @@ LRESULT CQuasar::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 LRESULT CQuasar::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (g_pHubble->m_pCLRProxy) {
-		g_pHubble->m_pCLRProxy->ReleaseTangramObj((IQuasar*)this);
+		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IQuasar*)this);
 	}
 	if (m_mapNodeScript.size())
 	{

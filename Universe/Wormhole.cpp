@@ -69,7 +69,7 @@ void CWormhole::SendMessage()
 {
 	if (m_pOwner)
 	{
-		m_pOwner->m_pChromeRenderFrameHost->SendTangramMessage(m_pSession);
+		m_pOwner->m_pChromeRenderFrameHost->SendHubbleMessage(m_pSession);
 	}
 }
 

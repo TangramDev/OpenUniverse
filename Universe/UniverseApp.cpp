@@ -259,7 +259,7 @@ LRESULT CALLBACK CUniverse::TangramWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM
 		case TANGRAM_CHROME_APP_INIT:
 		{
 			if (g_pHubble->m_hMainWnd == NULL && g_pHubble->m_pUniverseAppProxy)
-				g_pHubble->m_hMainWnd = g_pHubble->m_pUniverseAppProxy->InitTangramApp();
+				g_pHubble->m_hMainWnd = g_pHubble->m_pUniverseAppProxy->InitHubbleApp();
 		}
 		break;
 		case 20200120:
@@ -453,7 +453,7 @@ LRESULT CALLBACK CUniverse::TangramExtendedWndProc(_In_ HWND hWnd, UINT msg, _In
 			if (m_pHtmlWnd->m_pChromeRenderFrameHost)
 			{
 				IPCMsg* pMsg = (IPCMsg*)wParam;
-				m_pHtmlWnd->m_pChromeRenderFrameHost->SendTangramMessage(pMsg);
+				m_pHtmlWnd->m_pChromeRenderFrameHost->SendHubbleMessage(pMsg);
 				g_pHubble->m_pCurrentIPCMsg = nullptr;
 			}
 		}
