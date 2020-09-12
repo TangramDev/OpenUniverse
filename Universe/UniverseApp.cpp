@@ -215,9 +215,6 @@ LRESULT CALLBACK CUniverse::TangramWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM
 
 			if (g_pHubble->m_hForegroundIdleHook)
 				UnhookWindowsHookEx(g_pHubble->m_hForegroundIdleHook);
-
-			g_pHubble->m_pDesignerFrame = nullptr;
-			g_pHubble->m_pDesignerGalaxyCluster = nullptr;
 		}
 		break;
 	}

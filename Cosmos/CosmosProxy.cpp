@@ -1366,7 +1366,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 {
 	if (bstrObjID.CompareNoCase(_T("chromert")) == 0)
 	{
-		theApp.InitTangramApp(false);
+		theApp.InitHubbleApp(false);
 		return nullptr;
 	}
 	if (bstrObjID.Find(_T("<")) != -1)
@@ -2427,7 +2427,7 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 					Form^ mainForm = Cosmos::Hubble::MainForm::get();
 					if (mainForm)
 						theApp.m_pHubbleImpl->m_hMainWnd = (HWND)mainForm->Handle.ToPointer();
-					theApp.InitTangramApp(theApp.m_pHubbleImpl->m_bIsSupportCrashReporting);
+					theApp.InitHubbleApp(theApp.m_pHubbleImpl->m_bIsSupportCrashReporting);
 				}
 				break;
 				}

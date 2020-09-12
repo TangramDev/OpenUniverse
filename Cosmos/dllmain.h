@@ -66,7 +66,7 @@ public:
 	};
 	virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
 
-	void InitTangramApp(bool bCrashReporting);
+	void InitHubbleApp(bool bCrashReporting);
 private:
 	//CCosmosCoreEvents:
 	void OnHubbleClose();

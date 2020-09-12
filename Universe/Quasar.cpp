@@ -555,7 +555,7 @@ CQuasar::CQuasar()
 	m_pWebPageWnd = nullptr;
 	m_pSubQuasar = nullptr;
 	m_pInitEventObj = nullptr;
-	m_bDesignerState = g_pHubble->m_bFrameDefaultState;
+	m_bDesignerState = true;
 	m_hPWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
 	m_pWorkNode = nullptr;
@@ -1379,8 +1379,7 @@ LRESULT CQuasar::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			parse.SaveFile(it.first);
 		}
 	}
-	if (g_pHubble->m_pDesigningFrame && g_pHubble->m_pDesigningFrame == this)
-		g_pHubble->m_pDesigningFrame = nullptr;
+
 	m_pGalaxyCluster->BeforeDestory();
 	m_pGalaxyCluster->m_strConfigFileNodeName.MakeLower();//20190116
 	auto it = g_pHubble->m_mapWindowPage.find(m_pGalaxyCluster->m_hWnd);

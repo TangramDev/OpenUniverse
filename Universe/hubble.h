@@ -91,7 +91,6 @@ public:
 	CHubble();
 	virtual ~CHubble();
 
-	bool								m_bAppInitFromWeb;
 	int									m_nRef;
 	int									m_nAppID;
 	int									m_nTangramObj;
@@ -116,24 +115,18 @@ public:
 	//.NET Version 4: 
 	ICLRRuntimeHost*					m_pClrHost;
 
-	CWebPage*							m_pHostHtmlWnd;
+	CWebPage*							m_pHostHtmlWnd = nullptr;
 	CWebPage*							m_pHtmlWndCreated;
 	CWebPage*							m_pActiveHtmlWnd;
-	CWebPage*							m_pMainHtmlWnd = nullptr;
 
 	CQuasar*							m_pDocTemplateFrame;
 	CWinForm*							m_pActiveWinFormWnd;
 	HubbleDocTemplateInfo*				m_pHubbleDocTemplateInfo;
 
 	CStar*								m_pActiveStar;
-	CStar*								m_pDesignRootNode;
 	CStar*								m_pDesignWindowNode;
-	CStar*								m_pHostDesignUINode;
 	CQuasar*							m_pQuasar;
-	CQuasar*							m_pDesignerFrame;
-	CQuasar*							m_pDesigningFrame;
 	CGalaxyCluster*						m_pGalaxyCluster;
-	CGalaxyCluster*						m_pDesignerGalaxyCluster;
 
 	map<CString, int>					m_mapEventDic;
 	map<CString, long>					m_mapIPCMsgIndexDic;
@@ -231,12 +224,11 @@ public:
 	void Lock() {}
 	void Unlock() {}
 	void HubbleInit();
-	void TangramInitFromeWeb();
+	void HubbleInitFromeWeb();
 	void ExitInstance();
 	void FireAppEvent(CCosmosEvent*);
 	void ExportComponentInfo();
 	int	 LoadCLR();
-	bool ImportTangramDocTemplate(CString strFile);
 	BOOL IsUserAdministrator();
 	CString EncodeFileToBase64(CString strSRC);
 	CString ComputeHash(CString source);
@@ -301,7 +293,6 @@ private:
 	bool IsMDIClientQuasarNode(IStar*);
 	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
 	void FireNodeEvent(int nIndex, CStar* pNode, CCosmosEvent* pObj);
-	void GetTangramInfo(CString strFile, TangramDocInfo*);
 
 	CString RemoveUTF8BOM(CString strUTF8);
 

@@ -313,7 +313,6 @@ LRESULT CGrid::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 			m_pStar->m_vChildNodes.push_back(pNode);
 			pOldNode->m_pHostWnd->DestroyWindow();
 			CString strXml = m_pStar->m_pStarCommonData->m_pHubbleParse->xml();
-			g_pHubble->m_pHostDesignUINode = m_pStar->m_pStarCommonData->m_pQuasar->m_pWorkNode;
 #ifndef _WIN64
 			if (g_pHubble->m_strExeName == _T("devenv"))
 			{

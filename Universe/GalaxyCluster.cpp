@@ -61,8 +61,6 @@ CGalaxyCluster::CGalaxyCluster()
 
 CGalaxyCluster::~CGalaxyCluster()
 {
-	if (this == g_pHubble->m_pDesignerGalaxyCluster)
-		g_pHubble->m_pDesignerGalaxyCluster = nullptr;
 #ifdef _DEBUG
 	g_pHubble->m_nTangram--;
 #endif	
@@ -82,16 +80,7 @@ CGalaxyCluster::~CGalaxyCluster()
 	}
 	if (g_pHubble->m_mapWindowPage.size() == 0)
 		g_pHubble->Close();
-	else
-	{
-		if (g_pHubble->m_mapWindowPage.size() == 1 && g_pHubble->m_pDesignerGalaxyCluster)
-		{
-			if (g_pHubble->m_bDeleteGalaxyCluster == FALSE)
-				::DestroyWindow(g_pHubble->m_hHostWnd);
-			else
-				g_pHubble->m_bDeleteGalaxyCluster = FALSE;
-		}
-	}
+
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		if (it.second->m_bAutoDelete)

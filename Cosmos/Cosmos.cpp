@@ -251,7 +251,7 @@ namespace Cosmos
         return m_pHubble;
     }
 
-    Hubble^ Hubble::InitTangramApp(bool bSupportCrashReporting, CosmosAppType AppType)
+    Hubble^ Hubble::InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType)
     {
         if (m_pHubble == nullptr)
             m_pHubble = gcnew Hubble();
@@ -263,7 +263,7 @@ namespace Cosmos
         {
         case CosmosAppType::APPBROWSER:
         case CosmosAppType::APPBROWSER_ECLIPSE:
-            theApp.InitTangramApp(bSupportCrashReporting);
+            theApp.InitHubbleApp(bSupportCrashReporting);
             break;
         case CosmosAppType::APPECLIPSE:
             if (theApp.m_pHubble && !theApp.m_pHubbleImpl->m_bIsEclipseInit)

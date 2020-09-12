@@ -58,15 +58,12 @@ CHubble::CHubble()
 	m_pClrHost = nullptr;
 	g_pHubble = this;
 	m_bCLRObjTemplateInit = false;
-	m_bOfficeAddinUnLoad = true;
 	m_bCreatingForm = false;
 	m_bLoadEclipseDelay = false;
 	m_bUsingDefaultAppDocTemplate = false;
 	m_bWinFormActived = false;
 	m_bAdmin = IsUserAdministrator();
 	m_bCanClose = false;
-	m_bFrameDefaultState = true;
-	m_bAppInitFromWeb = false;
 	m_bDeleteGalaxyCluster = false;
 	m_bFirstDocCreated = false;
 	m_bEnableProcessFormTabKey = false;
@@ -101,11 +98,6 @@ CHubble::CHubble()
 	m_pActiveStar = nullptr;
 	m_pQuasar = nullptr;
 	m_pDesignWindowNode = nullptr;
-	m_pDesigningFrame = nullptr;
-	m_pHostDesignUINode = nullptr;
-	m_pDesignRootNode = nullptr;
-	m_pDesignerFrame = nullptr;
-	m_pDesignerGalaxyCluster = nullptr;
 	m_pRootNodes = nullptr;
 	m_pUniverseAppProxy = nullptr;
 	m_pCosmosAppProxy = nullptr;
@@ -140,7 +132,6 @@ CHubble::CHubble()
 	m_strDefaultTemplate = _T("");
 	m_strDefaultTemplate2 = _T("");
 	m_strCurrentEclipsePagePath = _T("");
-	m_strTangramURLBase = _T("http://tangramdesigner.com/TangramDesigner/");
 	m_strDesignerToolBarCaption = _T("Tangram Designer");
 	m_nTangramObj = 0;
 #ifdef _DEBUG
@@ -631,7 +622,7 @@ void CHubble::HubbleLoad()
 	m_strAppDataPath += _T("\\");
 }
 
-void CHubble::TangramInitFromeWeb()
+void CHubble::HubbleInitFromeWeb()
 {
 	CTangramXmlParse m_Parse;
 	if (m_Parse.LoadXml(m_strAppXml))
@@ -1180,12 +1171,6 @@ CString CHubble::GetNewLayoutNodeName(BSTR bstrCnnID, IStar* pDesignNode)
 
 CString CHubble::GetDesignerInfo(CString strIndex)
 {
-	if (m_pDesignerGalaxyCluster)
-	{
-		auto it = m_pDesignerGalaxyCluster->m_mapXtml.find(strIndex);
-		if (it != m_pDesignerGalaxyCluster->m_mapXtml.end())
-			return it->second;
-	}
 	return _T("");
 };
 
@@ -2817,18 +2802,9 @@ HICON CHubble::GetAppIcon(int nIndex)
 	return nullptr;
 }
 
-bool CHubble::ImportTangramDocTemplate(CString strFilePath)
-{
-	return false;
-}
-
 STDMETHODIMP CHubble::OpenTangramDocFile(BSTR bstrFilePath, IHubbleDoc** ppDoc)
 {
 	return S_OK;
-}
-
-void CHubble::GetTangramInfo(CString strFile, TangramDocInfo* pTangramDocInfo)
-{
 }
 
 STDMETHODIMP CHubble::CreateOfficeDocument(BSTR bstrXml)

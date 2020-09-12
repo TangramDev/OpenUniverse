@@ -635,8 +635,6 @@ namespace CommonUniverse {
 		bool									m_bHubbleInit = false;
 		bool									m_bAdmin;
 		bool									m_bCanClose;
-		bool									m_bFrameDefaultState;
-		bool									m_bOfficeAddinUnLoad;
 		bool									m_bWinFormActived;
 		bool									m_bEnableProcessFormTabKey;
 		bool									m_bDeleteGalaxyCluster;
@@ -678,7 +676,6 @@ namespace CommonUniverse {
 		CString									m_strAppDataPath;
 		CString									m_strCurrentAppID;
 		CString									m_strProgramFilePath;
-		CString									m_strTangramURLBase;
 		CString									m_strAppCommonDocPath;
 		CString									m_strAppCommonDocPath2;
 		CString									m_strAppCommonFormsPath;

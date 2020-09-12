@@ -1029,8 +1029,6 @@ void CStar::NodeCreated()
 		pHtmlWnd = GetHtmlWnd();
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = g_pHubble->m_pHostHtmlWnd;
-	if (pHtmlWnd == nullptr)
-		pHtmlWnd = g_pHubble->m_pMainHtmlWnd;
 	if (pHtmlWnd&&m_pHubbleCloudSession == nullptr)
 	{
 		::PostMessage(pHtmlWnd->m_hWnd, WM_COSMOSMSG, 20200310, (LPARAM)this);

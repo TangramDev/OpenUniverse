@@ -596,11 +596,10 @@ namespace Web {
 			{
 				RenderHTMLDocElement(m_strDocXml);
 			}
-			if (g_pHubble->m_bAppInitFromWeb == false && g_pHubble->m_strAppXml != _T(""))
+			if (g_pHubble->m_pHostHtmlWnd == nullptr && g_pHubble->m_strAppXml != _T(""))
 			{
-				g_pHubble->m_bAppInitFromWeb = true;
 				g_pHubble->m_pHostHtmlWnd = this;
-				g_pHubble->TangramInitFromeWeb();
+				g_pHubble->HubbleInitFromeWeb();
 				if (g_pHubble->m_strMainWndXml != _T(""))
 				{
 					RenderHTMLMainWindowElement(g_pHubble->m_strMainWndXml);
@@ -917,11 +916,9 @@ namespace Web {
 				g_pHubble->LoadCLR();
 			if (g_pHubble->m_pCLRProxy)
 			{
-				g_pHubble->m_pMainHtmlWnd = this;
 				CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
 				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
 				IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
-				g_pHubble->m_pMainHtmlWnd = nullptr;
 			}
 		}
 	}

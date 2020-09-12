@@ -145,9 +145,6 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
 	BOOL b = pQuasar->m_bDesignerState;
-	if (g_pHubble->m_pDesignerGalaxyCluster)
-		if (pQuasar->m_pGalaxyCluster == g_pHubble->m_pDesignerGalaxyCluster || m_pStar->m_strCnnID != _T(""))
-			b = false;
 	if (m_pStar->m_nViewType == BlankView && m_pStar->m_strCnnID == _T(""))
 		b = true;
 	if (m_pStar && m_pStar->m_pStarCommonData->m_pGalaxyCluster)
@@ -845,7 +842,6 @@ LRESULT CStarWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 
 		strXml = m_pStar->m_pStarCommonData->m_pHubbleParse->xml();
 		g_pHubble->m_pDesignWindowNode = m_pStar;
-		g_pHubble->m_pHostDesignUINode = m_pStar->m_pRootObj;
 		auto it = m_pStar->m_pStarCommonData->m_pQuasar->m_pGalaxyCluster->m_mapQuasar.find(pOldNode->m_hChildHostWnd);
 		if (it != m_pStar->m_pStarCommonData->m_pQuasar->m_pGalaxyCluster->m_mapQuasar.end())
 			m_pStar->m_pStarCommonData->m_pQuasar->m_pGalaxyCluster->m_mapQuasar.erase(it);

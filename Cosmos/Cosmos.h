@@ -693,7 +693,7 @@ namespace Cosmos
 
 		static Hubble^ GetHubble();
 
-		static Hubble^ InitTangramApp(bool bSupportCrashReporting, CosmosAppType AppType);
+		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
 
 		static bool WebRuntimeInit();
 

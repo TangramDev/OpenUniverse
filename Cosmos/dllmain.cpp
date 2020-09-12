@@ -39,7 +39,7 @@ CCosmos::~CCosmos()
 	BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
 }
 
-void CCosmos::InitTangramApp(bool bCrashReporting)
+void CCosmos::InitHubbleApp(bool bCrashReporting)
 {
 	if (m_bBrowserModeInit)
 		return;

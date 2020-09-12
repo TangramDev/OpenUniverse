@@ -18,18 +18,6 @@
 class CWinForm;
 namespace Web
 {
-	/*About CWebPage:
-	* WebPage WebPage (1564-1642) was a great astronomer, mechanist, philosopher, 
-	* physicist and mathematician in the late Renaissance of Italy. He is also the
-	* pioneer of modern experimental physics, known as "the father of modern science". 
-	* At the age of 17, he entered the University of Pisa to study medicine. Later, 
-	* he turned to mathematics and became a university professor after graduation. 
-	* He is an indomitable fighter for the sake of truth. Engels called him "one of 
-	* the giants who can break down the old theory and create the new one regardless 
-	* of any obstacles.". He was born in Pisa on February 15, 1564 and died in Pisa 
-	* on January 8, 1642. The family name of WebPage is Galilei, and his full name is
-	* WebPage Galilei
-	*/
 	class ATL_NO_VTABLE CWebPage :
 		public CWebPageImpl,
 		public CWindowImpl<CWebPage, CWindow>,
