@@ -1426,10 +1426,9 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 
 						if (strCaption != _T(""))
 							thisForm->Text = BSTR2STRING(strCaption);
-						if (strTagName.CompareNoCase(_T("mainwindow")) == 0)
+						if (theApp.m_pHubbleImpl->m_hMainWnd==NULL&&strTagName.CompareNoCase(_T("mainwindow")) == 0)
 						{
 							theApp.m_pHubbleImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
-							::PostMessage(theApp.m_pHubbleImpl->m_hMainWnd, WM_COSMOSMSG, 0, 20200419);
 						}
 						thisForm->Tag = BSTR2STRING(m_Parse.name());
 						__int64 nIpcSession = m_Parse.attrInt64(_T("ipcsession"), 0);

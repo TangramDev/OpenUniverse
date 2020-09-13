@@ -132,7 +132,7 @@ public:
 	map<CString, long>					m_mapIPCMsgIndexDic;
 
 	map<LONGLONG, CCosmosEvent*>		m_mapEvent;
-	map<HWND, CWinForm*>				m_mapMainForm;
+	//map<HWND, CWinForm*>				m_mapMainForm;
 	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
 	map<__int64, CStarCollection*>		m_mapWndNodeCollection;
 	map<CStar*, CString>				m_mapNodeForHtml;
@@ -147,13 +147,6 @@ public:
 		CONNECTION_POINT_ENTRY(__uuidof(_IHubble))
 	END_CONNECTION_POINT_MAP()
 
-	BEGIN_CATEGORY_MAP(CHubble)
-		IMPLEMENTED_CATEGORY(CATID_SafeForInitializing)
-		IMPLEMENTED_CATEGORY(CATID_SafeForScripting)
-	END_CATEGORY_MAP()
-
-	STDMETHOD(get_Application)(IDispatch** pVal);
-	STDMETHOD(put_Application)(IDispatch* newVal);
 	STDMETHOD(get_RootNodes)(IStarCollection** pNodeColletion);
 	STDMETHOD(get_CurrentActiveStar)(IStar** pVal);
 	STDMETHOD(get_CreatingStar)(IStar** pVal);
@@ -311,7 +304,6 @@ private:
 	long GetIPCMsgIndex(CString strMsgID);
 	CSession* CreateCloudSession(CWebPageImpl*);
 	CSession* GetCloudSession(IStar*);
-	void ReleaseCLR();
 	void SetMainWnd(HWND hMain);
 	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
 	void HubbleNotify(CString strXml1, CString strXml2, LONGLONG wParam, LONGLONG lParam);

@@ -111,7 +111,6 @@
 #define WM_CHROMEDEVTOOLMSG	            (WM_USER + 0x00004037)
 #define WM_BACKGROUNDWEBPROXY_MSG       (WM_USER + 0x00004039)
 #define WM_CHROMEWNDNODEMSG             (WM_USER + 0x00004040)
-#define WM_DOTNETCONTROLCREATED         (WM_USER + 0x00004041)
 #define WM_DOCUMENTONLOADCOMPLETED      (WM_USER + 0x00004043)
 #define WM_DOCUMENTFAILLOADWITHERROR    (WM_USER + 0x00004044)
 #define WM_CHROMEHELPWND                (WM_USER + 0x00004045)
@@ -575,7 +574,6 @@ namespace CommonUniverse {
 		virtual void SelectNode(IStar*) {}
 		virtual void SelectObj(IDispatch*) {}
 		virtual void ReleaseHubbleObj(IDispatch*) {}
-		virtual void AttachVSPropertyWnd(HWND) {}
 		virtual void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {}
 		virtual void WindowDestroy(HWND hWnd) {}
 		virtual CWPFObj* CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID) { return nullptr; }
@@ -722,8 +720,6 @@ namespace CommonUniverse {
 		IHubbleAppProxy*						m_pCosmosAppProxy;
 		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
 		CHubblePackageProxy*					m_pHubblePackageProxy;
-		IDispatch*								m_pMainFormDisp = nullptr;
-		IDispatch*								m_pAppDisp = nullptr;
 		IStar*									m_pHostViewDesignerNode = nullptr;
 		IHubbleExtender*						m_pExtender = nullptr;
 		IHubbleDelegate*						m_pHubbleDelegate = nullptr;
@@ -737,12 +733,11 @@ namespace CommonUniverse {
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapFramePage;
 		map<HWND, IGalaxyCluster*>				m_mapWindowPage;
-		map<CString, IDispatch*>				m_mapAppDispDic;
 		map<CString, CComVariant>				m_mapValInfo;
 		map<CString, void*>						m_mapTemplateInfo;
 		map<CString, IHubble*>					m_mapRemoteHubble;
 		map<IStar*, CString>					m_mapControlScript;
-		map<CString, void*>						m_mapExcludedObjects;
+		//map<CString, void*>						m_mapExcludedObjects;
 		map<CString, IHubbleAppProxy*>			m_mapHubbleAppProxy;
 		map<CString, IHubbleWindowProvider*>	m_mapWindowProvider;
 		map<int, HubbleDocTemplateInfo*>		m_mapHubbleDocTemplateInfo;
@@ -777,7 +772,6 @@ namespace CommonUniverse {
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
 		virtual IStar* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
 		virtual bool IsMDIClientQuasarNode(IStar*) { return false; }
-		virtual void DotNetControlCreated(MSG* lpMsg) {}
 		virtual void ExportComponentInfo() {}
 		virtual void ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate) {}
 		virtual void InserttoDataMap(int nType, CString strKey, void* pData) {}
@@ -785,7 +779,6 @@ namespace CommonUniverse {
 		virtual long GetIPCMsgIndex(CString strMsgID) { return 0; }
 		virtual CSession* CreateCloudSession(CWebPageImpl*) { return nullptr; }
 		virtual CSession* GetCloudSession(IStar*) { return nullptr; }
-		virtual void ReleaseCLR() {}
 		virtual void SetMainWnd(HWND hMain) {}
 		virtual void HubbleNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 	};
@@ -817,9 +810,7 @@ namespace CommonUniverse {
 		virtual BOOL IsAppIdleMessage() = 0;
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) = 0;
 		virtual CString GetNTPXml() = 0;
-		virtual CString GetNTPData() = 0;
 		virtual HWND GetMainWnd() = 0;
-		virtual bool BrowserAppStart() = 0;
 		virtual HWND QueryCanClose(HWND hWnd) = 0;
 		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) = 0;
 		virtual bool HookAppDocTemplateInfo() = 0;
@@ -947,8 +938,8 @@ namespace CommonUniverse {
 					(CommonUniverse::GetHubbleImplFunction)GetProcAddress(
 						hModule, "GetHubbleImpl");
 				if (GetHubbleImplFunction != NULL) {
-					IHubble* pTangram = nullptr;
-					CHubbleImpl* _pImpl = GetHubbleImplFunction(&pTangram);
+					IHubble* pHubble = nullptr;
+					CHubbleImpl* _pImpl = GetHubbleImplFunction(&pHubble);
 					if (_pImpl) {
 						m_pProxy = nullptr;
 						_pImpl->m_pActiveBrowser = this;

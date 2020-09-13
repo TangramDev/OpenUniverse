@@ -183,20 +183,6 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 				}//FindNextFile
 				else
 				{
-					if (theApp.m_pHubbleImpl)
-					{
-						strPath = theApp.m_pHubbleImpl->m_strAppCommonFormsPath + strLib + _T(".dll");
-						if (::PathFileExists(strPath))
-						{
-							return strObjName + _T("|") + strLib + _T("|") + strPath;
-						}
-						strPath = L"C:\\Program Files (x86)\\Syncfusion\\Essential Studio\\Windows\\16.4.0.42\\Assemblies\\4.6\\";
-						strPath = strPath + strLib + _T(".dll");
-						if (::PathFileExists(strPath))
-						{
-							return strObjName + _T("|") + strLib + _T("|") + strPath;
-						}
-					}
 					if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
 						bSearch = false;
 					else {

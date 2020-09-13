@@ -165,7 +165,7 @@ void CGrid::TrackRowSize(int y, int row)
 		if (GetStyle() & SPLS_DYNAMIC_SPLIT)
 			DeleteRow(row + 1);
 	}
-	if (m_pHostNode&&row != m_nRows - 1)
+	if (m_pHostNode && row != m_nRows - 1)
 	{
 		ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
 
@@ -185,7 +185,7 @@ void CGrid::TrackRowSize(int y, int row)
 				pInfo->nIdealSize = 0;      // too small to see
 			_nSize -= pInfo->nIdealSize;
 		}
-		_nSize -= (m_nRows - 1)*m_cxSplitterGap;
+		_nSize -= (m_nRows - 1) * m_cxSplitterGap;
 		pInfo->nCurSize = _nSize;
 		pInfo->nIdealSize = _nSize;
 	}
@@ -214,7 +214,7 @@ void CGrid::TrackColumnSize(int x, int col)
 		if (GetStyle() & SPLS_DYNAMIC_SPLIT)
 			DeleteColumn(col + 1);
 	}
-	if (m_pHostNode&&col != m_nCols - 1)
+	if (m_pHostNode && col != m_nCols - 1)
 	{
 		ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
 
@@ -234,7 +234,7 @@ void CGrid::TrackColumnSize(int x, int col)
 				pInfo->nIdealSize = 0;      // too small to see
 			_nSize -= pInfo->nIdealSize;
 		}
-		_nSize -= (m_nCols - 1)*m_cxSplitterGap;
+		_nSize -= (m_nCols - 1) * m_cxSplitterGap;
 		pInfo->nCurSize = _nSize;
 		pInfo->nIdealSize = _nSize;
 	}
@@ -288,7 +288,7 @@ LRESULT CGrid::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	CTangramXmlParse* _pOldParse = _pOldNode2->m_pHostParse;
 	m_pStar->ObserveEx(m_nRow, m_nCol, CComBSTR(L""), str.AllocSysString(), &_pNode);
 	CStar* pNode = (CStar*)_pNode;
-	if (pNode&&pOldNode)
+	if (pNode && pOldNode)
 	{
 		CQuasar* pQuasar = m_pStar->m_pStarCommonData->m_pQuasar;
 		pNode->m_pStarCommonData->m_pQuasar->m_bDesignerState = true;
@@ -339,7 +339,7 @@ LRESULT CGrid::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 LRESULT CGrid::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 {
 	int _nWidth = 0;
-	SetColumnInfo(lParam, m_nHostWidth>=0?m_nHostWidth:0, _nWidth);
+	SetColumnInfo(lParam, m_nHostWidth >= 0 ? m_nHostWidth : 0, _nWidth);
 	SetRowInfo(wParam, m_nHostHeight, _nWidth);
 	//SetColumnInfo(lParam, (m_nHostWidth>=0)? m_nHostWidth:0, _nWidth);
 	//SetRowInfo(wParam, (m_nHostHeight>=0)? m_nHostHeight:0, _nWidth);
@@ -358,7 +358,7 @@ void CGrid::StartTracking(int ht)
 		return;
 
 	CStar* pNode = m_pStar->m_pStarCommonData->m_pQuasar->m_pWorkNode;
-	if (pNode&&pNode->m_pStarCommonData->m_pHostClientView)
+	if (pNode && pNode->m_pStarCommonData->m_pHostClientView)
 	{
 		pNode->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
 	}
@@ -417,7 +417,7 @@ void CGrid::StopTracking(BOOL bAccept)
 		return;
 	CQuasar* pQuasar = m_pStar->m_pStarCommonData->m_pQuasar;
 	CStar* pNode = pQuasar->m_pWorkNode;
-	if (pNode&&pNode->m_pStarCommonData->m_pHostClientView)
+	if (pNode && pNode->m_pStarCommonData->m_pHostClientView)
 	{
 		pNode->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
 		::InvalidateRect(pQuasar->m_hWnd, NULL, false);
@@ -429,7 +429,7 @@ void CGrid::StopTracking(BOOL bAccept)
 	if (bAccept)
 	{
 		::InvalidateRect(pQuasar->m_hWnd, nullptr, true);
-		if (pQuasar->m_bDesignerState&&g_pHubble->m_pDesignWindowNode)
+		if (pQuasar->m_bDesignerState && g_pHubble->m_pDesignWindowNode)
 		{
 			g_pHubble->UpdareStar(g_pHubble->m_pDesignWindowNode->m_pRootObj);
 			CComBSTR bstrXml(L"");
@@ -442,7 +442,7 @@ void CGrid::StopTracking(BOOL bAccept)
 		{
 			pWebWnd = pQuasar->m_pWebPageWnd;
 		}
-		else if(g_pHubble->m_pDesignWindowNode&&g_pHubble->m_pDesignWindowNode->m_pStarCommonData->m_pQuasar->m_pWebPageWnd)
+		else if (g_pHubble->m_pDesignWindowNode && g_pHubble->m_pDesignWindowNode->m_pStarCommonData->m_pQuasar->m_pWebPageWnd)
 			pWebWnd = g_pHubble->m_pDesignWindowNode->m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
 		pQuasar->HostPosChanged();
 		if (pWebWnd)
@@ -524,7 +524,7 @@ void CGrid::TangramLayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax,
 			{
 				if (_indexHost != nMax - 1)
 				{
-					_nSize -= (nMax - 1)*nSizeSplitter;
+					_nSize -= (nMax - 1) * nSizeSplitter;
 					if (_nSize < 0)
 						_nSize = 0;
 					pInfoHost->nCurSize = _nSize;
@@ -718,7 +718,7 @@ void CGrid::_RecalcLayout()
 			{
 				int cyRow = m_pRowInfo[row].nCurSize;
 				CWnd* pWnd = GetPane(row, col);
-				if(pWnd)
+				if (pWnd)
 					TangramDeferClientPos(&layout, pWnd, x, y, cxCol, cyRow, FALSE);
 				y += cyRow + m_cySplitterGap;
 			}
@@ -782,15 +782,15 @@ BOOL CGrid::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle,
 
 	bstrVal.Empty();
 	m_pStar->get_Attribute(CComBSTR(L"splitterwidth"), &bstrVal);
-	m_cxSplitterGap = m_cySplitterGap = m_cxSplitter = m_cySplitter = !CString(bstrVal).IsEmpty()?_ttoi(CString(bstrVal)):7;
+	m_cxSplitterGap = m_cySplitterGap = m_cxSplitter = m_cySplitter = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 7;
 
 	bstrVal.Empty();
 	m_pStar->get_Attribute(CComBSTR(L"borderwidth"), &bstrVal);
-	m_cxBorder = m_cyBorder = !CString(bstrVal).IsEmpty()?_ttoi(CString(bstrVal)):2;
+	m_cxBorder = m_cyBorder = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 2;
 
 	bstrVal.Empty();
 	m_pStar->get_Attribute(CComBSTR(L"vmin"), &bstrVal);
-	m_Vmin = !CString(bstrVal).IsEmpty()?_ttoi(CString(bstrVal)):0;
+	m_Vmin = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 0;
 
 	bstrVal.Empty();
 	m_pStar->get_Attribute(CComBSTR(L"vmax"), &bstrVal);
@@ -804,7 +804,7 @@ BOOL CGrid::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle,
 		m_Vmax = 65535;
 	bstrVal.Empty();
 	m_pStar->get_Attribute(CComBSTR(L"hmin"), &bstrVal);
-	m_Hmin = !CString(bstrVal).IsEmpty()?_ttoi(CString(bstrVal)):0;
+	m_Hmin = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 0;
 
 	bstrVal.Empty();
 	m_pStar->get_Attribute(CComBSTR(L"hmax"), &bstrVal);
@@ -886,7 +886,7 @@ BOOL CGrid::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle,
 				nIndex++;
 				if (nIndex < nSize)
 					pSubItem = m_pStar->m_pHostParse->GetChild(nIndex);
-				else if(nIndex< m_pStar->m_nCols* m_pStar->m_nRows)
+				else if (nIndex < m_pStar->m_nCols * m_pStar->m_nRows)
 				{
 					strName.Format(_T("%s_splitterchild_%i"), m_pStar->m_strName, nIndex);
 					pSubItem = m_pStar->m_pHostParse->AddNode(strName);
@@ -917,7 +917,7 @@ BOOL CGrid::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle,
 				}
 			}
 		}
-		if (pHostNode&&::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
+		if (pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 			m_pHostNode = pHostNode;
 		//if (m_pHostNode == nullptr)
 		//{
@@ -1035,7 +1035,7 @@ void CGrid::OnDrawSplitter(CDC* pDC, ESplitType nType, const CRect& rectArg)
 	{
 		pDC->FillSolidRect(rect, rgbMiddle);
 		//pDC->FillSolidRect(rect, rgbMiddle);
-		if((rect.bottom - rect.top) > (rect.right - rect.left))
+		if ((rect.bottom - rect.top) > (rect.right - rect.left))
 		{
 			rect.bottom -= 1;
 			rect.top += 1;

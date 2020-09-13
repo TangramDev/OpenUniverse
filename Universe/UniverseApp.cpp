@@ -243,12 +243,6 @@ LRESULT CALLBACK CUniverse::TangramWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM
 			::GetClientRect(g_pHubble->m_hHostWnd, &rc);
 			::SetWindowPos(g_pHubble->m_hChildHostWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
-		else if (hWnd == g_pHubble->m_hTemplateWnd)
-		{
-			RECT rc;
-			::GetClientRect(g_pHubble->m_hTemplateWnd, &rc);
-			::SetWindowPos(g_pHubble->m_hTemplateChildWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-		}
 		break;
 	case WM_COSMOSMSG:
 		switch (lParam)
@@ -484,10 +478,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		CString strClassName = CString(g_pHubble->m_szBuffer);
 		::GetClassName(hPWnd, g_pHubble->m_szBuffer, MAX_PATH);
 		CString strPClassName = CString(g_pHubble->m_szBuffer);
-
-		if (strClassName.Find(_T("WindowsForms10."), 0) == 0) {
-			::PostMessage(hWnd, WM_DOTNETCONTROLCREATED, (WPARAM)hWnd, (LPARAM)hPWnd);
-		}
 
 		if (strClassName == _T("Chrome_RenderWidgetHostHWND"))
 		{
@@ -1069,11 +1059,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						g_bRecturnPressed = false;
 					}
 				}
-			}
-			break;
-			case WM_DOTNETCONTROLCREATED:
-			{
-				g_pHubble->DotNetControlCreated(lpMsg);
 			}
 			break;
 			}

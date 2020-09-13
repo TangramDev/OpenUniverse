@@ -48,7 +48,7 @@ public:
 		MESSAGE_HANDLER(WM_TANGRAMGETXML, OnHubbleGetXml)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
-		MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
+		//MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()
 
@@ -62,7 +62,7 @@ private:
 	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	//LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -73,7 +73,7 @@ public:
 class ATL_NO_VTABLE CQuasar : 
 	public CComObjectRootBase,	
 	public CWindowImpl<CQuasar, CWindow>,
-	public IDispatchImpl<IQuasar, &IID_IQuasar, &LIBID_Universe, 1, 0>
+	public IDispatchImpl<IQuasar, &IID_IQuasar>
 {
 public:
 	CQuasar();           

@@ -819,12 +819,6 @@ namespace Cosmos
 			Browser^ get();
 		}
 
-		static property Object^ Application
-		{
-			Object^ get();
-			void set(Object^ obj);
-		}
-
 		static property System::Drawing::Icon^ DefaultIcon
 		{
 			System::Drawing::Icon^ get();
@@ -840,11 +834,6 @@ namespace Cosmos
 		{
 			CosmosAppType get();
 			void set(CosmosAppType nType);
-		}
-
-		static property String^ CurrentDesigningTangramXml
-		{
-			String^ get();
 		}
 
 		static property Star^ CreatingStar

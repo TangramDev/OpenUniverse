@@ -217,22 +217,6 @@ void CHubble::Init()
 		{
 			::SHCreateDirectory(nullptr, m_strAppFormsInfoPath);
 		}
-		m_strAppWPFObjsInfoPath = m_strAppDataPath + _T("TangramWPFsInfo\\");
-		if (::PathIsDirectory(m_strAppWPFObjsInfoPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppWPFObjsInfoPath);
-		}
-
-		m_strAppControlsInfoPath = m_strAppDataPath + _T("TangramControlsInfo\\");
-		if (::PathIsDirectory(m_strAppControlsInfoPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppControlsInfoPath);
-		}
-		m_strAppFormsTemplatePath = m_strAppDataPath + _T("TangramFormsTemplate\\");
-		if (::PathIsDirectory(m_strAppFormsTemplatePath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppFormsTemplatePath);
-		}
 	}
 
 	SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer);
@@ -256,59 +240,6 @@ void CHubble::Init()
 		HWND hWnd = ::CreateWindowEx(WS_EX_NOACTIVATE, _T("Tangram Message Window Class"), _T(""), WS_VISIBLE | WS_POPUP, 0, 0, 0, 0, nullptr, nullptr, theUniverse.m_hInstance, nullptr);
 	}
 
-	if (m_nAppID != 9 && ::PathFileExists(m_strConfigFile) && m_bOfficeApp == false)
-	{
-		CTangramXmlParse m_Parse;
-		if (m_Parse.LoadFile(m_strConfigFile))
-		{
-			CTangramXmlParse* _pXmlParse = m_Parse.GetChild(_T("designerscript"));
-			if (_pXmlParse)
-			{
-				CTangramXmlParse* pXmlParse = _pXmlParse->GetChild(_T("selected"));
-				if (pXmlParse)
-					m_strNodeSelectedText = pXmlParse->text();
-				pXmlParse = _pXmlParse->GetChild(_T("infotip1"));
-				if (pXmlParse)
-					m_strDesignerTip1 = pXmlParse->text();
-				pXmlParse = _pXmlParse->GetChild(_T("infotip2"));
-				if (pXmlParse)
-					m_strDesignerTip2 = pXmlParse->text();
-				pXmlParse = _pXmlParse->GetChild(_T("designertoolcaption"));
-				if (pXmlParse)
-				{
-					m_strDesignerToolBarCaption = pXmlParse->text();
-				}
-				pXmlParse = _pXmlParse->GetChild(_T("designertoolxml"));
-				if (pXmlParse && pXmlParse->GetChild(TGM_CLUSTER))
-				{
-					CString strCaption = m_strDesignerToolBarCaption = pXmlParse->attr(_T("caption"), _T("Tangram Designer"));
-					strCaption.Trim();
-					if (strCaption != _T(""))
-						m_strDesignerToolBarCaption = strCaption;
-					m_strDesignerXml = pXmlParse->xml();
-				}
-			}
-			_pXmlParse = m_Parse.GetChild(_T("ntp"));
-			if (_pXmlParse)
-			{
-				g_pHubble->m_strNtpXml = _pXmlParse->xml();
-			}
-			if (::PathFileExists(m_strConfigDataFile) == FALSE)
-			{
-				_pXmlParse = m_Parse.GetChild(_T("tangrampage"));
-				CString strXml = _T("");
-				if (_pXmlParse)
-				{
-					strXml.Format(_T("<%s>%s</%s>"), m_strExeName, _pXmlParse->xml(), m_strExeName);
-					CTangramXmlParse xmlParse;
-					if (xmlParse.LoadXml(strXml))
-					{
-						xmlParse.SaveFile(m_strConfigDataFile);
-					}
-				}
-			}
-		}
-	}
 	if (m_strNodeSelectedText == _T(""))
 	{
 		m_strNodeSelectedText = m_strNodeSelectedText + _T("  ----Please Select an Object Type From Designer ToolBox for this Tangram View----") +
@@ -335,9 +266,6 @@ void CHubble::Init()
 
 	if (m_nAppID != 9 && m_bOfficeApp == false && ::IsWindow(m_hHostWnd) == false)
 	{
-		auto it = g_pHubble->m_mapValInfo.find(_T("designertoolcaption"));
-		if (it != g_pHubble->m_mapValInfo.end())
-			m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
 		CString strExeName = m_strExeName;
 		strExeName.MakeLower();
 		m_strDesignerToolBarCaption = strExeName + _T(" - ") + m_strDesignerToolBarCaption;
@@ -599,21 +527,6 @@ void CHubble::HubbleLoad()
 	HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
 	m_strAppDataPath = CString(m_szBuffer) + _T("\\");
 	m_strAppDataPath.Replace(_T("\\\\"), _T("\\"));
-	//m_strAppCommonDocPath += m_strAppDataPath + _T("TangramCommonDocTemplate\\");
-	//if (::PathIsDirectory(m_strAppCommonDocPath) == false)
-	//{
-	//	::SHCreateDirectory(nullptr, m_strAppCommonDocPath);
-	//}
-
-	//m_strNewDocXml = m_strAppCommonDocPath + _T("newdocument.xml");
-
-	//CString strPath = m_strAppCommonDocPath + _T("\\Tangramdoctemplate.xml");
-	//if (::PathFileExists(strPath) == FALSE)
-	//{
-	//	CTangramXmlParse m_Parse;
-	//	m_Parse.LoadXml(_T("<TangramDocTemplate />"));
-	//	m_Parse.SaveFile(strPath);
-	//}
 
 	m_strAppDataPath += _T("TangramData\\");
 	m_strAppDataPath += m_strExeName;
@@ -965,28 +878,6 @@ void CHubble::SetMainWnd(HWND hMain)
 	m_hMainWnd = hMain;
 	CWinForm* pWnd = new CWinForm();
 	pWnd->SubclassWindow(g_pHubble->m_hMainWnd);
-}
-
-void CHubble::ReleaseCLR()
-{
-	if (m_pClrHost && m_nAppID == -1 && theUniverse.m_bHostCLR == false)
-	{
-		OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
-		HRESULT hr = m_pClrHost->Stop();
-		ASSERT(hr == S_OK);
-		if (hr == S_OK)
-		{
-			OutputDebugString(_T("------------------Stop CLR Successed!------------------------\n"));
-		}
-		DWORD dw = m_pClrHost->Release();
-		ASSERT(dw == 0);
-		if (dw == 0)
-		{
-			m_pClrHost = nullptr;
-			OutputDebugString(_T("------------------ClrHost Release Successed!------------------------\n"));
-		}
-		OutputDebugString(_T("------------------End Stop CLR------------------------\n"));
-	}
 }
 
 IWebPage* CHubble::GetWebPageFromForm(HWND hForm)
@@ -1392,17 +1283,6 @@ CStar* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 	return pRootNode;
 }
 
-STDMETHODIMP CHubble::put_Application(IDispatch* newVal)
-{
-	if (m_pAppDisp == nullptr)
-	{
-		m_pAppDisp = newVal;
-		m_pAppDisp->AddRef();
-		return S_OK;
-	}
-	return S_FALSE;
-}
-
 STDMETHODIMP CHubble::get_ActiveChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
 {
 	if (m_pActiveBrowser->m_pProxy)
@@ -1509,8 +1389,6 @@ STDMETHODIMP CHubble::get_CreatingStar(IStar** pVal)
 
 STDMETHODIMP CHubble::get_DesignNode(IStar** pVal)
 {
-	if (m_pDesignWindowNode)
-		(*pVal) = (IStar*)m_pDesignWindowNode;
 	return S_OK;
 }
 
@@ -1629,16 +1507,6 @@ STDMETHODIMP CHubble::Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet)
 	if (bstrRet != nullptr)
 		::SysFreeString(*bstrRet);
 	*bstrRet = strSRC.AllocSysString();
-	return S_OK;
-}
-
-STDMETHODIMP CHubble::get_Application(IDispatch** pVal)
-{
-	if (m_pAppDisp)
-	{
-		*pVal = m_pAppDisp;
-		(*pVal)->AddRef();
-	}
 	return S_OK;
 }
 
@@ -1799,16 +1667,6 @@ STDMETHODIMP CHubble::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 		{
 			m_strAppName = strData;
 			::VariantClear(&newVal);
-			return S_OK;
-		}
-		
-		if (strKey == _T("designertoolcaption") && strData != _T("") && ::IsWindow(m_hHostWnd))
-		{
-			::SetWindowText(m_hHostWnd, strData);
-		}
-		if (strKey == _T("newtangramdocument"))
-		{
-			m_strNewDocXml = strData;
 			return S_OK;
 		}
 	}

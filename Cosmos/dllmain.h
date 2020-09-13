@@ -59,11 +59,6 @@ public:
 
 	virtual void HubbleInit() {};
 	virtual CString GetNTPXml() { return _T(""); };
-	virtual CString GetNTPData()  { return _T(""); };
-
-	virtual bool BrowserAppStart() { 
-		return false; 
-	};
 	virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
 
 	void InitHubbleApp(bool bCrashReporting);

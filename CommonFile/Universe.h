@@ -3492,11 +3492,8 @@ EXTERN_C const IID IID_IHubble;
     IHubble : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch **pVal) = 0;
-        
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Application( 
-            /* [in] */ IDispatch *newVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostChromeBrowserWnd( 
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AppKeyValue( 
             BSTR bstrKey,
@@ -3555,9 +3552,6 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ LONGLONG *pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveChromeBrowserWnd( 
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostChromeBrowserWnd( 
             /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateNode( 
@@ -3818,13 +3812,9 @@ EXTERN_C const IID IID_IHubble;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostChromeBrowserWnd )( 
             IHubble * This,
-            /* [retval][out] */ IDispatch **pVal);
-        
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Application )( 
-            IHubble * This,
-            /* [in] */ IDispatch *newVal);
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppKeyValue )( 
             IHubble * This,
@@ -3899,10 +3889,6 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveChromeBrowserWnd )( 
-            IHubble * This,
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostChromeBrowserWnd )( 
             IHubble * This,
             /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
@@ -4187,11 +4173,8 @@ EXTERN_C const IID IID_IHubble;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubble_get_Application(This,pVal)	\
-    ( (This)->lpVtbl -> get_Application(This,pVal) ) 
-
-#define IHubble_put_Application(This,newVal)	\
-    ( (This)->lpVtbl -> put_Application(This,newVal) ) 
+#define IHubble_get_HostChromeBrowserWnd(This,ppChromeWebBrowser)	\
+    ( (This)->lpVtbl -> get_HostChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
 #define IHubble_get_AppKeyValue(This,bstrKey,pVal)	\
     ( (This)->lpVtbl -> get_AppKeyValue(This,bstrKey,pVal) ) 
@@ -4243,9 +4226,6 @@ EXTERN_C const IID IID_IHubble;
 
 #define IHubble_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
     ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
-
-#define IHubble_get_HostChromeBrowserWnd(This,ppChromeWebBrowser)	\
-    ( (This)->lpVtbl -> get_HostChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
 #define IHubble_NavigateNode(This,pNode,bstrBrowserID,bstrXml)	\
     ( (This)->lpVtbl -> NavigateNode(This,pNode,bstrBrowserID,bstrXml) ) 

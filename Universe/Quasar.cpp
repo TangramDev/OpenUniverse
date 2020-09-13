@@ -57,50 +57,50 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 1:
 	case 3:
 	{
-		if (!::PathFileExists(m_strPath))
-		{
-			int nPos = m_strPath.ReverseFind('\\');
-			CString strPath = m_strPath.Left(nPos);
-			::SHCreateDirectory(nullptr, strPath);
-		}
-		CGalaxyCluster* pGalaxyCluster = nullptr;
-		auto it = g_pHubble->m_mapWindowPage.find(m_hWnd);
-		if (it != g_pHubble->m_mapWindowPage.end())
-		{
-			pGalaxyCluster = (CGalaxyCluster*)it->second;
-			CString strData = _T("<winform>");
-			CString strIndex = _T("@");
-			for (auto it2 : pGalaxyCluster->m_mapQuasar)
-			{
-				CComBSTR bstrXml(L"");
-				strIndex += it2.second->m_strQuasarName;
-				strIndex += _T("@");
-				it2.second->get_QuasarXML(&bstrXml);
-				strData += OLE2T(bstrXml);
-			}
-			DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-			if (dw & WS_EX_MDICHILD)
-			{
-				HWND h = ::GetParent(::GetParent(m_hWnd));
-				if (h)
-				{
-					CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_TANGRAMDATA, 0, 20190214);
-					if (pParent)
-					{
-						auto it = pParent->m_mapKey.find(m_strKey);
-						if (it != pParent->m_mapKey.end())
-						{
-							strData += it->second;
-						}
-					}
-				}
-			}
-			strData += _T("</winform>");
-			CTangramXmlParse xml;
-			if (xml.LoadXml(strData))
-				xml.SaveFile(m_strPath);
-			// TODO Refresh ListCtrl
-		}
+		//if (!::PathFileExists(m_strPath))
+		//{
+		//	int nPos = m_strPath.ReverseFind('\\');
+		//	CString strPath = m_strPath.Left(nPos);
+		//	::SHCreateDirectory(nullptr, strPath);
+		//}
+		//CGalaxyCluster* pGalaxyCluster = nullptr;
+		//auto it = g_pHubble->m_mapWindowPage.find(m_hWnd);
+		//if (it != g_pHubble->m_mapWindowPage.end())
+		//{
+		//	pGalaxyCluster = (CGalaxyCluster*)it->second;
+		//	CString strData = _T("<winform>");
+		//	CString strIndex = _T("@");
+		//	for (auto it2 : pGalaxyCluster->m_mapQuasar)
+		//	{
+		//		CComBSTR bstrXml(L"");
+		//		strIndex += it2.second->m_strQuasarName;
+		//		strIndex += _T("@");
+		//		it2.second->get_QuasarXML(&bstrXml);
+		//		strData += OLE2T(bstrXml);
+		//	}
+		//	DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
+		//	if (dw & WS_EX_MDICHILD)
+		//	{
+		//		HWND h = ::GetParent(::GetParent(m_hWnd));
+		//		if (h)
+		//		{
+		//			CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_TANGRAMDATA, 0, 20190214);
+		//			if (pParent)
+		//			{
+		//				auto it = pParent->m_mapKey.find(m_strKey);
+		//				if (it != pParent->m_mapKey.end())
+		//				{
+		//					strData += it->second;
+		//				}
+		//			}
+		//		}
+		//	}
+		//	strData += _T("</winform>");
+		//	CTangramXmlParse xml;
+		//	if (xml.LoadXml(strData))
+		//		xml.SaveFile(m_strPath);
+		//	// TODO Refresh ListCtrl
+		//}
 	}
 	break;
 	}
@@ -170,25 +170,25 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
 			if (dw & WS_EX_MDICHILD)
 			{
-				HWND h = ::GetParent(::GetParent(m_hWnd));
-				if (h)
-				{
-					CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_TANGRAMDATA, 0, 20190214);
-					if (pParent)
-					{
-						auto it = pParent->m_mapKey.find(m_strKey);
-						if (it == pParent->m_mapKey.end())
-						{
-							CTangramXmlParse m_Parse;
-							if (m_Parse.LoadFile(m_strPath))
-							{
-								CTangramXmlParse* pChild = m_Parse.GetChild(m_strKey);
-								if (pChild)
-									pParent->m_mapKey[m_strKey] = pChild->xml();
-							}
-						}
-					}
-				}
+				//HWND h = ::GetParent(::GetParent(m_hWnd));
+				//if (h)
+				//{
+				//	CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_TANGRAMDATA, 0, 20190214);
+				//	if (pParent)
+				//	{
+				//		auto it = pParent->m_mapKey.find(m_strKey);
+				//		if (it == pParent->m_mapKey.end())
+				//		{
+				//			CTangramXmlParse m_Parse;
+				//			if (m_Parse.LoadFile(m_strPath))
+				//			{
+				//				CTangramXmlParse* pChild = m_Parse.GetChild(m_strKey);
+				//				if (pChild)
+				//					pParent->m_mapKey[m_strKey] = pChild->xml();
+				//			}
+				//		}
+				//	}
+				//}
 			}
 		}
 		return (LRESULT)m_strKey.GetBuffer();
@@ -304,20 +304,20 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	auto it = g_pHubble->m_mapMainForm.find(m_hWnd);
-	if (it != g_pHubble->m_mapMainForm.end())
-	{
-		g_pHubble->m_mapMainForm.erase(it);
-		if (m_hWnd == g_pHubble->m_hMainWnd)
-		{
-			if (g_pHubble->m_mapMainForm.size())
-			{
-				it = g_pHubble->m_mapMainForm.begin();
-				if (it != g_pHubble->m_mapMainForm.end())
-					g_pHubble->m_hMainWnd = it->first;
-			}
-		}
-	}
+	//auto it = g_pHubble->m_mapMainForm.find(m_hWnd);
+	//if (it != g_pHubble->m_mapMainForm.end())
+	//{
+	//	g_pHubble->m_mapMainForm.erase(it);
+	//	if (m_hWnd == g_pHubble->m_hMainWnd)
+	//	{
+	//		if (g_pHubble->m_mapMainForm.size())
+	//		{
+	//			it = g_pHubble->m_mapMainForm.begin();
+	//			if (it != g_pHubble->m_mapMainForm.end())
+	//				g_pHubble->m_hMainWnd = it->first;
+	//		}
+	//	}
+	//}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -386,13 +386,6 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20190602:
 	{
 		return (LRESULT)m_pChildFormsInfo;
-	}
-	break;
-	case 20200419:
-	{
-		auto it = g_pHubble->m_mapMainForm.find(m_hWnd);
-		if (it == g_pHubble->m_mapMainForm.end())
-			g_pHubble->m_mapMainForm[m_hWnd] = this;
 	}
 	break;
 	}
@@ -497,19 +490,19 @@ LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	//}
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
-
-LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	CString strID = (LPCTSTR)lParam;
-	if (m_strBKID == _T(""))
-		m_strBKID = strID;
-	if (lParam)
-	{
-		::PostMessage(m_hWnd, WM_MDICLIENTCREATED, wParam, 0);
-	}
-
-	return  DefWindowProc(uMsg, wParam, lParam);
-}
+//
+//LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+//{
+//	CString strID = (LPCTSTR)lParam;
+//	if (m_strBKID == _T(""))
+//		m_strBKID = strID;
+//	if (lParam)
+//	{
+//		::PostMessage(m_hWnd, WM_MDICLIENTCREATED, wParam, 0);
+//	}
+//
+//	return  DefWindowProc(uMsg, wParam, lParam);
+//}
 
 LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 {
@@ -648,7 +641,7 @@ void CQuasar::HostPosChanged()
 			rt1.right - rt1.left,
 			rt1.bottom - rt1.top,
 			SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW
-		); 
+		);
 		EndDeferWindowPos(dwh);
 		::SendMessage(hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
 	}
@@ -1189,7 +1182,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 					break;
 			}
 		}
-		if (_pHostNode&&m_pWebPageWnd)
+		if (_pHostNode && m_pWebPageWnd)
 		{
 			CStar* pNode = _pHostNode->m_pRootObj;
 			if (pNode->m_strLastIPCMsgID != _T(""))
@@ -1239,7 +1232,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 					_pQuasar = _pNode->m_pHostQuasar;
 					while (_pQuasar)
 					{
-						if(_pQuasar->m_pHostWebBrowserNode)
+						if (_pQuasar->m_pHostWebBrowserNode)
 							_pNode = _pQuasar->m_pHostWebBrowserNode;
 						if (_pNode && _pNode->m_pHostQuasar)
 						{
@@ -1518,7 +1511,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->cx = rect.right - rect.left;
 			lpwndpos->cy = rect.bottom - rect.top;
 		}
-		::SetWindowPos(m_pWorkNode->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE| SWP_FRAMECHANGED|SWP_NOREDRAW );// ); 
+		::SetWindowPos(m_pWorkNode->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED | SWP_NOREDRAW);// ); 
 		CStar* _pHostNode = m_pBindingStar;
 		if (_pHostNode->m_pHostQuasar)
 		{

@@ -1,14 +1,21 @@
 /********************************************************************************
-*					Open Universe - version 0.1.0								*
+*					Tangram Library - version 10.0.0							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
-* This SOURCE CODE is governed by a BSD - style license that can be
-* found in the LICENSE file.
+* THIS SOURCE FILE IS THE PROPERTY OF TANGRAM TEAM AND IS NOT TO
+* BE RE-DISTRIBUTED BY ANY MEANS WHATSOEVER WITHOUT THE EXPRESSED
+* WRITTEN CONSENT OF TANGRAM TEAM.
+*
+* THIS SOURCE CODE CAN ONLY BE USED UNDER THE TERMS AND CONDITIONS
+* OUTLINED IN THE GPL LICENSE AGREEMENT.TANGRAM TEAM
+* GRANTS TO YOU (ONE SOFTWARE DEVELOPER) THE LIMITED RIGHT TO USE
+* THIS SOFTWARE ON A SINGLE COMPUTER.
 *
 * CONTACT INFORMATION:
 * mailto:tangramteam@outlook.com
 * https://www.tangram.dev
+*
 ********************************************************************************/
 
 // Universe.idl : IDL source for Universe
@@ -412,8 +419,7 @@ interface IHubbleDocTemplate : IDispatch {
 	pointer_default(unique)
 ]
 interface IHubble : IDispatch{
-	[propget, id(1), helpstring("property Application")] HRESULT Application([out, retval] IDispatch** pVal);
-	[propput, id(1), helpstring("property Application")] HRESULT Application([in]IDispatch* newVal);
+	[propget, id(1)] HRESULT HostChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 	[propget, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [out, retval] VARIANT* pVal);
 	[propput, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [in] VARIANT newVal);
 	[propget, id(3), helpstring("property AppExtender")] HRESULT AppExtender(BSTR bstrKey, [out, retval] IDispatch** pVal);
@@ -431,7 +437,6 @@ interface IHubble : IDispatch{
 	[propget, id(13)] HRESULT TangramDoc(LONGLONG AppProxy, LONGLONG nDocID, [out, retval] IHubbleDoc** pVal);
 	[propget, id(14)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
 	[propget, id(15)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
-	[propget, id(16)] HRESULT HostChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 
 	[id(0x00100)] HRESULT NavigateNode(IStar* pNode, BSTR bstrBrowserID, BSTR bstrXml);
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);

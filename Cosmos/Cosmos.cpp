@@ -266,8 +266,6 @@ namespace Cosmos
             theApp.InitHubbleApp(bSupportCrashReporting);
             break;
         case CosmosAppType::APPECLIPSE:
-            if (theApp.m_pHubble && !theApp.m_pHubbleImpl->m_bIsEclipseInit)
-                theApp.m_pHubble->InitEclipseApp();
             break;
         case CosmosAppType::APPBROWSERAPP:
             break;
@@ -384,64 +382,6 @@ namespace Cosmos
                 ::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20191004);
             }
         }
-    }
-
-    Object^ Hubble::Application::get()
-    {
-        Object^ pRetObject = nullptr;
-        if (theApp.m_pHubble)
-        {
-            try
-            {
-                IDispatch* pApp = nullptr;
-                theApp.m_pHubble->get_Application(&pApp);
-
-                if (pApp)
-                {
-                    pRetObject = Marshal::GetObjectForIUnknown((System::IntPtr)pApp);
-                }
-            }
-            catch (InvalidOleVariantTypeException ^ e)
-            {
-                Debug::Write(e->Message + L"\n");
-            }
-            catch (NotSupportedException ^ e)
-            {
-                Debug::Write(e->Message + L"\n");
-            }
-        }
-        return pRetObject;
-    }
-
-    void Hubble::Application::set(Object^ obj)
-    {
-        if (theApp.m_pHubble)
-        {
-            try
-            {
-                IntPtr nDisp = Marshal::GetIUnknownForObject(obj);
-                theApp.m_pHubble->put_Application((IDispatch*)nDisp.ToPointer());
-            }
-            catch (ArgumentException ^ e)
-            {
-                Debug::Write(e->Message + L"\n");
-            }
-        }
-    }
-
-    String^ Hubble::CurrentDesigningTangramXml::get()
-    {
-        IStar* pDesignerNode = nullptr;
-        theApp.m_pHubble->get_DesignNode(&pDesignerNode);
-        if (pDesignerNode == NULL)
-            return L"";
-        if (pDesignerNode)
-        {
-            CComBSTR bstrXml(L"");
-            pDesignerNode->get_DocXml(&bstrXml);
-            return BSTR2STRING(bstrXml);
-        }
-        return nullptr;
     }
 
     Star^ Hubble::CreatingStar::get()
@@ -584,10 +524,6 @@ namespace Cosmos
             Quasar^ frame = page->CreateQuasar(mdiclient, L"default");
             if (frame)
             {
-                if (strKey == L"newdoc")
-                {
-                    return frame->Observe(strKey, BSTR2STRING(theApp.m_pHubbleImpl->m_strNewDocXml));
-                }
                 return frame->Observe(strKey, strXml);
             }
         }

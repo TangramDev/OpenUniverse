@@ -817,28 +817,28 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 							if (pViewFactoryDisp == nullptr)
 							{
 								CString strLib = _T("");
-								CString strPath = g_pHubble->m_strAppPath + _T("tangramcomponent\\") + m_strCnnID + _T(".component");
+								CString strPath = g_pHubble->m_strAppPath + _T("wincomponent\\") + m_strCnnID + _T(".component");
 								CTangramXmlParse m_Parse;
 								if (::PathFileExists(strPath))
 								{
 									if (m_Parse.LoadFile(strPath))
 									{
-										strLib = g_pHubble->m_strAppPath + _T("tangramcomponent\\") + m_Parse.attr(_T("lib"), _T(""));
+										strLib = g_pHubble->m_strAppPath + _T("wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
 									}
 								}
 								else
 								{
-									strPath = g_pHubble->m_strProgramFilePath + _T("\\tangram\\tangramcomponent\\") + m_strCnnID + _T(".component");
+									strPath = g_pHubble->m_strProgramFilePath + _T("\\tangram\\wincomponent\\") + m_strCnnID + _T(".component");
 									if (m_Parse.LoadFile(strPath))
 									{
-										strLib = g_pHubble->m_strProgramFilePath + _T("\\tangram\\tangramcomponent\\") + m_Parse.attr(_T("lib"), _T(""));
+										strLib = g_pHubble->m_strProgramFilePath + _T("\\tangram\\wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
 									}
 									else
 									{
-										strPath = g_pHubble->m_strAppPath + _T("PublicAssemblies\\tangramcomponent\\") + m_strCnnID + _T(".component");
+										strPath = g_pHubble->m_strAppPath + _T("PublicAssemblies\\wincomponent\\") + m_strCnnID + _T(".component");
 										if (m_Parse.LoadFile(strPath))
 										{
-											strLib = g_pHubble->m_strAppPath + _T("PublicAssemblies\\tangramcomponent\\") + m_Parse.attr(_T("lib"), _T(""));
+											strLib = g_pHubble->m_strAppPath + _T("PublicAssemblies\\wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
 										}
 									}
 								}
