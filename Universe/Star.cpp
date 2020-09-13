@@ -411,7 +411,7 @@ STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IS
 			if (m_pStarCommonData->m_pQuasar->m_pWebPageWnd)
 			{
 				_pQuasar->m_pWebPageWnd = m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
-				if (pWindowNode->m_strID == _T("nucleus"))
+				if (pWindowNode->m_strID == TGM_NUCLEUS)
 					m_pStarCommonData->m_pQuasar->m_pSubQuasar = _pQuasar;
 			}
 		}
@@ -565,7 +565,7 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 			m_strID = strVal;
 		ATLTRACE(_T("Modify CStar Attribute: ID: %s Value: %s\n"), strID, strVal);
 		CQuasar* pQuasar = nullptr;
-		if (strVal.CompareNoCase(_T("nucleus")) == 0 && g_pHubble->m_pDesignWindowNode)
+		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pHubble->m_pDesignWindowNode)
 		{
 			pQuasar = g_pHubble->m_pDesignWindowNode->m_pRootObj->m_pStarCommonData->m_pQuasar;
 			if (g_pHubble->m_pDesignWindowNode && pQuasar->m_pBindingStar)
@@ -601,7 +601,7 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 				g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(g_pHubble->m_pDesignWindowNode->m_pRootObj->m_pStarCommonData->m_pHubbleParse->xml()));
 			}
 
-			m_strID = _T("nucleus");
+			m_strID = TGM_NUCLEUS;
 			CStar* pTopNode = m_pRootObj;
 			pTopNode->m_pStarCommonData->m_pHostClientView = (CStarWnd*)m_pHostWnd;
 			while (pTopNode != pTopNode->m_pRootObj)
@@ -610,7 +610,7 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 				pTopNode->m_pStarCommonData->m_pHostClientView = pTopNode->m_pStarCommonData->m_pHostClientView;
 				pTopNode = pTopNode->m_pRootObj;
 			}
-			m_pHostParse->put_attr(TGM_NODE_TYPE, _T("nucleus"));
+			m_pHostParse->put_attr(TGM_NODE_TYPE, TGM_NUCLEUS);
 			if (g_pHubble->m_pDesignWindowNode)
 			{
 				pQuasar->m_pBindingStar = this;

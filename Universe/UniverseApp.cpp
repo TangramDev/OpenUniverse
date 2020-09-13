@@ -825,7 +825,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
-							if ((g_pHubble->m_pActiveStar->m_nViewType == ActiveX || g_pHubble->m_pActiveStar->m_strID.CompareNoCase(_T("nucleus")) == 0))
+							if ((g_pHubble->m_pActiveStar->m_nViewType == ActiveX || g_pHubble->m_pActiveStar->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
 							{
 								if (pWnd)
 									pWnd->PreTranslateMessage(lpMsg);
@@ -947,9 +947,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						{
 							g_pHubble->m_hMainWnd = hWnd;
 						}
-						g_pHubble->m_pHubbleDelegate->BeginBrowserSession();
+
 						FuncInitApp(false);
-						g_pHubble->m_pHubbleDelegate->EndBrowserSession();
+
 						::PostQuitMessage(0);
 					}
 				}

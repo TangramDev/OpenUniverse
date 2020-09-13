@@ -52,9 +52,7 @@ void CCosmos::InitHubbleApp(bool bCrashReporting)
 		_pInitAppFunction = (_InitApp)GetProcAddress(hModule, "InitApp");
 		if (_pInitAppFunction != NULL) {
 			m_bBrowserModeInit = true;
-			theApp.BeginBrowserSession();
 			_pInitAppFunction(bCrashReporting);
-			theApp.EndBrowserSession();
 		}
 	}
 }
@@ -244,16 +242,6 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 	}
 
 	return _T("");
-}
-
-void CCosmos::BeginBrowserSession()
-{
-
-}
-
-void CCosmos::EndBrowserSession()
-{
-
 }
 
 CString CCosmos::_GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName)

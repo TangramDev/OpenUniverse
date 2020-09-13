@@ -82,7 +82,7 @@ BOOL CStarWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	m_pStar->m_nID = nID;
 	m_pStar->m_pHostWnd = this;
 
-	if (m_pStar->m_strID.CompareNoCase(_T("nucleus")) == 0)
+	if (m_pStar->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
 		CQuasar* pQuasar = m_pStar->m_pStarCommonData->m_pQuasar;
 		pQuasar->m_pBindingStar = m_pStar;
@@ -196,7 +196,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	}
 
 	if (b && m_bCreateExternal == false 
-		&& m_pStar->m_strID.CompareNoCase(_T("nucleus"))
+		&& m_pStar->m_strID.CompareNoCase(TGM_NUCLEUS)
 		&&m_pStar->m_pDisp == NULL)
 	{
 		if (g_pHubble->m_pDesignWindowNode && g_pHubble->m_pDesignWindowNode != m_pStar)
@@ -242,7 +242,7 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 	CBitmap bit;
 	RECT rt;
 	GetClientRect(&rt);
-	if (m_pStar->m_strID.CompareNoCase(_T("nucleus")) == 0)
+	if (m_pStar->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
 		HWND hWnd = pQuasar->m_hWnd;
 		if (::IsWindow(hWnd) && !::IsWindowVisible(hWnd))
@@ -267,7 +267,7 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 		pDC->DrawText(strInfo, &rt, DT_LEFT);
 	}
 
-	if (m_pStar->m_strID.CompareNoCase(_T("nucleus")) && (m_bCreateExternal == false && m_pStar->m_pDisp == NULL) && m_bEraseBkgnd)
+	if (m_pStar->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pStar->m_pDisp == NULL) && m_bEraseBkgnd)
 	{
 		CString strText = _T("");
 		if (bInDesignState && g_pHubble->m_pDesignWindowNode == m_pStar)
@@ -984,12 +984,12 @@ void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	else {
 		if (m_hFormWnd)
 			::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
-		else if (m_pStar->m_strID.CompareNoCase(_T("nucleus")) == 0)
+		else if (m_pStar->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 		{
 			m_pStar->m_pStarCommonData->m_pQuasar->HostPosChanged();
 		}
 	}
-	if (m_pStar->m_strID.CompareNoCase(_T("nucleus")) && (m_bCreateExternal == false && m_pStar->m_pDisp == NULL) && m_pStar != m_pStar->m_pRootObj)
+	if (m_pStar->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pStar->m_pDisp == NULL) && m_pStar != m_pStar->m_pRootObj)
 	{
 		return;
 	}

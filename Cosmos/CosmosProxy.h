@@ -69,7 +69,7 @@ public:
 	map<HWND, QuasarInfo*>								m_mapQuasarInfo;
 	map<HWND, CMenuHelperWnd*>							m_mapMenuHelperWnd;
 	map<HWND, CMenuHelperWnd*>							m_mapVisibleMenuHelperWnd;
-	map<IBrowser*, gcroot<Browser^>>			m_mapChromeWebBrowser;
+	map<IBrowser*, gcroot<Browser^>>					m_mapChromeWebBrowser;
 	map<HWND, CString>									m_mapEventBindInfo;
 	map<CSession*, gcroot<Wormhole^>>					m_mapSession2Wormhole;
 

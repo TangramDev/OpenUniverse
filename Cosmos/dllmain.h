@@ -45,8 +45,6 @@ public:
 		return false;
 	};
 	virtual HWND QueryCanClose(HWND hWnd) { return NULL; };
-	virtual void BeginBrowserSession();
-	virtual void EndBrowserSession();
 
 	virtual BOOL IsAppIdleMessage() {
 		return false;

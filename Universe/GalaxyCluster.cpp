@@ -1398,7 +1398,7 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 				return S_FALSE;
 		}
 		CString strXml = _T("");
-		strXml.Format(_T("<%s><tangrampage><%s /></tangrampage></%s>"), m_strPageFileName, m_strConfigFileNodeName, m_strPageFileName);
+		strXml.Format(_T("<%s><hubblepage><%s /></hubblepage></%s>"), m_strPageFileName, m_strConfigFileNodeName, m_strPageFileName);
 		CTangramXmlParse m_Parse2;
 		m_Parse2.LoadXml(strXml);
 		m_Parse2.SaveFile(m_strPageFilePath);

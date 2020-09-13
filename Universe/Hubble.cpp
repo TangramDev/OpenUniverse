@@ -132,7 +132,7 @@ CHubble::CHubble()
 	m_strDefaultTemplate = _T("");
 	m_strDefaultTemplate2 = _T("");
 	m_strCurrentEclipsePagePath = _T("");
-	m_strDesignerToolBarCaption = _T("Tangram Designer");
+	m_strDesignerToolBarCaption = _T("Hubble Designer");
 	m_nTangramObj = 0;
 #ifdef _DEBUG
 	m_nTangram = 0;
@@ -143,7 +143,7 @@ CHubble::CHubble()
 	m_nOfficeDocsSheet = 0;
 	m_nTangramNodeCommonData = 0;
 #endif
-	m_TabWndClassInfoDictionary[_T("nucleus")] = RUNTIME_CLASS(CStarWnd);
+	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CStarWnd);
 	m_TabWndClassInfoDictionary[TGM_SPLITTER] = RUNTIME_CLASS(CGrid);
 	m_mapEventDic[_T("textchanged")] = 1;
 	m_mapEventDic[_T("keydown")] = 2;

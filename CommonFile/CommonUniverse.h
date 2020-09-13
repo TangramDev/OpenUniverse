@@ -146,6 +146,7 @@
 #define TGM_TAG					_T("tag")
 #define TGM_CLUSTER				_T("cluster")
 #define TGM_NODE				_T("star")
+#define TGM_NUCLEUS				_T("nucleus")
 
 #define TGM_ROWS				_T("rows")
 #define TGM_COLS				_T("cols")
@@ -814,8 +815,6 @@ namespace CommonUniverse {
 		virtual HWND QueryCanClose(HWND hWnd) = 0;
 		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) = 0;
 		virtual bool HookAppDocTemplateInfo() = 0;
-		virtual void BeginBrowserSession() = 0;
-		virtual void EndBrowserSession() = 0;
 		virtual bool EclipseAppInit() = 0;
 		virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2) = 0;
 		virtual void RenderHTMLElement(HWND hWnd, CString strRuleName, CString strHTML) = 0;
