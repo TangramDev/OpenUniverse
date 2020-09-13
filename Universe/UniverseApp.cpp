@@ -82,8 +82,6 @@ BOOL CUniverse::InitInstance()
 			g_pHubble->m_hCBTHook = SetWindowsHookEx(WH_CBT, CUniverse::CBTProc, NULL, g_pHubble->m_dwThreadID);
 		theUniverse.SetHook(g_pHubble->m_dwThreadID);
 #ifndef _WIN64
-		{
-		}
 #else
 		g_pHubble->m_bEnableProcessFormTabKey = true;
 		if (g_pHubble->m_hForegroundIdleHook == NULL)

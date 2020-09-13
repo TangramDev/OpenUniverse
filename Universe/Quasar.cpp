@@ -1049,7 +1049,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 								CTangramXmlParse m_Parse;
 								if (m_Parse.LoadFile(m_pGalaxyCluster->m_strPageFilePath))
 								{
-									m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+									m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
 									if (m_pHubblePageParse)
 									{
 										m_pHubblePageParse2 = m_pHubblePageParse->GetChild(m_pGalaxyCluster->m_strConfigFileNodeName);

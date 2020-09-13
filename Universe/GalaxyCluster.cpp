@@ -1358,11 +1358,11 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 		CTangramXmlParse m_Parse2;
 		if (m_Parse2.LoadFile(m_strPageFilePath))
 		{
-			CTangramXmlParse* m_pHubblePageParse = m_Parse2.GetChild(_T("tangrampage"));
+			CTangramXmlParse* m_pHubblePageParse = m_Parse2.GetChild(_T("hubblepage"));
 			if (m_pHubblePageParse == nullptr)
 			{
-				m_Parse2.AddNode(_T("tangrampage"));
-				m_pHubblePageParse = m_Parse2.GetChild(_T("tangrampage"));
+				m_Parse2.AddNode(_T("hubblepage"));
+				m_pHubblePageParse = m_Parse2.GetChild(_T("hubblepage"));
 			}
 			if (m_pHubblePageParse)
 			{

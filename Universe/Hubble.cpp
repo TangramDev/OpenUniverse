@@ -75,7 +75,7 @@ CHubble::CHubble()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><cluster><star name=\"tangram\" startype=\"HostView\"/></cluster></default>");
+	m_strDefaultXml = _T("<default><cluster><star name=\"tangram\" startype=\"nucleus\"/></cluster></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
@@ -248,9 +248,9 @@ void CHubble::Init()
 			_T("\n  Office Application etc.") +
 			_T("\n  ") +
 			_T("\n  ") +
-			_T("\n  Creating a \"hostview\" in this place,if you want to show application") +
+			_T("\n  Creating a \"nucleus\" in this place,if you want to show application") +
 			_T("\n  Component come from original application, ") +
-			_T("\n  Creating an Object Type other than \"hostview\" in this place, if you want to show dynamic") +
+			_T("\n  Creating an Object Type other than \"nucleus\" in this place, if you want to show dynamic") +
 			_T("\n  Component come from some Components... ");
 	}
 	if (m_strDesignerTip1 == _T(""))

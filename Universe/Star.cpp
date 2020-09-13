@@ -1599,7 +1599,7 @@ STDMETHODIMP CStar::get_DocXml(BSTR * pVal)
 	g_pHubble->UpdareStar(m_pRootObj);
 	CString strXml = m_pStarCommonData->m_pHubbleParse->xml();
 	strXml.Replace(_T("/><"), _T("/>\r\n<"));
-	strXml.Replace(_T("/>"), _T("></node>"));
+	strXml.Replace(_T("/>"), _T("></star>"));
 	*pVal = strXml.AllocSysString();
 	strXml.ReleaseBuffer();
 
@@ -1933,11 +1933,11 @@ HRESULT CStar::Fire_Destroy()
 					{
 						if (m_Parse.LoadFile(strFile))
 						{
-							m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+							m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
 							if (m_pHubblePageParse == nullptr)
 							{
-								m_Parse.AddNode(_T("tangrampage"));
-								m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+								m_Parse.AddNode(_T("hubblepage"));
+								m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
 							}
 							if (m_pHubblePageParse)
 							{
@@ -2007,11 +2007,11 @@ HRESULT CStar::Fire_Destroy()
 						CTangramXmlParse m_Parse;
 						if (m_Parse.LoadFile(strFile))
 						{
-							m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+							m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
 							if (m_pHubblePageParse == nullptr)
 							{
-								m_Parse.AddNode(_T("tangrampage"));
-								m_pHubblePageParse = m_Parse.GetChild(_T("tangrampage"));
+								m_Parse.AddNode(_T("hubblepage"));
+								m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
 							}
 							if (m_pHubblePageParse)
 							{
