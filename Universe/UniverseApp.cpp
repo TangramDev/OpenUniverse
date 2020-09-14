@@ -403,20 +403,20 @@ LRESULT CALLBACK CUniverse::TangramExtendedWndProc(_In_ HWND hWnd, UINT msg, _In
 		return lRes;
 	}
 	break;
-	case WM_COSMOSMSG:
-	{
-		switch (lParam)
-		{
-		case 20200627:
-		{
-			CBrowser* pWnd = (CBrowser*)wParam;
-			pWnd->BrowserLayout();
-		}
-		break;
-		}
-		break;
-	}
-	break;
+	//case WM_COSMOSMSG:
+	//{
+	//	switch (lParam)
+	//	{
+	//	case 20200627:
+	//	{
+	//		CBrowser* pWnd = (CBrowser*)wParam;
+	//		pWnd->BrowserLayout();
+	//	}
+	//	break;
+	//	}
+	//	break;
+	//}
+	//break;
 	case WM_TANGRAMDATA:
 	{
 		switch (lParam)

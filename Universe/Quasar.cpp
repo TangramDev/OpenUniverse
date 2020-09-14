@@ -1258,6 +1258,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 				}
 			}
 		}
+		//m_pHostWebBrowserWnd->m_pBrowser->LayoutBrowser();
 	}
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	return S_OK;

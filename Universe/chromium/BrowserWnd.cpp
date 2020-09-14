@@ -39,7 +39,7 @@ namespace Web {
 		}
 	}
 
-	CBrowser::~CBrowser() 
+	CBrowser::~CBrowser()
 	{
 	}
 
@@ -70,7 +70,7 @@ namespace Web {
 	}
 
 	void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
-		if (hWnd==0||::IsWindowVisible(m_hWnd) == false || g_pHubble->m_bChromeNeedClosed == TRUE || g_pHubble->m_bOMNIBOXPOPUPVISIBLE) {
+		if (hWnd == 0 || ::IsWindowVisible(m_hWnd) == false || g_pHubble->m_bChromeNeedClosed == TRUE || g_pHubble->m_bOMNIBOXPOPUPVISIBLE) {
 			return;
 		}
 		if (m_hOldTab)
@@ -412,7 +412,7 @@ namespace Web {
 			g_pHubble->m_mapBrowserWnd.erase(it);
 		}
 
-		if ((g_pHubble->m_hMainWnd == g_pHubble->m_hHostWnd && g_pHubble->m_mapBrowserWnd.size() == 1)|| 
+		if ((g_pHubble->m_hMainWnd == g_pHubble->m_hHostWnd && g_pHubble->m_mapBrowserWnd.size() == 1) ||
 			g_pHubble->m_hHostBrowserWnd == m_hWnd)
 		{
 			g_pHubble->m_bChromeNeedClosed = true;
@@ -507,13 +507,12 @@ namespace Web {
 				}
 				else if (m_pBrowser)
 				{
-					::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);
-					m_pBrowser->LayoutBrowser();
-					if (lParam == 2)// && g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
-					{
+					//::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);//lParam == 2&&  )
+					if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
 						BrowserLayout();
-					}
-					::PostMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_COSMOSMSG, (WPARAM)this, 20200627);
+					else
+						m_pBrowser->LayoutBrowser();
+					//::PostMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_COSMOSMSG, (WPARAM)this, 20200627);
 					m_bTabChange = false;
 				}
 			}
