@@ -58,14 +58,10 @@ CHubble::CHubble()
 	m_pClrHost = nullptr;
 	g_pHubble = this;
 	m_bCLRObjTemplateInit = false;
-	m_bCreatingForm = false;
-	m_bLoadEclipseDelay = false;
 	m_bUsingDefaultAppDocTemplate = false;
 	m_bWinFormActived = false;
-	m_bAdmin = IsUserAdministrator();
 	m_bCanClose = false;
 	m_bDeleteGalaxyCluster = false;
-	m_bFirstDocCreated = false;
 	m_bEnableProcessFormTabKey = false;
 	m_bChromeNeedClosed = false;
 	m_pActiveHtmlWnd = nullptr;
@@ -121,7 +117,6 @@ CHubble::CHubble()
 	m_strDesignerTip2 = _T("");
 	m_strDesignerXml = _T("");
 	m_strNewDocXml = _T("");
-	m_strDesignerInfo = _T("");
 	m_strExcludeAppExtenderIDs = _T("");
 	m_strCurrentDocTemplateXml = _T("");
 	m_strCurrentFrameID = _T("");
@@ -192,13 +187,6 @@ void CHubble::Init()
 		si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64 ||
 		si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64)
 		m_b64bitSystem = true;
-	if (m_b64bitSystem)
-	{
-		m_bX86App = IsWow64();
-	}
-	else
-		m_bX86App = true;
-
 
 	if (m_bOfficeApp == false && m_nAppID != 9)
 	{
@@ -522,8 +510,6 @@ void CHubble::HubbleLoad()
 	m_strAppPath = szDriver;
 	m_strAppPath += szDir;
 
-	::GetTempPath(MAX_PATH, m_szBuffer);
-	m_strTempPath = CString(m_szBuffer);
 	HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
 	m_strAppDataPath = CString(m_szBuffer) + _T("\\");
 	m_strAppDataPath.Replace(_T("\\\\"), _T("\\"));
@@ -570,7 +556,7 @@ void CHubble::HubbleInitFromeWeb()
 			CBrowser* pWnd = (CBrowser*)it->second;
 			if (pWnd->m_pVisibleWebWnd)
 			{
-				m_pMainChromeRenderFrameHostProxy = pWnd->m_pVisibleWebWnd;
+				m_pMainWebPageImpl = pWnd->m_pVisibleWebWnd;
 
 				pParse = m_Parse.GetChild(_T("urls"));
 				if (pParse)
@@ -618,9 +604,6 @@ void CHubble::HubbleInitFromeWeb()
 
 void CHubble::HubbleInit()
 {
-	if (m_bHubbleInit)
-		return;
-	m_bHubbleInit = true;
 	CTangramXmlParse _m_Parse;
 	bool bLoad = false;
 	m_strConfigDataFile += m_strExeName;
@@ -856,7 +839,7 @@ long CHubble::GetIPCMsgIndex(CString strMsgID)
 CSession* CHubble::CreateCloudSession(CWebPageImpl* pOwner)
 {
 	CWormhole* pSession = new CWormhole();
-	pSession->m_pOwner = pOwner ? pOwner : m_pMainChromeRenderFrameHostProxy;
+	pSession->m_pOwner = pOwner ? pOwner : m_pMainWebPageImpl;
 	pSession->m_pSession = pSession->m_pOwner->m_pChromeRenderFrameHost->GetIPCSession();
 	pSession->Insertint64(_T("domhandle"), (__int64)pSession);
 	pSession->InsertString(L"sessionid", GetNewGUID());
@@ -1712,15 +1695,7 @@ STDMETHODIMP CHubble::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 		}
 		return S_OK;
 	}
-	if (strKey.CompareNoCase(_T("CurrentDesignerInfo")) == 0)
-	{
-		if (m_pDesignWindowNode)
-		{
-			m_strDesignerInfo = OLE2T(newVal.bstrVal);
-			m_pDesignWindowNode->m_pHostWnd->Invalidate();
-		}
-		return S_OK;
-	}
+
 	if (strKey.CompareNoCase(_T("unloadclr")) == 0)
 	{
 		if (m_pClrHost && m_nAppID == -1 && theUniverse.m_bHostCLR == false)

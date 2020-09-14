@@ -431,8 +431,6 @@ namespace Web {
 			{
 				if (g_pHubble->m_pCosmosAppProxy)
 					g_pHubble->m_pCosmosAppProxy->OnHubbleClose();
-
-				g_pHubble->m_bClose = true;
 			}
 
 			if (g_pHubble->m_hCBTHook) {

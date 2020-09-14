@@ -325,7 +325,6 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}
 
-		strText += g_pHubble->m_strDesignerInfo;
 		CString strKey = m_pStar->m_pRootObj->m_strKey;
 		switch (pQuasar->m_nQuasarType)
 		{

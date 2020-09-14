@@ -598,12 +598,9 @@ namespace CommonUniverse {
 	class CHubbleImpl {
 	public:
 		CHubbleImpl() {
-			m_bClose = false;
-			m_bInit = false;
 			m_hParent = NULL;
 			m_hSmallIcon = nullptr;
 			m_hLargeIcon = nullptr;
-			m_bExportComponent = false;
 			m_hHostWnd = nullptr;
 			m_hFormNodeWnd = nullptr;
 			m_hMainWnd = nullptr;
@@ -621,33 +618,21 @@ namespace CommonUniverse {
 
 		virtual ~CHubbleImpl() {}
 
-		bool									m_bClose;
-		bool									m_bInit;
 		bool									m_bChromeNeedClosed;
 		bool									m_bCreatingDevTool;
 		bool									m_bOMNIBOXPOPUPVISIBLE;
 		bool									m_b64bitSystem = false;
-		bool									m_bX86App = false;
 		bool									m_bOfficeApp = false;
 		bool									m_bEclipse = false;
-		bool									m_bLoadEclipseDelay = false;
-		bool									m_bHubbleInit = false;
-		bool									m_bAdmin;
 		bool									m_bCanClose;
 		bool									m_bWinFormActived;
 		bool									m_bEnableProcessFormTabKey;
 		bool									m_bDeleteGalaxyCluster;
 		bool									m_bNewFile;
-		bool									m_bFirstDocCreated;
 		bool									m_bUsingDefaultAppDocTemplate;
-		bool									m_bCreatingForm;
 		bool									m_bCLRObjTemplateInit;
-		bool									m_bJniInit;
-		bool									m_bExportComponent;
 		bool									m_bIsSupportCrashReporting = false;
-		bool									m_bIsAppInit = false;
 		bool									m_bIsEclipseInit = false;
-		bool									m_bIsChromeRunning = false;
 
 		DWORD									m_dwThreadID;
 		DWORD									m_nAppType;
@@ -670,7 +655,6 @@ namespace CommonUniverse {
 		CString									m_strAppName;
 		CString									m_strExeName;
 		CString									m_strAppPath;
-		CString									m_strTempPath;
 		CString 								m_strConfigDataFile;
 		CString									m_strAppDataPath;
 		CString									m_strCurrentAppID;
@@ -696,7 +680,6 @@ namespace CommonUniverse {
 
 		CString 								m_strConfigFile;
 		CString									m_strDocFilters;
-		CString									m_strDesignerInfo;
 		CString									m_strTemplatePath;
 		CString									m_strCurrentFrameID;
 		CString									m_strDocTemplateStrs;
@@ -729,7 +712,7 @@ namespace CommonUniverse {
 		IHubbleWindow*							m_pCreatingWindow = nullptr;
 		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
 		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CWebPageImpl*							m_pMainChromeRenderFrameHostProxy = nullptr;
+		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapFramePage;

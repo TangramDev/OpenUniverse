@@ -1495,7 +1495,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 {
 	LRESULT hr = DefWindowProc(uMsg, wParam, lParam);
 
-	if (g_pHubble->m_bIsChromeRunning && g_pHubble->m_bChromeNeedClosed)
+	if (g_pHubble->m_pBrowserFactory && g_pHubble->m_bChromeNeedClosed)
 		return hr;
 
 	WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
