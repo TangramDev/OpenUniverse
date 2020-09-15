@@ -527,12 +527,12 @@ LRESULT CStarWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	}
 	if (nOldPage != wParam)
 	{
-		if (pQuasar->m_pWebPageWnd)
-		{
-			::SendMessage(::GetParent(pQuasar->m_pWebPageWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-		}
 		m_pStar->Fire_TabChange(wParam, lParam);
 		m_pStar->m_pStarCommonData->m_pGalaxyCluster->Fire_TabChange(m_pStar, wParam, lParam);
+		if (pQuasar->m_pWebPageWnd)
+		{
+			::SendMessage(::GetParent(pQuasar->m_pWebPageWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+		}
 	}
 
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);

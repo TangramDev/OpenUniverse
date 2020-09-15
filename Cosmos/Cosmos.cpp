@@ -196,23 +196,32 @@ namespace Cosmos
 
     void Hubble::Run()
     {
-        if (Hubble::WebRuntimeInit())
-            return;
+        if (::PathFileExists(L"chrome_rt.dll"))
+        {
+            if (Hubble::WebRuntimeInit())
+                return;
+        }
         System::Windows::Forms::Application::Run();
     }
 
     void Hubble::Run(Form^ Mainform)
     {
-        if (Hubble::WebRuntimeInit())
-            return;
-        Hubble::MainForm::set(Mainform);
+        if (::PathFileExists(L"chrome_rt.dll"))
+        {
+            if (Hubble::WebRuntimeInit())
+                return;
+            Hubble::MainForm::set(Mainform);
+        }
         System::Windows::Forms::Application::Run(Mainform);
     }
 
     void Hubble::Run(ApplicationContext^ context)
     {
-        if (Hubble::WebRuntimeInit())
-            return;
+        if (::PathFileExists(L"chrome_rt.dll"))
+        {
+            if (Hubble::WebRuntimeInit())
+                return;
+        }
         System::Windows::Forms::Application::Run(context);
     }
 

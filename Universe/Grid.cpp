@@ -445,10 +445,6 @@ void CGrid::StopTracking(BOOL bAccept)
 		else if (g_pHubble->m_pDesignWindowNode && g_pHubble->m_pDesignWindowNode->m_pStarCommonData->m_pQuasar->m_pWebPageWnd)
 			pWebWnd = g_pHubble->m_pDesignWindowNode->m_pStarCommonData->m_pQuasar->m_pWebPageWnd;
 		pQuasar->HostPosChanged();
-		if (pWebWnd)
-		{
-			::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-		}
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
 		{
@@ -463,7 +459,11 @@ void CGrid::StopTracking(BOOL bAccept)
 				}
 			}
 		}
-		this->RecalcLayout();
+		RecalcLayout();
+		if (pWebWnd)
+		{
+			::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+		}
 	}
 }
 

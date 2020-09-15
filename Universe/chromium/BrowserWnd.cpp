@@ -65,6 +65,7 @@ namespace Web {
 			g_pHubble->m_bWinFormActived = false;
 		}
 		::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+		m_pBrowser->LayoutBrowser();
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}
@@ -468,8 +469,8 @@ namespace Web {
 			lpwndpos->x = -12;
 			lpwndpos->y = -6 - m_heightfix;
 			lpwndpos->cx = rc.right + 24;
-			lpwndpos->cy = rc.bottom + 18 + 3 * m_heightfix;
-			::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+			lpwndpos->cy = rc.bottom + 18 + m_heightfix;
+			//::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 		}
 		else if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
 			::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
@@ -494,27 +495,29 @@ namespace Web {
 			break;
 			case 2:
 			case 3:
+			case 4:
 			{
 				if (wParam == 1)
 				{
 					if (::IsWindow(m_hDrawWnd) == false) {
 						m_hDrawWnd = ::FindWindowEx(m_hWnd, nullptr, _T("Intermediate D3D Window"), nullptr);
 					}
-
+					
 					if (::IsWindow(m_hDrawWnd) == false) {
 						m_hDrawWnd = ::FindWindowEx(m_hWnd, nullptr, _T("Intermediate Software Window"), nullptr);
 					}
 				}
 				else if (m_pBrowser)
 				{
-					//::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);//lParam == 2&&  )
 					if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
+					{
 						BrowserLayout();
-					else
 						m_pBrowser->LayoutBrowser();
-					//::PostMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_COSMOSMSG, (WPARAM)this, 20200627);
+					}
 					m_bTabChange = false;
 				}
+				if(lParam==4)
+					m_pBrowser->LayoutBrowser();
 			}
 			break;
 			}
