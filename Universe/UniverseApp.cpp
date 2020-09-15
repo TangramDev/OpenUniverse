@@ -106,19 +106,19 @@ BOOL CUniverse::InitInstance()
 
 		g_pHubble->m_lpszSplitterClass = wndClass.lpszClassName;
 
-		wndClass.lpfnWndProc = TangramWndProc;
+		wndClass.lpfnWndProc = HubbleWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
 		wndClass.lpszClassName = L"Tangram Node Class";
 
 		RegisterClass(&wndClass);
 
-		wndClass.lpfnWndProc = TangramMsgWndProc;
+		wndClass.lpfnWndProc = HubbleMsgWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
 		wndClass.lpszClassName = L"Tangram Message Window Class";
 
 		RegisterClass(&wndClass);
 
-		wndClass.lpfnWndProc = TangramExtendedWndProc;
+		wndClass.lpfnWndProc = HubbleExtendedWndProc;
 		wndClass.lpszClassName = L"Chrome Extended Window Class";
 
 		RegisterClass(&wndClass);
@@ -185,7 +185,7 @@ int CUniverse::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-LRESULT CALLBACK CUniverse::TangramWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
 	switch (msg)
 	{
@@ -322,7 +322,7 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 	return CallNextHookEx(g_pHubble->m_hForegroundIdleHook, nCode, wParam, lParam);
 }
 
-LRESULT CALLBACK CUniverse::TangramMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
 	switch (msg)
 	{
@@ -382,7 +382,7 @@ LRESULT CALLBACK CUniverse::TangramMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPA
 	return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT CALLBACK CUniverse::TangramExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
 	switch (msg)
 	{
