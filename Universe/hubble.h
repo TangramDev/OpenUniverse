@@ -191,7 +191,7 @@ public:
 	STDMETHOD(SetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	STDMETHOD(SetItemText)(IStar* pNode, long nCtrlID, BSTR bstrRet);
 	STDMETHOD(SetHostFocus)(void);
-	STDMETHOD(UpdareStar)(IStar* pNode);
+	STDMETHOD(UpdateStar)(IStar* pNode);
 	STDMETHOD(HubbleCommand)(IDispatch* RibbonControl) { return S_OK; };
 	STDMETHOD(HubbleGetImage)(BSTR strValue, IPictureDisp ** ppDispImage) { return S_OK; };
 	STDMETHOD(HubbleGetVisible)(IDispatch* RibbonControl, VARIANT* varVisible) { return S_OK; };

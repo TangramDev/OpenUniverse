@@ -3608,7 +3608,7 @@ EXTERN_C const IID IID_IHubble;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetHostFocus( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdareStar( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdateStar( 
             IStar *pNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewGUID( 
@@ -3958,7 +3958,7 @@ EXTERN_C const IID IID_IHubble;
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetHostFocus )( 
             IHubble * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdareStar )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdateStar )( 
             IHubble * This,
             IStar *pNode);
         
@@ -4263,8 +4263,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_SetHostFocus(This)	\
     ( (This)->lpVtbl -> SetHostFocus(This) ) 
 
-#define IHubble_UpdareStar(This,pNode)	\
-    ( (This)->lpVtbl -> UpdareStar(This,pNode) ) 
+#define IHubble_UpdateStar(This,pNode)	\
+    ( (This)->lpVtbl -> UpdateStar(This,pNode) ) 
 
 #define IHubble_NewGUID(This,retVal)	\
     ( (This)->lpVtbl -> NewGUID(This,retVal) ) 

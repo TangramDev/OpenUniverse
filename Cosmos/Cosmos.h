@@ -681,8 +681,6 @@ namespace Cosmos
 		static Type^ GetType(String^ ObjID);
 		static Object^ ActiveMethod(String^ strObjID, String^ strMethod, cli::array<Object^, 1>^ p);
 		static Object^ ActiveObjectMethod(Object^ pObj, String^ strMethod, cli::array<Object^, 1>^ p);
-		static Control^ GetMDIClient(Form^ pForm);
-		static Star^ ExtendMDIClient(Form^ pForm, String^ strKey, String^ strXml);
 		static Browser^ ActiveBrowser();
 		static Browser^ GetHostBrowser(Object^ obj);
 		static Star^ GetStarFromHandle(IntPtr handle);

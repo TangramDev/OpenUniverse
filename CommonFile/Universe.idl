@@ -450,7 +450,7 @@ interface IHubble : IDispatch{
 	[id(0x00109), helpstring("method MessageBox")] HRESULT MessageBox(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, [out, retval] int* nRet);
 	[id(0x0010a), helpstring("method Encode")] HRESULT Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, [out,retval] BSTR* bstrRet);
 	[id(0x0010b), helpstring("method SetHostFocus")] HRESULT SetHostFocus(void);
-	[id(0x0010c)] HRESULT UpdareStar(IStar* pNode);
+	[id(0x0010c)] HRESULT UpdateStar(IStar* pNode);
 	[id(0x0010d), helpstring("method NewGUID")] HRESULT NewGUID([out, retval] BSTR* retVal);
 	[id(0x0010e)] HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	[id(0x00110)] HRESULT DownLoadFile(BSTR strFileURL, BSTR bstrTargetFile, BSTR bstrActionXml);

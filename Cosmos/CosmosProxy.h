@@ -119,7 +119,7 @@ private:
 	int IsSpecifiedType(IUnknown* pUnknown, BSTR bstrName);
 	IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames);
 	BSTR GetCtrlName(IDispatch* pCtrl);
-	HWND GetMDIClientHandle(IDispatch* pMDICtrl);
+	HWND GetMDIClientHandle(IDispatch* pMDICtrl) { return NULL; };
 	IDispatch* GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	HWND GetCtrlHandle(IDispatch* pCtrl);
 	BSTR GetCtrlType(IDispatch* pCtrl);

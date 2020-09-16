@@ -1165,134 +1165,6 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 	GalaxyCluster^ pGalaxyCluster = static_cast<GalaxyCluster^>(theAppProxy.InitTangramCtrl(pForm, pForm, true, pParse));
 	if (pGalaxyCluster)
 		pGalaxyCluster->Fire_OnGalaxyClusterLoad(pGalaxyCluster);
-	Control^ ctrl = Cosmos::Hubble::GetMDIClient(pForm);
-	if (ctrl != nullptr)
-	{
-		Form^ pForm2 = pForm->ActiveMdiChild;
-		if (pForm2 != nullptr)
-		{
-			String^ strKey = pForm2->GetType()->FullName;
-			Object^ objTag = pForm2->Tag;
-			if (objTag != nullptr)
-			{
-				String^ strTag = objTag->ToString();
-				if (String::IsNullOrEmpty(strTag) == false)
-				{
-					int nIndex = strTag->IndexOf("|");
-					if (nIndex != -1)
-					{
-						String^ strKey2 = strTag->Substring(0, nIndex);
-						if (String::IsNullOrEmpty(strKey2) == false)
-						{
-							strKey += L"_";
-							strKey += strKey2;
-						}
-					}
-				}
-			}
-			theApp.m_pHubble->ObserveQuasars(pForm->Handle.ToInt64(), CComBSTR(L""), STRING2BSTR(strKey), CComBSTR(L""), true);
-		}
-	}
-	if (pForm->IsMdiContainer)
-	{
-		ToolStrip^ defaultToolStrip = nullptr;
-		for each (Control ^ ctrl in pForm->Controls)
-		{
-			if (ctrl->Name == L"toolStrip")
-			{
-				defaultToolStrip = (ToolStrip^)ctrl;
-
-				ToolStripSeparator^ toolStripSeparator = gcnew ToolStripSeparator();
-				toolStripSeparator->Name = "defaulttoolStripSeparator";
-				toolStripSeparator->Size = System::Drawing::Size(6, 39);
-				defaultToolStrip->Items->Add(toolStripSeparator);
-
-				ToolStripButton^ pToolStripButton = gcnew ToolStripButton();
-				pToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				pToolStripButton->Image = (System::Drawing::Image^)(pForm->Icon->ToBitmap());
-				pToolStripButton->ImageTransparentColor = System::Drawing::Color::Black;
-				pToolStripButton->Name = L"defaultbtn";
-				pToolStripButton->Size = System::Drawing::Size(36, 36);
-				pToolStripButton->Text = L"default";
-				pToolStripButton->Tag = L"default";
-				pToolStripButton->Checked = true;
-				pToolStripButton->CheckOnClick = true;
-				//pToolStripButton->ToolTipText = BSTR2STRING(strTips);
-				pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
-				defaultToolStrip->Items->Add(pToolStripButton);
-
-				break;
-			}
-		}
-		HWND hForm = (HWND)pForm->Handle.ToPointer();
-		CMDIChildFormInfo* pInfo = (CMDIChildFormInfo*)::SendMessage(hForm, WM_COSMOSMSG, (WPARAM)0, 20190602);
-		if (pInfo && defaultToolStrip)
-		{
-			int nIndex = 0;
-			for (auto it : pInfo->m_mapFormsInfo)
-			{
-				CString strXml = it.second;
-				CTangramXmlParse m_Parse;
-				if (m_Parse.LoadXml(strXml))
-				{
-					CString strID = m_Parse.attr(_T("objid"), _T(""));
-					if (strID != _T(""))
-					{
-						Type^ pType = Cosmos::Hubble::GetType(BSTR2STRING(strID));
-						System::Drawing::Icon^ pIcon = nullptr;
-						if (pType && pType->IsSubclassOf(Form::typeid))
-						{
-							System::ComponentModel::ComponentResourceManager^ resources = gcnew System::ComponentModel::ComponentResourceManager(pType);
-							if (resources)
-							{
-								pIcon = static_cast<System::Drawing::Icon^>(resources->GetObject("$this.Icon"));
-								if (pIcon == nullptr)
-								{
-									if (Cosmos::Hubble::m_pDefaultIcon == nullptr)
-									{
-										Form^ _pForm = gcnew Form();
-										Cosmos::Hubble::m_pDefaultIcon = _pForm->Icon;
-									}
-									pIcon = Cosmos::Hubble::m_pDefaultIcon;
-								}
-								if (pIcon)
-								{
-									ToolStripButton^ pToolStripButton = gcnew ToolStripButton();
-									pToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-									pToolStripButton->Image = (System::Drawing::Image^)(pIcon->ToBitmap());
-									pToolStripButton->ImageTransparentColor = System::Drawing::Color::Black;
-									pToolStripButton->Name = BSTR2STRING(it.first);
-									pToolStripButton->Size = System::Drawing::Size(36, 36);
-									pToolStripButton->Text = BSTR2STRING(it.first);
-									pToolStripButton->Tag = BSTR2STRING(it.second);
-									CString strTips = m_Parse.attr(_T("tooltips"), _T(""));
-									if (strTips != _T(""))
-										pToolStripButton->ToolTipText = BSTR2STRING(strTips);
-									else
-									{
-										strTips = m_Parse.text();
-										if (strTips != _T(""))
-											pToolStripButton->ToolTipText = BSTR2STRING(strTips);
-									}
-									pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
-									nIndex++;
-									defaultToolStrip->Items->Insert(nIndex, pToolStripButton);
-								}
-							}
-						}
-						else {
-							CString strInfo = _T("");
-							strInfo.Format(_T("Error .NET Form Type : %s"), strID);
-							::MessageBox(NULL, strInfo, _T("Hubble"), MB_OK);
-						}
-					}
-				}
-			}
-			//delete pInfo;
-		}
-		//_pInfo->m_mapFormsInfo.clear();
-	}
-
 
 	pForm->Load -= theAppProxy.m_pOnLoad;
 }
@@ -1304,41 +1176,6 @@ void CCosmosProxy::OnCLRHostExit()
 
 void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 {
-	if (strFeatures.CompareNoCase(_T("tangram:creatingform")) == 0)
-	{
-		int nPos = strKey.Find(_T(","));
-		if (nPos != -1)
-		{
-			Object^ pObj = Cosmos::Hubble::CreateObject(BSTR2STRING(strKey));
-			if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
-			{
-				Form^ pForm = (Form^)pObj;
-				pForm->Show();
-			}
-		}
-	}
-	else if (strFeatures.CompareNoCase(_T("tangram:creatingmdichildform")) == 0)
-	{
-		int nPos = strKey.Find(_T(":"));
-		Form^ pParentForm = static_cast<Form^>(Form::FromHandle((IntPtr)_wtol(strKey.Mid(nPos + 1))));
-		if (pParentForm && pParentForm->IsMdiContainer)
-		{
-			strKey = strKey.Left(nPos);
-			nPos = strKey.Find(_T(","));
-			if (nPos != -1)
-			{
-				Object^ pObj = Cosmos::Hubble::CreateObject(BSTR2STRING(strKey));
-				if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
-				{
-					Form^ pForm = (Form^)pObj;
-					pForm->MdiParent = pParentForm;
-					m_strCurrentWinFormTemplate = strData;
-					pForm->Show();
-				}
-			}
-		}
-	}
-
 	return nullptr;
 }
 
@@ -1401,7 +1238,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							pProxyBase->OnWinFormCreated((HWND)thisForm->Handle.ToPointer());
 						}
 						int nWidth = m_Parse.attrInt(_T("width"), 0);
-						int nHeight= m_Parse.attrInt(_T("height"), 0);
+						int nHeight = m_Parse.attrInt(_T("height"), 0);
 						if (nWidth * nHeight)
 						{
 							thisForm->Width = nWidth;
@@ -1426,7 +1263,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 
 						if (strCaption != _T(""))
 							thisForm->Text = BSTR2STRING(strCaption);
-						if (theApp.m_pHubbleImpl->m_hMainWnd==NULL&&strTagName.CompareNoCase(_T("mainwindow")) == 0)
+						if (theApp.m_pHubbleImpl->m_hMainWnd == NULL && strTagName.CompareNoCase(_T("mainwindow")) == 0)
 						{
 							theApp.m_pHubbleImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
 						}
@@ -1540,11 +1377,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						mainForm->Height = nHeight;
 					}
 					Control^ client = nullptr;
-					if (mainForm->IsMdiContainer)
-					{
-						client = Cosmos::Hubble::GetMDIClient(mainForm);
-					}
-					else
+					if (mainForm->IsMdiContainer==false)
 					{
 						if (mainForm && mainForm->Controls->Count == 0)
 						{
@@ -1700,27 +1533,7 @@ BOOL CCosmosProxy::ProcessFormMsg(HWND hFormWnd, LPMSG lpMSG, int nMouseButton)
 	Form^ pForm = static_cast<Form^>(Ctrl);
 	if (pForm == nullptr)
 		return Ctrl->PreProcessMessage(Msg);
-	if (pForm->IsMdiContainer)
-	{
-		Ctrl = pForm->ActiveControl;
-		if (Ctrl != nullptr)
-		{
-			Form^ pForm2 = static_cast<Form^>(Ctrl);
-			if (pForm2 == nullptr)
-			{
-				return Ctrl->PreProcessMessage(Msg);
-			}
-			else
-			{
-				System::Windows::Forms::PreProcessControlState state = pForm2->PreProcessControlMessage(Msg);
-				if (state == System::Windows::Forms::PreProcessControlState::MessageProcessed)
-					return true;
-				else
-					return false;
-			}
-		}
-	}
-	else
+	if (!pForm->IsMdiContainer)
 	{
 		System::Windows::Forms::PreProcessControlState state = pForm->PreProcessControlMessage(Msg);
 		if (state == System::Windows::Forms::PreProcessControlState::MessageProcessed)
@@ -1891,7 +1704,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IStar* pHost
 				_pNode->m_pHostObj = pElementHost;
 				return pDisp;
 			}
-			catch (System::Exception ^ ex)
+			catch (System::Exception^ ex)
 			{
 				Debug::WriteLine(L"Hubble WPFControlWrapper Exception 1: " + ex->Message);
 				if (ex->InnerException)
@@ -2030,18 +1843,6 @@ void CCosmosProxy::ReleaseHubbleObj(IDispatch* pDisp)
 		}
 	}
 	_removeObject(nValue);
-}
-
-HWND CCosmosProxy::GetMDIClientHandle(IDispatch* pMDICtrl)
-{
-	Form^ pCtrl = (Form^)Marshal::GetObjectForIUnknown((IntPtr)pMDICtrl);
-	if (pCtrl != nullptr)
-	{
-		Control^ ctrl = Cosmos::Hubble::GetMDIClient(pCtrl);
-		if (ctrl != nullptr)
-			return (HWND)ctrl->Handle.ToInt64();
-	}
-	return NULL;
 }
 
 IDispatch* CCosmosProxy::GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild)
@@ -2307,7 +2108,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 		IStar* pNode = (IStar*)pSession->Getint64(L"nodeobj");
 		Star^ thisNode = theAppProxy._createObject<IStar, Star>(pNode);
 		Cosmos::Wormhole^ pCloudSession = nullptr;// gcnew Universe::Wormhole(pSession);
-		if (thisNode!=nullptr)
+		if (thisNode != nullptr)
 		{
 			if (thisNode->m_pWormhole == nullptr)
 			{

@@ -105,9 +105,7 @@ public:
 	CStar*											m_pBindingStar;
 	CQuasar*										m_pSubQuasar;
 	QuasarInfo*										m_pQuasarInfo;
-	CCosmosEvent*									m_pInitEventObj;
 	map<CString, CStar*>							m_mapNode;
-	map<CString, CStar*>							m_mapNeedSaveToConfigNode;
 	map<CString, VARIANT>							m_mapVal;
 	map<CString, CStar*>							m_mapNodeScript;
 	CComObject<CStarCollection>*					m_pRootNodes;
@@ -118,7 +116,7 @@ public:
 	void HostPosChanged();
 	void UpdateDesignerTreeInfo();
 
-	CTangramXmlParse* UpdareStar();
+	CTangramXmlParse* UpdateStar();
 	BOOL CreateGalaxyCluster();
 	CStar* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
 

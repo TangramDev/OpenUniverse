@@ -431,10 +431,7 @@ void CGrid::StopTracking(BOOL bAccept)
 		::InvalidateRect(pQuasar->m_hWnd, nullptr, true);
 		if (pQuasar->m_bDesignerState && g_pHubble->m_pDesignWindowNode)
 		{
-			g_pHubble->UpdareStar(g_pHubble->m_pDesignWindowNode->m_pRootObj);
-			CComBSTR bstrXml(L"");
-			g_pHubble->m_pDesignWindowNode->m_pRootObj->get_DocXml(&bstrXml);
-			g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
+			g_pHubble->UpdateStar(g_pHubble->m_pDesignWindowNode->m_pRootObj);
 		}
 
 		CWebPage* pWebWnd = nullptr;
@@ -454,8 +451,7 @@ void CGrid::StopTracking(BOOL bAccept)
 				CStar* pRetNode = (CStar*)lRes;
 				if (pRetNode && pRetNode->m_nViewType == Splitter)
 				{
-					CQuasar* pQuasar = pRetNode->m_pStarCommonData->m_pQuasar;
-					pQuasar->HostPosChanged();
+					pRetNode->m_pStarCommonData->m_pQuasar->HostPosChanged();
 				}
 			}
 		}

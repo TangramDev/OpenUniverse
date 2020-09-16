@@ -51,7 +51,6 @@ BEGIN_MESSAGE_MAP(CStarWnd, CWnd)
 	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEACTIVATE()
 	ON_WM_WINDOWPOSCHANGED()
-	ON_WM_WINDOWPOSCHANGING()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
 	ON_MESSAGE(WM_COSMOSMSG, OnHubbleMsg)
 	ON_MESSAGE(WM_TANGRAMGETNODE, OnGetTangramObj)
@@ -237,6 +236,8 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 {
+	if (m_pStar->m_nViewType != BlankView)
+		return true;
 	CQuasar* pQuasar = m_pStar->m_pStarCommonData->m_pQuasar;
 	BOOL bInDesignState = pQuasar->m_bDesignerState;
 	CBitmap bit;
@@ -330,22 +331,6 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 		{
 		case MDIClientQuasar:
 		{
-			CGalaxyCluster* pGalaxyCluster = pQuasar->m_pGalaxyCluster;
-			if (pGalaxyCluster)
-			{
-				LRESULT lRes = ::SendMessage(pGalaxyCluster->m_hWnd, WM_QUERYAPPPROXY, 0, 0);
-				if (lRes > 0)
-				{
-					IHubbleAppProxy* pProxy = (IHubbleAppProxy*)lRes;
-					auto it = g_pHubble->m_mapTemplateInfo.find(strKey);
-					if (it != g_pHubble->m_mapTemplateInfo.end())
-					{
-						CString strInfo = _T("");
-						strInfo.Format(_T("  MDIClientQuasar for Document Template : %s"), strKey);
-						strText += _T("  ") + strInfo;
-					}
-				}
-			}
 		}
 		break;
 		case SDIQuasar:
@@ -355,22 +340,6 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 		break;
 		case CtrlBarQuasar:
 		{
-			CGalaxyCluster* pGalaxyCluster = pQuasar->m_pGalaxyCluster;
-			if (pGalaxyCluster)
-			{
-				LRESULT lRes = ::SendMessage(pGalaxyCluster->m_hWnd, WM_QUERYAPPPROXY, 0, 0);
-				if (lRes > 0)
-				{
-					IHubbleAppProxy* pProxy = (IHubbleAppProxy*)lRes;
-					auto it = g_pHubble->m_mapTemplateInfo.find(strKey);
-					if (it != g_pHubble->m_mapTemplateInfo.end())
-					{
-						CString strInfo = _T("");
-						strInfo.Format(_T("  Control Bar for Document Template: %s"), strKey);
-						strText += _T("\n  ") + strInfo;
-					}
-				}
-			}
 		}
 		break;
 		case WinFormMDIClientQuasar:
@@ -935,13 +904,6 @@ LRESULT CStarWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 	return CWnd::WindowProc(message, wParam, lParam);
 }
 
-void CStarWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
-{
-	CWnd::OnWindowPosChanging(lpwndpos);
-	if (m_bCreateExternal)
-		Invalidate(true);
-}
-
 void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	if (m_pStar && m_pStar->m_nViewType == CLRCtrl && m_pStar->m_hHostWnd)
@@ -957,7 +919,6 @@ void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 			}
 		}
 	}
-	CWnd::OnWindowPosChanged(lpwndpos);
 	if (m_pStar && m_pStar->m_hHostWnd)
 	{
 		if (m_pStar->m_nViewType == CLRCtrl)
@@ -978,7 +939,7 @@ void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 
 	if (m_pStar->m_pWebBrowser)
 	{
-		::SetWindowPos(m_pStar->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
+		::SetWindowPos(m_pStar->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE);// | SWP_NOREDRAW);
 	}
 	else {
 		if (m_hFormWnd)
@@ -993,8 +954,9 @@ void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		return;
 	}
 
-	if (m_bCreateExternal || m_pStar == m_pStar->m_pRootObj)
+	if (m_bCreateExternal)// || m_pStar == m_pStar->m_pRootObj)
 	{
 		Invalidate(true);
 	}
+	CWnd::OnWindowPosChanged(lpwndpos);
 }

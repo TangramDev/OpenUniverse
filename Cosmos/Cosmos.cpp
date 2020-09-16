@@ -495,50 +495,6 @@ namespace Cosmos
         OnClose();
     }
 
-    Control^ Hubble::GetMDIClient(Form^ pForm)
-    {
-        if (pForm && pForm->IsMdiContainer)
-        {
-            String^ strTag = L"";
-            Object^ tag = pForm->Tag;
-            if (tag != nullptr)
-                strTag = tag->ToString();
-
-            CString _strTag = _T("");
-            if (String::IsNullOrEmpty(strTag) == false)
-                _strTag = STRING2BSTR(strTag);
-            if (_strTag == _T(""))
-                _strTag = _T("default");
-            int nCount = pForm->Controls->Count;
-            String^ strName = L"";
-            for (int i = nCount - 1; i >= 0; i--)
-            {
-                Control^ pCtrl = pForm->Controls[i];
-                strName = pCtrl->GetType()->Name->ToLower();
-                if (strName == L"mdiclient")
-                {
-                    return pCtrl;
-                }
-            }
-        }
-        return nullptr;
-    }
-
-    Star^ Hubble::ExtendMDIClient(Form^ pForm, String^ strKey, String^ strXml)
-    {
-        Control^ mdiclient = Hubble::GetMDIClient(pForm);
-        if (mdiclient)
-        {
-            GalaxyCluster^ page = Hubble::CreateGalaxyCluster(pForm, nullptr);
-            Quasar^ frame = page->CreateQuasar(mdiclient, L"default");
-            if (frame)
-            {
-                return frame->Observe(strKey, strXml);
-            }
-        }
-        return nullptr;
-    }
-
     Browser^ Hubble::ActiveBrowser()
     {
         IBrowser* pChromeWebBrowser = nullptr;

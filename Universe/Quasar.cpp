@@ -547,7 +547,6 @@ CQuasar::CQuasar()
 	m_bDetached = false;
 	m_pWebPageWnd = nullptr;
 	m_pSubQuasar = nullptr;
-	m_pInitEventObj = nullptr;
 	m_bDesignerState = true;
 	m_hPWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
@@ -647,7 +646,7 @@ void CQuasar::HostPosChanged()
 	}
 }
 
-CTangramXmlParse* CQuasar::UpdareStar()
+CTangramXmlParse* CQuasar::UpdateStar()
 {
 	for (auto it : m_mapNode) {
 		CStar* pWindowNode = (CStar*)it.second;
@@ -667,7 +666,7 @@ CTangramXmlParse* CQuasar::UpdareStar()
 			}
 
 			for (auto it2 : pWindowNode->m_vChildNodes) {
-				g_pHubble->UpdareStar(it2);
+				g_pHubble->UpdateStar(it2);
 			}
 		}
 	}
@@ -1361,7 +1360,7 @@ LRESULT CQuasar::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	if (m_mapNodeScript.size())
 	{
-		this->UpdareStar();
+		this->UpdateStar();
 		for (auto it : m_mapNodeScript)
 		{
 			CString strPath = it.first;
@@ -1638,7 +1637,7 @@ STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 	map<CString, CString>::iterator it2;
 	for (auto it : m_mapNode)
 	{
-		g_pHubble->UpdareStar(it.second);
+		g_pHubble->UpdateStar(it.second);
 		strName = it.first;
 		int nPos = strName.Find(_T("-"));
 		CString str = strName.Mid(nPos + 1);
@@ -1782,7 +1781,7 @@ STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 
 			for (auto it2 : pWindowNode->m_vChildNodes)
 			{
-				g_pHubble->UpdareStar(it2);
+				g_pHubble->UpdateStar(it2);
 			}
 		}
 		CString strXml = pWindowNode->m_pStarCommonData->m_pHubbleParse->GetChild(TGM_CLUSTER)->xml();

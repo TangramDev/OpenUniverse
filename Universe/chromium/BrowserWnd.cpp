@@ -64,8 +64,8 @@ namespace Web {
 			g_pHubble->m_pQuasar = nullptr;
 			g_pHubble->m_bWinFormActived = false;
 		}
-		::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
-		m_pBrowser->LayoutBrowser();
+		::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+		//m_pBrowser->LayoutBrowser();
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}
@@ -507,6 +507,10 @@ namespace Web {
 						m_hDrawWnd = ::FindWindowEx(m_hWnd, nullptr, _T("Intermediate Software Window"), nullptr);
 					}
 				}
+				else if (lParam == 4)
+				{
+					m_pBrowser->LayoutBrowser();
+				}
 				else if (m_pBrowser)
 				{
 					if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
@@ -516,8 +520,6 @@ namespace Web {
 					}
 					m_bTabChange = false;
 				}
-				if(lParam==4)
-					m_pBrowser->LayoutBrowser();
 			}
 			break;
 			}

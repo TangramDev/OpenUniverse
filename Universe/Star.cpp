@@ -286,13 +286,6 @@ STDMETHODIMP CStar::ActiveTabPage(IStar * _pNode)
 	{
 		::SetFocus(hWnd);
 		m_pStarCommonData->m_pQuasar->HostPosChanged();
-		if (m_pStarCommonData->m_pQuasar->m_bDesignerState && g_pHubble->m_pDesignWindowNode)
-		{
-			g_pHubble->UpdareStar(g_pHubble->m_pDesignWindowNode->m_pRootObj);
-			CComBSTR bstrXml(L"");
-			g_pHubble->m_pDesignWindowNode->m_pRootObj->get_DocXml(&bstrXml);
-			g_pHubble->m_mapValInfo[_T("tangramdesignerxml")] = CComVariant(bstrXml);
-		}
 	}
 	return S_OK;
 }
@@ -436,7 +429,7 @@ STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IS
 				if (pWebWnd)
 				{
 					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-					::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
+					//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 				}
 				return S_OK;
 			}
@@ -454,7 +447,7 @@ STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IS
 				else
 					pWebWnd->m_hWebHostWnd = NULL;
 				::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-				::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
+				//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 			}
 			HWND h = ::GetParent(m_pHostWnd->m_hWnd);
 			if (m_nViewType==Splitter)
@@ -597,8 +590,6 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 					pOldNode->m_pHostParse->put_attr(TGM_NODE_TYPE, _T(""));
 				ATLTRACE(_T("Modify CStar HostView Attribute: ID:%s Value: %s\n"), strID, strVal);
 				pOldNode->m_pHostWnd->Invalidate();
-				g_pHubble->UpdareStar(g_pHubble->m_pDesignWindowNode->m_pRootObj);
-				g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(g_pHubble->m_pDesignWindowNode->m_pRootObj->m_pStarCommonData->m_pHubbleParse->xml()));
 			}
 
 			m_strID = TGM_NUCLEUS;
@@ -1596,12 +1587,12 @@ STDMETHODIMP CStarCollection::get__NewEnum(IUnknown * *ppVal)
 
 STDMETHODIMP CStar::get_DocXml(BSTR * pVal)
 {
-	g_pHubble->UpdareStar(m_pRootObj);
-	CString strXml = m_pStarCommonData->m_pHubbleParse->xml();
-	strXml.Replace(_T("/><"), _T("/>\r\n<"));
-	strXml.Replace(_T("/>"), _T("></star>"));
-	*pVal = strXml.AllocSysString();
-	strXml.ReleaseBuffer();
+	//g_pHubble->UpdateStar(m_pRootObj);
+	//CString strXml = m_pStarCommonData->m_pHubbleParse->xml();
+	//strXml.Replace(_T("/><"), _T("/>\r\n<"));
+	//strXml.Replace(_T("/>"), _T("></star>"));
+	//*pVal = strXml.AllocSysString();
+	//strXml.ReleaseBuffer();
 
 	return S_OK;
 }
@@ -1914,131 +1905,7 @@ HRESULT CStar::Fire_Destroy()
 			m_pWebBrowser->DestroyWindow();
 		m_pWebBrowser = nullptr;
 	}
-	if (m_pRootObj == this)
-	{
-		if (m_pStarCommonData->m_pQuasar->m_pGalaxyCluster)
-		{
-			CString strKey = m_strKey + _T("@") + m_pStarCommonData->m_pQuasar->m_strQuasarName + _T("@") + m_pStarCommonData->m_pQuasar->m_pGalaxyCluster->m_strConfigFileNodeName;
-			auto it = m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode.find(m_strKey);
-			if (it != m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode.end())
-			{
-				if (it->second == this)
-				{
-					CString strFile = m_pStarCommonData->m_pQuasar->m_pGalaxyCluster->m_strPageFilePath;
-					CString strXml = _T("");
-					CTangramXmlParse m_Parse;
-					CTangramXmlParse xml;
-					CTangramXmlParse* m_pHubblePageParse = nullptr;
-					if (::PathFileExists(strFile))
-					{
-						if (m_Parse.LoadFile(strFile))
-						{
-							m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
-							if (m_pHubblePageParse == nullptr)
-							{
-								m_Parse.AddNode(_T("hubblepage"));
-								m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
-							}
-							if (m_pHubblePageParse)
-							{
-								CTangramXmlParse* pTangramPageParse = m_pHubblePageParse->GetChild(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
-								if (pTangramPageParse == nullptr)
-								{
-									pTangramPageParse = m_pHubblePageParse->AddNode(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
-								}
-								if (pTangramPageParse)
-								{
-									CString strFrameName = m_pStarCommonData->m_pQuasar->m_strQuasarName;
 
-									CTangramXmlParse* pTangramFrameParse = pTangramPageParse->GetChild(strFrameName);
-									if (pTangramFrameParse == nullptr)
-										pTangramFrameParse = pTangramPageParse->AddNode(strFrameName);
-									if (pTangramFrameParse)
-									{
-										if (m_pWindow)
-										{
-											if (m_nActivePage > 0)
-											{
-												CString strVal = _T("");
-												strVal.Format(_T("%d"), m_nActivePage);
-												m_pHostParse->put_attr(_T("activepage"), strVal);
-											}
-											m_pWindow->Save();
-										}
-										if (m_nViewType == Splitter)
-										{
-											((CGrid*)m_pHostWnd)->Save();
-										}
-
-										for (auto it2 : m_vChildNodes)
-										{
-											g_pHubble->UpdareStar(it2);
-										}
-										CTangramXmlParse* pParse = pTangramFrameParse->GetChild(m_strKey);
-										if (pParse)
-											pTangramFrameParse->RemoveNode(m_strKey);
-
-										strXml = m_pStarCommonData->m_pHubbleParse->xml();
-										CString _strName = m_pStarCommonData->m_pHubbleParse->name();
-										if (_strName != m_strKey)
-										{
-											CString strName = _T("<") + _strName;
-											int nPos = strXml.ReverseFind('<');
-											CString str = strXml.Left(nPos);
-											nPos = str.Find(strName);
-											str = str.Mid(nPos + strName.GetLength());
-											strXml = _T("<");
-											strXml += m_strKey;
-											strXml += str;
-											strXml += _T("</");
-											strXml += m_strKey;
-											strXml += _T(">");
-										}
-										xml.LoadXml(strXml);
-										if (pTangramFrameParse->AddNode(&xml, _T("")))
-											m_Parse.SaveFile(strFile);
-									}
-								}
-							}
-						}
-					}
-					if (strXml != _T(""))
-					{
-						CTangramXmlParse m_Parse;
-						if (m_Parse.LoadFile(strFile))
-						{
-							m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
-							if (m_pHubblePageParse == nullptr)
-							{
-								m_Parse.AddNode(_T("hubblepage"));
-								m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
-							}
-							if (m_pHubblePageParse)
-							{
-								CTangramXmlParse* pPageParse = m_pHubblePageParse->GetChild(m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName);
-								if (pPageParse)
-								{
-									CString strFrameName = m_pStarCommonData->m_pQuasar->m_strQuasarName;
-
-									CTangramXmlParse* pFrameParse = pPageParse->GetChild(strFrameName);
-									if (pFrameParse == nullptr)
-										pFrameParse = pPageParse->AddNode(strFrameName);
-									if (pFrameParse)
-									{
-										CTangramXmlParse* pParse = pFrameParse->GetChild(m_strKey);
-										if (pParse)
-											pFrameParse->RemoveNode(m_strKey);
-										if (pFrameParse->AddNode(&xml, _T("")))
-											m_Parse.SaveFile(strFile);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
@@ -2291,66 +2158,36 @@ HRESULT CStar::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 
 STDMETHODIMP CStar::put_SaveToConfigFile(VARIANT_BOOL newVal)
 {
-	if (m_pRootObj == this)
-	{
-		CString strKey = m_strKey + _T("@") + m_pStarCommonData->m_pQuasar->m_strQuasarName + _T("@") + m_pStarCommonData->m_pQuasar->m_pGalaxyCluster->m_strConfigFileNodeName;
-		auto it = m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode.find(m_strKey);
-		if (newVal)
-		{
-			if (it == m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode.end())
-			{
-				m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode[m_strKey] = this;
-				if (m_pStarCommonData->m_pGalaxyCluster->m_strConfigFileNodeName == _T(""))
-				{
-					m_pStarCommonData->m_pGalaxyCluster->put_ConfigName(CComBSTR(L""));
-				}
-				auto it2 = m_pStarCommonData->m_pGalaxyCluster->m_mapNeedSaveQuasar.find(m_pStarCommonData->m_pQuasar->m_hWnd);
-				if (it2 == m_pStarCommonData->m_pGalaxyCluster->m_mapNeedSaveQuasar.end())
-					m_pStarCommonData->m_pGalaxyCluster->m_mapNeedSaveQuasar[m_pStarCommonData->m_pQuasar->m_hWnd] = m_pStarCommonData->m_pQuasar;
-			}
-		}
-		else if (it != m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode.end())
-		{
-			m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode.erase(it);
-			if (m_pStarCommonData->m_pQuasar->m_mapNeedSaveToConfigNode.size() == 0)
-			{
-				auto it2 = m_pStarCommonData->m_pGalaxyCluster->m_mapNeedSaveQuasar.find(m_pStarCommonData->m_pQuasar->m_hWnd);
-				if (it2 != m_pStarCommonData->m_pGalaxyCluster->m_mapNeedSaveQuasar.end())
-					m_pStarCommonData->m_pGalaxyCluster->m_mapNeedSaveQuasar.erase(it2);
-			}
-		}
-	}
-
 	return S_OK;
 }
 
 STDMETHODIMP CStar::get_DockObj(BSTR bstrName, LONGLONG * pVal)
 {
-	CString strName = OLE2T(bstrName);
-	if (m_nViewType == CLRCtrl)
-	{
-		CStarWnd* pWnd = (CStarWnd*)m_pHostWnd;
-		auto it = pWnd->m_mapDockCtrl.find(strName);
-		if (it != pWnd->m_mapDockCtrl.end())
-		{
-			*pVal = (LONGLONG)it->second;
-		}
-	}
+	//CString strName = OLE2T(bstrName);
+	//if (m_nViewType == CLRCtrl)
+	//{
+	//	CStarWnd* pWnd = (CStarWnd*)m_pHostWnd;
+	//	auto it = pWnd->m_mapDockCtrl.find(strName);
+	//	if (it != pWnd->m_mapDockCtrl.end())
+	//	{
+	//		*pVal = (LONGLONG)it->second;
+	//	}
+	//}
 	return S_OK;
 }
 
 STDMETHODIMP CStar::put_DockObj(BSTR bstrName, LONGLONG newVal)
 {
-	CString strName = OLE2T(bstrName);
-	if (/*m_nViewType == CLRCtrl&&*/::IsWindow((HWND)newVal) && strName != _T(""))
-	{
-		CStarWnd* pWnd = (CStarWnd*)m_pHostWnd;
-		auto it = pWnd->m_mapDockCtrl.find(strName);
-		if (it == pWnd->m_mapDockCtrl.end())
-		{
-			pWnd->m_mapDockCtrl[strName] = (HWND)newVal;
-		}
-	}
+	//CString strName = OLE2T(bstrName);
+	//if (/*m_nViewType == CLRCtrl&&*/::IsWindow((HWND)newVal) && strName != _T(""))
+	//{
+	//	CStarWnd* pWnd = (CStarWnd*)m_pHostWnd;
+	//	auto it = pWnd->m_mapDockCtrl.find(strName);
+	//	if (it == pWnd->m_mapDockCtrl.end())
+	//	{
+	//		pWnd->m_mapDockCtrl[strName] = (HWND)newVal;
+	//	}
+	//}
 	return S_OK;
 }
 

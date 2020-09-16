@@ -1993,7 +1993,7 @@ STDMETHODIMP CHubble::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR b
 	return S_OK;
 }
 
-STDMETHODIMP CHubble::UpdareStar(IStar* pNode)
+STDMETHODIMP CHubble::UpdateStar(IStar* pNode)
 {
 	CStar* pWindowNode = (CStar*)pNode;
 	if (pWindowNode)
@@ -2014,7 +2014,7 @@ STDMETHODIMP CHubble::UpdareStar(IStar* pNode)
 		}
 		for (auto it2 : pWindowNode->m_vChildNodes)
 		{
-			UpdareStar(it2);
+			UpdateStar(it2);
 		}
 	}
 

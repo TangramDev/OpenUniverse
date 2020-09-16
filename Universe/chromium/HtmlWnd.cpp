@@ -233,7 +233,7 @@ namespace Web {
 			{
 				CBrowser* pWnd = (CBrowser*)lParam;
 				if (pWnd)
-					::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+					::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
 		break;
@@ -281,8 +281,8 @@ namespace Web {
 								pChromeBrowserWnd->m_pVisibleWebWnd = this;
 								if (bNewParent)
 								{
-									pChromeBrowserWnd->BrowserLayout();
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
+									//pChromeBrowserWnd->BrowserLayout();
+									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 4);
 								}
 							}
 						}
@@ -315,8 +315,8 @@ namespace Web {
 							if (bNewParent)
 							{
 								g_pHubble->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
-								pChromeBrowserWnd->BrowserLayout();
-								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
+								//pChromeBrowserWnd->BrowserLayout();
+								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 4);
 							}
 						}
 					}
@@ -343,8 +343,8 @@ namespace Web {
 								pChromeBrowserWnd->m_pVisibleWebWnd = this;
 								if (bNewParent)
 								{
-									pChromeBrowserWnd->BrowserLayout();
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
+									//pChromeBrowserWnd->BrowserLayout();
+									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 4);
 								}
 							}
 						}
@@ -407,7 +407,7 @@ namespace Web {
 				{
 					m_pChromeRenderFrameHost->ShowWebPage(true);
 					pBrowserWnd->BrowserLayout();
-					::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 2);
+					::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 				}
 				//for (auto it : m_mapSubWinForm)
 				//{

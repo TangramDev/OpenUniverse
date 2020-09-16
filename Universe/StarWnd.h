@@ -46,7 +46,6 @@ protected:
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();
 	afx_msg void OnWindowPosChanged(WINDOWPOS* lpwndpos);
-	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
