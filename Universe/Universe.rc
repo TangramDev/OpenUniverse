@@ -92,14 +92,6 @@ BEGIN
     END
 END
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_BITMAP_MDI          BITMAP                  "bitmapMDI.bmp"
-
 #endif    // English resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -115,8 +107,6 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 // Bitmap
 //
-
-IDB_BITMAP_GRID         BITMAP                  "bitmap1.bmp"
 
 IDB_BITMAP_DESIGNER     BITMAP                  "bitmap_g.bmp"
 

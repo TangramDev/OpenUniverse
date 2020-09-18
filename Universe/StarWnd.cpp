@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.2.0								*
+*					Open Universe - version 0.8.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -252,30 +252,30 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 			return false;
 		}
 	}
-	else if ((m_pStar->m_nViewType == ActiveX || m_pStar->m_nViewType == CLRCtrl) && m_pStar->m_pDisp == nullptr)
-	{
-		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
-		CBrush br(&bit);
-		pDC->FillRect(&rt, &br);
-		pDC->SetBkMode(TRANSPARENT);
-		CComBSTR bstrCaption(L"");
-		m_pStar->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
-		CString strInfo = _T("");
-		strInfo = strInfo +
-			_T("\n  ----.NET Assembly don't exists or AxtiveX Control not Support!----");
+	//else if ((m_pStar->m_nViewType == ActiveX || m_pStar->m_nViewType == CLRCtrl) && m_pStar->m_pDisp == nullptr)
+	//{
+	//	bit.LoadBitmap(IDB_BITMAP_DESIGNER);
+	//	CBrush br(&bit);
+	//	pDC->FillRect(&rt, &br);
+	//	pDC->SetBkMode(TRANSPARENT);
+	//	CComBSTR bstrCaption(L"");
+	//	m_pStar->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
+	//	CString strInfo = _T("");
+	//	strInfo = strInfo +
+	//		_T("\n  ----.NET Assembly don't exists or AxtiveX Control not Support!----");
 
-		pDC->SetTextColor(RGB(255, 0, 255));
-		pDC->DrawText(strInfo, &rt, DT_LEFT);
-	}
+	//	pDC->SetTextColor(RGB(255, 0, 255));
+	//	pDC->DrawText(strInfo, &rt, DT_LEFT);
+	//}
 
 	if (m_pStar->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pStar->m_pDisp == NULL) && m_bEraseBkgnd)
 	{
 		CString strText = _T("");
+		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
+		CBrush br(&bit);
+		pDC->FillRect(&rt, &br);
 		if (bInDesignState && g_pHubble->m_pDesignWindowNode == m_pStar)
 		{
-			bit.LoadBitmap(IDB_BITMAP_DESIGNER);
-			CBrush br(&bit);
-			pDC->FillRect(&rt, &br);
 			pDC->SetTextColor(RGB(255, 0, 255));
 			CString str = g_pHubble->GetDesignerInfo(_T("SelectedText"));
 			if (str == _T(""))
@@ -285,9 +285,6 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 		}
 		else
 		{
-			bit.LoadBitmap(IDB_BITMAP_GRID);
-			CBrush br(&bit);
-			pDC->FillRect(&rt, &br);
 			CComBSTR bstrCaption(L"");
 			m_pStar->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
 			CString strInfo = _T("\n\n  ");
@@ -326,54 +323,54 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}
 
-		CString strKey = m_pStar->m_pRootObj->m_strKey;
-		switch (pQuasar->m_nQuasarType)
-		{
-		case MDIClientQuasar:
-		{
-		}
-		break;
-		case SDIQuasar:
-		{
-			strText += _T("\n  ") + strKey;
-		}
-		break;
-		case CtrlBarQuasar:
-		{
-		}
-		break;
-		case WinFormMDIClientQuasar:
-		{
-		}
-		break;
-		case WinFormMDIChildQuasar:
-		{
-		}
-		break;
-		case WinFormQuasar:
-		{
-		}
-		break;
-		case EclipseWorkBenchQuasar:
-		{
-			strText += _T("\n  ") + strKey;
-		}
-		break;
-		case EclipseViewQuasar:
-		{
-		}
-		break;
-		case EclipseSWTQuasar:
-		{
-		}
-		break;
-		case WinFormControlQuasar:
-		{
-		}
-		break;
-		default:
-			break;
-		}
+		//CString strKey = m_pStar->m_pRootObj->m_strKey;
+		////switch (pQuasar->m_nQuasarType)
+		////{
+		////case MDIClientQuasar:
+		////{
+		////}
+		////break;
+		////case SDIQuasar:
+		////{
+		////	strText += _T("\n  ") + strKey;
+		////}
+		////break;
+		////case CtrlBarQuasar:
+		////{
+		////}
+		////break;
+		////case WinFormMDIClientQuasar:
+		////{
+		////}
+		////break;
+		////case WinFormMDIChildQuasar:
+		////{
+		////}
+		////break;
+		////case WinFormQuasar:
+		////{
+		////}
+		////break;
+		////case EclipseWorkBenchQuasar:
+		////{
+		////	strText += _T("\n  ") + strKey;
+		////}
+		////break;
+		////case EclipseViewQuasar:
+		////{
+		////}
+		////break;
+		////case EclipseSWTQuasar:
+		////{
+		////}
+		////break;
+		////case WinFormControlQuasar:
+		////{
+		////}
+		////break;
+		////default:
+		////	break;
+		////}
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(strText, &rt, DT_LEFT);
 	}
@@ -906,6 +903,7 @@ LRESULT CStarWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
+	CWnd::OnWindowPosChanged(lpwndpos);
 	if (m_pStar && m_pStar->m_nViewType == CLRCtrl && m_pStar->m_hHostWnd)
 	{
 		if (m_bNoMove)
@@ -958,5 +956,4 @@ void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		Invalidate(true);
 	}
-	CWnd::OnWindowPosChanged(lpwndpos);
 }

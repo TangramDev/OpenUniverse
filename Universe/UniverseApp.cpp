@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.2.0								*
+*					Open Universe - version 0.8.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1052,7 +1052,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_bRecturnPressed == false)
 						{
 							pWnd->m_pQuasar->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pHubble->m_strDefaultXml : _T("")), &pNode);
-							::SendMessage(it->first, WM_BROWSERLAYOUT, 0, 2);
+							::SendMessage(it->first, WM_BROWSERLAYOUT, 0, 4);
 						}
 						g_bRecturnPressed = false;
 					}

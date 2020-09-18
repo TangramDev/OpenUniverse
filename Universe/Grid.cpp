@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.2.0								*
+*					Open Universe - version 0.8.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -459,6 +459,7 @@ void CGrid::StopTracking(BOOL bAccept)
 		if (pWebWnd)
 		{
 			::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+			::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		}
 	}
 }

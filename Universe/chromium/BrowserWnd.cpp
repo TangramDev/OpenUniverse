@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.2.0								*
+*					Open Universe - version 0.8.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -17,6 +17,7 @@
 #include "../Star.h"
 #include "../StarWnd.h"
 #include "../Quasar.h"
+#include "../grid.h"
 #include "BrowserWnd.h"
 #include "HtmlWnd.h"
 
@@ -51,22 +52,22 @@ namespace Web {
 			if (::IsWindow(hOldWnd))
 			{
 				m_hOldTab = hOldWnd;
-				::PostMessage(hOldWnd, WM_COSMOSMSG, 20200214, 0);
+				//::PostMessage(hOldWnd, WM_COSMOSMSG, 20200214, 0);
 			}
-			::PostMessage(hActive, WM_COSMOSMSG, 20200214, (LPARAM)this);
+			//::PostMessage(hActive, WM_COSMOSMSG, 20200214, (LPARAM)this);
 		}
 	}
 
 	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		g_pHubble->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 		if (m_pVisibleWebWnd && g_pHubble->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
 		{
 			g_pHubble->m_pQuasar = nullptr;
 			g_pHubble->m_bWinFormActived = false;
 		}
-		::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		//m_pBrowser->LayoutBrowser();
-		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		//BrowserLayout();
 		return lRes;
 	}
 
@@ -83,6 +84,7 @@ namespace Web {
 			m_hOldTab = NULL;
 		}
 
+		BrowserLayout();
 		if (m_bTabChange == true || ::IsWindowVisible(hWnd) == FALSE ||
 			(m_pVisibleWebWnd && m_pVisibleWebWnd->m_hWnd != hWnd))
 		{
@@ -147,7 +149,7 @@ namespace Web {
 				}
 			}
 		}
-		BrowserLayout();
+		//BrowserLayout();
 	};
 
 	LRESULT CBrowser::BrowserLayout() {
@@ -488,8 +490,8 @@ namespace Web {
 			{
 				if (m_pBrowser)
 				{
-					BrowserLayout();
 					m_pBrowser->LayoutBrowser();
+					BrowserLayout();
 				}
 			}
 			break;
@@ -509,15 +511,68 @@ namespace Web {
 				}
 				else if (lParam == 4)
 				{
+					//m_bTabChange = false;
+					if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
+					{
+						BrowserLayout();
+					}
 					m_pBrowser->LayoutBrowser();
+					//if (m_pVisibleWebWnd)
+					//{
+					//	RECT rc;
+					//	::GetClientRect(m_pVisibleWebWnd->m_hWnd, &rc);
+					//	if (rc.right * rc.bottom == 1)
+					//	{
+					//		if (m_pVisibleWebWnd->m_pQuasar)
+					//		{
+					//			
+					//			//CStar* pStar = m_pVisibleWebWnd->m_pQuasar->m_pWorkNode;
+					//			//if (pStar)
+					//			//{
+					//			//	if (pStar->m_nViewType == Splitter)
+					//			//	{
+					//			//		CGrid* pGrid = (CGrid*)pStar->m_pHostWnd;
+					//			//		if (pGrid)
+					//			//		{
+					//			//			pGrid->RecalcLayout();
+					//			//			m_pVisibleWebWnd->m_pQuasar->HostPosChanged();
+					//			//			//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+					//			//		}
+					//			//	}
+					//			//}
+					//		}
+					//		//::GetWindowRect(m_hWnd, &rc);
+					//		//::SetWindowPos(m_hWnd, HWND_TOP, rc.left, rc.top, rc.right-rc.left-10, rc.bottom-rc.top, SWP_FRAMECHANGED);
+					//		if (::IsWindowVisible(m_pVisibleWebWnd->m_hChildWnd))
+					//		{
+					//			//RECT rc2;
+					//			//::GetWindowRect(m_pVisibleWebWnd->m_hWnd, &rc2);
+					//			//this->ScreenToClient(&rc2);
+					//			//::GetClientRect(m_pVisibleWebWnd->m_hExtendWnd, &rc);
+					//			//::SetWindowPos(m_pVisibleWebWnd->m_hWnd, HWND_TOP, rc2.left, rc2.top, rc.right, rc.bottom, SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOACTIVATE);
+					//			//::SetWindowPos(m_pVisibleWebWnd->m_hChildWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, /*SWP_NOREDRAW |*/ SWP_FRAMECHANGED | SWP_NOACTIVATE);
+					//			//IStar* pNode = nullptr;
+					//			//m_pVisibleWebWnd->m_pQuasar->Observe(CComBSTR(_T("__default__key__for__chrome__")), CComBSTR(g_pHubble->m_strDefaultXml), &pNode);
+					//			////IStar* pNode2 = nullptr;
+					//			////m_pBrowser->LayoutBrowser();
+					//			////m_pBrowser->LayoutBrowser();
+					//			////m_pVisibleWebWnd->m_pQuasar->Observe(CComBSTR(m_pVisibleWebWnd->m_strCurKey), CComBSTR(""), &pNode2);
+					//			//BrowserLayout();
+					//			//m_pBrowser->LayoutBrowser();
+					//			//BrowserLayout();
+					//			//m_pBrowser->LayoutBrowser();
+					//			//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+					//		}
+					//	}
+					//}
 				}
 				else if (m_pBrowser)
 				{
 					if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
 					{
 						BrowserLayout();
-						m_pBrowser->LayoutBrowser();
 					}
+					m_pBrowser->LayoutBrowser();
 					m_bTabChange = false;
 				}
 			}

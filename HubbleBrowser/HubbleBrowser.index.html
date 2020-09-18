@@ -122,10 +122,18 @@
         </modules>
         <ntp>
             <cluster>
-                <star startype='splitter' id='splitter' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                <star startype='splitter' id='splitter' rows='1' cols='2' height='250,' width='350,350,' caption="Web Runtime for Application" borderwidth='0' splitterwidth='6'>
                     <star startype="nucleus"></star>
                     <star startype="clrctrl" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
                 </star>
+                <!--<star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="0">-->
+                    <!--<star startype="nucleus" caption="Web Runtime for Application"></star>-->
+                    <!--<star startype='splitter' id='splitter' rows='1' cols='2' height='250,' width='350,350,' caption="Web Runtime for Application" borderwidth='0' splitterwidth='6'>
+                        <star startype="nucleus"></star>
+                        <star startype="clrctrl" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
+                    </star>
+                    <star startype="clrctrl" caption="Application" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
+                </star>-->
             </cluster>
         </ntp>
         <urls><url url="https://www.tangram.dev"></url></urls>
