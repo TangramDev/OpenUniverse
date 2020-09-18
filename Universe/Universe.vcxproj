@@ -353,8 +353,6 @@
     <ClInclude Include="StarWnd.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="bitmap1.bmp" />
-    <Image Include="bitmapMDI.bmp" />
     <Image Include="bitmap_g.bmp" />
   </ItemGroup>
   <ItemGroup>

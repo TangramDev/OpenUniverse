@@ -25,7 +25,7 @@ namespace HubbleBrowser
             //{
             //    string xml = "<content1 target=\"mainworkclient\">" +
             //        "<window>" +
-            //            "<node startype='splitter' id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>" +
+            //            "<node startype='grid' id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>" +
             //                "<node id='tangramtabctrl_Page2' startype="nucleus" caption=''></node>" +
             //                "<node id='test1'></node>" +
             //                "<node id='test2'></node>" +

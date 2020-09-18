@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.8.0								*
+*					Open Universe - version 0.9.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -92,7 +92,7 @@ BOOL CStarWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		BOOL bRet = SubclassWindow(hWnd);
 		if (m_pStar->m_pParentObj)
 		{
-			if (m_pStar->m_pParentObj->m_nViewType == Splitter)
+			if (m_pStar->m_pParentObj->m_nViewType == Grid)
 			{
 				::PostMessage(::GetParent(m_hWnd), WM_HOSTNODEFORSPLITTERCREATED, m_pStar->m_nRow, m_pStar->m_nCol);
 				ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
@@ -110,7 +110,7 @@ LRESULT CStarWnd::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 	{
 	case CLRCtrl:
 	case ActiveX:
-	case TabbedWnd:
+	case TabGrid:
 		m_pStar->m_pStarCommonData->m_pQuasar->HostPosChanged();
 		break;
 	default:
@@ -149,7 +149,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	if (m_pStar && m_pStar->m_pStarCommonData->m_pGalaxyCluster)
 		m_pStar->m_pStarCommonData->m_pGalaxyCluster->Fire_NodeMouseActivate(m_pStar);
 
-	if ((m_pStar->m_nViewType == TabbedWnd || m_pStar->m_nViewType == Splitter))
+	if ((m_pStar->m_nViewType == TabGrid || m_pStar->m_nViewType == Grid))
 	{
 		if (g_pHubble->m_pQuasar != m_pStar->m_pStarCommonData->m_pQuasar)
 			::SetFocus(m_hWnd);
@@ -162,7 +162,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		Invalidate(true);
 	else
 	{
-		if ((m_pStar->m_nViewType != TabbedWnd && m_pStar->m_nViewType != Splitter))
+		if ((m_pStar->m_nViewType != TabGrid && m_pStar->m_nViewType != Grid))
 		{
 			if (g_pHubble->m_pQuasar != m_pStar->m_pStarCommonData->m_pQuasar || g_pHubble->m_pActiveStar != m_pStar)
 				::SetFocus(m_hWnd);
@@ -172,7 +172,7 @@ int CStarWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	g_pHubble->m_bWinFormActived = false;
 	if (m_pStar->m_pParentObj)
 	{
-		if (m_pStar->m_pParentObj->m_nViewType & TabbedWnd)
+		if (m_pStar->m_pParentObj->m_nViewType & TabGrid)
 			m_pStar->m_pParentObj->m_pVisibleXMLObj = m_pStar;
 	}
 	g_pHubble->m_pQuasar = m_pStar->m_pStarCommonData->m_pQuasar;
@@ -323,54 +323,6 @@ BOOL CStarWnd::OnEraseBkgnd(CDC* pDC)
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}
 
-		//CString strKey = m_pStar->m_pRootObj->m_strKey;
-		////switch (pQuasar->m_nQuasarType)
-		////{
-		////case MDIClientQuasar:
-		////{
-		////}
-		////break;
-		////case SDIQuasar:
-		////{
-		////	strText += _T("\n  ") + strKey;
-		////}
-		////break;
-		////case CtrlBarQuasar:
-		////{
-		////}
-		////break;
-		////case WinFormMDIClientQuasar:
-		////{
-		////}
-		////break;
-		////case WinFormMDIChildQuasar:
-		////{
-		////}
-		////break;
-		////case WinFormQuasar:
-		////{
-		////}
-		////break;
-		////case EclipseWorkBenchQuasar:
-		////{
-		////	strText += _T("\n  ") + strKey;
-		////}
-		////break;
-		////case EclipseViewQuasar:
-		////{
-		////}
-		////break;
-		////case EclipseSWTQuasar:
-		////{
-		////}
-		////break;
-		////case WinFormControlQuasar:
-		////{
-		////}
-		////break;
-		////default:
-		////	break;
-		////}
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(strText, &rt, DT_LEFT);
 	}
@@ -449,7 +401,7 @@ LRESULT CStarWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		str.Format(_T("%d"), wParam);
 		m_pStar->put_Attribute(CComBSTR(L"activepage"), str.AllocSysString());
 		CStar* _pNode = (CStar*)pNode;
-		if (_pNode->m_nViewType == Splitter)
+		if (_pNode->m_nViewType == Grid)
 		{
 			((CSplitterWnd*)_pNode->m_pHostWnd)->RecalcLayout();
 		}
@@ -465,7 +417,7 @@ LRESULT CStarWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			::PostMessage(pQuasar->m_hWnd, WM_TANGRAMACTIVEPAGE, wParam, lParam);
 			::SendMessage(_pNode->m_pHostWnd->m_hWnd, WM_TANGRAMACTIVEPAGE, wParam, lParam);
 		}
-		if (m_pStar->m_nViewType == TabbedWnd)
+		if (m_pStar->m_nViewType == TabGrid)
 		{
 			for (auto it : m_pStar->m_vChildNodes)
 			{
@@ -483,7 +435,7 @@ LRESULT CStarWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			if (lRes)
 			{
 				CStar* pRetNode = (CStar*)lRes;
-				if (pRetNode && pRetNode->m_nViewType == Splitter)
+				if (pRetNode && pRetNode->m_nViewType == Grid)
 				{
 					CQuasar* pQuasar = pRetNode->m_pStarCommonData->m_pQuasar;
 					pQuasar->HostPosChanged();
@@ -910,7 +862,7 @@ void CStarWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		{
 			lpwndpos->flags |= SWP_NOMOVE;
 			CStarWnd* pNodeWnd = (CStarWnd*)m_pStar->m_pHostWnd;
-			if (m_pStar->m_pParentObj->m_nViewType == Splitter)
+			if (m_pStar->m_pParentObj->m_nViewType == Grid)
 			{
 				CGrid* pWnd = (CGrid*)m_pStar->m_pParentObj->m_pHostWnd;
 				::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, 3, 1993);

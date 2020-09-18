@@ -177,7 +177,7 @@ CTangramXmlParse* CTangramXmlParse::AddSplitterNode(int nRows, int nCols, CStrin
 		CString strCols = _T("");
 		if (pNode)
 		{
-			pNode->put_attr(_T("startype"), CString(_T("splitter")));
+			pNode->put_attr(_T("startype"), CString(_T("grid")));
 			pNode->put_attr(_T("id"), strName);
 			CString strVal = _T("");
 			strVal.Format(_T("%d"), nRows);

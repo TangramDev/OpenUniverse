@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.8.0								*
+*					Open Universe - version 0.9.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -100,7 +100,7 @@ BOOL CUniverse::InitInstance()
 		wndClass.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 		wndClass.hbrBackground = 0;
 		wndClass.lpszMenuName = NULL;
-		wndClass.lpszClassName = _T("Tangram Splitter Class");
+		wndClass.lpszClassName = _T("Tangram Grid Class");
 
 		RegisterClass(&wndClass);
 
@@ -631,7 +631,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				}
 				if (g_pHubble->m_pActiveStar)
 				{
-					if (g_pHubble->m_pActiveStar->m_nViewType != Splitter)
+					if (g_pHubble->m_pActiveStar->m_nViewType != Grid)
 					{
 						pWnd = (CStarWnd*)g_pHubble->m_pActiveStar->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)

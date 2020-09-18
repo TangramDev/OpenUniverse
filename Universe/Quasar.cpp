@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.8.0								*
+*					Open Universe - version 0.9.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -660,7 +660,7 @@ CTangramXmlParse* CQuasar::UpdateStar()
 				}
 				pWindowNode->m_pWindow->Save();
 			}
-			if (pWindowNode->m_nViewType == Splitter)
+			if (pWindowNode->m_nViewType == Grid)
 			{
 				((CGrid*)pWindowNode->m_pHostWnd)->Save();
 			}
@@ -1130,7 +1130,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 		::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 
 		if (m_pWorkNode != nullptr) {
-			if (m_pWorkNode->m_nViewType != Splitter) {
+			if (m_pWorkNode->m_nViewType != Grid) {
 				if (m_pWorkNode->m_pHostWnd)
 					m_pWorkNode->m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			}
@@ -1558,14 +1558,14 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			{
 				switch (_pParentNode->m_nViewType)
 				{
-				case Splitter:
+				case Grid:
 				{
 					CGrid* pWnd = (CGrid*)_pParentNode->m_pHostWnd;
 					if (pWnd->bInited == false)
 						::SendMessage(pWnd->m_hWnd, WM_COSMOSMSG, 1, 1993);
 				}
 				break;
-				case TabbedWnd:
+				case TabGrid:
 				{
 					CStarWnd* pWnd = (CStarWnd*)_pParentNode->m_pHostWnd;
 					::InvalidateRect(pWnd->m_hWnd, nullptr, true);
@@ -1573,7 +1573,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				break;
 				}
 			}
-			if (m_pContainerNode && m_pContainerNode->m_pParentObj && m_pContainerNode->m_pParentObj->m_nViewType == Splitter)
+			if (m_pContainerNode && m_pContainerNode->m_pParentObj && m_pContainerNode->m_pParentObj->m_nViewType == Grid)
 			{
 				if (m_pContainerNode->m_nViewType == CLRCtrl)
 				{
@@ -1774,7 +1774,7 @@ STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 				}
 				pWindowNode->m_pWindow->Save();
 			}
-			if (pWindowNode->m_nViewType == Splitter)
+			if (pWindowNode->m_nViewType == Grid)
 			{
 				((CGrid*)pWindowNode->m_pHostWnd)->Save();
 			}

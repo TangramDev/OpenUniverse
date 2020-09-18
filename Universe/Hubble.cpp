@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.8.0								*
+*					Open Universe - version 0.9.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -139,7 +139,7 @@ CHubble::CHubble()
 	m_nTangramNodeCommonData = 0;
 #endif
 	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CStarWnd);
-	m_TabWndClassInfoDictionary[TGM_SPLITTER] = RUNTIME_CLASS(CGrid);
+	m_TabWndClassInfoDictionary[_T("grid")] = RUNTIME_CLASS(CGrid);
 	m_mapEventDic[_T("textchanged")] = 1;
 	m_mapEventDic[_T("keydown")] = 2;
 	m_mapEventDic[_T("onclick")] = 3;
@@ -393,7 +393,7 @@ void CHubble::FireNodeEvent(int nIndex, CStar* pNode, CCosmosEvent* pObj)
 	case 0:
 	{
 		StarType type = pNode->m_nViewType;
-		if (type == Splitter || type == TabbedWnd)
+		if (type == Grid || type == TabGrid)
 		{
 			for (auto it : pNode->m_vChildNodes)
 			{
@@ -788,14 +788,14 @@ void CHubble::ProcessMsg(LPMSG lpMsg)
 						{
 							//case WM_POINTERDOWN:
 						case WM_LBUTTONDOWN:
-							if (pRetNode == nullptr || pRetNode->m_nViewType != Splitter)
+							if (pRetNode == nullptr || pRetNode->m_nViewType != Grid)
 							{
 								::SendMessage(pWnd->m_hWnd, WM_LBUTTONDOWN, (WPARAM)lpMsg, 0);
 							}
 							break;
 						case WM_LBUTTONUP:
 							//case WM_POINTERUP:
-							if (pRetNode && pRetNode->m_nViewType == Splitter)
+							if (pRetNode && pRetNode->m_nViewType == Grid)
 							{
 								::PostMessage(pWnd->m_hWnd, WM_LBUTTONDOWN, (WPARAM)lpMsg, 0);
 							}
@@ -2008,7 +2008,7 @@ STDMETHODIMP CHubble::UpdateStar(IStar* pNode)
 			}
 			pWindowNode->m_pWindow->Save();
 		}
-		if (pWindowNode->m_nViewType == Splitter)
+		if (pWindowNode->m_nViewType == Grid)
 		{
 			((CGrid*)pWindowNode->m_pHostWnd)->Save();
 		}

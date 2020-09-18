@@ -151,10 +151,6 @@
 #define TGM_ROWS				_T("rows")
 #define TGM_COLS				_T("cols")
 
-
-#define TGM_SPLITTER			_T("splitter")
-#define TGM_TABBED				_T("tab")
-
 #define TGM_SETTING_HEAD		_T("#$^&TANGRAM")
 #define TGM_SETTING_FOMRAT		_T("#$^&TANGRAM[%ld][%ld]")
 

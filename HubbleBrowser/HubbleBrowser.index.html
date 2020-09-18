@@ -122,17 +122,17 @@
         </modules>
         <ntp>
             <cluster>
-                <star startype='splitter' id='splitter' rows='1' cols='2' height='250,' width='350,350,' caption="Web Runtime for Application" borderwidth='0' splitterwidth='6'>
+                <star id='grid' rows='1' cols='2' height='250,' width='350,350,' caption="Web Runtime for Application" borderwidth='0' splitterwidth='6'>
                     <star startype="nucleus"></star>
-                    <star startype="clrctrl" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
+                    <star objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
                 </star>
-                <!--<star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="0">-->
+                <!--<star objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="0">-->
                     <!--<star startype="nucleus" caption="Web Runtime for Application"></star>-->
-                    <!--<star startype='splitter' id='splitter' rows='1' cols='2' height='250,' width='350,350,' caption="Web Runtime for Application" borderwidth='0' splitterwidth='6'>
+                    <!--<star id='grid' rows='1' cols='2' height='250,' width='350,350,' caption="Web Runtime for Application" borderwidth='0' splitterwidth='6'>
                         <star startype="nucleus"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
                     </star>
-                    <star startype="clrctrl" caption="Application" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
+                    <star caption="Application" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></star>
                 </star>-->
             </cluster>
         </ntp>
@@ -144,10 +144,10 @@
         <mdiclient id="mainworkclient">
             <default>
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
-                        <star startype='splitter' caption="Cloud Application" id='splitter' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
+                        <star caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <star startype="nucleus"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></star>
+                            <star objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></star>
                         </star>
                         <star caption="Web Runtime for Application" url="host"></star>
                     </star>
@@ -157,10 +157,10 @@
         <mainclient id="mainworkclient">
             <default>
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
-                        <star startype='splitter' caption="Cloud Application" id='splitter' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
+                        <star caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <star startype="nucleus"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></star>
+                            <star objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></star>
                         </star>
                         <star caption="Web Runtime for Application" url="host"></star>
                     </star>
@@ -170,10 +170,10 @@
         <panel1 id="mainworkclient">
             <default>
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
-                        <star startype='splitter' caption="Cloud Application" id='splitter' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
+                        <star caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <star startype="nucleus"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></star>
+                            <star objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></star>
                         </star>
                         <star caption="Web Runtime for Application" url="host"></star>
                     </star>
@@ -187,9 +187,9 @@
                 <treeView1_tag name="content"></treeView1_tag>
                 <node1 treenode="true" text="New Web New Application World"></node1>
                 <node1_tag name="content1"></node1_tag>
-                <node2 treenode="true" text="Splitter star cluster"></node2>
+                <node2 treenode="true" text="Grid star cluster"></node2>
                 <node2_tag name="content2"></node2_tag>
-                <node3 treenode="true" text="Nested Splitter cluster"></node3>
+                <node3 treenode="true" text="Nested Grid cluster"></node3>
                 <node3_tag name="content3"></node3_tag>
                 <node4 treenode="true" text="Tabbed star cluster"></node4>
                 <node4_tag name="content4"></node4_tag>
@@ -202,8 +202,8 @@
     </nodeDetails>
     <webViewport>
         <cluster>
-            <star startype="splitter" rows="1" cols="2" width="350,100,">
-                <star startype="clrctrl" objid="navDetails" id="navCtrl"></star>
+            <star  rows="1" cols="2" width="350,100,">
+                <star objid="navDetails" id="navCtrl"></star>
                 <star startype="nucleus" id="mainClient"></star>
             </star>
         </cluster>
@@ -211,7 +211,7 @@
 
     <form1 id="mainwindow_1">
         <cluster>
-            <star startype='splitter' id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+            <star id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                 <star id='tangramtabctrl_Page2' startype="nucleus" caption=''></star>
                 <star id='test1'></star>
                 <star id='test2'></star>
@@ -221,7 +221,7 @@
     </form1>
     <form id="mainwindow_2">
         <cluster>
-            <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="18">
+            <star objid="TangramTabbedWnd.TabbedComponent.1" style="18">
                 <star id='tangramtabctrl_Page2' startype="nucleus" caption='Page 1'></star>
                 <star id='test1' caption='Page 2'></star>
                 <star id='test2' caption='Page 3'></star>
@@ -237,9 +237,9 @@
             <p>This is a New and Dynamic Desktop Software World where you can combine most of the existing component frameworks, such as .NET, Java, COM, C++, Web and Office etc. ...</p>
             <content target="mainClient">
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="39">
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="39">
                         <star caption="Web Runtime for Application" startype="nucleus"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Customize your own WebBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Customize your own WebBrowser"></star>
                     </star>
                 </cluster>
             </content>
@@ -249,50 +249,50 @@
             <p>Web runtime for application constructs a new mixed world of native UI elements and web elements. In this world, a new web page is defined. While taking into account the standard web page, the ability to use native components as DOM elements is added ...</p>
             <content1 target="mainClient">
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="18">
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="18">
                         <star caption="The mixed world of web and native UI" startype="nucleus"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></star>
+                        <star objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></star>
+                        <star objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></star>
                     </star>
                 </cluster>
             </content1>
         </article>
         <article class="hidden content2 markdown-body">
-            <h1>About Splitter star</h1>
-            <p>Splitter star refers to a grid structure with m rows and n columns. As a container star, each child star can carry a specific programmable object ...</p>
+            <h1>About Grid star</h1>
+            <p>Grid star refers to a grid structure with m rows and n columns. As a container star, each child star can carry a specific programmable object ...</p>
             <content2 target="mainClient">
                 <cluster>
-                    <star startype="splitter" rows="3" cols="3" width="150,100,50" height="200,180,50">
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                    <star  rows="3" cols="3" width="150,100,50" height="200,180,50">
+                        <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
                         <star startype="nucleus"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                        <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
                     </star>
                 </cluster>
             </content2>
         </article>
         <article class="hidden content3 markdown-body">
-            <h1>Nested Splitter star</h1>
-            <p>Nested Splitter means that a Splitter can be a child star of another Splitter. We allow nested structures to mean that developers can use "lines" to plan the layout of a rectangular structure ... ...</p>
+            <h1>Nested Grid star</h1>
+            <p>Nested Grid means that a Grid can be a child star of another Grid. We allow nested structures to mean that developers can use "lines" to plan the layout of a rectangular structure ... ...</p>
             <content3 target="mainClient">
                 <cluster>
-                    <star startype="splitter" rows="1" cols="2" width="200,100,">
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
-                        <star startype="splitter" caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                    <star  rows="1" cols="2" width="200,100,">
+                        <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                        <star  caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
                             <star startype="nucleus"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
                         </star>
                     </star>
                 </cluster>
@@ -300,36 +300,36 @@
         </article>
         <article class="hidden content4 markdown-body">
             <h1>Tabbed star</h1>
-            <p>A Tabbed star is a container star which include a group of titled “tab structures". A tabbed star with n tabs is equivalent to a "1 row and n columns" Splitter ...</p>
+            <p>A Tabbed star is a container star which include a group of titled “tab structures". A tabbed star with n tabs is equivalent to a "1 row and n columns" Grid ...</p>
             <content4 target="mainClient">
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="23">
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="23">
                         <star caption="Introduction to Tabbed star" startype="nucleus"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Second Page"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></star>
+                        <star objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Second Page"></star>
+                        <star objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></star>
                     </star>
                 </cluster>
             </content4>
         </article>
         <article class="hidden content5 markdown-body">
-            <h1>Compound star: Tabbed star with a Splitter star as a Child star</h1>
-            <p>Compound star refers to the "composite structure" formed by various container nodes. We allow Tabbed star and Splitter star to "composite nest" so that developers can implement a more comprehensive UI layout ...</p>
+            <h1>Compound star: Tabbed star with a Grid star as a Child star</h1>
+            <p>Compound star refers to the "composite structure" formed by various container nodes. We allow Tabbed star and Grid star to "composite nest" so that developers can implement a more comprehensive UI layout ...</p>
             <content5 target="mainClient">
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="23">
-                        <star startype="splitter" caption="Nested star" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="23">
+                        <star  caption="Nested star" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
                             <star startype="nucleus"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
                         </star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></star>
+                        <star objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></star>
+                        <star objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></star>
                     </star>
                 </cluster>
             </content5>
@@ -339,24 +339,24 @@
             <p>What is shown here is a three times composite page structure. Because the "tab structure" can have various "styles", each specific sub star can carry various programmable objects, based on this, a comprehensive page structure can be formed. Thanks to the flexible and powerful description mechanism of HTML, so that the web page can present a page with dual advantages of native-web application...</p>
             <content6 target="mainClient">
                 <cluster>
-                    <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="23">
-                        <star startype="splitter" caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                            <star startype="TangramTabCtrl" objid="TangramTabbedWnd.TabbedComponent.1" style="18" activepage="1">
-                                <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="First Page"></star>
+                    <star objid="TangramTabbedWnd.TabbedComponent.1" style="23">
+                        <star  caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                            <star objid="TangramTabbedWnd.TabbedComponent.1" style="18" activepage="1">
+                                <star objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="First Page"></star>
                                 <star startype="nucleus" caption="Compound star World Gives You An Unexpected Surprise"></star>
-                                <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Third Page"></star>
+                                <star objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Third Page"></star>
                             </star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
-                            <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl1,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl3,HubbleBrowser"></star>
+                            <star objid="HubbleBrowser.UserControl2,HubbleBrowser"></star>
                         </star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Send Page"></star>
-                        <star startype="clrctrl" objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></star>
+                        <star objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Send Page"></star>
+                        <star objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></star>
                     </star>
                 </cluster>
             </content6>

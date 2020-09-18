@@ -119,8 +119,8 @@ enum StarType
 {
 	BlankView = 0x00000001,
 	ActiveX = 0x00000002,
-	Splitter = 0x00000004,
-	TabbedWnd = 0x00000008,
+	Grid = 0x00000004,
+	TabGrid = 0x00000008,
 
 	CLRCtrl = 0x00000010,
 	CLRForm = 0x00000020,

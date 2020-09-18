@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.8.0								*
+*					Open Universe - version 0.9.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -449,7 +449,7 @@ void CGrid::StopTracking(BOOL bAccept)
 			if (lRes)
 			{
 				CStar* pRetNode = (CStar*)lRes;
-				if (pRetNode && pRetNode->m_nViewType == Splitter)
+				if (pRetNode && pRetNode->m_nViewType == Grid)
 				{
 					pRetNode->m_pStarCommonData->m_pQuasar->HostPosChanged();
 				}
@@ -736,7 +736,7 @@ BOOL CGrid::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle,
 {
 	m_pStar = g_pHubble->m_pActiveStar;
 	m_pStar->m_pHostWnd = this;
-	m_pStar->m_nViewType = Splitter;
+	m_pStar->m_nViewType = Grid;
 	m_pStar->m_nID = nID;
 	m_pStar->m_pDisp = nullptr;
 	m_pStar->m_pStarCommonData->m_mapLayoutNodes[m_pStar->m_strName] = m_pStar;
@@ -814,8 +814,8 @@ BOOL CGrid::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle,
 	else
 		m_Hmax = 65535;
 
-	m_pStar->m_nRows = m_pStar->m_pHostParse->attrInt(TGM_ROWS, 0);
-	m_pStar->m_nCols = m_pStar->m_pHostParse->attrInt(TGM_COLS, 0);
+	//m_pStar->m_nRows = m_pStar->m_pHostParse->attrInt(TGM_ROWS, 0);
+	//m_pStar->m_nCols = m_pStar->m_pHostParse->attrInt(TGM_COLS, 0);
 
 	m_nMasterRow = m_pStar->m_pHostParse->attrInt(L"masterrow", -1);
 	m_nMasterCol = m_pStar->m_pHostParse->attrInt(L"mastercol", -1);
@@ -1145,7 +1145,7 @@ int CGrid::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 	if (m_pStar->m_pParentObj)
 	{
-		if (m_pStar->m_pParentObj->m_nViewType & TabbedWnd)
+		if (m_pStar->m_pParentObj->m_nViewType & TabGrid)
 			m_pStar->m_pParentObj->m_pVisibleXMLObj = m_pStar;
 	}
 

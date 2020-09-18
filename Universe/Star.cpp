@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.8.0								*
+*					Open Universe - version 0.9.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -106,14 +106,27 @@ void CStar::InitWndNode()
 			m_pStarCommonData->m_pGalaxyCluster->m_mapNode[m_strNodeName] = this;
 		}
 	}
-	m_strID = m_pHostParse->attr(TGM_NODE_TYPE, _T(""));
-	m_strID.MakeLower();
-	m_strID.Trim();
+
 	m_strCnnID = m_pHostParse->attr(TGM_CNN_ID, _T(""));
-	if(m_strCnnID==_T(""))
-		m_strCnnID = m_pHostParse->attr(_T("cnnid"), _T(""));
 	m_strCnnID.MakeLower();
 	m_strCnnID.Trim();
+	m_nRows = m_pHostParse->attrInt(TGM_ROWS, 0);
+	m_nCols = m_pHostParse->attrInt(TGM_COLS, 0);
+	if (m_nRows * m_nCols>1)
+	{
+		m_strID = _T("grid");
+		m_nViewType = Grid;
+	}
+	else
+	{
+		m_strID = m_pHostParse->attr(TGM_NODE_TYPE, _T(""));
+		m_strID.MakeLower();
+		m_strID.Trim();
+		if(m_strID==_T("")&&(m_strCnnID.Find(_T(","))!=-1)|| m_strCnnID.CompareNoCase(_T("navDetails")) == 0)
+		{ 
+			m_strID = _T("clrctrl");
+		}
+	}
 
 	auto it = g_pHubble->m_TabWndClassInfoDictionary.find(m_strID);
 	if (it != g_pHubble->m_TabWndClassInfoDictionary.end())
@@ -183,7 +196,7 @@ CStar::~CStar()
 		m_pExtender = nullptr;
 	}
 
-	if (m_nViewType != TangramTreeView && m_nViewType != Splitter && m_pDisp)
+	if (m_nViewType != TangramTreeView && m_nViewType != Grid && m_pDisp)
 		CCommonFunction::ClearObject<IUnknown>(m_pDisp);
 
 	m_vChildNodes.clear();
@@ -299,7 +312,7 @@ STDMETHODIMP CStar::Observe(BSTR bstrKey, BSTR bstrXml, IStar * *ppRetNode)
 	{
 		if (m_nViewType == BlankView)
 		{
-			if (m_pParentObj && m_pParentObj->m_nViewType == Splitter)
+			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 			{
 				HRESULT hr =  m_pParentObj->ObserveEx(m_nRow, m_nCol, bstrKey, bstrXml, ppRetNode);
 				return hr;
@@ -307,7 +320,7 @@ STDMETHODIMP CStar::Observe(BSTR bstrKey, BSTR bstrXml, IStar * *ppRetNode)
 		}
 		if (m_pStarCommonData->m_pGalaxyCluster)
 		{
-			if (m_nViewType == BlankView && m_pParentObj && m_pParentObj->m_nViewType == Splitter)
+			if (m_nViewType == BlankView && m_pParentObj && m_pParentObj->m_nViewType == Grid)
 			{
 				return m_pParentObj->ObserveEx(m_nRow, m_nCol, bstrKey, bstrXml, ppRetNode);
 			}
@@ -371,7 +384,7 @@ STDMETHODIMP CStar::Observe(BSTR bstrKey, BSTR bstrXml, IStar * *ppRetNode)
 		}
 	}
 	break;
-	case Splitter:
+	case Grid:
 		break;
 	}
 	return S_OK;
@@ -379,7 +392,7 @@ STDMETHODIMP CStar::Observe(BSTR bstrKey, BSTR bstrXml, IStar * *ppRetNode)
 
 STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IStar * *ppRetNode)
 {
-	if (m_pStarCommonData->m_pGalaxyCluster && m_nViewType == Splitter)
+	if (m_pStarCommonData->m_pGalaxyCluster && m_nViewType == Grid)
 	{
 		IStar* pNode = nullptr;
 		GetStar(nRow, nCol, &pNode);
@@ -450,7 +463,7 @@ STDMETHODIMP CStar::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IS
 				//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 			}
 			HWND h = ::GetParent(m_pHostWnd->m_hWnd);
-			if (m_nViewType==Splitter)
+			if (m_nViewType==Grid)
 			{
 				CQuasar* pQuasar = m_pStarCommonData->m_pQuasar;
 				pQuasar->HostPosChanged();
@@ -570,7 +583,7 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 					pOldNode->m_pStarCommonData->m_pOldQuasar = nullptr;
 				}
 				CStar* pParent = pOldNode->m_pParentObj;
-				if (pParent && pParent->m_nViewType == Splitter)
+				if (pParent && pParent->m_nViewType == Grid)
 				{
 					if (pOldNode != this)
 					{
@@ -580,7 +593,7 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 							pWnd->m_pHostNode = this;
 					}
 				}
-				if (m_pParentObj && m_pParentObj->m_nViewType == Splitter)
+				if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 				{
 					CGrid* pWnd = (CGrid*)m_pParentObj->m_pHostWnd;
 					pWnd->m_pHostNode = this;
@@ -610,7 +623,7 @@ STDMETHODIMP CStar::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 				g_pHubble->m_pDesignWindowNode->m_pStarCommonData->m_pHostClientView = m_pRootObj->m_pStarCommonData->m_pHostClientView;
 			}
 
-			if (m_pParentObj && m_pParentObj->m_nViewType == Splitter)
+			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 				m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			m_pStarCommonData->m_pQuasar->HostPosChanged();
 			if (m_pStarCommonData->m_pQuasar->m_pWebPageWnd)
@@ -868,14 +881,14 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			::SetWindowLong(hWnd, GWL_STYLE, dwStyle | WS_CHILD | /*WS_VISIBLE | */WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 		else
 		{
-			if (m_pParentObj && m_pParentObj->m_nViewType == Splitter)
+			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 				m_pHostWnd->ModifyStyleEx(0, WS_EX_CLIENTEDGE);
 		}
 		::SetWindowLong(hWnd, GWL_ID, nID);
 
 		pTangramDesignView->m_bCreateExternal = true;
 		if(m_nViewType==BlankView)
-			m_nViewType = TabbedWnd;
+			m_nViewType = TabGrid;
 		bRet = true;
 	}
 
@@ -960,7 +973,7 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 		if (nCol)
 		{
-			m_nViewType = TabbedWnd;
+			m_nViewType = TabGrid;
 			if (m_nActivePage<0 || m_nActivePage>nCol - 1)
 				m_nActivePage = 0;
 			CWnd * pView = nullptr;
@@ -1000,7 +1013,7 @@ BOOL CStar::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	}
 
 	m_pHostWnd->SetWindowText(m_strNodeName);
-	if (m_nViewType == TabbedWnd && m_pParentObj && m_pParentObj->m_nViewType == Splitter)
+	if (m_nViewType == TabGrid && m_pParentObj && m_pParentObj->m_nViewType == Grid)
 	{
 		if (m_pHostWnd)
 			m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
@@ -1599,7 +1612,7 @@ STDMETHODIMP CStar::get_DocXml(BSTR * pVal)
 
 STDMETHODIMP CStar::get_rgbMiddle(OLE_COLOR * pVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		*pVal = OLE_COLOR(pSplitter->rgbMiddle);
@@ -1613,7 +1626,7 @@ STDMETHODIMP CStar::get_rgbMiddle(OLE_COLOR * pVal)
 
 STDMETHODIMP CStar::put_rgbMiddle(OLE_COLOR newVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		OleTranslateColor(newVal, NULL, &pSplitter->rgbMiddle);
@@ -1630,7 +1643,7 @@ STDMETHODIMP CStar::put_rgbMiddle(OLE_COLOR newVal)
 
 STDMETHODIMP CStar::get_rgbLeftTop(OLE_COLOR * pVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		*pVal = OLE_COLOR(pSplitter->rgbLeftTop);
@@ -1644,7 +1657,7 @@ STDMETHODIMP CStar::get_rgbLeftTop(OLE_COLOR * pVal)
 
 STDMETHODIMP CStar::put_rgbLeftTop(OLE_COLOR newVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		OleTranslateColor(newVal, NULL, &pSplitter->rgbLeftTop);
@@ -1658,7 +1671,7 @@ STDMETHODIMP CStar::put_rgbLeftTop(OLE_COLOR newVal)
 
 STDMETHODIMP CStar::get_rgbRightBottom(OLE_COLOR * pVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		*pVal = OLE_COLOR(pSplitter->rgbRightBottom);
@@ -1671,7 +1684,7 @@ STDMETHODIMP CStar::get_rgbRightBottom(OLE_COLOR * pVal)
 
 STDMETHODIMP CStar::put_rgbRightBottom(OLE_COLOR newVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		OleTranslateColor(newVal, NULL, &pSplitter->rgbRightBottom);
@@ -1688,7 +1701,7 @@ STDMETHODIMP CStar::put_rgbRightBottom(OLE_COLOR newVal)
 
 STDMETHODIMP CStar::get_Hmin(int* pVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		*pVal = pSplitter->m_Hmin;
@@ -1698,7 +1711,7 @@ STDMETHODIMP CStar::get_Hmin(int* pVal)
 
 STDMETHODIMP CStar::put_Hmin(int newVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		pSplitter->m_Hmin = min(pSplitter->m_Hmax, newVal);
@@ -1712,7 +1725,7 @@ STDMETHODIMP CStar::put_Hmin(int newVal)
 
 STDMETHODIMP CStar::get_Hmax(int* pVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		*pVal = pSplitter->m_Hmax;
@@ -1722,7 +1735,7 @@ STDMETHODIMP CStar::get_Hmax(int* pVal)
 
 STDMETHODIMP CStar::put_Hmax(int newVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		pSplitter->m_Hmax = max(pSplitter->m_Hmin, newVal);
@@ -1736,7 +1749,7 @@ STDMETHODIMP CStar::put_Hmax(int newVal)
 
 STDMETHODIMP CStar::get_Vmin(int* pVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		*pVal = pSplitter->m_Vmin;
@@ -1747,7 +1760,7 @@ STDMETHODIMP CStar::get_Vmin(int* pVal)
 
 STDMETHODIMP CStar::put_Vmin(int newVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		pSplitter->m_Vmin = min(pSplitter->m_Vmax, newVal);
@@ -1761,7 +1774,7 @@ STDMETHODIMP CStar::put_Vmin(int newVal)
 
 STDMETHODIMP CStar::get_Vmax(int* pVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		*pVal = pSplitter->m_Vmax;
@@ -1772,7 +1785,7 @@ STDMETHODIMP CStar::get_Vmax(int* pVal)
 
 STDMETHODIMP CStar::put_Vmax(int newVal)
 {
-	if (m_nViewType == Splitter)
+	if (m_nViewType == Grid)
 	{
 		CGrid* pSplitter = (CGrid*)m_pHostWnd;
 		pSplitter->m_Vmax = max(pSplitter->m_Vmin, newVal);
@@ -1802,7 +1815,7 @@ STDMETHODIMP CStar::put_HostStar(IStar * newVal)
 
 STDMETHODIMP CStar::get_ActivePage(int* pVal)
 {
-	if (this->m_nViewType == StarType::TabbedWnd)
+	if (this->m_nViewType == StarType::TabGrid)
 	{
 		CComBSTR bstr(L"");
 		get_Attribute(CComBSTR(L"activepage"), &bstr);
@@ -1814,7 +1827,7 @@ STDMETHODIMP CStar::get_ActivePage(int* pVal)
 
 STDMETHODIMP CStar::put_ActivePage(int newVal)
 {
-	if (this->m_nViewType == StarType::TabbedWnd && newVal < m_nCols)
+	if (this->m_nViewType == StarType::TabGrid && newVal < m_nCols)
 	{
 		HWND hwnd = nullptr;
 		int nOldPage = 0;

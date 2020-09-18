@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.8.0								*
+*					Open Universe - version 0.9.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -114,7 +114,7 @@ namespace Web {
 					pSession->InsertString(_T("objID"), _T("wndnode"));
 					switch (pNode->m_nViewType)
 					{
-					case Splitter:
+					case Grid:
 					{
 						CGrid* pWnd = (CGrid*)pNode->m_pHostWnd;
 						for (int i = 0; i < pNode->m_nRows; i++)
@@ -129,7 +129,7 @@ namespace Web {
 						}
 					}
 					break;
-					case TabbedWnd:
+					case TabGrid:
 					{
 						for (auto it : pNode->m_vChildNodes)
 						{
@@ -733,7 +733,7 @@ namespace Web {
 				else
 				{
 					m_pParentStar = m_pQuasar->m_pBindingStar->m_pParentObj;
-					if (m_pParentStar && m_pParentStar->m_nViewType == TabbedWnd)
+					if (m_pParentStar && m_pParentStar->m_nViewType == TabGrid)
 					{
 						//IStar* _pNode = nullptr;
 						//m_pQuasar->m_pBindingStar->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pNode);
