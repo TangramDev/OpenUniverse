@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -16,7 +16,7 @@
 #include "stdafx.h"
 #include "dllmain.h" 
 #include "CosmosProxy.h"
-#include "StarCLREvent.h"
+#include "GridCLREvent.h"
 
 #include <io.h>
 #include <stdio.h>
@@ -60,10 +60,10 @@ IHubble* GetHubble()
 		}
 		if (hModule) {
 			typedef CHubbleImpl* (__stdcall* GetHubbleImpl)(IHubble**);
-			GetHubbleImpl _pTangramImplFunction;
-			_pTangramImplFunction = (GetHubbleImpl)GetProcAddress(hModule, "GetHubbleImpl");
-			if (_pTangramImplFunction != NULL) {
-				theApp.m_pHubbleImpl = _pTangramImplFunction(&theApp.m_pHubble);
+			GetHubbleImpl _pHubbleImplFunction;
+			_pHubbleImplFunction = (GetHubbleImpl)GetProcAddress(hModule, "GetHubbleImpl");
+			if (_pHubbleImplFunction != NULL) {
+				theApp.m_pHubbleImpl = _pHubbleImplFunction(&theApp.m_pHubble);
 				theApp.m_pHubbleImpl->m_pHubbleDelegate = (IHubbleDelegate*)&theApp;
 				theApp.m_pHubbleImpl->m_pUniverseAppProxy = (IHubbleAppProxy*)&theApp;
 			}
@@ -1217,7 +1217,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 			CString strTagName = m_Parse.name();
 			CWebPageImpl* pProxyBase = nullptr;
 			Cosmos::Wormhole^ pCloudSession = nullptr;
-			CSession* pTangramSession = nullptr;
+			CSession* pHubbleSession = nullptr;
 			__int64 nHandle = m_Parse.attrInt64(_T("renderframehostproxy"), 0);
 			if (nHandle)
 			{
@@ -1273,15 +1273,15 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						__int64 nIpcSession = m_Parse.attrInt64(_T("ipcsession"), 0);
 						if (nIpcSession)
 						{
-							pTangramSession = (CSession*)nIpcSession;
+							pHubbleSession = (CSession*)nIpcSession;
 							bool bExists = Cosmos::Hubble::WebBindEventDic->TryGetValue(pObj, pCloudSession);
 							if (bExists == false)
 							{
-								pCloudSession = gcnew Wormhole(pTangramSession);
+								pCloudSession = gcnew Wormhole(pHubbleSession);
 								Cosmos::Hubble::WebBindEventDic[pObj] = pCloudSession;
 								pCloudSession->m_pHostObj = pObj;
 							}
-							theAppProxy.m_mapSession2Wormhole[pTangramSession] = pCloudSession;
+							theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
 							if (strFormName == _T(""))
 							{
@@ -1289,15 +1289,15 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								strFormName = OLE2T(bstrName);
 								::SysFreeString(bstrName);
 							}
-							pTangramSession->InsertString(_T("formname"), strFormName);
-							pTangramSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
-							pTangramSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
-							pTangramSession->SendMessage();
+							pHubbleSession->InsertString(_T("formname"), strFormName);
+							pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+							pHubbleSession->SendMessage();
 						}
 						else
 						{
-							pTangramSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
-							pCloudSession = gcnew Wormhole(pTangramSession);
+							pHubbleSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
+							pCloudSession = gcnew Wormhole(pHubbleSession);
 							Cosmos::Hubble::WebBindEventDic[pObj] = pCloudSession;
 							pCloudSession->m_pHostObj = pObj;
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
@@ -1307,31 +1307,31 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								strFormName = OLE2T(bstrName);
 								::SysFreeString(bstrName);
 							}
-							pTangramSession->InsertString(_T("formname"), strFormName);
-							pTangramSession->InsertLong(_T("autodelete"), 0);
-							pTangramSession->Insertint64(_T("domhandle"), (__int64)pTangramSession);
+							pHubbleSession->InsertString(_T("formname"), strFormName);
+							pHubbleSession->InsertLong(_T("autodelete"), 0);
+							pHubbleSession->Insertint64(_T("domhandle"), (__int64)pHubbleSession);
 							CString strFormID = m_Parse.attr(_T("id"), _T(""));
-							pTangramSession->InsertString(_T("id"), strFormID);
+							pHubbleSession->InsertString(_T("id"), strFormID);
 
 							strFormID = m_Parse.attr(_T("objid"), _T(""));
-							pTangramSession->InsertString(_T("objid"), strFormID);
+							pHubbleSession->InsertString(_T("objid"), strFormID);
 
-							theAppProxy.m_mapSession2Wormhole[pTangramSession] = pCloudSession;
+							theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
 							if (thisForm->IsMdiContainer)
-								pTangramSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
 							else if (thisForm->MdiParent)
 							{
-								pTangramSession->Insertint64(_T("mdiformhandle"), thisForm->MdiParent->Handle.ToInt64());
+								pHubbleSession->Insertint64(_T("mdiformhandle"), thisForm->MdiParent->Handle.ToInt64());
 								thisForm->Show();
-								pTangramSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
-								pTangramSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
-								pTangramSession->SendMessage();
+								pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								pHubbleSession->SendMessage();
 								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 							}
 							else
-								pTangramSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
-							pTangramSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
-							pTangramSession->SendMessage();
+								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+							pHubbleSession->SendMessage();
 						}
 
 						if (pPage)
@@ -1402,24 +1402,24 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							}
 						}
 					}
-					pTangramSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
-					pCloudSession = gcnew Wormhole(pTangramSession);
+					pHubbleSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
+					pCloudSession = gcnew Wormhole(pHubbleSession);
 					Cosmos::Hubble::WebBindEventDic[mainForm] = pCloudSession;
 					pCloudSession->m_pHostObj = mainForm;
 					CString strFormName = mainForm->Name;
-					pTangramSession->InsertLong(_T("autodelete"), 0);
-					pTangramSession->Insertint64(_T("domhandle"), (__int64)pTangramSession);
-					pTangramSession->InsertString(_T("objid"), _T("mainForm"));
-					pTangramSession->InsertString(_T("formname"), strFormName);
-					theAppProxy.m_mapSession2Wormhole[pTangramSession] = pCloudSession;
+					pHubbleSession->InsertLong(_T("autodelete"), 0);
+					pHubbleSession->Insertint64(_T("domhandle"), (__int64)pHubbleSession);
+					pHubbleSession->InsertString(_T("objid"), _T("mainForm"));
+					pHubbleSession->InsertString(_T("formname"), strFormName);
+					theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
 
 					CString strFormID = m_Parse.attr(_T("id"), _T(""));
-					pTangramSession->InsertString(_T("id"), strFormID);
+					pHubbleSession->InsertString(_T("id"), strFormID);
 
-					pTangramSession->Insertint64(_T("formhandle"), mainForm->Handle.ToInt64());
-					pTangramSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+					pHubbleSession->Insertint64(_T("formhandle"), mainForm->Handle.ToInt64());
+					pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
 
-					pTangramSession->SendMessage();
+					pHubbleSession->SendMessage();
 
 					//if (client != nullptr)
 					//{

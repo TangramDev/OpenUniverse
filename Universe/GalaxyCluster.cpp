@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1471,9 +1471,9 @@ STDMETHODIMP CGalaxyCluster::ObserveQuasars(BSTR bstrFrames, BSTR bstrKey, BSTR 
 
 STDMETHODIMP CGalaxyCluster::get_CurrentDesignQuasarType(QuasarType* pVal)
 {
-	if (g_pHubble->m_pDesignWindowNode)
+	if (g_pHubble->m_pDesignGrid)
 	{
-		CQuasar* pQuasar = g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar;
+		CQuasar* pQuasar = g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar;
 		*pVal = pQuasar->m_nQuasarType;
 	}
 	else
@@ -1484,8 +1484,8 @@ STDMETHODIMP CGalaxyCluster::get_CurrentDesignQuasarType(QuasarType* pVal)
 
 STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IGrid** pVal)
 {
-	if (g_pHubble->m_pDesignWindowNode)
-		*pVal = g_pHubble->m_pDesignWindowNode;
+	if (g_pHubble->m_pDesignGrid)
+		*pVal = g_pHubble->m_pDesignGrid;
 
 	return S_OK;
 }

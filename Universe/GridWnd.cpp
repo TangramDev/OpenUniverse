@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -275,13 +275,13 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	}
 	IGrid* _pGrid = nullptr;
 	CString str = (LPCTSTR)lParam;
-	CGrid* pOldNode = (CGrid*)g_pHubble->m_pDesignWindowNode;
+	CGrid* pOldNode = (CGrid*)g_pHubble->m_pDesignGrid;
 	CTangramXmlParse* pOld = pOldNode->m_pHostParse;
 
 	long	m_nRow;
-	g_pHubble->m_pDesignWindowNode->get_Row(&m_nRow);
+	g_pHubble->m_pDesignGrid->get_Row(&m_nRow);
 	long	m_nCol;
-	g_pHubble->m_pDesignWindowNode->get_Col(&m_nCol);
+	g_pHubble->m_pDesignGrid->get_Col(&m_nCol);
 	IGrid* _pOldNode = nullptr;
 	m_pGrid->GetGrid(m_nRow, m_nCol, &_pOldNode);
 	CGrid* _pOldNode2 = (CGrid*)_pOldNode;
@@ -321,7 +321,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 				//	pAddin->m_pOutputWindowPane->OutputString(strXml.AllocSysString());
 			}
 #endif
-			g_pHubble->m_pDesignWindowNode = nullptr;
+			g_pHubble->m_pDesignGrid = nullptr;
 			RecalcLayout();
 		}
 	}
@@ -429,9 +429,9 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	if (bAccept)
 	{
 		::InvalidateRect(pQuasar->m_hWnd, nullptr, true);
-		if (pQuasar->m_bDesignerState && g_pHubble->m_pDesignWindowNode)
+		if (pQuasar->m_bDesignerState && g_pHubble->m_pDesignGrid)
 		{
-			g_pHubble->UpdateGrid(g_pHubble->m_pDesignWindowNode->m_pRootObj);
+			g_pHubble->UpdateGrid(g_pHubble->m_pDesignGrid->m_pRootObj);
 		}
 
 		CWebPage* pWebWnd = nullptr;
@@ -439,8 +439,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			pWebWnd = pQuasar->m_pWebPageWnd;
 		}
-		else if (g_pHubble->m_pDesignWindowNode && g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar->m_pWebPageWnd)
-			pWebWnd = g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
+		else if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar->m_pWebPageWnd)
+			pWebWnd = g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
 		pQuasar->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)

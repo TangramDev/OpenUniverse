@@ -42,14 +42,14 @@
                     {
                         e.grid.addEventListener("button1", "OnClick", function (e) {
                             e.grid.Observe("key1", document.getElementById("mainwindow_1").outerHTML);
-                            if (e.grid.parentStar != null && e.grid.parentStar.xobj.getLong("gridtype") == 4) {
-                                e.grid.parentStar.ObserveEx("key1", document.getElementById("mainwindow_2").outerHTML);
+                            if (e.grid.parentGrid != null && e.grid.parentGrid.xobj.getLong("gridtype") == 4) {
+                                e.grid.parentGrid.ObserveEx("key1", document.getElementById("mainwindow_2").outerHTML);
                             }
                         });
                         e.grid.addEventListener("button2", "OnClick", function (e) {
                             e.grid.Observe("key2", document.getElementById("mainwindow_2").outerHTML);
-                            if (e.grid.parentStar != null && e.grid.parentStar.xobj.getLong("gridtype") == 4) {
-                                e.grid.parentStar.ObserveEx("key2", document.getElementById("mainwindow_1").outerHTML);
+                            if (e.grid.parentGrid != null && e.grid.parentGrid.xobj.getLong("gridtype") == 4) {
+                                e.grid.parentGrid.ObserveEx("key2", document.getElementById("mainwindow_1").outerHTML);
                             }
                         });
                     }
@@ -214,8 +214,8 @@
             <grid id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                 <grid id='tangramtabctrl_Page2' gridtype="nucleus" caption=''></grid>
                 <grid id='test1'></grid>
-                <grid id='test2'></grid>
-                <grid id='test3'></grid>
+                <!--<grid id='test2'></grid>
+                <grid id='test3'></grid>-->
             </grid>
         </cluster>
     </form1>

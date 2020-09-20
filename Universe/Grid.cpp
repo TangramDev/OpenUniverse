@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -149,9 +149,9 @@ void CGrid::InitWndGrid()
 
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
-		CGridProxy* pTangramWndGridProxy = it.second->OnHubbleNodeInit(this);
-		if (pTangramWndGridProxy)
-			m_mapWndGridProxy[it.second] = pTangramWndGridProxy;
+		CGridProxy* pHubbleWndGridProxy = it.second->OnHubbleNodeInit(this);
+		if (pHubbleWndGridProxy)
+			m_mapWndGridProxy[it.second] = pHubbleWndGridProxy;
 	}
 }
 
@@ -368,10 +368,10 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 				if (m_pWebBrowser)
 				{
 					CGrid* pRetNode = (CGrid*)*ppRetGrid;
-					CComPtr<IGridCollection> pTangramNodeCollection;
+					CComPtr<IGridCollection> pHubbleNodeCollection;
 					IGrid* _pGrid = nullptr;
 					long nCount = 0;
-					pRetNode->m_pRootObj->GetGrids(CComBSTR(m_strName), &_pGrid, &pTangramNodeCollection, &nCount);
+					pRetNode->m_pRootObj->GetGrids(CComBSTR(m_strName), &_pGrid, &pHubbleNodeCollection, &nCount);
 					if (_pGrid)
 					{
 						CGrid* pGrid2 = (CGrid*)_pGrid;
@@ -584,10 +584,10 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 			m_strID = strVal;
 		ATLTRACE(_T("Modify CGrid Attribute: ID: %s Value: %s\n"), strID, strVal);
 		CQuasar* pQuasar = nullptr;
-		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pHubble->m_pDesignWindowNode)
+		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pHubble->m_pDesignGrid)
 		{
-			pQuasar = g_pHubble->m_pDesignWindowNode->m_pRootObj->m_pGridCommonData->m_pQuasar;
-			if (g_pHubble->m_pDesignWindowNode && pQuasar->m_pBindingGrid)
+			pQuasar = g_pHubble->m_pDesignGrid->m_pRootObj->m_pGridCommonData->m_pQuasar;
+			if (g_pHubble->m_pDesignGrid && pQuasar->m_pBindingGrid)
 			{
 				CGrid* pOldNode = pQuasar->m_pBindingGrid;
 				if (pOldNode->m_pGridCommonData->m_pOldQuasar)
@@ -612,7 +612,7 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 					pWnd->m_pHostGrid = this;
 				}
 				pOldNode->m_strID = _T("");
-				if (pOldNode->m_pRootObj == g_pHubble->m_pDesignWindowNode->m_pRootObj)
+				if (pOldNode->m_pRootObj == g_pHubble->m_pDesignGrid->m_pRootObj)
 					pOldNode->m_pHostParse->put_attr(TGM_NODE_TYPE, _T(""));
 				ATLTRACE(_T("Modify CGrid HostView Attribute: ID:%s Value: %s\n"), strID, strVal);
 				pOldNode->m_pHostWnd->Invalidate();
@@ -628,12 +628,12 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 				pTopGrid = pTopGrid->m_pRootObj;
 			}
 			m_pHostParse->put_attr(TGM_NODE_TYPE, TGM_NUCLEUS);
-			if (g_pHubble->m_pDesignWindowNode)
+			if (g_pHubble->m_pDesignGrid)
 			{
 				pQuasar->m_pBindingGrid = this;
-				g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pOldQuasar = g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar;
-				g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar = m_pRootObj->m_pGridCommonData->m_pQuasar;
-				g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pHostClientView = m_pRootObj->m_pGridCommonData->m_pHostClientView;
+				g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pOldQuasar = g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar;
+				g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar = m_pRootObj->m_pGridCommonData->m_pQuasar;
+				g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pHostClientView = m_pRootObj->m_pGridCommonData->m_pHostClientView;
 			}
 
 			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
@@ -709,7 +709,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	CWebPage* pHtmlWnd = m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
 	HWND hWnd = 0;
-	CGridHelperWnd* pTangramDesignView = (CGridHelperWnd*)m_pHostWnd;
+	CGridHelperWnd* pHubbleDesignView = (CGridHelperWnd*)m_pHostWnd;
 	BOOL isAppWnd = false;
 	if (m_strID == _T("activex") || m_strID == _T("clrctrl"))
 	{
@@ -745,7 +745,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				}
 			}
 
-			pTangramDesignView->m_bCreateExternal = true;
+			pHubbleDesignView->m_bCreateExternal = true;
 		}
 		bRet = true;
 	}
@@ -886,7 +886,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		}
 	}
 
-	if (!::IsWindow(m_pHostWnd->m_hWnd) && hWnd && pTangramDesignView->SubclassWindow(hWnd))
+	if (!::IsWindow(m_pHostWnd->m_hWnd) && hWnd && pHubbleDesignView->SubclassWindow(hWnd))
 	{
 		if (isAppWnd == false)
 			::SetWindowLong(hWnd, GWL_STYLE, dwStyle | WS_CHILD | /*WS_VISIBLE | */WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
@@ -897,7 +897,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		}
 		::SetWindowLong(hWnd, GWL_ID, nID);
 
-		pTangramDesignView->m_bCreateExternal = true;
+		pHubbleDesignView->m_bCreateExternal = true;
 		if(m_nViewType==BlankView)
 			m_nViewType = TabGrid;
 		bRet = true;

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -124,7 +124,7 @@ public:
 	HubbleDocTemplateInfo*				m_pHubbleDocTemplateInfo;
 
 	CGrid*								m_pActiveGrid;
-	CGrid*								m_pDesignWindowNode;
+	CGrid*								m_pDesignGrid;
 	CQuasar*							m_pQuasar;
 	CGalaxyCluster*						m_pGalaxyCluster;
 
@@ -170,13 +170,13 @@ public:
 	STDMETHOD(ActiveCLRMethod)(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
 	STDMETHOD(CreateCLRObj)(BSTR bstrObjID, IDispatch** ppDisp);
-	STDMETHOD(CreateGalaxyCluster)(LONGLONG hWnd, IGalaxyCluster** ppTangram);
+	STDMETHOD(CreateGalaxyCluster)(LONGLONG hWnd, IGalaxyCluster** ppHubble);
 	STDMETHOD(CreateHubbleCtrl)(BSTR bstrAppID, IHubbleCtrl** ppRetCtrl);
-	STDMETHOD(CreateHubbleEventObj)(IHubbleEventObj** ppTangramEventObj);
+	STDMETHOD(CreateHubbleEventObj)(IHubbleEventObj** ppHubbleEventObj);
 	STDMETHOD(DownLoadFile)(BSTR strFileURL, BSTR bstrTargetFile, BSTR bstrActionXml);
 	STDMETHOD(Encode)(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet);
 	STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml) { return S_OK; };
-	STDMETHOD(FireHubbleEventObj)(IHubbleEventObj* pTangramEventObj);
+	STDMETHOD(FireHubbleEventObj)(IHubbleEventObj* pHubbleEventObj);
 	STDMETHOD(GetQuasar)(LONGLONG hHostWnd, IQuasar** ppQuasar);
 	STDMETHOD(GetGridFromHandle)(LONGLONG hWnd, IGrid** ppRetGrid);
 	STDMETHOD(GetCtrlByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);

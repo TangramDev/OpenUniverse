@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -13,7 +13,7 @@
 
 #include "StdAfx.h"
 #include "dllmain.h"
-#include "StarCLREvent.h"
+#include "GridCLREvent.h"
 #include "Cosmos.h"
 #include "ChromeWebBrowser.h"
 
@@ -61,10 +61,10 @@ namespace Cosmos
 
     Quasar^ Grid::Quasar::get()
     {
-        CComPtr<IQuasar> pTangramFrame;
-        m_pGrid->get_Quasar(&pTangramFrame);
+        CComPtr<IQuasar> pHubbleFrame;
+        m_pGrid->get_Quasar(&pHubbleFrame);
 
-        Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pTangramFrame);
+        Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pHubbleFrame);
         return pQuasar;
     }
 
@@ -243,10 +243,10 @@ namespace Cosmos
             }
             if (hModule) {
                 typedef CHubbleImpl* (__stdcall* GetHubbleImpl)(IHubble**);
-                GetHubbleImpl _pTangramImplFunction;
-                _pTangramImplFunction = (GetHubbleImpl)GetProcAddress(hModule, "GetHubbleImpl");
-                if (_pTangramImplFunction != NULL) {
-                    theApp.m_pHubbleImpl = _pTangramImplFunction(&theApp.m_pHubble);
+                GetHubbleImpl _pHubbleImplFunction;
+                _pHubbleImplFunction = (GetHubbleImpl)GetProcAddress(hModule, "GetHubbleImpl");
+                if (_pHubbleImplFunction != NULL) {
+                    theApp.m_pHubbleImpl = _pHubbleImplFunction(&theApp.m_pHubble);
                     if (theApp.m_pHubbleImpl->m_nAppType == 0)
                         theApp.m_pHubbleImpl->m_nAppType = APP_BROWSERAPP;
                     theApp.m_pHubbleImpl->m_pHubbleDelegate = (IHubbleDelegate*)&theApp;
@@ -592,10 +592,10 @@ namespace Cosmos
                     HMODULE hModule = ::GetModuleHandle(_T("universe.dll"));
                     if (hModule) {
                         typedef IHubble* (__stdcall* GetTangram)();
-                        GetTangram _pTangramFunction;
-                        _pTangramFunction = (GetTangram)GetProcAddress(hModule, "GetTangram");
-                        if (_pTangramFunction != NULL) {
-                            theApp.m_pHubble = _pTangramFunction();
+                        GetTangram _pHubbleFunction;
+                        _pHubbleFunction = (GetTangram)GetProcAddress(hModule, "GetTangram");
+                        if (_pHubbleFunction != NULL) {
+                            theApp.m_pHubble = _pHubbleFunction();
                         }
                     }
                 }

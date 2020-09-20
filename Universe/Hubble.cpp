@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -93,7 +93,7 @@ CHubble::CHubble()
 	m_pHubbleDocTemplateInfo = nullptr;
 	m_pActiveGrid = nullptr;
 	m_pQuasar = nullptr;
-	m_pDesignWindowNode = nullptr;
+	m_pDesignGrid = nullptr;
 	m_pRootNodes = nullptr;
 	m_pUniverseAppProxy = nullptr;
 	m_pCosmosAppProxy = nullptr;
@@ -1134,9 +1134,9 @@ int CHubble::LoadCLR()
 					}
 				}
 
-				CHubbleImpl* pTangramProxyBase = static_cast<CHubbleImpl*>(this);
+				CHubbleImpl* pHubbleProxyBase = static_cast<CHubbleImpl*>(this);
 				CString strInfo = _T("");
-				strInfo.Format(_T("%I64d"), (__int64)pTangramProxyBase);
+				strInfo.Format(_T("%I64d"), (__int64)pHubbleProxyBase);
 				DWORD dwRetCode = 0;
 				hrStart = m_pClrHost->ExecuteInDefaultAppDomain(
 					strPath,
@@ -1878,9 +1878,9 @@ STDMETHODIMP CHubble::CreateGalaxyCluster(LONGLONG hWnd, IGalaxyCluster** ppGala
 			m_mapWindowPage[_hWnd] = pGalaxyCluster;
 			for (auto it : m_mapHubbleAppProxy)
 			{
-				CGalaxyClusterProxy* pTangramProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-				if (pTangramProxy)
-					pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pTangramProxy;
+				CGalaxyClusterProxy* pHubbleProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
+				if (pHubbleProxy)
+					pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pHubbleProxy;
 			}
 		}
 		*ppGalaxyCluster = pGalaxyCluster;
@@ -2439,17 +2439,17 @@ STDMETHODIMP CHubble::GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bs
 	return S_OK;
 }
 
-STDMETHODIMP CHubble::CreateHubbleEventObj(IHubbleEventObj** ppTangramEventObj)
+STDMETHODIMP CHubble::CreateHubbleEventObj(IHubbleEventObj** ppHubbleEventObj)
 {
 	CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
-	*ppTangramEventObj = pObj;
+	*ppHubbleEventObj = pObj;
 	m_mapEvent[(LONGLONG)pObj] = pObj;
 	return S_OK;
 }
 
-STDMETHODIMP CHubble::FireHubbleEventObj(IHubbleEventObj* pTangramEventObj)
+STDMETHODIMP CHubble::FireHubbleEventObj(IHubbleEventObj* pHubbleEventObj)
 {
-	CCosmosEvent* pObj = (CCosmosEvent*)pTangramEventObj;
+	CCosmosEvent* pObj = (CCosmosEvent*)pHubbleEventObj;
 	if (pObj)
 	{
 		FireAppEvent(pObj);

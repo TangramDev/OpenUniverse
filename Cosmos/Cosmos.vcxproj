@@ -355,7 +355,7 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="CosmosProxy.cpp" />
-    <ClCompile Include="StarCLREvent.cpp" />
+    <ClCompile Include="GridCLREvent.cpp" />
     <ClCompile Include="Cosmos.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -365,7 +365,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="CosmosProxy.h" />
-    <ClInclude Include="StarCLREvent.h" />
+    <ClInclude Include="GridCLREvent.h" />
     <ClInclude Include="Cosmos.h" />
   </ItemGroup>
   <ItemGroup>

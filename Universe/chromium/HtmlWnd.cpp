@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -550,9 +550,9 @@ namespace Web {
 
 					for (auto it : g_pHubble->m_mapHubbleAppProxy)
 					{
-						CGalaxyClusterProxy* pTangramProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-						if (pTangramProxy)
-							pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pTangramProxy;
+						CGalaxyClusterProxy* pHubbleProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
+						if (pHubbleProxy)
+							pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pHubbleProxy;
 					}
 				}
 				if (pGalaxyCluster) {
@@ -767,10 +767,10 @@ namespace Web {
 						CString strName = OLE2T(bstrName);
 						if (strName != _T(""))
 						{
-							CComPtr<IGridCollection> pTangramNodeCollection;
+							CComPtr<IGridCollection> pHubbleNodeCollection;
 							IGrid* _pGrid = nullptr;
 							long nCount = 0;
-							pGrid->m_pRootObj->GetGrids(bstrName, &_pGrid, &pTangramNodeCollection, &nCount);
+							pGrid->m_pRootObj->GetGrids(bstrName, &_pGrid, &pHubbleNodeCollection, &nCount);
 							if (_pGrid)
 							{
 								m_pBindGrid = (CGrid*)_pGrid;

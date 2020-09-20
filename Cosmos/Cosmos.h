@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -353,11 +353,11 @@ namespace Cosmos
 		{
 			Cosmos::Quasar^ get()
 			{
-				CComPtr<IQuasar> pTangramFrame;
-				m_pGrid->get_HostQuasar(&pTangramFrame);
-				if (pTangramFrame)
+				CComPtr<IQuasar> pHubbleFrame;
+				m_pGrid->get_HostQuasar(&pHubbleFrame);
+				if (pHubbleFrame)
 				{
-					Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pTangramFrame);
+					Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pHubbleFrame);
 					return pQuasar;
 				}
 				return nullptr;

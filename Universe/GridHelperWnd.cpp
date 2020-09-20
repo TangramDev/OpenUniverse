@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.5								*
+*					Open Universe - version 0.9.7								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -198,15 +198,15 @@ int CGridHelperWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT messa
 		&& m_pGrid->m_strID.CompareNoCase(TGM_NUCLEUS)
 		&&m_pGrid->m_pDisp == NULL)
 	{
-		if (g_pHubble->m_pDesignWindowNode && g_pHubble->m_pDesignWindowNode != m_pGrid)
+		if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid != m_pGrid)
 		{
-			CGridHelperWnd* pWnd = ((CGridHelperWnd*)g_pHubble->m_pDesignWindowNode->m_pHostWnd);
+			CGridHelperWnd* pWnd = ((CGridHelperWnd*)g_pHubble->m_pDesignGrid->m_pHostWnd);
 			if (pWnd && ::IsWindow(pWnd->m_hWnd))
 			{
 				pWnd->Invalidate(true);
 			}
 		}
-		g_pHubble->m_pDesignWindowNode = m_pGrid;
+		g_pHubble->m_pDesignGrid = m_pGrid;
 		Invalidate(true);
 	}
 
@@ -274,7 +274,7 @@ BOOL CGridHelperWnd::OnEraseBkgnd(CDC* pDC)
 		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
 		CBrush br(&bit);
 		pDC->FillRect(&rt, &br);
-		if (bInDesignState && g_pHubble->m_pDesignWindowNode == m_pGrid)
+		if (bInDesignState && g_pHubble->m_pDesignGrid == m_pGrid)
 		{
 			pDC->SetTextColor(RGB(255, 0, 255));
 			CString str = g_pHubble->GetDesignerInfo(_T("SelectedText"));
@@ -371,9 +371,9 @@ BOOL CGridHelperWnd::PreTranslateMessage(MSG* pMsg)
 
 void CGridHelperWnd::OnDestroy()
 {
-	if (g_pHubble->m_pDesignWindowNode == m_pGrid)
+	if (g_pHubble->m_pDesignGrid == m_pGrid)
 	{
-		g_pHubble->m_pDesignWindowNode = NULL;
+		g_pHubble->m_pDesignGrid = NULL;
 	}
 
 	m_pGrid->Fire_Destroy();
@@ -758,7 +758,7 @@ LRESULT CGridHelperWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 		}
 
 		strXml = m_pGrid->m_pGridCommonData->m_pHubbleParse->xml();
-		g_pHubble->m_pDesignWindowNode = m_pGrid;
+		g_pHubble->m_pDesignGrid = m_pGrid;
 		auto it = m_pGrid->m_pGridCommonData->m_pQuasar->m_pGalaxyCluster->m_mapQuasar.find(pOldNode->m_hChildHostWnd);
 		if (it != m_pGrid->m_pGridCommonData->m_pQuasar->m_pGalaxyCluster->m_mapQuasar.end())
 			m_pGrid->m_pGridCommonData->m_pQuasar->m_pGalaxyCluster->m_mapQuasar.erase(it);
