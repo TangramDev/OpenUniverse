@@ -41,8 +41,8 @@ namespace Web
 		CString								m_strAppProxyID;
 
 		CQuasar*							m_pQuasar;
-		CStar*								m_pParentStar;
-		CStar*								m_pBindStar;
+		CGrid*								m_pParentStar;
+		CGrid*								m_pBindStar;
 		CWinForm*							m_pBindWinForm;
 		IHubbleAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
@@ -76,7 +76,7 @@ namespace Web
 
 	private:
 		CString m_strDocXml;
-		IStar* GetParentNode() { return (IStar*)m_pParentStar; }
+		IGrid* GetParentNode() { return (IGrid*)m_pParentStar; }
 		IQuasar* GetQuasar() { return (IQuasar*)m_pQuasar; }
 		CString FindToken(CString pszContent, CString pszDelimiter, int& nStart);
 		void LoadDocument2Viewport(CString strName, CString strXML);

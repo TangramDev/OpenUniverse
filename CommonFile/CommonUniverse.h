@@ -36,9 +36,9 @@
 #define IPC_CLR_CONTROL_CREARED							20200220
 #define IPC_CLR_CONTROL_CREARED_ID						_T("Tangram_CLR_Control_Created")
 #define IPC_NODE_CREARED								20200221
-#define IPC_NODE_CREARED_ID								_T("Tangram_WndNode_Created")
+#define IPC_NODE_CREARED_ID								_T("Tangram_WndGrid_Created")
 #define IPC_NODE_ONMOUSEACTIVATE						20200222
-#define IPC_NODE_ONMOUSEACTIVATE_ID						_T("Tangram_WndNode_OnMouseActivate")
+#define IPC_NODE_ONMOUSEACTIVATE_ID						_T("Tangram_WndGrid_OnMouseActivate")
 #define IPC_MDIWINFORM_ACTIVEMDICHILD					20200224
 #define IPC_MDIWINFORM_ACTIVEMDICHILD_ID				_T("MdiWinForm_ActiveMdiChild")
 
@@ -137,7 +137,7 @@
 
 #define TGM_NAME				_T("name")
 #define TGM_CAPTION				_T("caption")
-#define TGM_NODE_TYPE			_T("startype")
+#define TGM_NODE_TYPE			_T("gridtype")
 #define TGM_CNN_ID				_T("objid")
 #define TGM_HEIGHT				_T("height")
 #define TGM_WIDTH				_T("width")
@@ -145,7 +145,7 @@
 #define TGM_ACTIVE_PAGE			_T("activepage")
 #define TGM_TAG					_T("tag")
 #define TGM_CLUSTER				_T("cluster")
-#define TGM_NODE				_T("star")
+#define TGM_NODE				_T("grid")
 #define TGM_NUCLEUS				_T("nucleus")
 
 #define TGM_ROWS				_T("rows")
@@ -226,7 +226,7 @@ namespace CommonUniverse {
 		CString m_strBindObjName = _T("");
 		CString m_strObjType = _T("");
 		CString m_strBindData = _T("");
-		IStar* m_pNode = nullptr;
+		IGrid* m_pGrid = nullptr;
 		IDispatch* m_pObjDisp = nullptr;
 		LPARAM lParam = 0;
 	} BindWebObj;
@@ -242,7 +242,7 @@ namespace CommonUniverse {
 		CString			m_strProxyID;
 		CString			m_strDocTemplateKey;
 		CString			m_strTemplatePath;
-		void*			m_pDocTemplate;
+		void* m_pDocTemplate;
 	}HubbleDocTemplateInfo;
 
 	typedef struct TangramProjectInfo
@@ -254,7 +254,7 @@ namespace CommonUniverse {
 		CString			m_strPrjFullPath;
 		CString			m_strExt;
 		CString			m_strFilter;
-		IDispatch*		m_pPrjDisp;
+		IDispatch* m_pPrjDisp;
 	}TangramProjectInfo;
 
 	typedef struct TangramDocInfo
@@ -271,9 +271,9 @@ namespace CommonUniverse {
 	{
 		HWND					m_hWnd;
 		CString					m_strName;
-		IGalaxyCluster*			m_pGalaxyCluster;
-		IStar*					m_pNode;
-		IDispatch*				m_pCtrlDisp;
+		IGalaxyCluster* m_pGalaxyCluster;
+		IGrid* m_pGrid;
+		IDispatch* m_pCtrlDisp;
 	}CtrlInfo;
 
 	typedef struct IPCSession
@@ -290,7 +290,7 @@ namespace CommonUniverse {
 	public:
 		CSession() {}
 		virtual ~CSession() {}
-		
+
 		CWebPageImpl* m_pOwner;
 
 		virtual void InsertString(CString key, CString value) = 0;
@@ -342,15 +342,15 @@ namespace CommonUniverse {
 
 		CString					m_strProviderID = _T("");
 		CString					m_strContainer = _T("");
-		IHubble*				m_pHubble = nullptr;
-		IStar*					m_pCreatingNode = nullptr;
+		IHubble* m_pHubble = nullptr;
+		IGrid* m_pCreatingNode = nullptr;
 		map<CString, CString>	m_mapInnerObjStyle;
 		map<CString, void*>		m_mapInnerObjInfo;
 
 		virtual bool HubbleInit(CString strID) = 0;
 		virtual CString GetNames() = 0;
 		virtual CString GetTags(CString strName) = 0;
-		virtual HWND Create(HWND hParentWnd, IStar* pNode) = 0;
+		virtual HWND Create(HWND hParentWnd, IGrid* pGrid) = 0;
 	};
 
 	class IHubbleWindow
@@ -362,11 +362,11 @@ namespace CommonUniverse {
 		virtual void Save() = 0;
 	};
 
-	class CStarProxy
+	class CGridProxy
 	{
 	public:
-		CStarProxy() { }
-		virtual ~CStarProxy() {}
+		CGridProxy() { }
+		virtual ~CGridProxy() {}
 
 		bool	m_bAutoDelete;
 
@@ -375,7 +375,7 @@ namespace CommonUniverse {
 		virtual void OnNodeAddInCreated(IDispatch* pAddIndisp, CString bstrAddInID, CString bstrAddInXml) {}
 		virtual void OnNodeAddInsCreated() {}
 		virtual void OnNodeDocumentComplete(IDispatch* ExtenderDisp, CString bstrURL) {}
-		virtual void OnControlNotify(IStar* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {}
+		virtual void OnControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {}
 		virtual void OnTabChange(LONG ActivePage, LONG OldPage) {}
 		virtual void OnHubbleDocEvent(IHubbleEventObj* pEventObj) {}
 	};
@@ -389,16 +389,16 @@ namespace CommonUniverse {
 		bool	m_bAutoDelete;
 
 		virtual void OnGalaxyClusterLoaded(IDispatch* sender, CString url) {}
-		virtual void OnNodeCreated(IStar* pNodeCreated) {}
-		virtual void OnAddInCreated(IStar* pRootNode, IDispatch* pAddIn, CString bstrID, CString bstrAddInXml) {}
+		virtual void OnNodeCreated(IGrid* pGridCreated) {}
+		virtual void OnAddInCreated(IGrid* pRootGrid, IDispatch* pAddIn, CString bstrID, CString bstrAddInXml) {}
 		virtual void OnBeforeOpenXml(CString bstrXml, HWND hWnd) {}
-		virtual void OnOpenXmlComplete(CString bstrXml, HWND hWnd, IStar* pRetRootNode) {}
+		virtual void OnOpenXmlComplete(CString bstrXml, HWND hWnd, IGrid* pRetRootNode) {}
 		virtual void OnDestroy() {}
-		virtual void OnNodeMouseActivate(IStar* pActiveNode) {}
-		virtual void OnClrControlCreated(IStar* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle) {}
-		virtual void OnTabChange(IStar* sender, LONG ActivePage, LONG OldPage) {}
+		virtual void OnNodeMouseActivate(IGrid* pActiveNode) {}
+		virtual void OnClrControlCreated(IGrid* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle) {}
+		virtual void OnTabChange(IGrid* sender, LONG ActivePage, LONG OldPage) {}
 		virtual void OnEvent(IDispatch* sender, IDispatch* EventArg) {}
-		virtual void OnControlNotify(IStar* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {}
+		virtual void OnControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {}
 		virtual void OnHubbleEvent(IHubbleEventObj* NotifyObj) {}
 	};
 
@@ -409,7 +409,7 @@ namespace CommonUniverse {
 		virtual ~CQuasarProxy() {}
 
 		bool	m_bAutoDelete;
-		virtual void OnExtend(IStar* pRetNode, CString bstrKey, CString bstrXml) {}
+		virtual void OnExtend(IGrid* pRetNode, CString bstrKey, CString bstrXml) {}
 	};
 
 	class CHubbleDocProxy
@@ -452,8 +452,8 @@ namespace CommonUniverse {
 		LPCTSTR								m_strCreatingFrameTitle;
 		LPCTSTR								m_strClosingFrameID;
 		void* m_pvoid;
-		CHubbleDocProxy*					m_pCurDocProxy;
-		CHubbleImpl*						m_pHubbleImpl;
+		CHubbleDocProxy* m_pCurDocProxy;
+		CHubbleImpl* m_pHubbleImpl;
 
 		BOOL								m_bCreatingNewFrame;
 		int									m_nFrameIndex;
@@ -471,16 +471,16 @@ namespace CommonUniverse {
 		virtual LRESULT OnForegroundIdleProc() { return 0; }
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
 		virtual void OnHubbleClose() {}
-		virtual void OnOpenComplete(HWND hWnd, CString bstrUrl, IStar* pRootNode) {}
+		virtual void OnOpenComplete(HWND hWnd, CString bstrUrl, IGrid* pRootGrid) {}
 		virtual void OnHubbleEvent(IHubbleEventObj* NotifyObj) {}
 		virtual void RegistWndClassToHubble() {}
-		virtual void OnActiveDocument(IHubbleDoc* ActiveDoc, IStar* pNodeInDoc, IStar* pNodeInCtrlBar, HWND hCtrlBar) {}
+		virtual void OnActiveDocument(IHubbleDoc* ActiveDoc, IGrid* pGridInDoc, IGrid* pGridInCtrlBar, HWND hCtrlBar) {}
 		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
 		virtual IHubbleDoc* CreateNewDocument(LPCTSTR lpszFrameID, LPCTSTR lpszAppTitle, void* pDocTemplate, BOOL bNewFrame) { return NULL; }
 		virtual IHubbleDoc* OpenDocument(void* pDocTemplate, CString strFile, BOOL bNewFrame) { return NULL; }
-		virtual CStarProxy* OnHubbleNodeInit(IStar* pNewNode) { return nullptr; }
+		virtual CGridProxy* OnHubbleNodeInit(IGrid* pNewNode) { return nullptr; }
 		virtual CQuasarProxy* OnQuasarCreated(IQuasar* pNewQuasar) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewQuasar) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
@@ -528,13 +528,13 @@ namespace CommonUniverse {
 		CString								m_strTangramToolWndXML;
 		CString								m_strCurrentXtmlFilePath;
 
-		IQuasar*							m_pQuasar;
-		CHubbleImpl*						m_pProxy;
+		IQuasar* m_pQuasar;
+		CHubbleImpl* m_pProxy;
 		map<HWND, IQuasar*>					m_mapWinFormQuasar;
 
-		IQuasar*							m_pToolBoxFrame;
-		IQuasar*							m_pClassViewFrame;
-		IQuasar*							m_pPropertyFrame;
+		IQuasar* m_pToolBoxFrame;
+		IQuasar* m_pClassViewFrame;
+		IQuasar* m_pPropertyFrame;
 
 		virtual IDispatch* CreateToolWnd(CString strXml, bool bShow) { return nullptr; }
 		virtual void* HubbleAction(CString strKey, CString strXml) { return nullptr; }
@@ -554,7 +554,7 @@ namespace CommonUniverse {
 		virtual IDispatch* CreateCLRObj(CString bstrObjID) = 0;
 		virtual HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey) = 0;
 		virtual BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton) = 0;
-		virtual IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IStar* pHostNode) = 0;
+		virtual IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode) = 0;
 		virtual int IsWinForm(HWND hWnd) = 0;
 		virtual int IsSpecifiedType(IUnknown* pUnknown, BSTR bstrName) = 0;
 		virtual IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames) = 0;
@@ -568,13 +568,13 @@ namespace CommonUniverse {
 		virtual void HubbleAction(BSTR bstrXml, void*) = 0;
 		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) = 0;
 		virtual void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal) = 0;
-		virtual void SelectNode(IStar*) {}
+		virtual void SelectNode(IGrid*) {}
 		virtual void SelectObj(IDispatch*) {}
 		virtual void ReleaseHubbleObj(IDispatch*) {}
 		virtual void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {}
 		virtual void WindowDestroy(HWND hWnd) {}
-		virtual CWPFObj* CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID) { return nullptr; }
-		virtual HRESULT NavigateURL(IStar* pNode, CString strURL, IDispatch* dispObjforScript) { return S_FALSE; }
+		virtual CWPFObj* CreateWPFControl(IGrid* pGrid, HWND hPWnd, UINT nID) { return nullptr; }
+		virtual HRESULT NavigateURL(IGrid* pGrid, CString strURL, IDispatch* dispObjforScript) { return S_FALSE; }
 		virtual void OnCLRHostExit() {}
 		virtual void OnDestroyChromeBrowser(IBrowser*) {}
 		virtual void ExportAllFormsInfo() {}
@@ -588,7 +588,7 @@ namespace CommonUniverse {
 		virtual void HideMenuStripPopup() = 0;
 		virtual bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType) = 0;
 		virtual void OnCloudMsgReceived(CSession*) = 0;
-		virtual void ConnectNodeToWebPage(IStar*, bool) = 0;
+		virtual void ConnectGridToWebPage(IGrid*, bool) = 0;
 	};
 
 	class CHubbleImpl {
@@ -676,6 +676,7 @@ namespace CommonUniverse {
 
 		CString 								m_strConfigFile;
 		CString									m_strDocFilters;
+
 		CString									m_strTemplatePath;
 		CString									m_strCurrentFrameID;
 		CString									m_strDocTemplateStrs;
@@ -693,22 +694,22 @@ namespace CommonUniverse {
 		CStringA								m_strBridgeJavaClass;
 		CString									m_strStartJarPath;
 
-		IPCMsg*									m_pCurrentIPCMsg;
-		IHubbleCLRImpl*							m_pCLRProxy;
-		IHubbleAppProxy*						m_pActiveAppProxy;
-		IHubbleAppProxy*						m_pUniverseAppProxy;
-		IHubbleAppProxy*						m_pCosmosAppProxy;
-		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
-		CHubblePackageProxy*					m_pHubblePackageProxy;
-		IStar*									m_pHostViewDesignerNode = nullptr;
-		IHubbleExtender*						m_pExtender = nullptr;
-		IHubbleDelegate*						m_pHubbleDelegate = nullptr;
-		CChromeBrowserBase*						m_pActiveBrowser = nullptr;
-		CHubbleBrowserFactory*					m_pBrowserFactory = nullptr;
-		IHubbleWindow*							m_pCreatingWindow = nullptr;
-		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
-		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
+		IPCMsg* m_pCurrentIPCMsg;
+		IHubbleCLRImpl* m_pCLRProxy;
+		IHubbleAppProxy* m_pActiveAppProxy;
+		IHubbleAppProxy* m_pUniverseAppProxy;
+		IHubbleAppProxy* m_pCosmosAppProxy;
+		CMDIChildFormInfo* m_pCurMDIChildFormInfo;
+		CHubblePackageProxy* m_pHubblePackageProxy;
+		IGrid* m_pHostViewDesignerNode = nullptr;
+		IHubbleExtender* m_pExtender = nullptr;
+		IHubbleDelegate* m_pHubbleDelegate = nullptr;
+		CChromeBrowserBase* m_pActiveBrowser = nullptr;
+		CHubbleBrowserFactory* m_pBrowserFactory = nullptr;
+		IHubbleWindow* m_pCreatingWindow = nullptr;
+		OmniboxViewViewsProxy* m_pCreatingOmniboxViewViews = nullptr;
+		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
+		CWebPageImpl* m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapFramePage;
@@ -716,7 +717,7 @@ namespace CommonUniverse {
 		map<CString, CComVariant>				m_mapValInfo;
 		map<CString, void*>						m_mapTemplateInfo;
 		map<CString, IHubble*>					m_mapRemoteHubble;
-		map<IStar*, CString>					m_mapControlScript;
+		map<IGrid*, CString>					m_mapControlScript;
 		//map<CString, void*>						m_mapExcludedObjects;
 		map<CString, IHubbleAppProxy*>			m_mapHubbleAppProxy;
 		map<CString, IHubbleWindowProvider*>	m_mapWindowProvider;
@@ -738,27 +739,27 @@ namespace CommonUniverse {
 		virtual IQuasar* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, QuasarInfo*) { return nullptr; }
 		virtual void OnSubBrowserWndCreated(HWND hParent, HWND hBrowser) = 0;
 		virtual void OnRenderProcessCreated(CChromeRenderProcess* pProcess) = 0;
-		virtual void OnDocumentOnLoadCompleted(CChromeRenderFrameHost*,	HWND hHtmlWnd, void*) = 0;
+		virtual void OnDocumentOnLoadCompleted(CChromeRenderFrameHost*, HWND hHtmlWnd, void*) = 0;
 		virtual void ChromeTabCreated(CChromeTab* pTab) = 0;
 		virtual CString GetProcessPath(const char* _ver, CString process_type) = 0;
 		virtual CString GetSchemeBaseName() = 0;
 		virtual HICON GetAppIcon(int nIndex) = 0;
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) = 0;
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) = 0;
-		virtual void AttachNode(void* pNodeEvents) {}
+		virtual void AttachNode(void* pGridEvents) {}
 		virtual void HubbleInit() {}
 		virtual IHubbleDoc* ConnectHubbleDoc(IHubbleAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hFrame, LPCTSTR strDocType) { return nullptr; }
-		virtual CString GetNewLayoutNodeName(BSTR strCnnID, IStar* pDesignNode) { return _T(""); }
+		virtual CString GetNewLayoutNodeName(BSTR strCnnID, IGrid* pDesignNode) { return _T(""); }
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
-		virtual IStar* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
-		virtual bool IsMDIClientQuasarNode(IStar*) { return false; }
+		virtual IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
+		virtual bool IsMDIClientQuasarNode(IGrid*) { return false; }
 		virtual void ExportComponentInfo() {}
 		virtual void ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate) {}
 		virtual void InserttoDataMap(int nType, CString strKey, void* pData) {}
 		virtual IWebPage* GetWebPageFromForm(HWND) { return nullptr; }
 		virtual long GetIPCMsgIndex(CString strMsgID) { return 0; }
 		virtual CSession* CreateCloudSession(CWebPageImpl*) { return nullptr; }
-		virtual CSession* GetCloudSession(IStar*) { return nullptr; }
+		virtual CSession* GetCloudSession(IGrid*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
 		virtual void HubbleNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 	};
@@ -777,8 +778,8 @@ namespace CommonUniverse {
 		virtual ~IHubbleDelegate() {}
 
 		BOOL				m_bBrowserWndCreated;
-		JavaVM*				m_pJVM;
-		JNIEnv*				m_pJVMenv;
+		JavaVM* m_pJVM;
+		JNIEnv* m_pJVMenv;
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
@@ -944,8 +945,8 @@ namespace CommonUniverse {
 		CBrowserImpl() {}
 		virtual ~CBrowserImpl() {}
 
-		CChromeBrowserBase*		m_pBrowser;
-		OmniboxViewViewsProxy*	m_pOmniboxViewViews;
+		CChromeBrowserBase* m_pBrowser;
+		OmniboxViewViewsProxy* m_pOmniboxViewViews;
 
 		virtual void UpdateContentRect(HWND hWebContent, RECT& rc, int nTopFix) = 0;
 		virtual void ActiveChromeTab(HWND hActive, HWND hOldWnd) = 0;
@@ -991,10 +992,10 @@ namespace CommonUniverse {
 		virtual void SendHubbleMessage(IPCMsg*) = 0;
 		virtual void SendHubbleMessage(IPCSession* var) = 0;
 		virtual IPCSession* GetIPCSession() = 0;
-		virtual void InsertString(IPCSession* , CString key, CString value) = 0;
-		virtual void InsertLong(IPCSession* , CString key, long value) = 0;
-		virtual void Insertint64(IPCSession* , CString key, __int64 value) = 0;
-		virtual void InsertFloat(IPCSession* , CString key, float value) = 0;
+		virtual void InsertString(IPCSession*, CString key, CString value) = 0;
+		virtual void InsertLong(IPCSession*, CString key, long value) = 0;
+		virtual void Insertint64(IPCSession*, CString key, __int64 value) = 0;
+		virtual void InsertFloat(IPCSession*, CString key, float value) = 0;
 		virtual CString GetString(IPCSession*, CString key) = 0;
 		virtual long GetLong(IPCSession*, CString key) = 0;
 		virtual __int64 Getint64(IPCSession*, CString key) = 0;
@@ -1003,12 +1004,12 @@ namespace CommonUniverse {
 
 	class CWebPageImpl {
 	public:
-		CWebPageImpl() { 
+		CWebPageImpl() {
 			m_pRemoteHubble = nullptr;
-			m_pChromeRenderFrameHost = nullptr; 
+			m_pChromeRenderFrameHost = nullptr;
 		}
 
-		virtual ~CWebPageImpl() 
+		virtual ~CWebPageImpl()
 		{
 			for (auto it = m_mapBindWebObj.begin(); it != m_mapBindWebObj.end(); it++)
 			{
@@ -1019,11 +1020,11 @@ namespace CommonUniverse {
 
 		IHubble* m_pRemoteHubble = nullptr;
 		map<CString, BindWebObj*>	m_mapBindWebObj;
-		CChromeRenderFrameHost*		m_pChromeRenderFrameHost;
+		CChromeRenderFrameHost* m_pChromeRenderFrameHost;
 		virtual void SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) = 0;
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) = 0;
 		virtual void OnWinFormCreated(HWND) = 0;
-		virtual IStar* GetParentNode() = 0;
+		virtual IGrid* GetParentNode() = 0;
 		virtual IQuasar* GetQuasar() = 0;
 		virtual void OnCloudMsgReceived(CSession*) = 0;
 	};

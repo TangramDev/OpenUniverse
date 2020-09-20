@@ -14,10 +14,10 @@
 #include "../stdafx.h"
 #include "../UniverseApp.h"
 #include "../Hubble.h"
-#include "../Star.h"
-#include "../StarWnd.h"
-#include "../Quasar.h"
 #include "../grid.h"
+#include "../GridHelperWnd.h"
+#include "../Quasar.h"
+#include "../GridWnd.h"
 #include "BrowserWnd.h"
 #include "HtmlWnd.h"
 
@@ -27,7 +27,7 @@ namespace Web {
 		m_heightfix = 0;
 		m_hOldTab = NULL;
 		m_bTabChange = false;
-		m_pRemoteStar = nullptr;
+		m_pRemoteGrid = nullptr;
 		m_pBrowser = nullptr;
 		m_pParentStar = nullptr;
 		m_fdevice_scale_factor = 1.0f;
@@ -369,8 +369,8 @@ namespace Web {
 				CQuasar* pQuasar = m_pVisibleWebWnd->m_pQuasar;
 				if (pQuasar)
 				{
-					CStar* pNode = pQuasar->m_pWorkNode;
-					CStarWnd* pWnd = (CStarWnd*)(pNode->m_pHostWnd);
+					CGrid* pGrid = pQuasar->m_pWorkNode;
+					CGridHelperWnd* pWnd = (CGridHelperWnd*)(pGrid->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}
 			}
@@ -532,20 +532,20 @@ namespace Web {
 		delete this;
 	}
 
-	STDMETHODIMP CBrowser::get_RemoteStar(IStar** pVal)
+	STDMETHODIMP CBrowser::get_RemoteGrid(IGrid** pVal)
 	{
-		if (m_pRemoteStar != nullptr)
+		if (m_pRemoteGrid != nullptr)
 		{
-			*pVal = m_pRemoteStar;
+			*pVal = m_pRemoteGrid;
 		}
 		return S_OK;
 	}
 
-	STDMETHODIMP CBrowser::put_RemoteStar(IStar* newVal)
+	STDMETHODIMP CBrowser::put_RemoteGrid(IGrid* newVal)
 	{
-		CComQIPtr<IStar>pNode(newVal);
-		if (pNode)
-			m_pRemoteStar = pNode.Detach();
+		CComQIPtr<IGrid>pGrid(newVal);
+		if (pGrid)
+			m_pRemoteGrid = pGrid.Detach();
 		return S_OK;
 	}
 

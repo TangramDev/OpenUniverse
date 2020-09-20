@@ -16,57 +16,57 @@
 
 using namespace System::Runtime::InteropServices;
 
-CStarCLREvent::CStarCLREvent()
+CGridCLREvent::CGridCLREvent()
 {
 }
 
 
-CStarCLREvent::~CStarCLREvent()
+CGridCLREvent::~CGridCLREvent()
 {
-	//delete m_pStar;
+	//delete m_pGrid;
 }
 
-void CStarCLREvent::OnOpenComplete(IStar* pNode)
+void CGridCLREvent::OnOpenComplete(IGrid* pGrid)
 {
-	m_pStar->Fire_OpenComplete(m_pStar);
+	m_pGrid->Fire_OpenComplete(m_pGrid);
 }
 
-void CStarCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
+void CGridCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 {
 	Object^ pObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pDocdisp)));
-	m_pStar->Fire_OnDocumentComplete(m_pStar, pObj, BSTR2STRING(bstrUrl));
+	m_pGrid->Fire_OnDocumentComplete(m_pGrid, pObj, BSTR2STRING(bstrUrl));
 }
 
-void CStarCLREvent::OnDestroy()
+void CGridCLREvent::OnDestroy()
 {
-	if (m_pStar->m_pHostObj)
+	if (m_pGrid->m_pHostObj)
 	{
-		Star^ pNode = nullptr;
-		if (Cosmos::Hubble::m_pFrameworkElementDic->TryGetValue(m_pStar->m_pHostObj, pNode))
+		Cosmos::Grid^ pGrid = nullptr;
+		if (Cosmos::Hubble::m_pFrameworkElementDic->TryGetValue(m_pGrid->m_pHostObj, pGrid))
 		{
-			Cosmos::Hubble::m_pFrameworkElementDic->Remove(m_pStar->m_pHostObj);
+			Cosmos::Hubble::m_pFrameworkElementDic->Remove(m_pGrid->m_pHostObj);
 		}
 	}
-	m_pStar->Fire_OnDestroy(m_pStar);
+	m_pGrid->Fire_OnDestroy(m_pGrid);
 }
 
-void CStarCLREvent::OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+void CGridCLREvent::OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	Object^ pAddinObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pAddIndisp)));
-	m_pStar->Fire_NodeAddInCreated(m_pStar, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
+	m_pGrid->Fire_NodeAddInCreated(m_pGrid, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
 }
 
-void CStarCLREvent::OnNodeAddInsCreated()
+void CGridCLREvent::OnNodeAddInsCreated()
 {
-	m_pStar->Fire_NodeAddInsCreated(m_pStar);
+	m_pGrid->Fire_NodeAddInsCreated(m_pGrid);
 }
 
-void CStarCLREvent::OnTabChange(int nActivePage, int nOldPage)
+void CGridCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	m_pStar->Fire_OnTabChange(nActivePage, nOldPage);
+	m_pGrid->Fire_OnTabChange(nActivePage, nOldPage);
 }
 
-void CStarCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
+void CGridCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
 {
-	m_pStar->Fire_OnIPCMessageReceived(BSTR2STRING(bstrFrom), BSTR2STRING(bstrTo), BSTR2STRING(bstrMsgId), BSTR2STRING(bstrPayload), BSTR2STRING(bstrExtra));
+	m_pGrid->Fire_OnIPCMessageReceived(BSTR2STRING(bstrFrom), BSTR2STRING(bstrTo), BSTR2STRING(bstrMsgId), BSTR2STRING(bstrPayload), BSTR2STRING(bstrExtra));
 }

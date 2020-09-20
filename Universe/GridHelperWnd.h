@@ -13,9 +13,9 @@
 
 #pragma once
 
-class CStarWnd : public CWnd
+class CGridHelperWnd : public CWnd
 {
-	DECLARE_DYNCREATE(CStarWnd)
+	DECLARE_DYNCREATE(CGridHelperWnd)
 public:
 	BOOL					m_bNoMove;
 	BOOL					m_bBKWnd;
@@ -26,8 +26,8 @@ public:
 	CString					m_strKey;
 	CString					m_strXml;
 
-	CStar*					m_pStar;
-	CStar*					m_pParentStar;
+	CGrid*					m_pGrid;
+	CGrid*					m_pParentStar;
 
 	map<CString, HWND>		m_mapDockCtrl;
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
@@ -40,8 +40,8 @@ public:
 #endif
 
 protected:
-	CStarWnd();           // protected constructor used by dynamic creation
-	virtual ~CStarWnd();
+	CGridHelperWnd();           // protected constructor used by dynamic creation
+	virtual ~CGridHelperWnd();
 	void PostNcDestroy();
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();

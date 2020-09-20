@@ -96,19 +96,19 @@ public:
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CWebPage*										m_pWebPageWnd;
-	CStar*											m_pHostWebBrowserNode = nullptr;
+	CGrid*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster;
-	CStar*											m_pParentStar;
-	CStar*											m_pWorkNode;
-	CStar*											m_pContainerNode;
-	CStar*											m_pBindingStar;
+	CGrid*											m_pParentStar;
+	CGrid*											m_pWorkNode;
+	CGrid*											m_pContainerNode;
+	CGrid*											m_pBindingStar;
 	CQuasar*										m_pSubQuasar;
 	QuasarInfo*										m_pQuasarInfo;
-	map<CString, CStar*>							m_mapNode;
+	map<CString, CGrid*>							m_mapGrid;
 	map<CString, VARIANT>							m_mapVal;
-	map<CString, CStar*>							m_mapNodeScript;
-	CComObject<CStarCollection>*					m_pRootNodes;
+	map<CString, CGrid*>							m_mapGridScript;
+	CComObject<CGridCollection>*					m_pRootNodes;
 
 	void Lock(){}
 	void Unlock(){}
@@ -116,13 +116,13 @@ public:
 	void HostPosChanged();
 	void UpdateDesignerTreeInfo();
 
-	CTangramXmlParse* UpdateStar();
+	CTangramXmlParse* UpdateGrid();
 	BOOL CreateGalaxyCluster();
-	CStar* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
+	CGrid* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
 
 	STDMETHOD(get_QuasarXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);
-	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(GetXml)(BSTR bstrRootName, BSTR* bstrRet);
 
 	BEGIN_COM_MAP(CQuasar)
@@ -164,13 +164,13 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 
 	STDMETHOD(get_Count)(long* pCount);
-	STDMETHOD(get_Star)(VARIANT vIndex, IStar **ppNode);
+	STDMETHOD(get_Grid)(VARIANT vIndex, IGrid **ppGrid);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_CurrentNavigateKey)(BSTR* pVal);
-	STDMETHOD(get_VisibleStar)(IStar** pVal);
-	STDMETHOD(get_RootStars)(IStarCollection** pNodeColletion);
+	STDMETHOD(get_VisibleGrid)(IGrid** pVal);
+	STDMETHOD(get_RootGrids)(IGridCollection** pGridColletion);
 	STDMETHOD(get_QuasarData)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_QuasarData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);

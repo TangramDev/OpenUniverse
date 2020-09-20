@@ -5802,7 +5802,7 @@ EXTERN_C const IID IID_ICLRGCManager;
         virtual HRESULT STDMETHODCALLTYPE GetStats( 
             /* [out][in] */ COR_GC_STATS *pStats) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetGCStartupLimits( 
+        virtual HRESULT STDMETHODCALLTYPE SetGCGridtupLimits( 
             /* [in] */ DWORD SegmentSize,
             /* [in] */ DWORD MaxGen0Size) = 0;
         
@@ -5835,7 +5835,7 @@ EXTERN_C const IID IID_ICLRGCManager;
             ICLRGCManager * This,
             /* [out][in] */ COR_GC_STATS *pStats);
         
-        HRESULT ( STDMETHODCALLTYPE *SetGCStartupLimits )( 
+        HRESULT ( STDMETHODCALLTYPE *SetGCGridtupLimits )( 
             ICLRGCManager * This,
             /* [in] */ DWORD SegmentSize,
             /* [in] */ DWORD MaxGen0Size);
@@ -5869,8 +5869,8 @@ EXTERN_C const IID IID_ICLRGCManager;
 #define ICLRGCManager_GetStats(This,pStats)	\
     ( (This)->lpVtbl -> GetStats(This,pStats) ) 
 
-#define ICLRGCManager_SetGCStartupLimits(This,SegmentSize,MaxGen0Size)	\
-    ( (This)->lpVtbl -> SetGCStartupLimits(This,SegmentSize,MaxGen0Size) ) 
+#define ICLRGCManager_SetGCGridtupLimits(This,SegmentSize,MaxGen0Size)	\
+    ( (This)->lpVtbl -> SetGCGridtupLimits(This,SegmentSize,MaxGen0Size) ) 
 
 #endif /* COBJMACROS */
 
@@ -5898,7 +5898,7 @@ EXTERN_C const IID IID_ICLRGCManager2;
     ICLRGCManager2 : public ICLRGCManager
     {
     public:
-        virtual HRESULT STDMETHODCALLTYPE SetGCStartupLimitsEx( 
+        virtual HRESULT STDMETHODCALLTYPE SetGCGridtupLimitsEx( 
             /* [in] */ SIZE_T SegmentSize,
             /* [in] */ SIZE_T MaxGen0Size) = 0;
         
@@ -5931,12 +5931,12 @@ EXTERN_C const IID IID_ICLRGCManager2;
             ICLRGCManager2 * This,
             /* [out][in] */ COR_GC_STATS *pStats);
         
-        HRESULT ( STDMETHODCALLTYPE *SetGCStartupLimits )( 
+        HRESULT ( STDMETHODCALLTYPE *SetGCGridtupLimits )( 
             ICLRGCManager2 * This,
             /* [in] */ DWORD SegmentSize,
             /* [in] */ DWORD MaxGen0Size);
         
-        HRESULT ( STDMETHODCALLTYPE *SetGCStartupLimitsEx )( 
+        HRESULT ( STDMETHODCALLTYPE *SetGCGridtupLimitsEx )( 
             ICLRGCManager2 * This,
             /* [in] */ SIZE_T SegmentSize,
             /* [in] */ SIZE_T MaxGen0Size);
@@ -5970,12 +5970,12 @@ EXTERN_C const IID IID_ICLRGCManager2;
 #define ICLRGCManager2_GetStats(This,pStats)	\
     ( (This)->lpVtbl -> GetStats(This,pStats) ) 
 
-#define ICLRGCManager2_SetGCStartupLimits(This,SegmentSize,MaxGen0Size)	\
-    ( (This)->lpVtbl -> SetGCStartupLimits(This,SegmentSize,MaxGen0Size) ) 
+#define ICLRGCManager2_SetGCGridtupLimits(This,SegmentSize,MaxGen0Size)	\
+    ( (This)->lpVtbl -> SetGCGridtupLimits(This,SegmentSize,MaxGen0Size) ) 
 
 
-#define ICLRGCManager2_SetGCStartupLimitsEx(This,SegmentSize,MaxGen0Size)	\
-    ( (This)->lpVtbl -> SetGCStartupLimitsEx(This,SegmentSize,MaxGen0Size) ) 
+#define ICLRGCManager2_SetGCGridtupLimitsEx(This,SegmentSize,MaxGen0Size)	\
+    ( (This)->lpVtbl -> SetGCGridtupLimitsEx(This,SegmentSize,MaxGen0Size) ) 
 
 #endif /* COBJMACROS */
 

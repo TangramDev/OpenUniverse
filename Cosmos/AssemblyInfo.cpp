@@ -26,7 +26,7 @@ using namespace Runtime::InteropServices;
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("Tangram Team")];
-[assembly:AssemblyProductAttribute("Universe")];
+[assembly:AssemblyProductAttribute("Cosmos")];
 [assembly:AssemblyCopyrightAttribute("Copyright (c) Tangram Team 2008")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];		

@@ -123,8 +123,8 @@ public:
 	CWinForm*							m_pActiveWinFormWnd;
 	HubbleDocTemplateInfo*				m_pHubbleDocTemplateInfo;
 
-	CStar*								m_pActiveStar;
-	CStar*								m_pDesignWindowNode;
+	CGrid*								m_pActiveStar;
+	CGrid*								m_pDesignWindowNode;
 	CQuasar*							m_pQuasar;
 	CGalaxyCluster*						m_pGalaxyCluster;
 
@@ -134,8 +134,8 @@ public:
 	map<LONGLONG, CCosmosEvent*>		m_mapEvent;
 	//map<HWND, CWinForm*>				m_mapMainForm;
 	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
-	map<__int64, CStarCollection*>		m_mapWndNodeCollection;
-	map<CStar*, CString>				m_mapNodeForHtml;
+	map<__int64, CGridCollection*>		m_mapWndGridCollection;
+	map<CGrid*, CString>				m_mapGridForHtml;
 
 	BEGIN_COM_MAP(CHubble)
 		COM_INTERFACE_ENTRY(IHubble)
@@ -147,10 +147,10 @@ public:
 		CONNECTION_POINT_ENTRY(__uuidof(_IHubble))
 	END_CONNECTION_POINT_MAP()
 
-	STDMETHOD(get_RootNodes)(IStarCollection** pNodeColletion);
-	STDMETHOD(get_CurrentActiveStar)(IStar** pVal);
-	STDMETHOD(get_CreatingStar)(IStar** pVal);
-	STDMETHOD(get_DesignNode)(IStar** pVal);
+	STDMETHOD(get_RootNodes)(IGridCollection** pGridColletion);
+	STDMETHOD(get_CurrentActiveGrid)(IGrid** pVal);
+	STDMETHOD(get_CreatingGrid)(IGrid** pVal);
+	STDMETHOD(get_DesignNode)(IGrid** pVal);
 	STDMETHOD(get_AppExtender)(BSTR bstrKey, IDispatch** pVal);
 	STDMETHOD(put_AppExtender)(BSTR bstrKey, IDispatch* newVal);
 	STDMETHOD(get_AppKeyValue)(BSTR bstrKey, VARIANT* pVal);
@@ -166,7 +166,7 @@ public:
 	STDMETHOD(get_ActiveChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 
-	STDMETHOD(NavigateNode)(IStar* pNode, BSTR bstrObjID, BSTR bstrXnl);
+	STDMETHOD(NavigateNode)(IGrid* pGrid, BSTR bstrObjID, BSTR bstrXnl);
 	STDMETHOD(ActiveCLRMethod)(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
 	STDMETHOD(CreateCLRObj)(BSTR bstrObjID, IDispatch** ppDisp);
@@ -178,20 +178,20 @@ public:
 	STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml) { return S_OK; };
 	STDMETHOD(FireHubbleEventObj)(IHubbleEventObj* pTangramEventObj);
 	STDMETHOD(GetQuasar)(LONGLONG hHostWnd, IQuasar** ppQuasar);
-	STDMETHOD(GetStarFromHandle)(LONGLONG hWnd, IStar** ppRetNode);
+	STDMETHOD(GetGridFromHandle)(LONGLONG hWnd, IGrid** ppRetGrid);
 	STDMETHOD(GetCtrlByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
 	STDMETHOD(GetDocTemplateXml)(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath);
-	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IStar** ppNode);
-	STDMETHOD(GetItemText)(IStar* pNode, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet);
+	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IGrid** ppGrid);
+	STDMETHOD(GetItemText)(IGrid* pGrid, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet);
 	STDMETHOD(GetCLRControl)(IDispatch* CtrlDisp, BSTR bstrNames, IDispatch** ppRetDisp);
 	STDMETHOD(MessageBox)(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, int* nRet);
 	STDMETHOD(NewGUID)(BSTR* retVal);
 	STDMETHOD(StartApplication)(BSTR bstrAppID, BSTR bstrXml);
 	STDMETHOD(SetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
-	STDMETHOD(SetItemText)(IStar* pNode, long nCtrlID, BSTR bstrRet);
+	STDMETHOD(SetItemText)(IGrid* pGrid, long nCtrlID, BSTR bstrRet);
 	STDMETHOD(SetHostFocus)(void);
-	STDMETHOD(UpdateStar)(IStar* pNode);
+	STDMETHOD(UpdateGrid)(IGrid* pGrid);
 	STDMETHOD(HubbleCommand)(IDispatch* RibbonControl) { return S_OK; };
 	STDMETHOD(HubbleGetImage)(BSTR strValue, IPictureDisp ** ppDispImage) { return S_OK; };
 	STDMETHOD(HubbleGetVisible)(IDispatch* RibbonControl, VARIANT* varVisible) { return S_OK; };
@@ -230,7 +230,7 @@ public:
 	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
 	CString GetPropertyFromObject(IDispatch* pObj, CString strPropertyName);
 	LRESULT Close(void);
-	CStar* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
+	CGrid* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
 	CommonThreadInfo* GetThreadInfo(DWORD dwInfo = 0);
 
 	virtual void CreateCommonDesignerToolBar();
@@ -272,20 +272,20 @@ protected:
 private:
 	CString								m_strExcludeAppExtenderIDs;
 	CWindow								m_HelperWnd;
-	CComObject<CStarCollection>*		m_pRootNodes;
+	CComObject<CGridCollection>*		m_pRootNodes;
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
 
 	void HubbleLoad();
 	bool CheckUrl(CString&   url);
-	void AttachNode(void* pNodeEvents);
+	void AttachNode(void* pGridEvents);
 	CString Encode(CString strSRC, BOOL bEnCode);
-	CString GetNewLayoutNodeName(BSTR strCnnID, IStar* pDesignNode);
+	CString GetNewLayoutNodeName(BSTR strCnnID, IGrid* pDesignNode);
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
-	IStar* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
+	IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
-	bool IsMDIClientQuasarNode(IStar*);
+	bool IsMDIClientQuasarNode(IGrid*);
 	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
-	void FireNodeEvent(int nIndex, CStar* pNode, CCosmosEvent* pObj);
+	void FireNodeEvent(int nIndex, CGrid* pGrid, CCosmosEvent* pObj);
 
 	CString RemoveUTF8BOM(CString strUTF8);
 
@@ -303,7 +303,7 @@ private:
 	char* GetSchemeString(int nType, CString strKey);
 	long GetIPCMsgIndex(CString strMsgID);
 	CSession* CreateCloudSession(CWebPageImpl*);
-	CSession* GetCloudSession(IStar*);
+	CSession* GetCloudSession(IGrid*);
 	void SetMainWnd(HWND hMain);
 	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
 	void HubbleNotify(CString strXml1, CString strXml2, LONGLONG wParam, LONGLONG lParam);

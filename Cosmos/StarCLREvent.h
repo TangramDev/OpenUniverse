@@ -21,17 +21,17 @@ using namespace System;
 using namespace System::Reflection;
 using namespace Cosmos;
 
-class CStarCLREvent
+class CGridCLREvent
 {
 public:
-	CStarCLREvent();
-	virtual ~CStarCLREvent();
+	CGridCLREvent();
+	virtual ~CGridCLREvent();
 
-	gcroot<Cosmos::Star^>	m_pStar;
+	gcroot<Cosmos::Grid^>	m_pGrid;
 
 	void OnDestroy();
 	void OnNodeAddInsCreated();
-	void OnOpenComplete(IStar* pNode);
+	void OnOpenComplete(IGrid* pGrid);
 	void OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
 	void OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	void OnTabChange(int nActivePage, int nOldPage);

@@ -20,7 +20,7 @@ using namespace System::Windows::Forms;
 
 namespace Cosmos
 {
-	ref class Star;
+	ref class Grid;
 	ref class Quasar;
 
 	public ref class Wormhole
@@ -65,9 +65,9 @@ namespace Cosmos
 			virtual IntPtr get();
 		}
 
-		property Star^ ParentStar
+		property Grid^ ParentGrid
 		{
-			Star^ get();
+			Grid^ get();
 		}
 
 		property Quasar^ HostQuasar

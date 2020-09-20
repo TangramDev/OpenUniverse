@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "Universe.h"
+#include "universe.h"
 extern _ATL_FUNC_INFO OpenComplete;
 extern _ATL_FUNC_INFO HubbleNotify;
 extern _ATL_FUNC_INFO DocumentComplete;
@@ -39,9 +39,9 @@ extern _ATL_FUNC_INFO NodeAddInsCreated;
 class CTangramCoreEvents : public IDispEventSimpleImpl</*nID =*/ 1, CTangramCoreEvents, &__uuidof(_IHubble)>
 {
 public:
-	virtual void __stdcall OnOpenComplete(long hWnd, BSTR bstrUrl, IStar* pRootNode){}
+	virtual void __stdcall OnOpenComplete(long hWnd, BSTR bstrUrl, IGrid* pRootGrid){}
 	virtual void __stdcall OnClose(){}
-	virtual void __stdcall OnHubbleEvent(IHubbleEventObj* pRootNode){}
+	virtual void __stdcall OnHubbleEvent(IHubbleEventObj* pRootGrid){}
 
 	BEGIN_SINK_MAP(CTangramCoreEvents)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000001, OnOpenComplete, &OpenComplete)
@@ -50,13 +50,13 @@ public:
 	END_SINK_MAP()
 };
 
-class CStarEvents : public IDispEventSimpleImpl</*nID =*/ 1, CStarEvents, &__uuidof(_IStarEvents)>
+class CGridEvents : public IDispEventSimpleImpl</*nID =*/ 1, CGridEvents, &__uuidof(_IGridEvents)>
 {
 public:
-	CStarEvents(){ m_pStar = NULL; };
-	virtual ~CStarEvents(){};
+	CGridEvents(){ m_pGrid = NULL; };
+	virtual ~CGridEvents(){};
 
-	IStar* m_pStar;
+	IGrid* m_pGrid;
 
 	virtual void __stdcall  OnDestroy(){}
 	virtual void __stdcall  OnOpenComplete(){}
@@ -65,12 +65,12 @@ public:
 	virtual void __stdcall  OnTabChange(int nActivePage, int nOldPage){}
 	virtual void __stdcall  OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra) {};
 
-	BEGIN_SINK_MAP(CStarEvents)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IStarEvents), /*dispid =*/ 0x00000001, OnOpenComplete, &NodeOpenComplete)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IStarEvents), /*dispid =*/ 0x00000002, OnDestroy, &Destroy)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IStarEvents), /*dispid =*/ 0x00000003, OnNodeAddInCreated, &NodeAddInCreated)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IStarEvents), /*dispid =*/ 0x00000004, OnNodeAddInsCreated, &NodeAddInsCreated)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IStarEvents), /*dispid =*/ 0x00000007, OnTabChange, &TabChange2)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IStarEvents), /*dispid =*/ 0x00000008, OnIPCMessageReceived, &MessageHandle)
+	BEGIN_SINK_MAP(CGridEvents)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000001, OnOpenComplete, &NodeOpenComplete)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000002, OnDestroy, &Destroy)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000003, OnNodeAddInCreated, &NodeAddInCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000004, OnNodeAddInsCreated, &NodeAddInsCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000007, OnTabChange, &TabChange2)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000008, OnIPCMessageReceived, &MessageHandle)
 	END_SINK_MAP()
 };

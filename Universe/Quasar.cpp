@@ -17,9 +17,9 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Hubble.h"
-#include "Grid.h"
-#include "StarWnd.h"
-#include "Star.h"
+#include "GridWnd.h"
+#include "GridHelperWnd.h"
+#include "grid.h"
 #include "Quasar.h"
 
 CWinForm::CWinForm(void)
@@ -264,12 +264,12 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		}
 		else
 		{
-			IStar* pNode = nullptr;
-			g_pHubble->GetStarFromHandle((__int64)m_hWnd, &pNode);
-			if (pNode)
+			IGrid* pGrid = nullptr;
+			g_pHubble->GetGridFromHandle((__int64)m_hWnd, &pGrid);
+			if (pGrid)
 			{
-				CStar* pWndNode = (CStar*)pNode;
-				HWND hWnd = pWndNode->m_pStarCommonData->m_pQuasar->m_hWnd;
+				CGrid* pWndGrid = (CGrid*)pGrid;
+				HWND hWnd = pWndGrid->m_pGridCommonData->m_pQuasar->m_hWnd;
 				BindWebObj* pObj = (BindWebObj*)wParam;
 				CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 				if (m_pHtmlWnd == nullptr)
@@ -584,7 +584,7 @@ CQuasar::~CQuasar()
 		}
 	}
 	if (m_pRootNodes)
-		CCommonFunction::ClearObject<CStarCollection>(m_pRootNodes);
+		CCommonFunction::ClearObject<CGridCollection>(m_pRootNodes);
 	if (m_mapVal.size()) {
 		for (auto it : m_mapVal) {
 			::VariantClear(&it.second);
@@ -613,14 +613,14 @@ void CQuasar::HostPosChanged()
 	if (::IsWindow(m_hWnd) == false)
 		return;
 	HWND hwnd = m_hWnd;
-	CStar* pTopNode = m_pWorkNode;
+	CGrid* pTopGrid = m_pWorkNode;
 	CQuasar* _pQuasar = this;
 	if (!_pQuasar->m_bDesignerState)
-		while (pTopNode && pTopNode->m_pRootObj != pTopNode)
+		while (pTopGrid && pTopGrid->m_pRootObj != pTopGrid)
 		{
-			_pQuasar = pTopNode->m_pRootObj->m_pStarCommonData->m_pQuasar;
+			_pQuasar = pTopGrid->m_pRootObj->m_pGridCommonData->m_pQuasar;
 			hwnd = _pQuasar->m_hWnd;
-			pTopNode = _pQuasar->m_pWorkNode;
+			pTopGrid = _pQuasar->m_pWorkNode;
 		}
 	if (::IsWindow(hwnd) == false)
 		return;
@@ -646,10 +646,10 @@ void CQuasar::HostPosChanged()
 	}
 }
 
-CTangramXmlParse* CQuasar::UpdateStar()
+CTangramXmlParse* CQuasar::UpdateGrid()
 {
-	for (auto it : m_mapNode) {
-		CStar* pWindowNode = (CStar*)it.second;
+	for (auto it : m_mapGrid) {
+		CGrid* pWindowNode = (CGrid*)it.second;
 		if (pWindowNode)
 		{
 			if (pWindowNode->m_pWindow) {
@@ -662,16 +662,16 @@ CTangramXmlParse* CQuasar::UpdateStar()
 			}
 			if (pWindowNode->m_nViewType == Grid)
 			{
-				((CGrid*)pWindowNode->m_pHostWnd)->Save();
+				((CGridWnd*)pWindowNode->m_pHostWnd)->Save();
 			}
 
 			for (auto it2 : pWindowNode->m_vChildNodes) {
-				g_pHubble->UpdateStar(it2);
+				g_pHubble->UpdateGrid(it2);
 			}
 		}
 	}
-	if (m_mapNode.size())
-		return m_mapNode.begin()->second->m_pStarCommonData->m_pHubbleParse;
+	if (m_mapGrid.size())
+		return m_mapGrid.begin()->second->m_pGridCommonData->m_pHubbleParse;
 	return nullptr;
 }
 
@@ -679,12 +679,12 @@ void CQuasar::UpdateDesignerTreeInfo()
 {
 }
 
-CStar* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CString strFile)
+CGrid* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CString strFile)
 {
-	m_pWorkNode = new CComObject<CStar>;
+	m_pWorkNode = new CComObject<CGrid>;
 	m_pWorkNode->m_pRootObj = m_pWorkNode;
-	CStarCommonData* pCommonData = new CStarCommonData();
-	m_pWorkNode->m_pStarCommonData = pCommonData;
+	CGridCommonData* pCommonData = new CGridCommonData();
+	m_pWorkNode->m_pGridCommonData = pCommonData;
 	pCommonData->m_pQuasar = this;
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
 	pCommonData->m_pHubbleParse = _pParse;
@@ -692,7 +692,7 @@ CStar* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	m_pWorkNode->m_pHostParse = pParse->GetChild(TGM_NODE);
 
 	CreateGalaxyCluster();
-	m_mapNode[strKey] = m_pWorkNode;
+	m_mapGrid[strKey] = m_pWorkNode;
 
 	if (m_pGalaxyCluster)
 		m_pGalaxyCluster->Fire_OpenXmlComplete(strFile.AllocSysString(), (long)m_hHostWnd, m_pWorkNode);
@@ -714,7 +714,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 
 	m_pWorkNode->m_strName.Trim();
 	m_pWorkNode->m_strName.MakeLower();
-	m_pWorkNode->InitWndNode();
+	m_pWorkNode->InitWndGrid();
 	HWND hWnd = NULL;
 	if (m_pWorkNode->m_pObjClsInfo) {
 		RECT rc;
@@ -733,7 +733,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOACTIVATE);//|SWP_NOREDRAWSWP_NOZORDER);
 	}
 
-	CTangramXmlParse* pWndParse = m_pWorkNode->m_pStarCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
+	CTangramXmlParse* pWndParse = m_pWorkNode->m_pGridCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
 	if (pWndParse)
 	{
 		CString strPlugID = _T("");
@@ -757,7 +757,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 					hr = pDisp.CoCreateInstance(strPlugID.AllocSysString());
 					if (hr == S_OK)
 					{
-						m_pWorkNode->m_pStarCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
+						m_pWorkNode->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
 						pDisp.p->AddRef();
 					}
 
@@ -768,7 +768,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 					hr = g_pHubble->CreateCLRObj(bstrPlugIn, &pDisp);
 					if (hr == S_OK)
 					{
-						m_pWorkNode->m_pStarCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
+						m_pWorkNode->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
 
 						bstrPlugIn = strPlugID.AllocSysString();
 						m_pWorkNode->Fire_NodeAddInCreated(pDisp, bstrPlugIn, bstrXml);
@@ -789,19 +789,19 @@ BOOL CQuasar::CreateGalaxyCluster()
 	return true;
 }
 
-STDMETHODIMP CQuasar::get_RootStars(IStarCollection** pNodeColletion)
+STDMETHODIMP CQuasar::get_RootGrids(IGridCollection** pGridColletion)
 {
 	if (m_pRootNodes == nullptr) {
-		CComObject<CStarCollection>::CreateInstance(&m_pRootNodes);
+		CComObject<CGridCollection>::CreateInstance(&m_pRootNodes);
 		m_pRootNodes->AddRef();
 	}
 
-	m_pRootNodes->m_pNodes->clear();
-	for (auto it : m_mapNode) {
-		m_pRootNodes->m_pNodes->push_back(it.second);
+	m_pRootNodes->m_pGrids->clear();
+	for (auto it : m_mapGrid) {
+		m_pRootNodes->m_pGrids->push_back(it.second);
 	}
 
-	return m_pRootNodes->QueryInterface(IID_IStarCollection, (void**)pNodeColletion);
+	return m_pRootNodes->QueryInterface(IID_IGridCollection, (void**)pGridColletion);
 }
 
 STDMETHODIMP CQuasar::get_QuasarData(BSTR bstrKey, VARIANT* pVal)
@@ -919,7 +919,7 @@ STDMETHODIMP CQuasar::ModifyHost(LONGLONG hHostWnd)
 	m_Parent.Attach(hParent);
 	m_Parent.ScreenToClient(&rc);
 	m_Parent.Detach();
-	for (auto it : m_mapNode)
+	for (auto it : m_mapGrid)
 	{
 		if (it.second != m_pWorkNode)
 		{
@@ -941,7 +941,7 @@ STDMETHODIMP CQuasar::get_HWND(LONGLONG* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CQuasar::get_VisibleStar(IStar** pVal)
+STDMETHODIMP CQuasar::get_VisibleGrid(IGrid** pVal)
 {
 	if (m_pWorkNode)
 		*pVal = m_pWorkNode;
@@ -956,7 +956,7 @@ STDMETHODIMP CQuasar::get_GalaxyCluster(IGalaxyCluster** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
+STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 {
 	if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
 		m_nQuasarType = QuasarType::MDIClientQuasar;
@@ -986,10 +986,10 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 	m_strCurrentKey = m_strCurrentKey.MakeLower();
 	g_pHubble->m_strCurrentKey = m_strCurrentKey;
 	CString strXml = _T("");
-	auto it = m_mapNode.find(m_strCurrentKey);
+	auto it = m_mapGrid.find(m_strCurrentKey);
 
-	CStar* pOldNode = m_pWorkNode;
-	if (it != m_mapNode.end())
+	CGrid* pOldNode = m_pWorkNode;
+	if (it != m_mapGrid.end())
 		m_pWorkNode = it->second;
 	else
 	{
@@ -1079,7 +1079,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 						if (strXml == _T(""))
 							strXml = _strXml;
 						if (strXml == _T(""))
-							strXml = _T("<default><cluster><star name=\"Start\" /></cluster></default>");;
+							strXml = _T("<default><cluster><grid name=\"Start\" /></cluster></default>");;
 					}
 					else
 						strXml = _strXml;
@@ -1095,10 +1095,10 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 		if (::GetWindowLong(::GetParent(m_hWnd), GWL_EXSTYLE) & WS_EX_MDICHILD)
 			m_bMDIChild = true;
 	}
-	m_pBindingStar = m_pWorkNode->m_pStarCommonData->m_pHostClientView ? m_pWorkNode->m_pStarCommonData->m_pHostClientView->m_pStar : nullptr;
+	m_pBindingStar = m_pWorkNode->m_pGridCommonData->m_pHostClientView ? m_pWorkNode->m_pGridCommonData->m_pHostClientView->m_pGrid : nullptr;
 
 	g_pHubble->m_strCurrentKey = _T("");
-	*ppRetNode = (IStar*)m_pWorkNode;
+	*ppRetGrid = (IGrid*)m_pWorkNode;
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
 		it.second->OnOpenComplete(m_hHostWnd, strXml, m_pWorkNode);
@@ -1115,7 +1115,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 		HWND hParent = ::GetParent(m_hWnd);
 
 		CWnd::FromHandle(hParent)->ScreenToClient(&rc);
-		for (auto it : m_mapNode)
+		for (auto it : m_mapGrid)
 		{
 			HWND hwnd = it.second->m_pHostWnd->m_hWnd;
 			BOOL bTop = (it.second == m_pWorkNode);
@@ -1142,7 +1142,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 				avarParams[2].vt = VT_I4;
 				avarParams[1] = strXml.AllocSysString();
 				avarParams[1].vt = VT_BSTR;
-				avarParams[0] = (IStar*)m_pWorkNode;
+				avarParams[0] = (IGrid*)m_pWorkNode;
 				avarParams[0].vt = VT_DISPATCH;
 				DISPPARAMS params = { avarParams, NULL, 3, 0 };
 				for (int iConnection = 0; iConnection < cConnections; iConnection++) {
@@ -1168,7 +1168,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 	//Add 20200218
 	if (m_pBindingStar)
 	{
-		CStar* _pHostNode = m_pBindingStar;
+		CGrid* _pHostNode = m_pBindingStar;
 		if (_pHostNode->m_pHostQuasar)
 		{
 			CQuasar* _pQuasar = _pHostNode->m_pHostQuasar;
@@ -1183,16 +1183,16 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 		}
 		if (_pHostNode && m_pWebPageWnd)
 		{
-			CStar* pNode = _pHostNode->m_pRootObj;
-			if (pNode->m_strLastIPCMsgID != _T(""))
+			CGrid* pGrid = _pHostNode->m_pRootObj;
+			if (pGrid->m_strLastIPCMsgID != _T(""))
 			{
 				IPCMsg pIPCInfo;
-				pIPCInfo.m_strId = pNode->m_strLastIPCMsgID;
-				pIPCInfo.m_strParam1 = pNode->m_strLastIPCParam1;
-				pIPCInfo.m_strParam2 = pNode->m_strLastIPCParam2;
-				pIPCInfo.m_strParam3 = pNode->m_strLastIPCParam5;
-				pIPCInfo.m_strParam4 = pNode->m_strLastIPCParam4;
-				pIPCInfo.m_strParam5 = pNode->m_strLastIPCParam3;
+				pIPCInfo.m_strId = pGrid->m_strLastIPCMsgID;
+				pIPCInfo.m_strParam1 = pGrid->m_strLastIPCParam1;
+				pIPCInfo.m_strParam2 = pGrid->m_strLastIPCParam2;
+				pIPCInfo.m_strParam3 = pGrid->m_strLastIPCParam5;
+				pIPCInfo.m_strParam4 = pGrid->m_strLastIPCParam4;
+				pIPCInfo.m_strParam5 = pGrid->m_strLastIPCParam3;
 				m_pWebPageWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
 			}
 			g_pHubble->m_pCurrentIPCMsg = nullptr;
@@ -1202,13 +1202,13 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 
 	if (m_pWorkNode->m_pHostQuasar)
 	{
-		IStar* pNode = nullptr;
-		m_pWorkNode->m_pHostQuasar->Observe(CComBSTR(m_pWorkNode->m_pHostQuasar->m_strCurrentKey), CComBSTR(""), &pNode);
+		IGrid* pGrid = nullptr;
+		m_pWorkNode->m_pHostQuasar->Observe(CComBSTR(m_pWorkNode->m_pHostQuasar->m_strCurrentKey), CComBSTR(""), &pGrid);
 	}
 	for (auto it : m_pWorkNode->m_mapExtendNode)
 	{
-		IStar* pNode = nullptr;
-		it.first->Observe(CComBSTR(it.second), CComBSTR(""), &pNode);
+		IGrid* pGrid = nullptr;
+		it.first->Observe(CComBSTR(it.second), CComBSTR(""), &pGrid);
 	}
 	if (m_pWebPageWnd)
 	{
@@ -1216,27 +1216,27 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 	}
 	if (m_pHostWebBrowserWnd)
 	{
-		IStar* pNode = nullptr;
-		CComPtr<IStarCollection> pCol;
+		IGrid* pGrid = nullptr;
+		CComPtr<IGridCollection> pCol;
 		long nCount = 0;
-		m_pWorkNode->GetStars(CComBSTR(m_strHostWebBrowserNodeName), &pNode, &pCol, &nCount);
-		if (pNode)
+		m_pWorkNode->GetGrids(CComBSTR(m_strHostWebBrowserNodeName), &pGrid, &pCol, &nCount);
+		if (pGrid)
 		{
-			CStar* _pNode = (CStar*)pNode;
-			if (_pNode->m_nViewType == BlankView)
+			CGrid* _pGrid = (CGrid*)pGrid;
+			if (_pGrid->m_nViewType == BlankView)
 			{
 				CQuasar* _pQuasar = nullptr;
-				if (_pNode->m_pHostQuasar)
+				if (_pGrid->m_pHostQuasar)
 				{
-					_pQuasar = _pNode->m_pHostQuasar;
+					_pQuasar = _pGrid->m_pHostQuasar;
 					while (_pQuasar)
 					{
 						if (_pQuasar->m_pHostWebBrowserNode)
-							_pNode = _pQuasar->m_pHostWebBrowserNode;
-						if (_pNode && _pNode->m_pHostQuasar)
+							_pGrid = _pQuasar->m_pHostWebBrowserNode;
+						if (_pGrid && _pGrid->m_pHostQuasar)
 						{
-							_pQuasar = _pNode->m_pHostQuasar;
-							_pNode = _pQuasar->m_pHostWebBrowserNode;
+							_pQuasar = _pGrid->m_pHostQuasar;
+							_pGrid = _pQuasar->m_pHostWebBrowserNode;
 						}
 						else
 							break;
@@ -1244,15 +1244,15 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
 				}
 				if (m_pHostWebBrowserWnd->m_pParentStar == nullptr)
 				{
-					m_pHostWebBrowserWnd->m_pParentStar = _pNode;
+					m_pHostWebBrowserWnd->m_pParentStar = _pGrid;
 					m_pHostWebBrowserWnd->m_pParentStar->m_pWebBrowser = m_pHostWebBrowserWnd;
 				}
-				else if (m_pHostWebBrowserWnd->m_pParentStar != _pNode)//&&_pNode->m_pHostWnd->IsWindowVisible())
+				else if (m_pHostWebBrowserWnd->m_pParentStar != _pGrid)//&&_pGrid->m_pHostWnd->IsWindowVisible())
 				{
 					m_pHostWebBrowserWnd->m_pParentStar->m_pWebBrowser = nullptr;
-					m_pHostWebBrowserWnd->m_pParentStar = _pNode;
-					_pNode->m_pWebBrowser = m_pHostWebBrowserWnd;
-					::SetParent(m_pHostWebBrowserWnd->m_hWnd, _pNode->m_pHostWnd->m_hWnd);
+					m_pHostWebBrowserWnd->m_pParentStar = _pGrid;
+					_pGrid->m_pWebBrowser = m_pHostWebBrowserWnd;
+					::SetParent(m_pHostWebBrowserWnd->m_hWnd, _pGrid->m_pHostWnd->m_hWnd);
 					::SetWindowPos(m_pHostWebBrowserWnd->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 				}
 			}
@@ -1271,14 +1271,14 @@ STDMETHODIMP CQuasar::get_CurrentNavigateKey(BSTR* pVal)
 
 void CQuasar::Destroy()
 {
-	CStar* pWndNode = nullptr;
+	CGrid* pWndGrid = nullptr;
 	CString strPlugID = _T("");
-	for (auto it : m_mapNode)
+	for (auto it : m_mapGrid)
 	{
-		pWndNode = it.second;
-		if (pWndNode->m_pStarCommonData->m_pHubbleParse)
+		pWndGrid = it.second;
+		if (pWndGrid->m_pGridCommonData->m_pHubbleParse)
 		{
-			CTangramXmlParse* pParse = pWndNode->m_pStarCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
+			CTangramXmlParse* pParse = pWndGrid->m_pGridCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
 			if (pParse)
 			{
 				int nCount = pParse->GetCount();
@@ -1292,10 +1292,10 @@ void CQuasar::Destroy()
 						if (strPlugID.Find(_T(",")) == -1)
 						{
 							strPlugID.MakeLower();
-							IDispatch* pDisp = (IDispatch*)pWndNode->m_pStarCommonData->m_PlugInDispDictionary[strPlugID];
+							IDispatch* pDisp = (IDispatch*)pWndGrid->m_pGridCommonData->m_PlugInDispDictionary[strPlugID];
 							if (pDisp)
 							{
-								pWndNode->m_pStarCommonData->m_PlugInDispDictionary.RemoveKey(LPCTSTR(strPlugID));
+								pWndGrid->m_pGridCommonData->m_PlugInDispDictionary.RemoveKey(LPCTSTR(strPlugID));
 								pDisp->Release();
 							}
 						}
@@ -1303,7 +1303,7 @@ void CQuasar::Destroy()
 				}
 			}
 
-			pWndNode->m_pStarCommonData->m_PlugInDispDictionary.RemoveAll();
+			pWndGrid->m_pGridCommonData->m_PlugInDispDictionary.RemoveAll();
 		}
 	}
 }
@@ -1358,10 +1358,10 @@ LRESULT CQuasar::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	if (g_pHubble->m_pCLRProxy) {
 		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IQuasar*)this);
 	}
-	if (m_mapNodeScript.size())
+	if (m_mapGridScript.size())
 	{
-		this->UpdateStar();
-		for (auto it : m_mapNodeScript)
+		this->UpdateGrid();
+		for (auto it : m_mapGridScript)
 		{
 			CString strPath = it.first;
 			CString s = it.second->m_pHostParse->xml();
@@ -1512,7 +1512,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->cy = rect.bottom - rect.top;
 		}
 		::SetWindowPos(m_pWorkNode->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED | SWP_NOREDRAW);// ); 
-		CStar* _pHostNode = m_pBindingStar;
+		CGrid* _pHostNode = m_pBindingStar;
 		if (_pHostNode->m_pHostQuasar)
 		{
 			CQuasar* _pQuasar = _pHostNode->m_pHostQuasar;
@@ -1553,21 +1553,21 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->flags &= ~SWP_HIDEWINDOW;
 			lpwndpos->flags |= SWP_SHOWWINDOW | SWP_NOZORDER;
 			//begin fix bug for .net Control or Window Form
-			CStar* _pParentNode = m_pBindingStar->m_pParentObj;
+			CGrid* _pParentNode = m_pBindingStar->m_pParentObj;
 			if (_pParentNode)
 			{
 				switch (_pParentNode->m_nViewType)
 				{
 				case Grid:
 				{
-					CGrid* pWnd = (CGrid*)_pParentNode->m_pHostWnd;
+					CGridWnd* pWnd = (CGridWnd*)_pParentNode->m_pHostWnd;
 					if (pWnd->bInited == false)
 						::SendMessage(pWnd->m_hWnd, WM_COSMOSMSG, 1, 1993);
 				}
 				break;
 				case TabGrid:
 				{
-					CStarWnd* pWnd = (CStarWnd*)_pParentNode->m_pHostWnd;
+					CGridHelperWnd* pWnd = (CGridHelperWnd*)_pParentNode->m_pHostWnd;
 					::InvalidateRect(pWnd->m_hWnd, nullptr, true);
 				}
 				break;
@@ -1577,8 +1577,8 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			{
 				if (m_pContainerNode->m_nViewType == CLRCtrl)
 				{
-					CStarWnd* pNodeWnd = (CStarWnd*)m_pContainerNode->m_pHostWnd;
-					pNodeWnd->m_bNoMove = true;
+					CGridHelperWnd* pGridWnd = (CGridHelperWnd*)m_pContainerNode->m_pHostWnd;
+					pGridWnd->m_bNoMove = true;
 				}
 			}
 			//end fix bug for .net Control or Window Form
@@ -1629,26 +1629,26 @@ STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 	CString strRootName = OLE2T(bstrRootName);
 	if (strRootName == _T(""))
 		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><cluster><star name=\"Start\"/></cluster></Default>");
+	CString strXmlData = _T("<Default><cluster><grid name=\"Start\"/></cluster></Default>");
 	CString strName = _T("");
 	CString strXml = _T("");
 
 	map<CString, CString> m_mapTemp;
 	map<CString, CString>::iterator it2;
-	for (auto it : m_mapNode)
+	for (auto it : m_mapGrid)
 	{
-		g_pHubble->UpdateStar(it.second);
+		g_pHubble->UpdateGrid(it.second);
 		strName = it.first;
 		int nPos = strName.Find(_T("-"));
 		CString str = strName.Mid(nPos + 1);
 		if (str.CompareNoCase(_T("inDesigning")) == 0)
 		{
 			strName = strName.Left(nPos);
-			m_mapTemp[strName] = it.second->m_pStarCommonData->m_pHubbleParse->xml();
+			m_mapTemp[strName] = it.second->m_pGridCommonData->m_pHubbleParse->xml();
 		}
 	}
 
-	for (auto it : m_mapNode)
+	for (auto it : m_mapGrid)
 	{
 		strName = it.first;
 		if (strName.Find(_T("-indesigning")) == -1)
@@ -1657,7 +1657,7 @@ STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 			if (it2 != m_mapTemp.end())
 				strXml = it2->second;
 			else
-				strXml = it.second->m_pStarCommonData->m_pHubbleParse->xml();
+				strXml = it.second->m_pGridCommonData->m_pHubbleParse->xml();
 			strXmlData += strXml;
 		}
 	}
@@ -1675,39 +1675,39 @@ STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 
 STDMETHODIMP CQuasar::get_Count(long* pCount)
 {
-	*pCount = (long)m_mapNode.size();
+	*pCount = (long)m_mapGrid.size();
 	return S_OK;
 }
 
-STDMETHODIMP CQuasar::get_Star(VARIANT vIndex, IStar** ppNode)
+STDMETHODIMP CQuasar::get_Grid(VARIANT vIndex, IGrid** ppGrid)
 {
 	if (vIndex.vt == VT_I4)
 	{
-		long lCount = m_mapNode.size();
+		long lCount = m_mapGrid.size();
 		int iIndex = vIndex.lVal;
 		if (iIndex < 0 || iIndex >= lCount) return E_INVALIDARG;
 
-		auto it = m_mapNode.begin();
+		auto it = m_mapGrid.begin();
 		int iPos = 0;
-		while (it != m_mapNode.end())
+		while (it != m_mapGrid.end())
 		{
 			if (iPos == iIndex) break;
 			iPos++;
 			it++;
 		}
 
-		CStar* pNode = it->second;
-		*ppNode = pNode;
+		CGrid* pGrid = it->second;
+		*ppGrid = pGrid;
 		return S_OK;
 	}
 
 	if (vIndex.vt == VT_BSTR)
 	{
 		CString strKey = OLE2T(vIndex.bstrVal);
-		auto it = m_mapNode.find(strKey);
-		if (it != m_mapNode.end())
+		auto it = m_mapGrid.find(strKey);
+		if (it != m_mapGrid.end())
 		{
-			*ppNode = it->second;
+			*ppGrid = it->second;
 			return S_OK;
 		}
 		return E_INVALIDARG;
@@ -1727,14 +1727,14 @@ STDMETHODIMP CQuasar::get__NewEnum(IUnknown** ppVal)
 	if (SUCCEEDED(hr))
 	{
 		pe->AddRef();
-		long nLen = (long)m_mapNode.size();
+		long nLen = (long)m_mapGrid.size();
 		VARIANT* rgvar = new VARIANT[nLen];
 		ZeroMemory(rgvar, sizeof(VARIANT) * nLen);
 		VARIANT* pItem = rgvar;
-		for (auto it : m_mapNode)
+		for (auto it : m_mapGrid)
 		{
 			IUnknown* pDisp = nullptr;
-			CStar* pObj = it.second;
+			CGrid* pObj = it.second;
 			hr = pObj->QueryInterface(IID_IUnknown, (void**)&pDisp);
 			pItem->vt = VT_UNKNOWN;
 			pItem->punkVal = pDisp;
@@ -1759,9 +1759,9 @@ STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 	strName.Replace(_T("@"), _T("_"));
 	strData += strName;
 	strData += _T(">");
-	for (auto it : m_mapNode)
+	for (auto it : m_mapGrid)
 	{
-		CStar* pWindowNode = (CStar*)it.second;
+		CGrid* pWindowNode = (CGrid*)it.second;
 		if (pWindowNode)
 		{
 			if (pWindowNode->m_pWindow)
@@ -1776,15 +1776,15 @@ STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 			}
 			if (pWindowNode->m_nViewType == Grid)
 			{
-				((CGrid*)pWindowNode->m_pHostWnd)->Save();
+				((CGridWnd*)pWindowNode->m_pHostWnd)->Save();
 			}
 
 			for (auto it2 : pWindowNode->m_vChildNodes)
 			{
-				g_pHubble->UpdateStar(it2);
+				g_pHubble->UpdateGrid(it2);
 			}
 		}
-		CString strXml = pWindowNode->m_pStarCommonData->m_pHubbleParse->GetChild(TGM_CLUSTER)->xml();
+		CString strXml = pWindowNode->m_pGridCommonData->m_pHubbleParse->GetChild(TGM_CLUSTER)->xml();
 		CString s = _T("");
 		s.Format(_T("<%s>%s</%s>"), it.first, strXml, it.first);
 		CString strKey = it.second->m_strKey + _T("@") + this->m_strQuasarName + _T("@") + _T("tangramdefaultpage");

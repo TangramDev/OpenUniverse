@@ -11,64 +11,249 @@
 * https://www.tangram.dev
 ********************************************************************************/
 
+// grid.h : Declaration of the CGrid
+
+#include "browser.h"
+#include "GalaxyCluster.h"
+#include "chromium/BrowserWnd.h"
+
 #pragma once
 
-// CGrid
-
-class CGrid : public CSplitterWnd
+class CWinForm;
+class CWormhole;
+class CGridCommonData
 {
-	DECLARE_DYNCREATE(CGrid)
 public:
-	void Save();
-	void RecalcLayout();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
-	CStar* m_pHostNode;
-	bool bInited;
-	int m_nHostWidth, m_nHostHeight;
-	int m_Vmin,m_Vmax,m_Hmin,m_Hmax;
-	int m_nNeedRefreshCol;
-	int m_nMasterRow;
-	int m_nMasterCol;
-	COLORREF		rgbLeftTop;
-	COLORREF		rgbMiddle;
-	COLORREF		rgbRightBottom;
-protected:
-	CGrid();           // protected constructor used by dynamic creation
+	CGridCommonData();
+	~CGridCommonData();
+
+	CQuasar*					m_pQuasar;
+	CQuasar*					m_pOldQuasar;
+	CGridHelperWnd*				m_pHostClientView;
+	CTangramXmlParse*			m_pHubbleParse;
+	CGalaxyCluster*				m_pGalaxyCluster;
+	map<CString, CGrid*>		m_mapLayoutNodes;
+	map<CString, CGrid*>		m_mapAxNodes;
+	map<CString, CGrid*>		m_mapCLRNodes;
+	map<CString, CGrid*>		m_mapCppGrids;
+	CMapStringToPtr				m_PlugInDispDictionary;
+};
+
+// CGrid 
+class ATL_NO_VTABLE CGrid : 
+	public CComObjectRootBase,
+	public IConnectionPointContainerImpl<CGrid>,
+	public IConnectionPointImpl<CGrid, &__uuidof(_IGridEvents)>,
+	public IDispatchImpl<IGrid, &IID_IGrid, &LIBID_Universe, 1, 0>
+{
+public:
+	CGrid();
 	virtual ~CGrid();
 
-	BOOL			m_bCreated;
-	bool			m_bNeedRefreh;
-	CStar*			m_pStar;
+	BOOL							m_bTopObj;
+	BOOL							m_bCreated;
+	BOOL							m_bWebInit;
+	BOOL							m_bNodeDocComplete;
 
-	BOOL PreCreateWindow(CREATESTRUCT& cs);
-	BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-	BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-	void StartTracking(int ht);
-	void StopTracking(BOOL bAccept);
-	void TrackRowSize(int y, int row);
-	void TrackColumnSize(int x, int col);
-	void OnDrawSplitter(CDC* pDC, ESplitType nType, const CRect& rect);
-	void PostNcDestroy();
-	void DrawAllSplitBars(CDC* pDC, int cxInside, int cyInside);
-	CWnd* GetActivePane(int* pRow = NULL, int* pCol = NULL);
-	//void RefreshNode(IStar*);
+	GridType						m_nViewType;
+	int								m_nID;
+	int								m_nActivePage;
+	int								m_nWidth;
+	int								m_nHeigh;
+	int								m_nRow;
+	int								m_nCol;
+	int								m_nRows;
+	int								m_nCols;
+	HWND							m_hHostWnd;
+	HWND							m_hChildHostWnd;
 
-	afx_msg void OnPaint();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnDestroy();
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
-	afx_msg LRESULT OnActivePage(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnSplitterNodeAdd(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnGetTangramObj(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnSplitterCreated(WPARAM wParam,LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
+	CString 						m_strID;
+	CString 						m_strURL;
+	CString							m_strKey;
+	CString							m_strName;
+	CString 						m_strCnnID;
+	CString 						m_strCaption;
+
+	CString							m_strLastIPCMsgID = _T("");
+	CString							m_strLastIPCParam1 = _T("");
+	CString							m_strLastIPCParam2 = _T("");
+	CString							m_strLastIPCParam3 = _T("");
+	CString							m_strLastIPCParam4 = _T("");
+	CString							m_strLastIPCParam5 = _T("");
+
+	CString							m_strNodeName;
+	CString 						m_strExtenderID;
+
+	IDispatch*						m_pDisp;
+	CGrid* 							m_pRootObj;
+	CGrid* 							m_pParentObj;
+	CGrid*							m_pVisibleXMLObj;
+	CWinForm*						m_pParentWinFormWnd;
+	CTangramXmlParse*				m_pHostParse;
+	CTangramXmlParse* 				m_pDocXmlParseNode;
+	CSession*						m_pCloudSession = nullptr;
+	IHubbleWindow*					m_pWindow;
+	CMDIChildFormInfo*				m_pChildFormsInfo;
+	CGridCommonData*				m_pGridCommonData;
+	Web::CBrowser*			m_pWebBrowser;
+	CWnd*							m_pHostWnd;
+	CQuasar*						m_pHostQuasar;
+	CRuntimeClass*					m_pObjClsInfo;
+
+	CGridEvents*					m_pCLREventConnector;
+
+	VARIANT							m_varTag;
+	IDispatch*						m_pExtender;
+	CGridVector						m_vChildNodes;
+	CGrid*							m_pCurrentExNode;
+	CWormhole*						m_pHubbleCloudSession;
+	map<CString, CQuasar*>			m_mapSubFrame;
+	map<CGrid*, CString>			m_mapExtendNode;
+	CComObject<CGridCollection>*	m_pChildNodeCollection;
+
+	map<IHubbleAppProxy*, CGridProxy*> m_mapWndGridProxy;
+
+	void	InitWndGrid();
+	BOOL	Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext);
+	BOOL	PreTranslateMessage(MSG* pMsg);
+	BOOL	AddChildNode(CGrid* pGrid);
+	BOOL	RemoveChildNode(CGrid* pGrid);
+	CString GetNames();
+	Web::CWebPage* GetHtmlWnd();
+	void NodeCreated();
+
+	HRESULT Fire_OpenComplete();
+	HRESULT Fire_Destroy();
+	HRESULT Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	HRESULT Fire_NodeAddInsCreated();
+	HRESULT Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
+	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
+	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);
+	HRESULT Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
+
+	void Lock(){}
+	void Unlock(){}
+protected:
+	ULONG InternalAddRef(){ return 1; }
+	ULONG InternalRelease(){ return 1; }
+
+public:
+	STDMETHOD(get_XObject)(VARIANT* pVar);
+	STDMETHOD(get_Tag)(VARIANT* pVar);
+	STDMETHOD(put_Tag)(VARIANT var);
+	STDMETHOD(get_AxPlugIn)(BSTR bstrName, IDispatch** pVal);
+	STDMETHOD(get_Name)(BSTR* pVal);
+	STDMETHOD(put_Name)(BSTR bstrName);
+	STDMETHOD(get_Caption)(BSTR* pVal);
+	STDMETHOD(put_Caption)(BSTR bstrCaption);
+	STDMETHOD(get_Attribute)(BSTR bstrKey, BSTR* pVal);
+	STDMETHOD(put_Attribute)(BSTR bstrKey, BSTR bstrVal);
+	STDMETHOD(get_Handle)(LONGLONG* hWnd);
+	STDMETHOD(get_XML)(BSTR* pVal);
+	STDMETHOD(get_ChildNodes)(IGridCollection** );
+	STDMETHOD(get_Row)(long* nRow);
+	STDMETHOD(get_Col)(long* nCol);
+	STDMETHOD(get_Objects)(long nType, IGridCollection** );
+	STDMETHOD(get_GridType)(GridType* nType);
+	STDMETHOD(get_ParentGrid)(IGrid** ppGrid);
+	STDMETHOD(get_RootGrid)(IGrid** ppGrid);
+	STDMETHOD(get_OuterXml)(BSTR* pVal);
+	STDMETHOD(get_Key)(BSTR* pVal);
+	STDMETHOD(get_Quasar)(IQuasar** pVal);
+	STDMETHOD(get_HostQuasar)(IQuasar** pVal);
+	STDMETHOD(get_Height)(LONG* pVal);
+	STDMETHOD(get_Width)(LONG* pVal);
+	STDMETHOD(get_Extender)(IDispatch** pVal);
+	STDMETHOD(put_Extender)(IDispatch* newVal);
+	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
+	STDMETHOD(get_NameAtWindowPage)(BSTR* pVal);
+	STDMETHOD(get_DocXml)(BSTR* pVal);
+	STDMETHOD(get_HostGrid)(IGrid** pVal);
+	STDMETHOD(put_HostGrid)(IGrid* newVal);
+	STDMETHOD(get_ActivePage)(int* pVal);
+	STDMETHOD(put_ActivePage)(int newVal);
+	STDMETHOD(get_OfficeObj)(IDispatch** pVal);
+
+	STDMETHOD(get_Rows)(long* nRows);
+	STDMETHOD(get_Cols)(long* nCols);
+	STDMETHOD(get_Hmin)(int* pVal);
+	STDMETHOD(put_Hmin)(int newVal);
+	STDMETHOD(get_Hmax)(int* pVal);
+	STDMETHOD(put_Hmax)(int newVal);
+	STDMETHOD(get_Vmin)(int* pVal);
+	STDMETHOD(put_Vmin)(int newVal);
+	STDMETHOD(get_Vmax)(int* pVal);
+	STDMETHOD(put_Vmax)(int newVal);
+	STDMETHOD(get_rgbMiddle)(OLE_COLOR* pVal);
+	STDMETHOD(put_rgbMiddle)(OLE_COLOR newVal);
+	STDMETHOD(get_rgbRightBottom)(OLE_COLOR* pVal);
+	STDMETHOD(put_rgbRightBottom)(OLE_COLOR newVal);
+	STDMETHOD(get_rgbLeftTop)(OLE_COLOR* pVal);
+	STDMETHOD(put_rgbLeftTop)(OLE_COLOR newVal);
+	STDMETHOD(get_MasterRow)(int* pVal);
+	STDMETHOD(put_MasterRow)(int newVal);
+	STDMETHOD(get_MasterCol)(int* pVal);
+	STDMETHOD(put_MasterCol)(int newVal);
+	STDMETHOD(put_SaveToConfigFile)(VARIANT_BOOL newVal);
+
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
+	STDMETHOD(ObserveEx)(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
+	STDMETHOD(ActiveTabPage)(IGrid* pGrid);
+	STDMETHOD(GetGrid)(long nRow, long nCol,IGrid** ppStar);
+	STDMETHOD(GetGrids)(BSTR bstrName, IGrid** ppGrid, IGridCollection** ppGrids, long* pCount);
+	STDMETHOD(GetCtrlByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
+	STDMETHOD(GetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
+	STDMETHOD(SetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
+	STDMETHOD(Refresh)(void);
+	STDMETHOD(LoadXML)(int nType, BSTR bstrXML);
+	STDMETHOD(Show)();
+	STDMETHOD(GetGridByName)(BSTR bstrName, IGridCollection** pVal);
+	STDMETHOD(get_DockObj)(BSTR bstrName, LONGLONG* pVal);
+	STDMETHOD(put_DockObj)(BSTR bstrName, LONGLONG newVal);
+	STDMETHOD(NavigateURL)(BSTR bstrURL, IDispatch* dispObjforScript);
+	STDMETHOD(get_URL)(BSTR* pVal);
+	STDMETHOD(put_URL)(BSTR newVal);
+
+	STDMETHOD(SendIPCMessage)(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet);
+
+	BEGIN_COM_MAP(CGrid)
+		COM_INTERFACE_ENTRY(IGrid)
+		COM_INTERFACE_ENTRY(IDispatch)
+		COM_INTERFACE_ENTRY(IConnectionPointContainer)
+	END_COM_MAP()
+
+	BEGIN_CONNECTION_POINT_MAP(CGrid)
+		CONNECTION_POINT_ENTRY(__uuidof(_IGridEvents))
+	END_CONNECTION_POINT_MAP()
+
+	HWND CreateView(HWND hParentWnd, CString strTag);
+
 private:
-	void _RecalcLayout();
-	void TangramLayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CStar* pHostNode, bool bCol);
-	void TangramDeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout, CWnd* pWnd, int x, int y, int cx, int cy, BOOL bScrollBar);
+	CString _GetNames(CGrid* pGrid);
+	void _get_Objects(CGrid* pGrid, UINT32& nType, CGridCollection* pGridColletion);
+	int _getNodes(CGrid* pGrid, CString& strName, CGrid**ppRetGrid, CGridCollection* pGrids);
+};
+
+// CGridCollection
+
+class ATL_NO_VTABLE CGridCollection :
+	public CComObjectRootEx<CComSingleThreadModel>,
+	public IDispatchImpl<IGridCollection, &IID_IGridCollection, &LIBID_Universe, 1, 0>
+{
+public:
+	CGridCollection();
+	~CGridCollection();
+
+	BEGIN_COM_MAP(CGridCollection)
+		COM_INTERFACE_ENTRY(IGridCollection)
+		COM_INTERFACE_ENTRY(IDispatch)
+	END_COM_MAP()
+
+	STDMETHOD(get_GridCount)(long* pCount);
+	STDMETHOD(get_Item)(long iIndex, IGrid **ppStar);
+	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
+	CGridVector*	m_pGrids;
+
+private:
+	CGridVector	m_vNodes;
 };

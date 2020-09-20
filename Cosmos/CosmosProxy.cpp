@@ -252,12 +252,12 @@ void CCosmosProxy::OnDestroyChromeBrowser(IBrowser* pChromeWebBrowser)
 	}
 };
 
-CWPFObj* CCosmosProxy::CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID)
+CWPFObj* CCosmosProxy::CreateWPFControl(IGrid* pGrid, HWND hPWnd, UINT nID)
 {
 	return nullptr;
 }
 
-HRESULT CCosmosProxy::NavigateURL(IStar* pNode, CString strURL, IDispatch* dispObjforScript)
+HRESULT CCosmosProxy::NavigateURL(IGrid* pGrid, CString strURL, IDispatch* dispObjforScript)
 {
 	return S_FALSE;
 }
@@ -410,11 +410,11 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 			}
 			else
 			{
-				IStar* pNode = (IStar*)lp;
+				IGrid* pGrid = (IGrid*)lp;
 			}
 		}
 		BSTR bstrName = STRING2BSTR(pChild->Name); //OK!
-		IGalaxyCluster* pNode = theApp.m_pHubbleImpl->Observe((HWND)pChild->Handle.ToInt64(), OLE2T(bstrName), _T("default"));
+		IGalaxyCluster* pGrid = theApp.m_pHubbleImpl->Observe((HWND)pChild->Handle.ToInt64(), OLE2T(bstrName), _T("default"));
 		::SysFreeString(bstrName);
 	}
 }
@@ -438,10 +438,11 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
-	Star^ pNode = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
-	if (pNode)
+	
+	Cosmos::Grid^ pGrid = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
+	if (pGrid)
 	{
-		Quasar^ pQuasar = pNode->Quasar;
+		Quasar^ pQuasar = pGrid->Quasar;
 		if (e->Item->Tag != nullptr)
 		{
 			String^ strTag = e->Item->Tag->ToString();
@@ -499,8 +500,8 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 //
 //		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 //	}
-//	Star^ pNode = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
-//	Quasar^ pQuasar = pNode->Quasar;
+//	Grid^ pGrid = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
+//	Quasar^ pQuasar = pGrid->Quasar;
 //	if (e->Node->Tag != nullptr)
 //	{
 //		String^ strTag = e->Node->Tag->ToString();
@@ -557,10 +558,11 @@ void CCosmosProxy::OnAfterSelect(System::Object^ sender, TreeViewEventArgs^ e)
 
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
-	Star^ pNode = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
-	if (pNode == nullptr)
+	
+	Cosmos::Grid^ pGrid = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
+	if (pGrid == nullptr)
 		return;
-	Quasar^ pQuasar = pNode->Quasar;
+	Quasar^ pQuasar = pGrid->Quasar;
 	if (e->Node->Tag != nullptr)
 	{
 		String^ strTag = e->Node->Tag->ToString();
@@ -880,15 +882,15 @@ Object^ CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, C
 	return pGalaxyCluster;
 }
 
-Object^ CCosmosProxy::InitTangramNode(IStar* _pNode, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
+Object^ CCosmosProxy::InitTangramNode(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
 {
 	if (::IsChild(theApp.m_pHubbleImpl->m_hHostWnd, (HWND)pCtrl->Handle.ToInt64()))
 		return nullptr;
 	GalaxyCluster^ pGalaxyCluster = nullptr;
-	Star^ pNode = (Star^)theAppProxy._createObject<IStar, Cosmos::Star>(_pNode);
-	if (pNode)
+	Cosmos::Grid^ pGrid = (Cosmos::Grid^)theAppProxy._createObject<IGrid, Cosmos::Grid>(_pGrid);
+	if (pGrid)
 	{
-		pGalaxyCluster = pNode->GalaxyCluster;
+		pGalaxyCluster = pGrid->GalaxyCluster;
 		for each (Control ^ pChild in pCtrl->Controls)
 		{
 			Type^ pType = pChild->GetType();
@@ -907,10 +909,10 @@ Object^ CCosmosProxy::InitTangramNode(IStar* _pNode, Control^ pCtrl, bool bSave,
 				if (bExtendable)
 				{
 					IQuasar* pQuasar = nullptr;
-					_pNode->get_Quasar(&pQuasar);
+					_pGrid->get_Quasar(&pQuasar);
 					CComBSTR bstrName("");
 					pQuasar->get_Name(&bstrName);
-					String^ name = pNode->Name + L".";
+					String^ name = pGrid->Name + L".";
 					if (String::IsNullOrEmpty(pChild->Name))
 						name += strType;
 					else
@@ -932,14 +934,14 @@ Object^ CCosmosProxy::InitTangramNode(IStar* _pNode, Control^ pCtrl, bool bSave,
 								CString strEvents = pChildParse->attr(_T("bindevent"), _T(""));
 								BindWebObj* pObj = new BindWebObj;
 								pObj->nType = 0;
-								pObj->m_pNode = _pNode;
+								pObj->m_pGrid = _pGrid;
 								pObj->m_strBindData = strEvents;
 								pObj->m_hWnd = hCtrl;
 								pObj->m_strObjName = pChild->Name;
 								pObj->m_strObjType = strType;
 								pObj->m_strBindObjName = strWebName;
 								__int64 nHandle = 0;
-								_pNode->get_Handle(&nHandle);
+								_pGrid->get_Handle(&nHandle);
 								HWND hWnd = (HWND)nHandle;
 								::PostMessage(theApp.m_pHubbleImpl->m_hTangramWnd, WM_TANGRAMDATA, (WPARAM)pObj, (LPARAM)20200204);
 							}
@@ -950,7 +952,7 @@ Object^ CCosmosProxy::InitTangramNode(IStar* _pNode, Control^ pCtrl, bool bSave,
 						{
 							QuasarInfo* pInfo = new QuasarInfo;
 							pInfo->m_pDisp = nullptr;
-							pInfo->m_pParentDisp = _pNode;
+							pInfo->m_pParentDisp = _pGrid;
 							pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 							m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
 							pInfo->m_strNodeXml = pChildParse2->xml();
@@ -1000,7 +1002,7 @@ Object^ CCosmosProxy::InitTangramNode(IStar* _pNode, Control^ pCtrl, bool bSave,
 					{
 						QuasarInfo* pInfo = new QuasarInfo;
 						pInfo->m_pDisp = nullptr;
-						pInfo->m_pParentDisp = _pNode;
+						pInfo->m_pParentDisp = _pGrid;
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 						m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
 						pInfo->m_strNodeXml = _T("");
@@ -1030,9 +1032,9 @@ Object^ CCosmosProxy::InitTangramNode(IStar* _pNode, Control^ pCtrl, bool bSave,
 					::SysFreeString(strName);
 				}
 			}
-			InitTangramNode(_pNode, pChild, bSave, pParse);
+			InitTangramNode(_pGrid, pChild, bSave, pParse);
 		}
-		auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(_pNode);
+		auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(_pGrid);
 		if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
 			theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
 	}
@@ -1059,16 +1061,16 @@ void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyClu
 				{
 					if (pTreeView->Nodes->Count == 0)
 					{
-						TreeNode^ pNode = pTreeView->Nodes->Add(BSTR2STRING(m_Parse.attr(_T("text"), _T(""))));
-						pNode->ImageIndex = m_Parse.attrInt(_T("imageindex"), 0);
-						pNode->SelectedImageIndex = m_Parse.attrInt(_T("selectedimageindex"), 0);
+						TreeNode^ pGrid = pTreeView->Nodes->Add(BSTR2STRING(m_Parse.attr(_T("text"), _T(""))));
+						pGrid->ImageIndex = m_Parse.attrInt(_T("imageindex"), 0);
+						pGrid->SelectedImageIndex = m_Parse.attrInt(_T("selectedimageindex"), 0);
 						CString strTagName = ctrl->Name->ToLower() + _T("_tag");
 						CTangramXmlParse* pChild = m_Parse.GetChild(strTagName);
 						if (pChild)
 						{
-							pNode->Tag = BSTR2STRING(pChild->xml());
+							pGrid->Tag = BSTR2STRING(pChild->xml());
 						}
-						LoadNode(pTreeView, pNode, pGalaxyCluster, &m_Parse);
+						LoadNode(pTreeView, pGrid, pGalaxyCluster, &m_Parse);
 					}
 				}
 				pTreeView->ExpandAll();
@@ -1103,7 +1105,7 @@ void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyClu
 	}
 }
 
-System::Void CCosmosProxy::LoadNode(TreeView^ pTreeView, TreeNode^ pNode, IGalaxyCluster* pGalaxyCluster, CTangramXmlParse* pParse)
+System::Void CCosmosProxy::LoadNode(TreeView^ pTreeView, TreeNode^ pGrid, IGalaxyCluster* pGalaxyCluster, CTangramXmlParse* pParse)
 {
 	if (pParse)
 	{
@@ -1124,7 +1126,7 @@ System::Void CCosmosProxy::LoadNode(TreeView^ pTreeView, TreeNode^ pNode, IGalax
 					bool isTreeNode = _pParse->attrBool(_T("treenode"), false);
 					if (isTreeNode)
 					{
-						TreeNode^ pChildNode = pNode->Nodes->Add(BSTR2STRING(_pParse->attr(_T("text"), _T(""))));
+						TreeNode^ pChildNode = pGrid->Nodes->Add(BSTR2STRING(_pParse->attr(_T("text"), _T(""))));
 						if (pChildNode)
 						{
 							pChildNode->ImageIndex = _pParse->attrInt(_T("imageindex"), 0);
@@ -1453,8 +1455,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					//					IQuasar* pQuasar = nullptr;
 					//					pManager->CreateQuasar(CComVariant(0), CComVariant((__int64)hWnd), L"default", &pQuasar);
 					//					if (pQuasar) {
-					//						IStar* pNode = nullptr;
-					//						pQuasar->Observe(L"default", CComBSTR(strMainForm), &pNode);
+					//						IGrid* pGrid = nullptr;
+					//						pQuasar->Observe(L"default", CComBSTR(strMainForm), &pGrid);
 					//					}
 					//				}
 					//			}
@@ -1614,15 +1616,15 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 	return nullptr;
 }
 //
-//void CCosmosProxy::SelectNode(IStar* pNode)
+//void CCosmosProxy::SelectNode(IGrid* pGrid)
 //{
 //}
 
-IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IStar* pHostNode)
+IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode)
 {
 	String^ strID = BSTR2STRING(bstrObjID);
 	Object^ _pObj = Cosmos::Hubble::CreateObject(strID);
-	Star^ _pNode = (Star^)_createObject<IStar, Cosmos::Star>(pHostNode);
+	Cosmos::Grid^ _pGrid = (Cosmos::Grid^)_createObject<IGrid, Cosmos::Grid>(pHostNode);
 	if (_pObj == nullptr)
 	{
 		System::Windows::Forms::Label^ label = (gcnew System::Windows::Forms::Label());
@@ -1646,14 +1648,14 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IStar* pHost
 			pHostNode->get_Handle(&h);
 			if (h)
 				::SendMessage((HWND)h, WM_COSMOSMSG, 0, 19920612);
-			IStar* pRootNode = NULL;
-			pHostNode->get_RootStar(&pRootNode);
+			IGrid* pRootGrid = NULL;
+			pHostNode->get_RootGrid(&pRootGrid);
 			CComBSTR bstrName(L"");
 			pHostNode->get_Name(&bstrName);
 			CString strName = OLE2T(bstrName);
 			HWND hWnd = (HWND)pObj->Handle.ToInt64();
 			IDispatch* pDisp = (IDispatch*)(Marshal::GetIUnknownForObject(pObj).ToInt64());
-			_pNode->m_pHostObj = pObj;
+			_pGrid->m_pHostObj = pObj;
 
 			if (pObj->GetType()->IsSubclassOf(Form::typeid))
 			{
@@ -1664,7 +1666,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IStar* pHost
 				theApp.m_pHubbleImpl->m_hFormNodeWnd = hWnd;
 				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD | WS_VISIBLE);
 				::SetWindowLongPtr(hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & ~(WS_EX_APPWINDOW/*|WS_EX_CLIENTEDGE*/));
-				Cosmos::Hubble::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pNode);
+				Cosmos::Hubble::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pGrid);
 
 				((Form^)pObj)->Show();
 				return pDisp;
@@ -1695,13 +1697,13 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IStar* pHost
 	{
 		if (_pObj->GetType()->IsSubclassOf(System::Windows::FrameworkElement::typeid))
 		{
-			Cosmos::Hubble::m_pFrameworkElementDic[_pObj] = _pNode;
+			Cosmos::Hubble::m_pFrameworkElementDic[_pObj] = _pGrid;
 			try
 			{
 				System::Windows::Forms::Integration::ElementHost^ pElementHost = gcnew System::Windows::Forms::Integration::ElementHost();
 				pElementHost->Child = (FrameworkElement^)_pObj;
 				IDispatch* pDisp = (IDispatch*)(Marshal::GetIUnknownForObject(pElementHost).ToInt64());
-				_pNode->m_pHostObj = pElementHost;
+				_pGrid->m_pHostObj = pElementHost;
 				return pDisp;
 			}
 			catch (System::Exception^ ex)
@@ -1930,9 +1932,9 @@ void CCosmosProxy::SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool b
 	}
 }
 
-void CCosmosProxy::ConnectNodeToWebPage(IStar* pNode, bool bAdd)
+void CCosmosProxy::ConnectGridToWebPage(IGrid* pGrid, bool bAdd)
 {
-	CSession* pSession = theApp.m_pHubbleImpl->GetCloudSession(pNode);
+	CSession* pSession = theApp.m_pHubbleImpl->GetCloudSession(pGrid);
 	if (pSession == nullptr)
 		return;
 	IDispatch* pDisp = nullptr;
@@ -2084,8 +2086,8 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 				if (_strEventName == _T(""))
 				{
 					HWND hWnd = (HWND)pSession->Getint64(L"nodehandle");
-					IStar* pNode = (IStar*)pSession->Getint64(L"nodeobj");
-					Star^ thisNode = theAppProxy._createObject<IStar, Star>(pNode);
+					IGrid* pGrid = (IGrid*)pSession->Getint64(L"nodeobj");
+					Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 					if (thisNode != nullptr)
 					{
 						thisNode->Fire_OnCloudMessageReceived(pCloudSession);
@@ -2105,8 +2107,8 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	else
 	{
 		HWND hWnd = (HWND)pSession->Getint64(L"nodehandle");
-		IStar* pNode = (IStar*)pSession->Getint64(L"nodeobj");
-		Star^ thisNode = theAppProxy._createObject<IStar, Star>(pNode);
+		IGrid* pGrid = (IGrid*)pSession->Getint64(L"nodeobj");
+		Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 		Cosmos::Wormhole^ pCloudSession = nullptr;// gcnew Universe::Wormhole(pSession);
 		if (thisNode != nullptr)
 		{
@@ -2251,7 +2253,7 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 			}
 			else
 			{
-				Star^ pWindowNode = (Star^)theAppProxy._createObject<IStar, Star>((IStar*)pvoid);
+				Cosmos::Grid^ pWindowNode = (Cosmos::Grid^)theAppProxy._createObject<IGrid, Cosmos::Grid>((IGrid*)pvoid);
 				if (pWindowNode)
 				{
 					int nType = m_Parse.attrInt(_T("Type"), 0);
@@ -2279,7 +2281,7 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 		}
 		//else if(pvoid!=nullptr)
 		//{
-		//	Star^ pWindowNode = (Star^)theAppProxy._createObject<IStar, Star>((IStar*)pvoid);
+		//	Grid^ pWindowNode = (Grid^)theAppProxy._createObject<IGrid, Grid>((IGrid*)pvoid);
 		//	if (pWindowNode != nullptr)
 		//	{
 		//		CString strToken = _T("@IPCMessage@");
@@ -2322,45 +2324,45 @@ bool CCosmosProxy::_removeObject(Object^ key)
 
 void CCosmosNodeEvent::OnOpenComplete()
 {
-	if (m_pStarCLREvent)
-		m_pStarCLREvent->OnOpenComplete(NULL);
+	if (m_pGridCLREvent)
+		m_pGridCLREvent->OnOpenComplete(NULL);
 }
 
 void CCosmosNodeEvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	if (m_pStar != nullptr)
-		m_pStarCLREvent->OnTabChange(nActivePage, nOldPage);
+	if (m_pGrid != nullptr)
+		m_pGridCLREvent->OnTabChange(nActivePage, nOldPage);
 }
 
 void CCosmosNodeEvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
 {
-	if (m_pStar != nullptr)
-		m_pStarCLREvent->OnIPCMessageReceived(bstrFrom, bstrTo, bstrMsgId, bstrPayload, bstrExtra);
+	if (m_pGrid != nullptr)
+		m_pGridCLREvent->OnIPCMessageReceived(bstrFrom, bstrTo, bstrMsgId, bstrPayload, bstrExtra);
 }
 
 void CCosmosNodeEvent::OnDestroy()
 {
-	LONGLONG nValue = (LONGLONG)m_pStar;
+	LONGLONG nValue = (LONGLONG)m_pGrid;
 	theAppProxy._removeObject(nValue);
-	if (m_pStarCLREvent)
+	if (m_pGridCLREvent)
 	{
-		m_pStarCLREvent->OnDestroy();
-		delete m_pStarCLREvent;
-		m_pStarCLREvent = nullptr;
+		m_pGridCLREvent->OnDestroy();
+		delete m_pGridCLREvent;
+		m_pGridCLREvent = nullptr;
 	}
-	this->DispEventUnadvise(m_pStar);
+	this->DispEventUnadvise(m_pGrid);
 }
 
 void CCosmosNodeEvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 {
-	if (m_pStar != nullptr)
-		m_pStarCLREvent->OnDocumentComplete(pDocdisp, bstrUrl);
+	if (m_pGrid != nullptr)
+		m_pGridCLREvent->OnDocumentComplete(pDocdisp, bstrUrl);
 }
 
 void CCosmosNodeEvent::OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
-	if (m_pStar != nullptr)
-		m_pStarCLREvent->OnNodeAddInCreated(pAddIndisp, bstrAddInID, bstrAddInXml);
+	if (m_pGrid != nullptr)
+		m_pGridCLREvent->OnNodeAddInCreated(pAddIndisp, bstrAddInID, bstrAddInXml);
 }
 
 bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)
@@ -2780,10 +2782,10 @@ void CCosmos::OnHubbleClose()
 	AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
 }
 
-void CCosmos::OnOpenComplete(HWND hWnd, CString strUrl, IStar* pRootNode)
+void CCosmos::OnOpenComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid)
 {
 	Cosmos::Hubble^ pManager = Cosmos::Hubble::GetHubble();
-	Star^ _pRootNode = theAppProxy._createObject<IStar, Star>(pRootNode);
+	Cosmos::Grid^ _pRootNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pRootGrid);
 	IntPtr nHandle = (IntPtr)hWnd;
 	pManager->Fire_OnOpenComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
@@ -2805,11 +2807,11 @@ void __stdcall  CGalaxyClusterEvent::OnDestroy()
 		delete m_pGalaxyCluster;
 }
 
-void __stdcall  CGalaxyClusterEvent::OnTabChange(IStar* sender, int nActivePage, int nOldPage)
+void __stdcall  CGalaxyClusterEvent::OnTabChange(IGrid* sender, int nActivePage, int nOldPage)
 {
 	Object^ pObj = m_pGalaxyCluster;
 	Cosmos::GalaxyCluster^ pGalaxyCluster = static_cast<Cosmos::GalaxyCluster^>(pObj);
-	Star^ pWindowNode = (Star^)theAppProxy._createObject<IStar, Star>(sender);
+	Cosmos::Grid^ pWindowNode = (Cosmos::Grid^)theAppProxy._createObject<IGrid, Cosmos::Grid>(sender);
 	pGalaxyCluster->Fire_OnTabChange(pWindowNode, nActivePage, nOldPage);
 }
 

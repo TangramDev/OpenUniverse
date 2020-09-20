@@ -14,12 +14,12 @@
 // TangramObject.cpp : Implementation of CGalaxyCluster
 
 #include "stdafx.h"
-#include "Star.h"
+#include "grid.h"
 #include "Quasar.h"
 #include "UniverseApp.h"
 #include "Hubble.h"
 
-CStarCommonData::CStarCommonData()
+CGridCommonData::CGridCommonData()
 {
 	m_pOldQuasar		= nullptr;
 	m_pHubbleParse		= nullptr;
@@ -29,7 +29,7 @@ CStarCommonData::CStarCommonData()
 #endif	
 };
 
-CStarCommonData::~CStarCommonData()
+CGridCommonData::~CGridCommonData()
 {
 	if (m_pHubbleParse)
 		delete m_pHubbleParse;
@@ -72,7 +72,7 @@ CGalaxyCluster::~CGalaxyCluster()
 	m_mapExternalObj.erase(m_mapExternalObj.begin(), m_mapExternalObj.end());
 
 	m_mapQuasar.erase(m_mapQuasar.begin(), m_mapQuasar.end());
-	m_mapNode.erase(m_mapNode.begin(), m_mapNode.end());
+	m_mapGrid.erase(m_mapGrid.begin(), m_mapGrid.end());
 	auto it = g_pHubble->m_mapWindowPage.find(m_hWnd);
 	if (it != g_pHubble->m_mapWindowPage.end())
 	{
@@ -362,7 +362,7 @@ STDMETHODIMP CGalaxyCluster::GetQuasarFromCtrl(IDispatch* CtrlObj, IQuasar** ppQ
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::GetStar(BSTR bstrFrameName, BSTR bstrNodeName, IStar** pRetNode)
+STDMETHODIMP CGalaxyCluster::GetGrid(BSTR bstrFrameName, BSTR bstrNodeName, IGrid** pRetNode)
 {
 	CString strKey = OLE2T(bstrFrameName);
 	CString strName = OLE2T(bstrNodeName);
@@ -379,14 +379,14 @@ STDMETHODIMP CGalaxyCluster::GetStar(BSTR bstrFrameName, BSTR bstrNodeName, ISta
 			{
 				CQuasar* pQuasar = it->second;
 				strName = strName.MakeLower();
-				auto it2 = pQuasar->m_mapNode.find(strName);
-				if (it2 != pQuasar->m_mapNode.end())
-					*pRetNode = (IStar*)it2->second;
+				auto it2 = pQuasar->m_mapGrid.find(strName);
+				if (it2 != pQuasar->m_mapGrid.end())
+					*pRetNode = (IGrid*)it2->second;
 				else
 				{
-					it2 = m_mapNode.find(strName);
-					if (it2 != m_mapNode.end())
-						*pRetNode = (IStar*)it2->second;
+					it2 = m_mapGrid.find(strName);
+					if (it2 != m_mapGrid.end())
+						*pRetNode = (IGrid*)it2->second;
 				}
 			}
 		}
@@ -459,7 +459,7 @@ void CGalaxyCluster::OnNodeDocComplete(WPARAM wParam)
 	bool bState = false;
 	for (auto it1 : m_mapQuasar)
 	{
-		for (auto it2 : it1.second->m_mapNode)
+		for (auto it2 : it1.second->m_mapGrid)
 		{
 			if (it2.second->m_bCreated == false)
 			{
@@ -560,13 +560,13 @@ void CGalaxyCluster::BeforeDestory()
 	}
 }
 
-STDMETHODIMP CGalaxyCluster::get_Star(BSTR bstrNodeName, IStar** pVal)
+STDMETHODIMP CGalaxyCluster::get_Grid(BSTR bstrNodeName, IGrid** pVal)
 {
 	CString strName = OLE2T(bstrNodeName);
 	if (strName == _T(""))
 		return S_OK;
-	auto it2 = m_mapNode.find(strName);
-	if (it2 == m_mapNode.end())
+	auto it2 = m_mapGrid.find(strName);
+	if (it2 == m_mapGrid.end())
 		return S_OK;
 
 	if (it2->second)
@@ -580,8 +580,8 @@ STDMETHODIMP CGalaxyCluster::get_XObject(BSTR bstrName, IDispatch** pVal)
 	CString strName = OLE2T(bstrName);
 	if (strName == _T(""))
 		return S_OK;
-	auto it2 = m_mapNode.find(strName);
-	if (it2 == m_mapNode.end())
+	auto it2 = m_mapGrid.find(strName);
+	if (it2 == m_mapGrid.end())
 		return S_OK;
 	if (it2->second->m_pDisp)
 	{
@@ -639,10 +639,10 @@ STDMETHODIMP CGalaxyCluster::put_Height(long newVal)
 	return S_OK; 
 }
 
-STDMETHODIMP CGalaxyCluster::get_StarNames(BSTR* pVal)
+STDMETHODIMP CGalaxyCluster::get_GridNames(BSTR* pVal)
 {
 	CString strNames = _T("");
-	for (auto it : m_mapNode)
+	for (auto it : m_mapGrid)
 	{
 		strNames += it.first;
 		strNames += _T(",");
@@ -682,18 +682,18 @@ STDMETHODIMP CGalaxyCluster::get_Handle(LONGLONG* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::GetCtrlInStar(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl)
+STDMETHODIMP CGalaxyCluster::GetCtrlInGrid(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl)
 {
 	CString strName = OLE2T(NodeName);
 	if (strName == _T(""))
 		return S_OK;
-	auto it2 = m_mapNode.find(strName);
-	if (it2 == m_mapNode.end())
+	auto it2 = m_mapGrid.find(strName);
+	if (it2 == m_mapGrid.end())
 		return S_OK;
 
-	CStar* pNode = it2->second;
-	if (pNode)
-		pNode->GetCtrlByName(CtrlName, true, ppCtrl);
+	CGrid* pGrid = it2->second;
+	if (pGrid)
+		pGrid->GetCtrlByName(CtrlName, true, ppCtrl);
 
 	return S_OK;
 }
@@ -721,7 +721,7 @@ STDMETHODIMP CGalaxyCluster::put_xtml(BSTR strKey, BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR FrameName, BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
+STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR FrameName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 {
 	if (g_pHubble->m_pCLRProxy)
 	{
@@ -744,11 +744,11 @@ STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR Fram
 				{
 					IQuasar* pQuasar = nullptr;
 					CreateQuasar(CComVariant(0), CComVariant((long)h), FrameName, &pQuasar);
-					return pQuasar->Observe(bstrKey, bstrXml, ppRetNode);
+					return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
 				}
 				else
 				{
-					return it->second->Observe(bstrKey, bstrXml, ppRetNode);
+					return it->second->Observe(bstrKey, bstrXml, ppRetGrid);
 				}
 			}
 		}
@@ -756,7 +756,7 @@ STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR Fram
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode)
+STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 {
 	HWND h = 0;
 	bool bMDI = false;
@@ -782,11 +782,11 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 					if (it == m_mapQuasar.end())
 					{
 						CreateQuasar(CComVariant(0), CComVariant((long)h), bstrName, &pQuasar);
-						return pQuasar->Observe(bstrKey, bstrXml, ppRetNode);
+						return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
 					}
 					else
 					{
-						return it->second->Observe(bstrKey, bstrXml, ppRetNode);
+						return it->second->Observe(bstrKey, bstrXml, ppRetGrid);
 					}
 				}
 			}
@@ -851,7 +851,7 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 			HRESULT hr = CreateQuasar(CComVariant(0), CComVariant((long)h), CComBSTR(L"TangramMDIClientQuasar"), &pQuasar);
 			if (pQuasar)
 			{
-				return pQuasar->Observe(bstrKey, bstrXml, ppRetNode);
+				return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
 			}
 		}
 		else
@@ -874,11 +874,11 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 					strText = s;
 				}
 				CreateQuasar(CComVariant(0), CComVariant((long)h), CComBSTR(strText), &pQuasar);
-				return pQuasar->Observe(bstrKey, bstrXml, ppRetNode);
+				return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
 			}
 			else
 			{
-				return it->second->Observe(bstrKey, bstrXml, ppRetNode);
+				return it->second->Observe(bstrKey, bstrXml, ppRetGrid);
 			}
 		}
 	}
@@ -926,14 +926,14 @@ HRESULT CGalaxyCluster::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_NodeCreated(IStar * pNodeCreated)
+HRESULT CGalaxyCluster::Fire_NodeCreated(IGrid * pGridCreated)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
 	{
 		CComVariant avarParams[1];
-		avarParams[0] = pNodeCreated;
+		avarParams[0] = pGridCreated;
 		avarParams[0].vt = VT_DISPATCH;
 
 		DISPPARAMS params = { avarParams, NULL, 1, 0 };
@@ -953,19 +953,19 @@ HRESULT CGalaxyCluster::Fire_NodeCreated(IStar * pNodeCreated)
 
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
-		it.second->OnNodeCreated(pNodeCreated);
+		it.second->OnNodeCreated(pGridCreated);
 	}
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_AddInCreated(IStar * pRootNode, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
+HRESULT CGalaxyCluster::Fire_AddInCreated(IGrid * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
 	{
 		CComVariant avarParams[4];
-		avarParams[3] = pRootNode;
+		avarParams[3] = pRootGrid;
 		avarParams[3].vt = VT_DISPATCH;
 		avarParams[2] = pAddIn;
 		avarParams[2].vt = VT_DISPATCH;
@@ -991,7 +991,7 @@ HRESULT CGalaxyCluster::Fire_AddInCreated(IStar * pRootNode, IDispatch * pAddIn,
 
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
-		it.second->OnAddInCreated(pRootNode, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
+		it.second->OnAddInCreated(pRootGrid, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
 	}
 	return hr;
 }
@@ -1030,7 +1030,7 @@ HRESULT CGalaxyCluster::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IStar * pRetRootNode)
+HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IGrid * pRetRootNode)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1095,7 +1095,7 @@ HRESULT CGalaxyCluster::Fire_Destroy()
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IStar * pActiveNode)
+HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IGrid * pActiveNode)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1128,7 +1128,7 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IStar * pActiveNode)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_ClrControlCreated(IStar * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle)
+HRESULT CGalaxyCluster::Fire_ClrControlCreated(IGrid * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1202,7 +1202,7 @@ HRESULT CGalaxyCluster::Fire_IPCMsg(IQuasar* pSender, BSTR bstrType, BSTR bstrCo
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_TabChange(IStar* sender, LONG ActivePage, LONG OldPage)
+HRESULT CGalaxyCluster::Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPage)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1406,20 +1406,20 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::CreateQuasarWithDefaultNode(ULONGLONG hFrameWnd, BSTR bstrFrameName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IStar** ppNode)
+STDMETHODIMP CGalaxyCluster::CreateQuasarWithDefaultNode(ULONGLONG hFrameWnd, BSTR bstrFrameName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid)
 {
 	CString strXml = OLE2T(bstrXml);
 	strXml.Trim();
 	if (strXml == _T(""))
-		strXml = _T("<default><cluster><star name=\"Start\" /></cluster></default>");
+		strXml = _T("<default><cluster><grid name=\"Start\" /></cluster></default>");
 	IQuasar* pQuasar = nullptr;
 	CreateQuasar(CComVariant(0), CComVariant((LONGLONG)hFrameWnd), bstrFrameName, &pQuasar);
 	if (pQuasar)
 	{
-		pQuasar->Observe(bstrDefaultNodeKey, strXml.AllocSysString(), ppNode);
-		if (*ppNode&&bSaveToConfig)
+		pQuasar->Observe(bstrDefaultNodeKey, strXml.AllocSysString(), ppGrid);
+		if (*ppGrid&&bSaveToConfig)
 		{
-			(*ppNode)->put_SaveToConfigFile(true);
+			(*ppGrid)->put_SaveToConfigFile(true);
 			//CQuasar* pFrame2 = (CQuasar*)::SendMessage(((CQuasar*)pQuasar)->m_hWnd, WM_TANGRAMDATA, 0, 1992);
 			//if (pQuasar)
 			//{
@@ -1443,10 +1443,10 @@ STDMETHODIMP CGalaxyCluster::ObserveQuasars(BSTR bstrFrames, BSTR bstrKey, BSTR 
 		{
 			if (it.second != m_pBKFrame)
 			{
-				IStar* pNode = nullptr;
-				it.second->Observe(bstrKey, bstrXml, &pNode);
-				if (pNode&&bSaveToConfigFile)
-					pNode->put_SaveToConfigFile(true);
+				IGrid* pGrid = nullptr;
+				it.second->Observe(bstrKey, bstrXml, &pGrid);
+				if (pGrid&&bSaveToConfigFile)
+					pGrid->put_SaveToConfigFile(true);
 			}
 		}
 	}
@@ -1458,10 +1458,10 @@ STDMETHODIMP CGalaxyCluster::ObserveQuasars(BSTR bstrFrames, BSTR bstrKey, BSTR 
 			CString strName = _T(",") + it.second->m_strQuasarName + _T(",");
 			if (strFrames.Find(strName) != -1)
 			{
-				IStar* pNode = nullptr;
-				it.second->Observe(bstrKey, bstrXml, &pNode);
-				if (pNode&&bSaveToConfigFile)
-					pNode->put_SaveToConfigFile(true);
+				IGrid* pGrid = nullptr;
+				it.second->Observe(bstrKey, bstrXml, &pGrid);
+				if (pGrid&&bSaveToConfigFile)
+					pGrid->put_SaveToConfigFile(true);
 			}
 		}
 	}
@@ -1473,7 +1473,7 @@ STDMETHODIMP CGalaxyCluster::get_CurrentDesignQuasarType(QuasarType* pVal)
 {
 	if (g_pHubble->m_pDesignWindowNode)
 	{
-		CQuasar* pQuasar = g_pHubble->m_pDesignWindowNode->m_pStarCommonData->m_pQuasar;
+		CQuasar* pQuasar = g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar;
 		*pVal = pQuasar->m_nQuasarType;
 	}
 	else
@@ -1482,7 +1482,7 @@ STDMETHODIMP CGalaxyCluster::get_CurrentDesignQuasarType(QuasarType* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IStar** pVal)
+STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IGrid** pVal)
 {
 	if (g_pHubble->m_pDesignWindowNode)
 		*pVal = g_pHubble->m_pDesignWindowNode;

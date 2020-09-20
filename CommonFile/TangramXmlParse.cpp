@@ -142,8 +142,8 @@ CTangramXmlParse* CTangramXmlParse::AddTabNode(CString strName, CString strCnnID
 		if (strStyle == _T(""))
 			strStyle = _T("19");
 	}
-	CTangramXmlParse* pNode = AddNode(_T("node"));
-	pNode->put_attr(_T("startype"), strObjID);
+	CTangramXmlParse* pNode = AddNode(_T("grid"));
+	pNode->put_attr(_T("gridtype"), strObjID);
 	pNode->put_attr(_T("id"), strName);
 	pNode->put_attr(_T("objid"), strCnnID);
 	pNode->put_attr(_T("tabstyle"), strStyle);
@@ -152,7 +152,7 @@ CTangramXmlParse* CTangramXmlParse::AddTabNode(CString strName, CString strCnnID
 		CString strVal = _T("");
 		for (int i = 0; i < nPages; i++)
 		{
-			CTangramXmlParse* _pNode = pNode->AddNode(_T("node"));
+			CTangramXmlParse* _pNode = pNode->AddNode(_T("grid"));
 			strVal.Format(_T("%s_Page%d"), strName, i);
 			_pNode->put_attr(_T("id"), strVal);
 			_pNode->put_attr(_T("caption"), strVal);
@@ -170,14 +170,14 @@ CTangramXmlParse* CTangramXmlParse::AddSplitterNode(int nRows, int nCols, CStrin
 	nCols = nCols % 16;
 	if (nWidth*nHeight&&nRows*nCols>1)
 	{
-		CTangramXmlParse* pNode = AddNode(_T("node"));
+		CTangramXmlParse* pNode = AddNode(_T("grid"));
 		int _nWidth = nWidth / nCols;
 		int _nHeight = nHeight / nRows;
 		CString strRows = _T("");
 		CString strCols = _T("");
 		if (pNode)
 		{
-			pNode->put_attr(_T("startype"), CString(_T("grid")));
+			pNode->put_attr(_T("gridtype"), CString(_T("grid")));
 			pNode->put_attr(_T("id"), strName);
 			CString strVal = _T("");
 			strVal.Format(_T("%d"), nRows);
@@ -200,7 +200,7 @@ CTangramXmlParse* CTangramXmlParse::AddSplitterNode(int nRows, int nCols, CStrin
 					{
 						strCols += strVal2;
 					}
-					CTangramXmlParse* _pNode = pNode->AddNode(_T("node"));
+					CTangramXmlParse* _pNode = pNode->AddNode(_T("grid"));
 					strVal3.Format(_T("%s_View%02d%02d"), strName, i, j);
 					_pNode->put_attr(_T("id"), strVal3);
 				}
@@ -217,7 +217,7 @@ CTangramXmlParse* CTangramXmlParse::AddSplitterNode(int nRows, int nCols, CStrin
 BOOL CTangramXmlParse::ModifyNode(int nRow, int nCol, CString strName, CString strXml)
 {
 	int nIndex = 0;
-	CString strID = this->attr(_T("startype"), _T(""));
+	CString strID = this->attr(_T("gridtype"), _T(""));
 	if (strID == _T(""))
 		return FALSE;
 	int nCount = GetCount();
@@ -239,7 +239,7 @@ BOOL CTangramXmlParse::ModifyNode(int nRow, int nCol, CString strName, CString s
 		CTangramXmlParse* pWindow = m_Parse.GetChild(TGM_CLUSTER);
 		if (pWindow)
 		{
-			CTangramXmlParse* pNode = pWindow->GetChild(_T("node"));
+			CTangramXmlParse* pNode = pWindow->GetChild(_T("grid"));
 			if (pNode)
 			{
 				if (ReplaceNode(pChild, pNode, strName))

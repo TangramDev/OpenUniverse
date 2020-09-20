@@ -14,11 +14,11 @@
 #include "../stdafx.h"
 #include "../Hubble.h"
 #include "../UniverseApp.h"
-#include "../Star.h"
+#include "../grid.h"
 #include "../Wormhole.h"
 #include "../Quasar.h"
-#include "../StarWnd.h"
-#include "../Grid.h"
+#include "../GridHelperWnd.h"
+#include "../GridWnd.h"
 #include "HtmlWnd.h"
 #include "BrowserWnd.h"
 #include "../Markup.h" 
@@ -90,38 +90,38 @@ namespace Web {
 		break;
 		case 20200310:
 		{
-			CStar* pNode = (CStar*)lParam;
-			if (pNode && pNode->m_pHubbleCloudSession == nullptr)
+			CGrid* pGrid = (CGrid*)lParam;
+			if (pGrid && pGrid->m_pHubbleCloudSession == nullptr)
 			{
-				pNode->m_pHubbleCloudSession = (CWormhole*)((CHubbleImpl*)g_pHubble)->CreateCloudSession(this);
-				CWormhole* pSession = pNode->m_pHubbleCloudSession;
+				pGrid->m_pHubbleCloudSession = (CWormhole*)((CHubbleImpl*)g_pHubble)->CreateCloudSession(this);
+				CWormhole* pSession = pGrid->m_pHubbleCloudSession;
 				if (pSession)
 				{
 					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
 					pSession->InsertLong(_T("autodelete"), 0);
-					pSession->InsertLong(_T("startype"), pNode->m_nViewType);
-					pSession->InsertLong(_T("rows"), pNode->m_nRows);
-					pSession->InsertLong(_T("cols"), pNode->m_nCols);
-					pSession->InsertLong(_T("row"), pNode->m_nRow);
-					pSession->InsertLong(_T("col"), pNode->m_nCol);
-					pSession->InsertString(_T("objtype"), pNode->m_strCnnID);
-					pSession->InsertString(_T("name@page"), pNode->m_strName);
-					pSession->Insertint64(_T("nodehandle"), (__int64)pNode->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("nodeobj"), (__int64)(IStar*)pNode);
-					pSession->Insertint64(_T("Quasarhandle"), (__int64)pNode->m_pStarCommonData->m_pQuasar->m_hWnd);
-					pSession->Insertint64(_T("rootnodehandle"), (__int64)pNode->m_pRootObj->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("domhandle"), (__int64)pNode->m_pHubbleCloudSession);
+					pSession->InsertLong(_T("gridtype"), pGrid->m_nViewType);
+					pSession->InsertLong(_T("rows"), pGrid->m_nRows);
+					pSession->InsertLong(_T("cols"), pGrid->m_nCols);
+					pSession->InsertLong(_T("row"), pGrid->m_nRow);
+					pSession->InsertLong(_T("col"), pGrid->m_nCol);
+					pSession->InsertString(_T("objtype"), pGrid->m_strCnnID);
+					pSession->InsertString(_T("name@page"), pGrid->m_strName);
+					pSession->Insertint64(_T("nodehandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("nodeobj"), (__int64)(IGrid*)pGrid);
+					pSession->Insertint64(_T("Quasarhandle"), (__int64)pGrid->m_pGridCommonData->m_pQuasar->m_hWnd);
+					pSession->Insertint64(_T("rootnodehandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
-					switch (pNode->m_nViewType)
+					switch (pGrid->m_nViewType)
 					{
 					case Grid:
 					{
-						CGrid* pWnd = (CGrid*)pNode->m_pHostWnd;
-						for (int i = 0; i < pNode->m_nRows; i++)
+						CGridWnd* pWnd = (CGridWnd*)pGrid->m_pHostWnd;
+						for (int i = 0; i < pGrid->m_nRows; i++)
 						{
-							for (int j = 0; j < pNode->m_nCols; j++)
+							for (int j = 0; j < pGrid->m_nCols; j++)
 							{
-								int nIndex = j + i * pNode->m_nRows;
+								int nIndex = j + i * pGrid->m_nRows;
 								CString strIndex = _T("");
 								strIndex.Format(_T("%d"), nIndex);
 								pSession->Insertint64(strIndex, (__int64)::GetDlgItem(pWnd->m_hWnd, pWnd->IdFromRowCol(i, j)));
@@ -131,7 +131,7 @@ namespace Web {
 					break;
 					case TabGrid:
 					{
-						for (auto it : pNode->m_vChildNodes)
+						for (auto it : pGrid->m_vChildNodes)
 						{
 							CString strIndex = _T("");
 							strIndex.Format(_T("%d"), it->m_nCol);
@@ -142,20 +142,20 @@ namespace Web {
 					default:
 						break;
 					}
-					if (pNode->m_pParentObj)
+					if (pGrid->m_pParentObj)
 					{
-						pSession->Insertint64(_T("parentnodehandle"), (__int64)pNode->m_pParentObj->m_pHostWnd->m_hWnd);
+						pSession->Insertint64(_T("parentnodehandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
 					}
-					if (pNode->m_pParentWinFormWnd)
+					if (pGrid->m_pParentWinFormWnd)
 					{
-						pSession->Insertint64(_T("parentFormHandle"), (__int64)pNode->m_pParentWinFormWnd->m_hWnd);
+						pSession->Insertint64(_T("parentFormHandle"), (__int64)pGrid->m_pParentWinFormWnd->m_hWnd);
 					}
-					if (pNode->m_pDisp)
+					if (pGrid->m_pDisp)
 					{
-						pNode->m_pHubbleCloudSession->Insertint64(_T("objectdisp"), (__int64)pNode->m_pDisp);
+						pGrid->m_pHubbleCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
 						if (g_pHubble->m_pCLRProxy)
 						{
-							g_pHubble->m_pCLRProxy->ConnectNodeToWebPage(pNode, true);
+							g_pHubble->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
 						}
 					}
 					m_pChromeRenderFrameHost->SendHubbleMessage(pSession->m_pSession);
@@ -567,9 +567,9 @@ namespace Web {
 			}
 			if (m_pQuasar)
 			{
-				IStar* pNode = nullptr;
-				m_pQuasar->Observe(CComBSTR(strName), CComBSTR(strXML), &pNode);
-				if (pNode)
+				IGrid* pGrid = nullptr;
+				m_pQuasar->Observe(CComBSTR(strName), CComBSTR(strXML), &pGrid);
+				if (pGrid)
 				{
 					m_strCurKey = strName;
 					m_hWebHostWnd = NULL;
@@ -657,48 +657,48 @@ namespace Web {
 				case 0:
 				{
 					IQuasar* pQuasar = nullptr;
-					IStar* pNode = nullptr;
+					IGrid* pGrid = nullptr;
 					m_pQuasar->m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hWnd), CComBSTR(pObj->m_strBindObjName), &pQuasar);
-					pQuasar->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pNode);
-					if (pNode)
+					pQuasar->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pGrid);
+					if (pGrid)
 					{
-						CStar* _pNode = (CStar*)pNode;
-						_pNode->m_strLastIPCMsgID = strId;
-						_pNode->m_strLastIPCParam1 = strParam1;
-						_pNode->m_strLastIPCParam2 = strParam2;
-						_pNode->m_strLastIPCParam3 = strParam3;
-						_pNode->m_strLastIPCParam4 = strParam4;
-						_pNode->m_strLastIPCParam5 = strParam5;
+						CGrid* _pGrid = (CGrid*)pGrid;
+						_pGrid->m_strLastIPCMsgID = strId;
+						_pGrid->m_strLastIPCParam1 = strParam1;
+						_pGrid->m_strLastIPCParam2 = strParam2;
+						_pGrid->m_strLastIPCParam3 = strParam3;
+						_pGrid->m_strLastIPCParam4 = strParam4;
+						_pGrid->m_strLastIPCParam5 = strParam5;
 					}
 				}
 				break;
 				case 1:
 				{
-					CStar* _pNode = (CStar*)pObj->m_pNode;
-					IStar* pNode = nullptr;
-					_pNode->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pNode);
-					if (pNode)
+					CGrid* _pGrid = (CGrid*)pObj->m_pGrid;
+					IGrid* pGrid = nullptr;
+					_pGrid->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pGrid);
+					if (pGrid)
 					{
-						CStar* _pNode = (CStar*)pNode;
-						if (_pNode->m_strLastIPCMsgID == _T("") || _pNode->m_strLastIPCMsgID != strId)
+						CGrid* _pGrid = (CGrid*)pGrid;
+						if (_pGrid->m_strLastIPCMsgID == _T("") || _pGrid->m_strLastIPCMsgID != strId)
 						{
-							_pNode->m_strLastIPCMsgID = strId;
-							_pNode->m_strLastIPCParam1 = strParam1;
-							_pNode->m_strLastIPCParam2 = strParam2;
-							_pNode->m_strLastIPCParam3 = strParam3;
-							_pNode->m_strLastIPCParam4 = strParam4;
-							_pNode->m_strLastIPCParam5 = strParam5;
+							_pGrid->m_strLastIPCMsgID = strId;
+							_pGrid->m_strLastIPCParam1 = strParam1;
+							_pGrid->m_strLastIPCParam2 = strParam2;
+							_pGrid->m_strLastIPCParam3 = strParam3;
+							_pGrid->m_strLastIPCParam4 = strParam4;
+							_pGrid->m_strLastIPCParam5 = strParam5;
 						}
-						else if (_pNode->m_strLastIPCMsgID == strId)
+						else if (_pGrid->m_strLastIPCMsgID == strId)
 						{
 							IPCMsg pIPCInfo;
 							pIPCInfo.m_strId = strId;
-							pIPCInfo.m_strParam1 = _pNode->m_strLastIPCParam1;
-							pIPCInfo.m_strParam2 = _pNode->m_strLastIPCParam2;
-							pIPCInfo.m_strParam3 = _pNode->m_strLastIPCParam3;
-							pIPCInfo.m_strParam4 = _pNode->m_strLastIPCParam4;
-							pIPCInfo.m_strParam5 = _pNode->m_strLastIPCParam5;
-							_pNode->m_strLastIPCMsgID = _T("");
+							pIPCInfo.m_strParam1 = _pGrid->m_strLastIPCParam1;
+							pIPCInfo.m_strParam2 = _pGrid->m_strLastIPCParam2;
+							pIPCInfo.m_strParam3 = _pGrid->m_strLastIPCParam3;
+							pIPCInfo.m_strParam4 = _pGrid->m_strLastIPCParam4;
+							pIPCInfo.m_strParam5 = _pGrid->m_strLastIPCParam5;
+							_pGrid->m_strLastIPCMsgID = _T("");
 							m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
 						}
 						g_pHubble->m_pCurrentIPCMsg = nullptr;
@@ -728,23 +728,23 @@ namespace Web {
 					LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
 					HWND _hWnd = (HWND)hWnd;
 					if (lRes)
-						m_pParentStar = (CStar*)lRes;
+						m_pParentStar = (CGrid*)lRes;
 				}
 				else
 				{
 					m_pParentStar = m_pQuasar->m_pBindingStar->m_pParentObj;
 					if (m_pParentStar && m_pParentStar->m_nViewType == TabGrid)
 					{
-						//IStar* _pNode = nullptr;
-						//m_pQuasar->m_pBindingStar->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pNode);
+						//IGrid* _pGrid = nullptr;
+						//m_pQuasar->m_pBindingStar->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
 						return;
 					}
 				}
 			}
 			if (m_pParentStar)
 			{
-				IStar* _pNode = nullptr;
-				m_pParentStar->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pNode);
+				IGrid* _pGrid = nullptr;
+				m_pParentStar->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
 			}
 			return;
 		}
@@ -755,33 +755,33 @@ namespace Web {
 			{
 				if (m_pBindStar == nullptr)
 				{
-					CStar* pNode = nullptr;
+					CGrid* pGrid = nullptr;
 					LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
 					HWND _hWnd = (HWND)hWnd;
 					if (lRes)
-						pNode = (CStar*)lRes;
-					if (pNode)
+						pGrid = (CGrid*)lRes;
+					if (pGrid)
 					{
 						CComBSTR bstrName("");
-						pNode->get_Attribute(CComBSTR("bindnode"), &bstrName);
+						pGrid->get_Attribute(CComBSTR("bindnode"), &bstrName);
 						CString strName = OLE2T(bstrName);
 						if (strName != _T(""))
 						{
-							CComPtr<IStarCollection> pTangramNodeCollection;
-							IStar* _pNode = nullptr;
+							CComPtr<IGridCollection> pTangramNodeCollection;
+							IGrid* _pGrid = nullptr;
 							long nCount = 0;
-							pNode->m_pRootObj->GetStars(bstrName, &_pNode, &pTangramNodeCollection, &nCount);
-							if (_pNode)
+							pGrid->m_pRootObj->GetGrids(bstrName, &_pGrid, &pTangramNodeCollection, &nCount);
+							if (_pGrid)
 							{
-								m_pBindStar = (CStar*)_pNode;
+								m_pBindStar = (CGrid*)_pGrid;
 							}
 						}
 					}
 				}
 				if (m_pBindStar)
 				{
-					IStar* _pNode = nullptr;
-					m_pBindStar->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pNode);
+					IGrid* _pGrid = nullptr;
+					m_pBindStar->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
 				}
 			}
 			return;
@@ -794,8 +794,8 @@ namespace Web {
 				m_pBindWinForm = (CWinForm*)::SendMessage(hWnd, WM_TANGRAMDATA, 0, 20190214);
 				if (m_pBindWinForm)
 				{
-					//IStar* _pNode = nullptr;
-					//m_pBindStar->Observe(CComBSTR(strMsgId), CComBSTR(strParam1), &_pNode);
+					//IGrid* _pGrid = nullptr;
+					//m_pBindStar->Observe(CComBSTR(strMsgId), CComBSTR(strParam1), &_pGrid);
 				}
 			}
 		}
@@ -1142,11 +1142,11 @@ namespace Web {
 	void CWebPage::OnCloudMsgReceived(CSession* pSession)
 	{
 		CString strMsgID = pSession->GetString(L"msgID");
-		IStar* pNode = (IStar*)pSession->Getint64(_T("nodeobj"));
-		if (pNode)
+		IGrid* pGrid = (IGrid*)pSession->Getint64(_T("nodeobj"));
+		if (pGrid)
 		{
-			if(((CStar*)pNode)->m_pHubbleCloudSession==nullptr) 
-				((CStar*)pNode)->m_pHubbleCloudSession = (CWormhole*)pSession;
+			if(((CGrid*)pGrid)->m_pHubbleCloudSession==nullptr) 
+				((CGrid*)pGrid)->m_pHubbleCloudSession = (CWormhole*)pSession;
 		}
 		if (strMsgID == _T("CREATE_WINFORM"))
 		{
@@ -1182,17 +1182,17 @@ namespace Web {
 		{
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
-			//IStar* pNode = nullptr;
+			//IGrid* pGrid = nullptr;
 			HWND hWnd = (HWND)pSession->Getint64(_T("nodehandle"));
-			CStar* pParent = (CStar*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
 			if (pParent)
 			{
-				IStar* _pNode = nullptr;
-				pParent->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pNode);
-				if (_pNode)
+				IGrid* _pGrid = nullptr;
+				pParent->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pGrid);
+				if (_pGrid)
 				{
 					__int64 nHandle = 0;
-					_pNode->get_Handle(&nHandle);
+					_pGrid->get_Handle(&nHandle);
 					pSession->Insertint64(_T("openxmlreturnhandle"), nHandle);
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20200429, (LPARAM)pSession);
 				}
@@ -1204,17 +1204,17 @@ namespace Web {
 			CString strXml = pSession->GetString(_T("openxml"));
 			int nCol = pSession->GetLong(_T("opencol"));
 			int nRow = pSession->GetLong(_T("openrow"));
-			IStar* pSplitterNode = nullptr;
+			IGrid* pSplitterNode = nullptr;
 			HWND hWnd = (HWND)pSession->Getint64(_T("nodehandle"));
-			CStar* pParent = (CStar*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
 			if (pParent)
 			{
-				IStar* pNode = nullptr;
-				pParent->ObserveEx(nRow, nCol, CComBSTR(strKey), CComBSTR(strXml), &pNode);
-				if (pNode)
+				IGrid* pGrid = nullptr;
+				pParent->ObserveEx(nRow, nCol, CComBSTR(strKey), CComBSTR(strXml), &pGrid);
+				if (pGrid)
 				{
 					__int64 nHandle = 0;
-					pNode->get_Handle(&nHandle);
+					pGrid->get_Handle(&nHandle);
 					pSession->Insertint64(_T("openxmlreturnhandle"), nHandle);
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20200429, (LPARAM)pSession);
 				}

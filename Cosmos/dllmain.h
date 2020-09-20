@@ -17,7 +17,7 @@
 #include <cstring>
 #include <iostream>
 
-class CStarCLREvent;
+class CGridCLREvent;
 
 class CCosmos :
 	public IHubbleDelegate,
@@ -63,7 +63,7 @@ public:
 private:
 	//CCosmosCoreEvents:
 	void OnHubbleClose();
-	void OnOpenComplete(HWND hWnd, CString strUrl, IStar* pRootNode);
+	void OnOpenComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
 	HWND InitHubbleApp();
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
 	virtual bool EclipseAppInit() { return false; };
@@ -73,13 +73,13 @@ private:
 
 extern CCosmos theApp;
 
-class CCosmosNodeEvent : public CStarEvents
+class CCosmosNodeEvent : public CGridEvents
 {
 public:
 	CCosmosNodeEvent();
 	virtual ~CCosmosNodeEvent();
 
-	CStarCLREvent* m_pStarCLREvent;
+	CGridCLREvent* m_pGridCLREvent;
 private:
 	void __stdcall  OnOpenComplete();
 	void __stdcall  OnDestroy();

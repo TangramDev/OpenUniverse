@@ -107,11 +107,11 @@ typedef interface IHubbleEventObj IHubbleEventObj;
 #endif 	/* __IHubbleEventObj_FWD_DEFINED__ */
 
 
-#ifndef __IStar_FWD_DEFINED__
-#define __IStar_FWD_DEFINED__
-typedef interface IStar IStar;
+#ifndef __IGrid_FWD_DEFINED__
+#define __IGrid_FWD_DEFINED__
+typedef interface IGrid IGrid;
 
-#endif 	/* __IStar_FWD_DEFINED__ */
+#endif 	/* __IGrid_FWD_DEFINED__ */
 
 
 #ifndef __IAppExtender_FWD_DEFINED__
@@ -156,11 +156,11 @@ typedef interface IQuasar IQuasar;
 #endif 	/* __IQuasar_FWD_DEFINED__ */
 
 
-#ifndef __IStarCollection_FWD_DEFINED__
-#define __IStarCollection_FWD_DEFINED__
-typedef interface IStarCollection IStarCollection;
+#ifndef __IGridCollection_FWD_DEFINED__
+#define __IGridCollection_FWD_DEFINED__
+typedef interface IGridCollection IGridCollection;
 
-#endif 	/* __IStarCollection_FWD_DEFINED__ */
+#endif 	/* __IGridCollection_FWD_DEFINED__ */
 
 
 #ifndef __IGalaxyCluster_FWD_DEFINED__
@@ -238,11 +238,11 @@ typedef struct Universe Universe;
 #endif 	/* __Universe_FWD_DEFINED__ */
 
 
-#ifndef ___IStarEvents_FWD_DEFINED__
-#define ___IStarEvents_FWD_DEFINED__
-typedef interface _IStarEvents _IStarEvents;
+#ifndef ___IGridEvents_FWD_DEFINED__
+#define ___IGridEvents_FWD_DEFINED__
+typedef interface _IGridEvents _IGridEvents;
 
-#endif 	/* ___IStarEvents_FWD_DEFINED__ */
+#endif 	/* ___IGridEvents_FWD_DEFINED__ */
 
 
 #ifndef ___IHubbleObjEvents_FWD_DEFINED__
@@ -349,21 +349,21 @@ enum ObjEventType
         HubbleDocEvent	= 0x1,
         TangramNodeAllChildNode	= 0x2,
         TangramDocAllQuasarAllChildNode	= 0x3,
-        TangramDocAllQuasarAllTopNode	= 0x4,
-        TangramQuasarAllTopNodeAllChildNode	= 0x5,
-        TangramQuasarAllTopNode	= 0x6,
-        GalaxyClusterAllQuasarAllTopNodeAllChildNode	= 0x7,
-        GalaxyClusterAllQuasarAllTopNode	= 0x8,
-        GalaxyClusterCtrlBarQuasarAllTopNodeAllChildNode	= 0x9,
-        GalaxyClusterCtrlBarQuasarAllTopNode	= 0xa,
-        GalaxyClusterNotCtrlBarQuasarAllTopNodeAllChildNode	= 0xb,
-        GalaxyClusterNotCtrlBarQuasarAllTopNode	= 0xc,
+        TangramDocAllQuasarAllTopGrid	= 0x4,
+        TangramQuasarAllTopGridAllChildNode	= 0x5,
+        TangramQuasarAllTopGrid	= 0x6,
+        GalaxyClusterAllQuasarAllTopGridAllChildNode	= 0x7,
+        GalaxyClusterAllQuasarAllTopGrid	= 0x8,
+        GalaxyClusterCtrlBarQuasarAllTopGridAllChildNode	= 0x9,
+        GalaxyClusterCtrlBarQuasarAllTopGrid	= 0xa,
+        GalaxyClusterNotCtrlBarQuasarAllTopGridAllChildNode	= 0xb,
+        GalaxyClusterNotCtrlBarQuasarAllTopGrid	= 0xc,
         TangramDocAllCtrlBarQuasarAllChildNode	= 0xd,
         TangramDocAllCtrlBarQuasar	= 0xe
     } 	ObjEventType;
 
 typedef /* [helpstring] */ 
-enum StarType
+enum GridType
     {
         BlankView	= 0x1,
         ActiveX	= 0x2,
@@ -377,7 +377,7 @@ enum StarType
         TangramListView	= 0x200,
         TabCtrl	= 0x400,
         TangramWPFCtrl	= 0x800
-    } 	StarType;
+    } 	GridType;
 
 
 
@@ -683,15 +683,15 @@ EXTERN_C const IID IID_IOfficeExtender;
             /* [in] */ IDispatch *newVal,
             /* [in] */ long nStyle,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarFromVBAForm( 
             IDispatch *pForm,
             /* [retval][out] */ IQuasar **ppQuasar) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetActiveTopStar( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetActiveTopGrid( 
             IDispatch *pForm,
-            /* [retval][out] */ IStar **WndNode) = 0;
+            /* [retval][out] */ IGrid **WndGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObjectFromWnd( 
             LONG hWnd,
@@ -774,17 +774,17 @@ EXTERN_C const IID IID_IOfficeExtender;
             /* [in] */ IDispatch *newVal,
             /* [in] */ long nStyle,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarFromVBAForm )( 
             IOfficeExtender * This,
             IDispatch *pForm,
             /* [retval][out] */ IQuasar **ppQuasar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetActiveTopStar )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetActiveTopGrid )( 
             IOfficeExtender * This,
             IDispatch *pForm,
-            /* [retval][out] */ IStar **WndNode);
+            /* [retval][out] */ IGrid **WndGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObjectFromWnd )( 
             IOfficeExtender * This,
@@ -837,14 +837,14 @@ EXTERN_C const IID IID_IOfficeExtender;
 #define IOfficeExtender_AddVBAFormsScript(This,OfficeObject,bstrKey,bstrXml)	\
     ( (This)->lpVtbl -> AddVBAFormsScript(This,OfficeObject,bstrKey,bstrXml) ) 
 
-#define IOfficeExtender_InitVBAForm(This,newVal,nStyle,bstrXml,ppNode)	\
-    ( (This)->lpVtbl -> InitVBAForm(This,newVal,nStyle,bstrXml,ppNode) ) 
+#define IOfficeExtender_InitVBAForm(This,newVal,nStyle,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> InitVBAForm(This,newVal,nStyle,bstrXml,ppGrid) ) 
 
 #define IOfficeExtender_GetQuasarFromVBAForm(This,pForm,ppQuasar)	\
     ( (This)->lpVtbl -> GetQuasarFromVBAForm(This,pForm,ppQuasar) ) 
 
-#define IOfficeExtender_GetActiveTopStar(This,pForm,WndNode)	\
-    ( (This)->lpVtbl -> GetActiveTopStar(This,pForm,WndNode) ) 
+#define IOfficeExtender_GetActiveTopGrid(This,pForm,WndGrid)	\
+    ( (This)->lpVtbl -> GetActiveTopGrid(This,pForm,WndGrid) ) 
 
 #define IOfficeExtender_GetObjectFromWnd(This,hWnd,ppObjFromWnd)	\
     ( (This)->lpVtbl -> GetObjectFromWnd(This,hWnd,ppObjFromWnd) ) 
@@ -876,19 +876,19 @@ EXTERN_C const IID IID_IVSExtender;
     {
     public:
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignNode( 
-            /* [retval][out] */ IStar **ppRetVal) = 0;
+            /* [retval][out] */ IGrid **ppRetVal) = 0;
         
         virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentDesignNode( 
-            /* [in] */ IStar *newVal) = 0;
+            /* [in] */ IGrid *newVal) = 0;
         
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
-            /* [retval][out] */ IStar **pVal) = 0;
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignRootNode( 
-            /* [retval][out] */ IStar **pVal) = 0;
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_DesignRootNode( 
-            /* [in] */ IStar *newVal) = 0;
+            /* [in] */ IGrid *newVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramCLRProject( 
             BSTR bstrPrjPath,
@@ -904,7 +904,7 @@ EXTERN_C const IID IID_IVSExtender;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ExtendXmlUI( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
     };
     
@@ -974,23 +974,23 @@ EXTERN_C const IID IID_IVSExtender;
         
         /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignNode )( 
             IVSExtender * This,
-            /* [retval][out] */ IStar **ppRetVal);
+            /* [retval][out] */ IGrid **ppRetVal);
         
         /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentDesignNode )( 
             IVSExtender * This,
-            /* [in] */ IStar *newVal);
+            /* [in] */ IGrid *newVal);
         
         /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
             IVSExtender * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignRootNode )( 
             IVSExtender * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignRootNode )( 
             IVSExtender * This,
-            /* [in] */ IStar *newVal);
+            /* [in] */ IGrid *newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramCLRProject )( 
             IVSExtender * This,
@@ -1010,7 +1010,7 @@ EXTERN_C const IID IID_IVSExtender;
             IVSExtender * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         END_INTERFACE
     } IVSExtenderVtbl;
@@ -1079,8 +1079,8 @@ EXTERN_C const IID IID_IVSExtender;
 #define IVSExtender_get_CurrentSelectedPrj(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentSelectedPrj(This,pVal) ) 
 
-#define IVSExtender_ExtendXmlUI(This,bstrKey,bstrXml,ppNode)	\
-    ( (This)->lpVtbl -> ExtendXmlUI(This,bstrKey,bstrXml,ppNode) ) 
+#define IVSExtender_ExtendXmlUI(This,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> ExtendXmlUI(This,bstrKey,bstrXml,ppGrid) ) 
 
 #endif /* COBJMACROS */
 
@@ -1110,7 +1110,7 @@ EXTERN_C const IID IID_IVSDocument;
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VSClass( 
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IDispatch **ppNode) = 0;
+            /* [retval][out] */ IDispatch **ppGrid) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
             /* [retval][out] */ IUnknown **ppVal) = 0;
@@ -1179,7 +1179,7 @@ EXTERN_C const IID IID_IVSDocument;
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VSClass )( 
             IVSDocument * This,
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IDispatch **ppNode);
+            /* [retval][out] */ IDispatch **ppGrid);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IVSDocument * This,
@@ -1225,8 +1225,8 @@ EXTERN_C const IID IID_IVSDocument;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IVSDocument_get_VSClass(This,vIndex,ppNode)	\
-    ( (This)->lpVtbl -> get_VSClass(This,vIndex,ppNode) ) 
+#define IVSDocument_get_VSClass(This,vIndex,ppGrid)	\
+    ( (This)->lpVtbl -> get_VSClass(This,vIndex,ppGrid) ) 
 
 #define IVSDocument_get__NewEnum(This,ppVal)	\
     ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
@@ -1380,8 +1380,8 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
     IHubbleTreeViewCallBack : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_WndNode( 
-            IStar *newVal) = 0;
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_WndGrid( 
+            IGrid *newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Pages( 
             long *retVal) = 0;
@@ -1462,9 +1462,9 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WndNode )( 
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WndGrid )( 
             IHubbleTreeViewCallBack * This,
-            IStar *newVal);
+            IGrid *newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Pages )( 
             IHubbleTreeViewCallBack * This,
@@ -1529,8 +1529,8 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleTreeViewCallBack_put_WndNode(This,newVal)	\
-    ( (This)->lpVtbl -> put_WndNode(This,newVal) ) 
+#define IHubbleTreeViewCallBack_put_WndGrid(This,newVal)	\
+    ( (This)->lpVtbl -> put_WndGrid(This,newVal) ) 
 
 #define IHubbleTreeViewCallBack_get_Pages(This,retVal)	\
     ( (This)->lpVtbl -> get_Pages(This,retVal) ) 
@@ -1955,23 +1955,23 @@ EXTERN_C const IID IID_IHubbleEventObj;
 #endif 	/* __IHubbleEventObj_INTERFACE_DEFINED__ */
 
 
-#ifndef __IStar_INTERFACE_DEFINED__
-#define __IStar_INTERFACE_DEFINED__
+#ifndef __IGrid_INTERFACE_DEFINED__
+#define __IGrid_INTERFACE_DEFINED__
 
-/* interface IStar */
+/* interface IGrid */
 /* [object][unique][helpstring][uuid] */ 
 
 
-EXTERN_C const IID IID_IStar;
+EXTERN_C const IID IID_IGrid;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060119820004")
-    IStar : public IDispatch
+    IGrid : public IDispatch
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChildNodes( 
-            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+            /* [retval][out] */ IGridCollection **ppGridColletion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rows( 
             /* [retval][out] */ long *nRows) = 0;
@@ -1985,11 +1985,11 @@ EXTERN_C const IID IID_IStar;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Col( 
             /* [retval][out] */ long *nCol) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StarType( 
-            /* [retval][out] */ StarType *nType) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GridType( 
+            /* [retval][out] */ GridType *nType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentStar( 
-            /* [retval][out] */ IStar **ppStar) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentGrid( 
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
             /* [retval][out] */ BSTR *pVal) = 0;
@@ -2000,8 +2000,8 @@ EXTERN_C const IID IID_IStar;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
             /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootStar( 
-            /* [retval][out] */ IStar **ppNode) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootGrid( 
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XObject( 
             /* [retval][out] */ VARIANT *pVar) = 0;
@@ -2024,7 +2024,7 @@ EXTERN_C const IID IID_IStar;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Objects( 
             /* [in] */ long nType,
-            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+            /* [retval][out] */ IGridCollection **ppGridColletion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
             /* [retval][out] */ LONGLONG *hWnd) = 0;
@@ -2123,11 +2123,11 @@ EXTERN_C const IID IID_IStar;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Vmax( 
             /* [in] */ int newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostStar( 
-            /* [retval][out] */ IStar **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostGrid( 
+            /* [retval][out] */ IGrid **pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostStar( 
-            /* [in] */ IStar *newVal) = 0;
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostGrid( 
+            /* [in] */ IGrid *newVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActivePage( 
             /* [retval][out] */ int *pVal) = 0;
@@ -2157,18 +2157,18 @@ EXTERN_C const IID IID_IStar;
             /* [in] */ VARIANT_BOOL newVal) = 0;
         
         virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE ActiveTabPage( 
-            IStar *pNode) = 0;
+            IGrid *pGrid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStars( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGrids( 
             /* [in] */ BSTR bstrName,
-            /* [out] */ IStar **ppNode,
-            /* [out] */ IStarCollection **ppNodes,
+            /* [out] */ IGrid **ppGrid,
+            /* [out] */ IGridCollection **ppGrids,
             /* [retval][out] */ long *pCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStar( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGrid( 
             /* [in] */ long nRow,
             /* [in] */ long nCol,
-            /* [retval][out] */ IStar **ppWndmNode) = 0;
+            /* [retval][out] */ IGrid **ppWndmNode) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlByName( 
             BSTR bstrName,
@@ -2180,7 +2180,7 @@ EXTERN_C const IID IID_IStar;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode) = 0;
+            /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadXML( 
             int nType,
@@ -2191,11 +2191,11 @@ EXTERN_C const IID IID_IStar;
             int nCol,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode) = 0;
+            /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetStarByName( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGridByName( 
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IStarCollection **pVal) = 0;
+            /* [retval][out] */ IGridCollection **pVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlValueByName( 
             BSTR bstrName,
@@ -2223,34 +2223,34 @@ EXTERN_C const IID IID_IStar;
     
 #else 	/* C style interface */
 
-    typedef struct IStarVtbl
+    typedef struct IGridVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IStar * This);
+            IGrid * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IStar * This);
+            IGrid * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IStar * This,
+            IGrid * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -2258,7 +2258,7 @@ EXTERN_C const IID IID_IStar;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IStar * This,
+            IGrid * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -2277,320 +2277,320 @@ EXTERN_C const IID IID_IStar;
             _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ChildNodes )( 
-            IStar * This,
-            /* [retval][out] */ IStarCollection **ppNodeColletion);
+            IGrid * This,
+            /* [retval][out] */ IGridCollection **ppGridColletion);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rows )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ long *nRows);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cols )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ long *nCols);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Row )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ long *nRow);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Col )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ long *nCol);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StarType )( 
-            IStar * This,
-            /* [retval][out] */ StarType *nType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GridType )( 
+            IGrid * This,
+            /* [retval][out] */ GridType *nType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentStar )( 
-            IStar * This,
-            /* [retval][out] */ IStar **ppStar);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentGrid )( 
+            IGrid * This,
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_URL )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_URL )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ BSTR newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyCluster )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ IGalaxyCluster **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootStar )( 
-            IStar * This,
-            /* [retval][out] */ IStar **ppNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootGrid )( 
+            IGrid * This,
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XObject )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ VARIANT *pVar);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AxPlugIn )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ BSTR bstrPlugInName,
             /* [retval][out] */ IDispatch **pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ BSTR bstrCaption);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ BSTR bstrName);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Objects )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ long nType,
-            /* [retval][out] */ IStarCollection **ppNodeColletion);
+            /* [retval][out] */ IGridCollection **ppGridColletion);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ LONGLONG *hWnd);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Attribute )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ BSTR bstrKey,
             /* [retval][out] */ BSTR *pVal);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Attribute )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ BSTR bstrKey,
             /* [in] */ BSTR bstrVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tag )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ VARIANT *pVar);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tag )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ VARIANT vVar);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OuterXml )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Key )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DockObj )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrName,
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DockObj )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrName,
             /* [in] */ LONGLONG newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NameAtWindowPage )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ LONG *pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ LONG *pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Quasar )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ IQuasar **pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XML )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ IDispatch **pVal);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ IDispatch *newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocXml )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_rgbMiddle )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ OLE_COLOR *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_rgbMiddle )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ OLE_COLOR newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_rgbRightBottom )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ OLE_COLOR *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_rgbRightBottom )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ OLE_COLOR newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_rgbLeftTop )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ OLE_COLOR *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_rgbLeftTop )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ OLE_COLOR newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hmin )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ int *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hmin )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ int newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hmax )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ int *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hmax )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ int newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Vmin )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ int *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Vmin )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ int newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Vmax )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ int *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Vmax )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ int newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostStar )( 
-            IStar * This,
-            /* [retval][out] */ IStar **pVal);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostGrid )( 
+            IGrid * This,
+            /* [retval][out] */ IGrid **pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostStar )( 
-            IStar * This,
-            /* [in] */ IStar *newVal);
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostGrid )( 
+            IGrid * This,
+            /* [in] */ IGrid *newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActivePage )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ int *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ActivePage )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ int newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostQuasar )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ IQuasar **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MasterRow )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ int *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MasterRow )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ int newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MasterCol )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ int *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MasterCol )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ int newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfficeObj )( 
-            IStar * This,
+            IGrid * This,
             /* [retval][out] */ IDispatch **pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SaveToConfigFile )( 
-            IStar * This,
+            IGrid * This,
             /* [in] */ VARIANT_BOOL newVal);
         
         /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *ActiveTabPage )( 
-            IStar * This,
-            IStar *pNode);
+            IGrid * This,
+            IGrid *pGrid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetStars )( 
-            IStar * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGrids )( 
+            IGrid * This,
             /* [in] */ BSTR bstrName,
-            /* [out] */ IStar **ppNode,
-            /* [out] */ IStarCollection **ppNodes,
+            /* [out] */ IGrid **ppGrid,
+            /* [out] */ IGridCollection **ppGrids,
             /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetStar )( 
-            IStar * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGrid )( 
+            IGrid * This,
             /* [in] */ long nRow,
             /* [in] */ long nCol,
-            /* [retval][out] */ IStar **ppWndmNode);
+            /* [retval][out] */ IGrid **ppWndmNode);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrName,
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
-            IStar * This);
+            IGrid * This);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode);
+            /* [retval][out] */ IGrid **ppRetGrid);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoadXML )( 
-            IStar * This,
+            IGrid * This,
             int nType,
             BSTR bstrXML);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
-            IStar * This,
+            IGrid * This,
             int nRow,
             int nCol,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode);
+            /* [retval][out] */ IGrid **ppRetGrid);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetStarByName )( 
-            IStar * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGridByName )( 
+            IGrid * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ IStarCollection **pVal);
+            /* [retval][out] */ IGridCollection **pVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlValueByName )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrName,
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ BSTR *bstrVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetCtrlValueByName )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrName,
             VARIANT_BOOL bFindInChild,
             BSTR bstrVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateURL )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrURL,
             IDispatch *dispObjforScript);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *SendIPCMessage )( 
-            IStar * This,
+            IGrid * This,
             BSTR bstrTo,
             BSTR bstrPayload,
             BSTR bstrExtra,
@@ -2598,11 +2598,11 @@ EXTERN_C const IID IID_IStar;
             /* [retval][out] */ BSTR *bstrRes);
         
         END_INTERFACE
-    } IStarVtbl;
+    } IGridVtbl;
 
-    interface IStar
+    interface IGrid
     {
-        CONST_VTBL struct IStarVtbl *lpVtbl;
+        CONST_VTBL struct IGridVtbl *lpVtbl;
     };
 
     
@@ -2610,246 +2610,246 @@ EXTERN_C const IID IID_IStar;
 #ifdef COBJMACROS
 
 
-#define IStar_QueryInterface(This,riid,ppvObject)	\
+#define IGrid_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IStar_AddRef(This)	\
+#define IGrid_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IStar_Release(This)	\
+#define IGrid_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IStar_GetTypeInfoCount(This,pctinfo)	\
+#define IGrid_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IStar_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define IGrid_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IStar_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define IGrid_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IStar_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define IGrid_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IStar_get_ChildNodes(This,ppNodeColletion)	\
-    ( (This)->lpVtbl -> get_ChildNodes(This,ppNodeColletion) ) 
+#define IGrid_get_ChildNodes(This,ppGridColletion)	\
+    ( (This)->lpVtbl -> get_ChildNodes(This,ppGridColletion) ) 
 
-#define IStar_get_Rows(This,nRows)	\
+#define IGrid_get_Rows(This,nRows)	\
     ( (This)->lpVtbl -> get_Rows(This,nRows) ) 
 
-#define IStar_get_Cols(This,nCols)	\
+#define IGrid_get_Cols(This,nCols)	\
     ( (This)->lpVtbl -> get_Cols(This,nCols) ) 
 
-#define IStar_get_Row(This,nRow)	\
+#define IGrid_get_Row(This,nRow)	\
     ( (This)->lpVtbl -> get_Row(This,nRow) ) 
 
-#define IStar_get_Col(This,nCol)	\
+#define IGrid_get_Col(This,nCol)	\
     ( (This)->lpVtbl -> get_Col(This,nCol) ) 
 
-#define IStar_get_StarType(This,nType)	\
-    ( (This)->lpVtbl -> get_StarType(This,nType) ) 
+#define IGrid_get_GridType(This,nType)	\
+    ( (This)->lpVtbl -> get_GridType(This,nType) ) 
 
-#define IStar_get_ParentStar(This,ppStar)	\
-    ( (This)->lpVtbl -> get_ParentStar(This,ppStar) ) 
+#define IGrid_get_ParentGrid(This,ppGrid)	\
+    ( (This)->lpVtbl -> get_ParentGrid(This,ppGrid) ) 
 
-#define IStar_get_URL(This,pVal)	\
+#define IGrid_get_URL(This,pVal)	\
     ( (This)->lpVtbl -> get_URL(This,pVal) ) 
 
-#define IStar_put_URL(This,newVal)	\
+#define IGrid_put_URL(This,newVal)	\
     ( (This)->lpVtbl -> put_URL(This,newVal) ) 
 
-#define IStar_get_GalaxyCluster(This,pVal)	\
+#define IGrid_get_GalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
 
-#define IStar_get_RootStar(This,ppNode)	\
-    ( (This)->lpVtbl -> get_RootStar(This,ppNode) ) 
+#define IGrid_get_RootGrid(This,ppGrid)	\
+    ( (This)->lpVtbl -> get_RootGrid(This,ppGrid) ) 
 
-#define IStar_get_XObject(This,pVar)	\
+#define IGrid_get_XObject(This,pVar)	\
     ( (This)->lpVtbl -> get_XObject(This,pVar) ) 
 
-#define IStar_get_AxPlugIn(This,bstrPlugInName,pVal)	\
+#define IGrid_get_AxPlugIn(This,bstrPlugInName,pVal)	\
     ( (This)->lpVtbl -> get_AxPlugIn(This,bstrPlugInName,pVal) ) 
 
-#define IStar_get_Caption(This,pVal)	\
+#define IGrid_get_Caption(This,pVal)	\
     ( (This)->lpVtbl -> get_Caption(This,pVal) ) 
 
-#define IStar_put_Caption(This,bstrCaption)	\
+#define IGrid_put_Caption(This,bstrCaption)	\
     ( (This)->lpVtbl -> put_Caption(This,bstrCaption) ) 
 
-#define IStar_get_Name(This,pVal)	\
+#define IGrid_get_Name(This,pVal)	\
     ( (This)->lpVtbl -> get_Name(This,pVal) ) 
 
-#define IStar_put_Name(This,bstrName)	\
+#define IGrid_put_Name(This,bstrName)	\
     ( (This)->lpVtbl -> put_Name(This,bstrName) ) 
 
-#define IStar_get_Objects(This,nType,ppNodeColletion)	\
-    ( (This)->lpVtbl -> get_Objects(This,nType,ppNodeColletion) ) 
+#define IGrid_get_Objects(This,nType,ppGridColletion)	\
+    ( (This)->lpVtbl -> get_Objects(This,nType,ppGridColletion) ) 
 
-#define IStar_get_Handle(This,hWnd)	\
+#define IGrid_get_Handle(This,hWnd)	\
     ( (This)->lpVtbl -> get_Handle(This,hWnd) ) 
 
-#define IStar_get_Attribute(This,bstrKey,pVal)	\
+#define IGrid_get_Attribute(This,bstrKey,pVal)	\
     ( (This)->lpVtbl -> get_Attribute(This,bstrKey,pVal) ) 
 
-#define IStar_put_Attribute(This,bstrKey,bstrVal)	\
+#define IGrid_put_Attribute(This,bstrKey,bstrVal)	\
     ( (This)->lpVtbl -> put_Attribute(This,bstrKey,bstrVal) ) 
 
-#define IStar_get_Tag(This,pVar)	\
+#define IGrid_get_Tag(This,pVar)	\
     ( (This)->lpVtbl -> get_Tag(This,pVar) ) 
 
-#define IStar_put_Tag(This,vVar)	\
+#define IGrid_put_Tag(This,vVar)	\
     ( (This)->lpVtbl -> put_Tag(This,vVar) ) 
 
-#define IStar_get_OuterXml(This,pVal)	\
+#define IGrid_get_OuterXml(This,pVal)	\
     ( (This)->lpVtbl -> get_OuterXml(This,pVal) ) 
 
-#define IStar_get_Key(This,pVal)	\
+#define IGrid_get_Key(This,pVal)	\
     ( (This)->lpVtbl -> get_Key(This,pVal) ) 
 
-#define IStar_get_DockObj(This,bstrName,pVal)	\
+#define IGrid_get_DockObj(This,bstrName,pVal)	\
     ( (This)->lpVtbl -> get_DockObj(This,bstrName,pVal) ) 
 
-#define IStar_put_DockObj(This,bstrName,newVal)	\
+#define IGrid_put_DockObj(This,bstrName,newVal)	\
     ( (This)->lpVtbl -> put_DockObj(This,bstrName,newVal) ) 
 
-#define IStar_get_NameAtWindowPage(This,pVal)	\
+#define IGrid_get_NameAtWindowPage(This,pVal)	\
     ( (This)->lpVtbl -> get_NameAtWindowPage(This,pVal) ) 
 
-#define IStar_get_Width(This,pVal)	\
+#define IGrid_get_Width(This,pVal)	\
     ( (This)->lpVtbl -> get_Width(This,pVal) ) 
 
-#define IStar_get_Height(This,pVal)	\
+#define IGrid_get_Height(This,pVal)	\
     ( (This)->lpVtbl -> get_Height(This,pVal) ) 
 
-#define IStar_get_Quasar(This,pVal)	\
+#define IGrid_get_Quasar(This,pVal)	\
     ( (This)->lpVtbl -> get_Quasar(This,pVal) ) 
 
-#define IStar_get_XML(This,pVal)	\
+#define IGrid_get_XML(This,pVal)	\
     ( (This)->lpVtbl -> get_XML(This,pVal) ) 
 
-#define IStar_get_Extender(This,pVal)	\
+#define IGrid_get_Extender(This,pVal)	\
     ( (This)->lpVtbl -> get_Extender(This,pVal) ) 
 
-#define IStar_put_Extender(This,newVal)	\
+#define IGrid_put_Extender(This,newVal)	\
     ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
 
-#define IStar_get_DocXml(This,pVal)	\
+#define IGrid_get_DocXml(This,pVal)	\
     ( (This)->lpVtbl -> get_DocXml(This,pVal) ) 
 
-#define IStar_get_rgbMiddle(This,pVal)	\
+#define IGrid_get_rgbMiddle(This,pVal)	\
     ( (This)->lpVtbl -> get_rgbMiddle(This,pVal) ) 
 
-#define IStar_put_rgbMiddle(This,newVal)	\
+#define IGrid_put_rgbMiddle(This,newVal)	\
     ( (This)->lpVtbl -> put_rgbMiddle(This,newVal) ) 
 
-#define IStar_get_rgbRightBottom(This,pVal)	\
+#define IGrid_get_rgbRightBottom(This,pVal)	\
     ( (This)->lpVtbl -> get_rgbRightBottom(This,pVal) ) 
 
-#define IStar_put_rgbRightBottom(This,newVal)	\
+#define IGrid_put_rgbRightBottom(This,newVal)	\
     ( (This)->lpVtbl -> put_rgbRightBottom(This,newVal) ) 
 
-#define IStar_get_rgbLeftTop(This,pVal)	\
+#define IGrid_get_rgbLeftTop(This,pVal)	\
     ( (This)->lpVtbl -> get_rgbLeftTop(This,pVal) ) 
 
-#define IStar_put_rgbLeftTop(This,newVal)	\
+#define IGrid_put_rgbLeftTop(This,newVal)	\
     ( (This)->lpVtbl -> put_rgbLeftTop(This,newVal) ) 
 
-#define IStar_get_Hmin(This,pVal)	\
+#define IGrid_get_Hmin(This,pVal)	\
     ( (This)->lpVtbl -> get_Hmin(This,pVal) ) 
 
-#define IStar_put_Hmin(This,newVal)	\
+#define IGrid_put_Hmin(This,newVal)	\
     ( (This)->lpVtbl -> put_Hmin(This,newVal) ) 
 
-#define IStar_get_Hmax(This,pVal)	\
+#define IGrid_get_Hmax(This,pVal)	\
     ( (This)->lpVtbl -> get_Hmax(This,pVal) ) 
 
-#define IStar_put_Hmax(This,newVal)	\
+#define IGrid_put_Hmax(This,newVal)	\
     ( (This)->lpVtbl -> put_Hmax(This,newVal) ) 
 
-#define IStar_get_Vmin(This,pVal)	\
+#define IGrid_get_Vmin(This,pVal)	\
     ( (This)->lpVtbl -> get_Vmin(This,pVal) ) 
 
-#define IStar_put_Vmin(This,newVal)	\
+#define IGrid_put_Vmin(This,newVal)	\
     ( (This)->lpVtbl -> put_Vmin(This,newVal) ) 
 
-#define IStar_get_Vmax(This,pVal)	\
+#define IGrid_get_Vmax(This,pVal)	\
     ( (This)->lpVtbl -> get_Vmax(This,pVal) ) 
 
-#define IStar_put_Vmax(This,newVal)	\
+#define IGrid_put_Vmax(This,newVal)	\
     ( (This)->lpVtbl -> put_Vmax(This,newVal) ) 
 
-#define IStar_get_HostStar(This,pVal)	\
-    ( (This)->lpVtbl -> get_HostStar(This,pVal) ) 
+#define IGrid_get_HostGrid(This,pVal)	\
+    ( (This)->lpVtbl -> get_HostGrid(This,pVal) ) 
 
-#define IStar_put_HostStar(This,newVal)	\
-    ( (This)->lpVtbl -> put_HostStar(This,newVal) ) 
+#define IGrid_put_HostGrid(This,newVal)	\
+    ( (This)->lpVtbl -> put_HostGrid(This,newVal) ) 
 
-#define IStar_get_ActivePage(This,pVal)	\
+#define IGrid_get_ActivePage(This,pVal)	\
     ( (This)->lpVtbl -> get_ActivePage(This,pVal) ) 
 
-#define IStar_put_ActivePage(This,newVal)	\
+#define IGrid_put_ActivePage(This,newVal)	\
     ( (This)->lpVtbl -> put_ActivePage(This,newVal) ) 
 
-#define IStar_get_HostQuasar(This,pVal)	\
+#define IGrid_get_HostQuasar(This,pVal)	\
     ( (This)->lpVtbl -> get_HostQuasar(This,pVal) ) 
 
-#define IStar_get_MasterRow(This,pVal)	\
+#define IGrid_get_MasterRow(This,pVal)	\
     ( (This)->lpVtbl -> get_MasterRow(This,pVal) ) 
 
-#define IStar_put_MasterRow(This,newVal)	\
+#define IGrid_put_MasterRow(This,newVal)	\
     ( (This)->lpVtbl -> put_MasterRow(This,newVal) ) 
 
-#define IStar_get_MasterCol(This,pVal)	\
+#define IGrid_get_MasterCol(This,pVal)	\
     ( (This)->lpVtbl -> get_MasterCol(This,pVal) ) 
 
-#define IStar_put_MasterCol(This,newVal)	\
+#define IGrid_put_MasterCol(This,newVal)	\
     ( (This)->lpVtbl -> put_MasterCol(This,newVal) ) 
 
-#define IStar_get_OfficeObj(This,pVal)	\
+#define IGrid_get_OfficeObj(This,pVal)	\
     ( (This)->lpVtbl -> get_OfficeObj(This,pVal) ) 
 
-#define IStar_put_SaveToConfigFile(This,newVal)	\
+#define IGrid_put_SaveToConfigFile(This,newVal)	\
     ( (This)->lpVtbl -> put_SaveToConfigFile(This,newVal) ) 
 
-#define IStar_ActiveTabPage(This,pNode)	\
-    ( (This)->lpVtbl -> ActiveTabPage(This,pNode) ) 
+#define IGrid_ActiveTabPage(This,pGrid)	\
+    ( (This)->lpVtbl -> ActiveTabPage(This,pGrid) ) 
 
-#define IStar_GetStars(This,bstrName,ppNode,ppNodes,pCount)	\
-    ( (This)->lpVtbl -> GetStars(This,bstrName,ppNode,ppNodes,pCount) ) 
+#define IGrid_GetGrids(This,bstrName,ppGrid,ppGrids,pCount)	\
+    ( (This)->lpVtbl -> GetGrids(This,bstrName,ppGrid,ppGrids,pCount) ) 
 
-#define IStar_GetStar(This,nRow,nCol,ppWndmNode)	\
-    ( (This)->lpVtbl -> GetStar(This,nRow,nCol,ppWndmNode) ) 
+#define IGrid_GetGrid(This,nRow,nCol,ppWndmNode)	\
+    ( (This)->lpVtbl -> GetGrid(This,nRow,nCol,ppWndmNode) ) 
 
-#define IStar_GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp)	\
+#define IGrid_GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp) ) 
 
-#define IStar_Refresh(This)	\
+#define IGrid_Refresh(This)	\
     ( (This)->lpVtbl -> Refresh(This) ) 
 
-#define IStar_Observe(This,bstrKey,bstrXml,ppRetNode)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetNode) ) 
+#define IGrid_Observe(This,bstrKey,bstrXml,ppRetGrid)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetGrid) ) 
 
-#define IStar_LoadXML(This,nType,bstrXML)	\
+#define IGrid_LoadXML(This,nType,bstrXML)	\
     ( (This)->lpVtbl -> LoadXML(This,nType,bstrXML) ) 
 
-#define IStar_ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetNode)	\
-    ( (This)->lpVtbl -> ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetNode) ) 
+#define IGrid_ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetGrid)	\
+    ( (This)->lpVtbl -> ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetGrid) ) 
 
-#define IStar_GetStarByName(This,bstrName,pVal)	\
-    ( (This)->lpVtbl -> GetStarByName(This,bstrName,pVal) ) 
+#define IGrid_GetGridByName(This,bstrName,pVal)	\
+    ( (This)->lpVtbl -> GetGridByName(This,bstrName,pVal) ) 
 
-#define IStar_GetCtrlValueByName(This,bstrName,bFindInChild,bstrVal)	\
+#define IGrid_GetCtrlValueByName(This,bstrName,bFindInChild,bstrVal)	\
     ( (This)->lpVtbl -> GetCtrlValueByName(This,bstrName,bFindInChild,bstrVal) ) 
 
-#define IStar_SetCtrlValueByName(This,bstrName,bFindInChild,bstrVal)	\
+#define IGrid_SetCtrlValueByName(This,bstrName,bFindInChild,bstrVal)	\
     ( (This)->lpVtbl -> SetCtrlValueByName(This,bstrName,bFindInChild,bstrVal) ) 
 
-#define IStar_NavigateURL(This,bstrURL,dispObjforScript)	\
+#define IGrid_NavigateURL(This,bstrURL,dispObjforScript)	\
     ( (This)->lpVtbl -> NavigateURL(This,bstrURL,dispObjforScript) ) 
 
-#define IStar_SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes)	\
+#define IGrid_SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes)	\
     ( (This)->lpVtbl -> SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes) ) 
 
 #endif /* COBJMACROS */
@@ -2860,7 +2860,7 @@ EXTERN_C const IID IID_IStar;
 
 
 
-#endif 	/* __IStar_INTERFACE_DEFINED__ */
+#endif 	/* __IGrid_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAppExtender_INTERFACE_DEFINED__
@@ -3512,16 +3512,16 @@ EXTERN_C const IID IID_IHubble;
             /* [in] */ IDispatch *newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootNodes( 
-            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+            /* [retval][out] */ IGridCollection **ppGridColletion) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWnd( 
             /* [retval][out] */ LONGLONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentActiveStar( 
-            /* [retval][out] */ IStar **pVal) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentActiveGrid( 
+            /* [retval][out] */ IGrid **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreatingStar( 
-            /* [retval][out] */ IStar **pVal) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreatingGrid( 
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHubble( 
             BSTR bstrID,
@@ -3540,7 +3540,7 @@ EXTERN_C const IID IID_IHubble;
             /* [in] */ LONGLONG newVal) = 0;
         
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
-            /* [retval][out] */ IStar **pVal) = 0;
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramDoc( 
             LONGLONG AppProxy,
@@ -3555,7 +3555,7 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateNode( 
-            IStar *pNode,
+            IGrid *pGrid,
             BSTR bstrBrowserID,
             BSTR bstrXml) = 0;
         
@@ -3579,13 +3579,13 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ IQuasar **ppQuasar) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetItemText( 
-            IStar *pNode,
+            IGrid *pGrid,
             long nCtrlID,
             LONG nMaxLengeh,
             /* [retval][out] */ BSTR *bstrRet) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetItemText( 
-            IStar *pNode,
+            IGrid *pGrid,
             long nCtrlID,
             BSTR bstrText) = 0;
         
@@ -3608,8 +3608,8 @@ EXTERN_C const IID IID_IHubble;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetHostFocus( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdateStar( 
-            IStar *pNode) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdateGrid( 
+            IGrid *pGrid) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewGUID( 
             /* [retval][out] */ BSTR *retVal) = 0;
@@ -3631,9 +3631,9 @@ EXTERN_C const IID IID_IHubble;
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetStarFromHandle( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGridFromHandle( 
             LONGLONG hWnd,
-            /* [retval][out] */ IStar **ppRetNode) = 0;
+            /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlValueByName( 
             IDispatch *pCtrl,
@@ -3656,7 +3656,7 @@ EXTERN_C const IID IID_IHubble;
             LONGLONG hParent,
             BSTR bstrWndClaName,
             BSTR bstrGalaxyClusterName,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDocTemplateXml( 
             BSTR bstrCaption,
@@ -3838,19 +3838,19 @@ EXTERN_C const IID IID_IHubble;
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootNodes )( 
             IHubble * This,
-            /* [retval][out] */ IStarCollection **ppNodeColletion);
+            /* [retval][out] */ IGridCollection **ppGridColletion);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWnd )( 
             IHubble * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveStar )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveGrid )( 
             IHubble * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreatingStar )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreatingGrid )( 
             IHubble * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHubble )( 
             IHubble * This,
@@ -3875,7 +3875,7 @@ EXTERN_C const IID IID_IHubble;
         
         /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
             IHubble * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramDoc )( 
             IHubble * This,
@@ -3894,7 +3894,7 @@ EXTERN_C const IID IID_IHubble;
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateNode )( 
             IHubble * This,
-            IStar *pNode,
+            IGrid *pGrid,
             BSTR bstrBrowserID,
             BSTR bstrXml);
         
@@ -3924,14 +3924,14 @@ EXTERN_C const IID IID_IHubble;
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetItemText )( 
             IHubble * This,
-            IStar *pNode,
+            IGrid *pGrid,
             long nCtrlID,
             LONG nMaxLengeh,
             /* [retval][out] */ BSTR *bstrRet);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetItemText )( 
             IHubble * This,
-            IStar *pNode,
+            IGrid *pGrid,
             long nCtrlID,
             BSTR bstrText);
         
@@ -3958,9 +3958,9 @@ EXTERN_C const IID IID_IHubble;
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetHostFocus )( 
             IHubble * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdateStar )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdateGrid )( 
             IHubble * This,
-            IStar *pNode);
+            IGrid *pGrid);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewGUID )( 
             IHubble * This,
@@ -3986,10 +3986,10 @@ EXTERN_C const IID IID_IHubble;
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetStarFromHandle )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGridFromHandle )( 
             IHubble * This,
             LONGLONG hWnd,
-            /* [retval][out] */ IStar **ppRetNode);
+            /* [retval][out] */ IGrid **ppRetGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlValueByName )( 
             IHubble * This,
@@ -4016,7 +4016,7 @@ EXTERN_C const IID IID_IHubble;
             LONGLONG hParent,
             BSTR bstrWndClaName,
             BSTR bstrGalaxyClusterName,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDocTemplateXml )( 
             IHubble * This,
@@ -4188,17 +4188,17 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_put_AppExtender(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppExtender(This,bstrKey,newVal) ) 
 
-#define IHubble_get_RootNodes(This,ppNodeColletion)	\
-    ( (This)->lpVtbl -> get_RootNodes(This,ppNodeColletion) ) 
+#define IHubble_get_RootNodes(This,ppGridColletion)	\
+    ( (This)->lpVtbl -> get_RootNodes(This,ppGridColletion) ) 
 
 #define IHubble_get_HostWnd(This,pVal)	\
     ( (This)->lpVtbl -> get_HostWnd(This,pVal) ) 
 
-#define IHubble_get_CurrentActiveStar(This,pVal)	\
-    ( (This)->lpVtbl -> get_CurrentActiveStar(This,pVal) ) 
+#define IHubble_get_CurrentActiveGrid(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentActiveGrid(This,pVal) ) 
 
-#define IHubble_get_CreatingStar(This,pVal)	\
-    ( (This)->lpVtbl -> get_CreatingStar(This,pVal) ) 
+#define IHubble_get_CreatingGrid(This,pVal)	\
+    ( (This)->lpVtbl -> get_CreatingGrid(This,pVal) ) 
 
 #define IHubble_get_RemoteHubble(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_RemoteHubble(This,bstrID,pVal) ) 
@@ -4227,8 +4227,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
     ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
-#define IHubble_NavigateNode(This,pNode,bstrBrowserID,bstrXml)	\
-    ( (This)->lpVtbl -> NavigateNode(This,pNode,bstrBrowserID,bstrXml) ) 
+#define IHubble_NavigateNode(This,pGrid,bstrBrowserID,bstrXml)	\
+    ( (This)->lpVtbl -> NavigateNode(This,pGrid,bstrBrowserID,bstrXml) ) 
 
 #define IHubble_CreateGalaxyCluster(This,hWnd,ppGalaxyCluster)	\
     ( (This)->lpVtbl -> CreateGalaxyCluster(This,hWnd,ppGalaxyCluster) ) 
@@ -4245,11 +4245,11 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_GetQuasar(This,hHostWnd,ppQuasar)	\
     ( (This)->lpVtbl -> GetQuasar(This,hHostWnd,ppQuasar) ) 
 
-#define IHubble_GetItemText(This,pNode,nCtrlID,nMaxLengeh,bstrRet)	\
-    ( (This)->lpVtbl -> GetItemText(This,pNode,nCtrlID,nMaxLengeh,bstrRet) ) 
+#define IHubble_GetItemText(This,pGrid,nCtrlID,nMaxLengeh,bstrRet)	\
+    ( (This)->lpVtbl -> GetItemText(This,pGrid,nCtrlID,nMaxLengeh,bstrRet) ) 
 
-#define IHubble_SetItemText(This,pNode,nCtrlID,bstrText)	\
-    ( (This)->lpVtbl -> SetItemText(This,pNode,nCtrlID,bstrText) ) 
+#define IHubble_SetItemText(This,pGrid,nCtrlID,bstrText)	\
+    ( (This)->lpVtbl -> SetItemText(This,pGrid,nCtrlID,bstrText) ) 
 
 #define IHubble_GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp)	\
     ( (This)->lpVtbl -> GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp) ) 
@@ -4263,8 +4263,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_SetHostFocus(This)	\
     ( (This)->lpVtbl -> SetHostFocus(This) ) 
 
-#define IHubble_UpdateStar(This,pNode)	\
-    ( (This)->lpVtbl -> UpdateStar(This,pNode) ) 
+#define IHubble_UpdateGrid(This,pGrid)	\
+    ( (This)->lpVtbl -> UpdateGrid(This,pGrid) ) 
 
 #define IHubble_NewGUID(This,retVal)	\
     ( (This)->lpVtbl -> NewGUID(This,retVal) ) 
@@ -4278,8 +4278,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp) ) 
 
-#define IHubble_GetStarFromHandle(This,hWnd,ppRetNode)	\
-    ( (This)->lpVtbl -> GetStarFromHandle(This,hWnd,ppRetNode) ) 
+#define IHubble_GetGridFromHandle(This,hWnd,ppRetGrid)	\
+    ( (This)->lpVtbl -> GetGridFromHandle(This,hWnd,ppRetGrid) ) 
 
 #define IHubble_GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
     ( (This)->lpVtbl -> GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal) ) 
@@ -4290,8 +4290,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_CreateHubbleCtrl(This,bstrAppID,ppRetCtrl)	\
     ( (This)->lpVtbl -> CreateHubbleCtrl(This,bstrAppID,ppRetCtrl) ) 
 
-#define IHubble_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppNode)	\
-    ( (This)->lpVtbl -> GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppNode) ) 
+#define IHubble_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppGrid)	\
+    ( (This)->lpVtbl -> GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppGrid) ) 
 
 #define IHubble_GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath)	\
     ( (This)->lpVtbl -> GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath) ) 
@@ -4388,9 +4388,9 @@ EXTERN_C const IID IID_IQuasar;
     IQuasar : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Star( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Grid( 
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
             /* [retval][out] */ IUnknown **ppVal) = 0;
@@ -4398,8 +4398,8 @@ EXTERN_C const IID IID_IQuasar;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HWND( 
             /* [retval][out] */ LONGLONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VisibleStar( 
-            /* [retval][out] */ IStar **pVal) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VisibleGrid( 
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentNavigateKey( 
             /* [retval][out] */ BSTR *pVal) = 0;
@@ -4424,8 +4424,8 @@ EXTERN_C const IID IID_IQuasar;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
             /* [retval][out] */ long *pCount) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootStars( 
-            /* [retval][out] */ IStarCollection **ppNodeColletion) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootGrids( 
+            /* [retval][out] */ IGridCollection **ppGridColletion) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
@@ -4455,7 +4455,7 @@ EXTERN_C const IID IID_IQuasar;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode) = 0;
+            /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetXml( 
             BSTR bstrRootName,
@@ -4519,10 +4519,10 @@ EXTERN_C const IID IID_IQuasar;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Star )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Grid )( 
             IQuasar * This,
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IQuasar * This,
@@ -4532,9 +4532,9 @@ EXTERN_C const IID IID_IQuasar;
             IQuasar * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VisibleStar )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VisibleGrid )( 
             IQuasar * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentNavigateKey )( 
             IQuasar * This,
@@ -4566,9 +4566,9 @@ EXTERN_C const IID IID_IQuasar;
             IQuasar * This,
             /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootStars )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootGrids )( 
             IQuasar * This,
-            /* [retval][out] */ IStarCollection **ppNodeColletion);
+            /* [retval][out] */ IGridCollection **ppGridColletion);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarXML )( 
             IQuasar * This,
@@ -4608,7 +4608,7 @@ EXTERN_C const IID IID_IQuasar;
             IQuasar * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode);
+            /* [retval][out] */ IGrid **ppRetGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetXml )( 
             IQuasar * This,
@@ -4651,8 +4651,8 @@ EXTERN_C const IID IID_IQuasar;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IQuasar_get_Star(This,vIndex,ppNode)	\
-    ( (This)->lpVtbl -> get_Star(This,vIndex,ppNode) ) 
+#define IQuasar_get_Grid(This,vIndex,ppGrid)	\
+    ( (This)->lpVtbl -> get_Grid(This,vIndex,ppGrid) ) 
 
 #define IQuasar_get__NewEnum(This,ppVal)	\
     ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
@@ -4660,8 +4660,8 @@ EXTERN_C const IID IID_IQuasar;
 #define IQuasar_get_HWND(This,pVal)	\
     ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
 
-#define IQuasar_get_VisibleStar(This,pVal)	\
-    ( (This)->lpVtbl -> get_VisibleStar(This,pVal) ) 
+#define IQuasar_get_VisibleGrid(This,pVal)	\
+    ( (This)->lpVtbl -> get_VisibleGrid(This,pVal) ) 
 
 #define IQuasar_get_CurrentNavigateKey(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentNavigateKey(This,pVal) ) 
@@ -4684,8 +4684,8 @@ EXTERN_C const IID IID_IQuasar;
 #define IQuasar_get_Count(This,pCount)	\
     ( (This)->lpVtbl -> get_Count(This,pCount) ) 
 
-#define IQuasar_get_RootStars(This,ppNodeColletion)	\
-    ( (This)->lpVtbl -> get_RootStars(This,ppNodeColletion) ) 
+#define IQuasar_get_RootGrids(This,ppGridColletion)	\
+    ( (This)->lpVtbl -> get_RootGrids(This,ppGridColletion) ) 
 
 #define IQuasar_get_QuasarXML(This,pVal)	\
     ( (This)->lpVtbl -> get_QuasarXML(This,pVal) ) 
@@ -4714,8 +4714,8 @@ EXTERN_C const IID IID_IQuasar;
 #define IQuasar_ModifyHost(This,hHostWnd)	\
     ( (This)->lpVtbl -> ModifyHost(This,hHostWnd) ) 
 
-#define IQuasar_Observe(This,bstrKey,bstrXml,ppRetNode)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetNode) ) 
+#define IQuasar_Observe(This,bstrKey,bstrXml,ppRetGrid)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetGrid) ) 
 
 #define IQuasar_GetXml(This,bstrRootName,bstrRet)	\
     ( (This)->lpVtbl -> GetXml(This,bstrRootName,bstrRet) ) 
@@ -4731,27 +4731,27 @@ EXTERN_C const IID IID_IQuasar;
 #endif 	/* __IQuasar_INTERFACE_DEFINED__ */
 
 
-#ifndef __IStarCollection_INTERFACE_DEFINED__
-#define __IStarCollection_INTERFACE_DEFINED__
+#ifndef __IGridCollection_INTERFACE_DEFINED__
+#define __IGridCollection_INTERFACE_DEFINED__
 
-/* interface IStarCollection */
+/* interface IGridCollection */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IStarCollection;
+EXTERN_C const IID IID_IGridCollection;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060119820017")
-    IStarCollection : public IDispatch
+    IGridCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StarCount( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GridCount( 
             /* [retval][out] */ long *pCount) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ long iIndex,
-            /* [retval][out] */ IStar **ppTopWindow) = 0;
+            /* [retval][out] */ IGrid **ppTopWindow) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
             /* [retval][out] */ IUnknown **ppVal) = 0;
@@ -4761,34 +4761,34 @@ EXTERN_C const IID IID_IStarCollection;
     
 #else 	/* C style interface */
 
-    typedef struct IStarCollectionVtbl
+    typedef struct IGridCollectionVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IStarCollection * This,
+            IGridCollection * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IStarCollection * This);
+            IGridCollection * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IStarCollection * This);
+            IGridCollection * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IStarCollection * This,
+            IGridCollection * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IStarCollection * This,
+            IGridCollection * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IStarCollection * This,
+            IGridCollection * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -4796,7 +4796,7 @@ EXTERN_C const IID IID_IStarCollection;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IStarCollection * This,
+            IGridCollection * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -4814,25 +4814,25 @@ EXTERN_C const IID IID_IStarCollection;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StarCount )( 
-            IStarCollection * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GridCount )( 
+            IGridCollection * This,
             /* [retval][out] */ long *pCount);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
-            IStarCollection * This,
+            IGridCollection * This,
             /* [in] */ long iIndex,
-            /* [retval][out] */ IStar **ppTopWindow);
+            /* [retval][out] */ IGrid **ppTopWindow);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
-            IStarCollection * This,
+            IGridCollection * This,
             /* [retval][out] */ IUnknown **ppVal);
         
         END_INTERFACE
-    } IStarCollectionVtbl;
+    } IGridCollectionVtbl;
 
-    interface IStarCollection
+    interface IGridCollection
     {
-        CONST_VTBL struct IStarCollectionVtbl *lpVtbl;
+        CONST_VTBL struct IGridCollectionVtbl *lpVtbl;
     };
 
     
@@ -4840,36 +4840,36 @@ EXTERN_C const IID IID_IStarCollection;
 #ifdef COBJMACROS
 
 
-#define IStarCollection_QueryInterface(This,riid,ppvObject)	\
+#define IGridCollection_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IStarCollection_AddRef(This)	\
+#define IGridCollection_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IStarCollection_Release(This)	\
+#define IGridCollection_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IStarCollection_GetTypeInfoCount(This,pctinfo)	\
+#define IGridCollection_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IStarCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define IGridCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IStarCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define IGridCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IStarCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define IGridCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IStarCollection_get_StarCount(This,pCount)	\
-    ( (This)->lpVtbl -> get_StarCount(This,pCount) ) 
+#define IGridCollection_get_GridCount(This,pCount)	\
+    ( (This)->lpVtbl -> get_GridCount(This,pCount) ) 
 
-#define IStarCollection_get_Item(This,iIndex,ppTopWindow)	\
+#define IGridCollection_get_Item(This,iIndex,ppTopWindow)	\
     ( (This)->lpVtbl -> get_Item(This,iIndex,ppTopWindow) ) 
 
-#define IStarCollection_get__NewEnum(This,ppVal)	\
+#define IGridCollection_get__NewEnum(This,ppVal)	\
     ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
 
 #endif /* COBJMACROS */
@@ -4880,7 +4880,7 @@ EXTERN_C const IID IID_IStarCollection;
 
 
 
-#endif 	/* __IStarCollection_INTERFACE_DEFINED__ */
+#endif 	/* __IGridCollection_INTERFACE_DEFINED__ */
 
 
 #ifndef __IGalaxyCluster_INTERFACE_DEFINED__
@@ -4924,9 +4924,9 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrExtenderName,
             /* [in] */ IDispatch *newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Star( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Grid( 
             BSTR bstrNodeName,
-            /* [retval][out] */ IStar **pVal) = 0;
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XObject( 
             BSTR bstrName,
@@ -4951,7 +4951,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Height( 
             /* [in] */ long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StarNames( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GridNames( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
@@ -4967,7 +4967,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             /* [retval][out] */ QuasarType *pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignNode( 
-            /* [retval][out] */ IStar **pVal) = 0;
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateQuasar( 
             VARIANT ParentObj,
@@ -4981,20 +4981,20 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR QuasarName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode) = 0;
+            /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveCtrl( 
             VARIANT Ctrl,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode) = 0;
+            /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetStar( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGrid( 
             BSTR bstrQuasarName,
             BSTR bstrNodeName,
-            /* [retval][out] */ IStar **pRetNode) = 0;
+            /* [retval][out] */ IGrid **pRetNode) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlInStar( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlInGrid( 
             BSTR NodeName,
             BSTR CtrlName,
             /* [retval][out] */ IDispatch **ppCtrl) = 0;
@@ -5012,7 +5012,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrDefaultNodeKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfig,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveQuasars( 
             BSTR bstrQuasars,
@@ -5111,10 +5111,10 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrExtenderName,
             /* [in] */ IDispatch *newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Star )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Grid )( 
             IGalaxyCluster * This,
             BSTR bstrNodeName,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XObject )( 
             IGalaxyCluster * This,
@@ -5146,7 +5146,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IGalaxyCluster * This,
             /* [in] */ long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StarNames )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GridNames )( 
             IGalaxyCluster * This,
             /* [retval][out] */ BSTR *pVal);
         
@@ -5168,7 +5168,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignNode )( 
             IGalaxyCluster * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateQuasar )( 
             IGalaxyCluster * This,
@@ -5184,22 +5184,22 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR QuasarName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode);
+            /* [retval][out] */ IGrid **ppRetGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveCtrl )( 
             IGalaxyCluster * This,
             VARIANT Ctrl,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode);
+            /* [retval][out] */ IGrid **ppRetGrid);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetStar )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGrid )( 
             IGalaxyCluster * This,
             BSTR bstrQuasarName,
             BSTR bstrNodeName,
-            /* [retval][out] */ IStar **pRetNode);
+            /* [retval][out] */ IGrid **pRetNode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlInStar )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlInGrid )( 
             IGalaxyCluster * This,
             BSTR NodeName,
             BSTR CtrlName,
@@ -5221,7 +5221,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrDefaultNodeKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfig,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveQuasars )( 
             IGalaxyCluster * This,
@@ -5287,8 +5287,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_put_Extender(This,bstrExtenderName,newVal)	\
     ( (This)->lpVtbl -> put_Extender(This,bstrExtenderName,newVal) ) 
 
-#define IGalaxyCluster_get_Star(This,bstrNodeName,pVal)	\
-    ( (This)->lpVtbl -> get_Star(This,bstrNodeName,pVal) ) 
+#define IGalaxyCluster_get_Grid(This,bstrNodeName,pVal)	\
+    ( (This)->lpVtbl -> get_Grid(This,bstrNodeName,pVal) ) 
 
 #define IGalaxyCluster_get_XObject(This,bstrName,pVal)	\
     ( (This)->lpVtbl -> get_XObject(This,bstrName,pVal) ) 
@@ -5311,8 +5311,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_put_Height(This,newVal)	\
     ( (This)->lpVtbl -> put_Height(This,newVal) ) 
 
-#define IGalaxyCluster_get_StarNames(This,pVal)	\
-    ( (This)->lpVtbl -> get_StarNames(This,pVal) ) 
+#define IGalaxyCluster_get_GridNames(This,pVal)	\
+    ( (This)->lpVtbl -> get_GridNames(This,pVal) ) 
 
 #define IGalaxyCluster_get_Parent(This,pVal)	\
     ( (This)->lpVtbl -> get_Parent(This,pVal) ) 
@@ -5332,17 +5332,17 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_CreateQuasar(This,ParentObj,HostWnd,bstrQuasarName,pRetQuasar)	\
     ( (This)->lpVtbl -> CreateQuasar(This,ParentObj,HostWnd,bstrQuasarName,pRetQuasar) ) 
 
-#define IGalaxyCluster_Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetNode)	\
-    ( (This)->lpVtbl -> Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetNode) ) 
+#define IGalaxyCluster_Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetGrid)	\
+    ( (This)->lpVtbl -> Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetGrid) ) 
 
-#define IGalaxyCluster_ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetNode)	\
-    ( (This)->lpVtbl -> ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetNode) ) 
+#define IGalaxyCluster_ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetGrid)	\
+    ( (This)->lpVtbl -> ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetGrid) ) 
 
-#define IGalaxyCluster_GetStar(This,bstrQuasarName,bstrNodeName,pRetNode)	\
-    ( (This)->lpVtbl -> GetStar(This,bstrQuasarName,bstrNodeName,pRetNode) ) 
+#define IGalaxyCluster_GetGrid(This,bstrQuasarName,bstrNodeName,pRetNode)	\
+    ( (This)->lpVtbl -> GetGrid(This,bstrQuasarName,bstrNodeName,pRetNode) ) 
 
-#define IGalaxyCluster_GetCtrlInStar(This,NodeName,CtrlName,ppCtrl)	\
-    ( (This)->lpVtbl -> GetCtrlInStar(This,NodeName,CtrlName,ppCtrl) ) 
+#define IGalaxyCluster_GetCtrlInGrid(This,NodeName,CtrlName,ppCtrl)	\
+    ( (This)->lpVtbl -> GetCtrlInGrid(This,NodeName,CtrlName,ppCtrl) ) 
 
 #define IGalaxyCluster_GetQuasarFromCtrl(This,ctrl,ppQuasar)	\
     ( (This)->lpVtbl -> GetQuasarFromCtrl(This,ctrl,ppQuasar) ) 
@@ -5350,8 +5350,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_ConnectHubbleCtrl(This,eventSource)	\
     ( (This)->lpVtbl -> ConnectHubbleCtrl(This,eventSource) ) 
 
-#define IGalaxyCluster_CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppNode)	\
-    ( (This)->lpVtbl -> CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppNode) ) 
+#define IGalaxyCluster_CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid)	\
+    ( (This)->lpVtbl -> CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid) ) 
 
 #define IGalaxyCluster_ObserveQuasars(This,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile)	\
     ( (This)->lpVtbl -> ObserveQuasars(This,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile) ) 
@@ -5412,18 +5412,18 @@ EXTERN_C const IID IID_IWorkBenchWindow;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveInView( 
             int nIndex,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode) = 0;
+            /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
     };
     
@@ -5523,20 +5523,20 @@ EXTERN_C const IID IID_IWorkBenchWindow;
             IWorkBenchWindow * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
             IWorkBenchWindow * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveInView )( 
             IWorkBenchWindow * This,
             int nIndex,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppRetNode);
+            /* [retval][out] */ IGrid **ppRetGrid);
         
         END_INTERFACE
     } IWorkBenchWindowVtbl;
@@ -5601,14 +5601,14 @@ EXTERN_C const IID IID_IWorkBenchWindow;
 #define IWorkBenchWindow_CloseTangramUI(This)	\
     ( (This)->lpVtbl -> CloseTangramUI(This) ) 
 
-#define IWorkBenchWindow_Observe(This,bstrKey,bstrXml,ppNode)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppNode) ) 
+#define IWorkBenchWindow_Observe(This,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppGrid) ) 
 
-#define IWorkBenchWindow_ObserveEx(This,bstrKey,bstrXml,ppNode)	\
-    ( (This)->lpVtbl -> ObserveEx(This,bstrKey,bstrXml,ppNode) ) 
+#define IWorkBenchWindow_ObserveEx(This,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> ObserveEx(This,bstrKey,bstrXml,ppGrid) ) 
 
-#define IWorkBenchWindow_ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetNode)	\
-    ( (This)->lpVtbl -> ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetNode) ) 
+#define IWorkBenchWindow_ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetGrid)	\
+    ( (This)->lpVtbl -> ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetGrid) ) 
 
 #endif /* COBJMACROS */
 
@@ -5636,11 +5636,11 @@ EXTERN_C const IID IID_IBrowser;
     IBrowser : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteStar( 
-            /* [retval][out] */ IStar **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteGrid( 
+            /* [retval][out] */ IGrid **pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteStar( 
-            /* [in] */ IStar *newVal) = 0;
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteGrid( 
+            /* [in] */ IGrid *newVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenURL( 
             BSTR bstrURL,
@@ -5709,13 +5709,13 @@ EXTERN_C const IID IID_IBrowser;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteStar )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteGrid )( 
             IBrowser * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteStar )( 
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteGrid )( 
             IBrowser * This,
-            /* [in] */ IStar *newVal);
+            /* [in] */ IGrid *newVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenURL )( 
             IBrowser * This,
@@ -5764,11 +5764,11 @@ EXTERN_C const IID IID_IBrowser;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IBrowser_get_RemoteStar(This,pVal)	\
-    ( (This)->lpVtbl -> get_RemoteStar(This,pVal) ) 
+#define IBrowser_get_RemoteGrid(This,pVal)	\
+    ( (This)->lpVtbl -> get_RemoteGrid(This,pVal) ) 
 
-#define IBrowser_put_RemoteStar(This,newVal)	\
-    ( (This)->lpVtbl -> put_RemoteStar(This,newVal) ) 
+#define IBrowser_put_RemoteGrid(This,newVal)	\
+    ( (This)->lpVtbl -> put_RemoteGrid(This,newVal) ) 
 
 #define IBrowser_OpenURL(This,bstrURL,nDisposition,bstrKey,bstrXml)	\
     ( (This)->lpVtbl -> OpenURL(This,bstrURL,nDisposition,bstrKey,bstrXml) ) 
@@ -5962,7 +5962,7 @@ EXTERN_C const IID IID_IOfficeObject;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE UnloadHubble( void) = 0;
         
@@ -6032,7 +6032,7 @@ EXTERN_C const IID IID_IOfficeObject;
             IOfficeObject * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *UnloadHubble )( 
             IOfficeObject * This);
@@ -6076,8 +6076,8 @@ EXTERN_C const IID IID_IOfficeObject;
 #define IOfficeObject_Show(This,bShow)	\
     ( (This)->lpVtbl -> Show(This,bShow) ) 
 
-#define IOfficeObject_Observe(This,bstrKey,bstrXml,ppNode)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppNode) ) 
+#define IOfficeObject_Observe(This,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppGrid) ) 
 
 #define IOfficeObject_UnloadHubble(This)	\
     ( (This)->lpVtbl -> UnloadHubble(This) ) 
@@ -6446,8 +6446,8 @@ EXTERN_C const IID IID_IEclipseCtrl;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TopQuasar( 
             /* [retval][out] */ IQuasar **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveTopNode( 
-            /* [retval][out] */ IStar **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveTopGrid( 
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AppKeyValue( 
             BSTR bstrKey,
@@ -6461,13 +6461,13 @@ EXTERN_C const IID IID_IEclipseCtrl;
             BSTR bstrQuasarName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
             BSTR bstrQuasarName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCtrl( 
             BSTR bstrXml) = 0;
@@ -6571,9 +6571,9 @@ EXTERN_C const IID IID_IEclipseCtrl;
             IEclipseCtrl * This,
             /* [retval][out] */ IQuasar **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveTopNode )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveTopGrid )( 
             IEclipseCtrl * This,
-            /* [retval][out] */ IStar **pVal);
+            /* [retval][out] */ IGrid **pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppKeyValue )( 
             IEclipseCtrl * This,
@@ -6590,14 +6590,14 @@ EXTERN_C const IID IID_IEclipseCtrl;
             BSTR bstrQuasarName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
             IEclipseCtrl * This,
             BSTR bstrQuasarName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IStar **ppNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCtrl )( 
             IEclipseCtrl * This,
@@ -6670,8 +6670,8 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #define IEclipseCtrl_get_TopQuasar(This,pVal)	\
     ( (This)->lpVtbl -> get_TopQuasar(This,pVal) ) 
 
-#define IEclipseCtrl_get_ActiveTopNode(This,pVal)	\
-    ( (This)->lpVtbl -> get_ActiveTopNode(This,pVal) ) 
+#define IEclipseCtrl_get_ActiveTopGrid(This,pVal)	\
+    ( (This)->lpVtbl -> get_ActiveTopGrid(This,pVal) ) 
 
 #define IEclipseCtrl_get_AppKeyValue(This,bstrKey,pVal)	\
     ( (This)->lpVtbl -> get_AppKeyValue(This,bstrKey,pVal) ) 
@@ -6679,11 +6679,11 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #define IEclipseCtrl_put_AppKeyValue(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppKeyValue(This,bstrKey,newVal) ) 
 
-#define IEclipseCtrl_Observe(This,bstrQuasarName,bstrKey,bstrXml,ppNode)	\
-    ( (This)->lpVtbl -> Observe(This,bstrQuasarName,bstrKey,bstrXml,ppNode) ) 
+#define IEclipseCtrl_Observe(This,bstrQuasarName,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> Observe(This,bstrQuasarName,bstrKey,bstrXml,ppGrid) ) 
 
-#define IEclipseCtrl_ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppNode)	\
-    ( (This)->lpVtbl -> ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppNode) ) 
+#define IEclipseCtrl_ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppGrid) ) 
 
 #define IEclipseCtrl_InitCtrl(This,bstrXml)	\
     ( (This)->lpVtbl -> InitCtrl(This,bstrXml) ) 
@@ -6832,52 +6832,52 @@ class DECLSPEC_UUID("19631222-1992-0612-1965-060119990606")
 Universe;
 #endif
 
-#ifndef ___IStarEvents_DISPINTERFACE_DEFINED__
-#define ___IStarEvents_DISPINTERFACE_DEFINED__
+#ifndef ___IGridEvents_DISPINTERFACE_DEFINED__
+#define ___IGridEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _IStarEvents */
+/* dispinterface _IGridEvents */
 /* [helpstring][uuid] */ 
 
 
-EXTERN_C const IID DIID__IStarEvents;
+EXTERN_C const IID DIID__IGridEvents;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
     MIDL_INTERFACE("19631222-1992-0612-1965-060119821001")
-    _IStarEvents : public IDispatch
+    _IGridEvents : public IDispatch
     {
     };
     
 #else 	/* C style interface */
 
-    typedef struct _IStarEventsVtbl
+    typedef struct _IGridEventsVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            _IStarEvents * This,
+            _IGridEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            _IStarEvents * This);
+            _IGridEvents * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            _IStarEvents * This);
+            _IGridEvents * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            _IStarEvents * This,
+            _IGridEvents * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            _IStarEvents * This,
+            _IGridEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            _IStarEvents * This,
+            _IGridEvents * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -6885,7 +6885,7 @@ EXTERN_C const IID DIID__IStarEvents;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            _IStarEvents * This,
+            _IGridEvents * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -6904,11 +6904,11 @@ EXTERN_C const IID DIID__IStarEvents;
             _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
-    } _IStarEventsVtbl;
+    } _IGridEventsVtbl;
 
-    interface _IStarEvents
+    interface _IGridEvents
     {
-        CONST_VTBL struct _IStarEventsVtbl *lpVtbl;
+        CONST_VTBL struct _IGridEventsVtbl *lpVtbl;
     };
 
     
@@ -6916,26 +6916,26 @@ EXTERN_C const IID DIID__IStarEvents;
 #ifdef COBJMACROS
 
 
-#define _IStarEvents_QueryInterface(This,riid,ppvObject)	\
+#define _IGridEvents_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define _IStarEvents_AddRef(This)	\
+#define _IGridEvents_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define _IStarEvents_Release(This)	\
+#define _IGridEvents_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define _IStarEvents_GetTypeInfoCount(This,pctinfo)	\
+#define _IGridEvents_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define _IStarEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define _IGridEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define _IStarEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define _IGridEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define _IStarEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define _IGridEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 #endif /* COBJMACROS */
@@ -6944,7 +6944,7 @@ EXTERN_C const IID DIID__IStarEvents;
 #endif 	/* C style interface */
 
 
-#endif 	/* ___IStarEvents_DISPINTERFACE_DEFINED__ */
+#endif 	/* ___IGridEvents_DISPINTERFACE_DEFINED__ */
 
 
 #ifndef ___IHubbleObjEvents_DISPINTERFACE_DEFINED__

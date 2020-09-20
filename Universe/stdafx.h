@@ -98,17 +98,17 @@ using namespace std;
 #include <ppltasks.h>
 using namespace concurrency;
 
-class CStar;
-class CStarWnd;
+class CGrid;
+class CGridHelperWnd;
 class CHubble;
 class CQuasar;
 class CUniverse;
-class CStarEvents;
+class CGridEvents;
 class CCosmosEvent;
 class CGalaxyCluster;
-class CStarCollection;
+class CGridCollection;
 
-typedef vector<CStar*> CStarVector;
+typedef vector<CGrid*> CGridVector;
 
 #include <afxcview.h>
 #include <afxdlgs.h>

@@ -24,33 +24,33 @@ using namespace System::Runtime::InteropServices;
 
 namespace Cosmos
 {
-    Star::Star(IStar* pNode)
+    Grid::Grid(IGrid* pGrid)
     {
         m_hWnd = NULL;
-        m_pStarEvent = new CCosmosNodeEvent();
-        m_pStarEvent->m_pStar = pNode;
-        m_pStarEvent->m_pStarCLREvent = new CStarCLREvent();
-        m_pStarCLREvent = m_pStarEvent->m_pStarCLREvent;
-        m_pStarEvent->m_pStarCLREvent->m_pStar = this;
-        HRESULT hr = m_pStarEvent->DispEventAdvise(pNode);
+        m_pGridEvent = new CCosmosNodeEvent();
+        m_pGridEvent->m_pGrid = pGrid;
+        m_pGridEvent->m_pGridCLREvent = new CGridCLREvent();
+        m_pGridCLREvent = m_pGridEvent->m_pGridCLREvent;
+        m_pGridEvent->m_pGridCLREvent->m_pGrid = this;
+        HRESULT hr = m_pGridEvent->DispEventAdvise(pGrid);
         if (theApp.m_pHubbleImpl)
-            theApp.m_pHubbleImpl->AttachNode(m_pStarEvent);
-        m_pStar = pNode;
-        LONGLONG nValue = (LONGLONG)pNode;
+            theApp.m_pHubbleImpl->AttachNode(m_pGridEvent);
+        m_pGrid = pGrid;
+        LONGLONG nValue = (LONGLONG)pGrid;
         theAppProxy._insertObject(nValue, this);
         m_pChromeBrowserProxy = nullptr;
     }
 
-    Star::~Star()
+    Grid::~Grid()
     {
-        delete m_pStarCLREvent;
-        m_pStar = NULL;
+        delete m_pGridCLREvent;
+        m_pGrid = NULL;
     }
 
-    GalaxyCluster^ Star::GalaxyCluster::get()
+    GalaxyCluster^ Grid::GalaxyCluster::get()
     {
         IGalaxyCluster* pGalaxyCluster = nullptr;
-        m_pStar->get_GalaxyCluster(&pGalaxyCluster);
+        m_pGrid->get_GalaxyCluster(&pGalaxyCluster);
 
         if (pGalaxyCluster)
         {
@@ -59,39 +59,39 @@ namespace Cosmos
         return nullptr;
     }
 
-    Quasar^ Star::Quasar::get()
+    Quasar^ Grid::Quasar::get()
     {
         CComPtr<IQuasar> pTangramFrame;
-        m_pStar->get_Quasar(&pTangramFrame);
+        m_pGrid->get_Quasar(&pTangramFrame);
 
         Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pTangramFrame);
         return pQuasar;
     }
 
-    String^ Star::Caption::get()
+    String^ Grid::Caption::get()
     {
-        if (m_pStar)
+        if (m_pGrid)
         {
             CComBSTR bstrCap("");
-            m_pStar->get_Caption(&bstrCap);
+            m_pGrid->get_Caption(&bstrCap);
             String^ strCap = Marshal::PtrToStringUni((System::IntPtr)LPTSTR(LPCTSTR(bstrCap)));
             return strCap;
         }
         return "";
     }
 
-    String^ Star::URL::get()
+    String^ Grid::URL::get()
     {
-        if (m_pStar)
+        if (m_pGrid)
         {
-            ::StarType nType;
-            m_pStar->get_StarType(&nType);
+            ::GridType nType;
+            m_pGrid->get_GridType(&nType);
             CComBSTR bstrCap("");
             switch (nType)
             {
             case BlankView:
             {
-                m_pStar->get_URL(&bstrCap);
+                m_pGrid->get_URL(&bstrCap);
                 return BSTR2STRING(bstrCap);
             }
             break;
@@ -106,18 +106,18 @@ namespace Cosmos
         return "";
     }
 
-    void Star::URL::set(String^ newVal)
+    void Grid::URL::set(String^ newVal)
     {
-        if (m_pStar)
+        if (m_pGrid)
         {
-            ::StarType nType;
-            m_pStar->get_StarType(&nType);
+            ::GridType nType;
+            m_pGrid->get_GridType(&nType);
             switch (nType)
             {
             case BlankView:
                 if (nType == BlankView)
                 {
-                    m_pStar->put_URL(STRING2BSTR(newVal));
+                    m_pGrid->put_URL(STRING2BSTR(newVal));
 
                 }
                 break;
@@ -131,34 +131,34 @@ namespace Cosmos
         }
     }
 
-    void Star::Init()
+    void Grid::Init()
     {
         LONGLONG h = 0;
-        if (m_pStar)
+        if (m_pGrid)
         {
-            m_pStar->get_Handle(&h);
+            m_pGrid->get_Handle(&h);
             ::SendMessage((HWND)h, WM_COSMOSMSG, 1, 0);
         }
     }
 
-    Object^ Star::PlugIn::get(String^ strObjName)
+    Object^ Grid::PlugIn::get(String^ strObjName)
     {
         Object^ pObj = nullptr;
-        if (m_pStar)
+        if (m_pGrid)
         {
-            Star^ pRootNode = this->RootStar;
-            if (pRootNode->m_pPlugInDic == nullptr)
+            Grid^ pRootGrid = this->RootStar;
+            if (pRootGrid->m_pPlugInDic == nullptr)
             {
-                pRootNode->m_pPlugInDic = gcnew Dictionary<String^, Object^>();
+                pRootGrid->m_pPlugInDic = gcnew Dictionary<String^, Object^>();
             }
-            if (pRootNode->m_pPlugInDic->TryGetValue(strObjName, pObj) == false)
+            if (pRootGrid->m_pPlugInDic->TryGetValue(strObjName, pObj) == false)
             {
                 IDispatch* pDisp = nullptr;
-                LRESULT hr = m_pStar->get_AxPlugIn(STRING2BSTR(strObjName), &pDisp);
+                LRESULT hr = m_pGrid->get_AxPlugIn(STRING2BSTR(strObjName), &pDisp);
                 if (SUCCEEDED(hr) && pDisp)
                 {
                     Object^ pObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pDisp)));
-                    pRootNode->m_pPlugInDic[strObjName] = pObj;
+                    pRootGrid->m_pPlugInDic[strObjName] = pObj;
                     return pObj;
                 }
 
@@ -167,11 +167,11 @@ namespace Cosmos
         return pObj;
     }
 
-    void Star::Fire_OnTabChange(int nActivePage, int nOldActivePage)
+    void Grid::Fire_OnTabChange(int nActivePage, int nOldActivePage)
     {
         OnTabChange(nActivePage, nOldActivePage);
-        Star^ pActiveStar = GetStar(0, nActivePage);
-        Star^ pOldStar = GetStar(0, nOldActivePage);
+        Grid^ pActiveStar = GetGrid(0, nActivePage);
+        Grid^ pOldStar = GetGrid(0, nOldActivePage);
     }
 
     Hubble::Hubble()
@@ -393,15 +393,15 @@ namespace Cosmos
         }
     }
 
-    Star^ Hubble::CreatingStar::get()
+    Grid^ Hubble::CreatingStar::get()
     {
         Object^ pRetObject = nullptr;
         if (theApp.m_pHubble)
         {
-            IStar* pNode = nullptr;
-            theApp.m_pHubble->get_CreatingStar(&pNode);
-            if (pNode)
-                return theAppProxy._createObject<IStar, Star>(pNode);
+            IGrid* pGrid = nullptr;
+            theApp.m_pHubble->get_CreatingGrid(&pGrid);
+            if (pGrid)
+                return theAppProxy._createObject<IGrid, Grid>(pGrid);
         }
         return nullptr;
     }
@@ -470,8 +470,8 @@ namespace Cosmos
         intptr_t nNode = eventSession->m_pWormhole->Getint64(L"nodeobj");
         if (nNode)
         {
-            IStar* pNode = (IStar*)nNode;
-            Star^ thisNode = theAppProxy._createObject<IStar, Star>(pNode);
+            IGrid* pGrid = (IGrid*)nNode;
+            Grid^ thisNode = theAppProxy._createObject<IGrid, Grid>(pGrid);
             if (thisNode != nullptr)
             {
                 thisNode->Fire_OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
@@ -546,14 +546,14 @@ namespace Cosmos
         {
             return nullptr;
         }
-        IStar* pWndNode = nullptr;
-        HRESULT hr = theApp.m_pHubble->GetStarFromHandle((LONGLONG)hWnd, &pWndNode);
-        if (hr != S_OK || pWndNode == nullptr)
+        IGrid* pWndGrid = nullptr;
+        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)hWnd, &pWndGrid);
+        if (hr != S_OK || pWndGrid == nullptr)
         {
             return nullptr;
         }
         IQuasar* pQuasar = nullptr;
-        hr = pWndNode->get_Quasar(&pQuasar);
+        hr = pWndGrid->get_Quasar(&pQuasar);
         if (hr != S_OK || pQuasar == nullptr)
         {
             return nullptr;
@@ -604,30 +604,30 @@ namespace Cosmos
         return 0;
     };
 
-    Star^ Hubble::GetStarFromHandle(IntPtr handle)
+    Grid^ Hubble::GetGridFromHandle(IntPtr handle)
     {
-        IStar* pWndNode = nullptr;
-        HRESULT hr = theApp.m_pHubble->GetStarFromHandle((LONGLONG)handle.ToPointer(), &pWndNode);
-        if (hr != S_OK || pWndNode == nullptr)
+        IGrid* pWndGrid = nullptr;
+        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)handle.ToPointer(), &pWndGrid);
+        if (hr != S_OK || pWndGrid == nullptr)
         {
             return nullptr;
         }
-        return theAppProxy._createObject<IStar, Star>(pWndNode);
+        return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
-    Star^ Hubble::GetNodeFromControl(Control^ ctrl)
+    Grid^ Hubble::GetNodeFromControl(Control^ ctrl)
     {
         if (ctrl == nullptr)
         {
             return nullptr;
         }
-        IStar* pWndNode = nullptr;
-        HRESULT hr = theApp.m_pHubble->GetStarFromHandle((LONGLONG)ctrl->Handle.ToPointer(), &pWndNode);
-        if (hr != S_OK || pWndNode == nullptr)
+        IGrid* pWndGrid = nullptr;
+        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)ctrl->Handle.ToPointer(), &pWndGrid);
+        if (hr != S_OK || pWndGrid == nullptr)
         {
             return nullptr;
         }
-        return theAppProxy._createObject<IStar, Star>(pWndNode);
+        return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
     void Hubble::UpdateNewTabPageLayout(String^ newTabPageLayout)
@@ -1005,15 +1005,15 @@ namespace Cosmos
         return nullptr;
     }
 
-    Wormhole^ Star::Wormhole::get()
+    Wormhole^ Grid::Wormhole::get()
     {
-        if (m_pStar)
+        if (m_pGrid)
         {
             __int64 nHandle = 0;
-            m_pStar->get_Handle(&nHandle);
+            m_pGrid->get_Handle(&nHandle);
             if (m_pWormhole == nullptr)
             {
-                CSession* pSession = theApp.m_pHubbleImpl->GetCloudSession(m_pStar);
+                CSession* pSession = theApp.m_pHubbleImpl->GetCloudSession(m_pGrid);
                 if (pSession)
                 {
                     m_pWormhole = gcnew Cosmos::Wormhole(pSession);
@@ -1109,43 +1109,43 @@ namespace Cosmos
         return m_pObj;
     }
 
-    Star^ Star::Observe(String^ layerName, String^ layerXML)
+    Grid^ Grid::Observe(String^ layerName, String^ layerXML)
     {
-        if (m_pStar)
+        if (m_pGrid)
         {
             BSTR blayerName = STRING2BSTR(layerName);
             BSTR blayerXML = STRING2BSTR(layerXML);
-            IStar* pNode = nullptr;
-            m_pStar->Observe(blayerName, blayerXML, &pNode);
+            IGrid* pGrid = nullptr;
+            m_pGrid->Observe(blayerName, blayerXML, &pGrid);
             ::SysFreeString(blayerName);
             ::SysFreeString(blayerXML);
-            if (pNode)
+            if (pGrid)
             {
-                return theAppProxy._createObject<IStar, Star>(pNode);
+                return theAppProxy._createObject<IGrid, Grid>(pGrid);
             }
         }
         return nullptr;
     }
 
-    Star^ Star::ObserveChild(int rowNum, int colNum, String^ layerName, String^ layerXML)
+    Grid^ Grid::ObserveChild(int rowNum, int colNum, String^ layerName, String^ layerXML)
     {
-        if (m_pStar)
+        if (m_pGrid)
         {
             BSTR blayerName = STRING2BSTR(layerName);
             BSTR blayerXML = STRING2BSTR(layerXML);
-            IStar* pNode = nullptr;
-            m_pStar->ObserveEx(rowNum, colNum, blayerName, blayerXML, &pNode);
+            IGrid* pGrid = nullptr;
+            m_pGrid->ObserveEx(rowNum, colNum, blayerName, blayerXML, &pGrid);
             ::SysFreeString(blayerName);
             ::SysFreeString(blayerXML);
-            if (pNode)
+            if (pGrid)
             {
-                return theAppProxy._createObject<IStar, Star>(pNode);
+                return theAppProxy._createObject<IGrid, Grid>(pGrid);
             }
         }
         return nullptr;
     }
 
-    //Object^ Star::ActiveMethod(String^ strMethod, cli::array<Object^, 1>^ p)
+    //Object^ Grid::ActiveMethod(String^ strMethod, cli::array<Object^, 1>^ p)
     //{
     //    Object^ pRetObj = nullptr;
     //    if (m_pHostObj != nullptr)
@@ -1227,18 +1227,18 @@ namespace Cosmos
         m_pGalaxyCluster->ObserveQuasars(STRING2BSTR(strFrames), STRING2BSTR(strKey), STRING2BSTR(bstrXml), bSaveToConfigFile);
     }
 
-    Star^ GalaxyCluster::GetStar(String^ strXml, String^ strFrameName)
+    Grid^ GalaxyCluster::GetGrid(String^ strXml, String^ strFrameName)
     {
         if (String::IsNullOrEmpty(strXml) || String::IsNullOrEmpty(strFrameName))
             return nullptr;
         BSTR bstrXml = STRING2BSTR(strXml);
         BSTR bstrFrameName = STRING2BSTR(strFrameName);
-        CComPtr<IStar> pNode;
-        m_pGalaxyCluster->GetStar(bstrXml, bstrFrameName, &pNode);
-        Star^ pRetNode = nullptr;
-        if (pNode)
+        CComPtr<IGrid> pGrid;
+        m_pGalaxyCluster->GetGrid(bstrXml, bstrFrameName, &pGrid);
+        Grid^ pRetNode = nullptr;
+        if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IStar, Star>(pNode);
+            pRetNode = theAppProxy._createObject<IGrid, Grid>(pGrid);
         }
         ::SysFreeString(bstrXml);
         ::SysFreeString(bstrFrameName);
@@ -1273,17 +1273,17 @@ namespace Cosmos
         theApp.m_pHubbleImpl->m_pCurrentIPCMsg = nullptr;
     }
 
-    Star^ Quasar::Observe(String^ layerName, String^ layerXML)
+    Grid^ Quasar::Observe(String^ layerName, String^ layerXML)
     {
-        Star^ pRetNode = nullptr;
+        Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
-        CComPtr<IStar> pNode;
-        m_pQuasar->Observe(blayerName, blayerXML, &pNode);
-        if (pNode)
+        CComPtr<IGrid> pGrid;
+        m_pQuasar->Observe(blayerName, blayerXML, &pGrid);
+        if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IStar, Star>(pNode);
-            Star^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IGrid, Grid>(pGrid);
+            Grid^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

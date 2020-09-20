@@ -327,10 +327,10 @@
     </ClCompile>
     <ClCompile Include="Quasar.cpp" />
     <ClCompile Include="Hubble.cpp" />
-    <ClCompile Include="Star.cpp" />
+    <ClCompile Include="grid.cpp" />
     <ClCompile Include="GalaxyCluster.cpp" />
-    <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="StarWnd.cpp" />
+    <ClCompile Include="GridWnd.cpp" />
+    <ClCompile Include="GridHelperWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="splith.cur" />
@@ -347,10 +347,10 @@
     <ClInclude Include="UniverseApp.h" />
     <ClInclude Include="Quasar.h" />
     <ClInclude Include="hubble.h" />
-    <ClInclude Include="Star.h" />
+    <ClInclude Include="grid.h" />
     <ClInclude Include="GalaxyCluster.h" />
-    <ClInclude Include="Grid.h" />
-    <ClInclude Include="StarWnd.h" />
+    <ClInclude Include="GridWnd.h" />
+    <ClInclude Include="GridHelperWnd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bitmap_g.bmp" />

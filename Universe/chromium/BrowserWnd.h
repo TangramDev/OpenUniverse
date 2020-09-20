@@ -23,7 +23,7 @@ namespace Web {
 		public CComObjectRootEx<CComSingleThreadModel>,
 		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_Universe, 1, 0>
 	{
-		friend class CStar;
+		friend class CGrid;
 	public:
 		CBrowser();
 		~CBrowser() override;
@@ -34,15 +34,15 @@ namespace Web {
 		HWND		m_hDrawWnd;
 		HWND		m_hOldTab;
 		CString		m_strCurKey;
-		CStar*		m_pParentStar;
+		CGrid*		m_pParentStar;
 		CWebPage*	m_pVisibleWebWnd;
-		IStar*		m_pRemoteStar;
+		IGrid*		m_pRemoteGrid;
 		LRESULT		BrowserLayout();
 
 		map<HWND, CWebPage*> m_mapNorifyPage;
 
-		STDMETHOD(get_RemoteStar)(IStar** pVal);
-		STDMETHOD(put_RemoteStar)(IStar* newVal);
+		STDMETHOD(get_RemoteGrid)(IGrid** pVal);
+		STDMETHOD(put_RemoteGrid)(IGrid* newVal);
 		STDMETHOD(AddURLs)(BSTR bstrURLs);
 		STDMETHOD(OpenURL)(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml);
 		BEGIN_MSG_MAP(CBrowser)

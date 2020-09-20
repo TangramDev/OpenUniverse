@@ -30,7 +30,7 @@ using namespace System::Threading::Tasks;
 
 using System::Runtime::InteropServices::Marshal;
 
-class CStarCLREvent;
+class CGridCLREvent;
 class CCosmosNodeEvent;
 extern CCosmosProxy theAppProxy;
 
@@ -40,7 +40,7 @@ namespace Cosmos
 	/// Summary for Hubble
 	/// </summary>
 
-	ref class Star;
+	ref class Grid;
 	ref class Quasar;
 	ref class Browser;
 	ref class GalaxyCluster;
@@ -55,58 +55,58 @@ namespace Cosmos
 		APPOTHER = 0
 	};
 
-	public ref class Star
+	public ref class Grid
 	{
 	public:
-		Star(IStar* pNode);
-		~Star();
+		Grid(IGrid* pGrid);
+		~Grid();
 
-		IStar* m_pStar;
+		IGrid* m_pGrid;
 		Object^ m_pHostObj = nullptr;
-		CCosmosNodeEvent* m_pStarEvent;
-		CStarCLREvent* m_pStarCLREvent;
+		CCosmosNodeEvent* m_pGridEvent;
+		CGridCLREvent* m_pGridCLREvent;
 		Cosmos::Wormhole^ m_pWormhole = nullptr;
 		CBrowserImpl* m_pChromeBrowserProxy;
 
-		delegate void NodeAddInCreated(Star^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
+		delegate void NodeAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
 		event NodeAddInCreated^ OnNodeAddInCreated;
-		void Fire_NodeAddInCreated(Star^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml)
+		void Fire_NodeAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml)
 		{
 			OnNodeAddInCreated(sender, pAddIndisp, bstrAddInID, bstrAddInXml);
 		}
 
-		delegate void NodeAddInsCreated(Star^ sender);
+		delegate void NodeAddInsCreated(Grid^ sender);
 		event NodeAddInsCreated^ OnNodeAddInsCreated;
-		void Fire_NodeAddInsCreated(Star^ sender)
+		void Fire_NodeAddInsCreated(Grid^ sender)
 		{
 			OnNodeAddInsCreated(sender);
 		}
 
 		// A notification has been created for all nodes in the current layout.
-		delegate void RootNodeCreated(IntPtr nHandle, String^ strUrl, Star^ pRootNode);
+		delegate void RootNodeCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);
 		event RootNodeCreated^ OnRootNodeCreated;
-		void Fire_RootNodeCreated(IntPtr nHandle, String^ strUrl, Star^ pRootNode)
+		void Fire_RootNodeCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid)
 		{
-			OnRootNodeCreated(nHandle, strUrl, pRootNode);
+			OnRootNodeCreated(nHandle, strUrl, pRootGrid);
 		}
 
-		delegate void OpenComplete(Star^ sender);
+		delegate void OpenComplete(Grid^ sender);
 		event OpenComplete^ OnOpenComplete;
-		void Fire_OpenComplete(Star^ sender)
+		void Fire_OpenComplete(Grid^ sender)
 		{
 			OnOpenComplete(sender);
 		}
 
-		delegate void Destroy(Star^ sender);
+		delegate void Destroy(Grid^ sender);
 		event Destroy^ OnDestroy;
-		void Fire_OnDestroy(Star^ sender)
+		void Fire_OnDestroy(Grid^ sender)
 		{
 			OnDestroy(sender);
 		}
 
-		delegate void DocumentComplete(Star^ sender, Object^ pHtmlDoc, String^ strURL);
+		delegate void DocumentComplete(Grid^ sender, Object^ pHtmlDoc, String^ strURL);
 		event DocumentComplete^ OnDocumentComplete;
-		void Fire_OnDocumentComplete(Star^ sender, Object^ pHtmlDoc, String^ strURL)
+		void Fire_OnDocumentComplete(Grid^ sender, Object^ pHtmlDoc, String^ strURL)
 		{
 			OnDocumentComplete(sender, pHtmlDoc, strURL);
 		}
@@ -139,7 +139,7 @@ namespace Cosmos
 		String^ SendIPCMessage(String^ strTo, String^ strPayload, String^ strExtra, String^ strMsgId)
 		{
 			BSTR bstrRet;
-			HRESULT hr = m_pStar->SendIPCMessage(STRING2BSTR(strTo), STRING2BSTR(strPayload), STRING2BSTR(strExtra), STRING2BSTR(strMsgId), &bstrRet);
+			HRESULT hr = m_pGrid->SendIPCMessage(STRING2BSTR(strTo), STRING2BSTR(strPayload), STRING2BSTR(strExtra), STRING2BSTR(strMsgId), &bstrRet);
 			if (hr == S_OK)
 			{
 				return BSTR2STRING(bstrRet);
@@ -154,15 +154,15 @@ namespace Cosmos
 
 	public:
 		void Init();
-		Star^ Observe(String^ layerName, String^ layerXML);
-		Star^ ObserveChild(int rowNum, int colName, String^ layerName, String^ layerXML);
+		Grid^ Observe(String^ layerName, String^ layerXML);
+		Grid^ ObserveChild(int rowNum, int colName, String^ layerName, String^ layerXML);
 
 		property String^ Caption
 		{
 			String^ get();
 			void set(String^ strCaption)
 			{
-				m_pStar->put_Caption(STRING2BSTR(strCaption));
+				m_pGrid->put_Caption(STRING2BSTR(strCaption));
 			}
 		}
 
@@ -176,10 +176,10 @@ namespace Cosmos
 		{
 			String^ get()
 			{
-				if (m_pStar)
+				if (m_pGrid)
 				{
 					CComBSTR bstrCap("");
-					m_pStar->get_Name(&bstrCap);
+					m_pGrid->get_Name(&bstrCap);
 					return BSTR2STRING(bstrCap);
 				}
 				return "";
@@ -187,9 +187,9 @@ namespace Cosmos
 
 			void set(String^ newVal)
 			{
-				if (m_pStar)
+				if (m_pGrid)
 				{
-					m_pStar->put_Name(STRING2BSTR(newVal));
+					m_pGrid->put_Name(STRING2BSTR(newVal));
 				}
 			}
 		}
@@ -209,7 +209,7 @@ namespace Cosmos
 					return m_pHostObj;
 
 				VARIANT var;
-				m_pStar->get_XObject(&var);
+				m_pGrid->get_XObject(&var);
 
 				try
 				{
@@ -232,12 +232,12 @@ namespace Cosmos
 			System::Drawing::Color get()
 			{
 				OLE_COLOR rgb;
-				m_pStar->get_rgbMiddle(&rgb);
+				m_pGrid->get_rgbMiddle(&rgb);
 				return System::Drawing::ColorTranslator::FromOle(rgb);
 			}
 			void set(System::Drawing::Color newVal)
 			{
-				m_pStar->put_rgbMiddle(System::Drawing::ColorTranslator::ToOle(newVal));
+				m_pGrid->put_rgbMiddle(System::Drawing::ColorTranslator::ToOle(newVal));
 			}
 		}
 
@@ -246,12 +246,12 @@ namespace Cosmos
 			System::Drawing::Color get()
 			{
 				OLE_COLOR rgb;
-				m_pStar->get_rgbLeftTop(&rgb);
+				m_pGrid->get_rgbLeftTop(&rgb);
 				return System::Drawing::ColorTranslator::FromOle(rgb);
 			}
 			void set(System::Drawing::Color newVal)
 			{
-				m_pStar->put_rgbLeftTop(System::Drawing::ColorTranslator::ToOle(newVal));
+				m_pGrid->put_rgbLeftTop(System::Drawing::ColorTranslator::ToOle(newVal));
 			}
 		}
 
@@ -260,12 +260,12 @@ namespace Cosmos
 			System::Drawing::Color get()
 			{
 				OLE_COLOR rgb;
-				m_pStar->get_rgbRightBottom(&rgb);
+				m_pGrid->get_rgbRightBottom(&rgb);
 				return System::Drawing::ColorTranslator::FromOle(rgb);
 			}
 			void set(System::Drawing::Color newVal)
 			{
-				m_pStar->put_rgbRightBottom(System::Drawing::ColorTranslator::ToOle(newVal));
+				m_pGrid->put_rgbRightBottom(System::Drawing::ColorTranslator::ToOle(newVal));
 			}
 		}
 
@@ -276,7 +276,7 @@ namespace Cosmos
 			{
 				Object^ pRetObject = nullptr;
 				IDispatch* pDisp = NULL;
-				m_pStar->get_Extender(&pDisp);
+				m_pGrid->get_Extender(&pDisp);
 				if (pDisp)
 					pRetObject = Marshal::GetObjectForIUnknown((IntPtr)pDisp);
 				return pRetObject;
@@ -284,7 +284,7 @@ namespace Cosmos
 			void set(Object^ obj)
 			{
 				IDispatch* pDisp = (IDispatch*)Marshal::GetIUnknownForObject(obj).ToPointer();
-				m_pStar->put_Extender(pDisp);
+				m_pGrid->put_Extender(pDisp);
 			}
 		}
 
@@ -294,7 +294,7 @@ namespace Cosmos
 			{
 				Object^ pRetObject = nullptr;
 				VARIANT var;
-				m_pStar->get_Tag(&var);
+				m_pGrid->get_Tag(&var);
 				try
 				{
 					pRetObject = Marshal::GetObjectForNativeVariant((System::IntPtr) & var);
@@ -316,7 +316,7 @@ namespace Cosmos
 				{
 					VARIANT var;
 					Marshal::GetNativeVariantForObject(obj, (System::IntPtr) & var);
-					m_pStar->put_Tag(var);
+					m_pGrid->put_Tag(var);
 				}
 				catch (ArgumentException^ e)
 				{
@@ -331,14 +331,14 @@ namespace Cosmos
 			int get()
 			{
 				int nPage = 0;
-				m_pStar->get_ActivePage(&nPage);
+				m_pGrid->get_ActivePage(&nPage);
 
 				return nPage;
 			}
 
 			void set(int nPage)
 			{
-				m_pStar->put_ActivePage(nPage);
+				m_pGrid->put_ActivePage(nPage);
 			}
 		}
 
@@ -354,7 +354,7 @@ namespace Cosmos
 			Cosmos::Quasar^ get()
 			{
 				CComPtr<IQuasar> pTangramFrame;
-				m_pStar->get_HostQuasar(&pTangramFrame);
+				m_pGrid->get_HostQuasar(&pTangramFrame);
 				if (pTangramFrame)
 				{
 					Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pTangramFrame);
@@ -371,39 +371,39 @@ namespace Cosmos
 		}
 
 		[BrowsableAttribute(false)]
-		property Star^ RootStar
+		property Grid^ RootStar
 		{
-			Star^ get()
+			Grid^ get()
 			{
-				CComPtr<IStar> pRootNode;
-				m_pStar->get_RootStar(&pRootNode);
+				CComPtr<IGrid> pRootGrid;
+				m_pGrid->get_RootGrid(&pRootGrid);
 
-				return theAppProxy._createObject<IStar, Star>(pRootNode);
+				return theAppProxy._createObject<IGrid, Grid>(pRootGrid);
 			}
 		}
 
 		[BrowsableAttribute(false)]
-		property Star^ ParentStar
+		property Grid^ ParentGrid
 		{
-			Star^ get()
+			Grid^ get()
 			{
-				CComPtr<IStar> pNode;
-				m_pStar->get_ParentStar(&pNode);
+				CComPtr<IGrid> pGrid;
+				m_pGrid->get_ParentGrid(&pGrid);
 
-				return theAppProxy._createObject<IStar, Star>(pNode);
+				return theAppProxy._createObject<IGrid, Grid>(pGrid);
 			}
 		}
 
 		[BrowsableAttribute(false)]
-		property Star^ HostStar
+		property Grid^ HostStar
 		{
-			Star^ get()
+			Grid^ get()
 			{
-				IStar* pNode = nullptr;
-				m_pStar->get_HostStar(&pNode);
-				if (pNode == NULL)
+				IGrid* pGrid = nullptr;
+				m_pGrid->get_HostGrid(&pGrid);
+				if (pGrid == NULL)
 					return nullptr;
-				return theAppProxy._createObject<IStar, Star>(pNode);
+				return theAppProxy._createObject<IGrid, Grid>(pGrid);
 			}
 		}
 
@@ -413,7 +413,7 @@ namespace Cosmos
 			int get()
 			{
 				long nValue = 0;
-				m_pStar->get_Col(&nValue);
+				m_pGrid->get_Col(&nValue);
 				return nValue;
 			}
 		}
@@ -424,7 +424,7 @@ namespace Cosmos
 			int get()
 			{
 				long nValue = 0;
-				m_pStar->get_Row(&nValue);
+				m_pGrid->get_Row(&nValue);
 				return nValue;
 			}
 		}
@@ -434,12 +434,12 @@ namespace Cosmos
 			int get()
 			{
 				int nValue = 0;
-				m_pStar->get_Hmin(&nValue);
+				m_pGrid->get_Hmin(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pStar->put_Hmin(newVal);
+				m_pGrid->put_Hmin(newVal);
 			}
 		}
 
@@ -448,12 +448,12 @@ namespace Cosmos
 			int get()
 			{
 				int nValue = 0;
-				m_pStar->get_Hmax(&nValue);
+				m_pGrid->get_Hmax(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pStar->put_Hmax(newVal);
+				m_pGrid->put_Hmax(newVal);
 			}
 		}
 
@@ -462,12 +462,12 @@ namespace Cosmos
 			int get()
 			{
 				int nValue = 0;
-				m_pStar->get_Vmin(&nValue);
+				m_pGrid->get_Vmin(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pStar->put_Vmin(newVal);
+				m_pGrid->put_Vmin(newVal);
 			}
 		}
 
@@ -476,12 +476,12 @@ namespace Cosmos
 			int get()
 			{
 				int nValue = 0;
-				m_pStar->get_Vmax(&nValue);
+				m_pGrid->get_Vmax(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pStar->put_Vmax(newVal);
+				m_pGrid->put_Vmax(newVal);
 			}
 		}
 
@@ -490,7 +490,7 @@ namespace Cosmos
 			int get()
 			{
 				long nValue = 0;
-				m_pStar->get_Rows(&nValue);
+				m_pGrid->get_Rows(&nValue);
 				return nValue;
 			}
 		}
@@ -500,18 +500,18 @@ namespace Cosmos
 			int get()
 			{
 				long nValue = 0;
-				m_pStar->get_Cols(&nValue);
+				m_pGrid->get_Cols(&nValue);
 				return nValue;
 			}
 		}
 
-		property ::StarType StarType
+		property ::GridType StarType
 		{
-			::StarType get()
+			::GridType get()
 			{
-				::StarType type;
-				m_pStar->get_StarType(&type);
-				return (::StarType)type;
+				::GridType type;
+				m_pGrid->get_GridType(&type);
+				return (::GridType)type;
 			}
 		}
 
@@ -522,7 +522,7 @@ namespace Cosmos
 				if (m_hWnd)
 					return (__int64)m_hWnd;
 				__int64 h = 0;
-				m_pStar->get_Handle(&h);
+				m_pGrid->get_Handle(&h);
 				m_hWnd = (HWND)h;
 				return h;
 			}
@@ -534,25 +534,25 @@ namespace Cosmos
 			String ^ get(String ^ strKey)
 			{
 				BSTR bstrVal;
-				m_pStar->get_Attribute(STRING2BSTR(strKey),&bstrVal);
+				m_pGrid->get_Attribute(STRING2BSTR(strKey),&bstrVal);
 
 				return BSTR2STRING(bstrVal);
 			}
 
 			void set(String ^ strKey, String ^ strVal)
 			{
-				m_pStar->put_Attribute(
+				m_pGrid->put_Attribute(
 					STRING2BSTR(strKey),
 					STRING2BSTR(strVal));
 			}
 		}
 
 	public:
-		Star^ GetStar(int nRow, int nCol)
+		Grid^ GetGrid(int nRow, int nCol)
 		{
-			IStar* pNode;
-			m_pStar->GetStar(nRow, nCol, &pNode);
-			return theAppProxy._createObject<IStar, Star>(pNode);
+			IGrid* pGrid;
+			m_pGrid->GetGrid(nRow, nCol, &pGrid);
+			return theAppProxy._createObject<IGrid, Grid>(pGrid);
 		}
 
 	private:
@@ -565,7 +565,7 @@ namespace Cosmos
 		Dictionary<String^, Object^>^ m_pPlugInDic = nullptr;
 	};
 
-	public ref class Quasar : public Dictionary<String^, Star^>
+	public ref class Quasar : public Dictionary<String^, Grid^>
 	{
 	public:
 		Quasar(IQuasar* pQuasar)
@@ -584,7 +584,7 @@ namespace Cosmos
 		IQuasar* m_pQuasar;
 
 	public:
-		Star^ Observe(String^ layerName, String^ layerXML);
+		Grid^ Observe(String^ layerName, String^ layerXML);
 
 		void SendMessage(String^ strFrom, String^ strTo, String^ strMsgId, String^ strMsgContent, String^ strExtra);
 
@@ -629,15 +629,15 @@ namespace Cosmos
 			}
 		}
 
-		property Star^ WndStar[Object^]
+		property Grid^ WndStar[Object^]
 		{
-			Star ^ get(Object ^ index)
+			Grid ^ get(Object ^ index)
 			{
 				VARIANT var;
 				Marshal::GetNativeVariantForObject(index,(System::IntPtr) & var);
-				IStar* pNode = nullptr;
-				m_pQuasar->get_Star(var, &pNode);
-				return theAppProxy._createObject<IStar, Star>(pNode);
+				IGrid* pGrid = nullptr;
+				m_pQuasar->get_Grid(var, &pGrid);
+				return theAppProxy._createObject<IGrid, Grid>(pGrid);
 			}
 		}
 
@@ -672,7 +672,7 @@ namespace Cosmos
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 		static Form^ m_pMainForm = nullptr;
 		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
-		static Dictionary<Object^, Star^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Star^>();
+		static Dictionary<Object^, Grid^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Grid^>();
 
 		static GalaxyCluster^ CreateGalaxyCluster(IntPtr nPageHandle);
 		static GalaxyCluster^ CreateGalaxyCluster(Control^ ctrl, Object^ ExternalObj);
@@ -683,8 +683,8 @@ namespace Cosmos
 		static Object^ ActiveObjectMethod(Object^ pObj, String^ strMethod, cli::array<Object^, 1>^ p);
 		static Browser^ ActiveBrowser();
 		static Browser^ GetHostBrowser(Object^ obj);
-		static Star^ GetStarFromHandle(IntPtr handle);
-		static Star^ GetNodeFromControl(Control^ ctrl);
+		static Grid^ GetGridFromHandle(IntPtr handle);
+		static Grid^ GetNodeFromControl(Control^ ctrl);
 		//static void RegComponentForTangram(String^ strIDs, Assembly^ a);
 		static void UpdateNewTabPageLayout(String^ newTabPageLayout);
 		static void BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ name);
@@ -698,12 +698,12 @@ namespace Cosmos
 		static void Run();
 		static void Run(Form^ Mainform);
 		static void Run(ApplicationContext^ context);
-		static Star^ GetStarFromObj(Object^ obj)
+		static Grid^ GetGridFromObj(Object^ obj)
 		{
-			Star^ pNode = nullptr;
-			if (m_pFrameworkElementDic->TryGetValue(obj, pNode))
+			Grid^ pGrid = nullptr;
+			if (m_pFrameworkElementDic->TryGetValue(obj, pGrid))
 			{
-				return pNode;
+				return pGrid;
 			}
 			return nullptr;
 		}
@@ -791,9 +791,9 @@ namespace Cosmos
 			return strName;
 		}
 
-		delegate void HubbleActionDelegate(Star^ SourceObj, String^ strInfo);
+		delegate void HubbleActionDelegate(Grid^ SourceObj, String^ strInfo);
 		static event HubbleActionDelegate^ OnHubbleActionDelegate;
-		static void Fire_OnHubbleActionDelegate(Star^ SourceObj, String^ strInfo)
+		static void Fire_OnHubbleActionDelegate(Grid^ SourceObj, String^ strInfo)
 		{
 			OnHubbleActionDelegate(SourceObj, strInfo);
 		}
@@ -834,9 +834,9 @@ namespace Cosmos
 			void set(CosmosAppType nType);
 		}
 
-		static property Star^ CreatingStar
+		static property Grid^ CreatingStar
 		{
-			Star^ get();
+			Grid^ get();
 		}
 
 		static Browser^ CreateBrowser(IntPtr ParentHandle, String^ strUrls);
@@ -899,11 +899,11 @@ namespace Cosmos
 		static event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
 		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName);
 
-		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Star^ pRootNode);
+		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid);
 		static event OpenComplete^ OnOpenComplete;
-		static void Fire_OnOpenComplete(IntPtr hWnd, String^ bstrUrl, Star^ pRootNode)
+		static void Fire_OnOpenComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid)
 		{
-			OnOpenComplete(hWnd, bstrUrl, pRootNode);
+			OnOpenComplete(hWnd, bstrUrl, pRootGrid);
 		}
 
 		delegate void AppMsgLoop(IntPtr hWnd, IntPtr msg, IntPtr wParam, IntPtr lParam);
@@ -941,11 +941,11 @@ namespace Cosmos
 		//	OnHubbleAppData(strAppData);
 		//}
 
-		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Star^ pNode);
+		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid);
 		static event FormNodeCreated^ OnFormNodeCreated;
-		static void Fire_OnFormNodeCreated(String^ bstrObjID, Form^ pForm, Star^ pNode)
+		static void Fire_OnFormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid)
 		{
-			OnFormNodeCreated(bstrObjID, pForm, pNode);
+			OnFormNodeCreated(bstrObjID, pForm, pGrid);
 		}
 
 		property String^ AppKeyValue[String^]
@@ -1044,7 +1044,7 @@ namespace Cosmos
 			}
 		}
 
-		Star^ GetStar(String^ bstrXml, String^ bstrFrameName);
+		Grid^ GetGrid(String^ bstrXml, String^ bstrFrameName);
 
 		Quasar^ CreateQuasar(Control^ ctrl, String^ strName)
 		{
@@ -1104,16 +1104,16 @@ namespace Cosmos
 			OnIPCMsg(sender, strType, strContent, strFeature);
 		}
 
-		delegate void Destroy(Star^ sender);
+		delegate void Destroy(Grid^ sender);
 		event Destroy^ OnDestroy;
-		void Fire_OnDestroy(Star^ sender)
+		void Fire_OnDestroy(Grid^ sender)
 		{
 			OnDestroy(sender);
 		}
 
-		delegate void TabChange(Star^ sender, int nActivePage, int nOldActivePage);
+		delegate void TabChange(Grid^ sender, int nActivePage, int nOldActivePage);
 		event TabChange^ OnTabChange;
-		void Fire_OnTabChange(Star^ sender, int nActivePage, int nOldActivePage)
+		void Fire_OnTabChange(Grid^ sender, int nActivePage, int nOldActivePage)
 		{
 			OnTabChange(sender, nActivePage, nOldActivePage);
 		}

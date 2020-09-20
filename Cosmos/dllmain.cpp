@@ -297,16 +297,16 @@ CString CCosmos::_GetLibPathFromAssemblyQualifiedName(CString strDir, CString st
 
 CCosmosNodeEvent::CCosmosNodeEvent()
 {
-	m_pStar			= nullptr;
-	m_pStarCLREvent = nullptr;
+	m_pGrid			= nullptr;
+	m_pGridCLREvent = nullptr;
 }
 
 CCosmosNodeEvent::~CCosmosNodeEvent()
 {
-	if (m_pStarCLREvent)
+	if (m_pGridCLREvent)
 	{
-		//LONGLONG nValue = (LONGLONG)m_pStar;
-		DispEventUnadvise(m_pStar);
+		//LONGLONG nValue = (LONGLONG)m_pGrid;
+		DispEventUnadvise(m_pGrid);
 	}
 }
 

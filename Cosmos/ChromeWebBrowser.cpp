@@ -132,9 +132,9 @@ namespace Cosmos
 		return (IntPtr)m_hWnd;
 	}
 	
-	Star^ WebPage::ParentStar::get()
+	Grid^ WebPage::ParentGrid::get()
 	{
-		return theAppProxy._createObject<IStar, Star>(m_pProxy->GetParentNode());
+		return theAppProxy._createObject<IGrid, Grid>(m_pProxy->GetParentNode());
 	}
 	
 	Quasar^ WebPage::HostQuasar::get()

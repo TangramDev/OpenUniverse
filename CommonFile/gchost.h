@@ -119,7 +119,7 @@ EXTERN_C const IID IID_IGCHost;
     IGCHost : public IUnknown
     {
     public:
-        virtual HRESULT STDMETHODCALLTYPE SetGCStartupLimits( 
+        virtual HRESULT STDMETHODCALLTYPE SetGCGridtupLimits( 
             /* [in] */ DWORD SegmentSize,
             /* [in] */ DWORD MaxGen0Size) = 0;
         
@@ -157,7 +157,7 @@ EXTERN_C const IID IID_IGCHost;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGCHost * This);
         
-        HRESULT ( STDMETHODCALLTYPE *SetGCStartupLimits )( 
+        HRESULT ( STDMETHODCALLTYPE *SetGCGridtupLimits )( 
             IGCHost * This,
             /* [in] */ DWORD SegmentSize,
             /* [in] */ DWORD MaxGen0Size);
@@ -202,8 +202,8 @@ EXTERN_C const IID IID_IGCHost;
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IGCHost_SetGCStartupLimits(This,SegmentSize,MaxGen0Size)	\
-    ( (This)->lpVtbl -> SetGCStartupLimits(This,SegmentSize,MaxGen0Size) ) 
+#define IGCHost_SetGCGridtupLimits(This,SegmentSize,MaxGen0Size)	\
+    ( (This)->lpVtbl -> SetGCGridtupLimits(This,SegmentSize,MaxGen0Size) ) 
 
 #define IGCHost_Collect(This,Generation)	\
     ( (This)->lpVtbl -> Collect(This,Generation) ) 
@@ -243,7 +243,7 @@ EXTERN_C const IID IID_IGCHost2;
     IGCHost2 : public IGCHost
     {
     public:
-        virtual HRESULT STDMETHODCALLTYPE SetGCStartupLimitsEx( 
+        virtual HRESULT STDMETHODCALLTYPE SetGCGridtupLimitsEx( 
             /* [in] */ SIZE_T SegmentSize,
             /* [in] */ SIZE_T MaxGen0Size) = 0;
         
@@ -268,7 +268,7 @@ EXTERN_C const IID IID_IGCHost2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGCHost2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE *SetGCStartupLimits )( 
+        HRESULT ( STDMETHODCALLTYPE *SetGCGridtupLimits )( 
             IGCHost2 * This,
             /* [in] */ DWORD SegmentSize,
             /* [in] */ DWORD MaxGen0Size);
@@ -290,7 +290,7 @@ EXTERN_C const IID IID_IGCHost2;
             IGCHost2 * This,
             /* [in] */ SIZE_T sztMaxVirtualMemMB);
         
-        HRESULT ( STDMETHODCALLTYPE *SetGCStartupLimitsEx )( 
+        HRESULT ( STDMETHODCALLTYPE *SetGCGridtupLimitsEx )( 
             IGCHost2 * This,
             /* [in] */ SIZE_T SegmentSize,
             /* [in] */ SIZE_T MaxGen0Size);
@@ -318,8 +318,8 @@ EXTERN_C const IID IID_IGCHost2;
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IGCHost2_SetGCStartupLimits(This,SegmentSize,MaxGen0Size)	\
-    ( (This)->lpVtbl -> SetGCStartupLimits(This,SegmentSize,MaxGen0Size) ) 
+#define IGCHost2_SetGCGridtupLimits(This,SegmentSize,MaxGen0Size)	\
+    ( (This)->lpVtbl -> SetGCGridtupLimits(This,SegmentSize,MaxGen0Size) ) 
 
 #define IGCHost2_Collect(This,Generation)	\
     ( (This)->lpVtbl -> Collect(This,Generation) ) 
@@ -334,8 +334,8 @@ EXTERN_C const IID IID_IGCHost2;
     ( (This)->lpVtbl -> SetVirtualMemLimit(This,sztMaxVirtualMemMB) ) 
 
 
-#define IGCHost2_SetGCStartupLimitsEx(This,SegmentSize,MaxGen0Size)	\
-    ( (This)->lpVtbl -> SetGCStartupLimitsEx(This,SegmentSize,MaxGen0Size) ) 
+#define IGCHost2_SetGCGridtupLimitsEx(This,SegmentSize,MaxGen0Size)	\
+    ( (This)->lpVtbl -> SetGCGridtupLimitsEx(This,SegmentSize,MaxGen0Size) ) 
 
 #endif /* COBJMACROS */
 

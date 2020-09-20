@@ -13,7 +13,7 @@ namespace HubbleBrowser
 {
     public partial class NtpCtrl : UserControl
     {
-        Star thisNode = null;
+        Grid thisNode = null;
         public NtpCtrl()
         {
             InitializeComponent();

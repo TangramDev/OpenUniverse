@@ -48,7 +48,7 @@ public:
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CQuasar*>							m_mapQuasar;
 	map<HWND, CQuasar*>							m_mapNeedSaveQuasar;
-	map<CString, CStar*>						m_mapNode;
+	map<CString, CGrid*>						m_mapGrid;
 	map<CString, IDispatch*>					m_mapExternalObj;
 	map<CString, CString>						m_mapXtml;
 	map<__int64, CCosmosEvent*>					m_mapEventObj;
@@ -69,14 +69,14 @@ public:
 	void BeforeDestory();
 	void UpdateMapKey(CString);
 	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
-	HRESULT Fire_NodeCreated(IStar * pNodeCreated);
-	HRESULT Fire_AddInCreated(IStar * pRootNode, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
+	HRESULT Fire_NodeCreated(IGrid * pGridCreated);
+	HRESULT Fire_AddInCreated(IGrid * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
 	HRESULT Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd);
-	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IStar * pRetRootNode);
+	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IGrid * pRetRootNode);
 	HRESULT Fire_Destroy();
-	HRESULT Fire_NodeMouseActivate(IStar * pActiveNode);
-	HRESULT Fire_ClrControlCreated(IStar * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
-	HRESULT Fire_TabChange(IStar* sender, LONG ActivePage, LONG OldPage);
+	HRESULT Fire_NodeMouseActivate(IGrid * pActiveNode);
+	HRESULT Fire_ClrControlCreated(IGrid * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
+	HRESULT Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPage);
 	HRESULT Fire_TangramEvent(IHubbleEventObj* pEventObj);
 	HRESULT Fire_IPCMsg(IQuasar* pSender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 
@@ -94,8 +94,8 @@ public:
 	STDMETHOD(get_Extender)(BSTR bstrExtenderName, IDispatch** pVal);
 	STDMETHOD(put_Extender)(BSTR bstrExtenderName, IDispatch* newVal);
 	STDMETHOD(get_QuasarName)(LONGLONG hHwnd, BSTR* pVal);
-	STDMETHOD(get_Star)(BSTR bstrNodeName, IStar** pVal);
-	STDMETHOD(get_StarNames)(BSTR* pVal);
+	STDMETHOD(get_Grid)(BSTR bstrNodeName, IGrid** pVal);
+	STDMETHOD(get_GridNames)(BSTR* pVal);
 	STDMETHOD(get_XObject)(BSTR bstrName, IDispatch** pVal);
 	STDMETHOD(get_Parent)(IGalaxyCluster** pVal);
 	STDMETHOD(get_Width)(long* pVal);
@@ -110,16 +110,16 @@ public:
 	STDMETHOD(put_NewVersion)(VARIANT_BOOL bNewVersion);
 
 	STDMETHOD(CreateQuasar)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrFrameName, IQuasar** pRetFrame);
-	STDMETHOD(GetStar)(BSTR bstrFrameName, BSTR bstrNodeName, IStar** pRetNode);
+	STDMETHOD(GetGrid)(BSTR bstrFrameName, BSTR bstrNodeName, IGrid** pRetNode);
 	STDMETHOD(GetQuasarFromCtrl)(IDispatch* ctrl, IQuasar** ppQuasar);
-	STDMETHOD(GetCtrlInStar)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
-	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR FrameName, BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode);
-	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IStar** ppRetNode);
+	STDMETHOD(GetCtrlInGrid)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
+	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR FrameName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
+	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ConnectHubbleCtrl)(IHubbleCtrl* eventSource);
-	STDMETHOD(CreateQuasarWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrFrameName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IStar** ppNode);
+	STDMETHOD(CreateQuasarWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrFrameName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
 	STDMETHOD(ObserveQuasars)(BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	STDMETHOD(get_CurrentDesignQuasarType)(QuasarType* pVal);
-	STDMETHOD(get_CurrentDesignNode)(IStar** pVal);
+	STDMETHOD(get_CurrentDesignNode)(IGrid** pVal);
 
 private:
 	bool										m_bIsBlank;

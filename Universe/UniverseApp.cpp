@@ -19,8 +19,8 @@
 #include <VersionHelpers.h> 
 #include <shellscalingapi.h>
 
-#include "StarWnd.h"
-#include "Star.h"
+#include "GridHelperWnd.h"
+#include "grid.h"
 #include "Quasar.h"
 #include <io.h>
 #include <stdio.h>
@@ -269,10 +269,10 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		g_pHubble->GetQuasar((LONGLONG)hwnd, &pQuasar);
 		if (pQuasar)
 		{
-			IStar* pNode = nullptr;
-			pQuasar->Observe(CComBSTR(L""), CComBSTR(L""), &pNode);
+			IGrid* pGrid = nullptr;
+			pQuasar->Observe(CComBSTR(L""), CComBSTR(L""), &pGrid);
 			LONGLONG h = 0;
-			pNode->get_Handle(&h);
+			pGrid->get_Handle(&h);
 			HWND hWnd = (HWND)h;
 			::InvalidateRect(hWnd, nullptr, true);
 		}
@@ -624,7 +624,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CStarWnd* pWnd = nullptr;
+				CGridHelperWnd* pWnd = nullptr;
 				if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -633,7 +633,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (g_pHubble->m_pActiveStar->m_nViewType != Grid)
 					{
-						pWnd = (CStarWnd*)g_pHubble->m_pActiveStar->m_pHostWnd;
+						pWnd = (CGridHelperWnd*)g_pHubble->m_pActiveStar->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pHubble->m_pActiveStar = nullptr;
@@ -1007,13 +1007,13 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				break;
 				case 2019111701:
 				{
-					if (g_pHubble->m_mapNodeForHtml.size())
+					if (g_pHubble->m_mapGridForHtml.size())
 					{
-						for (auto it : g_pHubble->m_mapNodeForHtml)
+						for (auto it : g_pHubble->m_mapGridForHtml)
 						{
 							it.first->put_URL(CComBSTR(it.second));
 						}
-						g_pHubble->m_mapNodeForHtml.erase(g_pHubble->m_mapNodeForHtml.begin(), g_pHubble->m_mapNodeForHtml.end());
+						g_pHubble->m_mapGridForHtml.erase(g_pHubble->m_mapGridForHtml.begin(), g_pHubble->m_mapGridForHtml.end());
 					}
 				}
 				break;
@@ -1048,10 +1048,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					CWebPage* pWnd = ((CBrowser*)it->second)->m_pVisibleWebWnd;
 					if (pWnd && ::IsWindow(pWnd->m_hWnd) && pWnd->m_pQuasar)
 					{
-						IStar* pNode = nullptr;
+						IGrid* pGrid = nullptr;
 						if (g_bRecturnPressed == false)
 						{
-							pWnd->m_pQuasar->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pHubble->m_strDefaultXml : _T("")), &pNode);
+							pWnd->m_pQuasar->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pHubble->m_strDefaultXml : _T("")), &pGrid);
 							::SendMessage(it->first, WM_BROWSERLAYOUT, 0, 4);
 						}
 						g_bRecturnPressed = false;

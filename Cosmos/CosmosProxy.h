@@ -109,12 +109,12 @@ private:
 	gcroot<EventHandler^>					m_pOnCtrlVisible;
 
 	virtual void OnCLRHostExit();
-	CWPFObj* CreateWPFControl(IStar* pNode, HWND hPWnd, UINT nID);
+	CWPFObj* CreateWPFControl(IGrid* pGrid, HWND hPWnd, UINT nID);
 	HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	HRESULT ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey);
 	BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton);
-	IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IStar* pHostNode);
+	IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode);
 	int IsWinForm(HWND hWnd);
 	int IsSpecifiedType(IUnknown* pUnknown, BSTR bstrName);
 	IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames);
@@ -128,7 +128,7 @@ private:
 	void ReleaseHubbleObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);
-	HRESULT NavigateURL(IStar* pNode, CString strURL, IDispatch* dispObjforScript);
+	HRESULT NavigateURL(IGrid* pGrid, CString strURL, IDispatch* dispObjforScript);
 	Control^ GetCanSelect(Control^ ctrl, bool direct);
 
 	HWND GetHwnd(HWND parent, int x, int y, int width, int height);
@@ -141,19 +141,19 @@ private:
 	void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage*, int nState);
 	void HideMenuStripPopup();
 	bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType);
-	void ConnectNodeToWebPage(IStar*, bool);
+	void ConnectGridToWebPage(IGrid*, bool);
 	void OnCloudMsgReceived(CSession*);
 
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);
-	//void SelectNode(IStar* );
+	//void SelectNode(IGrid* );
 	Object^ InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
-	Object^ InitTangramNode(IStar* pNode, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
+	Object^ InitTangramNode(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue);
 	IDispatch* CreateWinForm(HWND hParent, BSTR strXML);
 
 	void CtrlInit(int nType, Control^ treeview, IGalaxyCluster* pGalaxyCluster);
-	System::Void LoadNode(TreeView^ pTreeView, TreeNode^ pNode, IGalaxyCluster* pGalaxyCluster, CTangramXmlParse* pParse);
+	System::Void LoadNode(TreeView^ pTreeView, TreeNode^ pGrid, IGalaxyCluster* pGalaxyCluster, CTangramXmlParse* pParse);
 	static void OnLoad(Object ^sender, EventArgs ^e);
 	static void OnApplicationExit(Object ^sender, EventArgs ^e);
 	static void OnVisibleChanged(Object ^sender, EventArgs ^e);
@@ -177,7 +177,7 @@ public:
 	gcroot<Object^> m_pGalaxyCluster;
 
 	void __stdcall  OnDestroy();
-	void __stdcall  OnTabChange(IStar* sender, int nActivePage,int nOldPage);
+	void __stdcall  OnTabChange(IGrid* sender, int nActivePage,int nOldPage);
 	void __stdcall  OnInitialize(IDispatch* pHtmlWnd, BSTR bstrUrl);
 	void __stdcall  OnIPCMsg(IQuasar* sender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 	BEGIN_SINK_MAP(CGalaxyClusterEvent)
