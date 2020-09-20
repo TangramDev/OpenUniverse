@@ -123,7 +123,7 @@ public:
 	CWinForm*							m_pActiveWinFormWnd;
 	HubbleDocTemplateInfo*				m_pHubbleDocTemplateInfo;
 
-	CGrid*								m_pActiveStar;
+	CGrid*								m_pActiveGrid;
 	CGrid*								m_pDesignWindowNode;
 	CQuasar*							m_pQuasar;
 	CGalaxyCluster*						m_pGalaxyCluster;

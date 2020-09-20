@@ -29,7 +29,7 @@ namespace Web {
 		m_bTabChange = false;
 		m_pRemoteGrid = nullptr;
 		m_pBrowser = nullptr;
-		m_pParentStar = nullptr;
+		m_pParentGrid = nullptr;
 		m_fdevice_scale_factor = 1.0f;
 		m_strCurKey = _T("");
 		m_pVisibleWebWnd = nullptr;
@@ -369,7 +369,7 @@ namespace Web {
 				CQuasar* pQuasar = m_pVisibleWebWnd->m_pQuasar;
 				if (pQuasar)
 				{
-					CGrid* pGrid = pQuasar->m_pWorkNode;
+					CGrid* pGrid = pQuasar->m_pWorkGrid;
 					CGridHelperWnd* pWnd = (CGridHelperWnd*)(pGrid->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}

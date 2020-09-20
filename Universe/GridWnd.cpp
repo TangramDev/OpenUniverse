@@ -357,7 +357,7 @@ void CGridWnd::StartTracking(int ht)
 	if (ht == noHit)
 		return;
 
-	CGrid* pGrid = m_pGrid->m_pGridCommonData->m_pQuasar->m_pWorkNode;
+	CGrid* pGrid = m_pGrid->m_pGridCommonData->m_pQuasar->m_pWorkGrid;
 	if (pGrid && pGrid->m_pGridCommonData->m_pHostClientView)
 	{
 		pGrid->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
@@ -416,7 +416,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	if (!m_bTracking)
 		return;
 	CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
-	CGrid* pGrid = pQuasar->m_pWorkNode;
+	CGrid* pGrid = pQuasar->m_pWorkGrid;
 	if (pGrid && pGrid->m_pGridCommonData->m_pHostClientView)
 	{
 		pGrid->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
@@ -734,7 +734,7 @@ void CGridWnd::_RecalcLayout()
 
 BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveStar;
+	m_pGrid = g_pHubble->m_pActiveGrid;
 	m_pGrid->m_pHostWnd = this;
 	m_pGrid->m_nViewType = Grid;
 	m_pGrid->m_nID = nID;
@@ -897,9 +897,9 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		CGrid* pParent = nullptr;
 		CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
 		bool bHasHostView = false;
-		if (pQuasar->m_pBindingStar)
+		if (pQuasar->m_pBindingGrid)
 		{
-			pHostNode = pQuasar->m_pBindingStar;
+			pHostNode = pQuasar->m_pBindingGrid;
 			if (::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 			{
 				bHasHostView = true;

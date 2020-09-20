@@ -95,7 +95,7 @@ public:
 	IHubbleWindow*					m_pWindow;
 	CMDIChildFormInfo*				m_pChildFormsInfo;
 	CGridCommonData*				m_pGridCommonData;
-	Web::CBrowser*			m_pWebBrowser;
+	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CQuasar*						m_pHostQuasar;
 	CRuntimeClass*					m_pObjClsInfo;
@@ -199,7 +199,7 @@ public:
 	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ObserveEx)(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ActiveTabPage)(IGrid* pGrid);
-	STDMETHOD(GetGrid)(long nRow, long nCol,IGrid** ppStar);
+	STDMETHOD(GetGrid)(long nRow, long nCol,IGrid** ppGrid);
 	STDMETHOD(GetGrids)(BSTR bstrName, IGrid** ppGrid, IGridCollection** ppGrids, long* pCount);
 	STDMETHOD(GetCtrlByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
@@ -250,7 +250,7 @@ public:
 	END_COM_MAP()
 
 	STDMETHOD(get_GridCount)(long* pCount);
-	STDMETHOD(get_Item)(long iIndex, IGrid **ppStar);
+	STDMETHOD(get_Item)(long iIndex, IGrid **ppGrid);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	CGridVector*	m_pGrids;
 

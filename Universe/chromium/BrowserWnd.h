@@ -34,7 +34,7 @@ namespace Web {
 		HWND		m_hDrawWnd;
 		HWND		m_hOldTab;
 		CString		m_strCurKey;
-		CGrid*		m_pParentStar;
+		CGrid*		m_pParentGrid;
 		CWebPage*	m_pVisibleWebWnd;
 		IGrid*		m_pRemoteGrid;
 		LRESULT		BrowserLayout();

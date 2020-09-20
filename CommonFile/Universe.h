@@ -2168,7 +2168,7 @@ EXTERN_C const IID IID_IGrid;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGrid( 
             /* [in] */ long nRow,
             /* [in] */ long nCol,
-            /* [retval][out] */ IGrid **ppWndmNode) = 0;
+            /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlByName( 
             BSTR bstrName,
@@ -2537,7 +2537,7 @@ EXTERN_C const IID IID_IGrid;
             IGrid * This,
             /* [in] */ long nRow,
             /* [in] */ long nCol,
-            /* [retval][out] */ IGrid **ppWndmNode);
+            /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
             IGrid * This,
@@ -2819,8 +2819,8 @@ EXTERN_C const IID IID_IGrid;
 #define IGrid_GetGrids(This,bstrName,ppGrid,ppGrids,pCount)	\
     ( (This)->lpVtbl -> GetGrids(This,bstrName,ppGrid,ppGrids,pCount) ) 
 
-#define IGrid_GetGrid(This,nRow,nCol,ppWndmNode)	\
-    ( (This)->lpVtbl -> GetGrid(This,nRow,nCol,ppWndmNode) ) 
+#define IGrid_GetGrid(This,nRow,nCol,ppGrid)	\
+    ( (This)->lpVtbl -> GetGrid(This,nRow,nCol,ppGrid) ) 
 
 #define IGrid_GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp) ) 

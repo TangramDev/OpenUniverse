@@ -37,7 +37,7 @@ CGridHelperWnd::CGridHelperWnd()
 	m_bCreateExternal = false;
 	m_bEraseBkgnd = true;
 	m_pGrid = nullptr;
-	m_pParentStar = nullptr;
+	m_pParentGrid = nullptr;
 	m_pOleInPlaceActiveObject = nullptr;
 	m_strKey = m_strXml = _T("");
 }
@@ -77,18 +77,18 @@ void CGridHelperWnd::Dump(CDumpContext& dc) const
 //CGridHelperWnd message handlers
 BOOL CGridHelperWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveStar;
+	m_pGrid = g_pHubble->m_pActiveGrid;
 	m_pGrid->m_nID = nID;
 	m_pGrid->m_pHostWnd = this;
 
 	if (m_pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
 		CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
-		pQuasar->m_pBindingStar = m_pGrid;
+		pQuasar->m_pBindingGrid = m_pGrid;
 
 		m_pGrid->m_pGridCommonData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pQuasar->m_pGalaxyCluster;
-		HWND hWnd = CreateWindow(L"Tangram Node Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		HWND hWnd = CreateWindow(L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		if (m_pGrid->m_pParentObj)
 		{
@@ -153,7 +153,7 @@ int CGridHelperWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT messa
 	{
 		if (g_pHubble->m_pQuasar != m_pGrid->m_pGridCommonData->m_pQuasar)
 			::SetFocus(m_hWnd);
-		g_pHubble->m_pActiveStar = m_pGrid;
+		g_pHubble->m_pActiveGrid = m_pGrid;
 		g_pHubble->m_bWinFormActived = false;
 		return MA_ACTIVATE;
 	}
@@ -164,11 +164,11 @@ int CGridHelperWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT messa
 	{
 		if ((m_pGrid->m_nViewType != TabGrid && m_pGrid->m_nViewType != Grid))
 		{
-			if (g_pHubble->m_pQuasar != m_pGrid->m_pGridCommonData->m_pQuasar || g_pHubble->m_pActiveStar != m_pGrid)
+			if (g_pHubble->m_pQuasar != m_pGrid->m_pGridCommonData->m_pQuasar || g_pHubble->m_pActiveGrid != m_pGrid)
 				::SetFocus(m_hWnd);
 		}
 	}
-	g_pHubble->m_pActiveStar = m_pGrid;
+	g_pHubble->m_pActiveGrid = m_pGrid;
 	g_pHubble->m_bWinFormActived = false;
 	if (m_pGrid->m_pParentObj)
 	{
@@ -301,21 +301,21 @@ BOOL CGridHelperWnd::OnEraseBkgnd(CDC* pDC)
 				strInfo = strInfo + _T("\n  ") + g_pHubble->m_strDesignerTip2;
 			else
 				strInfo = strInfo + _T("\n  ") + str;
-			if (pQuasar->m_pParentStar)
+			if (pQuasar->m_pParentGrid)
 			{
 				CString strTip = _T("");
-				if (pQuasar->m_pParentStar->m_nViewType == CLRCtrl)
+				if (pQuasar->m_pParentGrid->m_nViewType == CLRCtrl)
 				{
-					strTip.Format(_T("Sub Frame for .NET CLRCtrl: %s"), pQuasar->m_pParentStar->m_strName);
+					strTip.Format(_T("Sub Frame for .NET CLRCtrl: %s"), pQuasar->m_pParentGrid->m_strName);
 					strInfo = strInfo + _T("\n  ") + strTip;
-					strTip.Format(_T("CLRCtrl Type: %s"), pQuasar->m_pParentStar->m_strCnnID);
+					strTip.Format(_T("CLRCtrl Type: %s"), pQuasar->m_pParentGrid->m_strCnnID);
 					strInfo = strInfo + _T("\n  ") + strTip;
 				}
-				else if (m_pGrid->m_pGridCommonData->m_pQuasar->m_pParentStar->m_nViewType == ActiveX)
+				else if (m_pGrid->m_pGridCommonData->m_pQuasar->m_pParentGrid->m_nViewType == ActiveX)
 				{
-					strTip.Format(_T("Sub Frame for ActiveX Control: %s"), pQuasar->m_pParentStar->m_strName);
+					strTip.Format(_T("Sub Frame for ActiveX Control: %s"), pQuasar->m_pParentGrid->m_strName);
 					strInfo = strInfo + _T("\n  ") + strTip;
-					strTip.Format(_T("ActiveX ID: %s"), pQuasar->m_pParentStar->m_strCnnID);
+					strTip.Format(_T("ActiveX ID: %s"), pQuasar->m_pParentGrid->m_strCnnID);
 					strInfo = strInfo + _T("\n  ") + strTip;
 				}
 			}
@@ -712,8 +712,8 @@ LRESULT CGridHelperWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 	{
 		RECT rc;
 		::GetClientRect(m_hWnd, &rc);
-		m_pGrid->m_hHostWnd = ::CreateWindowEx(NULL, L"Tangram Node Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
-		m_pGrid->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Tangram Node Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pGrid->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		m_pGrid->m_hHostWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+		m_pGrid->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pGrid->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
 		IQuasar* pQuasar = nullptr;
 		m_pGrid->m_pGridCommonData->m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((long)pOldNode->m_hChildHostWnd), CComBSTR(L"Design"), &pQuasar);
 		IGrid* pGrid = nullptr;

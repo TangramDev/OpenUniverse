@@ -64,7 +64,7 @@ CGrid::CGrid()
 	m_pDocXmlParseNode = nullptr;
 	m_pWebBrowser = nullptr;
 	m_pGridCommonData = nullptr;
-	g_pHubble->m_pActiveStar = this;
+	g_pHubble->m_pActiveGrid = this;
 }
 
 
@@ -157,8 +157,8 @@ void CGrid::InitWndGrid()
 
 CGrid::~CGrid()
 {
-	if (g_pHubble->m_pActiveStar == this)
-		g_pHubble->m_pActiveStar = nullptr;
+	if (g_pHubble->m_pActiveGrid == this)
+		g_pHubble->m_pActiveGrid = nullptr;
 	if (m_pGridCommonData->m_pOldQuasar)
 		m_pGridCommonData->m_pQuasar = m_pGridCommonData->m_pOldQuasar;
 	CQuasar * pQuasar = m_pGridCommonData->m_pQuasar;
@@ -168,8 +168,8 @@ CGrid::~CGrid()
 		if (it != pQuasar->m_pGalaxyCluster->m_mapGrid.end())
 			pQuasar->m_pGalaxyCluster->m_mapGrid.erase(it);
 	}
-	if (pQuasar->m_pWorkNode == this)
-		pQuasar->m_pWorkNode = nullptr;
+	if (pQuasar->m_pWorkGrid == this)
+		pQuasar->m_pWorkGrid = nullptr;
 	if (m_strKey != _T(""))
 	{
 		auto it = pQuasar->m_mapGrid.find(m_strKey);
@@ -233,20 +233,20 @@ CGrid::~CGrid()
 CString CGrid::GetNames()
 {
 	CString strRet = _T("");
-	CGrid* pStar = this;
-	pStar = pStar->m_pRootObj;
-	strRet += pStar->m_strName;
+	CGrid* pGrid = this;
+	pGrid = pGrid->m_pRootObj;
+	strRet += pGrid->m_strName;
 	strRet += _T(",");
-	strRet += _GetNames(pStar);
+	strRet += _GetNames(pGrid);
 	return strRet;
 }
 
-CString CGrid::_GetNames(CGrid * pStar)
+CString CGrid::_GetNames(CGrid * pGrid)
 {
 	CString strRet = _T("");
-	if (pStar)
+	if (pGrid)
 	{
-		for (auto it : pStar->m_vChildNodes)
+		for (auto it : pGrid->m_vChildNodes)
 		{
 			CGrid* pChildNode = it;
 			strRet += pChildNode->m_strName;
@@ -306,7 +306,7 @@ STDMETHODIMP CGrid::LoadXML(int nType, BSTR bstrXML)
 
 STDMETHODIMP CGrid::ActiveTabPage(IGrid * _pGrid)
 {
-	g_pHubble->m_pActiveStar = this;
+	g_pHubble->m_pActiveGrid = this;
 	HWND hWnd = m_pHostWnd->m_hWnd;
 	if (::IsWindow(hWnd))
 	{
@@ -346,7 +346,7 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 				{
 					RECT rc;
 					::GetClientRect(m_pHostWnd->m_hWnd, &rc);
-					m_hHostWnd = ::CreateWindowEx(NULL, L"Tangram Node Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pHostWnd->m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+					m_hHostWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pHostWnd->m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
 				}
 				else
 				{
@@ -360,9 +360,9 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 			if (m_pHostQuasar && ::IsWindow(m_hHostWnd))
 			{
 				m_pHostQuasar->m_pContainerNode = this;
-				if (m_pGridCommonData->m_pQuasar->m_pParentStar)
+				if (m_pGridCommonData->m_pQuasar->m_pParentGrid)
 				{
-					m_pHostQuasar->m_pParentStar = m_pGridCommonData->m_pQuasar->m_pParentStar;
+					m_pHostQuasar->m_pParentGrid = m_pGridCommonData->m_pQuasar->m_pParentGrid;
 				}
 				HRESULT hr = m_pHostQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
 				if (m_pWebBrowser)
@@ -376,8 +376,8 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 					{
 						CGrid* pGrid2 = (CGrid*)_pGrid;
 						pGrid2->m_pWebBrowser = m_pWebBrowser;
-						CGrid* pOldParent = m_pWebBrowser->m_pParentStar;
-						m_pWebBrowser->m_pParentStar = pGrid2;
+						CGrid* pOldParent = m_pWebBrowser->m_pParentGrid;
+						m_pWebBrowser->m_pParentGrid = pGrid2;
 						m_pHostQuasar->m_pHostWebBrowserNode = pGrid2;
 						m_pHostQuasar->m_strHostWebBrowserNodeName = m_strName;
 						m_pHostQuasar->m_pHostWebBrowserWnd = m_pWebBrowser;
@@ -411,47 +411,47 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 		GetGrid(nRow, nCol, &pGrid);
 		if (pGrid == nullptr)
 			return S_OK;
-		CGrid * pWindowNode = (CGrid*)pGrid;
-		if (pWindowNode->m_pHostQuasar == nullptr)
+		CGrid * pWndGrid = (CGrid*)pGrid;
+		if (pWndGrid->m_pHostQuasar == nullptr)
 		{
-			CString strName = pWindowNode->m_strNodeName;
+			CString strName = pWndGrid->m_strNodeName;
 			strName += _T("_Frame");
 
-			::SetWindowLong(pWindowNode->m_pHostWnd->m_hWnd, GWL_ID, 1);
+			::SetWindowLong(pWndGrid->m_pHostWnd->m_hWnd, GWL_ID, 1);
 			IQuasar* pQuasar = nullptr;
-			m_pGridCommonData->m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((long)pWindowNode->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pQuasar);
-			pWindowNode->m_pHostQuasar = (CQuasar*)pQuasar;
-			CQuasar* _pQuasar = pWindowNode->m_pHostQuasar;
+			m_pGridCommonData->m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((long)pWndGrid->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pQuasar);
+			pWndGrid->m_pHostQuasar = (CQuasar*)pQuasar;
+			CQuasar* _pQuasar = pWndGrid->m_pHostQuasar;
 			_pQuasar->m_pWebPageWnd = m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
-			if (m_pGridCommonData->m_pQuasar->m_pParentStar)
+			if (m_pGridCommonData->m_pQuasar->m_pParentGrid)
 			{
-				_pQuasar->m_pParentStar = m_pGridCommonData->m_pQuasar->m_pParentStar;
+				_pQuasar->m_pParentGrid = m_pGridCommonData->m_pQuasar->m_pParentGrid;
 			}
 			if (m_pGridCommonData->m_pQuasar->m_pWebPageWnd)
 			{
 				_pQuasar->m_pWebPageWnd = m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
-				if (pWindowNode->m_strID == TGM_NUCLEUS)
+				if (pWndGrid->m_strID == TGM_NUCLEUS)
 					m_pGridCommonData->m_pQuasar->m_pSubQuasar = _pQuasar;
 			}
 		}
 
-		if (pWindowNode->m_pHostQuasar)
+		if (pWndGrid->m_pHostQuasar)
 		{
-			if (pWindowNode->m_pCurrentExNode)
+			if (pWndGrid->m_pCurrentExNode)
 			{
-				::SetWindowLong(pWindowNode->m_pCurrentExNode->m_pHostWnd->m_hWnd, GWL_ID, 1);
+				::SetWindowLong(pWndGrid->m_pCurrentExNode->m_pHostWnd->m_hWnd, GWL_ID, 1);
 			}
 
-			HRESULT hr = pWindowNode->m_pHostQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
+			HRESULT hr = pWndGrid->m_pHostQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
 
 			long dwID = AFX_IDW_PANE_FIRST + nRow * 16 + nCol;
 			if (hr != S_OK)
 			{
-				if (pWindowNode->m_pCurrentExNode)
-					::SetWindowLong(pWindowNode->m_pCurrentExNode->m_pHostWnd->m_hWnd, GWL_ID, dwID);
+				if (pWndGrid->m_pCurrentExNode)
+					::SetWindowLong(pWndGrid->m_pCurrentExNode->m_pHostWnd->m_hWnd, GWL_ID, dwID);
 				else
-					::SetWindowLong(pWindowNode->m_pHostWnd->m_hWnd, GWL_ID, dwID);
-				CWebPage* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
+					::SetWindowLong(pWndGrid->m_pHostWnd->m_hWnd, GWL_ID, dwID);
+				CWebPage* pWebWnd = pWndGrid->m_pHostQuasar->m_pWebPageWnd;
 				if (pWebWnd)
 				{
 					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
@@ -462,14 +462,14 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 			CGrid* pRootGrid = (CGrid*)* ppRetGrid;
 			CString strKey = OLE2T(bstrKey);
 			strKey.MakeLower();
-			m_mapExtendNode[pWindowNode] = strKey;
-			pWindowNode->m_pCurrentExNode = pRootGrid;
+			m_mapExtendNode[pWndGrid] = strKey;
+			pWndGrid->m_pCurrentExNode = pRootGrid;
 			::SetWindowLongPtr(pRootGrid->m_pHostWnd->m_hWnd, GWLP_ID, dwID);
-			CWebPage* pWebWnd = pWindowNode->m_pHostQuasar->m_pWebPageWnd;
+			CWebPage* pWebWnd = pWndGrid->m_pHostQuasar->m_pWebPageWnd;
 			if (pWebWnd)
 			{
-				if (pWindowNode->m_pHostQuasar->m_pBindingStar)
-					pWebWnd->m_hWebHostWnd = pWindowNode->m_pHostQuasar->m_pBindingStar->m_pHostWnd->m_hWnd;
+				if (pWndGrid->m_pHostQuasar->m_pBindingGrid)
+					pWebWnd->m_hWebHostWnd = pWndGrid->m_pHostQuasar->m_pBindingGrid->m_pHostWnd->m_hWnd;
 				else
 					pWebWnd->m_hWebHostWnd = NULL;
 				::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
@@ -587,9 +587,9 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pHubble->m_pDesignWindowNode)
 		{
 			pQuasar = g_pHubble->m_pDesignWindowNode->m_pRootObj->m_pGridCommonData->m_pQuasar;
-			if (g_pHubble->m_pDesignWindowNode && pQuasar->m_pBindingStar)
+			if (g_pHubble->m_pDesignWindowNode && pQuasar->m_pBindingGrid)
 			{
-				CGrid* pOldNode = pQuasar->m_pBindingStar;
+				CGrid* pOldNode = pQuasar->m_pBindingGrid;
 				if (pOldNode->m_pGridCommonData->m_pOldQuasar)
 				{
 					pOldNode->m_pGridCommonData->m_pQuasar = pOldNode->m_pGridCommonData->m_pOldQuasar;
@@ -623,14 +623,14 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 			pTopGrid->m_pGridCommonData->m_pHostClientView = (CGridHelperWnd*)m_pHostWnd;
 			while (pTopGrid != pTopGrid->m_pRootObj)
 			{
-				pTopGrid->m_pGridCommonData->m_pQuasar->m_pBindingStar = this;
+				pTopGrid->m_pGridCommonData->m_pQuasar->m_pBindingGrid = this;
 				pTopGrid->m_pGridCommonData->m_pHostClientView = pTopGrid->m_pGridCommonData->m_pHostClientView;
 				pTopGrid = pTopGrid->m_pRootObj;
 			}
 			m_pHostParse->put_attr(TGM_NODE_TYPE, TGM_NUCLEUS);
 			if (g_pHubble->m_pDesignWindowNode)
 			{
-				pQuasar->m_pBindingStar = this;
+				pQuasar->m_pBindingGrid = this;
 				g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pOldQuasar = g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar;
 				g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pQuasar = m_pRootObj->m_pGridCommonData->m_pQuasar;
 				g_pHubble->m_pDesignWindowNode->m_pGridCommonData->m_pHostClientView = m_pRootObj->m_pGridCommonData->m_pHostClientView;
@@ -905,7 +905,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	if (hWnd == 0)
 	{
-		hWnd = CreateWindow(L"Tangram Node Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		hWnd = CreateWindow(L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		if (::IsWindow(m_pHostWnd->m_hWnd) == false)
 			bRet = m_pHostWnd->SubclassWindow(hWnd);
 	}
@@ -1029,8 +1029,8 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		if (m_pHostWnd)
 			m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 	}
-	if (g_pHubble->m_pActiveStar && g_pHubble->m_pActiveStar->m_pGridCommonData->m_pGalaxyCluster)
-		g_pHubble->m_pActiveStar->m_pGridCommonData->m_pGalaxyCluster->Fire_NodeCreated(this);
+	if (g_pHubble->m_pActiveGrid && g_pHubble->m_pActiveGrid->m_pGridCommonData->m_pGalaxyCluster)
+		g_pHubble->m_pActiveGrid->m_pGridCommonData->m_pGalaxyCluster->Fire_NodeCreated(this);
 
 	NodeCreated();
 
@@ -1077,7 +1077,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	break;
 	case CLRCtrl:
 	{
-		g_pHubble->m_pActiveStar = this;
+		g_pHubble->m_pActiveGrid = this;
 		auto it = m_pGridCommonData->m_mapCLRNodes.find(strName);
 		if (it == m_pGridCommonData->m_mapCLRNodes.end())
 		{
@@ -1187,7 +1187,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 				return hWnd;
 			}
 		}
-		auto hWnd = ::CreateWindowEx(NULL, L"Tangram Node Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
+		auto hWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
 		CAxWindow m_Wnd;
 		m_Wnd.Attach(hWnd);
 		CComPtr<IUnknown> pUnk;
@@ -1256,11 +1256,11 @@ STDMETHODIMP CGrid::get_RootGrid(IGrid * *ppGrid)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_ParentGrid(IGrid * *ppStar)
+STDMETHODIMP CGrid::get_ParentGrid(IGrid * *ppGrid)
 {
-	*ppStar = nullptr;
+	*ppGrid = nullptr;
 	if (m_pParentObj != nullptr)
-		* ppStar = m_pParentObj;
+		* ppGrid = m_pParentObj;
 
 	return S_OK;
 }
@@ -1326,12 +1326,12 @@ STDMETHODIMP CGrid::get_Col(long* nCol)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppTangramNode)
+STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppGrid)
 {
 	CGrid* pRet = nullptr;
 	auto bFound = false;
 
-	*ppTangramNode = nullptr;
+	*ppGrid = nullptr;
 	if (nRow < 0 || nCol < 0 || nRow >= m_nRows || nCol >= m_nCols) return E_INVALIDARG;
 
 	for (auto it : m_vChildNodes)
@@ -1347,7 +1347,7 @@ STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppTangramNode)
 	HRESULT hr = S_OK;
 	if (bFound)
 	{
-		hr = pRet->QueryInterface(IID_IGrid, (void**)ppTangramNode);
+		hr = pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
 	}
 	return hr;
 }
@@ -2312,7 +2312,7 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 		if (it != g_pHubble->m_mapBrowserWnd.end())
 		{
 			m_pWebBrowser = (CBrowser*)it->second;
-			m_pWebBrowser->m_pParentStar = this;
+			m_pWebBrowser->m_pParentGrid = this;
 		}
 
 		return S_OK;

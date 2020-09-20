@@ -67,54 +67,54 @@ enum BrowserWndOpenDisposition {
 	// Update when adding a new disposition.
 }BrowserWndOpenDisposition;
 
-typedef   
-[  
+typedef
+[
 	helpstring("")
-] 
+]
 enum QuasarType
 {
-	MDIClientQuasar										= 0x00000000,
-	MDIChildQuasar										= 0x00000001,
-	SDIQuasar											= 0x00000002,
-	CtrlBarQuasar										= 0x00000003,
-	WinFormMDIClientQuasar								= 0x00000004,
-	WinFormMDIChildQuasar								= 0x00000005,
-	WinFormQuasar										= 0x00000006,
-	EclipseWorkBenchQuasar								= 0x00000007,
-	EclipseViewQuasar									= 0x00000008,
-	EclipseSWTQuasar									= 0x00000009,
-	WinFormControlQuasar								= 0x0000000a,
-	TabbedMDIClientQuasar								= 0x0000000b,
-	NOQuasar											= 0x0000010a
+	MDIClientQuasar = 0x00000000,
+	MDIChildQuasar = 0x00000001,
+	SDIQuasar = 0x00000002,
+	CtrlBarQuasar = 0x00000003,
+	WinFormMDIClientQuasar = 0x00000004,
+	WinFormMDIChildQuasar = 0x00000005,
+	WinFormQuasar = 0x00000006,
+	EclipseWorkBenchQuasar = 0x00000007,
+	EclipseViewQuasar = 0x00000008,
+	EclipseSWTQuasar = 0x00000009,
+	WinFormControlQuasar = 0x0000000a,
+	TabbedMDIClientQuasar = 0x0000000b,
+	NOQuasar = 0x0000010a
 }QuasarType;
 
-typedef   
-[  
+typedef
+[
 	helpstring("")
-] 
+]
 enum ObjEventType
 {
-	TangramNode											= 0x00000000,
-	HubbleDocEvent										= 0x00000001,
-	TangramNodeAllChildNode								= 0x00000002,
-	TangramDocAllQuasarAllChildNode						= 0x00000003,
-	TangramDocAllQuasarAllTopGrid						= 0x00000004,
-	TangramQuasarAllTopGridAllChildNode					= 0x00000005,
-	TangramQuasarAllTopGrid								= 0x00000006,
-	GalaxyClusterAllQuasarAllTopGridAllChildNode		= 0x00000007,
-	GalaxyClusterAllQuasarAllTopGrid					= 0x00000008,
-	GalaxyClusterCtrlBarQuasarAllTopGridAllChildNode	= 0x00000009,
-	GalaxyClusterCtrlBarQuasarAllTopGrid				= 0x0000000a,
+	TangramNode = 0x00000000,
+	HubbleDocEvent = 0x00000001,
+	TangramNodeAllChildNode = 0x00000002,
+	TangramDocAllQuasarAllChildNode = 0x00000003,
+	TangramDocAllQuasarAllTopGrid = 0x00000004,
+	TangramQuasarAllTopGridAllChildNode = 0x00000005,
+	TangramQuasarAllTopGrid = 0x00000006,
+	GalaxyClusterAllQuasarAllTopGridAllChildNode = 0x00000007,
+	GalaxyClusterAllQuasarAllTopGrid = 0x00000008,
+	GalaxyClusterCtrlBarQuasarAllTopGridAllChildNode = 0x00000009,
+	GalaxyClusterCtrlBarQuasarAllTopGrid = 0x0000000a,
 	GalaxyClusterNotCtrlBarQuasarAllTopGridAllChildNode = 0x0000000b,
-	GalaxyClusterNotCtrlBarQuasarAllTopGrid				= 0x0000000c,
-	TangramDocAllCtrlBarQuasarAllChildNode				= 0x0000000d,
-	TangramDocAllCtrlBarQuasar							= 0x0000000e
+	GalaxyClusterNotCtrlBarQuasarAllTopGrid = 0x0000000c,
+	TangramDocAllCtrlBarQuasarAllChildNode = 0x0000000d,
+	TangramDocAllCtrlBarQuasar = 0x0000000e
 }ObjEventType;
 
-typedef   
-[  
+typedef
+[
 	helpstring("")
-] 
+]
 enum GridType
 {
 	BlankView = 0x00000001,
@@ -196,9 +196,9 @@ interface IVSExtender : IHubbleExtender {
 	pointer_default(unique)
 ]
 interface IVSDocument : IDispatch {
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT VSClass([in]VARIANT vIndex, [out, retval]IDispatch **ppGrid);
+	[propget, id(DISPID_VALUE), helpstring("")] HRESULT VSClass([in]VARIANT vIndex, [out, retval]IDispatch** ppGrid);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
-	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long *pCount);
+	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long* pCount);
 };
 
 [
@@ -254,7 +254,7 @@ interface IHubbleTreeView : IDispatch {
 	helpstring("IHubbleEventObj Interface"),
 	pointer_default(unique)
 ]
-interface IHubbleEventObj : IDispatch{
+interface IHubbleEventObj : IDispatch {
 	[propget, id(0)] HRESULT eventSource([out, retval] IDispatch** pVal);
 	[propput, id(0), helpstring("eventSource")] HRESULT eventSource([in] IDispatch* eventSource);
 	[propget, id(1)] HRESULT Index([out, retval] int* nVal);
@@ -272,14 +272,14 @@ interface IHubbleEventObj : IDispatch{
 	helpstring("IGrid Interface"),
 	pointer_default(unique)
 ]
-interface IGrid : IDispatch{
+interface IGrid : IDispatch {
 	[propget, id(1), helpstring("property ChildNodes")] HRESULT ChildNodes([out, retval]IGridCollection** ppGridColletion);
 	[propget, id(2), helpstring("property Rows")] HRESULT Rows([out, retval]long* nRows);
 	[propget, id(3), helpstring("property Cols")] HRESULT Cols([out, retval]long* nCols);
 	[propget, id(4), helpstring("property Row")] HRESULT Row([out, retval]long* nRow);
-	[propget, id(5), helpstring("property Col")] HRESULT Col([out, retval]long* nCol);	
-	[propget, id(6), helpstring("property NodeType")] HRESULT GridType([out,retval]GridType* nType);
-	[propget, id(7), helpstring("property ParentGrid")] HRESULT ParentGrid([out,retval]IGrid** ppGrid);	
+	[propget, id(5), helpstring("property Col")] HRESULT Col([out, retval]long* nCol);
+	[propget, id(6), helpstring("property NodeType")] HRESULT GridType([out, retval]GridType* nType);
+	[propget, id(7), helpstring("property ParentGrid")] HRESULT ParentGrid([out, retval]IGrid** ppGrid);
 	[propget, id(8)] HRESULT URL([out, retval] BSTR* pVal);
 	[propput, id(8)] HRESULT URL([in] BSTR newVal);
 	[propget, id(9)] HRESULT GalaxyCluster([out, retval] IGalaxyCluster** pVal);
@@ -337,7 +337,7 @@ interface IGrid : IDispatch{
 
 	[id(100), hidden] HRESULT ActiveTabPage(IGrid* pGrid);
 	[id(101), helpstring("method GetNodes")] HRESULT GetGrids([in]BSTR bstrName, [out]IGrid** ppGrid, [out]IGridCollection** ppGrids, [out, retval]long* pCount);
-	[id(102), helpstring("method GetNode")] HRESULT GetGrid([in]long nRow, [in]long nCol, [out, retval]IGrid** ppWndmNode);
+	[id(102), helpstring("method GetNode")] HRESULT GetGrid([in]long nRow, [in]long nCol, [out, retval]IGrid** ppGrid);
 	[id(103)] HRESULT GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
 	[id(104), helpstring("method Refresh")] HRESULT Refresh(void);
 	[id(105)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
@@ -358,7 +358,7 @@ interface IGrid : IDispatch{
 	helpstring("IAppExtender Interface"),
 	pointer_default(unique)
 ]
-interface IAppExtender : IDispatch{
+interface IAppExtender : IDispatch {
 	[id(1), helpstring("method ProcessNotify")] HRESULT ProcessNotify([in]BSTR bstrXmlNotify);
 };
 
@@ -418,7 +418,7 @@ interface IHubbleDocTemplate : IDispatch {
 	helpstring("IHubble Interface"),
 	pointer_default(unique)
 ]
-interface IHubble : IDispatch{
+interface IHubble : IDispatch {
 	[propget, id(1)] HRESULT HostChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 	[propget, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [out, retval] VARIANT* pVal);
 	[propput, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [in] VARIANT newVal);
@@ -441,14 +441,14 @@ interface IHubble : IDispatch{
 	[id(0x00100)] HRESULT NavigateNode(IGrid* pGrid, BSTR bstrBrowserID, BSTR bstrXml);
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);
 	[id(0x00102)] HRESULT CreateOfficeDocument(BSTR bstrXml);
-	[id(0x00103), helpstring("method Create CLR Object")] HRESULT CreateCLRObj(BSTR bstrObjID,[out, retval]IDispatch** ppDisp);
+	[id(0x00103), helpstring("method Create CLR Object")] HRESULT CreateCLRObj(BSTR bstrObjID, [out, retval]IDispatch** ppDisp);
 	[id(0x00104)] HRESULT StartApplication(BSTR bstrAppID, BSTR bstrXml);
-	[id(0x00105), helpstring("method GetQuasar")] HRESULT GetQuasar(LONGLONG hHostWnd, [out,retval] IQuasar** ppQuasar);
+	[id(0x00105), helpstring("method GetQuasar")] HRESULT GetQuasar(LONGLONG hHostWnd, [out, retval] IQuasar** ppQuasar);
 	[id(0x00106)] HRESULT GetItemText(IGrid* pGrid, long nCtrlID, LONG nMaxLengeh, [out, retval] BSTR* bstrRet);
 	[id(0x00107)] HRESULT SetItemText(IGrid* pGrid, long nCtrlID, BSTR bstrText);
 	[id(0x00108)] HRESULT GetCLRControl(IDispatch* CtrlDisp, BSTR bstrName, [out, retval] IDispatch** ppRetDisp);
 	[id(0x00109), helpstring("method MessageBox")] HRESULT MessageBox(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, [out, retval] int* nRet);
-	[id(0x0010a), helpstring("method Encode")] HRESULT Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, [out,retval] BSTR* bstrRet);
+	[id(0x0010a), helpstring("method Encode")] HRESULT Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, [out, retval] BSTR* bstrRet);
 	[id(0x0010b), helpstring("method SetHostFocus")] HRESULT SetHostFocus(void);
 	[id(0x0010c)] HRESULT UpdateGrid(IGrid* pGrid);
 	[id(0x0010d), helpstring("method NewGUID")] HRESULT NewGUID([out, retval] BSTR* retVal);
@@ -483,7 +483,7 @@ interface IHubble : IDispatch{
 	[id(0x001003), helpstring("method HubbleOnLoad")] HRESULT HubbleOnLoad(IDispatch* RibbonControl);
 	[id(0x001004), helpstring("method HubbleGetItemCount")] HRESULT HubbleGetItemCount(IDispatch* RibbonControl, [out, retval] long* nCount);
 	[id(0x001005), helpstring("method HubbleGetItemLabel")] HRESULT HubbleGetItemLabel(IDispatch* RibbonControl, long nIndex, [out, retval] BSTR* bstrLabel);
-	[id(0x001006), helpstring("method HubbleGetItemID")] HRESULT HubbleGetItemID(IDispatch* RibbonControl, long nIndex, [out, retval]BSTR*  bstrID);
+	[id(0x001006), helpstring("method HubbleGetItemID")] HRESULT HubbleGetItemID(IDispatch* RibbonControl, long nIndex, [out, retval]BSTR* bstrID);
 };
 
 [
@@ -494,8 +494,8 @@ interface IHubble : IDispatch{
 	helpstring("IQuasar Interface"),
 	pointer_default(unique)
 ]
-interface IQuasar : IDispatch{
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Grid([in]VARIANT vIndex, [out, retval]IGrid **ppGrid);
+interface IQuasar : IDispatch {
+	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Grid([in]VARIANT vIndex, [out, retval]IGrid** ppGrid);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
 	[propget, id(1), helpstring("property HWND")] HRESULT HWND([out, retval] LONGLONG* pVal);
 	[propget, id(2), helpstring("property VisibleGrid")] HRESULT VisibleGrid([out, retval] IGrid** pVal);
@@ -505,7 +505,7 @@ interface IQuasar : IDispatch{
 	[propput, id(5)] HRESULT QuasarData(BSTR bstrKey, [in] VARIANT newVal);
 	[propget, id(6), hidden] HRESULT DesignerState([out, retval] VARIANT_BOOL* pVal);
 	[propput, id(6), hidden] HRESULT DesignerState([in] VARIANT_BOOL newVal);
-	[propget, id(7), helpstring("")] HRESULT Count([out, retval]long *pCount);
+	[propget, id(7), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(8), helpstring("property RootGrids")] HRESULT RootGrids([out, retval]IGridCollection** ppGridColletion);
 	[propget, id(9)] HRESULT QuasarXML([out, retval] BSTR* pVal);
 	[propget, id(10)] HRESULT TangramDoc([out, retval] IHubbleDoc** pVal);
@@ -529,9 +529,9 @@ interface IQuasar : IDispatch{
 	helpstring("IGridCollection Interface"),
 	pointer_default(unique)
 ]
-interface IGridCollection : IDispatch{
-	[propget, id(1), helpstring("")] HRESULT GridCount([out, retval]long *pCount);
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Item([in]long iIndex, [out, retval]IGrid **ppTopWindow);
+interface IGridCollection : IDispatch {
+	[propget, id(1), helpstring("")] HRESULT GridCount([out, retval]long* pCount);
+	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Item([in]long iIndex, [out, retval]IGrid** ppTopWindow);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
 };
 
@@ -542,10 +542,10 @@ interface IGridCollection : IDispatch{
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IGalaxyCluster : IDispatch{
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Quasar([in]VARIANT vIndex, [out, retval]IQuasar ** ppQuasar);
+interface IGalaxyCluster : IDispatch {
+	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Quasar([in]VARIANT vIndex, [out, retval]IQuasar** ppQuasar);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
-	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long *pCount);
+	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(2)] HRESULT xtml(BSTR strKey, [out, retval] BSTR* pVal);
 	[propput, id(2)] HRESULT xtml(BSTR strKey, [in] BSTR newVal);
 	[propget, id(3)] HRESULT Extender(BSTR bstrExtenderName, [out, retval] IDispatch** pVal);
@@ -584,9 +584,9 @@ interface IGalaxyCluster : IDispatch{
 	pointer_default(unique)
 ]
 interface IWorkBenchWindow : IDispatch {
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Ctrl([in]VARIANT vIndex, [out, retval]IEclipseCtrl **ppCtrl);
+	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Ctrl([in]VARIANT vIndex, [out, retval]IEclipseCtrl** ppCtrl);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
-	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long *pCount);
+	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(2)] HRESULT Handle([out, retval] LONGLONG* pVal);
 	[propget, id(3)] HRESULT HubbleCtrl(LONGLONG hWnd, [out, retval] IEclipseCtrl** pVal);
 	[propget, id(4)] HRESULT GalaxyCluster([out, retval] IGalaxyCluster** pVal);
@@ -636,7 +636,7 @@ interface IWebPage : IDispatch {
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IOfficeObject : IDispatch{
+interface IOfficeObject : IDispatch {
 	[id(1)] HRESULT Show(VARIANT_BOOL bShow);
 	[id(2)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
 	[id(3)] HRESULT UnloadHubble();
@@ -649,7 +649,7 @@ interface IOfficeObject : IDispatch{
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IHubbleCtrl : IDispatch{
+interface IHubbleCtrl : IDispatch {
 	[propget, id(1), helpstring("property HWND")] HRESULT HWND([out, retval] LONGLONG* pVal);
 	[propget, id(2)] HRESULT Hubble([out, retval] IHubble** pVal);
 	[propget, id(1000)] HRESULT tag([out, retval] VARIANT* pVal);
@@ -705,7 +705,7 @@ library Universe
 	{
 		properties:
 		methods:
-			[id(1), helpstring("method OpenComplete")] HRESULT OpenComplete(LONG hWnd, BSTR bstrUrl, IGrid* pRootGrid);
+			[id(1), helpstring("method OpenComplete")] HRESULT OpenComplete(LONG hWnd, BSTR bstrUrl, IGrid * pRootGrid);
 			[id(2)] HRESULT Close();
 			[id(3)] HRESULT HubbleEvent(IHubbleEventObj* NotifyObj);
 	};
@@ -747,7 +747,7 @@ library Universe
 	{
 	properties:
 	methods:
-		[id(1)] HRESULT PageLoaded(IDispatch* sender, BSTR url);
+		[id(1)] HRESULT PageLoaded(IDispatch * sender, BSTR url);
 		[id(2)] HRESULT NodeCreated(IGrid* pGridCreated);
 		[id(3)] HRESULT AddInCreated(IGrid* pRootGrid, IDispatch* pAddIn, BSTR bstrID, BSTR bstrAddInXml);
 		[id(4)] HRESULT BeforeExtendXml(BSTR bstrXml, long hWnd);
@@ -770,17 +770,17 @@ library Universe
 	{
 	properties:
 	methods:
-		[id(1)] HRESULT HubbleEvent(IHubbleEventObj* NotifyObj);
+		[id(1)] HRESULT HubbleEvent(IHubbleEventObj * NotifyObj);
 	};
 
 	[
-		uuid(19631222-1992-0612-1965-060120071001),		
+		uuid(19631222-1992-0612-1965-060120071001),
 		control
 	]
 	coclass HubbleCtrl
 	{
 		[default] interface IHubbleCtrl;
-		[default, source]  dispinterface 	_IHubbleObjEvents;
+		[default, source] dispinterface 	_IHubbleObjEvents;
 	};
 
 	[

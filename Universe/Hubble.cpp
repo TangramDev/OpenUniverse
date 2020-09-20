@@ -91,7 +91,7 @@ CHubble::CHubble()
 	m_lpszSplitterClass = nullptr;
 	m_pGalaxyCluster = nullptr;
 	m_pHubbleDocTemplateInfo = nullptr;
-	m_pActiveStar = nullptr;
+	m_pActiveGrid = nullptr;
 	m_pQuasar = nullptr;
 	m_pDesignWindowNode = nullptr;
 	m_pRootNodes = nullptr;
@@ -257,8 +257,8 @@ void CHubble::Init()
 		CString strExeName = m_strExeName;
 		strExeName.MakeLower();
 		m_strDesignerToolBarCaption = strExeName + _T(" - ") + m_strDesignerToolBarCaption;
-		m_hHostWnd = ::CreateWindowEx(WS_EX_PALETTEWINDOW, _T("Tangram Node Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theUniverse.m_hInstance, NULL);
-		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Tangram Node Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theUniverse.m_hInstance, NULL);
+		m_hHostWnd = ::CreateWindowEx(WS_EX_PALETTEWINDOW, _T("Hubble Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theUniverse.m_hInstance, NULL);
+		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theUniverse.m_hInstance, NULL);
 	}
 }
 
@@ -1316,8 +1316,8 @@ STDMETHODIMP CHubble::get_RootNodes(IGridCollection** pGridColletion)
 
 STDMETHODIMP CHubble::get_CurrentActiveGrid(IGrid** pVal)
 {
-	if (m_pActiveStar)
-		*pVal = m_pActiveStar;
+	if (m_pActiveGrid)
+		*pVal = m_pActiveGrid;
 
 	return S_OK;
 }
@@ -1364,8 +1364,8 @@ STDMETHODIMP CHubble::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 
 STDMETHODIMP CHubble::get_CreatingGrid(IGrid** pVal)
 {
-	if (m_pActiveStar)
-		*pVal = m_pActiveStar;
+	if (m_pActiveGrid)
+		*pVal = m_pActiveGrid;
 
 	return S_OK;
 }
@@ -1557,9 +1557,9 @@ STDMETHODIMP CHubble::get_RemoteHelperHWND(LONGLONG* pVal)
 {
 	if (::IsWindow(m_hHostWnd) == false)
 	{
-		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Tangram Node Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theUniverse.m_hInstance, NULL);
+		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Hubble Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theUniverse.m_hInstance, NULL);
 		if (::IsWindow(m_hHostWnd))
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Tangram Node Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theUniverse.m_hInstance, NULL);
+			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theUniverse.m_hInstance, NULL);
 	}
 	*pVal = (LONGLONG)m_hHostWnd;
 	return S_OK;
@@ -1995,24 +1995,24 @@ STDMETHODIMP CHubble::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR b
 
 STDMETHODIMP CHubble::UpdateGrid(IGrid* pGrid)
 {
-	CGrid* pWindowNode = (CGrid*)pGrid;
-	if (pWindowNode)
+	CGrid* pWndGrid = (CGrid*)pGrid;
+	if (pWndGrid)
 	{
-		if (pWindowNode->m_pWindow)
+		if (pWndGrid->m_pWindow)
 		{
-			if (pWindowNode->m_nActivePage > 0)
+			if (pWndGrid->m_nActivePage > 0)
 			{
 				CString strVal = _T("");
-				strVal.Format(_T("%d"), pWindowNode->m_nActivePage);
-				pWindowNode->m_pHostParse->put_attr(_T("activepage"), strVal);
+				strVal.Format(_T("%d"), pWndGrid->m_nActivePage);
+				pWndGrid->m_pHostParse->put_attr(_T("activepage"), strVal);
 			}
-			pWindowNode->m_pWindow->Save();
+			pWndGrid->m_pWindow->Save();
 		}
-		if (pWindowNode->m_nViewType == Grid)
+		if (pWndGrid->m_nViewType == Grid)
 		{
-			((CGridWnd*)pWindowNode->m_pHostWnd)->Save();
+			((CGridWnd*)pWndGrid->m_pHostWnd)->Save();
 		}
-		for (auto it2 : pWindowNode->m_vChildNodes)
+		for (auto it2 : pWndGrid->m_vChildNodes)
 		{
 			UpdateGrid(it2);
 		}
@@ -2550,8 +2550,8 @@ STDMETHODIMP CHubble::DeleteQuasar(IQuasar* pQuasar)
 	CQuasar* _pQuasar = (CQuasar*)pQuasar;
 	if (_pQuasar)
 	{
-		HWND hwnd = ::CreateWindowEx(NULL, _T("Tangram Node Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-		_pQuasar->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Tangram Node Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
+		HWND hwnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		_pQuasar->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
 		::DestroyWindow(hwnd);
 	}
 	return S_OK;
@@ -2580,17 +2580,17 @@ STDMETHODIMP CHubble::DeletePage(LONGLONG GalaxyClusterHandle)
 				{
 					for (auto it : pQuasar->m_mapGrid)
 					{
-						if (it.second != pQuasar->m_pWorkNode)
+						if (it.second != pQuasar->m_pWorkGrid)
 						{
-							::SetParent(it.second->m_pHostWnd->m_hWnd, pQuasar->m_pWorkNode->m_pHostWnd->m_hWnd);
+							::SetParent(it.second->m_pHostWnd->m_hWnd, pQuasar->m_pWorkGrid->m_pHostWnd->m_hWnd);
 						}
 					}
 				}
-				if (pQuasar->m_pWorkNode)
+				if (pQuasar->m_pWorkGrid)
 				{
-					::GetWindowRect(pQuasar->m_pWorkNode->m_pHostWnd->m_hWnd, &rc);
+					::GetWindowRect(pQuasar->m_pWorkGrid->m_pHostWnd->m_hWnd, &rc);
 					pQuasar->GetParent().ScreenToClient(&rc);
-					::DestroyWindow(pQuasar->m_pWorkNode->m_pHostWnd->m_hWnd);
+					::DestroyWindow(pQuasar->m_pWorkGrid->m_pHostWnd->m_hWnd);
 					::SetWindowPos(hwnd, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE);
 				}
 			}

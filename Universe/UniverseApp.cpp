@@ -108,7 +108,7 @@ BOOL CUniverse::InitInstance()
 
 		wndClass.lpfnWndProc = HubbleWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpszClassName = L"Tangram Node Class";
+		wndClass.lpszClassName = L"Hubble Grid Class";
 
 		RegisterClass(&wndClass);
 
@@ -629,14 +629,14 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					g_bRecturnPressed = true;
 				}
-				if (g_pHubble->m_pActiveStar)
+				if (g_pHubble->m_pActiveGrid)
 				{
-					if (g_pHubble->m_pActiveStar->m_nViewType != Grid)
+					if (g_pHubble->m_pActiveGrid->m_nViewType != Grid)
 					{
-						pWnd = (CGridHelperWnd*)g_pHubble->m_pActiveStar->m_pHostWnd;
+						pWnd = (CGridHelperWnd*)g_pHubble->m_pActiveGrid->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pHubble->m_pActiveStar = nullptr;
+							g_pHubble->m_pActiveGrid = nullptr;
 							if (lpMsg->wParam != VK_TAB)
 								break;
 							else if (g_pHubble->m_bWinFormActived == false)
@@ -666,7 +666,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					{
 						break;
 					}
-					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveStar && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						lpMsg->hwnd = NULL;
 						lpMsg->lParam = 0;
@@ -731,7 +731,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 						break;
 					}
-					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveStar && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						if (g_pHubble->m_pCLRProxy && g_pHubble->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
 						{
@@ -756,9 +756,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					}
 					break;
 				case VK_DELETE:
-					if (g_pHubble->m_pActiveStar)
+					if (g_pHubble->m_pActiveGrid)
 					{
-						if (g_pHubble->m_pActiveStar->m_nViewType == ActiveX)
+						if (g_pHubble->m_pActiveGrid->m_nViewType == ActiveX)
 						{
 							pWnd->PreTranslateMessage(lpMsg);
 							lpMsg->hwnd = NULL;
@@ -778,11 +778,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_pHubble->m_pHubbleDelegate->OnUniversePreTranslateMessage(lpMsg))
 							break;
 					}
-					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveStar)
+					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveGrid)
 					{
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pHubble->m_pActiveStar = nullptr;
+							g_pHubble->m_pActiveGrid = nullptr;
 							g_pHubble->m_pQuasar = nullptr;
 						}
 						else if (pWnd)
@@ -816,16 +816,16 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 0x5a://Ctrl+Z
 					if (::GetKeyState(VK_CONTROL) < 0)  // control pressed
 					{
-						if (g_pHubble->m_pActiveStar && pWnd && !::IsWindow(pWnd->m_hWnd))
+						if (g_pHubble->m_pActiveGrid && pWnd && !::IsWindow(pWnd->m_hWnd))
 						{
-							g_pHubble->m_pActiveStar = nullptr;
+							g_pHubble->m_pActiveGrid = nullptr;
 						}
-						if (g_pHubble->m_pActiveStar)
+						if (g_pHubble->m_pActiveGrid)
 						{
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
-							if ((g_pHubble->m_pActiveStar->m_nViewType == ActiveX || g_pHubble->m_pActiveStar->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
+							if ((g_pHubble->m_pActiveGrid->m_nViewType == ActiveX || g_pHubble->m_pActiveGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
 							{
 								if (pWnd)
 									pWnd->PreTranslateMessage(lpMsg);

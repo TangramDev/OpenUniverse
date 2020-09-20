@@ -371,7 +371,7 @@ namespace Cosmos
 		}
 
 		[BrowsableAttribute(false)]
-		property Grid^ RootStar
+		property Grid^ RootGrid
 		{
 			Grid^ get()
 			{
@@ -395,7 +395,7 @@ namespace Cosmos
 		}
 
 		[BrowsableAttribute(false)]
-		property Grid^ HostStar
+		property Grid^ HostGrid
 		{
 			Grid^ get()
 			{

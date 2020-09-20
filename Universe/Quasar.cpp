@@ -550,12 +550,12 @@ CQuasar::CQuasar()
 	m_bDesignerState = true;
 	m_hPWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
-	m_pWorkNode = nullptr;
+	m_pWorkGrid = nullptr;
 	m_pRootNodes = nullptr;
-	m_pBindingStar = nullptr;
+	m_pBindingGrid = nullptr;
 	m_pContainerNode = nullptr;
 	m_pQuasarInfo = nullptr;
-	m_pParentStar = nullptr;
+	m_pParentGrid = nullptr;
 	m_nQuasarType = NOQuasar;
 #ifdef _DEBUG
 	g_pHubble->m_nTangramFrame++;
@@ -613,22 +613,22 @@ void CQuasar::HostPosChanged()
 	if (::IsWindow(m_hWnd) == false)
 		return;
 	HWND hwnd = m_hWnd;
-	CGrid* pTopGrid = m_pWorkNode;
+	CGrid* pTopGrid = m_pWorkGrid;
 	CQuasar* _pQuasar = this;
 	if (!_pQuasar->m_bDesignerState)
 		while (pTopGrid && pTopGrid->m_pRootObj != pTopGrid)
 		{
 			_pQuasar = pTopGrid->m_pRootObj->m_pGridCommonData->m_pQuasar;
 			hwnd = _pQuasar->m_hWnd;
-			pTopGrid = _pQuasar->m_pWorkNode;
+			pTopGrid = _pQuasar->m_pWorkGrid;
 		}
 	if (::IsWindow(hwnd) == false)
 		return;
 	HWND hPWnd = ::GetParent(m_hWnd);
-	if (::IsWindow(_pQuasar->m_pWorkNode->m_pHostWnd->m_hWnd))
+	if (::IsWindow(_pQuasar->m_pWorkGrid->m_pHostWnd->m_hWnd))
 	{
 		RECT rt1;
-		_pQuasar->m_pWorkNode->m_pHostWnd->GetWindowRect(&rt1);
+		_pQuasar->m_pWorkGrid->m_pHostWnd->GetWindowRect(&rt1);
 
 		::ScreenToClient(hPWnd, (LPPOINT)&rt1);
 		::ScreenToClient(hPWnd, ((LPPOINT)&rt1) + 1);
@@ -649,23 +649,23 @@ void CQuasar::HostPosChanged()
 CTangramXmlParse* CQuasar::UpdateGrid()
 {
 	for (auto it : m_mapGrid) {
-		CGrid* pWindowNode = (CGrid*)it.second;
-		if (pWindowNode)
+		CGrid* pWndGrid = (CGrid*)it.second;
+		if (pWndGrid)
 		{
-			if (pWindowNode->m_pWindow) {
-				if (pWindowNode->m_nActivePage > 0) {
+			if (pWndGrid->m_pWindow) {
+				if (pWndGrid->m_nActivePage > 0) {
 					CString strVal = _T("");
-					strVal.Format(_T("%d"), pWindowNode->m_nActivePage);
-					pWindowNode->m_pHostParse->put_attr(_T("activepage"), strVal);
+					strVal.Format(_T("%d"), pWndGrid->m_nActivePage);
+					pWndGrid->m_pHostParse->put_attr(_T("activepage"), strVal);
 				}
-				pWindowNode->m_pWindow->Save();
+				pWndGrid->m_pWindow->Save();
 			}
-			if (pWindowNode->m_nViewType == Grid)
+			if (pWndGrid->m_nViewType == Grid)
 			{
-				((CGridWnd*)pWindowNode->m_pHostWnd)->Save();
+				((CGridWnd*)pWndGrid->m_pHostWnd)->Save();
 			}
 
-			for (auto it2 : pWindowNode->m_vChildNodes) {
+			for (auto it2 : pWndGrid->m_vChildNodes) {
 				g_pHubble->UpdateGrid(it2);
 			}
 		}
@@ -681,25 +681,25 @@ void CQuasar::UpdateDesignerTreeInfo()
 
 CGrid* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CString strFile)
 {
-	m_pWorkNode = new CComObject<CGrid>;
-	m_pWorkNode->m_pRootObj = m_pWorkNode;
+	m_pWorkGrid = new CComObject<CGrid>;
+	m_pWorkGrid->m_pRootObj = m_pWorkGrid;
 	CGridCommonData* pCommonData = new CGridCommonData();
-	m_pWorkNode->m_pGridCommonData = pCommonData;
+	m_pWorkGrid->m_pGridCommonData = pCommonData;
 	pCommonData->m_pQuasar = this;
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
 	pCommonData->m_pHubbleParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
-	m_pWorkNode->m_pHostParse = pParse->GetChild(TGM_NODE);
+	m_pWorkGrid->m_pHostParse = pParse->GetChild(TGM_NODE);
 
 	CreateGalaxyCluster();
-	m_mapGrid[strKey] = m_pWorkNode;
+	m_mapGrid[strKey] = m_pWorkGrid;
 
 	if (m_pGalaxyCluster)
-		m_pGalaxyCluster->Fire_OpenXmlComplete(strFile.AllocSysString(), (long)m_hHostWnd, m_pWorkNode);
-	m_pWorkNode->m_strKey = strKey;
-	m_pWorkNode->Fire_OpenComplete();
+		m_pGalaxyCluster->Fire_OpenXmlComplete(strFile.AllocSysString(), (long)m_hHostWnd, m_pWorkGrid);
+	m_pWorkGrid->m_strKey = strKey;
+	m_pWorkGrid->Fire_OpenComplete();
 
-	return m_pWorkNode;
+	return m_pWorkGrid;
 }
 
 BOOL CQuasar::CreateGalaxyCluster()
@@ -712,17 +712,17 @@ BOOL CQuasar::CreateGalaxyCluster()
 	else
 		hPWnd = ::GetParent(m_hWnd);
 
-	m_pWorkNode->m_strName.Trim();
-	m_pWorkNode->m_strName.MakeLower();
-	m_pWorkNode->InitWndGrid();
+	m_pWorkGrid->m_strName.Trim();
+	m_pWorkGrid->m_strName.MakeLower();
+	m_pWorkGrid->InitWndGrid();
 	HWND hWnd = NULL;
-	if (m_pWorkNode->m_pObjClsInfo) {
+	if (m_pWorkGrid->m_pObjClsInfo) {
 		RECT rc;
 		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
-		m_pWorkNode->m_pRootObj = m_pWorkNode;
+		m_pWorkGrid->m_pRootObj = m_pWorkGrid;
 		CCreateContext	m_Context;
-		m_Context.m_pNewViewClass = m_pWorkNode->m_pObjClsInfo;
-		CWnd* pWnd = (CWnd*)m_pWorkNode->m_pObjClsInfo->CreateObject();
+		m_Context.m_pNewViewClass = m_pWorkGrid->m_pObjClsInfo;
+		CWnd* pWnd = (CWnd*)m_pWorkGrid->m_pObjClsInfo->CreateObject();
 		GetWindowRect(&rc);
 		if (pParentWnd)
 			pParentWnd->ScreenToClient(&rc);
@@ -733,7 +733,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOACTIVATE);//|SWP_NOREDRAWSWP_NOZORDER);
 	}
 
-	CTangramXmlParse* pWndParse = m_pWorkNode->m_pGridCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
+	CTangramXmlParse* pWndParse = m_pWorkGrid->m_pGridCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
 	if (pWndParse)
 	{
 		CString strPlugID = _T("");
@@ -757,25 +757,25 @@ BOOL CQuasar::CreateGalaxyCluster()
 					hr = pDisp.CoCreateInstance(strPlugID.AllocSysString());
 					if (hr == S_OK)
 					{
-						m_pWorkNode->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
+						m_pWorkGrid->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
 						pDisp.p->AddRef();
 					}
 
-					m_pWorkNode->Fire_NodeAddInCreated(pDisp.p, bstrPlugIn, bstrXml);
+					m_pWorkGrid->Fire_NodeAddInCreated(pDisp.p, bstrPlugIn, bstrXml);
 				}
 				else //for .NET Component
 				{
 					hr = g_pHubble->CreateCLRObj(bstrPlugIn, &pDisp);
 					if (hr == S_OK)
 					{
-						m_pWorkNode->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
+						m_pWorkGrid->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
 
 						bstrPlugIn = strPlugID.AllocSysString();
-						m_pWorkNode->Fire_NodeAddInCreated(pDisp, bstrPlugIn, bstrXml);
+						m_pWorkGrid->Fire_NodeAddInCreated(pDisp, bstrPlugIn, bstrXml);
 					}
 				}
 				if (m_pGalaxyCluster && pDisp)
-					m_pGalaxyCluster->Fire_AddInCreated(m_pWorkNode, pDisp, bstrPlugIn, bstrXml);
+					m_pGalaxyCluster->Fire_AddInCreated(m_pWorkGrid, pDisp, bstrPlugIn, bstrXml);
 				::SysFreeString(bstrPlugIn);
 				bHavePlugin = true;
 			}
@@ -783,9 +783,9 @@ BOOL CQuasar::CreateGalaxyCluster()
 		}
 
 		if (bHavePlugin)
-			m_pWorkNode->Fire_NodeAddInsCreated();
+			m_pWorkGrid->Fire_NodeAddInsCreated();
 	}
-	m_pWorkNode->m_bCreated = true;
+	m_pWorkGrid->m_bCreated = true;
 	return true;
 }
 
@@ -837,9 +837,9 @@ STDMETHODIMP CQuasar::Detach(void)
 	if (::IsWindow(m_hWnd))
 	{
 		m_bDetached = true;
-		::ShowWindow(m_pWorkNode->m_pHostWnd->m_hWnd, SW_HIDE);
+		::ShowWindow(m_pWorkGrid->m_pHostWnd->m_hWnd, SW_HIDE);
 		RECT rect;
-		m_pWorkNode->m_pHostWnd->GetWindowRect(&rect);
+		m_pWorkGrid->m_pHostWnd->GetWindowRect(&rect);
 		m_hHostWnd = UnsubclassWindow(true);
 		if (::IsWindow(m_hHostWnd)) {
 			HWND m_hParentWnd = ::GetParent(m_hHostWnd);
@@ -857,7 +857,7 @@ STDMETHODIMP CQuasar::Attach(void)
 
 	if (!::IsWindow(m_hWnd)) {
 		m_bDetached = false;
-		::ShowWindow(m_pWorkNode->m_pHostWnd->m_hWnd, SW_SHOW);
+		::ShowWindow(m_pWorkGrid->m_pHostWnd->m_hWnd, SW_SHOW);
 		SubclassWindow(m_hHostWnd);
 	}
 	HostPosChanged();
@@ -872,12 +872,12 @@ STDMETHODIMP CQuasar::ModifyHost(LONGLONG hHostWnd)
 	{
 		return S_OK;
 	}
-	if (m_pWorkNode == nullptr)
+	if (m_pWorkGrid == nullptr)
 		return S_FALSE;
 	HWND hParent = (HWND)::GetParent(_hHostWnd);
 	CWindow m_Parent;
 	RECT rc;
-	m_pWorkNode->m_pHostWnd->GetWindowRect(&rc);
+	m_pWorkGrid->m_pHostWnd->GetWindowRect(&rc);
 	if (::IsWindow(m_hWnd)) {
 		HWND hTangramWnd = m_pGalaxyCluster->m_hWnd;
 		auto it = g_pHubble->m_mapWindowPage.find(hTangramWnd);
@@ -921,13 +921,13 @@ STDMETHODIMP CQuasar::ModifyHost(LONGLONG hHostWnd)
 	m_Parent.Detach();
 	for (auto it : m_mapGrid)
 	{
-		if (it.second != m_pWorkNode)
+		if (it.second != m_pWorkGrid)
 		{
-			::SetParent(it.second->m_pHostWnd->m_hWnd, m_pWorkNode->m_pHostWnd->m_hWnd);
+			::SetParent(it.second->m_pHostWnd->m_hWnd, m_pWorkGrid->m_pHostWnd->m_hWnd);
 		}
 	}
-	::SetParent(m_pWorkNode->m_pHostWnd->m_hWnd, ::GetParent(_hHostWnd));
-	::SetWindowPos(m_pWorkNode->m_pHostWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+	::SetParent(m_pWorkGrid->m_pHostWnd->m_hWnd, ::GetParent(_hHostWnd));
+	::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 	HostPosChanged();
 	return S_OK;
 }
@@ -943,8 +943,8 @@ STDMETHODIMP CQuasar::get_HWND(LONGLONG* pVal)
 
 STDMETHODIMP CQuasar::get_VisibleGrid(IGrid** pVal)
 {
-	if (m_pWorkNode)
-		*pVal = m_pWorkNode;
+	if (m_pWorkGrid)
+		*pVal = m_pWorkGrid;
 	return S_OK;
 }
 
@@ -988,9 +988,9 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 	CString strXml = _T("");
 	auto it = m_mapGrid.find(m_strCurrentKey);
 
-	CGrid* pOldNode = m_pWorkNode;
+	CGrid* pOldNode = m_pWorkGrid;
 	if (it != m_mapGrid.end())
-		m_pWorkNode = it->second;
+		m_pWorkGrid = it->second;
 	else
 	{
 		bool bAtTemplate = false;
@@ -1089,38 +1089,38 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 
 		Unlock();
 		m_pGalaxyCluster->Fire_BeforeOpenXml(CComBSTR(strXml), (long)m_hHostWnd);
-		m_pWorkNode = g_pHubble->ObserveEx((long)m_hHostWnd, _T(""), strXml);
-		if (m_pWorkNode == nullptr)
+		m_pWorkGrid = g_pHubble->ObserveEx((long)m_hHostWnd, _T(""), strXml);
+		if (m_pWorkGrid == nullptr)
 			return S_FALSE;
 		if (::GetWindowLong(::GetParent(m_hWnd), GWL_EXSTYLE) & WS_EX_MDICHILD)
 			m_bMDIChild = true;
 	}
-	m_pBindingStar = m_pWorkNode->m_pGridCommonData->m_pHostClientView ? m_pWorkNode->m_pGridCommonData->m_pHostClientView->m_pGrid : nullptr;
+	m_pBindingGrid = m_pWorkGrid->m_pGridCommonData->m_pHostClientView ? m_pWorkGrid->m_pGridCommonData->m_pHostClientView->m_pGrid : nullptr;
 
 	g_pHubble->m_strCurrentKey = _T("");
-	*ppRetGrid = (IGrid*)m_pWorkNode;
+	*ppRetGrid = (IGrid*)m_pWorkGrid;
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
-		it.second->OnOpenComplete(m_hHostWnd, strXml, m_pWorkNode);
+		it.second->OnOpenComplete(m_hHostWnd, strXml, m_pWorkGrid);
 	}
 	if (g_pHubble->m_pCosmosAppProxy)
-		g_pHubble->m_pCosmosAppProxy->OnOpenComplete(m_hHostWnd, strXml, m_pWorkNode);
+		g_pHubble->m_pCosmosAppProxy->OnOpenComplete(m_hHostWnd, strXml, m_pWorkGrid);
 
-	if (pOldNode && pOldNode != m_pWorkNode)
+	if (pOldNode && pOldNode != m_pWorkGrid)
 	{
 		RECT  rc;
 		if (::IsWindow(pOldNode->m_pHostWnd->m_hWnd))
 			::GetWindowRect(pOldNode->m_pHostWnd->m_hWnd, &rc);
-		CWnd* pWnd = m_pWorkNode->m_pHostWnd;
+		CWnd* pWnd = m_pWorkGrid->m_pHostWnd;
 		HWND hParent = ::GetParent(m_hWnd);
 
 		CWnd::FromHandle(hParent)->ScreenToClient(&rc);
 		for (auto it : m_mapGrid)
 		{
 			HWND hwnd = it.second->m_pHostWnd->m_hWnd;
-			BOOL bTop = (it.second == m_pWorkNode);
+			BOOL bTop = (it.second == m_pWorkGrid);
 			it.second->m_bTopObj = bTop;
-			::SetWindowLongPtr(hwnd, GWLP_ID, bTop ? m_pWorkNode->m_nID : 0);
+			::SetWindowLongPtr(hwnd, GWLP_ID, bTop ? m_pWorkGrid->m_nID : 0);
 			::SetParent(hwnd, bTop ? hParent : pWnd->m_hWnd);
 			if (!bTop)
 			{
@@ -1129,10 +1129,10 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 		}
 		::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 
-		if (m_pWorkNode != nullptr) {
-			if (m_pWorkNode->m_nViewType != Grid) {
-				if (m_pWorkNode->m_pHostWnd)
-					m_pWorkNode->m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
+		if (m_pWorkGrid != nullptr) {
+			if (m_pWorkGrid->m_nViewType != Grid) {
+				if (m_pWorkGrid->m_pHostWnd)
+					m_pWorkGrid->m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			}
 			HRESULT hr = S_OK;
 			int cConnections = g_pHubble->m_vec.GetSize();
@@ -1142,7 +1142,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 				avarParams[2].vt = VT_I4;
 				avarParams[1] = strXml.AllocSysString();
 				avarParams[1].vt = VT_BSTR;
-				avarParams[0] = (IGrid*)m_pWorkNode;
+				avarParams[0] = (IGrid*)m_pWorkGrid;
 				avarParams[0].vt = VT_DISPATCH;
 				DISPPARAMS params = { avarParams, NULL, 3, 0 };
 				for (int iConnection = 0; iConnection < cConnections; iConnection++) {
@@ -1160,21 +1160,21 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 
 		for (auto it : m_mapQuasarProxy)
 		{
-			it.second->OnExtend(m_pWorkNode, m_strCurrentKey, strXml);
+			it.second->OnExtend(m_pWorkGrid, m_strCurrentKey, strXml);
 		}
 	}
 
 	HostPosChanged();
 	//Add 20200218
-	if (m_pBindingStar)
+	if (m_pBindingGrid)
 	{
-		CGrid* _pHostNode = m_pBindingStar;
+		CGrid* _pHostNode = m_pBindingGrid;
 		if (_pHostNode->m_pHostQuasar)
 		{
 			CQuasar* _pQuasar = _pHostNode->m_pHostQuasar;
 			while (_pQuasar)
 			{
-				_pHostNode = _pQuasar->m_pBindingStar;
+				_pHostNode = _pQuasar->m_pBindingGrid;
 				if (_pHostNode && _pHostNode->m_pHostQuasar)
 					_pQuasar = _pHostNode->m_pHostQuasar;
 				else
@@ -1200,12 +1200,12 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 	}
 	//end Add 20200218
 
-	if (m_pWorkNode->m_pHostQuasar)
+	if (m_pWorkGrid->m_pHostQuasar)
 	{
 		IGrid* pGrid = nullptr;
-		m_pWorkNode->m_pHostQuasar->Observe(CComBSTR(m_pWorkNode->m_pHostQuasar->m_strCurrentKey), CComBSTR(""), &pGrid);
+		m_pWorkGrid->m_pHostQuasar->Observe(CComBSTR(m_pWorkGrid->m_pHostQuasar->m_strCurrentKey), CComBSTR(""), &pGrid);
 	}
-	for (auto it : m_pWorkNode->m_mapExtendNode)
+	for (auto it : m_pWorkGrid->m_mapExtendNode)
 	{
 		IGrid* pGrid = nullptr;
 		it.first->Observe(CComBSTR(it.second), CComBSTR(""), &pGrid);
@@ -1219,7 +1219,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 		IGrid* pGrid = nullptr;
 		CComPtr<IGridCollection> pCol;
 		long nCount = 0;
-		m_pWorkNode->GetGrids(CComBSTR(m_strHostWebBrowserNodeName), &pGrid, &pCol, &nCount);
+		m_pWorkGrid->GetGrids(CComBSTR(m_strHostWebBrowserNodeName), &pGrid, &pCol, &nCount);
 		if (pGrid)
 		{
 			CGrid* _pGrid = (CGrid*)pGrid;
@@ -1242,15 +1242,15 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 							break;
 					}
 				}
-				if (m_pHostWebBrowserWnd->m_pParentStar == nullptr)
+				if (m_pHostWebBrowserWnd->m_pParentGrid == nullptr)
 				{
-					m_pHostWebBrowserWnd->m_pParentStar = _pGrid;
-					m_pHostWebBrowserWnd->m_pParentStar->m_pWebBrowser = m_pHostWebBrowserWnd;
+					m_pHostWebBrowserWnd->m_pParentGrid = _pGrid;
+					m_pHostWebBrowserWnd->m_pParentGrid->m_pWebBrowser = m_pHostWebBrowserWnd;
 				}
-				else if (m_pHostWebBrowserWnd->m_pParentStar != _pGrid)//&&_pGrid->m_pHostWnd->IsWindowVisible())
+				else if (m_pHostWebBrowserWnd->m_pParentGrid != _pGrid)//&&_pGrid->m_pHostWnd->IsWindowVisible())
 				{
-					m_pHostWebBrowserWnd->m_pParentStar->m_pWebBrowser = nullptr;
-					m_pHostWebBrowserWnd->m_pParentStar = _pGrid;
+					m_pHostWebBrowserWnd->m_pParentGrid->m_pWebBrowser = nullptr;
+					m_pHostWebBrowserWnd->m_pParentGrid = _pGrid;
 					_pGrid->m_pWebBrowser = m_pHostWebBrowserWnd;
 					::SetParent(m_pHostWebBrowserWnd->m_hWnd, _pGrid->m_pHostWnd->m_hWnd);
 					::SetWindowPos(m_pHostWebBrowserWnd->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
@@ -1333,7 +1333,7 @@ LRESULT CQuasar::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		g_pHubble->m_hActiveWnd = 0;
 		g_pHubble->m_bWinFormActived = false;
-		g_pHubble->m_pActiveStar = nullptr;
+		g_pHubble->m_pActiveGrid = nullptr;
 		g_pHubble->m_pQuasar = nullptr;
 	}
 	//bug fix for winform:
@@ -1500,7 +1500,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 	WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 
-	if (m_pBindingStar)
+	if (m_pBindingGrid)
 	{
 		RECT rect = { 0,0,0,0 };
 		HWND hPWnd = ::GetParent(m_hWnd);
@@ -1511,15 +1511,15 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->cx = rect.right - rect.left;
 			lpwndpos->cy = rect.bottom - rect.top;
 		}
-		::SetWindowPos(m_pWorkNode->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED | SWP_NOREDRAW);// ); 
-		CGrid* _pHostNode = m_pBindingStar;
+		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED | SWP_NOREDRAW);// ); 
+		CGrid* _pHostNode = m_pBindingGrid;
 		if (_pHostNode->m_pHostQuasar)
 		{
 			CQuasar* _pQuasar = _pHostNode->m_pHostQuasar;
 			while (_pQuasar)
 			{
-				if (_pQuasar->m_pBindingStar)
-					_pHostNode = _pQuasar->m_pBindingStar;
+				if (_pQuasar->m_pBindingGrid)
+					_pHostNode = _pQuasar->m_pBindingGrid;
 				else
 					break;
 				if (_pHostNode && _pHostNode->m_pHostQuasar)
@@ -1553,7 +1553,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->flags &= ~SWP_HIDEWINDOW;
 			lpwndpos->flags |= SWP_SHOWWINDOW | SWP_NOZORDER;
 			//begin fix bug for .net Control or Window Form
-			CGrid* _pParentNode = m_pBindingStar->m_pParentObj;
+			CGrid* _pParentNode = m_pBindingGrid->m_pParentObj;
 			if (_pParentNode)
 			{
 				switch (_pParentNode->m_nViewType)
@@ -1591,7 +1591,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	}
 	else
 	{
-		::SetWindowPos(m_pWorkNode->m_pHostWnd->m_hWnd, HWND_TOP, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
+		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_TOP, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
 		lpwndpos->flags &= ~SWP_SHOWWINDOW;
 		lpwndpos->flags |= SWP_HIDEWINDOW;
 	}
@@ -1761,30 +1761,30 @@ STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 	strData += _T(">");
 	for (auto it : m_mapGrid)
 	{
-		CGrid* pWindowNode = (CGrid*)it.second;
-		if (pWindowNode)
+		CGrid* pWndGrid = (CGrid*)it.second;
+		if (pWndGrid)
 		{
-			if (pWindowNode->m_pWindow)
+			if (pWndGrid->m_pWindow)
 			{
-				if (pWindowNode->m_nActivePage > 0)
+				if (pWndGrid->m_nActivePage > 0)
 				{
 					CString strVal = _T("");
-					strVal.Format(_T("%d"), pWindowNode->m_nActivePage);
-					pWindowNode->m_pHostParse->put_attr(_T("activepage"), strVal);
+					strVal.Format(_T("%d"), pWndGrid->m_nActivePage);
+					pWndGrid->m_pHostParse->put_attr(_T("activepage"), strVal);
 				}
-				pWindowNode->m_pWindow->Save();
+				pWndGrid->m_pWindow->Save();
 			}
-			if (pWindowNode->m_nViewType == Grid)
+			if (pWndGrid->m_nViewType == Grid)
 			{
-				((CGridWnd*)pWindowNode->m_pHostWnd)->Save();
+				((CGridWnd*)pWndGrid->m_pHostWnd)->Save();
 			}
 
-			for (auto it2 : pWindowNode->m_vChildNodes)
+			for (auto it2 : pWndGrid->m_vChildNodes)
 			{
 				g_pHubble->UpdateGrid(it2);
 			}
 		}
-		CString strXml = pWindowNode->m_pGridCommonData->m_pHubbleParse->GetChild(TGM_CLUSTER)->xml();
+		CString strXml = pWndGrid->m_pGridCommonData->m_pHubbleParse->GetChild(TGM_CLUSTER)->xml();
 		CString s = _T("");
 		s.Format(_T("<%s>%s</%s>"), it.first, strXml, it.first);
 		CString strKey = it.second->m_strKey + _T("@") + this->m_strQuasarName + _T("@") + _T("tangramdefaultpage");

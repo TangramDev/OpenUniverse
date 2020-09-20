@@ -34,9 +34,9 @@ namespace Web {
 		m_strCurKey = _T("");
 		m_strCurXml = _T("");
 		m_strDocXml = _T("");
-		m_pParentStar = nullptr;
+		m_pParentGrid = nullptr;
 		m_strAppProxyID = _T("");
-		m_pBindStar = nullptr;
+		m_pBindGrid = nullptr;
 		m_pGalaxyCluster = nullptr;
 		m_pQuasar = nullptr;
 		m_hWebHostWnd = m_hExtendWnd = m_hChildWnd = NULL;
@@ -167,10 +167,10 @@ namespace Web {
 		{
 			if (m_pQuasar)
 			{
-				if (m_pQuasar->m_pWorkNode->m_pHubbleCloudSession)
+				if (m_pQuasar->m_pWorkGrid->m_pHubbleCloudSession)
 				{
-					m_pQuasar->m_pWorkNode->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
-					m_pQuasar->m_pWorkNode->m_pHubbleCloudSession->SendMessage();
+					m_pQuasar->m_pWorkGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
+					m_pQuasar->m_pWorkGrid->m_pHubbleCloudSession->SendMessage();
 				}
 			}
 		}
@@ -573,9 +573,9 @@ namespace Web {
 				{
 					m_strCurKey = strName;
 					m_hWebHostWnd = NULL;
-					if (m_pQuasar->m_pBindingStar)
+					if (m_pQuasar->m_pBindingGrid)
 					{
-						m_hWebHostWnd = m_pQuasar->m_pBindingStar->m_pHostWnd->m_hWnd;
+						m_hWebHostWnd = m_pQuasar->m_pBindingGrid->m_pHostWnd->m_hWnd;
 					}
 				}
 			}
@@ -720,7 +720,7 @@ namespace Web {
 		}
 		else if (strId.CompareNoCase(_T("TO_PARENTNODE")) == 0)
 		{
-			if (m_pParentStar == nullptr)
+			if (m_pParentGrid == nullptr)
 			{
 				HWND hWnd = ::GetParent(::GetParent(m_hWnd));
 				if (::IsWindow(hWnd))
@@ -728,23 +728,23 @@ namespace Web {
 					LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
 					HWND _hWnd = (HWND)hWnd;
 					if (lRes)
-						m_pParentStar = (CGrid*)lRes;
+						m_pParentGrid = (CGrid*)lRes;
 				}
 				else
 				{
-					m_pParentStar = m_pQuasar->m_pBindingStar->m_pParentObj;
-					if (m_pParentStar && m_pParentStar->m_nViewType == TabGrid)
+					m_pParentGrid = m_pQuasar->m_pBindingGrid->m_pParentObj;
+					if (m_pParentGrid && m_pParentGrid->m_nViewType == TabGrid)
 					{
 						//IGrid* _pGrid = nullptr;
-						//m_pQuasar->m_pBindingStar->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
+						//m_pQuasar->m_pBindingGrid->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
 						return;
 					}
 				}
 			}
-			if (m_pParentStar)
+			if (m_pParentGrid)
 			{
 				IGrid* _pGrid = nullptr;
-				m_pParentStar->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
+				m_pParentGrid->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
 			}
 			return;
 		}
@@ -753,7 +753,7 @@ namespace Web {
 			HWND hWnd = ::GetParent(::GetParent(m_hWnd));
 			if (::IsWindow(hWnd))
 			{
-				if (m_pBindStar == nullptr)
+				if (m_pBindGrid == nullptr)
 				{
 					CGrid* pGrid = nullptr;
 					LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
@@ -773,15 +773,15 @@ namespace Web {
 							pGrid->m_pRootObj->GetGrids(bstrName, &_pGrid, &pTangramNodeCollection, &nCount);
 							if (_pGrid)
 							{
-								m_pBindStar = (CGrid*)_pGrid;
+								m_pBindGrid = (CGrid*)_pGrid;
 							}
 						}
 					}
 				}
-				if (m_pBindStar)
+				if (m_pBindGrid)
 				{
 					IGrid* _pGrid = nullptr;
-					m_pBindStar->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
+					m_pBindGrid->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
 				}
 			}
 			return;
@@ -795,7 +795,7 @@ namespace Web {
 				if (m_pBindWinForm)
 				{
 					//IGrid* _pGrid = nullptr;
-					//m_pBindStar->Observe(CComBSTR(strMsgId), CComBSTR(strParam1), &_pGrid);
+					//m_pBindGrid->Observe(CComBSTR(strMsgId), CComBSTR(strParam1), &_pGrid);
 				}
 			}
 		}

@@ -2253,14 +2253,14 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 			}
 			else
 			{
-				Cosmos::Grid^ pWindowNode = (Cosmos::Grid^)theAppProxy._createObject<IGrid, Cosmos::Grid>((IGrid*)pvoid);
-				if (pWindowNode)
+				Cosmos::Grid^ pWndGrid = (Cosmos::Grid^)theAppProxy._createObject<IGrid, Cosmos::Grid>((IGrid*)pvoid);
+				if (pWndGrid)
 				{
 					int nType = m_Parse.attrInt(_T("Type"), 0);
 					switch (nType)
 					{
 					case 5:
-						if (pWindowNode != nullptr)
+						if (pWndGrid != nullptr)
 						{
 						}
 						break;
@@ -2270,7 +2270,7 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 						CString strMethod = m_Parse.attr(_T("Method"), _T(""));
 						if (strID != _T("") && strMethod != _T(""))
 						{
-							cli::array<Object^, 1>^ pObjs = { BSTR2STRING(strXml), pWindowNode };
+							cli::array<Object^, 1>^ pObjs = { BSTR2STRING(strXml), pWndGrid };
 							Cosmos::Hubble::ActiveMethod(BSTR2STRING(strID), BSTR2STRING(strMethod), pObjs);
 						}
 					}
@@ -2281,17 +2281,17 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 		}
 		//else if(pvoid!=nullptr)
 		//{
-		//	Grid^ pWindowNode = (Grid^)theAppProxy._createObject<IGrid, Grid>((IGrid*)pvoid);
-		//	if (pWindowNode != nullptr)
+		//	Grid^ pWndGrid = (Grid^)theAppProxy._createObject<IGrid, Grid>((IGrid*)pvoid);
+		//	if (pWndGrid != nullptr)
 		//	{
 		//		CString strToken = _T("@IPCMessage@");
 		//		int nPos = strXml.Find(strToken);
 		//		if (nPos != -1)
 		//		{
-		//			Universe::Hubble::Fire_OnHubbleIPCMessage(pWindowNode, BSTR2STRING(strXml));
+		//			Universe::Hubble::Fire_OnHubbleIPCMessage(pWndGrid, BSTR2STRING(strXml));
 		//		}
 		//		else
-		//			Universe::Hubble::Fire_OnHubbleLoadDocument2Viewport(pWindowNode, BSTR2STRING(strXml));
+		//			Universe::Hubble::Fire_OnHubbleLoadDocument2Viewport(pWndGrid, BSTR2STRING(strXml));
 		//	}
 		//}
 	}
@@ -2811,8 +2811,8 @@ void __stdcall  CGalaxyClusterEvent::OnTabChange(IGrid* sender, int nActivePage,
 {
 	Object^ pObj = m_pGalaxyCluster;
 	Cosmos::GalaxyCluster^ pGalaxyCluster = static_cast<Cosmos::GalaxyCluster^>(pObj);
-	Cosmos::Grid^ pWindowNode = (Cosmos::Grid^)theAppProxy._createObject<IGrid, Cosmos::Grid>(sender);
-	pGalaxyCluster->Fire_OnTabChange(pWindowNode, nActivePage, nOldPage);
+	Cosmos::Grid^ pWndGrid = (Cosmos::Grid^)theAppProxy._createObject<IGrid, Cosmos::Grid>(sender);
+	pGalaxyCluster->Fire_OnTabChange(pWndGrid, nActivePage, nOldPage);
 }
 
 void CGalaxyClusterEvent::OnInitialize(IDispatch* pHtmlWnd, BSTR bstrUrl)

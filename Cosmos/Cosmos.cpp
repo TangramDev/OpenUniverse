@@ -146,7 +146,7 @@ namespace Cosmos
         Object^ pObj = nullptr;
         if (m_pGrid)
         {
-            Grid^ pRootGrid = this->RootStar;
+            Grid^ pRootGrid = this->RootGrid;
             if (pRootGrid->m_pPlugInDic == nullptr)
             {
                 pRootGrid->m_pPlugInDic = gcnew Dictionary<String^, Object^>();

@@ -99,10 +99,10 @@ public:
 	CGrid*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster;
-	CGrid*											m_pParentStar;
-	CGrid*											m_pWorkNode;
+	CGrid*											m_pParentGrid;
+	CGrid*											m_pWorkGrid;
 	CGrid*											m_pContainerNode;
-	CGrid*											m_pBindingStar;
+	CGrid*											m_pBindingGrid;
 	CQuasar*										m_pSubQuasar;
 	QuasarInfo*										m_pQuasarInfo;
 	map<CString, CGrid*>							m_mapGrid;

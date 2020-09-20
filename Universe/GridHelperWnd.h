@@ -27,7 +27,7 @@ public:
 	CString					m_strXml;
 
 	CGrid*					m_pGrid;
-	CGrid*					m_pParentStar;
+	CGrid*					m_pParentGrid;
 
 	map<CString, HWND>		m_mapDockCtrl;
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
