@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.0								*
+*					Open Universe - version 0.9.5								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -25,7 +25,7 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-	CGrid* m_pHostNode;
+	CGrid* m_pHostGrid;
 	bool bInited;
 	int m_nHostWidth, m_nHostHeight;
 	int m_Vmin,m_Vmax,m_Hmin,m_Hmax;

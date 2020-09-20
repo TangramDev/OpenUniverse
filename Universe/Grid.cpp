@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.0								*
+*					Open Universe - version 0.9.5								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -601,15 +601,15 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 					if (pOldNode != this)
 					{
 						CGridWnd* pWnd = (CGridWnd*)pParent->m_pHostWnd;
-						pWnd->m_pHostNode = nullptr;
+						pWnd->m_pHostGrid = nullptr;
 						if (m_pParentObj == pParent)
-							pWnd->m_pHostNode = this;
+							pWnd->m_pHostGrid = this;
 					}
 				}
 				if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 				{
 					CGridWnd* pWnd = (CGridWnd*)m_pParentObj->m_pHostWnd;
-					pWnd->m_pHostNode = this;
+					pWnd->m_pHostGrid = this;
 				}
 				pOldNode->m_strID = _T("");
 				if (pOldNode->m_pRootObj == g_pHubble->m_pDesignWindowNode->m_pRootObj)
@@ -874,9 +874,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 				if (pViewFactoryDisp)
 				{
-					pViewFactoryDisp->m_pCreatingNode = this;
 					hWnd = pViewFactoryDisp->Create(pParentWnd ? pParentWnd->m_hWnd : 0, this);
-					pViewFactoryDisp->m_pCreatingNode = nullptr;
 					if (g_pHubble->m_pCreatingWindow)
 					{
 						m_pWindow = g_pHubble->m_pCreatingWindow;

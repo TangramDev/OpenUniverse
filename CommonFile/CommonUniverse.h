@@ -271,9 +271,9 @@ namespace CommonUniverse {
 	{
 		HWND					m_hWnd;
 		CString					m_strName;
-		IGalaxyCluster* m_pGalaxyCluster;
-		IGrid* m_pGrid;
-		IDispatch* m_pCtrlDisp;
+		IGalaxyCluster*			m_pGalaxyCluster;
+		IGrid*					m_pGrid;
+		IDispatch*				m_pCtrlDisp;
 	}CtrlInfo;
 
 	typedef struct IPCSession
@@ -342,8 +342,7 @@ namespace CommonUniverse {
 
 		CString					m_strProviderID = _T("");
 		CString					m_strContainer = _T("");
-		IHubble* m_pHubble = nullptr;
-		IGrid* m_pCreatingNode = nullptr;
+		IHubble*				m_pHubble = nullptr;
 		map<CString, CString>	m_mapInnerObjStyle;
 		map<CString, void*>		m_mapInnerObjInfo;
 

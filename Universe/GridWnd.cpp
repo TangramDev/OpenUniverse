@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.0								*
+*					Open Universe - version 0.9.5								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -93,7 +93,7 @@ CGridWnd::CGridWnd()
 	m_bCreated = false;
 	m_bNeedRefreh = false;
 	m_pGrid = nullptr;
-	m_pHostNode = nullptr;
+	m_pHostGrid = nullptr;
 	m_nHostWidth = m_nHostHeight = 0;
 	m_nMasterRow = m_nMasterCol = m_nNeedRefreshCol = -1;
 	m_Vmin = m_Vmax = m_Hmin = m_Hmax = 0;
@@ -165,7 +165,7 @@ void CGridWnd::TrackRowSize(int y, int row)
 		if (GetStyle() & SPLS_DYNAMIC_SPLIT)
 			DeleteRow(row + 1);
 	}
-	if (m_pHostNode && row != m_nRows - 1)
+	if (m_pHostGrid && row != m_nRows - 1)
 	{
 		ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
 
@@ -214,7 +214,7 @@ void CGridWnd::TrackColumnSize(int x, int col)
 		if (GetStyle() & SPLS_DYNAMIC_SPLIT)
 			DeleteColumn(col + 1);
 	}
-	if (m_pHostNode && col != m_nCols - 1)
+	if (m_pHostGrid && col != m_nCols - 1)
 	{
 		ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
 
@@ -697,8 +697,8 @@ void CGridWnd::_RecalcLayout()
 	GetInsideRect(rectInside);
 
 	// layout columns (restrict to possible sizes)
-	TangramLayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap, m_pHostNode, true);
-	TangramLayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap, m_pHostNode, false);
+	TangramLayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap, m_pHostGrid, true);
+	TangramLayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap, m_pHostGrid, false);
 
 	// give the hint for the maximum number of HWNDs
 	AFX_SIZEPARENTPARAMS layout;
@@ -875,7 +875,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				}
 				if (m_nMasterRow == i && m_nMasterCol == j)
 				{
-					m_pHostNode = pObj;
+					m_pHostGrid = pObj;
 				}
 				nIndex++;
 				if (nIndex < nSize)
@@ -912,8 +912,8 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 			}
 		}
 		if (pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
-			m_pHostNode = pHostNode;
-		//if (m_pHostNode == nullptr)
+			m_pHostGrid = pHostNode;
+		//if (m_pHostGrid == nullptr)
 		//{
 		//	if (m_nMasterCol != -1 && m_nMasterRow != -1)
 		//	{
@@ -921,7 +921,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		//		m_pGrid->GetGrid(m_nMasterRow, m_nMasterCol, &pGrid);
 		//		if (pGrid)
 		//		{
-		//			m_pHostNode = (CGrid*)pGrid;
+		//			m_pHostGrid = (CGrid*)pGrid;
 		//		}
 		//	}
 		//}
