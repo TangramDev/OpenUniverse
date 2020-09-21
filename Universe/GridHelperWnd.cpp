@@ -279,7 +279,7 @@ BOOL CGridHelperWnd::OnEraseBkgnd(CDC* pDC)
 			pDC->SetTextColor(RGB(255, 0, 255));
 			CString str = g_pHubble->GetDesignerInfo(_T("SelectedText"));
 			if (str == _T(""))
-				strText = _T("\n\n  ") + g_pHubble->m_strNodeSelectedText;
+				strText = _T("\n\n  ") + g_pHubble->m_strGridSelectedText;
 			else
 				strText = _T("\n\n  ") + str;
 		}

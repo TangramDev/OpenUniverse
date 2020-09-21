@@ -1997,7 +1997,7 @@ HRESULT CGrid::Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, B
 
 	for (auto it : m_mapWndGridProxy)
 	{
-		it.second->OnNodeAddInCreated(pAddIndisp, OLE2T(bstrAddInID), OLE2T(bstrAddInXml));
+		it.second->OnGridAddInCreated(pAddIndisp, OLE2T(bstrAddInID), OLE2T(bstrAddInXml));
 	}
 
 	return hr;
@@ -2027,7 +2027,7 @@ HRESULT CGrid::Fire_NodeAddInsCreated()
 	}
 	for (auto it : m_mapWndGridProxy)
 	{
-		it.second->OnNodeAddInsCreated();
+		it.second->OnGridAddInsCreated();
 	}
 	return hr;
 }

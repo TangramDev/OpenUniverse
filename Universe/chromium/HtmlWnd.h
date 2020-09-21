@@ -76,7 +76,7 @@ namespace Web
 
 	private:
 		CString m_strDocXml;
-		IGrid* GetParentNode() { return (IGrid*)m_pParentGrid; }
+		IGrid* GetParentGrid() { return (IGrid*)m_pParentGrid; }
 		IQuasar* GetQuasar() { return (IQuasar*)m_pQuasar; }
 		CString FindToken(CString pszContent, CString pszDelimiter, int& nStart);
 		void LoadDocument2Viewport(CString strName, CString strXML);

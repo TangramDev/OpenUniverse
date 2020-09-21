@@ -69,17 +69,17 @@ namespace Cosmos
 		CBrowserImpl* m_pChromeBrowserProxy;
 
 		delegate void NodeAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
-		event NodeAddInCreated^ OnNodeAddInCreated;
+		event NodeAddInCreated^ OnGridAddInCreated;
 		void Fire_NodeAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml)
 		{
-			OnNodeAddInCreated(sender, pAddIndisp, bstrAddInID, bstrAddInXml);
+			OnGridAddInCreated(sender, pAddIndisp, bstrAddInID, bstrAddInXml);
 		}
 
 		delegate void NodeAddInsCreated(Grid^ sender);
-		event NodeAddInsCreated^ OnNodeAddInsCreated;
+		event NodeAddInsCreated^ OnGridAddInsCreated;
 		void Fire_NodeAddInsCreated(Grid^ sender)
 		{
-			OnNodeAddInsCreated(sender);
+			OnGridAddInsCreated(sender);
 		}
 
 		// A notification has been created for all nodes in the current layout.

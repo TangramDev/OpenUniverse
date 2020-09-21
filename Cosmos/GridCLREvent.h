@@ -30,10 +30,10 @@ public:
 	gcroot<Cosmos::Grid^>	m_pGrid;
 
 	void OnDestroy();
-	void OnNodeAddInsCreated();
+	void OnGridAddInsCreated();
 	void OnOpenComplete(IGrid* pGrid);
 	void OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
-	void OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	void OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	void OnTabChange(int nActivePage, int nOldPage);
 	void OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
 };

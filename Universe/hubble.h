@@ -277,7 +277,7 @@ private:
 
 	void HubbleLoad();
 	bool CheckUrl(CString&   url);
-	void AttachNode(void* pGridEvents);
+	void AttachGrid(void* pGridEvents);
 	CString Encode(CString strSRC, BOOL bEnCode);
 	CString GetNewLayoutNodeName(BSTR strCnnID, IGrid* pDesignNode);
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);

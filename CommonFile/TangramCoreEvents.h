@@ -60,16 +60,16 @@ public:
 
 	virtual void __stdcall  OnDestroy(){}
 	virtual void __stdcall  OnOpenComplete(){}
-	virtual void __stdcall  OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml){}
-	virtual void __stdcall  OnNodeAddInsCreated(){}
+	virtual void __stdcall  OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml){}
+	virtual void __stdcall  OnGridAddInsCreated(){}
 	virtual void __stdcall  OnTabChange(int nActivePage, int nOldPage){}
 	virtual void __stdcall  OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra) {};
 
 	BEGIN_SINK_MAP(CGridEvents)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000001, OnOpenComplete, &NodeOpenComplete)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000002, OnDestroy, &Destroy)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000003, OnNodeAddInCreated, &NodeAddInCreated)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000004, OnNodeAddInsCreated, &NodeAddInsCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000003, OnGridAddInCreated, &NodeAddInCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000004, OnGridAddInsCreated, &NodeAddInsCreated)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000007, OnTabChange, &TabChange2)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000008, OnIPCMessageReceived, &MessageHandle)
 	END_SINK_MAP()

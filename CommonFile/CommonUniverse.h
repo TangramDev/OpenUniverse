@@ -203,7 +203,7 @@ namespace CommonUniverse {
 		IDispatch*		m_pParentDisp;
 		CString			m_strCtrlName;
 		CString			m_strQuasarName;
-		CString			m_strNodeXml;
+		CString			m_strGridXml;
 		CString			m_strParentCtrlName;
 	}QuasarInfo;
 
@@ -371,8 +371,8 @@ namespace CommonUniverse {
 
 		virtual void OnOpenComplete() {}
 		virtual void OnDestroy() {}
-		virtual void OnNodeAddInCreated(IDispatch* pAddIndisp, CString bstrAddInID, CString bstrAddInXml) {}
-		virtual void OnNodeAddInsCreated() {}
+		virtual void OnGridAddInCreated(IDispatch* pAddIndisp, CString bstrAddInID, CString bstrAddInXml) {}
+		virtual void OnGridAddInsCreated() {}
 		virtual void OnNodeDocumentComplete(IDispatch* ExtenderDisp, CString bstrURL) {}
 		virtual void OnControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {}
 		virtual void OnTabChange(LONG ActivePage, LONG OldPage) {}
@@ -388,7 +388,7 @@ namespace CommonUniverse {
 		bool	m_bAutoDelete;
 
 		virtual void OnGalaxyClusterLoaded(IDispatch* sender, CString url) {}
-		virtual void OnNodeCreated(IGrid* pGridCreated) {}
+		virtual void OnGridCreated(IGrid* pGridCreated) {}
 		virtual void OnAddInCreated(IGrid* pRootGrid, IDispatch* pAddIn, CString bstrID, CString bstrAddInXml) {}
 		virtual void OnBeforeOpenXml(CString bstrXml, HWND hWnd) {}
 		virtual void OnOpenXmlComplete(CString bstrXml, HWND hWnd, IGrid* pRetRootNode) {}
@@ -527,8 +527,8 @@ namespace CommonUniverse {
 		CString								m_strTangramToolWndXML;
 		CString								m_strCurrentXtmlFilePath;
 
-		IQuasar* m_pQuasar;
-		CHubbleImpl* m_pProxy;
+		IQuasar*							m_pQuasar;
+		CHubbleImpl*						m_pProxy;
 		map<HWND, IQuasar*>					m_mapWinFormQuasar;
 
 		IQuasar* m_pToolBoxFrame;
@@ -567,7 +567,7 @@ namespace CommonUniverse {
 		virtual void HubbleAction(BSTR bstrXml, void*) = 0;
 		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) = 0;
 		virtual void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal) = 0;
-		virtual void SelectNode(IGrid*) {}
+		virtual void SelectGrid(IGrid*) {}
 		virtual void SelectObj(IDispatch*) {}
 		virtual void ReleaseHubbleObj(IDispatch*) {}
 		virtual void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {}
@@ -663,7 +663,7 @@ namespace CommonUniverse {
 		CString									m_strAppControlsInfoPath;
 		CString									m_strAppFormsTemplatePath;
 		CString									m_strAppCurrentFormTemplatePath;
-		CString									m_strNodeSelectedText;
+		CString									m_strGridSelectedText;
 		CString									m_strDesignerTip1;
 		CString									m_strDesignerTip2;
 		CString									m_strDesignerXml;
@@ -745,7 +745,7 @@ namespace CommonUniverse {
 		virtual HICON GetAppIcon(int nIndex) = 0;
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) = 0;
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) = 0;
-		virtual void AttachNode(void* pGridEvents) {}
+		virtual void AttachGrid(void* pGridEvents) {}
 		virtual void HubbleInit() {}
 		virtual IHubbleDoc* ConnectHubbleDoc(IHubbleAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hFrame, LPCTSTR strDocType) { return nullptr; }
 		virtual CString GetNewLayoutNodeName(BSTR strCnnID, IGrid* pDesignNode) { return _T(""); }
@@ -1023,7 +1023,7 @@ namespace CommonUniverse {
 		virtual void SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) = 0;
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) = 0;
 		virtual void OnWinFormCreated(HWND) = 0;
-		virtual IGrid* GetParentNode() = 0;
+		virtual IGrid* GetParentGrid() = 0;
 		virtual IQuasar* GetQuasar() = 0;
 		virtual void OnCloudMsgReceived(CSession*) = 0;
 	};

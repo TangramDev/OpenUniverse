@@ -953,7 +953,7 @@ HRESULT CGalaxyCluster::Fire_NodeCreated(IGrid * pGridCreated)
 
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
-		it.second->OnNodeCreated(pGridCreated);
+		it.second->OnGridCreated(pGridCreated);
 	}
 	return hr;
 }

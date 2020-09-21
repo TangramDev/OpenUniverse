@@ -394,7 +394,7 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 							name = strType;
 						BSTR strName = STRING2BSTR(name->ToLower());
 						QuasarInfo* pInfo = new QuasarInfo;
-						pInfo->m_strNodeXml = _T("");
+						pInfo->m_strGridXml = _T("");
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 						pInfo->m_pDisp = nullptr;
 						pInfo->m_pParentDisp = nullptr;
@@ -785,7 +785,7 @@ Object^ CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, C
 									{
 										QuasarInfo* pInfo = new QuasarInfo;
 										pInfo->m_pDisp = nullptr;
-										pInfo->m_strNodeXml = pChildParse2->xml();
+										pInfo->m_strGridXml = pChildParse2->xml();
 										pInfo->m_pParentDisp = nullptr;
 										pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 										m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
@@ -798,7 +798,7 @@ Object^ CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, C
 								{
 									QuasarInfo* pInfo = new QuasarInfo;
 									pInfo->m_pDisp = nullptr;
-									pInfo->m_strNodeXml = _T("");
+									pInfo->m_strGridXml = _T("");
 									pInfo->m_pParentDisp = nullptr;
 									pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 									m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
@@ -857,7 +857,7 @@ Object^ CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, C
 						name = strType;
 					BSTR strName = STRING2BSTR(name->ToLower());//OK!
 					QuasarInfo* pInfo = new QuasarInfo;
-					pInfo->m_strNodeXml = _T("");
+					pInfo->m_strGridXml = _T("");
 					pInfo->m_pDisp = nullptr;
 					pInfo->m_pParentDisp = nullptr;
 					pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
@@ -955,7 +955,7 @@ Object^ CCosmosProxy::InitTangramNode(IGrid* _pGrid, Control^ pCtrl, bool bSave,
 							pInfo->m_pParentDisp = _pGrid;
 							pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 							m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
-							pInfo->m_strNodeXml = pChildParse2->xml();
+							pInfo->m_strGridXml = pChildParse2->xml();
 							pInfo->m_strCtrlName = _strName;
 							pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
 							IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
@@ -1005,7 +1005,7 @@ Object^ CCosmosProxy::InitTangramNode(IGrid* _pGrid, Control^ pCtrl, bool bSave,
 						pInfo->m_pParentDisp = _pGrid;
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 						m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
-						pInfo->m_strNodeXml = _T("");
+						pInfo->m_strGridXml = _T("");
 						pInfo->m_strCtrlName = pChild->Name->ToLower();
 						pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
 						IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
@@ -1616,7 +1616,7 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 	return nullptr;
 }
 //
-//void CCosmosProxy::SelectNode(IGrid* pGrid)
+//void CCosmosProxy::SelectGrid(IGrid* pGrid)
 //{
 //}
 
@@ -2359,10 +2359,10 @@ void CCosmosNodeEvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 		m_pGridCLREvent->OnDocumentComplete(pDocdisp, bstrUrl);
 }
 
-void CCosmosNodeEvent::OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+void CCosmosNodeEvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	if (m_pGrid != nullptr)
-		m_pGridCLREvent->OnNodeAddInCreated(pAddIndisp, bstrAddInID, bstrAddInXml);
+		m_pGridCLREvent->OnGridAddInCreated(pAddIndisp, bstrAddInID, bstrAddInXml);
 }
 
 bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)

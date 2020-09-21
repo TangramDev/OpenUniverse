@@ -146,7 +146,7 @@ private:
 
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);
-	//void SelectNode(IGrid* );
+	//void SelectGrid(IGrid* );
 	Object^ InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	Object^ InitTangramNode(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue);

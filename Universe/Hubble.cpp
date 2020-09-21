@@ -111,7 +111,7 @@ CHubble::CHubble()
 	m_strConfigFile = _T("");
 	m_strConfigDataFile = _T("");
 	m_strAppCommonDocPath = _T("");
-	m_strNodeSelectedText = _T("");
+	m_strGridSelectedText = _T("");
 	m_strTemplatePath = _T("");
 	m_strDesignerTip1 = _T("");
 	m_strDesignerTip2 = _T("");
@@ -228,9 +228,9 @@ void CHubble::Init()
 		HWND hWnd = ::CreateWindowEx(WS_EX_NOACTIVATE, _T("Tangram Message Window Class"), _T(""), WS_VISIBLE | WS_POPUP, 0, 0, 0, 0, nullptr, nullptr, theUniverse.m_hInstance, nullptr);
 	}
 
-	if (m_strNodeSelectedText == _T(""))
+	if (m_strGridSelectedText == _T(""))
 	{
-		m_strNodeSelectedText = m_strNodeSelectedText + _T("  ----Please Select an Object Type From Designer ToolBox for this Tangram View----") +
+		m_strGridSelectedText = m_strGridSelectedText + _T("  ----Please Select an Object Type From Designer ToolBox for this Tangram View----") +
 			_T("\n  you can use Tangram XML to various applications such as ") +
 			_T("\n  .net framework application, MFC Application, Eclipcse RCP, ") +
 			_T("\n  Office Application etc.") +
@@ -820,7 +820,7 @@ void CHubble::CreateCommonDesignerToolBar()
 {
 }
 
-void CHubble::AttachNode(void* pGridEvents)
+void CHubble::AttachGrid(void* pGridEvents)
 {
 	CGridEvents* m_pCLREventConnector = (CGridEvents*)pGridEvents;
 	CGrid* pGrid = (CGrid*)m_pCLREventConnector->m_pGrid;
@@ -884,7 +884,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hFrame, CString _strFrameName, IGala
 	{
 		CQuasar* _pQuasar = (CQuasar*)pQuasar;
 		_pQuasar->m_pQuasarInfo = pInfo;
-		_pQuasar->m_strCurrentXml = pInfo->m_strNodeXml;
+		_pQuasar->m_strCurrentXml = pInfo->m_strGridXml;
 		CComQIPtr<IGrid> pParentNode(pInfo->m_pParentDisp);
 		IGrid* pGrid = nullptr;
 		CString str = _T("");

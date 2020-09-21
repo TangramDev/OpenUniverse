@@ -34,7 +34,7 @@ namespace Cosmos
         m_pGridEvent->m_pGridCLREvent->m_pGrid = this;
         HRESULT hr = m_pGridEvent->DispEventAdvise(pGrid);
         if (theApp.m_pHubbleImpl)
-            theApp.m_pHubbleImpl->AttachNode(m_pGridEvent);
+            theApp.m_pHubbleImpl->AttachGrid(m_pGridEvent);
         m_pGrid = pGrid;
         LONGLONG nValue = (LONGLONG)pGrid;
         theAppProxy._insertObject(nValue, this);

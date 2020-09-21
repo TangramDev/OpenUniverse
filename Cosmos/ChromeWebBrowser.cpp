@@ -134,7 +134,7 @@ namespace Cosmos
 	
 	Grid^ WebPage::ParentGrid::get()
 	{
-		return theAppProxy._createObject<IGrid, Grid>(m_pProxy->GetParentNode());
+		return theAppProxy._createObject<IGrid, Grid>(m_pProxy->GetParentGrid());
 	}
 	
 	Quasar^ WebPage::HostQuasar::get()

@@ -84,7 +84,7 @@ private:
 	void __stdcall  OnOpenComplete();
 	void __stdcall  OnDestroy();
 	void __stdcall  OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
-	void __stdcall  OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	void __stdcall  OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	void __stdcall  OnTabChange(int nActivePage, int nOldPage);
 	void __stdcall  OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
 };

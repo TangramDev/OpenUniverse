@@ -50,13 +50,13 @@ void CGridCLREvent::OnDestroy()
 	m_pGrid->Fire_OnDestroy(m_pGrid);
 }
 
-void CGridCLREvent::OnNodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+void CGridCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	Object^ pAddinObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pAddIndisp)));
 	m_pGrid->Fire_NodeAddInCreated(m_pGrid, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
 }
 
-void CGridCLREvent::OnNodeAddInsCreated()
+void CGridCLREvent::OnGridAddInsCreated()
 {
 	m_pGrid->Fire_NodeAddInsCreated(m_pGrid);
 }
