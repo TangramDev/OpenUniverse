@@ -58,7 +58,7 @@ namespace Cosmos
 		IWebPage*			m_pWebPage;
 		CWebPageImpl*		m_pProxy;
 
-		WebPage(IWebPage* m_pChromeWebPage);
+		WebPage(IWebPage* m_pWebPage);
 
 		property IntPtr Handle
 		{

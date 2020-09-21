@@ -144,7 +144,7 @@
 #define TGM_STYLE				_T("style")
 #define TGM_ACTIVE_PAGE			_T("activepage")
 #define TGM_TAG					_T("tag")
-#define TGM_CLUSTER				_T("cluster")
+#define TGM_CLUSTER				_T("layout")
 #define TGM_NODE				_T("grid")
 #define TGM_NUCLEUS				_T("nucleus")
 

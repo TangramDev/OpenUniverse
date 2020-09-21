@@ -121,7 +121,7 @@
             <module libname="HubbleBrowser.exe" objname="HubbleBrowser.WebDelegate" functionname="Init"></module>
         </modules>
         <ntp>
-            <cluster>
+            <layout>
                 <grid id='grid' rows='1' cols='2' height='250,' width='350,350,' caption="Web Runtime for Application" borderwidth='0' splitterwidth='6'>
                     <grid gridtype="nucleus"></grid>
                     <grid objid="HubbleBrowser.ntpctrl,HubbleBrowser"></grid>
@@ -134,16 +134,16 @@
                     </grid>
                     <grid caption="Application" objid="HubbleBrowser.ntpctrl,HubbleBrowser"></grid>
                 </grid>-->
-            </cluster>
+            </layout>
         </ntp>
         <urls><url url="https://www.tangram.dev"></url></urls>
     </application>
-    <!-- Determine the main cluster of the application, "HubbleBrowser.MDIParent1,HubbleBrowser" represents
+    <!-- Determine the main layout of the application, "HubbleBrowser.MDIParent1,HubbleBrowser" represents
         the HubbleBrowser.MDIParent1 class in the current executable program. -->
     <mainWindow objid="" caption="My Windows Forms App" width="1200" height="800">
         <mdiclient id="mainworkclient">
             <default>
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
                         <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <grid gridtype="nucleus"></grid>
@@ -151,12 +151,12 @@
                         </grid>
                         <grid caption="Web Runtime for Application" url="host"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </default>
         </mdiclient>
         <mainclient id="mainworkclient">
             <default>
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
                         <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <grid gridtype="nucleus"></grid>
@@ -164,12 +164,12 @@
                         </grid>
                         <grid caption="Web Runtime for Application" url="host"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </default>
         </mainclient>
         <panel1 id="mainworkclient">
             <default>
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="39" activepage="1">
                         <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <grid gridtype="nucleus"></grid>
@@ -177,7 +177,7 @@
                         </grid>
                         <grid caption="Web Runtime for Application" url="host"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </default>
         </panel1>
     </mainWindow>
@@ -187,47 +187,47 @@
                 <treeView1_tag name="content"></treeView1_tag>
                 <node1 treenode="true" text="New Web New Application World"></node1>
                 <node1_tag name="content1"></node1_tag>
-                <node2 treenode="true" text="Grid grid cluster"></node2>
+                <node2 treenode="true" text="Grid grid layout"></node2>
                 <node2_tag name="content2"></node2_tag>
-                <node3 treenode="true" text="Nested Grid cluster"></node3>
+                <node3 treenode="true" text="Nested Grid layout"></node3>
                 <node3_tag name="content3"></node3_tag>
-                <node4 treenode="true" text="Tabbed grid cluster"></node4>
+                <node4 treenode="true" text="Tabbed grid layout"></node4>
                 <node4_tag name="content4"></node4_tag>
-                <node5 treenode="true" text="Nested grid cluster"></node5>
+                <node5 treenode="true" text="Nested grid layout"></node5>
                 <node5_tag name="content5"></node5_tag>
-                <node6 treenode="true" text="More Complex Nested grid cluster"></node6>
+                <node6 treenode="true" text="More Complex Nested grid layout"></node6>
                 <node6_tag name="content6"></node6_tag>
             </uidata>
         </treeView1>
     </nodeDetails>
     <webViewport>
-        <cluster>
+        <layout>
             <grid  rows="1" cols="2" width="350,100,">
                 <grid objid="navDetails" id="navCtrl"></grid>
                 <grid gridtype="nucleus" id="mainClient"></grid>
             </grid>
-        </cluster>
+        </layout>
     </webViewport>
 
     <form1 id="mainwindow_1">
-        <cluster>
+        <layout>
             <grid id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                 <grid id='tangramtabctrl_Page2' gridtype="nucleus" caption=''></grid>
                 <grid id='test1'></grid>
                 <!--<grid id='test2'></grid>
                 <grid id='test3'></grid>-->
             </grid>
-        </cluster>
+        </layout>
     </form1>
     <form id="mainwindow_2">
-        <cluster>
+        <layout>
             <grid objid="TangramTabbedWnd.TabbedComponent.1" style="18">
                 <grid id='tangramtabctrl_Page2' gridtype="nucleus" caption='Page 1'></grid>
                 <grid id='test1' caption='Page 2'></grid>
                 <grid id='test2' caption='Page 3'></grid>
                 <grid id='test3' caption='Page 4'></grid>
             </grid>
-        </cluster>
+        </layout>
     </form>
 
     <div class="contents">
@@ -236,32 +236,32 @@
             <p>Web Runtime for Application is a software runtime service that enables developers to organize software in the form of Web pages, it extends Java, COM, .NET, Win32 components into DOM elements of Web pages, allowing developers to develop application-oriented-web-page, each specific function of the application software is embodied in one or a group of application-oriented-web-pages, consumers can access each specific application function by accessing the URL.</p>
             <p>This is a New and Dynamic Desktop Software World where you can combine most of the existing component frameworks, such as .NET, Java, COM, C++, Web and Office etc. ...</p>
             <content target="mainClient">
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="39">
                         <grid caption="Web Runtime for Application" gridtype="nucleus"></grid>
                         <grid objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Customize your own WebBrowser"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </content>
         </article>
         <article class="hidden content1 markdown-body">
             <h1>New Web, New Application World!</h1>
             <p>Web runtime for application constructs a new mixed world of native UI elements and web elements. In this world, a new web page is defined. While taking into account the standard web page, the ability to use native components as DOM elements is added ...</p>
             <content1 target="mainClient">
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="18">
                         <grid caption="The mixed world of web and native UI" gridtype="nucleus"></grid>
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></grid>
                         <grid objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </content1>
         </article>
         <article class="hidden content2 markdown-body">
             <h1>About Grid grid</h1>
             <p>Grid grid refers to a grid structure with m rows and n columns. As a container grid, each child grid can carry a specific programmable object ...</p>
             <content2 target="mainClient">
-                <cluster>
+                <layout>
                     <grid  rows="3" cols="3" width="150,100,50" height="200,180,50">
                         <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
@@ -273,14 +273,14 @@
                         <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </content2>
         </article>
         <article class="hidden content3 markdown-body">
             <h1>Nested Grid grid</h1>
             <p>Nested Grid means that a Grid can be a child grid of another Grid. We allow nested structures to mean that developers can use "lines" to plan the layout of a rectangular structure ... ...</p>
             <content3 target="mainClient">
-                <cluster>
+                <layout>
                     <grid  rows="1" cols="2" width="200,100,">
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
                         <grid  caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
@@ -295,27 +295,27 @@
                             <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
                         </grid>
                     </grid>
-                </cluster>
+                </layout>
             </content3>
         </article>
         <article class="hidden content4 markdown-body">
             <h1>Tabbed grid</h1>
             <p>A Tabbed grid is a container grid which include a group of titled “tab structures". A tabbed grid with n tabs is equivalent to a "1 row and n columns" Grid ...</p>
             <content4 target="mainClient">
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="23">
                         <grid caption="Introduction to Tabbed grid" gridtype="nucleus"></grid>
                         <grid objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Second Page"></grid>
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </content4>
         </article>
         <article class="hidden content5 markdown-body">
             <h1>Compound grid: Tabbed grid with a Grid grid as a Child grid</h1>
             <p>Compound grid refers to the "composite structure" formed by various container nodes. We allow Tabbed grid and Grid grid to "composite nest" so that developers can implement a more comprehensive UI layout ...</p>
             <content5 target="mainClient">
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="23">
                         <grid  caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
                             <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
@@ -331,14 +331,14 @@
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></grid>
                         <grid objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></grid>
                     </grid>
-                </cluster>
+                </layout>
             </content5>
         </article>
         <article class="hidden content6 markdown-body">
             <h1>More complex compound grid</h1>
             <p>What is shown here is a three times composite page structure. Because the "tab structure" can have various "styles", each specific sub grid can carry various programmable objects, based on this, a comprehensive page structure can be formed. Thanks to the flexible and powerful description mechanism of HTML, so that the web page can present a page with dual advantages of native-web application...</p>
             <content6 target="mainClient">
-                <cluster>
+                <layout>
                     <grid objid="TangramTabbedWnd.TabbedComponent.1" style="23">
                         <grid  caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
                             <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
@@ -358,7 +358,7 @@
                         <grid objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Send Page"></grid>
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></grid>
                     </gri>
-                </cluster>
+                </layout>
             </content6>
         </article>
     </div>

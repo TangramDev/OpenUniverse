@@ -1387,7 +1387,7 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
             long *retVal) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnInitTreeView( 
-            IHubbleTreeView *pHubbleTreeView,
+            IHubbleTreeView *pTangramTreeView,
             BSTR bstrXml) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnClick( 
@@ -1472,7 +1472,7 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnInitTreeView )( 
             IHubbleTreeViewCallBack * This,
-            IHubbleTreeView *pHubbleTreeView,
+            IHubbleTreeView *pTangramTreeView,
             BSTR bstrXml);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnClick )( 
@@ -1535,8 +1535,8 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
 #define IHubbleTreeViewCallBack_get_Pages(This,retVal)	\
     ( (This)->lpVtbl -> get_Pages(This,retVal) ) 
 
-#define IHubbleTreeViewCallBack_OnInitTreeView(This,pHubbleTreeView,bstrXml)	\
-    ( (This)->lpVtbl -> OnInitTreeView(This,pHubbleTreeView,bstrXml) ) 
+#define IHubbleTreeViewCallBack_OnInitTreeView(This,pTangramTreeView,bstrXml)	\
+    ( (This)->lpVtbl -> OnInitTreeView(This,pTangramTreeView,bstrXml) ) 
 
 #define IHubbleTreeViewCallBack_OnClick(This,bstrXml,bstrXmlData)	\
     ( (This)->lpVtbl -> OnClick(This,bstrXml,bstrXmlData) ) 

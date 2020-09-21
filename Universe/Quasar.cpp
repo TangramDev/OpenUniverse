@@ -1079,7 +1079,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 						if (strXml == _T(""))
 							strXml = _strXml;
 						if (strXml == _T(""))
-							strXml = _T("<default><cluster><grid name=\"Start\" /></cluster></default>");;
+							strXml = _T("<default><layout><grid name=\"Start\" /></layout></default>");;
 					}
 					else
 						strXml = _strXml;
@@ -1366,7 +1366,7 @@ LRESULT CQuasar::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			CString strPath = it.first;
 			CString s = it.second->m_pHostParse->xml();
 			CString str = _T("");
-			str.Format(_T("<nodexml><cluster>%s</cluster></nodexml>"), s);
+			str.Format(_T("<nodexml><layout>%s</layout></nodexml>"), s);
 			CTangramXmlParse parse;
 			parse.LoadXml(str);
 			parse.SaveFile(it.first);
@@ -1511,7 +1511,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->cx = rect.right - rect.left;
 			lpwndpos->cy = rect.bottom - rect.top;
 		}
-		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED | SWP_NOREDRAW);// ); 
+		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED); //| SWP_NOREDRAW);// ); 
 		CGrid* _pHostNode = m_pBindingGrid;
 		if (_pHostNode->m_pHostQuasar)
 		{
@@ -1629,7 +1629,7 @@ STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 	CString strRootName = OLE2T(bstrRootName);
 	if (strRootName == _T(""))
 		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><cluster><grid name=\"Start\"/></cluster></Default>");
+	CString strXmlData = _T("<Default><layout><grid name=\"Start\"/></layout></Default>");
 	CString strName = _T("");
 	CString strXml = _T("");
 

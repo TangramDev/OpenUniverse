@@ -505,7 +505,7 @@ namespace Cosmos
 			}
 		}
 
-		property ::GridType StarType
+		property ::GridType GridType
 		{
 			::GridType get()
 			{

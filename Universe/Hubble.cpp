@@ -71,7 +71,7 @@ CHubble::CHubble()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><cluster><grid name=\"tangram\" gridtype=\"nucleus\"/></cluster></default>");
+	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
@@ -891,7 +891,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hFrame, CString _strFrameName, IGala
 		m_mapFramePage[hFrame] = pGalaxyCluster;
 
 		CString strKey = _T("default");
-		str.Format(_T("<%s><cluster><grid name='%s' /></cluster></%s>"), strKey, _strFrameName, strKey);
+		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strFrameName, strKey);
 		pQuasar->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		if(pGrid)
 		{
@@ -973,7 +973,7 @@ IGrid* CHubble::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 		strPath += NodeTag + _T(".nodexml");
 		if (::PathFileExists(strPath) == false)
 		{
-			CString strXml = _T("<nodexml><cluster><grid name='StartNode' /></cluster></nodexml>");
+			CString strXml = _T("<nodexml><layout><grid name='StartNode' /></layout></nodexml>");
 			CTangramXmlParse m_Parse;
 			m_Parse.LoadXml(strXml);
 			m_Parse.SaveFile(strPath);
@@ -1002,7 +1002,7 @@ IGalaxyCluster* CHubble::Observe(HWND hFrame, CString strName, CString strKey)
 			pQuasar = it2->second;
 		IGrid* pGrid = nullptr;
 		CString str = _T("");
-		str.Format(_T("<default><cluster><grid name='%s' /></cluster></default>"), strName);
+		str.Format(_T("<default><layout><grid name='%s' /></layout></default>"), strName);
 		pQuasar->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		VARIANT_BOOL bNewVersion;
 		pGalaxyCluster->get_NewVersion(&bNewVersion);
@@ -2424,7 +2424,7 @@ STDMETHODIMP CHubble::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 		pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((LONGLONG)hWnd), CComBSTR(L"default"), &pQuasar);
 		if (pQuasar)
 		{
-			return pQuasar->Observe(CComBSTR(L"default"), CComBSTR(L"<default><cluster><grid name=\"Start\" /></cluster></default>"), ppGrid);
+			return pQuasar->Observe(CComBSTR(L"default"), CComBSTR(L"<default><layout><grid name=\"Start\" /></layout></default>"), ppGrid);
 		}
 	}
 	return S_FALSE;

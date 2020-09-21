@@ -13,9 +13,9 @@
 
 #include "stdafx.h"
 #include "dllmain.h"
+#include "Cosmos.h"
 #include "CosmosProxy.h"
 #include "ChromeWebBrowser.h"
-#include "Cosmos.h"
 
 using namespace std;
 using namespace System;

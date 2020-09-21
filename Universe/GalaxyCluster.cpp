@@ -1411,7 +1411,7 @@ STDMETHODIMP CGalaxyCluster::CreateQuasarWithDefaultNode(ULONGLONG hFrameWnd, BS
 	CString strXml = OLE2T(bstrXml);
 	strXml.Trim();
 	if (strXml == _T(""))
-		strXml = _T("<default><cluster><grid name=\"Start\" /></cluster></default>");
+		strXml = _T("<default><layout><grid name=\"Start\" /></layout></default>");
 	IQuasar* pQuasar = nullptr;
 	CreateQuasar(CComVariant(0), CComVariant((LONGLONG)hFrameWnd), bstrFrameName, &pQuasar);
 	if (pQuasar)
