@@ -59,7 +59,42 @@ namespace HubbleBrowser
 
         private void NtpCtrl_Load(object sender, EventArgs e)
         {
-            thisNode = Hubble.CreatingStar;
+            thisNode = Hubble.CreatingGrid;
+            //Control Topctrl = this.TopLevelControl;
+            //IntPtr h = Handle;
+            //IntPtr h1 = Topctrl.Handle;
+            //if(h==h1)
+            //{ }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string xml = "<content1>" +
+            "<layout>" +
+                "<grid objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"23\">" +
+                    "<grid id='tangramtabctrl_Page2' gridtype=\"nucleus\" caption='Page 1'></grid>" +
+                    "<grid id='test1' caption='Page 2'></grid>" +
+                    "<grid id='test2' caption='Page 3'></grid>" +
+                    "<grid id='test3' caption='Page 4'></grid>" +
+                "</grid>" +
+            "</layout>" +
+            "</content1>";
+            Hubble.Observe(this, "test", xml);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string xml = "<content1>" +
+                "<layout>" +
+                    "<grid objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"43\">" +
+                        "<grid id='tangramtabctrl_Page2' gridtype=\"nucleus\" caption='Page 1'></grid>" +
+                        "<grid id='test1' caption='Page 2'></grid>" +
+                        "<grid id='test2' caption='Page 3'></grid>" +
+                        "<grid id='test3' caption='Page 4'></grid>" +
+                    "</grid>" +
+                "</layout>" +
+              "</content1>";
+            Hubble.Observe(treeView1, "test", xml);
         }
     }
 

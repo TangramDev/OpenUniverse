@@ -2057,7 +2057,10 @@ STDMETHODIMP CHubble::GetGridFromHandle(LONGLONG hWnd, IGrid** ppRetGrid)
 	{
 		LRESULT lRes = ::SendMessage(_hWnd, WM_TANGRAMGETNODE, 0, 0);
 		if (lRes)
-			*ppRetGrid = (IGrid*)lRes;
+		{
+			CGrid* pGrid = (CGrid*)lRes;
+			pGrid->QueryInterface(IID_IGrid, (void**)ppRetGrid);
+		}
 	}
 	return S_OK;
 }

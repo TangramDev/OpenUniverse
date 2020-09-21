@@ -685,6 +685,7 @@ namespace Cosmos
 		static Browser^ GetHostBrowser(Object^ obj);
 		static Grid^ GetGridFromHandle(IntPtr handle);
 		static Grid^ GetNodeFromControl(Control^ ctrl);
+		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 		//static void RegComponentForTangram(String^ strIDs, Assembly^ a);
 		static void UpdateNewTabPageLayout(String^ newTabPageLayout);
 		static void BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ name);
@@ -834,7 +835,7 @@ namespace Cosmos
 			void set(CosmosAppType nType);
 		}
 
-		static property Grid^ CreatingStar
+		static property Grid^ CreatingGrid
 		{
 			Grid^ get();
 		}

@@ -393,7 +393,7 @@ namespace Cosmos
         }
     }
 
-    Grid^ Hubble::CreatingStar::get()
+    Grid^ Hubble::CreatingGrid::get()
     {
         Object^ pRetObject = nullptr;
         if (theApp.m_pHubble)
@@ -628,6 +628,136 @@ namespace Cosmos
             return nullptr;
         }
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
+    }
+
+    Grid^ Hubble::Observe(Control^ ctrl, String^ key, String^ strGridXml)
+    {
+        if (ctrl != nullptr)
+        {
+            if (ctrl->Dock != DockStyle::Fill && ctrl->Dock != DockStyle::None)
+                return nullptr;
+            IQuasar* pQuasar = nullptr;
+            theApp.m_pHubble->GetQuasar((__int64)ctrl->Handle.ToPointer(), &pQuasar);
+            if (pQuasar)
+            {
+                IGrid* pGrid = nullptr;
+                BSTR bstrKey = STRING2BSTR(key);
+                BSTR bstrXml = STRING2BSTR(strGridXml);
+                pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                ::SysFreeString(bstrKey);
+                ::SysFreeString(bstrXml);
+                if (pGrid)
+                    return theAppProxy._createObject<IGrid, Grid>(pGrid);
+                return nullptr;
+            }
+            HWND hTopWnd = nullptr;
+            Control^ topCtrl = ctrl->TopLevelControl;
+            if (topCtrl == nullptr)
+            {
+                hTopWnd = ::GetParent((HWND)ctrl->Handle.ToPointer());
+            }
+            else
+            {
+                if (topCtrl->GetType()->IsSubclassOf(Form::typeid))
+                {
+                    Form^ pForm = (Form^)topCtrl;
+                    Form^ pForm2 = nullptr;
+                    if (pForm != nullptr && pForm->IsMdiContainer)
+                    {
+                        bool bMdiClientChild = false;
+                        int nCount = pForm->Controls->Count;
+                        String^ strName = L"";
+                        for (int i = nCount - 1; i >= 0; i--)
+                        {
+                            Control^ pCtrl = pForm->Controls[i];
+                            strName = pCtrl->GetType()->Name->ToLower();
+                            if (strName == L"mdiclient")
+                            {
+                                if(::IsChild((HWND)pCtrl->Handle.ToPointer(),(HWND)ctrl->Handle.ToPointer()))
+                                { 
+                                    bMdiClientChild = true;
+                                }
+                                break;
+                            }
+                        }
+                        if(bMdiClientChild)
+                        {
+                            Control^ parent = ctrl->Parent;
+                            while (!parent->GetType()->IsSubclassOf(Form::typeid))
+                            {
+                                parent = parent->Parent;
+                            }
+                            if (parent != nullptr)
+                                pForm2 = (Form^)parent;
+                        }
+                        else
+                        {
+                            pForm2 = pForm;
+                        }
+                    }
+                    else
+                        pForm2 = pForm;
+                    if (pForm2 != nullptr)
+                    {
+                        GalaxyCluster^ thisGalaxyCluster = Hubble::CreateGalaxyCluster(pForm2, pForm2);
+                        if (thisGalaxyCluster != nullptr)
+                        {
+                            Quasar^ thisQuasar = thisGalaxyCluster->CreateQuasar(ctrl->Handle, ctrl->Name);
+                            return thisQuasar->Observe(key, strGridXml);
+                        }
+                    }
+                }
+                else
+                {
+                    hTopWnd = ::GetParent((HWND)topCtrl->Handle.ToPointer());
+                }
+            }
+            if (hTopWnd != nullptr)
+            {
+                HWND _hTopWnd = hTopWnd;
+                Grid^ pGrid = GetGridFromHandle((IntPtr)hTopWnd);
+                while (pGrid == nullptr)
+                {
+                    hTopWnd = ::GetParent(hTopWnd);
+                    pGrid = GetGridFromHandle((IntPtr)hTopWnd);
+                }
+                if (pGrid != nullptr)
+                {
+                    IGalaxyCluster* pIGalaxyCluster = nullptr;
+                    pGrid->m_pGrid->get_GalaxyCluster(&pIGalaxyCluster);
+                    if (pIGalaxyCluster)
+                    {
+                        String^ strName = ctrl->Name;
+                        BSTR bstrName = STRING2BSTR(strName);
+                        Grid^ _pRetGrid = nullptr;
+                        pIGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToPointer()), bstrName, &pQuasar);
+                        if (pQuasar)
+                        {
+                            IGrid* pGrid = nullptr;
+                            BSTR bstrKey = STRING2BSTR(key);
+                            BSTR bstrXml = STRING2BSTR(strGridXml);
+                            pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                            ::SysFreeString(bstrKey);
+                            ::SysFreeString(bstrXml);
+                            if(pGrid)
+                                _pRetGrid = theAppProxy._createObject<IGrid, Grid>(pGrid);
+                        }
+                        ::SysFreeString(bstrName);
+                        return _pRetGrid;
+                    }
+                }
+                else
+                {
+                    GalaxyCluster^ thisGalaxyCluster = Hubble::CreateGalaxyCluster((IntPtr)_hTopWnd);
+                    if (thisGalaxyCluster != nullptr)
+                    {
+                        Quasar^ thisQuasar = thisGalaxyCluster->CreateQuasar(ctrl->Handle, ctrl->Name);
+                        return thisQuasar->Observe(key, strGridXml);
+                    }
+                }
+            }
+        }
+        return nullptr;
     }
 
     void Hubble::UpdateNewTabPageLayout(String^ newTabPageLayout)
