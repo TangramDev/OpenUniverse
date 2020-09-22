@@ -64,7 +64,7 @@ protected:
 	afx_msg LRESULT OnActivePage(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnSplitterNodeAdd(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnGetTangramObj(WPARAM wParam,LPARAM lParam);
+	afx_msg LRESULT OnGetHubbleObj(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnSplitterCreated(WPARAM wParam,LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 private:

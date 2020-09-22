@@ -53,7 +53,7 @@ BEGIN_MESSAGE_MAP(CGridHelperWnd, CWnd)
 	ON_WM_WINDOWPOSCHANGED()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
 	ON_MESSAGE(WM_COSMOSMSG, OnHubbleMsg)
-	ON_MESSAGE(WM_TANGRAMGETNODE, OnGetTangramObj)
+	ON_MESSAGE(WM_TANGRAMGETNODE, OnGetHubbleObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
 END_MESSAGE_MAP()
@@ -776,7 +776,7 @@ LRESULT CGridHelperWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
 
-LRESULT CGridHelperWnd::OnGetTangramObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelperWnd::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 	{

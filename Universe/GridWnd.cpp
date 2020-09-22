@@ -110,7 +110,7 @@ BEGIN_MESSAGE_MAP(CGridWnd, CSplitterWnd)
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEACTIVATE()
 	ON_MESSAGE(WM_TABCHANGE, OnActivePage)
-	ON_MESSAGE(WM_TANGRAMGETNODE, OnGetTangramObj)
+	ON_MESSAGE(WM_TANGRAMGETNODE, OnGetHubbleObj)
 	ON_MESSAGE(WM_COSMOSMSG, OnSplitterNodeAdd)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_HOSTNODEFORSPLITTERCREATED, OnSplitterCreated)
@@ -932,7 +932,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	return false;
 }
 
-LRESULT CGridWnd::OnGetTangramObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridWnd::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 		return (LRESULT)m_pGrid;

@@ -349,7 +349,7 @@ namespace Cosmos
 		}
 
 		[BrowsableAttribute(false)]
-		property Cosmos::Quasar^ HostFrame
+		property Cosmos::Quasar^ HostQuasar
 		{
 			Cosmos::Quasar^ get()
 			{
@@ -629,26 +629,36 @@ namespace Cosmos
 			}
 		}
 
-		property Grid^ WndStar[Object^]
+		property Grid^ VisibleGrid
 		{
-			Grid ^ get(Object ^ index)
+			Cosmos::Grid^ get()
+			{
+				IGrid* pGrid = nullptr;
+				m_pQuasar->get_VisibleGrid(&pGrid);
+				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+			}
+		}
+
+		property Grid^ Grid[Object^]
+		{
+			Cosmos::Grid ^ get(Object ^ index)
 			{
 				VARIANT var;
 				Marshal::GetNativeVariantForObject(index,(System::IntPtr) & var);
 				IGrid* pGrid = nullptr;
 				m_pQuasar->get_Grid(var, &pGrid);
-				return theAppProxy._createObject<IGrid, Grid>(pGrid);
+				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 			}
 		}
 
-		property GalaxyCluster^ Page
+		property GalaxyCluster^ GalaxyCluster
 		{
-			GalaxyCluster^ get()
+			Cosmos::GalaxyCluster^ get()
 			{
 				CComPtr<IGalaxyCluster> pGalaxyCluster = NULL;
 				m_pQuasar->get_GalaxyCluster(&pGalaxyCluster);
 
-				return theAppProxy._createObject<IGalaxyCluster, GalaxyCluster>(pGalaxyCluster);
+				return theAppProxy._createObject<IGalaxyCluster, Cosmos::GalaxyCluster>(pGalaxyCluster);
 			}
 		}
 	};

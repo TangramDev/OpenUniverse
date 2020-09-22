@@ -871,7 +871,7 @@ IWebPage* CHubble::GetWebPageFromForm(HWND hForm)
 	return nullptr;
 }
 
-IQuasar* CHubble::ConnectGalaxyCluster(HWND hFrame, CString _strFrameName, IGalaxyCluster* _pGalaxyCluster, QuasarInfo* pInfo)
+IQuasar* CHubble::ConnectGalaxyCluster(HWND hQuasar, CString _strFrameName, IGalaxyCluster* _pGalaxyCluster, QuasarInfo* pInfo)
 {
 	CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)_pGalaxyCluster;
 	if (pGalaxyCluster->m_hWnd == m_hHostWnd)
@@ -879,7 +879,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hFrame, CString _strFrameName, IGala
 	CString strFrameName = _strFrameName;
 
 	IQuasar* pQuasar = nullptr;
-	pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hFrame), strFrameName.AllocSysString(), &pQuasar);
+	pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hQuasar), strFrameName.AllocSysString(), &pQuasar);
 	if (pQuasar)
 	{
 		CQuasar* _pQuasar = (CQuasar*)pQuasar;
@@ -888,7 +888,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hFrame, CString _strFrameName, IGala
 		CComQIPtr<IGrid> pParentNode(pInfo->m_pParentDisp);
 		IGrid* pGrid = nullptr;
 		CString str = _T("");
-		m_mapFramePage[hFrame] = pGalaxyCluster;
+		m_mapQuasar2GalaxyCluster[hQuasar] = pGalaxyCluster;
 
 		CString strKey = _T("default");
 		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strFrameName, strKey);
@@ -990,8 +990,8 @@ IGrid* CHubble::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 
 IGalaxyCluster* CHubble::Observe(HWND hFrame, CString strName, CString strKey)
 {
-	auto it = m_mapFramePage.find(hFrame);
-	if (it != m_mapFramePage.end())
+	auto it = m_mapQuasar2GalaxyCluster.find(hFrame);
+	if (it != m_mapQuasar2GalaxyCluster.end())
 	{
 		CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)it->second;
 		IQuasar* pQuasar = nullptr;

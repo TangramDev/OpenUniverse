@@ -479,7 +479,7 @@ namespace CommonUniverse {
 		virtual HRESULT CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
 		virtual IHubbleDoc* CreateNewDocument(LPCTSTR lpszFrameID, LPCTSTR lpszAppTitle, void* pDocTemplate, BOOL bNewFrame) { return NULL; }
 		virtual IHubbleDoc* OpenDocument(void* pDocTemplate, CString strFile, BOOL bNewFrame) { return NULL; }
-		virtual CGridProxy* OnHubbleNodeInit(IGrid* pNewNode) { return nullptr; }
+		virtual CGridProxy* OnGridInit(IGrid* pNewNode) { return nullptr; }
 		virtual CQuasarProxy* OnQuasarCreated(IQuasar* pNewQuasar) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewQuasar) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
@@ -711,7 +711,7 @@ namespace CommonUniverse {
 		CWebPageImpl* m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
-		map<HWND, IGalaxyCluster*>				m_mapFramePage;
+		map<HWND, IGalaxyCluster*>				m_mapQuasar2GalaxyCluster;
 		map<HWND, IGalaxyCluster*>				m_mapWindowPage;
 		map<CString, CComVariant>				m_mapValInfo;
 		map<CString, void*>						m_mapTemplateInfo;

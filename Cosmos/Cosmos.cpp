@@ -170,8 +170,8 @@ namespace Cosmos
     void Grid::Fire_OnTabChange(int nActivePage, int nOldActivePage)
     {
         OnTabChange(nActivePage, nOldActivePage);
-        Grid^ pActiveStar = GetGrid(0, nActivePage);
-        Grid^ pOldStar = GetGrid(0, nOldActivePage);
+        Grid^ pActiveGrid = GetGrid(0, nActivePage);
+        Grid^ pOldGrid = GetGrid(0, nOldActivePage);
     }
 
     Hubble::Hubble()
@@ -591,9 +591,9 @@ namespace Cosmos
                 {
                     HMODULE hModule = ::GetModuleHandle(_T("universe.dll"));
                     if (hModule) {
-                        typedef IHubble* (__stdcall* GetTangram)();
-                        GetTangram _pHubbleFunction;
-                        _pHubbleFunction = (GetTangram)GetProcAddress(hModule, "GetTangram");
+                        typedef IHubble* (__stdcall* GetHubble)();
+                        GetHubble _pHubbleFunction;
+                        _pHubbleFunction = (GetHubble)GetProcAddress(hModule, "GetHubble");
                         if (_pHubbleFunction != NULL) {
                             theApp.m_pHubble = _pHubbleFunction();
                         }
@@ -1405,15 +1405,15 @@ namespace Cosmos
 
     Grid^ Quasar::Observe(String^ layerName, String^ layerXML)
     {
-        Grid^ pRetNode = nullptr;
+        Cosmos::Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IGrid> pGrid;
         m_pQuasar->Observe(blayerName, blayerXML, &pGrid);
         if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IGrid, Grid>(pGrid);
-            Grid^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+            Cosmos::Grid^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

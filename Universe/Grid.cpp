@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.7								*
+*					Open Universe - version 0.9.8								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -11,7 +11,7 @@
 * https://www.tangram.dev
 ********************************************************************************/
 
-// Star.cpp : Implementation of CGrid
+// Grid.cpp : Implementation of CGrid
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -149,7 +149,7 @@ void CGrid::InitWndGrid()
 
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
-		CGridProxy* pHubbleWndGridProxy = it.second->OnHubbleNodeInit(this);
+		CGridProxy* pHubbleWndGridProxy = it.second->OnGridInit(this);
 		if (pHubbleWndGridProxy)
 			m_mapWndGridProxy[it.second] = pHubbleWndGridProxy;
 	}
@@ -1329,23 +1329,34 @@ STDMETHODIMP CGrid::get_Col(long* nCol)
 STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppGrid)
 {
 	CGrid* pRet = nullptr;
-	auto bFound = false;
 
 	*ppGrid = nullptr;
 	if (nRow < 0 || nCol < 0 || nRow >= m_nRows || nCol >= m_nCols) return E_INVALIDARG;
+	if (m_nViewType == Grid)
+	{
+		CGridWnd* pSplitter = (CGridWnd*)m_pHostWnd;
+		HWND hWnd = ::GetDlgItem(pSplitter->m_hWnd, pSplitter->IdFromRowCol(nRow, nCol));
+		LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+		if (lRes)
+		{
+			pRet = (CGrid*)lRes;
+			pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
+			return S_OK;
+		}
+		return S_FALSE;
+	}
 
 	for (auto it : m_vChildNodes)
 	{
-		pRet = it;
 		if (pRet->m_nCol == nCol && pRet->m_nRow == nRow)
 		{
-			bFound = true;
+			pRet = it;
 			break;
 		}
 	}
 
 	HRESULT hr = S_OK;
-	if (bFound)
+	if (pRet)
 	{
 		hr = pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
 	}

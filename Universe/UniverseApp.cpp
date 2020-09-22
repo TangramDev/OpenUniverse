@@ -518,9 +518,9 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (g_pHubble->m_pCLRProxy)
 			g_pHubble->m_pCLRProxy->WindowDestroy(hWnd);
 
-		auto it = g_pHubble->m_mapFramePage.find(hWnd);
-		if (it != g_pHubble->m_mapFramePage.end())
-			g_pHubble->m_mapFramePage.erase(it);
+		auto it = g_pHubble->m_mapQuasar2GalaxyCluster.find(hWnd);
+		if (it != g_pHubble->m_mapQuasar2GalaxyCluster.end())
+			g_pHubble->m_mapQuasar2GalaxyCluster.erase(it);
 
 		if (hWnd == g_pHubble->m_hMainWnd)
 		{
