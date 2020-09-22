@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -295,13 +295,13 @@ CString CCosmos::_GetLibPathFromAssemblyQualifiedName(CString strDir, CString st
 	return _T("");
 }
 
-CCosmosNodeEvent::CCosmosNodeEvent()
+CCosmosGridEvent::CCosmosGridEvent()
 {
 	m_pGrid			= nullptr;
 	m_pGridCLREvent = nullptr;
 }
 
-CCosmosNodeEvent::~CCosmosNodeEvent()
+CCosmosGridEvent::~CCosmosGridEvent()
 {
 	if (m_pGridCLREvent)
 	{

@@ -731,8 +731,8 @@ library Universe
 		methods:
 			[id(1), helpstring("method OpenComplete")] HRESULT OpenComplete();
 			[id(2)] HRESULT Destroy();
-			[id(3), helpstring("WndGrid Addin Object Created")] HRESULT NodeAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
-			[id(4)] HRESULT NodeAddInsCreated();
+			[id(3), helpstring("WndGrid Addin Object Created")] HRESULT GridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+			[id(4)] HRESULT GridAddInsCreated();
 			[id(5)] HRESULT NodeDocumentComplete(IDispatch* ExtenderDisp, BSTR bstrURL);
 			[id(6)] HRESULT ControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, long CtrlHandle, BSTR CtrlClassName);
 			[id(7)] HRESULT TabChange(LONG ActivePage, LONG OldPage);

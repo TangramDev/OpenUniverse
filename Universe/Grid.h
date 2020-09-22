@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -123,8 +123,8 @@ public:
 
 	HRESULT Fire_OpenComplete();
 	HRESULT Fire_Destroy();
-	HRESULT Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
-	HRESULT Fire_NodeAddInsCreated();
+	HRESULT Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	HRESULT Fire_GridAddInsCreated();
 	HRESULT Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
 	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
 	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);

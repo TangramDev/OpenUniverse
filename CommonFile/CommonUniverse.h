@@ -693,22 +693,22 @@ namespace CommonUniverse {
 		CStringA								m_strBridgeJavaClass;
 		CString									m_strStartJarPath;
 
-		IPCMsg* m_pCurrentIPCMsg;
-		IHubbleCLRImpl* m_pCLRProxy;
-		IHubbleAppProxy* m_pActiveAppProxy;
-		IHubbleAppProxy* m_pUniverseAppProxy;
-		IHubbleAppProxy* m_pCosmosAppProxy;
-		CMDIChildFormInfo* m_pCurMDIChildFormInfo;
-		CHubblePackageProxy* m_pHubblePackageProxy;
-		IGrid* m_pHostViewDesignerNode = nullptr;
-		IHubbleExtender* m_pExtender = nullptr;
-		IHubbleDelegate* m_pHubbleDelegate = nullptr;
-		CChromeBrowserBase* m_pActiveBrowser = nullptr;
-		CHubbleBrowserFactory* m_pBrowserFactory = nullptr;
-		IHubbleWindow* m_pCreatingWindow = nullptr;
-		OmniboxViewViewsProxy* m_pCreatingOmniboxViewViews = nullptr;
-		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CWebPageImpl* m_pMainWebPageImpl = nullptr;
+		IPCMsg*									m_pCurrentIPCMsg;
+		IHubbleCLRImpl*							m_pCLRProxy;
+		IHubbleAppProxy*						m_pActiveAppProxy;
+		IHubbleAppProxy*						m_pUniverseAppProxy;
+		IHubbleAppProxy*						m_pCosmosAppProxy;
+		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
+		CHubblePackageProxy*					m_pHubblePackageProxy;
+		IGrid*									m_pHostViewDesignerNode = nullptr;
+		IHubbleExtender*						m_pExtender = nullptr;
+		IHubbleDelegate*						m_pHubbleDelegate = nullptr;
+		CChromeBrowserBase*						m_pActiveBrowser = nullptr;
+		CHubbleBrowserFactory*					m_pBrowserFactory = nullptr;
+		IHubbleWindow*							m_pCreatingWindow = nullptr;
+		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
+		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
+		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapQuasar2GalaxyCluster;
@@ -717,7 +717,6 @@ namespace CommonUniverse {
 		map<CString, void*>						m_mapTemplateInfo;
 		map<CString, IHubble*>					m_mapRemoteHubble;
 		map<IGrid*, CString>					m_mapControlScript;
-		//map<CString, void*>						m_mapExcludedObjects;
 		map<CString, IHubbleAppProxy*>			m_mapHubbleAppProxy;
 		map<CString, IHubbleWindowProvider*>	m_mapWindowProvider;
 		map<int, HubbleDocTemplateInfo*>		m_mapHubbleDocTemplateInfo;
@@ -777,8 +776,8 @@ namespace CommonUniverse {
 		virtual ~IHubbleDelegate() {}
 
 		BOOL				m_bBrowserWndCreated;
-		JavaVM* m_pJVM;
-		JNIEnv* m_pJVMenv;
+		JavaVM*				m_pJVM;
+		JNIEnv*				m_pJVMenv;
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;

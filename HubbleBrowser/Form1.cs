@@ -32,6 +32,7 @@ namespace HubbleBrowser
                 "</layout>" +
               "</content1>";
             Grid node = Hubble.Observe(listView1, "test", xml);
+            node.OnTabChange += Node_OnTabChange1; ;
             string s = node.Handle.ToString();
             int n = node.Cols;
             n++;
@@ -40,6 +41,14 @@ namespace HubbleBrowser
             Form f = new Form();
             f.Text = n.ToString();
             f.Show();
+        }
+
+        private void Node_OnTabChange1(Grid ActiveGrid, Grid OldGrid)
+        {
+            //throw new NotImplementedException();
+            string s1 = ActiveGrid.Caption;
+            string s2 = OldGrid.Caption;
+            MessageBox.Show(s1 + s2);
         }
     }
 }

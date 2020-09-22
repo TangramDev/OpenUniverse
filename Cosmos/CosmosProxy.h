@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -147,8 +147,8 @@ private:
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);
 	//void SelectGrid(IGrid* );
-	Object^ InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
-	Object^ InitTangramNode(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
+	void InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
+	void InitTangramNode(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue);
 	IDispatch* CreateWinForm(HWND hParent, BSTR strXML);
 
@@ -161,30 +161,5 @@ private:
 	static void OnItemSelectionChanged(Object ^sender, ListViewItemSelectionChangedEventArgs ^e);
 	static void OnClick(Object ^sender, EventArgs ^e);
 	static void OnTextChanged(System::Object^ sender, System::EventArgs^ e);
-};
-
-extern _ATL_FUNC_INFO Initialize;
-extern _ATL_FUNC_INFO Destroy;
-extern _ATL_FUNC_INFO TabChange;
-extern _ATL_FUNC_INFO IPCMsg2;
-
-class CGalaxyClusterEvent : public IDispEventSimpleImpl</*nID =*/ 1, CGalaxyClusterEvent, &__uuidof(_IHubbleObjEvents)>
-{
-public:
-	CGalaxyClusterEvent();
-	virtual ~CGalaxyClusterEvent();
-
-	gcroot<Object^> m_pGalaxyCluster;
-
-	void __stdcall  OnDestroy();
-	void __stdcall  OnTabChange(IGrid* sender, int nActivePage,int nOldPage);
-	void __stdcall  OnInitialize(IDispatch* pHtmlWnd, BSTR bstrUrl);
-	void __stdcall  OnIPCMsg(IQuasar* sender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
-	BEGIN_SINK_MAP(CGalaxyClusterEvent)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x00000001, OnInitialize, &Initialize)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x00000006, OnDestroy, &Destroy)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x00000009, OnTabChange, &TabChange)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x0000000d, OnIPCMsg, &IPCMsg2)
-	END_SINK_MAP()
 };
 

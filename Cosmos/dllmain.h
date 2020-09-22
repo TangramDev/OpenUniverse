@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -73,11 +73,11 @@ private:
 
 extern CCosmos theApp;
 
-class CCosmosNodeEvent : public CGridEvents
+class CCosmosGridEvent : public CGridEvents
 {
 public:
-	CCosmosNodeEvent();
-	virtual ~CCosmosNodeEvent();
+	CCosmosGridEvent();
+	virtual ~CCosmosGridEvent();
 
 	CGridCLREvent* m_pGridCLREvent;
 private:

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -27,7 +27,7 @@ namespace Cosmos
     Grid::Grid(IGrid* pGrid)
     {
         m_hWnd = NULL;
-        m_pGridEvent = new CCosmosNodeEvent();
+        m_pGridEvent = new CCosmosGridEvent();
         m_pGridEvent->m_pGrid = pGrid;
         m_pGridEvent->m_pGridCLREvent = new CGridCLREvent();
         m_pGridCLREvent = m_pGridEvent->m_pGridCLREvent;
@@ -47,18 +47,6 @@ namespace Cosmos
         m_pGrid = NULL;
     }
 
-    GalaxyCluster^ Grid::GalaxyCluster::get()
-    {
-        IGalaxyCluster* pGalaxyCluster = nullptr;
-        m_pGrid->get_GalaxyCluster(&pGalaxyCluster);
-
-        if (pGalaxyCluster)
-        {
-            return theAppProxy._createObject<IGalaxyCluster, Cosmos::GalaxyCluster>(pGalaxyCluster);
-        }
-        return nullptr;
-    }
-
     Quasar^ Grid::Quasar::get()
     {
         CComPtr<IQuasar> pHubbleFrame;
@@ -74,7 +62,7 @@ namespace Cosmos
         {
             CComBSTR bstrCap("");
             m_pGrid->get_Caption(&bstrCap);
-            String^ strCap = Marshal::PtrToStringUni((System::IntPtr)LPTSTR(LPCTSTR(bstrCap)));
+            String^ strCap = BSTR2STRING(bstrCap);
             return strCap;
         }
         return "";
@@ -167,11 +155,9 @@ namespace Cosmos
         return pObj;
     }
 
-    void Grid::Fire_OnTabChange(int nActivePage, int nOldActivePage)
+    void Grid::Fire_OnTabChange(Grid^ ActivePage, Grid^ OldGrid)
     {
-        OnTabChange(nActivePage, nOldActivePage);
-        Grid^ pActiveGrid = GetGrid(0, nActivePage);
-        Grid^ pOldGrid = GetGrid(0, nOldActivePage);
+        OnTabChange(ActivePage, OldGrid);
     }
 
     Hubble::Hubble()
@@ -699,11 +685,29 @@ namespace Cosmos
                         pForm2 = pForm;
                     if (pForm2 != nullptr)
                     {
-                        GalaxyCluster^ thisGalaxyCluster = Hubble::CreateGalaxyCluster(pForm2, pForm2);
-                        if (thisGalaxyCluster != nullptr)
+                        IGalaxyCluster* pGalaxyCluster = nullptr;
+                        theApp.m_pHubble->CreateGalaxyCluster(pForm2->Handle.ToInt64(), &pGalaxyCluster);
+                        if (pGalaxyCluster != nullptr)
                         {
-                            Quasar^ thisQuasar = thisGalaxyCluster->CreateQuasar(ctrl->Handle, ctrl->Name);
-                            return thisQuasar->Observe(key, strGridXml);
+                            IQuasar* pQuasar = nullptr;
+                            BSTR bstrName = STRING2BSTR(ctrl->Name);
+                            Grid^ thisGrid = nullptr;
+                            pGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToInt64()), bstrName, &pQuasar);
+                            if (pQuasar)
+                            {
+                                IGrid* pGrid = nullptr;
+                                BSTR bstrKey = STRING2BSTR(key);
+                                BSTR bstrXml = STRING2BSTR(strGridXml);
+                                pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                                if (pGrid)
+                                {
+                                    thisGrid = theAppProxy._createObject<IGrid, Grid>(pGrid);
+                                }
+                                ::SysFreeString(bstrKey);
+                                ::SysFreeString(bstrXml);
+                            }
+                            ::SysFreeString(bstrName);
+                            return thisGrid;
                         }
                     }
                 }
@@ -721,17 +725,18 @@ namespace Cosmos
                     hTopWnd = ::GetParent(hTopWnd);
                     pGrid = GetGridFromHandle((IntPtr)hTopWnd);
                 }
+
+                Grid^ _pRetGrid = nullptr;
+                IGalaxyCluster* pGalaxyCluster = nullptr;
                 if (pGrid != nullptr)
                 {
-                    IGalaxyCluster* pIGalaxyCluster = nullptr;
-                    pGrid->m_pGrid->get_GalaxyCluster(&pIGalaxyCluster);
-                    if (pIGalaxyCluster)
+                    pGrid->m_pGrid->get_GalaxyCluster(&pGalaxyCluster);
+                    if (pGalaxyCluster)
                     {
                         String^ strName = ctrl->Name;
                         BSTR bstrName = STRING2BSTR(strName);
-                        Grid^ _pRetGrid = nullptr;
                         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
-                        pIGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)hWnd), bstrName, &pQuasar);
+                        pGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)hWnd), bstrName, &pQuasar);
                         if (pQuasar)
                         {
                             IGrid* pGrid = nullptr;
@@ -745,18 +750,30 @@ namespace Cosmos
                         }
                         ::SysFreeString(bstrName);
                         ::InvalidateRect(hWnd, nullptr, true);
-                        return _pRetGrid;
                     }
                 }
                 else
                 {
-                    GalaxyCluster^ thisGalaxyCluster = Hubble::CreateGalaxyCluster((IntPtr)_hTopWnd);
-                    if (thisGalaxyCluster != nullptr)
+                    theApp.m_pHubble->CreateGalaxyCluster((__int64)_hTopWnd, &pGalaxyCluster);
+                    if (pGalaxyCluster != nullptr)
                     {
-                        Quasar^ thisQuasar = thisGalaxyCluster->CreateQuasar(ctrl->Handle, ctrl->Name);
-                        return thisQuasar->Observe(key, strGridXml);
+                        BSTR bstrName = STRING2BSTR(ctrl->Name);
+                        pGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToInt64()), bstrName, &pQuasar);
+                        if (pQuasar)
+                        {
+                            IGrid* pGrid = nullptr;
+                            BSTR bstrKey = STRING2BSTR(key);
+                            BSTR bstrXml = STRING2BSTR(strGridXml);
+                            pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                            ::SysFreeString(bstrKey);
+                            ::SysFreeString(bstrXml);
+                            if (pGrid)
+                                _pRetGrid = theAppProxy._createObject<IGrid, Grid>(pGrid);
+                        }
+                        ::SysFreeString(bstrName);
                     }
                 }
+                return _pRetGrid;
             }
         }
         return nullptr;
@@ -923,33 +940,6 @@ namespace Cosmos
         }
 
         return pRetObj;
-    }
-
-    GalaxyCluster^ Hubble::CreateGalaxyCluster(IntPtr nPageHandle)
-    {
-        IGalaxyCluster* pGalaxyCluster = nullptr;
-        theApp.m_pHubble->CreateGalaxyCluster(nPageHandle.ToInt64(), &pGalaxyCluster);
-        if (pGalaxyCluster)
-        {
-            return theAppProxy._createObject<IGalaxyCluster, GalaxyCluster>(pGalaxyCluster);
-        }
-        return nullptr;
-    }
-
-    GalaxyCluster^ Hubble::CreateGalaxyCluster(Control^ ctrl, Object^ ExternalObj)
-    {
-        if (ctrl != nullptr)
-        {
-            if (theApp.m_pHubble == nullptr)
-                GetHubble();
-            IGalaxyCluster* pGalaxyCluster = nullptr;
-            theApp.m_pHubble->CreateGalaxyCluster(ctrl->Handle.ToInt64(), &pGalaxyCluster);
-            if (pGalaxyCluster)
-            {
-                return theAppProxy._createObject<IGalaxyCluster, GalaxyCluster>(pGalaxyCluster);
-            }
-        }
-        return nullptr;
     }
 
     Type^ Hubble::GetType(String^ strObjID)
@@ -1277,114 +1267,6 @@ namespace Cosmos
         return nullptr;
     }
 
-    //Object^ Grid::ActiveMethod(String^ strMethod, cli::array<Object^, 1>^ p)
-    //{
-    //    Object^ pRetObj = nullptr;
-    //    if (m_pHostObj != nullptr)
-    //    {
-    //        MethodInfo^ mi = nullptr;
-    //        if (m_pHubbleCLRMethodDic == nullptr)
-    //            m_pHubbleCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
-    //        Object^ pObj = nullptr;
-    //        if (m_pHubbleCLRMethodDic->TryGetValue(strMethod, mi) == true)
-    //        {
-    //            try
-    //            {
-    //                pRetObj = mi->Invoke(m_pHostObj, p);
-    //            }
-    //            finally
-    //            {
-    //            }
-    //            return pRetObj;
-    //        }
-    //        try
-    //        {
-    //            mi = m_pHostObj->GetType()->GetMethod(strMethod);
-    //            m_pHubbleCLRMethodDic[strMethod] = mi;
-    //        }
-    //        catch (AmbiguousMatchException ^ e)
-    //        {
-    //            Debug::WriteLine(L"Hubble::ActiveMethod GetMethod: " + e->Message);
-    //        }
-    //        catch (ArgumentNullException ^ e)
-    //        {
-    //            Debug::WriteLine(L"Hubble::ActiveMethod GetMethod: " + e->Message);
-    //        }
-    //        finally
-    //        {
-    //            if (mi != nullptr)
-    //            {
-    //                try
-    //                {
-    //                    pRetObj = mi->Invoke(m_pHostObj, p);
-    //                }
-    //                finally
-    //                {
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    return pRetObj;
-    //}
-
-    GalaxyCluster::GalaxyCluster(void)
-    {
-    }
-
-    GalaxyCluster::GalaxyCluster(IGalaxyCluster* pGalaxyCluster)
-    {
-        m_pGalaxyCluster = pGalaxyCluster;
-        LONGLONG nValue = (LONGLONG)m_pGalaxyCluster;
-        theAppProxy._insertObject(nValue, this);
-        m_pHubbleClrEvent = new CGalaxyClusterEvent();
-        m_pHubbleClrEvent->DispEventAdvise(m_pGalaxyCluster);
-        m_pHubbleClrEvent->m_pGalaxyCluster = this;
-    }
-
-    GalaxyCluster::~GalaxyCluster()
-    {
-        if (m_pHubbleClrEvent)
-        {
-            m_pHubbleClrEvent->DispEventUnadvise(m_pGalaxyCluster);
-            LONGLONG nValue = (LONGLONG)m_pGalaxyCluster;
-            theAppProxy._removeObject(nValue);
-            delete m_pHubbleClrEvent;
-            m_pHubbleClrEvent = nullptr;
-        }
-    }
-
-    void GalaxyCluster::ObserveQuasars(String^ strFrames, String^ strKey, String^ bstrXml, bool bSaveToConfigFile)
-    {
-        m_pGalaxyCluster->ObserveQuasars(STRING2BSTR(strFrames), STRING2BSTR(strKey), STRING2BSTR(bstrXml), bSaveToConfigFile);
-    }
-
-    Grid^ GalaxyCluster::GetGrid(String^ strXml, String^ strFrameName)
-    {
-        if (String::IsNullOrEmpty(strXml) || String::IsNullOrEmpty(strFrameName))
-            return nullptr;
-        BSTR bstrXml = STRING2BSTR(strXml);
-        BSTR bstrFrameName = STRING2BSTR(strFrameName);
-        CComPtr<IGrid> pGrid;
-        m_pGalaxyCluster->GetGrid(bstrXml, bstrFrameName, &pGrid);
-        Grid^ pRetNode = nullptr;
-        if (pGrid)
-        {
-            pRetNode = theAppProxy._createObject<IGrid, Grid>(pGrid);
-        }
-        ::SysFreeString(bstrXml);
-        ::SysFreeString(bstrFrameName);
-        return pRetNode;
-    }
-
-    String^ GalaxyCluster::GetPageXML()
-    {
-        BSTR bstrXML;
-        m_pGalaxyCluster->get_GalaxyClusterXML(&bstrXML);
-        String^ strXML = BSTR2STRING(bstrXML);
-        return strXML;
-    }
-
     void Quasar::SendMessage(String^ strFrom, String^ strTo, String^ strMsgId, String^ strMsgContent, String^ strExtra)
     {
         if (m_pQuasar)
@@ -1424,19 +1306,5 @@ namespace Cosmos
         ::SysFreeString(blayerName);
         ::SysFreeString(blayerXML);
         return pRetNode;
-    }
-
-    Object^ Quasar::FrameData::get(String^ iIndex)
-    {
-        CComVariant bstrVal(::SysAllocString(L""));
-        m_pQuasar->get_QuasarData(STRING2BSTR(iIndex), &bstrVal);
-        return Marshal::GetObjectForNativeVariant((IntPtr)&bstrVal);
-    }
-
-    void Quasar::FrameData::set(String^ iIndex, Object^ newVal)
-    {
-        IntPtr nPtr = (IntPtr)0;
-        Marshal::GetNativeVariantForObject(newVal, nPtr);
-        m_pQuasar->put_QuasarData(STRING2BSTR(iIndex), *(VARIANT*)nPtr.ToInt64());
     }
 }

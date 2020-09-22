@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -11,7 +11,7 @@
 * https://www.tangram.dev
 ********************************************************************************/
 
-// Star.cpp : Implementation of CGrid
+// Grid.cpp : Implementation of CGrid
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -45,7 +45,6 @@ CGrid::CGrid()
 	m_strKey = _T("");
 	m_strURL = _T("");
 	m_strNodeName = _T("");
-	m_strExtenderID = _T("");
 	m_hHostWnd = NULL;
 	m_hChildHostWnd = NULL;
 	m_pDisp = nullptr;
@@ -149,7 +148,7 @@ void CGrid::InitWndGrid()
 
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
-		CGridProxy* pHubbleWndGridProxy = it.second->OnHubbleNodeInit(this);
+		CGridProxy* pHubbleWndGridProxy = it.second->OnGridInit(this);
 		if (pHubbleWndGridProxy)
 			m_mapWndGridProxy[it.second] = pHubbleWndGridProxy;
 	}
@@ -430,8 +429,6 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 			if (m_pGridCommonData->m_pQuasar->m_pWebPageWnd)
 			{
 				_pQuasar->m_pWebPageWnd = m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
-				if (pWndGrid->m_strID == TGM_NUCLEUS)
-					m_pGridCommonData->m_pQuasar->m_pSubQuasar = _pQuasar;
 			}
 		}
 
@@ -455,7 +452,6 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 				if (pWebWnd)
 				{
 					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-					//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 				}
 				return S_OK;
 			}
@@ -711,42 +707,12 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	HWND hWnd = 0;
 	CGridHelperWnd* pHubbleDesignView = (CGridHelperWnd*)m_pHostWnd;
 	BOOL isAppWnd = false;
-	if (m_strID == _T("activex") || m_strID == _T("clrctrl"))
+	if ( m_strID == _T("clrctrl"))
 	{
-		if (m_strID == _T("clrctrl") || m_strCnnID.Find(_T(",")) != -1)
-		{
-			g_pHubble->LoadCLR();
-			m_nViewType = CLRCtrl;
-		}
-		else
-			m_nViewType = ActiveX;
-		if (m_strCnnID.Find(_T("//")) == -1 && ::PathFileExists(m_strCnnID) == false)
-		{
-			CString strPath = g_pHubble->m_strAppPath + _T("TangramWebPage\\") + m_strCnnID;
-			if (::PathFileExists(strPath))
-				m_strCnnID = strPath;
-		}
+		g_pHubble->LoadCLR();
+		m_nViewType = CLRCtrl;
 
 		hWnd = CreateView(pParentWnd->m_hWnd, m_strCnnID);
-		if (m_pDisp)
-		{
-			CComBSTR bstrExtenderID(L"");
-			get_Attribute(_T("extender"), &bstrExtenderID);
-			m_strExtenderID = OLE2T(bstrExtenderID);
-			m_strExtenderID.Trim();
-			if (m_strExtenderID != _T(""))
-			{
-				CComPtr<IDispatch> pDisp;
-				pDisp.CoCreateInstance(bstrExtenderID);
-				if (pDisp)
-				{
-					m_pExtender = pDisp.Detach();
-					m_pExtender->AddRef();
-				}
-			}
-
-			pHubbleDesignView->m_bCreateExternal = true;
-		}
 		bRet = true;
 	}
 	else
@@ -803,32 +769,14 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					{
 						if (m_strID.CompareNoCase(_T("TreeView")))
 						{
-							if (g_pHubble->m_strExeName.CompareNoCase(_T("devenv")) == 0)
+							CString strLib = g_pHubble->m_strAppPath + _T("TabbedWnd.dll");
+							if (::PathFileExists(strLib))
 							{
-#ifdef _WIN32
-								CString strLib = g_pHubble->m_strAppPath + _T("PublicAssemblies\\TangramTabbedWnd.dll");
-								if (::PathFileExists(strLib))
+								::LoadLibrary(strLib);
+								auto it = g_pHubble->m_mapWindowProvider.find(m_strCnnID);
+								if (it != g_pHubble->m_mapWindowProvider.end())
 								{
-									::LoadLibrary(strLib);
-									auto it = g_pHubble->m_mapWindowProvider.find(m_strCnnID);
-									if (it != g_pHubble->m_mapWindowProvider.end())
-									{
-										pViewFactoryDisp = it->second;
-									}
-								}
-#endif
-							}
-							else
-							{
-								CString strLib = g_pHubble->m_strAppPath + _T("TabbedWnd.dll");
-								if (::PathFileExists(strLib))
-								{
-									::LoadLibrary(strLib);
-									auto it = g_pHubble->m_mapWindowProvider.find(m_strCnnID);
-									if (it != g_pHubble->m_mapWindowProvider.end())
-									{
-										pViewFactoryDisp = it->second;
-									}
+									pViewFactoryDisp = it->second;
 								}
 							}
 							if (pViewFactoryDisp == nullptr)
@@ -841,22 +789,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 									if (m_Parse.LoadFile(strPath))
 									{
 										strLib = g_pHubble->m_strAppPath + _T("wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
-									}
-								}
-								else
-								{
-									strPath = g_pHubble->m_strProgramFilePath + _T("\\tangram\\wincomponent\\") + m_strCnnID + _T(".component");
-									if (m_Parse.LoadFile(strPath))
-									{
-										strLib = g_pHubble->m_strProgramFilePath + _T("\\tangram\\wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
-									}
-									else
-									{
-										strPath = g_pHubble->m_strAppPath + _T("PublicAssemblies\\wincomponent\\") + m_strCnnID + _T(".component");
-										if (m_Parse.LoadFile(strPath))
-										{
-											strLib = g_pHubble->m_strAppPath + _T("PublicAssemblies\\wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
-										}
 									}
 								}
 								if (::PathFileExists(strLib)&&::LoadLibrary(strLib))
@@ -1329,23 +1261,34 @@ STDMETHODIMP CGrid::get_Col(long* nCol)
 STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppGrid)
 {
 	CGrid* pRet = nullptr;
-	auto bFound = false;
 
 	*ppGrid = nullptr;
 	if (nRow < 0 || nCol < 0 || nRow >= m_nRows || nCol >= m_nCols) return E_INVALIDARG;
+	//if (m_nViewType == Grid)
+	//{
+	//	CGridWnd* pSplitter = (CGridWnd*)m_pHostWnd;
+	//	HWND hWnd = ::GetDlgItem(pSplitter->m_hWnd, pSplitter->IdFromRowCol(nRow, nCol));
+	//	LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+	//	if (lRes)
+	//	{
+	//		pRet = (CGrid*)lRes;
+	//		pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
+	//		return S_OK;
+	//	}
+	//	return S_FALSE;
+	//}
 
 	for (auto it : m_vChildNodes)
 	{
 		pRet = it;
 		if (pRet->m_nCol == nCol && pRet->m_nRow == nRow)
 		{
-			bFound = true;
 			break;
 		}
 	}
 
 	HRESULT hr = S_OK;
-	if (bFound)
+	if (pRet)
 	{
 		hr = pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
 	}
@@ -1965,7 +1908,7 @@ HRESULT CGrid::Fire_Destroy()
 	return hr;
 }
 
-HRESULT CGrid::Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+HRESULT CGrid::Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2003,7 +1946,7 @@ HRESULT CGrid::Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, B
 	return hr;
 }
 
-HRESULT CGrid::Fire_NodeAddInsCreated()
+HRESULT CGrid::Fire_GridAddInsCreated()
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -725,7 +725,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 						pDisp.p->AddRef();
 					}
 
-					m_pWorkGrid->Fire_NodeAddInCreated(pDisp.p, bstrPlugIn, bstrXml);
+					m_pWorkGrid->Fire_GridAddInCreated(pDisp.p, bstrPlugIn, bstrXml);
 				}
 				else //for .NET Component
 				{
@@ -735,7 +735,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 						m_pWorkGrid->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
 
 						bstrPlugIn = strPlugID.AllocSysString();
-						m_pWorkGrid->Fire_NodeAddInCreated(pDisp, bstrPlugIn, bstrXml);
+						m_pWorkGrid->Fire_GridAddInCreated(pDisp, bstrPlugIn, bstrXml);
 					}
 				}
 				if (m_pGalaxyCluster && pDisp)
@@ -747,7 +747,7 @@ BOOL CQuasar::CreateGalaxyCluster()
 		}
 
 		if (bHavePlugin)
-			m_pWorkGrid->Fire_NodeAddInsCreated();
+			m_pWorkGrid->Fire_GridAddInsCreated();
 	}
 	m_pWorkGrid->m_bCreated = true;
 	return true;

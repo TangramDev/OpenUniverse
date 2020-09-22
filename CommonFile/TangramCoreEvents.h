@@ -32,8 +32,8 @@ extern _ATL_FUNC_INFO MessageHandle;
 extern _ATL_FUNC_INFO TangramCoreClose;
 extern _ATL_FUNC_INFO TangramEvent;
 extern _ATL_FUNC_INFO Initialize;
-extern _ATL_FUNC_INFO NodeAddInCreated;
-extern _ATL_FUNC_INFO NodeAddInsCreated;
+extern _ATL_FUNC_INFO GridAddInCreated;
+extern _ATL_FUNC_INFO GridAddInsCreated;
 
 
 class CTangramCoreEvents : public IDispEventSimpleImpl</*nID =*/ 1, CTangramCoreEvents, &__uuidof(_IHubble)>
@@ -68,8 +68,8 @@ public:
 	BEGIN_SINK_MAP(CGridEvents)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000001, OnOpenComplete, &NodeOpenComplete)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000002, OnDestroy, &Destroy)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000003, OnGridAddInCreated, &NodeAddInCreated)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000004, OnGridAddInsCreated, &NodeAddInsCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000003, OnGridAddInCreated, &GridAddInCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000004, OnGridAddInsCreated, &GridAddInsCreated)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000007, OnTabChange, &TabChange2)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000008, OnIPCMessageReceived, &MessageHandle)
 	END_SINK_MAP()

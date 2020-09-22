@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -53,17 +53,19 @@ void CGridCLREvent::OnDestroy()
 void CGridCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	Object^ pAddinObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pAddIndisp)));
-	m_pGrid->Fire_NodeAddInCreated(m_pGrid, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
+	m_pGrid->Fire_GridAddInCreated(m_pGrid, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
 }
 
 void CGridCLREvent::OnGridAddInsCreated()
 {
-	m_pGrid->Fire_NodeAddInsCreated(m_pGrid);
+	m_pGrid->Fire_GridAddInsCreated(m_pGrid);
 }
 
 void CGridCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	m_pGrid->Fire_OnTabChange(nActivePage, nOldPage);
+	Cosmos::Grid^ pActiveGrid = m_pGrid->GetGrid(0, nActivePage);
+	Cosmos::Grid^ pOldGrid = m_pGrid->GetGrid(0, nOldPage);
+	m_pGrid->Fire_OnTabChange(pActiveGrid, pOldGrid);
 }
 
 void CGridCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)

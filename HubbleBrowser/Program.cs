@@ -15,7 +15,7 @@ namespace HubbleBrowser
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Hubble.Run(new Form1());
+            Hubble.Run(/*new Form1()*/);
         }
     }
 }

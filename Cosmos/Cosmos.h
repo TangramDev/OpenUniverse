@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.9								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -31,7 +31,7 @@ using namespace System::Threading::Tasks;
 using System::Runtime::InteropServices::Marshal;
 
 class CGridCLREvent;
-class CCosmosNodeEvent;
+class CCosmosGridEvent;
 extern CCosmosProxy theAppProxy;
 
 namespace Cosmos
@@ -43,7 +43,6 @@ namespace Cosmos
 	ref class Grid;
 	ref class Quasar;
 	ref class Browser;
-	ref class GalaxyCluster;
 
 	public enum class CosmosAppType
 	{
@@ -63,21 +62,21 @@ namespace Cosmos
 
 		IGrid* m_pGrid;
 		Object^ m_pHostObj = nullptr;
-		CCosmosNodeEvent* m_pGridEvent;
+		CCosmosGridEvent* m_pGridEvent;
 		CGridCLREvent* m_pGridCLREvent;
 		Cosmos::Wormhole^ m_pWormhole = nullptr;
 		CBrowserImpl* m_pChromeBrowserProxy;
 
-		delegate void NodeAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
-		event NodeAddInCreated^ OnGridAddInCreated;
-		void Fire_NodeAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml)
+		delegate void GridAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
+		event GridAddInCreated^ OnGridAddInCreated;
+		void Fire_GridAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml)
 		{
 			OnGridAddInCreated(sender, pAddIndisp, bstrAddInID, bstrAddInXml);
 		}
 
-		delegate void NodeAddInsCreated(Grid^ sender);
-		event NodeAddInsCreated^ OnGridAddInsCreated;
-		void Fire_NodeAddInsCreated(Grid^ sender)
+		delegate void GridAddInsCreated(Grid^ sender);
+		event GridAddInsCreated^ OnGridAddInsCreated;
+		void Fire_GridAddInsCreated(Grid^ sender)
 		{
 			OnGridAddInsCreated(sender);
 		}
@@ -111,9 +110,9 @@ namespace Cosmos
 			OnDocumentComplete(sender, pHtmlDoc, strURL);
 		}
 
-		delegate void TabChange(int nActivePage, int nOldActivePage);
+		delegate void TabChange(Grid^ ActiveGrid, Grid^ OldGrid);
 		event TabChange^ OnTabChange;
-		void Fire_OnTabChange(int nActivePage, int nOldActivePage);
+		void Fire_OnTabChange(Grid^ ActiveGrid, Grid^ OldGrid);
 
 		delegate void MessageHandle(String^ strFrom, String^ strTo, String^ strMsgId, String^ strPayload, String^ strExtra);
 		event MessageHandle^ OnIPCMessageReceived;
@@ -162,14 +161,10 @@ namespace Cosmos
 			String^ get();
 			void set(String^ strCaption)
 			{
-				m_pGrid->put_Caption(STRING2BSTR(strCaption));
+				BSTR bstrCap = STRING2BSTR(strCaption);
+				m_pGrid->put_Caption(bstrCap);
+				::SysFreeString(bstrCap);
 			}
-		}
-
-		[BrowsableAttribute(false)]
-		property GalaxyCluster^ GalaxyCluster
-		{
-			Cosmos::GalaxyCluster^ get();
 		}
 
 		property String^ Name
@@ -370,7 +365,7 @@ namespace Cosmos
 			Object ^ get(String ^ strName);
 		}
 
-		[BrowsableAttribute(false)]
+			[BrowsableAttribute(false)]
 		property Grid^ RootGrid
 		{
 			Grid^ get()
@@ -603,22 +598,6 @@ namespace Cosmos
 			}
 		}
 
-		property Object^ FrameData[String^]
-		{
-			Object ^ get(String ^ iIndex);
-			void set(String^ iIndex, Object^ newVal);
-		}
-
-			property String^ Name
-		{
-			String^ get()
-			{
-				CComBSTR bstrName("");
-				m_pQuasar->get_Name(&bstrName);
-				return BSTR2STRING(bstrName);
-			}
-		}
-
 		property IntPtr Handle
 		{
 			IntPtr get()
@@ -639,28 +618,28 @@ namespace Cosmos
 			}
 		}
 
-		property Grid^ Grid[Object^]
-		{
-			Cosmos::Grid ^ get(Object ^ index)
-			{
-				VARIANT var;
-				Marshal::GetNativeVariantForObject(index,(System::IntPtr) & var);
-				IGrid* pGrid = nullptr;
-				m_pQuasar->get_Grid(var, &pGrid);
-				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
-			}
-		}
+		//property Grid^ Grid[Object^]
+		//{
+		//	Cosmos::Grid ^ get(Object ^ index)
+		//	{
+		//		VARIANT var;
+		//		Marshal::GetNativeVariantForObject(index,(System::IntPtr) & var);
+		//		IGrid* pGrid = nullptr;
+		//		m_pQuasar->get_Grid(var, &pGrid);
+		//		return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+		//	}
+		//}
 
-		property GalaxyCluster^ GalaxyCluster
-		{
-			Cosmos::GalaxyCluster^ get()
-			{
-				CComPtr<IGalaxyCluster> pGalaxyCluster = NULL;
-				m_pQuasar->get_GalaxyCluster(&pGalaxyCluster);
+		//property GalaxyCluster^ GalaxyCluster
+		//{
+		//	Cosmos::GalaxyCluster^ get()
+		//	{
+		//		CComPtr<IGalaxyCluster> pGalaxyCluster = NULL;
+		//		m_pQuasar->get_GalaxyCluster(&pGalaxyCluster);
 
-				return theAppProxy._createObject<IGalaxyCluster, Cosmos::GalaxyCluster>(pGalaxyCluster);
-			}
-		}
+		//		return theAppProxy._createObject<IGalaxyCluster, Cosmos::GalaxyCluster>(pGalaxyCluster);
+		//	}
+		//}
 	};
 
 	public ref class Hubble
@@ -677,6 +656,9 @@ namespace Cosmos
 		static Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
 		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<Object^, Wormhole^>^ m_pCloudEventDic = gcnew Dictionary<Object^, Wormhole^>();
+
+		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
+		static bool WebRuntimeInit();
 	public:
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
@@ -684,8 +666,6 @@ namespace Cosmos
 		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
 		static Dictionary<Object^, Grid^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Grid^>();
 
-		static GalaxyCluster^ CreateGalaxyCluster(IntPtr nPageHandle);
-		static GalaxyCluster^ CreateGalaxyCluster(Control^ ctrl, Object^ ExternalObj);
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
 		static Type^ GetType(String^ ObjID);
@@ -696,15 +676,10 @@ namespace Cosmos
 		static Grid^ GetGridFromHandle(IntPtr handle);
 		static Grid^ GetNodeFromControl(Control^ ctrl);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
-		//static void RegComponentForTangram(String^ strIDs, Assembly^ a);
 		static void UpdateNewTabPageLayout(String^ newTabPageLayout);
 		static void BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ name);
 
 		static Hubble^ GetHubble();
-
-		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
-
-		static bool WebRuntimeInit();
 
 		static void Run();
 		static void Run(Form^ Mainform);
@@ -945,13 +920,6 @@ namespace Cosmos
 			OnRenderHTMLElement(hWnd, strRuleName, strHTML);
 		}
 
-		//delegate void TangramAppData(String^ strAppData);
-		//static event TangramAppData^ OnHubbleAppData;
-		//static void Fire_OnHubbleAppData(String^ strAppData)
-		//{
-		//	OnHubbleAppData(strAppData);
-		//}
-
 		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid);
 		static event FormNodeCreated^ OnFormNodeCreated;
 		static void Fire_OnFormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid)
@@ -964,183 +932,5 @@ namespace Cosmos
 			String ^ get(String ^ iIndex);
 			void set(String^ iIndex, String^ newVal);
 		}
-	};
-
-	/// <summary>
-	/// GalaxyCluster 
-	/// </summary>
-	//[ComSourceInterfacesAttribute(Universe::IManagerExtender::typeid)]
-	public ref class GalaxyCluster : public IWin32Window, public Dictionary<String^, Quasar^>
-	{
-	public:
-		GalaxyCluster(void);
-		GalaxyCluster(IGalaxyCluster* pGalaxyCluster);
-
-		IGalaxyCluster* m_pGalaxyCluster;
-		property IntPtr Handle
-		{
-			virtual IntPtr get()
-			{
-				LONGLONG h = 0;
-				m_pGalaxyCluster->get_Handle(&h);
-				return (IntPtr)h;
-			};
-		}
-
-		property String^ QuasarName[Control^]
-		{
-			String ^ get(Control ^ ctrl)
-			{
-				if (ctrl != nullptr)
-				{
-					LONGLONG hWnd = ctrl->Handle.ToInt64();
-					BSTR bstrName = ::SysAllocString(L"");
-					m_pGalaxyCluster->get_QuasarName(hWnd, &bstrName);
-					String^ strRet = BSTR2STRING(bstrName);
-					::SysFreeString(bstrName);
-					return strRet;
-				}
-				return String::Empty;
-			}
-		}
-
-			property String^ QuasarName[IntPtr]
-		{
-			String ^ get(IntPtr handle)
-			{
-				if (::IsWindow((HWND)handle.ToInt64()))
-				{
-					BSTR bstrName = ::SysAllocString(L"");
-					m_pGalaxyCluster->get_QuasarName(handle.ToInt32(), &bstrName);
-					String^ strRet = BSTR2STRING(bstrName);
-					::SysFreeString(bstrName);
-					return strRet;
-				}
-				return String::Empty;
-			}
-		}
-
-			property Object^ Extender[String^]
-		{
-			Object ^ get(String ^ strName)
-			{
-				BSTR bstrName = STRING2BSTR(strName);
-				CComPtr<IDispatch> pDisp;
-				m_pGalaxyCluster->get_Extender(bstrName, &pDisp);
-				::SysFreeString(bstrName);
-				return Marshal::GetObjectForIUnknown((IntPtr)pDisp.p);
-			}
-
-			void set(String ^ strName, Object ^ newObj)
-			{
-				IDispatch* pDisp = (IDispatch*)Marshal::GetIUnknownForObject(newObj).ToPointer();
-				m_pGalaxyCluster->put_Extender(STRING2BSTR(strName), pDisp);
-			}
-		}
-
-			property Quasar^ Quasars[Object^]
-		{
-			Quasar ^ get(Object ^ obj)
-			{
-				CComVariant m_v;
-				IntPtr handle = (IntPtr)&m_v;
-				Marshal::GetNativeVariantForObject(obj, handle);
-				CComPtr<IQuasar> pQuasar;
-				m_pGalaxyCluster->get_Quasar(m_v, &pQuasar);
-				if (pQuasar)
-				{
-					return theAppProxy._createObject<IQuasar, Quasar>(pQuasar);
-				}
-				return nullptr;
-			}
-		}
-
-		Grid^ GetGrid(String^ bstrXml, String^ bstrFrameName);
-
-		Quasar^ CreateQuasar(Control^ ctrl, String^ strName)
-		{
-			Quasar^ pRetQuasar = nullptr;
-			if (ctrl != nullptr && String::IsNullOrEmpty(strName) == false)
-			{
-				if (TryGetValue(strName, pRetQuasar))
-				{
-					return pRetQuasar;
-				}
-				CComPtr<IQuasar> pQuasar;
-				m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((LONGLONG)ctrl->Handle.ToInt64()), STRING2BSTR(strName), &pQuasar);
-				if (pQuasar)
-				{
-					pRetQuasar = theAppProxy._createObject<IQuasar, Quasar>(pQuasar);
-					if (pRetQuasar != nullptr)
-						Add(strName, pRetQuasar);
-				}
-			}
-			return pRetQuasar;
-		}
-
-		Quasar^ CreateQuasar(IntPtr handle, String^ strName)
-		{
-			Quasar^ pRetQuasar = nullptr;
-			if (::IsWindow((HWND)handle.ToInt64()) && String::IsNullOrEmpty(strName) == false)
-			{
-				if (TryGetValue(strName, pRetQuasar))
-				{
-					return pRetQuasar;
-				}
-				CComPtr<IQuasar> pQuasar;
-				m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((LONGLONG)handle.ToInt64()), STRING2BSTR(strName), &pQuasar);
-				if (pQuasar)
-				{
-					pRetQuasar = theAppProxy._createObject<IQuasar, Quasar>(pQuasar);
-					if (pRetQuasar != nullptr)
-						Add(strName, pRetQuasar);
-				}
-			}
-			return pRetQuasar;
-		}
-
-		void ObserveQuasars(String^ strFrames, String^ strKey, String^ bstrXml, bool bSaveToConfigFile);
-
-		delegate void DocumentComplete(GalaxyCluster^ sender, Object^ pHtmlDoc, String^ strURL);
-		event DocumentComplete^ OnDocumentComplete;
-		void Fire_OnDocumentComplete(GalaxyCluster^ sender, Object^ pHtmlDoc, String^ strURL)
-		{
-			OnDocumentComplete(sender, pHtmlDoc, strURL);
-		}
-
-		delegate void IPCMsg(Quasar^ sender, String^ strType, String^ strContent, String^ strFeature);
-		event IPCMsg^ OnIPCMsg;
-		void Fire_OnIPCMsg(Quasar^ sender, String^ strType, String^ strContent, String^ strFeature)
-		{
-			OnIPCMsg(sender, strType, strContent, strFeature);
-		}
-
-		delegate void Destroy(Grid^ sender);
-		event Destroy^ OnDestroy;
-		void Fire_OnDestroy(Grid^ sender)
-		{
-			OnDestroy(sender);
-		}
-
-		delegate void TabChange(Grid^ sender, int nActivePage, int nOldActivePage);
-		event TabChange^ OnTabChange;
-		void Fire_OnTabChange(Grid^ sender, int nActivePage, int nOldActivePage)
-		{
-			OnTabChange(sender, nActivePage, nOldActivePage);
-		}
-
-		delegate void GalaxyClusterLoad(GalaxyCluster^ sender);
-		event GalaxyClusterLoad^ OnGalaxyClusterLoad;
-		void Fire_OnGalaxyClusterLoad(GalaxyCluster^ sender)
-		{
-			OnGalaxyClusterLoad(sender);
-		}
-
-		String^ GetPageXML();
-
-	protected:
-		CGalaxyClusterEvent* m_pHubbleClrEvent;
-
-		~GalaxyCluster();
 	};
 }
