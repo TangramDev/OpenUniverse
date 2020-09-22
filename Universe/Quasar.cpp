@@ -1132,7 +1132,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 
 	m_bObserve = false;
 
-	//HostPosChanged();
+	HostPosChanged();
 	//Add 20200218
 	if (m_pBindingGrid)
 	{
@@ -1376,17 +1376,17 @@ LRESULT CQuasar::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
-	case 20180115:
-	{
-		HostPosChanged();
-	}
-	break;
-	case WM_BROWSERLAYOUT:
-	{
-		CWebPage* pWebWnd = (CWebPage*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
-		::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
-	}
-	break;
+		case 20180115:
+		{
+			HostPosChanged();
+		}
+		break;
+		case WM_BROWSERLAYOUT:
+		{
+			CWebPage* pWebWnd = (CWebPage*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+			::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
+		}
+		break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }

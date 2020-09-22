@@ -82,7 +82,6 @@ public:
 	CString							m_strLastIPCParam5 = _T("");
 
 	CString							m_strNodeName;
-	CString 						m_strExtenderID;
 
 	IDispatch*						m_pDisp;
 	CGrid* 							m_pRootObj;

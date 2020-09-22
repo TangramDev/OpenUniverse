@@ -45,7 +45,6 @@ CGrid::CGrid()
 	m_strKey = _T("");
 	m_strURL = _T("");
 	m_strNodeName = _T("");
-	m_strExtenderID = _T("");
 	m_hHostWnd = NULL;
 	m_hChildHostWnd = NULL;
 	m_pDisp = nullptr;
@@ -708,42 +707,12 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	HWND hWnd = 0;
 	CGridHelperWnd* pHubbleDesignView = (CGridHelperWnd*)m_pHostWnd;
 	BOOL isAppWnd = false;
-	if (m_strID == _T("activex") || m_strID == _T("clrctrl"))
+	if ( m_strID == _T("clrctrl"))
 	{
-		if (m_strID == _T("clrctrl") || m_strCnnID.Find(_T(",")) != -1)
-		{
-			g_pHubble->LoadCLR();
-			m_nViewType = CLRCtrl;
-		}
-		else
-			m_nViewType = ActiveX;
-		if (m_strCnnID.Find(_T("//")) == -1 && ::PathFileExists(m_strCnnID) == false)
-		{
-			CString strPath = g_pHubble->m_strAppPath + _T("TangramWebPage\\") + m_strCnnID;
-			if (::PathFileExists(strPath))
-				m_strCnnID = strPath;
-		}
+		g_pHubble->LoadCLR();
+		m_nViewType = CLRCtrl;
 
 		hWnd = CreateView(pParentWnd->m_hWnd, m_strCnnID);
-		if (m_pDisp)
-		{
-			CComBSTR bstrExtenderID(L"");
-			get_Attribute(_T("extender"), &bstrExtenderID);
-			m_strExtenderID = OLE2T(bstrExtenderID);
-			m_strExtenderID.Trim();
-			if (m_strExtenderID != _T(""))
-			{
-				CComPtr<IDispatch> pDisp;
-				pDisp.CoCreateInstance(bstrExtenderID);
-				if (pDisp)
-				{
-					m_pExtender = pDisp.Detach();
-					m_pExtender->AddRef();
-				}
-			}
-
-			pHubbleDesignView->m_bCreateExternal = true;
-		}
 		bRet = true;
 	}
 	else
@@ -800,32 +769,14 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					{
 						if (m_strID.CompareNoCase(_T("TreeView")))
 						{
-							if (g_pHubble->m_strExeName.CompareNoCase(_T("devenv")) == 0)
+							CString strLib = g_pHubble->m_strAppPath + _T("TabbedWnd.dll");
+							if (::PathFileExists(strLib))
 							{
-#ifdef _WIN32
-								CString strLib = g_pHubble->m_strAppPath + _T("PublicAssemblies\\TangramTabbedWnd.dll");
-								if (::PathFileExists(strLib))
+								::LoadLibrary(strLib);
+								auto it = g_pHubble->m_mapWindowProvider.find(m_strCnnID);
+								if (it != g_pHubble->m_mapWindowProvider.end())
 								{
-									::LoadLibrary(strLib);
-									auto it = g_pHubble->m_mapWindowProvider.find(m_strCnnID);
-									if (it != g_pHubble->m_mapWindowProvider.end())
-									{
-										pViewFactoryDisp = it->second;
-									}
-								}
-#endif
-							}
-							else
-							{
-								CString strLib = g_pHubble->m_strAppPath + _T("TabbedWnd.dll");
-								if (::PathFileExists(strLib))
-								{
-									::LoadLibrary(strLib);
-									auto it = g_pHubble->m_mapWindowProvider.find(m_strCnnID);
-									if (it != g_pHubble->m_mapWindowProvider.end())
-									{
-										pViewFactoryDisp = it->second;
-									}
+									pViewFactoryDisp = it->second;
 								}
 							}
 							if (pViewFactoryDisp == nullptr)
@@ -838,22 +789,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 									if (m_Parse.LoadFile(strPath))
 									{
 										strLib = g_pHubble->m_strAppPath + _T("wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
-									}
-								}
-								else
-								{
-									strPath = g_pHubble->m_strProgramFilePath + _T("\\tangram\\wincomponent\\") + m_strCnnID + _T(".component");
-									if (m_Parse.LoadFile(strPath))
-									{
-										strLib = g_pHubble->m_strProgramFilePath + _T("\\tangram\\wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
-									}
-									else
-									{
-										strPath = g_pHubble->m_strAppPath + _T("PublicAssemblies\\wincomponent\\") + m_strCnnID + _T(".component");
-										if (m_Parse.LoadFile(strPath))
-										{
-											strLib = g_pHubble->m_strAppPath + _T("PublicAssemblies\\wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
-										}
 									}
 								}
 								if (::PathFileExists(strLib)&&::LoadLibrary(strLib))

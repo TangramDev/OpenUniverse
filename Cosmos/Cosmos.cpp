@@ -730,7 +730,8 @@ namespace Cosmos
                         String^ strName = ctrl->Name;
                         BSTR bstrName = STRING2BSTR(strName);
                         Grid^ _pRetGrid = nullptr;
-                        pIGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToPointer()), bstrName, &pQuasar);
+                        HWND hWnd = (HWND)ctrl->Handle.ToPointer();
+                        pIGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)hWnd), bstrName, &pQuasar);
                         if (pQuasar)
                         {
                             IGrid* pGrid = nullptr;
@@ -743,6 +744,7 @@ namespace Cosmos
                                 _pRetGrid = theAppProxy._createObject<IGrid, Grid>(pGrid);
                         }
                         ::SysFreeString(bstrName);
+                        ::InvalidateRect(hWnd, nullptr, true);
                         return _pRetGrid;
                     }
                 }
