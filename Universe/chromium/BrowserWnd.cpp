@@ -218,9 +218,6 @@ namespace Web {
 			if (m_pBrowser) {
 				g_pHubble->m_pActiveBrowser = m_pBrowser;
 				g_pHubble->m_pActiveBrowser->m_pProxy = this;
-				//m_pBrowser->LayoutBrowser();
-				//BrowserLayout();
-				//::InvalidateRect(m_hWnd, nullptr, true);
 			}
 		}
 		else

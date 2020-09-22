@@ -885,7 +885,7 @@ namespace Web {
 		{
 			RenderHTMLIndWindowElement(strHTML);
 		}
-		else if (strRuleName.CompareNoCase(_T("nodeDetails")) == 0)
+		else if (strRuleName.CompareNoCase(_T("gridTemplate")) == 0)
 		{
 			RenderHTMLNodeDetailsElement(strHTML);
 		}

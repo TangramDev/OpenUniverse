@@ -330,9 +330,9 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 
 LRESULT CGridWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
-	RecalcLayout();
-	m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
-	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
+	//RecalcLayout();
+	//m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
+	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	return -1;
 }
 
@@ -729,7 +729,7 @@ void CGridWnd::_RecalcLayout()
 
 	// invalidate all the splitter bars (with NULL pDC)
 	DrawAllSplitBars(NULL, rectInside.right, rectInside.bottom);
-	::InvalidateRect(m_hWnd, nullptr, false);
+	//::InvalidateRect(m_hWnd, nullptr, false);
 }
 
 BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)

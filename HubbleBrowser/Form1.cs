@@ -20,6 +20,7 @@ namespace HubbleBrowser
 
         private void button1_Click(object sender, EventArgs e)
         {
+            int x = 0;
             string xml = "<content1>" +
                 "<layout>" +
                     "<grid objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"13\">" +
@@ -31,6 +32,14 @@ namespace HubbleBrowser
                 "</layout>" +
               "</content1>";
             Grid node = Hubble.Observe(listView1, "test", xml);
+            string s = node.Handle.ToString();
+            int n = node.Cols;
+            n++;
+            Quasar q = node.Quasar;
+             n = q.Count;
+            Form f = new Form();
+            f.Text = n.ToString();
+            f.Show();
         }
     }
 }

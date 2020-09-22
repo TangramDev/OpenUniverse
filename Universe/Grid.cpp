@@ -430,8 +430,6 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 			if (m_pGridCommonData->m_pQuasar->m_pWebPageWnd)
 			{
 				_pQuasar->m_pWebPageWnd = m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
-				if (pWndGrid->m_strID == TGM_NUCLEUS)
-					m_pGridCommonData->m_pQuasar->m_pSubQuasar = _pQuasar;
 			}
 		}
 
@@ -455,7 +453,6 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 				if (pWebWnd)
 				{
 					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-					//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 				}
 				return S_OK;
 			}
@@ -1332,25 +1329,25 @@ STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppGrid)
 
 	*ppGrid = nullptr;
 	if (nRow < 0 || nCol < 0 || nRow >= m_nRows || nCol >= m_nCols) return E_INVALIDARG;
-	if (m_nViewType == Grid)
-	{
-		CGridWnd* pSplitter = (CGridWnd*)m_pHostWnd;
-		HWND hWnd = ::GetDlgItem(pSplitter->m_hWnd, pSplitter->IdFromRowCol(nRow, nCol));
-		LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
-		if (lRes)
-		{
-			pRet = (CGrid*)lRes;
-			pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
-			return S_OK;
-		}
-		return S_FALSE;
-	}
+	//if (m_nViewType == Grid)
+	//{
+	//	CGridWnd* pSplitter = (CGridWnd*)m_pHostWnd;
+	//	HWND hWnd = ::GetDlgItem(pSplitter->m_hWnd, pSplitter->IdFromRowCol(nRow, nCol));
+	//	LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+	//	if (lRes)
+	//	{
+	//		pRet = (CGrid*)lRes;
+	//		pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
+	//		return S_OK;
+	//	}
+	//	return S_FALSE;
+	//}
 
 	for (auto it : m_vChildNodes)
 	{
+		pRet = it;
 		if (pRet->m_nCol == nCol && pRet->m_nRow == nRow)
 		{
-			pRet = it;
 			break;
 		}
 	}

@@ -771,8 +771,8 @@ LRESULT CGridHelperWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	if (m_pGrid->m_nViewType == CLRCtrl)
 		::SetWindowLong(m_hWnd, GWL_STYLE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 
-	m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
-	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
+	//m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
+	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
 

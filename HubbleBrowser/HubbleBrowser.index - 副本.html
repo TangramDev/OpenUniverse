@@ -113,7 +113,7 @@
     <define tagName="mainWindow"></define>
     <define tagName="application"></define>
     <define tagName="webViewport"></define>
-    <define tagName="nodeDetails"></define>
+    <define tagName="gridTemplate"></define>
     <!-- End Define new DOM elements -->
     <!-- The <application> grid is required, it can provide application-level configuration. -->
     <application>
@@ -173,7 +173,7 @@
             </default>
         </panel1>
     </mainWindow>
-    <nodeDetails type="usercontrol" objid="HubbleBrowser.NavControl,HubbleBrowser" uikey="navDetails">
+    <gridTemplate type="usercontrol" objid="HubbleBrowser.NavControl,HubbleBrowser" uikey="navDetails">
         <treeView1>
             <uidata key="uidata" treenode="true" text="Welcome to the World of Web Runtime for Applications!">
                 <treeView1_tag name="content"></treeView1_tag>
@@ -191,7 +191,7 @@
                 <node6_tag name="content6"></node6_tag>
             </uidata>
         </treeView1>
-    </nodeDetails>
+    </gridTemplate>
     <webViewport>
         <layout>
             <grid  rows="1" cols="2" width="350,100,">

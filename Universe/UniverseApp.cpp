@@ -274,7 +274,7 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			LONGLONG h = 0;
 			pGrid->get_Handle(&h);
 			HWND hWnd = (HWND)h;
-			::InvalidateRect(hWnd, nullptr, true);
+			//::InvalidateRect(hWnd, nullptr, true);
 		}
 	}
 	break;

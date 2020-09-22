@@ -78,7 +78,7 @@ class ATL_NO_VTABLE CQuasar :
 public:
 	CQuasar();           
 	virtual ~CQuasar();           
-
+	bool											m_bObserve = false;
 	BOOL											m_bDetached;
 	BOOL											m_bMDIChild;
 	BOOL											m_bDesignerState;
@@ -103,20 +103,16 @@ public:
 	CGrid*											m_pWorkGrid;
 	CGrid*											m_pContainerNode;
 	CGrid*											m_pBindingGrid;
-	CQuasar*										m_pSubQuasar;
 	QuasarInfo*										m_pQuasarInfo;
 	map<CString, CGrid*>							m_mapGrid;
-	map<CString, VARIANT>							m_mapVal;
-	map<CString, CGrid*>							m_mapGridScript;
 	CComObject<CGridCollection>*					m_pRootNodes;
 
 	void Lock(){}
 	void Unlock(){}
 	void Destroy();
 	void HostPosChanged();
-	void UpdateDesignerTreeInfo();
 
-	CTangramXmlParse* UpdateGrid();
+	//CTangramXmlParse* UpdateGrid();
 	BOOL CreateGalaxyCluster();
 	CGrid* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
 

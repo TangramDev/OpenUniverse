@@ -981,7 +981,7 @@ IGrid* CHubble::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 		IGrid* pGrid = nullptr;
 		pQuasar->Observe(NodeTag.AllocSysString(), strPath.AllocSysString(), &pGrid);
 		CQuasar* _pQuasar = (CQuasar*)pQuasar;
-		_pQuasar->m_mapGridScript[strPath] = (CGrid*)pGrid;
+		//_pQuasar->m_mapGridScript[strPath] = (CGrid*)pGrid;
 		//m_mapTreeCtrlScript[(HWND)handle] = NodeTag;
 		return pGrid;
 	}
@@ -1260,7 +1260,6 @@ CGrid* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 				m_wnd.ModifyStyle(0, WS_SIZEBOX | WS_BORDER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
 			}
 			m_wnd.Detach();
-			::PostMessage(hParent, WM_COSMOSMSG, 0, 1965);
 		}
 	}
 	return pRootGrid;
