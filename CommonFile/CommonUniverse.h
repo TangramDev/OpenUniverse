@@ -373,7 +373,7 @@ namespace CommonUniverse {
 		virtual void OnDestroy() {}
 		virtual void OnGridAddInCreated(IDispatch* pAddIndisp, CString bstrAddInID, CString bstrAddInXml) {}
 		virtual void OnGridAddInsCreated() {}
-		virtual void OnNodeDocumentComplete(IDispatch* ExtenderDisp, CString bstrURL) {}
+		virtual void OnGridDocumentComplete(IDispatch* ExtenderDisp, CString bstrURL) {}
 		virtual void OnControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {}
 		virtual void OnTabChange(LONG ActivePage, LONG OldPage) {}
 		virtual void OnHubbleDocEvent(IHubbleEventObj* pEventObj) {}

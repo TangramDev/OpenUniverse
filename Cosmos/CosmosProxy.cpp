@@ -2545,7 +2545,7 @@ void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid)
 	IntPtr nHandle = (IntPtr)hWnd;
 	Cosmos::Hubble::GetHubble()->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
-	_pRootNode->Fire_RootNodeCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
+	_pRootNode->Fire_RootGridCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
 }
 
 void CCosmosProxy::OnApplicationExit(System::Object^ sender, System::EventArgs^ e)

@@ -1006,7 +1006,7 @@ IGalaxyCluster* CHubble::Observe(HWND hFrame, CString strName, CString strKey)
 		pQuasar->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		VARIANT_BOOL bNewVersion;
 		pGalaxyCluster->get_NewVersion(&bNewVersion);
-		if (!bNewVersion)
+		if (pGrid&&!bNewVersion)
 		{
 			pGrid->put_SaveToConfigFile(true);
 		}

@@ -28,7 +28,7 @@ CGridCLREvent::~CGridCLREvent()
 
 void CGridCLREvent::OnObserverComplete(IGrid* pGrid)
 {
-	m_pGrid->Fire_OpenComplete(m_pGrid);
+	m_pGrid->Fire_ObserveComplete(m_pGrid);
 }
 
 void CGridCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)

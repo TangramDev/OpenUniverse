@@ -1833,7 +1833,7 @@ STDMETHODIMP CGrid::put_MasterCol(int newVal)
 	return S_OK;
 }
 
-HRESULT CGrid::Fire_OpenComplete()
+HRESULT CGrid::Fire_ObserveComplete()
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1975,7 +1975,7 @@ HRESULT CGrid::Fire_GridAddInsCreated()
 	return hr;
 }
 
-HRESULT CGrid::Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
+HRESULT CGrid::Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2005,7 +2005,7 @@ HRESULT CGrid::Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
 
 	for (auto it : m_mapWndGridProxy)
 	{
-		it.second->OnNodeDocumentComplete(ExtenderDisp, OLE2T(bstrURL));
+		it.second->OnGridDocumentComplete(ExtenderDisp, OLE2T(bstrURL));
 	}
 
 	return hr;

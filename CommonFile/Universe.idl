@@ -729,7 +729,7 @@ library Universe
 	{
 		properties:
 		methods:
-			[id(1), helpstring("method OpenComplete")] HRESULT OpenComplete();
+			[id(1), helpstring("method OpenComplete")] HRESULT ObserveComplete();
 			[id(2)] HRESULT Destroy();
 			[id(3), helpstring("WndGrid Addin Object Created")] HRESULT GridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 			[id(4)] HRESULT GridAddInsCreated();

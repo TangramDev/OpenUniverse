@@ -518,7 +518,7 @@ CGrid* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	if (m_pGalaxyCluster)
 		m_pGalaxyCluster->Fire_OpenXmlComplete(strFile.AllocSysString(), (long)m_hHostWnd, m_pWorkGrid);
 	m_pWorkGrid->m_strKey = strKey;
-	m_pWorkGrid->Fire_OpenComplete();
+	m_pWorkGrid->Fire_ObserveComplete();
 
 	return m_pWorkGrid;
 }

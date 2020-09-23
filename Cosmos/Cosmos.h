@@ -82,18 +82,18 @@ namespace Cosmos
 		}
 
 		// A notification has been created for all nodes in the current layout.
-		delegate void RootNodeCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);
-		event RootNodeCreated^ OnRootNodeCreated;
-		void Fire_RootNodeCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid)
+		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);
+		event RootGridCreated^ OnRootGridCreated;
+		void Fire_RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid)
 		{
-			OnRootNodeCreated(nHandle, strUrl, pRootGrid);
+			OnRootGridCreated(nHandle, strUrl, pRootGrid);
 		}
 
-		delegate void OpenComplete(Grid^ sender);
-		event OpenComplete^ OnObserverComplete;
-		void Fire_OpenComplete(Grid^ sender)
+		delegate void ObserveComplete(Grid^ sender);
+		event ObserveComplete^ OnObserveComplete;
+		void Fire_ObserveComplete(Grid^ sender)
 		{
-			OnObserverComplete(sender);
+			OnObserveComplete(sender);
 		}
 
 		delegate void Destroy(Grid^ sender);
@@ -152,7 +152,6 @@ namespace Cosmos
 		}
 
 	public:
-		void Init();
 		Grid^ Observe(String^ layerName, String^ layerXML);
 		Grid^ ObserveChild(int rowNum, int colName, String^ layerName, String^ layerXML);
 
@@ -551,13 +550,10 @@ namespace Cosmos
 		}
 
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-
 		HWND m_hWnd;
 		Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = nullptr;
 		Dictionary<String^, Object^>^ m_pPlugInDic = nullptr;
+		void Init();
 	};
 
 	public ref class Quasar : public Dictionary<String^, Grid^>

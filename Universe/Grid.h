@@ -121,11 +121,11 @@ public:
 	Web::CWebPage* GetHtmlWnd();
 	void NodeCreated();
 
-	HRESULT Fire_OpenComplete();
+	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
 	HRESULT Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	HRESULT Fire_GridAddInsCreated();
-	HRESULT Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
+	HRESULT Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
 	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
 	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);
 	HRESULT Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
