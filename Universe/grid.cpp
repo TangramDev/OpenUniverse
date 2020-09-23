@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -36,7 +36,7 @@ CGrid::CGrid()
 	m_nRows = 1;
 	m_nCols = 1;
 	m_nViewType = BlankView;
-	m_pChildFormsInfo = nullptr;
+	//m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
 	m_bWebInit = false;
 	m_bCreated = false;
@@ -1833,7 +1833,7 @@ STDMETHODIMP CGrid::put_MasterCol(int newVal)
 	return S_OK;
 }
 
-HRESULT CGrid::Fire_OpenComplete()
+HRESULT CGrid::Fire_ObserveComplete()
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1858,7 +1858,7 @@ HRESULT CGrid::Fire_OpenComplete()
 
 	for (auto it : m_mapWndGridProxy)
 	{
-		it.second->OnOpenComplete();
+		it.second->OnObserverComplete();
 	}
 
 	return hr;
@@ -1975,7 +1975,7 @@ HRESULT CGrid::Fire_GridAddInsCreated()
 	return hr;
 }
 
-HRESULT CGrid::Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
+HRESULT CGrid::Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2005,7 +2005,7 @@ HRESULT CGrid::Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
 
 	for (auto it : m_mapWndGridProxy)
 	{
-		it.second->OnNodeDocumentComplete(ExtenderDisp, OLE2T(bstrURL));
+		it.second->OnGridDocumentComplete(ExtenderDisp, OLE2T(bstrURL));
 	}
 
 	return hr;

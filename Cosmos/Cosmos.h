@@ -358,13 +358,11 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property Object^ PlugIn[String^]
 		{
 			Object ^ get(String ^ strName);
 		}
 
-			[BrowsableAttribute(false)]
 		property Grid^ RootGrid
 		{
 			Grid^ get()
@@ -376,7 +374,6 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property Grid^ ParentGrid
 		{
 			Grid^ get()
@@ -388,7 +385,6 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property Grid^ HostGrid
 		{
 			Grid^ get()
@@ -401,7 +397,6 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property int Col
 		{
 			int get()
@@ -412,7 +407,6 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property int Row
 		{
 			int get()
@@ -522,7 +516,6 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property String^ Attribute[String^]
 		{
 			String ^ get(String ^ strKey)
@@ -541,7 +534,6 @@ namespace Cosmos
 			}
 		}
 
-	public:
 		Grid^ GetGrid(int nRow, int nCol)
 		{
 			IGrid* pGrid;
@@ -551,7 +543,6 @@ namespace Cosmos
 
 	private:
 		HWND m_hWnd;
-		Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = nullptr;
 		Dictionary<String^, Object^>^ m_pPlugInDic = nullptr;
 		void Init();
 	};
@@ -571,26 +562,9 @@ namespace Cosmos
 			LONGLONG nValue = (LONGLONG)m_pQuasar;
 			theAppProxy._removeObject(nValue);
 		}
-	private:
-		IQuasar* m_pQuasar;
 
 	public:
 		Grid^ Observe(String^ layerName, String^ layerXML);
-
-		//void Attach(bool bAttach)
-		//{
-		//	if (m_pQuasar)
-		//	{
-		//		if (bAttach)
-		//		{
-		//			m_pQuasar->Attach();
-		//		}
-		//		else
-		//		{
-		//			m_pQuasar->Detach();
-		//		}
-		//	}
-		//}
 
 		property IntPtr Handle
 		{
@@ -611,6 +585,8 @@ namespace Cosmos
 				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 			}
 		}
+	private:
+		IQuasar* m_pQuasar;
 	};
 
 	public ref class Hubble
@@ -619,12 +595,11 @@ namespace Cosmos
 		Hubble(IHubble* pHubble);
 		~Hubble();
 	private:
-		Hubble();
+		Hubble() {};
 		static bool IsAppInit = false;
 		static bool IsChromeRunning = false;
 
 		static Hubble^ m_pHubble;
-		static Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
 		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<Object^, Wormhole^>^ m_pCloudEventDic = gcnew Dictionary<Object^, Wormhole^>();
 		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
@@ -643,7 +618,7 @@ namespace Cosmos
 		//static Browser^ ActiveBrowser();
 		static Browser^ GetHostBrowser(Object^ obj);
 		static Grid^ GetGridFromHandle(IntPtr handle);
-		static Grid^ GetNodeFromControl(Control^ ctrl);
+		static Grid^ GetGridFromControl(Control^ ctrl);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 		static void BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ name);
 

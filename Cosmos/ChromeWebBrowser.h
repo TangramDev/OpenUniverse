@@ -45,10 +45,11 @@ namespace Cosmos
 	public ref class Browser
 	{
 	public:
-		IBrowser*			m_pWebBrowser;
 		Browser(IBrowser* pChromeWebBrowser);
 		void AddURLs(String^ urls);
 		void OpenURL(String^ url, Disposition disposition, String^ key, String^ xml);
+	private:
+		IBrowser*			m_pWebBrowser;
 	};
 
 	public ref class WebPage : public IWin32Window

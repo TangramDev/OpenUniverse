@@ -247,7 +247,7 @@ void CCosmosProxy::OnDestroyChromeBrowser(IBrowser* pChromeWebBrowser)
 	auto it = m_mapChromeWebBrowser.find(pChromeWebBrowser);
 	if (it != theAppProxy.m_mapChromeWebBrowser.end())
 	{
-		it->second->m_pWebBrowser = nullptr;
+		//it->second->m_pWebBrowser = nullptr;
 		theAppProxy.m_mapChromeWebBrowser.erase(it);
 	}
 };
@@ -440,7 +440,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
 	
-	Cosmos::Grid^ pGrid = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
+	Cosmos::Grid^ pGrid = Cosmos::Hubble::GetGridFromControl(m_pCurrentForm);
 	if (pGrid)
 	{
 		Quasar^ pQuasar = pGrid->Quasar;
@@ -470,7 +470,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 	}
 }
 
-void CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
+void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
 {
 	IGalaxyCluster* pGalaxyCluster = nullptr;
 	theApp.m_pHubble->CreateGalaxyCluster(pForm->Handle.ToInt64(), &pGalaxyCluster);
@@ -662,7 +662,7 @@ void CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTan
 					pChild->VisibleChanged += m_pOnCtrlVisible;
 				}
 				if (pType->IsSubclassOf(UserControl::typeid) == false)
-					InitTangramCtrl(pForm, pChild, bSave, pParse);
+					InitControl(pForm, pChild, bSave, pParse);
 			}
 		}
 		if (pActiveCtrl != nullptr)
@@ -707,12 +707,12 @@ void CCosmosProxy::InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTan
 				}
 			}
 			if (pType->IsSubclassOf(UserControl::typeid) == false)
-				InitTangramCtrl(pForm, pChild, bSave, pParse);
+				InitControl(pForm, pChild, bSave, pParse);
 		}
 	}
 }
 
-void CCosmosProxy::InitTangramNode(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
+void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
 {
 	if (::IsChild(theApp.m_pHubbleImpl->m_hHostWnd, (HWND)pCtrl->Handle.ToInt64()))
 		return ;
@@ -861,7 +861,7 @@ void CCosmosProxy::InitTangramNode(IGrid* _pGrid, Control^ pCtrl, bool bSave, CT
 					::SysFreeString(strName);
 				}
 			}
-			InitTangramNode(_pGrid, pChild, bSave, pParse);
+			InitGrid(_pGrid, pChild, bSave, pParse);
 		}
 		auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(_pGrid);
 		if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
@@ -992,7 +992,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 		return;
 	}
 	
-	theAppProxy.InitTangramCtrl(pForm, pForm, true, pParse);
+	theAppProxy.InitControl(pForm, pForm, true, pParse);
 	pForm->Load -= theAppProxy.m_pOnLoad;
 }
 
@@ -1229,7 +1229,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
 
 					pHubbleSession->SendMessage();
-					theAppProxy.InitTangramCtrl(mainForm, mainForm, true, &m_Parse);
+					theAppProxy.InitControl(mainForm, mainForm, true, &m_Parse);
 				}
 			}
 		}
@@ -1443,7 +1443,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 						theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
 						CTangramXmlParse m_Parse;
 						if (m_strXml != _T("") && m_Parse.LoadXml(m_strXml))
-							InitTangramNode(pHostNode, pObj, true, &m_Parse);
+							InitGrid(pHostNode, pObj, true, &m_Parse);
 					}
 				}
 			}

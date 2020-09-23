@@ -160,10 +160,6 @@ namespace Cosmos
         OnTabChange(ActivePage, OldGrid);
     }
 
-    Hubble::Hubble()
-    {
-    }
-
     Hubble::Hubble(IHubble* pHubble)
     {
     }
@@ -582,7 +578,7 @@ namespace Cosmos
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
-    Grid^ Hubble::GetNodeFromControl(Control^ ctrl)
+    Grid^ Hubble::GetGridFromControl(Control^ ctrl)
     {
         if (ctrl == nullptr)
         {

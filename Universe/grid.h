@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -82,7 +82,6 @@ public:
 	CString							m_strLastIPCParam5 = _T("");
 
 	CString							m_strNodeName;
-	CString 						m_strExtenderID;
 
 	IDispatch*						m_pDisp;
 	CGrid* 							m_pRootObj;
@@ -93,7 +92,7 @@ public:
 	CTangramXmlParse* 				m_pDocXmlParseNode;
 	CSession*						m_pCloudSession = nullptr;
 	IHubbleWindow*					m_pWindow;
-	CMDIChildFormInfo*				m_pChildFormsInfo;
+	//CMDIChildFormInfo*				m_pChildFormsInfo;
 	CGridCommonData*				m_pGridCommonData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
@@ -122,11 +121,11 @@ public:
 	Web::CWebPage* GetHtmlWnd();
 	void NodeCreated();
 
-	HRESULT Fire_OpenComplete();
+	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
-	HRESULT Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
-	HRESULT Fire_NodeAddInsCreated();
-	HRESULT Fire_NodeDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
+	HRESULT Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	HRESULT Fire_GridAddInsCreated();
+	HRESULT Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
 	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
 	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);
 	HRESULT Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);

@@ -147,8 +147,8 @@ private:
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);
 	//void SelectGrid(IGrid* );
-	void InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
-	void InitTangramNode(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
+	void InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
+	void InitGrid(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue) {};
 	IDispatch* CreateWinForm(HWND hParent, BSTR strXML);
 

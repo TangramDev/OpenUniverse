@@ -120,6 +120,9 @@ namespace Cosmos
 		{
 			m_pWebBrowser->OpenURL(bstrUrl, (BrowserWndOpenDisposition)disposition, bstrKey, bstrXml);
 		}
+		::SysFreeString(bstrUrl);
+		::SysFreeString(bstrKey);
+		::SysFreeString(bstrXml);
 	}
 
 	WebPage::WebPage(IWebPage* pWebPage)
