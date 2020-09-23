@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -90,10 +90,10 @@ namespace Cosmos
 		}
 
 		delegate void OpenComplete(Grid^ sender);
-		event OpenComplete^ OnOpenComplete;
+		event OpenComplete^ OnObserverComplete;
 		void Fire_OpenComplete(Grid^ sender)
 		{
-			OnOpenComplete(sender);
+			OnObserverComplete(sender);
 		}
 
 		delegate void Destroy(Grid^ sender);
@@ -575,28 +575,26 @@ namespace Cosmos
 			LONGLONG nValue = (LONGLONG)m_pQuasar;
 			theAppProxy._removeObject(nValue);
 		}
-
+	private:
 		IQuasar* m_pQuasar;
 
 	public:
 		Grid^ Observe(String^ layerName, String^ layerXML);
 
-		void SendMessage(String^ strFrom, String^ strTo, String^ strMsgId, String^ strMsgContent, String^ strExtra);
-
-		void Attach(bool bAttach)
-		{
-			if (m_pQuasar)
-			{
-				if (bAttach)
-				{
-					m_pQuasar->Attach();
-				}
-				else
-				{
-					m_pQuasar->Detach();
-				}
-			}
-		}
+		//void Attach(bool bAttach)
+		//{
+		//	if (m_pQuasar)
+		//	{
+		//		if (bAttach)
+		//		{
+		//			m_pQuasar->Attach();
+		//		}
+		//		else
+		//		{
+		//			m_pQuasar->Detach();
+		//		}
+		//	}
+		//}
 
 		property IntPtr Handle
 		{
@@ -617,29 +615,6 @@ namespace Cosmos
 				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 			}
 		}
-
-		//property Grid^ Grid[Object^]
-		//{
-		//	Cosmos::Grid ^ get(Object ^ index)
-		//	{
-		//		VARIANT var;
-		//		Marshal::GetNativeVariantForObject(index,(System::IntPtr) & var);
-		//		IGrid* pGrid = nullptr;
-		//		m_pQuasar->get_Grid(var, &pGrid);
-		//		return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
-		//	}
-		//}
-
-		//property GalaxyCluster^ GalaxyCluster
-		//{
-		//	Cosmos::GalaxyCluster^ get()
-		//	{
-		//		CComPtr<IGalaxyCluster> pGalaxyCluster = NULL;
-		//		m_pQuasar->get_GalaxyCluster(&pGalaxyCluster);
-
-		//		return theAppProxy._createObject<IGalaxyCluster, Cosmos::GalaxyCluster>(pGalaxyCluster);
-		//	}
-		//}
 	};
 
 	public ref class Hubble
@@ -656,6 +631,7 @@ namespace Cosmos
 		static Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
 		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<Object^, Wormhole^>^ m_pCloudEventDic = gcnew Dictionary<Object^, Wormhole^>();
+		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
 
 		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
 		static bool WebRuntimeInit();
@@ -663,20 +639,16 @@ namespace Cosmos
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 		static Form^ m_pMainForm = nullptr;
-		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
 		static Dictionary<Object^, Grid^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Grid^>();
 
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
 		static Type^ GetType(String^ ObjID);
-		static Object^ ActiveMethod(String^ strObjID, String^ strMethod, cli::array<Object^, 1>^ p);
-		static Object^ ActiveObjectMethod(Object^ pObj, String^ strMethod, cli::array<Object^, 1>^ p);
-		static Browser^ ActiveBrowser();
+		//static Browser^ ActiveBrowser();
 		static Browser^ GetHostBrowser(Object^ obj);
 		static Grid^ GetGridFromHandle(IntPtr handle);
 		static Grid^ GetNodeFromControl(Control^ ctrl);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
-		static void UpdateNewTabPageLayout(String^ newTabPageLayout);
 		static void BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ name);
 
 		static Hubble^ GetHubble();
@@ -684,105 +656,6 @@ namespace Cosmos
 		static void Run();
 		static void Run(Form^ Mainform);
 		static void Run(ApplicationContext^ context);
-		static Grid^ GetGridFromObj(Object^ obj)
-		{
-			Grid^ pGrid = nullptr;
-			if (m_pFrameworkElementDic->TryGetValue(obj, pGrid))
-			{
-				return pGrid;
-			}
-			return nullptr;
-		}
-
-
-		static String^ GetObjAssemblyName(Object^ obj)
-		{
-			if (obj == nullptr)
-				return L"";
-			Assembly^ a = nullptr;
-			String^ strName = L"";
-			try
-			{
-				a = Assembly::GetAssembly(obj->GetType());
-			}
-			catch (System::ArgumentNullException^)
-			{
-
-			}
-			finally
-			{
-				if (a != nullptr)
-				{
-					strName = a->FullName;
-					strName = strName->Substring(0, strName->IndexOf(","));
-				}
-			}
-			return strName;
-		}
-
-		static String^ LoadCLRResource(Object^ destObj, String^ resourceName)
-		{
-			Assembly^ a = nullptr;
-			if (resourceName == L"" || resourceName == nullptr)
-				resourceName = L"tangramresource.xml";
-			String^ strName = L"";
-			try
-			{
-				if (destObj == nullptr)
-					a = Assembly::GetExecutingAssembly();
-				else
-				{
-					if (destObj->GetType()->IsSubclassOf(Assembly::typeid))
-						a = (Assembly^)destObj;
-					else
-						a = Assembly::GetAssembly(destObj->GetType());
-				}
-			}
-			catch (ArgumentNullException^)
-			{
-
-			}
-			finally
-			{
-				if (a != nullptr)
-				{
-					strName = a->FullName;
-					strName = strName->Substring(0, strName->IndexOf(","));
-				}
-			}
-
-			System::IO::Stream^ sm = nullptr;
-			try
-			{
-				sm = a->GetManifestResourceStream(strName + "." + resourceName);
-			}
-			catch (...)
-			{
-
-			}
-			finally
-			{
-				if (sm != nullptr)
-				{
-					cli::array<byte, 1>^ bs = gcnew cli::array<byte, 1>((int)sm->Length);
-					sm->Read(bs, 0, (int)sm->Length);
-					sm->Close();
-
-					System::Text::UTF8Encoding^ con = gcnew System::Text::UTF8Encoding();
-
-					strName = con->GetString(bs);
-					delete sm;
-				}
-			}
-			return strName;
-		}
-
-		delegate void HubbleActionDelegate(Grid^ SourceObj, String^ strInfo);
-		static event HubbleActionDelegate^ OnHubbleActionDelegate;
-		static void Fire_OnHubbleActionDelegate(Grid^ SourceObj, String^ strInfo)
-		{
-			OnHubbleActionDelegate(SourceObj, strInfo);
-		}
 
 		static property Dictionary<Object^, Cosmos::Wormhole^>^ WebBindEventDic
 		{
@@ -826,11 +699,6 @@ namespace Cosmos
 		}
 
 		static Browser^ CreateBrowser(IntPtr ParentHandle, String^ strUrls);
-
-		static property String^ AppDataPath
-		{
-			String^ get();
-		}
 
 		static property String^ NTPXml
 		{
@@ -886,10 +754,10 @@ namespace Cosmos
 		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName);
 
 		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid);
-		static event OpenComplete^ OnOpenComplete;
-		static void Fire_OnOpenComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid)
+		static event OpenComplete^ OnObserverComplete;
+		static void Fire_OnObserverComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid)
 		{
-			OnOpenComplete(hWnd, bstrUrl, pRootGrid);
+			OnObserverComplete(hWnd, bstrUrl, pRootGrid);
 		}
 
 		delegate void AppMsgLoop(IntPtr hWnd, IntPtr msg, IntPtr wParam, IntPtr lParam);
@@ -925,12 +793,6 @@ namespace Cosmos
 		static void Fire_OnFormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid)
 		{
 			OnFormNodeCreated(bstrObjID, pForm, pGrid);
-		}
-
-		property String^ AppKeyValue[String^]
-		{
-			String ^ get(String ^ iIndex);
-			void set(String^ iIndex, String^ newVal);
 		}
 	};
 }

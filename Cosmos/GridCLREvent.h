@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -31,7 +31,7 @@ public:
 
 	void OnDestroy();
 	void OnGridAddInsCreated();
-	void OnOpenComplete(IGrid* pGrid);
+	void OnObserverComplete(IGrid* pGrid);
 	void OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
 	void OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	void OnTabChange(int nActivePage, int nOldPage);

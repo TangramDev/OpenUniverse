@@ -20,7 +20,6 @@ namespace HubbleBrowser
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int x = 0;
             string xml = "<content1>" +
                 "<layout>" +
                     "<grid objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"13\">" +
@@ -32,7 +31,7 @@ namespace HubbleBrowser
                 "</layout>" +
               "</content1>";
             Grid node = Hubble.Observe(listView1, "test", xml);
-            node.OnTabChange += Node_OnTabChange1; ;
+            node.OnTabChange += Node_OnTabChange1; node.OnIPCMessageReceived += Node_OnIPCMessageReceived; ;
             string s = node.Handle.ToString();
             int n = node.Cols;
             n++;
@@ -43,12 +42,17 @@ namespace HubbleBrowser
             f.Show();
         }
 
+        private void Node_OnIPCMessageReceived(string strFrom, string strTo, string strMsgId, string strPayload, string strExtra)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Node_OnTabChange1(Grid ActiveGrid, Grid OldGrid)
         {
             //throw new NotImplementedException();
             string s1 = ActiveGrid.Caption;
             string s2 = OldGrid.Caption;
-            MessageBox.Show(s1 + s2);
+            ActiveGrid.Caption = s1 + "test";
         }
     }
 }

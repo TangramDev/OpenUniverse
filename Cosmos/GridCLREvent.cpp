@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -26,7 +26,7 @@ CGridCLREvent::~CGridCLREvent()
 	//delete m_pGrid;
 }
 
-void CGridCLREvent::OnOpenComplete(IGrid* pGrid)
+void CGridCLREvent::OnObserverComplete(IGrid* pGrid)
 {
 	m_pGrid->Fire_OpenComplete(m_pGrid);
 }

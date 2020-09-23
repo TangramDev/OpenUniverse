@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -63,7 +63,7 @@ public:
 private:
 	//CCosmosCoreEvents:
 	void OnHubbleClose();
-	void OnOpenComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
+	void OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
 	HWND InitHubbleApp();
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
 	virtual bool EclipseAppInit() { return false; };
@@ -81,7 +81,7 @@ public:
 
 	CGridCLREvent* m_pGridCLREvent;
 private:
-	void __stdcall  OnOpenComplete();
+	void __stdcall  OnObserverComplete();
 	void __stdcall  OnDestroy();
 	void __stdcall  OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
 	void __stdcall  OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);

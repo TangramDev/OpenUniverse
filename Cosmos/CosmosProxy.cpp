@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -466,171 +466,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 					}
 				}
 			}
-			if (pQuasar)
-			{
-				CTangramXmlParse m_Parse;
-				if (m_Parse.LoadXml(strTag))
-				{
-					CString strBindName = m_Parse.attr(_T("target"), _T(""));
-					if (strBindName != _T(""))
-					{
-						pQuasar->SendMessage(pCtrl->Name, pCtrl->Handle.ToInt64().ToString("d"), L"ControlBindMessage:MouseDoubleClick", strTag, BSTR2STRING(strBindName));
-					}
-				}
-			}
 		}
-	}
-}
-//
-//void CCosmosProxy::OnNodeMouseDoubleClick(Object^ sender, TreeNodeMouseClickEventArgs^ e)
-//{
-//	Control^ pCtrl = (Control^)sender;
-//	Form^ m_pCurrentForm = nullptr;
-//	IntPtr handle = (IntPtr)pCtrl->Handle;
-//	while (handle != IntPtr::Zero)
-//	{
-//		Control^ ctl = Control::FromHandle(handle);
-//		if (ctl != nullptr)
-//		{
-//			if (ctl->GetType()->IsSubclassOf(Form::typeid))
-//			{
-//				m_pCurrentForm = (Form^)ctl;
-//				break;
-//			}
-//		}
-//
-//		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
-//	}
-//	Grid^ pGrid = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
-//	Quasar^ pQuasar = pGrid->Quasar;
-//	if (e->Node->Tag != nullptr)
-//	{
-//		String^ strTag = e->Node->Tag->ToString();
-//		if (String::IsNullOrEmpty(strTag) == false)
-//		{
-//			if (strTag->IndexOf(L"|TangramNode|") != -1)
-//			{
-//				String^ strIndex = strTag->Substring(strTag->IndexOf(L":") + 1);
-//				if (String::IsNullOrEmpty(strIndex) == false)
-//				{
-//					Control^ pTop = pCtrl->TopLevelControl;
-//					Type^ pType = pTop->GetType();
-//					if (pType->IsSubclassOf(Form::typeid))
-//					{
-//						String^ name = pType->Name + pCtrl->Name;
-//						//theApp.m_pHubbleImpl->OpenCtrl(pCtrl->Handle.ToInt64(), name, strIndex);
-//					}
-//				}
-//			}
-//		}
-//		if (pQuasar)
-//		{
-//			CTangramXmlParse m_Parse;
-//			if (m_Parse.LoadXml(strTag))
-//			{
-//				CString strBindName = m_Parse.attr(_T("target"), _T(""));
-//				if (strBindName != _T(""))
-//				{
-//					CString strActionName = m_Parse.attr(_T("onnodemousedoubleclick"), pCtrl->Name);
-//					pQuasar->SendMessage(BSTR2STRING(strActionName), pCtrl->Handle.ToInt64().ToString("d"), L"ControlBindMessage:MouseDoubleClick", strTag, BSTR2STRING(strBindName));
-//				}
-//			}
-//		}
-//	}
-//	pCtrl->Select();
-//}
-
-void CCosmosProxy::OnAfterSelect(System::Object^ sender, TreeViewEventArgs^ e)
-{
-	Control^ pCtrl = (Control^)sender;
-	Form^ m_pCurrentForm = nullptr;
-	IntPtr handle = (IntPtr)pCtrl->Handle;
-	while (handle != IntPtr::Zero)
-	{
-		Control^ ctl = Control::FromHandle(handle);
-		if (ctl != nullptr)
-		{
-			if (ctl->GetType()->IsSubclassOf(Form::typeid))
-			{
-				m_pCurrentForm = (Form^)ctl;
-				break;
-			}
-		}
-
-		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
-	}
-	
-	Cosmos::Grid^ pGrid = Cosmos::Hubble::GetNodeFromControl(m_pCurrentForm);
-	if (pGrid == nullptr)
-		return;
-	Quasar^ pQuasar = pGrid->Quasar;
-	if (e->Node->Tag != nullptr)
-	{
-		String^ strTag = e->Node->Tag->ToString();
-		if (String::IsNullOrEmpty(strTag) == false)
-		{
-			if (strTag->IndexOf(L"|TangramNode|") != -1)
-			{
-				String^ strIndex = strTag->Substring(strTag->IndexOf(L":") + 1);
-				if (String::IsNullOrEmpty(strIndex) == false)
-				{
-					Control^ pTop = pCtrl->TopLevelControl;
-					Type^ pType = pTop->GetType();
-					if (pType->IsSubclassOf(Form::typeid))
-					{
-						String^ name = pType->Name + pCtrl->Name;
-						//theApp.m_pHubbleImpl->OpenCtrl(pCtrl->Handle.ToInt64(), name, strIndex);
-					}
-				}
-			}
-		}
-		//if (pQuasar)
-		//{
-		//	CTangramXmlParse m_Parse;
-		//	if (m_Parse.LoadXml(strTag))
-		//	{
-		//		CString strBindName = m_Parse.attr(_T("target"), _T(""));
-		//		CString strActionName = m_Parse.attr(_T("onafterselect"), pCtrl->Name);
-
-		//		if (pQuasar->m_pQuasar)
-		//		{
-		//			//__int64 nHandle;
-		//			//pQuasar->m_pQuasar->get_HWND(&nHandle);
-		//			//HWND hWnd = (HWND)nHandle;
-		//			//IPCMsg msg;
-		//			//msg.m_strId = _T("WinForm_TreeView_Node_OnAfterSelect");
-		//			//msg.m_strParam1 = strActionName;
-		//			//msg.m_strParam2 = pCtrl->Handle.ToInt64().ToString("d");
-		//			//msg.m_strParam3 = _T("");
-		//			//msg.m_strParam4 = strTag;
-		//			//msg.m_strParam5 = strBindName;
-		//			//theApp.m_pHubbleImpl->m_pCurrentIPCMsg = &msg;
-		//			//::SendMessage(hWnd, WM_TANGRAMDATA, (WPARAM)&msg, 20200203);
-		//		}
-		//		theApp.m_pHubbleImpl->m_pCurrentIPCMsg = nullptr;
-		//	}
-		//}
-	}
-	pCtrl->Select();
-}
-
-void CCosmosProxy::SetObjectProperty(IDispatch* pDisp, BSTR bstrPropertyName, BSTR bstrPropertyValue)
-{
-	try
-	{
-		Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)pDisp);
-		if (pObj != nullptr)
-		{
-			PropertyInfo^ ppi = pObj->GetType()->GetProperty(BSTR2STRING(bstrPropertyName));
-			if (ppi != nullptr)
-			{
-				ppi->SetValue(pObj, BSTR2STRING(bstrPropertyValue), nullptr);
-			}
-		}
-	}
-	catch (System::Exception^)
-	{
-
 	}
 }
 
@@ -1014,8 +850,6 @@ void CCosmosProxy::InitTangramNode(IGrid* _pGrid, Control^ pCtrl, bool bSave, CT
 						pChild->VisibleChanged += m_pOnCtrlVisible;
 						if (strType == L"System.Windows.Forms.TreeView")
 						{
-							TreeView^ pTreeView = (TreeView^)pChild;
-							pTreeView->AfterSelect += gcnew TreeViewEventHandler(&OnAfterSelect);
 						}
 						else if (strType == L"System.Windows.Forms.ListView")
 						{
@@ -1174,21 +1008,11 @@ void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 
 HRESULT CCosmosProxy::ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData)
 {
-	String^ strObjID = BSTR2STRING(bstrObjID);
-	String^ strMethod = BSTR2STRING(bstrMethod);
-	String^ strData = BSTR2STRING(bstrData);
-	cli::array<Object^, 1>^ pObjs = { BSTR2STRING(bstrParam), BSTR2STRING(bstrData) };
-	Cosmos::Hubble::ActiveMethod(strObjID, strMethod, pObjs);
 	return S_OK;
 }
 
 HRESULT CCosmosProxy::ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData)
 {
-	Object^ obj = Marshal::GetObjectForIUnknown((IntPtr)pCLRObj);
-	String^ strMethod = BSTR2STRING(bstrMethod);
-	String^ strData = BSTR2STRING(bstrData);
-	cli::array<Object^, 1>^ pObjs = {};
-	Cosmos::Hubble::ActiveObjectMethod(obj, strMethod, pObjs);
 	return S_OK;
 }
 
@@ -1342,12 +1166,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						}
 						else
 							thisForm->Show();
-
-						CTangramXmlParse* pChildForms = m_Parse.GetChild(_T("childforms"));
-						if (pChildForms)
-						{
-							::SendMessage((HWND)thisForm->Handle.ToPointer(), WM_COSMOSMSG, (WPARAM)pChildForms, 20190601);
-						}
 					}
 					return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 				}
@@ -1411,11 +1229,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
 
 					pHubbleSession->SendMessage();
-					CTangramXmlParse* pChildForms = m_Parse.GetChild(_T("childforms"));
-					if (pChildForms)
-					{
-						::SendMessage((HWND)mainForm->Handle.ToPointer(), WM_COSMOSMSG, (WPARAM)pChildForms, 20190601);
-					}
 					theAppProxy.InitTangramCtrl(mainForm, mainForm, true, &m_Parse);
 				}
 			}
@@ -2029,8 +1842,8 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 			{
 				if (_strEventName == _T(""))
 				{
-					HWND hWnd = (HWND)pSession->Getint64(L"nodehandle");
-					IGrid* pGrid = (IGrid*)pSession->Getint64(L"nodeobj");
+					HWND hWnd = (HWND)pSession->Getint64(L"gridobjhandle");
+					IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
 					Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 					if (thisNode != nullptr)
 					{
@@ -2050,8 +1863,8 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	}
 	else
 	{
-		HWND hWnd = (HWND)pSession->Getint64(L"nodehandle");
-		IGrid* pGrid = (IGrid*)pSession->Getint64(L"nodeobj");
+		HWND hWnd = (HWND)pSession->Getint64(L"gridobjhandle");
+		IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
 		Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 		Cosmos::Wormhole^ pCloudSession = nullptr;// gcnew Universe::Wormhole(pSession);
 		if (thisNode != nullptr)
@@ -2208,17 +2021,17 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 						{
 						}
 						break;
-					default:
-					{
-						CString strID = m_Parse.attr(_T("ObjID"), _T(""));
-						CString strMethod = m_Parse.attr(_T("Method"), _T(""));
-						if (strID != _T("") && strMethod != _T(""))
-						{
-							cli::array<Object^, 1>^ pObjs = { BSTR2STRING(strXml), pWndGrid };
-							Cosmos::Hubble::ActiveMethod(BSTR2STRING(strID), BSTR2STRING(strMethod), pObjs);
-						}
-					}
-					break;
+					//default:
+					//{
+					//	CString strID = m_Parse.attr(_T("ObjID"), _T(""));
+					//	CString strMethod = m_Parse.attr(_T("Method"), _T(""));
+					//	if (strID != _T("") && strMethod != _T(""))
+					//	{
+					//		cli::array<Object^, 1>^ pObjs = { BSTR2STRING(strXml), pWndGrid };
+					//		Cosmos::Hubble::ActiveMethod(BSTR2STRING(strID), BSTR2STRING(strMethod), pObjs);
+					//	}
+					//}
+					//break;
 					}
 				}
 			}
@@ -2266,10 +2079,10 @@ bool CCosmosProxy::_removeObject(Object^ key)
 	return false;
 }
 
-void CCosmosGridEvent::OnOpenComplete()
+void CCosmosGridEvent::OnObserverComplete()
 {
 	if (m_pGridCLREvent)
-		m_pGridCLREvent->OnOpenComplete(NULL);
+		m_pGridCLREvent->OnObserverComplete(NULL);
 }
 
 void CCosmosGridEvent::OnTabChange(int nActivePage, int nOldPage)
@@ -2726,12 +2539,11 @@ void CCosmos::OnHubbleClose()
 	AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
 }
 
-void CCosmos::OnOpenComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid)
+void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid)
 {
-	Cosmos::Hubble^ pManager = Cosmos::Hubble::GetHubble();
 	Cosmos::Grid^ _pRootNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pRootGrid);
 	IntPtr nHandle = (IntPtr)hWnd;
-	pManager->Fire_OnOpenComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
+	Cosmos::Hubble::GetHubble()->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
 	_pRootNode->Fire_RootNodeCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
 }

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -29,13 +29,13 @@ CWinForm::CWinForm(void)
 	m_pOwnerHtmlWnd = nullptr;
 	m_pParentHtmlWnd = nullptr;
 	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
-	m_pChildFormsInfo = nullptr;
+	//m_pChildFormsInfo = nullptr;
 }
 
 CWinForm::~CWinForm(void)
 {
-	if (m_pChildFormsInfo)
-		delete m_pChildFormsInfo;
+	//if (m_pChildFormsInfo)
+	//	delete m_pChildFormsInfo;
 }
 
 LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
@@ -51,59 +51,6 @@ LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	switch (m_nState)
-	{
-	case 0:
-	case 1:
-	case 3:
-	{
-		//if (!::PathFileExists(m_strPath))
-		//{
-		//	int nPos = m_strPath.ReverseFind('\\');
-		//	CString strPath = m_strPath.Left(nPos);
-		//	::SHCreateDirectory(nullptr, strPath);
-		//}
-		//CGalaxyCluster* pGalaxyCluster = nullptr;
-		//auto it = g_pHubble->m_mapWindowPage.find(m_hWnd);
-		//if (it != g_pHubble->m_mapWindowPage.end())
-		//{
-		//	pGalaxyCluster = (CGalaxyCluster*)it->second;
-		//	CString strData = _T("<winform>");
-		//	CString strIndex = _T("@");
-		//	for (auto it2 : pGalaxyCluster->m_mapQuasar)
-		//	{
-		//		CComBSTR bstrXml(L"");
-		//		strIndex += it2.second->m_strQuasarName;
-		//		strIndex += _T("@");
-		//		it2.second->get_QuasarXML(&bstrXml);
-		//		strData += OLE2T(bstrXml);
-		//	}
-		//	DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-		//	if (dw & WS_EX_MDICHILD)
-		//	{
-		//		HWND h = ::GetParent(::GetParent(m_hWnd));
-		//		if (h)
-		//		{
-		//			CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_TANGRAMDATA, 0, 20190214);
-		//			if (pParent)
-		//			{
-		//				auto it = pParent->m_mapKey.find(m_strKey);
-		//				if (it != pParent->m_mapKey.end())
-		//				{
-		//					strData += it->second;
-		//				}
-		//			}
-		//		}
-		//	}
-		//	strData += _T("</winform>");
-		//	CTangramXmlParse xml;
-		//	if (xml.LoadXml(strData))
-		//		xml.SaveFile(m_strPath);
-		//	// TODO Refresh ListCtrl
-		//}
-	}
-	break;
-	}
 	if (g_pHubble->m_pActiveWinFormWnd == this)
 		g_pHubble->m_pActiveWinFormWnd = nullptr;
 	if (m_pParentHtmlWnd)
@@ -298,96 +245,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20190214:
 		return (LRESULT)this;
 		break;
-	}
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	//auto it = g_pHubble->m_mapMainForm.find(m_hWnd);
-	//if (it != g_pHubble->m_mapMainForm.end())
-	//{
-	//	g_pHubble->m_mapMainForm.erase(it);
-	//	if (m_hWnd == g_pHubble->m_hMainWnd)
-	//	{
-	//		if (g_pHubble->m_mapMainForm.size())
-	//		{
-	//			it = g_pHubble->m_mapMainForm.begin();
-	//			if (it != g_pHubble->m_mapMainForm.end())
-	//				g_pHubble->m_hMainWnd = it->first;
-	//		}
-	//	}
-	//}
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	switch (lParam)
-	{
-	case 20200216:
-	{
-		if (m_bMdiForm)
-		{
-			if (m_pOwnerHtmlWnd)
-			{
-				ATLTRACE(_T("\n"));
-				CString strHandle = _T("");
-				strHandle.Format(_T("%d"), m_hWnd);
-				m_pOwnerHtmlWnd->SendChromeIPCMessage(_T("MESSAGE"), m_strKey, strHandle, _T("MainMdiForm:ActiveClient"), m_strKey, L"");
-			}
-		}
-		else
-		{
-			HWND hWnd = ::GetParent(m_hWnd);
-
-			DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
-			CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
-
-			CQuasar* pQuasar = nullptr;
-			auto iter = pThreadInfo->m_mapQuasar.find(hWnd);
-			if (iter != pThreadInfo->m_mapQuasar.end())
-			{
-				pQuasar = (CQuasar*)iter->second;
-			}
-			if (pQuasar->m_pHostWebBrowserWnd)
-			{
-				HWND hWnd = pQuasar->m_pHostWebBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
-				auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
-				if (it != g_pHubble->m_mapHtmlWnd.end())
-				{
-					CWebPage* pHtmlWnd = (CWebPage*)it->second;
-					CString strHandle = _T("");
-					strHandle.Format(_T("%d"), m_hWnd);
-					pHtmlWnd->SendChromeIPCMessage(_T("MdiWinForm_ActiveMdiChild"), m_strKey, strHandle, _T(""), m_strKey, _T(""));
-				}
-			}
-		}
-		return 0;
-	}
-	break;
-	case 20190601:
-	{
-		if (m_strKey == _T(""))
-		{
-			CTangramXmlParse m_Parse;
-			if (m_Parse.LoadXml(m_strXml))
-			{
-				m_strKey = m_Parse.name();
-			}
-		}
-		//CTangramXmlParse* pChild = (CTangramXmlParse*)wParam;
-		//if (pChild)
-		//{
-		//	int nCount = pChild->GetCount();
-		//}
-	}
-	break;
-	case 20190602:
-	{
-		return (LRESULT)m_pChildFormsInfo;
-	}
-	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
@@ -1065,10 +922,10 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 	*ppRetGrid = (IGrid*)m_pWorkGrid;
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
-		it.second->OnOpenComplete(m_hHostWnd, strXml, m_pWorkGrid);
+		it.second->OnObserverComplete(m_hHostWnd, strXml, m_pWorkGrid);
 	}
 	if (g_pHubble->m_pCosmosAppProxy)
-		g_pHubble->m_pCosmosAppProxy->OnOpenComplete(m_hHostWnd, strXml, m_pWorkGrid);
+		g_pHubble->m_pCosmosAppProxy->OnObserverComplete(m_hHostWnd, strXml, m_pWorkGrid);
 
 	if (pOldNode && pOldNode != m_pWorkGrid)
 	{

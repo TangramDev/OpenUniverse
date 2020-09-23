@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.8								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -36,7 +36,7 @@ CGrid::CGrid()
 	m_nRows = 1;
 	m_nCols = 1;
 	m_nViewType = BlankView;
-	m_pChildFormsInfo = nullptr;
+	//m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
 	m_bWebInit = false;
 	m_bCreated = false;
@@ -1858,7 +1858,7 @@ HRESULT CGrid::Fire_OpenComplete()
 
 	for (auto it : m_mapWndGridProxy)
 	{
-		it.second->OnOpenComplete();
+		it.second->OnObserverComplete();
 	}
 
 	return hr;
@@ -1908,7 +1908,7 @@ HRESULT CGrid::Fire_Destroy()
 	return hr;
 }
 
-HRESULT CGrid::Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+HRESULT CGrid::Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1946,7 +1946,7 @@ HRESULT CGrid::Fire_NodeAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, B
 	return hr;
 }
 
-HRESULT CGrid::Fire_NodeAddInsCreated()
+HRESULT CGrid::Fire_GridAddInsCreated()
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();

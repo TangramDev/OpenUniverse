@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -410,11 +410,14 @@ namespace Web {
 		if ((g_pHubble->m_hMainWnd == g_pHubble->m_hHostWnd && g_pHubble->m_mapBrowserWnd.size() == 1) ||
 			g_pHubble->m_hHostBrowserWnd == m_hWnd)
 		{
-			g_pHubble->m_bChromeNeedClosed = true;
-			for (auto it : g_pHubble->m_mapBrowserWnd)
+			if (g_pHubble->m_hHostBrowserWnd == m_hWnd)
 			{
-				if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
-					((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				g_pHubble->m_bChromeNeedClosed = true;
+				for (auto it : g_pHubble->m_mapBrowserWnd)
+				{
+					if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
+						((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -472,13 +472,6 @@ LRESULT CGridHelperWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 		case 20180115:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
-		case 20190602:
-		{
-			CWinForm* pWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_TANGRAMDATA, 0, 20190214);
-			if (pWinFormWnd)
-				return (LRESULT)pWinFormWnd->m_pChildFormsInfo;
-			return 0;
-		}
 		case 20200128:
 		{
 			if (m_pGrid && m_pGrid->m_pWebBrowser)

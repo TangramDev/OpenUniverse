@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -92,7 +92,7 @@ public:
 	CTangramXmlParse* 				m_pDocXmlParseNode;
 	CSession*						m_pCloudSession = nullptr;
 	IHubbleWindow*					m_pWindow;
-	CMDIChildFormInfo*				m_pChildFormsInfo;
+	//CMDIChildFormInfo*				m_pChildFormsInfo;
 	CGridCommonData*				m_pGridCommonData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;

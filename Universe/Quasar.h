@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -33,22 +33,19 @@ public:
 	
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWebPage*								m_pParentHtmlWnd;
-	CMDIChildFormInfo*						m_pChildFormsInfo;
+	//CMDIChildFormInfo*						m_pChildFormsInfo;
 
 	map<CString, CString>					m_mapKey;
 	map<CString, BindWebObj*>				m_mapBindWebObj;
 	BEGIN_MSG_MAP(CWinForm)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
-		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_TANGRAMDATA, OnGetMe)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
 		MESSAGE_HANDLER(WM_WINFORMCREATED, OnFormCreated)
 		MESSAGE_HANDLER(WM_TANGRAMGETXML, OnHubbleGetXml)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
-		//MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()
 
@@ -59,15 +56,11 @@ private:
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	//LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-public:
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
 class ATL_NO_VTABLE CQuasar : 

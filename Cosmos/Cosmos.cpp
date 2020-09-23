@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -422,25 +422,6 @@ namespace Cosmos
         }
     }
 
-    String^ Hubble::AppKeyValue::get(String^ iIndex)
-    {
-        auto it = theApp.m_pHubbleImpl->m_mapValInfo.find(STRING2BSTR(iIndex));
-        if (it != theApp.m_pHubbleImpl->m_mapValInfo.end())
-        {
-            return BSTR2STRING(it->second.bstrVal);
-        }
-        //CComVariant bstrVal(::SysAllocString(L""));
-        //theApp.m_pHubble->get_AppKeyValue(STRING2BSTR(iIndex), &bstrVal);
-        //String^ strVal = BSTR2STRING(bstrVal.bstrVal);
-        //::SysFreeString(bstrVal);
-        return L"";
-    }
-
-    void Hubble::AppKeyValue::set(String^ iIndex, String^ newVal)
-    {
-        theApp.m_pHubble->put_AppKeyValue(STRING2BSTR(iIndex), CComVariant(STRING2BSTR(newVal)));
-    }
-
     void Hubble::Fire_OnCloudAppIdle()
     {
         OnCloudAppIdle();
@@ -453,7 +434,7 @@ namespace Cosmos
 
     void Hubble::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName)
     {
-        intptr_t nNode = eventSession->m_pWormhole->Getint64(L"nodeobj");
+        intptr_t nNode = eventSession->m_pWormhole->Getint64(L"gridobj");
         if (nNode)
         {
             IGrid* pGrid = (IGrid*)nNode;
@@ -481,24 +462,24 @@ namespace Cosmos
         OnClose();
     }
 
-    Browser^ Hubble::ActiveBrowser()
-    {
-        IBrowser* pChromeWebBrowser = nullptr;
-        theApp.m_pHubble->get_ActiveChromeBrowserWnd(&pChromeWebBrowser);
-        if (pChromeWebBrowser)
-        {
-            auto it = theAppProxy.m_mapChromeWebBrowser.find(pChromeWebBrowser);
-            if (it != theAppProxy.m_mapChromeWebBrowser.end())
-                return it->second;
-            else
-            {
-                Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
-                theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
-                return pBrowser;
-            }
-        }
-        return nullptr;
-    }
+    //Browser^ Hubble::ActiveBrowser()
+    //{
+    //    IBrowser* pChromeWebBrowser = nullptr;
+    //    theApp.m_pHubble->get_ActiveChromeBrowserWnd(&pChromeWebBrowser);
+    //    if (pChromeWebBrowser)
+    //    {
+    //        auto it = theAppProxy.m_mapChromeWebBrowser.find(pChromeWebBrowser);
+    //        if (it != theAppProxy.m_mapChromeWebBrowser.end())
+    //            return it->second;
+    //        else
+    //        {
+    //            Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
+    //            theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
+    //            return pBrowser;
+    //        }
+    //    }
+    //    return nullptr;
+    //}
 
     Browser^ Hubble::GetHostBrowser(Object^ obj)
     {
@@ -779,11 +760,6 @@ namespace Cosmos
         return nullptr;
     }
 
-    void Hubble::UpdateNewTabPageLayout(String^ newTabPageLayout)
-    {
-        Hubble::NTPXml::set(newTabPageLayout);
-    }
-
     void Hubble::BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ strWebName)
     {
         HWND hWnd = (HWND)hWebPage.ToPointer();
@@ -837,109 +813,6 @@ namespace Cosmos
             theAppProxy.m_mapSession2Wormhole[pSession] = pCloudSession;
             pSession->SendMessage();
         }
-    }
-
-    String^ Hubble::AppDataPath::get()
-    {
-        BSTR bstrAppDataPath = theApp.m_pHubbleImpl->m_strAppDataPath.AllocSysString();
-        String^ strResult = BSTR2STRING(bstrAppDataPath);
-        ::SysFreeString(bstrAppDataPath);
-        return strResult;
-    }
-
-    Object^ Hubble::ActiveMethod(String^ strObjID, String^ strMethod, cli::array<Object^, 1>^ p)
-    {
-        Object^ pRetObj = nullptr;
-        Hubble^ pApp = Hubble::GetHubble();
-        String^ strIndex = strObjID + L"|" + strMethod;
-        MethodInfo^ mi = nullptr;
-        Object^ pObj = nullptr;
-        if (pApp->m_pHubbleCLRMethodDic->TryGetValue(strIndex, mi) == true)
-        {
-            try
-            {
-                pRetObj = mi->Invoke(pObj, p);
-            }
-            finally
-            {
-            }
-            return pRetObj;
-        }
-
-        if (pApp->m_pHubbleCLRObjDic->TryGetValue(strObjID, pObj) == false)
-        {
-            pObj = CreateObject(strObjID);
-            pApp->m_pHubbleCLRObjDic[strObjID] = pObj;
-        }
-        if (pObj != nullptr)
-        {
-            MethodInfo^ mi = nullptr;
-            try
-            {
-                mi = pObj->GetType()->GetMethod(strMethod);
-                pApp->m_pHubbleCLRMethodDic[strIndex] = mi;
-            }
-            catch (AmbiguousMatchException ^ e)
-            {
-                Debug::WriteLine(L"Hubble::ActiveMethod GetMethod: " + e->Message);
-            }
-            catch (ArgumentNullException ^ e)
-            {
-                Debug::WriteLine(L"Hubble::ActiveMethod GetMethod: " + e->Message);
-            }
-            finally
-            {
-                if (mi != nullptr)
-                {
-                    try
-                    {
-                        pRetObj = mi->Invoke(pObj, p);
-                    }
-                    finally
-                    {
-                    }
-                }
-            }
-        }
-
-        return pRetObj;
-    }
-
-    Object^ Hubble::ActiveObjectMethod(Object^ pObj, String^ strMethod, cli::array<Object^, 1>^ p)
-    {
-        Object^ pRetObj = nullptr;
-
-        if (pObj != nullptr)
-        {
-            MethodInfo^ mi = nullptr;
-            try
-            {
-                mi = pObj->GetType()->GetMethod(strMethod, gcnew cli::array<Type^, 1>(0));
-            }
-            catch (AmbiguousMatchException ^ e)
-            {
-                Debug::WriteLine(L"Hubble::ActiveMethod GetMethod: " + e->Message);
-            }
-            catch (ArgumentNullException ^ e)
-            {
-                Debug::WriteLine(L"Hubble::ActiveMethod GetMethod: " + e->Message);
-            }
-            finally
-            {
-                if (mi != nullptr)
-                {
-                    try
-                    {
-                        pRetObj = mi->Invoke(pObj, p);
-                    }
-                    finally
-                    {
-                    }
-                }
-            }
-        }
-
-        return pRetObj;
     }
 
     Type^ Hubble::GetType(String^ strObjID)
@@ -1265,26 +1138,6 @@ namespace Cosmos
             }
         }
         return nullptr;
-    }
-
-    void Quasar::SendMessage(String^ strFrom, String^ strTo, String^ strMsgId, String^ strMsgContent, String^ strExtra)
-    {
-        if (m_pQuasar)
-        {
-            __int64 nHandle;
-            m_pQuasar->get_HWND(&nHandle);
-            HWND hWnd = (HWND)nHandle;
-            IPCMsg msg;
-            msg.m_strId = L"MESSAGE";
-            msg.m_strParam1 = strFrom;
-            msg.m_strParam2 = strTo;
-            msg.m_strParam3 = strMsgId;
-            msg.m_strParam4 = strMsgContent;
-            msg.m_strParam5 = strExtra;
-            theApp.m_pHubbleImpl->m_pCurrentIPCMsg = &msg;
-            ::SendMessage(hWnd, WM_TANGRAMDATA, (WPARAM)&msg, 20200203);
-        }
-        theApp.m_pHubbleImpl->m_pCurrentIPCMsg = nullptr;
     }
 
     Grid^ Quasar::Observe(String^ layerName, String^ layerXML)

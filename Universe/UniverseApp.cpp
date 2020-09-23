@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -433,18 +433,6 @@ LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 				m_pHtmlWnd->m_mapBindWebObj.erase(it);
 			}
 			m_pHtmlWnd->m_mapBindWebObj[pObj->m_strBindObjName] = pObj;
-		}
-		break;
-		case 20200203:
-		{
-			LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-			CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-			if (m_pHtmlWnd->m_pChromeRenderFrameHost)
-			{
-				IPCMsg* pMsg = (IPCMsg*)wParam;
-				m_pHtmlWnd->m_pChromeRenderFrameHost->SendHubbleMessage(pMsg);
-				g_pHubble->m_pCurrentIPCMsg = nullptr;
-			}
 		}
 		break;
 		default:

@@ -39,12 +39,12 @@ extern _ATL_FUNC_INFO GridAddInsCreated;
 class CTangramCoreEvents : public IDispEventSimpleImpl</*nID =*/ 1, CTangramCoreEvents, &__uuidof(_IHubble)>
 {
 public:
-	virtual void __stdcall OnOpenComplete(long hWnd, BSTR bstrUrl, IGrid* pRootGrid){}
+	virtual void __stdcall OnObserverComplete(long hWnd, BSTR bstrUrl, IGrid* pRootGrid){}
 	virtual void __stdcall OnClose(){}
 	virtual void __stdcall OnHubbleEvent(IHubbleEventObj* pRootGrid){}
 
 	BEGIN_SINK_MAP(CTangramCoreEvents)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000001, OnOpenComplete, &OpenComplete)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000001, OnObserverComplete, &OpenComplete)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000002, OnClose, &TangramCoreClose)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000003, OnHubbleEvent, &TangramEvent)
 	END_SINK_MAP()
@@ -59,14 +59,14 @@ public:
 	IGrid* m_pGrid;
 
 	virtual void __stdcall  OnDestroy(){}
-	virtual void __stdcall  OnOpenComplete(){}
+	virtual void __stdcall  OnObserverComplete(){}
 	virtual void __stdcall  OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml){}
 	virtual void __stdcall  OnGridAddInsCreated(){}
 	virtual void __stdcall  OnTabChange(int nActivePage, int nOldPage){}
 	virtual void __stdcall  OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra) {};
 
 	BEGIN_SINK_MAP(CGridEvents)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000001, OnOpenComplete, &NodeOpenComplete)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000001, OnObserverComplete, &NodeOpenComplete)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000002, OnDestroy, &Destroy)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000003, OnGridAddInCreated, &GridAddInCreated)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000004, OnGridAddInsCreated, &GridAddInsCreated)

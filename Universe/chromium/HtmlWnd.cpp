@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -106,10 +106,10 @@ namespace Web {
 					pSession->InsertLong(_T("col"), pGrid->m_nCol);
 					pSession->InsertString(_T("objtype"), pGrid->m_strCnnID);
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
-					pSession->Insertint64(_T("nodehandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("nodeobj"), (__int64)(IGrid*)pGrid);
+					pSession->Insertint64(_T("gridobjhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
 					pSession->Insertint64(_T("Quasarhandle"), (__int64)pGrid->m_pGridCommonData->m_pQuasar->m_hWnd);
-					pSession->Insertint64(_T("rootnodehandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
 					switch (pGrid->m_nViewType)
@@ -144,7 +144,7 @@ namespace Web {
 					}
 					if (pGrid->m_pParentObj)
 					{
-						pSession->Insertint64(_T("parentnodehandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
+						pSession->Insertint64(_T("parentgridhandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
 					}
 					if (pGrid->m_pParentWinFormWnd)
 					{
@@ -1142,7 +1142,7 @@ namespace Web {
 	void CWebPage::OnCloudMsgReceived(CSession* pSession)
 	{
 		CString strMsgID = pSession->GetString(L"msgID");
-		IGrid* pGrid = (IGrid*)pSession->Getint64(_T("nodeobj"));
+		IGrid* pGrid = (IGrid*)pSession->Getint64(_T("gridobj"));
 		if (pGrid)
 		{
 			if(((CGrid*)pGrid)->m_pHubbleCloudSession==nullptr) 
@@ -1183,7 +1183,7 @@ namespace Web {
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
 			//IGrid* pGrid = nullptr;
-			HWND hWnd = (HWND)pSession->Getint64(_T("nodehandle"));
+			HWND hWnd = (HWND)pSession->Getint64(_T("gridobjhandle"));
 			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
 			if (pParent)
 			{
@@ -1205,7 +1205,7 @@ namespace Web {
 			int nCol = pSession->GetLong(_T("opencol"));
 			int nRow = pSession->GetLong(_T("openrow"));
 			IGrid* pSplitterNode = nullptr;
-			HWND hWnd = (HWND)pSession->Getint64(_T("nodehandle"));
+			HWND hWnd = (HWND)pSession->Getint64(_T("gridobjhandle"));
 			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
 			if (pParent)
 			{

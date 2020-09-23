@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9								*
+*					Open Universe - version 0.9.99								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -149,7 +149,7 @@ private:
 	//void SelectGrid(IGrid* );
 	void InitTangramCtrl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void InitTangramNode(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
-	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue);
+	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue) {};
 	IDispatch* CreateWinForm(HWND hParent, BSTR strXML);
 
 	void CtrlInit(int nType, Control^ treeview, IGalaxyCluster* pGalaxyCluster);
@@ -157,7 +157,6 @@ private:
 	static void OnLoad(Object ^sender, EventArgs ^e);
 	static void OnApplicationExit(Object ^sender, EventArgs ^e);
 	static void OnVisibleChanged(Object ^sender, EventArgs ^e);
-	static void OnAfterSelect(Object ^sender, TreeViewEventArgs ^e);
 	static void OnItemSelectionChanged(Object ^sender, ListViewItemSelectionChangedEventArgs ^e);
 	static void OnClick(Object ^sender, EventArgs ^e);
 	static void OnTextChanged(System::Object^ sender, System::EventArgs^ e);

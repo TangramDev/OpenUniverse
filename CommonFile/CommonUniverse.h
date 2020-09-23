@@ -369,7 +369,7 @@ namespace CommonUniverse {
 
 		bool	m_bAutoDelete;
 
-		virtual void OnOpenComplete() {}
+		virtual void OnObserverComplete() {}
 		virtual void OnDestroy() {}
 		virtual void OnGridAddInCreated(IDispatch* pAddIndisp, CString bstrAddInID, CString bstrAddInXml) {}
 		virtual void OnGridAddInsCreated() {}
@@ -470,7 +470,7 @@ namespace CommonUniverse {
 		virtual LRESULT OnForegroundIdleProc() { return 0; }
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
 		virtual void OnHubbleClose() {}
-		virtual void OnOpenComplete(HWND hWnd, CString bstrUrl, IGrid* pRootGrid) {}
+		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IGrid* pRootGrid) {}
 		virtual void OnHubbleEvent(IHubbleEventObj* NotifyObj) {}
 		virtual void RegistWndClassToHubble() {}
 		virtual void OnActiveDocument(IHubbleDoc* ActiveDoc, IGrid* pGridInDoc, IGrid* pGridInCtrlBar, HWND hCtrlBar) {}
