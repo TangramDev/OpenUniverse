@@ -119,14 +119,11 @@ public:
 	CWebPage*							m_pHtmlWndCreated;
 	CWebPage*							m_pActiveHtmlWnd;
 
-	CQuasar*							m_pDocTemplateFrame;
 	CWinForm*							m_pActiveWinFormWnd;
-	HubbleDocTemplateInfo*				m_pHubbleDocTemplateInfo;
 
 	CGrid*								m_pActiveGrid;
 	CGrid*								m_pDesignGrid;
 	CQuasar*							m_pQuasar;
-	CGalaxyCluster*						m_pGalaxyCluster;
 
 	map<CString, int>					m_mapEventDic;
 	map<CString, long>					m_mapIPCMsgIndexDic;

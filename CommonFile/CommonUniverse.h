@@ -555,7 +555,6 @@ namespace CommonUniverse {
 		virtual BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton) = 0;
 		virtual IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode) = 0;
 		virtual int IsWinForm(HWND hWnd) = 0;
-		virtual int IsSpecifiedType(IUnknown* pUnknown, BSTR bstrName) = 0;
 		virtual IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames) = 0;
 		virtual BSTR GetCtrlName(IDispatch* pCtrl) = 0;
 		virtual IDispatch* GetCtrlFromHandle(HWND hWnd) = 0;

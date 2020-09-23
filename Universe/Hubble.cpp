@@ -87,10 +87,8 @@ CHubble::CHubble()
 	m_hCBTHook = NULL;
 	m_hVSToolBoxWnd = NULL;
 	m_hForegroundIdleHook = NULL;
-	m_pDocTemplateFrame = nullptr;
 	m_lpszSplitterClass = nullptr;
-	m_pGalaxyCluster = nullptr;
-	m_pHubbleDocTemplateInfo = nullptr;
+	//m_pGalaxyCluster = nullptr;
 	m_pActiveGrid = nullptr;
 	m_pQuasar = nullptr;
 	m_pDesignGrid = nullptr;
@@ -901,7 +899,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hQuasar, CString _strFrameName, IGal
 			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_TANGRAMDATA, 0, 20190214);
 			if (pWnd)
 			{
-				if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
+				//if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
 					return pQuasar;
 			}
 			pGrid->put_SaveToConfigFile(true);
@@ -1245,7 +1243,6 @@ CGrid* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 	}
 
 	CGrid* pRootGrid = nullptr;
-	m_pGalaxyCluster = nullptr;
 	pRootGrid = _pQuasar->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
 	m_strCurrentKey = _T("");
 	if (pRootGrid != nullptr)

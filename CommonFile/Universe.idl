@@ -339,7 +339,7 @@ interface IGrid : IDispatch {
 	[id(101), helpstring("method GetNodes")] HRESULT GetGrids([in]BSTR bstrName, [out]IGrid** ppGrid, [out]IGridCollection** ppGrids, [out, retval]long* pCount);
 	[id(102), helpstring("method GetNode")] HRESULT GetGrid([in]long nRow, [in]long nCol, [out, retval]IGrid** ppGrid);
 	[id(103)] HRESULT GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
-	[id(104), helpstring("method Refresh")] HRESULT Refresh(void);
+	[id(104)] HRESULT SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, [out, retval] BSTR* bstrRes);
 	[id(105)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
 	[id(106), helpstring("method LoadXML")] HRESULT LoadXML(int nType, BSTR bstrXML);
 	[id(107)] HRESULT ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
@@ -347,7 +347,6 @@ interface IGrid : IDispatch {
 	[id(109)] HRESULT GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
 	[id(110)] HRESULT SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	[id(112)] HRESULT NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript);
-	[id(114)] HRESULT SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, [out, retval] BSTR* bstrRes);
 };
 
 [

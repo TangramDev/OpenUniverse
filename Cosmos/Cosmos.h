@@ -194,7 +194,6 @@ namespace Cosmos
 			void set(String^ newVal);
 		}
 
-		[BrowsableAttribute(false)]
 		property Object^ XObject
 		{
 			Object^ get()
@@ -263,7 +262,6 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property Object^ Extender
 		{
 			Object^ get()
@@ -319,7 +317,6 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property int ActivePage
 		{
 			int get()
@@ -336,13 +333,11 @@ namespace Cosmos
 			}
 		}
 
-		[BrowsableAttribute(false)]
 		property Quasar^ Quasar
 		{
 			Cosmos::Quasar^ get();
 		}
 
-		[BrowsableAttribute(false)]
 		property Cosmos::Quasar^ HostQuasar
 		{
 			Cosmos::Quasar^ get()
@@ -563,7 +558,6 @@ namespace Cosmos
 			theAppProxy._removeObject(nValue);
 		}
 
-	public:
 		Grid^ Observe(String^ layerName, String^ layerXML);
 
 		property IntPtr Handle
@@ -606,6 +600,7 @@ namespace Cosmos
 
 		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
 		static bool WebRuntimeInit();
+		static Type^ GetType(String^ ObjID);
 	public:
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
@@ -614,7 +609,6 @@ namespace Cosmos
 
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
-		static Type^ GetType(String^ ObjID);
 		//static Browser^ ActiveBrowser();
 		static Browser^ GetHostBrowser(Object^ obj);
 		static Grid^ GetGridFromHandle(IntPtr handle);
@@ -628,9 +622,9 @@ namespace Cosmos
 		static void Run(Form^ Mainform);
 		static void Run(ApplicationContext^ context);
 
-		static property Dictionary<Object^, Cosmos::Wormhole^>^ WebBindEventDic
+		static property Dictionary<Object^, Wormhole^>^ WebBindEventDic
 		{
-			Dictionary<Object^, Cosmos::Wormhole^>^ get()
+			Dictionary<Object^, Wormhole^>^ get()
 			{
 				return m_pCloudEventDic;
 			};
@@ -652,11 +646,11 @@ namespace Cosmos
 			System::Drawing::Icon^ get();
 		}
 
-		static property bool SupportCrashReporting
-		{
-			bool get();
-			void set(bool bSupportCrashReporting);
-		}
+		//static property bool SupportCrashReporting
+		//{
+		//	bool get();
+		//	void set(bool bSupportCrashReporting);
+		//}
 
 		static property CosmosAppType AppType
 		{

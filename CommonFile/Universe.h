@@ -2175,7 +2175,12 @@ EXTERN_C const IID IID_IGrid;
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SendIPCMessage( 
+            BSTR bstrTo,
+            BSTR bstrPayload,
+            BSTR bstrExtra,
+            BSTR bstrMsgId,
+            /* [retval][out] */ BSTR *bstrRes) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
@@ -2210,13 +2215,6 @@ EXTERN_C const IID IID_IGrid;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateURL( 
             BSTR bstrURL,
             IDispatch *dispObjforScript) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SendIPCMessage( 
-            BSTR bstrTo,
-            BSTR bstrPayload,
-            BSTR bstrExtra,
-            BSTR bstrMsgId,
-            /* [retval][out] */ BSTR *bstrRes) = 0;
         
     };
     
@@ -2545,8 +2543,13 @@ EXTERN_C const IID IID_IGrid;
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
-            IGrid * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SendIPCMessage )( 
+            IGrid * This,
+            BSTR bstrTo,
+            BSTR bstrPayload,
+            BSTR bstrExtra,
+            BSTR bstrMsgId,
+            /* [retval][out] */ BSTR *bstrRes);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
             IGrid * This,
@@ -2588,14 +2591,6 @@ EXTERN_C const IID IID_IGrid;
             IGrid * This,
             BSTR bstrURL,
             IDispatch *dispObjforScript);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SendIPCMessage )( 
-            IGrid * This,
-            BSTR bstrTo,
-            BSTR bstrPayload,
-            BSTR bstrExtra,
-            BSTR bstrMsgId,
-            /* [retval][out] */ BSTR *bstrRes);
         
         END_INTERFACE
     } IGridVtbl;
@@ -2825,8 +2820,8 @@ EXTERN_C const IID IID_IGrid;
 #define IGrid_GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp) ) 
 
-#define IGrid_Refresh(This)	\
-    ( (This)->lpVtbl -> Refresh(This) ) 
+#define IGrid_SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes)	\
+    ( (This)->lpVtbl -> SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes) ) 
 
 #define IGrid_Observe(This,bstrKey,bstrXml,ppRetGrid)	\
     ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetGrid) ) 
@@ -2848,9 +2843,6 @@ EXTERN_C const IID IID_IGrid;
 
 #define IGrid_NavigateURL(This,bstrURL,dispObjforScript)	\
     ( (This)->lpVtbl -> NavigateURL(This,bstrURL,dispObjforScript) ) 
-
-#define IGrid_SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes)	\
-    ( (This)->lpVtbl -> SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes) ) 
 
 #endif /* COBJMACROS */
 

@@ -19,7 +19,7 @@
 #include "../Quasar.h"
 #include "../GridWnd.h"
 #include "BrowserWnd.h"
-#include "HtmlWnd.h"
+#include "WebPage.h"
 
 namespace Web {
 	CBrowser::CBrowser() {
@@ -225,6 +225,7 @@ namespace Web {
 			if (g_pHubble->m_pCLRProxy)
 				g_pHubble->m_pCLRProxy->HideMenuStripPopup();
 		}
+		::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		return lRes;
 	}
 

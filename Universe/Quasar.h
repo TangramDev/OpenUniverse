@@ -12,7 +12,7 @@
 ********************************************************************************/
 
 #pragma once
-#include "chromium/HtmlWnd.h"
+#include "chromium/WebPage.h"
 
 using namespace Web;
 #define WM_TANGRAMNOTIFY WM_NOTIFY+WM_REFLECT_BASE
@@ -28,8 +28,8 @@ public:
 	CString									m_strKey;
 	CString									m_strXml;
 	CString									m_strPath;
-	CString									m_strBKID;
-	CString									m_strChildFormPath;
+	//CString									m_strBKID;
+	//CString									m_strChildFormPath;
 	
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWebPage*								m_pParentHtmlWnd;

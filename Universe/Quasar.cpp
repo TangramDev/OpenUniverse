@@ -28,14 +28,11 @@ CWinForm::CWinForm(void)
 	m_bMdiForm = false;
 	m_pOwnerHtmlWnd = nullptr;
 	m_pParentHtmlWnd = nullptr;
-	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
-	//m_pChildFormsInfo = nullptr;
+	m_strXml = m_strKey =  _T("");
 }
 
 CWinForm::~CWinForm(void)
 {
-	//if (m_pChildFormsInfo)
-	//	delete m_pChildFormsInfo;
 }
 
 LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
@@ -81,19 +78,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		m_nState = 1;//design
 		m_strPath = (LPCTSTR)wParam;
 		m_strPath.MakeLower();
-		if (m_bMdiForm)
-		{
-			int nPos = m_strPath.ReverseFind('.');
-			if (nPos != -1)
-			{
-				CString strDir = m_strPath.Left(nPos) + _T("\\");
-				m_strChildFormPath = strDir;
-				if (::PathIsDirectory(strDir) == false)
-				{
-					::SHCreateDirectory(nullptr, strDir);
-				}
-			}
-		}
 	}
 	break;
 	case 2:
@@ -117,25 +101,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
 			if (dw & WS_EX_MDICHILD)
 			{
-				//HWND h = ::GetParent(::GetParent(m_hWnd));
-				//if (h)
-				//{
-				//	CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_TANGRAMDATA, 0, 20190214);
-				//	if (pParent)
-				//	{
-				//		auto it = pParent->m_mapKey.find(m_strKey);
-				//		if (it == pParent->m_mapKey.end())
-				//		{
-				//			CTangramXmlParse m_Parse;
-				//			if (m_Parse.LoadFile(m_strPath))
-				//			{
-				//				CTangramXmlParse* pChild = m_Parse.GetChild(m_strKey);
-				//				if (pChild)
-				//					pParent->m_mapKey[m_strKey] = pChild->xml();
-				//			}
-				//		}
-				//	}
-				//}
+				//Don't Support MDI
 			}
 		}
 		return (LRESULT)m_strKey.GetBuffer();
@@ -161,20 +127,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 4:
 	{
-		m_bMdiForm = true;//design
-		if (m_bMdiForm)
-		{
-			int nPos = m_strPath.ReverseFind('.');
-			if (nPos != -1)
-			{
-				CString strDir = m_strPath.Left(nPos) + _T("\\");
-				m_strChildFormPath = strDir;
-				if (::PathIsDirectory(strDir) == false)
-				{
-					::SHCreateDirectory(nullptr, strDir);
-				}
-			}
-		}
+		m_bMdiForm = true;
 	}
 	break;
 	case 5:
@@ -575,14 +528,6 @@ BOOL CQuasar::CreateGalaxyCluster()
 				CComPtr<IDispatch> pDisp;
 				//for COM Component:
 				if (nPos == -1) {
-					hr = pDisp.CoCreateInstance(strPlugID.AllocSysString());
-					if (hr == S_OK)
-					{
-						m_pWorkGrid->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
-						pDisp.p->AddRef();
-					}
-
-					m_pWorkGrid->Fire_GridAddInCreated(pDisp.p, bstrPlugIn, bstrXml);
 				}
 				else //for .NET Component
 				{
@@ -800,7 +745,6 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 		m_strLastKey = m_strCurrentKey;
 		m_strCurrentKey = strCurrentKey;
 	}
-	g_pHubble->m_pGalaxyCluster = m_pGalaxyCluster;
 	g_pHubble->m_pQuasar = this;
 
 	m_strCurrentKey = m_strCurrentKey.MakeLower();
@@ -1034,10 +978,6 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 		IGrid* pGrid = nullptr;
 		it.first->Observe(CComBSTR(it.second), CComBSTR(""), &pGrid);
 	}
-	if (m_pWebPageWnd)
-	{
-		ATLTRACE(L"\n");
-	}
 	if (m_pHostWebBrowserWnd)
 	{
 		IGrid* pGrid = nullptr;
@@ -1103,31 +1043,6 @@ void CQuasar::Destroy()
 		pWndGrid = it.second;
 		if (pWndGrid->m_pGridCommonData->m_pHubbleParse)
 		{
-			CTangramXmlParse* pParse = pWndGrid->m_pGridCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
-			if (pParse)
-			{
-				int nCount = pParse->GetCount();
-				for (int i = 0; i < nCount; i++)
-				{
-					CTangramXmlParse* pChild = pParse->GetChild(i);
-					strPlugID = pChild->text();
-					strPlugID.Trim();
-					if (strPlugID != _T(""))
-					{
-						if (strPlugID.Find(_T(",")) == -1)
-						{
-							strPlugID.MakeLower();
-							IDispatch* pDisp = (IDispatch*)pWndGrid->m_pGridCommonData->m_PlugInDispDictionary[strPlugID];
-							if (pDisp)
-							{
-								pWndGrid->m_pGridCommonData->m_PlugInDispDictionary.RemoveKey(LPCTSTR(strPlugID));
-								pDisp->Release();
-							}
-						}
-					}
-				}
-			}
-
 			pWndGrid->m_pGridCommonData->m_PlugInDispDictionary.RemoveAll();
 		}
 	}

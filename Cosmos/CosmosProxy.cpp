@@ -1624,16 +1624,6 @@ IDispatch* CCosmosProxy::GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool 
 	return NULL;
 }
 
-int CCosmosProxy::IsSpecifiedType(IUnknown* pUnknown, BSTR bstrName)
-{
-	Object^ pObj = Marshal::GetObjectForIUnknown((IntPtr)pUnknown);
-	if (pObj && pObj->GetType()->FullName->Equals(BSTR2STRING(bstrName)))
-	{
-		return 1;
-	}
-	return 0;
-}
-
 BSTR CCosmosProxy::GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild)
 {
 	try

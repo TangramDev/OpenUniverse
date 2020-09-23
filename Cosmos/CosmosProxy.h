@@ -116,7 +116,6 @@ private:
 	BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton);
 	IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode);
 	int IsWinForm(HWND hWnd);
-	int IsSpecifiedType(IUnknown* pUnknown, BSTR bstrName);
 	IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames);
 	BSTR GetCtrlName(IDispatch* pCtrl);
 	HWND GetMDIClientHandle(IDispatch* pMDICtrl) { return NULL; };

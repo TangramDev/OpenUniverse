@@ -308,7 +308,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="chromium\HtmlWnd.cpp">
+    <ClCompile Include="chromium\WebPage.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -338,7 +338,7 @@
     <None Include="Universe.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="chromium\HtmlWnd.h" />
+    <ClInclude Include="chromium\WebPage.h" />
     <ClInclude Include="chromium\BrowserWnd.h" />
     <ClInclude Include="Wormhole.h" />
     <ClInclude Include="Markup.h" />

@@ -264,16 +264,16 @@ namespace Cosmos
         return m_pHubble;
     }
 
-    bool Hubble::SupportCrashReporting::get()
-    {
-        return theApp.m_pHubbleImpl->m_bIsSupportCrashReporting;
-    }
+    //bool Hubble::SupportCrashReporting::get()
+    //{
+    //    return theApp.m_pHubbleImpl->m_bIsSupportCrashReporting;
+    //}
 
-    void Hubble::SupportCrashReporting::set(bool bSupportCrashReporting)
-    {
-        if (theApp.m_pHubbleImpl->m_bIsSupportCrashReporting == false)
-            theApp.m_pHubbleImpl->m_bIsSupportCrashReporting = bSupportCrashReporting;
-    }
+    //void Hubble::SupportCrashReporting::set(bool bSupportCrashReporting)
+    //{
+    //    if (theApp.m_pHubbleImpl->m_bIsSupportCrashReporting == false)
+    //        theApp.m_pHubbleImpl->m_bIsSupportCrashReporting = bSupportCrashReporting;
+    //}
 
     CosmosAppType Hubble::AppType::get()
     {

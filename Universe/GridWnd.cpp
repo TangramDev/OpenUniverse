@@ -21,7 +21,7 @@
 #include "GridHelperWnd.h"
 #include "GridWnd.h"
 #include "chromium/BrowserWnd.h"
-#include "chromium/HtmlWnd.h"
+#include "chromium/WebPage.h"
 
 struct AUX_DATA
 {
@@ -313,14 +313,6 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 			m_pGrid->m_vChildNodes.push_back(pGrid);
 			pOldNode->m_pHostWnd->DestroyWindow();
 			CString strXml = m_pGrid->m_pGridCommonData->m_pHubbleParse->xml();
-#ifndef _WIN64
-			if (g_pHubble->m_strExeName == _T("devenv"))
-			{
-				//VisualStudioPlus::CVSAddin* pAddin = (VisualStudioPlus::CVSAddin*)g_pHubble;
-				//if (pAddin->m_pOutputWindowPane)
-				//	pAddin->m_pOutputWindowPane->OutputString(strXml.AllocSysString());
-			}
-#endif
 			g_pHubble->m_pDesignGrid = nullptr;
 			RecalcLayout();
 		}

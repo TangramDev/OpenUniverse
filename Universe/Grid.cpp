@@ -25,7 +25,7 @@
 #include "Wormhole.h"
 #include "universe.c"
 #include "chromium/BrowserWnd.h"
-#include "chromium/HtmlWnd.h"
+#include "chromium/WebPage.h"
 
 CGrid::CGrid()
 {
@@ -36,11 +36,9 @@ CGrid::CGrid()
 	m_nRows = 1;
 	m_nCols = 1;
 	m_nViewType = BlankView;
-	//m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
 	m_bWebInit = false;
 	m_bCreated = false;
-	m_bNodeDocComplete = false;
 	m_varTag.vt = VT_EMPTY;
 	m_strKey = _T("");
 	m_strURL = _T("");
@@ -1095,11 +1093,6 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 				((CGridHelperWnd*)m_pHostWnd)->m_bCreateExternal = false;
 				m_nViewType = BlankView;
 			}
-			if (m_strID.CollateNoCase(_T("wpfctrl")) == 0)
-			{
-				pWnd->m_hFormWnd = g_pHubble->m_hFormNodeWnd;
-				g_pHubble->m_hFormNodeWnd = NULL;
-			}
 		}
 	}
 	break;
@@ -1392,18 +1385,6 @@ STDMETHODIMP CGrid::get_HostQuasar(IQuasar * *pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::Refresh(void)
-{
-	if (m_pDisp)
-	{
-		CComQIPtr<IWebBrowser2> pWebCtrl(m_pDisp);
-		if (pWebCtrl)
-			pWebCtrl->Refresh();
-	}
-
-	return S_OK;
-}
-
 STDMETHODIMP CGrid::get_Height(LONG * pVal)
 {
 	RECT rc;
@@ -1486,7 +1467,7 @@ STDMETHODIMP CGrid::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild,
 
 CGridCollection::CGridCollection()
 {
-	m_pGrids = &m_vNodes;
+	m_pGrids = &m_vGrids;
 	g_pHubble->m_mapWndGridCollection[(__int64)this] = this;
 }
 
@@ -1497,7 +1478,7 @@ CGridCollection::~CGridCollection()
 	{
 		g_pHubble->m_mapWndGridCollection.erase(it);
 	}
-	m_vNodes.clear();
+	m_vGrids.clear();
 }
 
 STDMETHODIMP CGridCollection::get_GridCount(long* pCount)

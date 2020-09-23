@@ -28,7 +28,7 @@
 #include "Psapi.h"
 
 #include "chromium\BrowserWnd.h"
-#include "chromium\HtmlWnd.h"
+#include "chromium\WebPage.h"
 
 // Description  : the unique App object
 CUniverse theUniverse;
@@ -310,6 +310,7 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 			}
 			if (!::IsChild(it.first, pWnd->m_pVisibleWebWnd->m_hWnd))
 				::PostMessage(pWnd->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
+			::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
 	}
 
@@ -401,43 +402,6 @@ LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 			}
 		}
 		return lRes;
-	}
-	break;
-	//case WM_COSMOSMSG:
-	//{
-	//	switch (lParam)
-	//	{
-	//	case 20200627:
-	//	{
-	//		CBrowser* pWnd = (CBrowser*)wParam;
-	//		pWnd->BrowserLayout();
-	//	}
-	//	break;
-	//	}
-	//	break;
-	//}
-	//break;
-	case WM_TANGRAMDATA:
-	{
-		switch (lParam)
-		{
-		case 20200202:
-		{
-			LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-			CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-			BindWebObj* pObj = (BindWebObj*)wParam;
-			auto it = m_pHtmlWnd->m_mapBindWebObj.find(pObj->m_strBindObjName);
-			if (it != m_pHtmlWnd->m_mapBindWebObj.end())
-			{
-				delete it->second;
-				m_pHtmlWnd->m_mapBindWebObj.erase(it);
-			}
-			m_pHtmlWnd->m_mapBindWebObj[pObj->m_strBindObjName] = pObj;
-		}
-		break;
-		default:
-			break;
-		}
 	}
 	break;
 	}
@@ -813,7 +777,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
-							if ((g_pHubble->m_pActiveGrid->m_nViewType == ActiveX || g_pHubble->m_pActiveGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
+							if (g_pHubble->m_pActiveGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 							{
 								if (pWnd)
 									pWnd->PreTranslateMessage(lpMsg);
