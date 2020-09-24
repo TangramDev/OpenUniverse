@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -35,7 +35,6 @@ public:
 	map<CString, CGrid*>		m_mapLayoutNodes;
 	map<CString, CGrid*>		m_mapAxNodes;
 	map<CString, CGrid*>		m_mapCLRNodes;
-	CMapStringToPtr				m_PlugInDispDictionary;
 };
 
 // CGrid 
@@ -120,8 +119,6 @@ public:
 
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
-	HRESULT Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
-	HRESULT Fire_GridAddInsCreated();
 	HRESULT Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
 	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
 	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -468,8 +468,6 @@ CGrid* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	CreateGalaxyCluster();
 	m_mapGrid[strKey] = m_pWorkGrid;
 
-	if (m_pGalaxyCluster)
-		m_pGalaxyCluster->Fire_OpenXmlComplete(strFile.AllocSysString(), (long)m_hHostWnd, m_pWorkGrid);
 	m_pWorkGrid->m_strKey = strKey;
 	m_pWorkGrid->Fire_ObserveComplete();
 
@@ -507,50 +505,6 @@ BOOL CQuasar::CreateGalaxyCluster()
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOACTIVATE);//|SWP_NOREDRAWSWP_NOZORDER);
 	}
 
-	CTangramXmlParse* pWndParse = m_pWorkGrid->m_pGridCommonData->m_pHubbleParse->GetChild(_T("docplugin"));
-	if (pWndParse)
-	{
-		CString strPlugID = _T("");
-		HRESULT hr = S_OK;
-		BOOL bHavePlugin = false;
-		int nCount = pWndParse->GetCount();
-		for (int i = 0; i < nCount; i++)
-		{
-			CTangramXmlParse* pChild = pWndParse->GetChild(i);
-			CComBSTR bstrXml(pChild->xml());
-			strPlugID = pChild->text();
-			strPlugID.Trim();
-			strPlugID.MakeLower();
-			if (strPlugID != _T(""))
-			{
-				int nPos = strPlugID.Find(_T(","));
-				CComBSTR bstrPlugIn(strPlugID);
-				CComPtr<IDispatch> pDisp;
-				//for COM Component:
-				if (nPos == -1) {
-				}
-				else //for .NET Component
-				{
-					hr = g_pHubble->CreateCLRObj(bstrPlugIn, &pDisp);
-					if (hr == S_OK)
-					{
-						m_pWorkGrid->m_pGridCommonData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
-
-						bstrPlugIn = strPlugID.AllocSysString();
-						m_pWorkGrid->Fire_GridAddInCreated(pDisp, bstrPlugIn, bstrXml);
-					}
-				}
-				if (m_pGalaxyCluster && pDisp)
-					m_pGalaxyCluster->Fire_AddInCreated(m_pWorkGrid, pDisp, bstrPlugIn, bstrXml);
-				::SysFreeString(bstrPlugIn);
-				bHavePlugin = true;
-			}
-			::SysFreeString(bstrXml);
-		}
-
-		if (bHavePlugin)
-			m_pWorkGrid->Fire_GridAddInsCreated();
-	}
 	m_pWorkGrid->m_bCreated = true;
 	return true;
 }
@@ -727,11 +681,6 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 	if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
 		m_nQuasarType = QuasarType::MDIClientQuasar;
 	CString _strXml = OLE2T(bstrXml);
-	if (m_pGalaxyCluster->m_strPageFileName == _T(""))
-	{
-		m_pGalaxyCluster->m_strPageFileName = g_pHubble->m_strExeName;
-		m_pGalaxyCluster->m_strPageFilePath = g_pHubble->m_strConfigDataFile;
-	}
 	DWORD dwID = ::GetWindowThreadProcessId(m_hHostWnd, NULL);
 	TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
 	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
@@ -791,68 +740,12 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 			{
 				if (bAtTemplate == false)
 				{
-					if (m_strCurrentKey != _T("newdocument"))
-					{
-						CString _str = _T("@") + m_strQuasarName + _T("@") + m_pGalaxyCluster->m_strConfigFileNodeName;
-						CString strKey2 = OLE2T(bstrKey);
-						strKey2.MakeLower();
-						if (strKey2 == _T(""))
-							strKey2 = _T("default");
-						CString _strKey = strKey2 + _str;
-						auto itKey = m_pGalaxyCluster->m_strMapKey.find(_strKey);
-						if (itKey != m_pGalaxyCluster->m_strMapKey.end()) {
-							strXml = itKey->second;
-						}
-						else
-						{
-							CTangramXmlParse* m_pHubblePageParse = nullptr;
-							CTangramXmlParse* m_pHubblePageParse2 = nullptr;
-							if (m_pGalaxyCluster->m_bDoc == false && ::PathFileExists(m_pGalaxyCluster->m_strPageFilePath))
-							{
-								CTangramXmlParse m_Parse;
-								if (m_Parse.LoadFile(m_pGalaxyCluster->m_strPageFilePath))
-								{
-									m_pHubblePageParse = m_Parse.GetChild(_T("hubblepage"));
-									if (m_pHubblePageParse)
-									{
-										m_pHubblePageParse2 = m_pHubblePageParse->GetChild(m_pGalaxyCluster->m_strConfigFileNodeName);
-										if (m_pHubblePageParse2)
-										{
-											int nCount = m_pHubblePageParse2->GetCount();
-											for (int i = 0; i < nCount; i++)
-											{
-												CTangramXmlParse* _pParse = m_pHubblePageParse2->GetChild(i);
-												CString _str = _T("@") + _pParse->name() + _T("@") + m_pGalaxyCluster->m_strConfigFileNodeName;
-												int nCount2 = _pParse->GetCount();
-												for (int i = 0; i < nCount2; i++)
-												{
-													CTangramXmlParse* _pParse2 = _pParse->GetChild(i);
-													m_pGalaxyCluster->m_strMapKey[_pParse2->name() + _str] = _pParse2->xml();
-												}
-											}
-										}
-									}
-								}
-
-								auto itKey = m_pGalaxyCluster->m_strMapKey.find(_strKey);
-								if (strXml == _T("") && itKey != m_pGalaxyCluster->m_strMapKey.end()) {
-									strXml = itKey->second;
-								}
-							}
-						}
-						if (strXml == _T(""))
-							strXml = _strXml;
-						if (strXml == _T(""))
-							strXml = _T("<default><layout><grid name=\"Start\" /></layout></default>");;
-					}
-					else
-						strXml = _strXml;
+					strXml = _strXml;
 				}
 			}
 		}
 
 		Unlock();
-		m_pGalaxyCluster->Fire_BeforeOpenXml(CComBSTR(strXml), (long)m_hHostWnd);
 		m_bObserve = true;
 		m_pWorkGrid = g_pHubble->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkGrid == nullptr)
@@ -1036,16 +929,6 @@ STDMETHODIMP CQuasar::get_CurrentNavigateKey(BSTR* pVal)
 
 void CQuasar::Destroy()
 {
-	CGrid* pWndGrid = nullptr;
-	CString strPlugID = _T("");
-	for (auto it : m_mapGrid)
-	{
-		pWndGrid = it.second;
-		if (pWndGrid->m_pGridCommonData->m_pHubbleParse)
-		{
-			pWndGrid->m_pGridCommonData->m_PlugInDispDictionary.RemoveAll();
-		}
-	}
 }
 
 void CQuasar::OnFinalMessage(HWND hWnd)
@@ -1098,35 +981,7 @@ LRESULT CQuasar::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	if (g_pHubble->m_pCLRProxy) {
 		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IQuasar*)this);
 	}
-	//if (m_mapGridScript.size())
-	//{
-	//	this->UpdateGrid();
-	//	for (auto it : m_mapGridScript)
-	//	{
-	//		CString strPath = it.first;
-	//		CString s = it.second->m_pHostParse->xml();
-	//		CString str = _T("");
-	//		str.Format(_T("<nodexml><layout>%s</layout></nodexml>"), s);
-	//		CTangramXmlParse parse;
-	//		parse.LoadXml(str);
-	//		parse.SaveFile(it.first);
-	//	}
-	//}
-
 	m_pGalaxyCluster->BeforeDestory();
-	m_pGalaxyCluster->m_strConfigFileNodeName.MakeLower();//20190116
-	auto it = g_pHubble->m_mapWindowPage.find(m_pGalaxyCluster->m_hWnd);
-	if (it != g_pHubble->m_mapWindowPage.end())
-	{
-		auto it2 = m_pGalaxyCluster->m_mapNeedSaveQuasar.find(m_hWnd);
-		if (it2 != m_pGalaxyCluster->m_mapNeedSaveQuasar.end())
-		{
-			if (!m_pGalaxyCluster->m_bNewVersion)
-			{
-				m_pGalaxyCluster->put_ConfigName(m_pGalaxyCluster->m_strConfigFileNodeName.AllocSysString());
-			}
-		}
-	}
 
 	DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 	TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
@@ -1365,50 +1220,6 @@ STDMETHODIMP CQuasar::put_DesignerState(VARIANT_BOOL newVal)
 
 STDMETHODIMP CQuasar::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 {
-	CString strRootName = OLE2T(bstrRootName);
-	if (strRootName == _T(""))
-		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><layout><grid name=\"Start\"/></layout></Default>");
-	CString strName = _T("");
-	CString strXml = _T("");
-
-	map<CString, CString> m_mapTemp;
-	map<CString, CString>::iterator it2;
-	for (auto it : m_mapGrid)
-	{
-		g_pHubble->UpdateGrid(it.second);
-		strName = it.first;
-		int nPos = strName.Find(_T("-"));
-		CString str = strName.Mid(nPos + 1);
-		if (str.CompareNoCase(_T("inDesigning")) == 0)
-		{
-			strName = strName.Left(nPos);
-			m_mapTemp[strName] = it.second->m_pGridCommonData->m_pHubbleParse->xml();
-		}
-	}
-
-	for (auto it : m_mapGrid)
-	{
-		strName = it.first;
-		if (strName.Find(_T("-indesigning")) == -1)
-		{
-			it2 = m_mapTemp.find(strName);
-			if (it2 != m_mapTemp.end())
-				strXml = it2->second;
-			else
-				strXml = it.second->m_pGridCommonData->m_pHubbleParse->xml();
-			strXmlData += strXml;
-		}
-	}
-
-	strXml = _T("<");
-	strXml += strRootName;
-	strXml += _T(">");
-	strXml += strXmlData;
-	strXml += _T("</");
-	strXml += strRootName;
-	strXml += _T(">");
-	*bstrRet = strXml.AllocSysString();
 	return S_OK;
 }
 
@@ -1493,65 +1304,6 @@ STDMETHODIMP CQuasar::get__NewEnum(IUnknown** ppVal)
 
 STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 {
-	CString strData = _T("<");
-	CString strName = m_strQuasarName;
-	strName.Replace(_T("@"), _T("_"));
-	strData += strName;
-	strData += _T(">");
-	for (auto it : m_mapGrid)
-	{
-		CGrid* pWndGrid = (CGrid*)it.second;
-		if (pWndGrid)
-		{
-			if (pWndGrid->m_pWindow)
-			{
-				if (pWndGrid->m_nActivePage > 0)
-				{
-					CString strVal = _T("");
-					strVal.Format(_T("%d"), pWndGrid->m_nActivePage);
-					pWndGrid->m_pHostParse->put_attr(_T("activepage"), strVal);
-				}
-				pWndGrid->m_pWindow->Save();
-			}
-			if (pWndGrid->m_nViewType == Grid)
-			{
-				((CGridWnd*)pWndGrid->m_pHostWnd)->Save();
-			}
-
-			for (auto it2 : pWndGrid->m_vChildNodes)
-			{
-				g_pHubble->UpdateGrid(it2);
-			}
-		}
-		CString strXml = pWndGrid->m_pGridCommonData->m_pHubbleParse->GetChild(TGM_CLUSTER)->xml();
-		CString s = _T("");
-		s.Format(_T("<%s>%s</%s>"), it.first, strXml, it.first);
-		CString strKey = it.second->m_strKey + _T("@") + this->m_strQuasarName + _T("@") + _T("tangramdefaultpage");
-		auto it = m_pGalaxyCluster->m_strMapKey.find(strKey);
-		if (it != m_pGalaxyCluster->m_strMapKey.end())
-		{
-		}
-		m_pGalaxyCluster->m_strMapKey[strKey] = s;
-		strData += s;
-	}
-	strData += _T("</");
-	strData += strName;
-	strData += _T(">");
-	CString strXml = _T("<");
-	strXml += strName;
-	strXml += _T(">");
-	for (auto it : m_pGalaxyCluster->m_strMapKey)
-	{
-		CString strKey = it.first;
-		if (strKey.Find(_T("@") + m_strQuasarName + _T("@")) != -1)
-		{
-			strXml += it.second;
-		}
-	}
-	strXml += _T("</");
-	strXml += strName;
-	strXml += _T(">");
-	*pVal = strXml.AllocSysString();
 	return S_OK;
 }
 

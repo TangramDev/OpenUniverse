@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -30,29 +30,13 @@ public:
 	CGalaxyCluster();
 	virtual ~CGalaxyCluster();
 
-	BOOL										m_bDoc;
 	BOOL										m_bNewVersion;
-	BOOL										m_bPageDataLoaded;
 	HWND										m_hWnd;
 
-	CString										m_strPageFilePath;
-	CString										m_strPageFileName;
-	CString										m_strConfigFileNodeName;
-	CString										m_strXmlHeader;
-	CString										m_strXmlBottom;
-
-	CQuasar*									m_pBKFrame;
 	IHubbleAppProxy*							m_pUniverseAppProxy;
-	map<CString, CString>						m_strMapKey;
-	map<HWND, CQuasar*>							m_mapCtrlBarQuasar;
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CQuasar*>							m_mapQuasar;
-	map<HWND, CQuasar*>							m_mapNeedSaveQuasar;
 	map<CString, CGrid*>						m_mapGrid;
-	map<CString, IDispatch*>					m_mapExternalObj;
-	map<CString, CString>						m_mapXtml;
-	map<__int64, CCosmosEvent*>					m_mapEventObj;
-	map<IHubbleAppProxy*, CGalaxyClusterProxy*> m_mapGalaxyClusterProxy;
 
 	BEGIN_COM_MAP(CGalaxyCluster)
 		COM_INTERFACE_ENTRY(IGalaxyCluster)
@@ -67,18 +51,6 @@ public:
 	void Lock(){}
 	void Unlock(){}
 	void BeforeDestory();
-	void UpdateMapKey(CString);
-	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
-	HRESULT Fire_NodeCreated(IGrid * pGridCreated);
-	HRESULT Fire_AddInCreated(IGrid * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
-	HRESULT Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd);
-	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IGrid * pRetRootNode);
-	HRESULT Fire_Destroy();
-	HRESULT Fire_NodeMouseActivate(IGrid * pActiveNode);
-	HRESULT Fire_ClrControlCreated(IGrid * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
-	HRESULT Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPage);
-	HRESULT Fire_TangramEvent(IHubbleEventObj* pEventObj);
-	HRESULT Fire_IPCMsg(IQuasar* pSender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 
 	void OnNodeDocComplete(WPARAM);
 

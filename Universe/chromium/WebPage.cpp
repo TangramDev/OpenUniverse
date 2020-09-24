@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -506,13 +506,6 @@ namespace Web {
 					pGalaxyCluster = new CComObject<CGalaxyCluster>();
 					pGalaxyCluster->m_hWnd = m_hExtendWnd;
 					g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
-
-					for (auto it : g_pHubble->m_mapHubbleAppProxy)
-					{
-						CGalaxyClusterProxy* pHubbleProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-						if (pHubbleProxy)
-							pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pHubbleProxy;
-					}
 				}
 				if (pGalaxyCluster) {
 					IQuasar* pQuasar = nullptr;

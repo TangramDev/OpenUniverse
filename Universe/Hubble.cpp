@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1751,42 +1751,6 @@ CString CHubble::GetNewGUID()
 	return strGUID;
 }
 
-CString CHubble::GetPropertyFromObject(IDispatch* pObj, CString strPropertyName)
-{
-	CString strRet = _T("");
-	if (pObj)
-	{
-		//ITypeLib* pTypeLib = nullptr;
-		//ITypeInfo* pTypeInfo = nullptr;
-		//pObj->GetTypeInfo(0, 0, &pTypeInfo);
-		//if (pTypeInfo)
-		//{
-		//	pTypeInfo->GetContainingTypeLib(&pTypeLib, 0);
-		//	pTypeInfo->Release();
-		//	pTypeLib->Release();
-		//}
-
-		BSTR szMember = strPropertyName.AllocSysString();
-		DISPID dispid = -1;
-		HRESULT hr = pObj->GetIDsOfNames(IID_NULL, &szMember, 1, LOCALE_USER_DEFAULT, &dispid);
-		if (hr == S_OK)
-		{
-			DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
-			VARIANT result = { 0 };
-			EXCEPINFO excepInfo;
-			memset(&excepInfo, 0, sizeof excepInfo);
-			UINT nArgErr = (UINT)-1;
-			HRESULT hr = pObj->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
-			if (S_OK == hr && VT_BSTR == result.vt)
-			{
-				strRet = OLE2T(result.bstrVal);
-			}
-			::VariantClear(&result);
-		}
-	}
-	return strRet;
-}
-
 STDMETHODIMP CHubble::NewGUID(BSTR* retVal)
 {
 	*retVal = GetNewGUID().AllocSysString();
@@ -1795,55 +1759,55 @@ STDMETHODIMP CHubble::NewGUID(BSTR* retVal)
 
 STDMETHODIMP CHubble::LoadDocComponent(BSTR bstrLib, LONGLONG* llAppProxy)
 {
-	CString strLib = OLE2T(bstrLib);
-	strLib.Trim();
-	strLib.MakeLower();
-	BOOL bOK = FALSE;
-	if (strLib == _T("") || strLib.CompareNoCase(_T("default")) == 0)
-	{
-		*llAppProxy = (LONGLONG)m_pUniverseAppProxy;
-		return S_OK;
-	}
-	auto it = m_mapValInfo.find(strLib);
-	if (it == m_mapValInfo.end())
-	{
-		CString strPath = m_strAppCommonDocPath + strLib + _T(".xml");
-		CString strPath2 = m_strAppCommonDocPath2 + strLib + _T("\\");
-		CTangramXmlParse m_Parse;
-		if (m_Parse.LoadFile(strPath))
-		{
-			strPath2 += m_Parse.attr(_T("LibName"), _T(""));
-			strPath2 += _T(".dll");
-			if (::PathFileExists(strPath2) && ::LoadLibrary(strPath2))
-				bOK = TRUE;
-		}
-		if (bOK)
-		{
-			if (m_hForegroundIdleHook == NULL)
-				m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
-			auto it = m_mapValInfo.find(strLib);
-			if (it != m_mapValInfo.end())
-			{
-				LONGLONG llProxy = it->second.llVal;
-				*llAppProxy = llProxy;
-				m_mapHubbleAppProxy[strLib] = (IHubbleAppProxy*)llProxy;
-			}
-			return S_OK;
-		}
-	}
-	else
-	{
-		if (it->second.vt == VT_I8)
-			*llAppProxy = it->second.llVal;
-	}
+	//CString strLib = OLE2T(bstrLib);
+	//strLib.Trim();
+	//strLib.MakeLower();
+	//BOOL bOK = FALSE;
+	//if (strLib == _T("") || strLib.CompareNoCase(_T("default")) == 0)
+	//{
+	//	*llAppProxy = (LONGLONG)m_pUniverseAppProxy;
+	//	return S_OK;
+	//}
+	//auto it = m_mapValInfo.find(strLib);
+	//if (it == m_mapValInfo.end())
+	//{
+	//	CString strPath = m_strAppCommonDocPath + strLib + _T(".xml");
+	//	CString strPath2 = m_strAppCommonDocPath2 + strLib + _T("\\");
+	//	CTangramXmlParse m_Parse;
+	//	if (m_Parse.LoadFile(strPath))
+	//	{
+	//		strPath2 += m_Parse.attr(_T("LibName"), _T(""));
+	//		strPath2 += _T(".dll");
+	//		if (::PathFileExists(strPath2) && ::LoadLibrary(strPath2))
+	//			bOK = TRUE;
+	//	}
+	//	if (bOK)
+	//	{
+	//		if (m_hForegroundIdleHook == NULL)
+	//			m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
+	//		auto it = m_mapValInfo.find(strLib);
+	//		if (it != m_mapValInfo.end())
+	//		{
+	//			LONGLONG llProxy = it->second.llVal;
+	//			*llAppProxy = llProxy;
+	//			m_mapHubbleAppProxy[strLib] = (IHubbleAppProxy*)llProxy;
+	//		}
+	//		return S_OK;
+	//	}
+	//}
+	//else
+	//{
+	//	if (it->second.vt == VT_I8)
+	//		*llAppProxy = it->second.llVal;
+	//}
 	return S_OK;
 }
 
 STDMETHODIMP CHubble::GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames, IDispatch** ppRetDisp)
 {
-	CString strNames = OLE2T(bstrNames);
-	if (m_pCLRProxy && strNames != _T("") && CtrlDisp)
-		*ppRetDisp = m_pCLRProxy->GetCLRControl(CtrlDisp, bstrNames);
+	//CString strNames = OLE2T(bstrNames);
+	//if (m_pCLRProxy && strNames != _T("") && CtrlDisp)
+	//	*ppRetDisp = m_pCLRProxy->GetCLRControl(CtrlDisp, bstrNames);
 
 	return S_OK;
 }
@@ -1872,12 +1836,6 @@ STDMETHODIMP CHubble::CreateGalaxyCluster(LONGLONG hWnd, IGalaxyCluster** ppGala
 			pGalaxyCluster = new CComObject<CGalaxyCluster>();
 			pGalaxyCluster->m_hWnd = _hWnd;
 			m_mapWindowPage[_hWnd] = pGalaxyCluster;
-			for (auto it : m_mapHubbleAppProxy)
-			{
-				CGalaxyClusterProxy* pHubbleProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-				if (pHubbleProxy)
-					pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pHubbleProxy;
-			}
 		}
 		*ppGalaxyCluster = pGalaxyCluster;
 	}
@@ -1991,29 +1949,6 @@ STDMETHODIMP CHubble::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR b
 
 STDMETHODIMP CHubble::UpdateGrid(IGrid* pGrid)
 {
-	CGrid* pWndGrid = (CGrid*)pGrid;
-	if (pWndGrid)
-	{
-		if (pWndGrid->m_pWindow)
-		{
-			if (pWndGrid->m_nActivePage > 0)
-			{
-				CString strVal = _T("");
-				strVal.Format(_T("%d"), pWndGrid->m_nActivePage);
-				pWndGrid->m_pHostParse->put_attr(_T("activepage"), strVal);
-			}
-			pWndGrid->m_pWindow->Save();
-		}
-		if (pWndGrid->m_nViewType == Grid)
-		{
-			((CGridWnd*)pWndGrid->m_pHostWnd)->Save();
-		}
-		for (auto it2 : pWndGrid->m_vChildNodes)
-		{
-			UpdateGrid(it2);
-		}
-	}
-
 	return S_OK;
 }
 
@@ -2407,12 +2342,6 @@ STDMETHODIMP CHubble::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 		pGalaxyCluster = new CComObject<CGalaxyCluster>;
 		pGalaxyCluster->m_hWnd = hPWnd;
 		m_mapWindowPage[hPWnd] = pGalaxyCluster;
-		for (auto it : m_mapHubbleAppProxy)
-		{
-			CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-			if (pProxy)
-				pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pProxy;
-		}
 	}
 	else
 		pGalaxyCluster = (CGalaxyCluster*)it->second;
@@ -2481,7 +2410,7 @@ STDMETHODIMP CHubble::ObserveQuasars(LONGLONG hWnd, BSTR bstrFrames, BSTR bstrKe
 		{
 			for (auto it1 : ((CGalaxyCluster*)it->second)->m_mapQuasar)
 			{
-				if (it1.second != ((CGalaxyCluster*)it->second)->m_pBKFrame)
+				if (it1.second)
 				{
 					IGrid* pGrid = nullptr;
 					CGrid* pGrid2 = it1.second->m_pContainerNode;

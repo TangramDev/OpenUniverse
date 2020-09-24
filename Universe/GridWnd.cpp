@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -421,10 +421,6 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	if (bAccept)
 	{
 		::InvalidateRect(pQuasar->m_hWnd, nullptr, true);
-		if (pQuasar->m_bDesignerState && g_pHubble->m_pDesignGrid)
-		{
-			g_pHubble->UpdateGrid(g_pHubble->m_pDesignGrid->m_pRootObj);
-		}
 
 		CWebPage* pWebWnd = nullptr;
 		if (pQuasar->m_pWebPageWnd)
@@ -880,8 +876,6 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 			}
 		}
 		SetWindowPos(NULL, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER | SWP_NOREDRAW);
-		if (m_pGrid->m_pGridCommonData->m_pGalaxyCluster)
-			m_pGrid->m_pGridCommonData->m_pGalaxyCluster->Fire_NodeCreated(m_pGrid);
 
 		SetWindowText(m_pGrid->m_strNodeName);
 		m_bCreated = true;

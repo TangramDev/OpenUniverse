@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -146,8 +146,6 @@ int CGridHelperWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT messa
 	BOOL b = pQuasar->m_bDesignerState;
 	if (m_pGrid->m_nViewType == BlankView && m_pGrid->m_strCnnID == _T(""))
 		b = true;
-	if (m_pGrid && m_pGrid->m_pGridCommonData->m_pGalaxyCluster)
-		m_pGrid->m_pGridCommonData->m_pGalaxyCluster->Fire_NodeMouseActivate(m_pGrid);
 
 	if ((m_pGrid->m_nViewType == TabGrid || m_pGrid->m_nViewType == Grid))
 	{
@@ -412,7 +410,6 @@ LRESULT CGridHelperWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	if (nOldPage != wParam)
 	{
 		m_pGrid->Fire_TabChange(wParam, lParam);
-		m_pGrid->m_pGridCommonData->m_pGalaxyCluster->Fire_TabChange(m_pGrid, wParam, lParam);
 		if (pQuasar->m_pWebPageWnd)
 		{
 			::SendMessage(::GetParent(pQuasar->m_pWebPageWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);

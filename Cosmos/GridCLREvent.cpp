@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -52,13 +52,10 @@ void CGridCLREvent::OnDestroy()
 
 void CGridCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
-	Object^ pAddinObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pAddIndisp)));
-	m_pGrid->Fire_GridAddInCreated(m_pGrid, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
 }
 
 void CGridCLREvent::OnGridAddInsCreated()
 {
-	m_pGrid->Fire_GridAddInsCreated(m_pGrid);
 }
 
 void CGridCLREvent::OnTabChange(int nActivePage, int nOldPage)

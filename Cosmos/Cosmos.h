@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -66,20 +66,6 @@ namespace Cosmos
 		CGridCLREvent* m_pGridCLREvent;
 		Cosmos::Wormhole^ m_pWormhole = nullptr;
 		CBrowserImpl* m_pChromeBrowserProxy;
-
-		delegate void GridAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
-		event GridAddInCreated^ OnGridAddInCreated;
-		void Fire_GridAddInCreated(Grid^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml)
-		{
-			OnGridAddInCreated(sender, pAddIndisp, bstrAddInID, bstrAddInXml);
-		}
-
-		delegate void GridAddInsCreated(Grid^ sender);
-		event GridAddInsCreated^ OnGridAddInsCreated;
-		void Fire_GridAddInsCreated(Grid^ sender)
-		{
-			OnGridAddInsCreated(sender);
-		}
 
 		// A notification has been created for all nodes in the current layout.
 		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);

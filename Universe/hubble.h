@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -225,7 +225,6 @@ public:
 	CString GetDesignerInfo(CString);
 	CString GetXmlData(CString strName, CString strXml);
 	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
-	CString GetPropertyFromObject(IDispatch* pObj, CString strPropertyName);
 	LRESULT Close(void);
 	CGrid* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
 	CommonThreadInfo* GetThreadInfo(DWORD dwInfo = 0);

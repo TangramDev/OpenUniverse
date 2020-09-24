@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -105,7 +105,6 @@ public:
 	void Destroy();
 	void HostPosChanged();
 
-	//CTangramXmlParse* UpdateGrid();
 	BOOL CreateGalaxyCluster();
 	CGrid* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
 
