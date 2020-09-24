@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -65,7 +65,6 @@ namespace Cosmos
 		CCosmosGridEvent* m_pGridEvent;
 		CGridCLREvent* m_pGridCLREvent;
 		Cosmos::Wormhole^ m_pWormhole = nullptr;
-		CBrowserImpl* m_pChromeBrowserProxy;
 
 		// A notification has been created for all nodes in the current layout.
 		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);
@@ -328,20 +327,14 @@ namespace Cosmos
 		{
 			Cosmos::Quasar^ get()
 			{
-				CComPtr<IQuasar> pHubbleFrame;
-				m_pGrid->get_HostQuasar(&pHubbleFrame);
-				if (pHubbleFrame)
+				CComPtr<IQuasar> pQuasar;
+				m_pGrid->get_HostQuasar(&pQuasar);
+				if (pQuasar)
 				{
-					Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pHubbleFrame);
-					return pQuasar;
+					return theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pQuasar);
 				}
 				return nullptr;
 			}
-		}
-
-		property Object^ PlugIn[String^]
-		{
-			Object ^ get(String ^ strName);
 		}
 
 		property Grid^ RootGrid
@@ -524,7 +517,6 @@ namespace Cosmos
 
 	private:
 		HWND m_hWnd;
-		Dictionary<String^, Object^>^ m_pPlugInDic = nullptr;
 		void Init();
 	};
 
@@ -577,12 +569,11 @@ namespace Cosmos
 	private:
 		Hubble() {};
 		static bool IsAppInit = false;
-		static bool IsChromeRunning = false;
+		static bool IsWebRuntimeInit = false;
 
 		static Hubble^ m_pHubble;
 		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<Object^, Wormhole^>^ m_pCloudEventDic = gcnew Dictionary<Object^, Wormhole^>();
-		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
 
 		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
 		static bool WebRuntimeInit();
@@ -591,12 +582,11 @@ namespace Cosmos
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 		static Form^ m_pMainForm = nullptr;
-		static Dictionary<Object^, Grid^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Grid^>();
 
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
 		//static Browser^ ActiveBrowser();
-		static Browser^ GetHostBrowser(Object^ obj);
+		//static Browser^ GetHostBrowser(Object^ obj);
 		static Grid^ GetGridFromHandle(IntPtr handle);
 		static Grid^ GetGridFromControl(Control^ ctrl);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
@@ -608,7 +598,7 @@ namespace Cosmos
 		static void Run(Form^ Mainform);
 		static void Run(ApplicationContext^ context);
 
-		static property Dictionary<Object^, Wormhole^>^ WebBindEventDic
+		static property Dictionary<Object^, Wormhole^>^ WebConnect
 		{
 			Dictionary<Object^, Wormhole^>^ get()
 			{
@@ -627,22 +617,16 @@ namespace Cosmos
 			Browser^ get();
 		}
 
-		static property System::Drawing::Icon^ DefaultIcon
-		{
-			System::Drawing::Icon^ get();
-		}
-
-		//static property bool SupportCrashReporting
+		//static property System::Drawing::Icon^ DefaultIcon
 		//{
-		//	bool get();
-		//	void set(bool bSupportCrashReporting);
+		//	System::Drawing::Icon^ get();
 		//}
 
-		static property CosmosAppType AppType
-		{
-			CosmosAppType get();
-			void set(CosmosAppType nType);
-		}
+		//static property CosmosAppType AppType
+		//{
+		//	CosmosAppType get();
+		//	void set(CosmosAppType nType);
+		//}
 
 		static property Grid^ CreatingGrid
 		{

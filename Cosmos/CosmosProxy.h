@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -123,7 +123,7 @@ private:
 	HWND GetCtrlHandle(IDispatch* pCtrl);
 	BSTR GetCtrlType(IDispatch* pCtrl);
 	IDispatch* GetCtrlFromHandle(HWND hWnd);
-	HWND IsCtrlCanNavigate(IDispatch* ctrl);
+	HWND IsQuasar(IDispatch* ctrl);
 	void ReleaseHubbleObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);

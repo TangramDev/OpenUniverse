@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -191,7 +191,7 @@ STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BS
 	{
 		if (g_pHubble->m_pCLRProxy)
 		{
-			h = g_pHubble->m_pCLRProxy->IsCtrlCanNavigate(HostWnd.pdispVal);
+			h = g_pHubble->m_pCLRProxy->IsQuasar(HostWnd.pdispVal);
 			if (h)
 			{
 				CString strName = strFrameName;
@@ -300,7 +300,7 @@ STDMETHODIMP CGalaxyCluster::GetQuasarFromCtrl(IDispatch* CtrlObj, IQuasar** ppQ
 {
 	if (g_pHubble->m_pCLRProxy)
 	{
-		HWND h = g_pHubble->m_pCLRProxy->IsCtrlCanNavigate(CtrlObj);
+		HWND h = g_pHubble->m_pCLRProxy->IsQuasar(CtrlObj);
 		if (h)
 		{
 			auto it = m_mapQuasar.find(h);
@@ -584,7 +584,7 @@ STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR Fram
 		if (pDisp)
 		{
 			HWND h = 0;
-			h = g_pHubble->m_pCLRProxy->IsCtrlCanNavigate(pDisp);
+			h = g_pHubble->m_pCLRProxy->IsQuasar(pDisp);
 			if (h)
 			{
 				CString strFrameName = OLE2T(FrameName);
@@ -623,7 +623,7 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 				bMDI = true;
 			else
 			{
-				h = g_pHubble->m_pCLRProxy->IsCtrlCanNavigate(MdiForm.pdispVal);
+				h = g_pHubble->m_pCLRProxy->IsQuasar(MdiForm.pdispVal);
 				if (h)
 				{
 					CComBSTR bstrName(L"");

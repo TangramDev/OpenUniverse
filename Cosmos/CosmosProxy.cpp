@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -119,9 +119,6 @@ LRESULT CMenuHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 CCosmosProxy::CCosmosProxy() : IHubbleCLRImpl()
 {
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);//TabPage|TabControl|
-	//_CrtSetBreakAlloc(826);
-	//m_strExtendableTypes = L"|WebBrowser|Panel|TreeView|ListView|MonthCalendar|GroupBox|FlowLayoutPanel|TableLayoutPanel|SplitContainer|";
 	m_strExtendableTypes = L"|Button|TextBox|WebBrowser|Panel|TreeView|ListView|MonthCalendar|GroupBox|FlowLayoutPanel|TableLayoutPanel|SplitContainer|";
 	m_pCurrentPForm = nullptr;
 	m_strCurrentWinFormTemplate = _T("");
@@ -356,12 +353,6 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 		String^ strTag = pChild->Tag->ToString();
 		if (strTag == L"htmlclient")
 		{
-			if (pChild->Visible)
-			{
-			}
-			else
-			{
-			}
 			return;
 		}
 	}
@@ -380,7 +371,7 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 				String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
 				if ((theAppProxy.m_strExtendableTypes->IndexOf(L"|" + strType2 + L"|") != -1 && pChild->Dock == DockStyle::None) || pChild->Dock == DockStyle::Fill)
 				{
-					bool bExtendable = (pChild->Tag == nullptr);// false;// ;
+					bool bExtendable = (pChild->Tag == nullptr);
 					if (pChild->Tag != nullptr)
 					{
 						String^ strTag = pChild->Tag->ToString();
@@ -1089,11 +1080,11 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						if (nIpcSession)
 						{
 							pHubbleSession = (CSession*)nIpcSession;
-							bool bExists = Cosmos::Hubble::WebBindEventDic->TryGetValue(pObj, pCloudSession);
+							bool bExists = Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
 							if (bExists == false)
 							{
 								pCloudSession = gcnew Wormhole(pHubbleSession);
-								Cosmos::Hubble::WebBindEventDic[pObj] = pCloudSession;
+								Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
 								pCloudSession->m_pHostObj = pObj;
 							}
 							theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
@@ -1113,7 +1104,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							pHubbleSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
 							pCloudSession = gcnew Wormhole(pHubbleSession);
-							Cosmos::Hubble::WebBindEventDic[pObj] = pCloudSession;
+							Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
 							pCloudSession->m_pHostObj = pObj;
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
 							if (strFormName == _T(""))
@@ -1213,7 +1204,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					}
 					pHubbleSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
 					pCloudSession = gcnew Wormhole(pHubbleSession);
-					Cosmos::Hubble::WebBindEventDic[mainForm] = pCloudSession;
+					Cosmos::Hubble::WebConnect[mainForm] = pCloudSession;
 					pCloudSession->m_pHostObj = mainForm;
 					CString strFormName = mainForm->Name;
 					pHubbleSession->InsertLong(_T("autodelete"), 0);
@@ -1454,7 +1445,6 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 	{
 		if (_pObj->GetType()->IsSubclassOf(System::Windows::FrameworkElement::typeid))
 		{
-			Cosmos::Hubble::m_pFrameworkElementDic[_pObj] = _pGrid;
 			try
 			{
 				System::Windows::Forms::Integration::ElementHost^ pElementHost = gcnew System::Windows::Forms::Integration::ElementHost();
@@ -1593,12 +1583,12 @@ void CCosmosProxy::ReleaseHubbleObj(IDispatch* pDisp)
 	LONGLONG nValue = (LONGLONG)pDisp;
 	Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)pDisp);
 	Cosmos::Wormhole^ pCloudSession = nullptr;
-	bool bExists = Cosmos::Hubble::WebBindEventDic->TryGetValue(pObj, pCloudSession);
+	bool bExists = Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
 	if (bExists == true)
 	{
 		if (pCloudSession != nullptr)
 		{
-			Cosmos::Hubble::WebBindEventDic->Remove(pObj);
+			Cosmos::Hubble::WebConnect->Remove(pObj);
 		}
 	}
 	_removeObject(nValue);
@@ -1692,13 +1682,13 @@ void CCosmosProxy::ConnectGridToWebPage(IGrid* pGrid, bool bAdd)
 		if (pObj != nullptr)
 		{
 			Cosmos::Wormhole^ pCloudSession = nullptr;
-			bool bExists = Cosmos::Hubble::WebBindEventDic->TryGetValue(pObj, pCloudSession);
+			bool bExists = Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
 			if (bAdd)
 			{
 				if (bExists == false)
 				{
 					pCloudSession = gcnew Wormhole(pSession);
-					Cosmos::Hubble::WebBindEventDic[pObj] = pCloudSession;
+					Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
 					pCloudSession->m_pHostObj = pObj;
 					theAppProxy.m_mapSession2Wormhole[pSession] = pCloudSession;
 				}
@@ -1707,7 +1697,7 @@ void CCosmosProxy::ConnectGridToWebPage(IGrid* pGrid, bool bAdd)
 			{
 				if (pCloudSession != nullptr)
 				{
-					Cosmos::Hubble::WebBindEventDic->Remove(pObj);
+					Cosmos::Hubble::WebConnect->Remove(pObj);
 				}
 			}
 		}
@@ -1746,10 +1736,10 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 		if (strCallback != _T(""))
 		{
 			Cosmos::Wormhole^ pCloudSession = nullptr;
-			if (!Cosmos::Hubble::WebBindEventDic->TryGetValue(pObj, pCloudSession))
+			if (!Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession))
 			{
 				pCloudSession = gcnew Cosmos::Wormhole(pSession);
-				Cosmos::Hubble::WebBindEventDic[pObj] = pCloudSession;
+				Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
 			}
 			CString strEventName = pSession->GetString(LPCTSTR(strCallback));
 			if (strType == _T("SyncCtrlTextChange"))
@@ -1770,9 +1760,9 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 							{
 								pSubCtrl = pArray[0];
 								Cosmos::Wormhole^ pCloudSession2 = nullptr;
-								if (!Cosmos::Hubble::WebBindEventDic->TryGetValue(pSubCtrl, pCloudSession2))
+								if (!Cosmos::Hubble::WebConnect->TryGetValue(pSubCtrl, pCloudSession2))
 								{
-									Cosmos::Hubble::WebBindEventDic[pSubCtrl] = pCloudSession;
+									Cosmos::Hubble::WebConnect[pSubCtrl] = pCloudSession;
 								}
 								pSession->Insertint64(pSubCtrl->Name, pSubCtrl->Handle.ToInt64());
 								pSubCtrl->TextChanged += gcnew System::EventHandler(&OnTextChanged);
@@ -1808,9 +1798,9 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 						{
 							pSubCtrl = pArray[0];
 							Cosmos::Wormhole^ pCloudSession2 = nullptr;
-							if (!Cosmos::Hubble::WebBindEventDic->TryGetValue(pSubCtrl, pCloudSession2))
+							if (!Cosmos::Hubble::WebConnect->TryGetValue(pSubCtrl, pCloudSession2))
 							{
-								Cosmos::Hubble::WebBindEventDic[pSubCtrl] = pCloudSession;
+								Cosmos::Hubble::WebConnect[pSubCtrl] = pCloudSession;
 							}
 
 							Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, _strEventName);
@@ -1896,7 +1886,7 @@ void CCosmosProxy::OnTextChanged(System::Object^ sender, System::EventArgs^ e)
 {
 	Control^ pTextCtrl = (Control^)sender;
 	Cosmos::Wormhole^ pCloudSession = nullptr;
-	if (Cosmos::Hubble::WebBindEventDic->TryGetValue(sender, pCloudSession))
+	if (Cosmos::Hubble::WebConnect->TryGetValue(sender, pCloudSession))
 	{
 		pCloudSession->InsertString(pTextCtrl->Name, pTextCtrl->Text);
 		pCloudSession->InsertString("msgID", "FIRE_EVENT");
@@ -1935,12 +1925,12 @@ IDispatch* CCosmosProxy::GetCtrlFromHandle(HWND hWnd)
 	return nullptr;
 }
 
-HWND CCosmosProxy::IsCtrlCanNavigate(IDispatch* ctrl)
+HWND CCosmosProxy::IsQuasar(IDispatch* ctrl)
 {
 	Control^ pCtrl = (Control^)Marshal::GetObjectForIUnknown((IntPtr)ctrl);
 	if (pCtrl != nullptr)
 	{
-		if (pCtrl->Dock == DockStyle::Fill)
+		if (pCtrl->Dock == DockStyle::Fill|| pCtrl->Dock == DockStyle::None)
 			return (HWND)pCtrl->Handle.ToInt64();
 	}
 	return 0;
@@ -1961,25 +1951,30 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 					PostQuitMessage(0);
 					return;
 				}
-				switch (Cosmos::Hubble::AppType)
-				{
-				case CosmosAppType::APPWIN32:
-				{
-					ATLTRACE(_T("CosmosAppType::APP_WIN32\n"));
-				}
-				break;
-				case CosmosAppType::APPBROWSER:
-				case CosmosAppType::APPBROWSERAPP:
-				case CosmosAppType::APPBROWSER_ECLIPSE:
-				{
-					theApp.m_pHubbleImpl->m_hMainWnd = NULL;
-					Form^ mainForm = Cosmos::Hubble::MainForm::get();
-					if (mainForm)
-						theApp.m_pHubbleImpl->m_hMainWnd = (HWND)mainForm->Handle.ToPointer();
-					theApp.InitHubbleApp(theApp.m_pHubbleImpl->m_bIsSupportCrashReporting);
-				}
-				break;
-				}
+				theApp.m_pHubbleImpl->m_hMainWnd = NULL;
+				Form^ mainForm = Cosmos::Hubble::MainForm::get();
+				if (mainForm)
+					theApp.m_pHubbleImpl->m_hMainWnd = (HWND)mainForm->Handle.ToPointer();
+				theApp.InitHubbleApp(theApp.m_pHubbleImpl->m_bIsSupportCrashReporting);
+				//switch (Cosmos::Hubble::AppType)
+				//{
+				//case CosmosAppType::APPWIN32:
+				//{
+				//	ATLTRACE(_T("CosmosAppType::APP_WIN32\n"));
+				//}
+				//break;
+				//case CosmosAppType::APPBROWSER:
+				//case CosmosAppType::APPBROWSERAPP:
+				//case CosmosAppType::APPBROWSER_ECLIPSE:
+				//{
+				//	theApp.m_pHubbleImpl->m_hMainWnd = NULL;
+				//	Form^ mainForm = Cosmos::Hubble::MainForm::get();
+				//	if (mainForm)
+				//		theApp.m_pHubbleImpl->m_hMainWnd = (HWND)mainForm->Handle.ToPointer();
+				//	theApp.InitHubbleApp(theApp.m_pHubbleImpl->m_bIsSupportCrashReporting);
+				//}
+				//break;
+				//}
 			}
 			return;
 		}

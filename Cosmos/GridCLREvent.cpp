@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -39,14 +39,6 @@ void CGridCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 
 void CGridCLREvent::OnDestroy()
 {
-	if (m_pGrid->m_pHostObj)
-	{
-		Cosmos::Grid^ pGrid = nullptr;
-		if (Cosmos::Hubble::m_pFrameworkElementDic->TryGetValue(m_pGrid->m_pHostObj, pGrid))
-		{
-			Cosmos::Hubble::m_pFrameworkElementDic->Remove(m_pGrid->m_pHostObj);
-		}
-	}
 	m_pGrid->Fire_OnDestroy(m_pGrid);
 }
 

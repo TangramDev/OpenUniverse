@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -38,7 +38,6 @@ namespace Cosmos
         m_pGrid = pGrid;
         LONGLONG nValue = (LONGLONG)pGrid;
         theAppProxy._insertObject(nValue, this);
-        m_pChromeBrowserProxy = nullptr;
     }
 
     Grid::~Grid()
@@ -49,11 +48,10 @@ namespace Cosmos
 
     Quasar^ Grid::Quasar::get()
     {
-        CComPtr<IQuasar> pHubbleFrame;
-        m_pGrid->get_Quasar(&pHubbleFrame);
+        CComPtr<IQuasar> pQuasar;
+        m_pGrid->get_Quasar(&pQuasar);
 
-        Cosmos::Quasar^ pQuasar = theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pHubbleFrame);
-        return pQuasar;
+        return theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pQuasar);
     }
 
     String^ Grid::Caption::get()
@@ -129,32 +127,6 @@ namespace Cosmos
         }
     }
 
-    Object^ Grid::PlugIn::get(String^ strObjName)
-    {
-        Object^ pObj = nullptr;
-        if (m_pGrid)
-        {
-            Grid^ pRootGrid = this->RootGrid;
-            if (pRootGrid->m_pPlugInDic == nullptr)
-            {
-                pRootGrid->m_pPlugInDic = gcnew Dictionary<String^, Object^>();
-            }
-            if (pRootGrid->m_pPlugInDic->TryGetValue(strObjName, pObj) == false)
-            {
-                IDispatch* pDisp = nullptr;
-                LRESULT hr = m_pGrid->get_AxPlugIn(STRING2BSTR(strObjName), &pDisp);
-                if (SUCCEEDED(hr) && pDisp)
-                {
-                    Object^ pObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pDisp)));
-                    pRootGrid->m_pPlugInDic[strObjName] = pObj;
-                    return pObj;
-                }
-
-            }
-        }
-        return pObj;
-    }
-
     void Grid::Fire_OnTabChange(Grid^ ActivePage, Grid^ OldGrid)
     {
         OnTabChange(ActivePage, OldGrid);
@@ -166,14 +138,6 @@ namespace Cosmos
 
     Hubble::~Hubble(void)
     {
-        for each (KeyValuePair<String^, Object^>^ dic in Cosmos::Hubble::m_pHubbleCLRObjDic)
-        {
-            if (dic->Value != nullptr)
-            {
-                Object^ value = dic->Value;
-                delete value;
-            }
-        }
     }
 
     void Hubble::Run()
@@ -275,52 +239,52 @@ namespace Cosmos
     //        theApp.m_pHubbleImpl->m_bIsSupportCrashReporting = bSupportCrashReporting;
     //}
 
-    CosmosAppType Hubble::AppType::get()
-    {
-        DWORD _nType = theApp.m_pHubbleImpl->m_nAppType;
-        switch (_nType)
-        {
-        case APP_WIN32:
-            return CosmosAppType::APPWIN32;
-            break;
-        case APP_BROWSER:
-            return CosmosAppType::APPBROWSER;
-            break;
-        case APP_ECLIPSE:
-            return CosmosAppType::APPECLIPSE;
-            break;
-        case APP_BROWSER_ECLIPSE:
-            return CosmosAppType::APPBROWSER_ECLIPSE;
-            break;
-        case APP_BROWSERAPP:
-            return CosmosAppType::APPBROWSERAPP;
-            break;
-        default:
-            break;
-        }
-        return CosmosAppType::APPOTHER;
-    }
+    //CosmosAppType Hubble::AppType::get()
+    //{
+    //    DWORD _nType = theApp.m_pHubbleImpl->m_nAppType;
+    //    switch (_nType)
+    //    {
+    //    case APP_WIN32:
+    //        return CosmosAppType::APPWIN32;
+    //        break;
+    //    case APP_BROWSER:
+    //        return CosmosAppType::APPBROWSER;
+    //        break;
+    //    case APP_ECLIPSE:
+    //        return CosmosAppType::APPECLIPSE;
+    //        break;
+    //    case APP_BROWSER_ECLIPSE:
+    //        return CosmosAppType::APPBROWSER_ECLIPSE;
+    //        break;
+    //    case APP_BROWSERAPP:
+    //        return CosmosAppType::APPBROWSERAPP;
+    //        break;
+    //    default:
+    //        break;
+    //    }
+    //    return CosmosAppType::APPOTHER;
+    //}
 
-    void Hubble::AppType::set(CosmosAppType nType)
-    {
-        if (m_pHubble == nullptr)
-            m_pHubble = gcnew Hubble();
-        theApp.m_pHubbleImpl->m_nAppType = (DWORD)nType;
-    }
+    //void Hubble::AppType::set(CosmosAppType nType)
+    //{
+    //    if (m_pHubble == nullptr)
+    //        m_pHubble = gcnew Hubble();
+    //    theApp.m_pHubbleImpl->m_nAppType = (DWORD)nType;
+    //}
 
-    System::Drawing::Icon^ Hubble::DefaultIcon::get()
-    {
-        if (Cosmos::Hubble::m_pDefaultIcon == nullptr)
-        {
-            Form^ _pForm = gcnew Form();
-            Cosmos::Hubble::m_pDefaultIcon = _pForm->Icon;
-        }
-        return Cosmos::Hubble::m_pDefaultIcon;
-    }
+    //System::Drawing::Icon^ Hubble::DefaultIcon::get()
+    //{
+    //    if (Cosmos::Hubble::m_pDefaultIcon == nullptr)
+    //    {
+    //        Form^ _pForm = gcnew Form();
+    //        Cosmos::Hubble::m_pDefaultIcon = _pForm->Icon;
+    //    }
+    //    return Cosmos::Hubble::m_pDefaultIcon;
+    //}
 
     bool Hubble::WebRuntimeInit()
     {
-        if (IsChromeRunning)
+        if (IsWebRuntimeInit)
             return true;
 
         HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
@@ -331,14 +295,14 @@ namespace Cosmos
             _IsChromeRunning FuncIsChromeRunning;
             FuncIsChromeRunning = (_IsChromeRunning)GetProcAddress(hModule, "IsBrowserModel");
             if (FuncIsChromeRunning != NULL) {
-                IsChromeRunning = FuncIsChromeRunning(false);
+                IsWebRuntimeInit = FuncIsChromeRunning(false);
                 if (theAppProxy.m_bInitApp == false)
                 {
                     ::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20191022);
                 }
             }
         }
-        return IsChromeRunning;
+        return IsWebRuntimeInit;
     }
 
     Browser^ Hubble::HostWebBrowser::get()
@@ -477,66 +441,66 @@ namespace Cosmos
     //    return nullptr;
     //}
 
-    Browser^ Hubble::GetHostBrowser(Object^ obj)
-    {
-        if (obj == nullptr)
-        {
-            return nullptr;
-        }
-        HWND hWnd = nullptr;
-        if (obj->GetType()->IsSubclassOf(Control::typeid) || obj->GetType() == Control::typeid)
-        {
-            Control^ ctrl = (Control^)obj;
-            hWnd = (HWND)(ctrl->Handle.ToPointer());
-        }
-        else if (obj->GetType()->IsSubclassOf(System::Windows::Media::Visual::typeid) ||
-            obj->GetType() == System::Windows::Media::Visual::typeid)
-        {
-            System::Windows::Media::Visual^ vis = (System::Windows::Media::Visual^)obj;
-            System::Windows::PresentationSource^ ps = System::Windows::Interop::HwndSource::FromVisual(vis);
-            if (ps != nullptr)
-            {
-                System::Windows::Interop::HwndSource^ hwnd = (System::Windows::Interop::HwndSource^)ps;
-                hWnd = (HWND)(hwnd->Handle.ToPointer());
-                hWnd = ::GetParent(hWnd);
-                if (::IsWindow(hWnd))
-                {
-                    hWnd = ::GetParent(hWnd);
-                }
-            }
-        }
-        if (hWnd == nullptr)
-        {
-            return nullptr;
-        }
-        IGrid* pWndGrid = nullptr;
-        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)hWnd, &pWndGrid);
-        if (hr != S_OK || pWndGrid == nullptr)
-        {
-            return nullptr;
-        }
-        IQuasar* pQuasar = nullptr;
-        hr = pWndGrid->get_Quasar(&pQuasar);
-        if (hr != S_OK || pQuasar == nullptr)
-        {
-            return nullptr;
-        }
-        IBrowser* pChromeWebBrowser = nullptr;
-        pQuasar->get_HostBrowser(&pChromeWebBrowser);
-        if (pChromeWebBrowser == nullptr)
-        {
-            return nullptr;
-        }
-        auto it = theAppProxy.m_mapChromeWebBrowser.find(pChromeWebBrowser);
-        if (it != theAppProxy.m_mapChromeWebBrowser.end())
-            return it->second;
-        else
-        {
-            Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
-            theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
-            return pBrowser;
-        }
-    }
+    //Browser^ Hubble::GetHostBrowser(Object^ obj)
+    //{
+    //    if (obj == nullptr)
+    //    {
+    //        return nullptr;
+    //    }
+    //    HWND hWnd = nullptr;
+    //    if (obj->GetType()->IsSubclassOf(Control::typeid) || obj->GetType() == Control::typeid)
+    //    {
+    //        Control^ ctrl = (Control^)obj;
+    //        hWnd = (HWND)(ctrl->Handle.ToPointer());
+    //    }
+    //    else if (obj->GetType()->IsSubclassOf(System::Windows::Media::Visual::typeid) ||
+    //        obj->GetType() == System::Windows::Media::Visual::typeid)
+    //    {
+    //        System::Windows::Media::Visual^ vis = (System::Windows::Media::Visual^)obj;
+    //        System::Windows::PresentationSource^ ps = System::Windows::Interop::HwndSource::FromVisual(vis);
+    //        if (ps != nullptr)
+    //        {
+    //            System::Windows::Interop::HwndSource^ hwnd = (System::Windows::Interop::HwndSource^)ps;
+    //            hWnd = (HWND)(hwnd->Handle.ToPointer());
+    //            hWnd = ::GetParent(hWnd);
+    //            if (::IsWindow(hWnd))
+    //            {
+    //                hWnd = ::GetParent(hWnd);
+    //            }
+    //        }
+    //    }
+    //    if (hWnd == nullptr)
+    //    {
+    //        return nullptr;
+    //    }
+    //    IGrid* pWndGrid = nullptr;
+    //    HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)hWnd, &pWndGrid);
+    //    if (hr != S_OK || pWndGrid == nullptr)
+    //    {
+    //        return nullptr;
+    //    }
+    //    IQuasar* pQuasar = nullptr;
+    //    hr = pWndGrid->get_Quasar(&pQuasar);
+    //    if (hr != S_OK || pQuasar == nullptr)
+    //    {
+    //        return nullptr;
+    //    }
+    //    IBrowser* pChromeWebBrowser = nullptr;
+    //    pQuasar->get_HostBrowser(&pChromeWebBrowser);
+    //    if (pChromeWebBrowser == nullptr)
+    //    {
+    //        return nullptr;
+    //    }
+    //    auto it = theAppProxy.m_mapChromeWebBrowser.find(pChromeWebBrowser);
+    //    if (it != theAppProxy.m_mapChromeWebBrowser.end())
+    //        return it->second;
+    //    else
+    //    {
+    //        Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
+    //        theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
+    //        return pBrowser;
+    //    }
+    //}
 
     int Hubble::HubbleInit(String^ strInit)
     {
@@ -768,7 +732,7 @@ namespace Cosmos
         
         Wormhole^ pCloudSession = nullptr;
         CSession* pSession = nullptr;
-        bool bExists = Hubble::WebBindEventDic->TryGetValue(pObj, pCloudSession);
+        bool bExists = Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
         if (bExists)
         {
             pSession = pCloudSession->m_pWormhole;
@@ -821,10 +785,9 @@ namespace Cosmos
         Type^ pType = nullptr;
         if (m_strID != L"")
         {
-            Hubble^ pApp = Hubble::GetHubble();
-            Monitor::Enter(pApp->m_pHubbleCLRTypeDic);
+            Monitor::Enter(m_pHubbleCLRTypeDic);
             String^ strID = nullptr;
-            if (pApp->m_pHubbleCLRTypeDic->TryGetValue(m_strID, pType) == false)
+            if (m_pHubbleCLRTypeDic->TryGetValue(m_strID, pType) == false)
             {
                 BSTR bstrID = STRING2BSTR(m_strID);
                 CString _strID = OLE2T(bstrID);
@@ -864,7 +827,7 @@ namespace Cosmos
                         try
                         {
                             if (strLibName.CompareNoCase(_T("Cosmos")) == 0)
-                                m_pDotNetAssembly = pApp->GetType()->Assembly;
+                                m_pDotNetAssembly = GetHubble()->GetType()->Assembly;
                             else
                             {
                                 auto it = theAppProxy.m_mapAssembly.find(strLib);
@@ -932,13 +895,13 @@ namespace Cosmos
                         {
                             if (pType != nullptr)
                             {
-                                pApp->m_pHubbleCLRTypeDic->Add(m_strID, pType);
+                                m_pHubbleCLRTypeDic->Add(m_strID, pType);
                             }
                         }
                     }
                 }
             }
-            Monitor::Exit(pApp->m_pHubbleCLRTypeDic);
+            Monitor::Exit(m_pHubbleCLRTypeDic);
         }
         return pType;
     }

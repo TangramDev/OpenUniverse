@@ -562,7 +562,7 @@ namespace CommonUniverse {
 		virtual IDispatch* GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) = 0;
 		virtual HWND GetCtrlHandle(IDispatch* pCtrl) = 0;
 		virtual BSTR GetCtrlType(IDispatch* pCtrl) = 0;
-		virtual HWND IsCtrlCanNavigate(IDispatch* ctrl) = 0;
+		virtual HWND IsQuasar(IDispatch* ctrl) = 0;
 		virtual void HubbleAction(BSTR bstrXml, void*) = 0;
 		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) = 0;
 		virtual void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal) = 0;

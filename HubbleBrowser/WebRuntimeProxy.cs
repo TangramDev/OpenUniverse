@@ -81,7 +81,7 @@ namespace HubbleBrowser
 
         private static void UcButtonsAndTextBoxes_MyCustomClick(object sender, DemoComponents.ucButtonsAndTextBoxes.MyEventArgs e)
         {
-            if (Cosmos.Hubble.WebBindEventDic.TryGetValue(sender, out Wormhole thisWormhole))
+            if (Cosmos.Hubble.WebConnect.TryGetValue(sender, out Wormhole thisWormhole))
             {
                 Control ctrl = sender as Control;
                 if (ctrl != null)
@@ -99,7 +99,7 @@ namespace HubbleBrowser
 
         private static void TextBox_TextChanged(object sender, EventArgs e)
         {
-            if (Cosmos.Hubble.WebBindEventDic.TryGetValue(sender, out Wormhole thisSession))
+            if (Cosmos.Hubble.WebConnect.TryGetValue(sender, out Wormhole thisSession))
             {
                 TextBox ctrl = sender as TextBox;
                 if (ctrl != null)
@@ -115,7 +115,7 @@ namespace HubbleBrowser
 
         private static void ThisTreeview_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (Hubble.WebBindEventDic.TryGetValue(sender, out Wormhole thisSession))
+            if (Hubble.WebConnect.TryGetValue(sender, out Wormhole thisSession))
             {
                 if (e.Node.Tag != null)
                 {
@@ -149,7 +149,7 @@ namespace HubbleBrowser
 
         private static void Thisbtn_Click(object sender, EventArgs e)
         {
-            if (Cosmos.Hubble.WebBindEventDic.TryGetValue(sender, out Wormhole thisSession))
+            if (Cosmos.Hubble.WebConnect.TryGetValue(sender, out Wormhole thisSession))
             {
                 Control ctrl = sender as Control;
                 thisSession.InsertString("msgID", "FIRE_EVENT");
@@ -171,7 +171,7 @@ namespace HubbleBrowser
 
         private static void ThisForm_SizeChanged(object sender, EventArgs e)
         {
-            if (Hubble.WebBindEventDic.TryGetValue(sender, out Wormhole thisSession))
+            if (Hubble.WebConnect.TryGetValue(sender, out Wormhole thisSession))
             {
                 Form xform = sender as Form;
                 thisSession.InsertString("msgID", "FIRE_EVENT");

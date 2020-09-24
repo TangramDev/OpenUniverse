@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -16,7 +16,7 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Hubble.h"
-#include "GridHelperWnd.h"
+#include "GridHelper.h"
 #include "GridWnd.h"
 #include "grid.h"
 #include "Quasar.h"
@@ -142,7 +142,7 @@ void CGrid::InitWndGrid()
 	if (it != g_pHubble->m_TabWndClassInfoDictionary.end())
 		m_pObjClsInfo = it->second;
 	else
-		m_pObjClsInfo = RUNTIME_CLASS(CGridHelperWnd);
+		m_pObjClsInfo = RUNTIME_CLASS(CGridHelper);
 
 	for (auto it : g_pHubble->m_mapHubbleAppProxy)
 	{
@@ -380,10 +380,10 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 						m_pHostQuasar->m_pHostWebBrowserWnd = m_pWebBrowser;
 						HWND hWnd = m_pWebBrowser->m_hWnd;
 						HWND h = ::GetParent(hWnd);
-						CGridHelperWnd* pGridWnd = (CGridHelperWnd*)CWnd::FromHandlePermanent(h);
+						CGridHelper* pGridWnd = (CGridHelper*)CWnd::FromHandlePermanent(h);
 						pGridWnd->m_hFormWnd = nullptr;
-						::SetParent(hWnd, ((CGridHelperWnd*)pGrid2->m_pHostWnd)->m_hWnd);
-						((CGridHelperWnd*)pGrid2->m_pHostWnd)->m_hFormWnd = hWnd;
+						::SetParent(hWnd, ((CGridHelper*)pGrid2->m_pHostWnd)->m_hWnd);
+						((CGridHelper*)pGrid2->m_pHostWnd)->m_hFormWnd = hWnd;
 						if (pOldParent && pOldParent != pGrid2)
 							pOldParent->m_pWebBrowser = nullptr;
 						::PostMessage(pGrid2->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200128);
@@ -601,7 +601,7 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 
 			m_strID = TGM_NUCLEUS;
 			CGrid* pTopGrid = m_pRootObj;
-			pTopGrid->m_pGridCommonData->m_pHostClientView = (CGridHelperWnd*)m_pHostWnd;
+			pTopGrid->m_pGridCommonData->m_pHostClientView = (CGridHelper*)m_pHostWnd;
 			while (pTopGrid != pTopGrid->m_pRootObj)
 			{
 				pTopGrid->m_pGridCommonData->m_pQuasar->m_pBindingGrid = this;
@@ -690,7 +690,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	CWebPage* pHtmlWnd = m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
 	HWND hWnd = 0;
-	CGridHelperWnd* pHubbleDesignView = (CGridHelperWnd*)m_pHostWnd;
+	CGridHelper* pHubbleDesignView = (CGridHelper*)m_pHostWnd;
 	BOOL isAppWnd = false;
 	if ( m_strID == _T("clrctrl"))
 	{
@@ -869,7 +869,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			if (g_pHubble->m_pBrowserFactory)
 			{
 				HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, s);
-				((CGridHelperWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
+				((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
 				g_pHubble->m_hParent = NULL;
 				auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 				if (it != g_pHubble->m_mapBrowserWnd.end())
@@ -1045,7 +1045,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 				}
 			}
 
-			CGridHelperWnd* pWnd = (CGridHelperWnd*)m_pHostWnd;
+			CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
 			if (m_pDisp && pWnd->m_mapDockCtrl.size())
 			{
 				HWND hPage = m_pGridCommonData->m_pGalaxyCluster->m_hWnd;
@@ -1053,7 +1053,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 			}
 			if (m_pDisp == nullptr)
 			{
-				((CGridHelperWnd*)m_pHostWnd)->m_bCreateExternal = false;
+				((CGridHelper*)m_pHostWnd)->m_bCreateExternal = false;
 				m_nViewType = BlankView;
 			}
 		}
@@ -1082,7 +1082,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 
 		CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pDisp);
 		if (pIOleInPlaceActiveObject)
-			((CGridHelperWnd*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
+			((CGridHelper*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
 		m_Wnd.Detach();
 		return hWnd;
 	}
@@ -1906,10 +1906,6 @@ HRESULT CGrid::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 			}
 		}
 	}
-	//for (auto it : m_mapWndGridProxy)
-	//{
-	//	it.second->OnTabChange(ActivePage, OldPage);
-	//}
 	return hr;
 }
 
@@ -1923,7 +1919,7 @@ STDMETHODIMP CGrid::get_DockObj(BSTR bstrName, LONGLONG * pVal)
 	//CString strName = OLE2T(bstrName);
 	//if (m_nViewType == CLRCtrl)
 	//{
-	//	CGridHelperWnd* pWnd = (CGridHelperWnd*)m_pHostWnd;
+	//	CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
 	//	auto it = pWnd->m_mapDockCtrl.find(strName);
 	//	if (it != pWnd->m_mapDockCtrl.end())
 	//	{
@@ -1938,7 +1934,7 @@ STDMETHODIMP CGrid::put_DockObj(BSTR bstrName, LONGLONG newVal)
 	//CString strName = OLE2T(bstrName);
 	//if (/*m_nViewType == CLRCtrl&&*/::IsWindow((HWND)newVal) && strName != _T(""))
 	//{
-	//	CGridHelperWnd* pWnd = (CGridHelperWnd*)m_pHostWnd;
+	//	CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
 	//	auto it = pWnd->m_mapDockCtrl.find(strName);
 	//	if (it == pWnd->m_mapDockCtrl.end())
 	//	{
@@ -1976,8 +1972,8 @@ STDMETHODIMP CGrid::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
 			nPos = _strXml.Find(_T("|"));
 		}
 
-		HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(((CGridHelperWnd*)m_pHostWnd)->m_hWnd, s);
-		((CGridHelperWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
+		HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(((CGridHelper*)m_pHostWnd)->m_hWnd, s);
+		((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
 		g_pHubble->m_hParent = NULL;
 		auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pHubble->m_mapBrowserWnd.end())
@@ -2039,7 +2035,7 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 		}
 
 		HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(m_pHostWnd->m_hWnd, s);
-		((CGridHelperWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
+		((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
 		g_pHubble->m_hParent = NULL;
 		auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pHubble->m_mapBrowserWnd.end())
@@ -2057,8 +2053,8 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 	//	CString strURL = OLE2T(newVal);
 	//	strURL += _T("|");
 
-	//	HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(((CGridHelperWnd*)m_pHostWnd)->m_hWnd, strURL);
-	//	((CGridHelperWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
+	//	HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(((CGridHelper*)m_pHostWnd)->m_hWnd, strURL);
+	//	((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
 	//	g_pHubble->m_hParent = NULL;
 	//	auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
 	//	if (it != g_pHubble->m_mapBrowserWnd.end())
