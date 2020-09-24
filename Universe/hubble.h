@@ -220,7 +220,6 @@ public:
 	void ExportComponentInfo();
 	int	 LoadCLR();
 	BOOL IsUserAdministrator();
-	CString EncodeFileToBase64(CString strSRC);
 	CString ComputeHash(CString source);
 	CString GetDesignerInfo(CString);
 	CString GetXmlData(CString strName, CString strXml);
@@ -274,14 +273,12 @@ private:
 	void HubbleLoad();
 	bool CheckUrl(CString&   url);
 	void AttachGrid(void* pGridEvents);
-	CString Encode(CString strSRC, BOOL bEnCode);
-	CString GetNewLayoutNodeName(BSTR strCnnID, IGrid* pDesignNode);
+
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
 	IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
 	bool IsMDIClientQuasarNode(IGrid*);
 	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
-	void FireNodeEvent(int nIndex, CGrid* pGrid, CCosmosEvent* pObj);
 
 	CString RemoveUTF8BOM(CString strUTF8);
 
@@ -301,6 +298,5 @@ private:
 	CSession* CreateCloudSession(CWebPageImpl*);
 	CSession* GetCloudSession(IGrid*);
 	void SetMainWnd(HWND hMain);
-	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
 	void HubbleNotify(CString strXml1, CString strXml2, LONGLONG wParam, LONGLONG lParam);
 };

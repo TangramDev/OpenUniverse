@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -35,8 +35,6 @@ public:
 	map<CString, CGrid*>		m_mapLayoutNodes;
 	map<CString, CGrid*>		m_mapAxNodes;
 	map<CString, CGrid*>		m_mapCLRNodes;
-	map<CString, CGrid*>		m_mapCppGrids;
-	CMapStringToPtr				m_PlugInDispDictionary;
 };
 
 // CGrid 
@@ -53,7 +51,6 @@ public:
 	BOOL							m_bTopObj;
 	BOOL							m_bCreated;
 	BOOL							m_bWebInit;
-	BOOL							m_bNodeDocComplete;
 
 	GridType						m_nViewType;
 	int								m_nID;
@@ -92,7 +89,6 @@ public:
 	CTangramXmlParse* 				m_pDocXmlParseNode;
 	CSession*						m_pCloudSession = nullptr;
 	IHubbleWindow*					m_pWindow;
-	//CMDIChildFormInfo*				m_pChildFormsInfo;
 	CGridCommonData*				m_pGridCommonData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
@@ -123,8 +119,6 @@ public:
 
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
-	HRESULT Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
-	HRESULT Fire_GridAddInsCreated();
 	HRESULT Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
 	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
 	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);
@@ -203,7 +197,6 @@ public:
 	STDMETHOD(GetCtrlByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
 	STDMETHOD(SetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
-	STDMETHOD(Refresh)(void);
 	STDMETHOD(LoadXML)(int nType, BSTR bstrXML);
 	STDMETHOD(Show)();
 	STDMETHOD(GetGridByName)(BSTR bstrName, IGridCollection** pVal);
@@ -254,5 +247,5 @@ public:
 	CGridVector*	m_pGrids;
 
 private:
-	CGridVector	m_vNodes;
+	CGridVector	m_vGrids;
 };

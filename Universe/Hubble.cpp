@@ -98,7 +98,6 @@ CHubble::CHubble()
 	m_pActiveAppProxy = nullptr;
 	m_pCLRProxy = nullptr;
 	m_pHubblePackageProxy = nullptr;
-	m_strStartupCLRObj = _T("");
 	m_strWorkBenchStrs = _T("");
 	m_strExeName = _T("");
 	m_strAppName = _T("Tangram System");
@@ -384,48 +383,6 @@ LRESULT CHubble::Close(void)
 	return S_OK;
 }
 
-void CHubble::FireNodeEvent(int nIndex, CGrid* pGrid, CCosmosEvent* pObj)
-{
-	switch (nIndex)
-	{
-	case 0:
-	{
-		GridType type = pGrid->m_nViewType;
-		if (type == Grid || type == TabGrid)
-		{
-			for (auto it : pGrid->m_vChildNodes)
-			{
-				FireNodeEvent(nIndex, it, pObj);
-			}
-		}
-		else
-		{
-			for (auto it : pGrid->m_mapWndGridProxy)
-			{
-				it.second->OnHubbleDocEvent(pObj);
-			}
-		}
-	}
-	break;
-	case 1:
-	{
-		for (auto it : pGrid->m_mapWndGridProxy)
-		{
-			it.second->OnHubbleDocEvent(pObj);
-		}
-	}
-	break;
-	case 2:
-	{
-		for (auto it : pGrid->m_mapWndGridProxy)
-		{
-			it.second->OnHubbleDocEvent(pObj);
-		}
-	}
-	break;
-	}
-}
-
 void CHubble::FireAppEvent(CCosmosEvent* pObj)
 {
 	if (pObj)
@@ -621,58 +578,6 @@ void CHubble::HubbleInit()
 	if (bLoad == false) {
 		bLoad = _m_Parse.LoadFile(m_strConfigFile);
 	}
-	if (bLoad) {
-		m_strAppName = _m_Parse.attr(_T("appname"), _T("Tangram System"));
-		m_strStartupCLRObj = _m_Parse.attr(_T("startupclrobj"), _T(""));
-	}
-}
-
-DWORD CHubble::ExecCmd(const CString cmd, const BOOL setCurrentDirectory)
-{
-	BOOL  bReturnVal = false;
-	STARTUPINFO  si;
-	DWORD  dwExitCode = ERROR_NOT_SUPPORTED;
-	SECURITY_ATTRIBUTES saProcess, saThread;
-	PROCESS_INFORMATION process_info;
-
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-
-	saProcess.nLength = sizeof(saProcess);
-	saProcess.lpSecurityDescriptor = NULL;
-	saProcess.bInheritHandle = true;
-
-	saThread.nLength = sizeof(saThread);
-	saThread.lpSecurityDescriptor = NULL;
-	saThread.bInheritHandle = false;
-
-	CString currentDirectory = _T("");
-
-	bReturnVal = CreateProcess(NULL,
-		(LPTSTR)(LPCTSTR)cmd,
-		&saProcess,
-		&saThread,
-		false,
-		DETACHED_PROCESS,
-		NULL,
-		currentDirectory,
-		&si,
-		&process_info);
-
-	if (bReturnVal)
-	{
-		CloseHandle(process_info.hThread);
-		WaitForSingleObject(process_info.hProcess, INFINITE);
-		GetExitCodeProcess(process_info.hProcess, &dwExitCode);
-		CloseHandle(process_info.hProcess);
-	}
-	//else
-	//{
-	//	DWORD dw =  GetLastError();
-	//	dwExitCode = dw;
-	//}
-
-	return dwExitCode;
 }
 
 void CHubble::ExitInstance()
@@ -959,30 +864,6 @@ bool CHubble::IsMDIClientQuasarNode(IGrid* pGrid)
 
 IGrid* CHubble::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 {
-	IQuasar* pQuasar = nullptr;
-	GetQuasar(handle, &pQuasar);
-	if (pQuasar)
-	{
-		CString strPath = m_strAppDataPath + name + _T("\\");
-		if (::PathIsDirectory(strPath) == false)
-		{
-			::CreateDirectory(strPath, nullptr);
-		}
-		strPath += NodeTag + _T(".nodexml");
-		if (::PathFileExists(strPath) == false)
-		{
-			CString strXml = _T("<nodexml><layout><grid name='StartNode' /></layout></nodexml>");
-			CTangramXmlParse m_Parse;
-			m_Parse.LoadXml(strXml);
-			m_Parse.SaveFile(strPath);
-		}
-		IGrid* pGrid = nullptr;
-		pQuasar->Observe(NodeTag.AllocSysString(), strPath.AllocSysString(), &pGrid);
-		CQuasar* _pQuasar = (CQuasar*)pQuasar;
-		//_pQuasar->m_mapGridScript[strPath] = (CGrid*)pGrid;
-		//m_mapTreeCtrlScript[(HWND)handle] = NodeTag;
-		return pGrid;
-	}
 	return nullptr;
 };
 
@@ -1002,43 +883,9 @@ IGalaxyCluster* CHubble::Observe(HWND hFrame, CString strName, CString strKey)
 		CString str = _T("");
 		str.Format(_T("<default><layout><grid name='%s' /></layout></default>"), strName);
 		pQuasar->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
-		VARIANT_BOOL bNewVersion;
-		pGalaxyCluster->get_NewVersion(&bNewVersion);
-		if (pGrid&&!bNewVersion)
-		{
-			pGrid->put_SaveToConfigFile(true);
-		}
 		return pGalaxyCluster;
 	}
 	return nullptr;
-};
-
-CString CHubble::GetNewLayoutNodeName(BSTR bstrCnnID, IGrid* pDesignNode)
-{
-	BOOL bGetNew = false;
-	CString strNewName = _T("");
-	CString strName = OLE2T(bstrCnnID);
-	CString str = m_strExeName + _T(".appwnd.");
-	strName.Replace(str, _T(""));
-	int nIndex = 0;
-	CGrid* _pGrid = ((CGrid*)pDesignNode);
-	CGrid* pGrid = _pGrid->m_pRootObj;
-	auto it = pGrid->m_pGridCommonData->m_mapLayoutNodes.find(strName);
-	if (it == pGrid->m_pGridCommonData->m_mapLayoutNodes.end())
-	{
-		return strName;
-	}
-	while (bGetNew == false)
-	{
-		strNewName.Format(_T("%s%d"), strName, nIndex);
-		it = pGrid->m_pGridCommonData->m_mapLayoutNodes.find(strNewName);
-		if (it == pGrid->m_pGridCommonData->m_mapLayoutNodes.end())
-		{
-			return strNewName;
-		}
-		nIndex++;
-	}
-	return _T("");
 };
 
 CString CHubble::GetDesignerInfo(CString strIndex)
@@ -1329,8 +1176,7 @@ STDMETHODIMP CHubble::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 	CString strID = OLE2T(bstrObjID);
 	strID.Trim();
 	strID.MakeLower();
-	int nPos = strID.Find(_T("@"));
-	nPos = strID.Find(_T(","));
+	int nPos = strID.Find(_T(","));
 	if (nPos != -1 || strID.CompareNoCase(_T("chromert")) == 0)
 	{
 		LoadCLR();
@@ -1341,19 +1187,6 @@ STDMETHODIMP CHubble::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 			if (*ppDisp)
 				(*ppDisp)->AddRef();
 		}
-	}
-	else
-	{
-		CComPtr<IDispatch> pDisp;
-		pDisp.CoCreateInstance(CComBSTR(strID));
-		*ppDisp = pDisp.Detach();
-		if (*ppDisp)
-		{
-			(*ppDisp)->AddRef();
-			return S_OK;
-		}
-		else
-			return S_FALSE;
 	}
 	return S_OK;
 }
@@ -1371,121 +1204,8 @@ STDMETHODIMP CHubble::get_DesignNode(IGrid** pVal)
 	return S_OK;
 }
 
-CString CHubble::EncodeFileToBase64(CString strSRC)
-{
-	DWORD dwDesiredAccess = GENERIC_READ;
-	DWORD dwShareMode = FILE_SHARE_READ;
-	DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
-	HANDLE hFile = ::CreateFile(strSRC, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_RANDOM_ACCESS, NULL);
-
-	if (hFile == INVALID_HANDLE_VALUE)
-	{
-		TRACE(_T("ERROR: CreateFile failed - %s\n"), strSRC);
-		return _T("");
-	}
-	else
-	{
-		DWORD dwFileSizeHigh = 0;
-		__int64 qwFileSize = GetFileSize(hFile, &dwFileSizeHigh);
-		qwFileSize |= (((__int64)dwFileSizeHigh) << 32);
-		DWORD dwFileSize = qwFileSize;
-		if ((dwFileSize == 0) || (dwFileSize == INVALID_FILE_SIZE))
-		{
-			TRACE(_T("ERROR: GetFileSize failed - %s\n"), strSRC);
-			CloseHandle(hFile);
-			return _T("");
-		}
-		else
-		{
-			BYTE* buffer = new BYTE[dwFileSize];
-			memset(buffer, 0, (dwFileSize) * sizeof(BYTE));
-			DWORD dwBytesRead = 0;
-			if (!ReadFile(hFile, buffer, dwFileSize, &dwBytesRead, NULL))
-			{
-				TRACE(_T("ERROR: ReadFile failed - %s\n"), strSRC);
-				CloseHandle(hFile);
-			}
-			else
-			{
-				int nMaxLineLen = dwFileSize * 2;
-				char* pDstInfo = new char[nMaxLineLen];
-				memset(pDstInfo, 0, dwFileSize * 2);
-				Base64Encode(buffer, dwFileSize, pDstInfo, &nMaxLineLen, 0);
-				CString strInfo = CA2W(pDstInfo);
-				delete[] pDstInfo;
-				delete[] buffer;
-				CloseHandle(hFile);
-				return strInfo;
-			}
-		}
-	}
-
-	return _T("");
-}
-
-CString CHubble::Encode(CString strSRC, BOOL bEnCode)
-{
-	if (bEnCode)
-	{
-		LPCWSTR srcInfo = strSRC;
-		std::string strSrc = (LPCSTR)CW2A(srcInfo, CP_UTF8);
-		int nSrcLen = strSrc.length();
-		int nDstLen = Base64EncodeGetRequiredLength(nSrcLen);
-		char* pDstInfo = new char[nSrcLen * 2];
-		memset(pDstInfo, 0, nSrcLen * 2);
-		ATL::Base64Encode((BYTE*)strSrc.c_str(), nSrcLen, pDstInfo, &nDstLen);
-		CString strInfo = CA2W(pDstInfo);
-		delete[] pDstInfo;
-		return strInfo;
-	}
-	else
-	{
-		long nSrcSize = strSRC.GetLength();
-		BYTE* pDecodeStr = new BYTE[nSrcSize];
-		memset(pDecodeStr, 0, nSrcSize);
-		int nLen = nSrcSize;
-		ATL::Base64Decode(CW2A(strSRC), nSrcSize, pDecodeStr, &nLen);
-		////直接在内存里面构建CIMAGE,需要使用IStream接口,如何使用
-		////构建内存环境 
-		//HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, nLen); 
-		//void * pData = GlobalLock(hGlobal); 
-		//memcpy(pData, pDecodeStr, nLen); 
-		//// 拷贝位图数据进去 
-		//GlobalUnlock(hGlobal); 
-		//// 创建IStream 
-		//IStream * pStream = NULL; 
-		//if (CreateStreamOnHGlobal(hGlobal, TRUE, &pStream) != S_OK) 
-		//	return _T(""); 
-		//// 使用CImage加载位图内存 
-		//CImage img; 
-		//if (SUCCEEDED(img.Load(pStream)) ) 
-		//{ 
-		//	//CClientDC dc(this);
-		//	////使用内在中构造的图像 直接在对话框上绘图 
-		//	//img.Draw(dc.m_hDC, 0, 0, 500, 300); 
-		//} 
-		////释放内存
-		//pStream->Release(); 
-		//GlobalFree(hGlobal); 
-		CString str = CA2W((char*)pDecodeStr, CP_UTF8);
-		delete[] pDecodeStr;
-		pDecodeStr = NULL;
-		return str;
-	}
-}
-
 STDMETHODIMP CHubble::Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet)
 {
-	CString strSRC = OLE2T(bstrSRC);
-	strSRC.Trim();
-	if (::PathFileExists(strSRC))
-		strSRC = EncodeFileToBase64(strSRC);
-	else if (strSRC != _T(""))
-		strSRC = Encode(strSRC, bEncode ? true : false);
-	::SysFreeString(bstrSRC);
-	if (bstrRet != nullptr)
-		::SysFreeString(*bstrRet);
-	*bstrRet = strSRC.AllocSysString();
 	return S_OK;
 }
 
@@ -2016,28 +1736,16 @@ STDMETHODIMP CHubble::get_RemoteHubble(BSTR bstrID, IHubble** pVal)
 
 STDMETHODIMP CHubble::GetCtrlByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp)
 {
-	if (m_pCLRProxy)
-	{
-		*ppRetDisp = m_pCLRProxy->GetCtrlByName(pCtrl, bstrName, bFindInChild ? true : false);
-	}
 	return S_OK;
 }
 
 STDMETHODIMP CHubble::GetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal)
 {
-	if (m_pCLRProxy)
-	{
-		*bstrVal = m_pCLRProxy->GetCtrlValueByName(pCtrl, bstrName, bFindInChild ? true : false);
-	}
 	return S_OK;
 }
 
 STDMETHODIMP CHubble::SetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal)
 {
-	if (m_pCLRProxy)
-	{
-		m_pCLRProxy->SetCtrlValueByName(pCtrl, bstrName, bFindInChild ? true : false, bstrVal);
-	}
 	return S_OK;
 }
 

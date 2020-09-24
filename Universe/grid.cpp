@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.99								*
+*					Open Universe - version 0.9.999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -25,7 +25,7 @@
 #include "Wormhole.h"
 #include "universe.c"
 #include "chromium/BrowserWnd.h"
-#include "chromium/HtmlWnd.h"
+#include "chromium/WebPage.h"
 
 CGrid::CGrid()
 {
@@ -36,11 +36,9 @@ CGrid::CGrid()
 	m_nRows = 1;
 	m_nCols = 1;
 	m_nViewType = BlankView;
-	//m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
 	m_bWebInit = false;
 	m_bCreated = false;
-	m_bNodeDocComplete = false;
 	m_varTag.vt = VT_EMPTY;
 	m_strKey = _T("");
 	m_strURL = _T("");
@@ -512,19 +510,6 @@ STDMETHODIMP CGrid::get_XObject(VARIANT * pVar)
 
 STDMETHODIMP CGrid::get_AxPlugIn(BSTR bstrPlugInName, IDispatch * *pVal)
 {
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-
-	CString strObjName = OLE2T(bstrPlugInName);
-	strObjName.Trim();
-	strObjName.MakeLower();
-	IDispatch* pDisp = nullptr;
-	if (m_pGridCommonData->m_PlugInDispDictionary.Lookup(LPCTSTR(strObjName), (void*&)pDisp))
-	{
-		*pVal = pDisp;
-		(*pVal)->AddRef();
-	}
-	else
-		*pVal = nullptr;
 	return S_OK;
 }
 
@@ -951,7 +936,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			}
 			::SendMessage(m_pHostWnd->m_hWnd, WM_ACTIVETABPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
 			Fire_TabChange(m_nActivePage, -1);
-			m_pGridCommonData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, -1);
 		}
 	}
 
@@ -961,8 +945,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		if (m_pHostWnd)
 			m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 	}
-	if (g_pHubble->m_pActiveGrid && g_pHubble->m_pActiveGrid->m_pGridCommonData->m_pGalaxyCluster)
-		g_pHubble->m_pActiveGrid->m_pGridCommonData->m_pGalaxyCluster->Fire_NodeCreated(this);
 
 	NodeCreated();
 
@@ -1094,11 +1076,6 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 			{
 				((CGridHelperWnd*)m_pHostWnd)->m_bCreateExternal = false;
 				m_nViewType = BlankView;
-			}
-			if (m_strID.CollateNoCase(_T("wpfctrl")) == 0)
-			{
-				pWnd->m_hFormWnd = g_pHubble->m_hFormNodeWnd;
-				g_pHubble->m_hFormNodeWnd = NULL;
 			}
 		}
 	}
@@ -1392,18 +1369,6 @@ STDMETHODIMP CGrid::get_HostQuasar(IQuasar * *pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::Refresh(void)
-{
-	if (m_pDisp)
-	{
-		CComQIPtr<IWebBrowser2> pWebCtrl(m_pDisp);
-		if (pWebCtrl)
-			pWebCtrl->Refresh();
-	}
-
-	return S_OK;
-}
-
 STDMETHODIMP CGrid::get_Height(LONG * pVal)
 {
 	RECT rc;
@@ -1486,7 +1451,7 @@ STDMETHODIMP CGrid::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild,
 
 CGridCollection::CGridCollection()
 {
-	m_pGrids = &m_vNodes;
+	m_pGrids = &m_vGrids;
 	g_pHubble->m_mapWndGridCollection[(__int64)this] = this;
 }
 
@@ -1497,7 +1462,7 @@ CGridCollection::~CGridCollection()
 	{
 		g_pHubble->m_mapWndGridCollection.erase(it);
 	}
-	m_vNodes.clear();
+	m_vGrids.clear();
 }
 
 STDMETHODIMP CGridCollection::get_GridCount(long* pCount)
@@ -1554,13 +1519,6 @@ STDMETHODIMP CGridCollection::get__NewEnum(IUnknown * *ppVal)
 
 STDMETHODIMP CGrid::get_DocXml(BSTR * pVal)
 {
-	//g_pHubble->UpdateGrid(m_pRootObj);
-	//CString strXml = m_pGridCommonData->m_pHubbleParse->xml();
-	//strXml.Replace(_T("/><"), _T("/>\r\n<"));
-	//strXml.Replace(_T("/>"), _T("></grid>"));
-	//*pVal = strXml.AllocSysString();
-	//strXml.ReleaseBuffer();
-
 	return S_OK;
 }
 
@@ -1905,73 +1863,6 @@ HRESULT CGrid::Fire_Destroy()
 	//if (m_pHubbleCloudSession)
 	//	delete m_pHubbleCloudSession;
 	//m_pHubbleCloudSession = nullptr;
-	return hr;
-}
-
-HRESULT CGrid::Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
-{
-	HRESULT hr = S_OK;
-	int cConnections = m_vec.GetSize();
-	if (cConnections)
-	{
-		CComVariant avarParams[3];
-		avarParams[2] = pAddIndisp;
-		avarParams[2].vt = VT_DISPATCH;
-		avarParams[1] = bstrAddInID;
-		avarParams[1].vt = VT_BSTR;
-		avarParams[0] = bstrAddInXml;
-		avarParams[0].vt = VT_BSTR;
-		DISPPARAMS params = { avarParams, NULL, 3, 0 };
-		for (int iConnection = 0; iConnection < cConnections; iConnection++)
-		{
-			g_pHubble->Lock();
-			CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
-			g_pHubble->Unlock();
-
-			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection.p);
-
-			if (pConnection)
-			{
-				CComVariant varResult;
-				hr = pConnection->Invoke(3, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-
-	for (auto it : m_mapWndGridProxy)
-	{
-		it.second->OnGridAddInCreated(pAddIndisp, OLE2T(bstrAddInID), OLE2T(bstrAddInXml));
-	}
-
-	return hr;
-}
-
-HRESULT CGrid::Fire_GridAddInsCreated()
-{
-	HRESULT hr = S_OK;
-	int cConnections = m_vec.GetSize();
-	if (cConnections)
-	{
-		DISPPARAMS params = { NULL, NULL, 0, 0 };
-		for (int iConnection = 0; iConnection < cConnections; iConnection++)
-		{
-			g_pHubble->Lock();
-			CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
-			g_pHubble->Unlock();
-
-			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection.p);
-
-			if (pConnection)
-			{
-				CComVariant varResult;
-				hr = pConnection->Invoke(4, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-	for (auto it : m_mapWndGridProxy)
-	{
-		it.second->OnGridAddInsCreated();
-	}
 	return hr;
 }
 
