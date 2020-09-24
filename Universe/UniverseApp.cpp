@@ -19,7 +19,7 @@
 #include <VersionHelpers.h> 
 #include <shellscalingapi.h>
 
-#include "GridHelperWnd.h"
+#include "GridHelper.h"
 #include "grid.h"
 #include "Quasar.h"
 #include <io.h>
@@ -576,7 +576,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CGridHelperWnd* pWnd = nullptr;
+				CGridHelper* pWnd = nullptr;
 				if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -585,7 +585,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (g_pHubble->m_pActiveGrid->m_nViewType != Grid)
 					{
-						pWnd = (CGridHelperWnd*)g_pHubble->m_pActiveGrid->m_pHostWnd;
+						pWnd = (CGridHelper*)g_pHubble->m_pActiveGrid->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pHubble->m_pActiveGrid = nullptr;

@@ -29,7 +29,7 @@ public:
 
 	CQuasar*					m_pQuasar;
 	CQuasar*					m_pOldQuasar;
-	CGridHelperWnd*				m_pHostClientView;
+	CGridHelper*				m_pHostClientView;
 	CTangramXmlParse*			m_pHubbleParse;
 	CGalaxyCluster*				m_pGalaxyCluster;
 };
@@ -99,7 +99,6 @@ public:
 	CGridVector						m_vChildNodes;
 	CGrid*							m_pCurrentExNode;
 	CWormhole*						m_pHubbleCloudSession;
-	map<CString, CQuasar*>			m_mapSubFrame;
 	map<CGrid*, CString>			m_mapExtendNode;
 	CComObject<CGridCollection>*	m_pChildNodeCollection;
 

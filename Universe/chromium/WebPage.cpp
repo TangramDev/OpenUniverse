@@ -17,7 +17,7 @@
 #include "../grid.h"
 #include "../Wormhole.h"
 #include "../Quasar.h"
-#include "../GridHelperWnd.h"
+#include "../GridHelper.h"
 #include "../GridWnd.h"
 #include "WebPage.h"
 #include "BrowserWnd.h"

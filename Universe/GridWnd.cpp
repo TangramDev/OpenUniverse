@@ -18,7 +18,7 @@
 #include "Hubble.h"
 #include "grid.h"
 #include "Quasar.h"
-#include "GridHelperWnd.h"
+#include "GridHelper.h"
 #include "GridWnd.h"
 #include "chromium/BrowserWnd.h"
 #include "chromium/WebPage.h"
@@ -311,7 +311,6 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 			m_pGrid->m_vChildNodes.erase(it);
 			m_pGrid->m_vChildNodes.push_back(pGrid);
 			pOldNode->m_pHostWnd->DestroyWindow();
-			CString strXml = m_pGrid->m_pGridCommonData->m_pHubbleParse->xml();
 			g_pHubble->m_pDesignGrid = nullptr;
 			RecalcLayout();
 		}
@@ -856,7 +855,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 					pObj->m_nWidth = nWidth;
 					pObj->m_nHeigh = nHeight;
 					if (pContext->m_pNewViewClass == nullptr)
-						pContext->m_pNewViewClass = RUNTIME_CLASS(CGridHelperWnd);
+						pContext->m_pNewViewClass = RUNTIME_CLASS(CGridHelper);
 					CreateView(pObj->m_nRow, pObj->m_nCol, pObj->m_pObjClsInfo, CSize(max(pObj->m_nWidth, m_Hmin), max(pObj->m_nHeigh, m_Vmin)), pContext);
 				}
 				if (m_nMasterRow == i && m_nMasterCol == j)

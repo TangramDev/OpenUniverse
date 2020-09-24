@@ -28,12 +28,9 @@ public:
 	CString									m_strKey;
 	CString									m_strXml;
 	CString									m_strPath;
-	//CString									m_strBKID;
-	//CString									m_strChildFormPath;
 	
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWebPage*								m_pParentHtmlWnd;
-	//CMDIChildFormInfo*						m_pChildFormsInfo;
 
 	map<CString, CString>					m_mapKey;
 	map<CString, BindWebObj*>				m_mapBindWebObj;
@@ -41,23 +38,19 @@ public:
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_TANGRAMDATA, OnGetMe)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
-		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
 		MESSAGE_HANDLER(WM_WINFORMCREATED, OnFormCreated)
 		MESSAGE_HANDLER(WM_TANGRAMGETXML, OnHubbleGetXml)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
-		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
 
 private:
-	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -80,12 +73,10 @@ public:
 	HWND											m_hPWnd;
 	HWND											m_hHostWnd;
 	CString											m_strLastKey;
-	CString											m_strAsynKeys;
 	CString											m_strQuasarName;
 	CString											m_strCurrentKey;
 	CString											m_strCurrentXml;
 	CString											m_strHostWebBrowserNodeName = _T("");
-	map<IHubbleAppProxy*, CQuasarProxy*>			m_mapQuasarProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CWebPage*										m_pWebPageWnd;
@@ -119,10 +110,6 @@ public:
 	END_COM_MAP()
 
 	BEGIN_MSG_MAP(CQuasar)
-		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
-		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
-		MESSAGE_HANDLER(WM_DPICHANGED_BEFOREPARENT, OnBeforeParentDpiChanged)
-		MESSAGE_HANDLER(WM_DPICHANGED_AFTERPARENT, OnAfterParentDpiChanged)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_TANGRAMDATA, OnGetMe)
 		MESSAGE_HANDLER(WM_NCDESTROY, OnNcDestroy)
@@ -138,10 +125,6 @@ protected:
 	ULONG InternalRelease(){ return 1; }
 
 private:
-	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnBeforeParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnAfterParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnNcDestroy(UINT, WPARAM, LPARAM, BOOL&);

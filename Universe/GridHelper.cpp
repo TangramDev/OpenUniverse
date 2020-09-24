@@ -17,7 +17,7 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Hubble.h"
-#include "GridHelperWnd.h"
+#include "GridHelper.h"
 #include "grid.h"
 #include "Quasar.h"
 #include "GridWnd.h"
@@ -25,11 +25,11 @@
 
 #include "chromium/WebPage.h"
 
-// CGridHelperWnd
+// CGridHelper
 
-IMPLEMENT_DYNCREATE(CGridHelperWnd, CWnd)
+IMPLEMENT_DYNCREATE(CGridHelper, CWnd)
 
-CGridHelperWnd::CGridHelperWnd()
+CGridHelper::CGridHelper()
 {
 	m_hFormWnd = NULL;
 	m_bNoMove = false;
@@ -42,11 +42,11 @@ CGridHelperWnd::CGridHelperWnd()
 	m_strKey = m_strXml = _T("");
 }
 
-CGridHelperWnd::~CGridHelperWnd()
+CGridHelper::~CGridHelper()
 {
 }
 
-BEGIN_MESSAGE_MAP(CGridHelperWnd, CWnd)
+BEGIN_MESSAGE_MAP(CGridHelper, CWnd)
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEACTIVATE()
@@ -58,24 +58,24 @@ BEGIN_MESSAGE_MAP(CGridHelperWnd, CWnd)
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
 END_MESSAGE_MAP()
 
-// CGridHelperWnd diagnostics
+// CGridHelper diagnostics
 
 #ifdef _DEBUG
-void CGridHelperWnd::AssertValid() const
+void CGridHelper::AssertValid() const
 {
 	///CView::AssertValid();
 }
 
 #ifndef _WIN32_WCE
-void CGridHelperWnd::Dump(CDumpContext& dc) const
+void CGridHelper::Dump(CDumpContext& dc) const
 {
 	CWnd::Dump(dc);
 }
 #endif
 #endif //_DEBUG
 
-//CGridHelperWnd message handlers
-BOOL CGridHelperWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
+//CGridHelper message handlers
+BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
 	m_pGrid = g_pHubble->m_pActiveGrid;
 	m_pGrid->m_nID = nID;
@@ -104,7 +104,7 @@ BOOL CGridHelperWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD
 	return m_pGrid->Create(dwStyle, rect, pParentWnd, nID, pContext);
 }
 
-LRESULT CGridHelperWnd::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 {
 	switch (m_pGrid->m_nViewType)
 	{
@@ -120,7 +120,7 @@ LRESULT CGridHelperWnd::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_SPLITTERREPOSITION, wParam, lParam);
 }
 
-int CGridHelperWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
+int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
 	if (g_pHubble->m_pCLRProxy)
 		g_pHubble->m_pCLRProxy->HideMenuStripPopup();
@@ -198,7 +198,7 @@ int CGridHelperWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT messa
 	{
 		if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid != m_pGrid)
 		{
-			CGridHelperWnd* pWnd = ((CGridHelperWnd*)g_pHubble->m_pDesignGrid->m_pHostWnd);
+			CGridHelper* pWnd = ((CGridHelper*)g_pHubble->m_pDesignGrid->m_pHostWnd);
 			if (pWnd && ::IsWindow(pWnd->m_hWnd))
 			{
 				pWnd->Invalidate(true);
@@ -232,7 +232,7 @@ int CGridHelperWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT messa
 		return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message);
 }
 
-BOOL CGridHelperWnd::OnEraseBkgnd(CDC* pDC)
+BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 {
 	if (m_pGrid->m_nViewType != BlankView)
 		return true;
@@ -282,7 +282,7 @@ BOOL CGridHelperWnd::OnEraseBkgnd(CDC* pDC)
 	return true;
 }
 
-BOOL CGridHelperWnd::PreTranslateMessage(MSG* pMsg)
+BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 {
 	if (m_pOleInPlaceActiveObject)
 	{
@@ -322,7 +322,7 @@ BOOL CGridHelperWnd::PreTranslateMessage(MSG* pMsg)
 	return CWnd::PreTranslateMessage(pMsg);
 }
 
-void CGridHelperWnd::OnDestroy()
+void CGridHelper::OnDestroy()
 {
 	if (g_pHubble->m_pDesignGrid == m_pGrid)
 	{
@@ -333,14 +333,14 @@ void CGridHelperWnd::OnDestroy()
 	CWnd::OnDestroy();
 }
 
-void CGridHelperWnd::PostNcDestroy()
+void CGridHelper::PostNcDestroy()
 {
 	delete m_pGrid;
 	CWnd::PostNcDestroy();
 	delete this;
 }
 
-LRESULT CGridHelperWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 {
 	int nOldPage = m_pGrid->m_nActivePage;
 	m_pGrid->m_nActivePage = (int)wParam;
@@ -405,7 +405,7 @@ LRESULT CGridHelperWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	return lRes;
 }
 
-LRESULT CGridHelperWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
@@ -440,7 +440,7 @@ LRESULT CGridHelperWnd::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 	return -1;
 }
 
-LRESULT CGridHelperWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid->m_nViewType == CLRCtrl)
 		::SetWindowLong(m_hWnd, GWL_STYLE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
@@ -450,7 +450,7 @@ LRESULT CGridHelperWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
 
-LRESULT CGridHelperWnd::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 	{
@@ -468,7 +468,7 @@ LRESULT CGridHelperWnd::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_TANGRAMGETNODE, wParam, lParam);;
 }
 
-LRESULT CGridHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (m_bCreateExternal)
 	{
@@ -494,7 +494,7 @@ LRESULT CGridHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 	return CWnd::WindowProc(message, wParam, lParam);
 }
 
-void CGridHelperWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
+void CGridHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
 	if (m_pGrid && m_pGrid->m_nViewType == CLRCtrl && m_pGrid->m_hHostWnd)
@@ -502,7 +502,7 @@ void CGridHelperWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (m_bNoMove)
 		{
 			lpwndpos->flags |= SWP_NOMOVE;
-			CGridHelperWnd* pGridWnd = (CGridHelperWnd*)m_pGrid->m_pHostWnd;
+			CGridHelper* pGridWnd = (CGridHelper*)m_pGrid->m_pHostWnd;
 			if (m_pGrid->m_pParentObj->m_nViewType == Grid)
 			{
 				CGridWnd* pWnd = (CGridWnd*)m_pGrid->m_pParentObj->m_pHostWnd;

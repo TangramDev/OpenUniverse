@@ -99,7 +99,7 @@ using namespace std;
 using namespace concurrency;
 
 class CGrid;
-class CGridHelperWnd;
+class CGridHelper;
 class CHubble;
 class CQuasar;
 class CUniverse;

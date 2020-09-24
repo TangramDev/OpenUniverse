@@ -13,9 +13,9 @@
 
 #pragma once
 
-class CGridHelperWnd : public CWnd
+class CGridHelper : public CWnd
 {
-	DECLARE_DYNCREATE(CGridHelperWnd)
+	DECLARE_DYNCREATE(CGridHelper)
 public:
 	BOOL					m_bNoMove;
 	BOOL					m_bBKWnd;
@@ -40,8 +40,8 @@ public:
 #endif
 
 protected:
-	CGridHelperWnd();           // protected constructor used by dynamic creation
-	virtual ~CGridHelperWnd();
+	CGridHelper();           // protected constructor used by dynamic creation
+	virtual ~CGridHelper();
 	void PostNcDestroy();
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();

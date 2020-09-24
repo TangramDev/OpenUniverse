@@ -285,15 +285,6 @@ STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BS
 				m_mapQuasar[_hWnd] = m_pExtenderQuasar;
 				m_mapWnd[strName] = _hWnd;
 
-				for (auto it : g_pHubble->m_mapHubbleAppProxy)
-				{
-					CQuasarProxy* pQuasarProxy = it.second->OnQuasarCreated(m_pExtenderQuasar);
-					if (pQuasarProxy)
-					{
-						m_pExtenderQuasar->m_mapQuasarProxy[it.second] = pQuasarProxy;
-					}
-				}
-
 				*pRetFrame = m_pExtenderQuasar;
 			}
 			else

@@ -18,7 +18,7 @@
 #include "UniverseApp.h"
 #include "Hubble.h"
 #include "GridWnd.h"
-#include "GridHelperWnd.h"
+#include "GridHelper.h"
 #include "grid.h"
 #include "Quasar.h"
 
@@ -258,61 +258,12 @@ LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	DWORD dwY = HIWORD(wParam);
-	DWORD dwX = LOWORD(wParam);
-	RECT* const prcNewWindow = (RECT*)lParam;
-	float fScale = (float)dwX / USER_DEFAULT_SCREEN_DPI;
-
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CWinForm::OnGetDPIScaledSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	DWORD dwY = HIWORD(wParam);
-	DWORD dwX = LOWORD(wParam);
-	RECT* const prcNewWindow = (RECT*)lParam;
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return  false;//DefWindowProc(uMsg, wParam, lParam);
-}
-
 LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pHubble->m_pActiveHtmlWnd = nullptr;
 	g_pHubble->m_pActiveWinFormWnd = this;
-	//if (m_pParentHtmlWnd)
-	//{
-	//	m_pParentHtmlWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-	//}
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
-//
-//LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-//{
-//	CString strID = (LPCTSTR)lParam;
-//	if (m_strBKID == _T(""))
-//		m_strBKID = strID;
-//	if (lParam)
-//	{
-//		::PostMessage(m_hWnd, WM_MDICLIENTCREATED, wParam, 0);
-//	}
-//
-//	return  DefWindowProc(uMsg, wParam, lParam);
-//}
 
 LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 {
@@ -348,7 +299,6 @@ void CWinForm::OnFinalMessage(HWND hWnd)
 CQuasar::CQuasar()
 {
 	m_pCurrentIPCMsg = nullptr;
-	m_strAsynKeys = _T("");
 	m_strLastKey = _T("");
 	m_strCurrentKey = _T("");
 	m_strCurrentXml = _T("");
@@ -403,12 +353,6 @@ CQuasar::~CQuasar()
 				delete m_pGalaxyCluster;
 		}
 	}
-	for (auto it : m_mapQuasarProxy)
-	{
-		if (it.second->m_bAutoDelete)
-			delete it.second;
-	}
-	m_mapQuasarProxy.clear();
 	m_hWnd = NULL;
 }
 
@@ -526,29 +470,11 @@ STDMETHODIMP CQuasar::get_RootGrids(IGridCollection** pGridColletion)
 
 STDMETHODIMP CQuasar::get_QuasarData(BSTR bstrKey, VARIANT* pVal)
 {
-	//CString strKey = OLE2T(bstrKey);
-
-	//if (strKey != _T("")) {
-	//	::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)strKey.GetBuffer(), 0);
-	//	strKey.Trim();
-	//	strKey.MakeLower();
-	//	auto it = m_mapVal.find(strKey);
-	//	if (it != m_mapVal.end())
-	//		*pVal = it->second;
-	//	strKey.ReleaseBuffer();
-	//}
 	return S_OK;
 }
 
 STDMETHODIMP CQuasar::put_QuasarData(BSTR bstrKey, VARIANT newVal)
 {
-	//CString strKey = OLE2T(bstrKey);
-
-	//if (strKey == _T(""))
-	//	return S_OK;
-	//strKey.Trim();
-	//strKey.MakeLower();
-	//m_mapVal[strKey] = newVal;
 	return S_OK;
 }
 
@@ -817,11 +743,6 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 				}
 			}
 		}
-
-		for (auto it : m_mapQuasarProxy)
-		{
-			it.second->OnExtend(m_pWorkGrid, m_strCurrentKey, strXml);
-		}
 	}
 
 	m_bObserve = false;
@@ -1026,44 +947,6 @@ LRESULT CQuasar::OnTabChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CQuasar::OnDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	//RECT* const prcNewWindow = (RECT*)lParam;
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CQuasar::OnGetDPIScaledSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	//RECT* const prcNewWindow = (RECT*)lParam;
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return false;// DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CQuasar::OnBeforeParentDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CQuasar::OnAfterParentDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	//HostPosChanged();
-	//::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20180115);
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
 LRESULT CQuasar::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (lParam == 1992)
@@ -1162,7 +1045,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				break;
 				case TabGrid:
 				{
-					CGridHelperWnd* pWnd = (CGridHelperWnd*)_pParentNode->m_pHostWnd;
+					CGridHelper* pWnd = (CGridHelper*)_pParentNode->m_pHostWnd;
 				}
 				break;
 				}
@@ -1171,7 +1054,7 @@ LRESULT CQuasar::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			{
 				if (m_pContainerNode->m_nViewType == CLRCtrl)
 				{
-					CGridHelperWnd* pGridWnd = (CGridHelperWnd*)m_pContainerNode->m_pHostWnd;
+					CGridHelper* pGridWnd = (CGridHelper*)m_pContainerNode->m_pHostWnd;
 					pGridWnd->m_bNoMove = true;
 				}
 			}

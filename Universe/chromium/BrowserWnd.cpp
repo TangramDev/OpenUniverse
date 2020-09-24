@@ -15,7 +15,7 @@
 #include "../UniverseApp.h"
 #include "../Hubble.h"
 #include "../grid.h"
-#include "../GridHelperWnd.h"
+#include "../GridHelper.h"
 #include "../Quasar.h"
 #include "../GridWnd.h"
 #include "BrowserWnd.h"
@@ -368,7 +368,7 @@ namespace Web {
 				if (pQuasar)
 				{
 					CGrid* pGrid = pQuasar->m_pWorkGrid;
-					CGridHelperWnd* pWnd = (CGridHelperWnd*)(pGrid->m_pHostWnd);
+					CGridHelper* pWnd = (CGridHelper*)(pGrid->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}
 			}
