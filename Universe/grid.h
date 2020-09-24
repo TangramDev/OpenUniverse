@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -32,9 +32,6 @@ public:
 	CGridHelperWnd*				m_pHostClientView;
 	CTangramXmlParse*			m_pHubbleParse;
 	CGalaxyCluster*				m_pGalaxyCluster;
-	map<CString, CGrid*>		m_mapLayoutNodes;
-	map<CString, CGrid*>		m_mapAxNodes;
-	map<CString, CGrid*>		m_mapCLRNodes;
 };
 
 // CGrid 

@@ -11,7 +11,7 @@
 * https://www.tangram.dev
 ********************************************************************************/
 
-// TangramObject.cpp : Implementation of CGalaxyCluster
+// GalaxyCluster.cpp : Implementation of CGalaxyCluster
 
 #include "stdafx.h"
 #include "grid.h"
