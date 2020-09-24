@@ -316,10 +316,6 @@ CHubble::~CHubble()
 	OutputDebugString(_T("------------------End Release CHubble------------------------\n"));
 }
 
-void CHubble::ExportComponentInfo()
-{
-};
-
 LRESULT CHubble::Close(void)
 {
 	HRESULT hr = S_OK;
@@ -342,24 +338,6 @@ LRESULT CHubble::Close(void)
 	}
 
 	return S_OK;
-}
-
-CString CHubble::GetXmlData(CString strName, CString strXml)
-{
-	if (strName == _T("") || strXml == _T(""))
-		return _T("");
-	int nLength = strName.GetLength();
-	CString strKey = _T("<") + strName + _T(">");
-	int nPos = strXml.Find(strKey);
-	if (nPos != -1)
-	{
-		CString strData1 = strXml.Mid(nPos);
-		strKey = _T("</") + strName + _T(">");
-		nPos = strData1.Find(strKey);
-		if (nPos != -1)
-			return strData1.Left(nPos + nLength + 3);
-	}
-	return _T("");
 }
 
 void CHubble::HubbleLoad()
@@ -611,10 +589,6 @@ void CHubble::ProcessMsg(LPMSG lpMsg)
 	}
 }
 
-void CHubble::CreateCommonDesignerToolBar()
-{
-}
-
 void CHubble::AttachGrid(void* pGridEvents)
 {
 	CGridEvents* m_pCLREventConnector = (CGridEvents*)pGridEvents;
@@ -780,11 +754,6 @@ IGalaxyCluster* CHubble::Observe(HWND hFrame, CString strName, CString strKey)
 	return nullptr;
 };
 
-CString CHubble::GetDesignerInfo(CString strIndex)
-{
-	return _T("");
-};
-
 int CHubble::LoadCLR()
 {
 	if (m_pCLRProxy == nullptr && m_pClrHost == nullptr)
@@ -820,56 +789,6 @@ int CHubble::LoadCLR()
 					m_bEnableProcessFormTabKey = true;
 
 				CString strPath = m_strAppPath + _T("Cosmos.dll");
-
-				HANDLE hFind; // file handle
-				WIN32_FIND_DATA FindFileData;
-				if (::PathFileExists(strPath) == false)
-				{
-					strPath = _T("");
-					hFind = FindFirstFile(m_strAppPath + _T("Cosmos.dll"), &FindFileData); // find the first file
-					if (hFind != INVALID_HANDLE_VALUE)
-					{
-						bool bSearch = true;
-						while (bSearch) // until we finds an entry
-						{
-							if (FindNextFile(hFind, &FindFileData))
-							{
-								// Don't care about . and ..
-								//if(IsDots(FindFileData.cFileName))
-								if ((_tcscmp(FindFileData.cFileName, _T(".")) == 0) ||
-									(_tcscmp(FindFileData.cFileName, _T("..")) == 0))
-									continue;
-
-								// We have found a directory
-								if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-								{
-									strPath = m_strAppPath + FindFileData.cFileName + _T("\\");
-									strPath += _T("Cosmos.dll");
-									if (::PathFileExists(strPath))
-									{
-										break;
-									}
-								}
-
-							}//FindNextFile
-						}//while
-					}
-				}
-
-				if (strPath == _T(""))
-				{
-					strPath = m_strAppPath + _T("PublicAssemblies\\Cosmos.dll"); // find the first file
-					if (!::PathFileExists(strPath))
-					{
-						int nVer = 0;
-#ifdef _WIN64
-						nVer = 64;
-#else
-						nVer = 32;
-#endif
-						strPath.Format(_T("%s\\Microsoft.NET\\assembly\\GAC_%d\\Cosmos\\v4.0_1.0.1992.1963__1bcc94f26a4807a7\\Cosmos.dll"), m_szBuffer, nVer);
-					}
-				}
 
 				CHubbleImpl* pHubbleProxyBase = static_cast<CHubbleImpl*>(this);
 				CString strInfo = _T("");
@@ -911,36 +830,8 @@ int CHubble::LoadCLR()
 	return 0;
 }
 
-CString CHubble::RemoveUTF8BOM(CString strUTF8)
-{
-	int cc = 0;
-	if ((cc = WideCharToMultiByte(CP_UTF8, 0, strUTF8, -1, NULL, 0, 0, 0)) > 2)
-	{
-		char* cstr = (char*)malloc(cc);
-		WideCharToMultiByte(CP_UTF8, 0, strUTF8, -1, cstr, cc, 0, 0);
-
-		if (cstr[0] == (char)0xEF && cstr[1] == (char)0xBB && cstr[2] == (char)0xBF)
-		{
-			char* new_cstr = (char*)malloc(cc - 3);
-			memcpy(new_cstr, cstr + 3, cc - 3);
-
-			CStringW newStrUTF8;
-			wchar_t* buf = newStrUTF8.GetBuffer(cc - 3);
-			MultiByteToWideChar(CP_UTF8, 0, new_cstr, -1, buf, cc - 3);
-			newStrUTF8.ReleaseBuffer();
-			free(new_cstr);
-			free(cstr);
-			return newStrUTF8;
-		}
-
-		free(cstr);
-	}
-	return strUTF8;
-}
-
 CGrid* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 {
-	strXml = RemoveUTF8BOM(strXml);
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	CTangramXmlParse* m_pParse = new CTangramXmlParse();
 	bool bXml = m_pParse->LoadXml(strXml);
@@ -953,7 +844,6 @@ CGrid* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 		return nullptr;
 	}
 
-	BOOL bSizable = m_pParse->attrBool(_T("sizable"), false);
 	CTangramXmlParse* pWndGrid = m_pParse->GetChild(TGM_CLUSTER);
 	if (pWndGrid == nullptr)
 	{
@@ -984,20 +874,6 @@ CGrid* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 	CGrid* pRootGrid = nullptr;
 	pRootGrid = _pQuasar->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
 	m_strCurrentKey = _T("");
-	if (pRootGrid != nullptr)
-	{
-		if (bSizable)
-		{
-			HWND hParent = ::GetParent(pRootGrid->m_pHostWnd->m_hWnd);
-			CWindow m_wnd;
-			m_wnd.Attach(hParent);
-			if ((m_wnd.GetStyle() | WS_CHILD) == 0)
-			{
-				m_wnd.ModifyStyle(0, WS_SIZEBOX | WS_BORDER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
-			}
-			m_wnd.Detach();
-		}
-	}
 	return pRootGrid;
 }
 
@@ -1510,41 +1386,6 @@ STDMETHODIMP CHubble::StartApplication(BSTR bstrAppID, BSTR bstrXml)
 	return S_OK;
 }
 
-bool CHubble::CheckUrl(CString& url)
-{
-	char* res = nullptr;
-	char		dwCode[20];
-	DWORD		dwIndex, dwCodeLen;
-	HINTERNET   hSession, hFile;
-
-	url.MakeLower();
-
-	hSession = InternetOpen(_T("Tangram"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
-	if (hSession)
-	{
-		//hFile = InternetOpenUrl(hSession, url, NULL, 0, INTERNET_FLAG_RELOAD, 0);
-		hFile = InternetOpenUrl(hSession, url, NULL, 0, INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS, 0);
-		if (hFile == NULL)
-		{
-			InternetCloseHandle(hSession);
-			return false;
-		}
-		dwIndex = 0;
-		dwCodeLen = 10;
-		HttpQueryInfo(hFile, HTTP_QUERY_STATUS_CODE, dwCode, &dwCodeLen, &dwIndex);
-		res = dwCode;
-		if (strcmp(res, "200 ") || strcmp(res, "302 "))
-		{
-			//200,302未重定位标志    
-			if (hFile)
-				InternetCloseHandle(hFile);
-			InternetCloseHandle(hSession);
-			return   true;
-		}
-	}
-	return   false;
-}
-
 STDMETHODIMP CHubble::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR bstrActionXml)
 {
 	return S_OK;
@@ -1597,12 +1438,6 @@ STDMETHODIMP CHubble::GetGridFromHandle(LONGLONG hWnd, IGrid** ppRetGrid)
 		}
 	}
 	return S_OK;
-}
-
-CString CHubble::GetDocTemplateXml(CString strCaption, CString _strPath, CString strFilter)
-{
-	CString strTemplate = _T("");
-	return strTemplate;
 }
 
 STDMETHODIMP CHubble::get_HostWnd(LONGLONG* pVal)
@@ -1667,24 +1502,6 @@ STDMETHODIMP CHubble::get_TangramDoc(LONGLONG AppProxy, LONGLONG nDocID, IHubble
 	return S_OK;
 }
 
-BOOL CHubble::IsUserAdministrator()
-{
-	BOOL bRet = false;
-	PSID psidRidGroup;
-	SID_IDENTIFIER_AUTHORITY siaNtAuthority = SECURITY_NT_AUTHORITY;
-
-	bRet = AllocateAndInitializeSid(&siaNtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &psidRidGroup);
-	if (bRet)
-	{
-		if (!CheckTokenMembership(NULL, psidRidGroup, &bRet))
-			bRet = false;
-		FreeSid(psidRidGroup);
-	}
-
-	return (BOOL)bRet;
-}
-
-
 STDMETHODIMP CHubble::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IGrid** ppGrid)
 {
 	if (hParent == 0)
@@ -1731,10 +1548,6 @@ STDMETHODIMP CHubble::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 
 STDMETHODIMP CHubble::GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath)
 {
-	CString strTemplate = GetDocTemplateXml(OLE2T(bstrCaption), OLE2T(bstrPath), OLE2T(bstrFilter));
-	if (strTemplate == _T(""))
-		return S_FALSE;
-	*bstrTemplatePath = strTemplate.AllocSysString();
 	return S_OK;
 }
 

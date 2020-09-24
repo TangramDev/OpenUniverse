@@ -260,11 +260,7 @@ BOOL CGridHelperWnd::OnEraseBkgnd(CDC* pDC)
 		if (bInDesignState && g_pHubble->m_pDesignGrid == m_pGrid)
 		{
 			pDC->SetTextColor(RGB(255, 0, 255));
-			CString str = g_pHubble->GetDesignerInfo(_T("SelectedText"));
-			if (str == _T(""))
-				strText = _T("\n\n  ") + g_pHubble->m_strGridSelectedText;
-			else
-				strText = _T("\n\n  ") + str;
+			strText = _T("\n\n  ") + g_pHubble->m_strGridSelectedText;
 		}
 		else
 		{
@@ -273,17 +269,9 @@ BOOL CGridHelperWnd::OnEraseBkgnd(CDC* pDC)
 			CString strInfo = _T("\n\n  ");
 			if (bInDesignState)
 			{
-				CString str = g_pHubble->GetDesignerInfo(_T("DesignerTip1"));
-				if (str == _T(""))
-					strInfo = strInfo + g_pHubble->m_strDesignerTip1;
-				else
-					strInfo = strInfo + str;
+				strInfo = strInfo + g_pHubble->m_strDesignerTip1;
 			}
-			CString str = g_pHubble->GetDesignerInfo(_T("DesignerTip2"));
-			if (str == _T(""))
-				strInfo = strInfo + _T("\n  ") + g_pHubble->m_strDesignerTip2;
-			else
-				strInfo = strInfo + _T("\n  ") + str;
+			strInfo = strInfo + _T("\n  ") + g_pHubble->m_strDesignerTip2;
 			strText.Format(strInfo, m_pGrid->m_strName, CString(OLE2T(bstrCaption)));
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}

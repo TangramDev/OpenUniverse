@@ -166,17 +166,11 @@ public:
 	void HubbleInit();
 	void HubbleInitFromeWeb();
 	void ExitInstance();
-	void ExportComponentInfo();
 	int	 LoadCLR();
-	BOOL IsUserAdministrator();
-	CString GetDesignerInfo(CString);
-	CString GetXmlData(CString strName, CString strXml);
-	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
 	LRESULT Close(void);
 	CGrid* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
 	CommonThreadInfo* GetThreadInfo(DWORD dwInfo = 0);
 
-	virtual void CreateCommonDesignerToolBar();
 	virtual void ProcessMsg(LPMSG lpMsg);
 	IQuasar* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, QuasarInfo*);
 	IWebPage* GetWebPageFromForm(HWND);
@@ -219,15 +213,12 @@ private:
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
 
 	void HubbleLoad();
-	bool CheckUrl(CString&   url);
 	void AttachGrid(void* pGridEvents);
 
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
 	IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
 	bool IsMDIClientQuasarNode(IGrid*);
-
-	CString RemoveUTF8BOM(CString strUTF8);
 
 	void ChromeTabCreated(CChromeTab* pTab);
 	void OnRenderProcessCreated(CChromeRenderProcess* pProcess);
