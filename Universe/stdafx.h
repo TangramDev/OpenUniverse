@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -104,7 +104,6 @@ class CHubble;
 class CQuasar;
 class CUniverse;
 class CGridEvents;
-class CCosmosEvent;
 class CGalaxyCluster;
 class CGridCollection;
 

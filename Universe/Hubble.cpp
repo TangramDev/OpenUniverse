@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -351,16 +351,6 @@ void CHubble::ExportComponentInfo()
 
 LRESULT CHubble::Close(void)
 {
-	if (m_mapEvent.size())
-	{
-		for (auto it = m_mapEvent.begin(); it != m_mapEvent.end(); it++)
-		{
-			CCosmosEvent* pObj = it->second;
-			delete pObj;
-		}
-		m_mapEvent.clear();
-	}
-
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
@@ -381,54 +371,6 @@ LRESULT CHubble::Close(void)
 	}
 
 	return S_OK;
-}
-
-void CHubble::FireAppEvent(CCosmosEvent* pObj)
-{
-	if (pObj)
-	{
-		if (m_pUniverseAppProxy)
-			m_pUniverseAppProxy->OnHubbleEvent(pObj);
-		for (auto it : m_mapHubbleAppProxy)
-		{
-			if (it.second != m_pUniverseAppProxy)
-				it.second->OnHubbleEvent(pObj);
-		}
-		if (m_pCosmosAppProxy)
-			m_pCosmosAppProxy->OnHubbleEvent(pObj);
-		CString strEventName = pObj->m_strEventName;
-		strEventName.MakeLower();
-
-		HRESULT hr = S_OK;
-		int cConnections = m_vec.GetSize();
-		int cConnections2 = 0;
-
-		if (cConnections + cConnections2)
-		{
-			CComVariant avarParams[1];
-			avarParams[0] = (IHubbleEventObj*)pObj;
-			avarParams[0].vt = VT_DISPATCH;
-			DISPPARAMS params = { avarParams, NULL, 1, 0 };
-			IDispatch* pConnection = nullptr;
-			if (cConnections)
-			{
-				for (int iConnection = 0; iConnection < cConnections; iConnection++)
-				{
-					Lock();
-					CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
-					Unlock();
-					pConnection = static_cast<IDispatch*>(punkConnection.p);
-					if (pConnection)
-					{
-						CComVariant varResult;
-						hr = pConnection->Invoke(3, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-					}
-				}
-			}
-		}
-
-		delete pObj;
-	}
 }
 
 CString CHubble::GetXmlData(CString strName, CString strXml)
@@ -582,16 +524,6 @@ void CHubble::HubbleInit()
 
 void CHubble::ExitInstance()
 {
-	if (m_mapEvent.size())
-	{
-		auto it = m_mapEvent.begin();
-		for (it = m_mapEvent.begin(); it != m_mapEvent.end(); it++)
-		{
-			delete it->second;
-		}
-		m_mapEvent.clear();
-	}
-
 	if (m_hCBTHook)
 		UnhookWindowsHookEx(m_hCBTHook);
 	if (m_hForegroundIdleHook)
@@ -1384,15 +1316,6 @@ STDMETHODIMP CHubble::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 				delete it.second;
 			}
 			m_mapThreadInfo.erase(m_mapThreadInfo.begin(), m_mapThreadInfo.end());
-			if (m_mapEvent.size())
-			{
-				auto it = m_mapEvent.begin();
-				for (it = m_mapEvent.begin(); it != m_mapEvent.end(); it++)
-				{
-					delete it->second;
-				}
-				m_mapEvent.clear();
-			}
 
 			m_pCLRProxy = nullptr;
 
@@ -1776,143 +1699,6 @@ STDMETHODIMP CHubble::CreateHubbleCtrl(BSTR bstrAppID, IHubbleCtrl** ppRetCtrl)
 	return S_OK;
 }
 
-CCosmosEvent::CCosmosEvent()
-{
-	m_bNotFired = true;
-	m_nEventIndex = 19631965;
-	m_strEventName = _T("");
-	m_pSourceObj = nullptr;
-}
-
-CCosmosEvent::~CCosmosEvent()
-{
-	auto it = g_pHubble->m_mapEvent.find((LONGLONG)this);
-	if (it != g_pHubble->m_mapEvent.end())
-		g_pHubble->m_mapEvent.erase(it);
-	m_strEventName = _T("");
-	//m_pSourceObj->Release();
-	m_pSourceObj = nullptr;
-	for (auto it : m_mapVar)
-	{
-		::VariantClear(&it.second);
-	}
-	m_mapVar.clear();
-	for (auto it : m_mapDisp)
-	{
-		//it.second->Release();
-	}
-	m_mapDisp.clear();
-}
-
-STDMETHODIMP CCosmosEvent::get_EventName(BSTR* pVal)
-{
-	*pVal = m_strEventName.AllocSysString();
-	return S_OK;
-}
-
-STDMETHODIMP CCosmosEvent::put_EventName(BSTR newVal)
-{
-	m_strEventName = OLE2T(newVal);
-	return S_OK;
-}
-
-STDMETHODIMP CCosmosEvent::get_Index(int* pVal)
-{
-	*pVal = m_nEventIndex;
-	return S_OK;
-}
-
-STDMETHODIMP CCosmosEvent::put_Index(int newVal)
-{
-	m_nEventIndex = newVal;
-	return S_OK;
-}
-
-STDMETHODIMP CCosmosEvent::get_Object(int nIndex, IDispatch** pVal)
-{
-	auto it = m_mapDisp.find(nIndex);
-	if (it != m_mapDisp.end())
-	{
-		*pVal = it->second;
-		//(*pVal)->AddRef();
-		return S_OK;
-	}
-
-	return S_FALSE;
-}
-
-STDMETHODIMP CCosmosEvent::put_Object(int nIndex, IDispatch* newVal)
-{
-	auto it = m_mapDisp.find(nIndex);
-	if (it != m_mapDisp.end())
-	{
-		it->second->Release();
-		m_mapDisp.erase(it);
-	}
-	if (newVal)
-	{
-		m_mapDisp[nIndex] = newVal;
-		newVal->AddRef();
-	}
-	return S_OK;
-}
-
-STDMETHODIMP CCosmosEvent::get_Value(int nIndex, VARIANT* pVal)
-{
-	auto it = m_mapVar.find(nIndex);
-	if (it != m_mapVar.end())
-	{
-		*pVal = it->second;
-		return S_OK;
-	}
-
-	return S_FALSE;
-}
-
-STDMETHODIMP CCosmosEvent::put_Value(int nIndex, VARIANT newVal)
-{
-	auto it = m_mapVar.find(nIndex);
-	if (it != m_mapVar.end())
-	{
-		::VariantClear(&it->second);
-		m_mapVar.erase(it);
-		return S_OK;
-	}
-	m_mapVar[nIndex] = newVal;
-	return S_FALSE;
-}
-
-STDMETHODIMP CCosmosEvent::get_eventSource(IDispatch** pVal)
-{
-	if (m_pSourceObj)
-	{
-		*pVal = m_pSourceObj;
-		(*pVal)->AddRef();
-		return S_OK;
-	}
-
-	return S_FALSE;
-}
-
-STDMETHODIMP CCosmosEvent::put_eventSource(IDispatch* pSource)
-{
-	if (m_pSourceObj == nullptr)
-	{
-		m_pSourceObj = pSource;
-		m_pSourceObj->AddRef();
-		return S_OK;
-	}
-	else
-	{
-		m_pSourceObj->Release();
-		m_pSourceObj = nullptr;
-		m_pSourceObj = pSource;
-		m_pSourceObj->AddRef();
-	}
-
-	return S_FALSE;
-}
-
 STDMETHODIMP CHubble::get_TangramDoc(LONGLONG AppProxy, LONGLONG nDocID, IHubbleDoc** pVal)
 {
 	IHubbleAppProxy* pProxy = (IHubbleAppProxy*)AppProxy;
@@ -2077,107 +1863,16 @@ STDMETHODIMP CHubble::GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bs
 
 STDMETHODIMP CHubble::CreateHubbleEventObj(IHubbleEventObj** ppHubbleEventObj)
 {
-	CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
-	*ppHubbleEventObj = pObj;
-	m_mapEvent[(LONGLONG)pObj] = pObj;
 	return S_OK;
 }
 
 STDMETHODIMP CHubble::FireHubbleEventObj(IHubbleEventObj* pHubbleEventObj)
 {
-	CCosmosEvent* pObj = (CCosmosEvent*)pHubbleEventObj;
-	if (pObj)
-	{
-		FireAppEvent(pObj);
-	}
 	return S_OK;
 }
 
 STDMETHODIMP CHubble::ObserveQuasars(LONGLONG hWnd, BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSave)
 {
-	LRESULT lRes = ::SendMessage((HWND)hWnd, WM_TANGRAMDATA, 0, 20190214);
-	CString _strXml = _T("<");
-	CString strKey = OLE2T(bstrKey);
-	CWinForm* pWnd = nullptr;
-	if (lRes)
-	{
-		pWnd = (CWinForm*)lRes;
-	}
-	if (pWnd)
-	{
-		_strXml += strKey;
-		_strXml += _T(">");
-	}
-	auto it = g_pHubble->m_mapWindowPage.find((HWND)hWnd);
-	if (it != g_pHubble->m_mapWindowPage.end())
-	{
-		CString strFrames = OLE2T(bstrFrames);
-		CString strKey = OLE2T(bstrKey);
-		CString strXml = OLE2T(bstrXml);
-		if (strFrames == _T(""))
-		{
-			for (auto it1 : ((CGalaxyCluster*)it->second)->m_mapQuasar)
-			{
-				if (it1.second)
-				{
-					IGrid* pGrid = nullptr;
-					CGrid* pGrid2 = it1.second->m_pContainerNode;
-					if (pGrid2)
-					{
-						it1.second->Observe(CComBSTR(it1.second->m_strCurrentKey), bstrXml, &pGrid);
-					}
-					else
-					{
-						it1.second->Observe(bstrKey, bstrXml, &pGrid);
-						if (pGrid && bSave)
-							pGrid->put_SaveToConfigFile(true);
-						if (pWnd && pWnd->m_bMdiForm)
-						{
-							CGrid* _pGrid = (CGrid*)pGrid;
-							CString strXml = _pGrid->m_pGridCommonData->m_pHubbleParse->xml();
-							strXml.Replace(_T("/><"), _T("/>\r\n<"));
-							strXml.Replace(_T("/>"), _T("></node>"));
-							CString s = _T("");
-							s.Format(_T("<%s>%s</%s>"), it1.second->m_strQuasarName, strXml, it1.second->m_strQuasarName);
-							_strXml += s;
-						}
-					}
-				}
-			}
-			if (pWnd && pWnd->m_bMdiForm)
-			{
-				_strXml += _T("</");
-				_strXml += strKey;
-				_strXml += _T(">");
-				auto it = pWnd->m_mapKey.find(strKey);
-				if (it == pWnd->m_mapKey.end())
-				{
-					pWnd->m_mapKey[strKey] = _strXml;
-				}
-				else
-				{
-					pWnd->m_mapKey.erase(it);
-					pWnd->m_mapKey[strKey] = _strXml;
-				}
-			}
-		}
-		else
-		{
-			strFrames = _T(",") + strFrames;
-			for (auto it1 : ((CGalaxyCluster*)it->second)->m_mapQuasar)
-			{
-				CString strName = _T(",") + it1.second->m_strQuasarName + _T(",");
-				if (strFrames.Find(strName) != -1)
-				{
-					IGrid* pGrid = nullptr;
-					it1.second->Observe(bstrKey, bstrXml, &pGrid);
-					if (pGrid && bSave)
-						pGrid->put_SaveToConfigFile(true);
-				}
-			}
-		}
-	}
-
 	return S_OK;
 }
 

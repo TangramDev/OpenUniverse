@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -299,7 +299,6 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 		{
 			pGrid->m_pRootObj = m_pGrid->m_pRootObj;
 			pGrid->m_pParentObj = m_pGrid;
-			m_pGrid->m_pGridCommonData->m_mapLayoutNodes[((CGrid*)pGrid)->m_strName] = (CGrid*)pGrid;
 			CGridVector vec = pGrid->m_vChildNodes;
 			CGrid* pChildNode = nullptr;
 			for (auto it2 : pGrid->m_vChildNodes)
@@ -727,7 +726,6 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	m_pGrid->m_nViewType = Grid;
 	m_pGrid->m_nID = nID;
 	m_pGrid->m_pDisp = nullptr;
-	m_pGrid->m_pGridCommonData->m_mapLayoutNodes[m_pGrid->m_strName] = m_pGrid;
 
 	int r, g, b;
 	CComBSTR bstrVal(L"");

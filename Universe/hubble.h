@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -27,54 +27,6 @@ struct CommonThreadInfo
 {
 	HHOOK					m_hGetMessageHook;
 	map<HWND, CQuasar*>		m_mapQuasar;
-};
-
-class ATL_NO_VTABLE CCosmosEvent :
-	public CComObjectRootBase,
-	public IDispatchImpl<IHubbleEventObj, &IID_IHubbleEventObj, &LIBID_Universe, 1, 0>
-{
-public:
-	CCosmosEvent();
-	virtual ~CCosmosEvent();
-
-	BEGIN_COM_MAP(CCosmosEvent)
-		COM_INTERFACE_ENTRY(IHubbleEventObj)
-		COM_INTERFACE_ENTRY(IDispatch)
-	END_COM_MAP()
-
-	void Lock() {}
-	void Unlock() {}
-
-	void Init(CString strEventName, int nEventIndex, IDispatch* pSourceDisp)
-	{
-		m_nEventIndex = nEventIndex;
-		m_strEventName = strEventName;
-		if (pSourceDisp)
-		{
-			m_pSourceObj = pSourceDisp;
-			m_pSourceObj->AddRef();
-		}
-	}
-	BOOL m_bNotFired;
-	int m_nEventIndex;
-	CString m_strEventName;
-	IDispatch*	m_pSourceObj;
-	map<int, IDispatch*> m_mapDisp;
-	map<int, VARIANT> m_mapVar;
-protected:
-	ULONG InternalAddRef() { return 1; }
-	ULONG InternalRelease() { return 1; }
-public:
-	STDMETHOD(get_EventName)(BSTR* pVal);
-	STDMETHOD(put_EventName)(BSTR newVal);
-	STDMETHOD(get_Object)(int nIndex, IDispatch** pVal);
-	STDMETHOD(put_Object)(int nIndex, IDispatch* newVal);
-	STDMETHOD(get_Value)(int nIndex, VARIANT* pVal);
-	STDMETHOD(put_Value)(int nIndex, VARIANT newVal);
-	STDMETHOD(get_eventSource)(IDispatch** pVal);
-	STDMETHOD(put_eventSource)(IDispatch* pSource);
-	STDMETHOD(get_Index)(int* nVal);
-	STDMETHOD(put_Index)(int newVal);
 };
 
 // CHubble
@@ -128,8 +80,6 @@ public:
 	map<CString, int>					m_mapEventDic;
 	map<CString, long>					m_mapIPCMsgIndexDic;
 
-	map<LONGLONG, CCosmosEvent*>		m_mapEvent;
-	//map<HWND, CWinForm*>				m_mapMainForm;
 	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
 	map<__int64, CGridCollection*>		m_mapWndGridCollection;
 	map<CGrid*, CString>				m_mapGridForHtml;
@@ -216,7 +166,6 @@ public:
 	void HubbleInit();
 	void HubbleInitFromeWeb();
 	void ExitInstance();
-	void FireAppEvent(CCosmosEvent*);
 	void ExportComponentInfo();
 	int	 LoadCLR();
 	BOOL IsUserAdministrator();

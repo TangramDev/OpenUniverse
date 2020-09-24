@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -779,64 +779,11 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 
 STDMETHODIMP CGalaxyCluster::CreateQuasarWithDefaultNode(ULONGLONG hFrameWnd, BSTR bstrFrameName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid)
 {
-	//CString strXml = OLE2T(bstrXml);
-	//strXml.Trim();
-	//if (strXml == _T(""))
-	//	strXml = _T("<default><layout><grid name=\"Start\" /></layout></default>");
-	//IQuasar* pQuasar = nullptr;
-	//CreateQuasar(CComVariant(0), CComVariant((LONGLONG)hFrameWnd), bstrFrameName, &pQuasar);
-	//if (pQuasar)
-	//{
-	//	pQuasar->Observe(bstrDefaultNodeKey, strXml.AllocSysString(), ppGrid);
-	//	if (*ppGrid&&bSaveToConfig)
-	//	{
-	//		(*ppGrid)->put_SaveToConfigFile(true);
-	//		//CQuasar* pFrame2 = (CQuasar*)::SendMessage(((CQuasar*)pQuasar)->m_hWnd, WM_TANGRAMDATA, 0, 1992);
-	//		//if (pQuasar)
-	//		//{
-	//		//	pFrame2->m_nQuasarType = EclipseWorkBenchQuasar;
-	//		//	//pQuasar->m_pWorkBenchFrame = this;
-	//		//}
-	//	}
-	//}
-
 	return S_OK;
 }
 
 STDMETHODIMP CGalaxyCluster::ObserveQuasars(BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile)
 {
-	//CString strFrames = OLE2T(bstrFrames);
-	//CString strKey = OLE2T(bstrKey);
-	//CString strXml = OLE2T(bstrXml);
-	//if (strFrames == _T(""))
-	//{
-	//	for (auto it : m_mapQuasar)
-	//	{
-	//		if (it.second)
-	//		{
-	//			IGrid* pGrid = nullptr;
-	//			it.second->Observe(bstrKey, bstrXml, &pGrid);
-	//			if (pGrid&&bSaveToConfigFile)
-	//				pGrid->put_SaveToConfigFile(true);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	strFrames = _T(",") + strFrames;
-	//	for (auto it : m_mapQuasar)
-	//	{
-	//		CString strName = _T(",") + it.second->m_strQuasarName + _T(",");
-	//		if (strFrames.Find(strName) != -1)
-	//		{
-	//			IGrid* pGrid = nullptr;
-	//			it.second->Observe(bstrKey, bstrXml, &pGrid);
-	//			if (pGrid&&bSaveToConfigFile)
-	//				pGrid->put_SaveToConfigFile(true);
-	//		}
-	//	}
-	//}
-
 	return S_OK;
 }
 

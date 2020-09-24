@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -471,15 +471,6 @@ namespace Web {
 	void CWebPage::LoadDocument2Viewport(CString strName, CString strXML)
 	{
 		HWND hPPWnd = ::GetParent(::GetParent(m_hWnd));
-		if (m_pRemoteHubble)
-		{
-			CString strInfo = _T("");
-			strInfo.Format(_T("loaddocument2viewport:%I64d"), hPPWnd);
-			CString strData = strName;
-			strData += _T("|");
-			strData += strXML;
-			m_pRemoteHubble->put_AppKeyValue(CComBSTR(strInfo), CComVariant(strData));
-		}
 		if (m_hExtendWnd == nullptr)
 		{
 			HWND hParent = NULL;
@@ -665,54 +656,45 @@ namespace Web {
 				LoadDocument2Viewport(strParam1, strParam3);
 			}
 		}
-		else if (strId.CompareNoCase(_T("TO_TOPFRAME")) == 0)
-		{
-			LoadDocument2Viewport(strParam1, strParam2);
-			return;
-		}
-		else if (strId.CompareNoCase(_T("TO_PARENTNODE")) == 0)
-		{
-			if (m_pParentGrid == nullptr)
-			{
-				HWND hWnd = ::GetParent(::GetParent(m_hWnd));
-				if (::IsWindow(hWnd))
-				{
-					LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
-					HWND _hWnd = (HWND)hWnd;
-					if (lRes)
-						m_pParentGrid = (CGrid*)lRes;
-				}
-				else
-				{
-					m_pParentGrid = m_pQuasar->m_pBindingGrid->m_pParentObj;
-					if (m_pParentGrid && m_pParentGrid->m_nViewType == TabGrid)
-					{
-						//IGrid* _pGrid = nullptr;
-						//m_pQuasar->m_pBindingGrid->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
-						return;
-					}
-				}
-			}
-			if (m_pParentGrid)
-			{
-				IGrid* _pGrid = nullptr;
-				m_pParentGrid->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
-			}
-			return;
-		}
+		//else if (strId.CompareNoCase(_T("TO_TOPFRAME")) == 0)
+		//{
+		//	LoadDocument2Viewport(strParam1, strParam2);
+		//	return;
+		//}
+		//else if (strId.CompareNoCase(_T("TO_PARENTNODE")) == 0)
+		//{
+		//	if (m_pParentGrid == nullptr)
+		//	{
+		//		HWND hWnd = ::GetParent(::GetParent(m_hWnd));
+		//		if (::IsWindow(hWnd))
+		//		{
+		//			LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+		//			HWND _hWnd = (HWND)hWnd;
+		//			if (lRes)
+		//				m_pParentGrid = (CGrid*)lRes;
+		//		}
+		//		else
+		//		{
+		//			m_pParentGrid = m_pQuasar->m_pBindingGrid->m_pParentObj;
+		//			if (m_pParentGrid && m_pParentGrid->m_nViewType == TabGrid)
+		//			{
+		//				//IGrid* _pGrid = nullptr;
+		//				//m_pQuasar->m_pBindingGrid->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
+		//				return;
+		//			}
+		//		}
+		//	}
+		//	if (m_pParentGrid)
+		//	{
+		//		IGrid* _pGrid = nullptr;
+		//		m_pParentGrid->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
+		//	}
+		//	return;
+		//}
 		else
 		{
 			if (g_pHubble->m_pHubbleDelegate)
 				g_pHubble->m_pHubbleDelegate->IPCMsg(m_hWnd, strId, strParam1, strParam2); // TODO: Missing parameters
-			HWND hPPWnd = ::GetParent(::GetParent(m_hWnd));
-			if (m_pRemoteHubble)
-			{
-				CString strMsg = _T("");
-				CString strMsgID = _T("");
-				strMsg.Format(_T("%s@IPCMessage@%s@IPCMessage@%s@IPCMessage@%s@IPCMessage@%s@IPCMessage@%s"), strId, strParam1, strParam2, strParam3, strParam4, strParam5);
-				strMsgID.Format(_T("HandleChromeIPCMessage:%I64d"), hPPWnd);
-				m_pRemoteHubble->put_AppKeyValue(CComBSTR(strMsgID), CComVariant(strMsg));
-			}
 		}
 	}
 

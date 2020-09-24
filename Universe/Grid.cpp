@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.999								*
+*					Open Universe - version 0.9.9999								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -891,7 +891,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		m_pHostWnd->SendMessage(WM_INITIALUPDATE);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	m_pGridCommonData->m_mapLayoutNodes[m_strName] = this;
 	if (m_strID.CompareNoCase(_T("treeview")))
 	{
 		int nCol = m_pHostParse->GetCount();
@@ -992,26 +991,6 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	case CLRCtrl:
 	{
 		g_pHubble->m_pActiveGrid = this;
-		auto it = m_pGridCommonData->m_mapCLRNodes.find(strName);
-		if (it == m_pGridCommonData->m_mapCLRNodes.end())
-		{
-			m_pGridCommonData->m_mapCLRNodes[strName] = this;
-		}
-		else
-		{
-			int nCount = m_pGridCommonData->m_mapCLRNodes.size();
-			CString str = _T("");
-			str.Format(_T("%s%d"), strName, nCount);
-			it = m_pGridCommonData->m_mapCLRNodes.find(str);
-			while (it != m_pGridCommonData->m_mapCLRNodes.end())
-			{
-				nCount++;
-				str.Format(_T("%s%d"), strName, nCount);
-				it = m_pGridCommonData->m_mapCLRNodes.find(str);
-			}
-			m_pGridCommonData->m_mapCLRNodes[str] = this;
-			put_Attribute(CComBSTR("id"), str.AllocSysString());
-		}
 		
 		CString strUIKey = strTag;
 		if (g_pHubble->m_pCLRProxy)
@@ -1083,7 +1062,6 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	}
 	if (m_pDisp)
 	{
-		m_pGridCommonData->m_mapLayoutNodes[m_strName] = this;
 		if (m_nViewType == CLRCtrl)
 		{
 			HWND hCtrl = NULL;
@@ -1433,19 +1411,19 @@ STDMETHODIMP CGrid::GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, IDis
 
 STDMETHODIMP CGrid::GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR * bstrVal)
 {
-	if (g_pHubble->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
-	{
-		*bstrVal = g_pHubble->m_pCLRProxy->GetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false);
-	}
+	//if (g_pHubble->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
+	//{
+	//	*bstrVal = g_pHubble->m_pCLRProxy->GetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false);
+	//}
 	return S_OK;
 }
 
 STDMETHODIMP CGrid::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal)
 {
-	if (g_pHubble->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
-	{
-		g_pHubble->m_pCLRProxy->SetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false, bstrVal);
-	}
+	//if (g_pHubble->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
+	//{
+	//	g_pHubble->m_pCLRProxy->SetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false, bstrVal);
+	//}
 	return S_OK;
 }
 

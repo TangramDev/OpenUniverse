@@ -1002,7 +1002,6 @@ namespace CommonUniverse {
 	class CWebPageImpl {
 	public:
 		CWebPageImpl() {
-			m_pRemoteHubble = nullptr;
 			m_pChromeRenderFrameHost = nullptr;
 		}
 
@@ -1015,7 +1014,6 @@ namespace CommonUniverse {
 			m_mapBindWebObj.erase(m_mapBindWebObj.begin(), m_mapBindWebObj.end());
 		}
 
-		IHubble* m_pRemoteHubble = nullptr;
 		map<CString, BindWebObj*>	m_mapBindWebObj;
 		CChromeRenderFrameHost* m_pChromeRenderFrameHost;
 		virtual void SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) = 0;
