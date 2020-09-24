@@ -169,7 +169,6 @@ public:
 	void ExportComponentInfo();
 	int	 LoadCLR();
 	BOOL IsUserAdministrator();
-	CString ComputeHash(CString source);
 	CString GetDesignerInfo(CString);
 	CString GetXmlData(CString strName, CString strXml);
 	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
@@ -227,7 +226,6 @@ private:
 	IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
 	bool IsMDIClientQuasarNode(IGrid*);
-	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
 
 	CString RemoveUTF8BOM(CString strUTF8);
 

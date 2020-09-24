@@ -116,8 +116,6 @@ public:
 
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
-	HRESULT Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
-	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
 	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);
 	HRESULT Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
 

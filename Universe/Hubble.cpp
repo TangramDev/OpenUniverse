@@ -101,7 +101,6 @@ CHubble::CHubble()
 	m_strWorkBenchStrs = _T("");
 	m_strExeName = _T("");
 	m_strAppName = _T("Tangram System");
-	m_strAppKey = _T("");
 	m_strMainWndXml = _T("");
 	m_strCurrentKey = _T("");
 	m_strCurrentAppID = _T("");
@@ -185,39 +184,11 @@ void CHubble::Init()
 		si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64)
 		m_b64bitSystem = true;
 
-	if (m_bOfficeApp == false && m_nAppID != 9)
-	{
-		//m_strConfigDataFile = m_strAppDataPath;
-		if (::PathIsDirectory(m_strAppDataPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppDataPath);
-		}
-		m_strAppFormsPath = m_strAppPath + _T("CommonForms\\");
-		if (::PathIsDirectory(m_strAppFormsPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppFormsPath);
-		}
-		m_strAppFormsInfoPath = m_strAppDataPath + _T("TangramFormsInfo\\");
-		if (::PathIsDirectory(m_strAppFormsInfoPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppFormsInfoPath);
-		}
-	}
-
 	SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer);
 	m_strProgramFilePath = CString(m_szBuffer);
-
-	m_strAppCommonDocPath2 = m_strProgramFilePath + _T("\\Tangram\\CommonDocComponent\\");
-	m_strAppCommonFormsPath = m_strProgramFilePath + _T("\\Tangram\\CommonForms\\");
-	if (::PathIsDirectory(m_strAppCommonFormsPath) == false)
-	{
-		::SHCreateDirectory(nullptr, m_strAppCommonFormsPath);
-	}
 	m_mapValInfo[_T("apppath")] = CComVariant(m_strAppPath);
-	m_mapValInfo[_T("appdatapath")] = CComVariant(m_strAppDataPath);
 	m_mapValInfo[_T("appdatafile")] = CComVariant(m_strConfigDataFile);
 	m_mapValInfo[_T("appname")] = CComVariant(m_strExeName);
-	m_mapValInfo[_T("appkey")] = CComVariant(m_strAppKey);
 
 	if (m_nAppID != 9)
 	{
@@ -401,21 +372,10 @@ void CHubble::HubbleLoad()
 
 	m_strConfigFile = CString(m_szBuffer);
 	m_strConfigFile.MakeLower();
-	m_strAppKey = ComputeHash(m_strConfigFile);
 	m_strConfigFile += _T(".tangram");
 	_tsplitpath_s(m_szBuffer, szDriver, szDir, szFile2, szExt);
 	m_strAppPath = szDriver;
 	m_strAppPath += szDir;
-
-	HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
-	m_strAppDataPath = CString(m_szBuffer) + _T("\\");
-	m_strAppDataPath.Replace(_T("\\\\"), _T("\\"));
-
-	m_strAppDataPath += _T("TangramData\\");
-	m_strAppDataPath += m_strExeName;
-	m_strAppDataPath += _T("\\");
-	m_strAppDataPath += m_strAppKey;
-	m_strAppDataPath += _T("\\");
 }
 
 void CHubble::HubbleInitFromeWeb()
@@ -1701,94 +1661,11 @@ STDMETHODIMP CHubble::CreateHubbleCtrl(BSTR bstrAppID, IHubbleCtrl** ppRetCtrl)
 
 STDMETHODIMP CHubble::get_TangramDoc(LONGLONG AppProxy, LONGLONG nDocID, IHubbleDoc** pVal)
 {
-	IHubbleAppProxy* pProxy = (IHubbleAppProxy*)AppProxy;
-	*pVal = pProxy->GetDoc(nDocID);
+	//IHubbleAppProxy* pProxy = (IHubbleAppProxy*)AppProxy;
+	//*pVal = pProxy->GetDoc(nDocID);
 
 	return S_OK;
 }
-
-#include <wincrypt.h>
-
-int CHubble::CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString& MD5)
-{
-	HCRYPTPROV hProv = NULL;
-	DWORD dw = 0;
-	// Acquire a cryptographic provider context handle.
-	if (CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, 0))
-	{
-		HCRYPTHASH hHash;
-		// Create the hash object.
-		if (CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash))
-		{
-			// Compute the cryptographic hash of the buffer.
-			if (CryptHashData(hHash, pBuffer, BufferSize, 0))
-			{
-				DWORD dwCount = 16;
-				unsigned char digest[16];
-				CryptGetHashParam(hHash, HP_HASHVAL, digest, &dwCount, 0);
-
-				if (hHash)
-					CryptDestroyHash(hHash);
-
-				// Release the provider handle.
-				if (hProv)
-					CryptReleaseContext(hProv, 0);
-
-				unsigned char b;
-				char c;
-				char* Value = new char[1024];
-				int k = 0;
-				for (int i = 0; i < 16; i++)
-				{
-					b = digest[i];
-					for (int j = 4; j >= 0; j -= 4)
-					{
-						c = ((char)(b >> j) & 0x0F);
-						if (c < 10) c += '0';
-						else c = ('a' + (c - 10));
-						Value[k] = c;
-						k++;
-					}
-				}
-				Value[k] = '\0';
-				MD5 = CString(Value);
-				delete Value;
-			}
-		}
-	}
-	else
-	{
-		dw = GetLastError();
-		if (dw == NTE_BAD_KEYSET)               //同样，如果当不存在这样的容器的时候，创建一个
-		{
-			if (CryptAcquireContext(
-				&hProv,
-				NULL,
-				NULL,
-				PROV_RSA_FULL,
-				CRYPT_NEWKEYSET))
-			{
-				_tprintf(TEXT("CryptAcquireContext succeeded.\n"));
-			}
-			else
-			{
-				_tprintf(TEXT("CryptAcquireContext falied.\n"));
-			}
-		}
-	}
-
-	return 1;
-}
-
-CString CHubble::ComputeHash(CString source)
-{
-	std::string strSrc = (LPCSTR)CW2A(source, CP_UTF8);
-	int nSrcLen = strSrc.length();
-	CString strRet = _T("");
-	CalculateByteMD5((BYTE*)strSrc.c_str(), nSrcLen, strRet);
-	return strRet;
-}
-
 
 BOOL CHubble::IsUserAdministrator()
 {

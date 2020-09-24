@@ -190,54 +190,6 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 					}
 				}
 			}//while
-
-			// Find .shared directory
-			CString strSharedPath = theApp.m_pHubbleImpl->m_strAppDataPath;// OLE2T(pVal.bstrVal);
-			hFind = FindFirstFile(strSharedPath + _T(".shared\\*.*"), &FindFileData); // find the first file
-			if (hFind == INVALID_HANDLE_VALUE)
-			{
-				return false;
-			}
-
-			bSearch = true;
-			while (bSearch) // until we finds an entry
-			{
-				if (FindNextFile(hFind, &FindFileData))
-				{
-					// Don't care about . and ..
-					//if(IsDots(FindFileData.cFileName))
-					if ((_tcscmp(FindFileData.cFileName, _T(".")) == 0) ||
-						(_tcscmp(FindFileData.cFileName, _T("..")) == 0))
-						continue;
-
-					// We have found a directory
-					if ((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-					{
-						CString strPath = m_strAppPath + FindFileData.cFileName + _T("\\");
-						CString strPath2 = strPath + strLib + _T(".dll");
-						if (::PathFileExists(strPath2))
-							return strObjName + _T("|") + strLib + _T("|") + strPath2;
-						CString strRet = _GetLibPathFromAssemblyQualifiedName(strPath, strLib + _T(".dll"));
-						if (strRet != _T(""))
-							return strObjName + _T("|") + strLib + _T("|") + strRet;
-					}
-
-				}//FindNextFile
-				else
-				{
-					if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-						bSearch = false;
-					else {
-						// some error occured, close the handle and return false
-						FindClose(hFind);
-						return _T("");
-					}
-				}
-			}//while
-
-			// End Find .shared directory
-
-			FindClose(hFind); // closing file handle
 		}
 	}
 
