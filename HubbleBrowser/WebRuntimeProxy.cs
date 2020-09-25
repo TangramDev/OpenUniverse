@@ -12,7 +12,7 @@ namespace HubbleBrowser
             Hubble.OnBindCLRObjToWebPage += Cosmos_OnBindCLRObjToWebPage;
             Hubble.OnGetSubObjForWebPage += Tangram_OnGetSubObjForWebPage;
             Hubble.OnHubbleMsg += Cosmos_OnHubbleMsg;
-            Hubble.OnRenderHTMLElement += Cosmos_OnRenderHTMLElement;
+            Hubble.OnCustomizedDOMElement += Cosmos_OnCustomizedDOMElement;
             Hubble.OnHubbleMsgReceived += Cosmos_OnHubbleMsgReceived;
             return 0;
         }
@@ -32,7 +32,7 @@ namespace HubbleBrowser
         {
         }
 
-        private static void Cosmos_OnRenderHTMLElement(IntPtr hWnd, string strRuleName, string strHTML)
+        private static void Cosmos_OnCustomizedDOMElement(IntPtr hWnd, string strRuleName, string strHTML)
         {
         }
 

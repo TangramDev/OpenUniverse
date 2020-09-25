@@ -24,14 +24,14 @@ namespace HubbleBrowser
             //if (thisNode.ParentNode != null)
             //{
             //    string xml = "<content1 target=\"mainworkclient\">" +
-            //        "<window>" +
+            //        "<layout>" +
             //            "<node startype='grid' id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>" +
-            //                "<node id='tangramtabctrl_Page2' startype="nucleus" caption=''></node>" +
-            //                "<node id='test1'></node>" +
-            //                "<node id='test2'></node>" +
-            //                "<node id='test3'></node>" +
-            //            "</node>" +
-            //        "</window>" +
+            //                "<grid id='tangramtabctrl_Page2' startype="nucleus" caption=''></grid>" +
+            //                "<grid id='test1'></node>" +
+            //                "<grid id='test2'></node>" +
+            //                "<grid id='test3'></node>" +
+            //            "</grid>" +
+            //        "</layout>" +
             //      "</content1>";
 
             //    thisNode.ParentNode.OpenChild(0, 0, button1.Name, xml);
@@ -43,14 +43,14 @@ namespace HubbleBrowser
             //if (thisNode.ParentNode != null)
             //{
             //    string xml = "<content1>" +
-            //        "<window>" +
-            //            "<node startype=\"TangramTabCtrl\" objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"18\">" +
-            //                "<node id='tangramtabctrl_Page2' startype="nucleus" caption='Page 1'></node>" +
-            //                "<node id='test1' caption='Page 2'></node>" +
-            //                "<node id='test2' caption='Page 3'></node>" +
-            //                "<node id='test3' caption='Page 4'></node>" +
-            //            "</node>" +
-            //        "</window>" +
+            //        "<layout>" +
+            //            "<grid style=\"18\">" +
+            //                "<grid id='tangramtabctrl_Page2' startype="nucleus" caption='Page 1'></grid>" +
+            //                "<grid id='test1' caption='Page 2'></grid>" +
+            //                "<grid id='test2' caption='Page 3'></grid>" +
+            //                "<grid id='test3' caption='Page 4'></grid>" +
+            //            "</grid>" +
+            //        "</layout>" +
             //      "</content1>";
 
             //    thisNode.ParentNode.OpenChild(0, 0, button2.Name, xml);
@@ -71,7 +71,7 @@ namespace HubbleBrowser
         {
             string xml = "<content1>" +
             "<layout>" +
-                "<grid objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"23\">" +
+                "<grid style=\"23\">" +
                     "<grid id='tangramtabctrl_Page2' gridtype=\"nucleus\" caption='Page 1'></grid>" +
                     "<grid id='test1' caption='Page 2'></grid>" +
                     "<grid id='test2' caption='Page 3'></grid>" +
@@ -86,7 +86,7 @@ namespace HubbleBrowser
         {
             string xml = "<content1>" +
                 "<layout>" +
-                    "<grid objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"43\">" +
+                    "<grid style=\"43\">" +
                         "<grid id='tangramtabctrl_Page2' gridtype=\"nucleus\" caption='Page 1'></grid>" +
                         "<grid id='test1' caption='Page 2'></grid>" +
                         "<grid id='test2' caption='Page 3'></grid>" +

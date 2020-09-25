@@ -716,11 +716,11 @@ namespace Cosmos
 			OnHubbleMsgReceived(cloudSession);
 		}
 
-		delegate void RenderHTMLElement(IntPtr hWnd, String^ strRuleName, String^ strHTML);
-		static event RenderHTMLElement^ OnRenderHTMLElement;
-		static void Fire_OnRenderHTMLElement(IntPtr hWnd, String^ strRuleName, String^ strHTML)
+		delegate void CustomizedDOMElement(IntPtr hWnd, String^ strRuleName, String^ strHTML);
+		static event CustomizedDOMElement^ OnCustomizedDOMElement;
+		static void Fire_OnCustomizedDOMElement(IntPtr hWnd, String^ strRuleName, String^ strHTML)
 		{
-			OnRenderHTMLElement(hWnd, strRuleName, strHTML);
+			OnCustomizedDOMElement(hWnd, strRuleName, strHTML);
 		}
 
 		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid);

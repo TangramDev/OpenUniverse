@@ -692,6 +692,9 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	HWND hWnd = 0;
 	CGridHelper* pHubbleDesignView = (CGridHelper*)m_pHostWnd;
 	BOOL isAppWnd = false;
+	int nCol = m_pHostParse->GetCount();
+	if (nCol && m_strID == _T("") && m_strCnnID == _T(""))
+		m_strCnnID = _T("tabbedwnd");
 	if ( m_strID == _T("clrctrl"))
 	{
 		g_pHubble->LoadCLR();
@@ -893,7 +896,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	if (m_strID.CompareNoCase(_T("treeview")))
 	{
-		int nCol = m_pHostParse->GetCount();
 
 		m_nRows = 1;
 		m_nCols = nCol;

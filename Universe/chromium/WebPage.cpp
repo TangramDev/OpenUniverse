@@ -534,14 +534,14 @@ namespace Web {
 	{
 		if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
 		{
-			RenderHTMLElement(strParam1, strParam2);
+			CustomizedDOMElement(strParam1, strParam2);
 		}
 		else if (strId.CompareNoCase(_T("AGGREGATED_MESSAGE")) == 0)
 		{
 			HandleAggregatedMessage(strParam1, strParam2);
 			if (m_strDocXml != _T(""))
 			{
-				RenderHTMLDocElement(m_strDocXml);
+				CustomizedDocElement(m_strDocXml);
 			}
 			if (g_pHubble->m_pHostHtmlWnd == nullptr && g_pHubble->m_strAppXml != _T(""))
 			{
@@ -549,7 +549,7 @@ namespace Web {
 				g_pHubble->HubbleInitFromeWeb();
 				if (g_pHubble->m_strMainWndXml != _T(""))
 				{
-					RenderHTMLMainWindowElement(g_pHubble->m_strMainWndXml);
+					CustomizedMainWindowElement(g_pHubble->m_strMainWndXml);
 				}
 				auto t = create_task([this]()
 					{
@@ -746,7 +746,7 @@ namespace Web {
 		HandleChromeIPCMessage(strId, strParam1, strParam2, strParam3, strParam4, strParam5);
 	}
 
-	void CWebPage::RenderHTMLElement(CString strRuleName, CString strHTML)
+	void CWebPage::CustomizedDOMElement(CString strRuleName, CString strHTML)
 	{
 		if (strRuleName.CompareNoCase(_T("application")) == 0)
 		{
@@ -762,23 +762,23 @@ namespace Web {
 		}
 		else if (strRuleName.CompareNoCase(_T("webBrowser")) == 0)
 		{
-			RenderHTMLWebBrowserElement(strHTML);
+			CustomizedWebBrowserElement(strHTML);
 		}
 		else if (strRuleName.CompareNoCase(_T("cloud-form")) == 0)
 		{
-			RenderHTMLIndWindowElement(strHTML);
+			CustomizedIndWindowElement(strHTML);
 		}
 		else if (strRuleName.CompareNoCase(_T("gridTemplate")) == 0)
 		{
-			RenderHTMLNodeDetailsElement(strHTML);
+			CustomizedNodeDetailsElement(strHTML);
 		}
 		else if (strRuleName.CompareNoCase(_T("object")) == 0)
 		{
-			RenderHTMLObjectElement(strHTML);
+			CustomizedObjectElement(strHTML);
 		}
 		else if (strRuleName.CompareNoCase(_T("data")) == 0)
 		{
-			RenderHTMLDataElement(strHTML);
+			CustomizedDataElement(strHTML);
 		}
 		else if (strRuleName.CompareNoCase(_T("webViewPort")) == 0)
 		{
@@ -786,15 +786,15 @@ namespace Web {
 		}
 		else if (strRuleName.CompareNoCase(_T("extra")) == 0)
 		{
-			RenderHTMLExtraElement(strHTML);
+			CustomizedExtraElement(strHTML);
 		}
 		else
 		{
-			g_pHubble->m_pHubbleDelegate->RenderHTMLElement(m_hWnd, strRuleName, strHTML);
+			g_pHubble->m_pHubbleDelegate->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
 		}
 	}
 
-	void CWebPage::RenderHTMLMainWindowElement(CString strHTML)
+	void CWebPage::CustomizedMainWindowElement(CString strHTML)
 	{
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
@@ -810,7 +810,7 @@ namespace Web {
 		}
 	}
 
-	void CWebPage::RenderHTMLIndWindowElement(CString strHTML)
+	void CWebPage::CustomizedIndWindowElement(CString strHTML)
 	{
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
@@ -829,7 +829,7 @@ namespace Web {
 		}
 	}
 
-	void CWebPage::RenderHTMLWebBrowserElement(CString strHTML)
+	void CWebPage::CustomizedWebBrowserElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -862,7 +862,7 @@ namespace Web {
 		}
 	}
 
-	void CWebPage::RenderHTMLNodeDetailsElement(CString strHTML)
+	void CWebPage::CustomizedNodeDetailsElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -883,7 +883,7 @@ namespace Web {
 		}
 	}
 
-	void CWebPage::RenderHTMLObjectElement(CString strHTML)
+	void CWebPage::CustomizedObjectElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -957,7 +957,7 @@ namespace Web {
 		}
 	}
 
-	void CWebPage::RenderHTMLExtraElement(CString strHTML)
+	void CWebPage::CustomizedExtraElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -970,7 +970,7 @@ namespace Web {
 		}
 	}
 
-	void CWebPage::RenderHTMLDataElement(CString strHTML)
+	void CWebPage::CustomizedDataElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -980,7 +980,7 @@ namespace Web {
 		}
 	}
 
-	void CWebPage::RenderHTMLDocElement(CString strHTML)
+	void CWebPage::CustomizedDocElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())

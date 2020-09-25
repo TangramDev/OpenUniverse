@@ -745,7 +745,7 @@ namespace CommonUniverse {
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) = 0;
 		virtual void AttachGrid(void* pGridEvents) {}
 		virtual void HubbleInit() {}
-		virtual IHubbleDoc* ConnectHubbleDoc(IHubbleAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hFrame, LPCTSTR strDocType) { return nullptr; }
+		virtual IHubbleDoc* ConnectHubbleDoc(IHubbleAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hQuasar, LPCTSTR strDocType) { return nullptr; }
 		virtual CString GetNewLayoutNodeName(BSTR strCnnID, IGrid* pDesignNode) { return _T(""); }
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
 		virtual IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
@@ -794,7 +794,7 @@ namespace CommonUniverse {
 		virtual bool HookAppDocTemplateInfo() = 0;
 		virtual bool EclipseAppInit() = 0;
 		virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2) = 0;
-		virtual void RenderHTMLElement(HWND hWnd, CString strRuleName, CString strHTML) = 0;
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) = 0;
 		virtual void HubbleNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 	};
 

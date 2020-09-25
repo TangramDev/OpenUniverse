@@ -136,8 +136,8 @@ CTangramXmlParse* CTangramXmlParse::AddTabNode(CString strName, CString strCnnID
 	strCnnID.Trim().MakeLower();
 	strStyle.Trim().MakeLower();
 	if (strCnnID == _T(""))
-		strCnnID = _T("TangramTabbedWnd.TabbedComponent.1");
-	if (strCnnID == _T("TangramTabbedWnd.TabbedComponent.1"))
+		strCnnID = _T("tabbedwnd");
+	if (strCnnID == _T("tabbedwnd"))
 	{
 		if (strStyle == _T(""))
 			strStyle = _T("19");

@@ -22,7 +22,7 @@ namespace HubbleBrowser
         {
             string xml = "<content1>" +
                 "<layout>" +
-                    "<grid objid=\"TangramTabbedWnd.TabbedComponent.1\" style=\"13\">" +
+                    "<grid objid=\"TabbedWnd\" style=\"13\">" +
                         "<grid id='tangramtabctrl_Page2 www' gridtype=\"nucleus\" caption='Page 1'></grid>" +
                         "<grid id='test1' caption='Page 2 eee'></grid>" +
                         "<grid id='test2' caption='Page 3'></grid>" +

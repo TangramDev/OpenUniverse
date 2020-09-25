@@ -68,7 +68,7 @@ private:
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
 	virtual bool EclipseAppInit() { return false; };
 	virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2);
-	virtual void RenderHTMLElement(HWND hWnd, CString strRuleName, CString strHTML);
+	virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 };
 
 extern CCosmos theApp;

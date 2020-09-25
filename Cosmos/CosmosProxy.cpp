@@ -206,9 +206,9 @@ void CCosmos::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strP
 	Hubble::Fire_OnHubbleMsg((IntPtr)hWnd, BSTR2STRING(strType), BSTR2STRING(strParam1), BSTR2STRING(strParam2));
 }
 
-void CCosmos::RenderHTMLElement(HWND hWnd, CString strRuleName, CString strHTML)
+void CCosmos::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
 {
-	Hubble::Fire_OnRenderHTMLElement((IntPtr)hWnd, BSTR2STRING(strRuleName), BSTR2STRING(strHTML));
+	Hubble::Fire_OnCustomizedDOMElement((IntPtr)hWnd, BSTR2STRING(strRuleName), BSTR2STRING(strHTML));
 }
 
 void CCosmos::ProcessMsg(MSG* msg) {
@@ -2508,7 +2508,7 @@ bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)
 void CCosmos::OnHubbleClose()
 {
 	AtlTrace(_T("*************Begin CCosmos::OnClose:  ****************\n"));
-	Cosmos::Hubble::GetHubble()->Fire_OnClose();
+	Hubble::GetHubble()->Fire_OnClose();
 	FormCollection^ pCollection = Forms::Application::OpenForms;
 	int nCount = pCollection->Count;
 	while (pCollection->Count > 0) {
@@ -2526,7 +2526,7 @@ void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid)
 {
 	Cosmos::Grid^ _pRootNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pRootGrid);
 	IntPtr nHandle = (IntPtr)hWnd;
-	Cosmos::Hubble::GetHubble()->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
+	Hubble::GetHubble()->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
 	_pRootNode->Fire_RootGridCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
 }
@@ -2635,37 +2635,6 @@ void CCosmosProxy::OnWinFormActivate(HWND hForm, int nState)
 					menuitem->HideDropDown();
 				}
 			}
-			//else
-			//{
-			//	Form^ pForm = (Form^)pCtrl;
-			//	for each (Control ^ ctrl in pForm->Controls)
-			//	{
-			//		if (ctrl->GetType() == (MenuStrip::typeid))
-			//		{
-			//			pMenuStrip = (MenuStrip^)ctrl;
-			//			theAppProxy.m_mapFormMenuStrip[(HWND)pForm->Handle.ToPointer()] = pMenuStrip;
-			//			for each (ToolStripItem ^ item in pMenuStrip->Items)
-			//			{
-			//				ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)item;
-			//				String^ strText = menuitem->Text;
-			//				int nIndex = strText->IndexOf(L"&");
-			//				if (nIndex != -1)
-			//				{
-			//					char s = strText[nIndex + 1];
-			//				}
-			//				System::Windows::Forms::Keys keys = menuitem->ShortcutKeys;
-			//				if(keys!= System::Windows::Forms::Keys::None)
-			//				{ 
-			//				}
-			//			}
-			//			break;
-			//		}
-			//	}
-			//}
-
-			//if (pMenuStrip)
-			//{
-			//}
 		}
 	}
 	break;
@@ -2678,17 +2647,6 @@ void CCosmosProxy::OnWinFormActivate(HWND hForm, int nState)
 			CString s = name;
 			if (s == _T("ToolStripDropDownMenu"))
 			{
-				//theAppProxy.m_pCurInputLanguage = InputLanguage::CurrentInputLanguage;
-				//String^ name = L"";
-				//for each (InputLanguage ^ item in InputLanguage::InstalledInputLanguages)
-				//{
-				//	name = item->Culture->Name;
-				//	if (name == L"en-US")
-				//	{
-				//		InputLanguage::CurrentInputLanguage = item;
-				//		break;
-				//	}
-				//}
 				m_hCreatingCLRWnd = nullptr;
 				CMenuHelperWnd* pWnd = new CMenuHelperWnd();
 				theAppProxy.m_mapMenuHelperWnd[hForm] = pWnd;

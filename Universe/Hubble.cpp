@@ -708,16 +708,16 @@ IGrid* CHubble::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 	return nullptr;
 };
 
-IGalaxyCluster* CHubble::Observe(HWND hFrame, CString strName, CString strKey)
+IGalaxyCluster* CHubble::Observe(HWND hQuasar, CString strName, CString strKey)
 {
-	auto it = m_mapQuasar2GalaxyCluster.find(hFrame);
+	auto it = m_mapQuasar2GalaxyCluster.find(hQuasar);
 	if (it != m_mapQuasar2GalaxyCluster.end())
 	{
 		CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)it->second;
 		IQuasar* pQuasar = nullptr;
-		auto it2 = pGalaxyCluster->m_mapQuasar.find(hFrame);
+		auto it2 = pGalaxyCluster->m_mapQuasar.find(hQuasar);
 		if (it2 == pGalaxyCluster->m_mapQuasar.end())
-			pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hFrame), CComBSTR(strName), &pQuasar);
+			pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hQuasar), CComBSTR(strName), &pQuasar);
 		else
 			pQuasar = it2->second;
 		IGrid* pGrid = nullptr;
