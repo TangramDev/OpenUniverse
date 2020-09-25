@@ -1080,11 +1080,11 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						if (nIpcSession)
 						{
 							pHubbleSession = (CSession*)nIpcSession;
-							bool bExists = Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
+							bool bExists = Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession);
 							if (bExists == false)
 							{
 								pCloudSession = gcnew Wormhole(pHubbleSession);
-								Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
+								Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
 								pCloudSession->m_pHostObj = pObj;
 							}
 							theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
@@ -1104,7 +1104,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							pHubbleSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
 							pCloudSession = gcnew Wormhole(pHubbleSession);
-							Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
+							Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
 							pCloudSession->m_pHostObj = pObj;
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
 							if (strFormName == _T(""))
@@ -1204,7 +1204,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					}
 					pHubbleSession = theApp.m_pHubbleImpl->CreateCloudSession(pProxyBase);
 					pCloudSession = gcnew Wormhole(pHubbleSession);
-					Cosmos::Hubble::WebConnect[mainForm] = pCloudSession;
+					Cosmos::Hubble::Wormholes[mainForm] = pCloudSession;
 					pCloudSession->m_pHostObj = mainForm;
 					CString strFormName = mainForm->Name;
 					pHubbleSession->InsertLong(_T("autodelete"), 0);
@@ -1583,12 +1583,12 @@ void CCosmosProxy::ReleaseHubbleObj(IDispatch* pDisp)
 	LONGLONG nValue = (LONGLONG)pDisp;
 	Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)pDisp);
 	Cosmos::Wormhole^ pCloudSession = nullptr;
-	bool bExists = Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
+	bool bExists = Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession);
 	if (bExists == true)
 	{
 		if (pCloudSession != nullptr)
 		{
-			Cosmos::Hubble::WebConnect->Remove(pObj);
+			Cosmos::Hubble::Wormholes->Remove(pObj);
 		}
 	}
 	_removeObject(nValue);
@@ -1682,13 +1682,13 @@ void CCosmosProxy::ConnectGridToWebPage(IGrid* pGrid, bool bAdd)
 		if (pObj != nullptr)
 		{
 			Cosmos::Wormhole^ pCloudSession = nullptr;
-			bool bExists = Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
+			bool bExists = Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession);
 			if (bAdd)
 			{
 				if (bExists == false)
 				{
 					pCloudSession = gcnew Wormhole(pSession);
-					Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
+					Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
 					pCloudSession->m_pHostObj = pObj;
 					theAppProxy.m_mapSession2Wormhole[pSession] = pCloudSession;
 				}
@@ -1697,7 +1697,7 @@ void CCosmosProxy::ConnectGridToWebPage(IGrid* pGrid, bool bAdd)
 			{
 				if (pCloudSession != nullptr)
 				{
-					Cosmos::Hubble::WebConnect->Remove(pObj);
+					Cosmos::Hubble::Wormholes->Remove(pObj);
 				}
 			}
 		}
@@ -1736,10 +1736,10 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 		if (strCallback != _T(""))
 		{
 			Cosmos::Wormhole^ pCloudSession = nullptr;
-			if (!Cosmos::Hubble::WebConnect->TryGetValue(pObj, pCloudSession))
+			if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))
 			{
 				pCloudSession = gcnew Cosmos::Wormhole(pSession);
-				Cosmos::Hubble::WebConnect[pObj] = pCloudSession;
+				Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
 			}
 			CString strEventName = pSession->GetString(LPCTSTR(strCallback));
 			if (strType == _T("SyncCtrlTextChange"))
@@ -1760,9 +1760,9 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 							{
 								pSubCtrl = pArray[0];
 								Cosmos::Wormhole^ pCloudSession2 = nullptr;
-								if (!Cosmos::Hubble::WebConnect->TryGetValue(pSubCtrl, pCloudSession2))
+								if (!Cosmos::Hubble::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
 								{
-									Cosmos::Hubble::WebConnect[pSubCtrl] = pCloudSession;
+									Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
 								}
 								pSession->Insertint64(pSubCtrl->Name, pSubCtrl->Handle.ToInt64());
 								pSubCtrl->TextChanged += gcnew System::EventHandler(&OnTextChanged);
@@ -1798,9 +1798,9 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 						{
 							pSubCtrl = pArray[0];
 							Cosmos::Wormhole^ pCloudSession2 = nullptr;
-							if (!Cosmos::Hubble::WebConnect->TryGetValue(pSubCtrl, pCloudSession2))
+							if (!Cosmos::Hubble::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
 							{
-								Cosmos::Hubble::WebConnect[pSubCtrl] = pCloudSession;
+								Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
 							}
 
 							Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, _strEventName);
@@ -1886,7 +1886,7 @@ void CCosmosProxy::OnTextChanged(System::Object^ sender, System::EventArgs^ e)
 {
 	Control^ pTextCtrl = (Control^)sender;
 	Cosmos::Wormhole^ pCloudSession = nullptr;
-	if (Cosmos::Hubble::WebConnect->TryGetValue(sender, pCloudSession))
+	if (Cosmos::Hubble::Wormholes->TryGetValue(sender, pCloudSession))
 	{
 		pCloudSession->InsertString(pTextCtrl->Name, pTextCtrl->Text);
 		pCloudSession->InsertString("msgID", "FIRE_EVENT");

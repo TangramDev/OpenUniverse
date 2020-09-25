@@ -36,10 +36,7 @@ namespace Web {
 		CString		m_strCurKey;
 		CGrid*		m_pParentGrid;
 		CWebPage*	m_pVisibleWebWnd;
-		IGrid*		m_pRemoteGrid;
 		LRESULT		BrowserLayout();
-
-		map<HWND, CWebPage*> m_mapNorifyPage;
 
 		STDMETHOD(get_RemoteGrid)(IGrid** pVal);
 		STDMETHOD(put_RemoteGrid)(IGrid* newVal);

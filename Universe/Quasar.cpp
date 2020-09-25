@@ -204,9 +204,9 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CString strFrameName = (LPCTSTR)wParam;
+	CString strQuasarName = (LPCTSTR)wParam;
 	CString currentKey = (LPCTSTR)lParam;
-	CString strIndex = strFrameName + L"_" + currentKey;
+	CString strIndex = strQuasarName + L"_" + currentKey;
 	if (m_bMdiForm)
 	{
 		auto it = m_mapKey.find(currentKey);
@@ -216,7 +216,7 @@ LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			CTangramXmlParse parse;
 			if (parse.LoadXml(strXml))
 			{
-				CTangramXmlParse* pParse = parse.GetChild(strFrameName);
+				CTangramXmlParse* pParse = parse.GetChild(strQuasarName);
 				if (pParse)
 				{
 					CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
@@ -239,7 +239,7 @@ LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	CTangramXmlParse parse;
 	if (parse.LoadXml(m_strXml) || parse.LoadFile(m_strXml))
 	{
-		CTangramXmlParse* pParse = parse.GetChild(strFrameName);
+		CTangramXmlParse* pParse = parse.GetChild(strQuasarName);
 		if (pParse)
 		{
 			CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
@@ -401,7 +401,7 @@ CGrid* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 {
 	m_pWorkGrid = new CComObject<CGrid>;
 	m_pWorkGrid->m_pRootObj = m_pWorkGrid;
-	CGridCommonData* pCommonData = new CGridCommonData();
+	CGridShareData* pCommonData = new CGridShareData();
 	m_pWorkGrid->m_pGridCommonData = pCommonData;
 	pCommonData->m_pQuasar = this;
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;

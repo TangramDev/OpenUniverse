@@ -27,7 +27,6 @@ namespace Web {
 		m_heightfix = 0;
 		m_hOldTab = NULL;
 		m_bTabChange = false;
-		m_pRemoteGrid = nullptr;
 		m_pBrowser = nullptr;
 		m_pParentGrid = nullptr;
 		m_fdevice_scale_factor = 1.0f;
@@ -535,18 +534,11 @@ namespace Web {
 
 	STDMETHODIMP CBrowser::get_RemoteGrid(IGrid** pVal)
 	{
-		if (m_pRemoteGrid != nullptr)
-		{
-			*pVal = m_pRemoteGrid;
-		}
 		return S_OK;
 	}
 
 	STDMETHODIMP CBrowser::put_RemoteGrid(IGrid* newVal)
 	{
-		CComQIPtr<IGrid>pGrid(newVal);
-		if (pGrid)
-			m_pRemoteGrid = pGrid.Detach();
 		return S_OK;
 	}
 

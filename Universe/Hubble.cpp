@@ -615,15 +615,15 @@ IWebPage* CHubble::GetWebPageFromForm(HWND hForm)
 	return nullptr;
 }
 
-IQuasar* CHubble::ConnectGalaxyCluster(HWND hQuasar, CString _strFrameName, IGalaxyCluster* _pGalaxyCluster, QuasarInfo* pInfo)
+IQuasar* CHubble::ConnectGalaxyCluster(HWND hQuasar, CString _strQuasarName, IGalaxyCluster* _pGalaxyCluster, QuasarInfo* pInfo)
 {
 	CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)_pGalaxyCluster;
 	if (pGalaxyCluster->m_hWnd == m_hHostWnd)
 		return nullptr;
-	CString strFrameName = _strFrameName;
+	CString strQuasarName = _strQuasarName;
 
 	IQuasar* pQuasar = nullptr;
-	pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hQuasar), strFrameName.AllocSysString(), &pQuasar);
+	pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hQuasar), strQuasarName.AllocSysString(), &pQuasar);
 	if (pQuasar)
 	{
 		CQuasar* _pQuasar = (CQuasar*)pQuasar;
@@ -635,7 +635,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hQuasar, CString _strFrameName, IGal
 		m_mapQuasar2GalaxyCluster[hQuasar] = pGalaxyCluster;
 
 		CString strKey = _T("default");
-		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strFrameName, strKey);
+		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strQuasarName, strKey);
 		pQuasar->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		if(pGrid)
 		{
@@ -1536,7 +1536,7 @@ STDMETHODIMP CHubble::FireHubbleEventObj(IHubbleEventObj* pHubbleEventObj)
 	return S_OK;
 }
 
-STDMETHODIMP CHubble::ObserveQuasars(LONGLONG hWnd, BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSave)
+STDMETHODIMP CHubble::ObserveQuasars(LONGLONG hWnd, BSTR bstrQuasars, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSave)
 {
 	return S_OK;
 }

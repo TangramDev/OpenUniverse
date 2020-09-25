@@ -732,7 +732,7 @@ namespace Cosmos
         
         Wormhole^ pCloudSession = nullptr;
         CSession* pSession = nullptr;
-        bool bExists = Hubble::WebConnect->TryGetValue(pObj, pCloudSession);
+        bool bExists = Hubble::Wormholes->TryGetValue(pObj, pCloudSession);
         if (bExists)
         {
             pSession = pCloudSession->m_pWormhole;

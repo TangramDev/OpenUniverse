@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 0.9.9999								*
+*					Open Universe - version 1.0.0								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -21,11 +21,11 @@
 
 class CWinForm;
 class CWormhole;
-class CGridCommonData
+class CGridShareData
 {
 public:
-	CGridCommonData();
-	~CGridCommonData();
+	CGridShareData();
+	~CGridShareData();
 
 	CQuasar*					m_pQuasar;
 	CQuasar*					m_pOldQuasar;
@@ -86,7 +86,7 @@ public:
 	CTangramXmlParse* 				m_pDocXmlParseNode;
 	CSession*						m_pCloudSession = nullptr;
 	IHubbleWindow*					m_pWindow;
-	CGridCommonData*				m_pGridCommonData;
+	CGridShareData*				m_pGridCommonData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CQuasar*						m_pHostQuasar;

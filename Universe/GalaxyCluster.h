@@ -81,15 +81,15 @@ public:
 	STDMETHOD(get_NewVersion)(VARIANT_BOOL* bNewVersion);
 	STDMETHOD(put_NewVersion)(VARIANT_BOOL bNewVersion);
 
-	STDMETHOD(CreateQuasar)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrFrameName, IQuasar** pRetFrame);
-	STDMETHOD(GetGrid)(BSTR bstrFrameName, BSTR bstrNodeName, IGrid** pRetNode);
+	STDMETHOD(CreateQuasar)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrQuasarName, IQuasar** pRetFrame);
+	STDMETHOD(GetGrid)(BSTR bstrQuasarName, BSTR bstrNodeName, IGrid** pRetNode);
 	STDMETHOD(GetQuasarFromCtrl)(IDispatch* ctrl, IQuasar** ppQuasar);
 	STDMETHOD(GetCtrlInGrid)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
 	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR FrameName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ConnectHubbleCtrl)(IHubbleCtrl* eventSource);
-	STDMETHOD(CreateQuasarWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrFrameName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
-	STDMETHOD(ObserveQuasars)(BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
+	STDMETHOD(CreateQuasarWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrQuasarName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
+	STDMETHOD(ObserveQuasars)(BSTR bstrQuasars, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	STDMETHOD(get_CurrentDesignQuasarType)(QuasarType* pVal);
 	STDMETHOD(get_CurrentDesignNode)(IGrid** pVal);
 

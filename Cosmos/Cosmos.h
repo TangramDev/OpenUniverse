@@ -573,7 +573,7 @@ namespace Cosmos
 
 		static Hubble^ m_pHubble;
 		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
-		static Dictionary<Object^, Wormhole^>^ m_pCloudEventDic = gcnew Dictionary<Object^, Wormhole^>();
+		static Dictionary<Object^, Wormhole^>^ m_pWormholes = gcnew Dictionary<Object^, Wormhole^>();
 
 		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
 		static bool WebRuntimeInit();
@@ -598,11 +598,11 @@ namespace Cosmos
 		static void Run(Form^ Mainform);
 		static void Run(ApplicationContext^ context);
 
-		static property Dictionary<Object^, Wormhole^>^ WebConnect
+		static property Dictionary<Object^, Wormhole^>^ Wormholes
 		{
 			Dictionary<Object^, Wormhole^>^ get()
 			{
-				return m_pCloudEventDic;
+				return m_pWormholes;
 			};
 		}
 
