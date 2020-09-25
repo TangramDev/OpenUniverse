@@ -13,7 +13,6 @@
 
 // grid.h : Declaration of the CGrid
 
-#include "browser.h"
 #include "GalaxyCluster.h"
 #include "chromium/BrowserWnd.h"
 

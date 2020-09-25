@@ -332,7 +332,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="ChromeWebBrowser.cpp" />
+    <ClCompile Include="Browser.cpp" />
     <ClCompile Include="dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
@@ -360,7 +360,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrowserWndOpenDisposition.h" />
-    <ClInclude Include="ChromeWebBrowser.h" />
+    <ClInclude Include="Browser.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />

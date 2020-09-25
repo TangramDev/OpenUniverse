@@ -17,7 +17,7 @@
 
 #include "resource.h"       // main symbols
 #include "TangramBase.h"       
-#include "ChromeWebBrowser.h"
+#include "Browser.h"
 
 using namespace Cosmos;
 using namespace System::Reflection;

@@ -15,7 +15,7 @@
 #include "dllmain.h"
 #include "GridCLREvent.h"
 #include "Cosmos.h"
-#include "ChromeWebBrowser.h"
+#include "Browser.h"
 
 using namespace System::Threading;
 using namespace System::Diagnostics;
