@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -367,48 +367,6 @@ STDMETHODIMP CGalaxyCluster::get_QuasarName(LONGLONG hHwnd, BSTR* pVal)
 	}
 
 	return S_OK;
-}
-
-//STDMETHODIMP CGalaxyCluster::get_Quasar(BSTR bstrQuasarName, IQuasar** pVal)
-//{
-//	CString strName = OLE2T(bstrQuasarName);
-//	if (strName != _T(""))
-//	{
-//		auto it = m_mapWnd.find(strName);
-//		if (it != m_mapWnd.end())
-//		{
-//			HWND h = it->second;
-//			auto it2 = m_mapQuasar.find(h);
-//			if (it2 != m_mapQuasar.end())
-//				*pVal = it2->second;
-//		}
-//	}
-//	return S_OK;
-//}
-
-void CGalaxyCluster::OnNodeDocComplete(WPARAM wParam)
-{
-	bool bState = false;
-	for (auto it1 : m_mapQuasar)
-	{
-		for (auto it2 : it1.second->m_mapGrid)
-		{
-			if (it2.second->m_bCreated == false)
-			{
-				::PostMessage(m_hWnd, WM_TANGRAM_WEBNODEDOCCOMPLETE, wParam, 0);
-				return;
-			}
-		}
-	}
-
-	switch (wParam)
-	{
-	case 0:
-		break;
-	case 1:
-	default:
-		break;
-	}
 }
 
 void CGalaxyCluster::BeforeDestory()
@@ -782,7 +740,7 @@ STDMETHODIMP CGalaxyCluster::get_CurrentDesignQuasarType(QuasarType* pVal)
 {
 	if (g_pHubble->m_pDesignGrid)
 	{
-		CQuasar* pQuasar = g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar;
+		CQuasar* pQuasar = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar;
 		*pVal = pQuasar->m_nQuasarType;
 	}
 	else

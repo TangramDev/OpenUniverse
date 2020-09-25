@@ -90,7 +90,7 @@ public:
 	CTangramXmlParse* ReplaceNode(CTangramXmlParse* pOldParse, CTangramXmlParse* pNewParse, CString strName);
 	CTangramXmlParse* AddNode(CString name);
 	BOOL ModifyNode(int nRow, int nCol, CString strName, CString strXml);
-	CTangramXmlParse* AddTabNode(CString strName, CString strCnnID, CString strObjID, CString strStyle, int nPages);
+	CTangramXmlParse* AddTabNode(CString strName, CString strObjTypeID, CString strObjID, CString strStyle, int nPages);
 	CTangramXmlParse* AddSplitterNode(int nRow, int nCol, CString strName, int nWidth, int nHeight);
 	HRESULT RemoveNode(CString name);
 	HRESULT RemoveNode(int index);

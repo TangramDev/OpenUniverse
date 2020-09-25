@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -169,7 +169,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			if (pGrid)
 			{
 				CGrid* pWndGrid = (CGrid*)pGrid;
-				HWND hWnd = pWndGrid->m_pGridCommonData->m_pQuasar->m_hWnd;
+				HWND hWnd = pWndGrid->m_pGridShareData->m_pQuasar->m_hWnd;
 				BindWebObj* pObj = (BindWebObj*)wParam;
 				CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 				if (m_pHtmlWnd == nullptr)
@@ -366,7 +366,7 @@ void CQuasar::HostPosChanged()
 	if (!_pQuasar->m_bDesignerState)
 		while (pTopGrid && pTopGrid->m_pRootObj != pTopGrid)
 		{
-			_pQuasar = pTopGrid->m_pRootObj->m_pGridCommonData->m_pQuasar;
+			_pQuasar = pTopGrid->m_pRootObj->m_pGridShareData->m_pQuasar;
 			hwnd = _pQuasar->m_hWnd;
 			pTopGrid = _pQuasar->m_pWorkGrid;
 		}
@@ -402,7 +402,7 @@ CGrid* CQuasar::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	m_pWorkGrid = new CComObject<CGrid>;
 	m_pWorkGrid->m_pRootObj = m_pWorkGrid;
 	CGridShareData* pCommonData = new CGridShareData();
-	m_pWorkGrid->m_pGridCommonData = pCommonData;
+	m_pWorkGrid->m_pGridShareData = pCommonData;
 	pCommonData->m_pQuasar = this;
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
 	pCommonData->m_pHubbleParse = _pParse;
@@ -507,7 +507,6 @@ STDMETHODIMP CQuasar::Attach(void)
 		SubclassWindow(m_hHostWnd);
 	}
 	HostPosChanged();
-	//::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	return S_OK;
 }
 
@@ -679,7 +678,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 		if (::GetWindowLong(::GetParent(m_hWnd), GWL_EXSTYLE) & WS_EX_MDICHILD)
 			m_bMDIChild = true;
 	}
-	m_pBindingGrid = m_pWorkGrid->m_pGridCommonData->m_pHostClientView ? m_pWorkGrid->m_pGridCommonData->m_pHostClientView->m_pGrid : nullptr;
+	m_pBindingGrid = m_pWorkGrid->m_pGridShareData->m_pHostClientView ? m_pWorkGrid->m_pGridShareData->m_pHostClientView->m_pGrid : nullptr;
 
 	g_pHubble->m_strCurrentKey = _T("");
 	*ppRetGrid = (IGrid*)m_pWorkGrid;

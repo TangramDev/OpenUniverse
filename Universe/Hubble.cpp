@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -640,7 +640,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hQuasar, CString _strQuasarName, IGa
 		if(pGrid)
 		{
 			CGrid* _pGrid = (CGrid*)pGrid;
-			HWND hWnd = _pGrid->m_pGridCommonData->m_pGalaxyCluster->m_hWnd;
+			HWND hWnd = _pGrid->m_pGridShareData->m_pGalaxyCluster->m_hWnd;
 			
 			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_TANGRAMDATA, 0, 20190214);
 			if (pWnd)
@@ -1471,53 +1471,11 @@ STDMETHODIMP CHubble::CreateHubbleCtrl(BSTR bstrAppID, IHubbleCtrl** ppRetCtrl)
 
 STDMETHODIMP CHubble::get_TangramDoc(LONGLONG AppProxy, LONGLONG nDocID, IHubbleDoc** pVal)
 {
-	//IHubbleAppProxy* pProxy = (IHubbleAppProxy*)AppProxy;
-	//*pVal = pProxy->GetDoc(nDocID);
-
 	return S_OK;
 }
 
 STDMETHODIMP CHubble::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IGrid** ppGrid)
 {
-	if (hParent == 0)
-		return S_FALSE;
-	HWND hPWnd = (HWND)hParent;
-	CString strClsName = OLE2T(bstrWndClsName);
-	strClsName.Trim();
-	if (strClsName == _T(""))
-	{
-		strClsName = _T("MDIClient");
-	}
-	strClsName.MakeLower();
-	HWND hWnd = ::FindWindowEx(hPWnd, NULL, strClsName, NULL);
-	if (hWnd == nullptr)
-		return S_FALSE;
-	strClsName = OLE2T(bstrGalaxyClusterName);
-	strClsName.Trim();
-	if (strClsName == _T(""))
-	{
-		strClsName = _T("default");
-	}
-	CGalaxyCluster* pGalaxyCluster = nullptr;
-	auto it = m_mapWindowPage.find(hPWnd);
-	if (it == m_mapWindowPage.end())
-	{
-		pGalaxyCluster = new CComObject<CGalaxyCluster>;
-		pGalaxyCluster->m_hWnd = hPWnd;
-		m_mapWindowPage[hPWnd] = pGalaxyCluster;
-	}
-	else
-		pGalaxyCluster = (CGalaxyCluster*)it->second;
-	if (pGalaxyCluster != nullptr)
-	{
-		pGalaxyCluster->put_ConfigName(strClsName.AllocSysString());
-		IQuasar* pQuasar = nullptr;
-		pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((LONGLONG)hWnd), CComBSTR(L"default"), &pQuasar);
-		if (pQuasar)
-		{
-			return pQuasar->Observe(CComBSTR(L"default"), CComBSTR(L"<default><layout><grid name=\"Start\" /></layout></default>"), ppGrid);
-		}
-	}
 	return S_FALSE;
 }
 

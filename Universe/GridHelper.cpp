@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -83,10 +83,10 @@ BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 
 	if (m_pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
-		CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
+		CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
 		pQuasar->m_pBindingGrid = m_pGrid;
 
-		m_pGrid->m_pGridCommonData->m_pHostClientView = this;
+		m_pGrid->m_pGridShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pQuasar->m_pGalaxyCluster;
 		HWND hWnd = CreateWindow(L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
@@ -111,7 +111,7 @@ LRESULT CGridHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 	case CLRCtrl:
 	case ActiveX:
 	case TabGrid:
-		m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
+		m_pGrid->m_pGridShareData->m_pQuasar->HostPosChanged();
 		break;
 	default:
 		break;
@@ -130,7 +130,7 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		g_pHubble->m_pActiveHtmlWnd = nullptr;
 	}
 
-	CQuasar* pQuasar = m_pGrid->m_pRootObj->m_pGridCommonData->m_pQuasar;
+	CQuasar* pQuasar = m_pGrid->m_pRootObj->m_pGridShareData->m_pQuasar;
 	if (pQuasar->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
 		HWND hMenuWnd = pQuasar->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
@@ -144,12 +144,12 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
 	BOOL b = pQuasar->m_bDesignerState;
-	if (m_pGrid->m_nViewType == BlankView && m_pGrid->m_strCnnID == _T(""))
+	if (m_pGrid->m_nViewType == BlankView && m_pGrid->m_strObjTypeID == _T(""))
 		b = true;
 
 	if ((m_pGrid->m_nViewType == TabGrid || m_pGrid->m_nViewType == Grid))
 	{
-		if (g_pHubble->m_pQuasar != m_pGrid->m_pGridCommonData->m_pQuasar)
+		if (g_pHubble->m_pQuasar != m_pGrid->m_pGridShareData->m_pQuasar)
 			::SetFocus(m_hWnd);
 		g_pHubble->m_pActiveGrid = m_pGrid;
 		g_pHubble->m_bWinFormActived = false;
@@ -162,18 +162,13 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if ((m_pGrid->m_nViewType != TabGrid && m_pGrid->m_nViewType != Grid))
 		{
-			if (g_pHubble->m_pQuasar != m_pGrid->m_pGridCommonData->m_pQuasar || g_pHubble->m_pActiveGrid != m_pGrid)
+			if (g_pHubble->m_pQuasar != m_pGrid->m_pGridShareData->m_pQuasar || g_pHubble->m_pActiveGrid != m_pGrid)
 				::SetFocus(m_hWnd);
 		}
 	}
 	g_pHubble->m_pActiveGrid = m_pGrid;
 	g_pHubble->m_bWinFormActived = false;
-	if (m_pGrid->m_pParentObj)
-	{
-		if (m_pGrid->m_pParentObj->m_nViewType & TabGrid)
-			m_pGrid->m_pParentObj->m_pVisibleXMLObj = m_pGrid;
-	}
-	g_pHubble->m_pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
+	g_pHubble->m_pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
 
 	CWebPage* pHtmlWnd = g_pHubble->m_pQuasar->m_pWebPageWnd;
 	CString strID = m_pGrid->m_strName;
@@ -236,7 +231,7 @@ BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 {
 	if (m_pGrid->m_nViewType != BlankView)
 		return true;
-	CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
+	CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
 	BOOL bInDesignState = pQuasar->m_bDesignerState;
 	CBitmap bit;
 	RECT rt;
@@ -347,7 +342,7 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	IGrid* pGrid = nullptr;
 	m_pGrid->GetGrid(0, wParam, &pGrid);
 
-	CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
+	CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
 	if (pGrid)
 	{
 		CGrid* _pGrid = (CGrid*)pGrid;
@@ -387,7 +382,7 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 				CGrid* pRetNode = (CGrid*)lRes;
 				if (pRetNode && pRetNode->m_nViewType == Grid)
 				{
-					pRetNode->m_pGridCommonData->m_pQuasar->HostPosChanged();
+					pRetNode->m_pGridShareData->m_pQuasar->HostPosChanged();
 				}
 			}
 		}
@@ -412,11 +407,8 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 		switch (lParam)
 		{
 		case 19920612:
-		case 20200609:
-		case 20200606:
 		case 20200531:
 		case 19631222:
-		case 20191031:
 		case 20180115:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
@@ -433,10 +425,6 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
-	if (lParam == 20191031 || lParam == 20200609|| lParam == 20200606)
-		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
-	if (lParam == 20200208)
-		return 0;
 	return -1;
 }
 
@@ -445,7 +433,7 @@ LRESULT CGridHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	if (m_pGrid->m_nViewType == CLRCtrl)
 		::SetWindowLong(m_hWnd, GWL_STYLE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 
-	//m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
+	//m_pGrid->m_pGridShareData->m_pQuasar->HostPosChanged();
 	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
@@ -537,7 +525,7 @@ void CGridHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 			::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		else if (m_pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 		{
-			m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
+			m_pGrid->m_pGridShareData->m_pQuasar->HostPosChanged();
 		}
 	}
 	if (m_pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pGrid->m_pDisp == NULL) && m_pGrid != m_pGrid->m_pRootObj)

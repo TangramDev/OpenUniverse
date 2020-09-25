@@ -128,16 +128,16 @@ CTangramXmlParse* CTangramXmlParse::AddNode(CTangramXmlParse* pParse, CString st
 	return NULL;
 }
 
-CTangramXmlParse* CTangramXmlParse::AddTabNode(CString strName, CString strCnnID,CString strObjID, CString strStyle, int nPages)
+CTangramXmlParse* CTangramXmlParse::AddTabNode(CString strName, CString strObjTypeID,CString strObjID, CString strStyle, int nPages)
 {
 	strName.Trim();
 	if (strName == _T(""))
 		return NULL;
-	strCnnID.Trim().MakeLower();
+	strObjTypeID.Trim().MakeLower();
 	strStyle.Trim().MakeLower();
-	if (strCnnID == _T(""))
-		strCnnID = _T("tabbedwnd");
-	if (strCnnID == _T("tabbedwnd"))
+	if (strObjTypeID == _T(""))
+		strObjTypeID = _T("tabbedwnd");
+	if (strObjTypeID == _T("tabbedwnd"))
 	{
 		if (strStyle == _T(""))
 			strStyle = _T("19");
@@ -145,7 +145,7 @@ CTangramXmlParse* CTangramXmlParse::AddTabNode(CString strName, CString strCnnID
 	CTangramXmlParse* pNode = AddNode(_T("grid"));
 	pNode->put_attr(_T("gridtype"), strObjID);
 	pNode->put_attr(_T("id"), strName);
-	pNode->put_attr(_T("objid"), strCnnID);
+	pNode->put_attr(_T("objid"), strObjTypeID);
 	pNode->put_attr(_T("tabstyle"), strStyle);
 	if (nPages)
 	{

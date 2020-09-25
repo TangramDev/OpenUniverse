@@ -54,13 +54,11 @@
 #define APP_MDI					1992
 #define APP_MDT					1963
 
-#define WM_TANGRAM_WEBNODEDOCCOMPLETE	(WM_USER + 0x00004001)
 #define WM_OPENDOCUMENT					(WM_USER + 0x00004002)
 #define WM_SPLITTERREPOSITION			(WM_USER + 0x00004003)
 #define WM_ECLIPSEWORKBENCHCREATED		(WM_USER + 0x00004004)
 #define WM_TABCHANGE					(WM_USER + 0x00004005)
 #define WM_COSMOSMSG					(WM_USER + 0x00004006)
-#define WM_NAVIXTML						(WM_USER + 0x00004007)
 #define WM_OFFICEOBJECTCREATED			(WM_USER + 0x00004008)
 #define WM_MDICHILDMIN					(WM_USER + 0x00004009)
 #define WM_TANGRAMAPPINIT				(WM_USER + 0x0000400a)
@@ -137,8 +135,8 @@
 
 #define TGM_NAME				_T("name")
 #define TGM_CAPTION				_T("caption")
-#define TGM_NODE_TYPE			_T("gridtype")
-#define TGM_CNN_ID				_T("objid")
+#define TGM_GRID_TYPE			_T("gridtype")
+#define TGM_OBJ_ID				_T("objid")
 #define TGM_HEIGHT				_T("height")
 #define TGM_WIDTH				_T("width")
 #define TGM_STYLE				_T("style")
@@ -746,7 +744,7 @@ namespace CommonUniverse {
 		virtual void AttachGrid(void* pGridEvents) {}
 		virtual void HubbleInit() {}
 		virtual IHubbleDoc* ConnectHubbleDoc(IHubbleAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hQuasar, LPCTSTR strDocType) { return nullptr; }
-		virtual CString GetNewLayoutNodeName(BSTR strCnnID, IGrid* pDesignNode) { return _T(""); }
+		virtual CString GetNewLayoutNodeName(BSTR strObjTypeID, IGrid* pDesignNode) { return _T(""); }
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
 		virtual IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
 		virtual bool IsMDIClientQuasarNode(IGrid*) { return false; }

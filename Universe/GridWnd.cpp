@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -260,7 +260,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 		break;
 		case 2:
 		{
-			m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
+			m_pGrid->m_pGridShareData->m_pQuasar->HostPosChanged();
 			return 0;
 		}
 		break;
@@ -290,8 +290,8 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	CGrid* pGrid = (CGrid*)_pGrid;
 	if (pGrid && pOldNode)
 	{
-		CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
-		pGrid->m_pGridCommonData->m_pQuasar->m_bDesignerState = true;
+		CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
+		pGrid->m_pGridShareData->m_pQuasar->m_bDesignerState = true;
 		CGridVector::iterator it;
 		it = find(m_pGrid->m_vChildNodes.begin(), m_pGrid->m_vChildNodes.end(), pOldNode);
 
@@ -321,7 +321,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 LRESULT CGridWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
 	//RecalcLayout();
-	//m_pGrid->m_pGridCommonData->m_pQuasar->HostPosChanged();
+	//m_pGrid->m_pGridShareData->m_pQuasar->HostPosChanged();
 	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	return -1;
 }
@@ -347,8 +347,8 @@ void CGridWnd::StartTracking(int ht)
 	if (ht == noHit)
 		return;
 
-	CGrid* pGrid = m_pGrid->m_pGridCommonData->m_pQuasar->m_pWorkGrid;
-	if (pGrid && pGrid->m_pGridCommonData->m_pHostClientView)
+	CGrid* pGrid = m_pGrid->m_pGridShareData->m_pQuasar->m_pWorkGrid;
+	if (pGrid && pGrid->m_pGridShareData->m_pHostClientView)
 	{
 		pGrid->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
 	}
@@ -405,9 +405,9 @@ void CGridWnd::StopTracking(BOOL bAccept)
 {
 	if (!m_bTracking)
 		return;
-	CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
+	CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
 	CGrid* pGrid = pQuasar->m_pWorkGrid;
-	if (pGrid && pGrid->m_pGridCommonData->m_pHostClientView)
+	if (pGrid && pGrid->m_pGridShareData->m_pHostClientView)
 	{
 		pGrid->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
 		::InvalidateRect(pQuasar->m_hWnd, NULL, false);
@@ -425,8 +425,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			pWebWnd = pQuasar->m_pWebPageWnd;
 		}
-		else if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar->m_pWebPageWnd)
-			pWebWnd = g_pHubble->m_pDesignGrid->m_pGridCommonData->m_pQuasar->m_pWebPageWnd;
+		else if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar->m_pWebPageWnd)
+			pWebWnd = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar->m_pWebPageWnd;
 		pQuasar->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
@@ -437,7 +437,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 				CGrid* pRetNode = (CGrid*)lRes;
 				if (pRetNode && pRetNode->m_nViewType == Grid)
 				{
-					pRetNode->m_pGridCommonData->m_pQuasar->HostPosChanged();
+					pRetNode->m_pGridShareData->m_pQuasar->HostPosChanged();
 				}
 			}
 		}
@@ -878,7 +878,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		m_bCreated = true;
 		CGrid* pHostNode = nullptr;
 		CGrid* pParent = nullptr;
-		CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
+		CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
 		bool bHasHostView = false;
 		if (pQuasar->m_pBindingGrid)
 		{
@@ -1121,13 +1121,7 @@ int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		g_pHubble->m_pActiveHtmlWnd = nullptr;
 	}
 
-	CQuasar* pQuasar = m_pGrid->m_pGridCommonData->m_pQuasar;
-
-	if (m_pGrid->m_pParentObj)
-	{
-		if (m_pGrid->m_pParentObj->m_nViewType & TabGrid)
-			m_pGrid->m_pParentObj->m_pVisibleXMLObj = m_pGrid;
-	}
+	CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
 
 	if (pQuasar->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{

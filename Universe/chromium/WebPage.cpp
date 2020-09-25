@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -98,11 +98,11 @@ namespace Web {
 					pSession->InsertLong(_T("cols"), pGrid->m_nCols);
 					pSession->InsertLong(_T("row"), pGrid->m_nRow);
 					pSession->InsertLong(_T("col"), pGrid->m_nCol);
-					pSession->InsertString(_T("objtype"), pGrid->m_strCnnID);
+					pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
 					pSession->Insertint64(_T("gridobjhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
-					pSession->Insertint64(_T("Quasarhandle"), (__int64)pGrid->m_pGridCommonData->m_pQuasar->m_hWnd);
+					pSession->Insertint64(_T("Quasarhandle"), (__int64)pGrid->m_pGridShareData->m_pQuasar->m_hWnd);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
 					pSession->InsertString(_T("objID"), _T("wndnode"));

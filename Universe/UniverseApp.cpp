@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -905,22 +905,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						::PostQuitMessage(0);
 					}
 				}
-			}
-			break;
-			case WM_NAVIXTML:
-			{
-				RECT rc;
-				HWND hWnd = ::GetParent(lpMsg->hwnd);
-				::GetClientRect(hWnd, &rc);
-				::SetWindowPos(lpMsg->hwnd, HWND_BOTTOM, rc.left, rc.top, rc.right + 1, rc.bottom, SWP_NOZORDER | SWP_FRAMECHANGED);
-				::SetWindowPos(lpMsg->hwnd, HWND_BOTTOM, rc.left, rc.top, rc.right, rc.bottom, SWP_NOZORDER | SWP_FRAMECHANGED);
-			}
-			break;
-			case WM_TANGRAM_WEBNODEDOCCOMPLETE:
-			{
-				auto it = g_pHubble->m_mapWindowPage.find((HWND)lpMsg->wParam);
-				if (it != g_pHubble->m_mapWindowPage.end())
-					((CGalaxyCluster*)it->second)->OnNodeDocComplete(lpMsg->wParam);
 			}
 			break;
 			case WM_CHROMEDEVTOOLMSG:

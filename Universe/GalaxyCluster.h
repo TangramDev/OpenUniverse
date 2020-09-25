@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -51,8 +51,6 @@ public:
 	void Lock(){}
 	void Unlock(){}
 	void BeforeDestory();
-
-	void OnNodeDocComplete(WPARAM);
 
 protected:
 	ULONG InternalAddRef(){ return 1; }
