@@ -461,7 +461,7 @@ void CGridWnd::PostNcDestroy()
 // Generic routine:
 //  for X direction: pInfo = m_pColInfo, nMax = m_nMaxCols, nSize = cx
 //  for Y direction: pInfo = m_pRowInfo, nMax = m_nMaxRows, nSize = cy
-void CGridWnd::TangramLayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CGrid* pHostNode, bool bCol)
+void CGridWnd::_LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CGrid* pHostNode, bool bCol)
 {
 	ASSERT(pInfoArray != NULL);
 	ASSERT(nMax > 0);
@@ -595,7 +595,7 @@ void CGridWnd::TangramLayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nM
 // repositions client area of specified window
 // assumes everything has WS_BORDER or is inset like it does
 //  (includes scroll bars)
-void CGridWnd::TangramDeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout, CWnd* pWnd, int x, int y, int cx, int cy, BOOL bScrollBar)
+void CGridWnd::_DeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout, CWnd* pWnd, int x, int y, int cx, int cy, BOOL bScrollBar)
 {
 	ASSERT(pWnd != NULL);
 	ASSERT(pWnd->m_hWnd != NULL);
@@ -683,8 +683,8 @@ void CGridWnd::_RecalcLayout()
 	GetInsideRect(rectInside);
 
 	// layout columns (restrict to possible sizes)
-	TangramLayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap, m_pHostGrid, true);
-	TangramLayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap, m_pHostGrid, false);
+	_LayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap, m_pHostGrid, true);
+	_LayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap, m_pHostGrid, false);
 
 	// give the hint for the maximum number of HWNDs
 	AFX_SIZEPARENTPARAMS layout;
@@ -702,7 +702,7 @@ void CGridWnd::_RecalcLayout()
 				int cyRow = m_pRowInfo[row].nCurSize;
 				CWnd* pWnd = GetPane(row, col);
 				if (pWnd)
-					TangramDeferClientPos(&layout, pWnd, x, y, cxCol, cyRow, FALSE);
+					_DeferClientPos(&layout, pWnd, x, y, cxCol, cyRow, FALSE);
 				y += cyRow + m_cySplitterGap;
 			}
 			x += cxCol + m_cxSplitterGap;

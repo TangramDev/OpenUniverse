@@ -533,7 +533,7 @@ STDMETHODIMP CGalaxyCluster::put_xtml(BSTR strKey, BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR FrameName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
+STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR QuasarName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 {
 	if (g_pHubble->m_pCLRProxy)
 	{
@@ -545,17 +545,17 @@ STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR Fram
 			h = g_pHubble->m_pCLRProxy->IsQuasar(pDisp);
 			if (h)
 			{
-				CString strQuasarName = OLE2T(FrameName);
+				CString strQuasarName = OLE2T(QuasarName);
 				CString strKey = OLE2T(bstrKey);
 				if (strQuasarName == _T(""))
-					FrameName = CtrlName;
+					QuasarName = CtrlName;
 				if (strKey == _T(""))
 					bstrKey = CComBSTR(L"Default");
 				auto it = m_mapQuasar.find((HWND)h);
 				if (it == m_mapQuasar.end())
 				{
 					IQuasar* pQuasar = nullptr;
-					CreateQuasar(CComVariant(0), CComVariant((long)h), FrameName, &pQuasar);
+					CreateQuasar(CComVariant(0), CComVariant((long)h), QuasarName, &pQuasar);
 					return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
 				}
 				else
@@ -703,18 +703,6 @@ STDMETHODIMP CGalaxyCluster::ConnectHubbleCtrl(IHubbleCtrl* eventSource)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_NewVersion(VARIANT_BOOL* bNewVersion)
-{
-	*bNewVersion = m_bNewVersion;
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::put_NewVersion(VARIANT_BOOL bNewVersion)
-{
-	m_bNewVersion = bNewVersion;
-	return S_OK;
-}
-
 
 STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 {
@@ -726,7 +714,7 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::CreateQuasarWithDefaultNode(ULONGLONG hFrameWnd, BSTR bstrQuasarName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid)
+STDMETHODIMP CGalaxyCluster::CreateQuasarWithDefaultNode(ULONGLONG hQuasarWnd, BSTR bstrQuasarName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid)
 {
 	return S_OK;
 }

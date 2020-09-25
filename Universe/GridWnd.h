@@ -69,6 +69,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	void _RecalcLayout();
-	void TangramLayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CGrid* pHostNode, bool bCol);
-	void TangramDeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout, CWnd* pWnd, int x, int y, int cx, int cy, BOOL bScrollBar);
+	void _LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CGrid* pHostNode, bool bCol);
+	void _DeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout, CWnd* pWnd, int x, int y, int cx, int cy, BOOL bScrollBar);
 };

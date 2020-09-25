@@ -988,13 +988,6 @@ STDMETHODIMP CHubble::put_AppExtender(BSTR bstrKey, IDispatch* newVal)
 		}
 		if (newVal != nullptr)
 		{
-			if (strName.CompareNoCase(_T("HostViewNode")) == 0)
-			{
-				CComQIPtr<IGrid> pGrid(newVal);
-				if (pGrid)
-					m_pHostViewDesignerNode = pGrid.Detach();
-				return S_OK;
-			}
 			m_mapObjDic[strName] = newVal;
 			newVal->AddRef();
 			void* pDisp = nullptr;

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0								*
+*					Open Universe - version 1.0.0.1								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -64,7 +64,7 @@ public:
 	CString 						m_strURL;
 	CString							m_strKey;
 	CString							m_strName;
-	CString 						m_strCnnID;
+	CString 						m_strObjTypeID;
 	CString 						m_strCaption;
 
 	CString							m_strLastIPCMsgID = _T("");
@@ -79,13 +79,11 @@ public:
 	IDispatch*						m_pDisp;
 	CGrid* 							m_pRootObj;
 	CGrid* 							m_pParentObj;
-	CGrid*							m_pVisibleXMLObj;
 	CWinForm*						m_pParentWinFormWnd;
 	CTangramXmlParse*				m_pHostParse;
-	CTangramXmlParse* 				m_pDocXmlParseNode;
 	CSession*						m_pCloudSession = nullptr;
 	IHubbleWindow*					m_pWindow;
-	CGridShareData*				m_pGridCommonData;
+	CGridShareData*					m_pGridShareData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CQuasar*						m_pHostQuasar;
