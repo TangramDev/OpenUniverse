@@ -1748,11 +1748,11 @@ IBrowser* CHubble::GetHostBrowser(HWND hNodeWnd)
 		hr = pWndGrid->get_Quasar(&pQuasar);
 		if (hr == S_OK && pQuasar != nullptr)
 		{
-			IBrowser* pChromeWebBrowser = nullptr;
-			hr = pQuasar->get_HostBrowser(&pChromeWebBrowser);
-			if (hr == S_OK && pChromeWebBrowser != nullptr)
+			IBrowser* pBrowser = nullptr;
+			hr = pQuasar->get_HostBrowser(&pBrowser);
+			if (hr == S_OK && pBrowser != nullptr)
 			{
-				return pChromeWebBrowser;
+				return pBrowser;
 			}
 		}
 	}

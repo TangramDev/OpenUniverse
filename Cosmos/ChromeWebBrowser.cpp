@@ -97,9 +97,9 @@ namespace Cosmos
 			return m_pWormhole->SendMessage();
 	}
 
-	Browser::Browser(IBrowser* pChromeWebBrowser)
+	Browser::Browser(IBrowser* pBrowser)
 	{
-		m_pWebBrowser = pChromeWebBrowser;
+		m_pWebBrowser = pBrowser;
 	}
 
 	void Browser::AddURLs(String^ urls)

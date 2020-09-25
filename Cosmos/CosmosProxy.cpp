@@ -239,13 +239,13 @@ bool CCosmosProxy::IsSupportDesigner()
 	return true;
 }
 
-void CCosmosProxy::OnDestroyChromeBrowser(IBrowser* pChromeWebBrowser)
+void CCosmosProxy::OnDestroyChromeBrowser(IBrowser* pBrowser)
 {
-	auto it = m_mapChromeWebBrowser.find(pChromeWebBrowser);
-	if (it != theAppProxy.m_mapChromeWebBrowser.end())
+	auto it = m_mapWebBrowser.find(pBrowser);
+	if (it != theAppProxy.m_mapWebBrowser.end())
 	{
 		//it->second->m_pWebBrowser = nullptr;
-		theAppProxy.m_mapChromeWebBrowser.erase(it);
+		theAppProxy.m_mapWebBrowser.erase(it);
 	}
 };
 

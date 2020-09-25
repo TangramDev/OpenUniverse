@@ -45,7 +45,7 @@ namespace Cosmos
 	public ref class Browser
 	{
 	public:
-		Browser(IBrowser* pChromeWebBrowser);
+		Browser(IBrowser* pBrowser);
 		void AddURLs(String^ urls);
 		void OpenURL(String^ url, Disposition disposition, String^ key, String^ xml);
 	private:

@@ -313,8 +313,8 @@ namespace Cosmos
             theApp.m_pHubble->get_HostChromeBrowserWnd(&pWebBrowser);
             if (pWebBrowser)
             {
-                auto it = theAppProxy.m_mapChromeWebBrowser.find(pWebBrowser);
-                if (it != theAppProxy.m_mapChromeWebBrowser.end())
+                auto it = theAppProxy.m_mapWebBrowser.find(pWebBrowser);
+                if (it != theAppProxy.m_mapWebBrowser.end())
                     return it->second;
             }
         }
@@ -424,17 +424,17 @@ namespace Cosmos
 
     //Browser^ Hubble::ActiveBrowser()
     //{
-    //    IBrowser* pChromeWebBrowser = nullptr;
-    //    theApp.m_pHubble->get_ActiveChromeBrowserWnd(&pChromeWebBrowser);
-    //    if (pChromeWebBrowser)
+    //    IBrowser* pBrowser = nullptr;
+    //    theApp.m_pHubble->get_ActiveChromeBrowserWnd(&pBrowser);
+    //    if (pBrowser)
     //    {
-    //        auto it = theAppProxy.m_mapChromeWebBrowser.find(pChromeWebBrowser);
-    //        if (it != theAppProxy.m_mapChromeWebBrowser.end())
+    //        auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
+    //        if (it != theAppProxy.m_mapWebBrowser.end())
     //            return it->second;
     //        else
     //        {
-    //            Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
-    //            theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
+    //            Browser^ pBrowser = gcnew Browser(pBrowser);
+    //            theAppProxy.m_mapWebBrowser[pBrowser] = pBrowser;
     //            return pBrowser;
     //        }
     //    }
@@ -485,19 +485,19 @@ namespace Cosmos
     //    {
     //        return nullptr;
     //    }
-    //    IBrowser* pChromeWebBrowser = nullptr;
-    //    pQuasar->get_HostBrowser(&pChromeWebBrowser);
-    //    if (pChromeWebBrowser == nullptr)
+    //    IBrowser* pBrowser = nullptr;
+    //    pQuasar->get_HostBrowser(&pBrowser);
+    //    if (pBrowser == nullptr)
     //    {
     //        return nullptr;
     //    }
-    //    auto it = theAppProxy.m_mapChromeWebBrowser.find(pChromeWebBrowser);
-    //    if (it != theAppProxy.m_mapChromeWebBrowser.end())
+    //    auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
+    //    if (it != theAppProxy.m_mapWebBrowser.end())
     //        return it->second;
     //    else
     //    {
-    //        Browser^ pBrowser = gcnew Browser(pChromeWebBrowser);
-    //        theAppProxy.m_mapChromeWebBrowser[pChromeWebBrowser] = pBrowser;
+    //        Browser^ pBrowser = gcnew Browser(pBrowser);
+    //        theAppProxy.m_mapWebBrowser[pBrowser] = pBrowser;
     //        return pBrowser;
     //    }
     //}
@@ -915,8 +915,8 @@ namespace Cosmos
             strUrls = strUrls->Replace(L"||", L"|");
             HWND hWnd = theApp.m_pHubbleImpl->m_pBrowserFactory->CreateBrowser(hPWnd, strUrls);
             IBrowser* pBrowser = (IBrowser*)::SendMessage(hWnd, WM_COSMOSMSG, 20190527, 0);
-            auto it = theAppProxy.m_mapChromeWebBrowser.find(pBrowser);
-            if (it != theAppProxy.m_mapChromeWebBrowser.end())
+            auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
+            if (it != theAppProxy.m_mapWebBrowser.end())
                 return it->second;
             else
                 return gcnew Browser(pBrowser);
