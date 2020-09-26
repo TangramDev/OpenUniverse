@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.2								*
+*					Open Universe - version 1.0.0.3								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -19,9 +19,9 @@
 #include "../Quasar.h"
 #include "../GridHelper.h"
 #include "../GridWnd.h"
-#include "WebPage.h"
-#include "BrowserWnd.h"
 #include "../Markup.h" 
+#include "WebPage.h"
+#include "Browser.h"
 
 namespace Web {
 	CWebPage::CWebPage() {

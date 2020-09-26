@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.2								*
+*					Open Universe - version 1.0.0.3								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -24,7 +24,7 @@
 #include "GridWnd.h"
 #include "Wormhole.h"
 #include "universe.c"
-#include "chromium/BrowserWnd.h"
+#include "chromium/Browser.h"
 #include "chromium/WebPage.h"
 
 CGrid::CGrid()
@@ -227,29 +227,7 @@ CGrid::~CGrid()
 
 CString CGrid::GetNames()
 {
-	CString strRet = _T("");
-	CGrid* pGrid = this;
-	pGrid = pGrid->m_pRootObj;
-	strRet += pGrid->m_strName;
-	strRet += _T(",");
-	strRet += _GetNames(pGrid);
-	return strRet;
-}
-
-CString CGrid::_GetNames(CGrid * pGrid)
-{
-	CString strRet = _T("");
-	if (pGrid)
-	{
-		for (auto it : pGrid->m_vChildNodes)
-		{
-			CGrid* pChildNode = it;
-			strRet += pChildNode->m_strName;
-			strRet += _T(",");
-			strRet += _GetNames(pChildNode);
-		}
-	}
-	return strRet;
+	return _T("");
 }
 
 CWebPage* CGrid::GetHtmlWnd()
@@ -519,27 +497,27 @@ STDMETHODIMP CGrid::get_Name(BSTR * pVal)
 
 STDMETHODIMP CGrid::put_Name(BSTR bstrNewName)
 {
-	CString strName = OLE2T(bstrNewName);
-	strName.Trim();
-	strName.Replace(_T(","), _T(""));
-	if (m_pHostParse != NULL)
-	{
-		CString _strName = _T(",");
-		_strName += GetNames();
-		CString _strName2 = _T(",");
-		_strName2 += strName;
-		_strName2 += _T(",");
-		int nPos = _strName.Find(_strName2);
-		if (nPos == -1)
-		{
-			m_pHostParse->put_attr(L"id", strName);
-			m_strName = strName;
-		}
-		else
-		{
-			::MessageBox(NULL, _T("Modify name failed!"), _T("Tangram"), MB_OK);
-		}
-	}
+	//CString strName = OLE2T(bstrNewName);
+	//strName.Trim();
+	//strName.Replace(_T(","), _T(""));
+	//if (m_pHostParse != NULL)
+	//{
+	//	CString _strName = _T(",");
+	//	_strName += GetNames();
+	//	CString _strName2 = _T(",");
+	//	_strName2 += strName;
+	//	_strName2 += _T(",");
+	//	int nPos = _strName.Find(_strName2);
+	//	if (nPos == -1)
+	//	{
+	//		m_pHostParse->put_attr(L"id", strName);
+	//		m_strName = strName;
+	//	}
+	//	else
+	//	{
+	//		::MessageBox(NULL, _T("Modify name failed!"), _T("Tangram"), MB_OK);
+	//	}
+	//}
 	return S_OK;
 }
 

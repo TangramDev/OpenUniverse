@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.2								*
+*					Open Universe - version 1.0.0.3								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -27,7 +27,7 @@
 
 #include "Psapi.h"
 
-#include "chromium\BrowserWnd.h"
+#include "chromium\Browser.h"
 #include "chromium\WebPage.h"
 
 // Description  : the unique App object
