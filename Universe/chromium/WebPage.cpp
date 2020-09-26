@@ -192,7 +192,7 @@ namespace Web {
 			HWND hWnd = (HWND)lParam;
 			if (::IsWindow(hWnd))
 			{
-				CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_TANGRAMDATA, 0, 20190214);
+				CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 				if (pWnd)
 				{
 					m_mapSubWinForm[hWnd] = pWnd;
@@ -583,7 +583,7 @@ namespace Web {
 					LoadDocument2Viewport(strParam1, strParam3);
 					return;
 				}
-				LRESULT lRes = ::SendMessage(hWndSource, WM_TANGRAMDATA, 0, 20190214);
+				LRESULT lRes = ::SendMessage(hWndSource, WM_HUBBLE_DATA, 0, 20190214);
 				if (lRes)
 				{
 					LoadDocument2Viewport(strParam2, strParam3);
@@ -668,7 +668,7 @@ namespace Web {
 		//		HWND hWnd = ::GetParent(::GetParent(m_hWnd));
 		//		if (::IsWindow(hWnd))
 		//		{
-		//			LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+		//			LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 		//			HWND _hWnd = (HWND)hWnd;
 		//			if (lRes)
 		//				m_pParentGrid = (CGrid*)lRes;
@@ -916,7 +916,7 @@ namespace Web {
 							HWND hwnd = g_pHubble->m_pCLRProxy->GetCtrlHandle(pDisp);
 							if (hwnd)
 							{
-								CWinForm* pForm = (CWinForm*)::SendMessage(hwnd, WM_TANGRAMDATA, 0, 20190214);
+								CWinForm* pForm = (CWinForm*)::SendMessage(hwnd, WM_HUBBLE_DATA, 0, 20190214);
 								if (pForm)
 								{
 									pForm->m_pOwnerHtmlWnd = this;
@@ -1007,7 +1007,7 @@ namespace Web {
 	{
 		if (hwnd)
 		{
-			LRESULT l = ::SendMessage(hwnd, WM_TANGRAMDATA, 0, 20190214);
+			LRESULT l = ::SendMessage(hwnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (l == 0)
 			{
 				CWinForm* pWnd = new CWinForm();
@@ -1067,7 +1067,7 @@ namespace Web {
 			CString strXml = pSession->GetString(_T("openxml"));
 			//IGrid* pGrid = nullptr;
 			HWND hWnd = (HWND)pSession->Getint64(_T("gridobjhandle"));
-			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
 				IGrid* _pGrid = nullptr;
@@ -1089,7 +1089,7 @@ namespace Web {
 			int nRow = pSession->GetLong(_T("openrow"));
 			IGrid* pSplitterNode = nullptr;
 			HWND hWnd = (HWND)pSession->Getint64(_T("gridobjhandle"));
-			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
 				IGrid* pGrid = nullptr;

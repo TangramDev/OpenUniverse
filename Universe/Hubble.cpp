@@ -29,7 +29,7 @@
 #include "Quasar.h"
 #include "GridWnd.h"
 #include "TangramJavaHelper.h"
-#include "TangramCoreEvents.h"
+#include "HubbleEvents.h"
 #include "Wormhole.h"
 
 #include <shellapi.h>
@@ -531,7 +531,7 @@ void CHubble::ProcessMsg(LPMSG lpMsg)
 					CWebPage* pWnd = pBrowserWnd->m_pVisibleWebWnd;
 					if (pWnd && lpMsg->hwnd != pWnd->m_hWnd)
 					{
-						CGrid* pRetNode = (CGrid*)::SendMessage(lpMsg->hwnd, WM_TANGRAMGETNODE, 0, 0);
+						CGrid* pRetNode = (CGrid*)::SendMessage(lpMsg->hwnd, WM_HUBBLE_GETNODE, 0, 0);
 						switch (lpMsg->message)
 						{
 							//case WM_POINTERDOWN:
@@ -642,7 +642,7 @@ IQuasar* CHubble::ConnectGalaxyCluster(HWND hQuasar, CString _strQuasarName, IGa
 			CGrid* _pGrid = (CGrid*)pGrid;
 			HWND hWnd = _pGrid->m_pGridShareData->m_pGalaxyCluster->m_hWnd;
 			
-			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_TANGRAMDATA, 0, 20190214);
+			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (pWnd)
 			{
 				//if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
@@ -1386,7 +1386,7 @@ STDMETHODIMP CHubble::GetGridFromHandle(LONGLONG hWnd, IGrid** ppRetGrid)
 	HWND _hWnd = (HWND)hWnd;
 	if (::IsWindow(_hWnd))
 	{
-		LRESULT lRes = ::SendMessage(_hWnd, WM_TANGRAMGETNODE, 0, 0);
+		LRESULT lRes = ::SendMessage(_hWnd, WM_HUBBLE_GETNODE, 0, 0);
 		if (lRes)
 		{
 			CGrid* pGrid = (CGrid*)lRes;
@@ -1729,7 +1729,7 @@ void CHubble::ChromeChildProcessCreated(
 void CHubble::OnSubBrowserWndCreated(HWND hParent, HWND hBrowser)
 {
 	m_hParent = NULL;
-	LRESULT lRes = ::SendMessage(::GetParent(hBrowser), WM_TANGRAMGETNODE, 0, (LPARAM)hBrowser);
+	LRESULT lRes = ::SendMessage(::GetParent(hBrowser), WM_HUBBLE_GETNODE, 0, (LPARAM)hBrowser);
 }
 
 CString CHubble::GetProcessPath(const char* _ver, CString process_type)

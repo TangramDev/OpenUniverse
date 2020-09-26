@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.3								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -14,7 +14,7 @@
 // grid.h : Declaration of the CGrid
 
 #include "GalaxyCluster.h"
-#include "chromium/BrowserWnd.h"
+#include "chromium/Browser.h"
 
 #pragma once
 
@@ -212,8 +212,6 @@ public:
 	HWND CreateView(HWND hParentWnd, CString strTag);
 
 private:
-	CString _GetNames(CGrid* pGrid);
-	void _get_Objects(CGrid* pGrid, UINT32& nType, CGridCollection* pGridColletion);
 	int _getNodes(CGrid* pGrid, CString& strName, CGrid**ppRetGrid, CGridCollection* pGrids);
 };
 

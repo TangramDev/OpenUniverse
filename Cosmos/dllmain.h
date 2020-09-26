@@ -13,7 +13,7 @@
 
 // dllmain.h : Declaration of module class.
 
-#include "TangramCoreEvents.h"
+#include "HubbleEvents.h"
 #include <cstring>
 #include <iostream>
 

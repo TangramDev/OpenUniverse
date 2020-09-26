@@ -16,7 +16,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "dllmain.h"
-#include "TangramCoreEvents.cpp"
+#include "HubbleEvents.cpp"
 #include <shellapi.h>
 #include <shlobj.h>
 

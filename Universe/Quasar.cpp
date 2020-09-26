@@ -633,7 +633,7 @@ STDMETHODIMP CQuasar::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 	{
 		bool bAtTemplate = false;
 
-		LRESULT l = ::SendMessage(m_pGalaxyCluster->m_hWnd, WM_TANGRAMGETXML, (WPARAM)LPCTSTR(m_strQuasarName), (WPARAM)LPCTSTR(m_strCurrentKey));
+		LRESULT l = ::SendMessage(m_pGalaxyCluster->m_hWnd, WM_HUBBLE_GETXML, (WPARAM)LPCTSTR(m_strQuasarName), (WPARAM)LPCTSTR(m_strCurrentKey));
 		if (l)
 		{
 			if (m_strCurrentXml != _T(""))

@@ -53,7 +53,7 @@ BEGIN_MESSAGE_MAP(CGridHelper, CWnd)
 	ON_WM_WINDOWPOSCHANGED()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
 	ON_MESSAGE(WM_COSMOSMSG, OnHubbleMsg)
-	ON_MESSAGE(WM_TANGRAMGETNODE, OnGetHubbleObj)
+	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetHubbleObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
 END_MESSAGE_MAP()
@@ -359,8 +359,8 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 		if (nOldPage != wParam)
 		{
-			::PostMessage(pQuasar->m_hWnd, WM_TANGRAMACTIVEPAGE, wParam, lParam);
-			::SendMessage(_pGrid->m_pHostWnd->m_hWnd, WM_TANGRAMACTIVEPAGE, wParam, lParam);
+			::PostMessage(pQuasar->m_hWnd, WM_HUBBLE_ACTIVEPAGE, wParam, lParam);
+			::SendMessage(_pGrid->m_pHostWnd->m_hWnd, WM_HUBBLE_ACTIVEPAGE, wParam, lParam);
 		}
 		if (m_pGrid->m_nViewType == TabGrid)
 		{
@@ -376,7 +376,7 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
 		{
-			LRESULT lRes = ::SendMessage(h, WM_TANGRAMGETNODE, 0, 0);
+			LRESULT lRes = ::SendMessage(h, WM_HUBBLE_GETNODE, 0, 0);
 			if (lRes)
 			{
 				CGrid* pRetNode = (CGrid*)lRes;
@@ -453,7 +453,7 @@ LRESULT CGridHelper::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
 		}
 		return (LRESULT)m_pGrid;
 	}
-	return CWnd::DefWindowProc(WM_TANGRAMGETNODE, wParam, lParam);;
+	return CWnd::DefWindowProc(WM_HUBBLE_GETNODE, wParam, lParam);;
 }
 
 LRESULT CGridHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)

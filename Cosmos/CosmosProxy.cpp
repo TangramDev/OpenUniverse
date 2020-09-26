@@ -470,12 +470,12 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 		HWND hWnd = (HWND)pForm->Handle.ToPointer();
 		if (m_strCurrentWinFormTemplate != _T(""))
 		{
-			::SendMessage(hWnd, WM_TANGRAMDATA, (WPARAM)m_strCurrentWinFormTemplate.GetBuffer(), 3);
+			::SendMessage(hWnd, WM_HUBBLE_DATA, (WPARAM)m_strCurrentWinFormTemplate.GetBuffer(), 3);
 			m_strCurrentWinFormTemplate = _T("");
 		}
 		else if (theApp.m_pHubbleImpl->m_strAppCurrentFormTemplatePath != _T(""))
 		{
-			::SendMessage(hWnd, WM_TANGRAMDATA, (WPARAM)theApp.m_pHubbleImpl->m_strAppCurrentFormTemplatePath.GetBuffer(), 3);
+			::SendMessage(hWnd, WM_HUBBLE_DATA, (WPARAM)theApp.m_pHubbleImpl->m_strAppCurrentFormTemplatePath.GetBuffer(), 3);
 		}
 		theApp.m_pHubbleImpl->m_strAppCurrentFormTemplatePath = _T("");
 		Control^ pActiveCtrl = nullptr;
@@ -605,7 +605,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 											pObj->m_strBindObjName = strWebName;
 											pObj->m_strBindData = pChildParse->attr(_T("bindevent"), _T(""));
 											HWND hForm = (HWND)pForm->Handle.ToPointer();
-											::PostMessage(hForm, WM_TANGRAMDATA, (WPARAM)pObj, 5);
+											::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
 										}
 										pChildParse2 = pChildParse->GetChild(_T("default"));
 									}
@@ -765,7 +765,7 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								__int64 nHandle = 0;
 								_pGrid->get_Handle(&nHandle);
 								HWND hWnd = (HWND)nHandle;
-								::PostMessage(theApp.m_pHubbleImpl->m_hHubbleWnd, WM_TANGRAMDATA, (WPARAM)pObj, (LPARAM)20200204);
+								::PostMessage(theApp.m_pHubbleImpl->m_hHubbleWnd, WM_HUBBLE_DATA, (WPARAM)pObj, (LPARAM)20200204);
 							}
 
 							pChildParse2 = pChildParse->GetChild(_T("default"));

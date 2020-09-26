@@ -110,7 +110,7 @@ BEGIN_MESSAGE_MAP(CGridWnd, CSplitterWnd)
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEACTIVATE()
 	ON_MESSAGE(WM_TABCHANGE, OnActivePage)
-	ON_MESSAGE(WM_TANGRAMGETNODE, OnGetHubbleObj)
+	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetHubbleObj)
 	ON_MESSAGE(WM_COSMOSMSG, OnSplitterNodeAdd)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_HOSTNODEFORSPLITTERCREATED, OnSplitterCreated)
@@ -431,7 +431,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
 		{
-			LRESULT lRes = ::SendMessage(h, WM_TANGRAMGETNODE, 0, 0);
+			LRESULT lRes = ::SendMessage(h, WM_HUBBLE_GETNODE, 0, 0);
 			if (lRes)
 			{
 				CGrid* pRetNode = (CGrid*)lRes;
@@ -919,7 +919,7 @@ LRESULT CGridWnd::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 		return (LRESULT)m_pGrid;
-	return (long)CWnd::DefWindowProc(WM_TANGRAMGETNODE, wParam, lParam);;
+	return (long)CWnd::DefWindowProc(WM_HUBBLE_GETNODE, wParam, lParam);;
 }
 
 void CGridWnd::OnPaint()

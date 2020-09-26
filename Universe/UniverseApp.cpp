@@ -166,7 +166,7 @@ BOOL CUniverse::InitInstance()
 					}
 				}
 			}
-			::PostAppMessage(g_pHubble->m_dwThreadID, WM_TANGRAMINIT, 20191005, 0);
+			::PostAppMessage(g_pHubble->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
 		}
 	}
 
@@ -278,7 +278,7 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		}
 	}
 	break;
-	case WM_TANGRAMAPPQUIT:
+	case WM_HUBBLE_APPQUIT:
 	{
 		::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
 	}
@@ -338,7 +338,7 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	break;
 	case WM_WINFORMCREATED:
 	{
-		LRESULT l = ::SendMessage((HWND)wParam, WM_TANGRAMDATA, 0, 20190214);
+		LRESULT l = ::SendMessage((HWND)wParam, WM_HUBBLE_DATA, 0, 20190214);
 		if (l == 0)
 		{
 			CWinForm* pWnd = new CWinForm();
@@ -366,13 +366,13 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	}
 	return 1;
 	break;
-	case WM_TANGRAMINIT:
+	case WM_HUBBLE_INIT:
 		if (lParam == 20002000)
 		{
 			g_pHubble->HubbleInit();
 		}
 		break;
-		case WM_TANGRAMAPPQUIT:
+		case WM_HUBBLE_APPQUIT:
 		{
 			::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
 		}
@@ -807,7 +807,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				}
 			}
 			break;
-			case WM_TANGRAMINIT:
+			case WM_HUBBLE_INIT:
 			{
 				if (lpMsg->wParam == 20191005)
 					g_pHubble->Init();
@@ -963,9 +963,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				}
 			}
 			break;
-			case WM_TANGRAMAPPQUIT:
+			case WM_HUBBLE_APPQUIT:
 			{
-				TRACE(_T("======== WM_TANGRAMAPPQUIT=========\n"));
+				TRACE(_T("======== WM_HUBBLE_APPQUIT=========\n"));
 				if (g_pHubble->m_mapBrowserWnd.size())
 				{
 					g_pHubble->m_bChromeNeedClosed = true;

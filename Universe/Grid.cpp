@@ -20,7 +20,7 @@
 #include "GridWnd.h"
 #include "grid.h"
 #include "Quasar.h"
-#include "TangramCoreEvents.h"
+#include "HubbleEvents.h"
 #include "GridWnd.h"
 #include "Wormhole.h"
 #include "universe.c"
@@ -246,7 +246,7 @@ CWebPage* CGrid::GetHtmlWnd()
 		}
 		else
 		{
-			CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_TANGRAMDATA, 0, 20190214);
+			CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (pForm)
 			{
 				m_pParentWinFormWnd = pForm;
@@ -1011,7 +1011,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 			m_pDisp = g_pHubble->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
 			if (g_pHubble->m_hFormNodeWnd)
 			{
-				LRESULT l = ::SendMessage((HWND)g_pHubble->m_hFormNodeWnd, WM_TANGRAMDATA, 0, 20190214);
+				LRESULT l = ::SendMessage((HWND)g_pHubble->m_hFormNodeWnd, WM_HUBBLE_DATA, 0, 20190214);
 				if (l&& pHtmlWnd)
 				{
 					auto it = pHtmlWnd->m_mapWinForm.find(g_pHubble->m_hFormNodeWnd);
@@ -1200,7 +1200,7 @@ STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppGrid)
 	//{
 	//	CGridWnd* pSplitter = (CGridWnd*)m_pHostWnd;
 	//	HWND hWnd = ::GetDlgItem(pSplitter->m_hWnd, pSplitter->IdFromRowCol(nRow, nCol));
-	//	LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+	//	LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 	//	if (lRes)
 	//	{
 	//		pRet = (CGrid*)lRes;
