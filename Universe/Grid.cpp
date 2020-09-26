@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.2								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1157,35 +1157,35 @@ STDMETHODIMP CGrid::get_GridType(GridType* nType)
 	return S_OK;
 }
 
-void CGrid::_get_Objects(CGrid * pGrid, UINT32 & nType, CGridCollection * pGridColletion)
-{
-	if (pGrid->m_nViewType & nType)
-	{
-		pGridColletion->m_pGrids->push_back(pGrid);
-	}
-
-	CGrid* pChildNode = nullptr;
-	for (auto it : pGrid->m_vChildNodes)
-	{
-		pChildNode = it;
-		_get_Objects(pChildNode, nType, pGridColletion);
-	}
-}
+//void CGrid::_get_Objects(CGrid * pGrid, UINT32 & nType, CGridCollection * pGridColletion)
+//{
+//	if (pGrid->m_nViewType & nType)
+//	{
+//		pGridColletion->m_pGrids->push_back(pGrid);
+//	}
+//
+//	CGrid* pChildNode = nullptr;
+//	for (auto it : pGrid->m_vChildNodes)
+//	{
+//		pChildNode = it;
+//		_get_Objects(pChildNode, nType, pGridColletion);
+//	}
+//}
 
 STDMETHODIMP CGrid::get_Objects(long nType, IGridCollection * *ppGridColletion)
 {
-	CComObject<CGridCollection>* pGrids = nullptr;
-	CComObject<CGridCollection>::CreateInstance(&pGrids);
+	//CComObject<CGridCollection>* pGrids = nullptr;
+	//CComObject<CGridCollection>::CreateInstance(&pGrids);
 
-	pGrids->AddRef();
+	//pGrids->AddRef();
 
-	UINT32 u = nType;
-	_get_Objects(this, u, pGrids);
-	HRESULT hr = pGrids->QueryInterface(IID_IGridCollection, (void**)ppGridColletion);
+	//UINT32 u = nType;
+	//_get_Objects(this, u, pGrids);
+	//HRESULT hr = pGrids->QueryInterface(IID_IGridCollection, (void**)ppGridColletion);
 
-	pGrids->Release();
+	//pGrids->Release();
 
-	return hr;
+	return S_OK;
 }
 
 STDMETHODIMP CGrid::get_Rows(long* nRows)

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.2								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -76,7 +76,7 @@ CHubble::CHubble()
 	m_nRef = 4;
 	m_nAppID = -1;
 	m_nAppType = 0;
-	m_hTangramWnd = NULL;
+	m_hHubbleWnd = NULL;
 	m_hHostBrowserWnd = NULL;
 	m_hHostWnd = NULL;
 	m_hEclipseHideWnd = NULL;
@@ -1046,12 +1046,6 @@ STDMETHODIMP CHubble::get_AppKeyValue(BSTR bstrKey, VARIANT* pVal)
 			(*pVal).lVal = (long)m_nTangramObj;
 			return S_OK;
 		}
-		if (strKey == _T("tangrammsgwnd"))
-		{
-			(*pVal).vt = VT_I8;
-			(*pVal).llVal = (LONGLONG)m_hTangramWnd;
-			return S_OK;
-		}
 		if (strKey == _T("clrproxy"))
 		{
 			(*pVal).vt = VT_I8;
@@ -1059,12 +1053,6 @@ STDMETHODIMP CHubble::get_AppKeyValue(BSTR bstrKey, VARIANT* pVal)
 			return S_OK;
 		}
 
-		if (strKey == _T("toolboxxml"))
-		{
-			(*pVal).vt = VT_BSTR;
-			pVal->bstrVal = CComBSTR(m_strDesignerXml);
-			return S_OK;
-		}
 		auto it = m_mapValInfo.find(strKey);
 		if (it != m_mapValInfo.end())
 		{

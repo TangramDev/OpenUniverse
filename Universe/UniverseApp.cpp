@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.2								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -329,9 +329,9 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	{
 	case WM_CREATE:
 	{
-		if (g_pHubble->m_hTangramWnd == NULL)
+		if (g_pHubble->m_hHubbleWnd == NULL)
 		{
-			g_pHubble->m_hTangramWnd = hWnd;
+			g_pHubble->m_hHubbleWnd = hWnd;
 			g_pHubble->HubbleInit();
 		}
 	}
@@ -367,7 +367,6 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	return 1;
 	break;
 	case WM_TANGRAMINIT:
-		ATLTRACE(_T("Tangram Message Window WM_TANGRAMINIT :%p\n"), g_pHubble->m_hTangramWnd);
 		if (lParam == 20002000)
 		{
 			g_pHubble->HubbleInit();
@@ -548,8 +547,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (::IsWindow(g_pHubble->m_hHostWnd))
 						::DestroyWindow(g_pHubble->m_hHostWnd);
-					if (::IsWindow(g_pHubble->m_hTangramWnd))
-						::DestroyWindow(g_pHubble->m_hTangramWnd);
+					if (::IsWindow(g_pHubble->m_hHubbleWnd))
+						::DestroyWindow(g_pHubble->m_hHubbleWnd);
 				}
 				if (g_pHubble->m_pCosmosAppProxy)
 					g_pHubble->m_pCosmosAppProxy->OnHubbleClose();

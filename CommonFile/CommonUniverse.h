@@ -119,7 +119,6 @@
 #define WM_WINFORMCREATED				(WM_USER + 0x0000404a)
 #define WM_CHROMEIPCMSG					(WM_USER + 0x00004052)
 #define WM_CHROMEAPPINIT				(WM_USER + 0x00004053)
-#define WM_CREATETANGRAMVIEW			(WM_USER + 0x00004054)
 
 #define TANGRAM_OBJECT_ENTRY_AUTO(clsid, class) \
     __declspec(selectany) ATL::_ATL_OBJMAP_CACHE __objCache__##class = { NULL, 0 }; \
@@ -596,7 +595,7 @@ namespace CommonUniverse {
 			m_hHostWnd = nullptr;
 			m_hFormNodeWnd = nullptr;
 			m_hMainWnd = nullptr;
-			m_hTangramWnd = nullptr;
+			m_hHubbleWnd = nullptr;
 			m_pCLRProxy = nullptr;
 			m_hChildHostWnd = nullptr;
 			m_pActiveAppProxy = nullptr;
@@ -635,7 +634,7 @@ namespace CommonUniverse {
 		HWND									m_hMainWnd;
 		HWND									m_hHostWnd;
 		HWND									m_hChildHostWnd;
-		HWND									m_hTangramWnd;
+		HWND									m_hHubbleWnd;
 		HWND									m_hFormNodeWnd;
 		HWND									m_hParent;
 		HWND									m_hHostBrowserWnd;

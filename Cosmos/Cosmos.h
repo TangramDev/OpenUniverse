@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.2								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -645,9 +645,9 @@ namespace Cosmos
 		static event Close^ OnClose;
 		static void Fire_OnClose();
 
-		delegate void CloudAppIdle();
-		static event CloudAppIdle^ OnCloudAppIdle;
-		static void Fire_OnCloudAppIdle();
+		//delegate void CloudAppIdle();
+		//static event CloudAppIdle^ OnCloudAppIdle;
+		//static void Fire_OnCloudAppIdle();
 
 		delegate bool TangramAppInit();
 		static TangramAppInit^ pOnAppInit;
@@ -693,13 +693,6 @@ namespace Cosmos
 		static void Fire_OnObserverComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid)
 		{
 			OnObserverComplete(hWnd, bstrUrl, pRootGrid);
-		}
-
-		delegate void AppMsgLoop(IntPtr hWnd, IntPtr msg, IntPtr wParam, IntPtr lParam);
-		static event AppMsgLoop^ OnAppMsgLoop;
-		static void Fire_OnAppMsgLoop(IntPtr hWnd, IntPtr msg, IntPtr wParam, IntPtr lParam)
-		{
-			OnAppMsgLoop(hWnd, msg, wParam, lParam);
 		}
 
 		delegate void HubbleMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2);

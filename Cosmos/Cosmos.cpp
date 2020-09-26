@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.2								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -382,10 +382,10 @@ namespace Cosmos
         }
     }
 
-    void Hubble::Fire_OnCloudAppIdle()
-    {
-        OnCloudAppIdle();
-    }
+    //void Hubble::Fire_OnCloudAppIdle()
+    //{
+    //    OnCloudAppIdle();
+    //}
 
     Object^ Hubble::Fire_OnGetSubObjForWebPage(Object^ SourceObj, String^ subObjName)
     {

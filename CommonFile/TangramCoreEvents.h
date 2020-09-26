@@ -29,7 +29,7 @@ extern _ATL_FUNC_INFO Destroy;
 extern _ATL_FUNC_INFO TabChange;
 extern _ATL_FUNC_INFO TabChange2;
 extern _ATL_FUNC_INFO MessageHandle;
-extern _ATL_FUNC_INFO TangramCoreClose;
+extern _ATL_FUNC_INFO HubbleClose;
 extern _ATL_FUNC_INFO TangramEvent;
 extern _ATL_FUNC_INFO Initialize;
 extern _ATL_FUNC_INFO GridAddInCreated;
@@ -45,7 +45,7 @@ public:
 
 	BEGIN_SINK_MAP(CTangramCoreEvents)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000001, OnObserverComplete, &OpenComplete)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000002, OnClose, &TangramCoreClose)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000002, OnClose, &HubbleClose)
 		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubble), /*dispid =*/ 0x00000003, OnHubbleEvent, &TangramEvent)
 	END_SINK_MAP()
 };

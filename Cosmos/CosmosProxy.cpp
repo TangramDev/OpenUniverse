@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.2								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -192,7 +192,7 @@ bool CCosmos::DoIdleWork() {
 		}
 		theAppProxy.m_mapFormMenuStrip2.erase(it);
 	}
-	Hubble::GetHubble()->Fire_OnCloudAppIdle();
+	//Hubble::GetHubble()->Fire_OnCloudAppIdle();
 	return false;
 }
 
@@ -214,7 +214,7 @@ void CCosmos::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHT
 void CCosmos::ProcessMsg(MSG* msg) {
 	if (msg)
 	{
-		Cosmos::Hubble::Fire_OnAppMsgLoop((IntPtr)msg->hwnd, (IntPtr)(__int32)msg->message, (IntPtr)(__int32)msg->wParam, (IntPtr)msg->lParam);
+		//Cosmos::Hubble::Fire_OnAppMsgLoop((IntPtr)msg->hwnd, (IntPtr)(__int32)msg->message, (IntPtr)(__int32)msg->wParam, (IntPtr)msg->lParam);
 		::TranslateMessage(msg);
 		::DispatchMessage(msg);
 	}
@@ -289,7 +289,7 @@ void CCosmosProxy::WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPW
 						else
 							m_pOnLoad = gcnew EventHandler(CCosmosProxy::OnLoad);
 						_pForm->Load += m_pOnLoad;
-						::SendMessage(theApp.m_pHubbleImpl->m_hTangramWnd, WM_WINFORMCREATED, (WPARAM)hPWnd, (LPARAM)0);
+						::SendMessage(theApp.m_pHubbleImpl->m_hHubbleWnd, WM_WINFORMCREATED, (WPARAM)hPWnd, (LPARAM)0);
 					}
 				}
 			}
@@ -765,7 +765,7 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								__int64 nHandle = 0;
 								_pGrid->get_Handle(&nHandle);
 								HWND hWnd = (HWND)nHandle;
-								::PostMessage(theApp.m_pHubbleImpl->m_hTangramWnd, WM_TANGRAMDATA, (WPARAM)pObj, (LPARAM)20200204);
+								::PostMessage(theApp.m_pHubbleImpl->m_hHubbleWnd, WM_TANGRAMDATA, (WPARAM)pObj, (LPARAM)20200204);
 							}
 
 							pChildParse2 = pChildParse->GetChild(_T("default"));
