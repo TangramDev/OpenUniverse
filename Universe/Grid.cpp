@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -55,7 +55,6 @@ CGrid::CGrid()
 	m_pCLREventConnector = nullptr;
 	m_pChildNodeCollection = nullptr;
 	m_pCurrentExNode = nullptr;
-	m_pWindow = nullptr;
 	m_pHostParse = nullptr;
 	m_pWebBrowser = nullptr;
 	m_pGridShareData = nullptr;
@@ -686,7 +685,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			int nPos = m_strID.Find(_T("@"));
 			if (nPos != -1)
 			{
-				IHubbleAppProxy* pProxy = nullptr;
+				IUniverseAppProxy* pProxy = nullptr;
 				CString strKey = m_strID.Mid(nPos + 1);
 				auto it = g_pHubble->m_mapHubbleAppProxy.find(strKey);
 				if (it != g_pHubble->m_mapHubbleAppProxy.end())
@@ -771,11 +770,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				if (pViewFactoryDisp)
 				{
 					hWnd = pViewFactoryDisp->Create(pParentWnd ? pParentWnd->m_hWnd : 0, this);
-					if (g_pHubble->m_pCreatingWindow)
-					{
-						m_pWindow = g_pHubble->m_pCreatingWindow;
-						g_pHubble->m_pCreatingWindow = nullptr;
-					}
 					m_nID = ::GetWindowLong(hWnd, GWL_ID);
 				}
 			}

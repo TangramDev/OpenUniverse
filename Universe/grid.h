@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -82,7 +82,6 @@ public:
 	CWinForm*						m_pParentWinFormWnd;
 	CTangramXmlParse*				m_pHostParse;
 	CSession*						m_pCloudSession = nullptr;
-	IHubbleWindow*					m_pWindow;
 	CGridShareData*					m_pGridShareData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
@@ -99,7 +98,7 @@ public:
 	map<CGrid*, CString>			m_mapExtendNode;
 	CComObject<CGridCollection>*	m_pChildNodeCollection;
 
-	map<IHubbleAppProxy*, CGridProxy*> m_mapWndGridProxy;
+	map<IUniverseAppProxy*, CGridProxy*> m_mapWndGridProxy;
 
 	void	InitWndGrid();
 	BOOL	Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext);

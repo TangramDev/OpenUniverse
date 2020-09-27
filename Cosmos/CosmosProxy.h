@@ -110,8 +110,8 @@ private:
 
 	virtual void OnCLRHostExit();
 	CWPFObj* CreateWPFControl(IGrid* pGrid, HWND hPWnd, UINT nID);
-	HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
-	HRESULT ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
+	//HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
+	//HRESULT ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey);
 	BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton);
 	IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode);

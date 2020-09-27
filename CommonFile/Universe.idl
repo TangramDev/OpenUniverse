@@ -406,7 +406,7 @@ interface IHubble : IDispatch {
 	[id(0x0010b), helpstring("method SetHostFocus")] HRESULT SetHostFocus(void);
 	[id(0x0010c)] HRESULT UpdateGrid(IGrid* pGrid);
 	[id(0x0010d), helpstring("method NewGUID")] HRESULT NewGUID([out, retval] BSTR* retVal);
-	[id(0x0010e)] HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
+	//[id(0x0010e)] HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	[id(0x00110)] HRESULT DownLoadFile(BSTR strFileURL, BSTR bstrTargetFile, BSTR bstrActionXml);
 	[id(0x00111)] HRESULT GetCtrlByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
 	[id(0x00112)] HRESULT GetGridFromHandle(LONGLONG hWnd, [out, retval] IGrid** ppRetGrid);

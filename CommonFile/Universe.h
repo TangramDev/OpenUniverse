@@ -3079,12 +3079,6 @@ EXTERN_C const IID IID_IHubble;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewGUID( 
             /* [retval][out] */ BSTR *retVal) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ActiveCLRMethod( 
-            BSTR bstrObjID,
-            BSTR bstrMethod,
-            BSTR bstrParam,
-            BSTR bstrData) = 0;
-        
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE DownLoadFile( 
             BSTR strFileURL,
             BSTR bstrTargetFile,
@@ -3431,13 +3425,6 @@ EXTERN_C const IID IID_IHubble;
             IHubble * This,
             /* [retval][out] */ BSTR *retVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ActiveCLRMethod )( 
-            IHubble * This,
-            BSTR bstrObjID,
-            BSTR bstrMethod,
-            BSTR bstrParam,
-            BSTR bstrData);
-        
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownLoadFile )( 
             IHubble * This,
             BSTR strFileURL,
@@ -3733,9 +3720,6 @@ EXTERN_C const IID IID_IHubble;
 
 #define IHubble_NewGUID(This,retVal)	\
     ( (This)->lpVtbl -> NewGUID(This,retVal) ) 
-
-#define IHubble_ActiveCLRMethod(This,bstrObjID,bstrMethod,bstrParam,bstrData)	\
-    ( (This)->lpVtbl -> ActiveCLRMethod(This,bstrObjID,bstrMethod,bstrParam,bstrData) ) 
 
 #define IHubble_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
     ( (This)->lpVtbl -> DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml) ) 

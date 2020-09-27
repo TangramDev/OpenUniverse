@@ -77,7 +77,7 @@ public:
 	CGrid*								m_pDesignGrid;
 	CQuasar*							m_pQuasar;
 
-	map<CString, int>					m_mapEventDic;
+	//map<CString, int>					m_mapEventDic;
 	map<CString, long>					m_mapIPCMsgIndexDic;
 
 	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
@@ -114,7 +114,7 @@ public:
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 
 	STDMETHOD(NavigateNode)(IGrid* pGrid, BSTR bstrObjID, BSTR bstrXnl);
-	STDMETHOD(ActiveCLRMethod)(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
+	//STDMETHOD(ActiveCLRMethod)(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
 	STDMETHOD(CreateCLRObj)(BSTR bstrObjID, IDispatch** ppDisp);
 	STDMETHOD(CreateGalaxyCluster)(LONGLONG hWnd, IGalaxyCluster** ppHubble);

@@ -496,8 +496,8 @@ namespace CommonUniverse {
 
 		CString							m_strCurrentWinFormTemplate;
 
-		virtual HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData) = 0;
-		virtual HRESULT ActiveCLRMethod(IDispatch* obj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData) = 0;
+		//virtual HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData) = 0;
+		//virtual HRESULT ActiveCLRMethod(IDispatch* obj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData) = 0;
 		virtual IDispatch* CreateCLRObj(CString bstrObjID) = 0;
 		virtual HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey) = 0;
 		virtual BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton) = 0;
