@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.1								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -20,11 +20,11 @@
 #include "GridWnd.h"
 #include "grid.h"
 #include "Quasar.h"
-#include "TangramCoreEvents.h"
+#include "HubbleEvents.h"
 #include "GridWnd.h"
 #include "Wormhole.h"
 #include "universe.c"
-#include "chromium/BrowserWnd.h"
+#include "chromium/Browser.h"
 #include "chromium/WebPage.h"
 
 CGrid::CGrid()
@@ -55,7 +55,6 @@ CGrid::CGrid()
 	m_pCLREventConnector = nullptr;
 	m_pChildNodeCollection = nullptr;
 	m_pCurrentExNode = nullptr;
-	m_pWindow = nullptr;
 	m_pHostParse = nullptr;
 	m_pWebBrowser = nullptr;
 	m_pGridShareData = nullptr;
@@ -227,29 +226,7 @@ CGrid::~CGrid()
 
 CString CGrid::GetNames()
 {
-	CString strRet = _T("");
-	CGrid* pGrid = this;
-	pGrid = pGrid->m_pRootObj;
-	strRet += pGrid->m_strName;
-	strRet += _T(",");
-	strRet += _GetNames(pGrid);
-	return strRet;
-}
-
-CString CGrid::_GetNames(CGrid * pGrid)
-{
-	CString strRet = _T("");
-	if (pGrid)
-	{
-		for (auto it : pGrid->m_vChildNodes)
-		{
-			CGrid* pChildNode = it;
-			strRet += pChildNode->m_strName;
-			strRet += _T(",");
-			strRet += _GetNames(pChildNode);
-		}
-	}
-	return strRet;
+	return _T("");
 }
 
 CWebPage* CGrid::GetHtmlWnd()
@@ -268,7 +245,7 @@ CWebPage* CGrid::GetHtmlWnd()
 		}
 		else
 		{
-			CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_TANGRAMDATA, 0, 20190214);
+			CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (pForm)
 			{
 				m_pParentWinFormWnd = pForm;
@@ -519,27 +496,27 @@ STDMETHODIMP CGrid::get_Name(BSTR * pVal)
 
 STDMETHODIMP CGrid::put_Name(BSTR bstrNewName)
 {
-	CString strName = OLE2T(bstrNewName);
-	strName.Trim();
-	strName.Replace(_T(","), _T(""));
-	if (m_pHostParse != NULL)
-	{
-		CString _strName = _T(",");
-		_strName += GetNames();
-		CString _strName2 = _T(",");
-		_strName2 += strName;
-		_strName2 += _T(",");
-		int nPos = _strName.Find(_strName2);
-		if (nPos == -1)
-		{
-			m_pHostParse->put_attr(L"id", strName);
-			m_strName = strName;
-		}
-		else
-		{
-			::MessageBox(NULL, _T("Modify name failed!"), _T("Tangram"), MB_OK);
-		}
-	}
+	//CString strName = OLE2T(bstrNewName);
+	//strName.Trim();
+	//strName.Replace(_T(","), _T(""));
+	//if (m_pHostParse != NULL)
+	//{
+	//	CString _strName = _T(",");
+	//	_strName += GetNames();
+	//	CString _strName2 = _T(",");
+	//	_strName2 += strName;
+	//	_strName2 += _T(",");
+	//	int nPos = _strName.Find(_strName2);
+	//	if (nPos == -1)
+	//	{
+	//		m_pHostParse->put_attr(L"id", strName);
+	//		m_strName = strName;
+	//	}
+	//	else
+	//	{
+	//		::MessageBox(NULL, _T("Modify name failed!"), _T("Tangram"), MB_OK);
+	//	}
+	//}
 	return S_OK;
 }
 
@@ -708,7 +685,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			int nPos = m_strID.Find(_T("@"));
 			if (nPos != -1)
 			{
-				IHubbleAppProxy* pProxy = nullptr;
+				IUniverseAppProxy* pProxy = nullptr;
 				CString strKey = m_strID.Mid(nPos + 1);
 				auto it = g_pHubble->m_mapHubbleAppProxy.find(strKey);
 				if (it != g_pHubble->m_mapHubbleAppProxy.end())
@@ -793,11 +770,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				if (pViewFactoryDisp)
 				{
 					hWnd = pViewFactoryDisp->Create(pParentWnd ? pParentWnd->m_hWnd : 0, this);
-					if (g_pHubble->m_pCreatingWindow)
-					{
-						m_pWindow = g_pHubble->m_pCreatingWindow;
-						g_pHubble->m_pCreatingWindow = nullptr;
-					}
 					m_nID = ::GetWindowLong(hWnd, GWL_ID);
 				}
 			}
@@ -1033,7 +1005,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 			m_pDisp = g_pHubble->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
 			if (g_pHubble->m_hFormNodeWnd)
 			{
-				LRESULT l = ::SendMessage((HWND)g_pHubble->m_hFormNodeWnd, WM_TANGRAMDATA, 0, 20190214);
+				LRESULT l = ::SendMessage((HWND)g_pHubble->m_hFormNodeWnd, WM_HUBBLE_DATA, 0, 20190214);
 				if (l&& pHtmlWnd)
 				{
 					auto it = pHtmlWnd->m_mapWinForm.find(g_pHubble->m_hFormNodeWnd);
@@ -1157,35 +1129,35 @@ STDMETHODIMP CGrid::get_GridType(GridType* nType)
 	return S_OK;
 }
 
-void CGrid::_get_Objects(CGrid * pGrid, UINT32 & nType, CGridCollection * pGridColletion)
-{
-	if (pGrid->m_nViewType & nType)
-	{
-		pGridColletion->m_pGrids->push_back(pGrid);
-	}
-
-	CGrid* pChildNode = nullptr;
-	for (auto it : pGrid->m_vChildNodes)
-	{
-		pChildNode = it;
-		_get_Objects(pChildNode, nType, pGridColletion);
-	}
-}
+//void CGrid::_get_Objects(CGrid * pGrid, UINT32 & nType, CGridCollection * pGridColletion)
+//{
+//	if (pGrid->m_nViewType & nType)
+//	{
+//		pGridColletion->m_pGrids->push_back(pGrid);
+//	}
+//
+//	CGrid* pChildNode = nullptr;
+//	for (auto it : pGrid->m_vChildNodes)
+//	{
+//		pChildNode = it;
+//		_get_Objects(pChildNode, nType, pGridColletion);
+//	}
+//}
 
 STDMETHODIMP CGrid::get_Objects(long nType, IGridCollection * *ppGridColletion)
 {
-	CComObject<CGridCollection>* pGrids = nullptr;
-	CComObject<CGridCollection>::CreateInstance(&pGrids);
+	//CComObject<CGridCollection>* pGrids = nullptr;
+	//CComObject<CGridCollection>::CreateInstance(&pGrids);
 
-	pGrids->AddRef();
+	//pGrids->AddRef();
 
-	UINT32 u = nType;
-	_get_Objects(this, u, pGrids);
-	HRESULT hr = pGrids->QueryInterface(IID_IGridCollection, (void**)ppGridColletion);
+	//UINT32 u = nType;
+	//_get_Objects(this, u, pGrids);
+	//HRESULT hr = pGrids->QueryInterface(IID_IGridCollection, (void**)ppGridColletion);
 
-	pGrids->Release();
+	//pGrids->Release();
 
-	return hr;
+	return S_OK;
 }
 
 STDMETHODIMP CGrid::get_Rows(long* nRows)
@@ -1222,7 +1194,7 @@ STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid * *ppGrid)
 	//{
 	//	CGridWnd* pSplitter = (CGridWnd*)m_pHostWnd;
 	//	HWND hWnd = ::GetDlgItem(pSplitter->m_hWnd, pSplitter->IdFromRowCol(nRow, nCol));
-	//	LRESULT lRes = ::SendMessage(hWnd, WM_TANGRAMGETNODE, 0, 0);
+	//	LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 	//	if (lRes)
 	//	{
 	//		pRet = (CGrid*)lRes;

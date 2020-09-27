@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -572,6 +572,7 @@ namespace Cosmos
 		static bool IsWebRuntimeInit = false;
 
 		static Hubble^ m_pHubble;
+		static Form^ m_pMainForm = nullptr;
 		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<Object^, Wormhole^>^ m_pWormholes = gcnew Dictionary<Object^, Wormhole^>();
 
@@ -581,7 +582,6 @@ namespace Cosmos
 	public:
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
-		static Form^ m_pMainForm = nullptr;
 
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);

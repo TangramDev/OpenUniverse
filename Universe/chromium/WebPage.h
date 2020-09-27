@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -42,7 +42,7 @@ namespace Web
 
 		CQuasar*							m_pQuasar;
 		CGrid*								m_pParentGrid;
-		IHubbleAppProxy*					m_pAppProxy;
+		IUniverseAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
 
 		CWebPage*							m_pWebWnd;

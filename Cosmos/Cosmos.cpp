@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -196,7 +196,7 @@ namespace Cosmos
                     if (theApp.m_pHubbleImpl->m_nAppType == 0)
                         theApp.m_pHubbleImpl->m_nAppType = APP_BROWSERAPP;
                     theApp.m_pHubbleImpl->m_pHubbleDelegate = (IHubbleDelegate*)&theApp;
-                    theApp.m_pHubbleImpl->m_pUniverseAppProxy = (IHubbleAppProxy*)&theApp;
+                    theApp.m_pHubbleImpl->m_pUniverseAppProxy = (IUniverseAppProxy*)&theApp;
                     theApp.m_pHubbleImpl->m_pCLRProxy = &theAppProxy;
                 }
             }
@@ -512,7 +512,7 @@ namespace Cosmos
             {
                 theApp.m_pHubbleImpl = (CHubbleImpl*)nPointer;
                 theApp.m_pHubbleImpl->m_pCLRProxy = &theAppProxy;
-                theApp.m_pHubbleImpl->m_pCosmosAppProxy = static_cast<IHubbleAppProxy*>(&theApp);
+                theApp.m_pHubbleImpl->m_pCosmosAppProxy = static_cast<IUniverseAppProxy*>(&theApp);
                 //20180817
                 if (theApp.m_pHubble == nullptr)
                 {

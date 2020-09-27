@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -146,7 +146,7 @@ private:
 	STDMETHOD(put_QuasarData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);
 	STDMETHOD(put_DesignerState)(VARIANT_BOOL newVal);
-	STDMETHOD(get_TangramDoc)(IHubbleDoc** pVal);
+	STDMETHOD(get_HubbleDoc)(IHubbleDoc** pVal);
 	STDMETHOD(get_QuasarType)(QuasarType* pVal);
 	STDMETHOD(get_Name)(BSTR* pVal);
 	STDMETHOD(get_HostBrowser)(IBrowser** ppChromeWebBrowser);

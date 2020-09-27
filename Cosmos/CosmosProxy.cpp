@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -65,7 +65,7 @@ IHubble* GetHubble()
 			if (_pHubbleImplFunction != NULL) {
 				theApp.m_pHubbleImpl = _pHubbleImplFunction(&theApp.m_pHubble);
 				theApp.m_pHubbleImpl->m_pHubbleDelegate = (IHubbleDelegate*)&theApp;
-				theApp.m_pHubbleImpl->m_pUniverseAppProxy = (IHubbleAppProxy*)&theApp;
+				theApp.m_pHubbleImpl->m_pUniverseAppProxy = (IUniverseAppProxy*)&theApp;
 			}
 		}
 	}
@@ -1163,11 +1163,11 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 			}
 			else
 			{
-				if (Cosmos::Hubble::m_pMainForm)
+				if (Cosmos::Hubble::MainForm)
 				{
-					HWND hWnd = (HWND)Cosmos::Hubble::m_pMainForm->Handle.ToPointer();
-					theApp.m_pHubbleImpl->m_hMainWnd = hWnd;
 					Form^ mainForm = Cosmos::Hubble::MainForm;
+					HWND hWnd = (HWND)mainForm->Handle.ToPointer();
+					theApp.m_pHubbleImpl->m_hMainWnd = hWnd;
 					CString strCaption = m_Parse.attr(_T("caption"), _T(""));
 					if (strCaption != _T(""))
 						mainForm->Text = BSTR2STRING(strCaption);
@@ -1980,9 +1980,9 @@ void CCosmosProxy::HubbleAction(BSTR bstrXml, void* pvoid)
 		}
 		if (strXml.CompareNoCase(_T("setmainform")) == 0)
 		{
-			if (Cosmos::Hubble::m_pMainForm != nullptr)
+			if (Cosmos::Hubble::MainForm != nullptr)
 			{
-				theApp.m_pHubbleImpl->m_hMainWnd = (HWND)Hubble::m_pMainForm->Handle.ToPointer();
+				theApp.m_pHubbleImpl->m_hMainWnd = (HWND)Hubble::MainForm->Handle.ToPointer();
 			}
 			return;
 		}

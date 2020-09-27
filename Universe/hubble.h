@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -104,7 +104,7 @@ public:
 	STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_RemoteHelperHWND)(LONGLONG* pVal);
 	STDMETHOD(put_RemoteHelperHWND)(LONGLONG newVal) { m_hHostWnd = (HWND)newVal; return S_OK; };
-	STDMETHOD(get_TangramDoc)(LONGLONG AppProxy, LONGLONG nDocID, IHubbleDoc** pVal);
+	STDMETHOD(get_HubbleDoc)(LONGLONG AppProxy, LONGLONG nDocID, IHubbleDoc** pVal);
 	STDMETHOD(get_HostWnd)(LONGLONG* pVal);
 	STDMETHOD(get_RemoteHubble)(BSTR bstrID, IHubble** pVal);
 	STDMETHOD(get_Extender)(IHubbleExtender** pVal);
@@ -150,8 +150,8 @@ public:
 	STDMETHOD(DeletePage)(LONGLONG PageHandle);
 	STDMETHOD(LoadDocComponent)(BSTR bstrLib, LONGLONG* llAppProxy);
 	STDMETHOD(OpenTangramFile)(IHubbleDoc** ppDoc);
-	STDMETHOD(OpenTangramDocFile)(BSTR bstrFilePath, IHubbleDoc** ppDoc);
-	STDMETHOD(NewWorkBench)(BSTR bstrTangramDoc, IWorkBenchWindow** ppWorkBenchWindow);
+	STDMETHOD(OpenHubbleDocFile)(BSTR bstrFilePath, IHubbleDoc** ppDoc);
+	STDMETHOD(NewWorkBench)(BSTR bstrHubbleDoc, IWorkBenchWindow** ppWorkBenchWindow);
 	STDMETHOD(CreateOutLookObj)(BSTR bstrObjType, int nType, BSTR bstrURL, IDispatch** ppRetDisp);
 	STDMETHOD(InitEclipseApp)();
 	STDMETHOD(DeleteQuasar)(IQuasar* pQuasar);

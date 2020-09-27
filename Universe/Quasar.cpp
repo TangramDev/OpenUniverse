@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1189,7 +1189,7 @@ STDMETHODIMP CQuasar::get_QuasarXML(BSTR* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CQuasar::get_TangramDoc(IHubbleDoc** pVal)
+STDMETHODIMP CQuasar::get_HubbleDoc(IHubbleDoc** pVal)
 {
 	return S_OK;
 }

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -97,7 +97,6 @@ CHubble::CHubble()
 	m_pCosmosAppProxy = nullptr;
 	m_pActiveAppProxy = nullptr;
 	m_pCLRProxy = nullptr;
-	m_pHubblePackageProxy = nullptr;
 	m_strWorkBenchStrs = _T("");
 	m_strExeName = _T("");
 	m_strAppName = _T("Tangram System");
@@ -1225,7 +1224,7 @@ STDMETHODIMP CHubble::LoadDocComponent(BSTR bstrLib, LONGLONG* llAppProxy)
 	//		{
 	//			LONGLONG llProxy = it->second.llVal;
 	//			*llAppProxy = llProxy;
-	//			m_mapHubbleAppProxy[strLib] = (IHubbleAppProxy*)llProxy;
+	//			m_mapHubbleAppProxy[strLib] = (IUniverseAppProxy*)llProxy;
 	//		}
 	//		return S_OK;
 	//	}
@@ -1450,7 +1449,7 @@ STDMETHODIMP CHubble::CreateHubbleCtrl(BSTR bstrAppID, IHubbleCtrl** ppRetCtrl)
 	return S_OK;
 }
 
-STDMETHODIMP CHubble::get_TangramDoc(LONGLONG AppProxy, LONGLONG nDocID, IHubbleDoc** pVal)
+STDMETHODIMP CHubble::get_HubbleDoc(LONGLONG AppProxy, LONGLONG nDocID, IHubbleDoc** pVal)
 {
 	return S_OK;
 }
@@ -1570,7 +1569,7 @@ HICON CHubble::GetAppIcon(int nIndex)
 	return nullptr;
 }
 
-STDMETHODIMP CHubble::OpenTangramDocFile(BSTR bstrFilePath, IHubbleDoc** ppDoc)
+STDMETHODIMP CHubble::OpenHubbleDocFile(BSTR bstrFilePath, IHubbleDoc** ppDoc)
 {
 	return S_OK;
 }
@@ -1580,7 +1579,7 @@ STDMETHODIMP CHubble::CreateOfficeDocument(BSTR bstrXml)
 	return S_OK;
 }
 
-STDMETHODIMP CHubble::NewWorkBench(BSTR bstrTangramDoc, IWorkBenchWindow** ppWorkBenchWindow)
+STDMETHODIMP CHubble::NewWorkBench(BSTR bstrHubbleDoc, IWorkBenchWindow** ppWorkBenchWindow)
 {
 	return S_OK;
 }
@@ -1771,7 +1770,7 @@ void CHubble::InserttoDataMap(int nType, CString strKey, void* pData)
 	case 0:
 	{
 		if (pData)
-			m_mapHubbleAppProxy[strKey] = (IHubbleAppProxy*)pData;
+			m_mapHubbleAppProxy[strKey] = (IUniverseAppProxy*)pData;
 		else
 		{
 			auto it = m_mapHubbleAppProxy.find(strKey);

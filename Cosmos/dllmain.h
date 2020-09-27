@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -21,7 +21,7 @@ class CGridCLREvent;
 
 class CCosmos :
 	public IHubbleDelegate,
-	public IHubbleAppProxy
+	public IUniverseAppProxy
 {
 public:
 	CCosmos();

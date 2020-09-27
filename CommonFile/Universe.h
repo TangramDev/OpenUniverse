@@ -65,20 +65,6 @@ typedef interface IOfficeExtender IOfficeExtender;
 #endif 	/* __IOfficeExtender_FWD_DEFINED__ */
 
 
-#ifndef __IVSExtender_FWD_DEFINED__
-#define __IVSExtender_FWD_DEFINED__
-typedef interface IVSExtender IVSExtender;
-
-#endif 	/* __IVSExtender_FWD_DEFINED__ */
-
-
-#ifndef __IVSDocument_FWD_DEFINED__
-#define __IVSDocument_FWD_DEFINED__
-typedef interface IVSDocument IVSDocument;
-
-#endif 	/* __IVSDocument_FWD_DEFINED__ */
-
-
 #ifndef __IHubbleTreeNode_FWD_DEFINED__
 #define __IHubbleTreeNode_FWD_DEFINED__
 typedef interface IHubbleTreeNode IHubbleTreeNode;
@@ -119,13 +105,6 @@ typedef interface IGrid IGrid;
 typedef interface IAppExtender IAppExtender;
 
 #endif 	/* __IAppExtender_FWD_DEFINED__ */
-
-
-#ifndef __IHubbleEditor_FWD_DEFINED__
-#define __IHubbleEditor_FWD_DEFINED__
-typedef interface IHubbleEditor IHubbleEditor;
-
-#endif 	/* __IHubbleEditor_FWD_DEFINED__ */
 
 
 #ifndef __IHubbleDoc_FWD_DEFINED__
@@ -307,7 +286,6 @@ extern "C"{
 
 
 
-
 typedef /* [helpstring] */ 
 enum BrowserWndOpenDisposition
     {
@@ -348,8 +326,8 @@ enum ObjEventType
         TangramNode	= 0,
         HubbleDocEvent	= 0x1,
         TangramNodeAllChildNode	= 0x2,
-        TangramDocAllQuasarAllChildNode	= 0x3,
-        TangramDocAllQuasarAllTopGrid	= 0x4,
+        HubbleDocAllQuasarAllChildNode	= 0x3,
+        HubbleDocAllQuasarAllTopGrid	= 0x4,
         TangramQuasarAllTopGridAllChildNode	= 0x5,
         TangramQuasarAllTopGrid	= 0x6,
         GalaxyClusterAllQuasarAllTopGridAllChildNode	= 0x7,
@@ -358,8 +336,8 @@ enum ObjEventType
         GalaxyClusterCtrlBarQuasarAllTopGrid	= 0xa,
         GalaxyClusterNotCtrlBarQuasarAllTopGridAllChildNode	= 0xb,
         GalaxyClusterNotCtrlBarQuasarAllTopGrid	= 0xc,
-        TangramDocAllCtrlBarQuasarAllChildNode	= 0xd,
-        TangramDocAllCtrlBarQuasar	= 0xe
+        HubbleDocAllCtrlBarQuasarAllChildNode	= 0xd,
+        HubbleDocAllCtrlBarQuasar	= 0xe
     } 	ObjEventType;
 
 typedef /* [helpstring] */ 
@@ -858,391 +836,6 @@ EXTERN_C const IID IID_IOfficeExtender;
 
 
 #endif 	/* __IOfficeExtender_INTERFACE_DEFINED__ */
-
-
-#ifndef __IVSExtender_INTERFACE_DEFINED__
-#define __IVSExtender_INTERFACE_DEFINED__
-
-/* interface IVSExtender */
-/* [unique][nonextensible][dual][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IVSExtender;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("19631222-1992-0612-1965-060119890701")
-    IVSExtender : public IHubbleExtender
-    {
-    public:
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignNode( 
-            /* [retval][out] */ IGrid **ppRetVal) = 0;
-        
-        virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentDesignNode( 
-            /* [in] */ IGrid *newVal) = 0;
-        
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
-            /* [retval][out] */ IGrid **pVal) = 0;
-        
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignRootNode( 
-            /* [retval][out] */ IGrid **pVal) = 0;
-        
-        virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_DesignRootNode( 
-            /* [in] */ IGrid *newVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramCLRProject( 
-            BSTR bstrPrjPath,
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TangramCLRProject( 
-            BSTR bstrPrjPath,
-            /* [in] */ VARIANT_BOOL newVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentSelectedPrj( 
-            /* [retval][out] */ BSTR *pVal) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ExtendXmlUI( 
-            BSTR bstrKey,
-            BSTR bstrXml,
-            /* [retval][out] */ IGrid **ppGrid) = 0;
-        
-    };
-    
-    
-#else 	/* C style interface */
-
-    typedef struct IVSExtenderVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IVSExtender * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IVSExtender * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IVSExtender * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IVSExtender * This,
-            /* [out] */ UINT *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IVSExtender * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IVSExtender * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [range][in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IVSExtender * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
-            IVSExtender * This);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveWorkBenchWindow )( 
-            IVSExtender * This,
-            BSTR bstrID,
-            /* [retval][out] */ IWorkBenchWindow **pVal);
-        
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignNode )( 
-            IVSExtender * This,
-            /* [retval][out] */ IGrid **ppRetVal);
-        
-        /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentDesignNode )( 
-            IVSExtender * This,
-            /* [in] */ IGrid *newVal);
-        
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
-            IVSExtender * This,
-            /* [retval][out] */ IGrid **pVal);
-        
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignRootNode )( 
-            IVSExtender * This,
-            /* [retval][out] */ IGrid **pVal);
-        
-        /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignRootNode )( 
-            IVSExtender * This,
-            /* [in] */ IGrid *newVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramCLRProject )( 
-            IVSExtender * This,
-            BSTR bstrPrjPath,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TangramCLRProject )( 
-            IVSExtender * This,
-            BSTR bstrPrjPath,
-            /* [in] */ VARIANT_BOOL newVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentSelectedPrj )( 
-            IVSExtender * This,
-            /* [retval][out] */ BSTR *pVal);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ExtendXmlUI )( 
-            IVSExtender * This,
-            BSTR bstrKey,
-            BSTR bstrXml,
-            /* [retval][out] */ IGrid **ppGrid);
-        
-        END_INTERFACE
-    } IVSExtenderVtbl;
-
-    interface IVSExtender
-    {
-        CONST_VTBL struct IVSExtenderVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IVSExtender_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
-
-#define IVSExtender_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
-
-#define IVSExtender_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
-
-
-#define IVSExtender_GetTypeInfoCount(This,pctinfo)	\
-    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
-
-#define IVSExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
-
-#define IVSExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
-
-#define IVSExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
-
-
-#define IVSExtender_Close(This)	\
-    ( (This)->lpVtbl -> Close(This) ) 
-
-#define IVSExtender_get_ActiveWorkBenchWindow(This,bstrID,pVal)	\
-    ( (This)->lpVtbl -> get_ActiveWorkBenchWindow(This,bstrID,pVal) ) 
-
-
-#define IVSExtender_get_CurrentDesignNode(This,ppRetVal)	\
-    ( (This)->lpVtbl -> get_CurrentDesignNode(This,ppRetVal) ) 
-
-#define IVSExtender_put_CurrentDesignNode(This,newVal)	\
-    ( (This)->lpVtbl -> put_CurrentDesignNode(This,newVal) ) 
-
-#define IVSExtender_get_DesignNode(This,pVal)	\
-    ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 
-
-#define IVSExtender_get_DesignRootNode(This,pVal)	\
-    ( (This)->lpVtbl -> get_DesignRootNode(This,pVal) ) 
-
-#define IVSExtender_put_DesignRootNode(This,newVal)	\
-    ( (This)->lpVtbl -> put_DesignRootNode(This,newVal) ) 
-
-#define IVSExtender_get_TangramCLRProject(This,bstrPrjPath,pVal)	\
-    ( (This)->lpVtbl -> get_TangramCLRProject(This,bstrPrjPath,pVal) ) 
-
-#define IVSExtender_put_TangramCLRProject(This,bstrPrjPath,newVal)	\
-    ( (This)->lpVtbl -> put_TangramCLRProject(This,bstrPrjPath,newVal) ) 
-
-#define IVSExtender_get_CurrentSelectedPrj(This,pVal)	\
-    ( (This)->lpVtbl -> get_CurrentSelectedPrj(This,pVal) ) 
-
-#define IVSExtender_ExtendXmlUI(This,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> ExtendXmlUI(This,bstrKey,bstrXml,ppGrid) ) 
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __IVSExtender_INTERFACE_DEFINED__ */
-
-
-#ifndef __IVSDocument_INTERFACE_DEFINED__
-#define __IVSDocument_INTERFACE_DEFINED__
-
-/* interface IVSDocument */
-/* [unique][nonextensible][dual][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IVSDocument;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("19631222-1992-0612-1965-060120170824")
-    IVSDocument : public IDispatch
-    {
-    public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VSClass( 
-            /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IDispatch **ppGrid) = 0;
-        
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **ppVal) = 0;
-        
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pCount) = 0;
-        
-    };
-    
-    
-#else 	/* C style interface */
-
-    typedef struct IVSDocumentVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IVSDocument * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IVSDocument * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IVSDocument * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IVSDocument * This,
-            /* [out] */ UINT *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IVSDocument * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IVSDocument * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [range][in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IVSDocument * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VSClass )( 
-            IVSDocument * This,
-            /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IDispatch **ppGrid);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
-            IVSDocument * This,
-            /* [retval][out] */ IUnknown **ppVal);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
-            IVSDocument * This,
-            /* [retval][out] */ long *pCount);
-        
-        END_INTERFACE
-    } IVSDocumentVtbl;
-
-    interface IVSDocument
-    {
-        CONST_VTBL struct IVSDocumentVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IVSDocument_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
-
-#define IVSDocument_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
-
-#define IVSDocument_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
-
-
-#define IVSDocument_GetTypeInfoCount(This,pctinfo)	\
-    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
-
-#define IVSDocument_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
-
-#define IVSDocument_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
-
-#define IVSDocument_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
-
-
-#define IVSDocument_get_VSClass(This,vIndex,ppGrid)	\
-    ( (This)->lpVtbl -> get_VSClass(This,vIndex,ppGrid) ) 
-
-#define IVSDocument_get__NewEnum(This,ppVal)	\
-    ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
-
-#define IVSDocument_get_Count(This,pCount)	\
-    ( (This)->lpVtbl -> get_Count(This,pCount) ) 
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __IVSDocument_INTERFACE_DEFINED__ */
 
 
 #ifndef __IHubbleTreeNode_INTERFACE_DEFINED__
@@ -2985,126 +2578,6 @@ EXTERN_C const IID IID_IAppExtender;
 #endif 	/* __IAppExtender_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleEditor_INTERFACE_DEFINED__
-#define __IHubbleEditor_INTERFACE_DEFINED__
-
-/* interface IHubbleEditor */
-/* [unique][helpstring][nonextensible][oleautomation][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IHubbleEditor;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("19631222-1992-0612-1965-060119826688")
-    IHubbleEditor : public IDispatch
-    {
-    public:
-    };
-    
-    
-#else 	/* C style interface */
-
-    typedef struct IHubbleEditorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleEditor * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleEditor * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleEditor * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleEditor * This,
-            /* [out] */ UINT *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleEditor * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleEditor * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [range][in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleEditor * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
-        
-        END_INTERFACE
-    } IHubbleEditorVtbl;
-
-    interface IHubbleEditor
-    {
-        CONST_VTBL struct IHubbleEditorVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IHubbleEditor_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
-
-#define IHubbleEditor_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
-
-#define IHubbleEditor_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
-
-
-#define IHubbleEditor_GetTypeInfoCount(This,pctinfo)	\
-    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
-
-#define IHubbleEditor_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
-
-#define IHubbleEditor_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
-
-#define IHubbleEditor_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
-
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __IHubbleEditor_INTERFACE_DEFINED__ */
-
-
 #ifndef __IHubbleDoc_INTERFACE_DEFINED__
 #define __IHubbleDoc_INTERFACE_DEFINED__
 
@@ -3534,7 +3007,7 @@ EXTERN_C const IID IID_IHubble;
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
             /* [retval][out] */ IGrid **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramDoc( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HubbleDoc( 
             LONGLONG AppProxy,
             LONGLONG nDocID,
             /* [retval][out] */ IHubbleDoc **pVal) = 0;
@@ -3679,7 +3152,7 @@ EXTERN_C const IID IID_IHubble;
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenTangramDocFile( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenHubbleDocFile( 
             BSTR bstrFilePath,
             /* [retval][out] */ IHubbleDoc **ppDoc) = 0;
         
@@ -3694,7 +3167,7 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NewWorkBench( 
-            BSTR bstrTangramDoc,
+            BSTR bstrHubbleDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateBrowser( 
@@ -3869,7 +3342,7 @@ EXTERN_C const IID IID_IHubble;
             IHubble * This,
             /* [retval][out] */ IGrid **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramDoc )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HubbleDoc )( 
             IHubble * This,
             LONGLONG AppProxy,
             LONGLONG nDocID,
@@ -4046,7 +3519,7 @@ EXTERN_C const IID IID_IHubble;
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenTangramDocFile )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenHubbleDocFile )( 
             IHubble * This,
             BSTR bstrFilePath,
             /* [retval][out] */ IHubbleDoc **ppDoc);
@@ -4065,7 +3538,7 @@ EXTERN_C const IID IID_IHubble;
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NewWorkBench )( 
             IHubble * This,
-            BSTR bstrTangramDoc,
+            BSTR bstrHubbleDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateBrowser )( 
@@ -4210,8 +3683,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_get_DesignNode(This,pVal)	\
     ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 
 
-#define IHubble_get_TangramDoc(This,AppProxy,nDocID,pVal)	\
-    ( (This)->lpVtbl -> get_TangramDoc(This,AppProxy,nDocID,pVal) ) 
+#define IHubble_get_HubbleDoc(This,AppProxy,nDocID,pVal)	\
+    ( (This)->lpVtbl -> get_HubbleDoc(This,AppProxy,nDocID,pVal) ) 
 
 #define IHubble_get_DocTemplate(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_DocTemplate(This,bstrID,pVal) ) 
@@ -4306,8 +3779,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_LoadDocComponent(This,bstrLib,llAppProxy)	\
     ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
 
-#define IHubble_OpenTangramDocFile(This,bstrFilePath,ppDoc)	\
-    ( (This)->lpVtbl -> OpenTangramDocFile(This,bstrFilePath,ppDoc) ) 
+#define IHubble_OpenHubbleDocFile(This,bstrFilePath,ppDoc)	\
+    ( (This)->lpVtbl -> OpenHubbleDocFile(This,bstrFilePath,ppDoc) ) 
 
 #define IHubble_InitCLRApp(This,strInitXml,llHandle)	\
     ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
@@ -4315,8 +3788,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
     ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
-#define IHubble_NewWorkBench(This,bstrTangramDoc,ppWorkBenchWindow)	\
-    ( (This)->lpVtbl -> NewWorkBench(This,bstrTangramDoc,ppWorkBenchWindow) ) 
+#define IHubble_NewWorkBench(This,bstrHubbleDoc,ppWorkBenchWindow)	\
+    ( (This)->lpVtbl -> NewWorkBench(This,bstrHubbleDoc,ppWorkBenchWindow) ) 
 
 #define IHubble_CreateBrowser(This,hParentWnd,strUrls,ppRet)	\
     ( (This)->lpVtbl -> CreateBrowser(This,hParentWnd,strUrls,ppRet) ) 
@@ -4422,7 +3895,7 @@ EXTERN_C const IID IID_IQuasar;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TangramDoc( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HubbleDoc( 
             /* [retval][out] */ IHubbleDoc **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarType( 
@@ -4566,7 +4039,7 @@ EXTERN_C const IID IID_IQuasar;
             IQuasar * This,
             /* [retval][out] */ BSTR *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TangramDoc )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HubbleDoc )( 
             IQuasar * This,
             /* [retval][out] */ IHubbleDoc **pVal);
         
@@ -4682,8 +4155,8 @@ EXTERN_C const IID IID_IQuasar;
 #define IQuasar_get_QuasarXML(This,pVal)	\
     ( (This)->lpVtbl -> get_QuasarXML(This,pVal) ) 
 
-#define IQuasar_get_TangramDoc(This,pVal)	\
-    ( (This)->lpVtbl -> get_TangramDoc(This,pVal) ) 
+#define IQuasar_get_HubbleDoc(This,pVal)	\
+    ( (This)->lpVtbl -> get_HubbleDoc(This,pVal) ) 
 
 #define IQuasar_get_QuasarType(This,pVal)	\
     ( (This)->lpVtbl -> get_QuasarType(This,pVal) ) 

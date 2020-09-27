@@ -178,7 +178,7 @@ namespace CommonUniverse {
 	class CChromeChildProcessHostImplProxy;
 
 	class IHubbleCLRImpl;
-	class IHubbleAppProxy;
+	class IUniverseAppProxy;
 
 	extern CHubbleImpl* g_pHubbleImpl;
 
@@ -254,7 +254,7 @@ namespace CommonUniverse {
 		IDispatch* m_pPrjDisp;
 	}TangramProjectInfo;
 
-	typedef struct TangramDocInfo
+	typedef struct HubbleDocInfo
 	{
 		CString		m_strTangramID;
 		CString		m_strAppProxyID;
@@ -262,7 +262,7 @@ namespace CommonUniverse {
 		CString		m_strMainFrameID;
 		CString		m_strDocID;
 		CString		m_strHubbleData;
-	}TangramDocInfo;
+	}HubbleDocInfo;
 
 	typedef struct CtrlInfo
 	{
@@ -434,11 +434,11 @@ namespace CommonUniverse {
 		virtual void HubbleDocEvent(IHubbleEventObj* pEventObj) {}
 	};
 
-	class IHubbleAppProxy
+	class IUniverseAppProxy
 	{
 	public:
-		IHubbleAppProxy() {}
-		virtual ~IHubbleAppProxy() {}
+		IUniverseAppProxy() {}
+		virtual ~IUniverseAppProxy() {}
 
 		BOOL								m_bAutoDelete;
 		HWND								m_hMainWnd;
@@ -485,55 +485,6 @@ namespace CommonUniverse {
 		virtual IHubbleDoc* GetDoc(LONGLONG llDocID) { return nullptr; }
 		virtual IHubbleDoc* NewDoc() { return nullptr; }
 		virtual HWND InitHubbleApp() { return NULL; }
-	};
-
-	class CHubblePackageProxy
-	{
-	public:
-		CHubblePackageProxy()
-		{
-			m_hTangramToolWnd = nullptr;
-			m_hVSGridView = nullptr;
-			m_pQuasar = nullptr;
-			m_pProxy = nullptr;
-			m_pToolBoxFrame = nullptr;
-			m_pClassViewFrame = nullptr;
-			m_pPropertyFrame = nullptr;
-
-			m_strOrgs = _T("");
-			m_strRepo = _T("");
-			m_strBranch = _T("");
-			m_strToolBoxXML = _T("");
-			m_strClassViewXML = _T("");
-			m_strPropertiesXML = _T("");
-			m_strTangramToolWndXML = _T("");
-			m_strCurrentXtmlFilePath = _T("");
-		}
-
-		HWND								m_hTangramToolWnd;
-		HWND								m_hVSGridView;
-		HWND								m_hPropertyWnd;
-		HWND								m_hPropertyPWnd;
-
-		CString								m_strOrgs;
-		CString								m_strRepo;
-		CString								m_strBranch;
-		CString								m_strToolBoxXML;
-		CString								m_strClassViewXML;
-		CString								m_strPropertiesXML;
-		CString								m_strTangramToolWndXML;
-		CString								m_strCurrentXtmlFilePath;
-
-		IQuasar*							m_pQuasar;
-		CHubbleImpl*						m_pProxy;
-		map<HWND, IQuasar*>					m_mapWinFormQuasar;
-
-		IQuasar* m_pToolBoxFrame;
-		IQuasar* m_pClassViewFrame;
-		IQuasar* m_pPropertyFrame;
-
-		virtual IDispatch* CreateToolWnd(CString strXml, bool bShow) { return nullptr; }
-		virtual void* HubbleAction(CString strKey, CString strXml) { return nullptr; }
 	};
 
 	class IHubbleCLRImpl
@@ -603,7 +554,6 @@ namespace CommonUniverse {
 			m_pUniverseAppProxy = nullptr;
 			m_pCurMDIChildFormInfo = nullptr;
 			m_strNtpXml = _T("");
-			m_pHubblePackageProxy = nullptr;
 			m_strAppCurrentFormTemplatePath = _T("");
 		}
 
@@ -691,11 +641,10 @@ namespace CommonUniverse {
 
 		IPCMsg*									m_pCurrentIPCMsg;
 		IHubbleCLRImpl*							m_pCLRProxy;
-		IHubbleAppProxy*						m_pActiveAppProxy;
-		IHubbleAppProxy*						m_pUniverseAppProxy;
-		IHubbleAppProxy*						m_pCosmosAppProxy;
+		IUniverseAppProxy*						m_pActiveAppProxy;
+		IUniverseAppProxy*						m_pUniverseAppProxy;
+		IUniverseAppProxy*						m_pCosmosAppProxy;
 		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
-		CHubblePackageProxy*					m_pHubblePackageProxy;
 		IGrid*									m_pHostViewDesignerNode = nullptr;
 		IHubbleExtender*						m_pExtender = nullptr;
 		IHubbleDelegate*						m_pHubbleDelegate = nullptr;
@@ -713,7 +662,7 @@ namespace CommonUniverse {
 		map<CString, void*>						m_mapTemplateInfo;
 		map<CString, IHubble*>					m_mapRemoteHubble;
 		map<IGrid*, CString>					m_mapControlScript;
-		map<CString, IHubbleAppProxy*>			m_mapHubbleAppProxy;
+		map<CString, IUniverseAppProxy*>			m_mapHubbleAppProxy;
 		map<CString, IHubbleWindowProvider*>	m_mapWindowProvider;
 		map<int, HubbleDocTemplateInfo*>		m_mapHubbleDocTemplateInfo;
 		map<CString, HubbleDocTemplateInfo*>	m_mapHubbleDocTemplateInfo2;
@@ -742,7 +691,7 @@ namespace CommonUniverse {
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) = 0;
 		virtual void AttachGrid(void* pGridEvents) {}
 		virtual void HubbleInit() {}
-		virtual IHubbleDoc* ConnectHubbleDoc(IHubbleAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hQuasar, LPCTSTR strDocType) { return nullptr; }
+		virtual IHubbleDoc* ConnectHubbleDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hQuasar, LPCTSTR strDocType) { return nullptr; }
 		virtual CString GetNewLayoutNodeName(BSTR strObjTypeID, IGrid* pDesignNode) { return _T(""); }
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
 		virtual IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }

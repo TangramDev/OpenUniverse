@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -352,15 +352,6 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	switch (lParam)
 	{
 	break;
-	case 20170907:
-		if (g_pHubble->m_pHubblePackageProxy->m_hVSGridView)
-		{
-			::SetParent(g_pHubble->m_pHubblePackageProxy->m_hPropertyWnd, hWnd);
-			::SetWindowPos(g_pHubble->m_pHubblePackageProxy->m_hPropertyWnd, HWND_TOP, -1000, -1000, 0, 0, SWP_NOACTIVATE);
-			::PostMessage(hWnd, WM_COSMOSMSG, 1, 20170907);
-		}
-		return ::DefWindowProc(hWnd, msg, wParam, lParam);
-		break;
 	default:
 		break;
 	}
@@ -459,7 +450,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			LRESULT lRes = ::SendMessage(hWnd, WM_QUERYAPPPROXY, 0, 0);
 			if (lRes > 0)
 			{
-				g_pHubble->m_pActiveAppProxy = (IHubbleAppProxy*)lRes;
+				g_pHubble->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
 			}
 		}
 	}
@@ -514,7 +505,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		LRESULT lRes = ::SendMessage(hWnd, WM_QUERYAPPPROXY, 0, 0);
 		if (lRes > 0)
 		{
-			g_pHubble->m_pActiveAppProxy = (IHubbleAppProxy*)lRes;
+			g_pHubble->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
 		}
 		else
 			g_pHubble->m_pActiveAppProxy = nullptr;

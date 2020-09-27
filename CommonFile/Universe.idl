@@ -36,7 +36,6 @@ interface IWorkBenchWindow;
 interface IHubbleTreeView;
 interface IEclipseCtrl;
 interface IHubbleDoc;
-interface IVSDocument;
 interface IWebPage;
 interface IBrowser;
 interface IGridCollection;
@@ -97,8 +96,8 @@ enum ObjEventType
 	TangramNode = 0x00000000,
 	HubbleDocEvent = 0x00000001,
 	TangramNodeAllChildNode = 0x00000002,
-	TangramDocAllQuasarAllChildNode = 0x00000003,
-	TangramDocAllQuasarAllTopGrid = 0x00000004,
+	HubbleDocAllQuasarAllChildNode = 0x00000003,
+	HubbleDocAllQuasarAllTopGrid = 0x00000004,
 	TangramQuasarAllTopGridAllChildNode = 0x00000005,
 	TangramQuasarAllTopGrid = 0x00000006,
 	GalaxyClusterAllQuasarAllTopGridAllChildNode = 0x00000007,
@@ -107,8 +106,8 @@ enum ObjEventType
 	GalaxyClusterCtrlBarQuasarAllTopGrid = 0x0000000a,
 	GalaxyClusterNotCtrlBarQuasarAllTopGridAllChildNode = 0x0000000b,
 	GalaxyClusterNotCtrlBarQuasarAllTopGrid = 0x0000000c,
-	TangramDocAllCtrlBarQuasarAllChildNode = 0x0000000d,
-	TangramDocAllCtrlBarQuasar = 0x0000000e
+	HubbleDocAllCtrlBarQuasarAllChildNode = 0x0000000d,
+	HubbleDocAllCtrlBarQuasar = 0x0000000e
 }ObjEventType;
 
 typedef
@@ -167,38 +166,6 @@ interface IOfficeExtender : IHubbleExtender {
 	[id(103)] HRESULT GetQuasarFromVBAForm(IDispatch* pForm, [out, retval] IQuasar** ppQuasar);
 	[id(104)] HRESULT GetActiveTopGrid(IDispatch* pForm, [out, retval] IGrid** WndGrid);
 	[id(105)] HRESULT GetObjectFromWnd(LONG hWnd, [out, retval] IDispatch** ppObjFromWnd);
-};
-
-[
-	object,
-	uuid(19631222-1992-0612-1965-060119890701),
-	dual,
-	nonextensible,
-	pointer_default(unique)
-]
-interface IVSExtender : IHubbleExtender {
-	[propget, id(101), hidden] HRESULT CurrentDesignNode([out, retval] IGrid** ppRetVal);
-	[propput, id(101), hidden] HRESULT CurrentDesignNode([in] IGrid* newVal);
-	[propget, id(102), hidden] HRESULT DesignNode([out, retval] IGrid** pVal);
-	[propget, id(103), hidden] HRESULT DesignRootNode([out, retval] IGrid** pVal);
-	[propput, id(103), hidden] HRESULT DesignRootNode([in] IGrid* newVal);
-	[propget, id(104)] HRESULT TangramCLRProject(BSTR bstrPrjPath, [out, retval] VARIANT_BOOL* pVal);
-	[propput, id(104)] HRESULT TangramCLRProject(BSTR bstrPrjPath, [in] VARIANT_BOOL newVal);
-	[propget, id(105)] HRESULT CurrentSelectedPrj([out, retval] BSTR* pVal);
-	[id(106)] HRESULT ExtendXmlUI(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
-};
-
-[
-	object,
-	uuid(19631222-1992-0612-1965-060120170824),
-	dual,
-	nonextensible,
-	pointer_default(unique)
-]
-interface IVSDocument : IDispatch {
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT VSClass([in]VARIANT vIndex, [out, retval]IDispatch** ppGrid);
-	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
-	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long* pCount);
 };
 
 [
@@ -363,18 +330,6 @@ interface IAppExtender : IDispatch {
 
 [
 	object,
-	uuid(19631222-1992-0612-1965-060119826688),
-	oleautomation,
-	nonextensible,
-	helpstring("THubbleDesigner Single View Editor Interface"),
-	pointer_default(unique)
-]
-interface IHubbleEditor : IDispatch
-{
-};
-
-[
-	object,
 	uuid(19631222-1992-0612-1965-060120161101),
 	dual,
 	nonextensible,
@@ -433,7 +388,7 @@ interface IHubble : IDispatch {
 	[propget, id(10)] HRESULT RemoteHelperHWND([out, retval] LONGLONG* pVal);
 	[propput, id(10)] HRESULT RemoteHelperHWND([in]LONGLONG newVal);
 	[propget, id(11), hidden] HRESULT DesignNode([out, retval] IGrid** pVal);
-	[propget, id(13)] HRESULT TangramDoc(LONGLONG AppProxy, LONGLONG nDocID, [out, retval] IHubbleDoc** pVal);
+	[propget, id(13)] HRESULT HubbleDoc(LONGLONG AppProxy, LONGLONG nDocID, [out, retval] IHubbleDoc** pVal);
 	[propget, id(14)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
 	[propget, id(15)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 
@@ -466,10 +421,10 @@ interface IHubble : IDispatch {
 	[id(0x0011d)] HRESULT ObserveQuasars(LONGLONG hWnd, BSTR bstrQuasars, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	[id(0x0011e)] HRESULT DeletePage(LONGLONG PageHandle);
 	[id(0x0011f)] HRESULT LoadDocComponent(BSTR bstrLib, [out, retval] LONGLONG* llAppProxy);
-	[id(0x00120)] HRESULT OpenTangramDocFile(BSTR bstrFilePath, [out, retval] IHubbleDoc** ppDoc);
+	[id(0x00120)] HRESULT OpenHubbleDocFile(BSTR bstrFilePath, [out, retval] IHubbleDoc** ppDoc);
 	[id(0x00121)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
 	[id(0x00122), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
-	[id(0x00123)] HRESULT NewWorkBench(BSTR bstrTangramDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
+	[id(0x00123)] HRESULT NewWorkBench(BSTR bstrHubbleDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
 	[id(0x00124), helpstring("method Create ChromeWebBrowser")] HRESULT CreateBrowser(ULONGLONG hParentWnd, BSTR strUrls, [out, retval]IBrowser** ppRet);
 	[id(0x00125)] HRESULT HubbleNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
 	[id(0x00126)] HRESULT DeleteQuasar(IQuasar* pQuasar);
@@ -507,7 +462,7 @@ interface IQuasar : IDispatch {
 	[propget, id(7), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(8), helpstring("property RootGrids")] HRESULT RootGrids([out, retval]IGridCollection** ppGridColletion);
 	[propget, id(9)] HRESULT QuasarXML([out, retval] BSTR* pVal);
-	[propget, id(10)] HRESULT TangramDoc([out, retval] IHubbleDoc** pVal);
+	[propget, id(10)] HRESULT HubbleDoc([out, retval] IHubbleDoc** pVal);
 	[propget, id(11)] HRESULT QuasarType([out, retval] QuasarType* pVal);
 	[propget, id(12)] HRESULT Name([out, retval] BSTR* pVal);
 	[propget, id(13)] HRESULT HostBrowser([out, retval] IBrowser** ppChromeWebBrowser);
@@ -728,7 +683,7 @@ library Universe
 	{
 		properties:
 		methods:
-			[id(1), helpstring("method OpenComplete")] HRESULT ObserveComplete();
+			[id(1), helpstring("method ObserveComplete")] HRESULT ObserveComplete();
 			[id(2)] HRESULT Destroy();
 			[id(3), helpstring("WndGrid Addin Object Created")] HRESULT GridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 			[id(4)] HRESULT GridAddInsCreated();
@@ -792,6 +747,5 @@ library Universe
 		interface IEclipseExtender;
 		interface IOfficeExtender;
 		interface IHubbleAppCtrl;
-		interface IVSExtender;
 	};
 };

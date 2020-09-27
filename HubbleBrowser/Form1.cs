@@ -15,7 +15,7 @@ namespace HubbleBrowser
     {
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();this.Dock = DockStyle.Fill;
         }
 
         private void button1_Click(object sender, EventArgs e)

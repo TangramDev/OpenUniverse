@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.3								*
+*					Open Universe - version 1.0.0.4								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -32,7 +32,7 @@ public:
 
 	HWND										m_hWnd;
 
-	IHubbleAppProxy*							m_pUniverseAppProxy;
+	IUniverseAppProxy*							m_pUniverseAppProxy;
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CQuasar*>							m_mapQuasar;
 	map<CString, CGrid*>						m_mapGrid;
