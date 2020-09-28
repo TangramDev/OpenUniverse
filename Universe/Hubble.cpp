@@ -1006,13 +1006,13 @@ STDMETHODIMP CHubble::put_AppExtender(BSTR bstrKey, IDispatch* newVal)
 
 STDMETHODIMP CHubble::get_RemoteHelperHWND(LONGLONG* pVal)
 {
-	if (::IsWindow(m_hHostWnd) == false)
-	{
-		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Hubble Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theUniverse.m_hInstance, NULL);
-		if (::IsWindow(m_hHostWnd))
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theUniverse.m_hInstance, NULL);
-	}
-	*pVal = (LONGLONG)m_hHostWnd;
+	//if (::IsWindow(m_hHostWnd) == false)
+	//{
+	//	m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Hubble Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theUniverse.m_hInstance, NULL);
+	//	if (::IsWindow(m_hHostWnd))
+	//		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theUniverse.m_hInstance, NULL);
+	//}
+	//*pVal = (LONGLONG)m_hHostWnd;
 	return S_OK;
 }
 

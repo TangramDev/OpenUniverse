@@ -996,16 +996,6 @@ void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 {
 	return nullptr;
 }
-//
-//HRESULT CCosmosProxy::ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData)
-//{
-//	return S_OK;
-//}
-//
-//HRESULT CCosmosProxy::ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData)
-//{
-//	return S_OK;
-//}
 
 IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 {
