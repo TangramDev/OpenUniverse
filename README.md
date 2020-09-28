@@ -3,7 +3,7 @@
 - 1.	Provide a flexible, easy-to-describe, Internet-oriented UI layout engine for Win32 applications;
 - 2.	Provide a built-in modern browser model for each Win32 application
 - 3.	Let Win32 applications fully support .NET Framework (design time and runtime)
-![](https://github.com/TangramDev/OpenUniverse/blob/master/Universe/bitmap_g.bmp)
+
 OpenUniverse allows software developers to re-look at every WinForm application with a sense of hierarchy of the universe structure, making:
 1.	Thoroughly break the boundary between desktop development and Web development to adapt to the software needs of the new generation of Internet environments;
 2.	To downplay the difference between desktop applications and Internet browsers, every Win32 or WinForm application can actually have a built-in modern browser model, making the application an Internet-oriented browser by default;
