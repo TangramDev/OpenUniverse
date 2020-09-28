@@ -1,0 +1,19 @@
+[
+  Exposed = Window
+] interface HubbleEvent {
+  attribute DOMString eventId;
+  attribute DOMString param1;
+  attribute DOMString param2;
+  attribute DOMString param3;
+  attribute DOMString param4;
+  attribute DOMString param5;
+  attribute long long handleSource;
+  attribute long long handleTarget;
+  attribute HubbleXobj xobj;
+  readonly attribute DOMString name;
+  readonly attribute DOMString objtype;
+  readonly attribute long long hwnd;
+  readonly attribute HubbleNode grid;
+  readonly attribute HubbleWinform form;
+  readonly attribute HubbleWindow window;
+};
