@@ -727,20 +727,20 @@ namespace CommonUniverse {
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
 
-		virtual void ProcessMsg(MSG* msg) = 0;
-		virtual void ForegroundIdleProc() = 0;
-		virtual bool DoIdleWork() = 0;
-		virtual BOOL OnAppIdle(BOOL& bIdle, LONG lCount) = 0;
-		virtual BOOL IsAppIdleMessage() = 0;
-		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) = 0;
-		virtual CString GetNTPXml() = 0;
-		virtual HWND GetMainWnd() = 0;
-		virtual HWND QueryCanClose(HWND hWnd) = 0;
-		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) = 0;
-		virtual bool HookAppDocTemplateInfo() = 0;
-		virtual bool EclipseAppInit() = 0;
-		virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2) = 0;
-		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) = 0;
+		virtual void ProcessMsg(MSG* msg) {}
+		virtual void ForegroundIdleProc() {}
+		virtual bool DoIdleWork() { return false; }
+		virtual BOOL OnAppIdle(BOOL& bIdle, LONG lCount) { return false; }
+		virtual BOOL IsAppIdleMessage() { return false; }
+		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) { return false; }
+		virtual CString GetNTPXml() { return _T(""); }
+		virtual HWND GetMainWnd() { return NULL; }
+		virtual HWND QueryCanClose(HWND hWnd) { return NULL; }
+		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; }
+		virtual bool HookAppDocTemplateInfo() { return false; }
+		virtual bool EclipseAppInit() { return false; }
+		virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2) {}
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
 		virtual void HubbleNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 	};
 

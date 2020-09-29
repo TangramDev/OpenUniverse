@@ -43,37 +43,9 @@ private:
 	//CCosmosCoreEvents:
 	void OnHubbleClose();
 	void OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
-	void ForegroundIdleProc() {};
-	bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; };
-	bool HookAppDocTemplateInfo() { return false; };
-	BOOL OnAppIdle(BOOL& bIdle, LONG lCount) {
-		return false;
-	};
-	HWND QueryCanClose(HWND hWnd) { return NULL; };
-
-	bool CCosmos::DoIdleWork() {
-		return false;
-	}
-
-	void CCosmos::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2)
-	{
-	}
-
-	BOOL IsAppIdleMessage() {
-		return false;
-	};
-
-	HWND GetMainWnd()
-	{
-		return NULL;
-	};
-
 	void HubbleInit() {};
-	CString GetNTPXml() { return _T(""); };
 	bool OnUniversePreTranslateMessage(MSG* pMsg);
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
-	bool EclipseAppInit() { return false; };
-	void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 };
 
 extern CCosmos theApp;

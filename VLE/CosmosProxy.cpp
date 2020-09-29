@@ -110,10 +110,6 @@ CCosmosProxy::~CCosmosProxy()
 	ATLTRACE(_T("Release CCosmosProxy :%p\n"), this);
 }
 
-void CCosmos::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
-{
-}
-
 void CCosmos::ProcessMsg(MSG* msg) {
 	if (msg)
 	{
