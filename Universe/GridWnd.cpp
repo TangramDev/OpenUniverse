@@ -17,7 +17,7 @@
 #include "UniverseApp.h"
 #include "Hubble.h"
 #include "grid.h"
-#include "Quasar.h"
+#include "Galaxy.h"
 #include "GridHelper.h"
 #include "GridWnd.h"
 #include "chromium/Browser.h"
@@ -260,7 +260,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 		break;
 		case 2:
 		{
-			m_pGrid->m_pGridShareData->m_pQuasar->HostPosChanged();
+			m_pGrid->m_pGridShareData->m_pGalaxy->HostPosChanged();
 			return 0;
 		}
 		break;
@@ -290,8 +290,8 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	CGrid* pGrid = (CGrid*)_pGrid;
 	if (pGrid && pOldNode)
 	{
-		CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
-		pGrid->m_pGridShareData->m_pQuasar->m_bDesignerState = true;
+		CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+		pGrid->m_pGridShareData->m_pGalaxy->m_bDesignerState = true;
 		CGridVector::iterator it;
 		it = find(m_pGrid->m_vChildNodes.begin(), m_pGrid->m_vChildNodes.end(), pOldNode);
 
@@ -321,7 +321,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 LRESULT CGridWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
 	//RecalcLayout();
-	//m_pGrid->m_pGridShareData->m_pQuasar->HostPosChanged();
+	//m_pGrid->m_pGridShareData->m_pGalaxy->HostPosChanged();
 	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	return -1;
 }
@@ -347,7 +347,7 @@ void CGridWnd::StartTracking(int ht)
 	if (ht == noHit)
 		return;
 
-	CGrid* pGrid = m_pGrid->m_pGridShareData->m_pQuasar->m_pWorkGrid;
+	CGrid* pGrid = m_pGrid->m_pGridShareData->m_pGalaxy->m_pWorkGrid;
 	if (pGrid && pGrid->m_pGridShareData->m_pHostClientView)
 	{
 		pGrid->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
@@ -405,12 +405,12 @@ void CGridWnd::StopTracking(BOOL bAccept)
 {
 	if (!m_bTracking)
 		return;
-	CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
-	CGrid* pGrid = pQuasar->m_pWorkGrid;
+	CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+	CGrid* pGrid = pGalaxy->m_pWorkGrid;
 	if (pGrid && pGrid->m_pGridShareData->m_pHostClientView)
 	{
 		pGrid->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
-		::InvalidateRect(pQuasar->m_hWnd, NULL, false);
+		::InvalidateRect(pGalaxy->m_hWnd, NULL, false);
 		pGrid->m_pHostWnd->Invalidate();
 	}
 
@@ -418,16 +418,16 @@ void CGridWnd::StopTracking(BOOL bAccept)
 
 	if (bAccept)
 	{
-		::InvalidateRect(pQuasar->m_hWnd, nullptr, true);
+		::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
 
 		CWebPage* pWebWnd = nullptr;
-		if (pQuasar->m_pWebPageWnd)
+		if (pGalaxy->m_pWebPageWnd)
 		{
-			pWebWnd = pQuasar->m_pWebPageWnd;
+			pWebWnd = pGalaxy->m_pWebPageWnd;
 		}
-		else if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar->m_pWebPageWnd)
-			pWebWnd = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar->m_pWebPageWnd;
-		pQuasar->HostPosChanged();
+		else if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
+			pWebWnd = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+		pGalaxy->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
 		{
@@ -437,7 +437,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 				CGrid* pRetNode = (CGrid*)lRes;
 				if (pRetNode && pRetNode->m_nViewType == Grid)
 				{
-					pRetNode->m_pGridShareData->m_pQuasar->HostPosChanged();
+					pRetNode->m_pGridShareData->m_pGalaxy->HostPosChanged();
 				}
 			}
 		}
@@ -878,11 +878,11 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		m_bCreated = true;
 		CGrid* pHostNode = nullptr;
 		CGrid* pParent = nullptr;
-		CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
+		CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
 		bool bHasHostView = false;
-		if (pQuasar->m_pBindingGrid)
+		if (pGalaxy->m_pBindingGrid)
 		{
-			pHostNode = pQuasar->m_pBindingGrid;
+			pHostNode = pGalaxy->m_pBindingGrid;
 			if (::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 			{
 				bHasHostView = true;
@@ -1121,11 +1121,11 @@ int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		g_pHubble->m_pActiveHtmlWnd = nullptr;
 	}
 
-	CQuasar* pQuasar = m_pGrid->m_pGridShareData->m_pQuasar;
+	CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
 
-	if (pQuasar->m_pGalaxyCluster->m_pUniverseAppProxy)
+	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
-		HWND hMenuWnd = pQuasar->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}

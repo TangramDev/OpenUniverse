@@ -41,7 +41,7 @@ namespace Cosmos
 	/// </summary>
 
 	ref class Grid;
-	ref class Quasar;
+	ref class Galaxy;
 
 	public enum class CosmosAppType
 	{
@@ -173,9 +173,9 @@ namespace Cosmos
 			}
 		}
 
-		property System::Drawing::Color rgbLeftTop
+		property Drawing::Color rgbLeftTop
 		{
-			System::Drawing::Color get()
+			Drawing::Color get()
 			{
 				OLE_COLOR rgb;
 				m_pGrid->get_rgbLeftTop(&rgb);
@@ -187,15 +187,15 @@ namespace Cosmos
 			}
 		}
 
-		property System::Drawing::Color rgbRightBottom
+		property Drawing::Color rgbRightBottom
 		{
-			System::Drawing::Color get()
+			Drawing::Color get()
 			{
 				OLE_COLOR rgb;
 				m_pGrid->get_rgbRightBottom(&rgb);
-				return System::Drawing::ColorTranslator::FromOle(rgb);
+				return Drawing::ColorTranslator::FromOle(rgb);
 			}
-			void set(System::Drawing::Color newVal)
+			void set(Drawing::Color newVal)
 			{
 				m_pGrid->put_rgbRightBottom(System::Drawing::ColorTranslator::ToOle(newVal));
 			}
@@ -272,20 +272,20 @@ namespace Cosmos
 			}
 		}
 
-		property Quasar^ Quasar
+		property Galaxy^ Galaxy
 		{
-			Cosmos::Quasar^ get();
+			Cosmos::Galaxy^ get();
 		}
 
-		property Cosmos::Quasar^ HostQuasar
+		property Cosmos::Galaxy^ HostGalaxy
 		{
-			Cosmos::Quasar^ get()
+			Cosmos::Galaxy^ get()
 			{
-				CComPtr<IQuasar> pQuasar;
-				m_pGrid->get_HostQuasar(&pQuasar);
-				if (pQuasar)
+				CComPtr<IGalaxy> pGalaxy;
+				m_pGrid->get_HostGalaxy(&pGalaxy);
+				if (pGalaxy)
 				{
-					return theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pQuasar);
+					return theAppProxy._createObject<IGalaxy, Cosmos::Galaxy>(pGalaxy);
 				}
 				return nullptr;
 			}
@@ -474,19 +474,19 @@ namespace Cosmos
 		void Init();
 	};
 
-	public ref class Quasar : public Dictionary<String^, Grid^>
+	public ref class Galaxy : public Dictionary<String^, Grid^>
 	{
 	public:
-		Quasar(IQuasar* pQuasar)
+		Galaxy(IGalaxy* pGalaxy)
 		{
-			m_pQuasar = pQuasar;
+			m_pGalaxy = pGalaxy;
 		}
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		~Quasar()
+		~Galaxy()
 		{
-			LONGLONG nValue = (LONGLONG)m_pQuasar;
+			LONGLONG nValue = (LONGLONG)m_pGalaxy;
 			theAppProxy._removeObject(nValue);
 		}
 
@@ -497,7 +497,7 @@ namespace Cosmos
 			IntPtr get()
 			{
 				__int64 nHandle;
-				m_pQuasar->get_HWND(&nHandle);
+				m_pGalaxy->get_HWND(&nHandle);
 				return (IntPtr)nHandle;
 			}
 		}
@@ -507,12 +507,12 @@ namespace Cosmos
 			Cosmos::Grid^ get()
 			{
 				IGrid* pGrid = nullptr;
-				m_pQuasar->get_VisibleGrid(&pGrid);
+				m_pGalaxy->get_VisibleGrid(&pGrid);
 				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 			}
 		}
 	private:
-		IQuasar* m_pQuasar;
+		IGalaxy* m_pGalaxy;
 	};
 
 	public ref class Hubble

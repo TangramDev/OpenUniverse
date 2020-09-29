@@ -101,7 +101,7 @@ using namespace concurrency;
 class CGrid;
 class CGridHelper;
 class CHubble;
-class CQuasar;
+class CGalaxy;
 class CUniverse;
 class CGridEvents;
 class CGalaxyCluster;

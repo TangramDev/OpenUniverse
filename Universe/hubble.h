@@ -26,7 +26,7 @@ class CWinForm;
 struct CommonThreadInfo
 {
 	HHOOK					m_hGetMessageHook;
-	map<HWND, CQuasar*>		m_mapQuasar;
+	map<HWND, CGalaxy*>		m_mapGalaxy;
 };
 
 // CHubble
@@ -37,7 +37,7 @@ class ATL_NO_VTABLE CHubble :
 	public IConnectionPointImpl<CHubble, &__uuidof(_IHubble)>,
 	public IDispatchImpl<IHubble, &IID_IHubble, &LIBID_Universe, 1, 0>
 {
-	friend class CQuasar;
+	friend class CGalaxy;
 	friend class CUniverse;
 public:
 	CHubble();
@@ -75,7 +75,7 @@ public:
 
 	CGrid*								m_pActiveGrid;
 	CGrid*								m_pDesignGrid;
-	CQuasar*							m_pQuasar;
+	CGalaxy*							m_pGalaxy;
 
 	map<CString, long>					m_mapIPCMsgIndexDic;
 
@@ -122,7 +122,7 @@ public:
 	STDMETHOD(Encode)(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet);
 	STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml) { return S_OK; };
 	STDMETHOD(FireHubbleEventObj)(IHubbleEventObj* pHubbleEventObj);
-	STDMETHOD(GetQuasar)(LONGLONG hHostWnd, IQuasar** ppQuasar);
+	STDMETHOD(GetGalaxy)(LONGLONG hHostWnd, IGalaxy** ppGalaxy);
 	STDMETHOD(GetGridFromHandle)(LONGLONG hWnd, IGrid** ppRetGrid);
 	STDMETHOD(GetCtrlByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
@@ -144,7 +144,7 @@ public:
 	STDMETHOD(HubbleGetItemCount)(IDispatch* RibbonControl, long* nCount) { return S_OK; };
 	STDMETHOD(HubbleGetItemLabel)(IDispatch* RibbonControl, long nIndex, BSTR* bstrLabel) { return S_OK; };
 	STDMETHOD(HubbleGetItemID)(IDispatch* RibbonControl, long nIndex, BSTR* bstrID) { return S_OK; };
-	STDMETHOD(ObserveQuasars)(LONGLONG hWnd, BSTR bstrDeleteQuasars, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSave);
+	STDMETHOD(ObserveGalaxys)(LONGLONG hWnd, BSTR bstrDeleteGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSave);
 	STDMETHOD(DeletePage)(LONGLONG PageHandle);
 	STDMETHOD(LoadDocComponent)(BSTR bstrLib, LONGLONG* llAppProxy);
 	STDMETHOD(OpenTangramFile)(IHubbleDoc** ppDoc);
@@ -152,7 +152,7 @@ public:
 	STDMETHOD(NewWorkBench)(BSTR bstrHubbleDoc, IWorkBenchWindow** ppWorkBenchWindow);
 	STDMETHOD(CreateOutLookObj)(BSTR bstrObjType, int nType, BSTR bstrURL, IDispatch** ppRetDisp);
 	STDMETHOD(InitEclipseApp)();
-	STDMETHOD(DeleteQuasar)(IQuasar* pQuasar);
+	STDMETHOD(DeleteGalaxy)(IGalaxy* pGalaxy);
 	STDMETHOD(InitCLRApp)(BSTR strInitXml, LONGLONG* llHandle);
 	STDMETHOD(CreateBrowser)(ULONGLONG hParentWnd, BSTR strUrls, IBrowser** ppRet);
 	STDMETHOD(HubbleNotify)(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
@@ -170,7 +170,7 @@ public:
 	CommonThreadInfo* GetThreadInfo(DWORD dwInfo = 0);
 
 	virtual void ProcessMsg(LPMSG lpMsg);
-	IQuasar* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, QuasarInfo*);
+	IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*);
 	IWebPage* GetWebPageFromForm(HWND);
 
 	void _addObject(void* pThis, IUnknown* pUnknown)
@@ -216,7 +216,7 @@ private:
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
 	IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
-	bool IsMDIClientQuasarNode(IGrid*);
+	bool IsMDIClientGalaxyNode(IGrid*);
 
 	void ChromeTabCreated(CChromeTab* pTab);
 	void OnRenderProcessCreated(CChromeRenderProcess* pProcess);

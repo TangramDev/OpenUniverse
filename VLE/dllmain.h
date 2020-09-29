@@ -36,39 +36,44 @@ public:
 	CString									m_strAppPath;
 
 	CString GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifiedName);
-	virtual void ProcessMsg(MSG* msg);
-	virtual void ForegroundIdleProc() {};
-	virtual bool DoIdleWork();
-	virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; };
-	virtual bool HookAppDocTemplateInfo() { return false; };
-	virtual BOOL OnAppIdle(BOOL& bIdle, LONG lCount) {
+
+	void InitHubbleApp(bool bCrashReporting);
+private:
+	void ProcessMsg(MSG* msg);
+	//CCosmosCoreEvents:
+	void OnHubbleClose();
+	void OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
+	void ForegroundIdleProc() {};
+	bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; };
+	bool HookAppDocTemplateInfo() { return false; };
+	BOOL OnAppIdle(BOOL& bIdle, LONG lCount) {
 		return false;
 	};
-	virtual HWND QueryCanClose(HWND hWnd) { return NULL; };
+	HWND QueryCanClose(HWND hWnd) { return NULL; };
 
-	virtual BOOL IsAppIdleMessage() {
+	bool CCosmos::DoIdleWork() {
+		return false;
+	}
+
+	void CCosmos::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2)
+	{
+	}
+
+	BOOL IsAppIdleMessage() {
 		return false;
 	};
 
-	virtual HWND GetMainWnd()
+	HWND GetMainWnd()
 	{
 		return NULL;
 	};
 
-	virtual void HubbleInit() {};
-	virtual CString GetNTPXml() { return _T(""); };
-	virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
-
-	void InitHubbleApp(bool bCrashReporting);
-private:
-	//CCosmosCoreEvents:
-	void OnHubbleClose();
-	void OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
-	HWND InitHubbleApp();
+	void HubbleInit() {};
+	CString GetNTPXml() { return _T(""); };
+	bool OnUniversePreTranslateMessage(MSG* pMsg);
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
-	virtual bool EclipseAppInit() { return false; };
-	virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2);
-	virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
+	bool EclipseAppInit() { return false; };
+	void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 };
 
 extern CCosmos theApp;

@@ -35,7 +35,7 @@ namespace HubbleBrowser
             string s = node.Handle.ToString();
             int n = node.Cols;
             n++;
-            Quasar q = node.Quasar;
+            Galaxy q = node.Galaxy;
              n = q.Count;
             Form f = new Form();
             f.Text = n.ToString();

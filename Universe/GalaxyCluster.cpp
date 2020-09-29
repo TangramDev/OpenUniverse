@@ -15,13 +15,13 @@
 
 #include "stdafx.h"
 #include "grid.h"
-#include "Quasar.h"
+#include "Galaxy.h"
 #include "UniverseApp.h"
 #include "Hubble.h"
 
 CGridShareData::CGridShareData()
 {
-	m_pOldQuasar		= nullptr;
+	m_pOldGalaxy		= nullptr;
 	m_pHubbleParse		= nullptr;
 	m_pHostClientView	= nullptr;
 #ifdef _DEBUG
@@ -57,7 +57,7 @@ CGalaxyCluster::~CGalaxyCluster()
 	g_pHubble->m_nTangram--;
 #endif	
 
-	m_mapQuasar.erase(m_mapQuasar.begin(), m_mapQuasar.end());
+	m_mapGalaxy.erase(m_mapGalaxy.begin(), m_mapGalaxy.end());
 	m_mapGrid.erase(m_mapGrid.begin(), m_mapGrid.end());
 	auto it = g_pHubble->m_mapWindowPage.find(m_hWnd);
 	if (it != g_pHubble->m_mapWindowPage.end())
@@ -70,35 +70,35 @@ CGalaxyCluster::~CGalaxyCluster()
 
 STDMETHODIMP CGalaxyCluster::get_Count(long* pCount)
 {
-	*pCount = (long)m_mapQuasar.size();
+	*pCount = (long)m_mapGalaxy.size();
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_Quasar(VARIANT vIndex, IQuasar ** ppQuasar)
+STDMETHODIMP CGalaxyCluster::get_Galaxy(VARIANT vIndex, IGalaxy ** ppGalaxy)
 {
 	if (vIndex.vt == VT_I4)
 	{
-		long lCount = m_mapQuasar.size();
+		long lCount = m_mapGalaxy.size();
 		int iIndex = vIndex.lVal;
 		HWND hWnd = (HWND)iIndex;
 		if (::IsWindow(hWnd))
 		{
-			auto it = m_mapQuasar.find(hWnd);
-			if (it != m_mapQuasar.end())
+			auto it = m_mapGalaxy.find(hWnd);
+			if (it != m_mapGalaxy.end())
 			{
-				*ppQuasar = it->second;
+				*ppGalaxy = it->second;
 				return S_OK;
 			}
 		}
 		if (iIndex < 0 || iIndex >= lCount) return E_INVALIDARG;
 
-		auto it = m_mapQuasar.begin();
+		auto it = m_mapGalaxy.begin();
 		int iPos = 0;
-		while (it != m_mapQuasar.end())
+		while (it != m_mapGalaxy.end())
 		{
 			if (iPos == iIndex)
 			{
-				*ppQuasar = it->second;
+				*ppGalaxy = it->second;
 				return S_OK;
 			};
 			iPos++;
@@ -113,10 +113,10 @@ STDMETHODIMP CGalaxyCluster::get_Quasar(VARIANT vIndex, IQuasar ** ppQuasar)
 		auto it = m_mapWnd.find(strKey);
 		if (it != m_mapWnd.end())
 		{
-			auto it2 = m_mapQuasar.find(it->second);
-			if (it2 != m_mapQuasar.end())
+			auto it2 = m_mapGalaxy.find(it->second);
+			if (it2 != m_mapGalaxy.end())
 			{
-				*ppQuasar = it2->second;
+				*ppGalaxy = it2->second;
 				return S_OK;
 			}
 		}
@@ -137,14 +137,14 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 	//if (SUCCEEDED(hr))
 	//{
 	//	pe->AddRef();
-	//	long nLen = (long)m_mapQuasar.size();
+	//	long nLen = (long)m_mapGalaxy.size();
 	//	VARIANT* rgvar = new VARIANT[nLen];
 	//	ZeroMemory(rgvar, sizeof(VARIANT)*nLen);
 	//	VARIANT* pItem = rgvar;
-	//	for (auto it : m_mapQuasar)
+	//	for (auto it : m_mapGalaxy)
 	//	{
 	//		IUnknown* pDisp = nullptr;
-	//		CQuasar* pObj = it.second;
+	//		CGalaxy* pObj = it.second;
 	//		hr = pObj->QueryInterface(IID_IUnknown, (void**)&pDisp);
 	//		pItem->vt = VT_UNKNOWN;
 	//		pItem->punkVal = pDisp;
@@ -162,11 +162,11 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrQuasarName, IQuasar** pRetFrame)
+STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame)
 {
 	HWND h = 0; 
-	CString strQuasarName = OLE2T(bstrQuasarName);
-	BSTR bstrName = strQuasarName.MakeLower().AllocSysString();
+	CString strGalaxyName = OLE2T(bstrGalaxyName);
+	BSTR bstrName = strGalaxyName.MakeLower().AllocSysString();
 	if (ParentObj.vt == VT_DISPATCH&&HostWnd.vt == VT_BSTR)
 	{
 		if (g_pHubble->m_pCLRProxy)
@@ -178,7 +178,7 @@ STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BS
 				h = g_pHubble->m_pCLRProxy->GetCtrlHandle(pDisp);
 				if (h)
 				{
-					HRESULT hr = CreateQuasar(CComVariant(0), CComVariant((long)h), bstrName, pRetFrame);
+					HRESULT hr = CreateGalaxy(CComVariant(0), CComVariant((long)h), bstrName, pRetFrame);
 					::SysFreeString(bstrName);
 					return hr;
 				}
@@ -191,41 +191,41 @@ STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BS
 	{
 		if (g_pHubble->m_pCLRProxy)
 		{
-			h = g_pHubble->m_pCLRProxy->IsQuasar(HostWnd.pdispVal);
+			h = g_pHubble->m_pCLRProxy->IsGalaxy(HostWnd.pdispVal);
 			if (h)
 			{
-				CString strName = strQuasarName;
+				CString strName = strGalaxyName;
 				if (strName == _T(""))
 				{
 					::SysFreeString(bstrName);
-					bstrQuasarName = g_pHubble->m_pCLRProxy->GetCtrlName(HostWnd.pdispVal);
-					strName = OLE2T(bstrQuasarName);
+					bstrGalaxyName = g_pHubble->m_pCLRProxy->GetCtrlName(HostWnd.pdispVal);
+					strName = OLE2T(bstrGalaxyName);
 					if (strName == _T(""))
-						bstrQuasarName = CComBSTR(L"Default");
+						bstrGalaxyName = CComBSTR(L"Default");
 					
-					strQuasarName = OLE2T(bstrQuasarName);
-					auto it = m_mapWnd.find(strQuasarName);
+					strGalaxyName = OLE2T(bstrGalaxyName);
+					auto it = m_mapWnd.find(strGalaxyName);
 					if (it != m_mapWnd.end())
 					{
 						int i = 0;
 						CString s = _T("");
-						s.Format(_T("%s%d"), strQuasarName, i);
+						s.Format(_T("%s%d"), strGalaxyName, i);
 						auto it = m_mapWnd.find(s);
 						while (it != m_mapWnd.end())
 						{
 							i++;
-							s.Format(_T("%s%d"), strQuasarName, i);
+							s.Format(_T("%s%d"), strGalaxyName, i);
 							it = m_mapWnd.find(s);
 							if (it == m_mapWnd.end())
 								break;
 						}
-						strQuasarName = s;
+						strGalaxyName = s;
 					}
 
 				}
-				auto it = m_mapQuasar.find((HWND)h);
-				if (it == m_mapQuasar.end())
-					return CreateQuasar(CComVariant(0), CComVariant((long)h), CComBSTR(strQuasarName.MakeLower()), pRetFrame);
+				auto it = m_mapGalaxy.find((HWND)h);
+				if (it == m_mapGalaxy.end())
+					return CreateGalaxy(CComVariant(0), CComVariant((long)h), CComBSTR(strGalaxyName.MakeLower()), pRetFrame);
 				else
 					*pRetFrame = it->second;
 			}
@@ -249,43 +249,43 @@ STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BS
 		}
 		if (_hWnd&&::IsWindow(_hWnd))
 		{
-			auto it = m_mapQuasar.find(_hWnd);
-			if (it == m_mapQuasar.end())
+			auto it = m_mapGalaxy.find(_hWnd);
+			if (it == m_mapGalaxy.end())
 			{
 				DWORD dwID = ::GetWindowThreadProcessId(_hWnd, NULL);
 				CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
 
-				CQuasar* m_pExtenderQuasar = new CComObject<CQuasar>();
-				CString strName = strQuasarName;
+				CGalaxy* m_pExtenderGalaxy = new CComObject<CGalaxy>();
+				CString strName = strGalaxyName;
 				if (strName == _T(""))
 					strName = _T("default");
 				strName.MakeLower();
-				m_pExtenderQuasar->m_strQuasarName = strName;
+				m_pExtenderGalaxy->m_strGalaxyName = strName;
 				if (strName.CompareNoCase(_T("System.Windows.Forms.MdiClient")) == 0)
-					m_pExtenderQuasar->m_nQuasarType = WinFormMDIClientQuasar;
+					m_pExtenderGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
 				else if(bIsMDI)
-					m_pExtenderQuasar->m_nQuasarType = MDIClientQuasar;
+					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
 				::GetClassName(::GetParent(_hWnd), g_pHubble->m_szBuffer, MAX_PATH);
 				CString strClassName = CString(g_pHubble->m_szBuffer);
 				if (strClassName.Find(_T("MDIClient")) == 0)
 				{
-					m_pExtenderQuasar->m_nQuasarType = MDIClientQuasar;
+					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
 				}
-				m_pExtenderQuasar->m_pGalaxyCluster = this;
-				m_pExtenderQuasar->m_hHostWnd = _hWnd;
+				m_pExtenderGalaxy->m_pGalaxyCluster = this;
+				m_pExtenderGalaxy->m_hHostWnd = _hWnd;
 				if (ParentObj.vt == VT_I8 || ParentObj.vt == VT_I4)
 				{
 					HWND hPWnd = (HWND)ParentObj.llVal;
 					if (::IsWindow(hPWnd))
 					{
-						m_pExtenderQuasar->m_hPWnd = hPWnd;
+						m_pExtenderGalaxy->m_hPWnd = hPWnd;
 					}
 				}
-				pThreadInfo->m_mapQuasar[_hWnd] = m_pExtenderQuasar;
-				m_mapQuasar[_hWnd] = m_pExtenderQuasar;
+				pThreadInfo->m_mapGalaxy[_hWnd] = m_pExtenderGalaxy;
+				m_mapGalaxy[_hWnd] = m_pExtenderGalaxy;
 				m_mapWnd[strName] = _hWnd;
 
-				*pRetFrame = m_pExtenderQuasar;
+				*pRetFrame = m_pExtenderGalaxy;
 			}
 			else
 				*pRetFrame = it->second;
@@ -296,25 +296,25 @@ STDMETHODIMP CGalaxyCluster::CreateQuasar(VARIANT ParentObj, VARIANT HostWnd, BS
 }
 
 
-STDMETHODIMP CGalaxyCluster::GetQuasarFromCtrl(IDispatch* CtrlObj, IQuasar** ppQuasar)
+STDMETHODIMP CGalaxyCluster::GetGalaxyFromCtrl(IDispatch* CtrlObj, IGalaxy** ppGalaxy)
 {
 	if (g_pHubble->m_pCLRProxy)
 	{
-		HWND h = g_pHubble->m_pCLRProxy->IsQuasar(CtrlObj);
+		HWND h = g_pHubble->m_pCLRProxy->IsGalaxy(CtrlObj);
 		if (h)
 		{
-			auto it = m_mapQuasar.find(h);
-			if (it != m_mapQuasar.end())
-				* ppQuasar = it->second;
+			auto it = m_mapGalaxy.find(h);
+			if (it != m_mapGalaxy.end())
+				* ppGalaxy = it->second;
 		}
 	}
 
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::GetGrid(BSTR bstrQuasarName, BSTR bstrNodeName, IGrid** pRetNode)
+STDMETHODIMP CGalaxyCluster::GetGrid(BSTR bstrGalaxyName, BSTR bstrNodeName, IGrid** pRetNode)
 {
-	CString strKey = OLE2T(bstrQuasarName);
+	CString strKey = OLE2T(bstrGalaxyName);
 	CString strName = OLE2T(bstrNodeName);
 	if (strKey == _T("") || strName == _T(""))
 		return S_FALSE;
@@ -324,13 +324,13 @@ STDMETHODIMP CGalaxyCluster::GetGrid(BSTR bstrQuasarName, BSTR bstrNodeName, IGr
 		HWND hWnd = it->second;
 		if (::IsWindow(hWnd))
 		{
-			auto it = m_mapQuasar.find(hWnd);
-			if (it != m_mapQuasar.end())
+			auto it = m_mapGalaxy.find(hWnd);
+			if (it != m_mapGalaxy.end())
 			{
-				CQuasar* pQuasar = it->second;
+				CGalaxy* pGalaxy = it->second;
 				strName = strName.MakeLower();
-				auto it2 = pQuasar->m_mapGrid.find(strName);
-				if (it2 != pQuasar->m_mapGrid.end())
+				auto it2 = pGalaxy->m_mapGrid.find(strName);
+				if (it2 != pGalaxy->m_mapGrid.end())
 					*pRetNode = (IGrid*)it2->second;
 				else
 				{
@@ -356,14 +356,14 @@ STDMETHODIMP CGalaxyCluster::put_Extender(BSTR bstrExtenderName, IDispatch* newV
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_QuasarName(LONGLONG hHwnd, BSTR* pVal)
+STDMETHODIMP CGalaxyCluster::get_GalaxyName(LONGLONG hHwnd, BSTR* pVal)
 {
 	HWND _hWnd = (HWND)hHwnd;
 	if (_hWnd)
 	{
-		auto it = m_mapQuasar.find(_hWnd);
-		if (it!=m_mapQuasar.end())
-			*pVal = it->second->m_strQuasarName.AllocSysString();
+		auto it = m_mapGalaxy.find(_hWnd);
+		if (it!=m_mapGalaxy.end())
+			*pVal = it->second->m_strGalaxyName.AllocSysString();
 	}
 
 	return S_OK;
@@ -375,7 +375,7 @@ void CGalaxyCluster::BeforeDestory()
 	{
 		m_bIsDestory = true;
 
-		for (auto it: m_mapQuasar)
+		for (auto it: m_mapGalaxy)
 			it.second->Destroy();
 
 		if (g_pHubble->m_pCLRProxy)
@@ -533,7 +533,7 @@ STDMETHODIMP CGalaxyCluster::put_xtml(BSTR strKey, BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR QuasarName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
+STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 {
 	if (g_pHubble->m_pCLRProxy)
 	{
@@ -542,21 +542,21 @@ STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR Quas
 		if (pDisp)
 		{
 			HWND h = 0;
-			h = g_pHubble->m_pCLRProxy->IsQuasar(pDisp);
+			h = g_pHubble->m_pCLRProxy->IsGalaxy(pDisp);
 			if (h)
 			{
-				CString strQuasarName = OLE2T(QuasarName);
+				CString strGalaxyName = OLE2T(GalaxyName);
 				CString strKey = OLE2T(bstrKey);
-				if (strQuasarName == _T(""))
-					QuasarName = CtrlName;
+				if (strGalaxyName == _T(""))
+					GalaxyName = CtrlName;
 				if (strKey == _T(""))
 					bstrKey = CComBSTR(L"Default");
-				auto it = m_mapQuasar.find((HWND)h);
-				if (it == m_mapQuasar.end())
+				auto it = m_mapGalaxy.find((HWND)h);
+				if (it == m_mapGalaxy.end())
 				{
-					IQuasar* pQuasar = nullptr;
-					CreateQuasar(CComVariant(0), CComVariant((long)h), QuasarName, &pQuasar);
-					return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
+					IGalaxy* pGalaxy = nullptr;
+					CreateGalaxy(CComVariant(0), CComVariant((long)h), GalaxyName, &pGalaxy);
+					return pGalaxy->Observe(bstrKey, bstrXml, ppRetGrid);
 				}
 				else
 				{
@@ -581,7 +581,7 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 				bMDI = true;
 			else
 			{
-				h = g_pHubble->m_pCLRProxy->IsQuasar(MdiForm.pdispVal);
+				h = g_pHubble->m_pCLRProxy->IsGalaxy(MdiForm.pdispVal);
 				if (h)
 				{
 					CComBSTR bstrName(L"");
@@ -589,12 +589,12 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 					CString strKey = OLE2T(bstrKey);
 					if (strKey == _T(""))
 						bstrKey = CComBSTR(L"Default");
-					IQuasar* pQuasar = nullptr;
-					map<HWND, CQuasar*>::iterator it = m_mapQuasar.find((HWND)h);
-					if (it == m_mapQuasar.end())
+					IGalaxy* pGalaxy = nullptr;
+					map<HWND, CGalaxy*>::iterator it = m_mapGalaxy.find((HWND)h);
+					if (it == m_mapGalaxy.end())
 					{
-						CreateQuasar(CComVariant(0), CComVariant((long)h), bstrName, &pQuasar);
-						return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
+						CreateGalaxy(CComVariant(0), CComVariant((long)h), bstrName, &pGalaxy);
+						return pGalaxy->Observe(bstrKey, bstrXml, ppRetGrid);
 					}
 					else
 					{
@@ -657,13 +657,13 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 		CString strKey = OLE2T(bstrKey);
 		if (strKey == _T(""))
 			bstrKey = CComBSTR(L"Default");
-		IQuasar* pQuasar = nullptr;
+		IGalaxy* pGalaxy = nullptr;
 		if (bMDI)
 		{
-			HRESULT hr = CreateQuasar(CComVariant(0), CComVariant((long)h), CComBSTR(L"TangramMDIClientQuasar"), &pQuasar);
-			if (pQuasar)
+			HRESULT hr = CreateGalaxy(CComVariant(0), CComVariant((long)h), CComBSTR(L"TangramMDIClientGalaxy"), &pGalaxy);
+			if (pGalaxy)
 			{
-				return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
+				return pGalaxy->Observe(bstrKey, bstrXml, ppRetGrid);
 			}
 		}
 		else
@@ -672,9 +672,9 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 			if (strKey == _T(""))
 				bstrKey = CComBSTR(L"Default");
 
-			IQuasar* pQuasar = nullptr;
-			auto it = m_mapQuasar.find((HWND)h);
-			if (it == m_mapQuasar.end())
+			IGalaxy* pGalaxy = nullptr;
+			auto it = m_mapGalaxy.find((HWND)h);
+			if (it == m_mapGalaxy.end())
 			{
 				TCHAR szBuffer[MAX_PATH];
 				::GetWindowText((HWND)h, szBuffer, MAX_PATH);
@@ -685,8 +685,8 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 					s.Format(_T("Frame_%p"), h);
 					strText = s;
 				}
-				CreateQuasar(CComVariant(0), CComVariant((long)h), CComBSTR(strText), &pQuasar);
-				return pQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
+				CreateGalaxy(CComVariant(0), CComVariant((long)h), CComBSTR(strText), &pGalaxy);
+				return pGalaxy->Observe(bstrKey, bstrXml, ppRetGrid);
 			}
 			else
 			{
@@ -714,25 +714,25 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::CreateQuasarWithDefaultNode(ULONGLONG hQuasarWnd, BSTR bstrQuasarName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid)
+STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::ObserveQuasars(BSTR bstrQuasars, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile)
+STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_CurrentDesignQuasarType(QuasarType* pVal)
+STDMETHODIMP CGalaxyCluster::get_CurrentDesignGalaxyType(GalaxyType* pVal)
 {
 	if (g_pHubble->m_pDesignGrid)
 	{
-		CQuasar* pQuasar = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar;
-		*pVal = pQuasar->m_nQuasarType;
+		CGalaxy* pGalaxy = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
+		*pVal = pGalaxy->m_nGalaxyType;
 	}
 	else
-		*pVal = NOQuasar;
+		*pVal = NOGalaxy;
 
 	return S_OK;
 }

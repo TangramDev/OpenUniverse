@@ -26,8 +26,8 @@ public:
 	CGridShareData();
 	~CGridShareData();
 
-	CQuasar*					m_pQuasar;
-	CQuasar*					m_pOldQuasar;
+	CGalaxy*					m_pGalaxy;
+	CGalaxy*					m_pOldGalaxy;
 	CGridHelper*				m_pHostClientView;
 	CTangramXmlParse*			m_pHubbleParse;
 	CGalaxyCluster*				m_pGalaxyCluster;
@@ -84,7 +84,7 @@ public:
 	CGridShareData*					m_pGridShareData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
-	CQuasar*						m_pHostQuasar;
+	CGalaxy*						m_pHostGalaxy;
 	CRuntimeClass*					m_pObjClsInfo;
 
 	CGridEvents*					m_pCLREventConnector;
@@ -141,8 +141,8 @@ public:
 	STDMETHOD(get_RootGrid)(IGrid** ppGrid);
 	STDMETHOD(get_OuterXml)(BSTR* pVal);
 	STDMETHOD(get_Key)(BSTR* pVal);
-	STDMETHOD(get_Quasar)(IQuasar** pVal);
-	STDMETHOD(get_HostQuasar)(IQuasar** pVal);
+	STDMETHOD(get_Galaxy)(IGalaxy** pVal);
+	STDMETHOD(get_HostGalaxy)(IGalaxy** pVal);
 	STDMETHOD(get_Height)(LONG* pVal);
 	STDMETHOD(get_Width)(LONG* pVal);
 	STDMETHOD(get_Extender)(IDispatch** pVal);

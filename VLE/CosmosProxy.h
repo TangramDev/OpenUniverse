@@ -33,7 +33,7 @@ public:
 	HWND												m_hCreatingCLRWnd = nullptr;
 	gcroot<String^>										m_strExtendableTypes;
 	map<CString, gcroot<Assembly^>>						m_mapAssembly;
-	map<HWND, QuasarInfo*>								m_mapQuasarInfo;
+	map<HWND, GalaxyInfo*>								m_mapGalaxyInfo;
 	map<HWND, CString>									m_mapEventBindInfo;
 
 	gcroot<Form^>										m_pCurrentPForm;
@@ -84,7 +84,7 @@ private:
 	HWND GetCtrlHandle(IDispatch* pCtrl);
 	BSTR GetCtrlType(IDispatch* pCtrl);
 	IDispatch* GetCtrlFromHandle(HWND hWnd);
-	HWND IsQuasar(IDispatch* ctrl);
+	HWND IsGalaxy(IDispatch* ctrl);
 	void ReleaseHubbleObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);

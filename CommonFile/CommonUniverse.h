@@ -193,16 +193,16 @@ namespace CommonUniverse {
 		long m_nHandleTo = 0;
 	} IPCMsg;
 
-	typedef struct QuasarInfo
+	typedef struct GalaxyInfo
 	{
 		HWND			m_hCtrlHandle;
 		IDispatch*		m_pDisp;
 		IDispatch*		m_pParentDisp;
 		CString			m_strCtrlName;
-		CString			m_strQuasarName;
+		CString			m_strGalaxyName;
 		CString			m_strGridXml;
 		CString			m_strParentCtrlName;
-	}QuasarInfo;
+	}GalaxyInfo;
 
 	typedef struct DocTemplateInfo
 	{
@@ -398,11 +398,11 @@ namespace CommonUniverse {
 		virtual void OnHubbleEvent(IHubbleEventObj* NotifyObj) {}
 	};
 
-	class CQuasarProxy
+	class CGalaxyProxy
 	{
 	public:
-		CQuasarProxy() { }
-		virtual ~CQuasarProxy() {}
+		CGalaxyProxy() { }
+		virtual ~CGalaxyProxy() {}
 
 		bool	m_bAutoDelete;
 		virtual void OnExtend(IGrid* pRetNode, CString bstrKey, CString bstrXml) {}
@@ -477,8 +477,8 @@ namespace CommonUniverse {
 		virtual IHubbleDoc* CreateNewDocument(LPCTSTR lpszFrameID, LPCTSTR lpszAppTitle, void* pDocTemplate, BOOL bNewFrame) { return NULL; }
 		virtual IHubbleDoc* OpenDocument(void* pDocTemplate, CString strFile, BOOL bNewFrame) { return NULL; }
 		virtual CGridProxy* OnGridInit(IGrid* pNewNode) { return nullptr; }
-		virtual CQuasarProxy* OnQuasarCreated(IQuasar* pNewQuasar) { return nullptr; }
-		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewQuasar) { return nullptr; }
+		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalaxy) { return nullptr; }
+		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
 		virtual void AddDoc(LONGLONG llDocID, IHubbleDoc* pDoc) {}
 		virtual void RemoveDoc(LONGLONG llDocID) {}
@@ -510,7 +510,7 @@ namespace CommonUniverse {
 		virtual IDispatch* GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) = 0;
 		virtual HWND GetCtrlHandle(IDispatch* pCtrl) = 0;
 		virtual BSTR GetCtrlType(IDispatch* pCtrl) = 0;
-		virtual HWND IsQuasar(IDispatch* ctrl) = 0;
+		virtual HWND IsGalaxy(IDispatch* ctrl) = 0;
 		virtual void HubbleAction(BSTR bstrXml, void*) = 0;
 		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) = 0;
 		virtual void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal) = 0;
@@ -656,7 +656,7 @@ namespace CommonUniverse {
 		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
-		map<HWND, IGalaxyCluster*>				m_mapQuasar2GalaxyCluster;
+		map<HWND, IGalaxyCluster*>				m_mapGalaxy2GalaxyCluster;
 		map<HWND, IGalaxyCluster*>				m_mapWindowPage;
 		map<CString, CComVariant>				m_mapValInfo;
 		map<CString, void*>						m_mapTemplateInfo;
@@ -679,7 +679,7 @@ namespace CommonUniverse {
 		map<HWND, HWND>							m_mapVSWebPage;
 
 		virtual void BrowserAppStart() = 0;
-		virtual IQuasar* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, QuasarInfo*) { return nullptr; }
+		virtual IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*) { return nullptr; }
 		virtual void OnSubBrowserWndCreated(HWND hParent, HWND hBrowser) = 0;
 		virtual void OnRenderProcessCreated(CChromeRenderProcess* pProcess) = 0;
 		virtual void OnDocumentOnLoadCompleted(CChromeRenderFrameHost*, HWND hHtmlWnd, void*) = 0;
@@ -691,11 +691,11 @@ namespace CommonUniverse {
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) = 0;
 		virtual void AttachGrid(void* pGridEvents) {}
 		virtual void HubbleInit() {}
-		virtual IHubbleDoc* ConnectHubbleDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hQuasar, LPCTSTR strDocType) { return nullptr; }
+		virtual IHubbleDoc* ConnectHubbleDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hGalaxy, LPCTSTR strDocType) { return nullptr; }
 		virtual CString GetNewLayoutNodeName(BSTR strObjTypeID, IGrid* pDesignNode) { return _T(""); }
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
 		virtual IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
-		virtual bool IsMDIClientQuasarNode(IGrid*) { return false; }
+		virtual bool IsMDIClientGalaxyNode(IGrid*) { return false; }
 		virtual void ExportComponentInfo() {}
 		virtual void ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate) {}
 		virtual void InserttoDataMap(int nType, CString strKey, void* pData) {}
@@ -966,7 +966,7 @@ namespace CommonUniverse {
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) = 0;
 		virtual void OnWinFormCreated(HWND) = 0;
 		virtual IGrid* GetParentGrid() = 0;
-		virtual IQuasar* GetQuasar() = 0;
+		virtual IGalaxy* GetGalaxy() = 0;
 		virtual void OnCloudMsgReceived(CSession*) = 0;
 	};
 

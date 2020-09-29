@@ -34,7 +34,7 @@ public:
 
 	IUniverseAppProxy*							m_pUniverseAppProxy;
 	map<CString, HWND>							m_mapWnd;
-	map<HWND, CQuasar*>							m_mapQuasar;
+	map<HWND, CGalaxy*>							m_mapGalaxy;
 	map<CString, CGrid*>						m_mapGrid;
 
 	BEGIN_COM_MAP(CGalaxyCluster)
@@ -57,12 +57,12 @@ protected:
 
 public:
 	STDMETHOD(get_Count)(long* pCount);
-	STDMETHOD(get_Quasar)(VARIANT vIndex, IQuasar ** ppQuasar);
+	STDMETHOD(get_Galaxy)(VARIANT vIndex, IGalaxy ** ppGalaxy);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_Handle)(LONGLONG* pVal);
 	STDMETHOD(get_Extender)(BSTR bstrExtenderName, IDispatch** pVal);
 	STDMETHOD(put_Extender)(BSTR bstrExtenderName, IDispatch* newVal);
-	STDMETHOD(get_QuasarName)(LONGLONG hHwnd, BSTR* pVal);
+	STDMETHOD(get_GalaxyName)(LONGLONG hHwnd, BSTR* pVal);
 	STDMETHOD(get_Grid)(BSTR bstrNodeName, IGrid** pVal);
 	STDMETHOD(get_GridNames)(BSTR* pVal);
 	STDMETHOD(get_XObject)(BSTR bstrName, IDispatch** pVal);
@@ -76,16 +76,16 @@ public:
 	STDMETHOD(get_GalaxyClusterXML)(BSTR* pVal);
 	STDMETHOD(put_ConfigName)(BSTR newVal);
 
-	STDMETHOD(CreateQuasar)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrQuasarName, IQuasar** pRetFrame);
-	STDMETHOD(GetGrid)(BSTR bstrQuasarName, BSTR bstrNodeName, IGrid** pRetNode);
-	STDMETHOD(GetQuasarFromCtrl)(IDispatch* ctrl, IQuasar** ppQuasar);
+	STDMETHOD(CreateGalaxy)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame);
+	STDMETHOD(GetGrid)(BSTR bstrGalaxyName, BSTR bstrNodeName, IGrid** pRetNode);
+	STDMETHOD(GetGalaxyFromCtrl)(IDispatch* ctrl, IGalaxy** ppGalaxy);
 	STDMETHOD(GetCtrlInGrid)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
-	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR QuasarName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
+	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ConnectHubbleCtrl)(IHubbleCtrl* eventSource);
-	STDMETHOD(CreateQuasarWithDefaultNode)(ULONGLONG hQuasarWnd, BSTR bstrQuasarName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
-	STDMETHOD(ObserveQuasars)(BSTR bstrQuasars, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
-	STDMETHOD(get_CurrentDesignQuasarType)(QuasarType* pVal);
+	STDMETHOD(CreateGalaxyWithDefaultNode)(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
+	STDMETHOD(ObserveGalaxys)(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
+	STDMETHOD(get_CurrentDesignGalaxyType)(GalaxyType* pVal);
 	STDMETHOD(get_CurrentDesignNode)(IGrid** pVal);
 
 private:

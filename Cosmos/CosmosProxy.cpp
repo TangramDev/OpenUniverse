@@ -146,7 +146,7 @@ CCosmosProxy::CCosmosProxy() : IHubbleCLRImpl()
 
 CCosmosProxy::~CCosmosProxy()
 {
-	for (auto it : m_mapQuasarInfo)
+	for (auto it : m_mapGalaxyInfo)
 	{
 		delete it.second;
 	}
@@ -316,11 +316,11 @@ void CCosmosProxy::WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPW
 
 void CCosmosProxy::WindowDestroy(HWND hWnd)
 {
-	auto it3 = m_mapQuasarInfo.find(hWnd);
-	if (it3 != m_mapQuasarInfo.end())
+	auto it3 = m_mapGalaxyInfo.find(hWnd);
+	if (it3 != m_mapGalaxyInfo.end())
 	{
 		delete it3->second;
-		m_mapQuasarInfo.erase(it3);
+		m_mapGalaxyInfo.erase(it3);
 	}
 	auto it4 = m_mapFormMenuStrip.find(hWnd);
 	if (it4 != m_mapFormMenuStrip.end())
@@ -386,12 +386,12 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 						if (String::IsNullOrEmpty(name))
 							name = strType;
 						BSTR strName = STRING2BSTR(name->ToLower());
-						QuasarInfo* pInfo = new QuasarInfo;
+						GalaxyInfo* pInfo = new GalaxyInfo;
 						pInfo->m_strGridXml = _T("");
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 						pInfo->m_pDisp = nullptr;
 						pInfo->m_pParentDisp = nullptr;
-						theAppProxy.m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
+						theAppProxy.m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 						pInfo->m_strCtrlName = pChild->Name->ToLower();
 						pInfo->m_strParentCtrlName = pChild->Name->ToLower();
 						theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
@@ -435,7 +435,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 	Cosmos::Grid^ pGrid = Cosmos::Hubble::GetGridFromControl(m_pCurrentForm);
 	if (pGrid)
 	{
-		Quasar^ pQuasar = pGrid->Quasar;
+		Galaxy^ pGalaxy = pGrid->Galaxy;
 		if (e->Item->Tag != nullptr)
 		{
 			String^ strTag = e->Item->Tag->ToString();
@@ -613,28 +613,28 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 
 									if (pChildParse2)
 									{
-										QuasarInfo* pInfo = new QuasarInfo;
+										GalaxyInfo* pInfo = new GalaxyInfo;
 										pInfo->m_pDisp = nullptr;
 										pInfo->m_strGridXml = pChildParse2->xml();
 										pInfo->m_pParentDisp = nullptr;
 										pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-										m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
+										m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 										pInfo->m_strCtrlName = name->ToLower();
 										pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-										IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+										IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
 									}
 								}
 								else
 								{
-									QuasarInfo* pInfo = new QuasarInfo;
+									GalaxyInfo* pInfo = new GalaxyInfo;
 									pInfo->m_pDisp = nullptr;
 									pInfo->m_strGridXml = _T("");
 									pInfo->m_pParentDisp = nullptr;
 									pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-									m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
+									m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 									pInfo->m_strCtrlName = name->ToLower();
 									pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-									IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+									IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
 								}
 							}
 							::SysFreeString(strName);
@@ -686,15 +686,15 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 					if (String::IsNullOrEmpty(name))
 						name = strType;
 					BSTR strName = STRING2BSTR(name->ToLower());//OK!
-					QuasarInfo* pInfo = new QuasarInfo;
+					GalaxyInfo* pInfo = new GalaxyInfo;
 					pInfo->m_strGridXml = _T("");
 					pInfo->m_pDisp = nullptr;
 					pInfo->m_pParentDisp = nullptr;
 					pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-					m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
+					m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 					pInfo->m_strCtrlName = pChild->Name->ToLower();
 					pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-					IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+					IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
 					::SysFreeString(strName);
 				}
 			}
@@ -731,10 +731,10 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 				}
 				if (bExtendable)
 				{
-					IQuasar* pQuasar = nullptr;
-					_pGrid->get_Quasar(&pQuasar);
+					IGalaxy* pGalaxy = nullptr;
+					_pGrid->get_Galaxy(&pGalaxy);
 					CComBSTR bstrName("");
-					pQuasar->get_Name(&bstrName);
+					pGalaxy->get_Name(&bstrName);
 					String^ name = pGrid->Name + L".";
 					if (String::IsNullOrEmpty(pChild->Name))
 						name += strType;
@@ -773,15 +773,15 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 						}
 						if (pChildParse2)
 						{
-							QuasarInfo* pInfo = new QuasarInfo;
+							GalaxyInfo* pInfo = new GalaxyInfo;
 							pInfo->m_pDisp = nullptr;
 							pInfo->m_pParentDisp = _pGrid;
 							pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-							m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
+							m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 							pInfo->m_strGridXml = pChildParse2->xml();
 							pInfo->m_strCtrlName = _strName;
 							pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-							IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+							IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
 							if (m_pOnCtrlVisible)
 							{
 							}
@@ -823,15 +823,15 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 					}
 					else
 					{
-						QuasarInfo* pInfo = new QuasarInfo;
+						GalaxyInfo* pInfo = new GalaxyInfo;
 						pInfo->m_pDisp = nullptr;
 						pInfo->m_pParentDisp = _pGrid;
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-						m_mapQuasarInfo[pInfo->m_hCtrlHandle] = pInfo;
+						m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 						pInfo->m_strGridXml = _T("");
 						pInfo->m_strCtrlName = pChild->Name->ToLower();
 						pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-						IQuasar* _pQuasar = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+						IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
 						if (m_pOnCtrlVisible)
 						{
 						}
@@ -1413,7 +1413,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 				((Form^)pObj)->Show();
 				return pDisp;
 			}
-			if (theApp.m_pHubbleImpl->IsMDIClientQuasarNode(pHostNode) == false)
+			if (theApp.m_pHubbleImpl->IsMDIClientGalaxyNode(pHostNode) == false)
 			{
 				if (theApp.m_pHubbleImpl->m_mapControlScript.size())
 				{
@@ -1916,7 +1916,7 @@ IDispatch* CCosmosProxy::GetCtrlFromHandle(HWND hWnd)
 	return nullptr;
 }
 
-HWND CCosmosProxy::IsQuasar(IDispatch* ctrl)
+HWND CCosmosProxy::IsGalaxy(IDispatch* ctrl)
 {
 	Control^ pCtrl = (Control^)Marshal::GetObjectForIUnknown((IntPtr)ctrl);
 	if (pCtrl != nullptr)

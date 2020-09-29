@@ -45,12 +45,12 @@ namespace Cosmos
         m_pGrid = NULL;
     }
 
-    Quasar^ Grid::Quasar::get()
+    Galaxy^ Grid::Galaxy::get()
     {
-        CComPtr<IQuasar> pQuasar;
-        m_pGrid->get_Quasar(&pQuasar);
+        CComPtr<IGalaxy> pGalaxy;
+        m_pGrid->get_Galaxy(&pGalaxy);
 
-        return theAppProxy._createObject<IQuasar, Cosmos::Quasar>(pQuasar);
+        return theAppProxy._createObject<IGalaxy, Cosmos::Galaxy>(pGalaxy);
     }
 
     String^ Grid::Caption::get()
@@ -285,14 +285,14 @@ namespace Cosmos
         {
             if (ctrl->Dock != DockStyle::Fill && ctrl->Dock != DockStyle::None)
                 return nullptr;
-            IQuasar* pQuasar = nullptr;
-            theApp.m_pHubble->GetQuasar((__int64)ctrl->Handle.ToPointer(), &pQuasar);
-            if (pQuasar)
+            IGalaxy* pGalaxy = nullptr;
+            theApp.m_pHubble->GetGalaxy((__int64)ctrl->Handle.ToPointer(), &pGalaxy);
+            if (pGalaxy)
             {
                 IGrid* pGrid = nullptr;
                 BSTR bstrKey = STRING2BSTR(key);
                 BSTR bstrXml = STRING2BSTR(strGridXml);
-                pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                pGalaxy->Observe(bstrKey, bstrXml, &pGrid);
                 ::SysFreeString(bstrKey);
                 ::SysFreeString(bstrXml);
                 if (pGrid)
@@ -352,16 +352,16 @@ namespace Cosmos
                         theApp.m_pHubble->CreateGalaxyCluster(pForm2->Handle.ToInt64(), &pGalaxyCluster);
                         if (pGalaxyCluster != nullptr)
                         {
-                            IQuasar* pQuasar = nullptr;
+                            IGalaxy* pGalaxy = nullptr;
                             BSTR bstrName = STRING2BSTR(ctrl->Name);
                             Grid^ thisGrid = nullptr;
-                            pGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToInt64()), bstrName, &pQuasar);
-                            if (pQuasar)
+                            pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToInt64()), bstrName, &pGalaxy);
+                            if (pGalaxy)
                             {
                                 IGrid* pGrid = nullptr;
                                 BSTR bstrKey = STRING2BSTR(key);
                                 BSTR bstrXml = STRING2BSTR(strGridXml);
-                                pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                                pGalaxy->Observe(bstrKey, bstrXml, &pGrid);
                                 if (pGrid)
                                 {
                                     thisGrid = theAppProxy._createObject<IGrid, Grid>(pGrid);
@@ -399,13 +399,13 @@ namespace Cosmos
                         String^ strName = ctrl->Name;
                         BSTR bstrName = STRING2BSTR(strName);
                         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
-                        pGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)hWnd), bstrName, &pQuasar);
-                        if (pQuasar)
+                        pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)hWnd), bstrName, &pGalaxy);
+                        if (pGalaxy)
                         {
                             IGrid* pGrid = nullptr;
                             BSTR bstrKey = STRING2BSTR(key);
                             BSTR bstrXml = STRING2BSTR(strGridXml);
-                            pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                            pGalaxy->Observe(bstrKey, bstrXml, &pGrid);
                             ::SysFreeString(bstrKey);
                             ::SysFreeString(bstrXml);
                             if(pGrid)
@@ -421,13 +421,13 @@ namespace Cosmos
                     if (pGalaxyCluster != nullptr)
                     {
                         BSTR bstrName = STRING2BSTR(ctrl->Name);
-                        pGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToInt64()), bstrName, &pQuasar);
-                        if (pQuasar)
+                        pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)ctrl->Handle.ToInt64()), bstrName, &pGalaxy);
+                        if (pGalaxy)
                         {
                             IGrid* pGrid = nullptr;
                             BSTR bstrKey = STRING2BSTR(key);
                             BSTR bstrXml = STRING2BSTR(strGridXml);
-                            pQuasar->Observe(bstrKey, bstrXml, &pGrid);
+                            pGalaxy->Observe(bstrKey, bstrXml, &pGrid);
                             ::SysFreeString(bstrKey);
                             ::SysFreeString(bstrXml);
                             if (pGrid)
@@ -729,13 +729,13 @@ namespace Cosmos
         return nullptr;
     }
 
-    Grid^ Quasar::Observe(String^ layerName, String^ layerXML)
+    Grid^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
         Cosmos::Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IGrid> pGrid;
-        m_pQuasar->Observe(blayerName, blayerXML, &pGrid);
+        m_pGalaxy->Observe(blayerName, blayerXML, &pGrid);
         if (pGrid)
         {
             pRetNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);

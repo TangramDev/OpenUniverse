@@ -140,9 +140,9 @@ namespace Cosmos
 		return theAppProxy._createObject<IGrid, Grid>(m_pProxy->GetParentGrid());
 	}
 	
-	Quasar^ WebPage::HostQuasar::get()
+	Galaxy^ WebPage::HostGalaxy::get()
 	{
-		return theAppProxy._createObject<IQuasar, Quasar>(m_pProxy->GetQuasar());
+		return theAppProxy._createObject<IGalaxy, Galaxy>(m_pProxy->GetGalaxy());
 	}
 
 	Form^ WebPage::CreateForm(String^ strFormKey)

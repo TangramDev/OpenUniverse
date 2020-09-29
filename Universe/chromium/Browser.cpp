@@ -16,7 +16,7 @@
 #include "../Hubble.h"
 #include "../grid.h"
 #include "../GridHelper.h"
-#include "../Quasar.h"
+#include "../Galaxy.h"
 #include "../GridWnd.h"
 #include "Browser.h"
 #include "WebPage.h"
@@ -60,7 +60,7 @@ namespace Web {
 		g_pHubble->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 		if (m_pVisibleWebWnd && g_pHubble->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
 		{
-			g_pHubble->m_pQuasar = nullptr;
+			g_pHubble->m_pGalaxy = nullptr;
 			g_pHubble->m_bWinFormActived = false;
 		}
 		return lRes;
@@ -155,7 +155,7 @@ namespace Web {
 			return 0;
 		RECT rcBrowser;
 		GetClientRect(&rcBrowser);
-		if (m_pVisibleWebWnd->m_pQuasar == nullptr) {
+		if (m_pVisibleWebWnd->m_pGalaxy == nullptr) {
 			if (rcBrowser.right * rcBrowser.left)
 				::SetWindowPos(m_pVisibleWebWnd->m_hExtendWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_SHOWWINDOW);
 			::SetWindowRgn(m_hDrawWnd, NULL, true);
@@ -242,7 +242,7 @@ namespace Web {
 			g_pHubble->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 			if (g_pHubble->m_pActiveHtmlWnd && g_pHubble->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
 			{
-				g_pHubble->m_pQuasar = nullptr;
+				g_pHubble->m_pGalaxy = nullptr;
 				g_pHubble->m_bWinFormActived = false;
 			}
 		}
@@ -279,7 +279,7 @@ namespace Web {
 			if (hPWnd)
 			{
 				g_pHubble->m_pActiveHtmlWnd = m_pVisibleWebWnd;// g_pHubble->m_pHtmlWndCreated;
-				g_pHubble->m_pQuasar = nullptr;
+				g_pHubble->m_pGalaxy = nullptr;
 				g_pHubble->m_bWinFormActived = false;
 				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
 			}
@@ -363,10 +363,10 @@ namespace Web {
 		{
 			if (m_pVisibleWebWnd)
 			{
-				CQuasar* pQuasar = m_pVisibleWebWnd->m_pQuasar;
-				if (pQuasar)
+				CGalaxy* pGalaxy = m_pVisibleWebWnd->m_pGalaxy;
+				if (pGalaxy)
 				{
-					CGrid* pGrid = pQuasar->m_pWorkGrid;
+					CGrid* pGrid = pGalaxy->m_pWorkGrid;
 					CGridHelper* pWnd = (CGridHelper*)(pGrid->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}

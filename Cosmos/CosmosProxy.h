@@ -66,7 +66,7 @@ public:
 	map<HWND, FormInfo*>								m_mapFormInfo;
 	map<HWND, gcroot<MenuStrip^>>						m_mapFormMenuStrip2;
 	map<HWND, gcroot<WebPage^>>							m_mapChromeWebPage;
-	map<HWND, QuasarInfo*>								m_mapQuasarInfo;
+	map<HWND, GalaxyInfo*>								m_mapGalaxyInfo;
 	map<HWND, CMenuHelperWnd*>							m_mapMenuHelperWnd;
 	map<HWND, CMenuHelperWnd*>							m_mapVisibleMenuHelperWnd;
 	map<IBrowser*, gcroot<Browser^>>					m_mapWebBrowser;
@@ -123,7 +123,7 @@ private:
 	HWND GetCtrlHandle(IDispatch* pCtrl);
 	BSTR GetCtrlType(IDispatch* pCtrl);
 	IDispatch* GetCtrlFromHandle(HWND hWnd);
-	HWND IsQuasar(IDispatch* ctrl);
+	HWND IsGalaxy(IDispatch* ctrl);
 	void ReleaseHubbleObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);

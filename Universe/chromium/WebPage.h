@@ -40,7 +40,7 @@ namespace Web
 		CString								m_strCurXml;
 		CString								m_strAppProxyID;
 
-		CQuasar*							m_pQuasar;
+		CGalaxy*							m_pGalaxy;
 		CGrid*								m_pParentGrid;
 		IUniverseAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
@@ -74,7 +74,7 @@ namespace Web
 	private:
 		CString m_strDocXml;
 		IGrid* GetParentGrid() { return (IGrid*)m_pParentGrid; }
-		IQuasar* GetQuasar() { return (IQuasar*)m_pQuasar; }
+		IGalaxy* GetGalaxy() { return (IGalaxy*)m_pGalaxy; }
 		CString FindToken(CString pszContent, CString pszDelimiter, int& nStart);
 		void LoadDocument2Viewport(CString strName, CString strXML);
 		void OnFinalMessage(HWND hWnd) override;

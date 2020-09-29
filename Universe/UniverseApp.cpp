@@ -21,7 +21,7 @@
 
 #include "GridHelper.h"
 #include "grid.h"
-#include "Quasar.h"
+#include "Galaxy.h"
 #include <io.h>
 #include <stdio.h>
 
@@ -223,7 +223,7 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			{
 				if (it.second)
 				{
-					for (auto it2 : it.second->m_mapQuasar)
+					for (auto it2 : it.second->m_mapGalaxy)
 					{
 						it2.second->HostPosChanged();
 					}
@@ -263,12 +263,12 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	case WM_TABCHANGE:
 	{
 		HWND hwnd = (HWND)wParam;
-		IQuasar* pQuasar = nullptr;
-		g_pHubble->GetQuasar((LONGLONG)hwnd, &pQuasar);
-		if (pQuasar)
+		IGalaxy* pGalaxy = nullptr;
+		g_pHubble->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
+		if (pGalaxy)
 		{
 			IGrid* pGrid = nullptr;
-			pQuasar->Observe(CComBSTR(L""), CComBSTR(L""), &pGrid);
+			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pGrid);
 			LONGLONG h = 0;
 			pGrid->get_Handle(&h);
 			HWND hWnd = (HWND)h;
@@ -458,9 +458,9 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (g_pHubble->m_pCLRProxy)
 			g_pHubble->m_pCLRProxy->WindowDestroy(hWnd);
 
-		auto it = g_pHubble->m_mapQuasar2GalaxyCluster.find(hWnd);
-		if (it != g_pHubble->m_mapQuasar2GalaxyCluster.end())
-			g_pHubble->m_mapQuasar2GalaxyCluster.erase(it);
+		auto it = g_pHubble->m_mapGalaxy2GalaxyCluster.find(hWnd);
+		if (it != g_pHubble->m_mapGalaxy2GalaxyCluster.end())
+			g_pHubble->m_mapGalaxy2GalaxyCluster.erase(it);
 
 		if (hWnd == g_pHubble->m_hMainWnd)
 		{
@@ -497,7 +497,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			g_pHubble->m_bWinFormActived = g_pHubble->m_pCLRProxy->IsWinForm(hWnd);
 			if (g_pHubble->m_bWinFormActived)
 			{
-				g_pHubble->m_pQuasar = nullptr;
+				g_pHubble->m_pGalaxy = nullptr;
 			}
 		}
 		LRESULT lRes = ::SendMessage(hWnd, WM_QUERYAPPPROXY, 0, 0);
@@ -593,7 +593,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									}
 								}
 								else
-									g_pHubble->m_pQuasar = nullptr;
+									g_pHubble->m_pGalaxy = nullptr;
 							}
 						}
 					}
@@ -606,7 +606,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					{
 						break;
 					}
-					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pHubble->m_pGalaxy && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						lpMsg->hwnd = NULL;
 						lpMsg->lParam = 0;
@@ -671,7 +671,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 						break;
 					}
-					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pHubble->m_pGalaxy && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						if (g_pHubble->m_pCLRProxy && g_pHubble->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
 						{
@@ -718,12 +718,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_pHubble->m_pHubbleDelegate->OnUniversePreTranslateMessage(lpMsg))
 							break;
 					}
-					if (g_pHubble->m_pQuasar && g_pHubble->m_pActiveGrid)
+					if (g_pHubble->m_pGalaxy && g_pHubble->m_pActiveGrid)
 					{
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pHubble->m_pActiveGrid = nullptr;
-							g_pHubble->m_pQuasar = nullptr;
+							g_pHubble->m_pGalaxy = nullptr;
 						}
 						else if (pWnd)
 						{
@@ -970,12 +970,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				if (it != g_pHubble->m_mapBrowserWnd.end())
 				{
 					CWebPage* pWnd = ((CBrowser*)it->second)->m_pVisibleWebWnd;
-					if (pWnd && ::IsWindow(pWnd->m_hWnd) && pWnd->m_pQuasar)
+					if (pWnd && ::IsWindow(pWnd->m_hWnd) && pWnd->m_pGalaxy)
 					{
 						IGrid* pGrid = nullptr;
 						if (g_bRecturnPressed == false)
 						{
-							pWnd->m_pQuasar->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pHubble->m_strDefaultXml : _T("")), &pGrid);
+							pWnd->m_pGalaxy->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pHubble->m_strDefaultXml : _T("")), &pGrid);
 							::SendMessage(it->first, WM_BROWSERLAYOUT, 0, 4);
 						}
 						g_bRecturnPressed = false;

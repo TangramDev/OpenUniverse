@@ -21,7 +21,7 @@ using namespace System::Windows::Forms;
 namespace Cosmos
 {
 	ref class Grid;
-	ref class Quasar;
+	ref class Galaxy;
 
 	public ref class Wormhole
 	{
@@ -71,9 +71,9 @@ namespace Cosmos
 			Grid^ get();
 		}
 
-		property Quasar^ HostQuasar
+		property Galaxy^ HostGalaxy
 		{
-			Quasar^ get();
+			Galaxy^ get();
 		}
 
 		Form^ CreateForm(String^ strFormKey);

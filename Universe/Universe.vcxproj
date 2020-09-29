@@ -325,7 +325,7 @@
     <ClCompile Include="UniverseApp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Quasar.cpp" />
+    <ClCompile Include="Galaxy.cpp" />
     <ClCompile Include="Hubble.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="GalaxyCluster.cpp" />
@@ -345,7 +345,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UniverseApp.h" />
-    <ClInclude Include="Quasar.h" />
+    <ClInclude Include="Galaxy.h" />
     <ClInclude Include="hubble.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="GalaxyCluster.h" />

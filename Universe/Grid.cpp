@@ -19,7 +19,7 @@
 #include "GridHelper.h"
 #include "GridWnd.h"
 #include "grid.h"
-#include "Quasar.h"
+#include "Galaxy.h"
 #include "HubbleEvents.h"
 #include "GridWnd.h"
 #include "Wormhole.h"
@@ -46,7 +46,7 @@ CGrid::CGrid()
 	m_hHostWnd = NULL;
 	m_hChildHostWnd = NULL;
 	m_pDisp = nullptr;
-	m_pHostQuasar = nullptr;
+	m_pHostGalaxy = nullptr;
 	m_pRootObj = nullptr;
 	m_pHostWnd = nullptr;
 	m_pExtender = nullptr;
@@ -75,25 +75,25 @@ void CGrid::InitWndGrid()
 	{
 		m_strName.Format(_T("Node_%p"), (LONGLONG)this);
 	}
-	if (m_pGridShareData->m_pQuasar->m_pWebPageWnd)
+	if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 	{
-		auto it = m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapBindWebObj.find(m_strName);
-		if (it == m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapBindWebObj.end())
+		auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj.find(m_strName);
+		if (it == m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj.end())
 		{
 			BindWebObj* pObj = new BindWebObj;
 			pObj->nType = 1;
 			pObj->m_pGrid = this;
 			pObj->m_strBindObjName = m_strName;
-			//m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapBindWebObj.erase(it);
+			//m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj.erase(it);
 			//delete it->second;
-			m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapBindWebObj[m_strName] = pObj;
+			m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj[m_strName] = pObj;
 		}
 	}
 	m_nActivePage = m_pHostParse->attrInt(TGM_ACTIVE_PAGE, 0);
 	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
-	if (m_pGridShareData->m_pQuasar && m_pGridShareData->m_pQuasar->m_pGalaxyCluster)
+	if (m_pGridShareData->m_pGalaxy && m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)
 	{
-		m_strNodeName = m_strName + _T("@") + g_pHubble->m_strCurrentKey + _T("@") + m_pGridShareData->m_pQuasar->m_strQuasarName;
+		m_strNodeName = m_strName + _T("@") + g_pHubble->m_strCurrentKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName;
 		auto it2 = m_pGridShareData->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
 		if (it2 == m_pGridShareData->m_pGalaxyCluster->m_mapGrid.end())
 		{
@@ -120,15 +120,15 @@ void CGrid::InitWndGrid()
 		{ 
 			if(m_strObjTypeID.Find(_T(",")) != -1)
 				m_strID = _T("clrctrl");
-			else if (m_pGridShareData->m_pQuasar->m_pWebPageWnd)
+			else if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 			{
-				auto it = m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapUserControlsInfo.find(m_strObjTypeID);
-				if(it!= m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapUserControlsInfo.end())
+				auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapUserControlsInfo.find(m_strObjTypeID);
+				if(it!= m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapUserControlsInfo.end())
 					m_strID = _T("clrctrl");
 				else
 				{
-					it = m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapFormsInfo.find(m_strObjTypeID);
-					if (it != m_pGridShareData->m_pQuasar->m_pWebPageWnd->m_mapFormsInfo.end())
+					it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.find(m_strObjTypeID);
+					if (it != m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.end())
 						m_strID = _T("clrctrl");
 				}
 			}
@@ -153,32 +153,32 @@ CGrid::~CGrid()
 {
 	if (g_pHubble->m_pActiveGrid == this)
 		g_pHubble->m_pActiveGrid = nullptr;
-	if (m_pGridShareData->m_pOldQuasar)
-		m_pGridShareData->m_pQuasar = m_pGridShareData->m_pOldQuasar;
-	CQuasar * pQuasar = m_pGridShareData->m_pQuasar;
-	if (pQuasar->m_pGalaxyCluster)
+	if (m_pGridShareData->m_pOldGalaxy)
+		m_pGridShareData->m_pGalaxy = m_pGridShareData->m_pOldGalaxy;
+	CGalaxy * pGalaxy = m_pGridShareData->m_pGalaxy;
+	if (pGalaxy->m_pGalaxyCluster)
 	{
-		auto it = pQuasar->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
-		if (it != pQuasar->m_pGalaxyCluster->m_mapGrid.end())
-			pQuasar->m_pGalaxyCluster->m_mapGrid.erase(it);
+		auto it = pGalaxy->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
+		if (it != pGalaxy->m_pGalaxyCluster->m_mapGrid.end())
+			pGalaxy->m_pGalaxyCluster->m_mapGrid.erase(it);
 	}
-	if (pQuasar->m_pWorkGrid == this)
-		pQuasar->m_pWorkGrid = nullptr;
+	if (pGalaxy->m_pWorkGrid == this)
+		pGalaxy->m_pWorkGrid = nullptr;
 	if (m_strKey != _T(""))
 	{
-		auto it = pQuasar->m_mapGrid.find(m_strKey);
-		if (it != pQuasar->m_mapGrid.end())
+		auto it = pGalaxy->m_mapGrid.find(m_strKey);
+		if (it != pGalaxy->m_mapGrid.end())
 		{
 			//BOOL bDeleteFrame = FALSE;
-			pQuasar->m_mapGrid.erase(it);
-			if (pQuasar->m_mapGrid.size() == 0)
+			pGalaxy->m_mapGrid.erase(it);
+			if (pGalaxy->m_mapGrid.size() == 0)
 			{
-				if (::IsWindow(pQuasar->m_hWnd))
+				if (::IsWindow(pGalaxy->m_hWnd))
 				{
-					pQuasar->UnsubclassWindow(true);
-					pQuasar->m_hWnd = NULL;
+					pGalaxy->UnsubclassWindow(true);
+					pGalaxy->m_hWnd = NULL;
 				}
-				delete pQuasar;
+				delete pGalaxy;
 			}
 			delete m_pGridShareData;
 			m_pGridShareData = nullptr;
@@ -233,7 +233,7 @@ CWebPage* CGrid::GetHtmlWnd()
 {
 	if (m_pRootObj)
 	{
-		HWND hPWnd = m_pGridShareData->m_pQuasar->m_pGalaxyCluster->m_hWnd;
+		HWND hPWnd = m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 		HWND hWnd = (HWND)::GetWindowLongPtr(hPWnd, GWLP_USERDATA);
 		if (::IsWindow(hWnd))
 		{
@@ -283,7 +283,7 @@ STDMETHODIMP CGrid::ActiveTabPage(IGrid * _pGrid)
 	if (::IsWindow(hWnd))
 	{
 		::SetFocus(hWnd);
-		m_pGridShareData->m_pQuasar->HostPosChanged();
+		m_pGridShareData->m_pGalaxy->HostPosChanged();
 	}
 	return S_OK;
 }
@@ -309,7 +309,7 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 			{
 				return m_pParentObj->ObserveEx(m_nRow, m_nCol, bstrKey, bstrXml, ppRetGrid);
 			}
-			if (m_pHostQuasar == nullptr)
+			if (m_pHostGalaxy == nullptr)
 			{
 				CString strName = m_strNodeName;
 				strName += _T("_Frame");
@@ -324,19 +324,19 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 				{
 					m_hHostWnd = ::GetWindow(m_pHostWnd->m_hWnd, GW_CHILD);
 				}
-				IQuasar* pQuasar = nullptr;
-				m_pGridShareData->m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((long)m_hHostWnd), strName.AllocSysString(), &pQuasar);
-				if (pQuasar)
-					m_pHostQuasar = (CQuasar*)pQuasar;
+				IGalaxy* pGalaxy = nullptr;
+				m_pGridShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)m_hHostWnd), strName.AllocSysString(), &pGalaxy);
+				if (pGalaxy)
+					m_pHostGalaxy = (CGalaxy*)pGalaxy;
 			}
-			if (m_pHostQuasar && ::IsWindow(m_hHostWnd))
+			if (m_pHostGalaxy && ::IsWindow(m_hHostWnd))
 			{
-				m_pHostQuasar->m_pContainerNode = this;
-				if (m_pGridShareData->m_pQuasar->m_pParentGrid)
+				m_pHostGalaxy->m_pContainerNode = this;
+				if (m_pGridShareData->m_pGalaxy->m_pParentGrid)
 				{
-					m_pHostQuasar->m_pParentGrid = m_pGridShareData->m_pQuasar->m_pParentGrid;
+					m_pHostGalaxy->m_pParentGrid = m_pGridShareData->m_pGalaxy->m_pParentGrid;
 				}
-				HRESULT hr = m_pHostQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
+				HRESULT hr = m_pHostGalaxy->Observe(bstrKey, bstrXml, ppRetGrid);
 				if (m_pWebBrowser)
 				{
 					CGrid* pRetNode = (CGrid*)*ppRetGrid;
@@ -350,9 +350,9 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 						pGrid2->m_pWebBrowser = m_pWebBrowser;
 						CGrid* pOldParent = m_pWebBrowser->m_pParentGrid;
 						m_pWebBrowser->m_pParentGrid = pGrid2;
-						m_pHostQuasar->m_pHostWebBrowserNode = pGrid2;
-						m_pHostQuasar->m_strHostWebBrowserNodeName = m_strName;
-						m_pHostQuasar->m_pHostWebBrowserWnd = m_pWebBrowser;
+						m_pHostGalaxy->m_pHostWebBrowserNode = pGrid2;
+						m_pHostGalaxy->m_strHostWebBrowserNodeName = m_strName;
+						m_pHostGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 						HWND hWnd = m_pWebBrowser->m_hWnd;
 						HWND h = ::GetParent(hWnd);
 						CGridHelper* pGridWnd = (CGridHelper*)CWnd::FromHandlePermanent(h);
@@ -384,35 +384,35 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 		if (pGrid == nullptr)
 			return S_OK;
 		CGrid * pWndGrid = (CGrid*)pGrid;
-		if (pWndGrid->m_pHostQuasar == nullptr)
+		if (pWndGrid->m_pHostGalaxy == nullptr)
 		{
 			CString strName = pWndGrid->m_strNodeName;
 			strName += _T("_Frame");
 
 			::SetWindowLong(pWndGrid->m_pHostWnd->m_hWnd, GWL_ID, 1);
-			IQuasar* pQuasar = nullptr;
-			m_pGridShareData->m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((long)pWndGrid->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pQuasar);
-			pWndGrid->m_pHostQuasar = (CQuasar*)pQuasar;
-			CQuasar* _pQuasar = pWndGrid->m_pHostQuasar;
-			_pQuasar->m_pWebPageWnd = m_pGridShareData->m_pQuasar->m_pWebPageWnd;
-			if (m_pGridShareData->m_pQuasar->m_pParentGrid)
+			IGalaxy* pGalaxy = nullptr;
+			m_pGridShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pWndGrid->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pGalaxy);
+			pWndGrid->m_pHostGalaxy = (CGalaxy*)pGalaxy;
+			CGalaxy* _pGalaxy = pWndGrid->m_pHostGalaxy;
+			_pGalaxy->m_pWebPageWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+			if (m_pGridShareData->m_pGalaxy->m_pParentGrid)
 			{
-				_pQuasar->m_pParentGrid = m_pGridShareData->m_pQuasar->m_pParentGrid;
+				_pGalaxy->m_pParentGrid = m_pGridShareData->m_pGalaxy->m_pParentGrid;
 			}
-			if (m_pGridShareData->m_pQuasar->m_pWebPageWnd)
+			if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 			{
-				_pQuasar->m_pWebPageWnd = m_pGridShareData->m_pQuasar->m_pWebPageWnd;
+				_pGalaxy->m_pWebPageWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
 			}
 		}
 
-		if (pWndGrid->m_pHostQuasar)
+		if (pWndGrid->m_pHostGalaxy)
 		{
 			if (pWndGrid->m_pCurrentExNode)
 			{
 				::SetWindowLong(pWndGrid->m_pCurrentExNode->m_pHostWnd->m_hWnd, GWL_ID, 1);
 			}
 
-			HRESULT hr = pWndGrid->m_pHostQuasar->Observe(bstrKey, bstrXml, ppRetGrid);
+			HRESULT hr = pWndGrid->m_pHostGalaxy->Observe(bstrKey, bstrXml, ppRetGrid);
 
 			long dwID = AFX_IDW_PANE_FIRST + nRow * 16 + nCol;
 			if (hr != S_OK)
@@ -421,7 +421,7 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 					::SetWindowLong(pWndGrid->m_pCurrentExNode->m_pHostWnd->m_hWnd, GWL_ID, dwID);
 				else
 					::SetWindowLong(pWndGrid->m_pHostWnd->m_hWnd, GWL_ID, dwID);
-				CWebPage* pWebWnd = pWndGrid->m_pHostQuasar->m_pWebPageWnd;
+				CWebPage* pWebWnd = pWndGrid->m_pHostGalaxy->m_pWebPageWnd;
 				if (pWebWnd)
 				{
 					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
@@ -434,11 +434,11 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 			m_mapExtendNode[pWndGrid] = strKey;
 			pWndGrid->m_pCurrentExNode = pRootGrid;
 			::SetWindowLongPtr(pRootGrid->m_pHostWnd->m_hWnd, GWLP_ID, dwID);
-			CWebPage* pWebWnd = pWndGrid->m_pHostQuasar->m_pWebPageWnd;
+			CWebPage* pWebWnd = pWndGrid->m_pHostGalaxy->m_pWebPageWnd;
 			if (pWebWnd)
 			{
-				if (pWndGrid->m_pHostQuasar->m_pBindingGrid)
-					pWebWnd->m_hWebHostWnd = pWndGrid->m_pHostQuasar->m_pBindingGrid->m_pHostWnd->m_hWnd;
+				if (pWndGrid->m_pHostGalaxy->m_pBindingGrid)
+					pWebWnd->m_hWebHostWnd = pWndGrid->m_pHostGalaxy->m_pBindingGrid->m_pHostWnd->m_hWnd;
 				else
 					pWebWnd->m_hWebHostWnd = NULL;
 				::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
@@ -447,8 +447,8 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 			HWND h = ::GetParent(m_pHostWnd->m_hWnd);
 			if (m_nViewType==Grid)
 			{
-				CQuasar* pQuasar = m_pGridShareData->m_pQuasar;
-				pQuasar->HostPosChanged();
+				CGalaxy* pGalaxy = m_pGridShareData->m_pGalaxy;
+				pGalaxy->HostPosChanged();
 			}
 			return hr;
 		}
@@ -539,17 +539,17 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 		if (strID.CompareNoCase(TGM_GRID_TYPE))
 			m_strID = strVal;
 		ATLTRACE(_T("Modify CGrid Attribute: ID: %s Value: %s\n"), strID, strVal);
-		CQuasar* pQuasar = nullptr;
+		CGalaxy* pGalaxy = nullptr;
 		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pHubble->m_pDesignGrid)
 		{
-			pQuasar = g_pHubble->m_pDesignGrid->m_pRootObj->m_pGridShareData->m_pQuasar;
-			if (g_pHubble->m_pDesignGrid && pQuasar->m_pBindingGrid)
+			pGalaxy = g_pHubble->m_pDesignGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
+			if (g_pHubble->m_pDesignGrid && pGalaxy->m_pBindingGrid)
 			{
-				CGrid* pOldNode = pQuasar->m_pBindingGrid;
-				if (pOldNode->m_pGridShareData->m_pOldQuasar)
+				CGrid* pOldNode = pGalaxy->m_pBindingGrid;
+				if (pOldNode->m_pGridShareData->m_pOldGalaxy)
 				{
-					pOldNode->m_pGridShareData->m_pQuasar = pOldNode->m_pGridShareData->m_pOldQuasar;
-					pOldNode->m_pGridShareData->m_pOldQuasar = nullptr;
+					pOldNode->m_pGridShareData->m_pGalaxy = pOldNode->m_pGridShareData->m_pOldGalaxy;
+					pOldNode->m_pGridShareData->m_pOldGalaxy = nullptr;
 				}
 				CGrid* pParent = pOldNode->m_pParentObj;
 				if (pParent && pParent->m_nViewType == Grid)
@@ -579,25 +579,25 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 			pTopGrid->m_pGridShareData->m_pHostClientView = (CGridHelper*)m_pHostWnd;
 			while (pTopGrid != pTopGrid->m_pRootObj)
 			{
-				pTopGrid->m_pGridShareData->m_pQuasar->m_pBindingGrid = this;
+				pTopGrid->m_pGridShareData->m_pGalaxy->m_pBindingGrid = this;
 				pTopGrid->m_pGridShareData->m_pHostClientView = pTopGrid->m_pGridShareData->m_pHostClientView;
 				pTopGrid = pTopGrid->m_pRootObj;
 			}
 			m_pHostParse->put_attr(TGM_GRID_TYPE, TGM_NUCLEUS);
 			if (g_pHubble->m_pDesignGrid)
 			{
-				pQuasar->m_pBindingGrid = this;
-				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pOldQuasar = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar;
-				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pQuasar = m_pRootObj->m_pGridShareData->m_pQuasar;
+				pGalaxy->m_pBindingGrid = this;
+				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pOldGalaxy = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
+				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy = m_pRootObj->m_pGridShareData->m_pGalaxy;
 				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pHostClientView = m_pRootObj->m_pGridShareData->m_pHostClientView;
 			}
 
 			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 				m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
-			m_pGridShareData->m_pQuasar->HostPosChanged();
-			if (m_pGridShareData->m_pQuasar->m_pWebPageWnd)
+			m_pGridShareData->m_pGalaxy->HostPosChanged();
+			if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 			{
-				CWebPage* pWebWnd = m_pGridShareData->m_pQuasar->m_pWebPageWnd;
+				CWebPage* pWebWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
 				auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(pWebWnd->m_hWnd));
 				if (it != g_pHubble->m_mapBrowserWnd.end()) {
 					((CBrowser*)it->second)->m_pBrowser->LayoutBrowser();
@@ -663,7 +663,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 {
 	BOOL bRet = false;
 
-	CWebPage* pHtmlWnd = m_pGridShareData->m_pQuasar->m_pWebPageWnd;
+	CWebPage* pHtmlWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
 	HWND hWnd = 0;
 	int nCol = m_pHostParse->GetCount();
 	if (nCol && m_strID == _T("") && m_strObjTypeID == _T(""))
@@ -805,15 +805,15 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		CString _strURL = m_pHostParse->attr(_T("url"), _T(""));
 		if(_strURL ==_T("host"))
 		{ 
-			m_pRootObj->m_pGridShareData->m_pQuasar->m_strHostWebBrowserNodeName = m_strName;
+			m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
 			::SetParent(g_pHubble->m_hHostBrowserWnd, hWnd);
 			g_pHubble->m_hParent = NULL;
 			auto it = g_pHubble->m_mapBrowserWnd.find(g_pHubble->m_hHostBrowserWnd);
 			if (it != g_pHubble->m_mapBrowserWnd.end())
 			{
 				m_pWebBrowser = (CBrowser*)it->second;
-				m_pRootObj->m_pGridShareData->m_pQuasar->m_pHostWebBrowserNode = this;
-				m_pRootObj->m_pGridShareData->m_pQuasar->m_pHostWebBrowserWnd = m_pWebBrowser;
+				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
+				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = 12;
 			}
 		}
@@ -923,7 +923,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 void CGrid::NodeCreated()
 {
-	CWebPage* pHtmlWnd = m_pGridShareData->m_pQuasar->m_pWebPageWnd;
+	CWebPage* pHtmlWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = GetHtmlWnd();
 	if (pHtmlWnd == nullptr)
@@ -944,7 +944,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	CString strName = OLE2T(bstr2);
 
 	CWebPage* pHtmlWnd = nullptr;
-	HWND _hWnd = m_pGridShareData->m_pQuasar->m_hWnd;
+	HWND _hWnd = m_pGridShareData->m_pGalaxy->m_hWnd;
 	{
 		::GetClassName(_hWnd, g_pHubble->m_szBuffer, 256);
 		CString strName = CString(g_pHubble->m_szBuffer);
@@ -1302,18 +1302,18 @@ BOOL CGrid::RemoveChildNode(CGrid * pGrid)
 	return false;
 }
 
-STDMETHODIMP CGrid::get_Quasar(IQuasar * *pVal)
+STDMETHODIMP CGrid::get_Galaxy(IGalaxy * *pVal)
 {
-	if (m_pGridShareData->m_pQuasar)
-		* pVal = m_pGridShareData->m_pQuasar;
+	if (m_pGridShareData->m_pGalaxy)
+		* pVal = m_pGridShareData->m_pGalaxy;
 
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_HostQuasar(IQuasar * *pVal)
+STDMETHODIMP CGrid::get_HostGalaxy(IGalaxy * *pVal)
 {
-	if (m_pHostQuasar)
-		* pVal = m_pHostQuasar;
+	if (m_pHostGalaxy)
+		* pVal = m_pHostGalaxy;
 
 	return S_OK;
 }
@@ -1362,7 +1362,7 @@ STDMETHODIMP CGrid::put_Extender(IDispatch * newVal)
 
 STDMETHODIMP CGrid::get_GalaxyCluster(IGalaxyCluster * *pVal)
 {
-	*pVal = (IGalaxyCluster*)m_pGridShareData->m_pQuasar->m_pGalaxyCluster;
+	*pVal = (IGalaxyCluster*)m_pGridShareData->m_pGalaxy->m_pGalaxyCluster;
 	return S_OK;
 }
 
@@ -2039,17 +2039,17 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 
 STDMETHODIMP CGrid::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet)
 {
-	if (m_pGridShareData->m_pQuasar->m_pWebPageWnd)
+	if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 	{
-		m_pGridShareData->m_pQuasar->m_pWebPageWnd->SendChromeIPCMessage(_T("I_DONT_KNOW"), OLE2T(bstrTo), OLE2T(bstrMsgId), OLE2T(bstrExtra), L"", L"");
+		m_pGridShareData->m_pGalaxy->m_pWebPageWnd->SendChromeIPCMessage(_T("I_DONT_KNOW"), OLE2T(bstrTo), OLE2T(bstrMsgId), OLE2T(bstrExtra), L"", L"");
 	}
 	else
 	{
-		if (m_pGridShareData->m_pQuasar->m_pHostWebBrowserNode)
+		if (m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode)
 		{
-			if (m_pGridShareData->m_pQuasar->m_pHostWebBrowserWnd)
+			if (m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd)
 			{
-				HWND hPWnd = m_pGridShareData->m_pQuasar->m_pHostWebBrowserWnd->m_hWnd;
+				HWND hPWnd = m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd->m_hWnd;
 				for (auto it : g_pHubble->m_mapHtmlWnd)
 				{
 					if (::IsChild(hPWnd,it.first))

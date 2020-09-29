@@ -16,7 +16,7 @@
 #include "../UniverseApp.h"
 #include "../grid.h"
 #include "../Wormhole.h"
-#include "../Quasar.h"
+#include "../Galaxy.h"
 #include "../GridHelper.h"
 #include "../GridWnd.h"
 #include "../Markup.h" 
@@ -36,7 +36,7 @@ namespace Web {
 		m_pParentGrid = nullptr;
 		m_strAppProxyID = _T("");
 		m_pGalaxyCluster = nullptr;
-		m_pQuasar = nullptr;
+		m_pGalaxy = nullptr;
 		m_hWebHostWnd = m_hExtendWnd = m_hChildWnd = NULL;
 		m_pChromeRenderFrameHost = g_pHubble->m_pCreatingChromeRenderFrameHostBase;
 		g_pHubble->m_pCreatingChromeRenderFrameHostBase = nullptr;
@@ -57,7 +57,7 @@ namespace Web {
 		if (hPWnd != NULL)
 		{
 			g_pHubble->m_pActiveHtmlWnd = this;
-			g_pHubble->m_pQuasar = nullptr;
+			g_pHubble->m_pGalaxy = nullptr;
 			g_pHubble->m_bWinFormActived = false;
 			g_pHubble->m_hActiveWnd = nullptr;
 			LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
@@ -102,7 +102,7 @@ namespace Web {
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
 					pSession->Insertint64(_T("gridobjhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
-					pSession->Insertint64(_T("Quasarhandle"), (__int64)pGrid->m_pGridShareData->m_pQuasar->m_hWnd);
+					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
@@ -159,12 +159,12 @@ namespace Web {
 		break;
 		case 20200311:
 		{
-			if (m_pQuasar)
+			if (m_pGalaxy)
 			{
-				if (m_pQuasar->m_pWorkGrid->m_pHubbleCloudSession)
+				if (m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
 				{
-					m_pQuasar->m_pWorkGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
-					m_pQuasar->m_pWorkGrid->m_pHubbleCloudSession->SendMessage();
+					m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
+					m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->SendMessage();
 				}
 			}
 		}
@@ -487,7 +487,7 @@ namespace Web {
 		}
 		if (m_hExtendWnd)
 		{
-			if (m_pQuasar == nullptr) {
+			if (m_pGalaxy == nullptr) {
 				CGalaxyCluster* pGalaxyCluster = nullptr;
 				auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
 				if (it != g_pHubble->m_mapWindowPage.end())
@@ -499,26 +499,26 @@ namespace Web {
 					g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 				}
 				if (pGalaxyCluster) {
-					IQuasar* pQuasar = nullptr;
-					pGalaxyCluster->CreateQuasar(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pQuasar);
-					if (pQuasar)
+					IGalaxy* pGalaxy = nullptr;
+					pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pGalaxy);
+					if (pGalaxy)
 					{
-						m_pQuasar = (CQuasar*)pQuasar;
-						m_pQuasar->m_pWebPageWnd = this;
+						m_pGalaxy = (CGalaxy*)pGalaxy;
+						m_pGalaxy->m_pWebPageWnd = this;
 					}
 				}
 			}
-			if (m_pQuasar)
+			if (m_pGalaxy)
 			{
 				IGrid* pGrid = nullptr;
-				m_pQuasar->Observe(CComBSTR(strName), CComBSTR(strXML), &pGrid);
+				m_pGalaxy->Observe(CComBSTR(strName), CComBSTR(strXML), &pGrid);
 				if (pGrid)
 				{
 					m_strCurKey = strName;
 					m_hWebHostWnd = NULL;
-					if (m_pQuasar->m_pBindingGrid)
+					if (m_pGalaxy->m_pBindingGrid)
 					{
-						m_hWebHostWnd = m_pQuasar->m_pBindingGrid->m_pHostWnd->m_hWnd;
+						m_hWebHostWnd = m_pGalaxy->m_pBindingGrid->m_pHostWnd->m_hWnd;
 					}
 				}
 			}
@@ -599,10 +599,10 @@ namespace Web {
 				{
 				case 0:
 				{
-					IQuasar* pQuasar = nullptr;
+					IGalaxy* pGalaxy = nullptr;
 					IGrid* pGrid = nullptr;
-					m_pQuasar->m_pGalaxyCluster->CreateQuasar(CComVariant(0), CComVariant((__int64)hWnd), CComBSTR(pObj->m_strBindObjName), &pQuasar);
-					pQuasar->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pGrid);
+					m_pGalaxy->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)hWnd), CComBSTR(pObj->m_strBindObjName), &pGalaxy);
+					pGalaxy->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pGrid);
 					if (pGrid)
 					{
 						CGrid* _pGrid = (CGrid*)pGrid;
@@ -675,11 +675,11 @@ namespace Web {
 		//		}
 		//		else
 		//		{
-		//			m_pParentGrid = m_pQuasar->m_pBindingGrid->m_pParentObj;
+		//			m_pParentGrid = m_pGalaxy->m_pBindingGrid->m_pParentObj;
 		//			if (m_pParentGrid && m_pParentGrid->m_nViewType == TabGrid)
 		//			{
 		//				//IGrid* _pGrid = nullptr;
-		//				//m_pQuasar->m_pBindingGrid->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
+		//				//m_pGalaxy->m_pBindingGrid->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
 		//				return;
 		//			}
 		//		}

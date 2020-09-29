@@ -128,11 +128,11 @@ typedef interface IHubble IHubble;
 #endif 	/* __IHubble_FWD_DEFINED__ */
 
 
-#ifndef __IQuasar_FWD_DEFINED__
-#define __IQuasar_FWD_DEFINED__
-typedef interface IQuasar IQuasar;
+#ifndef __IGalaxy_FWD_DEFINED__
+#define __IGalaxy_FWD_DEFINED__
+typedef interface IGalaxy IGalaxy;
 
-#endif 	/* __IQuasar_FWD_DEFINED__ */
+#endif 	/* __IGalaxy_FWD_DEFINED__ */
 
 
 #ifndef __IGridCollection_FWD_DEFINED__
@@ -303,22 +303,22 @@ enum BrowserWndOpenDisposition
     } 	BrowserWndOpenDisposition;
 
 typedef /* [helpstring] */ 
-enum QuasarType
+enum GalaxyType
     {
-        MDIClientQuasar	= 0,
-        MDIChildQuasar	= 0x1,
-        SDIQuasar	= 0x2,
-        CtrlBarQuasar	= 0x3,
-        WinFormMDIClientQuasar	= 0x4,
-        WinFormMDIChildQuasar	= 0x5,
-        WinFormQuasar	= 0x6,
-        EclipseWorkBenchQuasar	= 0x7,
-        EclipseViewQuasar	= 0x8,
-        EclipseSWTQuasar	= 0x9,
-        WinFormControlQuasar	= 0xa,
-        TabbedMDIClientQuasar	= 0xb,
-        NOQuasar	= 0x10a
-    } 	QuasarType;
+        MDIClientGalaxy	= 0,
+        MDIChildGalaxy	= 0x1,
+        SDIGalaxy	= 0x2,
+        CtrlBarGalaxy	= 0x3,
+        WinFormMDIClientGalaxy	= 0x4,
+        WinFormMDIChildGalaxy	= 0x5,
+        WinFormGalaxy	= 0x6,
+        EclipseWorkBenchGalaxy	= 0x7,
+        EclipseViewGalaxy	= 0x8,
+        EclipseSWTGalaxy	= 0x9,
+        WinFormControlGalaxy	= 0xa,
+        TabbedMDIClientGalaxy	= 0xb,
+        NOGalaxy	= 0x10a
+    } 	GalaxyType;
 
 typedef /* [helpstring] */ 
 enum ObjEventType
@@ -326,18 +326,18 @@ enum ObjEventType
         TangramNode	= 0,
         HubbleDocEvent	= 0x1,
         TangramNodeAllChildNode	= 0x2,
-        HubbleDocAllQuasarAllChildNode	= 0x3,
-        HubbleDocAllQuasarAllTopGrid	= 0x4,
-        TangramQuasarAllTopGridAllChildNode	= 0x5,
-        TangramQuasarAllTopGrid	= 0x6,
-        GalaxyClusterAllQuasarAllTopGridAllChildNode	= 0x7,
-        GalaxyClusterAllQuasarAllTopGrid	= 0x8,
-        GalaxyClusterCtrlBarQuasarAllTopGridAllChildNode	= 0x9,
-        GalaxyClusterCtrlBarQuasarAllTopGrid	= 0xa,
-        GalaxyClusterNotCtrlBarQuasarAllTopGridAllChildNode	= 0xb,
-        GalaxyClusterNotCtrlBarQuasarAllTopGrid	= 0xc,
-        HubbleDocAllCtrlBarQuasarAllChildNode	= 0xd,
-        HubbleDocAllCtrlBarQuasar	= 0xe
+        HubbleDocAllGalaxyAllChildNode	= 0x3,
+        HubbleDocAllGalaxyAllTopGrid	= 0x4,
+        TangramGalaxyAllTopGridAllChildNode	= 0x5,
+        TangramGalaxyAllTopGrid	= 0x6,
+        GalaxyClusterAllGalaxyAllTopGridAllChildNode	= 0x7,
+        GalaxyClusterAllGalaxyAllTopGrid	= 0x8,
+        GalaxyClusterCtrlBarGalaxyAllTopGridAllChildNode	= 0x9,
+        GalaxyClusterCtrlBarGalaxyAllTopGrid	= 0xa,
+        GalaxyClusterNotCtrlBarGalaxyAllTopGridAllChildNode	= 0xb,
+        GalaxyClusterNotCtrlBarGalaxyAllTopGrid	= 0xc,
+        HubbleDocAllCtrlBarGalaxyAllChildNode	= 0xd,
+        HubbleDocAllCtrlBarGalaxy	= 0xe
     } 	ObjEventType;
 
 typedef /* [helpstring] */ 
@@ -663,9 +663,9 @@ EXTERN_C const IID IID_IOfficeExtender;
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarFromVBAForm( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGalaxyFromVBAForm( 
             IDispatch *pForm,
-            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+            /* [retval][out] */ IGalaxy **ppGalaxy) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetActiveTopGrid( 
             IDispatch *pForm,
@@ -754,10 +754,10 @@ EXTERN_C const IID IID_IOfficeExtender;
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarFromVBAForm )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyFromVBAForm )( 
             IOfficeExtender * This,
             IDispatch *pForm,
-            /* [retval][out] */ IQuasar **ppQuasar);
+            /* [retval][out] */ IGalaxy **ppGalaxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetActiveTopGrid )( 
             IOfficeExtender * This,
@@ -818,8 +818,8 @@ EXTERN_C const IID IID_IOfficeExtender;
 #define IOfficeExtender_InitVBAForm(This,newVal,nStyle,bstrXml,ppGrid)	\
     ( (This)->lpVtbl -> InitVBAForm(This,newVal,nStyle,bstrXml,ppGrid) ) 
 
-#define IOfficeExtender_GetQuasarFromVBAForm(This,pForm,ppQuasar)	\
-    ( (This)->lpVtbl -> GetQuasarFromVBAForm(This,pForm,ppQuasar) ) 
+#define IOfficeExtender_GetGalaxyFromVBAForm(This,pForm,ppGalaxy)	\
+    ( (This)->lpVtbl -> GetGalaxyFromVBAForm(This,pForm,ppGalaxy) ) 
 
 #define IOfficeExtender_GetActiveTopGrid(This,pForm,WndGrid)	\
     ( (This)->lpVtbl -> GetActiveTopGrid(This,pForm,WndGrid) ) 
@@ -1659,8 +1659,8 @@ EXTERN_C const IID IID_IGrid;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Height( 
             /* [retval][out] */ LONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Quasar( 
-            /* [retval][out] */ IQuasar **pVal) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Galaxy( 
+            /* [retval][out] */ IGalaxy **pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XML( 
             /* [retval][out] */ BSTR *pVal) = 0;
@@ -1728,8 +1728,8 @@ EXTERN_C const IID IID_IGrid;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ActivePage( 
             /* [in] */ int newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HostQuasar( 
-            /* [retval][out] */ IQuasar **pVal) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HostGalaxy( 
+            /* [retval][out] */ IGalaxy **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MasterRow( 
             /* [retval][out] */ int *pVal) = 0;
@@ -1993,9 +1993,9 @@ EXTERN_C const IID IID_IGrid;
             IGrid * This,
             /* [retval][out] */ LONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Quasar )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Galaxy )( 
             IGrid * This,
-            /* [retval][out] */ IQuasar **pVal);
+            /* [retval][out] */ IGalaxy **pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XML )( 
             IGrid * This,
@@ -2085,9 +2085,9 @@ EXTERN_C const IID IID_IGrid;
             IGrid * This,
             /* [in] */ int newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostQuasar )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostGalaxy )( 
             IGrid * This,
-            /* [retval][out] */ IQuasar **pVal);
+            /* [retval][out] */ IGalaxy **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MasterRow )( 
             IGrid * This,
@@ -2311,8 +2311,8 @@ EXTERN_C const IID IID_IGrid;
 #define IGrid_get_Height(This,pVal)	\
     ( (This)->lpVtbl -> get_Height(This,pVal) ) 
 
-#define IGrid_get_Quasar(This,pVal)	\
-    ( (This)->lpVtbl -> get_Quasar(This,pVal) ) 
+#define IGrid_get_Galaxy(This,pVal)	\
+    ( (This)->lpVtbl -> get_Galaxy(This,pVal) ) 
 
 #define IGrid_get_XML(This,pVal)	\
     ( (This)->lpVtbl -> get_XML(This,pVal) ) 
@@ -2380,8 +2380,8 @@ EXTERN_C const IID IID_IGrid;
 #define IGrid_put_ActivePage(This,newVal)	\
     ( (This)->lpVtbl -> put_ActivePage(This,newVal) ) 
 
-#define IGrid_get_HostQuasar(This,pVal)	\
-    ( (This)->lpVtbl -> get_HostQuasar(This,pVal) ) 
+#define IGrid_get_HostGalaxy(This,pVal)	\
+    ( (This)->lpVtbl -> get_HostGalaxy(This,pVal) ) 
 
 #define IGrid_get_MasterRow(This,pVal)	\
     ( (This)->lpVtbl -> get_MasterRow(This,pVal) ) 
@@ -2608,7 +2608,7 @@ EXTERN_C const IID IID_IHubbleDoc;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocID( 
             /* [in] */ LONGLONG newVal) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarWndXml( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGalaxyWndXml( 
             BSTR bstrWndID,
             /* [retval][out] */ BSTR *bstrWndScriptVal) = 0;
         
@@ -2690,7 +2690,7 @@ EXTERN_C const IID IID_IHubbleDoc;
             IHubbleDoc * This,
             /* [in] */ LONGLONG newVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarWndXml )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyWndXml )( 
             IHubbleDoc * This,
             BSTR bstrWndID,
             /* [retval][out] */ BSTR *bstrWndScriptVal);
@@ -2746,8 +2746,8 @@ EXTERN_C const IID IID_IHubbleDoc;
 #define IHubbleDoc_put_DocID(This,newVal)	\
     ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
 
-#define IHubbleDoc_GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal)	\
-    ( (This)->lpVtbl -> GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal) ) 
+#define IHubbleDoc_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
+    ( (This)->lpVtbl -> GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal) ) 
 
 #endif /* COBJMACROS */
 
@@ -2790,7 +2790,7 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocID( 
             /* [in] */ LONGLONG newVal) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarWndXml( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGalaxyWndXml( 
             BSTR bstrWndID,
             /* [retval][out] */ BSTR *bstrWndScriptVal) = 0;
         
@@ -2872,7 +2872,7 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
             IHubbleDocTemplate * This,
             /* [in] */ LONGLONG newVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarWndXml )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyWndXml )( 
             IHubbleDocTemplate * This,
             BSTR bstrWndID,
             /* [retval][out] */ BSTR *bstrWndScriptVal);
@@ -2928,8 +2928,8 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
 #define IHubbleDocTemplate_put_DocID(This,newVal)	\
     ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
 
-#define IHubbleDocTemplate_GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal)	\
-    ( (This)->lpVtbl -> GetQuasarWndXml(This,bstrWndID,bstrWndScriptVal) ) 
+#define IHubbleDocTemplate_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
+    ( (This)->lpVtbl -> GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal) ) 
 
 #endif /* COBJMACROS */
 
@@ -3039,9 +3039,9 @@ EXTERN_C const IID IID_IHubble;
             BSTR bstrAppID,
             BSTR bstrXml) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetQuasar( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGalaxy( 
             LONGLONG hHostWnd,
-            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+            /* [retval][out] */ IGalaxy **ppGalaxy) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetItemText( 
             IGrid *pGrid,
@@ -3132,9 +3132,9 @@ EXTERN_C const IID IID_IHubble;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE FireHubbleEventObj( 
             IHubbleEventObj *pHubbleEventObj) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveQuasars( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
             LONGLONG hWnd,
-            BSTR bstrQuasars,
+            BSTR bstrGalaxys,
             BSTR bstrKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfigFile) = 0;
@@ -3175,8 +3175,8 @@ EXTERN_C const IID IID_IHubble;
             LONGLONG wParam,
             LONGLONG lParam) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteQuasar( 
-            IQuasar *pQuasar) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteGalaxy( 
+            IGalaxy *pGalaxy) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEclipseApp( void) = 0;
         
@@ -3376,10 +3376,10 @@ EXTERN_C const IID IID_IHubble;
             BSTR bstrAppID,
             BSTR bstrXml);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasar )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxy )( 
             IHubble * This,
             LONGLONG hHostWnd,
-            /* [retval][out] */ IQuasar **ppQuasar);
+            /* [retval][out] */ IGalaxy **ppGalaxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetItemText )( 
             IHubble * This,
@@ -3489,10 +3489,10 @@ EXTERN_C const IID IID_IHubble;
             IHubble * This,
             IHubbleEventObj *pHubbleEventObj);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveQuasars )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
             IHubble * This,
             LONGLONG hWnd,
-            BSTR bstrQuasars,
+            BSTR bstrGalaxys,
             BSTR bstrKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfigFile);
@@ -3541,9 +3541,9 @@ EXTERN_C const IID IID_IHubble;
             LONGLONG wParam,
             LONGLONG lParam);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteQuasar )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteGalaxy )( 
             IHubble * This,
-            IQuasar *pQuasar);
+            IGalaxy *pGalaxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
             IHubble * This);
@@ -3694,8 +3694,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_StartApplication(This,bstrAppID,bstrXml)	\
     ( (This)->lpVtbl -> StartApplication(This,bstrAppID,bstrXml) ) 
 
-#define IHubble_GetQuasar(This,hHostWnd,ppQuasar)	\
-    ( (This)->lpVtbl -> GetQuasar(This,hHostWnd,ppQuasar) ) 
+#define IHubble_GetGalaxy(This,hHostWnd,ppGalaxy)	\
+    ( (This)->lpVtbl -> GetGalaxy(This,hHostWnd,ppGalaxy) ) 
 
 #define IHubble_GetItemText(This,pGrid,nCtrlID,nMaxLengeh,bstrRet)	\
     ( (This)->lpVtbl -> GetItemText(This,pGrid,nCtrlID,nMaxLengeh,bstrRet) ) 
@@ -3754,8 +3754,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_FireHubbleEventObj(This,pHubbleEventObj)	\
     ( (This)->lpVtbl -> FireHubbleEventObj(This,pHubbleEventObj) ) 
 
-#define IHubble_ObserveQuasars(This,hWnd,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile)	\
-    ( (This)->lpVtbl -> ObserveQuasars(This,hWnd,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile) ) 
+#define IHubble_ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
+    ( (This)->lpVtbl -> ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 
 
 #define IHubble_DeletePage(This,PageHandle)	\
     ( (This)->lpVtbl -> DeletePage(This,PageHandle) ) 
@@ -3781,8 +3781,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_HubbleNotify(This,strXml1,strXml2,wParam,lParam)	\
     ( (This)->lpVtbl -> HubbleNotify(This,strXml1,strXml2,wParam,lParam) ) 
 
-#define IHubble_DeleteQuasar(This,pQuasar)	\
-    ( (This)->lpVtbl -> DeleteQuasar(This,pQuasar) ) 
+#define IHubble_DeleteGalaxy(This,pGalaxy)	\
+    ( (This)->lpVtbl -> DeleteGalaxy(This,pGalaxy) ) 
 
 #define IHubble_InitEclipseApp(This)	\
     ( (This)->lpVtbl -> InitEclipseApp(This) ) 
@@ -3822,19 +3822,19 @@ EXTERN_C const IID IID_IHubble;
 #endif 	/* __IHubble_INTERFACE_DEFINED__ */
 
 
-#ifndef __IQuasar_INTERFACE_DEFINED__
-#define __IQuasar_INTERFACE_DEFINED__
+#ifndef __IGalaxy_INTERFACE_DEFINED__
+#define __IGalaxy_INTERFACE_DEFINED__
 
-/* interface IQuasar */
+/* interface IGalaxy */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IQuasar;
+EXTERN_C const IID IID_IGalaxy;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060119820003")
-    IQuasar : public IDispatch
+    IGalaxy : public IDispatch
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Grid( 
@@ -3856,11 +3856,11 @@ EXTERN_C const IID IID_IQuasar;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
             /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarData( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyData( 
             BSTR bstrKey,
             /* [retval][out] */ VARIANT *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_QuasarData( 
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GalaxyData( 
             BSTR bstrKey,
             /* [in] */ VARIANT newVal) = 0;
         
@@ -3876,14 +3876,14 @@ EXTERN_C const IID IID_IQuasar;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootGrids( 
             /* [retval][out] */ IGridCollection **ppGridColletion) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarXML( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HubbleDoc( 
             /* [retval][out] */ IHubbleDoc **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarType( 
-            /* [retval][out] */ QuasarType *pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyType( 
+            /* [retval][out] */ GalaxyType *pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
             /* [retval][out] */ BSTR *pVal) = 0;
@@ -3915,34 +3915,34 @@ EXTERN_C const IID IID_IQuasar;
     
 #else 	/* C style interface */
 
-    typedef struct IQuasarVtbl
+    typedef struct IGalaxyVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IQuasar * This);
+            IGalaxy * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IQuasar * This);
+            IGalaxy * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -3950,7 +3950,7 @@ EXTERN_C const IID IID_IQuasar;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -3969,107 +3969,107 @@ EXTERN_C const IID IID_IQuasar;
             _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Grid )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [in] */ VARIANT vIndex,
             /* [retval][out] */ IGrid **ppGrid);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ IUnknown **ppVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VisibleGrid )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ IGrid **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentNavigateKey )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyCluster )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ IGalaxyCluster **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarData )( 
-            IQuasar * This,
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyData )( 
+            IGalaxy * This,
             BSTR bstrKey,
             /* [retval][out] */ VARIANT *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_QuasarData )( 
-            IQuasar * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GalaxyData )( 
+            IGalaxy * This,
             BSTR bstrKey,
             /* [in] */ VARIANT newVal);
         
         /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignerState )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ VARIANT_BOOL *pVal);
         
         /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignerState )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [in] */ VARIANT_BOOL newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ long *pCount);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootGrids )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ IGridCollection **ppGridColletion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarXML )( 
-            IQuasar * This,
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyXML )( 
+            IGalaxy * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HubbleDoc )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ IHubbleDoc **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarType )( 
-            IQuasar * This,
-            /* [retval][out] */ QuasarType *pVal);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyType )( 
+            IGalaxy * This,
+            /* [retval][out] */ GalaxyType *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostBrowser )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWebPage )( 
-            IQuasar * This,
+            IGalaxy * This,
             /* [retval][out] */ IWebPage **ppChromeWebPage);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Detach )( 
-            IQuasar * This);
+            IGalaxy * This);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Attach )( 
-            IQuasar * This);
+            IGalaxy * This);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ModifyHost )( 
-            IQuasar * This,
+            IGalaxy * This,
             LONGLONG hHostWnd);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
-            IQuasar * This,
+            IGalaxy * This,
             BSTR bstrKey,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppRetGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetXml )( 
-            IQuasar * This,
+            IGalaxy * This,
             BSTR bstrRootName,
             /* [retval][out] */ BSTR *bstrRet);
         
         END_INTERFACE
-    } IQuasarVtbl;
+    } IGalaxyVtbl;
 
-    interface IQuasar
+    interface IGalaxy
     {
-        CONST_VTBL struct IQuasarVtbl *lpVtbl;
+        CONST_VTBL struct IGalaxyVtbl *lpVtbl;
     };
 
     
@@ -4077,96 +4077,96 @@ EXTERN_C const IID IID_IQuasar;
 #ifdef COBJMACROS
 
 
-#define IQuasar_QueryInterface(This,riid,ppvObject)	\
+#define IGalaxy_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IQuasar_AddRef(This)	\
+#define IGalaxy_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IQuasar_Release(This)	\
+#define IGalaxy_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IQuasar_GetTypeInfoCount(This,pctinfo)	\
+#define IGalaxy_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IQuasar_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define IGalaxy_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IQuasar_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define IGalaxy_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IQuasar_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define IGalaxy_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IQuasar_get_Grid(This,vIndex,ppGrid)	\
+#define IGalaxy_get_Grid(This,vIndex,ppGrid)	\
     ( (This)->lpVtbl -> get_Grid(This,vIndex,ppGrid) ) 
 
-#define IQuasar_get__NewEnum(This,ppVal)	\
+#define IGalaxy_get__NewEnum(This,ppVal)	\
     ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
 
-#define IQuasar_get_HWND(This,pVal)	\
+#define IGalaxy_get_HWND(This,pVal)	\
     ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
 
-#define IQuasar_get_VisibleGrid(This,pVal)	\
+#define IGalaxy_get_VisibleGrid(This,pVal)	\
     ( (This)->lpVtbl -> get_VisibleGrid(This,pVal) ) 
 
-#define IQuasar_get_CurrentNavigateKey(This,pVal)	\
+#define IGalaxy_get_CurrentNavigateKey(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentNavigateKey(This,pVal) ) 
 
-#define IQuasar_get_GalaxyCluster(This,pVal)	\
+#define IGalaxy_get_GalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
 
-#define IQuasar_get_QuasarData(This,bstrKey,pVal)	\
-    ( (This)->lpVtbl -> get_QuasarData(This,bstrKey,pVal) ) 
+#define IGalaxy_get_GalaxyData(This,bstrKey,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyData(This,bstrKey,pVal) ) 
 
-#define IQuasar_put_QuasarData(This,bstrKey,newVal)	\
-    ( (This)->lpVtbl -> put_QuasarData(This,bstrKey,newVal) ) 
+#define IGalaxy_put_GalaxyData(This,bstrKey,newVal)	\
+    ( (This)->lpVtbl -> put_GalaxyData(This,bstrKey,newVal) ) 
 
-#define IQuasar_get_DesignerState(This,pVal)	\
+#define IGalaxy_get_DesignerState(This,pVal)	\
     ( (This)->lpVtbl -> get_DesignerState(This,pVal) ) 
 
-#define IQuasar_put_DesignerState(This,newVal)	\
+#define IGalaxy_put_DesignerState(This,newVal)	\
     ( (This)->lpVtbl -> put_DesignerState(This,newVal) ) 
 
-#define IQuasar_get_Count(This,pCount)	\
+#define IGalaxy_get_Count(This,pCount)	\
     ( (This)->lpVtbl -> get_Count(This,pCount) ) 
 
-#define IQuasar_get_RootGrids(This,ppGridColletion)	\
+#define IGalaxy_get_RootGrids(This,ppGridColletion)	\
     ( (This)->lpVtbl -> get_RootGrids(This,ppGridColletion) ) 
 
-#define IQuasar_get_QuasarXML(This,pVal)	\
-    ( (This)->lpVtbl -> get_QuasarXML(This,pVal) ) 
+#define IGalaxy_get_GalaxyXML(This,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyXML(This,pVal) ) 
 
-#define IQuasar_get_HubbleDoc(This,pVal)	\
+#define IGalaxy_get_HubbleDoc(This,pVal)	\
     ( (This)->lpVtbl -> get_HubbleDoc(This,pVal) ) 
 
-#define IQuasar_get_QuasarType(This,pVal)	\
-    ( (This)->lpVtbl -> get_QuasarType(This,pVal) ) 
+#define IGalaxy_get_GalaxyType(This,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyType(This,pVal) ) 
 
-#define IQuasar_get_Name(This,pVal)	\
+#define IGalaxy_get_Name(This,pVal)	\
     ( (This)->lpVtbl -> get_Name(This,pVal) ) 
 
-#define IQuasar_get_HostBrowser(This,ppChromeWebBrowser)	\
+#define IGalaxy_get_HostBrowser(This,ppChromeWebBrowser)	\
     ( (This)->lpVtbl -> get_HostBrowser(This,ppChromeWebBrowser) ) 
 
-#define IQuasar_get_HostWebPage(This,ppChromeWebPage)	\
+#define IGalaxy_get_HostWebPage(This,ppChromeWebPage)	\
     ( (This)->lpVtbl -> get_HostWebPage(This,ppChromeWebPage) ) 
 
-#define IQuasar_Detach(This)	\
+#define IGalaxy_Detach(This)	\
     ( (This)->lpVtbl -> Detach(This) ) 
 
-#define IQuasar_Attach(This)	\
+#define IGalaxy_Attach(This)	\
     ( (This)->lpVtbl -> Attach(This) ) 
 
-#define IQuasar_ModifyHost(This,hHostWnd)	\
+#define IGalaxy_ModifyHost(This,hHostWnd)	\
     ( (This)->lpVtbl -> ModifyHost(This,hHostWnd) ) 
 
-#define IQuasar_Observe(This,bstrKey,bstrXml,ppRetGrid)	\
+#define IGalaxy_Observe(This,bstrKey,bstrXml,ppRetGrid)	\
     ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetGrid) ) 
 
-#define IQuasar_GetXml(This,bstrRootName,bstrRet)	\
+#define IGalaxy_GetXml(This,bstrRootName,bstrRet)	\
     ( (This)->lpVtbl -> GetXml(This,bstrRootName,bstrRet) ) 
 
 #endif /* COBJMACROS */
@@ -4177,7 +4177,7 @@ EXTERN_C const IID IID_IQuasar;
 
 
 
-#endif 	/* __IQuasar_INTERFACE_DEFINED__ */
+#endif 	/* __IGalaxy_INTERFACE_DEFINED__ */
 
 
 #ifndef __IGridCollection_INTERFACE_DEFINED__
@@ -4347,9 +4347,9 @@ EXTERN_C const IID IID_IGalaxyCluster;
     IGalaxyCluster : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Quasar( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Galaxy( 
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+            /* [retval][out] */ IGalaxy **ppGalaxy) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
             /* [retval][out] */ IUnknown **ppVal) = 0;
@@ -4381,7 +4381,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrName,
             /* [retval][out] */ IDispatch **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_QuasarName( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyName( 
             LONGLONG hHwnd,
             /* [retval][out] */ BSTR *pVal) = 0;
         
@@ -4412,22 +4412,22 @@ EXTERN_C const IID IID_IGalaxyCluster;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ConfigName( 
             /* [in] */ BSTR newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignQuasarType( 
-            /* [retval][out] */ QuasarType *pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignGalaxyType( 
+            /* [retval][out] */ GalaxyType *pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignNode( 
             /* [retval][out] */ IGrid **pVal) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateQuasar( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxy( 
             VARIANT ParentObj,
             VARIANT HostWnd,
-            BSTR bstrQuasarName,
-            /* [retval][out] */ IQuasar **pRetQuasar) = 0;
+            BSTR bstrGalaxyName,
+            /* [retval][out] */ IGalaxy **pRetGalaxy) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             IDispatch *Parent,
             BSTR CtrlName,
-            BSTR QuasarName,
+            BSTR GalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppRetGrid) = 0;
@@ -4439,7 +4439,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             /* [retval][out] */ IGrid **ppRetGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGrid( 
-            BSTR bstrQuasarName,
+            BSTR bstrGalaxyName,
             BSTR bstrNodeName,
             /* [retval][out] */ IGrid **pRetNode) = 0;
         
@@ -4448,23 +4448,23 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR CtrlName,
             /* [retval][out] */ IDispatch **ppCtrl) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetQuasarFromCtrl( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGalaxyFromCtrl( 
             IDispatch *ctrl,
-            /* [retval][out] */ IQuasar **ppQuasar) = 0;
+            /* [retval][out] */ IGalaxy **ppGalaxy) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectHubbleCtrl( 
             IHubbleCtrl *eventSource) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateQuasarWithDefaultNode( 
-            ULONGLONG hQuasarWnd,
-            BSTR bstrQuasarName,
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxyWithDefaultNode( 
+            ULONGLONG hGalaxyWnd,
+            BSTR bstrGalaxyName,
             BSTR bstrDefaultNodeKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfig,
             /* [retval][out] */ IGrid **ppGrid) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveQuasars( 
-            BSTR bstrQuasars,
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
+            BSTR bstrGalaxys,
             BSTR bstrKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfigFile) = 0;
@@ -4527,10 +4527,10 @@ EXTERN_C const IID IID_IGalaxyCluster;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Quasar )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Galaxy )( 
             IGalaxyCluster * This,
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IQuasar **ppQuasar);
+            /* [retval][out] */ IGalaxy **ppGalaxy);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGalaxyCluster * This,
@@ -4570,7 +4570,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrName,
             /* [retval][out] */ IDispatch **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuasarName )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyName )( 
             IGalaxyCluster * This,
             LONGLONG hHwnd,
             /* [retval][out] */ BSTR *pVal);
@@ -4611,26 +4611,26 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IGalaxyCluster * This,
             /* [in] */ BSTR newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignQuasarType )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignGalaxyType )( 
             IGalaxyCluster * This,
-            /* [retval][out] */ QuasarType *pVal);
+            /* [retval][out] */ GalaxyType *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignNode )( 
             IGalaxyCluster * This,
             /* [retval][out] */ IGrid **pVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateQuasar )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxy )( 
             IGalaxyCluster * This,
             VARIANT ParentObj,
             VARIANT HostWnd,
-            BSTR bstrQuasarName,
-            /* [retval][out] */ IQuasar **pRetQuasar);
+            BSTR bstrGalaxyName,
+            /* [retval][out] */ IGalaxy **pRetGalaxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
             IGalaxyCluster * This,
             IDispatch *Parent,
             BSTR CtrlName,
-            BSTR QuasarName,
+            BSTR GalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppRetGrid);
@@ -4644,7 +4644,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGrid )( 
             IGalaxyCluster * This,
-            BSTR bstrQuasarName,
+            BSTR bstrGalaxyName,
             BSTR bstrNodeName,
             /* [retval][out] */ IGrid **pRetNode);
         
@@ -4654,27 +4654,27 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR CtrlName,
             /* [retval][out] */ IDispatch **ppCtrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetQuasarFromCtrl )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyFromCtrl )( 
             IGalaxyCluster * This,
             IDispatch *ctrl,
-            /* [retval][out] */ IQuasar **ppQuasar);
+            /* [retval][out] */ IGalaxy **ppGalaxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectHubbleCtrl )( 
             IGalaxyCluster * This,
             IHubbleCtrl *eventSource);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateQuasarWithDefaultNode )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxyWithDefaultNode )( 
             IGalaxyCluster * This,
-            ULONGLONG hQuasarWnd,
-            BSTR bstrQuasarName,
+            ULONGLONG hGalaxyWnd,
+            BSTR bstrGalaxyName,
             BSTR bstrDefaultNodeKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfig,
             /* [retval][out] */ IGrid **ppGrid);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveQuasars )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
             IGalaxyCluster * This,
-            BSTR bstrQuasars,
+            BSTR bstrGalaxys,
             BSTR bstrKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfigFile);
@@ -4715,8 +4715,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IGalaxyCluster_get_Quasar(This,vIndex,ppQuasar)	\
-    ( (This)->lpVtbl -> get_Quasar(This,vIndex,ppQuasar) ) 
+#define IGalaxyCluster_get_Galaxy(This,vIndex,ppGalaxy)	\
+    ( (This)->lpVtbl -> get_Galaxy(This,vIndex,ppGalaxy) ) 
 
 #define IGalaxyCluster_get__NewEnum(This,ppVal)	\
     ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
@@ -4742,8 +4742,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_get_XObject(This,bstrName,pVal)	\
     ( (This)->lpVtbl -> get_XObject(This,bstrName,pVal) ) 
 
-#define IGalaxyCluster_get_QuasarName(This,hHwnd,pVal)	\
-    ( (This)->lpVtbl -> get_QuasarName(This,hHwnd,pVal) ) 
+#define IGalaxyCluster_get_GalaxyName(This,hHwnd,pVal)	\
+    ( (This)->lpVtbl -> get_GalaxyName(This,hHwnd,pVal) ) 
 
 #define IGalaxyCluster_get_Handle(This,pVal)	\
     ( (This)->lpVtbl -> get_Handle(This,pVal) ) 
@@ -4772,38 +4772,38 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_put_ConfigName(This,newVal)	\
     ( (This)->lpVtbl -> put_ConfigName(This,newVal) ) 
 
-#define IGalaxyCluster_get_CurrentDesignQuasarType(This,pVal)	\
-    ( (This)->lpVtbl -> get_CurrentDesignQuasarType(This,pVal) ) 
+#define IGalaxyCluster_get_CurrentDesignGalaxyType(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentDesignGalaxyType(This,pVal) ) 
 
 #define IGalaxyCluster_get_CurrentDesignNode(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentDesignNode(This,pVal) ) 
 
-#define IGalaxyCluster_CreateQuasar(This,ParentObj,HostWnd,bstrQuasarName,pRetQuasar)	\
-    ( (This)->lpVtbl -> CreateQuasar(This,ParentObj,HostWnd,bstrQuasarName,pRetQuasar) ) 
+#define IGalaxyCluster_CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy)	\
+    ( (This)->lpVtbl -> CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy) ) 
 
-#define IGalaxyCluster_Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetGrid)	\
-    ( (This)->lpVtbl -> Observe(This,Parent,CtrlName,QuasarName,bstrKey,bstrXml,ppRetGrid) ) 
+#define IGalaxyCluster_Observe(This,Parent,CtrlName,GalaxyName,bstrKey,bstrXml,ppRetGrid)	\
+    ( (This)->lpVtbl -> Observe(This,Parent,CtrlName,GalaxyName,bstrKey,bstrXml,ppRetGrid) ) 
 
 #define IGalaxyCluster_ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetGrid)	\
     ( (This)->lpVtbl -> ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetGrid) ) 
 
-#define IGalaxyCluster_GetGrid(This,bstrQuasarName,bstrNodeName,pRetNode)	\
-    ( (This)->lpVtbl -> GetGrid(This,bstrQuasarName,bstrNodeName,pRetNode) ) 
+#define IGalaxyCluster_GetGrid(This,bstrGalaxyName,bstrNodeName,pRetNode)	\
+    ( (This)->lpVtbl -> GetGrid(This,bstrGalaxyName,bstrNodeName,pRetNode) ) 
 
 #define IGalaxyCluster_GetCtrlInGrid(This,NodeName,CtrlName,ppCtrl)	\
     ( (This)->lpVtbl -> GetCtrlInGrid(This,NodeName,CtrlName,ppCtrl) ) 
 
-#define IGalaxyCluster_GetQuasarFromCtrl(This,ctrl,ppQuasar)	\
-    ( (This)->lpVtbl -> GetQuasarFromCtrl(This,ctrl,ppQuasar) ) 
+#define IGalaxyCluster_GetGalaxyFromCtrl(This,ctrl,ppGalaxy)	\
+    ( (This)->lpVtbl -> GetGalaxyFromCtrl(This,ctrl,ppGalaxy) ) 
 
 #define IGalaxyCluster_ConnectHubbleCtrl(This,eventSource)	\
     ( (This)->lpVtbl -> ConnectHubbleCtrl(This,eventSource) ) 
 
-#define IGalaxyCluster_CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid)	\
-    ( (This)->lpVtbl -> CreateQuasarWithDefaultNode(This,hQuasarWnd,bstrQuasarName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid) ) 
+#define IGalaxyCluster_CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid)	\
+    ( (This)->lpVtbl -> CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid) ) 
 
-#define IGalaxyCluster_ObserveQuasars(This,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile)	\
-    ( (This)->lpVtbl -> ObserveQuasars(This,bstrQuasars,bstrKey,bstrXml,bSaveToConfigFile) ) 
+#define IGalaxyCluster_ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
+    ( (This)->lpVtbl -> ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 
 
 #endif /* COBJMACROS */
 
@@ -4851,8 +4851,8 @@ EXTERN_C const IID IID_IWorkBenchWindow;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
             /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Quasar( 
-            /* [retval][out] */ IQuasar **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Galaxy( 
+            /* [retval][out] */ IGalaxy **pVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Active( void) = 0;
         
@@ -4958,9 +4958,9 @@ EXTERN_C const IID IID_IWorkBenchWindow;
             IWorkBenchWindow * This,
             /* [retval][out] */ IGalaxyCluster **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Quasar )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Galaxy )( 
             IWorkBenchWindow * This,
-            /* [retval][out] */ IQuasar **pVal);
+            /* [retval][out] */ IGalaxy **pVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *Active )( 
             IWorkBenchWindow * This);
@@ -5041,8 +5041,8 @@ EXTERN_C const IID IID_IWorkBenchWindow;
 #define IWorkBenchWindow_get_GalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
 
-#define IWorkBenchWindow_get_Quasar(This,pVal)	\
-    ( (This)->lpVtbl -> get_Quasar(This,pVal) ) 
+#define IWorkBenchWindow_get_Galaxy(This,pVal)	\
+    ( (This)->lpVtbl -> get_Galaxy(This,pVal) ) 
 
 #define IWorkBenchWindow_Active(This)	\
     ( (This)->lpVtbl -> Active(This) ) 
@@ -5892,8 +5892,8 @@ EXTERN_C const IID IID_IEclipseCtrl;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TopGalaxyCluster( 
             /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TopQuasar( 
-            /* [retval][out] */ IQuasar **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TopGalaxy( 
+            /* [retval][out] */ IGalaxy **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveTopGrid( 
             /* [retval][out] */ IGrid **pVal) = 0;
@@ -5907,13 +5907,13 @@ EXTERN_C const IID IID_IEclipseCtrl;
             /* [in] */ VARIANT newVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
-            BSTR bstrQuasarName,
+            BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
-            BSTR bstrQuasarName,
+            BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid) = 0;
@@ -6016,9 +6016,9 @@ EXTERN_C const IID IID_IEclipseCtrl;
             IEclipseCtrl * This,
             /* [retval][out] */ IGalaxyCluster **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TopQuasar )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TopGalaxy )( 
             IEclipseCtrl * This,
-            /* [retval][out] */ IQuasar **pVal);
+            /* [retval][out] */ IGalaxy **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveTopGrid )( 
             IEclipseCtrl * This,
@@ -6036,14 +6036,14 @@ EXTERN_C const IID IID_IEclipseCtrl;
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
             IEclipseCtrl * This,
-            BSTR bstrQuasarName,
+            BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
             IEclipseCtrl * This,
-            BSTR bstrQuasarName,
+            BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid);
@@ -6116,8 +6116,8 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #define IEclipseCtrl_get_TopGalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_TopGalaxyCluster(This,pVal) ) 
 
-#define IEclipseCtrl_get_TopQuasar(This,pVal)	\
-    ( (This)->lpVtbl -> get_TopQuasar(This,pVal) ) 
+#define IEclipseCtrl_get_TopGalaxy(This,pVal)	\
+    ( (This)->lpVtbl -> get_TopGalaxy(This,pVal) ) 
 
 #define IEclipseCtrl_get_ActiveTopGrid(This,pVal)	\
     ( (This)->lpVtbl -> get_ActiveTopGrid(This,pVal) ) 
@@ -6128,11 +6128,11 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #define IEclipseCtrl_put_AppKeyValue(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppKeyValue(This,bstrKey,newVal) ) 
 
-#define IEclipseCtrl_Observe(This,bstrQuasarName,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> Observe(This,bstrQuasarName,bstrKey,bstrXml,ppGrid) ) 
+#define IEclipseCtrl_Observe(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> Observe(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid) ) 
 
-#define IEclipseCtrl_ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> ObserveEx(This,bstrQuasarName,bstrKey,bstrXml,ppGrid) ) 
+#define IEclipseCtrl_ObserveEx(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid)	\
+    ( (This)->lpVtbl -> ObserveEx(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid) ) 
 
 #define IEclipseCtrl_InitCtrl(This,bstrXml)	\
     ( (This)->lpVtbl -> InitCtrl(This,bstrXml) ) 
