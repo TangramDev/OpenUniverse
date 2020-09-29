@@ -92,7 +92,7 @@ namespace HubbleBrowser
                 "</grid>" +
             "</layout>" +
             "</content1>";
-            Hubble.Observe(this, "test", xml);
+            Grid grid = Hubble.Observe(this, "test", xml);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -107,7 +107,7 @@ namespace HubbleBrowser
                     "</grid>" +
                 "</layout>" +
               "</content1>";
-            Hubble.Observe(treeView1, "test", xml);
+            Grid grid = Hubble.Observe(treeView1, "test", xml);
         }
     }
 

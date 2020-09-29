@@ -17,6 +17,7 @@
 #include "dllmain.h" 
 #include "CosmosProxy.h"
 #include "GridCLREvent.h"
+#include "browser.h"
 
 #include <io.h>
 #include <stdio.h>
@@ -1012,7 +1013,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 			m_strCurrentWinFormTemplate = bstrObjID;
 			CString strTagName = m_Parse.name();
 			CWebPageImpl* pProxyBase = nullptr;
-			Cosmos::Wormhole^ pCloudSession = nullptr;
+			Wormhole^ pCloudSession = nullptr;
 			CSession* pHubbleSession = nullptr;
 			__int64 nHandle = m_Parse.attrInt64(_T("renderframehostproxy"), 0);
 			if (nHandle)
@@ -1041,17 +1042,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							thisForm->Width = nWidth;
 							thisForm->Height = nHeight;
-						}
-						WebPage^ pPage = nullptr;
-						nHandle = m_Parse.attrInt64(_T("webpage"), 0);
-						if (nHandle)
-						{
-							IWebPage* pWebPage = (IWebPage*)nHandle;
-							if (pWebPage != nullptr)
-							{
-								pPage = gcnew WebPage(pWebPage);
-								pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
-							}
 						}
 						if (m_pCurrentPForm)
 						{
@@ -1130,6 +1120,17 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							pHubbleSession->SendMessage();
 						}
 
+						WebPage^ pPage = nullptr;
+						nHandle = m_Parse.attrInt64(_T("webpage"), 0);
+						if (nHandle)
+						{
+							IWebPage* pWebPage = (IWebPage*)nHandle;
+							if (pWebPage != nullptr)
+							{
+								pPage = gcnew WebPage(pWebPage);
+								pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
+							}
+						}
 						if (pPage)
 						{
 							thisForm->ShowInTaskbar = false;

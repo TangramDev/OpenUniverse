@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cosmos", "Cosmos\Cosmos.vcx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubbleBrowser", "HubbleBrowser\HubbleBrowser.csproj", "{CFAC881E-FD36-4EE7-AEDC-38D78BA057DA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VLE", "VLE\VLE.vcxproj", "{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,16 @@ Global
 		{CFAC881E-FD36-4EE7-AEDC-38D78BA057DA}.Release|x64.Build.0 = Release|Any CPU
 		{CFAC881E-FD36-4EE7-AEDC-38D78BA057DA}.Release|x86.ActiveCfg = Release|Any CPU
 		{CFAC881E-FD36-4EE7-AEDC-38D78BA057DA}.Release|x86.Build.0 = Release|Any CPU
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Debug|x64.ActiveCfg = Debug|x64
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Debug|x64.Build.0 = Debug|x64
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Debug|x86.ActiveCfg = Debug|Win32
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Debug|x86.Build.0 = Debug|Win32
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Release|Any CPU.ActiveCfg = Release|Win32
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Release|x64.ActiveCfg = Release|x64
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Release|x64.Build.0 = Release|x64
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Release|x86.ActiveCfg = Release|Win32
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +72,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{92CA847E-FF92-404F-B3A6-74BE45D464F3} = {62395F10-1D26-4B0C-ACB7-2A175357246B}
 		{D7A9DC7E-0B4A-4091-9B13-4D6CA4494452} = {62395F10-1D26-4B0C-ACB7-2A175357246B}
+		{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC} = {62395F10-1D26-4B0C-ACB7-2A175357246B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3445413C-995C-4A50-8FF0-CCEAAC7A46FC}
