@@ -59,8 +59,6 @@ BOOL CUniverse::InitInstance()
 	nPos = strName.Find(_T("."));
 	CString strExeName = strName.Left(nPos);
 	strExeName.MakeLower();
-	if (strExeName == _T("regsvr32"))
-		return true;
 
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(824);

@@ -81,7 +81,6 @@ public:
 	CGrid* 							m_pParentObj;
 	CWinForm*						m_pParentWinFormWnd;
 	CTangramXmlParse*				m_pHostParse;
-	CSession*						m_pCloudSession = nullptr;
 	CGridShareData*					m_pGridShareData;
 	Web::CBrowser*					m_pWebBrowser;
 	CWnd*							m_pHostWnd;
