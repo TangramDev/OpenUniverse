@@ -20,7 +20,6 @@ CGridCLREvent::CGridCLREvent()
 {
 }
 
-
 CGridCLREvent::~CGridCLREvent()
 {
 }

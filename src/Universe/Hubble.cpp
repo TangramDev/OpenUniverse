@@ -88,7 +88,6 @@ CHubble::CHubble()
 	m_hVSToolBoxWnd = NULL;
 	m_hForegroundIdleHook = NULL;
 	m_lpszSplitterClass = nullptr;
-	//m_pGalaxyCluster = nullptr;
 	m_pActiveGrid = nullptr;
 	m_pGalaxy = nullptr;
 	m_pDesignGrid = nullptr;
@@ -135,9 +134,6 @@ CHubble::CHubble()
 #endif
 	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CGridHelper);
 	m_TabWndClassInfoDictionary[_T("grid")] = RUNTIME_CLASS(CGridWnd);
-	//m_mapEventDic[_T("textchanged")] = 1;
-	//m_mapEventDic[_T("keydown")] = 2;
-	//m_mapEventDic[_T("onclick")] = 3;
 
 	m_mapIPCMsgIndexDic[IPC_NODE_CREARED_ID] = IPC_NODE_CREARED;
 	m_mapIPCMsgIndexDic[IPC_NODE_ONMOUSEACTIVATE_ID] = IPC_NODE_ONMOUSEACTIVATE;
