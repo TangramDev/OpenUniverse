@@ -32,14 +32,6 @@ namespace HubbleBrowser
               "</content1>";
             Grid node = Hubble.Observe(listView1, "test", xml);
             node.OnTabChange += Node_OnTabChange1; node.OnIPCMessageReceived += Node_OnIPCMessageReceived; ;
-            string s = node.Handle.ToString();
-            int n = node.Cols;
-            n++;
-            Galaxy q = node.Galaxy;
-             n = q.Count;
-            Form f = new Form();
-            f.Text = n.ToString();
-            f.Show();
         }
 
         private void Node_OnIPCMessageReceived(string strFrom, string strTo, string strMsgId, string strPayload, string strExtra)
