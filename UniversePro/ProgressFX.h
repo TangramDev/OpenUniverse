@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 /********************************************************************************
-*					Tangram Library - version 10.0.0							*
+*					UniversePro - version 0.0.5							*
 *********************************************************************************
 * Copyright (C) 2002-2018 by Tangram Team.   All Rights Reserved.				*
 *

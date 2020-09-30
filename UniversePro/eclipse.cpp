@@ -13,7 +13,7 @@
  *	   Rapicorp, Inc - Bug 461728 - [Mac] Allow users to specify values in eclipse.ini outside of the installation
  *******************************************************************************/
  /********************************************************************************
- *					Tangram Library - version 10.0.0							 *
+ *					UniversePro - version 0.0.5							 *
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
  *

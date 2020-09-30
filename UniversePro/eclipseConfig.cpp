@@ -10,7 +10,7 @@
  *	   Martin Oberhuber (Wind River) - [316975] memory leak on failure reading .ini file
  *******************************************************************************/
  /********************************************************************************
- *					Tangram Library - version 10.0.0							*
+ *					UniversePro - version 0.0.5							*
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
  *

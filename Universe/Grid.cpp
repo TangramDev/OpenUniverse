@@ -73,7 +73,7 @@ void CGrid::InitWndGrid()
 	m_strName = m_pHostParse->attr(_T("id"), _T(""));
 	if (m_strName == _T(""))
 	{
-		m_strName.Format(_T("Node_%p"), (LONGLONG)this);
+		m_strName.Format(_T("Grid_%p"), (LONGLONG)this);
 	}
 	if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 	{
@@ -882,7 +882,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				CTangramXmlParse* pChild = m_pHostParse->GetChild(i);
 				CString _strName = pChild->name();
 				CString strName = pChild->attr(_T("id"), _T(""));
-				if (_strName.CompareNoCase(TGM_NODE) == 0)
+				if (_strName.CompareNoCase(TGM_GRID) == 0)
 				{
 					strName.Trim();
 					strName.MakeLower();
