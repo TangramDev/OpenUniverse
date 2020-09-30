@@ -88,25 +88,25 @@
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Commos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Commos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Commos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Commos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
     <OutDir>..\..\chromium_root_81\src\out\tangram_static_release_x64</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

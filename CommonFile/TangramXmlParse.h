@@ -14,7 +14,7 @@
 * THIS SOFTWARE ON A SINGLE COMPUTER.
 *
 * CONTACT INFORMATION:
-* mailto:tangramteam@outlook.com
+* mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
 * http://www.tangramteam.com/
 *
 ********************************************************************************/

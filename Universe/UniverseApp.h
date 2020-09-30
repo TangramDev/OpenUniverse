@@ -7,7 +7,7 @@
 * found in the LICENSE file.
 *
 * CONTACT INFORMATION:
-* mailto:tangramteam@outlook.com
+* mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
 * https://www.tangram.dev
 ********************************************************************************/
 
