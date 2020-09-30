@@ -1,0 +1,555 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Your First Cloud Form Application</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <style type="text/css">
+        .hidden {
+            display: none;
+        }
+        .show {
+            display: block;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            var testNode = null;
+            if (tangram != null) {
+                tangram.addChannel('web');
+                var mainform = null;
+
+
+                tangram.onWinFormCreated = function (e) {
+                    alert("winform created:" + e.xobj.getStr("formname"));
+                };
+                tangram.onTangramNodeCreated = function (e) {
+                    //alert("node created:" + e.node.handle);
+                };
+
+                tangram.onTangramWindowCreated = function (e) {
+                    var wnd = e.window;
+                    wnd.onTangramNodeCreated = function (x) {
+                        var Node = x.node;
+                        if (x.name == "testTangramWinApp9SubCtrlEvent") {
+                            Node.addEventListener("button1", "OnClick", function (e) {
+                                var xform = tangram.createWinForm(document.getElementById("testform").outerHTML,
+                                    0,
+                                    function (x) {
+                                        x.form.addEventListener("button1", "OnClick", function (e) {
+                                            alert("hi" + "  --  " + x.form.handle);
+                                            x.form.xobj.setStr("textBox1", "test modify textbox");
+                                        });
+                                        x.form.SyncCtrlTextChange("textBox1;button1", function (e) {
+                                            alert("hi" + "  --  " + e.getStr("textBox1"));
+                                        });
+
+                                        xform.onTangramNodeCreated = function (e) {
+                                        };
+                                    });
+                            })
+                            Node.addEventListener("treeView1", "OnAfterSelect", function (e) {
+                                var eventtarget = e.getStr("onafterselect");
+                                var list = document.getElementsByTagName(eventtarget);
+                                for (var i = 0; i < list.length; i++) {
+                                    var target = list[i].getAttribute("target");
+                                    if (target != null) {
+                                        tangram.sendMessage("TANGRAM_UI_MESSAGE", eventtarget, e.getInt64("subobjhandle"), list[i].outerHTML, target);
+                                    }
+                                }
+
+                                var TangramWinApp9Elements = document.getElementsByClassName("TangramWinApp9contents")[0].children;
+                                for (var i = 0; i < TangramWinApp9Elements.length; i++) {
+                                    var contentElement = TangramWinApp9Elements[i];
+                                    if (contentElement.classList.contains(eventtarget)) {
+                                        contentElement.classList.remove("hidden");
+                                        contentElement.classList.add("show");
+                                    } else {
+                                        contentElement.classList.remove("show");
+                                        contentElement.classList.add("hidden");
+                                    }
+                                }
+                            })
+                        }
+                    };
+                };
+
+                tangram.onMdiChildActivate = function (e) {
+                    var TangramWinApp9Elements = document.getElementsByClassName("TangramWinApp9contents")[0].children;
+                    if (e.param4 != "") {
+                        for (var i = 0; i < TangramWinApp9Elements.length; i++) {
+                            var contentElement = TangramWinApp9Elements[i];
+                            if (contentElement.classList.contains(e.param4)) {
+                                contentElement.classList.remove("hidden");
+                                contentElement.classList.add("show");
+                                for (var j = 0; j < contentElement.children.length; j++) {
+                                    var x = contentElement.children[j];
+
+                                    if (x.tagName.toLowerCase() == "formui") {
+                                        tangram.sendMessage("TANGRAM_UI_MESSAGE", e.param1, e.param2, x.outerHTML);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                contentElement.classList.remove("show");
+                                contentElement.classList.add("hidden");
+                            }
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < TangramWinApp9Elements.length; i++) {
+                            var contentElement = TangramWinApp9Elements[i];
+                            if (contentElement.classList.contains("mainWindow")) {
+                                contentElement.classList.remove("hidden");
+                                contentElement.classList.add("show");
+                            } else {
+                                contentElement.classList.remove("show");
+                                contentElement.classList.add("hidden");
+                            }
+                        }
+                    }
+                };
+
+                tangram.onMessageReceived = function (e) {
+                    switch (e.param3) {
+                        case "MainMdiForm:ActiveClient":
+                            {
+                                var TangramWinApp9Elements = document.getElementsByClassName("TangramWinApp9contents")[0].children;
+                                if (e.param4 != "") {
+                                    for (var i = 0; i < TangramWinApp9Elements.length; i++) {
+                                        var contentElement = TangramWinApp9Elements[i];
+                                        if (contentElement.classList.contains("mainWindow")) {
+                                            contentElement.classList.remove("hidden");
+                                            contentElement.classList.add("show");
+                                            tangram.sendMessage("TANGRAM_UI_MESSAGE", "__VIEWPORT_DEFAULT__", e.param2);
+                                        } else {
+                                            contentElement.classList.remove("show");
+                                            contentElement.classList.add("hidden");
+                                        }
+                                    }
+                                }
+                                else {
+                                    for (var i = 0; i < TangramWinApp9Elements.length; i++) {
+                                        var contentElement = TangramWinApp9Elements[i];
+                                        if (contentElement.classList.toLowerCase().contains("mainWindow")) {
+                                            contentElement.classList.remove("hidden");
+                                            contentElement.classList.add("show");
+                                        } else {
+                                            contentElement.classList.remove("show");
+                                            contentElement.classList.add("hidden");
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                tangram.onTangramMessageReceived = function (e) {
+                    switch (e.xobj.getStr("msgID")) {
+                        case "TANGRAMAPP_READY":
+                            {
+                                //if (mainform == null) {
+                                //    mainform = tangram.createWinForm(document.getElementById("Mainform").outerHTML,
+                                //        0,
+                                //        function (x) {
+                                //        });
+                                //}
+                            }
+                            break;
+                    }
+                }
+
+                tangram.onBindCLRObject = function (e) {
+                    //alert(e.name);
+                    //alert(e.objtype);
+                    //alert(e.hwnd);
+                    //e.xobj.addEventListener("SizeChanged", function (x) {
+                    //    alert(x.getStr("currentevent") + " " +
+                    //        "Form width:" + x.getLong("width") +
+                    //        "\nheight:" + x.getLong("height"));
+                    //});
+                }
+            }
+        }
+
+        function open_win1() {
+            tangram.sendMessage("TO_TOPFRAME", "__VIEWPORT_DEFAULT__", "<default><window><node name='tangram' nodetype='HostView'/></window></default>", "chrome_proxy:tangram", "__VIEWPORT_DEFAULT__", "");
+        }
+
+        function open_win2() {
+            tangram.sendMessage("TO_TOPFRAME", "2", "<tangramproperties><window><node nodetype='splitter' name='properties' rows='3' cols='1' height ='350,250,200' width='500,' middlecolor='RGB(255,224,192)'><node name='tangramtabctrl_Page2' caption='tangramtabctrl_Page1'/><node name='propertiesView' nodetype='hostview'/><node name='tangramtabctrl_Page1' caption='tangramtabctrl_Page1'/></node></window></tangramproperties>", "chrome_proxy:tangram", "2", "");
+        }
+
+    </script>
+</head>
+<body>
+    <define tagName="mainWindow"></define>
+    <define tagName="application"></define>
+    <define tagName="doc"></define>
+    <define tagName="object"></define>
+    <object type="winform" objid="TangramWinApp9.Form1,host" uikey="form1" caption="test child form1" id="testform">
+        <mainpanel>
+            <default>
+                <window>
+                    <node nodetype='splitter' name='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                        <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                        <node name='test1'></node>
+                    </node>
+                </window>
+            </default>
+        </mainpanel>
+        <panel1 id="test3">
+        </panel1>
+        <treeView1>
+            <treeview1_onafterselect>
+                <maincontent target="test1">
+                    <window>
+                        <node nodetype='splitter' name='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                            <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                            <node name='test1'></node>
+                        </node>
+                    </window>
+                </maincontent>
+                <maincontent target="test3">
+                    <window>
+                        <node name="Start_S0001" nodetype="TangramTabCtrl" cnnid="TangramTabbedWnd.TabbedComponent.1" style="19">
+                            <node name="Page3" caption="Create your own NTP Page" nodetype="clrctrl" cnnid="TangramWinApp9.UserControl1,host"></node>
+                            <node name="Page4" caption="Customize your own WebBrowser"></node>
+                        </node>
+                    </window>
+                </maincontent>
+                <maincontent target="hostclient">
+                    <window>
+                        <node name="Start_S0001" nodetype="TangramTabCtrl" cnnid="TangramTabbedWnd.TabbedComponent.1" style="39">
+                            <node name="Page1" caption="xxxxxxx" nodetype="hostview"></node>
+                            <node name="Page2" caption="yyy" nodetype="" cnnid=""></node>
+                            <node name="Page3" caption="Create your own NTP Page"></node>
+                            <node name="Page4" caption="Customize your own WebBrowser"></node>
+                        </node>
+                    </window>
+                </maincontent>
+                <tangramwinapp9 target="test1">
+                    <window>
+                        <node nodetype='splitter' name='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                            <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                            <node name='test1'></node>
+                            <node name='test2'></node>
+                            <node name='test3'></node>
+                        </node>
+                    </window>
+                </tangramwinapp9>
+                <tangramwinapp9 target="test3">
+                    <window>
+                        <node name="Start_S0001" nodetype="TangramTabCtrl" cnnid="TangramTabbedWnd.TabbedComponent.1" style="17">
+                            <node name="Page3" caption="TangramWinApp9 Page"></node>
+                            <node name="Page4" caption="TangramWinApp9 Page2"></node>
+                        </node>
+                    </window>
+                </tangramwinapp9>
+                <tangramwinapp9 target="hostclient">
+                    <window>
+                        <node name="Start_S0001" nodetype="TangramTabCtrl" cnnid="TangramTabbedWnd.TabbedComponent.1" style="18">
+                            <node name="Page1" caption="111111" nodetype="hostview"></node>
+                            <node name="Page2" caption="222222" nodetype="" cnnid=""></node>
+                            <node name="Page3" caption="33333 your own NTP Page"></node>
+                        </node>
+                    </window>
+                </tangramwinapp9>
+            </treeview1_onafterselect>
+            <treeview1_onnodemousedoubleclick></treeview1_onnodemousedoubleclick>
+            <uidata key="ntpdata" treenode="true" width="0" height="0" text="Welcome to the World of Tangram!">
+                <featurelist treenode="true" text="Feature Lists">
+                    <node1 treenode="true" text="Welcome to the New Cloud-Desktop Mixed World"></node1>
+                    <node1_tag action="openurl" onafterselect="maincontent">
+                    </node1_tag>
+                    <node2 treenode="true" text="ChromeRuntime Support"></node2>
+                    <node2_tag target="test1" onafterselect="tangramwinapp9">
+                    </node2_tag>
+                    <node3 treenode="true" text="JavaRuntime Support"></node3>
+                    <node3_tag action="doubleclick" target="test3">
+                    </node3_tag>
+                    <node4 treenode="true" text="CLR Support"></node4>
+                    <node4_tag action="openurl">
+                        <openurl url="http://www.tangram.dev"></openurl>
+                    </node4_tag>
+                    <node5 treenode="true" text="COM Support"></node5>
+                    <node5_tag action="openurl">
+                        <openurl url="http://www.tangram.dev"></openurl>
+                    </node5_tag>
+                    <node6 treenode="true" text="C++ Support"></node6>
+                    <node6_tag action="openurl">
+                        <openurl url="http://www.tangram.dev"></openurl>
+                    </node6_tag>
+                    <node7 treenode="true" text="Office Support"></node7>
+                    <node7_tag action="openurl">
+                        <openurl url="http://www.tangram.dev"></openurl>
+                    </node7_tag>
+                </featurelist>
+                <Samples treenode="true" text="Samples for Tangram">
+                    <sample1 treenode="true" text="Tangram Sample1(doubleclick me)"></sample1>
+                    <sample1_tag action="openurl">
+                        <openurl url="http://www.tangram.dev/sample/sample1.html"></openurl>
+                    </sample1_tag>
+                    <sample2 treenode="true" text="Tangram Sample2(doubleclick me)"></sample2>
+                    <sample2_tag action="openurl">
+                        <openurl url="http://www.tangram.dev/sample/sample2.html"></openurl>
+                    </sample2_tag>
+                    <sample3 treenode="true" text="Tangram Sample3(doubleclick me)"></sample3>
+                    <sample3_tag action="openurl">
+                        <openurl url="http://www.tangram.dev/sample/sample3.html"></openurl>
+                    </sample3_tag>
+                    <sample4 treenode="true" text="Tangram Sample4(doubleclick me)"></sample4>
+                    <sample4_tag action="openurl">
+                        <openurl url="http://www.tangram.dev/sample/sample4.html"></openurl>
+                    </sample4_tag>
+                </Samples>
+            </uidata>
+            <default>
+                <window>
+                    <node nodetype='splitter' name='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                        <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                        <node name='test1'></node>
+                    </node>
+                </window>
+            </default>
+        </treeView1>
+    </object>
+    <object type="usercontrol" objid="TangramWinApp9.usercontrol,host" uikey="control1">
+        <button1 id="testButtonatctrl">
+        </button1>
+        <listview1 id="test1">
+            <default>
+                <window>
+                    <node nodetype='splitter' name='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                        <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                        <node name='test1'></node>
+                    </node>
+                </window>
+            </default>
+        </listview1>
+    </object>
+    <doc>
+        <window>
+            <node nodetype="splitter" rows="1" cols="2" width="350,100,">
+                <node nodetype="clrctrl" cnnid="TangramWinApp9.Form1,host" uikey="form1" id="testTangramWinApp9SubCtrlEvent"></node>
+                <node nodetype="splitter" rows="2" cols="1" height="350,100," id="asasdasd">
+                    <node nodetype="hostview" id="hostclient" name="xx" id="sfsdfsdfsfsd"></node>
+                    <node nodetype="clrctrl" cnnid="TangramWinApp9.usercontrol1,host" uikey="control1"></node>
+                </node>
+            </node>
+        </window>
+    </doc>
+    <application>
+        <ntp>
+            <window>
+                <node nodetype='splitter' name='splitter' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='10' middlecolor='RGB(180,180,180)'>
+                    <node nodetype="clrctrl" cnnid="TangramWinApp9.UserControl1,host"></node>
+                    <node nodetype="hostview"></node>
+                </node>
+            </window>
+        </ntp>
+        <urls>
+            <test url="host:startpage.html"></test>
+            <test url="host:winapp3.html"></test>
+            <test url="http://www.sina.com.cn"></test>
+            <test url="http://www.csdn.net"></test>
+        </urls>
+    </application>
+    <mainWindow type="winform"
+                formname="test"
+                mainwindow="true"
+                objid="TangramWinApp9.TangramWinApp9MDIForm,host"
+                formkey="test"
+                mdibkpageid="TangramWinApp9.bk,host"
+                showstartup="true"
+                caption="Your First WinForm MDI Application Using Chromium Anywhere"
+                id="Mainform">
+        <mdiclient>
+            <default>
+                <window>
+                    <node url="host" name="mainworkclient">
+                    </node>
+                </window>
+            </default>
+            <tangramwinapp9_mdichild_1>
+                <window>
+                    <node nodetype='splitter' name='properties' rows='1' cols='2' width='300,600,'
+                          middlecolor='RGB(255,224,192)'>
+                        <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                        <node name="mainworkclient"></node>
+                    </node>
+                </window>
+            </tangramwinapp9_mdichild_1>
+            <tangramwinapp9_mdichild_2>
+                <window>
+                    <node nodetype='splitter' name='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                        <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                        <node name="mainworkclient"></node>
+                    </node>
+                </window>
+            </tangramwinapp9_mdichild_2>
+            <tangramwinapp9_mdichild_3>
+                <window>
+                    <node nodetype='splitter' name='properties' rows='1' cols='2' width='600,200,' middlecolor='RGB(255,224,192)'>
+                        <node name="mainworkclient"></node>
+                        <node nodetype="tangramtabctrl" name="tangramtabctrl" cnnid="tangramtabbedwnd.tabbedcomponent.1" style="18">
+                            <node name="winform" caption="Tangram for WinForm Developer" nodetype="hostview" cnnid=""></node>
+                            <node name="mfc" caption="Tangram for MFC/C++ Developer" nodetype="" cnnid=""></node>
+                            <node name="mainworkclient" caption="Tangram for Eclipse" nodetype="" cnnid=""></node>
+                        </node>
+                    </node>
+                </window>
+            </tangramwinapp9_mdichild_3>
+        </mdiclient>
+        <mdichild>
+            <tangramwinapp9_mdichild_1 objid="TangramWinApp9.Form1,host" caption="test child form1">
+                <mainpanel>
+                    <default>
+                        <window>
+                            <node nodetype='splitter' name='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                                <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                                <node name='test1' nodetype="clrctrl" cnnid="TangramWinApp9.UserControl1,TangramWinApp9"></node>
+                            </node>
+                        </window>
+                    </default>
+                </mainpanel>
+            </tangramwinapp9_mdichild_1>
+            <tangramwinapp9_mdichild_2 objid="TangramWinApp9.Form1,host" tooltips="test tangramwinapp9_mdichild_2" caption="test child form2">
+                <mainpanel>
+                    <default>
+                        <window>
+                            <node nodetype="tangramtabctrl" name="tangramtabctrl" cnnid="tangramtabbedwnd.tabbedcomponent.1" style="19">
+                                <node nodetype='splitter' name='splitter' rows='1' cols='2' height='250,' width='400,100,' caption="Tangram Solution for TangramWinApp9">
+                                    <node name="mfc" caption="Tangram for MFC/C++ Developer" nodetype="" cnnid=""></node>
+                                    <node name="eclipse" caption="Tangram for Eclipse" nodetype="" cnnid=""></node>
+                                </node>
+                            </node>
+                        </window>
+                    </default>
+                </mainpanel>
+            </tangramwinapp9_mdichild_2>
+            <tangramwinapp9_mdichild_3 objid="TangramWinApp9.Form1,host" caption="test child mdi form 2">
+                <mainpanel>
+                    <default>
+                        <window>
+                            <node nodetype='splitter' name='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                                <node name='tangramtabctrl_Page2' nodetype='hostview' caption=''></node>
+                                <node nodetype="tangramtabctrl" name="tangramtabctrl" cnnid="tangramtabbedwnd.tabbedcomponent.1" style="19">
+                                    <node name="winform" caption="Tangram for WinForm Developer" nodetype="" cnnid=""></node>
+                                    <node name="mfc" caption="Tangram for MFC/C++ Developer" nodetype="" cnnid=""></node>
+                                    <node name="eclipse" caption="Tangram for Eclipse" nodetype="" cnnid=""></node>
+                                </node>
+                            </node>
+                        </window>
+                    </default>
+                </mainpanel>
+            </tangramwinapp9_mdichild_3>
+        </mdichild>
+    </mainWindow>
+    <div class="TangramWinApp9contents">
+        <div class="show mainWindow maincontent">
+            <input type=button value="Test Tangram 1" onclick="open_win1()" />
+            <input type=button value="Test Tangram 2" onclick="open_win2()" />
+            <input type=button value="Test Tangram 3" onclick="open_win3()" />
+            <input type=button value="Test Tangram 4" onclick="open_win4()" />
+            test: <input id="textName" type="text" name="fname"><br>
+            <h1 align=center style='text-align:center'>这是一个充分混合了浏览器技术和桌面技术的应用程序</h1>
+            <p>您当前看到的窗口是一个Windows Forms MDI风格窗口，您可以在工程中找到它（叫做MainForm.cs）。而如您所见的用户区域则是一个标准的浏览器窗口（移除了地址栏和菜单栏），试试在不同的标签页间切换。</p>
+            <p>我们将通过2组页面来解释我们的产品，我们将在当前用户区域展示第一组页面，同时我们将使用“应用内浏览器”窗口来展示第二组页面。</p>
+            <p>快速导航</p>
+            <p>一组链接，直接在新窗口打开</p>
+            <p>要体验第二组页面，你需要首先打开“应用内浏览器”，通过点击工具栏的浏览器图标打开它。“应用内浏览器”是内置在应用程序中，跟随应用程序一同发行的浏览器，“应用内浏览器”可以利用应用程序的所有资源。</p>
+            <p>一张图片，指示点击浏览器图标</p>
+            <b>您可以在工程的HTML目录中找到所有的HTML文件</b>
+            <p>现在，您需要了解的第一个页面便是当前页面（叫做TangramWinApp9.html），它负责主窗口的标题、初始打开的标签页以及您当前阅读的这段文字。</p>
+            <p>观察页面的左侧和下方区域，分别是一个Form(在工程中叫做Form1.cs)和一个UserControl(在工程中叫做UserControl1.cs)。它们也是当前页面的一部分，对应页面中的doc标签。</p>
+            <p>为了证明它们是页面的一部分，您可以点击下面的选项来配置左侧区域的背景颜色。</p>
+            <input type="button" value="XXXXXX" />
+            <p>位于Form窗口中的浏览器移除了“新标签页”和“关闭标签页”功能，使其更接近于桌面软件的交互习惯，然而页面也可以直接在“应用内浏览器”中被打开，那将是另外一种体验。</p>
+            <formui>
+                <window>
+                    <node nodetype="tangramtabctrl" name="tangramtabctrl" cnnid="tangramtabbedwnd.tabbedcomponent.1" style="13">
+                        <node name="winform" caption="main div" nodetype="hostview" cnnid=""></node>
+                        <node name="mfc" caption="test1" nodetype="" cnnid=""></node>
+                        <node name="eclipse" caption="test2" nodetype="" cnnid=""></node>
+                    </node>
+                </window>
+            </formui>
+        </div>
+        <div class="hidden tangramwinapp9">
+            <h1>About Cloud Form</h1>
+            <p>
+                <b>
+                    <span lang=EN-US style='font-size:14.0pt'>
+                        <a href="test.html">Click me to see what will happen ...</a>
+                    </span>
+                </b>
+                <input type="button" value="Send Message" onclick="" />
+            <p />
+        </div>
+        <div class="hidden tangramwinapp9_mdichild_1">
+            <h1 align=center style='text-align:center'>About Cloud MDI Child WinForm 1</h1>
+            <formui>
+                <window>
+                    <node nodetype="tangramtabctrl" name="tangramtabctrl" cnnid="tangramtabbedwnd.tabbedcomponent.1" style="27">
+                        <node name="winform" caption="Tangram for WinForm Developer" nodetype="hostview" cnnid=""></node>
+                        <node name="mfc" caption="Tangram for MFC/C++ Developer" nodetype="" cnnid=""></node>
+                        <node name="eclipse" caption="Tangram for Eclipse" nodetype="" cnnid=""></node>
+                    </node>
+                </window>
+            </formui>
+            <p>
+                <b>
+                    <span lang=EN-US style='font-size:14.0pt'>
+                        <a href="test.html">Hi, Im a Active Child Form</a>
+                    </span>
+                </b>
+                <input type="button" value="Send Message" onclick="" />
+            <p />
+        </div>
+        <div class="hidden tangramwinapp9_mdichild_2">
+            <h1 align=center style='text-align:center'>About Cloud MDI Child WinForm 2</h1>
+            <formui>
+                <window>
+                    <node nodetype="tangramtabctrl" name="tangramtabctrl" cnnid="tangramtabbedwnd.tabbedcomponent.1" style="43">
+                        <node name="winform" caption="Tangram for WinForm Developer" nodetype="hostview" cnnid=""></node>
+                        <node name="mfc" caption="Tangram for MFC/C++ Developer" nodetype="" cnnid=""></node>
+                        <node name="eclipse" caption="Tangram for Eclipse" nodetype="" cnnid=""></node>
+                    </node>
+                </window>
+            </formui>
+            <p>
+                First name: <input type="text" name="fname"><br>
+                Last name: <input type="text" name="lname"><br>
+            <p />
+        </div>
+        <div class="hidden tangramwinapp9_mdichild_3">
+            <h1 align=center style='text-align:center'>About Cloud MDI Child WinForm 3</h1>
+            <formui>
+                <window>
+                    <node nodetype="tangramtabctrl" name="tangramtabctrl" cnnid="tangramtabbedwnd.tabbedcomponent.1" style="18">
+                        <node name="winform" caption="xxxxxxxxx" nodetype="hostview" cnnid=""></node>
+                        <node name="mfc" caption="yyyyyyyyy" nodetype="" cnnid=""></node>
+                        <node name="eclipse" caption="zzzzzzzz" nodetype="" cnnid=""></node>
+                    </node>
+                </window>
+            </formui>
+            <p>
+                <b>
+                    <span lang=EN-US style='font-size:14.0pt'>
+                        <a href="test.html">Hi, Im a Active Child Form</a>
+                    </span>
+                </b>
+                <input type="button" value="Send Message" onclick="" />
+            <p />
+        </div>
+    </div>
+</body>
+</html>

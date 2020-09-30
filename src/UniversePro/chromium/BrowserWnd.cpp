@@ -25,8 +25,8 @@
 #include "../Grid.h"
 #include "../GridHelper.h"
 #include "../Galaxy.h"
-#include "BrowserWnd.h"
 #include "WebPage.h"
+#include "BrowserWnd.h"
 
 namespace Web {
 	CBrowser::CBrowser() {
