@@ -1,8 +1,0 @@
-; Universe.def : Declares the module parameters.
-
-LIBRARY      "Universe.DLL"
-
-EXPORTS
-	GetHubble						PRIVATE
-	GetHubbleImpl					PRIVATE
-	SetMainDllLoader				PRIVATE
