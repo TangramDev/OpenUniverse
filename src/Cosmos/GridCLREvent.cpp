@@ -23,7 +23,6 @@ CGridCLREvent::CGridCLREvent()
 
 CGridCLREvent::~CGridCLREvent()
 {
-	//delete m_pGrid;
 }
 
 void CGridCLREvent::OnObserverComplete(IGrid* pGrid)
