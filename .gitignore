@@ -109,7 +109,7 @@ ipch/
 
 output/
 output32/
-doc/
+docs/
 
 # Visual Studio profiler
 *.psess

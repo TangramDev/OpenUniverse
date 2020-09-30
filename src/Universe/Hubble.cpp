@@ -51,6 +51,7 @@
 using namespace Web;
 
 // CHubble
+
 CHubble::CHubble()
 {
 	m_pCurrentIPCMsg = nullptr;
