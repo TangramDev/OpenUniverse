@@ -1,0 +1,10 @@
+
+[
+	Exposed = Window
+] interface HubbleCompositor : EventTarget {
+	readonly attribute DOMString name;
+
+	// Event handler attributes
+	attribute EventHandler onMessageReceived;
+	attribute EventHandler onGridCreated;
+};

@@ -1,0 +1,24 @@
+
+[
+	Exposed = Window
+] interface HubbleXobj {
+	readonly attribute DOMString name;
+	readonly attribute HubbleNode grid;
+	readonly attribute HubbleWinform form;
+	readonly attribute HubbleWindow window;
+
+	DOMString getStr(DOMString strKey);
+	void setStr(DOMString strKey, DOMString value);
+	long getLong(DOMString strKey);
+	void setLong(DOMString strKey, long value);
+	long long getInt64(DOMString strKey);
+	void setInt64(DOMString strKey, long long value);
+	float getFloat(DOMString strKey);
+	void setFloat(DOMString strKey, float value);
+
+	void sendMessage(HubbleXobj msg,
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	void addEventListener(DOMString eventName, ApplicationCallback callback);
+	void addEventListener(DOMString subObjName, DOMString eventName, ApplicationCallback callback);
+	void removeEventListener(DOMString eventName);
+};
