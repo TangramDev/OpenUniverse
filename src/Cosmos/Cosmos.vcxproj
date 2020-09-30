@@ -89,26 +89,28 @@
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
     <TargetName>$(ProjectName)</TargetName>
+    <OutDir>..\..\output32\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>..\output</OutDir>
+    <OutDir>..\..\output\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
     <TargetName>$(ProjectName)</TargetName>
+    <OutDir>..\..\output32\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>..\output\</OutDir>
+    <OutDir>..\..\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>

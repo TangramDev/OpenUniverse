@@ -89,6 +89,7 @@
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
     <TargetName>Cosmos</TargetName>
+    <OutDir>..\..\output32\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -102,6 +103,7 @@
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
     <TargetName>Cosmos</TargetName>
+    <OutDir>..\..\output32\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
