@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>VLE</ProjectName>
+    <ProjectName>CosmosMini</ProjectName>
     <ProjectGuid>{53AEE43E-1B0A-4CCE-8AEC-6E243C6322BC}</ProjectGuid>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <RootNamespace>Cosmos</RootNamespace>
@@ -88,26 +88,26 @@
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
     <OutDir>..\output</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
-    <TargetName>$(ProjectName)</TargetName>
+    <TargetName>Cosmos</TargetName>
     <OutDir>..\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

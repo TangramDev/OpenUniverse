@@ -372,7 +372,7 @@ namespace Cosmos
                 int nCount = pParse->GetCount();
                 if (nCount == 1)
                 {
-                    pParse = pParse->GetChild(TGM_NODE);
+                    pParse = pParse->GetChild(TGM_GRID);
                     if (pParse)
                     {
                         theApp.m_pHubbleImpl->m_strNtpXml = _strXml;

@@ -825,7 +825,7 @@ CGrid* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 		return nullptr;
 	}
 
-	CTangramXmlParse* pGrid = pWndGrid->GetChild(TGM_NODE);
+	CTangramXmlParse* pGrid = pWndGrid->GetChild(TGM_GRID);
 	if (pGrid == nullptr)
 	{
 		delete m_pParse;
