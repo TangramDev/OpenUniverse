@@ -30,6 +30,8 @@ struct CommonThreadInfo
 };
 
 // CHubble
+/*Chubble is the key core object of the universe framework. From the perspective
+of cosmology, chubble is equivalent to the Hubble telescope in the software universe*/
 class ATL_NO_VTABLE CHubble :
 	public CHubbleImpl,
 	public CComObjectRootBase,
