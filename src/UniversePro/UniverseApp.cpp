@@ -308,30 +308,6 @@ LRESULT CGenericPaneWnd::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lP
 	return lRes;
 }
 
-// Method used for Windows 8.1 and later.
-// Since we support versions earlier than 8.1, we must dynamically load this
-// function from user32.dll, so it won't fail to load in runtime. For earlier
-// Windows versions GetProcAddress will return null and report failure so that
-// callers can fall back on the deprecated SetProcessDPIAware.
-bool SetProcessDpiAwarenessWrapper(PROCESS_DPI_AWARENESS value) {
-	decltype(&::SetProcessDpiAwareness) set_process_dpi_awareness_func =
-		reinterpret_cast<decltype(&::SetProcessDpiAwareness)>(GetProcAddress(
-			GetModuleHandle(L"user32.dll"), "SetProcessDpiAwarenessInternal"));
-	if (set_process_dpi_awareness_func) {
-		HRESULT hr = set_process_dpi_awareness_func(value);
-		if (SUCCEEDED(hr))
-			return true;
-		//DLOG_IF(ERROR, hr == E_ACCESSDENIED)
-		//	<< "Access denied error from SetProcessDpiAwarenessInternal. Function "
-		//	"called twice, or manifest was used.";
-		//NOTREACHED()
-		//	<< "SetProcessDpiAwarenessInternal failed with unexpected error: "
-		//	<< hr;
-		//return false;
-	}
-	return false;
-}
-
 CUniverse::CUniverse()
 {
 	m_bHostCLR = false;
