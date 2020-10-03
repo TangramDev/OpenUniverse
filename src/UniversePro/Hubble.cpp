@@ -191,6 +191,7 @@ CHubble::CHubble()
 	m_strAppName = _T("Tangram System");
 	m_strAppKey = _T("");
 	m_strMainWndXml = _T("");
+	m_strDefaultWorkBenchXml = _T("");
 	m_strCurrentKey = _T("");
 	m_strCurrentAppID = _T("");
 	m_strConfigFile = _T("");
@@ -443,6 +444,11 @@ void CHubble::Init()
 			if (_pXmlParse)
 			{
 				g_pHubble->m_strNtpXml = _pXmlParse->xml();
+			}
+			_pXmlParse = m_Parse.GetChild(_T("defaultworkbench"));
+			if (_pXmlParse)
+			{
+				g_pHubble->m_strDefaultWorkBenchXml = _pXmlParse->xml();
 			}
 			if (::PathFileExists(m_strConfigDataFile) == FALSE)
 			{
@@ -1431,6 +1437,9 @@ void CHubble::TangramInitFromeWeb()
 		pParse = m_Parse.GetChild(_T("ntp"));
 		if (pParse)
 			m_strNtpXml = m_Parse[_T("ntp")].xml();
+		pParse = m_Parse.GetChild(_T("defaultworkbench"));
+		if (pParse)
+			m_strDefaultWorkBenchXml = m_Parse[_T("defaultworkbench")].xml();
 
 		auto it = m_mapBrowserWnd.find(m_hHostBrowserWnd);
 		if (it != m_mapBrowserWnd.end())
@@ -1597,7 +1606,7 @@ void CHubble::HubbleInit()
 	}
 	if (bLoad) {
 		m_nJVMVersion = _m_Parse.attrInt(_T("jvmver"), JNI_VERSION_10);
-		m_bEclipse = _m_Parse.attrBool(_T("eclipseapp"));
+		//m_bEclipse = _m_Parse.attrBool(_T("eclipseapp"));
 		m_strAppName = _m_Parse.attr(_T("appname"), _T("Tangram System"));
 		m_strStartupCLRObj = _m_Parse.attr(_T("startupclrobj"), _T(""));
 	}
@@ -2216,7 +2225,8 @@ void CHubble::BrowserAppStart()
 			if (m_nAppType == APP_BROWSERAPP)
 				m_hMainWnd = m_hHostWnd;
 			::PostMessage(m_hHostWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
-			g_pHubble->m_nAppType = APP_BROWSERAPP;
+			if(g_pHubble->m_nAppType != APP_BROWSER_ECLIPSE)
+				g_pHubble->m_nAppType = APP_BROWSERAPP;
 			CString str = _T("<host popup='true'><url></url></host>");
 			CTangramXmlParse m_Parse;
 			if (m_Parse.LoadXml(str)) {

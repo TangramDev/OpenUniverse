@@ -235,6 +235,7 @@ public:
 	LPCTSTR									m_lpszSplitterClass;
 	CString									m_strAppXml;
 	CString									m_strMainWndXml;
+	CString									m_strDefaultWorkBenchXml;
 	CImageList								m_DocImageList;
 	CImageList								m_DocTemplateImageList;
 

@@ -129,6 +129,16 @@
                 </grid>
             </layout>
         </ntp>
+        <defaultworkbench>
+            <layout>
+                <grid style="18">
+                    <grid id='tangramtabctrl_Page2' gridtype="nucleus" caption='Page 1'></grid>
+                    <grid id='test1 x' caption='Page 2' url="https://www.csdn.net|https://www.tangram.dev"></grid>
+                    <grid id='test2 y' caption='Page 3'></grid>
+                    <grid id='test3 z' caption='Page 4'></grid>
+                </grid>
+            </layout>
+        </defaultworkbench>
         <urls><url url="https://www.tangram.dev"></url></urls>
     </application>
     <!-- Determine the main layout of the application, "HubbleBrowser.MDIParent1,HubbleBrowser" represents
@@ -182,7 +192,7 @@
     </gridTemplate>
     <webViewport>
         <layout>
-            <grid  rows="1" cols="2" width="350,100,">
+            <grid rows="1" cols="2" width="350,100,">
                 <grid objid="navDetails" id="navCtrl"></grid>
                 <grid gridtype="nucleus" id="mainClient"></grid>
             </grid>
@@ -240,7 +250,7 @@
             <p>Grid grid refers to a grid structure with m rows and n columns. As a container grid, each child grid can carry a specific programmable object ...</p>
             <content2 target="mainClient">
                 <layout>
-                    <grid  rows="3" cols="3" width="150,100,50" height="200,180,50">
+                    <grid rows="3" cols="3" width="150,100,50" height="200,180,50">
                         <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
                         <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
@@ -259,9 +269,9 @@
             <p>Nested Grid means that a Grid can be a child grid of another Grid. We allow nested structures to mean that developers can use "lines" to plan the layout of a rectangular structure ... ...</p>
             <content3 target="mainClient">
                 <layout>
-                    <grid  rows="1" cols="2" width="200,100,">
+                    <grid rows="1" cols="2" width="200,100,">
                         <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
-                        <grid  caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                        <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
                             <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
                             <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
                             <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
@@ -295,7 +305,7 @@
             <content5 target="mainClient">
                 <layout>
                     <grid style="23">
-                        <grid  caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                        <grid caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
                             <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
                             <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
                             <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
@@ -318,7 +328,7 @@
             <content6 target="mainClient">
                 <layout>
                     <grid style="23">
-                        <grid  caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                        <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
                             <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
                             <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
                             <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>

@@ -3384,101 +3384,103 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		return hr;
 
 	WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
-
-	if (m_pBindingGrid)
+	if (m_pWorkGrid)
 	{
-		RECT rect = { 0,0,0,0 };
-		HWND hPWnd = ::GetParent(m_hWnd);
-		if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)&rect, 19921989) == 19921989)
+		if (m_pBindingGrid)
 		{
-			lpwndpos->x = rect.left;
-			lpwndpos->y = rect.top;
-			lpwndpos->cx = rect.right - rect.left;
-			lpwndpos->cy = rect.bottom - rect.top;
-		}
-		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE| SWP_FRAMECHANGED );// |SWP_NOREDRAW); 
-		CGrid* _pHostNode = m_pBindingGrid;
-		if (_pHostNode->m_pHostGalaxy)
-		{
-			CGalaxy* _pGalaxy = _pHostNode->m_pHostGalaxy;
-			while (_pGalaxy)
+			RECT rect = { 0,0,0,0 };
+			HWND hPWnd = ::GetParent(m_hWnd);
+			if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)&rect, 19921989) == 19921989)
 			{
-				if (_pGalaxy->m_pBindingGrid)
-					_pHostNode = _pGalaxy->m_pBindingGrid;
-				else
-					break;
-				if (_pHostNode && _pHostNode->m_pHostGalaxy)
+				lpwndpos->x = rect.left;
+				lpwndpos->y = rect.top;
+				lpwndpos->cx = rect.right - rect.left;
+				lpwndpos->cy = rect.bottom - rect.top;
+			}
+			::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE| SWP_FRAMECHANGED );// |SWP_NOREDRAW); 
+			CGrid* _pHostNode = m_pBindingGrid;
+			if (_pHostNode->m_pHostGalaxy)
+			{
+				CGalaxy* _pGalaxy = _pHostNode->m_pHostGalaxy;
+				while (_pGalaxy)
 				{
-					_pGalaxy = _pHostNode->m_pHostGalaxy;
-					if (_pGalaxy == nullptr)
+					if (_pGalaxy->m_pBindingGrid)
+						_pHostNode = _pGalaxy->m_pBindingGrid;
+					else
+						break;
+					if (_pHostNode && _pHostNode->m_pHostGalaxy)
+					{
+						_pGalaxy = _pHostNode->m_pHostGalaxy;
+						if (_pGalaxy == nullptr)
+							break;
+					}
+					else
 						break;
 				}
-				else
+			}
+			HWND hHost = _pHostNode->m_pHostWnd->m_hWnd;
+			bool bVisible = ::IsWindowVisible(hHost);
+			if (bVisible)
+			{
+				RECT rc;
+				::GetClientRect(hHost, &rc);
+				if (rc.bottom * rc.right == 0)
+					bVisible = false;
+			}
+			if (bVisible)
+			{
+				::GetWindowRect(hHost, &rect);
+				::ScreenToClient(hPWnd, (LPPOINT)&rect);
+				::ScreenToClient(hPWnd, ((LPPOINT)&rect) + 1);
+				lpwndpos->x = rect.left;
+				lpwndpos->y = rect.top;
+				lpwndpos->cx = rect.right - rect.left;
+				lpwndpos->cy = rect.bottom - rect.top;
+				lpwndpos->flags &= ~SWP_HIDEWINDOW;
+				lpwndpos->flags |= SWP_SHOWWINDOW | SWP_NOZORDER;
+				//begin fix bug for .net Control or Window Form
+				CGrid* _pParentNode = m_pBindingGrid->m_pParentObj;
+				if (_pParentNode)
+				{
+					switch (_pParentNode->m_nViewType)
+					{
+					case Grid:
+					{
+						CGridWnd* pWnd = (CGridWnd*)_pParentNode->m_pHostWnd;
+						if (pWnd->bInited == false)
+							::SendMessage(pWnd->m_hWnd, WM_COSMOSMSG, 1, 1993);
+					}
 					break;
+					case TabGrid:
+					{
+						CGridHelper* pWnd = (CGridHelper*)_pParentNode->m_pHostWnd;
+						::InvalidateRect(pWnd->m_hWnd, nullptr, true);
+					}
+					break;
+					}
+				}
+				if (m_pContainerNode && m_pContainerNode->m_pParentObj && m_pContainerNode->m_pParentObj->m_nViewType == Grid)
+				{
+					if (m_pContainerNode->m_nViewType == CLRCtrl)
+					{
+						CGridHelper* pGridWnd = (CGridHelper*)m_pContainerNode->m_pHostWnd;
+						pGridWnd->m_bNoMove = true;
+					}
+				}
+				//end fix bug for .net Control or Window Form
 			}
-		}
-		HWND hHost = _pHostNode->m_pHostWnd->m_hWnd;
-		bool bVisible = ::IsWindowVisible(hHost);
-		if (bVisible)
-		{
-			RECT rc;
-			::GetClientRect(hHost, &rc);
-			if (rc.bottom * rc.right == 0)
-				bVisible = false;
-		}
-		if (bVisible)
-		{
-			::GetWindowRect(hHost, &rect);
-			::ScreenToClient(hPWnd, (LPPOINT)&rect);
-			::ScreenToClient(hPWnd, ((LPPOINT)&rect) + 1);
-			lpwndpos->x = rect.left;
-			lpwndpos->y = rect.top;
-			lpwndpos->cx = rect.right - rect.left;
-			lpwndpos->cy = rect.bottom - rect.top;
-			lpwndpos->flags &= ~SWP_HIDEWINDOW;
-			lpwndpos->flags |= SWP_SHOWWINDOW | SWP_NOZORDER;
-			//begin fix bug for .net Control or Window Form
-			CGrid* _pParentNode = m_pBindingGrid->m_pParentObj;
-			if (_pParentNode)
+			else
 			{
-				switch (_pParentNode->m_nViewType)
-				{
-				case Grid:
-				{
-					CGridWnd* pWnd = (CGridWnd*)_pParentNode->m_pHostWnd;
-					if (pWnd->bInited == false)
-						::SendMessage(pWnd->m_hWnd, WM_COSMOSMSG, 1, 1993);
-				}
-				break;
-				case TabGrid:
-				{
-					CGridHelper* pWnd = (CGridHelper*)_pParentNode->m_pHostWnd;
-					::InvalidateRect(pWnd->m_hWnd, nullptr, true);
-				}
-				break;
-				}
+				lpwndpos->x = lpwndpos->y = lpwndpos->cx = lpwndpos->cy = 0;
+				lpwndpos->flags |= SWP_HIDEWINDOW | SWP_NOZORDER;
 			}
-			if (m_pContainerNode && m_pContainerNode->m_pParentObj && m_pContainerNode->m_pParentObj->m_nViewType == Grid)
-			{
-				if (m_pContainerNode->m_nViewType == CLRCtrl)
-				{
-					CGridHelper* pGridWnd = (CGridHelper*)m_pContainerNode->m_pHostWnd;
-					pGridWnd->m_bNoMove = true;
-				}
-			}
-			//end fix bug for .net Control or Window Form
 		}
 		else
 		{
-			lpwndpos->x = lpwndpos->y = lpwndpos->cx = lpwndpos->cy = 0;
-			lpwndpos->flags |= SWP_HIDEWINDOW | SWP_NOZORDER;
+			::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_TOP, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
+			lpwndpos->flags &= ~SWP_SHOWWINDOW;
+			lpwndpos->flags |= SWP_HIDEWINDOW;
 		}
-	}
-	else
-	{
-		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_TOP, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
-		lpwndpos->flags &= ~SWP_SHOWWINDOW;
-		lpwndpos->flags |= SWP_HIDEWINDOW;
 	}
 
 	if (m_bMDIChild)

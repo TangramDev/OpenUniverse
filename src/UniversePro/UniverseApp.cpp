@@ -498,6 +498,7 @@ BOOL CUniverse::InitInstance()
 			if (bHasChromeRT && bSupportBrowser && bSupportEclipse)
 			{
 				g_pHubble->m_strStartupURL = strInitWebPage;
+				g_pHubble->m_strStartView = strInitEclipse;
 				g_pHubble->m_nAppType = APP_BROWSER_ECLIPSE;
 			}
 			if (g_pHubble->m_strStartupURL == _T(""))
@@ -776,7 +777,7 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		break;
 		case TANGRAM_CHROME_APP_INIT:
 		{
-			if (g_pHubble->m_nAppType == APP_BROWSER_ECLIPSE)
+			if (g_pHubble->m_nAppType == APP_BROWSER_ECLIPSE||g_pHubble->m_bEclipse)
 			{
 				IHubbleCLRImpl* pProxy = g_pHubble->m_pCLRProxy;
 				g_pHubble->InitEclipseApp();

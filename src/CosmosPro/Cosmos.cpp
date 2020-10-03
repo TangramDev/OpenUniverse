@@ -620,11 +620,11 @@ namespace Cosmos
                 IsWebRuntimeInit = FuncIsChromeRunning(false);
                 if (theAppProxy.m_bInitApp == false)
                 {
-                    if (System::Diagnostics::Debugger::IsAttached)
-                    {
-                        StartApplication(L"caswebagent.server.1", L"fordebug");
-                        OnHubbleDebugDelegate += gcnew TangramDebugDelegate(&OnHubble_DebugDelegate);
-                    }
+                    //if (System::Diagnostics::Debugger::IsAttached)
+                    //{
+                    //    StartApplication(L"caswebagent.server.1", L"fordebug");
+                    //    OnHubbleDebugDelegate += gcnew TangramDebugDelegate(&OnHubble_DebugDelegate);
+                    //}
                     ::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20191022);
                 }
             }

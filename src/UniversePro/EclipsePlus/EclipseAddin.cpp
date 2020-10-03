@@ -406,19 +406,22 @@ void CEclipseWnd::Show(CString strID)
 		{
 			m_strAppProxyID = _T("");
 			auto it = g_pHubble->m_mapWindowPage.find(m_hWnd);
-			if (it != g_pHubble->m_mapWindowPage.end())
-				m_pGalaxyCluster = (CGalaxyCluster*)it->second;
-			else
+			if (m_pGalaxyCluster == nullptr)
 			{
-				m_pGalaxyCluster = new CComObject<CGalaxyCluster>();
-				m_pGalaxyCluster->m_hWnd = m_hWnd;
-				g_pHubble->m_mapWindowPage[m_hWnd] = m_pGalaxyCluster;
-
-				for (auto it : g_pHubble->m_mapHubbleAppProxy)
+				if (it != g_pHubble->m_mapWindowPage.end())
+					m_pGalaxyCluster = (CGalaxyCluster*)it->second;
+				else
 				{
-					CGalaxyClusterProxy* pHubbleProxy = it.second->OnGalaxyClusterCreated(m_pGalaxyCluster);
-					if (pHubbleProxy)
-						m_pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pHubbleProxy;
+					m_pGalaxyCluster = new CComObject<CGalaxyCluster>();
+					m_pGalaxyCluster->m_hWnd = m_hWnd;
+					g_pHubble->m_mapWindowPage[m_hWnd] = m_pGalaxyCluster;
+
+					for (auto it : g_pHubble->m_mapHubbleAppProxy)
+					{
+						CGalaxyClusterProxy* pHubbleProxy = it.second->OnGalaxyClusterCreated(m_pGalaxyCluster);
+						if (pHubbleProxy)
+							m_pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pHubbleProxy;
+					}
 				}
 			}
 
@@ -431,7 +434,7 @@ void CEclipseWnd::Show(CString strID)
 					g_pHubble->m_mapCreatingWorkBenchInfo.erase(it);
 				}
 				else
-					m_strDocKey = m_strXml = m_strPath = g_pHubble->m_strAppDataPath + _T("default.workbench");
+					m_strDocKey = m_strXml = m_strPath = g_pHubble->m_strDefaultWorkBenchXml;
 			}
 			else
 			{
@@ -508,6 +511,7 @@ void CEclipseWnd::Show(CString strID)
 						if (g_pHubble->m_nAppType == APP_ECLIPSE)
 							m_strDocKey = g_pHubble->m_strStartupURL;
 					}
+
 					IGrid* pGrid = nullptr;
 					pGalaxy->Observe(CComBSTR(strKey), CComBSTR(m_strDocKey), &pGrid);
 					if (pGrid == nullptr)
