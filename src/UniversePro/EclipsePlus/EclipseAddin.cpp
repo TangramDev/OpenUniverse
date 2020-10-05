@@ -766,13 +766,10 @@ LRESULT CEclipseWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 	if (it != g_pHubble->m_mapWorkBenchWnd.end())
 	{
 		g_pHubble->m_mapWorkBenchWnd.erase(it);
-		//if (g_pHubble->m_mapWorkBenchWnd.size()==0)
-		//{
-		//	if(::IsWindow(g_pHubble->m_hHostWnd))
-		//		::DestroyWindow(g_pHubble->m_hHostWnd);
-		//}
 	}
+
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+
 	if (g_pHubble->m_mapWorkBenchWnd.size() == 0)
 	{
 		if (::GetModuleHandle(L"chrome_elf.dll"))
