@@ -61,7 +61,6 @@ CGrid::CGrid()
 void CGrid::InitWndGrid()
 {
 	m_pParentWinFormWnd = nullptr;
-	m_pHubbleCloudSession = nullptr;
 	m_pGridShareData = m_pRootObj->m_pGridShareData;
 	ASSERT(m_pGridShareData != nullptr);
 	m_nHeigh = m_pHostParse->attrInt(TGM_HEIGHT, 0);

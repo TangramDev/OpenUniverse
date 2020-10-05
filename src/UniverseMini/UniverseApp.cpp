@@ -851,18 +851,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					::DestroyWindow(g_pHubble->m_hHostWnd);
 				}
 				break;
-				case 2019111701:
-				{
-					if (g_pHubble->m_mapGridForHtml.size())
-					{
-						for (auto it : g_pHubble->m_mapGridForHtml)
-						{
-							it.first->put_URL(CComBSTR(it.second));
-						}
-						g_pHubble->m_mapGridForHtml.erase(g_pHubble->m_mapGridForHtml.begin(), g_pHubble->m_mapGridForHtml.end());
-					}
-				}
-				break;
 				case 20191022:
 				{
 					if (g_pHubble->m_pCLRProxy)

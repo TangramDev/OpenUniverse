@@ -128,10 +128,6 @@ CHubble::CHubble()
 #endif
 	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CGridHelper);
 	m_TabWndClassInfoDictionary[_T("grid")] = RUNTIME_CLASS(CGridWnd);
-
-	m_mapIPCMsgIndexDic[IPC_NODE_CREARED_ID] = IPC_NODE_CREARED;
-	m_mapIPCMsgIndexDic[IPC_NODE_ONMOUSEACTIVATE_ID] = IPC_NODE_ONMOUSEACTIVATE;
-	m_mapIPCMsgIndexDic[IPC_MDIWINFORM_ACTIVEMDICHILD_ID] = IPC_MDIWINFORM_ACTIVEMDICHILD;
 }
 
 void CHubble::Init()
@@ -447,11 +443,7 @@ void CHubble::AttachGrid(void* pGridEvents)
 
 long CHubble::GetIPCMsgIndex(CString strMsgID)
 {
-	auto it = m_mapIPCMsgIndexDic.find(strMsgID);
-	if (it != m_mapIPCMsgIndexDic.end())
-		return it->second;
-	else
-		return 0;
+	return 0;
 }
 
 CSession* CHubble::CreateCloudSession(CWebPageImpl* pOwner)

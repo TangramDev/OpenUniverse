@@ -14,7 +14,6 @@
 // Hubble.h : Declaration of the CHubble
 
 #include "Universe.h"
-#include "ObjSafe.h"
 
 #pragma once
 
@@ -72,11 +71,8 @@ public:
 	CGrid*								m_pDesignGrid;
 	CGalaxy*							m_pGalaxy;
 
-	map<CString, long>					m_mapIPCMsgIndexDic;
-
 	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
 	map<__int64, CGridCollection*>		m_mapWndGridCollection;
-	map<CGrid*, CString>				m_mapGridForHtml;
 
 	BEGIN_COM_MAP(CHubble)
 		COM_INTERFACE_ENTRY(IHubble)

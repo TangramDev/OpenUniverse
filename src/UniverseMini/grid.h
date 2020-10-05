@@ -18,7 +18,6 @@
 #pragma once
 
 class CWinForm;
-class CWormhole;
 class CGridShareData
 {
 public:
@@ -91,7 +90,6 @@ public:
 	IDispatch*						m_pExtender;
 	CGridVector						m_vChildNodes;
 	CGrid*							m_pCurrentExNode;
-	CWormhole*						m_pHubbleCloudSession;
 	map<CGrid*, CString>			m_mapExtendNode;
 	CComObject<CGridCollection>*	m_pChildNodeCollection;
 
