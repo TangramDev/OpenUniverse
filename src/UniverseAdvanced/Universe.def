@@ -1,0 +1,14 @@
+; Universe.def : Declares the module parameters.
+
+LIBRARY      "Universe.DLL"
+
+EXPORTS
+	DllCanUnloadNow					PRIVATE
+	DllGetClassObject				PRIVATE
+	DllRegisterServer				PRIVATE
+	DllUnregisterServer				PRIVATE
+	FreeCLR							PRIVATE
+	GetHubble						PRIVATE
+	GetHubbleImpl					PRIVATE
+	JNI_OnLoad						PRIVATE
+	SetMainDllLoader				PRIVATE

@@ -24,7 +24,6 @@
 #include "Grid.h"
 #include "Galaxy.h"
 #include "HubbleCtrl.h"
-#include "OfficePlus\OfficeAddin.h"
 
 HRESULT WINAPI CHubbleCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
 {
@@ -33,13 +32,6 @@ HRESULT WINAPI CHubbleCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
 		if(g_pHubble->m_pHubbleDelegate->m_pJVM)
 		{
 			return CEclipseCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
-		}
-		if (g_pHubble->m_nAppID != -1)
-		{
-			OfficePlus::COfficeAddin* pAddin = (OfficePlus::COfficeAddin*)g_pHubble;
-			HRESULT hr = pAddin->CreateHubbleCtrl(pv, riid, ppv);
-			if (hr == S_OK)
-				return hr;
 		}
 		if (g_pHubble->m_pUniverseAppProxy)
 		{

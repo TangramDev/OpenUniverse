@@ -42,7 +42,6 @@
 #include "WPFView.h"
 #include "universe.c"
 #include "TangramTabCtrl.h"
-#include "OfficePlus\OfficeAddin.h"
 #include "chromium/BrowserWnd.h"
 #include "chromium/WebPage.h"
 

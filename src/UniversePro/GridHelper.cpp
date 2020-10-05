@@ -30,8 +30,6 @@
 #include "GridWnd.h"
 #include "Wormhole.h"
 #include "TangramHtmlTreeWnd.h"
-#include "OfficePlus\ExcelPlus\ExcelAddin.h"
-#include "OfficePlus\ExcelPlus\ExcelPlusWnd.h"
 
 #include "chromium/WebPage.h"
 

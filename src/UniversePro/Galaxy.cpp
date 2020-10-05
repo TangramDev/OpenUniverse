@@ -30,11 +30,8 @@
 #include "Grid.h"
 #include "Galaxy.h"
 #include "TangramHtmlTreeWnd.h"
-#include "OfficePlus\WordPlus\WordAddin.h"
 #include "EclipsePlus\EclipseAddin.h"
 #include "DocTemplateDlg.h"
-
-using namespace OfficePlus::WordPlus;
 
 CCommonCtrl::CCommonCtrl()
 {

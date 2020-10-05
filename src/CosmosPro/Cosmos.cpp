@@ -1827,22 +1827,22 @@ namespace Cosmos
     {
         BSTR _strID = STRING2BSTR(appID);
         BSTR _strXml = STRING2BSTR(strXml);
-        if (appID->ToLower() == L"caswebagent.server.1")
-        {
-            CComPtr<IHubble> pApp;
-            pApp.CoCreateInstance(_strID, nullptr, CLSCTX_SERVER);
-            if (pApp)
-            {
-                DWORD dwID = ::GetCurrentProcessId();
-                CString str = _T("");
-                str.Format(_T("tangramprocess:%d"), dwID);
-                CComVariant var;
-                var.vt = VT_DISPATCH;
-                var.pdispVal = (IDispatch*)theApp.m_pHubble;
-                pApp->put_AppKeyValue(CComBSTR(str), var);
-            }
-        }
-        else
+        //if (appID->ToLower() == L"caswebagent.server.1")
+        //{
+        //    CComPtr<IHubble> pApp;
+        //    pApp.CoCreateInstance(_strID, nullptr, CLSCTX_SERVER);
+        //    if (pApp)
+        //    {
+        //        DWORD dwID = ::GetCurrentProcessId();
+        //        CString str = _T("");
+        //        str.Format(_T("tangramprocess:%d"), dwID);
+        //        CComVariant var;
+        //        var.vt = VT_DISPATCH;
+        //        var.pdispVal = (IDispatch*)theApp.m_pHubble;
+        //        pApp->put_AppKeyValue(CComBSTR(str), var);
+        //    }
+        //}
+        //else
         {
             theApp.m_pHubble->StartApplication(_strID, _strXml);
         }

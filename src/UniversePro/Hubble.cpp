@@ -34,12 +34,6 @@
 #include "TangramHtmlTreeExWnd.h"
 #include "EclipsePlus\EclipseAddin.h"
 
-#include "OfficePlus\OfficeAddin.h"
-#include "OfficePlus\ExcelPlus\Excel.h"
-#include "OfficePlus\WordPlus\MSWord.h"
-#include "OfficePlus\ProjectPlus\MSPrj.h"
-#include "OfficePlus\OutLookPlus\MsOutl.h"
-#include "OfficePlus\PowerpointPlus\msppt.h"
 #include "CloudUtilities\DownLoad.h"
 #include <io.h>
 #include <stdio.h>
@@ -1611,87 +1605,87 @@ void CHubble::HubbleInit()
 		m_strStartupCLRObj = _m_Parse.attr(_T("startupclrobj"), _T(""));
 	}
 
-	if (m_strExeName == _T("devenv"))
-	{
-#ifndef _WIN64
-		if (m_pCLRProxy == nullptr)
-			LoadCLR();
-
-		TCHAR m_szBuffer[MAX_PATH];
-		HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
-		CString strCASServer = CString(m_szBuffer) + _T("\\WebRuntimeApp\\WebRuntime");
-		CString strWebRuntimeForVS = strCASServer + _T("\\CASWebAgent.exe");
-		CString strWebRuntimeForVS2 = strWebRuntimeForVS;
-		bool bUpdateHostExe = false;
-		CString strSRC = m_strAppPath + _T("PublicAssemblies\\WebRuntimeData\\output.zip");
-		if (::PathIsDirectory(strCASServer) == false)
-		{
-			if (::PathFileExists(strSRC))
-			{
-				bUpdateHostExe = true;
-			}
-		}
-		else
-		{
-			CString strVer = strCASServer + _T("\\ver.xml");
-			CTangramXmlParse m_Parse;
-			if (PathFileExists(strVer) && m_Parse.LoadFile(strVer))
-			{
-				CString strVer = m_Parse.attr(_T("ver"), _T("1.0.0.0"));
-				CString strUpdateVer = _T("");
-				CString strUpdateCASServer = CString(m_szBuffer) + _T("\\CASChromiumUpdate\\update.xml");
-				CTangramXmlParse m_Parse2;
-				if (PathFileExists(strUpdateCASServer) && m_Parse2.LoadFile(strUpdateCASServer))
-				{
-					strUpdateVer = m_Parse2.attr(_T("ver"), _T("1.0.0.0"));
-					if (strUpdateVer.CompareNoCase(strVer) > 0)
-					{
-						strSRC = CString(m_szBuffer) + _T("\\") + strUpdateVer + _T("\\output.zip");;
-						if (::PathFileExists(strSRC))
-						{
-							bUpdateHostExe = true;
-						}
-					}
-				}
-			}
-		}
-		if (bUpdateHostExe)
-		{
-			Utilities::CComponentInstaller m_ComponentInstaller;
-			if (::PathIsDirectory(strCASServer))
-				DelTree(strCASServer);
-			m_ComponentInstaller.UnMultiZip2(strSRC, strCASServer);
-		}
-
-		if (!::PathFileExists(strWebRuntimeForVS2))
-		{
-			strSRC = m_strAppPath + _T("PublicAssemblies\\WebRuntimeData\\CASAgentInstaller.msi");
-			STARTUPINFO startupInfo;
-			memset(&startupInfo, 0, sizeof(startupInfo));
-			startupInfo.cb = sizeof(startupInfo);
-			PROCESS_INFORMATION processInfo;
-			memset(&processInfo, 0, sizeof(processInfo));
-
-			DWORD code;
-			wchar_t cmdLine[2048];
-
-			HRESULT hr = SHGetFolderPath(NULL, CSIDL_SYSTEM, NULL, 0, m_szBuffer);
-			//swprintf_s(cmdLine, _T("%s /Regserver"), strWebRuntimeForVS2.GetBuffer());
-			swprintf_s(cmdLine, _T("%s\\msiexec.exe /i \"%s\" %s"), m_szBuffer, strSRC.GetBuffer(), g_pHubble->IsUserAdministrator() ? _T("/qn") : _T("/qb"));
-			if (CreateProcess(nullptr, cmdLine, NULL, NULL, true, 0, NULL, NULL, &startupInfo, &processInfo))
-			{
-				// wait for the installer to finish
-				WaitForSingleObject(processInfo.hProcess, INFINITE);
-				GetExitCodeProcess(processInfo.hProcess, &code);
-				Sleep(200);
-			}
-
-			strSRC.ReleaseBuffer();
-		}
-		ConnectWebAgent();
-#endif
-	}
-	else
+//	if (m_strExeName == _T("devenv"))
+//	{
+//#ifndef _WIN64
+//		if (m_pCLRProxy == nullptr)
+//			LoadCLR();
+//
+//		TCHAR m_szBuffer[MAX_PATH];
+//		HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
+//		CString strCASServer = CString(m_szBuffer) + _T("\\WebRuntimeApp\\WebRuntime");
+//		CString strWebRuntimeForVS = strCASServer + _T("\\CASWebAgent.exe");
+//		CString strWebRuntimeForVS2 = strWebRuntimeForVS;
+//		bool bUpdateHostExe = false;
+//		CString strSRC = m_strAppPath + _T("PublicAssemblies\\WebRuntimeData\\output.zip");
+//		if (::PathIsDirectory(strCASServer) == false)
+//		{
+//			if (::PathFileExists(strSRC))
+//			{
+//				bUpdateHostExe = true;
+//			}
+//		}
+//		else
+//		{
+//			CString strVer = strCASServer + _T("\\ver.xml");
+//			CTangramXmlParse m_Parse;
+//			if (PathFileExists(strVer) && m_Parse.LoadFile(strVer))
+//			{
+//				CString strVer = m_Parse.attr(_T("ver"), _T("1.0.0.0"));
+//				CString strUpdateVer = _T("");
+//				CString strUpdateCASServer = CString(m_szBuffer) + _T("\\CASChromiumUpdate\\update.xml");
+//				CTangramXmlParse m_Parse2;
+//				if (PathFileExists(strUpdateCASServer) && m_Parse2.LoadFile(strUpdateCASServer))
+//				{
+//					strUpdateVer = m_Parse2.attr(_T("ver"), _T("1.0.0.0"));
+//					if (strUpdateVer.CompareNoCase(strVer) > 0)
+//					{
+//						strSRC = CString(m_szBuffer) + _T("\\") + strUpdateVer + _T("\\output.zip");;
+//						if (::PathFileExists(strSRC))
+//						{
+//							bUpdateHostExe = true;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		if (bUpdateHostExe)
+//		{
+//			Utilities::CComponentInstaller m_ComponentInstaller;
+//			if (::PathIsDirectory(strCASServer))
+//				DelTree(strCASServer);
+//			m_ComponentInstaller.UnMultiZip2(strSRC, strCASServer);
+//		}
+//
+//		if (!::PathFileExists(strWebRuntimeForVS2))
+//		{
+//			strSRC = m_strAppPath + _T("PublicAssemblies\\WebRuntimeData\\CASAgentInstaller.msi");
+//			STARTUPINFO startupInfo;
+//			memset(&startupInfo, 0, sizeof(startupInfo));
+//			startupInfo.cb = sizeof(startupInfo);
+//			PROCESS_INFORMATION processInfo;
+//			memset(&processInfo, 0, sizeof(processInfo));
+//
+//			DWORD code;
+//			wchar_t cmdLine[2048];
+//
+//			HRESULT hr = SHGetFolderPath(NULL, CSIDL_SYSTEM, NULL, 0, m_szBuffer);
+//			//swprintf_s(cmdLine, _T("%s /Regserver"), strWebRuntimeForVS2.GetBuffer());
+//			swprintf_s(cmdLine, _T("%s\\msiexec.exe /i \"%s\" %s"), m_szBuffer, strSRC.GetBuffer(), g_pHubble->IsUserAdministrator() ? _T("/qn") : _T("/qb"));
+//			if (CreateProcess(nullptr, cmdLine, NULL, NULL, true, 0, NULL, NULL, &startupInfo, &processInfo))
+//			{
+//				// wait for the installer to finish
+//				WaitForSingleObject(processInfo.hProcess, INFINITE);
+//				GetExitCodeProcess(processInfo.hProcess, &code);
+//				Sleep(200);
+//			}
+//
+//			strSRC.ReleaseBuffer();
+//		}
+//		ConnectWebAgent();
+//#endif
+//	}
+//	else
 	{
 		if (m_bEclipse) {
 			if (launchMode == -1)
@@ -2842,112 +2836,6 @@ STDMETHODIMP CHubble::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 					int nPos = m_strOfficeAppIDs.Find(strAppID);
 					if (nPos != -1)
 					{
-						CString str = m_strOfficeAppIDs.Left(nPos);
-						CComPtr<Office::COMAddIns> pAddins;
-						int nIndex = str.Replace(_T(","), _T(""));
-						switch (nIndex)
-						{
-						case 0:
-						{
-							CComQIPtr<Word::_Application> pWordApp(pApp);
-							if (pWordApp)
-							{
-								pWordApp->put_Visible(true);
-								pWordApp->get_COMAddIns(&pAddins);
-							}
-						}
-						break;
-						case 1:
-						{
-							CComQIPtr<Excel::_Application> pExcelApp(pApp);
-							pExcelApp->put_UserControl(true);
-							pExcelApp->get_COMAddIns(&pAddins);
-							pExcelApp->put_Visible(0, true);
-						}
-						break;
-						case 2:
-						{
-							CComQIPtr<OutLook::_Application> pOutLookApp(pApp);
-							pOutLookApp->get_COMAddIns(&pAddins);
-						}
-						break;
-						case 3:
-						{
-							//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-							//pOneNoteApp->get_COMAddIns(&pAddins);
-						}
-						break;
-						case 4:
-						{
-							//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-							//pOneNoteApp->get_COMAddIns(&pAddins);
-						}
-						break;
-						case 5:
-						{
-							CComQIPtr<MSProject::_MSProject> pProjectApp(pApp);
-							//pProjectApp->get_COMAddIns(&pAddins);
-						}
-						break;
-						case 6:
-						{
-							//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-							//pOneNoteApp->get_COMAddIns(&pAddins);
-						}
-						break;
-						case 7:
-						{
-							//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-							//pOneNoteApp->get_COMAddIns(&pAddins);
-						}
-						break;
-						case 8:
-						{
-							CComQIPtr<PowerPoint::_Application> pPptApp(pApp);
-							pPptApp->get_COMAddIns(&pAddins);
-							pPptApp->put_Visible(Office::MsoTriState::msoTrue);
-							//IDispatch* pDisp = pApp.Detach();
-							//pDisp->Release();
-							//pPptApp.Detach();
-						}
-						break;
-						case 9:
-						{
-						}
-						break;
-						default:
-							break;
-						}
-
-						if (pAddins)
-						{
-							CComPtr<Office::COMAddIn> pAddin;
-							pAddins->Item(&CComVariant(_T("Hubble.hubble")), &pAddin);
-							if (pAddin)
-							{
-								CComPtr<IDispatch> pAddin2;
-								pAddin->get_Object(&pAddin2);
-								CComQIPtr<IHubble> _pHubbleAddin(pAddin2);
-								if (_pHubbleAddin)
-								{
-									pRemoteTangram = _pHubbleAddin.p;
-									if (::GetModuleHandle(_T("CloudAppStudioToolWnd.dll")))
-										_pHubbleAddin->put_AppKeyValue(CComBSTR(L"fromvisualstudio"), CComVariant((VARIANT_BOOL)true));
-									m_mapRemoteHubble[strAppID] = _pHubbleAddin.p;
-									_pHubbleAddin.p->AddRef();
-									LONGLONG h = 0;
-									_pHubbleAddin->get_RemoteHelperHWND(&h);
-									if (h)
-									{
-										HWND hWnd = (HWND)h;
-										CHelperWnd* pWnd = new CHelperWnd();
-										pWnd->m_strID = strAppID;
-										pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-										m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-									}
-								}
-							}
-						}
 					}
 					else
 					{
@@ -3898,113 +3786,7 @@ STDMETHODIMP CHubble::StartApplication(BSTR bstrAppID, BSTR bstrXml)
 		if (pApp)
 		{
 			int nPos = m_strOfficeAppIDs.Find(strAppID);
-			if (nPos != -1)
-			{
-				CString str = m_strOfficeAppIDs.Left(nPos);
-				CComPtr<Office::COMAddIns> pAddins;
-				int nIndex = str.Replace(_T(","), _T(""));
-				switch (nIndex)
-				{
-				case 0:
-				{
-					CComQIPtr<Word::_Application> pWordApp(pApp);
-					if (pWordApp)
-					{
-						pWordApp->put_Visible(true);
-						pWordApp->get_COMAddIns(&pAddins);
-					}
-				}
-				break;
-				case 1:
-				{
-					CComQIPtr<Excel::_Application> pExcelApp(pApp);
-					pExcelApp->put_UserControl(true);
-					pExcelApp->get_COMAddIns(&pAddins);
-					pExcelApp->put_Visible(0, true);
-				}
-				break;
-				case 2:
-				{
-					CComQIPtr<OutLook::_Application> pOutLookApp(pApp);
-					pOutLookApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 3:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 4:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 5:
-				{
-					CComQIPtr<MSProject::_MSProject> pProjectApp(pApp);
-					//pProjectApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 6:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 7:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 8:
-				{
-					CComQIPtr<PowerPoint::_Application> pPptApp(pApp);
-					pPptApp->get_COMAddIns(&pAddins);
-					pPptApp->put_Visible(Office::MsoTriState::msoTrue);
-				}
-				break;
-				case 9:
-				{
-				}
-				break;
-				default:
-					break;
-				}
-
-				if (pAddins)
-				{
-					CComPtr<Office::COMAddIn> pAddin;
-					pAddins->Item(&CComVariant(_T("Hubble.hubble")), &pAddin);
-					if (pAddin)
-					{
-						CComPtr<IDispatch> pAddin2;
-						pAddin->get_Object(&pAddin2);
-						CComQIPtr<IHubble> _pHubbleAddin(pAddin2);
-						if (_pHubbleAddin)
-						{
-							if (::GetModuleHandle(_T("CloudAppStudioToolWnd.dll")))
-								_pHubbleAddin->put_AppKeyValue(CComBSTR(L"fromvisualstudio"), CComVariant((VARIANT_BOOL)true));
-							_pHubbleAddin->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-							m_mapRemoteHubble[strAppID] = _pHubbleAddin.p;
-							_pHubbleAddin.p->AddRef();
-							LONGLONG h = 0;
-							_pHubbleAddin->get_RemoteHelperHWND(&h);
-							if (h)
-							{
-								HWND hWnd = (HWND)h;
-								CHelperWnd* pWnd = new CHelperWnd();
-								pWnd->m_strID = strAppID;
-								pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-							}
-						}
-					}
-				}
-			}
-			else
+			if (nPos == -1)
 			{
 				IHubble* pRemoteTangram = nullptr;
 				HRESULT hr = pApp->QueryInterface(IID_IHubble, (void**)&pRemoteTangram);
@@ -4652,110 +4434,7 @@ STDMETHODIMP CHubble::CreateHubbleCtrl(BSTR bstrAppID, IHubbleCtrl** ppRetCtrl)
 		if (pApp)
 		{
 			int nPos = m_strOfficeAppIDs.Find(strAppID);
-			if (nPos != -1)
-			{
-				CString str = m_strOfficeAppIDs.Left(nPos);
-				int nIndex = str.Replace(_T(","), _T(""));
-				CComPtr<Office::COMAddIns> pAddins;
-				switch (nIndex)
-				{
-				case 0:
-				{
-					CComQIPtr<Word::_Application> pWordApp(pApp);
-					if (pWordApp)
-					{
-						pWordApp->put_Visible(true);
-						pWordApp->get_COMAddIns(&pAddins);
-					}
-				}
-				break;
-				case 1:
-				{
-					CComQIPtr<Excel::_Application> pExcelApp(pApp);
-					pExcelApp->put_UserControl(true);
-					pExcelApp->get_COMAddIns(&pAddins);
-					pExcelApp->put_Visible(0, true);
-				}
-				break;
-				case 2:
-				{
-					CComQIPtr<OutLook::_Application> pOutLookApp(pApp);
-					pOutLookApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 3:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 4:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 5:
-				{
-					CComQIPtr<MSProject::_MSProject> pProjectApp(pApp);
-					//pProjectApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 6:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 7:
-				{
-					//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-					//pOneNoteApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 8:
-				{
-					CComQIPtr<PowerPoint::_Application> pPptApp(pApp);
-					pPptApp->get_COMAddIns(&pAddins);
-				}
-				break;
-				case 9:
-				{
-				}
-				break;
-				default:
-					break;
-				}
-
-				if (pAddins)
-				{
-					CComPtr<Office::COMAddIn> pAddin;
-					pAddins->Item(&CComVariant(_T("Hubble.hubble")), &pAddin);
-					if (pAddin)
-					{
-						CComPtr<IDispatch> pAddin2;
-						pAddin->get_Object(&pAddin2);
-						CComQIPtr<IHubble> _pHubbleAddin(pAddin2);
-						if (_pHubbleAddin)
-						{
-							m_mapRemoteHubble[strAppID] = _pHubbleAddin.p;
-							_pHubbleAddin.p->AddRef();
-							LONGLONG h = 0;
-							_pHubbleAddin->get_RemoteHelperHWND(&h);
-							if (h)
-							{
-								HWND hWnd = (HWND)h;
-								CHelperWnd* pWnd = new CHelperWnd();
-								pWnd->m_strID = strAppID;
-								pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-							}
-							return _pHubbleAddin->CreateHubbleCtrl(CComBSTR(L""), ppRetCtrl);
-						}
-					}
-				}
-			}
-			else
+			if (nPos == -1)
 			{
 				DISPID dispID = 0;
 				DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
@@ -7345,60 +7024,6 @@ STDMETHODIMP CHubble::NewWorkBench(BSTR bstrHubbleDoc, IWorkBenchWindow** ppWork
 
 STDMETHODIMP CHubble::CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, IDispatch** ppRetDisp)
 {
-	CString m_strAppName = OLE2T(bstrObjType);
-
-	CComPtr<OutLook::_Application> pApp;
-	pApp.CoCreateInstance(CComBSTR(L"OutLook.Application"), 0, CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER);
-	*ppRetDisp = pApp.p;
-	(*ppRetDisp)->AddRef();
-	CComPtr<OutLook::_Explorers>		m_pExplorers;
-	CComPtr<OutLook::_Inspectors>		m_pInspectors;
-	pApp->get_Explorers(&m_pExplorers);
-	pApp->get_Inspectors(&m_pInspectors);
-	if (m_pExplorers)
-	{
-		CComPtr<OutLook::_Explorer>		m_pExplorer;
-		CComPtr<OutLook::_NameSpace>	pSessionDisp;
-		HRESULT hr = pApp->get_Session(&pSessionDisp);
-		if (hr == S_OK)
-		{
-			if (m_strAppName.CompareNoCase(_T("explorer")) == 0)
-			{
-				CComPtr<OutLook::MAPIFolder> m_pFolder;
-				pSessionDisp->GetDefaultFolder((OutLook::OlDefaultFolders)nType, &m_pFolder);
-				m_pExplorers->Add(CComVariant(m_pFolder), OutLook::OlFolderDisplayMode::olFolderDisplayNormal, &m_pExplorer);
-				if (m_pExplorer)
-					m_pExplorer->Display();
-			}
-			else
-			{
-				//enum OlItemType
-				//{
-				//	olMailItem = 0,
-				//	olAppointmentItem = 1,
-				//	olContactItem = 2,
-				//	olTaskItem = 3,
-				//	olJournalItem = 4,
-				//	olNoteItem = 5,
-				//	olPostItem = 6,
-				//	olDistributionListItem = 7,
-				//	olMobileItemSMS = 11,
-				//	olMobileItemMMS = 12
-				//};
-				CComPtr<IDispatch> pItem;
-				pApp->CreateItem((OutLook::OlItemType)nType, &pItem);
-				CComQIPtr<OutLook::_MailItem> pMailItem(pItem);
-				if (pMailItem)
-				{
-					//pMailItem->put_To(CComBSTR(L"xxx@mailtest.com"));
-				}
-				CComPtr<OutLook::_Inspector> _pInspector;
-				m_pInspectors->Add(pItem, &_pInspector);
-				_pInspector->Display();
-			}
-		}
-	}
-
 	return S_OK;
 }
 
