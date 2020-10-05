@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 /********************************************************************************
-*					Open Universe - version 1.0.0.6							*
+*					Open Universe - version 1.0.0.7							*
 *********************************************************************************
 * Copyright (C) 2002-2018 by Tangram Team.   All Rights Reserved.				*
 *
