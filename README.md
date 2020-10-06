@@ -20,7 +20,7 @@ Eclipse Runtime is a **dynamic link library version of Eclipse Project**. We kno
 - 2.	Provide a built-in modern browser model for each Win32 application
 - 3.	Let Win32 applications fully support .NET Framework (design time and runtime)
 
-OpenUniverse allows software developers to re-look at every WinForm application with a sense of hierarchy of the universe structure, making:
+OpenUniverse allows software developers to re-look at every Win32 desktop application with a sense of hierarchy of the universe structure, making:
 1.	Thoroughly break the boundary between desktop development and Web development to adapt to the software needs of the new generation of Internet environments;
 2.	To downplay the difference between desktop applications and Internet browsers, every Win32 or WinForm application can actually have a built-in modern browser model, making the application an Internet-oriented browser by default;
 3.	Every WinForm or Win32 application has a sufficiently large object model and its own DOM system based on Web technology
