@@ -1,7 +1,7 @@
 # OpenUniverse: A Brand-New Subversive Windows Desktop Application Development Technology
 OpenUniverse is a disruptive open source project for Windows desktop software development, in which we provide a consistent way for Windows desktop software to support：	
-### 			1. Common Web Browser Runtime, 
-### 			2. Common Eclipse Runtime, 
+### 			1. Common Web Browser Runtime(CWR), 
+### 			2. Common Eclipse Runtime(CER), 
 ### 			3. .NET Runtime, 
 			
 OpenUniverse provides a **Multi-Dimensional Software Ecosystem** for Win32 Desktop Application.
