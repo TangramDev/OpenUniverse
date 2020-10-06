@@ -1,4 +1,11 @@
 # OpenUniverse: A Brand-New Subversive WinForm Application Development Technology
+OpenUniverse is a disruptive open source project for Windows desktop software development, in which we provide a consistent way for Windows desktop software to support Both Moden Web Browser Runtime, Eclipse Runtime, and .NET Runtime, making the host application an application for Software Ecosystem.
+## Modern browser runtime.
+Modern Web Browser Runtime is a dynamic link library version of Google Chromium Project that contains all of the Chromium Project code, with the goal of allowing Windows desktop applications to implement the built-in modern browser model in a unified manner, making the host desktop software a natural Web browser. The difference with browsers in the conventional sense is that applications that integrate MWBR have their own application object models, and because of the built-in Chromium, application developers can develop new application contents for host applications based on Web technology, making the host application a Web technology-based Software Ecosystem.
+## Eclipse runtime.
+We know that eclipse's basic structure consists of two parts, the first being an executable called Eclipse Laucher and the second being a Java-based component integration system. Eclipse Runtime essentially implements Eclipse Laucher as a set of dynamic link libraries, allowing a typically meaningful Windows desktop application to become Eclipse Laucher in a standard way, and integrating Eclipse Runtime applications with its own non-Java-based application model allows application developers to take full advantage of Java technology. Based on this model, Java technology is used to develop new application content for host applications, making the application system a Software Ecosystem based on Java technology.
+
+
 ## OpenUniverse is an open source project whose goals are:
 - 1.	Provide a flexible, easy-to-describe, Internet-oriented UI layout engine for Win32 applications;
 - 2.	Provide a built-in modern browser model for each Win32 application
