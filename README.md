@@ -12,8 +12,8 @@ Modern Web Browser Runtime is a **dynamic link library version of Google Chromiu
 Every application that supports MWBR is a modern browser. Strictly speaking, it is an application-oriented browser, which is different from standard browsers. the fundamental difference is that MWBR supports extended DOM, allowing developers to customize their own DOM model, The fundamental difference is that MWBR supports extending DOM, allowing developers to customize their own DOM model, which endows host applications with great content ecological support. 
 ## Key features of MWBR
 - 1.	Supports all of Chromium features.
-- 2.	With the complete Chromium Sandbox mechanism, this is the most direct difference from CEF.
-- 3.	Custom DOM, in particular, we allow binary programmable object UI elements (WinForm, Usercontrol, WPF, ActiveX Control, etc.) to participate in web page development as extended DOM elements.
+- 2.	With **the Complete Chromium Sandbox Mechanism**, this is the most direct difference from **CEF**.
+- 3.	**Custom DOM**, in particular, we allow **Binary Programmable Object UI Elements** (WinForm, Usercontrol, WPF, ActiveX Control, etc.) to participate in web page development as extended DOM elements.
 - 4.	Binary programmable object Web binding: 1, allows the **Renderer Process** to **listen** for events of the Browser process object(COM Object, .Net Object, Java Object and C++ Object etc.) in the Javascript session; 2, **Binary Programmable Objects**(COM Object, .Net Object, Java Object and C++ Object etc.) can send IPC messages to the Renderer process. Through the above two aspects, MWBR realizes the web page expansion development ability 
 - 5.	A **Multi-Layered, Gridded UI layout Description Engine** based on DOM enables developers to implement a flexible, powerful, dynamic Web-Desktop hybrid layout based on Web technology.
 ## Eclipse Runtime.
