@@ -1,7 +1,7 @@
 # OpenUniverse: A Brand-New Subversive Windows Desktop Application Development Technology
 OpenUniverse is a disruptive open source project for Windows desktop software development, in which we provide a consistent way for Windows desktop software to support：	
 ### 			1. Common Web Browser Runtime, 
-### 			2. Eclipse Runtime, 
+### 			2. Common Eclipse Runtime, 
 ### 			3. .NET Runtime, 
 			
 OpenUniverse provides a **Multi-Dimensional Software Ecosystem** for Win32 Desktop Application.
@@ -16,8 +16,8 @@ Every application that supports CWBR is a modern browser. Strictly speaking, it 
 - 3.	**Custom DOM**, in particular, we allow **Binary Programmable Object UI Elements** (WinForm, Usercontrol, WPF, ActiveX Control, etc.) to participate in web page development as extended DOM elements.
 - 4.	Binary programmable object Web binding: 1, allows the **Renderer Process** to **listen** for events of the Browser process object(COM Object, .Net Object, Java Object and C++ Object etc.) in the Javascript session; 2, **Binary Programmable Objects**(COM Object, .Net Object, Java Object and C++ Object etc.) can send IPC messages to the Renderer process. Through the above two aspects, CWBR realizes the web page expansion development ability 
 - 5.	A **Multi-Layered, Gridded UI layout Description Engine** based on DOM enables developers to implement a flexible, powerful, dynamic Web-Desktop hybrid layout based on Web technology.
-## Eclipse Runtime.
-Eclipse Runtime is a **dynamic link library version of Eclipse Project**. We know that eclipse's basic structure consists of two parts, the first being an executable called **Eclipse Laucher** and the second being a Java-based component integration system. Eclipse Runtime essentially implements Eclipse Laucher as a set of dynamic link libraries, allowing a typically meaningful Windows desktop application to become Eclipse Laucher in a standard way, and integrating Eclipse Runtime applications with its own non-Java-based application model allows application developers to take full advantage of Java technology. Based on this model, Java technology is used to develop new application content for host applications, making the application system a Software Ecosystem based on Java technology.
+## Common Eclipse Runtime.
+Common Eclipse Runtime is a **dynamic link library version of Eclipse Project**. We know that eclipse's basic structure consists of two parts, the first being an executable called **Eclipse Laucher** and the second being a Java-based component integration system. Eclipse Runtime essentially implements Eclipse Laucher as a set of dynamic link libraries, allowing a typically meaningful Windows desktop application to become Eclipse Laucher in a standard way, and integrating Eclipse Runtime applications with its own non-Java-based application model allows application developers to take full advantage of Java technology. Based on this model, Java technology is used to develop new application content for host applications, making the application system a Software Ecosystem based on Java technology.
 
 
 ## OpenUniverse is an open source project whose goals are:
