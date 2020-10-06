@@ -5,7 +5,7 @@ OpenUniverse is a disruptive open source project for Windows desktop software de
 ### 			3. .NET Runtime, 
 			
 OpenUniverse provides a **Multi-Dimensional Software Ecosystem** for Win32 Desktop Application.
-## Modern Browser Runtime.
+## Modern Web Browser Runtime(MWBR).
 Modern Web Browser Runtime is a **dynamic link library version of Google Chromium Project** that contains all of the Chromium Project code, with the goal of allowing Windows desktop applications to implement the **built-in modern browser model** in a unified manner, making the host desktop software a natural Web browser. The difference with browsers in the conventional sense is that applications that integrate **MWBR**(Modern Web Browser Runtime) have their own application object models, and because of the built-in Chromium, application developers can develop new application contents for host applications based on Web technology, making the host application a Web technology-based Software Ecosystem.
 
 **MWBR** is different from **Chromium Embbed Framework**. Compared with CEF, MWBR provides all the functions of Chromium. This ensures that the smallest structural unit of desktop applications integrated with MWBR is a web browser. The most obvious difference from conventional browsers is that MWBR supports Application-oriented windows, and browsers usually only support browser windows. MWBR is also different from **Electron**, and the positioning between the two is completely different. MWBR is for desktop software, while Electron is committed to developing desktop software using Web technology. Electron weakens the huge resources of desktop software, which is almost two extremes of MWBR's positioning.
