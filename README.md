@@ -28,9 +28,9 @@ OpenUniverse allows software developers to re-look at every Win32 desktop applic
 5.	Every desktop software has the basis of Web-oriented content services. Internet browser is a special desktop application. Because it supports Web pages, its content ecology has established the real status of Internet browsers. We believe this model being restricted to the browser is a kind of restriction on productivity. One of the missions of OpenUniverse is to extend this webpage support capability to popular desktop applications, making Internet content services a kind of public rather than browser-only characteristics.
 
 ## OpenUniverse provides a 3-dimensional software ecosystem
--1.	The first dimension is .NET Framework software ecosystem;
--2.	The second dimension is Java software ecosystem;
--3.	The third dimension is the Web software ecosystem
+- 1.	The first dimension is .NET Framework software ecosystem;
+- 2.	The second dimension is Java software ecosystem;
+- 3.	The third dimension is the Web software ecosystem
 ## From Galileo to Herschel to Hubble, every breakthrough in cosmic observation is a cognitive subversionFrom Galileo to Herschel to Hubble, every breakthrough in cosmic observation is a cognitive subversion
 Galileo invented the first astronomical telescope in the true sense of mankind, allowing mankind to have a glimpse of the solar system, Herschel expanded the field of vision of mankind to the Milky Way. The emergence of Hubble enabled human beings to have a glimpse of the universe. The influence of Hubble is so profound that even Einstein had to modify the key links of his theory of relativity because of the discovery of Hubble. Up to now, our understanding of the universe is a cosmic system with galaxy clusters and more and larger celestial structures as its structural members. All this benefits from NASA's Hubble. Without Hubble telescope, we can hardly imagine all this.
 In the era of observing the sky with the naked eye, many links can only be explained by imagination, so people have created a lot of "myths", which is almost the same in China and foreign countries. Due to the limitations of the naked eye, people can only see a limited universe. At today's scale, the universe under the naked eye is very, very "small". We know that in some celestial images taken by Hubble, the size of a pixel in the image is estimated to be 5 light years, which is much larger than the scale of our solar system. In many cases, everything we see may be very different from the real scene.
