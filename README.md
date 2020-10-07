@@ -4,12 +4,11 @@ On May 22, 1990, Microsoft released Windows 3.0. From that moment on, Microsoft 
 
 Here, we do not intend to redefine what **software ecology** is. We suggest that readers search for "**software ecosystem**" through search engines. Through the search results of search engines, we can fully and deeply understand the precise meaning of "software ecosystem". The mainstream desktop software development technology can be roughly divided into three areas: **COM/.Net, Java and Web Technology**. These three areas basically cover almost all desktop software developers. From a conventional point of view, a desktop software system is a directory based storage structure formed by the software boot loader (one or more exe files and a group of DLLs on which the EXE file depends), as well as some component libraries and data files responsible for organizing the application, which are finally embodied in the PC.
 
-OpenUniverse is a disruptive open source project for Windows desktop software development, in which we provide a consistent way for Windows desktop software to support：	
+OpenUniverse is a **disruptive** open source project for Windows desktop software development, in which we provide a **consistent way** for Windows desktop software to support：	
 ### 			1. Common Web Browser Runtime(CWR), 
 ### 			2. Common Eclipse Runtime(CER), 
 ### 			3. .NET Runtime, 
 			
-OpenUniverse provides a **Multi-Dimensional Software Ecosystem** for Win32 Desktop Application.
 ## Common Web Browser Runtime(CWR or Common Web Browser Runtime for Application).
 Common Web Browser Runtime is a **dynamic link library version of Google Chromium Project** that contains all of the Chromium Project Code, with the goal of allowing Windows desktop applications to implement the **built-in modern browser model** in a unified manner, making the host desktop software a natural Web browser. The difference with browsers in the conventional sense is that applications that integrate **CWR**(Common Web Browser Runtime) have their own application object models, and because of the built-in Chromium, application developers can develop new application contents for host applications based on Web technology, making the host application a Web technology-based Software Ecosystem.
 
