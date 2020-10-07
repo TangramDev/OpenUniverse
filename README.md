@@ -8,7 +8,10 @@ OpenUniverse is a **disruptive** open source project for Windows desktop softwar
 ### 			1. Common Web Browser Runtime(CWR), 
 ### 			2. Common Eclipse Runtime(CER), 
 ### 			3. .NET Runtime, 
-			
+### 			4. COM, 
+### 			5. Office Document, 
+### 			6. C++ Component
+The basic starting point of this project is to realize a desktop application development mode that conforms to the habits of most software developers, and allows developers to freely use COM, .Net, Java and Web technologies in a single desktop application system. Based on the needs of software content ecology, OpenUniverse allows developers to maximize the use of web pages and office documents within their applications, we regard the mature technologies from COM. Net, Java, web and MS office as common resources for desktop software development, making the application system based on UpenUniverse a multi-dimensional software ecosystem, that is, allowing other developers to develop application content for desktop software based on those mature software technologies, thereby making desktop software upgrade to Internet software content service. 			
 ## Common Web Browser Runtime(CWR or Common Web Browser Runtime for Application).
 Common Web Browser Runtime is a **dynamic link library version of Google Chromium Project** that contains all of the Chromium Project Code, with the goal of allowing Windows desktop applications to implement the **built-in modern browser model** in a unified manner, making the host desktop software a natural Web browser. The difference with browsers in the conventional sense is that applications that integrate **CWR**(Common Web Browser Runtime) have their own application object models, and because of the built-in Chromium, application developers can develop new application contents for host applications based on Web technology, making the host application a Web technology-based Software Ecosystem.
 
