@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.7								*
+*					Open Universe - version 1.0.1.8								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -90,7 +90,5 @@ public:
 
 private:
 	bool										m_bIsBlank;
-	bool										m_bIsDestory;
-	bool										m_bDocComplete;
 };
 

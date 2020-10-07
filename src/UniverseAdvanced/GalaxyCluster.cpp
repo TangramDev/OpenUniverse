@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.7							*
+*					Open Universe - version 1.0.1.8							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -53,8 +53,6 @@ CGalaxyCluster::CGalaxyCluster()
 	m_hWnd								= 0;
 	m_bIsBlank							= false;
 	m_bPageDataLoaded					= false;
-	m_bIsDestory						= false;
-	m_bDocComplete						= false;
 	m_bDoc								= false;
 	m_strXmlHeader						= _T("");
 	m_strPageFileName					= _T("");
@@ -582,18 +580,14 @@ void CGalaxyCluster::UpdateMapKey(CString strXml)
 
 void CGalaxyCluster::BeforeDestory()
 {
-	if (!m_bIsDestory)
+	Fire_Destroy();
+
+	for (auto it: m_mapGalaxy)
+		it.second->Destroy();
+
+	if (g_pHubble->m_pCLRProxy)
 	{
-		m_bIsDestory = true;
-		Fire_Destroy();
-
-		for (auto it: m_mapGalaxy)
-			it.second->Destroy();
-
-		if (g_pHubble->m_pCLRProxy)
-		{
-			g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IGalaxyCluster*)this);
-		}
+		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IGalaxyCluster*)this);
 	}
 }
 

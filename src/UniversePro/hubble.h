@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.7							*
+*					Open Universe - version 1.0.1.8							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -189,7 +189,7 @@ public:
 	~CHubbleDocFrame();
 
 	CString							m_strWndID;
-	CHubbleDoc*					m_pHubbleDoc;
+	CHubbleDoc*						m_pHubbleDoc;
 	CHubbleDocWnd*					m_pCurrentWnd;
 	CGalaxy*						m_pHostGalaxy;
 

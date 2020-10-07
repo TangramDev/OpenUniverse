@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.7							*
+*					Open Universe - version 1.0.1.8							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -47,7 +47,6 @@ protected:
 	virtual ~CGridWnd();
 
 	BOOL			m_bCreated;
-	bool			m_bNeedRefreh;
 	CGrid*			m_pGrid;
 
 	BOOL PreCreateWindow(CREATESTRUCT& cs);

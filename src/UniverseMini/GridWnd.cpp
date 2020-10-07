@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.7								*
+*					Open Universe - version 1.0.1.8								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -89,11 +89,10 @@ CGridWnd::CGridWnd()
 {
 	bInited = false;
 	m_bCreated = false;
-	m_bNeedRefreh = false;
 	m_pGrid = nullptr;
 	m_pHostGrid = nullptr;
 	m_nHostWidth = m_nHostHeight = 0;
-	m_nMasterRow = m_nMasterCol = m_nNeedRefreshCol = -1;
+	m_nMasterRow = m_nMasterCol = -1;
 	m_Vmin = m_Vmax = m_Hmin = m_Hmax = 0;
 }
 

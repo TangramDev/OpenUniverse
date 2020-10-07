@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.0.7								*
+*					Open Universe - version 1.0.1.8								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -29,7 +29,6 @@ public:
 	bool bInited;
 	int m_nHostWidth, m_nHostHeight;
 	int m_Vmin,m_Vmax,m_Hmin,m_Hmax;
-	int m_nNeedRefreshCol;
 	int m_nMasterRow;
 	int m_nMasterCol;
 	COLORREF		rgbLeftTop;
@@ -40,7 +39,6 @@ protected:
 	virtual ~CGridWnd();
 
 	BOOL			m_bCreated;
-	bool			m_bNeedRefreh;
 	CGrid*			m_pGrid;
 
 	BOOL PreCreateWindow(CREATESTRUCT& cs);
