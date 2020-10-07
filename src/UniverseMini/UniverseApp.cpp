@@ -536,19 +536,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								break;
 							else if (g_pHubble->m_bWinFormActived == false)
 							{
-								if (pWnd->m_bBKWnd)
-								{
-									if (pWnd->PreTranslateMessage(lpMsg))
-									{
-										lpMsg->hwnd = NULL;
-										lpMsg->lParam = 0;
-										lpMsg->wParam = 0;
-										lpMsg->message = 0;
-										break;
-									}
-								}
-								else
-									g_pHubble->m_pGalaxy = nullptr;
+								g_pHubble->m_pGalaxy = nullptr;
 							}
 						}
 					}

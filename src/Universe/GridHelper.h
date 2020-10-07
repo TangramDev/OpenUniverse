@@ -29,7 +29,6 @@ public:
 	CGrid*					m_pGrid;
 	CGrid*					m_pParentGrid;
 
-	map<CString, HWND>		m_mapDockCtrl;
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
 
 	BOOL PreTranslateMessage(MSG* pMsg);

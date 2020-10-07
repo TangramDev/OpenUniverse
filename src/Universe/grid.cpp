@@ -955,10 +955,6 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 
 	switch (m_nViewType)
 	{
-	case ActiveX:
-	{
-	}
-	break;
 	case CLRCtrl:
 	{
 		g_pHubble->m_pActiveGrid = this;
@@ -1016,12 +1012,6 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 				}
 			}
 
-			CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
-			if (m_pDisp && pWnd->m_mapDockCtrl.size())
-			{
-				HWND hPage = m_pGridShareData->m_pGalaxyCluster->m_hWnd;
-				::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)m_pHostWnd, 1963);
-			}
 			if (m_pDisp == nullptr)
 			{
 				((CGridHelper*)m_pHostWnd)->m_bCreateExternal = false;
@@ -1887,31 +1877,11 @@ STDMETHODIMP CGrid::put_SaveToConfigFile(VARIANT_BOOL newVal)
 
 STDMETHODIMP CGrid::get_DockObj(BSTR bstrName, LONGLONG * pVal)
 {
-	//CString strName = OLE2T(bstrName);
-	//if (m_nViewType == CLRCtrl)
-	//{
-	//	CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
-	//	auto it = pWnd->m_mapDockCtrl.find(strName);
-	//	if (it != pWnd->m_mapDockCtrl.end())
-	//	{
-	//		*pVal = (LONGLONG)it->second;
-	//	}
-	//}
 	return S_OK;
 }
 
 STDMETHODIMP CGrid::put_DockObj(BSTR bstrName, LONGLONG newVal)
 {
-	//CString strName = OLE2T(bstrName);
-	//if (/*m_nViewType == CLRCtrl&&*/::IsWindow((HWND)newVal) && strName != _T(""))
-	//{
-	//	CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
-	//	auto it = pWnd->m_mapDockCtrl.find(strName);
-	//	if (it == pWnd->m_mapDockCtrl.end())
-	//	{
-	//		pWnd->m_mapDockCtrl[strName] = (HWND)newVal;
-	//	}
-	//}
 	return S_OK;
 }
 

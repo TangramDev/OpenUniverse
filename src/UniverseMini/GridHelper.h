@@ -18,7 +18,6 @@ class CGridHelper : public CWnd
 	DECLARE_DYNCREATE(CGridHelper)
 public:
 	BOOL					m_bNoMove;
-	BOOL					m_bBKWnd;
 	BOOL					m_bEraseBkgnd;
 	BOOL					m_bCreateExternal;
 	HWND					m_hFormWnd;
@@ -29,7 +28,6 @@ public:
 	CGrid*					m_pGrid;
 	CGrid*					m_pParentGrid;
 
-	map<CString, HWND>		m_mapDockCtrl;
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
 
 	BOOL PreTranslateMessage(MSG* pMsg);

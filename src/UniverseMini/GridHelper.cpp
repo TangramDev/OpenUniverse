@@ -30,7 +30,6 @@ CGridHelper::CGridHelper()
 {
 	m_hFormWnd = NULL;
 	m_bNoMove = false;
-	m_bBKWnd = false;
 	m_bCreateExternal = false;
 	m_bEraseBkgnd = true;
 	m_pGrid = nullptr;
