@@ -42,7 +42,6 @@ CGridShareData::~CGridShareData()
 CGalaxyCluster::CGalaxyCluster()
 {
 	m_hWnd								= 0;
-	m_bIsBlank							= false;
 	m_pUniverseAppProxy					= nullptr;
 #ifdef _DEBUG
 	g_pHubble->m_nTangram++;

@@ -371,7 +371,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	if (g_pHubble == nullptr)
 		return 0;
 	LRESULT hr = CallNextHookEx(g_pHubble->m_hCBTHook, nCode, wParam, lParam);
-	//TangramCBT(nCode, wParam, lParam);
 	HWND hWnd = (HWND)wParam;
 	switch (nCode)
 	{

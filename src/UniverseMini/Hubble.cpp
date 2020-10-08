@@ -954,12 +954,6 @@ STDMETHODIMP CHubble::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 
 			m_pCLRProxy = nullptr;
 
-			if (::IsWindow(m_hHostWnd))
-			{
-				//::DestroyWindow(m_hHostWnd);
-				//m_hHostWnd = NULL;
-			}
-
 			if (m_hCBTHook)
 				UnhookWindowsHookEx(m_hCBTHook);
 			if (m_hForegroundIdleHook)

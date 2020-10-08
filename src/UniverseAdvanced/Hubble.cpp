@@ -3561,12 +3561,6 @@ STDMETHODIMP CHubble::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 
 			m_pCLRProxy = nullptr;
 
-			if (::IsWindow(m_hHostWnd))
-			{
-				//::DestroyWindow(m_hHostWnd);
-				//m_hHostWnd = NULL;
-			}
-
 			if (m_hCBTHook)
 				UnhookWindowsHookEx(m_hCBTHook);
 			if (m_hForegroundIdleHook)
@@ -3644,7 +3638,6 @@ STDMETHODIMP CHubble::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 				strKey.Replace(_T("fordebug:"), _T(""));
 			}
 			int nIndex = _wtoi64(strKey);
-			//::PostAppMessage(g_pHubble->m_dwThreadID, WM_COSMOSMSG, 0, 20200603);
 			IHubble* pDisp = p.Detach();
 			pDisp->AddRef();
 			m_mapRemoteTangramApp[nIndex] = pDisp;

@@ -3,10 +3,6 @@
 LIBRARY      "Universe.DLL"
 
 EXPORTS
-	DllCanUnloadNow					PRIVATE
-	DllGetClassObject				PRIVATE
-	DllRegisterServer				PRIVATE
-	DllUnregisterServer				PRIVATE
 	FreeCLR							PRIVATE
 	GetHubble						PRIVATE
 	GetHubbleImpl					PRIVATE

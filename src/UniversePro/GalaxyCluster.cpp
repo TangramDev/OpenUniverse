@@ -51,7 +51,6 @@ CGridShareData::~CGridShareData()
 CGalaxyCluster::CGalaxyCluster()
 {
 	m_hWnd								= 0;
-	m_bIsBlank							= false;
 	m_bPageDataLoaded					= false;
 	m_bDoc								= false;
 	m_strXmlHeader						= _T("");

@@ -117,8 +117,8 @@ public:
 
 class CUniverse :
 	public CWinApp,
-	public CComObjectRootBase,
-	public CComCoClass<CUniverse>,
+	//public CComObjectRootBase,
+	//public CComCoClass<CUniverse>,
 	public CAtlDllModuleT< CUniverse >
 {
 public:
@@ -137,9 +137,9 @@ public:
 
 	static LRESULT CALLBACK ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam);
 
-	static HRESULT WINAPI UpdateRegistry(BOOL bRegister);
+	//static HRESULT WINAPI UpdateRegistry(BOOL bRegister);
 
-	static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
+	//static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
 
 	DECLARE_LIBID(LIBID_Universe)
 
@@ -150,7 +150,7 @@ private:
 	static LRESULT CALLBACK GetMessageProc(int nCode, WPARAM wParam, LPARAM lParam);
 };
 
-TANGRAM_OBJECT_ENTRY_AUTO(CLSID_Universe, CUniverse)
+//TANGRAM_OBJECT_ENTRY_AUTO(CLSID_Universe, CUniverse)
 
 extern CUniverse theApp;
 extern CHubble* g_pHubble;

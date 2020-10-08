@@ -87,8 +87,5 @@ public:
 	STDMETHOD(ObserveGalaxys)(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	STDMETHOD(get_CurrentDesignGalaxyType)(GalaxyType* pVal);
 	STDMETHOD(get_CurrentDesignNode)(IGrid** pVal);
-
-private:
-	bool										m_bIsBlank;
 };
 

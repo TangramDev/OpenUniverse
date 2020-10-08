@@ -544,13 +544,6 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			{
 				::SendMessage(g_pHubble->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
 			}
-
-			//while (g_pHubble->m_mapBrowserWnd.size())
-			//{
-			//	auto it = g_pHubble->m_mapBrowserWnd.begin();
-			//	if (it != g_pHubble->m_mapBrowserWnd.end())
-			//		::DestroyWindow(it->first);
-			//}
 			if (g_pHubble->m_hForegroundIdleHook)
 				UnhookWindowsHookEx(g_pHubble->m_hForegroundIdleHook);
 
@@ -564,21 +557,6 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	{
 		if (wParam == PBT_APMRESUMEAUTOMATIC)
 		{
-			//for (auto it : g_pHubble->m_mapWindowPage)
-			//{
-			//	if (it.second)
-			//	{
-			//		for (auto it2 : it.second->m_mapGalaxy)
-			//		{
-			//			it2.second->HostPosChanged();
-			//			for (auto it3 : it2.second->m_mapWPFView)
-			//			{
-			//				ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-			//				::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-			//			}
-			//		}
-			//	}
-			//}
 			for (auto it : g_pHubble->m_mapThreadInfo)
 			{
 				if (it.second)
@@ -960,8 +938,6 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 				if (it != g_pHubble->m_mapRemoteTangramApp.end())
 				{
 					it->second->SelectVSObj(CComBSTR(pRemoteDebugInfo->m_strKey), nullptr, nHandle);
-					//g_pHubble->m_mapRemoteTangramApp.erase(it);
-					//g_pHubble->m_pCLRProxy->HubbleAction(CComBSTR(pRemoteDebugInfo->m_strKey), nullptr);
 				}
 				delete pRemoteDebugInfo;
 			}
@@ -1219,13 +1195,11 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	if (g_pHubble == nullptr)
 		return 0;
 	LRESULT hr = CallNextHookEx(g_pHubble->m_hCBTHook, nCode, wParam, lParam);
-	//TangramCBT(nCode, wParam, lParam);
 	HWND hWnd = (HWND)wParam;
 	switch (nCode)
 	{
 	case HCBT_CREATEWND:
 	{
-		//g_pHubble->Init();
 		CBT_CREATEWND* pCreateWnd = (CBT_CREATEWND*)lParam;
 		LPCTSTR lpszName = pCreateWnd->lpcs->lpszName;
 		HWND hPWnd = pCreateWnd->lpcs->hwndParent;
@@ -1446,12 +1420,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			if (theApp.m_bHostCLR && g_pHubble->m_nAppType == APP_BROWSERAPP)
 				g_pHubble->m_nAppType = APP_BROWSER;
 
-			//while (g_pHubble->m_mapBrowserWnd.size())
-			//{
-			//	auto it = g_pHubble->m_mapBrowserWnd.begin();
-			//	if(it!= g_pHubble->m_mapBrowserWnd.end())
-			//		::DestroyWindow(it->first);
-			//}
 			::DestroyWindow(g_pHubble->m_hHostWnd);
 			if (theApp.m_bHostCLR && g_pHubble->m_nAppType == 0)
 				::PostQuitMessage(20191116);
@@ -2055,15 +2023,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							it2.second->put_AppKeyValue(CComBSTR("appdata"), it->second);
 						}
 					}
-					//else
-					//{
-					//	auto t = create_task([]()
-					//		{
-					//			SleepEx(1000, true);
-					//			::PostAppMessage(g_pHubble->m_dwThreadID, WM_COSMOSMSG, 0, 20200603);
-					//			return 1;
-					//		});
-					//}
 				}
 				break;
 				case 20191114:
@@ -2104,68 +2063,52 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						}
 						g_pHubble->m_mapGridForHtml.erase(g_pHubble->m_mapGridForHtml.begin(), g_pHubble->m_mapGridForHtml.end());
 					}
-					CString strHelper = g_pHubble->m_strAppPath + _T("tangramhelper.xml");
-					if (::PathFileExists(strHelper))
-					{
-						CTangramXmlParse m_Parse;
-						if (m_Parse.LoadFile(strHelper))
-						{
-							switch (g_pHubble->m_nAppType)
-							{
-							case APP_BROWSER:
-							case APP_BROWSERAPP:
-							case APP_BROWSER_ECLIPSE:
-							{
-								CTangramXmlParse* pChild = nullptr;
-								if (g_pHubble->m_nAppType == APP_BROWSERAPP)
-									pChild = m_Parse.GetChild(_T("browser_app"));
-								else if (g_pHubble->m_nAppType == APP_BROWSER)
-									pChild = m_Parse.GetChild(_T("browser"));
-								else
-									pChild = m_Parse.GetChild(_T("browser_eclipse"));
-								if (pChild)
-								{
-									int nCount = pChild->GetCount();
-									CString strUrls = _T("");
-									for (int i = 0; i < nCount; i++)
-									{
-										CString strUrl = pChild->GetChild(i)->text();
-										int nPos2 = strUrl.Find(_T(":"));
-										if (nPos2 != -1)
-										{
-											CString strURLHeader = strUrl.Left(nPos2);
-											if (strURLHeader.CompareNoCase(_T("host")) == 0)
-											{
-												strUrl = g_pHubble->m_strAppPath + strUrl.Mid(nPos2 + 1);
-											}
-										}
-										strUrls += strUrl;
-										strUrls += _T("|");
-									}
-									if (nCount)
-										g_pHubble->m_pBrowserFactory->CreateBrowser(NULL, strUrls);
-								}
-							}
-							break;
-							case APP_WIN32:
-							case APP_ECLIPSE:
-							{
-								//HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
-								//if (hModule == nullptr)
-								//	hModule = ::LoadLibrary(L"chrome_rt.dll");
-								//if (hModule) {
-								//	typedef int(__stdcall* _InitApp)(bool bSupportCrashReporting);
-								//	_InitApp _pInitAppFunction;
-								//	_pInitAppFunction = (_InitApp)GetProcAddress(hModule, "InitApp");
-								//	if (_pInitAppFunction != NULL) {
-								//		_pInitAppFunction(false);
-								//	}
-								//}
-							}
-							break;
-							}
-						}
-					}
+					//CString strHelper = g_pHubble->m_strAppPath + _T("tangramhelper.xml");
+					//if (::PathFileExists(strHelper))
+					//{
+					//	CTangramXmlParse m_Parse;
+					//	if (m_Parse.LoadFile(strHelper))
+					//	{
+					//		switch (g_pHubble->m_nAppType)
+					//		{
+					//		case APP_BROWSER:
+					//		case APP_BROWSERAPP:
+					//		case APP_BROWSER_ECLIPSE:
+					//		{
+					//			CTangramXmlParse* pChild = nullptr;
+					//			if (g_pHubble->m_nAppType == APP_BROWSERAPP)
+					//				pChild = m_Parse.GetChild(_T("browser_app"));
+					//			else if (g_pHubble->m_nAppType == APP_BROWSER)
+					//				pChild = m_Parse.GetChild(_T("browser"));
+					//			else
+					//				pChild = m_Parse.GetChild(_T("browser_eclipse"));
+					//			if (pChild)
+					//			{
+					//				int nCount = pChild->GetCount();
+					//				CString strUrls = _T("");
+					//				for (int i = 0; i < nCount; i++)
+					//				{
+					//					CString strUrl = pChild->GetChild(i)->text();
+					//					int nPos2 = strUrl.Find(_T(":"));
+					//					if (nPos2 != -1)
+					//					{
+					//						CString strURLHeader = strUrl.Left(nPos2);
+					//						if (strURLHeader.CompareNoCase(_T("host")) == 0)
+					//						{
+					//							strUrl = g_pHubble->m_strAppPath + strUrl.Mid(nPos2 + 1);
+					//						}
+					//					}
+					//					strUrls += strUrl;
+					//					strUrls += _T("|");
+					//				}
+					//				if (nCount)
+					//					g_pHubble->m_pBrowserFactory->CreateBrowser(NULL, strUrls);
+					//			}
+					//		}
+					//		break;
+					//		}
+					//	}
+					//}
 				}
 				break;
 				case 20191022:
@@ -2274,136 +2217,9 @@ CString CUniverse::GetFileVer()
 	return strVersion;
 }
 
-HRESULT CUniverse::UpdateRegistry(BOOL bRegister)
-{
-	return theApp.UpdateRegistryFromResource(IDR_TANGRAM, bRegister);
-}
-
-HRESULT CUniverse::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
-{
-	if (g_pHubble)
-	{
-		DWORD dwID = ::GetCurrentThreadId();
-		if (dwID != g_pHubble->m_dwThreadID)
-		{
-			IStream* pStream = 0;
-			HRESULT hr = ::CoMarshalInterThreadInterfaceInStream(IID_IDispatch, (IHubble*)g_pHubble, &pStream);
-			if (hr == S_OK)
-			{
-				IDispatch* pTarget = nullptr;
-				hr = ::CoGetInterfaceAndReleaseStream(pStream, IID_IDispatch, (LPVOID*)&pTarget);
-				if (hr == S_OK && pTarget)
-					return pTarget->QueryInterface(riid, ppv);
-			}
-		}
-		return g_pHubble->QueryInterface(riid, ppv);
-	}
-	return S_FALSE;
-}
-
-STDAPI DllCanUnloadNow(void)
-{
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	if (g_pHubble)
-	{
-		bool bCanUnLoad = false;
-		if (g_pHubble->m_bOfficeApp)
-			bCanUnLoad = g_pHubble->m_bOfficeAddinUnLoad;
-		if (::GetModuleHandle(L"chrome_elf.dll"))
-			bCanUnLoad = false;
-		if (bCanUnLoad && g_pHubble && g_pHubble->m_nTangramObj == 0)
-		{
-			g_pHubble->ExitInstance();
-			delete g_pHubble;
-			g_pHubble = nullptr;
-			return S_OK;
-		}
-	}
-	//return (theApp.DllCanUnloadNow() == S_OK && theApp.GetLockCount() == 0) ? S_OK : S_FALSE;
-	return (AfxDllCanUnloadNow() == S_OK && theApp.GetLockCount() == 0) ? S_OK : S_FALSE;
-}
-
-STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
-{
-	return theApp.DllGetClassObject(rclsid, riid, ppv);
-}
-
-STDAPI DllRegisterServer(void)
-{
-	//theApp.m_bRegisterServer = true;
-	return theApp.DllRegisterServer();
-}
-
-STDAPI DllUnregisterServer(void)
-{
-	return theApp.DllUnregisterServer();
-}
-
 JNIEXPORT void JNICALL Java_Tangram_Host_Tangram_InitTangram(JNIEnv* env, jobject obj, jobject jTangram, jobject jGalaxyCluster, jobject jGalaxy, jobject jWndGrid)
 {
 	jclass cls = env->GetObjectClass(obj);
 
 	return;
 }
-
-//查找指定进程  
-DWORD FindProcess(TCHAR* strProcessName)
-{
-	DWORD aProcesses[1024], cbNeeded, cbMNeeded;
-	HMODULE hMods[1024];
-	HANDLE hProcess;
-	TCHAR szProcessName[MAX_PATH];
-
-	if (!EnumProcesses(aProcesses, sizeof(aProcesses), &cbNeeded))
-		return 0;
-	for (int i = 0; i < (int)(cbNeeded / sizeof(DWORD)); i++)
-	{
-		hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, aProcesses[i]);
-		EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbMNeeded);
-		GetModuleFileNameEx(hProcess, hMods[0], szProcessName, sizeof(szProcessName));
-
-		CString strPrcFullName(szProcessName);
-		CString strPrcName(strProcessName);
-		if (_tcsstr(strPrcFullName, strPrcName) || _tcsstr(strPrcFullName, strPrcName.MakeLower()))
-		{
-			CString strNameFull;
-			strNameFull.Format(_T("Process full name：\n%s;"), szProcessName);
-			return(aProcesses[i]);
-		}
-	}
-
-	return 0;
-}
-
-// 此函数利用上面的 FindProcess 函数获得你的目标进程的ID  
-// 用WIN API OpenPorcess 获得此进程的句柄，再以TerminateProcess强制结束这个进程  
-VOID KillProcess(TCHAR* strProcessName)
-{
-	// When the all operation fail this function terminate the "winlogon" Process for force exit the system.  
-	HANDLE hTargetProcess = OpenProcess(PROCESS_QUERY_INFORMATION | // Required by Alpha  
-		PROCESS_CREATE_THREAD | // For CreateRemoteThread  
-		PROCESS_VM_OPERATION | // For VirtualAllocEx/VirtualFreeEx  
-		PROCESS_VM_WRITE | // For WriteProcessMemory  
-		PROCESS_TERMINATE, //Required to terminate a process using TerminateProcess function  
-		FALSE, FindProcess(strProcessName));
-
-	if (hTargetProcess == NULL)
-	{
-		DWORD ulErrCode = GetLastError();
-		CString strError;
-		strError.Format(L"OpenProcess failed,error code:%ld", ulErrCode);
-		AfxMessageBox(strError);
-	}
-
-	BOOL result = TerminateProcess(hTargetProcess, 0);
-	if (!result)
-	{
-		DWORD ulErrCode = GetLastError();
-		CString strError;
-		strError.Format(L"TerminateProcess failed,error code:%ld", ulErrCode);
-		AfxMessageBox(strError);
-	}
-	return;
-}
-
-
