@@ -1300,7 +1300,7 @@ STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrX
 		g_pHubble->CreateGalaxyCluster((LONGLONG)hTop, &pGalaxyCluster);
 		if (pGalaxyCluster == nullptr)
 			return S_OK;
-		//m_pGalaxyCluster = (CGalaxyCluster*)pGalaxyCluster;m_pEclipseWnd->m_
+
 		IGalaxy* pGalaxy = nullptr;
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hWnd), bstrGalaxyName, &pGalaxy);
 		if (pGalaxy == nullptr)

@@ -1600,135 +1600,51 @@ void CHubble::HubbleInit()
 	}
 	if (bLoad) {
 		m_nJVMVersion = _m_Parse.attrInt(_T("jvmver"), JNI_VERSION_10);
-		//m_bEclipse = _m_Parse.attrBool(_T("eclipseapp"));
 		m_strAppName = _m_Parse.attr(_T("appname"), _T("Tangram System"));
 		m_strStartupCLRObj = _m_Parse.attr(_T("startupclrobj"), _T(""));
 	}
 
-//	if (m_strExeName == _T("devenv"))
-//	{
-//#ifndef _WIN64
-//		if (m_pCLRProxy == nullptr)
-//			LoadCLR();
-//
-//		TCHAR m_szBuffer[MAX_PATH];
-//		HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
-//		CString strCASServer = CString(m_szBuffer) + _T("\\WebRuntimeApp\\WebRuntime");
-//		CString strWebRuntimeForVS = strCASServer + _T("\\CASWebAgent.exe");
-//		CString strWebRuntimeForVS2 = strWebRuntimeForVS;
-//		bool bUpdateHostExe = false;
-//		CString strSRC = m_strAppPath + _T("PublicAssemblies\\WebRuntimeData\\output.zip");
-//		if (::PathIsDirectory(strCASServer) == false)
-//		{
-//			if (::PathFileExists(strSRC))
-//			{
-//				bUpdateHostExe = true;
-//			}
-//		}
-//		else
-//		{
-//			CString strVer = strCASServer + _T("\\ver.xml");
-//			CTangramXmlParse m_Parse;
-//			if (PathFileExists(strVer) && m_Parse.LoadFile(strVer))
-//			{
-//				CString strVer = m_Parse.attr(_T("ver"), _T("1.0.0.0"));
-//				CString strUpdateVer = _T("");
-//				CString strUpdateCASServer = CString(m_szBuffer) + _T("\\CASChromiumUpdate\\update.xml");
-//				CTangramXmlParse m_Parse2;
-//				if (PathFileExists(strUpdateCASServer) && m_Parse2.LoadFile(strUpdateCASServer))
-//				{
-//					strUpdateVer = m_Parse2.attr(_T("ver"), _T("1.0.0.0"));
-//					if (strUpdateVer.CompareNoCase(strVer) > 0)
-//					{
-//						strSRC = CString(m_szBuffer) + _T("\\") + strUpdateVer + _T("\\output.zip");;
-//						if (::PathFileExists(strSRC))
-//						{
-//							bUpdateHostExe = true;
-//						}
-//					}
-//				}
-//			}
-//		}
-//		if (bUpdateHostExe)
-//		{
-//			Utilities::CComponentInstaller m_ComponentInstaller;
-//			if (::PathIsDirectory(strCASServer))
-//				DelTree(strCASServer);
-//			m_ComponentInstaller.UnMultiZip2(strSRC, strCASServer);
-//		}
-//
-//		if (!::PathFileExists(strWebRuntimeForVS2))
-//		{
-//			strSRC = m_strAppPath + _T("PublicAssemblies\\WebRuntimeData\\CASAgentInstaller.msi");
-//			STARTUPINFO startupInfo;
-//			memset(&startupInfo, 0, sizeof(startupInfo));
-//			startupInfo.cb = sizeof(startupInfo);
-//			PROCESS_INFORMATION processInfo;
-//			memset(&processInfo, 0, sizeof(processInfo));
-//
-//			DWORD code;
-//			wchar_t cmdLine[2048];
-//
-//			HRESULT hr = SHGetFolderPath(NULL, CSIDL_SYSTEM, NULL, 0, m_szBuffer);
-//			//swprintf_s(cmdLine, _T("%s /Regserver"), strWebRuntimeForVS2.GetBuffer());
-//			swprintf_s(cmdLine, _T("%s\\msiexec.exe /i \"%s\" %s"), m_szBuffer, strSRC.GetBuffer(), g_pHubble->IsUserAdministrator() ? _T("/qn") : _T("/qb"));
-//			if (CreateProcess(nullptr, cmdLine, NULL, NULL, true, 0, NULL, NULL, &startupInfo, &processInfo))
-//			{
-//				// wait for the installer to finish
-//				WaitForSingleObject(processInfo.hProcess, INFINITE);
-//				GetExitCodeProcess(processInfo.hProcess, &code);
-//				Sleep(200);
-//			}
-//
-//			strSRC.ReleaseBuffer();
-//		}
-//		ConnectWebAgent();
-//#endif
-//	}
-//	else
-	{
-		if (m_bEclipse) {
-			if (launchMode == -1)
-				GetLaunchMode();
-			if (launchMode != -1) {
-				m_strStartJarPath = _m_Parse.attr(_T("startupjarname"), DEFAULT_EQUINOX_STARTUP);
-				CString _strBridgeJavaClass = _m_Parse.attr(_T("bridgeclass"), _T("org.eclipse.equinox.launcher.JNIBridge"));
-				_strBridgeJavaClass.Replace(_T("."), _T("/"));
-				USES_CONVERSION;
-				m_strBridgeJavaClass = T2A(_strBridgeJavaClass);
-				jarFile = findStartupJar();
-				m_bEclipse = (jarFile != nullptr);
-			}
-			else
-				m_bEclipse = false;
+	if (m_bEclipse) {
+		if (launchMode == -1)
+			GetLaunchMode();
+		if (launchMode != -1) {
+			m_strStartJarPath = _m_Parse.attr(_T("startupjarname"), DEFAULT_EQUINOX_STARTUP);
+			CString _strBridgeJavaClass = _m_Parse.attr(_T("bridgeclass"), _T("org.eclipse.equinox.launcher.JNIBridge"));
+			_strBridgeJavaClass.Replace(_T("."), _T("/"));
+			USES_CONVERSION;
+			m_strBridgeJavaClass = T2A(_strBridgeJavaClass);
+			jarFile = findStartupJar();
+			m_bEclipse = (jarFile != nullptr);
 		}
 		else
-		{
-			CString strPath = m_strProgramFilePath + _T("\\tangram\\") + m_strExeName + _T("\\tangraminit.xml");
-			if (::PathFileExists(strPath)) {
-				CTangramXmlParse m_Parse;
-				if (m_Parse.LoadFile(strPath)) {
-					int nCount = m_Parse.GetCount();
-					for (int i = 0; i < nCount; i++) {
-						CTangramXmlParse* pParse = m_Parse.GetChild(i);
-						CString strID = pParse->attr(TGM_GRID_TYPE, _T(""));
-						CString strXml = pParse->GetChild(0)->xml();
-						if (strID == _T("xmlRibbon")) {
-							CString strPath = m_strAppCommonDocPath + _T("OfficeRibbon\\") + m_strExeName + _T("\\ribbon.xml");
-							CTangramXmlParse m_Parse2;
-							if (m_Parse2.LoadXml(strXml))
-								m_Parse2.SaveFile(strPath);
+			m_bEclipse = false;
+	}
+	else
+	{
+		CString strPath = m_strProgramFilePath + _T("\\tangram\\") + m_strExeName + _T("\\tangraminit.xml");
+		if (::PathFileExists(strPath)) {
+			CTangramXmlParse m_Parse;
+			if (m_Parse.LoadFile(strPath)) {
+				int nCount = m_Parse.GetCount();
+				for (int i = 0; i < nCount; i++) {
+					CTangramXmlParse* pParse = m_Parse.GetChild(i);
+					CString strID = pParse->attr(TGM_GRID_TYPE, _T(""));
+					CString strXml = pParse->GetChild(0)->xml();
+					if (strID == _T("xmlRibbon")) {
+						CString strPath = m_strAppCommonDocPath + _T("OfficeRibbon\\") + m_strExeName + _T("\\ribbon.xml");
+						CTangramXmlParse m_Parse2;
+						if (m_Parse2.LoadXml(strXml))
+							m_Parse2.SaveFile(strPath);
+					}
+					if (strID == _T("tangramdesigner"))
+						m_strDesignerXml = strXml;
+					else {
+						strID.MakeLower();
+						if (strID == _T("newtangramdocument")) {
+							m_strNewDocXml = strXml;
 						}
-						if (strID == _T("tangramdesigner"))
-							m_strDesignerXml = strXml;
 						else {
-							strID.MakeLower();
-							if (strID == _T("newtangramdocument")) {
-								m_strNewDocXml = strXml;
-							}
-							else {
-								m_mapValInfo[strID] = CComVariant(strXml);
-							}
+							m_mapValInfo[strID] = CComVariant(strXml);
 						}
 					}
 				}
