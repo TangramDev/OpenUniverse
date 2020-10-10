@@ -734,7 +734,7 @@ namespace CommonUniverse {
 
 		CString					m_strProviderID = _T("");
 		CString					m_strContainer = _T("");
-		IHubble* m_pHubble = nullptr;
+		IHubble*				m_pHubble = nullptr;
 		map<CString, CString>	m_mapInnerObjStyle;
 		map<CString, void*>		m_mapInnerObjInfo;
 

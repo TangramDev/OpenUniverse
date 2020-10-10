@@ -28,7 +28,6 @@
 #include "grid.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
-#include "TangramJavaHelper.h"
 #include "HubbleEvents.h"
 #include "Wormhole.h"
 

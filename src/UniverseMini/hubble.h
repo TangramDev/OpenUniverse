@@ -59,8 +59,6 @@ public:
 	TCHAR								m_szBuffer[MAX_PATH];
 
 	LPCTSTR								m_lpszSplitterClass;
-	CString								m_strAppXml;
-	CString								m_strMainWndXml;
 
 	//.NET Version 4: 
 	ICLRRuntimeHost*					m_pClrHost;

@@ -28,7 +28,6 @@
 #include "grid.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
-#include "TangramJavaHelper.h"
 #include "HubbleEvents.h"
 
 #include <shellapi.h>
@@ -64,7 +63,6 @@ CHubble::CHubble()
 	m_bCreatingDevTool = false;
 	m_bOMNIBOXPOPUPVISIBLE = false;
 	m_pActiveWinFormWnd = nullptr;
-	m_strAppXml = _T("");
 	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
@@ -93,7 +91,6 @@ CHubble::CHubble()
 	m_strWorkBenchStrs = _T("");
 	m_strExeName = _T("");
 	m_strAppName = _T("Tangram System");
-	m_strMainWndXml = _T("");
 	m_strCurrentKey = _T("");
 	m_strCurrentAppID = _T("");
 	m_strConfigFile = _T("");
