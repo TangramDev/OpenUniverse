@@ -175,6 +175,7 @@ namespace CommonUniverse {
 	class CChromeRenderFrameHost;
 	class CChromeChildProcessHostImpl;
 	class CWebPageImpl;
+	class IHubbleWindowProvider;
 	class CChromeChildProcessHostImplProxy;
 
 	class IHubbleCLRImpl;
@@ -331,33 +332,6 @@ namespace CommonUniverse {
 		virtual void Focusable(BOOL bFocus) {}
 	};
 
-	class IHubbleWindowProvider
-	{
-	public:
-		IHubbleWindowProvider() {}
-		virtual ~IHubbleWindowProvider() {}
-
-		CString					m_strProviderID = _T("");
-		CString					m_strContainer = _T("");
-		IHubble*				m_pHubble = nullptr;
-		map<CString, CString>	m_mapInnerObjStyle;
-		map<CString, void*>		m_mapInnerObjInfo;
-
-		virtual bool HubbleInit(CString strID) { return false; }
-		virtual CString GetNames() { return _T(""); }
-		virtual CString GetTags(CString strName) { return _T(""); }
-		virtual HWND Create(HWND hParentWnd, IGrid* pGrid) { return NULL; }
-	};
-
-	class IHubbleWindow
-	{
-	public:
-		IHubbleWindow() {}
-		virtual ~IHubbleWindow() {}
-
-		virtual void Save() {}
-	};
-
 	class CGridProxy
 	{
 	public:
@@ -437,7 +411,24 @@ namespace CommonUniverse {
 	class IUniverseAppProxy
 	{
 	public:
-		IUniverseAppProxy() {}
+		IUniverseAppProxy() {
+			m_bAutoDelete = TRUE;
+			m_hMainWnd = nullptr;
+			m_hClosingFrame = m_hCreatingView = nullptr;
+			m_pvoid = nullptr;
+			m_pCurDocProxy = nullptr;
+			m_strProxyName = _T("");
+			m_strProxyID = _T("");
+			m_strClosingFrameID = _T("");
+			m_strCreatingFrameTitle = _T("");
+
+			m_bCreatingNewFrame = FALSE;
+			m_mapHubbleDoc.clear();
+
+			m_nFrameIndex = 0;
+			m_strAppKey = _T("");
+		}
+
 		virtual ~IUniverseAppProxy() {}
 
 		BOOL								m_bAutoDelete;
@@ -459,11 +450,17 @@ namespace CommonUniverse {
 		map<LONGLONG, IHubbleDoc*>			m_mapHubbleDoc;
 		map<void*, LONG>					m_mapHubbleDocTemplateID;
 
-		virtual BOOL InitHubble(void* pVoid) { return false; }
-		virtual BOOL HubbleSaveAllModified() { return false; }
+		virtual BOOL InitHubble(void* pVoid) {
+			return TRUE;
+		}
+		virtual BOOL HubbleSaveAllModified() {
+			return TRUE;
+		}
 
 		virtual void OnActiveMainFrame(HWND) {}
-		virtual int OnDestroyMainFrame(CString strID, int nMainFrameCount, int nWndType) { return 0; }
+		virtual int OnDestroyMainFrame(CString strID, int nMainFrameCount, int nWndType) {
+			return -1;
+		}
 		virtual LRESULT OnForegroundIdleProc() { return 0; }
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
 		virtual void OnHubbleClose() {}
@@ -480,9 +477,25 @@ namespace CommonUniverse {
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalaxy) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
-		virtual void AddDoc(LONGLONG llDocID, IHubbleDoc* pDoc) {}
-		virtual void RemoveDoc(LONGLONG llDocID) {}
-		virtual IHubbleDoc* GetDoc(LONGLONG llDocID) { return nullptr; }
+		void RemoveDoc(LONGLONG llDocID)
+		{
+			auto it = m_mapHubbleDoc.find(llDocID);
+			if (it != m_mapHubbleDoc.end())
+				m_mapHubbleDoc.erase(it);
+		}
+
+		void AddDoc(LONGLONG llDocID, IHubbleDoc* pDoc)
+		{
+			m_mapHubbleDoc[llDocID] = pDoc;
+		}
+
+		IHubbleDoc* GetDoc(LONGLONG llDocID)
+		{
+			auto it = m_mapHubbleDoc.find(llDocID);
+			if (it != m_mapHubbleDoc.end())
+				return it->second;
+			return nullptr;
+		}
 		virtual IHubbleDoc* NewDoc() { return nullptr; }
 		virtual HWND InitHubbleApp() { return NULL; }
 	};
@@ -504,15 +517,15 @@ namespace CommonUniverse {
 		virtual IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode) { return nullptr; }
 		virtual int IsWinForm(HWND hWnd) { return 0; }
 		virtual IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames) { return nullptr; }
-		virtual BSTR GetCtrlName(IDispatch* pCtrl) { return L""; }
+		virtual BSTR GetCtrlName(IDispatch* pCtrl) { return CComBSTR(""); }
 		virtual IDispatch* GetCtrlFromHandle(HWND hWnd) { return nullptr; }
 		virtual HWND GetMDIClientHandle(IDispatch* pMDICtrl) { return NULL; }
 		virtual IDispatch* GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) { return nullptr; }
 		virtual HWND GetCtrlHandle(IDispatch* pCtrl) { return NULL; }
-		virtual BSTR GetCtrlType(IDispatch* pCtrl) { return L""; }
+		virtual BSTR GetCtrlType(IDispatch* pCtrl) { return CComBSTR(""); }
 		virtual HWND IsGalaxy(IDispatch* ctrl) { return NULL; }
 		virtual void HubbleAction(BSTR bstrXml, void*) {}
-		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) { return L""; }
+		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) { return CComBSTR(""); }
 		virtual void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal) {}
 		virtual void SelectGrid(IGrid*) {}
 		virtual void SelectObj(IDispatch*) {}
@@ -705,6 +718,63 @@ namespace CommonUniverse {
 		virtual CSession* GetCloudSession(IGrid*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
 		virtual void HubbleNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
+	};
+
+	class IHubbleWindowProvider
+	{
+	public:
+		IHubbleWindowProvider() {}
+		virtual ~IHubbleWindowProvider()
+		{
+			if (::GetModuleHandle(L"universe") != NULL && g_pHubbleImpl)
+			{
+				g_pHubbleImpl->InserttoDataMap(0, m_strProviderID, nullptr);
+			}
+		}
+
+		CString					m_strProviderID = _T("");
+		CString					m_strContainer = _T("");
+		IHubble* m_pHubble = nullptr;
+		map<CString, CString>	m_mapInnerObjStyle;
+		map<CString, void*>		m_mapInnerObjInfo;
+
+		virtual bool HubbleInit(CString strID)
+		{
+			strID.MakeLower().Trim();
+			if (strID != _T("") && g_pHubbleImpl == nullptr)
+			{
+				m_strProviderID = strID;
+				HMODULE hModule = ::GetModuleHandle(_T("universe.dll"));
+				if (hModule) {
+					typedef CHubbleImpl* (__stdcall* GetHubbleImpl)(IHubble**);
+					GetHubbleImpl _pHubbleFunction;
+					_pHubbleFunction = (GetHubbleImpl)GetProcAddress(hModule, "GetHubbleImpl");
+					IHubble* pHubble = nullptr;
+					g_pHubbleImpl = _pHubbleFunction(&pHubble);
+					m_strProviderID.MakeLower();
+					g_pHubbleImpl->InserttoDataMap(1, m_strProviderID, static_cast<IHubbleWindowProvider*>(this));
+					return true;
+				}
+			}
+			return false;
+		}
+
+		virtual CString GetNames() { return _T(""); }
+		virtual CString GetTags(CString strName) { return _T(""); }
+		virtual HWND Create(HWND hParentWnd, IGrid* pGrid) { return NULL; }
+	};
+
+	class IHubbleWindow
+	{
+	public:
+		IHubbleWindow(){
+			if (g_pHubbleImpl)
+				g_pHubbleImpl->m_pCreatingWindow = this;
+		}
+
+		virtual ~IHubbleWindow() {}
+
+		virtual void Save() {}
 	};
 
 	class IHubbleDelegate {
