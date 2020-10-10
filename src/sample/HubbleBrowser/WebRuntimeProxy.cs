@@ -3,7 +3,7 @@ using System.Xml;
 using Cosmos;
 using System.Windows.Forms;
 
-namespace HubbleBrowser
+namespace Sunny
 {
     static class WebDelegate
     {

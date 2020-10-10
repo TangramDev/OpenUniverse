@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.0.0.6								*
+*					Sunny - version 1.0.0.0							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Cosmos;
 
-namespace HubbleBrowser
+namespace Sunny
 {
     public partial class NtpCtrl : UserControl
     {

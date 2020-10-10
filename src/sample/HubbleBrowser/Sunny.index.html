@@ -119,13 +119,13 @@
     <!-- The <application> grid is required, it can provide application-level configuration. -->
     <application>
         <modules>
-            <module libname="HubbleBrowser.exe" objname="HubbleBrowser.WebDelegate" functionname="Init"></module>
+            <module libname="Sunny.exe" objname="Sunny.WebDelegate" functionname="Init"></module>
         </modules>
         <ntp>
             <layout>
                 <grid id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
                     <grid gridtype="nucleus"></grid>
-                    <grid objid="HubbleBrowser.ntpctrl,HubbleBrowser"></grid>
+                    <grid objid="Sunny.ntpctrl,Sunny"></grid>
                 </grid>
             </layout>
         </ntp>
@@ -141,16 +141,16 @@
         </defaultworkbench>
         <urls><url url="https://www.tangram.dev"></url></urls>
     </application>
-    <!-- Determine the main layout of the application, "HubbleBrowser.MDIParent1,HubbleBrowser" represents
-        the HubbleBrowser.MDIParent1 class in the current executable program. -->
-    <mainWindow objid="HubbleBrowser.form1,HubbleBrowser" caption="My Windows Forms App" width="1200" height="800">
+    <!-- Determine the main layout of the application, "Sunny.MDIParent1,Sunny" represents
+        the Sunny.MDIParent1 class in the current executable program. -->
+    <mainWindow objid="Sunny.form1,Sunny" caption="My Windows Forms App" width="1200" height="800">
         <mainclient id="mainworkclient">
             <default>
                 <layout>
                     <grid style="39" activepage="1">
                         <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <grid gridtype="nucleus"></grid>
-                            <grid objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></grid>
+                            <grid objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></grid>
                         </grid>
                         <grid caption="Web Runtime for Application" url="host"></grid>
                     </grid>
@@ -163,7 +163,7 @@
                     <grid style="39" activepage="1">
                         <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <grid gridtype="nucleus"></grid>
-                            <grid objid="HubbleBrowser.ntpctrl,HubbleBrowser" id="SigmaBrowser_ntpctrl"></grid>
+                            <grid objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></grid>
                         </grid>
                         <grid caption="Web Runtime for Application" url="host"></grid>
                     </grid>
@@ -171,7 +171,7 @@
             </default>
         </panel1>
     </mainWindow>
-    <gridTemplate type="usercontrol" objid="HubbleBrowser.NavControl,HubbleBrowser" uikey="navDetails">
+    <gridTemplate type="usercontrol" objid="Sunny.NavControl,Sunny" uikey="navDetails">
         <treeView1>
             <uidata key="uidata" treenode="true" text="Welcome to the World of Web Runtime for Applications!">
                 <treeView1_tag name="content"></treeView1_tag>
@@ -227,7 +227,7 @@
                 <layout>
                     <grid style="39">
                         <grid caption="Web Runtime for Application" gridtype="nucleus"></grid>
-                        <grid objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Customize your own WebBrowser"></grid>
+                        <grid objid="Sunny.UserControl1,Sunny" caption="Customize your own WebBrowser"></grid>
                     </grid>
                 </layout>
             </content>
@@ -239,8 +239,8 @@
                 <layout>
                     <grid style="18">
                         <grid caption="The mixed world of web and native UI" gridtype="nucleus"></grid>
-                        <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></grid>
-                        <grid objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></grid>
+                        <grid objid="Sunny.UserControl2,Sunny" caption="Second Page"></grid>
+                        <grid objid="Sunny.UserControl3,Sunny" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content1>
@@ -251,15 +251,15 @@
             <content2 target="mainClient">
                 <layout>
                     <grid rows="3" cols="3" width="150,100,50" height="200,180,50">
-                        <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                        <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
-                        <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                        <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
+                        <grid objid="Sunny.UserControl1,Sunny"></grid>
+                        <grid objid="Sunny.UserControl2,Sunny"></grid>
+                        <grid objid="Sunny.UserControl3,Sunny"></grid>
+                        <grid objid="Sunny.UserControl3,Sunny"></grid>
                         <grid gridtype="nucleus"></grid>
-                        <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                        <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                        <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                        <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
+                        <grid objid="Sunny.UserControl1,Sunny"></grid>
+                        <grid objid="Sunny.UserControl1,Sunny"></grid>
+                        <grid objid="Sunny.UserControl3,Sunny"></grid>
+                        <grid objid="Sunny.UserControl2,Sunny"></grid>
                     </grid>
                 </layout>
             </content2>
@@ -270,17 +270,17 @@
             <content3 target="mainClient">
                 <layout>
                     <grid rows="1" cols="2" width="200,100,">
-                        <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
+                        <grid objid="Sunny.UserControl2,Sunny"></grid>
                         <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl2,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
                             <grid gridtype="nucleus"></grid>
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
+                            <grid objid="Sunny.UserControl2,Sunny"></grid>
                         </grid>
                     </grid>
                 </layout>
@@ -293,8 +293,8 @@
                 <layout>
                     <grid style="23">
                         <grid caption="Introduction to Tabbed grid" gridtype="nucleus"></grid>
-                        <grid objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Second Page"></grid>
-                        <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></grid>
+                        <grid objid="Sunny.UserControl1,Sunny" caption="Second Page"></grid>
+                        <grid objid="Sunny.UserControl2,Sunny" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content4>
@@ -306,18 +306,18 @@
                 <layout>
                     <grid style="23">
                         <grid caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl2,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
                             <grid gridtype="nucleus"></grid>
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
+                            <grid objid="Sunny.UserControl2,Sunny"></grid>
                         </grid>
-                        <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Second Page"></grid>
-                        <grid objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Third Page"></grid>
+                        <grid objid="Sunny.UserControl2,Sunny" caption="Second Page"></grid>
+                        <grid objid="Sunny.UserControl3,Sunny" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content5>
@@ -329,22 +329,22 @@
                 <layout>
                     <grid style="23">
                         <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl2,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
                             <grid style="18" activepage="1">
-                                <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="First Page"></grid>
+                                <grid objid="Sunny.UserControl2,Sunny" caption="First Page"></grid>
                                 <grid gridtype="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></grid>
-                                <grid objid="HubbleBrowser.UserControl1,HubbleBrowser" caption="Third Page"></grid>
+                                <grid objid="Sunny.UserControl1,Sunny" caption="Third Page"></grid>
                             </grid>
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl1,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl3,HubbleBrowser"></grid>
-                            <grid objid="HubbleBrowser.UserControl2,HubbleBrowser"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl1,Sunny"></grid>
+                            <grid objid="Sunny.UserControl3,Sunny"></grid>
+                            <grid objid="Sunny.UserControl2,Sunny"></grid>
                         </grid>
-                        <grid objid="HubbleBrowser.UserControl3,HubbleBrowser" caption="Send Page"></grid>
-                        <grid objid="HubbleBrowser.UserControl2,HubbleBrowser" caption="Third Page"></grid>
+                        <grid objid="Sunny.UserControl3,Sunny" caption="Send Page"></grid>
+                        <grid objid="Sunny.UserControl2,Sunny" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content6>

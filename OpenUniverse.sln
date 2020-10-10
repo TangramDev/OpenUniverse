@@ -19,7 +19,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Universe", "src\Universe\Un
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cosmos", "src\Cosmos\Cosmos.vcxproj", "{D7A9DC7E-0B4A-4091-9B13-4D6CA4494452}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubbleBrowser", "src\sample\HubbleBrowser\HubbleBrowser.csproj", "{CFAC881E-FD36-4EE7-AEDC-38D78BA057DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sunny", "src\sample\HubbleBrowser\Sunny.csproj", "{CFAC881E-FD36-4EE7-AEDC-38D78BA057DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionApi", "src\sample\SessionApi\SessionApi.csproj", "{2519D5B3-0EE4-4740-8AD0-A377F9341A62}"
 EndProject

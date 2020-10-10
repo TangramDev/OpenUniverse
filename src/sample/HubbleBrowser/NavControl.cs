@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Cosmos;
 
-namespace HubbleBrowser
+namespace Sunny
 {
     public partial class NavControl : UserControl
     {

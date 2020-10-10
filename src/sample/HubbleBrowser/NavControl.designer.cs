@@ -1,4 +1,4 @@
-﻿namespace HubbleBrowser
+﻿namespace Sunny
 {
     partial class NavControl
     {

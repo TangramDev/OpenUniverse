@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CFAC881E-FD36-4EE7-AEDC-38D78BA057DA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>HubbleBrowser</RootNamespace>
-    <AssemblyName>HubbleBrowser</AssemblyName>
+    <RootNamespace>Sunny</RootNamespace>
+    <AssemblyName>Sunny</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -98,7 +98,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="HubbleBrowser.index.html">
+    <Content Include="Sunny.index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
