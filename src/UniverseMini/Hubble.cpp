@@ -94,7 +94,6 @@ CHubble::CHubble()
 	m_strCurrentKey = _T("");
 	m_strCurrentAppID = _T("");
 	m_strConfigFile = _T("");
-	m_strConfigDataFile = _T("");
 	m_strAppCommonDocPath = _T("");
 	m_strGridSelectedText = _T("");
 	m_strTemplatePath = _T("");
@@ -144,7 +143,6 @@ void CHubble::Init()
 	SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer);
 	m_strProgramFilePath = CString(m_szBuffer);
 	m_mapValInfo[_T("apppath")] = CComVariant(m_strAppPath);
-	m_mapValInfo[_T("appdatafile")] = CComVariant(m_strConfigDataFile);
 	m_mapValInfo[_T("appname")] = CComVariant(m_strExeName);
 
 	if (m_nAppID != 9)
@@ -321,12 +319,8 @@ void CHubble::HubbleInit()
 {
 	CTangramXmlParse _m_Parse;
 	bool bLoad = false;
-	m_strConfigDataFile += m_strExeName;
-	m_strConfigDataFile += _T(".tangram");
 	if (::PathFileExists(m_strConfigFile) == FALSE)
 	{
-		if (::PathFileExists(m_strConfigDataFile) == TRUE)
-			::DeleteFile(m_strConfigDataFile);
 		CString strXml = _T("");
 		strXml.Format(_T("<%s developermodel='true' companypathname='%s %s'  productname='%s' />"), g_pHubble->m_strExeName, g_pHubble->m_strExeName, _T(" team"), g_pHubble->m_strExeName);
 		_m_Parse.LoadXml(strXml);
