@@ -104,6 +104,8 @@ void CGrid::InitWndGrid()
 	m_strObjTypeID = m_pHostParse->attr(TGM_OBJ_ID, _T(""));
 	m_strObjTypeID.MakeLower();
 	m_strObjTypeID.Trim();
+	if (m_strObjTypeID == TGM_NUCLEUS)
+		m_strID = TGM_NUCLEUS;
 	m_nRows = m_pHostParse->attrInt(TGM_ROWS, 0);
 	m_nCols = m_pHostParse->attrInt(TGM_COLS, 0);
 	if (m_nRows * m_nCols>1)
@@ -113,9 +115,12 @@ void CGrid::InitWndGrid()
 	}
 	else
 	{
-		m_strID = m_pHostParse->attr(TGM_GRID_TYPE, _T(""));
-		m_strID.MakeLower();
-		m_strID.Trim();
+		if (m_strID != TGM_NUCLEUS)
+		{
+			m_strID = m_pHostParse->attr(TGM_GRID_TYPE, _T(""));
+			m_strID.MakeLower();
+			m_strID.Trim();
+		}
 		if(m_strID==_T(""))
 		{ 
 			if(m_strObjTypeID.Find(_T(",")) != -1)

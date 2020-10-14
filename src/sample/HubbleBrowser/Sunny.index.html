@@ -124,7 +124,7 @@
         <ntp>
             <layout>
                 <grid id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
-                    <grid gridtype="nucleus"></grid>
+                    <grid objid="nucleus"></grid>
                     <grid objid="Sunny.ntpctrl,Sunny"></grid>
                 </grid>
             </layout>
@@ -132,7 +132,7 @@
         <defaultworkbench>
             <layout>
                 <grid style="18">
-                    <grid id='tangramtabctrl_Page2' gridtype="nucleus" caption='Page 1'></grid>
+                    <grid id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></grid>
                     <grid id='test1 x' caption='Page 2' url="https://www.csdn.net|https://www.tangram.dev"></grid>
                     <grid id='test2 y' caption='Page 3'></grid>
                     <grid id='test3 z' caption='Page 4'></grid>
@@ -149,10 +149,10 @@
                 <layout>
                     <grid style="39" activepage="1">
                         <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
-                            <grid gridtype="nucleus"></grid>
+                            <grid objid="nucleus"></grid>
                             <grid objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></grid>
                         </grid>
-                        <grid caption="Web Runtime for Application" url="host"></grid>
+                        <grid caption="Virtual Web Browser Engine for Application" url="host"></grid>
                     </grid>
                 </layout>
             </default>
@@ -162,10 +162,10 @@
                 <layout>
                     <grid style="39" activepage="1">
                         <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
-                            <grid gridtype="nucleus"></grid>
+                            <grid objid="nucleus"></grid>
                             <grid objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></grid>
                         </grid>
-                        <grid caption="Web Runtime for Application" url="host"></grid>
+                        <grid caption="Virtual Web Browser Engine for Application" url="host"></grid>
                     </grid>
                 </layout>
             </default>
@@ -173,7 +173,7 @@
     </mainWindow>
     <gridTemplate type="usercontrol" objid="Sunny.NavControl,Sunny" uikey="navDetails">
         <treeView1>
-            <uidata key="uidata" treenode="true" text="Welcome to the World of Web Runtime for Applications!">
+            <uidata key="uidata" treenode="true" text="Welcome to the World of Virtual Web Browser Engine for Applications!">
                 <treeView1_tag name="content"></treeView1_tag>
                 <node1 treenode="true" text="New Web New Application World"></node1>
                 <node1_tag name="content1"></node1_tag>
@@ -194,7 +194,7 @@
         <layout>
             <grid rows="1" cols="2" width="350,100,">
                 <grid objid="navDetails" id="navCtrl"></grid>
-                <grid gridtype="nucleus" id="mainClient"></grid>
+                <grid objid="nucleus" id="mainClient"></grid>
             </grid>
         </layout>
     </webViewport>
@@ -202,7 +202,7 @@
     <form1 id="mainwindow_1">
         <layout>
             <grid id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
-                <grid id='tangramtabctrl_Page2' gridtype="nucleus" caption=''></grid>
+                <grid id='tangramtabctrl_Page2' objid="nucleus" caption=''></grid>
                 <grid id='test1'></grid>
             </grid>
         </layout>
@@ -210,7 +210,7 @@
     <form id="mainwindow_2">
         <layout>
             <grid style="18">
-                <grid id='tangramtabctrl_Page2' gridtype="nucleus" caption='Page 1'></grid>
+                <grid id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></grid>
                 <grid id='test1' caption='Page 2'></grid>
                 <grid id='test2' caption='Page 3'></grid>
                 <grid id='test3' caption='Page 4'></grid>
@@ -220,27 +220,27 @@
 
     <div class="contents">
         <article class="show content markdown-body">
-            <h1>Web Runtime for Application</h1>
-            <p>Web Runtime for Application is a software runtime service that enables developers to organize software in the form of Web pages, it extends Java, COM, .NET, Win32 components into DOM elements of Web pages, allowing developers to develop application-oriented-web-page, each specific function of the application software is embodied in one or a group of application-oriented-web-pages, consumers can access each specific application function by accessing the URL.</p>
+            <h1>Virtual Web Browser Engine for Application</h1>
+            <p>Virtual Web Browser Engine for Application is a software runtime service that enables developers to organize software in the form of Web pages, it extends Java, COM, .NET, Win32 components into DOM elements of Web pages, allowing developers to develop application-oriented-web-page, each specific function of the application software is embodied in one or a group of application-oriented-web-pages, consumers can access each specific application function by accessing the URL.</p>
             <p>This is a New and Dynamic Desktop Software World where you can combine most of the existing component frameworks, such as .NET, Java, COM, C++, Web and Office etc. ...</p>
             <content target="mainClient">
                 <layout>
                     <grid style="39">
-                        <grid caption="Web Runtime for Application" gridtype="nucleus"></grid>
-                        <grid objid="Sunny.UserControl1,Sunny" caption="Customize your own WebBrowser"></grid>
+                        <grid caption="Virtual Web Browser Engine for Application" objid="nucleus"></grid>
+                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Customize your own WebBrowser"></grid>
                     </grid>
                 </layout>
             </content>
         </article>
         <article class="hidden content1 markdown-body">
             <h1>New Web, New Application World!</h1>
-            <p>Web runtime for application constructs a new mixed world of native UI elements and web elements. In this world, a new web page is defined. While taking into account the standard web page, the ability to use native components as DOM elements is added ...</p>
+            <p>Virtual Web Browser Engine for Application constructs a new mixed world of native UI elements and web elements. In this world, a new web page is defined. While taking into account the standard web page, the ability to use native components as DOM elements is added ...</p>
             <content1 target="mainClient">
                 <layout>
                     <grid style="18">
-                        <grid caption="The mixed world of web and native UI" gridtype="nucleus"></grid>
-                        <grid objid="Sunny.UserControl2,Sunny" caption="Second Page"></grid>
-                        <grid objid="Sunny.UserControl3,Sunny" caption="Third Page"></grid>
+                        <grid caption="The mixed world of web and native UI" objid="nucleus"></grid>
+                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></grid>
+                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content1>
@@ -251,15 +251,15 @@
             <content2 target="mainClient">
                 <layout>
                     <grid rows="3" cols="3" width="150,100,50" height="200,180,50">
-                        <grid objid="Sunny.UserControl1,Sunny"></grid>
-                        <grid objid="Sunny.UserControl2,Sunny"></grid>
-                        <grid objid="Sunny.UserControl3,Sunny"></grid>
-                        <grid objid="Sunny.UserControl3,Sunny"></grid>
-                        <grid gridtype="nucleus"></grid>
-                        <grid objid="Sunny.UserControl1,Sunny"></grid>
-                        <grid objid="Sunny.UserControl1,Sunny"></grid>
-                        <grid objid="Sunny.UserControl3,Sunny"></grid>
-                        <grid objid="Sunny.UserControl2,Sunny"></grid>
+                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
+                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                        <grid objid="nucleus"></grid>
+                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
                     </grid>
                 </layout>
             </content2>
@@ -270,17 +270,17 @@
             <content3 target="mainClient">
                 <layout>
                     <grid rows="1" cols="2" width="200,100,">
-                        <grid objid="Sunny.UserControl2,Sunny"></grid>
+                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
                         <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl2,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid gridtype="nucleus"></grid>
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid objid="Sunny.UserControl2,Sunny"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="nucleus"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
                         </grid>
                     </grid>
                 </layout>
@@ -292,9 +292,9 @@
             <content4 target="mainClient">
                 <layout>
                     <grid style="23">
-                        <grid caption="Introduction to Tabbed grid" gridtype="nucleus"></grid>
-                        <grid objid="Sunny.UserControl1,Sunny" caption="Second Page"></grid>
-                        <grid objid="Sunny.UserControl2,Sunny" caption="Third Page"></grid>
+                        <grid caption="Introduction to Tabbed grid" objid="nucleus"></grid>
+                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Second Page"></grid>
+                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content4>
@@ -306,18 +306,18 @@
                 <layout>
                     <grid style="23">
                         <grid caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl2,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid gridtype="nucleus"></grid>
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid objid="Sunny.UserControl2,Sunny"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="nucleus"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
                         </grid>
-                        <grid objid="Sunny.UserControl2,Sunny" caption="Second Page"></grid>
-                        <grid objid="Sunny.UserControl3,Sunny" caption="Third Page"></grid>
+                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></grid>
+                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content5>
@@ -329,22 +329,22 @@
                 <layout>
                     <grid style="23">
                         <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl2,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
                             <grid style="18" activepage="1">
-                                <grid objid="Sunny.UserControl2,Sunny" caption="First Page"></grid>
-                                <grid gridtype="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></grid>
-                                <grid objid="Sunny.UserControl1,Sunny" caption="Third Page"></grid>
+                                <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></grid>
+                                <grid objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></grid>
+                                <grid objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></grid>
                             </grid>
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl1,Sunny"></grid>
-                            <grid objid="Sunny.UserControl3,Sunny"></grid>
-                            <grid objid="Sunny.UserControl2,Sunny"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
+                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
                         </grid>
-                        <grid objid="Sunny.UserControl3,Sunny" caption="Send Page"></grid>
-                        <grid objid="Sunny.UserControl2,Sunny" caption="Third Page"></grid>
+                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Send Page"></grid>
+                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></grid>
                     </grid>
                 </layout>
             </content6>
