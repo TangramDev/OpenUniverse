@@ -70,7 +70,7 @@ CHubble::CHubble()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
+	m_strDefaultXml = _T("<default><layout><g name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
@@ -623,7 +623,7 @@ IGalaxy* CHubble::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
 
 		CString strKey = _T("default");
-		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
+		str.Format(_T("<%s><layout><g name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		if(pGrid)
 		{
@@ -710,7 +710,7 @@ IGalaxyCluster* CHubble::Observe(HWND hGalaxy, CString strName, CString strKey)
 			pGalaxy = it2->second;
 		IGrid* pGrid = nullptr;
 		CString str = _T("");
-		str.Format(_T("<default><layout><grid name='%s' /></layout></default>"), strName);
+		str.Format(_T("<default><layout><g name='%s' /></layout></default>"), strName);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		return pGalaxyCluster;
 	}

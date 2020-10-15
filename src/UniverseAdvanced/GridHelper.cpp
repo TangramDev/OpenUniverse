@@ -1107,7 +1107,7 @@ LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		IGalaxy* pGalaxy = nullptr;
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hChild), CComBSTR(L"ClientFrame"), &pGalaxy);
 		CString strXml = _T("");
-		strXml.Format(_T("<mdiclient><layout><grid name=\"mdiclient\" gridtype=\"activex\" objid=\"%s\" /></layout></mdiclient>"), m_strURL);
+		strXml.Format(_T("<mdiclient><layout><g name=\"mdiclient\" gridtype=\"activex\" objid=\"%s\" /></layout></mdiclient>"), m_strURL);
 		IGrid* pGrid = nullptr;
 		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pGrid);
 		m_pGalaxy = (CGalaxy*)pGalaxy;

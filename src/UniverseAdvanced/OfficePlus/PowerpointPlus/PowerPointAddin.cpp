@@ -314,7 +314,7 @@ namespace OfficePlus
 					CGrid* pGrid = pGalaxy->m_pWorkGrid;
 					if (pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 					{
-						CString strXml = _T("<documentui><layout><grid name=\"Start\" /></layout></documentui>");
+						CString strXml = _T("<documentui><layout><g name=\"Start\" /></layout></documentui>");
 						IGrid* pDesignNode = nullptr;
 						pGalaxy->Observe(CComBSTR(L"default-inDesigning"), CComBSTR(strXml), &pDesignNode);
 					}

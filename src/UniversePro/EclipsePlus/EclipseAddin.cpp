@@ -718,7 +718,7 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 						{
 							CString strXml = _pGrid->m_pGridShareData->m_pHubbleParse->xml();
 							strXml.Replace(_T("/><"), _T("/>\r\n<"));
-							strXml.Replace(_T("/>"), _T("></grid>"));
+							strXml.Replace(_T("/>"), _T("></g>"));
 							CString s = _T("");
 							s.Format(_T("<%s>%s</%s>"), pGalaxy->m_strGalaxyName, strXml, pGalaxy->m_strGalaxyName);
 							m_strXml += s;

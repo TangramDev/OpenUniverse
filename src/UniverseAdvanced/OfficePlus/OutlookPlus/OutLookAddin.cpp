@@ -2130,7 +2130,7 @@ namespace OfficePlus
 				pFolder->get_FolderPath(&bstrName);
 				IGrid* pGrid = nullptr;
 				if(strXml==_T(""))
-					strXml  = _T("<Tangram><layout><grid name=\"Start\" /></layout></Tangram>");
+					strXml  = _T("<Tangram><layout><g name=\"Start\" /></layout></Tangram>");
 				pWnd->m_pGalaxy->Observe(bstrName, strXml.AllocSysString(), &pGrid);
 				CGalaxy* _pGalaxy = (CGalaxy*)pWnd->m_pGalaxy;
 				_pGalaxy->HostPosChanged();
@@ -2361,7 +2361,7 @@ namespace OfficePlus
 					CString strKey = _T("taskpaneui");
 					CString strXml = m_strUIScript;
 					if(strXml==_T(""))
-						strXml = _T("<taskpaneui><layout><grid name=\"Start\" /></layout></taskpaneui>");
+						strXml = _T("<taskpaneui><layout><g name=\"Start\" /></layout></taskpaneui>");
 					CTangramXmlParse m_Parse;
 					if (m_Parse.LoadXml(strXml))
 					{
@@ -2371,7 +2371,7 @@ namespace OfficePlus
 							strXml = pParse->xml();
 						}
 						else
-							strXml = _T("<taskpaneui><layout><grid name=\"Start\" /></layout></taskpaneui>");
+							strXml = _T("<taskpaneui><layout><g name=\"Start\" /></layout></taskpaneui>");
 						if (strXml != _T(""))
 						{
 							{
@@ -2887,7 +2887,7 @@ namespace OfficePlus
 							{
 								CString strName = m_strName;
 								strName.Replace(_T(" "), _T("_"));
-								m_strXml.Format(_T("<%s><layout><grid name=\"Start\" /></layout></%s>"), strName, strName);
+								m_strXml.Format(_T("<%s><layout><g name=\"Start\" /></layout></%s>"), strName, strName);
 							}
 							m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pGrid);
 							g_pHubble->m_pDesigningFrame = (CGalaxy*)m_pGalaxy;
