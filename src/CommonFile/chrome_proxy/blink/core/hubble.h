@@ -89,6 +89,7 @@ namespace blink {
 	 void wait(bool bwait);
 	 void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
 	 void sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback, bool bwait);
+	 void openUrl(const String& url, long nBrowserWndOpenDisposition, V8ApplicationCallback* callback, bool bwait);
 	 void addEventListener(const String& eventName, V8ApplicationCallback* callback);
 	 void removeEventListener(const String& eventName);
 	 void disConnect();

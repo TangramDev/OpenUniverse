@@ -1422,6 +1422,38 @@ namespace Web {
 				}
 			}
 		}
+		else if (strMsgID == _T("OPEN_URL"))
+		{
+			CString strPath = g_pHubble->m_strAppPath;
+			CString strUrl = pSession->GetString(_T("openurl"));
+			long nPos = pSession->GetLong(_T("BrowserWndOpenDisposition"));
+			int _nPos = strUrl.Find(_T("host:"));
+			if (nPos == 2 && _nPos != -1)
+				strUrl.Replace(_T("host:"), strPath);
+			else
+			{
+				strUrl.Replace(_T("host:"), strPath);
+				strUrl += _T("|");
+				strUrl.Replace(_T("||"), _T("|"));
+			}
+			if (m_pChromeRenderFrameHost)
+			{
+				if (nPos > 0x000a || nPos == 0)
+				{
+					g_pHubble->m_pBrowserFactory->CreateBrowser(0, strUrl);
+				}
+				else
+				{
+					IPCMsg msg;
+					msg.m_strId = L"OPEN_URL";
+					msg.m_strParam1 = strUrl;
+					CString strDisposition = _T("");
+					strDisposition.Format(_T("%d"), nPos);
+					msg.m_strParam2 = strDisposition;
+					m_pChromeRenderFrameHost->SendHubbleMessage(&msg);
+				}
+			}
+		}
 		else if (strMsgID == _T("OPEN_XML"))
 		{
 			CString strKey = pSession->GetString(_T("openkey"));

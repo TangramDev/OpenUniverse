@@ -159,8 +159,8 @@ namespace blink {
 		form->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapWinForm.insert(form->handle_, form);
 		if (m_pRenderframeImpl) {
-			WebString webstr = strFormXml;
-			std::wstring _strFormXml = webstr.Utf16();
+			//WebString webstr = strFormXml;
+			//std::wstring _strFormXml = webstr.Utf16();
 			form->innerXobj_->setStr(L"msgID", L"CREATE_WINFORM");
 			form->innerXobj_->setStr(L"objID", L"WinForm");
 			form->innerXobj_->setInt64(L"form", (int64_t)form);
@@ -374,6 +374,28 @@ namespace blink {
 				m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
 			}
 			m_pRenderframeImpl->SendHubbleMessageEx(msg->session_);
+		}
+		//if (bwait)
+		//	run_loop_.Run();
+	}
+
+	void Hubble::openUrl(const String& url, long nBrowserWndOpenDisposition, V8ApplicationCallback* callback, bool bwait=false)
+	{
+		if (m_pRenderframeImpl)
+		{
+			innerXobj_->setStr(L"senderid", innerXobj_->getid());
+			innerXobj_->setStr(L"msgID", L"OPEN_URL");
+			innerXobj_->setStr(L"openurl", url);
+			innerXobj_->setLong(L"BrowserWndOpenDisposition", nBrowserWndOpenDisposition);
+			if (callback)
+			{
+				String callbackid_ = WTF::CreateCanonicalUUIDString();
+				innerXobj_->setStr(L"callbackid", callbackid_);
+				innerXobj_->mapHubbleEventCallback_.insert(callbackid_, callback);
+				WebString strID = callbackid_;
+				m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
+			}
+			m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
 		}
 		//if (bwait)
 		//	run_loop_.Run();
