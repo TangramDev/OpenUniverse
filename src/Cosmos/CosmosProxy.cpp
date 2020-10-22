@@ -1698,6 +1698,28 @@ void CCosmosProxy::ConnectGridToWebPage(IGrid* pGrid, bool bAdd)
 void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 {
 	CString strMsgID = pSession->GetString(L"msgID");
+
+	if (strMsgID == _T("OPEN_XML_CTRL"))
+	{
+		HWND hWnd = (HWND)pSession->Getint64(L"gridobjhandle");
+		IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
+		if (pGrid)
+		{
+			Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+			CString strName = pSession->GetString(_T("ctrlName"));
+			CString strKey = pSession->GetString(_T("openkey"));
+			CString strXml = pSession->GetString(_T("openxml"));
+			String^ ctrlName = BSTR2STRING(strName);
+			Control^ ctrl = (Control^)thisNode->XObject;
+			cli::array<Control^, 1>^ pArray = ctrl->Controls->Find(ctrlName, true);
+			if (pArray != nullptr && pArray->Length)
+			{
+				Control^ _ctrl = pArray[0];
+				Hubble::Observe(_ctrl, BSTR2STRING(strKey), BSTR2STRING(strXml));
+			}
+		}
+	}
+
 	auto it = m_mapSession2Wormhole.find(pSession);
 	if (it != m_mapSession2Wormhole.end())
 	{
@@ -1818,6 +1840,21 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 					Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 					if (thisNode != nullptr)
 					{
+						//CString strMsgID = pSession->GetString(L"msgID");
+						//if (strMsgID == _T("OPEN_XML_CTRL"))
+						//{
+						//	CString strName = pSession->GetString(_T("ctrlName"));
+						//	CString strKey = pSession->GetString(_T("openkey"));
+						//	CString strXml = pSession->GetString(_T("openxml"));
+						//	String^ ctrlName = BSTR2STRING(strName);
+						//	Control^ ctrl = (Control^)thisNode->XObject;
+						//	cli::array<Control^, 1>^ pArray = ctrl->Controls->Find(ctrlName, true);
+						//	if (pArray != nullptr && pArray->Length)
+						//	{
+						//		Control^ _ctrl = pArray[0];
+						//		Hubble::Observe(_ctrl, BSTR2STRING(strKey), BSTR2STRING(strXml));
+						//	}
+						//}
 						thisNode->Fire_OnCloudMessageReceived(pCloudSession);
 					}
 					else

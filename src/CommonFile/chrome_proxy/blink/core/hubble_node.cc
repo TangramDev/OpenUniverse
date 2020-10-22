@@ -186,6 +186,27 @@ void HubbleNode::ObserveEx(const String& strKey, const String& xml, long row, lo
 	}
 }
 
+void HubbleNode::ObserveCtrl(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback)
+{
+	if (m_pRenderframeImpl)
+	{
+		innerXobj_->setStr(L"senderid", id_);
+		innerXobj_->setStr(L"msgID", L"OPEN_XML_CTRL");
+		innerXobj_->setStr(L"ctrlName", strCtrlName);
+		innerXobj_->setStr(L"openkey", strKey);
+		innerXobj_->setStr(L"openxml", xml);
+		String callbackid_ = WTF::CreateCanonicalUUIDString();
+		innerXobj_->setStr(L"opencallbackid", callbackid_);
+		WebString strID = callbackid_;
+		m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
+		if (callback)
+		{
+			innerXobj_->mapHubbleEventCallback_.insert(callbackid_, callback);
+		}
+		m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
+	}
+}
+
 void HubbleNode::SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback)
 {
 	if (callback)

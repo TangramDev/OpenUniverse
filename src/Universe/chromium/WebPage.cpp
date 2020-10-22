@@ -1136,6 +1136,12 @@ namespace Web {
 				}
 			}
 		}
+		else if (strMsgID == _T("OPEN_XML_CTRL"))
+		{
+			CString strName = pSession->GetString(_T("ctrlName"));
+			CString strKey = pSession->GetString(_T("openkey"));
+			CString strXml = pSession->GetString(_T("openxml"));
+		}
 	}
 
 	STDMETHODIMP CWebPage::get_HostWnd(LONGLONG* Val)

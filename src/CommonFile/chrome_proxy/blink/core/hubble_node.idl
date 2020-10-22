@@ -22,6 +22,7 @@
 	HubbleNode getChild(DOMString strName);
 	void Observe(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveEx(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional long row, [DefaultValue = Undefined] optional long col, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void ObserveCtrl(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	readonly attribute long row;
 	readonly attribute long col;

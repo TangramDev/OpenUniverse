@@ -110,7 +110,7 @@
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Cosmos.snk</LinkKeyFile>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>..\..\output\</OutDir>
+    <OutDir>..\..\..\output\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
