@@ -16,6 +16,7 @@ typedef sequence<any> ObjectArray;
 	void openUrl(DOMString url, long nBrowserWndOpenDisposition,
 		[DefaultValue = Undefined] optional ApplicationCallback callback, 
 		[DefaultValue = Undefined] optional  boolean bwait);
+	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void removeEventListener(DOMString eventName);
 

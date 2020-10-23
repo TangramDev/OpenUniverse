@@ -1725,6 +1725,18 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	{
 		Object^ pObj = nullptr;
 		pObj = it->second->m_pHostObj;
+		if(pObj==nullptr)
+		{
+			Wormhole^ pCloudSession = gcnew Wormhole(pSession);
+			IDispatch* pDisp = nullptr;
+			__int64 nDisp = pSession->Getint64(_T("objectdisp"));
+			if (nDisp)
+			{
+				pObj = Marshal::GetObjectForIUnknown((IntPtr)nDisp);
+				pCloudSession->m_pHostObj = pObj;
+				theAppProxy.m_mapSession2Wormhole[pSession] = pCloudSession;
+			}
+		}
 		if (strMsgID == _T("MODIFY_CTRL_VALUE"))
 		{
 			CString strSubObj = pSession->GetString(L"currentsubobjformodify");
@@ -1746,7 +1758,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 		}
 		CString strType = pSession->GetString(L"eventtype");
 		CString strCallback = pSession->GetString(L"callbackid");
-		if (strCallback != _T(""))
+		if (pObj != nullptr)
 		{
 			Cosmos::Wormhole^ pCloudSession = nullptr;
 			if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))

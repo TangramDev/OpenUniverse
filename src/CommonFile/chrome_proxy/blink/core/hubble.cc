@@ -305,6 +305,11 @@ namespace blink {
 		return DomWindow()->document();
 	}
 
+	void Hubble::Observe(const String& key, const String& strXml, V8ApplicationCallback* callback)
+	{
+		sendMessage("TANGRAM_UI_MESSAGE", key, L"", strXml, L"", L"");
+	}
+
 	void Hubble::addEventListener(const String& eventName, V8ApplicationCallback* callback)
 	{
 		if (callback)

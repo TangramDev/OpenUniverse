@@ -63,7 +63,7 @@
                             for (var i = 0; i < list.length; i++) {
                                 var target = list[i].getAttribute("target");
                                 if (target != null) {
-                                    hubble.sendMessage("TANGRAM_UI_MESSAGE", name, e.getInt64("subobjhandle"), list[i].outerHTML, target);
+                                    hubble.sendMessage(name, list[i].outerHTML, target);
                                 }
                             }
                             var contentElements = document.getElementsByClassName("contents")[0].children;
