@@ -424,9 +424,9 @@ namespace Web {
 	{
 		if (g_pHubble->m_pCLRProxy)
 		{
-			IBrowser* pIChromeWebBrowser = nullptr;
-			QueryInterface(__uuidof(IBrowser), (void**)&pIChromeWebBrowser);
-			g_pHubble->m_pCLRProxy->OnDestroyChromeBrowser(pIChromeWebBrowser);
+			IBrowser* pIBrowser = nullptr;
+			QueryInterface(__uuidof(IBrowser), (void**)&pIBrowser);
+			g_pHubble->m_pCLRProxy->OnDestroyChromeBrowser(pIBrowser);
 		}
 
 		m_pVisibleWebWnd = nullptr;
@@ -435,14 +435,17 @@ namespace Web {
 			g_pHubble->m_mapBrowserWnd.erase(it);
 		}
 
-		if ((g_pHubble->m_hMainWnd == g_pHubble->m_hHostWnd && g_pHubble->m_mapBrowserWnd.size() == 1)|| 
+		if ((g_pHubble->m_hMainWnd == g_pHubble->m_hHostWnd && g_pHubble->m_mapBrowserWnd.size() == 1) ||
 			g_pHubble->m_hHostBrowserWnd == m_hWnd)
 		{
-			g_pHubble->m_bChromeNeedClosed = true;
-			for (auto it : g_pHubble->m_mapBrowserWnd)
+			if (g_pHubble->m_hHostBrowserWnd == m_hWnd)
 			{
-				if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
-					((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				g_pHubble->m_bChromeNeedClosed = true;
+				for (auto it : g_pHubble->m_mapBrowserWnd)
+				{
+					if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
+						((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				}
 			}
 		}
 
