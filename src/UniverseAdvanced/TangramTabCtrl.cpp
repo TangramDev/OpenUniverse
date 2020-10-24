@@ -114,7 +114,7 @@ void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	else
 	{
-		CString strXml = _T("<tangram><layout><g name=\"start\" gridtype=\"nucleus\" /></layout></tangram>"); 
+		CString strXml = _T("<tangram><layout><grid name=\"start\" gridtype=\"nucleus\" /></layout></tangram>"); 
 		m_pHubbleTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pGrid);
 	}
 

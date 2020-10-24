@@ -138,7 +138,7 @@ CHubble::CHubble()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><layout><g name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
+	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
@@ -2081,7 +2081,7 @@ IGalaxy* CHubble::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 				pDocTemplate->m_strClientKey = _T("default");
 			strKey = pDocTemplate->m_strClientKey;
 		}
-		str.Format(_T("<%s><layout><g name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
+		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		if (pDocTemplate == nullptr && pGrid)
 		{
@@ -2189,7 +2189,7 @@ IGrid* CHubble::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 		strPath += NodeTag + _T(".nodexml");
 		if (::PathFileExists(strPath) == false)
 		{
-			CString strXml = _T("<nodexml><layout><g name='StartNode' /></layout></nodexml>");
+			CString strXml = _T("<nodexml><layout><grid name='StartNode' /></layout></nodexml>");
 			CTangramXmlParse m_Parse;
 			m_Parse.LoadXml(strXml);
 			m_Parse.SaveFile(strPath);
@@ -2218,7 +2218,7 @@ IGalaxyCluster* CHubble::Observe(HWND hGalaxy, CString strName, CString strKey)
 			pGalaxy = it2->second;
 		IGrid* pGrid = nullptr;
 		CString str = _T("");
-		str.Format(_T("<default><layout><g name='%s' /></layout></default>"), strName);
+		str.Format(_T("<default><layout><grid name='%s' /></layout></default>"), strName);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
 		//VARIANT_BOOL bNewVersion;
 		//pGalaxyCluster->get_NewVersion(&bNewVersion);
@@ -4717,7 +4717,7 @@ STDMETHODIMP CHubble::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hWnd), CComBSTR(L"default"), &pGalaxy);
 		if (pGalaxy)
 		{
-			return pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L"<default><layout><g name=\"Start\" /></layout></default>"), ppGrid);
+			return pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L"<default><layout><grid name=\"Start\" /></layout></default>"), ppGrid);
 		}
 	}
 	return S_FALSE;
@@ -4822,11 +4822,11 @@ void CHubbleDocTemplate::InitXmlData()
 				}
 				else
 				{
-					CString strXml = _T("<HubbleDocTemplate><mdiclient><layout><g name='mdiclient'/></layout></mdiclient></HubbleDocTemplate>");
+					CString strXml = _T("<HubbleDocTemplate><mdiclient><layout><grid name='mdiclient'/></layout></mdiclient></HubbleDocTemplate>");
 					if (m_Parse.LoadXml(strXml))
 					{
 						m_Parse.SaveFile(strPath);
-						m_mapXml[_T("mdiclient")] = _T("<mdiclient><layout><g name='mdiclient'/></layout></mdiclient>");
+						m_mapXml[_T("mdiclient")] = _T("<mdiclient><layout><grid name='mdiclient'/></layout></mdiclient>");
 					}
 				}
 			}
@@ -5365,7 +5365,7 @@ STDMETHODIMP CHubble::ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrK
 							CGrid* _pGrid = (CGrid*)pGrid;
 							CString strXml = _pGrid->m_pGridShareData->m_pHubbleParse->xml();
 							strXml.Replace(_T("/><"), _T("/>\r\n<"));
-							strXml.Replace(_T("/>"), _T("></g>"));
+							strXml.Replace(_T("/>"), _T("></grid>"));
 							CString s = _T("");
 							s.Format(_T("<%s>%s</%s>"), it1.second->m_strGalaxyName, strXml, it1.second->m_strGalaxyName);
 							_strXml += s;

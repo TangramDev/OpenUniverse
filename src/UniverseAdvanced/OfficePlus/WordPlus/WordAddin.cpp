@@ -102,7 +102,7 @@ namespace OfficePlus
 					if (it != pWordDoc->m_mapDocUIInfo.end())
 						strXml = it->second;
 					else
-						strXml = _T("<Document><layout><g name=\"Start\" gridtype=\"nucleus\"/></layout></Document>");
+						strXml = _T("<Document><layout><grid name=\"Start\" gridtype=\"nucleus\"/></layout></Document>");
 					IGrid* pGrid = nullptr;
 					pWordDoc->m_pGalaxy->Observe(CComBSTR(L"Default"), strXml.AllocSysString(), &pGrid);
 					CGrid* _pGrid = (CGrid*)pGrid;
@@ -569,7 +569,7 @@ namespace OfficePlus
 						CGrid* pGrid = pGalaxy->m_pWorkGrid;
 						if (pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 						{
-							CString strXml = _T("<documentui><layout><g name=\"Start\" /></layout></documentui>");
+							CString strXml = _T("<documentui><layout><grid name=\"Start\" /></layout></documentui>");
 							IGrid* pDesignNode = nullptr;
 							pGalaxy->Observe(CComBSTR(L"default-inDesigning"), CComBSTR(strXml), &pDesignNode);
 						}
@@ -600,7 +600,7 @@ namespace OfficePlus
 					if (it != pWnd->m_pWordPlusDoc->m_mapDocUIInfo.end())
 						strXml = it->second;
 					else
-						strXml = _T("<taskpaneui><layout><g name=\"Start\" /></layout></taskpaneui>");
+						strXml = _T("<taskpaneui><layout><grid name=\"Start\" /></layout></taskpaneui>");
 					if (strXml != _T(""))
 					{
 						CTangramXmlParse m_Parse;

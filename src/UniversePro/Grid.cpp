@@ -1974,7 +1974,7 @@ STDMETHODIMP CGrid::get_DocXml(BSTR * pVal)
 	g_pHubble->UpdateGrid(m_pRootObj);
 	CString strXml = m_pGridShareData->m_pHubbleParse->xml();
 	strXml.Replace(_T("/><"), _T("/>\r\n<"));
-	strXml.Replace(_T("/>"), _T("></g>"));
+	strXml.Replace(_T("/>"), _T("></grid>"));
 	*pVal = strXml.AllocSysString();
 	strXml.ReleaseBuffer();
 

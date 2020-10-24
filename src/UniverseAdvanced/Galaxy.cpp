@@ -288,7 +288,7 @@ void CUniverseMDIMain::OnCreateDoc(CString strDocData)
 			{
 				_strKey += _T("default");
 				_strClientKey += _T("default");
-				strXml = _T("<default><layout><g name=\"Start\" =\"nucleus\"/></layout></default>");
+				strXml = _T("<default><layout><grid name=\"Start\" =\"nucleus\"/></layout></default>");
 			}
 		}
 		CUniverseMDIChild* pWnd = g_pHubble->m_pActiveMDIChildWnd;
@@ -1627,11 +1627,11 @@ LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			CString strXml = _T("");
 			int nPos = m_strBKID.Find(_T(":"));
 			if (nPos == -1)
-				strXml.Format(_T("<mdiclient><layout><g name=\"mdiclient\" gridtype=\"clrctrl\" objid=\"%s\" /></layout></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><layout><grid name=\"mdiclient\" gridtype=\"clrctrl\" objid=\"%s\" /></layout></mdiclient>"), m_strBKID);
 			else
 			{
 				m_strBKID = m_strBKID.Mid(nPos + 1);
-				strXml.Format(_T("<mdiclient><layout><g name='mdiclient' gridtype='' url='%s' /></layout></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><layout><grid name='mdiclient' gridtype='' url='%s' /></layout></mdiclient>"), m_strBKID);
 			}
 			IGrid* pGrid = nullptr;
 			pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pGrid);
@@ -2712,7 +2712,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 						if (strXml == _T(""))
 							strXml = _strXml;
 						if (strXml == _T(""))
-							strXml = _T("<default><layout><g name=\"Start\" /></layout></default>");;
+							strXml = _T("<default><layout><grid name=\"Start\" /></layout></default>");;
 					}
 					else
 						strXml = _strXml;
@@ -3517,7 +3517,7 @@ STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 	CString strRootName = OLE2T(bstrRootName);
 	if (strRootName == _T(""))
 		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><layout><g name=\"Start\"/></layout></Default>");
+	CString strXmlData = _T("<Default><layout><grid name=\"Start\"/></layout></Default>");
 	CString strName = _T("");
 	CString strXml = _T("");
 

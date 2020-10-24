@@ -89,7 +89,7 @@ namespace OfficePlus
 									CString strXml = _T("");
 									CString strName = m_strName;
 									strName.Replace(_T(" "),_T("_"));
-									strXml.Format(_T("<%s><layout><g name=\"Start\" /></layout></%s>"), strName, strName);
+									strXml.Format(_T("<%s><layout><grid name=\"Start\" /></layout></%s>"), strName, strName);
 									pOutLookPageWnd->m_strXml =strXml;
 									CComQIPtr<MSForm::_UserForm> pForm(pItem);
 									pOutLookPageWnd->m_pForm = pForm.p;
