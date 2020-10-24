@@ -2813,7 +2813,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 
 	m_bObserve = false;
 
-	//HostPosChanged();
+	HostPosChanged();
 	//Add 20200218
 	if (m_pBindingGrid)
 	{

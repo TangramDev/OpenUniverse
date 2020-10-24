@@ -713,7 +713,7 @@ namespace Web {
 		if (::IsWindowVisible(m_hWnd))
 		{
 			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
+			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		}
 	}
 
