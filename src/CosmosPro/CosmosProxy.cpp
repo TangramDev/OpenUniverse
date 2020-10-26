@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.8							*
+*					Open Universe - version 1.0.1.10							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1889,16 +1889,32 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 
 						if (pPage)
 						{
-							thisForm->ShowInTaskbar = false;
 							int nModel = m_Parse.attrInt(_T("model"), 0);
 							::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
-							if (nModel == 1)
+							//thisForm->ShowInTaskbar = false;
+							::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
+							switch (nModel)
 							{
+							case 1:
+								thisForm->ShowInTaskbar = false;
 								thisForm->ShowDialog();
 								thisForm->StartPosition = FormStartPosition::CenterScreen;
+								break;
+							case 0:
+							case 2:
+								thisForm->StartPosition = FormStartPosition::CenterParent;
+								thisForm->WindowState = FormWindowState::Minimized;
+								if (nModel)
+									thisForm->Show(pPage);
+								else
+								{
+									thisForm->Show();
+									::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 0, 0);
+								}
+
+								thisForm->WindowState = FormWindowState::Normal;
+								break;
 							}
-							else
-								thisForm->Show(pPage);
 						}
 						else
 							thisForm->Show();

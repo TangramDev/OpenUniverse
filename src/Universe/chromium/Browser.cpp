@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.0.1.8								*
+*					Open Universe - version 1.0.1.10							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -108,7 +108,7 @@ namespace Web {
 			if (::IsChild(hWnd, hExtendWnd))
 				::SetParent(hExtendWnd, m_hWnd);
 
-			::SetWindowPos(hExtendWnd, HWND_BOTTOM,
+			::SetWindowPos(hExtendWnd, m_hDrawWnd,
 				rc.left,
 				nTopFix * m_fdevice_scale_factor,
 				rc.right * m_fdevice_scale_factor,
@@ -162,11 +162,13 @@ namespace Web {
 			return 0;
 		}
 
+		HWND hActive = NULL;
+		hActive = m_pBrowser->GetActiveWebContentWnd();
 		if (!::IsWindowVisible(m_pVisibleWebWnd->m_hWnd))
 		{
 			if (m_pVisibleWebWnd->m_hExtendWnd)
 				::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_pVisibleWebWnd->m_hWnd);
-			auto it = g_pHubble->m_mapHtmlWnd.find(m_pBrowser->GetActiveWebContentWnd());
+			auto it = g_pHubble->m_mapHtmlWnd.find(hActive);
 			if (it != g_pHubble->m_mapHtmlWnd.end())
 			{
 				m_pVisibleWebWnd = (CWebPage*)it->second;

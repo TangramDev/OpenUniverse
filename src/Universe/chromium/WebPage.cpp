@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.8								*
+*					Open Universe - version 1.0.1.10							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -62,6 +62,7 @@ namespace Web {
 			g_pHubble->m_hActiveWnd = nullptr;
 			LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 20190331, 1);
+			m_pChromeRenderFrameHost->ShowWebPage(true);
 			return lRes;
 		}
 		else
@@ -201,6 +202,12 @@ namespace Web {
 			}
 		}
 		break;
+		case 20201026:
+		{
+			HWND hWnd = (HWND)lParam;
+			m_vSubForm.push_back(hWnd);
+		}
+		break;
 		}
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
@@ -327,7 +334,10 @@ namespace Web {
 		{
 			::DestroyWindow(m_hExtendWnd);
 		}
-
+		for (auto it : m_vSubForm)
+		{
+			::DestroyWindow(it);
+		}
 		if (g_pHubble->m_pCLRProxy)
 			g_pHubble->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CWebPageImpl*)this, (IWebPage*)this, 1);
 
@@ -523,6 +533,16 @@ namespace Web {
 				}
 			}
 		}
+		CBrowser* pBrowserWnd = nullptr;
+		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+		if (it != g_pHubble->m_mapBrowserWnd.end())
+		{
+			pBrowserWnd = (CBrowser*)it->second;
+			HWND hActive = NULL;
+			hActive = pBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
+			if (hActive != m_hWnd)
+				::ShowWindow(m_hWnd, SW_HIDE);
+		}
 		if (::IsWindowVisible(m_hWnd))
 		{
 			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
@@ -534,6 +554,9 @@ namespace Web {
 	{
 		if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
 		{
+			//m_strCurKey = strParam1;
+			//m_strCurXml = strParam2;
+			//::PostMessage(m_hWnd, WM_COSMOSMSG, 20201013, 0);
 			CustomizedDOMElement(strParam1, strParam2);
 		}
 		else if (strId.CompareNoCase(_T("AGGREGATED_MESSAGE")) == 0)

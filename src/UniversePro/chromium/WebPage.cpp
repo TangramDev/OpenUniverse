@@ -1,5 +1,5 @@
 /********************************************************************************
- *					Open Universe - version 1.0.1.8
+ *					Open Universe - version 1.0.1.10
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -279,6 +279,12 @@ namespace Web {
 			SendChromeIPCMessage(_T("VS_EVENT_SOLUTION"), strSol, _strPrj, strPrj, strType, s1);
 		}
 		break;
+		case 20201026:
+		{
+			HWND hWnd = (HWND)lParam;
+			m_vSubForm.push_back(hWnd);
+		}
+		break;
 		}
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
@@ -405,6 +411,10 @@ namespace Web {
 		if (m_hExtendWnd)
 		{
 			::DestroyWindow(m_hExtendWnd);
+		}
+		for (auto it : m_vSubForm)
+		{
+			::DestroyWindow(it);
 		}
 
 		if (g_pHubble->m_pCLRProxy)
@@ -709,6 +719,16 @@ namespace Web {
 					}
 				}
 			}
+		}
+		CBrowser* pBrowserWnd = nullptr;
+		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+		if (it != g_pHubble->m_mapBrowserWnd.end())
+		{
+			pBrowserWnd = (CBrowser*)it->second;
+			HWND hActive = NULL;
+			hActive = pBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
+			if (hActive != m_hWnd)
+				::ShowWindow(m_hWnd, SW_HIDE);
 		}
 		if (::IsWindowVisible(m_hWnd))
 		{

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.8								*
+*					Open Universe - version 1.0.1.10							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -51,7 +51,7 @@ namespace Web
 		map<CString, CString>				m_mapUserControlsInfo;
 		map<HWND, CWinForm*>				m_mapWinForm;
 		map<HWND, CWinForm*>				m_mapSubWinForm;
-
+		vector<HWND>						m_vSubForm;
 		BEGIN_MSG_MAP(CWebPage)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 			MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
