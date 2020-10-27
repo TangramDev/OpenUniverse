@@ -1018,7 +1018,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				::ShowWindow(hPWnd, SW_SHOW);
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
-				m_pWebBrowser->m_heightfix = 12;
+				m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 6;
 				//::ShowWindow(hPWnd, SW_SHOW);
 			}
 		}

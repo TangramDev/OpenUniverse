@@ -402,6 +402,23 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 
 LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 {
+	//if (wParam && lParam == 20201028)
+	//{
+	//	HWND hPWnd = (HWND)wParam;
+	//	if (::IsWindow(hPWnd))
+	//	{
+	//		auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
+	//		if (it != g_pHubble->m_mapBrowserWnd.end())
+	//		{
+	//			m_pGrid->m_pWebBrowser = (CBrowser*)it->second;
+	//			::SetParent(hPWnd, m_hWnd);
+	//			m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = m_pGrid;
+	//			m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pGrid->m_pWebBrowser;
+	//			m_pGrid->m_pWebBrowser->m_heightfix = 12;
+	//		}
+	//		return -1;
+	//	}
+	//}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
 		switch (lParam)

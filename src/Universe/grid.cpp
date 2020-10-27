@@ -808,9 +808,11 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	if (m_nViewType == BlankView && m_pHostParse != nullptr)
 	{
 		CString _strURL = m_pHostParse->attr(_T("url"), _T(""));
-		HWND hPWnd = NULL;
+		HWND hPWnd = g_pHubble->m_hHostBrowserWnd; 
+
 		if(_strURL ==_T("host"))
 		{ 
+			//auto t = create_task
 			m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
 			if (g_pHubble->m_hTempBrowserWnd)
 			{
@@ -826,20 +828,16 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			{
 				hPWnd = ::GetParent(g_pHubble->m_pHtmlWndCreated->m_hWnd);
 			}
+
 			g_pHubble->m_hParent = NULL;
 			auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
 			if (it != g_pHubble->m_mapBrowserWnd.end())
 			{
 				m_pWebBrowser = (CBrowser*)it->second;
-				::ShowWindow(hPWnd, SW_HIDE);
-				::MoveWindow(hPWnd, 0, 0, 0, 0, false);
-				((CGridHelper*)m_pHostWnd)->m_hFormWnd = hPWnd;
 				::SetParent(hPWnd, hWnd);
-				::ShowWindow(hPWnd, SW_SHOW);
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
-				m_pWebBrowser->m_heightfix = 12;
-				//::ShowWindow(hPWnd, SW_SHOW);
+				m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd)?12:6;
 			}
 		}
 		//if(_strURL ==_T("host"))
@@ -856,42 +854,45 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		//		m_pWebBrowser->m_heightfix = 12;
 		//	}
 		//}
-		if (m_pWebBrowser == nullptr && _strURL != _T(""))
+		else
 		{
-			_strURL += _T("|");
-			CString s = _T("");
-			int nPos = _strURL.Find(_T("|"));
-			while (nPos != -1) {
-				CString strURL = _strURL.Left(nPos);
-				int nPos2 = strURL.Find(_T(":"));
-				if (nPos2 != -1)
-				{
-					CString strURLHeader = strURL.Left(nPos2);
-					if (strURLHeader.CompareNoCase(_T("host")) == 0)
+			if (m_pWebBrowser == nullptr && _strURL != _T(""))
+			{
+				_strURL += _T("|");
+				CString s = _T("");
+				int nPos = _strURL.Find(_T("|"));
+				while (nPos != -1) {
+					CString strURL = _strURL.Left(nPos);
+					int nPos2 = strURL.Find(_T(":"));
+					if (nPos2 != -1)
 					{
-						strURL = g_pHubble->m_strAppPath + strURL.Mid(nPos2 + 1);
+						CString strURLHeader = strURL.Left(nPos2);
+						if (strURLHeader.CompareNoCase(_T("host")) == 0)
+						{
+							strURL = g_pHubble->m_strAppPath + strURL.Mid(nPos2 + 1);
+						}
+					}
+					s += strURL;
+					s += _T("|");
+					_strURL = _strURL.Mid(nPos + 1);
+					nPos = _strURL.Find(_T("|"));
+				}
+
+				if (g_pHubble->m_pBrowserFactory)
+				{
+					HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, s);
+					((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+					g_pHubble->m_hParent = NULL;
+					auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
+					if (it != g_pHubble->m_mapBrowserWnd.end())
+					{
+						m_pWebBrowser = (CBrowser*)it->second;
 					}
 				}
-				s += strURL;
-				s += _T("|");
-				_strURL = _strURL.Mid(nPos + 1);
-				nPos = _strURL.Find(_T("|"));
-			}
-
-			if (g_pHubble->m_pBrowserFactory)
-			{
-				HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, s);
-				((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
-				g_pHubble->m_hParent = NULL;
-				auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
-				if (it != g_pHubble->m_mapBrowserWnd.end())
+				else
 				{
-					m_pWebBrowser = (CBrowser*)it->second;
+					g_pHubble->m_mapGridForHtml[this] = s;
 				}
-			}
-			else
-			{
-				g_pHubble->m_mapGridForHtml[this] = s;
 			}
 		}
 	}
