@@ -66,7 +66,6 @@ namespace Web
 		map<HWND, CWinForm*>				m_mapWinForm;
 		map<HWND, CWinForm*>				m_mapSubWinForm;
 		map<CString, CMDIChildFormInfo*>	m_mapChildFormsInfo;
-		vector<HWND>						m_vSubForm;
 
 		BEGIN_MSG_MAP(CWebPage)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)

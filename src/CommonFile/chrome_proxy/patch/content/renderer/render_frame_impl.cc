@@ -6962,15 +6962,15 @@ void RenderFrameImpl::OnHubbleMessage(long messageindex,
                                        std::wstring param3,
                                        std::wstring param4,
                                        std::wstring param5) {
-  blink::Hubble* pTangram = (blink::Hubble*)GetWebFrame()->GetHubble();
-  if (pTangram) {
+  blink::Hubble* pHubble = (blink::Hubble*)GetWebFrame()->GetHubble();
+  if (pHubble) {
     AtomicString strEventID = blink::event_type_names::kHubble;
     switch (messageindex) {
       case IPC_MDIWINFORM_ACTIVEMDICHILD:
         strEventID = blink::event_type_names::kMdichildactivate;
         break;
     }
-    pTangram->DispatchEvent(*blink::HubbleEvent::Create(
+    pHubble->DispatchEvent(*blink::HubbleEvent::Create(
         strEventID, String(id.c_str()), String(param1.c_str()),
         String(param2.c_str()), String(param3.c_str()), String(param4.c_str()),
         String(param5.c_str()), 0, 0, nullptr));
@@ -6994,11 +6994,11 @@ void RenderFrameImpl::OnHubbleRendererIPCMsg(
     strSession = itID->second;
   }
 
-  blink::Hubble* pTangram = (blink::Hubble*)GetWebFrame()->GetHubble();
+  blink::Hubble* pHubble = (blink::Hubble*)GetWebFrame()->GetHubble();
   blink::HubbleXobj* var = nullptr;
 
-  auto itObj = pTangram->mapCloudSession_.find(String(strSession.c_str()));
-  if (itObj != pTangram->mapCloudSession_.end())
+  auto itObj = pHubble->mapCloudSession_.find(String(strSession.c_str()));
+  if (itObj != pHubble->mapCloudSession_.end())
     var = itObj->value;
   else {
     auto itXobj = mapint64.find(L"innerXobj");
@@ -7007,7 +7007,7 @@ void RenderFrameImpl::OnHubbleRendererIPCMsg(
     } else {
       var = blink::HubbleXobj::Create();
       var->id_ = strSession.c_str();
-      var->hubble_ = pTangram;
+      var->hubble_ = pHubble;
       var->m_pRenderframeImpl = this;
     }
   }
@@ -7025,11 +7025,11 @@ void RenderFrameImpl::OnHubbleRendererIPCMsg(
   }
   if (strID == L"BindCLRObject") {
     if (strSession != L"") {
-      pTangram->mapCloudSession_.insert(String(strSession.c_str()), var);
+      pHubble->mapCloudSession_.insert(String(strSession.c_str()), var);
       mapString[L"BindState"] = L"OK";
       Send(new TangramHostIPCMsg(routing_id_, mapString, mapLong, mapint64,
                                  mapFloat));
-      pTangram->DispatchEvent(*blink::HubbleEvent::Create(
+      pHubble->DispatchEvent(*blink::HubbleEvent::Create(
           blink::event_type_names::kBindclrobject, var));
       return;
     }
@@ -7050,28 +7050,28 @@ void RenderFrameImpl::OnHubbleRendererIPCMsg(
       blink::HubbleWinform* form = nullptr;
       auto itForm = mapint64.find(L"form");
       if (itForm != mapint64.end()) {
-        auto it = pTangram->m_mapWinForm.find(itForm->second);
-        if (it != pTangram->m_mapWinForm.end()) {
+        auto it = pHubble->m_mapWinForm.find(itForm->second);
+        if (it != pHubble->m_mapWinForm.end()) {
           form = it->value;
           itForm = mapint64.find(L"formhandle");
           if (itForm != mapint64.end()) {
-            pTangram->m_mapWinForm.erase(it);
+            pHubble->m_mapWinForm.erase(it);
             form->handle_ = itForm->second;
-            pTangram->m_mapWinForm.insert(itForm->second, form);
+            pHubble->m_mapWinForm.insert(itForm->second, form);
           }
           if (form) {
-            pTangram->invokeWinFormCreatedCallback(form);
-            pTangram->DispatchEvent(*blink::HubbleEvent::Create(
+            pHubble->invokeWinFormCreatedCallback(form);
+            pHubble->DispatchEvent(*blink::HubbleEvent::Create(
                 blink::event_type_names::kWinformcreated, var));
           }
         }
       } else {
         auto itForm2 = mapint64.find(L"formhandle");
         if (itForm2 != mapint64.end()) {
-          form = pTangram->newWinForm(itForm2->second, var);
+          form = pHubble->newWinForm(itForm2->second, var);
           // form->handle_ = itForm2->second;
-          // pTangram->m_mapWinForm.insert(itForm2->second, form);
-          pTangram->DispatchEvent(*blink::HubbleEvent::Create(
+          // pHubble->m_mapWinForm.insert(itForm2->second, form);
+          pHubble->DispatchEvent(*blink::HubbleEvent::Create(
               blink::event_type_names::kWinformcreated, var));
         }
       }
@@ -7079,16 +7079,16 @@ void RenderFrameImpl::OnHubbleRendererIPCMsg(
     }
   }
   if (strID == L"Tangram_WndGrid_Created") {
-    pTangram->createHubbleNode(var);
+    pHubble->createHubbleNode(var);
     // return;
   }
   if (strID == L"OPEN_XML_SPLITTER") {
     auto itnode = mapint64.find(L"gridobjhandle");
-    auto itNode = pTangram->m_mapHubbleNode.find(itnode->second);
-    if (itNode != pTangram->m_mapHubbleNode.end()) {
+    auto itNode = pHubble->m_mapHubbleNode.find(itnode->second);
+    if (itNode != pHubble->m_mapHubbleNode.end()) {
       auto itreturnnode = mapint64.find(L"openxmlreturnhandle");
-      auto itNodeRet = pTangram->m_mapHubbleNode.find(itreturnnode->second);
-      if (itNodeRet != pTangram->m_mapHubbleNode.end()) {
+      auto itNodeRet = pHubble->m_mapHubbleNode.find(itreturnnode->second);
+      if (itNodeRet != pHubble->m_mapHubbleNode.end()) {
         auto itCallback = mapString.find(L"opencallbackid");
         if (itCallback != mapString.end()) {
           itNode->value->invokeCallback(itCallback->second,
@@ -7098,7 +7098,7 @@ void RenderFrameImpl::OnHubbleRendererIPCMsg(
     }
   }
 
-  pTangram->DispatchEvent(*blink::HubbleEvent::Create(
+  pHubble->DispatchEvent(*blink::HubbleEvent::Create(
       blink::event_type_names::kHubblemessage, var));
 }
 

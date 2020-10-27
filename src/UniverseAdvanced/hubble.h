@@ -228,6 +228,7 @@ public:
 	int										m_nOfficeDocsSheet;
 	int										m_nTangramNodeCommonData;
 #endif
+	HWND									m_hTempBrowserWnd = NULL;
 	HHOOK									m_hCBTHook;
 	HHOOK									m_hForegroundIdleHook;
 	TCHAR									m_szBuffer[MAX_PATH];

@@ -989,20 +989,54 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	if (m_nViewType == BlankView && m_pHostParse != nullptr)
 	{
 		CString _strURL = m_pHostParse->attr(_T("url"), _T(""));
-		if(_strURL ==_T("host"))
-		{ 
+		HWND hPWnd = NULL;
+		if (_strURL == _T("host"))
+		{
 			m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
-			::SetParent(g_pHubble->m_hHostBrowserWnd, hWnd);
+			if (g_pHubble->m_hTempBrowserWnd)
+			{
+				hPWnd = g_pHubble->m_hTempBrowserWnd;
+				g_pHubble->m_hTempBrowserWnd = NULL;
+			}
+			else if (g_pHubble->m_pHtmlWndCreated == nullptr)
+			{
+				hPWnd = g_pHubble->m_hHostBrowserWnd;
+				::SetParent(hPWnd, hWnd);
+			}
+			else
+			{
+				hPWnd = ::GetParent(g_pHubble->m_pHtmlWndCreated->m_hWnd);
+			}
 			g_pHubble->m_hParent = NULL;
-			auto it = g_pHubble->m_mapBrowserWnd.find(g_pHubble->m_hHostBrowserWnd);
+			auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
 			if (it != g_pHubble->m_mapBrowserWnd.end())
 			{
 				m_pWebBrowser = (CBrowser*)it->second;
+				::ShowWindow(hPWnd, SW_HIDE);
+				::MoveWindow(hPWnd, 0, 0, 0, 0, false);
+				((CGridHelper*)m_pHostWnd)->m_hFormWnd = hPWnd;
+				::SetParent(hPWnd, hWnd);
+				::ShowWindow(hPWnd, SW_SHOW);
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = 12;
+				//::ShowWindow(hPWnd, SW_SHOW);
 			}
 		}
+		//if(_strURL ==_T("host"))
+		//{ 
+		//	m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
+		//	::SetParent(g_pHubble->m_hHostBrowserWnd, hWnd);
+		//	g_pHubble->m_hParent = NULL;
+		//	auto it = g_pHubble->m_mapBrowserWnd.find(g_pHubble->m_hHostBrowserWnd);
+		//	if (it != g_pHubble->m_mapBrowserWnd.end())
+		//	{
+		//		m_pWebBrowser = (CBrowser*)it->second;
+		//		m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
+		//		m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
+		//		m_pWebBrowser->m_heightfix = 12;
+		//	}
+		//}
 		if (m_pWebBrowser == nullptr && _strURL != _T(""))
 		{
 			_strURL += _T("|");

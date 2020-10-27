@@ -386,8 +386,8 @@ ChromeBrowserFactory::ChromeBrowserFactory() {
         _pHubbleFunction =
             (GetHubbleImpl)GetProcAddress(hModule, "GetHubbleImpl");
         if (_pHubbleFunction != NULL) {
-          IHubble* pTangram = nullptr;
-          g_pHubbleImpl = _pHubbleFunction(&pTangram);
+          IHubble* pHubble = nullptr;
+          g_pHubbleImpl = _pHubbleFunction(&pHubble);
         }
       }
   }

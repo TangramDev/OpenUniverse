@@ -1151,7 +1151,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								else
 								{
 									thisForm->Show();
-									::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 0, 0);
 								}
 
 								thisForm->WindowState = FormWindowState::Normal;

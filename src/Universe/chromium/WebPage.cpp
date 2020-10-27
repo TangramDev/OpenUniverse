@@ -202,12 +202,6 @@ namespace Web {
 			}
 		}
 		break;
-		case 20201026:
-		{
-			HWND hWnd = (HWND)lParam;
-			m_vSubForm.push_back(hWnd);
-		}
-		break;
 		}
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
@@ -334,9 +328,9 @@ namespace Web {
 		{
 			::DestroyWindow(m_hExtendWnd);
 		}
-		for (auto it : m_vSubForm)
+		for (auto it : m_mapSubWinForm)
 		{
-			::DestroyWindow(it);
+			::DestroyWindow(it.second->m_hWnd);
 		}
 		if (g_pHubble->m_pCLRProxy)
 			g_pHubble->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CWebPageImpl*)this, (IWebPage*)this, 1);
@@ -538,9 +532,7 @@ namespace Web {
 		if (it != g_pHubble->m_mapBrowserWnd.end())
 		{
 			pBrowserWnd = (CBrowser*)it->second;
-			HWND hActive = NULL;
-			hActive = pBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
-			if (hActive != m_hWnd)
+			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
 				::ShowWindow(m_hWnd, SW_HIDE);
 		}
 		if (::IsWindowVisible(m_hWnd))
@@ -1103,7 +1095,13 @@ namespace Web {
 			{
 				if (nPos > 0x000a || nPos == 0)
 				{
-					g_pHubble->m_pBrowserFactory->CreateBrowser(0, strUrl);
+					if (nPos == 200)
+					{
+						g_pHubble->m_hTempBrowserWnd = g_pHubble->m_pBrowserFactory->CreateBrowser(g_pHubble->m_hChildHostWnd, strUrl);
+						::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE);
+					}
+					else
+						g_pHubble->m_pBrowserFactory->CreateBrowser(0, strUrl);
 				}
 				else
 				{

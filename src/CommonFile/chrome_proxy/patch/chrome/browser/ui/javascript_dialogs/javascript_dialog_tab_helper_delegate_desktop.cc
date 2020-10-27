@@ -83,10 +83,41 @@ bool JavaScriptDialogTabHelperDelegateDesktop::IsWebContentsForemost() {
   }
   if (browser2 != nullptr)
     browser = browser2;
+  if (browser == nullptr) {
+  }
   // end Add by TangramTeam
   DCHECK(browser);
   return browser->tab_strip_model()->GetActiveWebContents() == web_contents_;
 }
+// bool JavaScriptDialogTabHelperDelegateDesktop::IsWebContentsForemost() {
+//  Browser* browser = BrowserList::GetInstance()->GetLastActive();
+//  // begin Add by TangramTeam
+//  if (browser == nullptr)
+//  {
+//      content::WebContentsImpl* pWebContentsImpl =
+//      static_cast<content::WebContentsImpl*>(web_contents_); if
+//      (pWebContentsImpl)
+//      {
+//          content::RenderFrameHostImpl* pRenderFrameHostImpl =
+//          pWebContentsImpl->GetMainFrame(); if(pRenderFrameHostImpl)
+//          {
+//              content::RenderWidgetHostView* view =
+//              pWebContentsImpl->GetTopLevelRenderWidgetHostView(); if (view)
+//              {
+//                  HWND hwnd = views::HWNDForNativeView(view->GetNativeView());
+//                  if (::IsWindow(hwnd))
+//                  {
+//                      browser = (Browser*)::SendMessage(hwnd, WM_COSMOSMSG,
+//                      1992, 20200116);
+//                  }
+//              }
+//          }
+//      }
+//  }
+//  // end Add by TangramTeam
+//  DCHECK(browser);
+//  return browser->tab_strip_model()->GetActiveWebContents() == web_contents_;
+//}
 
 bool JavaScriptDialogTabHelperDelegateDesktop::IsApp() {
   Browser* browser = chrome::FindBrowserWithWebContents(web_contents_);

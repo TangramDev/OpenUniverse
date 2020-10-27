@@ -11,7 +11,7 @@
 
     <script type="text/javascript">
 
-        hubble.onGridCreated = function (e) {
+        apppage.onGridCreated = function (e) {
             console.log("grid " + e.grid.name + " is created\n" + "grid Handle:" + e.grid.handle.toString(16) + "\nNode ObjID:" + e.grid.objtype);
             switch (e.grid.name) {
                 case "usercontrol1":

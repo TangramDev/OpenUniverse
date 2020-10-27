@@ -1891,8 +1891,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							int nModel = m_Parse.attrInt(_T("model"), 0);
 							::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
-							//thisForm->ShowInTaskbar = false;
-							::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
 							switch (nModel)
 							{
 							case 1:
@@ -1909,7 +1907,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								else
 								{
 									thisForm->Show();
-									::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 0, 0);
 								}
 
 								thisForm->WindowState = FormWindowState::Normal;
