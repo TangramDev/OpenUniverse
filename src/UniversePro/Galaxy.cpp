@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.10							*
+*					Open Universe - version 1.0.1.11							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1119,30 +1119,49 @@ LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (m_bMainForm)
-	{
-		//::MessageBox(nullptr, L"", L"", MB_OK);
-	}
 	CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
-	__int64 nRet = 0;
-	CString strInfo = _T("");
-	bool bQueryonclose = false;
 	if (pSession)
 	{
+		int nCount = 0;
+		if (m_bMainForm)
+		{
+			nCount = g_pHubble->m_mapNeedQueryOnClose.size();
+			if (nCount > 1)
+			{
+
+			}
+			for (auto it : g_pHubble->m_mapNeedQueryOnClose)
+			{
+				if (it.second != this)
+				{
+
+				}
+			}
+		}
+		bool bQueryonclose = false;
 		long nQueryOnClose = pSession->GetLong(_T("queryonclose"));
 		bQueryonclose = nQueryOnClose ? true : false;
 		pSession->InsertString(_T("msgID"), _T("WINFORM_ONCLOSE"));
-		pSession->Insertint64(_T("CloseInfo"), 100);
 		pSession->SendMessage();
-	}
-	if (bQueryonclose)
-	{
-		MSG msg;
-		while (pSession->Getint64(_T("CloseInfo")) != 19921963)
+		if (bQueryonclose)
 		{
-			GetMessage(&msg, NULL, 0, 0);
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			MSG msg;
+			while (pSession->Getint64(_T("CloseInfo")) != 19921963)
+			{
+				GetMessage(&msg, NULL, 0, 0);
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+				if (pSession->Getint64(_T("CloseInfo")) == 19921965)
+				{
+					pSession->Insertint64(_T("CloseInfo"), 0);
+					return 1;
+					break;
+				}
+				else if (pSession->Getint64(_T("CloseInfo")) == 19921963)
+				{
+					break;
+				}
+			}
 		}
 	}
 	switch (m_nState)
@@ -1208,6 +1227,9 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			m_pParentHtmlWnd->m_mapSubWinForm.erase(it);
 		}
 	}
+	auto it = g_pHubble->m_mapNeedQueryOnClose.find(m_hWnd);
+	if (it != g_pHubble->m_mapNeedQueryOnClose.end())
+		g_pHubble->m_mapNeedQueryOnClose.erase(it);
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -1393,8 +1415,15 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		return (LRESULT)this;
 		break;
 	case 20201029:
-		m_bMainForm = true;
-		break;
+	{
+		if (wParam == 0)
+			m_bMainForm = true;
+		else
+		{
+			g_pHubble->m_mapNeedQueryOnClose[m_hWnd] = this;
+		}
+	}
+	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.10							*
+*					Open Universe - version 1.0.1.11							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -290,7 +290,7 @@ public:
 	map<int, IHubble*>						m_mapRemoteTangramApp;
 	map<CGrid*, CString>					m_mapGridForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
-	map<HWND, CWinForm>						m_mapNeedQueryOnClose;
+	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
 
 	BEGIN_COM_MAP(CHubble)
 		COM_INTERFACE_ENTRY(IHubble)

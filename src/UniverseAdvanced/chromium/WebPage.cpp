@@ -1,5 +1,5 @@
 /********************************************************************************
- *					Open Universe - version 1.0.1.10
+ *					Open Universe - version 1.0.1.11
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -1456,7 +1456,7 @@ namespace Web {
 					if (nPos == 200)
 					{
 						g_pHubble->m_hTempBrowserWnd = g_pHubble->m_pBrowserFactory->CreateBrowser(g_pHubble->m_hChildHostWnd, strUrl);
-						::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE);
+						//::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE);
 					}
 					else
 						g_pHubble->m_pBrowserFactory->CreateBrowser(0, strUrl);

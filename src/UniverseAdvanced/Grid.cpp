@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.10							*
+*					Open Universe - version 1.0.1.11							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1012,15 +1012,10 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			if (it != g_pHubble->m_mapBrowserWnd.end())
 			{
 				m_pWebBrowser = (CBrowser*)it->second;
-				::ShowWindow(hPWnd, SW_HIDE);
-				::MoveWindow(hPWnd, 0, 0, 0, 0, false);
-				((CGridHelper*)m_pHostWnd)->m_hFormWnd = hPWnd;
 				::SetParent(hPWnd, hWnd);
-				::ShowWindow(hPWnd, SW_SHOW);
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 6;
-				//::ShowWindow(hPWnd, SW_SHOW);
 			}
 		}
 		//if(_strURL ==_T("host"))
