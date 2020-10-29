@@ -1015,58 +1015,48 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 6;
+				::SetWindowPos(hPWnd, HWND_BOTTOM, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_DRAWFRAME);
 			}
 		}
-		//if(_strURL ==_T("host"))
-		//{ 
-		//	m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
-		//	::SetParent(g_pHubble->m_hHostBrowserWnd, hWnd);
-		//	g_pHubble->m_hParent = NULL;
-		//	auto it = g_pHubble->m_mapBrowserWnd.find(g_pHubble->m_hHostBrowserWnd);
-		//	if (it != g_pHubble->m_mapBrowserWnd.end())
-		//	{
-		//		m_pWebBrowser = (CBrowser*)it->second;
-		//		m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
-		//		m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
-		//		m_pWebBrowser->m_heightfix = 12;
-		//	}
-		//}
-		if (m_pWebBrowser == nullptr && _strURL != _T(""))
+		else
 		{
-			_strURL += _T("|");
-			CString s = _T("");
-			int nPos = _strURL.Find(_T("|"));
-			while (nPos != -1) {
-				CString strURL = _strURL.Left(nPos);
-				int nPos2 = strURL.Find(_T(":"));
-				if (nPos2 != -1)
-				{
-					CString strURLHeader = strURL.Left(nPos2);
-					if (strURLHeader.CompareNoCase(_T("host")) == 0)
+			if (m_pWebBrowser == nullptr && _strURL != _T(""))
+			{
+				_strURL += _T("|");
+				CString s = _T("");
+				int nPos = _strURL.Find(_T("|"));
+				while (nPos != -1) {
+					CString strURL = _strURL.Left(nPos);
+					int nPos2 = strURL.Find(_T(":"));
+					if (nPos2 != -1)
 					{
-						strURL = g_pHubble->m_strAppPath + strURL.Mid(nPos2 + 1);
+						CString strURLHeader = strURL.Left(nPos2);
+						if (strURLHeader.CompareNoCase(_T("host")) == 0)
+						{
+							strURL = g_pHubble->m_strAppPath + strURL.Mid(nPos2 + 1);
+						}
+					}
+					s += strURL;
+					s += _T("|");
+					_strURL = _strURL.Mid(nPos + 1);
+					nPos = _strURL.Find(_T("|"));
+				}
+
+				if (g_pHubble->m_pBrowserFactory)
+				{
+					HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, s);
+					((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+					g_pHubble->m_hParent = NULL;
+					auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
+					if (it != g_pHubble->m_mapBrowserWnd.end())
+					{
+						m_pWebBrowser = (CBrowser*)it->second;
 					}
 				}
-				s += strURL;
-				s += _T("|");
-				_strURL = _strURL.Mid(nPos + 1);
-				nPos = _strURL.Find(_T("|"));
-			}
-
-			if (g_pHubble->m_pBrowserFactory)
-			{
-				HWND hBrowser = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, s);
-				((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
-				g_pHubble->m_hParent = NULL;
-				auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
-				if (it != g_pHubble->m_mapBrowserWnd.end())
+				else
 				{
-					m_pWebBrowser = (CBrowser*)it->second;
+					g_pHubble->m_mapGridForHtml[this] = s;
 				}
-			}
-			else
-			{
-				g_pHubble->m_mapGridForHtml[this] = s;
 			}
 		}
 	}

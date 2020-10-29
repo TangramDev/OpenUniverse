@@ -57,7 +57,7 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			nCount = g_pHubble->m_mapNeedQueryOnClose.size();
 			if (nCount > 1)
 			{
-
+				pSession->InsertLong(_T("FormAppNeedClosed"),nCount);
 			}
 			for (auto it : g_pHubble->m_mapNeedQueryOnClose)
 			{
