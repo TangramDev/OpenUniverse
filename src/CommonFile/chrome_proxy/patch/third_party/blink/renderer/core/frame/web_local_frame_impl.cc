@@ -2320,7 +2320,7 @@ void WebLocalFrameImpl::CopyImageAtForTesting(
 
 // begin Add by TangramTeam
 void* WebLocalFrameImpl::GetHubble() {
-  return GetFrame()->DomWindow()->hubble();
+  return GetFrame()->DomWindow()->apppage();
 }
 // end Add by TangramTeam
 

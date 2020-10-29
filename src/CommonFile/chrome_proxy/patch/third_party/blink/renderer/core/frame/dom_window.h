@@ -133,7 +133,7 @@ class CORE_EXPORT DOMWindow : public EventTargetWithInlineData {
   InputDeviceCapabilitiesConstants* GetInputDeviceCapabilities();
 
   // begin Add by TangramTeam
-  virtual Hubble* hubble() const = 0;
+  virtual Hubble* apppage() const = 0;
   virtual HubbleApplication* application() const = 0;
   virtual HubbleUserpage* userpage() const = 0;
   virtual HubbleNtp* ntp() const = 0;

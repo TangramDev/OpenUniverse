@@ -579,6 +579,7 @@ namespace Cosmos
 		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
 		static bool WebRuntimeInit();
 		static Type^ GetType(String^ ObjID);
+		static void OnFormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e);
 	public:
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;

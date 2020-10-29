@@ -289,6 +289,8 @@ public:
 	map<__int64, CGridCollection*>			m_mapWndGridCollection;
 	map<int, IHubble*>						m_mapRemoteTangramApp;
 	map<CGrid*, CString>					m_mapGridForHtml;
+	map<CString, HWND>						m_mapSingleWndApp;
+	map<HWND, CWinForm>						m_mapNeedQueryOnClose;
 
 	BEGIN_COM_MAP(CHubble)
 		COM_INTERFACE_ENTRY(IHubble)

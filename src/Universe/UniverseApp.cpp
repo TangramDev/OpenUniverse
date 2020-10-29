@@ -915,6 +915,14 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
+				case 20201028:
+				{
+					if (g_pHubble->m_hTempBrowserWnd)
+					{
+						g_pHubble->m_hTempBrowserWnd=NULL;
+					}
+				}
+				break;
 				case 20191004:
 				{
 					if (g_pHubble->m_pCLRProxy)

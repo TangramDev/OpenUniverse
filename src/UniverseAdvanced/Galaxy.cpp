@@ -1122,6 +1122,32 @@ LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
+	if (m_bMainForm)
+	{
+		//::MessageBox(nullptr, L"", L"", MB_OK);
+	}
+	CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+	__int64 nRet = 0;
+	CString strInfo = _T("");
+	bool bQueryonclose = false;
+	if (pSession)
+	{
+		long nQueryOnClose = pSession->GetLong(_T("queryonclose"));
+		bQueryonclose = nQueryOnClose ? true : false;
+		pSession->InsertString(_T("msgID"), _T("WINFORM_ONCLOSE"));
+		pSession->Insertint64(_T("CloseInfo"), 100);
+		pSession->SendMessage();
+	}
+	if (bQueryonclose)
+	{
+		MSG msg;
+		while (pSession->Getint64(_T("CloseInfo")) != 19921963)
+		{
+			GetMessage(&msg, NULL, 0, 0);
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
 	switch (m_nState)
 	{
 	case 0:
@@ -1368,6 +1394,9 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 20190214:
 		return (LRESULT)this;
+		break;
+	case 20201029:
+		m_bMainForm = true;
 		break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);

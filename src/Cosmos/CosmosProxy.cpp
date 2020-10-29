@@ -1,3 +1,4 @@
+#include "..\CosmosMini\CosmosProxy.h"
 /********************************************************************************
 *					Open Universe - version 1.0.1.10							*
 *********************************************************************************
@@ -1075,9 +1076,12 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								strFormName = OLE2T(bstrName);
 								::SysFreeString(bstrName);
 							}
+							bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+							pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent?1:0);
 							pHubbleSession->InsertString(_T("formname"), strFormName);
 							pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
 							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+							::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
 							pHubbleSession->SendMessage();
 						}
 						else
@@ -1111,12 +1115,23 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								thisForm->Show();
 								pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
 								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+								pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+								::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
 								pHubbleSession->SendMessage();
 								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 							}
 							else
 								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
 							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+							bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+							int nMainWnd = m_Parse.attrInt(_T("IsMainHubbleWnd"), 0);
+							if (nMainWnd == 1)
+							{
+								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 0, 20201029);
+							}
+							pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+							::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
 							pHubbleSession->SendMessage();
 						}
 
@@ -1220,6 +1235,9 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 
 					pHubbleSession->Insertint64(_T("formhandle"), mainForm->Handle.ToInt64());
 					pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+					bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+					pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+					::SetWindowLongPtr((HWND)(mainForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
 
 					pHubbleSession->SendMessage();
 					theAppProxy.InitControl(mainForm, mainForm, true, &m_Parse);
@@ -2745,3 +2763,4 @@ HICON CCosmosProxy::GetAppIcon(int nIndex)
 		return (HICON)Cosmos::Hubble::m_pDefaultIcon->Handle.ToPointer();
 	}
 }
+

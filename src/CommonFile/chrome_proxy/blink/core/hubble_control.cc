@@ -85,7 +85,7 @@ namespace blink {
 
 	void HubbleControl::addEventListener(const String& eventName, V8ApplicationCallback* callback)
 	{
-		blink::Hubble* pHubble = (blink::Hubble*)DomWindow()->hubble();
+		blink::Hubble* pHubble = (blink::Hubble*)DomWindow()->apppage();
 		if (callback)
 		{
 			auto it = innerXobj_->session_.m_mapString.find(L"objID");

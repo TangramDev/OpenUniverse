@@ -286,7 +286,7 @@
 
     // begin Add by TangramTeam
     [ RuntimeEnabled = TrustedDOMTypes,
-      Replaceable ] readonly attribute Hubble hubble;
+      Replaceable ] readonly attribute Hubble apppage;
     [ RuntimeEnabled = TrustedDOMTypes,
       Replaceable ] readonly attribute HubbleApplication application;
     [ RuntimeEnabled = TrustedDOMTypes,

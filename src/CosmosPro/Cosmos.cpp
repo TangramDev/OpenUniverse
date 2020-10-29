@@ -2064,6 +2064,14 @@ namespace Cosmos
         {
             strUrls += L"|";
             strUrls = strUrls->Replace(L"||", L"|");
+            CString strPath = theApp.m_pHubbleImpl->m_strAppPath;
+
+            strUrls = strUrls->Replace(L"host:", BSTR2STRING(strPath));
+            if (ParentHandle == (IntPtr)1)
+            {
+                hPWnd = theApp.m_pHubbleImpl->m_hChildHostWnd;
+            }
+
             HWND hWnd = theApp.m_pHubbleImpl->m_pBrowserFactory->CreateBrowser(hPWnd, strUrls);
             IBrowser* pBrowser = (IBrowser*)::SendMessage(hWnd, WM_COSMOSMSG, 20190527, 0);
             auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);

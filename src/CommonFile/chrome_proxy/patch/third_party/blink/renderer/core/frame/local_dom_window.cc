@@ -313,11 +313,11 @@ void LocalDOMWindow::EnqueueDocumentEvent(Event& event, TaskType task_type) {
 }
 
 // begin Add by TangramTeam
-Hubble* LocalDOMWindow::hubble() const {
-  if (!hubble_) {
-    hubble_ = Hubble::Create(GetFrame());
+Hubble* LocalDOMWindow::apppage() const {
+  if (!apppage_) {
+    apppage_ = Hubble::Create(GetFrame());
   }
-  return hubble_.Get();
+  return apppage_.Get();
 }
 
 HubbleNtp* LocalDOMWindow::ntp() const {
@@ -468,8 +468,8 @@ MediaQueryList* LocalDOMWindow::matchMedia(const String& media) {
 
 void LocalDOMWindow::FrameDestroyed() {
   // begin Add by TangramTeam
-  if (hubble_ != nullptr) {
-    hubble()->Close();
+  if (apppage_ != nullptr) {
+    apppage()->Close();
   }
   // end Add by TangramTeam
   RemoveAllEventListeners();
@@ -500,7 +500,7 @@ void LocalDOMWindow::Reset() {
   application_cache_ = nullptr;
   trusted_types_ = nullptr;
   // begin Add by TangramTeam
-  hubble_ = nullptr;
+  apppage_ = nullptr;
   application_ = nullptr;
   userpage_ = nullptr;
   // end Add by TangramTeam
@@ -1552,9 +1552,9 @@ void LocalDOMWindow::FinishedLoading(FrameLoader::NavigationFinishState state) {
   }
 
   // begin Add by TangramTeam
-  if (hubble_.Get() == nullptr)
-    hubble();
-  if (hubble_) {
+  if (apppage_.Get() == nullptr)
+    apppage();
+  if (apppage_) {
     AtomicString extraPrefix = "";
 
     // Use a custom prefix.
@@ -1572,7 +1572,7 @@ void LocalDOMWindow::FinishedLoading(FrameLoader::NavigationFinishState state) {
       extraPrefixWithDash = extraPrefix + "-";
     }
 
-    hubble()->waitMessage();
+    apppage()->waitMessage();
 
     // Scan all define tags.
     HTMLCollection* const defineElements =
@@ -1589,19 +1589,19 @@ void LocalDOMWindow::FinishedLoading(FrameLoader::NavigationFinishState state) {
           tagName = tagName.Substring(extraPrefixWithDash.length());
         }
         String outerHTML = defineElement->OuterHTMLAsString();
-        hubble()->defineElement(tagName, outerHTML);
+        apppage()->defineElement(tagName, outerHTML);
 
         // Scan tags for specific tagName
         HTMLCollection* const elements =
             document()->getElementsByTagName(extraPrefixWithDash + tagName);
         for (Element* element : *elements) {
           String outerHTML = element->OuterHTMLAsString();
-          hubble()->renderElement(tagName, outerHTML);
+          apppage()->renderElement(tagName, outerHTML);
         }
       }
     }
 
-    hubble()->releaseMessage();
+    apppage()->releaseMessage();
   }
   // end Add by TangramTeam
 }
@@ -1743,7 +1743,7 @@ void LocalDOMWindow::Trace(blink::Visitor* visitor) {
   visitor->Trace(event_listener_observers_);
   visitor->Trace(trusted_types_);
   // begin Add by TangramTeam
-  visitor->Trace(hubble_);
+  visitor->Trace(apppage_);
   visitor->Trace(application_);
   visitor->Trace(userpage_);
   visitor->Trace(ntp_);

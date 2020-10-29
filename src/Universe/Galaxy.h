@@ -25,6 +25,7 @@ public:
 	virtual ~CWinForm(void);
 	int										m_nState;
 	BOOL									m_bMdiForm;
+	BOOL									m_bMainForm = false;
 	CString									m_strKey;
 	CString									m_strXml;
 	CString									m_strPath;

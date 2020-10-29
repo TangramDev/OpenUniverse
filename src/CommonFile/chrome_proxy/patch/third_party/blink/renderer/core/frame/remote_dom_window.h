@@ -29,7 +29,7 @@ class RemoteDOMWindow final : public DOMWindow {
   void FrameDetached();
 
   // begin Add by TangramTeam
-  Hubble* hubble() const override {
+  Hubble* apppage() const override {
     NOTREACHED();
     return nullptr;
   }

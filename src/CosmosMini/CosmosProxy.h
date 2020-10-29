@@ -120,5 +120,7 @@ private:
 	static void OnItemSelectionChanged(Object ^sender, ListViewItemSelectionChangedEventArgs ^e);
 	static void OnClick(Object ^sender, EventArgs ^e);
 	static void OnTextChanged(System::Object^ sender, System::EventArgs^ e);
+	static void OnFormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e);
+	static void OnFormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e);
 };
 

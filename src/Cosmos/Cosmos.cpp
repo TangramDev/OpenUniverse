@@ -321,6 +321,11 @@ namespace Cosmos
         return nullptr;
     }
 
+    void Hubble::OnFormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e)
+    {
+        //throw gcnew System::NotImplementedException();
+    }
+
     Form^ Hubble::MainForm::get()
     {
         return m_pMainForm;
@@ -335,6 +340,7 @@ namespace Cosmos
             {
                 theApp.m_pHubbleImpl->SetMainWnd((HWND)frm->Handle.ToPointer());
                 ::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20191004);
+                m_pMainForm->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(&OnFormClosing);
             }
         }
     }
@@ -913,6 +919,14 @@ namespace Cosmos
         {
             strUrls += L"|";
             strUrls = strUrls->Replace(L"||", L"|");
+            CString strPath = theApp.m_pHubbleImpl->m_strAppPath;
+
+            strUrls = strUrls->Replace(L"host:", BSTR2STRING(strPath));
+            if (ParentHandle == (IntPtr)1)
+            {
+                hPWnd = theApp.m_pHubbleImpl->m_hChildHostWnd;
+            }
+
             HWND hWnd = theApp.m_pHubbleImpl->m_pBrowserFactory->CreateBrowser(hPWnd, strUrls);
             IBrowser* pBrowser = (IBrowser*)::SendMessage(hWnd, WM_COSMOSMSG, 20190527, 0);
             auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);

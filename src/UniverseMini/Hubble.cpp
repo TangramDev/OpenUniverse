@@ -1196,16 +1196,16 @@ void CHubble::HubbleNotify(CString strXml1, CString strXml2, LONGLONG wParam, LO
 
 HRESULT CHubble::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** ppRet)
 {
-	HWND hPWnd = (HWND)hParentWnd;
-	CString strUrls = OLE2T(bstrUrls);
-	CString strPath = m_strAppPath;
-	strUrls.Replace(_T("host:"), strPath);
-	if (m_pBrowserFactory)
-	{
-		strUrls += _T("|");
-		strUrls.Replace(_T("||"), _T("|"));
-		*ppRet = (IBrowser*)::SendMessage(m_pBrowserFactory->CreateBrowser(hPWnd, strUrls), WM_COSMOSMSG, 20190527, 0);
-	}
+	//HWND hPWnd = (HWND)hParentWnd;
+	//CString strUrls = OLE2T(bstrUrls);
+	//CString strPath = m_strAppPath;
+	//strUrls.Replace(_T("host:"), strPath);
+	//if (m_pBrowserFactory)
+	//{
+	//	strUrls += _T("|");
+	//	strUrls.Replace(_T("||"), _T("|"));
+	//	*ppRet = (IBrowser*)::SendMessage(m_pBrowserFactory->CreateBrowser(hPWnd, strUrls), WM_COSMOSMSG, 20190527, 0);
+	//}
 	return S_OK;
 }
 

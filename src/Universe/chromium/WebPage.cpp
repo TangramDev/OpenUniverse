@@ -820,6 +820,7 @@ namespace Web {
 			{
 				CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
 				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
+				xmlParse.put_attr(_T("IsMainHubbleWnd"), (__int64)1);
 				IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 			}
 		}
