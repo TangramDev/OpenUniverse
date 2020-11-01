@@ -37,11 +37,11 @@ namespace OfficePlus
 			g_pHubble->m_nOfficeDocs++;
 #endif			
 			m_bCreating						= FALSE;
-			m_pDocGalaxyCluster						= nullptr;
+			m_pDocGalaxyCluster				= nullptr;
 			m_pGalaxy						= nullptr;
 			m_pWorkBook						= nullptr;
 			m_pSheetNode					= nullptr;
-			m_pTaskPaneGalaxyCluster					= nullptr;
+			m_pTaskPaneGalaxyCluster		= nullptr;
 			m_pTaskPaneGalaxy				= nullptr;
 			m_strDocXml						= _T("");
 			m_strTaskPaneXml				= _T("");
@@ -144,7 +144,7 @@ namespace OfficePlus
 		//					strXml.Format(_T("<sheet><default><sheet><layout>%s</layout></sheet></default></sheet>"), strSheetXml);
 		//				else
 		//				{
-		//					strXml.Format(_T("<sheet><default><sheet><layout><grid name=\"Start\" gridtype=\"nucleus\" /></layout></sheet><taskpane><layout>%s</layout></taskpane></default></sheet>"), strTaskPaneXml);
+		//					strXml.Format(_T("<sheet><default><sheet><layout><grid name=\"Start\" objid=\"nucleus\" /></layout></sheet><taskpane><layout>%s</layout></taskpane></default></sheet>"), strTaskPaneXml);
 		//				}
 		//			}
 		//			CComQIPtr<Excel::CustomProperties> pCustomProperties(result.pdispVal);
@@ -242,7 +242,7 @@ namespace OfficePlus
 								strTemplate = _T("<sheet><layout><grid name=\"start\" /></layout></sheet>");
 							else
 							{
-								strTemplate = _T("<sheet><layout><grid name=\"start\" gridtype=\"nucleus\" /></layout></sheet>");
+								strTemplate = _T("<sheet><layout><grid name=\"start\" objid=\"nucleus\" /></layout></sheet>");
 							}
 						}
 						CTangramXmlParse m_Parse2;

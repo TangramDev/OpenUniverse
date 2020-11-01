@@ -63,7 +63,7 @@ CHubble::CHubble()
 	m_bCreatingDevTool = false;
 	m_bOMNIBOXPOPUPVISIBLE = false;
 	m_pActiveWinFormWnd = nullptr;
-	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
+	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" objid=\"nucleus\"/></layout></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;

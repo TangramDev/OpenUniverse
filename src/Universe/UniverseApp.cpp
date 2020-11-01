@@ -310,6 +310,19 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 				::PostMessage(pWnd->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
 			::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
+		//bool bBrowserLayout = false;
+		//if (::IsWindow(pWnd->m_hDrawWnd) == false)
+		//{
+		//	bBrowserLayout = true;
+		//	pWnd->m_hDrawWnd = ::FindWindowEx(pWnd->m_hWnd, nullptr, _T("Intermediate D3D Window"), nullptr);
+		//	if (::IsWindow(pWnd->m_hDrawWnd) == false) {
+		//		pWnd->m_hDrawWnd = ::FindWindowEx(pWnd->m_hWnd, nullptr, _T("Intermediate Software Window"), nullptr);
+		//	}
+		//	if (::IsWindow(pWnd->m_hDrawWnd) == true)
+		//	{
+		//		::SendMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+		//	}
+		//}
 	}
 
 	if (g_pHubble->m_pHubbleDelegate)

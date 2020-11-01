@@ -328,6 +328,13 @@ namespace Web {
 			return (LRESULT)((IBrowser*)this);
 		}
 		break;
+		case 20201101:
+		{
+			m_hDrawWnd = (HWND)lParam;
+			BrowserLayout();
+			return 0;
+		}
+		break;
 		case 20200205:
 		{
 			if (lParam == 1)
@@ -525,17 +532,7 @@ namespace Web {
 			case 3:
 			case 4:
 			{
-				if (wParam == 1)
-				{
-					if (::IsWindow(m_hDrawWnd) == false) {
-						m_hDrawWnd = ::FindWindowEx(m_hWnd, nullptr, _T("Intermediate D3D Window"), nullptr);
-					}
-
-					if (::IsWindow(m_hDrawWnd) == false) {
-						m_hDrawWnd = ::FindWindowEx(m_hWnd, nullptr, _T("Intermediate Software Window"), nullptr);
-					}
-				}
-				else if (lParam == 4)
+				if (lParam == 4)
 				{
 					if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
 					{
@@ -545,6 +542,8 @@ namespace Web {
 				}
 				else if (m_pBrowser)
 				{
+					if (!::IsWindowVisible(m_hWnd))
+						::ShowWindow(m_hWnd, SW_SHOW);
 					if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
 					{
 						BrowserLayout();

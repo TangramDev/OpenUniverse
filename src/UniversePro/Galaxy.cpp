@@ -1682,11 +1682,11 @@ LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			CString strXml = _T("");
 			int nPos = m_strBKID.Find(_T(":"));
 			if (nPos == -1)
-				strXml.Format(_T("<mdiclient><layout><grid name=\"mdiclient\" gridtype=\"clrctrl\" objid=\"%s\" /></layout></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><layout><grid name=\"mdiclient\" objid=\"%s\" /></layout></mdiclient>"), m_strBKID);
 			else
 			{
 				m_strBKID = m_strBKID.Mid(nPos + 1);
-				strXml.Format(_T("<mdiclient><layout><grid name='mdiclient' gridtype='' url='%s' /></layout></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><layout><grid name='mdiclient' url='%s' /></layout></mdiclient>"), m_strBKID);
 			}
 			IGrid* pGrid = nullptr;
 			pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pGrid);

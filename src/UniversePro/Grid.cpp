@@ -991,7 +991,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		HWND hPWnd = NULL;
 		if (_strURL == _T("host"))
 		{
-			m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
 			if (g_pHubble->m_hTempBrowserWnd)
 			{
 				hPWnd = g_pHubble->m_hTempBrowserWnd;
@@ -1000,22 +999,25 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			else if (g_pHubble->m_pHtmlWndCreated == nullptr)
 			{
 				hPWnd = g_pHubble->m_hHostBrowserWnd;
-				::SetParent(hPWnd, hWnd);
 			}
 			else
 			{
 				hPWnd = ::GetParent(g_pHubble->m_pHtmlWndCreated->m_hWnd);
 			}
-			g_pHubble->m_hParent = NULL;
-			auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
-			if (it != g_pHubble->m_mapBrowserWnd.end())
-			{
-				m_pWebBrowser = (CBrowser*)it->second;
-				::SetParent(hPWnd, hWnd);
-				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
-				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
-				m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 6;
-				::SetWindowPos(hPWnd, HWND_BOTTOM, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_DRAWFRAME);
+
+			if (::IsWindow(hPWnd) && (::GetWindowLongPtr(hPWnd, GWL_STYLE) & WS_CHILD)) {
+				auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
+				if (it != g_pHubble->m_mapBrowserWnd.end())// && hPWnd == g_pHubble->m_hHostBrowserWnd)
+				{
+					m_pWebBrowser = (CBrowser*)it->second;
+					::SetWindowPos(hPWnd, HWND_BOTTOM, 0, 0, rect.right - rect.left, rect.bottom - rect.top, /*|SWP_SHOWWINDOW|SWP_NOSENDCHANGING*/SWP_NOREDRAW | SWP_NOACTIVATE);
+					g_pHubble->m_hParent = NULL;
+					m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
+					m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
+					m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
+					m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 0;
+					::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
+				}
 			}
 		}
 		else

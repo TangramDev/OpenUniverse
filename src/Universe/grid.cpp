@@ -812,8 +812,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 		if(_strURL ==_T("host"))
 		{ 
-			//auto t = create_task
-			m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
 			if (g_pHubble->m_hTempBrowserWnd)
 			{
 				hPWnd = g_pHubble->m_hTempBrowserWnd;
@@ -827,18 +825,20 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			{
 				hPWnd = ::GetParent(g_pHubble->m_pHtmlWndCreated->m_hWnd);
 			}
-
-			::SetParent(hPWnd, hWnd);
-			g_pHubble->m_hParent = NULL;
-			auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
-			if (it != g_pHubble->m_mapBrowserWnd.end())
-			{
-				m_pWebBrowser = (CBrowser*)it->second;
-				//::SetParent(hPWnd, hWnd);
-				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
-				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
-				m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 4;
-				::SetWindowPos(hPWnd, HWND_BOTTOM, 0,0, rect.right-rect.left,rect.bottom-rect.top, SWP_NOREDRAW|SWP_NOACTIVATE);
+			
+			if (::IsWindow(hPWnd) && (::GetWindowLongPtr(hPWnd, GWL_STYLE) & WS_CHILD)) {
+				auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
+				if (it != g_pHubble->m_mapBrowserWnd.end())// && hPWnd == g_pHubble->m_hHostBrowserWnd)
+				{
+					m_pWebBrowser = (CBrowser*)it->second;
+					::SetWindowPos(hPWnd, HWND_BOTTOM, 0,0, rect.right-rect.left,rect.bottom-rect.top, /*|SWP_SHOWWINDOW|SWP_NOSENDCHANGING*/SWP_NOREDRAW|SWP_NOACTIVATE);
+					g_pHubble->m_hParent = NULL;
+					m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
+					m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
+					m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
+					m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 0;
+					::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
+				}
 			}
 		}
 		else

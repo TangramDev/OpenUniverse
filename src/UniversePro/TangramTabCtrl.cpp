@@ -42,13 +42,6 @@ CTangramListCtrl::CTangramListCtrl()
 	m_nListViewSelectedIndex = 0;
 	m_strDir = _T("");
 	m_strSubDir = _T("");
-
-	if (g_pHubble->m_strExeName.CompareNoCase(_T("excel")) == 0)
-	{
-		auto it = g_pHubble->m_mapValInfo.find(_T("exceldesignstate"));
-		if (it == g_pHubble->m_mapValInfo.end())
-			g_pHubble->m_mapValInfo[_T("exceldesignstate")] = CComVariant((VARIANT_BOOL)true);
-	}
 }
 
 CTangramListCtrl::~CTangramListCtrl()
@@ -114,7 +107,7 @@ void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	else
 	{
-		CString strXml = _T("<tangram><layout><grid name=\"start\" gridtype=\"nucleus\" /></layout></tangram>"); 
+		CString strXml = _T("<tangram><layout><grid name=\"start\" objid=\"nucleus\" /></layout></tangram>"); 
 		m_pHubbleTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pGrid);
 	}
 
@@ -211,11 +204,6 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 						}
 						else
 						{
-							auto it2 = g_pHubble->m_mapValInfo.find(_T("exceldesignstate"));
-							if (it2 != g_pHubble->m_mapValInfo.end())
-							{
-								return;
-							}
 							IGrid* pGrid = nullptr;
 							CGalaxy* pGalaxy = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy;
 							pGalaxy->Observe(pGalaxy->m_strLastKey.AllocSysString(), CComBSTR(_T("")), &pGrid);
@@ -300,11 +288,7 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 				strTemplateFile += it->second->m_strFilter.Mid(1);
 			if (it->second->m_bCOMObj)
 			{
-				if (g_pHubble->m_bEclipse)
-				{
-
-				}
-				else
+				if (!g_pHubble->m_bEclipse)
 					g_pHubble->StartApplication(it->second->m_strProxyID.AllocSysString(), strTemplateFile.AllocSysString());
 			}
 			else

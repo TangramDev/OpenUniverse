@@ -70,7 +70,7 @@ CHubble::CHubble()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
+	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" objid=\"nucleus\"/></layout></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;

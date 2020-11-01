@@ -3743,7 +3743,7 @@ CString	CTangramHtmlTreeWnd::GetSelectedNodeInfo(CString strPropertys)
 							str1 = str1.Left(nPos2);
 							CString strFormat = _T("");
 							if(m_bNoHandle==false)
-								strFormat.Format(_T("<%s handle=\"%d\" gridtype=\"%s\">%s</%s>"),strProperty,it.second->m_hItem,it.second->m_strTangramItemID,str1,strProperty);
+								strFormat.Format(_T("<%s handle=\"%d\" objid=\"%s\">%s</%s>"),strProperty,it.second->m_hItem,it.second->m_strTangramItemID,str1,strProperty);
 							else
 								strFormat.Format(_T("<%s>%s</%s>"),strProperty,str1,strProperty);
 							strVal += strFormat;

@@ -1099,7 +1099,6 @@ namespace Web {
 					if (nPos == 200)
 					{
 						g_pHubble->m_hTempBrowserWnd = g_pHubble->m_pBrowserFactory->CreateBrowser(g_pHubble->m_hChildHostWnd, strUrl);
-						//::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE);
 					}
 					else
 						g_pHubble->m_pBrowserFactory->CreateBrowser(0, strUrl);

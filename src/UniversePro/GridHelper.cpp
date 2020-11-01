@@ -644,23 +644,17 @@ LRESULT CGridHelper::OnHubbleData(WPARAM wParam, LPARAM lParam)
 
 LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 {
-	//if (wParam&&lParam==20201028)
-	//{
-	//	HWND hPWnd = (HWND)wParam;
-	//	if (::IsWindow(hPWnd))
-	//	{
-	//		auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
-	//		if (it != g_pHubble->m_mapBrowserWnd.end())
-	//		{
-	//			m_pGrid->m_pWebBrowser = (CBrowser*)it->second;
-	//			::SetParent(hPWnd, m_hWnd);
-	//			m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = m_pGrid;
-	//			m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pGrid->m_pWebBrowser;
-	//			m_pGrid->m_pWebBrowser->m_heightfix = 12;
-	//		}
-	//		return -1;
-	//	}
-	//}
+	if (wParam && lParam == 20201028)
+	{
+		CBrowser* pWnd = (CBrowser*)wParam;
+		::SetParent(pWnd->m_hWnd, m_hWnd);
+		RECT rect;
+		::GetClientRect(m_hWnd, &rect);
+		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_HIDEWINDOW);
+		pWnd->BrowserLayout();
+		::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+		return -1;
+	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
 		switch (lParam)
@@ -1152,7 +1146,7 @@ LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		IGalaxy* pGalaxy = nullptr;
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hChild), CComBSTR(L"ClientFrame"), &pGalaxy);
 		CString strXml = _T("");
-		strXml.Format(_T("<mdiclient><layout><grid name=\"mdiclient\" gridtype=\"activex\" objid=\"%s\" /></layout></mdiclient>"), m_strURL);
+		strXml.Format(_T("<mdiclient><layout><grid name=\"mdiclient\" objid=\"%s\" /></layout></mdiclient>"), m_strURL);
 		IGrid* pGrid = nullptr;
 		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pGrid);
 		m_pGalaxy = (CGalaxy*)pGalaxy;

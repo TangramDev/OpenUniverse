@@ -158,15 +158,15 @@ namespace Cosmos
             {
                 CComVariant var;
                 m_pGrid->get_XObject(&var);
-                if (var.vt == VT_DISPATCH)
-                {
-                    CComQIPtr<IWebBrowser2> pWebCtrl(var.pdispVal);
-                    if (pWebCtrl)
-                    {
-                        m_pGrid->get_Attribute(CComBSTR("gridtype"), &bstrCap);
-                        return BSTR2STRING(bstrCap);
-                    }
-                }
+                //if (var.vt == VT_DISPATCH)
+                //{
+                //    CComQIPtr<IWebBrowser2> pWebCtrl(var.pdispVal);
+                //    if (pWebCtrl)
+                //    {
+                //        m_pGrid->get_Attribute(CComBSTR("gridtype"), &bstrCap);
+                //        return BSTR2STRING(bstrCap);
+                //    }
+                //}
             }
             break;
             default:
