@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.11							*
+*					Open Universe - version 1.0.1.12							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -48,7 +48,7 @@
 #include "TangramListView.h"
 #include "Psapi.h"
 
-#include "chromium\BrowserWnd.h"
+#include "chromium\Browser.h"
 #include "chromium\WebPage.h"
 
 using namespace OfficePlus;
@@ -916,19 +916,6 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 			if (!::IsChild(it.first, pWnd->m_pVisibleWebWnd->m_hWnd))
 				::PostMessage(pWnd->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
 		}
-		//bool bBrowserLayout = false;
-		//if (::IsWindow(pWnd->m_hDrawWnd) == false)
-		//{
-		//	bBrowserLayout = true;
-		//	pWnd->m_hDrawWnd = ::FindWindowEx(pWnd->m_hWnd, nullptr, _T("Intermediate D3D Window"), nullptr);
-		//	if (::IsWindow(pWnd->m_hDrawWnd) == false) {
-		//		pWnd->m_hDrawWnd = ::FindWindowEx(pWnd->m_hWnd, nullptr, _T("Intermediate Software Window"), nullptr);
-		//	}
-		//	if (::IsWindow(pWnd->m_hDrawWnd) == true)
-		//	{
-		//		::SendMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
-		//	}
-		//}
 	}
 
 	if (g_pHubble->m_pHubbleDelegate)

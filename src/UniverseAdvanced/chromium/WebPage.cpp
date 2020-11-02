@@ -1,5 +1,5 @@
 /********************************************************************************
- *					Open Universe - version 1.0.1.11
+ *					Open Universe - version 1.0.1.12
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -27,9 +27,9 @@
 #include "../Galaxy.h"
 #include "../GridHelper.h"
 #include "../GridWnd.h"
-#include "WebPage.h"
-#include "BrowserWnd.h"
 #include "../Markup.h" 
+#include "WebPage.h"
+#include "Browser.h"
 
 namespace Web {
 	CWebPage::CWebPage() {
@@ -218,27 +218,6 @@ namespace Web {
 			}
 		}
 		break;
-		//case 20200214:
-		//{
-		//	if (::IsWindow(m_hExtendWnd))
-		//	{
-		//		CBrowser* pWnd = (CBrowser*)lParam;
-		//		if (pWnd)
-		//		{
-		//			pWnd->BrowserLayout();
-		//			if (lParam == 0)
-		//			{
-		//				::SetParent(m_hExtendWnd, m_hWnd);
-		//			}
-		//			else
-		//			{
-		//				pWnd->m_pVisibleWebWnd = this;
-		//				::SetParent(m_hExtendWnd, pWnd->m_hWnd);
-		//			}
-		//		}
-		//	}
-		//}
-		//break;
 		case 19820911:
 		{
 			Show(_T(""));

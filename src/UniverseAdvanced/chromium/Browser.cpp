@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *					Open Universe - version 1.0.1.11
+ *					Open Universe - version 1.0.1.12
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -26,7 +26,7 @@
 #include "../GridHelper.h"
 #include "../Galaxy.h"
 #include "WebPage.h"
-#include "BrowserWnd.h"
+#include "Browser.h"
 
 namespace Web {
 	CBrowser::CBrowser() {
@@ -57,9 +57,7 @@ namespace Web {
 			if (::IsWindow(hOldWnd))
 			{
 				m_hOldTab = hOldWnd;
-				//::PostMessage(hOldWnd, WM_COSMOSMSG, 20200214, 0);
 			}
-			//::PostMessage(hActive, WM_COSMOSMSG, 20200214, (LPARAM)this);
 		}
 	}
 
@@ -118,7 +116,7 @@ namespace Web {
 			if (::IsChild(hWnd, hExtendWnd))
 				::SetParent(hExtendWnd, m_hWnd);
 
-			::SetWindowPos(hExtendWnd, HWND_BOTTOM,
+			::SetWindowPos(hExtendWnd, m_hDrawWnd,
 				rc.left,
 				nTopFix * m_fdevice_scale_factor,
 				rc.right * m_fdevice_scale_factor,
@@ -343,32 +341,6 @@ namespace Web {
 		}
 		return 1;
 		break;
-		case 20200215:
-			if (lParam < 100)
-			{
-				m_heightfix = (int)lParam;
-				if (lParam == 0)
-				{
-					auto t = create_task([this]()
-						{
-							SleepEx(100, true);
-							try
-							{
-								if (m_pVisibleWebWnd)
-								{
-									::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
-								}
-							}
-							catch (...)
-							{
-								ATLASSERT(false);
-								return 0;
-							}
-							return 1;
-						});
-				}
-			}
-			break;
 		case 20200214:
 		{
 			auto t = create_task([this]()

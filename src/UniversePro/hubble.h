@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.11							*
+*					Open Universe - version 1.0.1.12							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -24,7 +24,7 @@
 #include "ObjSafe.h"
 #include "wpfview.h"
 
-#include "chromium\BrowserWnd.h"
+#include "chromium\Browser.h"
 
 #pragma once
 //https://github.com/eclipse/rt.equinox.framework/tree/master/features/org.eclipse.equinox.executable.feature/library/win32

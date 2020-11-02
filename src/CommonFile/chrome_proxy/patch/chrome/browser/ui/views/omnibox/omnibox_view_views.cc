@@ -1942,13 +1942,6 @@ void OmniboxViewViews::OnCompositingStarted(ui::Compositor* compositor,
   // event we get is the one we're waiting for (and not for a previous paint).
   if (latency_histogram_state_ == COMPOSITING_COMMIT)
     latency_histogram_state_ = COMPOSITING_STARTED;
-  // begin Add by TangramTeam
-  HWND hBrowser = compositor->widget();
-  if (::IsWindow(hBrowser))
-  {
-      ::SendMessage(hBrowser, WM_BROWSERLAYOUT, 1, 2);
-  }
-  // end Add by TangramTeam
 }
 
 void OmniboxViewViews::OnCompositingEnded(ui::Compositor* compositor) {

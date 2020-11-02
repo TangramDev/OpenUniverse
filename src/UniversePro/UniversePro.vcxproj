@@ -321,7 +321,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="chromium\BrowserWnd.cpp">
+    <ClCompile Include="chromium\Browser.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -425,7 +425,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
   <ItemGroup>
     <ClInclude Include="CeXDib.h" />
     <ClInclude Include="chromium\WebPage.h" />
-    <ClInclude Include="chromium\BrowserWnd.h" />
+    <ClInclude Include="chromium\Browser.h" />
     <ClInclude Include="Wormhole.h" />
     <ClInclude Include="Markup.h" />
     <ClInclude Include="DocTemplateDlg.h" />

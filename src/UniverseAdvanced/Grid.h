@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.11							*
+*					Open Universe - version 1.0.1.12							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -22,7 +22,7 @@
 // Grid.h : Declaration of the CGrid
 
 #include "GalaxyCluster.h"
-#include "chromium/BrowserWnd.h"
+#include "chromium/Browser.h"
 
 #pragma once
 

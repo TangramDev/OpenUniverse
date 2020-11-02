@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.0.1.11							*
+*					Open Universe - version 1.0.1.12							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -198,20 +198,17 @@ namespace Web {
 		::GetWindowRect(_hWebPage, &rcWebPage);
 		::ScreenToClient(m_hWnd, (LPPOINT)&rcWebPage);
 		::ScreenToClient(m_hWnd, ((LPPOINT)&rcWebPage) + 1);
-		if (::IsWindow(m_hDrawWnd))
-		{
-			//浏览器窗口区域：
-			HRGN hGPUWndRgn = ::CreateRectRgn(rcBrowser.left, rcBrowser.top, rcBrowser.right, rcBrowser.bottom);
-			//浏览器页面扩展窗口区域：
-			HRGN hWebExtendWndRgn = ::CreateRectRgn(rcExtendWnd.left, rcExtendWnd.top, rcExtendWnd.right, rcExtendWnd.bottom);
-			//浏览器页面窗口区域：
-			HRGN hWebPage = ::CreateRectRgn(rcWebPage.left, rcWebPage.top, rcWebPage.right, rcWebPage.bottom);
-			::CombineRgn(hWebExtendWndRgn, hWebExtendWndRgn, hWebPage, RGN_DIFF);
-			::CombineRgn(hGPUWndRgn, hGPUWndRgn, hWebExtendWndRgn, RGN_DIFF);
-			::DeleteObject(hWebPage);
-			::DeleteObject(hWebExtendWndRgn);
-			::SetWindowRgn(m_hDrawWnd, hGPUWndRgn, false);
-		}
+		//浏览器窗口区域：
+		HRGN hGPUWndRgn = ::CreateRectRgn(rcBrowser.left, rcBrowser.top, rcBrowser.right, rcBrowser.bottom);
+		//浏览器页面扩展窗口区域：
+		HRGN hWebExtendWndRgn = ::CreateRectRgn(rcExtendWnd.left, rcExtendWnd.top, rcExtendWnd.right, rcExtendWnd.bottom);
+		//浏览器页面窗口区域：
+		HRGN hWebPage = ::CreateRectRgn(rcWebPage.left, rcWebPage.top, rcWebPage.right, rcWebPage.bottom);
+		::CombineRgn(hWebExtendWndRgn, hWebExtendWndRgn, hWebPage, RGN_DIFF);
+		::CombineRgn(hGPUWndRgn, hGPUWndRgn, hWebExtendWndRgn, RGN_DIFF);
+		::DeleteObject(hWebPage);
+		::DeleteObject(hWebExtendWndRgn);
+		::SetWindowRgn(m_hDrawWnd, hGPUWndRgn, false);
 
 		return 0;
 	}
@@ -320,32 +317,6 @@ namespace Web {
 		}
 		return 1;
 		break;
-		case 20200215:
-			if (lParam < 100)
-			{
-				m_heightfix = (int)lParam;
-				if (lParam == 0)
-				{
-					auto t = create_task([this]()
-						{
-							SleepEx(100, true);
-							try
-							{
-								if (m_pVisibleWebWnd)
-								{
-									::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
-								}
-							}
-							catch (...)
-							{
-								ATLASSERT(false);
-								return 0;
-							}
-							return 1;
-						});
-				}
-			}
-			break;
 		case 20200214:
 		{
 			auto t = create_task([this]()
