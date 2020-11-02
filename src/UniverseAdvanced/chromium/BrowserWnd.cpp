@@ -76,7 +76,7 @@ namespace Web {
 	}
 
 	void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
-		if (hWnd==0||::IsWindowVisible(m_hWnd) == false || g_pHubble->m_bChromeNeedClosed == TRUE || g_pHubble->m_bOMNIBOXPOPUPVISIBLE) {
+		if (hWnd == 0 || ::IsWindowVisible(m_hWnd) == false || g_pHubble->m_bChromeNeedClosed == TRUE || g_pHubble->m_bOMNIBOXPOPUPVISIBLE) {
 			return;
 		}
 		if (m_hOldTab)
@@ -331,7 +331,6 @@ namespace Web {
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;
-			BrowserLayout();
 			return 0;
 		}
 		break;

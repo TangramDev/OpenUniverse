@@ -1516,6 +1516,7 @@ class CONTENT_EXPORT RenderFrameHostImpl :
 
   // IPC Message handlers.
   // begin Add by TangramTeam
+  HWND GetHostBrowserWnd() override;
   CommonUniverse::IPCSession* GetIPCSession() override;
   void InsertString(CommonUniverse::IPCSession*, CString key, CString value) override;
   void InsertLong(CommonUniverse::IPCSession*, CString key, long value) override;

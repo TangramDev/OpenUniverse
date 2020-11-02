@@ -8272,6 +8272,15 @@ RenderFrameHostImpl* RenderFrameHostImpl::ParentOrOuterDelegateFrame() {
 }
 
 // begin Add by TangramTeam
+HWND RenderFrameHostImpl::GetHostBrowserWnd() {
+  if (g_pHubbleImpl) {
+    content::RenderWidgetHostViewAura* view =
+        static_cast<content::RenderWidgetHostViewAura*>(
+            GetViewForAccessibility());
+    return view->GetHostWindowHWND();
+  }
+  return NULL;
+}
 
 void RenderFrameHostImpl::ShowWebPage(bool bShow) {
   if (g_pHubbleImpl) {

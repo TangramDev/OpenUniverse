@@ -198,17 +198,20 @@ namespace Web {
 		::GetWindowRect(_hWebPage, &rcWebPage);
 		::ScreenToClient(m_hWnd, (LPPOINT)&rcWebPage);
 		::ScreenToClient(m_hWnd, ((LPPOINT)&rcWebPage) + 1);
-		//浏览器窗口区域：
-		HRGN hGPUWndRgn = ::CreateRectRgn(rcBrowser.left, rcBrowser.top, rcBrowser.right, rcBrowser.bottom);
-		//浏览器页面扩展窗口区域：
-		HRGN hWebExtendWndRgn = ::CreateRectRgn(rcExtendWnd.left, rcExtendWnd.top, rcExtendWnd.right, rcExtendWnd.bottom);
-		//浏览器页面窗口区域：
-		HRGN hWebPage = ::CreateRectRgn(rcWebPage.left, rcWebPage.top, rcWebPage.right, rcWebPage.bottom);
-		::CombineRgn(hWebExtendWndRgn, hWebExtendWndRgn, hWebPage, RGN_DIFF);
-		::CombineRgn(hGPUWndRgn, hGPUWndRgn, hWebExtendWndRgn, RGN_DIFF);
-		::DeleteObject(hWebPage);
-		::DeleteObject(hWebExtendWndRgn);
-		::SetWindowRgn(m_hDrawWnd, hGPUWndRgn, false);
+		if (::IsWindow(m_hDrawWnd))
+		{
+			//浏览器窗口区域：
+			HRGN hGPUWndRgn = ::CreateRectRgn(rcBrowser.left, rcBrowser.top, rcBrowser.right, rcBrowser.bottom);
+			//浏览器页面扩展窗口区域：
+			HRGN hWebExtendWndRgn = ::CreateRectRgn(rcExtendWnd.left, rcExtendWnd.top, rcExtendWnd.right, rcExtendWnd.bottom);
+			//浏览器页面窗口区域：
+			HRGN hWebPage = ::CreateRectRgn(rcWebPage.left, rcWebPage.top, rcWebPage.right, rcWebPage.bottom);
+			::CombineRgn(hWebExtendWndRgn, hWebExtendWndRgn, hWebPage, RGN_DIFF);
+			::CombineRgn(hGPUWndRgn, hGPUWndRgn, hWebExtendWndRgn, RGN_DIFF);
+			::DeleteObject(hWebPage);
+			::DeleteObject(hWebExtendWndRgn);
+			::SetWindowRgn(m_hDrawWnd, hGPUWndRgn, false);
+		}
 
 		return 0;
 	}
@@ -305,7 +308,6 @@ namespace Web {
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;
-			BrowserLayout();
 			return 0;
 		}
 		break;
@@ -519,6 +521,7 @@ namespace Web {
 						BrowserLayout();
 						m_pBrowser->LayoutBrowser();
 					}
+					::ShowWindow(m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
 					m_bTabChange = false;
 				}
 			}

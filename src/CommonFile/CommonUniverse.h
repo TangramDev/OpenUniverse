@@ -1004,6 +1004,7 @@ namespace CommonUniverse {
 		virtual void ShowWebPage(bool bShow) {}
 		virtual void SendHubbleMessage(IPCMsg*) {}
 		virtual void SendHubbleMessage(IPCSession* var) {}
+		virtual HWND GetHostBrowserWnd() { return NULL; }
 		virtual IPCSession* GetIPCSession() { return nullptr; }
 		virtual void InsertString(IPCSession*, CString key, CString value) {}
 		virtual void InsertLong(IPCSession*, CString key, long value) {}
