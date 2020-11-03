@@ -117,8 +117,6 @@ public:
 
 class CUniverse :
 	public CWinApp,
-	//public CComObjectRootBase,
-	//public CComCoClass<CUniverse>,
 	public CAtlDllModuleT< CUniverse >
 {
 public:
@@ -136,10 +134,6 @@ public:
 	static LRESULT CALLBACK HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
 	static LRESULT CALLBACK ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam);
-
-	//static HRESULT WINAPI UpdateRegistry(BOOL bRegister);
-
-	//static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
 
 	DECLARE_LIBID(LIBID_Universe)
 

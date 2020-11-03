@@ -1954,8 +1954,8 @@ jumbo_source_set("browser") {
     "worker_host/worker_script_loader_factory.cc",
     "worker_host/worker_script_loader_factory.h",
     # >>>>> TANGRAMDEV
-    "c:/src/tangram/source/chrome_proxy/third_party/trackable.cc",
-    "c:/src/tangram/source/chrome_proxy/third_party/trackable.h",
+    "c:/universework/openuniverse/src/chrome_proxy/third_party/trackable.cc",
+    "c:/universework/openuniverse/src/chrome_proxy/third_party/trackable.h",
     # <<<<< TANGRAMDEV
   ]
 

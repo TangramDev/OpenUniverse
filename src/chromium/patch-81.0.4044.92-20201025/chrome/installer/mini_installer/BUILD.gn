@@ -128,7 +128,7 @@ template("generate_mini_installer") {
 
   action(archive_name) {
     script = "//chrome/tools/build/win/create_installer_archive.py"
-    release_file = "C:/src/Tangram/Source/chrome_proxy/installer/chrome.release"
+    release_file = "c:/universework/openuniverse/src/chrome_proxy/installer/chrome.release"
 
     inputs = [
       "$chrome_dll_file",

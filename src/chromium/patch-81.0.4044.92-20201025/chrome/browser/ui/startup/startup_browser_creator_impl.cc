@@ -89,8 +89,8 @@
 // begin Add by TangramTeam
 #include "base/task/sequence_manager/thread_controller_with_message_pump_impl.h"
 #include "base/win/windows_types.h"
-#include "c:/src/tangram/source/chrome_proxy/third_party/Markup.h"
-#include "c:/src/tangram/source/chrome_proxy/third_party/UniverseForChromium.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/third_party/Markup.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/third_party/UniverseForChromium.h"
 #include "ui/views/win/hwnd_util.h"
 // end Add by TangramTeam
 #endif  // defined(OS_WIN)

@@ -88,8 +88,8 @@ blink_core_sources("events") {
     "wheel_event.cc",
     "wheel_event.h",
     # begin Add by TangramTeam
-    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_event.cc",
-    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_event.h",
+    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_event.cc",
+    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_event.h",
     # end Add by TangramTeam
   ]
 }

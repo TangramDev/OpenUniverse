@@ -233,14 +233,14 @@
 #include "base/debug/invalid_access_win.h"
 #include "base/process/kill.h"
 // begin Add by TangramTeam
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble.h"
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble_compositor.h"
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble_control.h"
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble_event.h"
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble_node.h"
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble_window.h"
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble_winform.h"
-#include "c:/src/tangram/source/chrome_proxy/blink/core/hubble_xobj.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_compositor.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_control.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_event.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_node.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_window.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_winform.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_xobj.h"
 using namespace std;
 // end Add by TangramTeam
 #elif defined(OS_POSIX)

@@ -23,7 +23,7 @@
 #include "third_party/blink/renderer/bindings/core/v8/v8_hubble_callback.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_application_callback.h"
 
-#include "C:\src\tangram\Source\chrome_proxy\third_party\ChromeRenderDomProxy.h"
+#include "../../third_party/ChromeRenderDomProxy.h"
 
 namespace blink {
 

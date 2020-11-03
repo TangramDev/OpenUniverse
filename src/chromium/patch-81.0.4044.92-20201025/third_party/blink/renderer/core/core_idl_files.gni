@@ -492,17 +492,17 @@ core_idl_files =
                     "xmlhttprequest/xml_http_request_event_target.idl",
                     "xmlhttprequest/xml_http_request_upload.idl",
                     # begin Add by TangramTeam
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_ntp.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_node.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_event.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_xobj.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_control.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_window.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_winform.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_compositor.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_userpage.idl",
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_application.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_ntp.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_node.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_event.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_xobj.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_control.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_window.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_winform.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_compositor.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_userpage.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_application.idl",
                     # end Add by TangramTeam
                   ],
                   "abspath")
@@ -609,7 +609,7 @@ core_callback_function_idl_files =
                     "dom/idle_request_callback.idl",
                     "dom/void_function.idl",
                     # begin Add by TangramTeam
-                    "c:/src/tangram/source/chrome_proxy/blink/core/hubble_callback.idl",
+                    "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_callback.idl",
                     # end Add by TangramTeam
                   ],
                   "abspath")

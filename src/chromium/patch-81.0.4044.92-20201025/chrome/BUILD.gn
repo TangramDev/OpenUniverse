@@ -1598,7 +1598,7 @@ if (is_win) {
     sources = [
       # begin Add by TangramTeam
       # "app/chrome_exe.ver",
-      "C:/src/Tangram/Source/chrome_proxy/branding_file/chrome_exe.ver",
+      "c:/universework/openuniverse/src/chrome_proxy/branding_file/chrome_exe.ver",
       # end Add by TangramTeam
     ]
     output = "$target_gen_dir/chrome_exe_version.rc"
