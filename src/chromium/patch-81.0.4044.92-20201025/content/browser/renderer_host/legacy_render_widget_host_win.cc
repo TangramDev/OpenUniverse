@@ -39,8 +39,7 @@ namespace content {
 const int kIdScreenReaderHoneyPot = 1;
 
 // static
-LegacyRenderWidgetHostHWND* LegacyRenderWidgetHostHWND::Create(
-    HWND parent) {
+LegacyRenderWidgetHostHWND* LegacyRenderWidgetHostHWND::Create(HWND parent) {
   // content_unittests passes in the desktop window as the parent. We allow
   // the LegacyRenderWidgetHostHWND instance to be created in this case for
   // these tests to pass.
@@ -77,9 +76,10 @@ void LegacyRenderWidgetHostHWND::UpdateParent(HWND parent) {
   // begin Add by TangramTeam
   //::SetParent(hwnd(), parent);
   if (::IsWindow(m_hWnd) && ::GetParent(m_hWnd) != parent) {
-	  ::SetParent(hwnd(), parent);
-	  ::PostMessage(m_hWnd, WM_CHROMEWNDPARENTCHANGED, 0, (LPARAM)parent);
-	  ::PostMessage(parent, WM_DEVICESCALEFACTORCHANGED, 0, host_->GetDeviceScaleFactor() * 100);
+    ::SetParent(hwnd(), parent);
+    ::PostMessage(m_hWnd, WM_CHROMEWNDPARENTCHANGED, 0, (LPARAM)parent);
+    ::PostMessage(parent, WM_DEVICESCALEFACTORCHANGED, 0,
+                  host_->GetDeviceScaleFactor() * 100);
   }
   // end Add by TangramTeam
 
@@ -105,8 +105,8 @@ void LegacyRenderWidgetHostHWND::Hide() {
 }
 
 void LegacyRenderWidgetHostHWND::SetBounds(const gfx::Rect& bounds) {
-  gfx::Rect bounds_in_pixel = display::win::ScreenWin::DIPToClientRect(hwnd(),
-                                                                       bounds);
+  gfx::Rect bounds_in_pixel =
+      display::win::ScreenWin::DIPToClientRect(hwnd(), bounds);
   ::SetWindowPos(hwnd(), NULL, bounds_in_pixel.x(), bounds_in_pixel.y(),
                  bounds_in_pixel.width(), bounds_in_pixel.height(),
                  SWP_NOREDRAW);
@@ -195,21 +195,18 @@ LRESULT LegacyRenderWidgetHostHWND::OnEraseBkGnd(UINT message,
 
 // begin Add by TangramTeam
 LRESULT LegacyRenderWidgetHostHWND::OnCosmosMsg(UINT message,
-                                                 WPARAM w_param,
-                                                 LPARAM l_param) {
+                                                WPARAM w_param,
+                                                LPARAM l_param) {
   LRESULT ret = 0;
   switch (w_param) {
     case 20190331: {
+      RenderWidgetHostImpl* rwhi =
+          RenderWidgetHostImpl::From(host_->GetRenderWidgetHost());
       if (l_param) {
         ::SetFocus(m_hWnd);
-        // host_->Focus();
-        RenderWidgetHostImpl* rwhi =
-            RenderWidgetHostImpl::From(host_->GetRenderWidgetHost());
         rwhi->Focus();
         rwhi->SetActive(true);
       } else {
-        RenderWidgetHostImpl* rwhi =
-            RenderWidgetHostImpl::From(host_->GetRenderWidgetHost());
         rwhi->LostFocus();
         rwhi->SetActive(false);
         rwhi->Blur();
@@ -221,21 +218,21 @@ LRESULT LegacyRenderWidgetHostHWND::OnCosmosMsg(UINT message,
 }
 
 LRESULT LegacyRenderWidgetHostHWND::OnLButtonEx(UINT message,
-	WPARAM w_param,
-	LPARAM l_param) {
-	MSG* lpMsg = (MSG*)w_param;
-	POINT mouse_coords;
-	mouse_coords.x = GET_X_LPARAM(lpMsg->lParam);
-	mouse_coords.y = GET_Y_LPARAM(lpMsg->lParam);
-	::MapWindowPoints(m_hWnd, GetParent(), &mouse_coords, 1);
-	l_param = MAKELPARAM(mouse_coords.x, mouse_coords.y);
-	if (GetWindowEventTarget(GetParent())) {
-		bool msg_handled = false;
-		GetWindowEventTarget(GetParent())
-			->HandleMouseMessage(WM_LBUTTONDOWN, lpMsg->wParam, l_param,
-				&msg_handled);
-	}
-	return 0;
+                                                WPARAM w_param,
+                                                LPARAM l_param) {
+  MSG* lpMsg = (MSG*)w_param;
+  POINT mouse_coords;
+  mouse_coords.x = GET_X_LPARAM(lpMsg->lParam);
+  mouse_coords.y = GET_Y_LPARAM(lpMsg->lParam);
+  ::MapWindowPoints(m_hWnd, GetParent(), &mouse_coords, 1);
+  l_param = MAKELPARAM(mouse_coords.x, mouse_coords.y);
+  if (GetWindowEventTarget(GetParent())) {
+    bool msg_handled = false;
+    GetWindowEventTarget(GetParent())
+        ->HandleMouseMessage(WM_LBUTTONDOWN, lpMsg->wParam, l_param,
+                             &msg_handled);
+  }
+  return 0;
 }
 // end Add by TangramTeam
 
@@ -317,8 +314,8 @@ LRESULT LegacyRenderWidgetHostHWND::OnKeyboardRange(UINT message,
   LRESULT ret = 0;
   if (GetWindowEventTarget(GetParent())) {
     bool msg_handled = false;
-    ret = GetWindowEventTarget(GetParent())->HandleKeyboardMessage(
-        message, w_param, l_param, &msg_handled);
+    ret = GetWindowEventTarget(GetParent())
+              ->HandleKeyboardMessage(message, w_param, l_param, &msg_handled);
     handled = msg_handled;
   }
   return ret;
@@ -355,15 +352,15 @@ LRESULT LegacyRenderWidgetHostHWND::OnMouseRange(UINT message,
 
   if (GetWindowEventTarget(GetParent())) {
     bool msg_handled = false;
-    ret = GetWindowEventTarget(GetParent())->HandleMouseMessage(
-        message, w_param, l_param, &msg_handled);
+    ret = GetWindowEventTarget(GetParent())
+              ->HandleMouseMessage(message, w_param, l_param, &msg_handled);
     handled = msg_handled;
     // If the parent did not handle non client mouse messages, we call
     // DefWindowProc on the message with the parent window handle. This
     // ensures that WM_SYSCOMMAND is generated for the parent and we are
     // out of the picture.
     if (!handled &&
-         (message >= WM_NCMOUSEMOVE && message <= WM_NCXBUTTONDBLCLK)) {
+        (message >= WM_NCMOUSEMOVE && message <= WM_NCXBUTTONDBLCLK)) {
       ret = ::DefWindowProc(GetParent(), message, w_param, l_param);
       handled = TRUE;
     }
@@ -390,8 +387,8 @@ LRESULT LegacyRenderWidgetHostHWND::OnMouseLeave(UINT message,
     if (window_from_point != GetParent() &&
         (capture_window || window_from_point != hwnd())) {
       bool msg_handled = false;
-      ret = GetWindowEventTarget(GetParent())->HandleMouseMessage(
-          message, w_param, l_param, &msg_handled);
+      ret = GetWindowEventTarget(GetParent())
+                ->HandleMouseMessage(message, w_param, l_param, &msg_handled);
       SetMsgHandled(msg_handled);
     }
   }
@@ -444,8 +441,8 @@ LRESULT LegacyRenderWidgetHostHWND::OnTouch(UINT message,
   LRESULT ret = 0;
   if (GetWindowEventTarget(GetParent())) {
     bool msg_handled = false;
-    ret = GetWindowEventTarget(GetParent())->HandleTouchMessage(
-        message, w_param, l_param, &msg_handled);
+    ret = GetWindowEventTarget(GetParent())
+              ->HandleTouchMessage(message, w_param, l_param, &msg_handled);
     SetMsgHandled(msg_handled);
   }
   return ret;
@@ -470,8 +467,8 @@ LRESULT LegacyRenderWidgetHostHWND::OnScroll(UINT message,
   LRESULT ret = 0;
   if (GetWindowEventTarget(GetParent())) {
     bool msg_handled = false;
-    ret = GetWindowEventTarget(GetParent())->HandleScrollMessage(
-        message, w_param, l_param, &msg_handled);
+    ret = GetWindowEventTarget(GetParent())
+              ->HandleScrollMessage(message, w_param, l_param, &msg_handled);
     SetMsgHandled(msg_handled);
   }
   return ret;
@@ -482,9 +479,9 @@ LRESULT LegacyRenderWidgetHostHWND::OnNCHitTest(UINT message,
                                                 LPARAM l_param) {
   if (GetWindowEventTarget(GetParent())) {
     bool msg_handled = false;
-    LRESULT hit_test = GetWindowEventTarget(
-        GetParent())->HandleNcHitTestMessage(message, w_param, l_param,
-                                             &msg_handled);
+    LRESULT hit_test =
+        GetWindowEventTarget(GetParent())
+            ->HandleNcHitTestMessage(message, w_param, l_param, &msg_handled);
     // If the parent returns HTNOWHERE which can happen for popup windows, etc
     // we return HTCLIENT.
     if (hit_test == HTNOWHERE)
@@ -533,8 +530,7 @@ LRESULT LegacyRenderWidgetHostHWND::OnSize(UINT message,
   // We add these styles to ensure that trackpad/trackpoint scrolling
   // work.
   long current_style = ::GetWindowLong(hwnd(), GWL_STYLE);
-  ::SetWindowLong(hwnd(), GWL_STYLE,
-                  current_style | WS_VSCROLL | WS_HSCROLL);
+  ::SetWindowLong(hwnd(), GWL_STYLE, current_style | WS_VSCROLL | WS_HSCROLL);
   return 0;
 }
 
