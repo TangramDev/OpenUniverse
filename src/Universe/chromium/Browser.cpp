@@ -58,7 +58,7 @@ namespace Web {
 	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		g_pHubble->m_pActiveHtmlWnd = m_pVisibleWebWnd;
-		if (m_pVisibleWebWnd && g_pHubble->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
+		if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost)
 		{
 			g_pHubble->m_pGalaxy = nullptr;
 			g_pHubble->m_bWinFormActived = false;
@@ -492,7 +492,6 @@ namespace Web {
 						BrowserLayout();
 						m_pBrowser->LayoutBrowser();
 					}
-					::ShowWindow(m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
 					m_bTabChange = false;
 				}
 			}
