@@ -174,7 +174,7 @@ namespace Web {
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy)
+			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid)
 			{
 				if (m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
 				{
