@@ -1059,7 +1059,14 @@ namespace Web {
 					{
 						CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
 						if (pMdiClientXmlParse->GetChild(strName))
+						{
+							CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
+							IWebPage* pChromeWebPage = (IWebPage*)this;
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
 							pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
+						}
 					}
 				}
 			}
@@ -1093,7 +1100,14 @@ namespace Web {
 					{
 						CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
 						if (pMdiClientXmlParse->GetChild(strName))
+						{
+							CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
+							IWebPage* pChromeWebPage = (IWebPage*)this;
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
 							pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
+						}
 					}
 				}
 			}
@@ -1197,7 +1211,14 @@ namespace Web {
 						{
 							CString strName = pChild3->GetChild(i)->name().MakeLower();
 							if (pChild4->GetChild(strName))
+							{
+								CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
+								pChild3->GetChild(i)->put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
+								IWebPage* pChromeWebPage = (IWebPage*)this;
+								pChild3->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
+								pChild3->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
 								pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
+							}
 						}
 					}
 				}
@@ -1387,7 +1408,14 @@ namespace Web {
 						{
 							CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
 							if (pMdiClientXmlParse->GetChild(strName))
+							{
+								CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
+								IWebPage* pChromeWebPage = (IWebPage*)this;
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
 								pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
+							}
 						}
 					}
 				}
