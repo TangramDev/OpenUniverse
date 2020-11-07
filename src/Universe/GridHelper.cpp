@@ -130,7 +130,8 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		g_pHubble->m_pActiveHtmlWnd = nullptr;
 	}
 	HWND hWnd = m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
-	::BringWindowToTop(hWnd);
+	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
+		::BringWindowToTop(hWnd);
 
 	CGalaxy* pGalaxy = m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
@@ -408,8 +409,8 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 	{
 		RECT rect;
 		::GetClientRect(m_hWnd, &rect);
-		CBrowser* pWnd = (CBrowser*)wParam;
-		::SetParent(pWnd->m_hWnd, m_hWnd);
+		m_pGrid->m_pWebBrowser = (CBrowser*)wParam;
+		::SetParent(m_pGrid->m_pWebBrowser->m_hWnd, m_hWnd);
 		return -1;
 	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node

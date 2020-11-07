@@ -351,7 +351,8 @@ void CGridWnd::StartTracking(int ht)
 	}
 
 	HWND hWnd = m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
-	::BringWindowToTop(hWnd);
+	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
+		::BringWindowToTop(hWnd);
 
 	GetInsideRect(m_rectLimit);
 

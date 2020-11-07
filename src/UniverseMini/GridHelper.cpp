@@ -123,7 +123,8 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 	CGalaxy* pGalaxy = m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
 	HWND hWnd = pGalaxy->m_pGalaxyCluster->m_hWnd;
-	::BringWindowToTop(hWnd);
+	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
+		::BringWindowToTop(hWnd);
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
 		HWND hMenuWnd = pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);

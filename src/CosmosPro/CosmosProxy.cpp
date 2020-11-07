@@ -1160,9 +1160,9 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 					}
 					pChild->VisibleChanged += m_pOnCtrlVisible;
 				}
-				if (pType->IsSubclassOf(UserControl::typeid) == false)
-					InitControl(pForm, pChild, bSave, pParse);
 			}
+			if (pType->IsSubclassOf(UserControl::typeid) == false)
+				InitControl(pForm, pChild, bSave, pParse);
 		}
 		//if (pActiveCtrl != nullptr)
 		//{
@@ -1937,6 +1937,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 
 								thisForm->WindowState = FormWindowState::Normal;
 								::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+								thisForm->Focus();
 								break;
 							}
 						}
