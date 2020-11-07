@@ -796,14 +796,17 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	{
 		if (m_nViewType == CLRCtrl)
 		{
-			HWND hCtrl = NULL;
-			if (g_pHubble->m_pCLRProxy)
-				hCtrl = g_pHubble->m_pCLRProxy->GetCtrlHandle(m_pDisp);
-			if (g_pHubble->m_hFormNodeWnd&& hCtrl == g_pHubble->m_hFormNodeWnd &&(::GetWindowLongPtr(g_pHubble->m_hFormNodeWnd, GWL_STYLE) & WS_CHILD))
+			if (g_pHubble->m_hFormNodeWnd && (::GetWindowLongPtr(g_pHubble->m_hFormNodeWnd, GWL_STYLE) & WS_CHILD))
 			{
-				HWND hWnd = g_pHubble->m_hFormNodeWnd;
-				g_pHubble->m_hFormNodeWnd = nullptr;
-				return hWnd;
+				HWND hCtrl = NULL;
+				if (g_pHubble->m_pCLRProxy)
+					hCtrl = g_pHubble->m_pCLRProxy->GetCtrlHandle(m_pDisp);
+				if (hCtrl == g_pHubble->m_hFormNodeWnd)
+				{
+					HWND hWnd = g_pHubble->m_hFormNodeWnd;
+					g_pHubble->m_hFormNodeWnd = nullptr;
+					return hWnd;
+				}
 			}
 		}
 		auto hWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);

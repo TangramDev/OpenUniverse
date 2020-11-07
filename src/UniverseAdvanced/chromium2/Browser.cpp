@@ -321,15 +321,15 @@ namespace Web {
 			}
 		}
 		break;
+		case 20190527:
+		{
+			return (LRESULT)((IBrowser*)this);
+		}
+		break;
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;
 			return 0;
-		}
-		break;
-		case 20190527:
-		{
-			return (LRESULT)((IBrowser*)this);
 		}
 		break;
 		case 20200205:
@@ -454,6 +454,8 @@ namespace Web {
 		{
 			::SendMessageW(g_pHubble->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
 		}
+		//if (g_pHubble->m_mapBrowserWnd.size() == 1 && ::IsWindow(g_pHubble->m_hMainWnd))
+		//	::SendMessageW(g_pHubble->m_hMainWnd, WM_CLOSE, 0, 0);
 		return lRes;
 	}
 
@@ -474,6 +476,7 @@ namespace Web {
 			lpwndpos->y = -6 - m_heightfix;
 			lpwndpos->cx = rc.right + 24;
 			lpwndpos->cy = rc.bottom + 18 + 3 + m_heightfix;
+			//::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 		}
 		else if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE)
 			::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);

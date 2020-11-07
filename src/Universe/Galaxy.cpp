@@ -320,6 +320,7 @@ LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 {
 	g_pHubble->m_pActiveHtmlWnd = nullptr;
 	g_pHubble->m_pActiveWinFormWnd = this;
+	::BringWindowToTop(m_hWnd);
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
 

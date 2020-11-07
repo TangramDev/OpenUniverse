@@ -154,6 +154,8 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	}
 
 	CGalaxy* pGalaxy = m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
+	HWND hWnd = pGalaxy->m_pGalaxyCluster->m_hWnd;
+	::BringWindowToTop(hWnd);
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
 		HWND hMenuWnd = pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
@@ -646,13 +648,10 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam && lParam == 20201028)
 	{
-		CBrowser* pWnd = (CBrowser*)wParam;
-		::SetParent(pWnd->m_hWnd, m_hWnd);
 		RECT rect;
 		::GetClientRect(m_hWnd, &rect);
-		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_HIDEWINDOW);
-		pWnd->BrowserLayout();
-		::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+		CBrowser* pWnd = (CBrowser*)wParam;
+		::SetParent(pWnd->m_hWnd, m_hWnd);
 		return -1;
 	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node

@@ -174,7 +174,7 @@ namespace Web {
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid)
+			if (m_pGalaxy)
 			{
 				if (m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
 				{
@@ -1460,9 +1460,8 @@ namespace Web {
 				{
 					if (nPos == 200)
 					{
-						HWND hWnd = ::CreateWindow(L"Hubble Grid Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD| WS_VISIBLE |WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pHubble->m_hChildHostWnd, 0, AfxGetInstanceHandle(), NULL);
-						g_pHubble->m_hTempBrowserWnd = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
-						::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 200, 200, SWP_NOACTIVATE);
+						g_pHubble->m_hTempBrowserWnd = g_pHubble->m_pBrowserFactory->CreateBrowser(g_pHubble->m_hChildHostWnd, strUrl);
+						//::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE);
 					}
 					else
 						g_pHubble->m_pBrowserFactory->CreateBrowser(0, strUrl);

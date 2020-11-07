@@ -352,6 +352,9 @@ void CGridWnd::StartTracking(int ht)
 		pGrid->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
 	}
 
+	HWND hWnd = m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+	::BringWindowToTop(hWnd);
+
 	GetInsideRect(m_rectLimit);
 
 	if (ht >= splitterIntersection1 && ht <= splitterIntersection225)

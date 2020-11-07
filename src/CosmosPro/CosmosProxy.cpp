@@ -993,12 +993,29 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 
 		for each (Control ^ pChild in pCtrl->Controls)
 		{
-			if (pChild != pActiveCtrl)
+			String^ name = pChild->Name;
+			Type^ pType = pChild->GetType();
+			String^ strType = pType->FullName;
+			if (strType == L"System.Windows.Forms.MdiClient")
 			{
-				Type^ pType = pChild->GetType();
+				name = "MdiClient";
+				::SendMessage((HWND)pForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 4);
+				if (m_pOnMdiChildActivate)
+				{
+				}
+				else
+				{
+					m_pOnMdiChildActivate = gcnew EventHandler(CCosmosProxy::OnMdiChildActivate);
+				}
+				pForm->MdiChildActivate += m_pOnMdiChildActivate;
+			}
+			if (String::IsNullOrEmpty(name))
+				name = strType;
+			CTangramXmlParse* _pChild = pParse->GetChild(name->ToLower());
+			if (_pChild&&pChild != pActiveCtrl)
+			{
 				if (pActiveCtrl == nullptr)
 				{
-					String^ strType = pType->FullName;
 					if (strType->IndexOf(L"System.Drawing") == 0)// || strType->IndexOf(L"System.Windows.Forms.Button") == 0 || strType->IndexOf(L"System.Windows.Forms.Label") == 0 || strType->IndexOf(L"System.Windows.Forms.Text") == 0)
 						continue;
 					String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
@@ -1020,24 +1037,9 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
 							}
 							pChild->VisibleChanged += m_pOnCtrlVisible;
-							String^ name = pChild->Name;
-							if (strType == L"System.Windows.Forms.MdiClient")
-							{
-								name = "MdiClient";
-								::SendMessage((HWND)pForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 4);
-								if (m_pOnMdiChildActivate)
-								{
-								}
-								else
-								{
-									m_pOnMdiChildActivate = gcnew EventHandler(CCosmosProxy::OnMdiChildActivate);
-								}
-								pForm->MdiChildActivate += m_pOnMdiChildActivate;
-							}
-							else if (strType == L"System.Windows.Forms.TreeView")
+							if (strType == L"System.Windows.Forms.TreeView")
 							{
 								TreeView^ pTreeView = (TreeView^)pChild;
-								CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 								if (_pChild)
 								{
 									_pChild = _pChild->GetChild(_T("uidata"));
@@ -1053,7 +1055,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 							else if (strType == L"System.Windows.Forms.ListView")
 							{
 								ListView^ pListView = (ListView^)pChild;
-								CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);// ->GetChild(_T("uidata"));
 								if (_pChild)
 								{
 									_pChild = _pChild->GetChild(_T("uidata"));
@@ -1066,8 +1067,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								}
 							}
 
-							if (String::IsNullOrEmpty(name))
-								name = strType;
 							BSTR strName = STRING2BSTR(name->ToLower());
 							if (name == L"htmlclient")
 							{
@@ -1077,10 +1076,9 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 							}
 							else if (name == L"mdiclient")
 							{
-								CTangramXmlParse* pChildParse = pParse->GetChild(L"mdiclient");
 								CTangramXmlParse* pChildParse2 = nullptr;
-								if (pChildParse)
-									pChildParse2 = pChildParse->GetChild(_T("default"));
+								if (_pChild)
+									pChildParse2 = _pChild->GetChild(_T("default"));
 								GalaxyInfo* pInfo = new GalaxyInfo;
 								pInfo->m_pDisp = nullptr;
 								pInfo->m_strGridXml = _T("");
@@ -1099,11 +1097,10 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 							{
 								if (pParse)
 								{
-									CTangramXmlParse* pChildParse = pParse->GetChild(name->ToLower());
 									CTangramXmlParse* pChildParse2 = nullptr;
-									if (pChildParse)
+									if (_pChild)
 									{
-										CString strWebName = pChildParse->attr(_T("id"), _T(""));
+										CString strWebName = _pChild->attr(_T("id"), _T(""));
 										if (strWebName == _T(""))strWebName = pChild->Name;
 										if (strWebName != _T(""))
 										{
@@ -1114,11 +1111,11 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 											pObj->m_strObjName = name;
 											pObj->m_strObjType = strType;
 											pObj->m_strBindObjName = strWebName;
-											pObj->m_strBindData = pChildParse->attr(_T("bindevent"), _T(""));
+											pObj->m_strBindData = _pChild->attr(_T("bindevent"), _T(""));
 											HWND hForm = (HWND)pForm->Handle.ToPointer();
 											::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
 										}
-										pChildParse2 = pChildParse->GetChild(_T("default"));
+										pChildParse2 = _pChild->GetChild(_T("default"));
 									}
 
 									if (pChildParse2)
@@ -1167,50 +1164,50 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 					InitControl(pForm, pChild, bSave, pParse);
 			}
 		}
-		if (pActiveCtrl != nullptr)
-		{
-			Control^ pChild = pActiveCtrl;
-			Type^ pType = pChild->GetType();
-			String^ strType = pType->FullName;
-			String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
-			if ((m_strExtendableTypes->IndexOf(L"|" + strType2 + L"|") != -1 && pChild->Dock == DockStyle::None) || pChild->Dock == DockStyle::Fill)
-			{
-				bool bExtendable = (pChild->Tag == nullptr);
-				if (pChild->Tag != nullptr)
-				{
-					String^ strTag = pChild->Tag->ToString();
-					bExtendable = (strTag->IndexOf(L"|Extendable|") >= 0);
-				}
-				if (bExtendable)
-				{
-					if (m_pOnCtrlVisible)
-					{
-					}
-					else
-					{
-						m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
-					}
-					pChild->VisibleChanged += m_pOnCtrlVisible;
+		//if (pActiveCtrl != nullptr)
+		//{
+		//	Control^ pChild = pActiveCtrl;
+		//	Type^ pType = pChild->GetType();
+		//	String^ strType = pType->FullName;
+		//	String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
+		//	if ((m_strExtendableTypes->IndexOf(L"|" + strType2 + L"|") != -1 && pChild->Dock == DockStyle::None) || pChild->Dock == DockStyle::Fill)
+		//	{
+		//		bool bExtendable = (pChild->Tag == nullptr);
+		//		if (pChild->Tag != nullptr)
+		//		{
+		//			String^ strTag = pChild->Tag->ToString();
+		//			bExtendable = (strTag->IndexOf(L"|Extendable|") >= 0);
+		//		}
+		//		if (bExtendable)
+		//		{
+		//			if (m_pOnCtrlVisible)
+		//			{
+		//			}
+		//			else
+		//			{
+		//				m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
+		//			}
+		//			pChild->VisibleChanged += m_pOnCtrlVisible;
 
-					String^ name = pChild->Name;
-					if (String::IsNullOrEmpty(name))
-						name = strType;
-					BSTR strName = STRING2BSTR(name->ToLower());//OK!
-					GalaxyInfo* pInfo = new GalaxyInfo;
-					pInfo->m_strGridXml = _T("");
-					pInfo->m_pDisp = nullptr;
-					pInfo->m_pParentDisp = nullptr;
-					pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-					m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
-					pInfo->m_strCtrlName = pChild->Name->ToLower();
-					pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-					IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
-					::SysFreeString(strName);
-				}
-			}
-			if (pType->IsSubclassOf(UserControl::typeid) == false)
-				InitControl(pForm, pChild, bSave, pParse);
-		}
+		//			String^ name = pChild->Name;
+		//			if (String::IsNullOrEmpty(name))
+		//				name = strType;
+		//			BSTR strName = STRING2BSTR(name->ToLower());//OK!
+		//			GalaxyInfo* pInfo = new GalaxyInfo;
+		//			pInfo->m_strGridXml = _T("");
+		//			pInfo->m_pDisp = nullptr;
+		//			pInfo->m_pParentDisp = nullptr;
+		//			pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
+		//			m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
+		//			pInfo->m_strCtrlName = pChild->Name->ToLower();
+		//			pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
+		//			IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
+		//			::SysFreeString(strName);
+		//		}
+		//	}
+		//	if (pType->IsSubclassOf(UserControl::typeid) == false)
+		//		InitControl(pForm, pChild, bSave, pParse);
+		//}
 	}
 	long nCount = 0;
 	pGalaxyCluster->m_pGalaxyCluster->get_Count(&nCount);
@@ -1804,7 +1801,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						}
 						if (m_pCurrentPForm)
 						{
-							thisForm->MdiParent = m_pCurrentPForm;
+							if(thisForm->IsMdiContainer==false)
+								thisForm->MdiParent = m_pCurrentPForm;
 							m_pCurrentPForm = nullptr;
 						}
 
@@ -1928,6 +1926,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							case 2:
 								thisForm->StartPosition = FormStartPosition::CenterParent;
 								thisForm->WindowState = FormWindowState::Minimized;
+								
+
 								if (nModel)
 									thisForm->Show(pPage);
 								else
@@ -1936,6 +1936,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								}
 
 								thisForm->WindowState = FormWindowState::Normal;
+								::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 								break;
 							}
 						}
@@ -3016,9 +3017,18 @@ void CCosmosProxy::OnTextChanged(System::Object^ sender, System::EventArgs^ e)
 
 HWND CCosmosProxy::GetCtrlHandle(IDispatch* _pCtrl)
 {
-	Control^ pCtrl = (Control^)Marshal::GetObjectForIUnknown((IntPtr)_pCtrl);
-	if (pCtrl != nullptr)
-		return (HWND)pCtrl->Handle.ToInt64();
+	Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)_pCtrl);
+	if (pObj->GetType()->IsSubclassOf(System::Windows::FrameworkElement::typeid))
+	{
+		System::Windows::Forms::Integration::ElementHost^ pElementHost = (System::Windows::Forms::Integration::ElementHost^)pObj;
+		return (HWND)pElementHost->Handle.ToInt64();
+	}
+	else
+	{
+		Control^ pCtrl = (Control^)pObj;
+		if (pCtrl != nullptr)
+			return (HWND)pCtrl->Handle.ToInt64();
+	}
 	return 0;
 }
 

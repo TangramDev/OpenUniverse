@@ -2088,7 +2088,7 @@ IGalaxy* CHubble::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 			strKey = pDocTemplate->m_strClientKey;
 		}
 		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
-		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
+		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(_pGalaxy->m_strCurrentXml), &pGrid);
 		if (pDocTemplate == nullptr && pGrid)
 		{
 			CGrid* _pGrid = (CGrid*)pGrid;

@@ -902,7 +902,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						}
 						if (m_pCurrentPForm)
 						{
-							thisForm->MdiParent = m_pCurrentPForm;
+							if (thisForm->IsMdiContainer == false)
+								thisForm->MdiParent = m_pCurrentPForm;
 							m_pCurrentPForm = nullptr;
 						}
 
@@ -1386,9 +1387,18 @@ void CCosmosProxy::OnTextChanged(System::Object^ sender, System::EventArgs^ e)
 
 HWND CCosmosProxy::GetCtrlHandle(IDispatch* _pCtrl)
 {
-	Control^ pCtrl = (Control^)Marshal::GetObjectForIUnknown((IntPtr)_pCtrl);
-	if (pCtrl != nullptr)
-		return (HWND)pCtrl->Handle.ToInt64();
+	Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)_pCtrl);
+	if (pObj->GetType()->IsSubclassOf(System::Windows::FrameworkElement::typeid))
+	{
+		System::Windows::Forms::Integration::ElementHost^ pElementHost = (System::Windows::Forms::Integration::ElementHost^)pObj;
+		return (HWND)pElementHost->Handle.ToInt64();
+	}
+	else
+	{
+		Control^ pCtrl = (Control^)pObj;
+		if (pCtrl != nullptr)
+			return (HWND)pCtrl->Handle.ToInt64();
+	}
 	return 0;
 }
 

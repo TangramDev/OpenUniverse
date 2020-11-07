@@ -915,6 +915,7 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 			}
 			if (!::IsChild(it.first, pWnd->m_pVisibleWebWnd->m_hWnd))
 				::PostMessage(pWnd->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
+			::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
 	}
 

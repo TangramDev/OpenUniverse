@@ -1336,16 +1336,16 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		m_bMdiForm = true;//design
 		if (m_bMdiForm)
 		{
-			int nPos = m_strPath.ReverseFind('.');
-			if (nPos != -1)
-			{
-				CString strDir = m_strPath.Left(nPos) + _T("\\");
-				m_strChildFormPath = strDir;
-				if (::PathIsDirectory(strDir) == false)
-				{
-					::SHCreateDirectory(nullptr, strDir);
-				}
-			}
+			//int nPos = m_strPath.ReverseFind('.');
+			//if (nPos != -1)
+			//{
+			//	CString strDir = m_strPath.Left(nPos) + _T("\\");
+			//	m_strChildFormPath = strDir;
+			//	if (::PathIsDirectory(strDir) == false)
+			//	{
+			//		::SHCreateDirectory(nullptr, strDir);
+			//	}
+			//}
 		}
 	}
 	break;
@@ -1415,6 +1415,12 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	break;
 	case 20190214:
+		//if (m_pOwnerHtmlWnd)
+		//{
+		//	::PostMessage(::GetParent(m_pOwnerHtmlWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+		//}
+		//if (m_pParentHtmlWnd)
+		//	::PostMessage(::GetParent(m_pParentHtmlWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		return (LRESULT)this;
 		break;
 	case 20201029:
@@ -1652,6 +1658,7 @@ LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 {
 	g_pHubble->m_pActiveHtmlWnd = nullptr;
 	g_pHubble->m_pActiveWinFormWnd = this;
+	::BringWindowToTop(m_hWnd);
 	//if (m_pParentHtmlWnd)
 	//{
 	//	m_pParentHtmlWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
@@ -2967,6 +2974,12 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 				}
 			}
 		}
+
+		//m_pHostWebBrowserWnd->m_pBrowser->LayoutBrowser();
+		////m_pHostWebBrowserWnd->BrowserLayout();
+		::SendMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+		::PostMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+
 	}
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	return S_OK;
@@ -3242,6 +3255,12 @@ LRESULT CGalaxy::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20180115:
 	{
 		HostPosChanged();
+		//if (m_pHostWebBrowserWnd)
+		//{
+		//	m_pHostWebBrowserWnd->m_pBrowser->LayoutBrowser();
+		//	//m_pHostWebBrowserWnd->BrowserLayout();
+		//	::PostMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+		//}
 	}
 	break;
 	case 20200601:
