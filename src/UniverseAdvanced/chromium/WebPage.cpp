@@ -189,6 +189,7 @@ namespace Web {
 			if (bChild && m_pChromeRenderFrameHost)
 			{
 				m_pChromeRenderFrameHost->ShowWebPage(true);
+				::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
 			}
 		}
 		break;

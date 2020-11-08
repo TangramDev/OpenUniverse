@@ -1209,7 +1209,8 @@ void CGridHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 
 	if (m_pGrid->m_pWebBrowser)
 	{
-		::SetWindowPos(m_pGrid->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE);
+		::SetWindowPos(m_pGrid->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE| SWP_NOREDRAW);
+		return;
 	}
 	else {
 		if (m_hFormWnd)

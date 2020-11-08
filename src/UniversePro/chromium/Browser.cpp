@@ -324,6 +324,7 @@ namespace Web {
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 			return 0;
 		}
 		break;
@@ -424,6 +425,7 @@ namespace Web {
 					if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
 						((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
 				}
+				g_pHubble->m_mapBrowserWnd.erase(g_pHubble->m_mapBrowserWnd.begin(), g_pHubble->m_mapBrowserWnd.end());
 			}
 		}
 

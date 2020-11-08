@@ -898,12 +898,12 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
 	for (auto it : g_pHubble->m_mapBrowserWnd)
 	{
-		CBrowser* pWnd = (CBrowser*)it.second;
-		if (pWnd && ::IsWindowVisible(it.first) && pWnd->m_pVisibleWebWnd)
+		if (::IsWindowVisible(it.first))
 		{
-			HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-			if (pWnd->m_pVisibleWebWnd)
+			CBrowser* pWnd = (CBrowser*)it.second;
+			if (pWnd && pWnd->m_pVisibleWebWnd)
 			{
+				HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
 				if (pWnd->m_pVisibleWebWnd->m_hWnd != hWnd)
 				{
 					auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
@@ -912,10 +912,9 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 						pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
 					}
 				}
+				if (!::IsChild(it.first, pWnd->m_pVisibleWebWnd->m_hWnd) || ::IsChild(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_pVisibleWebWnd->m_hWnd))
+					::PostMessage(pWnd->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
 			}
-			if (!::IsChild(it.first, pWnd->m_pVisibleWebWnd->m_hWnd))
-				::PostMessage(pWnd->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
-			::PostMessage(pWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
 	}
 

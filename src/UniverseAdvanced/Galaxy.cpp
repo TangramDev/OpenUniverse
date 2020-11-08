@@ -1122,47 +1122,50 @@ LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
-	if (pSession)
+	if (g_pHubble->m_mapBrowserWnd.size())
 	{
-		int nCount = 0;
-		if (m_bMainForm)
+		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		if (pSession)
 		{
-			nCount = g_pHubble->m_mapNeedQueryOnClose.size();
-			if (nCount > 1)
+			int nCount = 0;
+			if (m_bMainForm)
 			{
-				pSession->InsertLong(_T("FormAppNeedClosed"), nCount);
-			}
-			for (auto it : g_pHubble->m_mapNeedQueryOnClose)
-			{
-				if (it.second != this)
+				nCount = g_pHubble->m_mapNeedQueryOnClose.size();
+				if (nCount > 1)
 				{
+					pSession->InsertLong(_T("FormAppNeedClosed"), nCount);
+				}
+				for (auto it : g_pHubble->m_mapNeedQueryOnClose)
+				{
+					if (it.second != this)
+					{
 
+					}
 				}
 			}
-		}
-		bool bQueryonclose = false;
-		long nQueryOnClose = pSession->GetLong(_T("queryonclose"));
-		bQueryonclose = nQueryOnClose ? true : false;
-		pSession->InsertString(_T("msgID"), _T("WINFORM_ONCLOSE"));
-		pSession->SendMessage();
-		if (bQueryonclose)
-		{
-			MSG msg;
-			while (pSession->Getint64(_T("CloseInfo")) != 19921963)
+			bool bQueryonclose = false;
+			long nQueryOnClose = pSession->GetLong(_T("queryonclose"));
+			bQueryonclose = nQueryOnClose ? true : false;
+			pSession->InsertString(_T("msgID"), _T("WINFORM_ONCLOSE"));
+			pSession->SendMessage();
+			if (bQueryonclose)
 			{
-				GetMessage(&msg, NULL, 0, 0);
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-				if (pSession->Getint64(_T("CloseInfo")) == 19921965)
+				MSG msg;
+				while (pSession->Getint64(_T("CloseInfo")) != 19921963)
 				{
-					pSession->Insertint64(_T("CloseInfo"), 0);
-					return 1;
-					break;
-				}
-				else if (pSession->Getint64(_T("CloseInfo")) == 19921963)
-				{
-					break;
+					GetMessage(&msg, NULL, 0, 0);
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+					if (pSession->Getint64(_T("CloseInfo")) == 19921965)
+					{
+						pSession->Insertint64(_T("CloseInfo"), 0);
+						return 1;
+						break;
+					}
+					else if (pSession->Getint64(_T("CloseInfo")) == 19921963)
+					{
+						break;
+					}
 				}
 			}
 		}

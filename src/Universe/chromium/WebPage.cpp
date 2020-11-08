@@ -160,13 +160,10 @@ namespace Web {
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy)
+			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
 			{
-				if (m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
-				{
-					m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
-					m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->SendMessage();
-				}
+				m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
+				m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->SendMessage();
 			}
 		}
 		break;
@@ -175,6 +172,7 @@ namespace Web {
 			if (bChild && m_pChromeRenderFrameHost)
 			{
 				m_pChromeRenderFrameHost->ShowWebPage(true);
+				::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
 			}
 		}
 		break;
