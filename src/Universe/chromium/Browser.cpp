@@ -63,6 +63,8 @@ namespace Web {
 			g_pHubble->m_pGalaxy = nullptr;
 			g_pHubble->m_bWinFormActived = false;
 		}
+		m_pBrowser->LayoutBrowser();
+		//::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		return lRes;
 	}
 
