@@ -20,7 +20,7 @@
 
 #pragma once
 
-using namespace Web;
+using namespace Browser;
 using namespace CommonUniverse;
 class CWinForm;
 struct CommonThreadInfo

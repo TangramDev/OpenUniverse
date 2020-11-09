@@ -21,7 +21,7 @@
 #pragma once
 #include "chromium/WebPage.h"
 
-using namespace Web;
+using namespace Browser;
 class CBKWnd;
 #define WM_HUBBLE_NOTIFY WM_NOTIFY+WM_REFLECT_BASE
 class CCommonCtrl :

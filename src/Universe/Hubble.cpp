@@ -47,7 +47,7 @@
 #include <sys/stat.h>
 #include "Markup.h"
 
-using namespace Web;
+using namespace Browser;
 
 // CHubble
 

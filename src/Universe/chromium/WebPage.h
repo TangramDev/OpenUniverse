@@ -16,7 +16,7 @@
 #include "../stdafx.h"
 
 class CWinForm;
-namespace Web
+namespace Browser
 {
 	class ATL_NO_VTABLE CWebPage :
 		public CWebPageImpl,

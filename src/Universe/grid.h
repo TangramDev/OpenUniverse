@@ -82,7 +82,7 @@ public:
 	CWinForm*						m_pParentWinFormWnd;
 	CTangramXmlParse*				m_pHostParse;
 	CGridShareData*					m_pGridShareData;
-	Web::CBrowser*					m_pWebBrowser;
+	Browser::CBrowser*				m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CGalaxy*						m_pHostGalaxy;
 	CRuntimeClass*					m_pObjClsInfo;
@@ -105,7 +105,7 @@ public:
 	BOOL	AddChildNode(CGrid* pGrid);
 	BOOL	RemoveChildNode(CGrid* pGrid);
 	CString GetNames();
-	Web::CWebPage* GetHtmlWnd();
+	Browser::CWebPage* GetHtmlWnd();
 	void NodeCreated();
 
 	HRESULT Fire_ObserveComplete();

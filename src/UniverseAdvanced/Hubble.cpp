@@ -80,7 +80,7 @@
 #include "Markup.h"
 //#include "vcproject2.h"
 
-using namespace Web;
+using namespace Browser;
 
 #ifdef _WIN32
 #ifdef ReplaceText
