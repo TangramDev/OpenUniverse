@@ -320,6 +320,44 @@ void CGalaxy::HostPosChanged()
 	}
 }
 
+HWND CGalaxy::GetWinForm(HWND hForm)
+{
+	if (g_pHubble->m_pCLRProxy)
+	{
+		int nForm = g_pHubble->m_pCLRProxy->IsWinForm(hForm);
+		while (nForm >= 1)
+		{
+			m_pWorkGrid->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+			LRESULT lRes = ::SendMessage(hForm, WM_HUBBLE_GETNODE, 0, 0);
+			if (lRes)
+			{
+				CGrid* pGrid = (CGrid*)lRes;
+				hForm = pGrid->m_pRootObj->m_pGridShareData->m_pGalaxyCluster->m_hWnd;
+				nForm = g_pHubble->m_pCLRProxy->IsWinForm(hForm);
+			}
+			else
+			{
+				break;
+			}
+		}
+		if (nForm == 0)
+		{
+			hForm = ::GetParent(hForm);
+			while (g_pHubble->m_pCLRProxy->IsWinForm(hForm) == 0)
+			{
+				hForm = ::GetParent(hForm);
+				if (hForm == NULL)
+				{
+					return hForm;
+					break;
+				}
+			}
+			hForm = GetWinForm(hForm);
+		}
+	}
+	return hForm;
+}
+
 CGrid* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CString strFile)
 {
 	m_pWorkGrid = new CComObject<CGrid>;
@@ -337,6 +375,14 @@ CGrid* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 
 	m_pWorkGrid->m_strKey = strKey;
 	m_pWorkGrid->Fire_ObserveComplete();
+	if (g_pHubble->m_pCLRProxy)
+	{
+		CGalaxyCluster* pGalaxyCluster = m_pGalaxyCluster;
+		HWND hForm = pGalaxyCluster->m_hWnd;
+		hForm = GetWinForm(hForm);
+		if (hForm)
+			m_pWorkGrid->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+	}
 
 	return m_pWorkGrid;
 }

@@ -281,7 +281,6 @@ public:
 	void HostPosChanged();
 	void UpdateDesignerTreeInfo();
 	void UpdateVisualWPFMap(HWND, BOOL);
-
 	CTangramXmlParse* UpdateGrid();
 	BOOL CreateGalaxyCluster();
 	CGrid* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
@@ -358,4 +357,5 @@ private:
 	STDMETHOD(Detach)(void);
 
 	void OnFinalMessage(HWND hWnd);
+	HWND GetWinForm(HWND hWnd);
 };

@@ -146,4 +146,5 @@ private:
 	STDMETHOD(Detach)(void);
 
 	void OnFinalMessage(HWND hWnd);
+	HWND GetWinForm(HWND hWnd);
 };

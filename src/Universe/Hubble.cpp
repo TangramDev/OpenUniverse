@@ -834,8 +834,7 @@ CGrid* CHubble::ObserveEx(long hWnd, CString strExXml, CString strXml)
 			pWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 	}
 
-	CGrid* pRootGrid = nullptr;
-	pRootGrid = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
+	CGrid* pRootGrid = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
 	m_strCurrentKey = _T("");
 	return pRootGrid;
 }

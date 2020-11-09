@@ -313,11 +313,14 @@ CWebPage* CGrid::GetHtmlWnd()
 		}
 		else
 		{
-			CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
-			if (pForm)
+			if (m_pParentWinFormWnd == nullptr)
 			{
-				m_pParentWinFormWnd = pForm;
-				return pForm->m_pOwnerHtmlWnd;
+				CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
+				if (pForm)
+				{
+					m_pParentWinFormWnd = pForm;
+					return pForm->m_pOwnerHtmlWnd;
+				}
 			}
 		}
 	}
