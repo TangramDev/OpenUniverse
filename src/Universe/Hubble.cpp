@@ -1140,8 +1140,18 @@ STDMETHODIMP CHubble::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CHubble::NavigateNode(IGrid* pGrid, BSTR bstrBrowserID, BSTR bstrXnl)
+STDMETHODIMP CHubble::NavigateNode(IGrid* _pGrid, BSTR bstrBrowserID, BSTR bstrXml, IGrid** pVal)
 {
+	CGrid* pGrid = (CGrid*)_pGrid;
+	if (pGrid->m_nViewType == GridType::Grid)
+	{
+		IGrid* pRet = nullptr;
+		pGrid->m_pParentObj->ObserveEx(pGrid->m_nRow, pGrid->m_nCol, bstrBrowserID, bstrXml, pVal);
+		if (pVal)
+		{
+			return S_OK;
+		}
+	}
 	return S_OK;
 }
 

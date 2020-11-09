@@ -101,7 +101,7 @@ public:
 	STDMETHOD(get_ActiveChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 
-	STDMETHOD(NavigateNode)(IGrid* pGrid, BSTR bstrObjID, BSTR bstrXnl);
+	STDMETHOD(NavigateNode)(IGrid* pGrid, BSTR bstrObjID, BSTR bstrXml, IGrid** pRet);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
 	STDMETHOD(CreateCLRObj)(BSTR bstrObjID, IDispatch** ppDisp);
 	STDMETHOD(CreateGalaxyCluster)(LONGLONG hWnd, IGalaxyCluster** ppHubble);

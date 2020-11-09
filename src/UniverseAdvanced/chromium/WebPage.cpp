@@ -91,6 +91,23 @@ namespace Web {
 		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
+		case 20201109:
+		{
+			if (lParam)
+			{
+				if (::IsWindow(m_hExtendWnd))
+				{
+					::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+					::ShowWindow(m_hExtendWnd, SW_SHOW);
+				}
+			}
+			else
+			{
+				::SetParent(m_hExtendWnd, m_hWnd);
+				::ShowWindow(m_hExtendWnd, SW_HIDE);
+			}
+		}
+		break;
 		case 20200429:
 		{
 			CSession* pSession = (CSession*)lParam;
@@ -174,7 +191,7 @@ namespace Web {
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid)
+			if (m_pGalaxy && m_pGalaxy->m_pWorkGrid)
 			{
 				if (m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
 				{
@@ -1461,7 +1478,7 @@ namespace Web {
 				{
 					if (nPos == 200)
 					{
-						HWND hWnd = ::CreateWindow(L"Hubble Grid Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD| WS_VISIBLE |WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pHubble->m_hChildHostWnd, 0, AfxGetInstanceHandle(), NULL);
+						HWND hWnd = ::CreateWindow(L"Hubble Grid Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pHubble->m_hChildHostWnd, 0, AfxGetInstanceHandle(), NULL);
 						g_pHubble->m_hTempBrowserWnd = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
 						::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 200, 200, SWP_NOACTIVATE);
 					}

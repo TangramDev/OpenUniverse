@@ -392,7 +392,7 @@ interface IHubble : IDispatch {
 	[propget, id(14)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
 	[propget, id(15)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 
-	[id(0x00100)] HRESULT NavigateNode(IGrid* pGrid, BSTR bstrBrowserID, BSTR bstrXml);
+	[id(0x00100)] HRESULT NavigateNode(IGrid* pGrid, BSTR bstrBrowserID, BSTR bstrXml, [out, retval] IGrid** pVal);
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);
 	[id(0x00102)] HRESULT CreateOfficeDocument(BSTR bstrXml);
 	[id(0x00103), helpstring("method Create CLR Object")] HRESULT CreateCLRObj(BSTR bstrObjID, [out, retval]IDispatch** ppDisp);

@@ -217,7 +217,9 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	break;
 	case WM_POWERBROADCAST:
 	{
-		if (wParam == PBT_APMRESUMEAUTOMATIC)
+		switch (wParam)
+		{
+		case PBT_APMRESUMEAUTOMATIC:
 		{
 			for (auto it : g_pHubble->m_mapThreadInfo)
 			{
@@ -226,9 +228,42 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 					for (auto it2 : it.second->m_mapGalaxy)
 					{
 						it2.second->HostPosChanged();
+						for (auto it3 : it2.second->m_mapWPFView)
+						{
+							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
+							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+						}
 					}
 				}
 			}
+		}
+		break;
+		case PBT_APMPOWERSTATUSCHANGE:
+		{
+			for (auto it : g_pHubble->m_mapBrowserWnd)
+			{
+				if (::IsWindowVisible(it.first))
+				{
+					CBrowser* pWnd = (CBrowser*)it.second;
+					if (pWnd && pWnd->m_pVisibleWebWnd)
+					{
+						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+						if (pWnd->m_pVisibleWebWnd->m_hWnd != hWnd)
+						{
+							auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
+							if (it != g_pHubble->m_mapHtmlWnd.end())
+							{
+								pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
+							}
+						}
+						if (!::IsChild(it.first, hWnd) || ::IsChild(pWnd->m_pVisibleWebWnd->m_hExtendWnd, hWnd))
+							::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+					}
+					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
+				}
+			}
+		}
+		break;
 		}
 	}
 	break;
@@ -289,27 +324,27 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 
 LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	for (auto it : g_pHubble->m_mapBrowserWnd)
-	{
-		if (::IsWindowVisible(it.first))
-		{
-			CBrowser* pWnd = (CBrowser*)it.second;
-			if (pWnd && pWnd->m_pVisibleWebWnd)
-			{
-				HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-				if (pWnd->m_pVisibleWebWnd->m_hWnd != hWnd)
-				{
-					auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
-					if (it != g_pHubble->m_mapHtmlWnd.end())
-					{
-						pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
-					}
-				}
-				if (!::IsChild(it.first, pWnd->m_pVisibleWebWnd->m_hWnd) || ::IsChild(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_pVisibleWebWnd->m_hWnd))
-					::PostMessage(pWnd->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
-			}
-		}
-	}
+	//for (auto it : g_pHubble->m_mapBrowserWnd)
+	//{
+	//	if (::IsWindowVisible(it.first))
+	//	{
+	//		CBrowser* pWnd = (CBrowser*)it.second;
+	//		if (pWnd && pWnd->m_pVisibleWebWnd)
+	//		{
+	//			HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+	//			if (pWnd->m_pVisibleWebWnd->m_hWnd != hWnd)
+	//			{
+	//				auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
+	//				if (it != g_pHubble->m_mapHtmlWnd.end())
+	//				{
+	//					pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
+	//				}
+	//			}
+	//			if (!::IsChild(it.first, hWnd) || ::IsChild(pWnd->m_pVisibleWebWnd->m_hExtendWnd, hWnd))
+	//				::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+	//		}
+	//	}
+	//}
 
 	if (g_pHubble->m_pHubbleDelegate)
 	{

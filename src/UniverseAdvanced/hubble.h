@@ -326,7 +326,7 @@ public:
 	STDMETHOD(get_ActiveChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 
-	STDMETHOD(NavigateNode)(IGrid* pGrid, BSTR bstrObjID, BSTR bstrXnl);
+	STDMETHOD(NavigateNode)(IGrid* pGrid, BSTR bstrObjID, BSTR bstrXml, IGrid** pVal);
 	STDMETHOD(ActiveCLRMethod)(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };

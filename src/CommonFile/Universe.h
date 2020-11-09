@@ -3022,7 +3022,8 @@ EXTERN_C const IID IID_IHubble;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateNode( 
             IGrid *pGrid,
             BSTR bstrBrowserID,
-            BSTR bstrXml) = 0;
+            BSTR bstrXml,
+            /* [retval][out] */ IGrid **pVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxyCluster( 
             LONGLONG hWnd,
@@ -3355,7 +3356,8 @@ EXTERN_C const IID IID_IHubble;
             IHubble * This,
             IGrid *pGrid,
             BSTR bstrBrowserID,
-            BSTR bstrXml);
+            BSTR bstrXml,
+            /* [retval][out] */ IGrid **pVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxyCluster )( 
             IHubble * This,
@@ -3679,8 +3681,8 @@ EXTERN_C const IID IID_IHubble;
 #define IHubble_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
     ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
-#define IHubble_NavigateNode(This,pGrid,bstrBrowserID,bstrXml)	\
-    ( (This)->lpVtbl -> NavigateNode(This,pGrid,bstrBrowserID,bstrXml) ) 
+#define IHubble_NavigateNode(This,pGrid,bstrBrowserID,bstrXml,pVal)	\
+    ( (This)->lpVtbl -> NavigateNode(This,pGrid,bstrBrowserID,bstrXml,pVal) ) 
 
 #define IHubble_CreateGalaxyCluster(This,hWnd,ppGalaxyCluster)	\
     ( (This)->lpVtbl -> CreateGalaxyCluster(This,hWnd,ppGalaxyCluster) ) 

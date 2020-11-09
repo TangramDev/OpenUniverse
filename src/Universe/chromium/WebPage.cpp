@@ -77,6 +77,23 @@ namespace Web {
 		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
+		case 20201109:
+		{
+			if (lParam)
+			{
+				if (::IsWindow(m_hExtendWnd))
+				{
+					::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+					::ShowWindow(m_hExtendWnd, SW_SHOW);
+				}
+			}
+			else
+			{
+				::SetParent(m_hExtendWnd, m_hWnd);
+				::ShowWindow(m_hExtendWnd, SW_HIDE);
+			}
+		}
+		break;
 		case 20200429:
 		{
 			CSession* pSession = (CSession*)lParam;
