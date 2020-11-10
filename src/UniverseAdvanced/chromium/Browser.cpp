@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *					Open Universe - version 1.0.1.13
+ *					Open Universe - version 1.0.1.14
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -28,7 +28,7 @@
 #include "WebPage.h"
 #include "Browser.h"
 
-namespace Web {
+namespace Browser {
 	CBrowser::CBrowser() {
 		m_hDrawWnd = 0;
 		m_heightfix = 0;
@@ -598,4 +598,4 @@ namespace Web {
 		}
 		return S_OK;
 	}
-}  // namespace Web
+}  // namespace Browser

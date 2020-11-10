@@ -1,5 +1,5 @@
 /********************************************************************************
- *					Open Universe - version 1.0.1.13
+ *					Open Universe - version 1.0.1.14
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -31,7 +31,7 @@
 #include "WebPage.h"
 #include "Browser.h"
 
-namespace Web {
+namespace Browser {
 	CWebPage::CWebPage() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
@@ -172,9 +172,32 @@ namespace Web {
 					{
 						pSession->Insertint64(_T("parentgridhandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
 					}
+					CWinForm* pMDIPForm = nullptr;
+					bool bMDIChild = false;
+					{
+						pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->GetWinForm(pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_hWnd);
+						if (pGrid->m_pRootObj->m_pParentWinFormWnd)
+						{
+							pGrid->m_pParentWinFormWnd = pGrid->m_pRootObj->m_pParentWinFormWnd;
+							{
+								HWND hPWnd = pGrid->m_pRootObj->m_pParentWinFormWnd->m_hWnd;
+								if ((::GetWindowLong(hPWnd, GWL_EXSTYLE) & WS_EX_MDICHILD))
+								{
+									bMDIChild = true;
+									hPWnd = ::GetParent(::GetParent(hPWnd));
+									pMDIPForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
+								}
+							}
+						}
+					}
+
 					if (pGrid->m_pParentWinFormWnd)
 					{
 						pSession->Insertint64(_T("parentFormHandle"), (__int64)pGrid->m_pParentWinFormWnd->m_hWnd);
+					}
+					if (bMDIChild && pMDIPForm)
+					{
+						pSession->Insertint64(_T("parentMDIFormHandle"), (__int64)pMDIPForm->m_hWnd);
 					}
 					if (pGrid->m_pDisp)
 					{
@@ -1575,4 +1598,4 @@ namespace Web {
 		}
 		return S_OK;
 	}
-}  // namespace Web
+}  // namespace Browser

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.13							*
+*					Open Universe - version 1.0.1.14							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -252,6 +252,26 @@ CWebPage* CGrid::GetHtmlWnd()
 		{
 			if (m_pParentWinFormWnd == nullptr)
 			{
+				m_pGridShareData->m_pGalaxy->GetWinForm(hPWnd);
+				if (m_pRootObj->m_pParentWinFormWnd)
+				{
+					m_pParentWinFormWnd = m_pRootObj->m_pParentWinFormWnd;
+					if (m_pRootObj->m_pParentWinFormWnd->m_pOwnerHtmlWnd)
+						return m_pRootObj->m_pParentWinFormWnd->m_pOwnerHtmlWnd;
+					else
+					{
+						hPWnd = m_pRootObj->m_pParentWinFormWnd->m_hWnd;
+						if ((::GetWindowLong(hPWnd, GWL_EXSTYLE) & WS_EX_MDICHILD))
+						{
+							hPWnd = ::GetParent(::GetParent(hPWnd));
+							CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
+							if (pForm)
+							{
+								return pForm->m_pOwnerHtmlWnd;
+							}
+						}
+					}
+				}
 				CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
 				if (pForm)
 				{
@@ -972,9 +992,8 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 void CGrid::NodeCreated()
 {
-	CWebPage* pHtmlWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
-	if (pHtmlWnd == nullptr)
-		pHtmlWnd = GetHtmlWnd();
+	CWebPage* pHtmlWnd = GetHtmlWnd();
+	m_pGridShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = g_pHubble->m_pHostHtmlWnd;
 	if (pHtmlWnd&&m_pHubbleCloudSession == nullptr)

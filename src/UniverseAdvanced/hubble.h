@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.13							*
+*					Open Universe - version 1.0.1.14							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -29,7 +29,7 @@
 #pragma once
 //https://github.com/eclipse/rt.equinox.framework/tree/master/features/org.eclipse.equinox.executable.feature/library/win32
 
-using namespace Web;
+using namespace Browser;
 using namespace CommonUniverse;
 class CWinForm;
 struct CommonThreadInfo

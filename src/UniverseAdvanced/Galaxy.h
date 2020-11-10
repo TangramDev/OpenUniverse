@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.13							*
+*					Open Universe - version 1.0.1.14							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -21,7 +21,7 @@
 #pragma once
 #include "chromium/WebPage.h"
 
-using namespace Web;
+using namespace Browser;
 class CBKWnd;
 #define WM_HUBBLE_NOTIFY WM_NOTIFY+WM_REFLECT_BASE
 class CCommonCtrl :
@@ -279,6 +279,7 @@ public:
 	void Unlock(){}
 	void Destroy();
 	void HostPosChanged();
+	HWND GetWinForm(HWND hWnd);
 	void UpdateDesignerTreeInfo();
 	void UpdateVisualWPFMap(HWND, BOOL);
 
@@ -358,5 +359,4 @@ private:
 	STDMETHOD(Detach)(void);
 
 	void OnFinalMessage(HWND hWnd);
-	HWND GetWinForm(HWND hWnd);
 };

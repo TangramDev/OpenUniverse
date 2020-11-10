@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.13							*
+*					Open Universe - version 1.0.1.14							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -256,8 +256,7 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 								pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
 							}
 						}
-						if (!::IsChild(it.first, hWnd) || ::IsChild(pWnd->m_pVisibleWebWnd->m_hExtendWnd, hWnd))
-							::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
 					}
 					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
 				}

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.0.1.13							*
+*					Open Universe - version 1.0.1.14							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -80,7 +80,7 @@
 #include "Markup.h"
 //#include "vcproject2.h"
 
-using namespace Web;
+using namespace Browser;
 
 #ifdef _WIN32
 #ifdef ReplaceText

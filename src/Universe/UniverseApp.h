@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.13							*
+*					Open Universe - version 1.0.1.14							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -15,13 +15,13 @@
 
 #pragma once
 
-namespace Web
+namespace Browser
 {
 	class CBrowser;
 	class CWebPage;
 }
 
-using namespace Web;
+using namespace Browser;
 
 typedef HRESULT(__stdcall* HubbleCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 

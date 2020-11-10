@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.13							*
+*					Open Universe - version 1.0.1.14							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -23,7 +23,7 @@
 #include "../stdafx.h"
 
 class CWinForm;
-namespace Web
+namespace Browser
 {
 	class ATL_NO_VTABLE CWebPage :
 		public CWebPageImpl,
