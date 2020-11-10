@@ -31,7 +31,7 @@
 #include "WebPage.h"
 #include "Browser.h"
 
-namespace Browser {
+namespace Web {
 	CWebPage::CWebPage() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
@@ -1575,4 +1575,4 @@ namespace Browser {
 		}
 		return S_OK;
 	}
-}  // namespace Browser
+}  // namespace Web

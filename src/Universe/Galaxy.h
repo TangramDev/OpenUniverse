@@ -14,7 +14,7 @@
 #pragma once
 #include "chromium/WebPage.h"
 
-using namespace Browser;
+using namespace Web;
 #define WM_HUBBLE_NOTIFY WM_NOTIFY+WM_REFLECT_BASE
 
 class CWinForm :

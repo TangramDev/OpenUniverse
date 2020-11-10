@@ -23,13 +23,13 @@
 #pragma once
 #include <jni.h>
 
-namespace Browser
+namespace Web
 {
 	class CBrowser;
 	class CWebPage;
 }
 
-using namespace Browser;
+using namespace Web;
 
 typedef HRESULT(__stdcall* HubbleCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 

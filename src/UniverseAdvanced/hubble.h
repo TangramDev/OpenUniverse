@@ -29,7 +29,7 @@
 #pragma once
 //https://github.com/eclipse/rt.equinox.framework/tree/master/features/org.eclipse.equinox.executable.feature/library/win32
 
-using namespace Browser;
+using namespace Web;
 using namespace CommonUniverse;
 class CWinForm;
 struct CommonThreadInfo

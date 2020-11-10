@@ -21,7 +21,7 @@
 #include "Browser.h"
 #include "WebPage.h"
 
-namespace Browser {
+namespace Web {
 	CBrowser::CBrowser() {
 		m_hDrawWnd = 0;
 		m_heightfix = 0;

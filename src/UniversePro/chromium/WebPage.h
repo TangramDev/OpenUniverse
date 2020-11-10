@@ -23,7 +23,7 @@
 #include "../stdafx.h"
 
 class CWinForm;
-namespace Browser
+namespace Web
 {
 	class ATL_NO_VTABLE CWebPage :
 		public CWebPageImpl,

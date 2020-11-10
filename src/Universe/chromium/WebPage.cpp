@@ -23,7 +23,7 @@
 #include "WebPage.h"
 #include "Browser.h"
 
-namespace Browser {
+namespace Web {
 	CWebPage::CWebPage() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;

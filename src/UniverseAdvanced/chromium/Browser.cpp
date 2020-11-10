@@ -28,7 +28,7 @@
 #include "WebPage.h"
 #include "Browser.h"
 
-namespace Browser {
+namespace Web {
 	CBrowser::CBrowser() {
 		m_hDrawWnd = 0;
 		m_heightfix = 0;
@@ -598,4 +598,4 @@ namespace Browser {
 		}
 		return S_OK;
 	}
-}  // namespace Browser
+}  // namespace Web

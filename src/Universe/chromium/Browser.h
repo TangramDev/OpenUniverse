@@ -13,7 +13,7 @@
 
 #pragma once
 
-namespace Browser {
+namespace Web {
 	using namespace ATL;
 	class CWebPage;
 
