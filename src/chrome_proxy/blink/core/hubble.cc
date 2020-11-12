@@ -184,6 +184,35 @@ namespace blink {
 		return form;
 	}
 
+	HubbleWinform* Hubble::CreateForm(int64_t handle, HubbleXobj* obj)
+	{
+		HubbleWinform* form = HubbleWinform::Create(DomWindow()->GetFrame(), obj->getStr(L"tagName"));
+		form->hubble_ = this;
+		form->innerXobj_ = obj;
+		form->handle_ = handle;
+		form->innerXobj_->setStr(L"objID", L"WinForm");
+		form->m_pRenderframeImpl = m_pRenderframeImpl;
+		m_mapWinForm.insert(form->handle_, form);
+		long nFormType = obj->getLong(L"WinFormType");
+		switch (nFormType)
+		{
+		case 1:
+			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdiparentcreated, obj));
+			break;
+		case 2:
+		{
+			HubbleWinform* parentform = form->mdiParent();
+			if(parentform)
+				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildcreated, obj));
+		}
+			break;
+		default:
+			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kWinformcreated, obj));
+			break;
+		}
+		return form;
+	}
+
 	HubbleNode* Hubble::createHubbleNode(HubbleXobj* xobj)
 	{
 		__int64 handle = xobj->getInt64(L"gridobjhandle");
@@ -238,11 +267,47 @@ namespace blink {
 		nPHandle = xobj->getInt64(L"parentFormHandle");
 		if (nPHandle)
 		{
+			HubbleWinform* parentform = nullptr;
+			HubbleWinform* parentmdiform = nullptr;
 			auto it = m_mapWinForm.find(nPHandle);
 			if (it != m_mapWinForm.end())
 			{
-				HubbleWinform* form = it->value.Get();
-				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
+				parentform = it->value.Get();
+				node->m_pParentForm = parentform;
+			}
+			it = m_mapWinForm.find(xobj->getInt64(L"parentMDIFormHandle"));
+			if (it != m_mapWinForm.end())
+			{
+				parentmdiform = it->value.Get();
+			}
+
+			if (parentmdiform && parentform)
+			{
+				HubbleNode* pNode = parentform->mdibindgrid();
+				if (pNode == nullptr)
+				{
+					int64_t nHandle = xobj->getInt64(L"BindMdiGridHandle");
+					if (nHandle)
+					{
+						auto it1 = m_mapHubbleNode.find(nHandle);
+						if (it1 != m_mapHubbleNode.end())
+						{
+							parentform->m_pBindMdiNode = it1->value.Get();
+						}
+					}
+				}
+				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
+				return node;
+			}
+			else if (parentmdiform)
+			{
+				parentmdiform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
+				return node;
+			}
+			else if (parentform)
+			{
+				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
+				return node;
 			}
 		}
 

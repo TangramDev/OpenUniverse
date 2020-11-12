@@ -1750,7 +1750,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		theApp.InitHubbleApp(false);
 		return nullptr;
 	}
-	if (bstrObjID.Find(_T("<")) != -1)
+	if (bstrObjID.Find(_T("<")) != -1) 
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(bstrObjID))
@@ -1776,7 +1776,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					{
 						CString strCaption = m_Parse.attr(_T("caption"), _T(""));
 						Form^ thisForm = (Form^)pObj;
-
 						if (nHandle)
 						{
 							pProxyBase->OnWinFormCreated((HWND)thisForm->Handle.ToPointer());
@@ -1869,6 +1868,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								strFormName = OLE2T(bstrName);
 								::SysFreeString(bstrName);
 							}
+							pHubbleSession->InsertString(_T("tagName"), strTagName);
 							pHubbleSession->InsertString(_T("formname"), strFormName);
 							pHubbleSession->InsertLong(_T("autodelete"), 0);
 							pHubbleSession->Insertint64(_T("domhandle"), (__int64)pHubbleSession);
@@ -1880,10 +1880,15 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 
 							theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
 							if (thisForm->IsMdiContainer)
+							{
 								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								pHubbleSession->InsertLong(_T("WinFormType"), 1);
+							}
 							else if (thisForm->MdiParent)
 							{
+								pHubbleSession->InsertLong(_T("WinFormType"), 2);
 								pHubbleSession->Insertint64(_T("mdiformhandle"), thisForm->MdiParent->Handle.ToInt64());
+								theApp.m_pHubble->ObserveGalaxys(thisForm->MdiParent->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strTagName.MakeLower()), CComBSTR(L""), false);
 								thisForm->Show();
 								pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
 								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
@@ -1896,7 +1901,10 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 							}
 							else
+							{
+								pHubbleSession->InsertLong(_T("WinFormType"), 0);
 								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							}
 							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
 							bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
 							pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);

@@ -46,6 +46,8 @@ typedef sequence<any> ObjectArray;
 	attribute EventHandler onMessageReceived;
 	attribute EventHandler onHubbleMessageReceived;
 	attribute EventHandler onGridCreated;
+	attribute EventHandler onMdiParentCreated;
+	attribute EventHandler onMdiChildCreated;
 	attribute EventHandler onHubbleWindowCreated;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onWinFormCreated;

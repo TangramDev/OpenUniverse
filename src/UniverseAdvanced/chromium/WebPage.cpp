@@ -198,6 +198,24 @@ namespace Browser {
 					if (bMDIChild && pMDIPForm)
 					{
 						pSession->Insertint64(_T("parentMDIFormHandle"), (__int64)pMDIPForm->m_hWnd);
+						IGalaxy* pGalaxy = nullptr;
+						CHubbleImpl* _pHubbleImpl = static_cast<CHubbleImpl*>(g_pHubble);
+						auto it = _pHubbleImpl->m_mapWindowPage.find(pMDIPForm->m_hWnd);// ->getg((__int64)pMDIPForm->m_hWnd, &pGalaxy);
+						if (it != _pHubbleImpl->m_mapWindowPage.end())
+						{
+							it->second->get_Galaxy(CComVariant(L"mdiclient"), &pGalaxy);
+							if (pGalaxy)
+							{
+								IGrid* pGrid = nullptr;
+								pGalaxy->get_VisibleGrid(&pGrid);
+								__int64 nHandle = 0;
+								if (pGrid)
+								{
+									pGrid->get_Handle(&nHandle);
+									pSession->Insertint64(_T("BindMdiGridHandle"), nHandle);
+								}
+							}
+						}
 					}
 					if (pGrid->m_pDisp)
 					{

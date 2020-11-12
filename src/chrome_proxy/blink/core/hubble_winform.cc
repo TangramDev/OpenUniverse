@@ -20,6 +20,7 @@
 namespace blink {
 
 	HubbleWinform::HubbleWinform(LocalFrame* frame) : DOMWindowClient(frame) {
+		m_pBindMdiNode = nullptr;
 		m_pRenderframeImpl = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 	}
@@ -54,6 +55,7 @@ namespace blink {
 		DOMWindowClient::Trace(visitor);
 		visitor->Trace(hubble_);
 		visitor->Trace(innerXobj_);
+		visitor->Trace(m_pBindMdiNode);
 		visitor->Trace(mapHubbleEventCallback_);
 	}
 
@@ -64,12 +66,59 @@ namespace blink {
 	}
 
 	String HubbleWinform::name() {
-		return name_;
+		long nType = innerXobj_->getLong(L"WinFormType");
+		String strname = "";
+		switch (nType)
+		{
+		case 2:
+			strname = innerXobj_->getStr(L"tagName");
+			break;
+		default:
+		{
+			strname = innerXobj_->getStr(L"id");
+			if(strname=="")
+				strname = innerXobj_->getStr(L"formname");
+			if(strname=="")
+				strname = innerXobj_->getStr(L"tagName");
+		}
+		break;
+		}
+		return strname;
 	}
 
 	HubbleXobj* HubbleWinform::xobj()
 	{
 		return innerXobj_;
+	}
+
+	HubbleNode* HubbleWinform::mdibindgrid()
+	{
+		if (m_pBindMdiNode)
+			return m_pBindMdiNode;
+		//Hubble* pHubble = hubble_.Get();
+		//int64_t nHandle = innerXobj_->getInt64("BindMdiGridHandle");
+		//if (nHandle && pHubble)
+		//{
+		//	pHubble->m_mapHubbleNode.find(nHandle);
+		//	auto it1 = pHubble->m_mapHubbleNode.find(nHandle);
+		//	if (it1 != pHubble->m_mapHubbleNode.end())
+		//		return it1->value;
+		//}
+		return nullptr;
+	}
+
+	HubbleWinform* HubbleWinform::mdiParent()
+	{
+		Hubble* pHubble = hubble_.Get();
+		int64_t nHandle = innerXobj_->getInt64("mdiformhandle");
+		if (nHandle&&pHubble)
+		{
+			pHubble->m_mapWinForm.find(nHandle);
+			auto it1 = pHubble->m_mapWinForm.find(nHandle);
+			if (it1 != pHubble->m_mapWinForm.end())
+				return it1->value;
+		}
+		return nullptr;
 	}
 
 	String HubbleWinform::getid()

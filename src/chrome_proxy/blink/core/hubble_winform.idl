@@ -14,10 +14,13 @@
 	readonly attribute long long handle;
 	readonly attribute DOMString name;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode mdibindgrid;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform mdiParent;
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;
 	attribute EventHandler onGridCreated;
+	attribute EventHandler onMdiChildCreated;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onWinFormCreated;
 	attribute EventHandler onWinFormClosed;
