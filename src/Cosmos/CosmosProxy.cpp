@@ -281,8 +281,6 @@ void CCosmosProxy::WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPW
 					{
 						if (::GetWindowLong(hPWnd, GWL_EXSTYLE) & WS_EX_APPWINDOW)
 						{
-							//::SetWindowLongPtr(hPWnd, GWL_EXSTYLE, ::GetWindowLongPtr(hPWnd, GWL_EXSTYLE) & ~(WS_EX_APPWINDOW));
-							//_pForm->ShowInTaskbar = false;
 						}
 						m_mapForm[hPWnd] = _pForm;
 						if (m_pOnLoad)

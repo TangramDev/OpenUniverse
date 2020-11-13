@@ -20,8 +20,7 @@
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;
 	attribute EventHandler onGridCreated;
-	attribute EventHandler onMdiChildCreated;
+	attribute EventHandler onLoadMdiChildWinForm;
 	attribute EventHandler onMdiChildActivate;
-	attribute EventHandler onWinFormCreated;
 	attribute EventHandler onWinFormClosed;
 };

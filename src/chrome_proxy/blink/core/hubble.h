@@ -73,9 +73,9 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(HubbleWindowCreated, kHubblewindowcreated)
-	 DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormCreated, kWinformcreated)
-	 DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiParentCreated, kMdiparentcreated)
-	 DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildCreated, kMdichildcreated)
+	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
+	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiWinForm, kLoadmdiwinform)
+	 //DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(BindCLRObject, kBindclrobject)
 
@@ -108,6 +108,7 @@ namespace blink {
 	 HubbleWinform* CreateForm(int64_t handle, HubbleXobj* obj);
 
 	 //HubbleNode API
+	 void MdiChildActive(HubbleXobj* xobj);
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 

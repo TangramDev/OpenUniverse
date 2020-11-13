@@ -21,6 +21,4 @@
 	attribute EventHandler onMessageReceived;
 	attribute EventHandler onGridCreated;
 	attribute EventHandler onMdiChildActivate;
-	attribute EventHandler onWinFormCreated;
-	attribute EventHandler onWinFormClosed;
 };

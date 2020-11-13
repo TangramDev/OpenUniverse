@@ -91,7 +91,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(HubbleControlCreated, kHubblecontrolcreated)
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormCreated, kWinformcreated)
+  DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
 
   // EventTarget overrides:

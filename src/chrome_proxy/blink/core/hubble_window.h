@@ -63,8 +63,6 @@ class CORE_EXPORT HubbleWindow final : public EventTargetWithInlineData,
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewindow)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormCreated, kWinformcreated)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
 
   // EventTarget overrides:
   const AtomicString& InterfaceName() const override;

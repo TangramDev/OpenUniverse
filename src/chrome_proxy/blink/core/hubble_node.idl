@@ -44,6 +44,5 @@
 	attribute EventHandler onGridCreated;
 	attribute EventHandler onHubbleControlCreated;
 	attribute EventHandler onMdiChildActivate;
-	attribute EventHandler onWinFormCreated;
 	attribute EventHandler onWinFormClosed;
 };

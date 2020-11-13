@@ -172,6 +172,7 @@ namespace Browser {
 					{
 						pSession->Insertint64(_T("parentgridhandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
 					}
+
 					CWinForm* pMDIPForm = nullptr;
 					bool bMDIChild = false;
 					{
@@ -195,12 +196,12 @@ namespace Browser {
 					{
 						pSession->Insertint64(_T("parentFormHandle"), (__int64)pGrid->m_pParentWinFormWnd->m_hWnd);
 					}
-					if (bMDIChild && pMDIPForm)
+					if (bMDIChild&&pMDIPForm)
 					{
 						pSession->Insertint64(_T("parentMDIFormHandle"), (__int64)pMDIPForm->m_hWnd);
 						IGalaxy* pGalaxy = nullptr;
 						CHubbleImpl* _pHubbleImpl = static_cast<CHubbleImpl*>(g_pHubble);
-						auto it = _pHubbleImpl->m_mapWindowPage.find(pMDIPForm->m_hWnd);// ->getg((__int64)pMDIPForm->m_hWnd, &pGalaxy);
+						auto it = _pHubbleImpl->m_mapWindowPage.find(pMDIPForm->m_hWnd);
 						if (it != _pHubbleImpl->m_mapWindowPage.end())
 						{
 							it->second->get_Galaxy(CComVariant(L"mdiclient"), &pGalaxy);
@@ -232,7 +233,7 @@ namespace Browser {
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy && m_pGalaxy->m_pWorkGrid)
+			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid)
 			{
 				if (m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
 				{
@@ -248,6 +249,7 @@ namespace Browser {
 			{
 				m_pChromeRenderFrameHost->ShowWebPage(true);
 				::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
 		break;

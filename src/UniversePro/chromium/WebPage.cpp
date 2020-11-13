@@ -201,7 +201,7 @@ namespace Browser {
 						pSession->Insertint64(_T("parentMDIFormHandle"), (__int64)pMDIPForm->m_hWnd);
 						IGalaxy* pGalaxy = nullptr;
 						CHubbleImpl* _pHubbleImpl = static_cast<CHubbleImpl*>(g_pHubble);
-						auto it = _pHubbleImpl->m_mapWindowPage.find(pMDIPForm->m_hWnd);// ->getg((__int64)pMDIPForm->m_hWnd, &pGalaxy);
+						auto it = _pHubbleImpl->m_mapWindowPage.find(pMDIPForm->m_hWnd);
 						if (it != _pHubbleImpl->m_mapWindowPage.end())
 						{
 							it->second->get_Galaxy(CComVariant(L"mdiclient"), &pGalaxy);
