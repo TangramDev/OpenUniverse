@@ -1310,6 +1310,18 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				}
 			}
 		}
+		else
+		{
+			if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
+			{
+				auto it = m_pOwnerHtmlWnd->m_pGalaxy->m_mapGrid.find(m_strKey);
+				if (it != m_pOwnerHtmlWnd->m_pGalaxy->m_mapGrid.end())
+				{
+					IGrid* pGrid = nullptr;
+					m_pOwnerHtmlWnd->m_pGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pGrid);
+				}
+			}
+		}
 		return (LRESULT)m_strKey.GetBuffer();
 	}
 	break;
@@ -1327,6 +1339,15 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			if (m_Parse.LoadXml(m_strXml))
 			{
 				m_strKey = m_Parse.name();
+				if (m_pOwnerHtmlWnd)
+				{
+					CTangramXmlParse* pChild = m_Parse.GetChild(_T("webui"));
+					if (pChild)
+					{
+						IGrid* pGrid = nullptr;
+						m_pOwnerHtmlWnd->Observe(CComBSTR(m_strKey), CComBSTR(pChild->xml()), &pGrid);
+					}
+				}
 			}
 		}
 	}
@@ -1561,6 +1582,11 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		auto it = g_pHubble->m_mapMainForm.find(m_hWnd);
 		if (it == g_pHubble->m_mapMainForm.end())
 			g_pHubble->m_mapMainForm[m_hWnd] = this;
+	}
+	break;
+	case 20201114:
+	{
+		CString strXml = (LPCTSTR)wParam;
 	}
 	break;
 	}

@@ -147,6 +147,8 @@ public:
 	CString									m_strChildFormPath;
 	
 	CBKWnd*									m_pBKWnd;
+	CGrid*									m_pHelperGrid = nullptr;
+	CGrid*									m_pWebHelperGrid = nullptr;
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWebPage*								m_pParentHtmlWnd;
 	CMDIChildFormInfo*						m_pChildFormsInfo;

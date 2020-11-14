@@ -56,6 +56,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   String getid();
   HubbleXobj* xobj();
   HubbleNode* mdibindgrid();
+  HubbleNode* mdiwebbindgrid();
   HubbleWinform* mdiParent();
 
   // Message method
@@ -85,9 +86,11 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   ~HubbleWinform() override;
 
   int64_t handle_ = 0;
+  int64_t m_nMdiwebbindgridhandle = 0;
   mutable Member<Hubble> hubble_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleNode> m_pBindMdiNode;
+  mutable Member<HubbleNode> m_pWebBindMdiNode;
   WebLocalFrameClient* m_pRenderframeImpl;
   map<int64_t, Member<HubbleControl>> m_mapChildControl;
   map<std::wstring, Member<HubbleControl>> m_mapChildControl2;

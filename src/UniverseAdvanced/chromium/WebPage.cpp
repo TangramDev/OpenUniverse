@@ -207,13 +207,32 @@ namespace Browser {
 							it->second->get_Galaxy(CComVariant(L"mdiclient"), &pGalaxy);
 							if (pGalaxy)
 							{
-								IGrid* pGrid = nullptr;
-								pGalaxy->get_VisibleGrid(&pGrid);
+								IGrid* _pGrid = nullptr;
+								pGalaxy->get_VisibleGrid(&_pGrid);
 								__int64 nHandle = 0;
-								if (pGrid)
+								if (_pGrid)
 								{
-									pGrid->get_Handle(&nHandle);
+									_pGrid->get_Handle(&nHandle);
 									pSession->Insertint64(_T("BindMdiGridHandle"), nHandle);
+									if (pGrid->m_pParentWinFormWnd)
+									{
+										pGrid->m_pParentWinFormWnd->m_pHelperGrid = (CGrid*)_pGrid;
+									}
+								}
+								if (m_pGalaxy && m_pGalaxy->m_pWorkGrid && pGrid->m_pParentWinFormWnd)
+								{
+									CString strKey = pGrid->m_pParentWinFormWnd->m_strKey;
+									auto it = m_pGalaxy->m_mapGrid.find(strKey);// 
+									if (it != m_pGalaxy->m_mapGrid.end())
+									{
+										it->second->get_Handle(&nHandle);
+										if (nHandle)
+											pSession->Insertint64(_T("mdiwebbindgridhandle"), nHandle);
+										if (pGrid->m_pParentWinFormWnd)
+										{
+											pGrid->m_pParentWinFormWnd->m_pWebHelperGrid = it->second;
+										}
+									}
 								}
 							}
 						}
@@ -1601,6 +1620,65 @@ namespace Browser {
 		HWND hWnd = (HWND)newVal;
 		if (::IsWindow(hWnd))
 			m_hWebHostWnd = hWnd;
+		return S_OK;
+	}
+
+	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid)
+	{
+		if (m_pGalaxy == nullptr) {
+			CGalaxyCluster* pGalaxyCluster = nullptr;
+			auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
+			if (it != g_pHubble->m_mapWindowPage.end())
+				pGalaxyCluster = (CGalaxyCluster*)it->second;
+			else
+			{
+				pGalaxyCluster = new CComObject<CGalaxyCluster>();
+				pGalaxyCluster->m_hWnd = m_hExtendWnd;
+				g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
+
+				for (auto it : g_pHubble->m_mapHubbleAppProxy)
+				{
+					CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
+					if (pProxy)
+						pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pProxy;
+				}
+			}
+			if (pGalaxyCluster) {
+				IGalaxy* pGalaxy = nullptr;
+				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pGalaxy);
+				if (pGalaxy)
+				{
+					m_pGalaxy = (CGalaxy*)pGalaxy;
+					m_pGalaxy->m_pWebPageWnd = this;
+				}
+			}
+		}
+		if (m_pGalaxy)
+		{
+			m_pGalaxy->Observe(bstrKey, bstrXml, pRetGrid);
+			if (*pRetGrid)
+			{
+				m_strCurKey = OLE2T(bstrKey);
+				m_hWebHostWnd = NULL;
+				if (m_pGalaxy->m_pBindingGrid)
+				{
+					m_hWebHostWnd = m_pGalaxy->m_pBindingGrid->m_pHostWnd->m_hWnd;
+				}
+			}
+		}
+		CBrowser* pBrowserWnd = nullptr;
+		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+		if (it != g_pHubble->m_mapBrowserWnd.end())
+		{
+			pBrowserWnd = (CBrowser*)it->second;
+			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
+				::ShowWindow(m_hWnd, SW_HIDE);
+		}
+		if (::IsWindowVisible(m_hWnd))
+		{
+			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
+			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+		}
 		return S_OK;
 	}
 

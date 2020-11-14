@@ -5264,6 +5264,11 @@ EXTERN_C const IID IID_IWebPage;
             LONGLONG hParent,
             /* [retval][out] */ IDispatch **pRetForm) = 0;
         
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IGrid **pRetGrid) = 0;
+        
     };
     
     
@@ -5336,6 +5341,12 @@ EXTERN_C const IID IID_IWebPage;
             LONGLONG hParent,
             /* [retval][out] */ IDispatch **pRetForm);
         
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Observe )( 
+            IWebPage * This,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            /* [retval][out] */ IGrid **pRetGrid);
+        
         END_INTERFACE
     } IWebPageVtbl;
 
@@ -5380,6 +5391,9 @@ EXTERN_C const IID IID_IWebPage;
 
 #define IWebPage_CreateForm(This,bstrKey,hParent,pRetForm)	\
     ( (This)->lpVtbl -> CreateForm(This,bstrKey,hParent,pRetForm) ) 
+
+#define IWebPage_Observe(This,bstrKey,bstrXml,pRetGrid)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,pRetGrid) ) 
 
 #endif /* COBJMACROS */
 

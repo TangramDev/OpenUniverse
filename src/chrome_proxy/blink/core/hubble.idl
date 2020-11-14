@@ -41,6 +41,7 @@ typedef sequence<any> ObjectArray;
 
 	readonly attribute DOMString url;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode topGrid;
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;

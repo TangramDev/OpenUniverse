@@ -21,6 +21,7 @@ namespace blink {
 
 	HubbleWinform::HubbleWinform(LocalFrame* frame) : DOMWindowClient(frame) {
 		m_pBindMdiNode = nullptr;
+		m_pWebBindMdiNode = nullptr;
 		m_pRenderframeImpl = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 	}
@@ -56,6 +57,7 @@ namespace blink {
 		visitor->Trace(hubble_);
 		visitor->Trace(innerXobj_);
 		visitor->Trace(m_pBindMdiNode);
+		visitor->Trace(m_pWebBindMdiNode);
 		visitor->Trace(mapHubbleEventCallback_);
 	}
 
@@ -95,15 +97,25 @@ namespace blink {
 	{
 		if (m_pBindMdiNode)
 			return m_pBindMdiNode;
-		//Hubble* pHubble = hubble_.Get();
-		//int64_t nHandle = innerXobj_->getInt64("BindMdiGridHandle");
-		//if (nHandle && pHubble)
-		//{
-		//	pHubble->m_mapHubbleNode.find(nHandle);
-		//	auto it1 = pHubble->m_mapHubbleNode.find(nHandle);
-		//	if (it1 != pHubble->m_mapHubbleNode.end())
-		//		return it1->value;
-		//}
+		return nullptr;
+	}
+
+	HubbleNode* HubbleWinform::mdiwebbindgrid()
+	{
+		if (m_nMdiwebbindgridhandle)
+		{
+			if (m_pWebBindMdiNode == nullptr)
+			{
+				Hubble* pHubble = hubble_.Get();
+				auto it1 = pHubble->m_mapHubbleNode.find(m_nMdiwebbindgridhandle);
+				if (it1 != pHubble->m_mapHubbleNode.end())
+				{
+					m_pWebBindMdiNode = it1->value.Get();
+				}
+			}
+		}
+		if (m_pWebBindMdiNode)
+			return m_pWebBindMdiNode;
 		return nullptr;
 	}
 

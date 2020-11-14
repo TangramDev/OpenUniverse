@@ -228,11 +228,11 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 					for (auto it2 : it.second->m_mapGalaxy)
 					{
 						it2.second->HostPosChanged();
-						for (auto it3 : it2.second->m_mapWPFView)
-						{
-							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						}
+						//for (auto it3 : it2.second->m_mapWPFView)
+						//{
+						//	ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
+						//	::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+						//}
 					}
 				}
 			}

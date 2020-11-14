@@ -80,6 +80,7 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(BindCLRObject, kBindclrobject)
 
 	 HubbleXobj* xobj();
+	 HubbleNode* topGrid();
 	 String url();
 	 HubbleXobj* getNamedItem(const AtomicString&) const;
 	 HubbleXobj* setNamedItem(HubbleXobj*, ExceptionState&);
@@ -133,6 +134,7 @@ namespace blink {
 	 WebLocalFrameClient* m_pRenderframeImpl;
 	 String url_;
 	 mutable Member<HubbleXobj> innerXobj_;
+	 mutable Member<HubbleNode> topGrid_;
 	 HeapHashMap<String, Member<HubbleXobj>> mapCloudSession_;
 	 HeapHashMap<int64_t, Member<HubbleNode>> m_mapHubbleNode;
 	 HeapHashMap<int64_t, Member<HubbleWindow>> m_mapHubbleWindow;

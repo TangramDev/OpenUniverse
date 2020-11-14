@@ -1394,7 +1394,7 @@ void CCosmosProxy::OnMdiChildActivate(System::Object^ sender, System::EventArgs^
 			CString strPath = (LPCTSTR)l;
 			theApp.m_pHubble->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strPath), CComBSTR(L""), false);
 			HWND hWnd = (HWND)pForm->ActiveMdiChild->Handle.ToPointer();
-			::SendMessage(hWnd, WM_COSMOSMSG, 0, 20200216);
+			::PostMessage(hWnd, WM_COSMOSMSG, 0, 20200216);
 			return;
 		}
 		Object^ objTag = pForm->Tag;
@@ -1768,6 +1768,24 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 			CString strObjID = m_Parse.attr(_T("objid"), _T(""));
 			if (strObjID != _T(""))
 			{
+				WebPage^ pPage = nullptr;
+				IWebPage* pWebPage = nullptr;
+				nHandle = m_Parse.attrInt64(_T("webpage"), 0);
+				if (nHandle)
+				{
+					pWebPage = (IWebPage*)nHandle;
+					if (pWebPage != nullptr)
+					{
+						pPage = gcnew WebPage(pWebPage);
+						pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
+						CTangramXmlParse* pChild = m_Parse.GetChild(_T("webui"));
+						if (pChild)
+						{
+							IGrid* pGrid = nullptr;
+							pWebPage->Observe(CComBSTR(strTagName), CComBSTR(pChild->xml()), &pGrid);
+						}
+					}
+				}
 				Object^ pObj = Cosmos::Hubble::CreateObject(BSTR2STRING(strObjID));
 
 				if (pObj != nullptr)
@@ -1786,17 +1804,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							thisForm->Width = nWidth;
 							thisForm->Height = nHeight;
-						}
-						WebPage^ pPage = nullptr;
-						nHandle = m_Parse.attrInt64(_T("webpage"), 0);
-						if (nHandle)
-						{
-							IWebPage* pWebPage = (IWebPage*)nHandle;
-							if (pWebPage != nullptr)
-							{
-								pPage = gcnew WebPage(pWebPage);
-								pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
-							}
 						}
 						if (m_pCurrentPForm)
 						{
@@ -1930,6 +1937,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
 								::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
 								pHubbleSession->SendMessage();
+								//::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_COSMOSMSG, 0, 20200216);
 								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 							}
 							else
@@ -2068,49 +2076,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						::PostMessage((HWND)(mainForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
 
 					pHubbleSession->SendMessage();
-
-					//if (client != nullptr)
-					//{
-					//	HWND hWnd = (HWND)client->Handle.ToPointer();
-					//	if (::IsWindow(hWnd))
-					//	{
-					//		CTangramXmlParse* pParse = m_Parse.GetChild(_T("mainclient"));
-					//		if (pParse)
-					//		{
-					//			CString strWebName = pParse->attr(_T("id"), _T(""));
-					//			if (strWebName == _T(""))strWebName = m_Parse.name();
-					//			if (strWebName != _T(""))
-					//			{
-					//				BindWebObj* pObj = new BindWebObj;
-					//				pObj->nType = 0;
-					//				pObj->m_pObjDisp = (IDispatch*)Marshal::GetIUnknownForObject(mainForm).ToPointer();
-					//				pObj->m_hWnd = hWnd;
-					//				pObj->m_strObjName = strWebName;
-					//				pObj->m_strObjType = "clrctrl";
-					//				pObj->m_strBindObjName = strWebName;
-					//				//pObj->m_strBindData = pChildParse->attr(_T("bindevent"), _T(""));
-					//				HWND hForm = (HWND)::GetParent(hWnd);
-					//				::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
-					//			}
-					//			pParse = pParse->GetChild(_T("default"));
-					//			if (pParse)
-					//			{
-					//				CString strMainForm = pParse->xml();
-					//				IGalaxyCluster* pManager = nullptr;
-					//				theApp.m_pHubble->CreateGalaxyCluster((__int64)::GetParent(hWnd), &pManager);
-					//				if (pManager)
-					//				{
-					//					IGalaxy* pGalaxy = nullptr;
-					//					pManager->CreateGalaxy(CComVariant(0), CComVariant((__int64)hWnd), L"default", &pGalaxy);
-					//					if (pGalaxy) {
-					//						IGrid* pGrid = nullptr;
-					//						pGalaxy->Open(L"default", CComBSTR(strMainForm), &pGrid);
-					//					}
-					//				}
-					//			}
-					//		}
-					//	}
-					//}
 					CTangramXmlParse* pChildForms = m_Parse.GetChild(_T("childforms"));
 					if (pChildForms)
 					{

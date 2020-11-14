@@ -30,6 +30,7 @@ namespace blink {
 	Hubble::Hubble(LocalFrame* frame) : DOMWindowClient(frame) {
 		is_pending_ = false;
 		innerXobj_ = newVar(L"");
+		topGrid_ = nullptr;
 		url_ = L"";
 		m_pRenderframeImpl = nullptr;
 	}
@@ -48,12 +49,18 @@ namespace blink {
 		visitor->Trace(mapHubbleCallback_);
 		visitor->Trace(mapCallbackFunction_);
 		visitor->Trace(innerXobj_);
+		visitor->Trace(topGrid_);
 		visitor->Trace(mapCloudSession_);
 	}
 
 	String Hubble::url()
 	{
 		return DomWindow()->document()->Url().GetString();
+	}
+
+	HubbleNode* Hubble::topGrid()
+	{
+		return nullptr;
 	}
 
 	HubbleXobj* Hubble::xobj()
@@ -208,6 +215,7 @@ namespace blink {
 			if (parentform)
 			{
 				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kLoadmdichildwinform, obj));
+				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, obj));
 				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, obj));
 			}
 		}
@@ -223,7 +231,6 @@ namespace blink {
 		__int64 handle = xobj->getInt64(L"active_mdichildhandle");
 		if (handle)
 		{
-			//__int64 nPHandle = xobj->getInt64(L"formHandle");
 			HubbleWinform* form = nullptr;
 			HubbleWinform* parentmdiform = nullptr;
 			auto it = m_mapWinForm.find(handle);
@@ -232,14 +239,9 @@ namespace blink {
 				form = it->value.Get();
 				parentmdiform = form->mdiParent();
 			}
-			//it = m_mapWinForm.find(nPHandle);
-			//if (it != m_mapWinForm.end())
-			//{
-			//	parentmdiform = it->value.Get();
-			//}
-
 			if (parentmdiform && form)
 			{
+				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
 				parentmdiform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
 			}
 		}
@@ -306,6 +308,8 @@ namespace blink {
 			{
 				parentform = it->value.Get();
 				node->m_pParentForm = parentform;
+				if (parentform->m_nMdiwebbindgridhandle == handle)
+					parentform->m_pWebBindMdiNode = node;
 			}
 			it = m_mapWinForm.find(xobj->getInt64(L"parentMDIFormHandle"));
 			if (it != m_mapWinForm.end())
@@ -325,6 +329,17 @@ namespace blink {
 						if (it1 != m_mapHubbleNode.end())
 						{
 							parentform->m_pBindMdiNode = it1->value.Get();
+						}
+					}
+					
+					nHandle = xobj->getInt64(L"mdiwebbindgridhandle");
+					if (nHandle)
+					{
+						parentform->m_nMdiwebbindgridhandle = nHandle;
+						auto it1 = m_mapHubbleNode.find(nHandle);
+						if (it1 != m_mapHubbleNode.end())
+						{
+							parentform->m_pWebBindMdiNode = it1->value.Get();
 						}
 					}
 				}

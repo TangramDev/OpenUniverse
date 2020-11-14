@@ -102,6 +102,7 @@ namespace Browser
 		STDMETHOD(get_HostWnd)(LONGLONG* Val);
 		STDMETHOD(put_HostWnd)(LONGLONG newVal);
 		STDMETHOD(CreateForm)(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm);
+		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid);
 		CChromeBrowserBase* GetChromeBrowserBase(HWND) override;
 	};
 };

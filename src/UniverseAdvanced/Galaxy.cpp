@@ -1313,6 +1313,18 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				}
 			}
 		}
+		else
+		{
+			if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
+			{
+				auto it = m_pOwnerHtmlWnd->m_pGalaxy->m_mapGrid.find(m_strKey);
+				if (it != m_pOwnerHtmlWnd->m_pGalaxy->m_mapGrid.end())
+				{
+					IGrid* pGrid = nullptr;
+					m_pOwnerHtmlWnd->m_pGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pGrid);
+				}
+			}
+		}
 		return (LRESULT)m_strKey.GetBuffer();
 	}
 	break;

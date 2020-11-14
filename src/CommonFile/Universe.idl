@@ -581,6 +581,7 @@ interface IWebPage : IDispatch {
 	[propget, id(1)] HRESULT HostWnd([out, retval] LONGLONG* pVal);
 	[propput, id(1)] HRESULT HostWnd([in] LONGLONG newVal);
 	[id(101)] HRESULT CreateForm(BSTR bstrKey, LONGLONG hParent, [out, retval]IDispatch** pRetForm);
+	[id(102)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval]IGrid** pRetGrid);
 };
 
 [

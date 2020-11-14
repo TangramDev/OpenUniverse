@@ -1210,4 +1210,32 @@ namespace Browser {
 		}
 		return S_OK;
 	}
+
+	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid)
+	{
+		if (m_pGalaxy == nullptr) {
+			CGalaxyCluster* pGalaxyCluster = nullptr;
+			auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
+			if (it != g_pHubble->m_mapWindowPage.end())
+				pGalaxyCluster = (CGalaxyCluster*)it->second;
+			else
+			{
+				pGalaxyCluster = new CComObject<CGalaxyCluster>();
+				pGalaxyCluster->m_hWnd = m_hExtendWnd;
+				g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
+			}
+			if (pGalaxyCluster) {
+				IGalaxy* pGalaxy = nullptr;
+				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pGalaxy);
+				if (pGalaxy)
+				{
+					m_pGalaxy = (CGalaxy*)pGalaxy;
+					m_pGalaxy->m_pWebPageWnd = this;
+				}
+			}
+		}
+		if (m_pGalaxy)
+			return m_pGalaxy->Observe(bstrKey, bstrXml, pRetGrid);
+		return S_OK;
+	}
 }  // namespace Universe
