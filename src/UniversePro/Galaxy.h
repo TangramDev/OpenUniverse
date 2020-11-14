@@ -137,6 +137,7 @@ class CWinForm :
 public:
 	CWinForm(void);
 	virtual ~CWinForm(void);
+	bool									m_bReady = false;
 	int										m_nState;
 	BOOL									m_bMdiForm;
 	BOOL									m_bMainForm = false;
@@ -147,8 +148,8 @@ public:
 	CString									m_strChildFormPath;
 	
 	CBKWnd*									m_pBKWnd;
-	CGrid*									m_pHelperGrid = nullptr;
-	CGrid*									m_pWebHelperGrid = nullptr;
+	CGrid*									m_pBindMDIGrid = nullptr;
+	CGrid*									m_pWebBindMDIGrid = nullptr;
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWebPage*								m_pParentHtmlWnd;
 	CMDIChildFormInfo*						m_pChildFormsInfo;

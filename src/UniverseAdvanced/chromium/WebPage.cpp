@@ -216,7 +216,7 @@ namespace Browser {
 									pSession->Insertint64(_T("BindMdiGridHandle"), nHandle);
 									if (pGrid->m_pParentWinFormWnd)
 									{
-										pGrid->m_pParentWinFormWnd->m_pHelperGrid = (CGrid*)_pGrid;
+										pGrid->m_pParentWinFormWnd->m_pBindMDIGrid = (CGrid*)_pGrid;
 									}
 								}
 								if (m_pGalaxy && m_pGalaxy->m_pWorkGrid && pGrid->m_pParentWinFormWnd)
@@ -230,7 +230,7 @@ namespace Browser {
 											pSession->Insertint64(_T("mdiwebbindgridhandle"), nHandle);
 										if (pGrid->m_pParentWinFormWnd)
 										{
-											pGrid->m_pParentWinFormWnd->m_pWebHelperGrid = it->second;
+											pGrid->m_pParentWinFormWnd->m_pWebBindMDIGrid = it->second;
 										}
 									}
 								}

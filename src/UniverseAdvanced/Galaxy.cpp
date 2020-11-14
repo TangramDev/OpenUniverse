@@ -1475,6 +1475,36 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 20201114:
+	{
+		if (m_bReady)
+			return DefWindowProc(uMsg, wParam, lParam);
+		m_bReady = true;
+		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		HWND hWnd = ::GetParent(m_hWnd);
+		DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
+		CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+
+		CGalaxy* pGalaxy = nullptr;
+		auto iter = pThreadInfo->m_mapGalaxy.find(hWnd);
+		if (iter != pThreadInfo->m_mapGalaxy.end())
+		{
+			pGalaxy = (CGalaxy*)iter->second;
+		}
+		if (pGalaxy->m_pHostWebBrowserWnd)
+		{
+			HWND hWnd = pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
+			auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
+			if (it != g_pHubble->m_mapHtmlWnd.end())
+			{
+				pSession->InsertString(_T("msgID"), _T("MdiWinForm_Ready"));
+				pSession->Insertint64(_T("ready_mdichildhandle"), (__int64)m_hWnd);
+				pSession->InsertString(_T("mdichildkey"), m_strKey);
+				pSession->SendMessage();
+			}
+		}
+	}
+	break;
 	case 20200216:
 	{
 		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
@@ -1512,10 +1542,10 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						pSession->Insertint64(_T("active_mdichildhandle"), (__int64)m_hWnd);
 						pSession->InsertString(_T("active_mdichildkey"), m_strKey);
 						pSession->SendMessage();
-						//CWebPage* pHtmlWnd = (CWebPage*)it->second;
-						//CString strHandle = _T("");
-						//strHandle.Format(_T("%d"), m_hWnd);
-						//pHtmlWnd->SendChromeIPCMessage(_T("MdiWinForm_ActiveMdiChild"), m_strKey, strHandle, _T(""), m_strKey, _T(""));
+						if (!m_bReady)
+						{
+							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20201114);
+						}
 					}
 				}
 			}

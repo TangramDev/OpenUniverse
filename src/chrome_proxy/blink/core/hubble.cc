@@ -215,8 +215,8 @@ namespace blink {
 			if (parentform)
 			{
 				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kLoadmdichildwinform, obj));
-				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, obj));
-				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, obj));
+				//form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, obj));
+				//parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, obj));
 			}
 		}
 			break;
@@ -243,6 +243,28 @@ namespace blink {
 			{
 				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
 				parentmdiform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
+			}
+		}
+	}
+
+	void Hubble::MdiChildReady(HubbleXobj* xobj)
+	{
+		__int64 handle = xobj->getInt64(L"ready_mdichildhandle");
+		if (handle)
+		{
+			HubbleWinform* form = nullptr;
+			HubbleWinform* parentmdiform = nullptr;
+			auto it = m_mapWinForm.find(handle);
+			if (it != m_mapWinForm.end())
+			{
+				form = it->value.Get();
+				parentmdiform = form->mdiParent();
+			}
+			if (parentmdiform && form)
+			{
+				form->isReady_ = true;
+				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildwinformready, xobj));
+				parentmdiform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildwinformready, xobj));
 			}
 		}
 	}

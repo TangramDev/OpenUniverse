@@ -110,6 +110,7 @@ namespace blink {
 
 	 //HubbleNode API
 	 void MdiChildActive(HubbleXobj* xobj);
+	 void MdiChildReady(HubbleXobj* xobj);
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 

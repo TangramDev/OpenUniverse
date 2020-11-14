@@ -138,6 +138,13 @@ namespace blink {
 		return id_;
 	}
 
+	bool HubbleWinform::isReady()
+	{
+		if (isReady_)
+			return true;
+		return false;
+	}
+
 	int64_t HubbleWinform::handle() {
 		return handle_;
 	}
