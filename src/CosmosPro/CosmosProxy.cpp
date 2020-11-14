@@ -1833,6 +1833,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								pCloudSession->m_pHostObj = pObj;
 							}
 							theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
+
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
 							if (strFormName == _T(""))
 							{
@@ -1841,12 +1842,43 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								::SysFreeString(bstrName);
 							}
 							pHubbleSession->InsertString(_T("formname"), strFormName);
-							pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							pHubbleSession->InsertString(_T("tagName"), strTagName);
+							//pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
 							CString strFormID = m_Parse.attr(_T("id"), _T(""));
 							if (strFormID != _T(""))
 							{
 								pHubbleSession->InsertString(_T("id"), strFormID);
 							}
+							strFormID = m_Parse.attr(_T("objid"), _T(""));
+							pHubbleSession->InsertString(_T("objid"), strFormID);
+
+							if (thisForm->IsMdiContainer)
+							{
+								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								pHubbleSession->InsertLong(_T("WinFormType"), 1);
+							}
+							else if (thisForm->MdiParent)
+							{
+								pHubbleSession->InsertLong(_T("WinFormType"), 2);
+								pHubbleSession->Insertint64(_T("mdiformhandle"), thisForm->MdiParent->Handle.ToInt64());
+								theApp.m_pHubble->ObserveGalaxys(thisForm->MdiParent->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strTagName.MakeLower()), CComBSTR(L""), false);
+								thisForm->Show();
+								pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+								if (bNeedQueryOnCloseEvent)
+									::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
+								pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+								::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
+								pHubbleSession->SendMessage();
+								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
+							}
+							else
+							{
+								pHubbleSession->InsertLong(_T("WinFormType"), 0);
+								pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							}
+
 							bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
 							pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
 							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));

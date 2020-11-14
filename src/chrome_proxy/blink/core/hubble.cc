@@ -196,6 +196,9 @@ namespace blink {
 		long nFormType = obj->getLong(L"WinFormType");
 		switch (nFormType)
 		{
+		case 0:
+			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kLoadwinform, obj));
+			break;
 		case 1:
 			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kLoadmdiwinform, obj));
 			break;
@@ -210,7 +213,6 @@ namespace blink {
 		}
 			break;
 		default:
-			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kLoadwinform, obj));
 			break;
 		}
 		return form;
