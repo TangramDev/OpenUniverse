@@ -462,10 +462,6 @@ namespace Browser {
 		{
 			::DestroyWindow(m_hExtendWnd);
 		}
-		for (auto it : m_mapSubWinForm)
-		{
-			::DestroyWindow(it.second->m_hWnd);
-		}
 
 		if (g_pHubble->m_pCLRProxy)
 			g_pHubble->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CWebPageImpl*)this, (IWebPage*)this, 1);
@@ -1504,6 +1500,7 @@ namespace Browser {
 				{
 					CWebPageImpl* pProxyBase = (CWebPageImpl*)this;
 					xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pProxyBase);
+					xmlParse.put_attr(_T("addsubform"), (int)1);
 					xmlParse.put_attr(_T("ipcsession"), (__int64)pSession);
 					pSession->Insertint64(_T("domhandle"), (__int64)pSession);
 					pSession->InsertLong(_T("autodelete"), 0);

@@ -1076,6 +1076,7 @@ namespace Browser {
 				{
 					CWebPageImpl* pProxyBase = (CWebPageImpl*)this;
 					xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pProxyBase);
+					xmlParse.put_attr(_T("addsubform"), (int)1);
 					xmlParse.put_attr(_T("ipcsession"), (__int64)pSession);
 					pSession->Insertint64(_T("domhandle"), (__int64)pSession);
 					pSession->InsertLong(_T("autodelete"), 0);

@@ -1816,6 +1816,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							thisForm->Text = BSTR2STRING(strCaption);
 						if (thisForm->IsMdiContainer)
 						{
+							Control^ mdiclient = Hubble::GetMDIClient(thisForm);
+							mdiclient->ControlRemoved += gcnew System::Windows::Forms::ControlEventHandler(&OnControlRemoved);
 							CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
 							if (strBKPage != _T(""))
 							{
@@ -1962,7 +1964,9 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						if (pPage)
 						{
 							int nModel = m_Parse.attrInt(_T("model"), 0);
-							::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
+							int nAddSubFormMap = m_Parse.attrInt(_T("addsubform"), 0);
+							if(nAddSubFormMap)
+								::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
 							switch (nModel)
 							{
 							case 1:
@@ -2021,6 +2025,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					Control^ client = nullptr;
 					if (mainForm->IsMdiContainer)
 					{
+						Control^ mdiclient = Hubble::GetMDIClient(mainForm);
+						mdiclient->ControlRemoved += gcnew System::Windows::Forms::ControlEventHandler(&OnControlRemoved);
 						CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
 						if (strBKPage != _T(""))
 						{
@@ -2903,6 +2909,16 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 							{
 							case CheckState::Checked:
 							{
+								//Cosmos::Wormhole^ pCloudSession = nullptr;
+								//bool bExists = Cosmos::Hubble::Wormholes->TryGetValue(form, pCloudSession);
+								//if (bExists)
+								//{
+								//	pCloudSession->InsertLong(L"MDIChildCount", 0);
+								//	pCloudSession->InsertString(L"msgID", L"MDIFORM_ALLMDICHILDREMOVED");
+								//	pCloudSession->SendMessage();
+								//	return;
+								//}
+
 								String^ strKey = L"";
 								if (form->ActiveMdiChild != nullptr)
 								{
@@ -4061,11 +4077,26 @@ void CCosmosProxy::OnControlAdded(Object^ sender, ControlEventArgs^ e)
 
 void CCosmosProxy::OnControlRemoved(Object^ sender, ControlEventArgs^ e)
 {
-	String^ strType = e->Control->GetType()->ToString();
+	String^ strType = sender->GetType()->ToString();
 	if (strType == L"System.Windows.Forms.MdiClient")
 	{
-		__int64 nHandle = e->Control->Handle.ToInt64();
-		::SetWindowLongPtr((HWND)((Form^)sender)->Handle.ToInt64(), GWLP_USERDATA, 0);
+		Control^ ctrl = (Control^)sender;
+		int nCount = ctrl->Controls->Count;
+		if (nCount == 0)
+		{
+			Form^ thisForm = (Form^)ctrl->Parent;
+			Cosmos::Wormhole^ pCloudSession = nullptr;
+			bool bExists = Cosmos::Hubble::Wormholes->TryGetValue(thisForm, pCloudSession);
+			if (bExists)
+			{
+				pCloudSession->InsertLong(L"MDIChildCount", 0);
+				pCloudSession->InsertString(L"msgID", L"MDIFORM_ALLMDICHILDREMOVED");
+				pCloudSession->SendMessage();
+			}
+			//BSTR bstrKey = CComBSTR("default");
+			//theApp.m_pHubble->ObserveGalaxys(thisForm->Handle.ToInt64(), CComBSTR(L""), bstrKey, CComBSTR(L""), true);
+			//::SysFreeString(bstrKey);
+		}
 	}
 }
 

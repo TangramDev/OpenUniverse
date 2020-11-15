@@ -55,6 +55,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   String name();
   String getid();
   bool isReady();
+  long formType();
   HubbleXobj* xobj();
   HubbleNode* mdibindgrid();
   HubbleNode* mdiwebbindgrid();
@@ -73,7 +74,9 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewinform)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
+      DEFINE_ATTRIBUTE_EVENT_LISTENER(AllMdiChildRemoved, kAllmdichildremoved)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)
+      DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForWinForm, kCloudmessageforwinform)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildWinFormReady, kMdichildwinformready)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiWinFormReady, kMdiwinformready)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormReady, kWinformready)

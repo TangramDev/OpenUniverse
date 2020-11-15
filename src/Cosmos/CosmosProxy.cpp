@@ -1160,7 +1160,9 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							//thisForm->ShowInTaskbar = false;
 							int nModel = m_Parse.attrInt(_T("model"), 0);
-							::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
+							int nAddSubFormMap = m_Parse.attrInt(_T("addsubform"), 0);
+							if (nAddSubFormMap)
+								::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
 							switch (nModel)
 							{
 							case 1:

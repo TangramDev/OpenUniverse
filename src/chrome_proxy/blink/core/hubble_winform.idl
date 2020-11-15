@@ -12,6 +12,7 @@
 	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	readonly attribute boolean isReady;
+	readonly attribute long formType;
 	readonly attribute long long handle;
 	readonly attribute DOMString name;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
@@ -23,6 +24,8 @@
 	attribute EventHandler onMessageReceived;
 	attribute EventHandler onGridCreated;
 	attribute EventHandler onLoadMdiChildWinForm;
+	attribute EventHandler onCloudMessageForWinForm;
+	attribute EventHandler onAllMdiChildRemoved;
 	attribute EventHandler onMdiChildWinFormReady;
 	attribute EventHandler onMdiWinFormReady;
 	attribute EventHandler onWinFormReady;

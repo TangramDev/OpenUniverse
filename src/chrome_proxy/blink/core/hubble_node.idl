@@ -45,4 +45,5 @@
 	attribute EventHandler onHubbleControlCreated;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onWinFormClosed;
+	attribute EventHandler onCloudMessageForGrid;
 };

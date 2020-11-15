@@ -138,6 +138,13 @@ namespace blink {
 		return id_;
 	}
 
+	long HubbleWinform::formType()
+	{
+		long nFormType = innerXobj_->getLong(L"WinFormType");
+		
+		return nFormType;
+	}
+
 	bool HubbleWinform::isReady()
 	{
 		if (isReady_)

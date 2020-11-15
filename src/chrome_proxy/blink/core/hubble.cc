@@ -247,6 +247,48 @@ namespace blink {
 		}
 	}
 
+	void Hubble::AllMdiChildRemoved(HubbleXobj* xobj)
+	{
+		__int64 nHandle = xobj->getInt64(L"formhandle");
+		HubbleWinform* form = nullptr;
+		auto it = m_mapWinForm.find(nHandle);
+		if (it != m_mapWinForm.end())
+		{
+			form = it->value.Get();
+			form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kAllmdichildremoved, xobj));
+		}
+	}
+	void Hubble::ProcessMessage(HubbleXobj* xobj)
+	{
+		__int64 nHandle = xobj->getInt64(L"formhandle");
+		if (nHandle)
+		{
+			HubbleWinform* form = nullptr;
+			auto it = m_mapWinForm.find(nHandle);
+			if (it != m_mapWinForm.end())
+			{
+				form = it->value.Get();
+				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforwinform, xobj));
+			}
+		}
+		//else
+		{
+			nHandle = xobj->getInt64(L"gridobjhandle");
+			HubbleNode* grid = nullptr;
+			if (nHandle)
+			{
+				auto it = m_mapHubbleNode.find(nHandle);
+				if (it != m_mapHubbleNode.end())
+				{
+					grid = it->value.Get();
+					grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, xobj));
+				}
+			}
+		}
+		DispatchEvent(*blink::HubbleEvent::Create(
+			blink::event_type_names::kHubblemessage, xobj));
+	}
+
 	void Hubble::MdiChildReady(HubbleXobj* xobj)
 	{
 		__int64 handle = xobj->getInt64(L"ready_mdichildhandle");
