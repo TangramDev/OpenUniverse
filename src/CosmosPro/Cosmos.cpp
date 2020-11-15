@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1334,6 +1334,17 @@ namespace Cosmos
     void Hubble::UpdateNewTabPageLayout(String^ newTabPageLayout)
     {
         Hubble::NTPXml::set(newTabPageLayout);
+    }
+
+    Wormhole^ Hubble::GetWormholeFromObj(Object^ obj)
+    {
+        Cosmos::Wormhole^ pCloudSession = nullptr;
+        bool bExists = Cosmos::Hubble::Wormholes->TryGetValue(obj, pCloudSession);
+        if (bExists)
+        {
+            return pCloudSession;
+        }
+        return nullptr;
     }
 
     void Hubble::BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ strWebName)

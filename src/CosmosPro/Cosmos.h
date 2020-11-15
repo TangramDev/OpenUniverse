@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -987,6 +987,7 @@ namespace Cosmos
 		static void RegComponentForTangram(String^ strIDs, Assembly^ a);
 		static void UpdateNewTabPageLayout(String^ newTabPageLayout);
 		static void BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ name);
+		static Wormhole^ GetWormholeFromObj(Object^ obj);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 
 		Cosmos::IHubbleApp^ m_pUniverseAppProxy;

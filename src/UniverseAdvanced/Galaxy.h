@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -23,6 +23,7 @@
 
 using namespace Browser;
 class CBKWnd;
+class CWormhole;
 #define WM_HUBBLE_NOTIFY WM_NOTIFY+WM_REFLECT_BASE
 class CCommonCtrl :
 	public CWindowImpl<CCommonCtrl, CWindow>
@@ -151,13 +152,15 @@ public:
 	CGrid*									m_pBindMDIGrid = nullptr;
 	CGrid*									m_pWebBindMDIGrid = nullptr;
 	CWebPage*								m_pOwnerHtmlWnd;
-	CWebPage*								m_pParentHtmlWnd;
+	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
 	map<CString, BindWebObj*>				m_mapBindWebObj;
 
 	map<CString, CString>					m_mapKey;
-	map<CString, HubbleDocTemplateInfo*>	m_mapHubbleFormsTemplateInfo;
-	map<int, HubbleDocTemplateInfo*>		m_mapHubbleFormsTemplateInfo2;
+	void SendMessage();
+
+	//map<CString, HubbleDocTemplateInfo*>	m_mapHubbleFormsTemplateInfo;
+	//map<int, HubbleDocTemplateInfo*>		m_mapHubbleFormsTemplateInfo2;
 	BEGIN_MSG_MAP(CWinForm)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)

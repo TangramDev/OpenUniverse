@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -130,8 +130,8 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 					if (pWnd)
 					{
 						strFormsInfoPath = pWnd->m_strChildFormPath;
-						m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
-						m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
+						//m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
+						//m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
 					}
 				}
 			}
@@ -489,8 +489,8 @@ void CTangramListView::ChangeTemplate(int nItem)
 						pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 						if (pWnd)
 						{
-							m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
-							m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
+							//m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
+							//m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
 						}
 					}
 				}

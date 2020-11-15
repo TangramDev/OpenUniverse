@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -212,7 +212,6 @@ namespace Browser {
 				if (pWnd)
 				{
 					m_mapSubWinForm[hWnd] = pWnd;
-					pWnd->m_pParentHtmlWnd = this;
 				}
 			}
 		}

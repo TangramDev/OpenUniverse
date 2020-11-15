@@ -1,6 +1,6 @@
 #include "..\CosmosMini\CosmosProxy.h"
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -3014,8 +3014,6 @@ void CCosmosProxy::OnTextChanged(System::Object^ sender, System::EventArgs^ e)
 		pCloudSession->InsertString("currentsubobj", pTextCtrl->Name);
 		String^ strEventtype = pCloudSession->GetString(L"eventtype");
 		pCloudSession->InsertString("currentevent", "OnTextChanged@" + strEventtype);
-		//pCloudSession->InsertString(L"callbackid", _T(""));
-		//pCloudSession->InsertString(L"eventtype", _T(""));
 
 		pCloudSession->SendMessage();
 	}

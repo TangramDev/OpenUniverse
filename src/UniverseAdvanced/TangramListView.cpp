@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -126,13 +126,13 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 				HWND hWnd = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 				if (hWnd)
 				{
-					pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
-					if (pWnd)
-					{
-						strFormsInfoPath = pWnd->m_strChildFormPath;
-						m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
-						m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
-					}
+					//pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
+					//if (pWnd)
+					//{
+					//	strFormsInfoPath = pWnd->m_strChildFormPath;
+					//	m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
+					//	m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
+					//}
 				}
 			}
 			if (g_pHubble->m_mapHubbleDocTemplateInfo.size() == 0)
@@ -486,12 +486,12 @@ void CTangramListView::ChangeTemplate(int nItem)
 					HWND hWnd = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 					if (hWnd)
 					{
-						pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
-						if (pWnd)
-						{
-							m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
-							m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
-						}
+						//pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
+						//if (pWnd)
+						//{
+						//	m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
+						//	m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
+						//}
 					}
 				}
 				CString strText = GetListCtrl().GetItemText(nItem, 0);

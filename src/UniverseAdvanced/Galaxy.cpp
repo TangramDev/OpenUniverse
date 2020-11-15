@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.14							*
+*					Open Universe - version 1.0.1.15							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -33,6 +33,7 @@
 #include "OfficePlus\WordPlus\WordAddin.h"
 #include "EclipsePlus\EclipseAddin.h"
 #include "DocTemplateDlg.h"
+#include "Wormhole.h"
 
 using namespace OfficePlus::WordPlus;
 
@@ -1079,8 +1080,8 @@ CWinForm::CWinForm(void)
 	m_nState = -1;
 	m_bMdiForm = false;
 	m_pBKWnd = nullptr;
+	m_pWormhole = nullptr;
 	m_pOwnerHtmlWnd = nullptr;
-	m_pParentHtmlWnd = nullptr;
 	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
 	if (g_pHubble->m_pCurMDIChildFormInfo)
 	{
@@ -1097,16 +1098,20 @@ CWinForm::CWinForm(void)
 
 CWinForm::~CWinForm(void)
 {
-	if (m_bMdiForm)
-	{
-		for (auto it : m_mapHubbleFormsTemplateInfo)
-		{
-			delete it.second;
-		}
-		m_mapHubbleFormsTemplateInfo.clear();
-	}
 	if (m_pChildFormsInfo)
 		delete m_pChildFormsInfo;
+}
+
+void CWinForm::SendMessage()
+{
+	if (m_pWormhole == nullptr)
+	{
+		m_pWormhole = (CWormhole*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+	}
+	if (m_pWormhole)
+	{
+		m_pWormhole->SendMessage();
+	}
 }
 
 LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
@@ -1225,14 +1230,6 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	if (g_pHubble->m_pActiveWinFormWnd == this)
 		g_pHubble->m_pActiveWinFormWnd = nullptr;
-	if (m_pParentHtmlWnd)
-	{
-		auto it = m_pParentHtmlWnd->m_mapSubWinForm.find(m_hWnd);
-		if (it != m_pParentHtmlWnd->m_mapSubWinForm.end())
-		{
-			m_pParentHtmlWnd->m_mapSubWinForm.erase(it);
-		}
-	}
 	auto it = g_pHubble->m_mapNeedQueryOnClose.find(m_hWnd);
 	if (it != g_pHubble->m_mapNeedQueryOnClose.end())
 		g_pHubble->m_mapNeedQueryOnClose.erase(it);
@@ -1430,12 +1427,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	break;
 	case 20190214:
-		//if (m_pOwnerHtmlWnd)
-		//{
-		//	::PostMessage(::GetParent(m_pOwnerHtmlWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-		//}
-		//if (m_pParentHtmlWnd)
-		//	::PostMessage(::GetParent(m_pParentHtmlWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		return (LRESULT)this;
 		break;
 	case 20201029:
@@ -1711,10 +1702,6 @@ LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	g_pHubble->m_pActiveHtmlWnd = nullptr;
 	g_pHubble->m_pActiveWinFormWnd = this;
 	::BringWindowToTop(m_hWnd);
-	//if (m_pParentHtmlWnd)
-	//{
-	//	m_pParentHtmlWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-	//}
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
 
