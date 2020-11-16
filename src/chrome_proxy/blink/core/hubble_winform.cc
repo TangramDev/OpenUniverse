@@ -23,6 +23,7 @@ namespace blink {
 		m_pBindMdiNode = nullptr;
 		m_pWebBindMdiNode = nullptr;
 		m_pRenderframeImpl = nullptr;
+		m_pContentElement = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 	}
 
@@ -57,6 +58,7 @@ namespace blink {
 		visitor->Trace(hubble_);
 		visitor->Trace(innerXobj_);
 		visitor->Trace(m_pBindMdiNode);
+		visitor->Trace(m_pContentElement);
 		visitor->Trace(m_pWebBindMdiNode);
 		visitor->Trace(mapHubbleEventCallback_);
 	}

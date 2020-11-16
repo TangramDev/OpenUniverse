@@ -138,6 +138,7 @@ namespace blink {
 	 String url_;
 	 mutable Member<HubbleXobj> innerXobj_;
 	 mutable Member<HubbleNode> topGrid_;
+	 mutable Member<Element> m_pVisibleContentElement;
 	 HeapHashMap<String, Member<HubbleXobj>> mapCloudSession_;
 	 HeapHashMap<int64_t, Member<HubbleNode>> m_mapHubbleNode;
 	 HeapHashMap<int64_t, Member<HubbleWindow>> m_mapHubbleWindow;

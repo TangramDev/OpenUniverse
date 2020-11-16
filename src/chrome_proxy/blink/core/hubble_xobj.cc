@@ -40,6 +40,7 @@ namespace blink {
 
 	void HubbleXobj::Trace(blink::Visitor* visitor) {
 		ScriptWrappable::Trace(visitor);
+		visitor->Trace(mapVisibleElem);
 		visitor->Trace(mapHubbleEventCallback_);
 		visitor->Trace(hubble_);
 	}
@@ -159,6 +160,29 @@ namespace blink {
 		if (it != session_.m_mapFloat.end())
 			return it->second;
 		return 0;
+	}
+
+	void HubbleXobj::setVisibleElement(const String& strKey, Element* value)
+	{
+		auto it = mapVisibleElem.find(strKey);
+		if (it == mapVisibleElem.end())
+		{
+			mapVisibleElem.insert(strKey, value);
+		}
+		else {
+			mapVisibleElem.erase(it);
+			mapVisibleElem.insert(strKey, value);
+		}
+	}
+
+	Element* HubbleXobj::getVisibleElement(const String& strKey)
+	{
+		auto it = mapVisibleElem.find(strKey);
+		if (it != mapVisibleElem.end())
+		{			
+			return it->value.Get();
+		}
+		return nullptr;
 	}
 
 	void HubbleXobj::addEventListener(const String& eventName, V8ApplicationCallback* callback)

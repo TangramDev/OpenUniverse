@@ -12,8 +12,11 @@
 
 #include "base/guid.h"
 #include "third_party/blink/renderer/core/dom/document.h"
+#include "third_party/blink/renderer/core/dom/dom_token_list.h"
+#include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/html/html_element.h"
 #include "third_party/blink/renderer/core/html/html_head_element.h"
+#include "third_party/blink/renderer/core/dom/class_collection.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "third_party/blink/renderer/core/frame/local_dom_window.h"
 #include "third_party/blink/public/web/web_local_frame_client.h"
@@ -33,6 +36,7 @@ namespace blink {
 		topGrid_ = nullptr;
 		url_ = L"";
 		m_pRenderframeImpl = nullptr;
+		m_pVisibleContentElement = nullptr;
 	}
 
 	Hubble::~Hubble() {
@@ -48,6 +52,7 @@ namespace blink {
 		visitor->Trace(m_mapHubbleCompositor);
 		visitor->Trace(mapHubbleCallback_);
 		visitor->Trace(mapCallbackFunction_);
+		visitor->Trace(m_pVisibleContentElement);
 		visitor->Trace(innerXobj_);
 		visitor->Trace(topGrid_);
 		visitor->Trace(mapCloudSession_);
@@ -219,7 +224,7 @@ namespace blink {
 				//parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, obj));
 			}
 		}
-			break;
+		break;
 		default:
 			break;
 		}
@@ -238,11 +243,63 @@ namespace blink {
 			{
 				form = it->value.Get();
 				parentmdiform = form->mdiParent();
-			}
-			if (parentmdiform && form)
-			{
-				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
-				parentmdiform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
+				ExceptionState exception_state(nullptr,
+					ExceptionState::kExecutionContext,
+					"MdiChildActive",
+					"");
+				if (form->m_pContentElement == nullptr)
+				{
+					ClassCollection* contentCollection = DomWindow()->document()->getElementsByClassName(parentmdiform->name() + "contents");
+					if (contentCollection)
+					{
+						HTMLCollection* contentsElements = contentCollection->item(0)->Children();
+						if (contentsElements)
+						{
+							String strname = form->name();
+							WebString _strName = strname;
+							for (Element* contentElement : *contentsElements)
+							{
+								if (contentElement->classList().contains(_strName))
+								{
+									contentElement->classList().remove({ "hidden" }, exception_state);
+									contentElement->classList().add({ "show" }, exception_state);
+									form->m_pContentElement = contentElement;
+									if(m_pVisibleContentElement==nullptr)
+										m_pVisibleContentElement = contentElement;
+									else
+									{
+										m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+										m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+										m_pVisibleContentElement = contentElement;
+										break;
+									}
+								}
+								else
+								{
+									contentElement->classList().remove({ "show" }, exception_state);
+									contentElement->classList().add({ "hidden" }, exception_state);
+								}
+
+							}
+						}
+					}
+				}
+				else
+				{
+					if (m_pVisibleContentElement != form->m_pContentElement)
+					{
+						form->m_pContentElement->classList().remove({ "hidden" }, exception_state);
+						form->m_pContentElement->classList().add({ "show" }, exception_state);
+						m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+						m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+						m_pVisibleContentElement = form->m_pContentElement;
+					}
+				}
+				if (parentmdiform && form)
+				{
+					form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
+					parentmdiform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kMdichildactivate, xobj));
+				}
 			}
 		}
 	}
@@ -343,7 +400,7 @@ namespace blink {
 		node->handle_ = handle;
 		node->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapHubbleNode.insert(handle, node);
-		if(bNewWindow)
+		if (bNewWindow)
 			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblewindowcreated, xobj));
 
 		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
@@ -361,7 +418,7 @@ namespace blink {
 			window->m_mapHubbleNode[handle] = node;
 			window->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
 		}
-		
+
 		nPHandle = xobj->getInt64(L"parentFormHandle");
 		if (nPHandle)
 		{
@@ -395,7 +452,7 @@ namespace blink {
 							parentform->m_pBindMdiNode = it1->value.Get();
 						}
 					}
-					
+
 					nHandle = xobj->getInt64(L"mdiwebbindgridhandle");
 					if (nHandle)
 					{
@@ -539,7 +596,7 @@ namespace blink {
 		}
 	}
 
-	void Hubble::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback, bool bwait=false)
+	void Hubble::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback, bool bwait = false)
 	{
 		if (m_pRenderframeImpl)
 		{
@@ -560,7 +617,7 @@ namespace blink {
 		//	run_loop_.Run();
 	}
 
-	void Hubble::openUrl(const String& url, long nBrowserWndOpenDisposition, V8ApplicationCallback* callback, bool bwait=false)
+	void Hubble::openUrl(const String& url, long nBrowserWndOpenDisposition, V8ApplicationCallback* callback, bool bwait = false)
 	{
 		if (m_pRenderframeImpl)
 		{

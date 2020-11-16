@@ -12,7 +12,7 @@
 #include "third_party/blink/renderer/platform/heap/handle.h"
 #include "third_party/blink/renderer/platform/wtf/assertions.h"
 #include "third_party/blink/renderer/platform/wtf/forward.h"
-
+#include "third_party/blink/renderer/core/dom/element.h"
 #include "c:/universework/openuniverse/src/chrome_proxy/third_party/ChromeRenderDomProxy.h"
 
 namespace blink {
@@ -60,6 +60,9 @@ friend class Hubble;
   float getFloat(const String& strKey);
   void setFloat(const String& strKey, float value);
 
+  Element* getVisibleElement(const String& strKey);
+  void setVisibleElement(const String& strKey, Element* value);
+
   void addEventListener(const String& eventName, V8ApplicationCallback* callback);
   void addEventListener(const String& subObjName, const String& eventName, V8ApplicationCallback* callback);
   void removeEventListener(const String& eventName);
@@ -72,6 +75,7 @@ friend class Hubble;
   CommonUniverse::IPCSession session_;
   WebLocalFrameClient* m_pRenderframeImpl;
   mutable Member<Hubble> hubble_;
+  HeapHashMap<String, Member<Element>> mapVisibleElem;
   HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;
 private:
   String name_;

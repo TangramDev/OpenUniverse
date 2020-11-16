@@ -13,6 +13,7 @@
 #include "third_party/blink/renderer/platform/heap/handle.h"
 #include "third_party/blink/renderer/platform/wtf/assertions.h"
 #include "third_party/blink/renderer/platform/wtf/forward.h"
+#include "third_party/blink/renderer/core/dom/element.h"
 
 namespace blink {
 
@@ -93,6 +94,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   ~HubbleWinform() override;
 
   bool isReady_ = false;
+  mutable Member<Element> m_pContentElement;
   int64_t handle_ = 0;
   int64_t m_nMdiwebbindgridhandle = 0;
   mutable Member<Hubble> hubble_;

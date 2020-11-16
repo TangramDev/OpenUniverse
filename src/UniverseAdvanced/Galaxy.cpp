@@ -1314,11 +1314,19 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
 			{
-				auto it = m_pOwnerHtmlWnd->m_pGalaxy->m_mapGrid.find(m_strKey);
-				if (it != m_pOwnerHtmlWnd->m_pGalaxy->m_mapGrid.end())
+				CTangramXmlParse m_Parse;
+				if (m_Parse.LoadXml(m_strXml))
 				{
-					IGrid* pGrid = nullptr;
-					m_pOwnerHtmlWnd->m_pGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pGrid);
+					m_strKey = m_Parse.name();
+					if (m_pOwnerHtmlWnd)
+					{
+						CTangramXmlParse* pChild = m_Parse.GetChild(_T("webui"));
+						if (pChild)
+						{
+							IGrid* pGrid = nullptr;
+							m_pOwnerHtmlWnd->Observe(CComBSTR(m_strKey), CComBSTR(pChild->xml()), &pGrid);
+						}
+					}
 				}
 			}
 		}
@@ -1339,6 +1347,15 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			if (m_Parse.LoadXml(m_strXml))
 			{
 				m_strKey = m_Parse.name();
+				if (m_pOwnerHtmlWnd)
+				{
+					CTangramXmlParse* pChild = m_Parse.GetChild(_T("webui"));
+					if (pChild)
+					{
+						IGrid* pGrid = nullptr;
+						m_pOwnerHtmlWnd->Observe(CComBSTR(m_strKey), CComBSTR(pChild->xml()), &pGrid);
+					}
+				}
 			}
 		}
 	}
@@ -1529,6 +1546,8 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
 					if (it != g_pHubble->m_mapHtmlWnd.end())
 					{
+						if (m_pOwnerHtmlWnd == nullptr)
+							m_pOwnerHtmlWnd = (CWebPage*)it->second;
 						pSession->InsertString(_T("msgID"), _T("MdiWinForm_ActiveMdiChild"));
 						pSession->Insertint64(_T("active_mdichildhandle"), (__int64)m_hWnd);
 						pSession->InsertString(_T("active_mdichildkey"), m_strKey);

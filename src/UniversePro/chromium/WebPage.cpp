@@ -507,18 +507,10 @@ namespace Browser {
 					pBrowserWnd->BrowserLayout();
 					::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 2);
 				}
-				//for (auto it : m_mapSubWinForm)
-				//{
-				//	::ShowWindow(it.first,SW_SHOW);
-				//}
 			}
 			else
 			{
 				::SetParent(m_hExtendWnd, m_hWnd);
-				//for (auto it : m_mapSubWinForm)
-				//{
-				//	::ShowWindow(it.first, SW_HIDE);
-				//}
 			}
 		}
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);

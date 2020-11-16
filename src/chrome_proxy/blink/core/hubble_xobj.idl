@@ -16,6 +16,9 @@
 	float getFloat(DOMString strKey);
 	void setFloat(DOMString strKey, float value);
 
+	void setVisibleElement(DOMString strKey, Element value);
+	Element getVisibleElement(DOMString strKey);
+
 	void sendMessage(HubbleXobj msg,
 		[DefaultValue = Undefined] optional ApplicationCallback callback);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);

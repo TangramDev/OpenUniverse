@@ -2,9 +2,11 @@
 #define THIRD_PARTY_BLINK_RENDERER_CORE_EVENTS_TANGRAM_EVENT_H_
 
 #include "third_party/blink/renderer/core/dom/events/Event.h"
+#include "third_party/blink/renderer/core/dom/element.h"
 
 namespace blink {
 
+  class Element;
   class ScriptState;
   class HubbleXobj;
   class HubbleNode;
