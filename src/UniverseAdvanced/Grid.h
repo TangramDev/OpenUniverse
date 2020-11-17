@@ -115,6 +115,7 @@ public:
 	CWormhole*						m_pHubbleCloudSession;
 	map<CString, CGalaxy*>			m_mapSubFrame;
 	map<CGrid*, CString>			m_mapExtendNode;
+	map<CString, CGrid*>			m_mapChildGrid;
 	CComObject<CGridCollection>*	m_pChildNodeCollection;
 
 	map<IUniverseAppProxy*, CGridProxy*> m_mapWndGridProxy;
@@ -208,6 +209,7 @@ public:
 	STDMETHOD(GetGrid)(long nRow, long nCol,IGrid** ppGrid);
 	STDMETHOD(GetGrids)(BSTR bstrName, IGrid** ppGrid, IGridCollection** ppGrids, long* pCount);
 	STDMETHOD(GetCtrlByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
+	STDMETHOD(GetChildGridByName)(BSTR bstrName, IGrid** pVal);
 	STDMETHOD(GetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
 	STDMETHOD(SetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	STDMETHOD(LoadXML)(int nType, BSTR bstrXML);

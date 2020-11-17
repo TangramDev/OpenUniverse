@@ -82,7 +82,7 @@ public:
 	CWinForm*						m_pParentWinFormWnd;
 	CTangramXmlParse*				m_pHostParse;
 	CGridShareData*					m_pGridShareData;
-	Browser::CBrowser*					m_pWebBrowser;
+	Browser::CBrowser*				m_pWebBrowser;
 	CWnd*							m_pHostWnd;
 	CGalaxy*						m_pHostGalaxy;
 	CRuntimeClass*					m_pObjClsInfo;
@@ -95,6 +95,7 @@ public:
 	CGrid*							m_pCurrentExNode;
 	CWormhole*						m_pHubbleCloudSession;
 	map<CGrid*, CString>			m_mapExtendNode;
+	map<CString, CGrid*>			m_mapChildGrid;
 	CComObject<CGridCollection>*	m_pChildNodeCollection;
 
 	map<IUniverseAppProxy*, CGridProxy*> m_mapWndGridProxy;
@@ -188,6 +189,7 @@ public:
 	STDMETHOD(SetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	STDMETHOD(LoadXML)(int nType, BSTR bstrXML);
 	STDMETHOD(Show)();
+	STDMETHOD(GetChildGridByName)(BSTR bstrName, IGrid** pVal);
 	STDMETHOD(GetGridByName)(BSTR bstrName, IGridCollection** pVal);
 	STDMETHOD(get_DockObj)(BSTR bstrName, LONGLONG* pVal);
 	STDMETHOD(put_DockObj)(BSTR bstrName, LONGLONG newVal);

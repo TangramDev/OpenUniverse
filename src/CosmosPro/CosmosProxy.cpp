@@ -1324,7 +1324,7 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 						else if (strType == L"System.Windows.Forms.ListView")
 						{
 							ListView^ pListView = (ListView^)pChild;
-							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);// ->GetChild(_T("uidata"));
+							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{
 								_pChild = _pChild->GetChild(_T("uidata"));

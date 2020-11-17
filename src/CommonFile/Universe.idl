@@ -314,6 +314,7 @@ interface IGrid : IDispatch {
 	[id(109)] HRESULT GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
 	[id(110)] HRESULT SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	[id(112)] HRESULT NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript);
+	[id(113)] HRESULT GetChildGridByName([in]BSTR bstrName, [out, retval] IGrid** pVal);
 };
 
 [

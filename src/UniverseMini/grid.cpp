@@ -70,6 +70,7 @@ void CGrid::InitWndGrid()
 	{
 		m_strName.Format(_T("Grid_%p"), (LONGLONG)this);
 	}
+	m_pRootObj->m_mapChildGrid[m_strName] = this;
 	m_nActivePage = m_pHostParse->attrInt(TGM_ACTIVE_PAGE, 0);
 	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
 	if (m_pGridShareData->m_pGalaxy && m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)
@@ -233,6 +234,18 @@ STDMETHODIMP CGrid::ActiveTabPage(IGrid * _pGrid)
 		m_pGridShareData->m_pGalaxy->HostPosChanged();
 	}
 	return S_OK;
+}
+
+STDMETHODIMP CGrid::GetChildGridByName(BSTR bstrName, IGrid** ppGrid)
+{
+	CString strName = OLE2T(bstrName);
+	auto it = m_pRootObj->m_mapChildGrid.find(strName);
+	if (it != m_pRootObj->m_mapChildGrid.end())
+	{
+		*ppGrid = it->second;
+		return S_OK;
+	}
+	return S_FALSE;
 }
 
 STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)

@@ -1809,6 +1809,10 @@ EXTERN_C const IID IID_IGrid;
             BSTR bstrURL,
             IDispatch *dispObjforScript) = 0;
         
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetChildGridByName( 
+            /* [in] */ BSTR bstrName,
+            /* [retval][out] */ IGrid **pVal) = 0;
+        
     };
     
     
@@ -2185,6 +2189,11 @@ EXTERN_C const IID IID_IGrid;
             BSTR bstrURL,
             IDispatch *dispObjforScript);
         
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetChildGridByName )( 
+            IGrid * This,
+            /* [in] */ BSTR bstrName,
+            /* [retval][out] */ IGrid **pVal);
+        
         END_INTERFACE
     } IGridVtbl;
 
@@ -2436,6 +2445,9 @@ EXTERN_C const IID IID_IGrid;
 
 #define IGrid_NavigateURL(This,bstrURL,dispObjforScript)	\
     ( (This)->lpVtbl -> NavigateURL(This,bstrURL,dispObjforScript) ) 
+
+#define IGrid_GetChildGridByName(This,bstrName,pVal)	\
+    ( (This)->lpVtbl -> GetChildGridByName(This,bstrName,pVal) ) 
 
 #endif /* COBJMACROS */
 

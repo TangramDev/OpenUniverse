@@ -99,6 +99,7 @@ void CGrid::InitWndGrid()
 	{
 		m_strName.Format(_T("Grid_%p"), (LONGLONG)this);
 	}
+	m_pRootObj->m_mapChildGrid[m_strName] = this;
 	if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 	{
 		auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj.find(m_strName);
@@ -1782,6 +1783,18 @@ STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid** ppGrid)
 		hr = pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
 	}
 	return hr;
+}
+
+STDMETHODIMP CGrid::GetChildGridByName(BSTR bstrName, IGrid** ppGrid)
+{
+	CString strName = OLE2T(bstrName);
+	auto it = m_pRootObj->m_mapChildGrid.find(strName);
+	if (it != m_pRootObj->m_mapChildGrid.end())
+	{
+		*ppGrid = it->second;
+		return S_OK;
+	}
+	return S_FALSE;
 }
 
 STDMETHODIMP CGrid::GetGridByName(BSTR bstrName, IGridCollection * *ppGrids)

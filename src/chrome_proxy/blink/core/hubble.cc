@@ -312,6 +312,35 @@ namespace blink {
 		if (it != m_mapWinForm.end())
 		{
 			form = it->value.Get();
+			if (m_pVisibleContentElement)
+			{
+				ExceptionState exception_state(nullptr,
+					ExceptionState::kExecutionContext,
+					"AllMdiChildRemoved",
+					"");
+				m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+				m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+				m_pVisibleContentElement = nullptr;
+				ClassCollection* contentCollection = DomWindow()->document()->getElementsByClassName(form->name() + "contents");
+				if (contentCollection)
+				{
+					HTMLCollection* contentsElements = contentCollection->item(0)->Children();
+					if (contentsElements)
+					{
+						for (Element* contentElement : *contentsElements)
+						{
+							if (contentElement->classList().contains("mainWindow"))
+							{
+								contentElement->classList().remove({ "hidden" }, exception_state);
+								contentElement->classList().add({ "show" }, exception_state);
+								break;
+							}
+						}
+					}
+				}
+			}
+		
+			sendMessage("TANGRAM_UI_MESSAGE", "__VIEWPORT_DEFAULT__", L"", L"", L"", L"");
 			form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kAllmdichildremoved, xobj));
 		}
 	}

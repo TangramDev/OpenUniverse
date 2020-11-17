@@ -469,6 +469,14 @@ namespace Cosmos
 			return theAppProxy._createObject<IGrid, Grid>(pGrid);
 		}
 
+		Grid^ GetChildGrid(String^ strName)
+		{
+			IGrid* pGrid;
+			BSTR bstrName = STRING2BSTR(strName);
+			m_pGrid->GetChildGridByName(bstrName, &pGrid);
+			::SysFreeString(bstrName);
+			return theAppProxy._createObject<IGrid, Grid>(pGrid);
+		}
 	private:
 		HWND m_hWnd;
 		void Init();
