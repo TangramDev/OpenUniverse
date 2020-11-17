@@ -86,6 +86,7 @@ public:
 	CWnd*							m_pHostWnd;
 	CGalaxy*						m_pHostGalaxy;
 	CRuntimeClass*					m_pObjClsInfo;
+	Browser::CWebPage*				m_pWebPage = nullptr;
 
 	CGridEvents*					m_pCLREventConnector;
 
@@ -156,6 +157,7 @@ public:
 	STDMETHOD(get_ActivePage)(int* pVal);
 	STDMETHOD(put_ActivePage)(int newVal);
 	STDMETHOD(get_OfficeObj)(IDispatch** pVal);
+	STDMETHOD(get_WebPage)(IWebPage** pVal);
 
 	STDMETHOD(get_Rows)(long* nRows);
 	STDMETHOD(get_Cols)(long* nCols);

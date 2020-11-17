@@ -85,6 +85,7 @@ namespace Browser
 		STDMETHOD(put_HostWnd)(LONGLONG newVal);
 		STDMETHOD(CreateForm)(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm);
 		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid);
+		STDMETHOD(SendXmlMessage)(IGrid* sender, BSTR bstrXml);
 
 		void SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		CChromeBrowserBase* GetChromeBrowserBase(HWND) override;

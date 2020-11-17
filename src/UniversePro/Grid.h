@@ -112,6 +112,7 @@ public:
 	IDispatch*						m_pExtender;
 	CGridVector						m_vChildNodes;
 	CGrid*							m_pCurrentExNode;
+	CWebPage*						m_pWebPage = nullptr;
 	CWormhole*						m_pHubbleCloudSession;
 	map<CString, CGalaxy*>			m_mapSubFrame;
 	map<CGrid*, CString>			m_mapExtendNode;
@@ -180,6 +181,7 @@ public:
 	STDMETHOD(get_ActivePage)(int* pVal);
 	STDMETHOD(put_ActivePage)(int newVal);
 	STDMETHOD(get_OfficeObj)(IDispatch** pVal);
+	STDMETHOD(get_WebPage)(IWebPage** pVal);
 
 	STDMETHOD(get_Rows)(long* nRows);
 	STDMETHOD(get_Cols)(long* nCols);

@@ -1911,6 +1911,19 @@ STDMETHODIMP CGrid::get_Width(LONG * pVal)
 	return S_OK;
 }
 
+STDMETHODIMP CGrid::get_WebPage(IWebPage * *pVal)
+{
+	if (m_pWebPage == nullptr)
+	{
+		m_pWebPage = GetHtmlWnd();
+	}
+	if (m_pWebPage)
+	{
+		*pVal = m_pWebPage;
+	}
+	return S_OK;
+}
+
 STDMETHODIMP CGrid::get_OfficeObj(IDispatch * *pVal)
 {
 	if (m_pGridShareData->m_pOfficeObj)

@@ -121,6 +121,8 @@ namespace Browser {
 					pSession->Insertint64(_T("gridobjhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
+					pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
+					pSession->InsertString(_T("level"), pGrid->m_pRootObj->m_strKey);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
@@ -1201,6 +1203,131 @@ namespace Browser {
 			*pRetForm = g_pHubble->m_pCLRProxy->CreateWinForm((HWND)hParent, CComBSTR(it->second));
 		}
 		return S_OK;
+	}
+
+	STDMETHODIMP CWebPage::SendXmlMessage(IGrid* sender, BSTR bstrXml)
+	{
+		CGrid* pGrid = (CGrid*)sender;
+		if (pGrid)
+		{
+			CTangramXmlParse m_Parse;
+			if (m_Parse.LoadXml(OLE2T(bstrXml)))
+			{
+				CTangramXmlParse* pChild = m_Parse.GetChild(_T("webpage"));
+				if (pChild)
+				{
+					CString strMsgID = m_Parse.attr(_T("msgID"), _T(""));
+					int nCount = pChild->GetCount();
+					if (nCount)
+					{
+						for (int i = 0; i < nCount; i++)
+						{
+							CString strName = pChild->GetChild(i)->name();
+							auto it = pGrid->m_pRootObj->m_mapChildGrid.find(strName);
+							if (it != pGrid->m_pRootObj->m_mapChildGrid.end())
+							{
+								CGrid* pTarget = it->second;
+								if (pTarget)
+								{
+									if (pGrid->m_pHubbleCloudSession == nullptr)
+									{
+										pGrid->m_pHubbleCloudSession = (CWormhole*)((CHubbleImpl*)g_pHubble)->CreateCloudSession(this);
+										CWormhole* pSession = pGrid->m_pHubbleCloudSession;
+										if (pSession)
+										{
+											pSession->InsertString(_T("msgID"), strMsgID);
+											pSession->InsertLong(_T("autodelete"), 0);
+											pSession->InsertLong(_T("gridtype"), pGrid->m_nViewType);
+											pSession->InsertLong(_T("rows"), pGrid->m_nRows);
+											pSession->InsertLong(_T("cols"), pGrid->m_nCols);
+											pSession->InsertLong(_T("row"), pGrid->m_nRow);
+											pSession->InsertLong(_T("col"), pGrid->m_nCol);
+											pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
+											pSession->InsertString(_T("name@page"), pGrid->m_strName);
+											pSession->Insertint64(_T("gridobjhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
+											pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
+											pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
+											pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
+											pSession->InsertString(_T("level"), pGrid->m_pRootObj->m_strKey);
+											pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
+											pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
+											pSession->InsertString(_T("objID"), _T("wndnode"));
+											switch (pGrid->m_nViewType)
+											{
+											case Grid:
+											{
+												CGridWnd* pWnd = (CGridWnd*)pGrid->m_pHostWnd;
+												for (int i = 0; i < pGrid->m_nRows; i++)
+												{
+													for (int j = 0; j < pGrid->m_nCols; j++)
+													{
+														int nIndex = j + i * pGrid->m_nRows;
+														CString strIndex = _T("");
+														strIndex.Format(_T("%d"), nIndex);
+														pSession->Insertint64(strIndex, (__int64)::GetDlgItem(pWnd->m_hWnd, pWnd->IdFromRowCol(i, j)));
+													}
+												}
+											}
+											break;
+											case TabGrid:
+											{
+												for (auto it : pGrid->m_vChildNodes)
+												{
+													CString strIndex = _T("");
+													strIndex.Format(_T("%d"), it->m_nCol);
+													pSession->Insertint64(strIndex, (__int64)it->m_pHostWnd->m_hWnd);
+												}
+											}
+											break;
+											default:
+												break;
+											}
+											if (pGrid->m_pParentObj)
+											{
+												pSession->Insertint64(_T("parentgridhandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
+											}
+											if (pGrid->m_pParentWinFormWnd)
+											{
+												pSession->Insertint64(_T("parentFormHandle"), (__int64)pGrid->m_pParentWinFormWnd->m_hWnd);
+											}
+											if (pGrid->m_pDisp)
+											{
+												pGrid->m_pHubbleCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
+												if (g_pHubble->m_pCLRProxy)
+												{
+													g_pHubble->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
+												}
+											}
+											pGrid->m_pHubbleCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+											m_pChromeRenderFrameHost->SendHubbleMessage(pSession->m_pSession);
+										}
+									}
+									else
+									{
+										pGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), strMsgID);
+										pGrid->m_pHubbleCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+										m_pChromeRenderFrameHost->SendHubbleMessage(pGrid->m_pHubbleCloudSession->m_pSession);
+									}
+								}
+							}
+						}
+					}
+				}
+				pChild = m_Parse.GetChild(_T("parentform"));
+				if (pChild)
+				{
+					int nCount = pChild->GetCount();
+					if (nCount)
+					{
+						for (int i = 0; i < nCount; i++)
+						{
+
+						}
+					}
+				}
+			}
+		}
+		return S_FALSE;
 	}
 
 	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid)

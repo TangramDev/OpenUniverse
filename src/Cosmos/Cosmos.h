@@ -602,6 +602,7 @@ namespace Cosmos
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 		static void BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ name);
 		static Wormhole^ GetWormholeFromObj(Object^ obj);
+		static void SendXmlMessage(Grid^ sender, String^ strXml);
 
 		static Hubble^ GetHubble();
 

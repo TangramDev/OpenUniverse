@@ -301,6 +301,7 @@ interface IGrid : IDispatch {
 	[propput, id(40)] HRESULT MasterCol([in] int newVal);
 	[propget, id(41), helpstring("property Office Object")] HRESULT OfficeObj([out, retval] IDispatch** pVal);
 	[propput, id(42)] HRESULT SaveToConfigFile([in] VARIANT_BOOL newVal);
+	[propget, id(43), helpstring("property WebPage")] HRESULT WebPage([out, retval] IWebPage** pVal);
 
 	[id(100), hidden] HRESULT ActiveTabPage(IGrid* pGrid);
 	[id(101), helpstring("method GetNodes")] HRESULT GetGrids([in]BSTR bstrName, [out]IGrid** ppGrid, [out]IGridCollection** ppGrids, [out, retval]long* pCount);
@@ -583,6 +584,7 @@ interface IWebPage : IDispatch {
 	[propput, id(1)] HRESULT HostWnd([in] LONGLONG newVal);
 	[id(101)] HRESULT CreateForm(BSTR bstrKey, LONGLONG hParent, [out, retval]IDispatch** pRetForm);
 	[id(102)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval]IGrid** pRetGrid);
+	[id(103)] HRESULT SendXmlMessage(IGrid* sender, BSTR bstrXml);
 };
 
 [

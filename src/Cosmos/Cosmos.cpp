@@ -563,6 +563,21 @@ namespace Cosmos
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
+    void Hubble::SendXmlMessage(Grid^ sender, String^ strXml)
+    {
+        BSTR bstrXml = STRING2BSTR(strXml);
+        IWebPage* pPage = nullptr;
+        sender->m_pGrid->get_WebPage(&pPage);
+        if (pPage)
+        {
+            BSTR bstrXml = STRING2BSTR(strXml);
+            pPage->SendXmlMessage(sender->m_pGrid, bstrXml);
+            ::SysFreeString(bstrXml);
+        }
+        //theApp.m_pHubble->SendXmlMessage(sender->m_pGrid, bstrXml);
+        ::SysFreeString(bstrXml);
+    }
+
     Grid^ Hubble::Observe(Control^ ctrl, String^ key, String^ strGridXml)
     {
         if (ctrl != nullptr)
@@ -988,8 +1003,6 @@ namespace Cosmos
     {
         if (m_pGrid)
         {
-            __int64 nHandle = 0;
-            m_pGrid->get_Handle(&nHandle);
             if (m_pWormhole == nullptr)
             {
                 CSession* pSession = theApp.m_pHubbleImpl->GetCloudSession(m_pGrid);

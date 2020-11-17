@@ -312,6 +312,19 @@ BOOL CGrid::PreTranslateMessage(MSG * pMsg)
 	return true;
 }
 
+STDMETHODIMP CGrid::get_WebPage(IWebPage** pVal)
+{
+	if (m_pWebPage == nullptr)
+	{
+		m_pWebPage = GetHtmlWnd();
+	}
+	if (m_pWebPage)
+	{
+		*pVal = m_pWebPage;
+	}
+	return S_OK;
+}
+
 STDMETHODIMP CGrid::LoadXML(int nType, BSTR bstrXML)
 {
 	return S_OK;

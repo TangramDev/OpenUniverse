@@ -1749,6 +1749,9 @@ EXTERN_C const IID IID_IGrid;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SaveToConfigFile( 
             /* [in] */ VARIANT_BOOL newVal) = 0;
         
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_WebPage( 
+            /* [retval][out] */ IWebPage **pVal) = 0;
+        
         virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE ActiveTabPage( 
             IGrid *pGrid) = 0;
         
@@ -2117,6 +2120,10 @@ EXTERN_C const IID IID_IGrid;
             IGrid * This,
             /* [in] */ VARIANT_BOOL newVal);
         
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WebPage )( 
+            IGrid * This,
+            /* [retval][out] */ IWebPage **pVal);
+        
         /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *ActiveTabPage )( 
             IGrid * This,
             IGrid *pGrid);
@@ -2409,6 +2416,9 @@ EXTERN_C const IID IID_IGrid;
 
 #define IGrid_put_SaveToConfigFile(This,newVal)	\
     ( (This)->lpVtbl -> put_SaveToConfigFile(This,newVal) ) 
+
+#define IGrid_get_WebPage(This,pVal)	\
+    ( (This)->lpVtbl -> get_WebPage(This,pVal) ) 
 
 #define IGrid_ActiveTabPage(This,pGrid)	\
     ( (This)->lpVtbl -> ActiveTabPage(This,pGrid) ) 
@@ -5281,6 +5291,10 @@ EXTERN_C const IID IID_IWebPage;
             BSTR bstrXml,
             /* [retval][out] */ IGrid **pRetGrid) = 0;
         
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SendXmlMessage( 
+            IGrid *sender,
+            BSTR bstrXml) = 0;
+        
     };
     
     
@@ -5359,6 +5373,11 @@ EXTERN_C const IID IID_IWebPage;
             BSTR bstrXml,
             /* [retval][out] */ IGrid **pRetGrid);
         
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SendXmlMessage )( 
+            IWebPage * This,
+            IGrid *sender,
+            BSTR bstrXml);
+        
         END_INTERFACE
     } IWebPageVtbl;
 
@@ -5406,6 +5425,9 @@ EXTERN_C const IID IID_IWebPage;
 
 #define IWebPage_Observe(This,bstrKey,bstrXml,pRetGrid)	\
     ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,pRetGrid) ) 
+
+#define IWebPage_SendXmlMessage(This,sender,bstrXml)	\
+    ( (This)->lpVtbl -> SendXmlMessage(This,sender,bstrXml) ) 
 
 #endif /* COBJMACROS */
 

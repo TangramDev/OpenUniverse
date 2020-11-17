@@ -1347,6 +1347,21 @@ namespace Cosmos
         return nullptr;
     }
 
+    void Hubble::SendXmlMessage(Grid^ sender, String^ strXml)
+    {
+        BSTR bstrXml = STRING2BSTR(strXml);
+        IWebPage* pPage = nullptr;
+        sender->m_pGrid->get_WebPage(&pPage);
+        if (pPage)
+        {
+            BSTR bstrXml = STRING2BSTR(strXml);
+            pPage->SendXmlMessage(sender->m_pGrid, bstrXml);
+            ::SysFreeString(bstrXml);
+        }
+        //theApp.m_pHubble->SendXmlMessage(sender->m_pGrid, bstrXml);
+        ::SysFreeString(bstrXml);
+    }
+
     void Hubble::BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ strWebName)
     {
         HWND hWnd = (HWND)hWebPage.ToPointer();
@@ -2188,8 +2203,6 @@ namespace Cosmos
     {
         if (m_pGrid)
         {
-            __int64 nHandle = 0;
-            m_pGrid->get_Handle(&nHandle);
             if (m_pSession == nullptr)
             {
                 CSession* pSession = theApp.m_pHubbleImpl->GetCloudSession(m_pGrid);

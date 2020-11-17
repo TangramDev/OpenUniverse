@@ -2862,6 +2862,18 @@ STDMETHODIMP CGrid::get_ActivePage(int* pVal)
 	return S_OK;
 }
 
+STDMETHODIMP CGrid::get_WebPage(IWebPage** pVal)
+{
+	if (m_pWebPage == nullptr)
+	{
+		m_pWebPage = GetHtmlWnd();
+	}
+	if (m_pWebPage)
+	{
+		*pVal = m_pWebPage;
+	}
+	return S_OK;
+}
 
 STDMETHODIMP CGrid::put_ActivePage(int newVal)
 {

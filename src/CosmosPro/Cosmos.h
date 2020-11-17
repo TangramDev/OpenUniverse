@@ -1011,6 +1011,7 @@ namespace Cosmos
 
 		static bool WebRuntimeInit();
 		static void InitEclipse();
+		static void SendXmlMessage(Grid^ sender, String^ strXml);
 
 		static void Run();
 		static void Run(Form^ Mainform);
