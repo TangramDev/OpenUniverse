@@ -140,6 +140,19 @@ namespace blink {
 		return id_;
 	}
 
+	HubbleNode* HubbleWinform::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
+	{
+		auto it = m_mapHubbleWindow.find(WebString(galaxyName).Utf16());
+		if (it != m_mapHubbleWindow.end())
+		{
+			String clusterName_ = clusterName + "__" + gridName;
+			auto it2 = it->second->m_mapHubbleNode2.find(WebString(clusterName_).Utf16());
+			if (it2 != it->second->m_mapHubbleNode2.end())
+				return it2->second;
+		}
+		return nullptr;
+	}
+
 	long HubbleWinform::formType()
 	{
 		long nFormType = innerXobj_->getLong(L"WinFormType");

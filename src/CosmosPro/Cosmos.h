@@ -1098,7 +1098,7 @@ namespace Cosmos
 			{
 				if (sm != nullptr)
 				{
-					cli::array<byte,1>^ bs = gcnew cli::array<byte,1>((int)sm->Length);
+					cli::array<unsigned char,1>^ bs = gcnew cli::array<unsigned char,1>((int)sm->Length);
 					sm->Read(bs, 0, (int)sm->Length);
 					sm->Close();
 

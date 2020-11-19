@@ -94,7 +94,6 @@ BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 				ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			}
 		}
-		m_pGrid->NodeCreated();
 		return bRet;
 	}
 	return m_pGrid->Create(dwStyle, rect, pParentWnd, nID, pContext);

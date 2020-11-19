@@ -61,6 +61,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   HubbleNode* mdibindgrid();
   HubbleNode* mdiwebbindgrid();
   HubbleWinform* mdiParent();
+  HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
 
   // Message method
   void addEventListener(const String& eventName, V8ApplicationCallback* callback);
@@ -75,6 +76,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewinform)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
+      DEFINE_ATTRIBUTE_EVENT_LISTENER(GalaxyCreated, kHubblegalaxycreated)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(AllMdiChildRemoved, kAllmdichildremoved)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForWinForm, kCloudmessageforwinform)
@@ -101,6 +103,10 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleNode> m_pBindMdiNode;
   mutable Member<HubbleNode> m_pWebBindMdiNode;
+
+  map<wstring, HubbleWindow*> m_mapHubbleWindow;
+
+
   WebLocalFrameClient* m_pRenderframeImpl;
   map<int64_t, Member<HubbleControl>> m_mapChildControl;
   map<std::wstring, Member<HubbleControl>> m_mapChildControl2;

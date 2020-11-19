@@ -50,7 +50,7 @@ friend class Hubble;
   String getStr(const String& strKey);
   HubbleNode* grid();
   HubbleWinform* form();
-  HubbleWindow* window();
+  HubbleWindow* galaxy();
 
   void setStr(const String& strKey, const String& value);
   long getLong(const String& strKey);

@@ -186,6 +186,8 @@ copy "$(TargetPath)" "$(DevEnvDir)PublicAssemblies\$(TargetName)$(TargetExt)"</C
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <RegisterOutput>false</RegisterOutput>

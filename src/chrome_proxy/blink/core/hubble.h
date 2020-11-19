@@ -72,10 +72,9 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(HubbleMessageReceived, kHubblemessage)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
-	 DEFINE_ATTRIBUTE_EVENT_LISTENER(HubbleWindowCreated, kHubblewindowcreated)
+	 DEFINE_ATTRIBUTE_EVENT_LISTENER(GalaxyCreated, kHubblegalaxycreated)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiWinForm, kLoadmdiwinform)
-	 //DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(BindCLRObject, kBindclrobject)
 
@@ -115,6 +114,7 @@ namespace blink {
 	 void ProcessMessage(HubbleXobj* xobj);
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
+	 HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
 
 	 HubbleWindow* getWindow(const String& wndName);
 	 HubbleWindow* getWindow(const int64_t wndHandle);

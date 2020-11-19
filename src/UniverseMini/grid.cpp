@@ -762,13 +762,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 	}
 
-	NodeCreated();
-
 	return bRet;
-}
-
-void CGrid::NodeCreated()
-{
 }
 
 HWND CGrid::CreateView(HWND hParentWnd, CString strTag)

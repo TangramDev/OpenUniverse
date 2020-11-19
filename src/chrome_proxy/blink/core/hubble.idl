@@ -27,6 +27,7 @@ typedef sequence<any> ObjectArray;
 	//HubbleNode API
 	HubbleXobj newVar([DefaultValue = Undefined] optional DOMString name);
 	HubbleNode getGrid(long long nodeHandle);
+	HubbleNode getGrid(DOMString galaxyName, DOMString clusterName, DOMString gridName);
 	HubbleWindow getWindow(DOMString wndName);
 	HubbleWindow getWindow(long long wndHandle);
 
@@ -49,7 +50,7 @@ typedef sequence<any> ObjectArray;
 	attribute EventHandler onGridCreated;
 	attribute EventHandler onLoadWinForm;
 	attribute EventHandler onLoadMdiWinForm;
-	attribute EventHandler onHubbleWindowCreated;
+	attribute EventHandler onGalaxyCreated;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onWinFormClosed;
 	attribute EventHandler onBindCLRObject;

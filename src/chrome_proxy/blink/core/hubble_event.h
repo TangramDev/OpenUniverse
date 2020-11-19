@@ -65,7 +65,7 @@ namespace blink {
     String objtype();
     HubbleNode* grid();
     HubbleWinform* form();
-    HubbleWindow* window();
+    HubbleWindow* galaxy();
 
     ~HubbleEvent() override;
 

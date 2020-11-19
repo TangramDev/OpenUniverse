@@ -15,5 +15,5 @@
   readonly attribute long long hwnd;
   readonly attribute HubbleNode grid;
   readonly attribute HubbleWinform form;
-  readonly attribute HubbleWindow window;
+  readonly attribute HubbleWindow galaxy;
 };

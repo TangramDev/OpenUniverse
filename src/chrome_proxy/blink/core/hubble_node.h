@@ -19,6 +19,7 @@ namespace blink {
 using namespace std;
 
 class Hubble;
+class Element;
 class HubbleXobj;
 class HubbleWindow;
 class HubbleWinform;
@@ -55,7 +56,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
 
   HubbleNode* root();
   HubbleNode* parentGrid();
-  HubbleWindow* parentWindow();
+  HubbleWindow* parentGalaxy();
   HubbleWinform* parentForm();
 
   int64_t hwnd();
@@ -74,6 +75,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback);
   void invokeCallback(wstring callbackid, HubbleXobj* callbackParam);
   void SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback);
+  void ShowWebContent(const String& strParentDivName, const String& strDivName);
 
   //Control Bind API:
   void setControlVal(const String& CtrlID, int64_t CtrlHandle, const String& strVal);
@@ -113,6 +115,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   mutable Member<Hubble> hubble_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
+  mutable Member<Element> m_pVisibleContentElement;
 
   WebLocalFrameClient* m_pRenderframeImpl;
   map<int, HubbleNode*> m_mapChildNode;

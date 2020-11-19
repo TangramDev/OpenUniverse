@@ -27,6 +27,7 @@
 #include "third_party/blink/renderer/bindings/core/v8/v8_application_callback.h"
 
 #include "../../third_party/ChromeRenderDomProxy.h"
+//#include "../../third_party/Markup.cpp"
 
 namespace blink {
 
@@ -171,8 +172,6 @@ namespace blink {
 		form->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapWinForm.insert(form->handle_, form);
 		if (m_pRenderframeImpl) {
-			//WebString webstr = strFormXml;
-			//std::wstring _strFormXml = webstr.Utf16();
 			form->innerXobj_->setStr(L"msgID", L"CREATE_WINFORM");
 			form->innerXobj_->setStr(L"objID", L"WinForm");
 			form->innerXobj_->setInt64(L"form", (int64_t)form);
@@ -249,7 +248,7 @@ namespace blink {
 					"");
 				if (form->m_pContentElement == nullptr)
 				{
-					ClassCollection* contentCollection = DomWindow()->document()->getElementsByClassName(parentmdiform->name() + "contents");
+					ClassCollection* contentCollection = DomWindow()->document()->getElementsByClassName(/*parentmdiform->name() + */"applicationcontents");
 					if (contentCollection)
 					{
 						HTMLCollection* contentsElements = contentCollection->item(0)->Children();
@@ -321,7 +320,7 @@ namespace blink {
 				m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
 				m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
 				m_pVisibleContentElement = nullptr;
-				ClassCollection* contentCollection = DomWindow()->document()->getElementsByClassName(form->name() + "contents");
+				ClassCollection* contentCollection = DomWindow()->document()->getElementsByClassName(/*form->name() + */"applicationcontents");
 				if (contentCollection)
 				{
 					HTMLCollection* contentsElements = contentCollection->item(0)->Children();
@@ -329,7 +328,7 @@ namespace blink {
 					{
 						for (Element* contentElement : *contentsElements)
 						{
-							if (contentElement->classList().contains("mainWindow"))
+							if (contentElement->classList().contains(WebString(form->name())))
 							{
 								contentElement->classList().remove({ "hidden" }, exception_state);
 								contentElement->classList().add({ "show" }, exception_state);
@@ -400,25 +399,27 @@ namespace blink {
 	HubbleNode* Hubble::createHubbleNode(HubbleXobj* xobj)
 	{
 		__int64 handle = xobj->getInt64(L"gridobjhandle");
-		__int64 nRootHandle = xobj->getInt64(L"rootgridhandle");
+		//__int64 nRootHandle = xobj->getInt64(L"rootgridhandle");
+		__int64 nGalaxyHandle = xobj->getInt64(L"Galaxyhandle");
 		String strname = xobj->getStr(L"name@page");
 		blink::HubbleWindow* window = nullptr;
+		String strGalaxyname = xobj->getStr(L"galaxy");
 		bool bNewWindow = false;
-		if (nRootHandle)
+		if (nGalaxyHandle)
 		{
-			auto it1 = m_mapHubbleWindow.find(nRootHandle);
+			auto it1 = m_mapHubbleWindow.find(nGalaxyHandle);
 			if (it1 != m_mapHubbleWindow.end())
 				window = it1->value;
 			else
 			{
 				bNewWindow = true;
-				window = HubbleWindow::Create(DomWindow()->GetFrame(), strname);
+				window = HubbleWindow::Create(DomWindow()->GetFrame(), strGalaxyname);
 				window->hubble_ = this;
 				window->innerXobj_ = xobj;
-				window->handle_ = handle;
+				window->handle_ = nGalaxyHandle;
 				window->m_pRenderframeImpl = m_pRenderframeImpl;
-				m_mapHubbleWindow.insert(handle, window);
-				WebString str = strname;
+				m_mapHubbleWindow.insert(nGalaxyHandle, window);
+				WebString str = strGalaxyname;
 				m_mapHubbleWindow2[str.Utf16()] = window;
 			}
 		}
@@ -430,7 +431,7 @@ namespace blink {
 		node->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapHubbleNode.insert(handle, node);
 		if (bNewWindow)
-			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblewindowcreated, xobj));
+			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 
 		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
 		if (nPHandle)
@@ -442,9 +443,16 @@ namespace blink {
 				it->value->m_mapChildNode2[str.Utf16()] = node;
 			}
 		}
+		String strClustername = xobj->getStr(L"cluster");;
+		strClustername = strClustername + L"__";
+		strClustername = strClustername + strname;
+
 		if (window)
 		{
 			window->m_mapHubbleNode[handle] = node;
+			WebString str = strClustername;
+			window->m_mapHubbleNode[handle] = node;
+			window->m_mapHubbleNode2[str.Utf16()] = node;
 			window->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
 		}
 
@@ -460,6 +468,8 @@ namespace blink {
 				node->m_pParentForm = parentform;
 				if (parentform->m_nMdiwebbindgridhandle == handle)
 					parentform->m_pWebBindMdiNode = node;
+				parentform->m_mapHubbleWindow[WebString(strGalaxyname).Utf16()] = window;
+				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 			}
 			it = m_mapWinForm.find(xobj->getInt64(L"parentMDIFormHandle"));
 			if (it != m_mapWinForm.end())
@@ -521,6 +531,19 @@ namespace blink {
 		return nullptr;
 	}
 
+	HubbleNode* Hubble::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
+	{
+		auto it = m_mapHubbleWindow2.find(WebString(galaxyName).Utf16());
+		if (it != m_mapHubbleWindow2.end())
+		{
+			String clusterName_ = clusterName + "__" + gridName;
+			auto it2 = it->second->m_mapHubbleNode2.find(WebString(clusterName_).Utf16());
+			if (it2 != it->second->m_mapHubbleNode2.end())
+				return it2->second;
+		}
+		return nullptr;
+	}
+
 	HubbleWindow* Hubble::getWindow(const String& wndName)
 	{
 		WebString str = wndName;
@@ -540,24 +563,6 @@ namespace blink {
 		}
 		return nullptr;
 	}
-
-	//void Hubble::sendIPCMessage(const String& type, const String& param1, const String& param2) {
-	//	if (m_pRenderframeImpl) {
-	//		if (is_bundling_) {
-	//			String message = type + "%%%" + param1 + "%%%" + param2;
-	//			pending_messages_.push_back(message);
-	//		}
-	//		else {
-	//			WebString webstr = type;
-	//			std::wstring u16_type = webstr.Utf16();
-	//			webstr = param1;
-	//			std::wstring u16_param1 = webstr.Utf16();
-	//			webstr = param2;
-	//			std::wstring u16_param2 = webstr.Utf16();
-	//			//m_pRenderframeImpl->SendHubbleMessage(u16_type, u16_param1, u16_param2);
-	//		}
-	//	}
-	//}
 
 	const AtomicString& Hubble::InterfaceName() const {
 		return event_target_names::kHubble;

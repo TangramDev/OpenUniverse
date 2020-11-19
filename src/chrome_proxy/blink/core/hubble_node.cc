@@ -8,8 +8,11 @@
 #include "hubble_compositor.h"
 
 #include "third_party/blink/renderer/core/dom/document.h"
+#include "third_party/blink/renderer/core/dom/dom_token_list.h"
+#include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/html/html_element.h"
 #include "third_party/blink/renderer/core/html/html_head_element.h"
+#include "third_party/blink/renderer/core/dom/class_collection.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "third_party/blink/renderer/core/frame/local_dom_window.h"
 #include "third_party/blink/public/web/web_local_frame_client.h"
@@ -21,6 +24,7 @@ namespace blink {
 HubbleNode::HubbleNode(LocalFrame* frame) : DOMWindowClient(frame) {
 	m_pParentForm = nullptr;
 	m_pRenderframeImpl = nullptr;
+	m_pVisibleContentElement = nullptr;
 	id_ = WTF::CreateCanonicalUUIDString();
 }
 
@@ -125,6 +129,7 @@ void HubbleNode::Trace(blink::Visitor* visitor) {
   visitor->Trace(hubble_);
   visitor->Trace(innerXobj_);
   visitor->Trace(m_pParentForm);
+  visitor->Trace(m_pVisibleContentElement);
   visitor->Trace(mapHubbleEventCallback_);
 }
 
@@ -142,6 +147,99 @@ void HubbleNode::addEventListener(const String& subObjName, const String& eventN
 	{
 		innerXobj_->addEventListener(subObjName, eventName, callback);
 	}
+}
+
+void HubbleNode::ShowWebContent(const String& strParentDivName, const String& strDivName)
+{
+	String contentname = innerXobj_->getStr(L"content_show");
+	String contentparent = innerXobj_->getStr(L"content_parent");
+	//Element* visibleElem = m_pVisibleContentElement;
+	Element* visibleElem2 = innerXobj_->getVisibleElement(contentname);
+	ExceptionState exception_state(nullptr,
+		ExceptionState::kExecutionContext,
+		"MdiChildActive",
+		"");
+	if (visibleElem2 == nullptr)
+	{
+		ClassCollection* contentCollection = DomWindow()->document()->getElementsByClassName(WebString(contentparent));
+		if (contentCollection)
+		{
+			HTMLCollection* contentsElements = contentCollection->item(0)->Children();
+			if (contentsElements)
+			{
+				String strname = contentname;
+				WebString _strName = strname;
+				for (Element* contentElement : *contentsElements)
+				{
+					if (contentElement->classList().contains(_strName))
+					{
+						contentElement->classList().remove({ "hidden" }, exception_state);
+						contentElement->classList().add({ "show" }, exception_state);
+						innerXobj_->setVisibleElement(contentname, contentElement);
+						if (m_pVisibleContentElement == nullptr)
+							m_pVisibleContentElement = contentElement;
+						else
+						{
+							m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+							m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+							m_pVisibleContentElement = contentElement;
+							break;
+						}
+					}
+					else
+					{
+						contentElement->classList().remove({ "show" }, exception_state);
+						contentElement->classList().add({ "hidden" }, exception_state);
+					}
+
+				}
+			}
+		}
+	}
+	else
+	{
+		if (m_pVisibleContentElement != visibleElem2)
+		{
+			visibleElem2->classList().remove({ "hidden" }, exception_state);
+			visibleElem2->classList().add({ "show" }, exception_state);
+			m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+			m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+			m_pVisibleContentElement = visibleElem2;
+		}
+	}
+	//var visibleElem = null;
+	//var visibleElem2 = sender.xobj.getVisibleElement(contentname);
+	//if (visibleElem2 == null) {
+	//    var contentElements = document.getElementsByClassName(contentparent)[0].children;
+	//    for (var i = 0; i < contentElements.length; i++) {
+	//        var classList = contentElements[i].classList;
+	//        var bContains = classList.contains(contentname);
+	//        if (bContains) {
+	//            classList.remove("hidden");
+	//            classList.add("show");
+	//            sender.xobj.setVisibleElement(contentname, contentElements[i]);
+	//            if (visibleElem == null)
+	//                visibleElem = contentElements[i];
+	//            else {
+	//                visibleElem.classList.remove("show");
+	//                visibleElem.classList.add("hidden");
+	//                visibleElem = contentElements[i];
+	//                break;
+	//            }
+	//        } else {
+	//            classList.remove("show");
+	//            classList.add("hidden");
+	//        }
+	//    }
+	//} else {
+	//    if (visibleElem != visibleElem2) {
+	//        visibleElem.classList.remove("show");
+	//        visibleElem.classList.add("hidden");
+	//        visibleElem2.classList.remove("hidden");
+	//        visibleElem2.classList.add("show");
+	//        visibleElem = visibleElem2;
+	//    }
+	//}
 }
 
 void HubbleNode::Observe(const String& strKey, const String& xml, V8ApplicationCallback* callback)
@@ -357,8 +455,8 @@ HubbleNode* HubbleNode::root()
 	return nullptr;
 }
 
-HubbleWindow* HubbleNode::parentWindow() {
-	__int64 nHandle = innerXobj_->getInt64(L"rootgridhandle");
+HubbleWindow* HubbleNode::parentGalaxy() {
+	__int64 nHandle = innerXobj_->getInt64(L"Galaxyhandle");
 	auto it = hubble_->m_mapHubbleWindow.find(nHandle);
 	if (it != hubble_->m_mapHubbleWindow.end())
 		return it->value.Get();

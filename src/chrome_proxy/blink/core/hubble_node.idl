@@ -12,7 +12,7 @@
 
 	void GetControlsNames(ApplicationCallback callback);
 	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
-
+	void ShowWebContent(DOMString strParentDivName, DOMString strDivName);
 	//Control Bind Api:
 	void setControlVal(DOMString CtrlID, long long CtrlHandle, DOMString strVal);
 
@@ -36,7 +36,7 @@
 
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode root;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode parentGrid;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWindow parentWindow;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWindow parentGalaxy;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform parentForm;
 
 	// Event handler attributes

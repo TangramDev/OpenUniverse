@@ -145,14 +145,14 @@ namespace blink {
       return nullptr;
   }
 
-  HubbleWindow* HubbleEvent::window()
+  HubbleWindow* HubbleEvent::galaxy()
   {
       if (session_)
       {
           HubbleNode* node = session_->grid();
           if (node)
           {
-              return node->parentWindow();
+              return node->parentGalaxy();
           }
       }
       return nullptr;

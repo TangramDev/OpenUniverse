@@ -103,7 +103,7 @@ public:
 	BOOL	RemoveChildNode(CGrid* pGrid);
 	CString GetNames();
 
-	void NodeCreated();
+	void NodeCreated() {};
 
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
@@ -152,6 +152,7 @@ public:
 	STDMETHOD(get_ActivePage)(int* pVal);
 	STDMETHOD(put_ActivePage)(int newVal);
 	STDMETHOD(get_OfficeObj)(IDispatch** pVal);
+	STDMETHOD(get_WebPage)(IWebPage** pVal) { return S_FALSE; };
 
 	STDMETHOD(get_Rows)(long* nRows);
 	STDMETHOD(get_Cols)(long* nCols);
