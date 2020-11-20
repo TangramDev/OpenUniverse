@@ -377,6 +377,14 @@ void HubbleNode::sendMessageToGrid(HubbleXobj* msg)
 	}
 }
 
+void HubbleNode::sendMessageToGrid(HubbleNode* grid)
+{
+	if (grid)
+	{
+		grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid->xobj()));
+	}
+}
+
 void HubbleNode::invokeCallback(wstring callbackid, HubbleXobj* callbackParam)
 {
 	innerXobj_->invokeCallback(callbackid, callbackParam);

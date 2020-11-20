@@ -68,6 +68,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
 
   void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
   void sendMessageToGrid(HubbleXobj* msg);
+  void sendMessageToGrid(HubbleNode* node);
   void addEventListener(const String& eventName, V8ApplicationCallback* callback);
   void addEventListener(const String& subObjName, const String& eventName, V8ApplicationCallback* callback);
   void removeEventListener(const String& eventName);

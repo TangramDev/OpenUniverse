@@ -116,8 +116,8 @@ namespace blink {
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 	 HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
 
-	 HubbleGalaxy* getWindow(const String& wndName);
-	 HubbleGalaxy* getWindow(const int64_t wndHandle);
+	 HubbleGalaxy* getGalaxy(const String& wndName);
+	 HubbleGalaxy* getGalaxy(const int64_t wndHandle);
 
 	 // Non-js method
 	 void waitMessage();

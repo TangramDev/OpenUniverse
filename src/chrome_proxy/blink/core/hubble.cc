@@ -398,21 +398,38 @@ namespace blink {
 
 	HubbleNode* Hubble::createHubbleNode(HubbleXobj* xobj)
 	{
-		__int64 handle = xobj->getInt64(L"gridobjhandle");
-		__int64 nGalaxyHandle = xobj->getInt64(L"Galaxyhandle");
 		String strname = xobj->getStr(L"name@page");
+		HubbleNode* node = HubbleNode::Create(DomWindow()->GetFrame(), strname);
+		__int64 handle = xobj->getInt64(L"gridobjhandle");
+		node->hubble_ = this;
+		node->innerXobj_ = xobj;
+		node->handle_ = handle;
+		node->m_pRenderframeImpl = m_pRenderframeImpl;
+		m_mapHubbleNode.insert(handle, node);
+
+		__int64 nGalaxyHandle = xobj->getInt64(L"Galaxyhandle");
 		blink::HubbleGalaxy* pGalaxy = nullptr;
 		HubbleNode* m_pRootNode = nullptr;
 		String strGalaxyname = xobj->getStr(L"galaxy");
+		String strClustername = xobj->getStr(L"cluster");;
 		bool bNewGalaxy = false;
 		if (nGalaxyHandle)
 		{
 			auto it1 = m_mapHubbleGalaxy.find(nGalaxyHandle);
 			if (it1 != m_mapHubbleGalaxy.end())
+			{
+				__int64 nRootHandle = xobj->getInt64(L"rootgridhandle");
+				auto it = m_mapHubbleNode.find(nRootHandle);
+				if (it != m_mapHubbleNode.end())
+				{
+					m_pRootNode = it->value;
+				}
 				pGalaxy = it1->value;
+			}
 			else
 			{
 				bNewGalaxy = true;
+				m_pRootNode = node;
 				pGalaxy = HubbleGalaxy::Create(DomWindow()->GetFrame(), strGalaxyname);
 				pGalaxy->hubble_ = this;
 				pGalaxy->innerXobj_ = xobj;
@@ -421,37 +438,17 @@ namespace blink {
 				m_mapHubbleGalaxy.insert(nGalaxyHandle, pGalaxy);
 				WebString str = strGalaxyname;
 				m_mapHubbleGalaxy2[str.Utf16()] = pGalaxy;
+				str = strClustername;
+				pGalaxy->m_mapRootNode[str.Utf16()] = node;
+				DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 			}
 		}
 
-		HubbleNode* node = HubbleNode::Create(DomWindow()->GetFrame(), strname);
-		if (bNewGalaxy == true)
-			m_pRootNode = node;
-		else
-		{
-			__int64 nRootHandle = xobj->getInt64(L"rootgridhandle");
-			auto it = m_mapHubbleNode.find(nRootHandle);
-			if(it != m_mapHubbleNode.end())
-				m_pRootNode = it->value;
-		}
-		node->hubble_ = this;
-		node->innerXobj_ = xobj;
-		node->handle_ = handle;
-		node->m_pRenderframeImpl = m_pRenderframeImpl;
-		m_mapHubbleNode.insert(handle, node);
 		if (m_pRootNode)
 		{
 			WebString str = strname;
 			m_pRootNode->m_mapGrid[str.Utf16()] = node;
 		}
-		String strClustername = xobj->getStr(L"cluster");;
-		if (bNewGalaxy)
-		{
-			WebString str = strClustername;
-			pGalaxy->m_mapRootNode[str.Utf16()] = node;
-			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
-		}
-
 		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
 		if (nPHandle)
 		{
@@ -462,14 +459,13 @@ namespace blink {
 				it->value->m_mapChildNode2[str.Utf16()] = node;
 			}
 		}
-		strClustername = strClustername + L"__";
-		strClustername = strClustername + strname;
 
 		if (pGalaxy)
 		{
+			strClustername = strClustername + L"__";
+			strClustername = strClustername + strname;
 			pGalaxy->m_mapHubbleNode[handle] = node;
 			WebString str = strClustername;
-			pGalaxy->m_mapHubbleNode[handle] = node;
 			pGalaxy->m_mapHubbleNode2[str.Utf16()] = node;
 			pGalaxy->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
 		}
@@ -563,7 +559,7 @@ namespace blink {
 		return nullptr;
 	}
 
-	HubbleGalaxy* Hubble::getWindow(const String& wndName)
+	HubbleGalaxy* Hubble::getGalaxy(const String& wndName)
 	{
 		WebString str = wndName;
 		auto it = m_mapHubbleGalaxy2.find(str.Utf16());
@@ -572,7 +568,7 @@ namespace blink {
 		return nullptr;
 	}
 
-	HubbleGalaxy* Hubble::getWindow(const int64_t wndHandle)
+	HubbleGalaxy* Hubble::getGalaxy(const int64_t wndHandle)
 	{
 		if (wndHandle)
 		{
