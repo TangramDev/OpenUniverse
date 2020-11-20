@@ -10,7 +10,7 @@ namespace blink {
   class ScriptState;
   class HubbleXobj;
   class HubbleNode;
-  class HubbleWindow;
+  class HubbleGalaxy;
   class HubbleWinform;
 
   class CORE_EXPORT HubbleEvent : public Event {
@@ -65,7 +65,7 @@ namespace blink {
     String objtype();
     HubbleNode* grid();
     HubbleWinform* form();
-    HubbleWindow* galaxy();
+    HubbleGalaxy* galaxy();
 
     ~HubbleEvent() override;
 

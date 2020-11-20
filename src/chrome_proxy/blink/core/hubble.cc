@@ -2,7 +2,7 @@
 #include "hubble_xobj.h"
 #include "hubble_node.h"
 #include "hubble_event.h"
-#include "hubble_window.h"
+#include "hubble_galaxy.h"
 #include "hubble_winform.h"
 #include "hubble_control.h"
 #include "hubble_compositor.h"
@@ -48,7 +48,7 @@ namespace blink {
 		ScriptWrappable::Trace(visitor);
 		DOMWindowClient::Trace(visitor);
 		visitor->Trace(m_mapHubbleNode);
-		visitor->Trace(m_mapHubbleWindow);
+		visitor->Trace(m_mapHubbleGalaxy);
 		visitor->Trace(m_mapWinForm);
 		visitor->Trace(m_mapHubbleCompositor);
 		visitor->Trace(mapHubbleCallback_);
@@ -399,39 +399,58 @@ namespace blink {
 	HubbleNode* Hubble::createHubbleNode(HubbleXobj* xobj)
 	{
 		__int64 handle = xobj->getInt64(L"gridobjhandle");
-		//__int64 nRootHandle = xobj->getInt64(L"rootgridhandle");
 		__int64 nGalaxyHandle = xobj->getInt64(L"Galaxyhandle");
 		String strname = xobj->getStr(L"name@page");
-		blink::HubbleWindow* window = nullptr;
+		blink::HubbleGalaxy* pGalaxy = nullptr;
+		HubbleNode* m_pRootNode = nullptr;
 		String strGalaxyname = xobj->getStr(L"galaxy");
-		bool bNewWindow = false;
+		bool bNewGalaxy = false;
 		if (nGalaxyHandle)
 		{
-			auto it1 = m_mapHubbleWindow.find(nGalaxyHandle);
-			if (it1 != m_mapHubbleWindow.end())
-				window = it1->value;
+			auto it1 = m_mapHubbleGalaxy.find(nGalaxyHandle);
+			if (it1 != m_mapHubbleGalaxy.end())
+				pGalaxy = it1->value;
 			else
 			{
-				bNewWindow = true;
-				window = HubbleWindow::Create(DomWindow()->GetFrame(), strGalaxyname);
-				window->hubble_ = this;
-				window->innerXobj_ = xobj;
-				window->handle_ = nGalaxyHandle;
-				window->m_pRenderframeImpl = m_pRenderframeImpl;
-				m_mapHubbleWindow.insert(nGalaxyHandle, window);
+				bNewGalaxy = true;
+				pGalaxy = HubbleGalaxy::Create(DomWindow()->GetFrame(), strGalaxyname);
+				pGalaxy->hubble_ = this;
+				pGalaxy->innerXobj_ = xobj;
+				pGalaxy->handle_ = nGalaxyHandle;
+				pGalaxy->m_pRenderframeImpl = m_pRenderframeImpl;
+				m_mapHubbleGalaxy.insert(nGalaxyHandle, pGalaxy);
 				WebString str = strGalaxyname;
-				m_mapHubbleWindow2[str.Utf16()] = window;
+				m_mapHubbleGalaxy2[str.Utf16()] = pGalaxy;
 			}
 		}
 
 		HubbleNode* node = HubbleNode::Create(DomWindow()->GetFrame(), strname);
+		if (bNewGalaxy == true)
+			m_pRootNode = node;
+		else
+		{
+			__int64 nRootHandle = xobj->getInt64(L"rootgridhandle");
+			auto it = m_mapHubbleNode.find(nRootHandle);
+			if(it != m_mapHubbleNode.end())
+				m_pRootNode = it->value;
+		}
 		node->hubble_ = this;
 		node->innerXobj_ = xobj;
 		node->handle_ = handle;
 		node->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapHubbleNode.insert(handle, node);
-		if (bNewWindow)
+		if (m_pRootNode)
+		{
+			WebString str = strname;
+			m_pRootNode->m_mapGrid[str.Utf16()] = node;
+		}
+		String strClustername = xobj->getStr(L"cluster");;
+		if (bNewGalaxy)
+		{
+			WebString str = strClustername;
+			pGalaxy->m_mapRootNode[str.Utf16()] = node;
 			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
+		}
 
 		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
 		if (nPHandle)
@@ -443,17 +462,16 @@ namespace blink {
 				it->value->m_mapChildNode2[str.Utf16()] = node;
 			}
 		}
-		String strClustername = xobj->getStr(L"cluster");;
 		strClustername = strClustername + L"__";
 		strClustername = strClustername + strname;
 
-		if (window)
+		if (pGalaxy)
 		{
-			window->m_mapHubbleNode[handle] = node;
+			pGalaxy->m_mapHubbleNode[handle] = node;
 			WebString str = strClustername;
-			window->m_mapHubbleNode[handle] = node;
-			window->m_mapHubbleNode2[str.Utf16()] = node;
-			window->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
+			pGalaxy->m_mapHubbleNode[handle] = node;
+			pGalaxy->m_mapHubbleNode2[str.Utf16()] = node;
+			pGalaxy->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
 		}
 
 		nPHandle = xobj->getInt64(L"parentFormHandle");
@@ -468,8 +486,9 @@ namespace blink {
 				node->m_pParentForm = parentform;
 				if (parentform->m_nMdiwebbindgridhandle == handle)
 					parentform->m_pWebBindMdiNode = node;
-				parentform->m_mapHubbleWindow[WebString(strGalaxyname).Utf16()] = window;
-				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
+				parentform->m_mapHubbleGalaxy[WebString(strGalaxyname).Utf16()] = pGalaxy;
+				if (bNewGalaxy)
+					parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 			}
 			it = m_mapWinForm.find(xobj->getInt64(L"parentMDIFormHandle"));
 			if (it != m_mapWinForm.end())
@@ -533,8 +552,8 @@ namespace blink {
 
 	HubbleNode* Hubble::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
 	{
-		auto it = m_mapHubbleWindow2.find(WebString(galaxyName).Utf16());
-		if (it != m_mapHubbleWindow2.end())
+		auto it = m_mapHubbleGalaxy2.find(WebString(galaxyName).Utf16());
+		if (it != m_mapHubbleGalaxy2.end())
 		{
 			String clusterName_ = clusterName + "__" + gridName;
 			auto it2 = it->second->m_mapHubbleNode2.find(WebString(clusterName_).Utf16());
@@ -544,21 +563,21 @@ namespace blink {
 		return nullptr;
 	}
 
-	HubbleWindow* Hubble::getWindow(const String& wndName)
+	HubbleGalaxy* Hubble::getWindow(const String& wndName)
 	{
 		WebString str = wndName;
-		auto it = m_mapHubbleWindow2.find(str.Utf16());
-		if (it != m_mapHubbleWindow2.end())
+		auto it = m_mapHubbleGalaxy2.find(str.Utf16());
+		if (it != m_mapHubbleGalaxy2.end())
 			return it->second;
 		return nullptr;
 	}
 
-	HubbleWindow* Hubble::getWindow(const int64_t wndHandle)
+	HubbleGalaxy* Hubble::getWindow(const int64_t wndHandle)
 	{
 		if (wndHandle)
 		{
-			auto it = m_mapHubbleWindow.find(wndHandle);
-			if (it != m_mapHubbleWindow.end())
+			auto it = m_mapHubbleGalaxy.find(wndHandle);
+			if (it != m_mapHubbleGalaxy.end())
 				return it->value;
 		}
 		return nullptr;
@@ -716,9 +735,9 @@ namespace blink {
 		{
 			m_mapHubbleNode.erase(m_mapHubbleNode.begin());
 		}
-		while (m_mapHubbleWindow.size())
+		while (m_mapHubbleGalaxy.size())
 		{
-			m_mapHubbleWindow.erase(m_mapHubbleWindow.begin());
+			m_mapHubbleGalaxy.erase(m_mapHubbleGalaxy.begin());
 		}
 		while (m_mapWinForm.size())
 		{

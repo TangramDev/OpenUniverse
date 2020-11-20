@@ -78,7 +78,7 @@ class V8VoidFunction;
 class Hubble;
 class HubbleXobj;
 class HubbleNode;
-class HubbleWindow;
+class HubbleGalaxy;
 class HubbleControl;
 class HubbleWinform;
 class HubbleUserpage;

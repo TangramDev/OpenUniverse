@@ -6,6 +6,7 @@
 	// Message API
 	void sendMessage([DefaultValue = Undefined] optional HubbleXobj msg,
 		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	void sendMessageToGrid(HubbleXobj msg);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void addEventListener(DOMString subObjName, DOMString eventName, ApplicationCallback callback);
 	void removeEventListener(DOMString eventName);
@@ -20,6 +21,7 @@
 	HubbleNode getChild(long nIndex);
 	HubbleNode getChild(long row, long col);
 	HubbleNode getChild(DOMString strName);
+	HubbleNode getGrid(DOMString strName);
 	void Observe(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveEx(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional long row, [DefaultValue = Undefined] optional long col, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveCtrl(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
@@ -36,7 +38,7 @@
 
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode root;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode parentGrid;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWindow parentGalaxy;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleGalaxy parentGalaxy;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform parentForm;
 
 	// Event handler attributes

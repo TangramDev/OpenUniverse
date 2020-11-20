@@ -145,7 +145,7 @@ namespace blink {
       return nullptr;
   }
 
-  HubbleWindow* HubbleEvent::galaxy()
+  HubbleGalaxy* HubbleEvent::galaxy()
   {
       if (session_)
       {

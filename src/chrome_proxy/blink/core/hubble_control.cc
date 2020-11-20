@@ -4,7 +4,7 @@
 #include "hubble_xobj.h"
 #include "hubble_winform.h"
 #include "hubble_control.h"
-#include "hubble_window.h"
+#include "hubble_galaxy.h"
 #include "hubble_compositor.h"
 
 #include "third_party/blink/renderer/core/dom/document.h"

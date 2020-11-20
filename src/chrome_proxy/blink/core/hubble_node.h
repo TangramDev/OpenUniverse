@@ -21,7 +21,7 @@ using namespace std;
 class Hubble;
 class Element;
 class HubbleXobj;
-class HubbleWindow;
+class HubbleGalaxy;
 class HubbleWinform;
 class HubbleControl;
 
@@ -56,7 +56,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
 
   HubbleNode* root();
   HubbleNode* parentGrid();
-  HubbleWindow* parentGalaxy();
+  HubbleGalaxy* parentGalaxy();
   HubbleWinform* parentForm();
 
   int64_t hwnd();
@@ -67,6 +67,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   // Message method
 
   void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
+  void sendMessageToGrid(HubbleXobj* msg);
   void addEventListener(const String& eventName, V8ApplicationCallback* callback);
   void addEventListener(const String& subObjName, const String& eventName, V8ApplicationCallback* callback);
   void removeEventListener(const String& eventName);
@@ -85,6 +86,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);
   HubbleNode* getChild(const String& strName);
+  HubbleNode* getGrid(const String& strName);
   void Observe(const String& strKey, const String& xml, V8ApplicationCallback* callback);
   void ObserveEx(const String& strKey, const String& xml, long row, long col, V8ApplicationCallback* callback);
   void ObserveCtrl(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback);
@@ -119,6 +121,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
 
   WebLocalFrameClient* m_pRenderframeImpl;
   map<int, HubbleNode*> m_mapChildNode;
+  map<wstring, HubbleNode*> m_mapGrid;
   map<wstring, HubbleNode*> m_mapChildNode2;
 
 private:

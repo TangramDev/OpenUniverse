@@ -3,7 +3,7 @@
 #include "hubble_node.h"
 #include "hubble_event.h"
 #include "hubble_winform.h"
-#include "hubble_window.h"
+#include "hubble_galaxy.h"
 #include "hubble_control.h"
 #include "hubble_compositor.h"
 
@@ -114,6 +114,15 @@ HubbleNode* HubbleNode::getChild(long row, long col)
 }
 
 HubbleNode* HubbleNode::getChild(const String& strName)
+{
+	WebString str = strName;
+	auto it = m_mapChildNode2.find(str.Utf16());
+	if (it != m_mapChildNode2.end())
+		return it->second;
+	return nullptr;
+}
+
+HubbleNode* HubbleNode::getGrid(const String& strName)
 {
 	WebString str = strName;
 	auto it = m_mapChildNode2.find(str.Utf16());
@@ -349,6 +358,25 @@ void HubbleNode::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback)
 	}
 }
 
+void HubbleNode::sendMessageToGrid(HubbleXobj* msg)
+{
+	if (msg)
+	{
+		Hubble* pHubble = hubble_.Get();
+		__int64 nHandle = msg->getInt64(L"gridobjhandle");
+		HubbleNode* grid = nullptr;
+		if (nHandle)
+		{
+			auto it = pHubble->m_mapHubbleNode.find(nHandle);
+			if (it != pHubble->m_mapHubbleNode.end())
+			{
+				grid = it->value.Get();
+				grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, msg));
+			}
+		}
+	}
+}
+
 void HubbleNode::invokeCallback(wstring callbackid, HubbleXobj* callbackParam)
 {
 	innerXobj_->invokeCallback(callbackid, callbackParam);
@@ -455,10 +483,10 @@ HubbleNode* HubbleNode::root()
 	return nullptr;
 }
 
-HubbleWindow* HubbleNode::parentGalaxy() {
+HubbleGalaxy* HubbleNode::parentGalaxy() {
 	__int64 nHandle = innerXobj_->getInt64(L"Galaxyhandle");
-	auto it = hubble_->m_mapHubbleWindow.find(nHandle);
-	if (it != hubble_->m_mapHubbleWindow.end())
+	auto it = hubble_->m_mapHubbleGalaxy.find(nHandle);
+	if (it != hubble_->m_mapHubbleGalaxy.end())
 		return it->value.Get();
 	return nullptr;
 }

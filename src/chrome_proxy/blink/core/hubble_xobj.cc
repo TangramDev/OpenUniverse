@@ -72,7 +72,7 @@ namespace blink {
 		return nullptr;
 	}
 
-	HubbleWindow* HubbleXobj::galaxy()
+	HubbleGalaxy* HubbleXobj::galaxy()
 	{
 		__int64 nHandle = getInt64(L"gridobjhandle");
 		auto it = hubble_->m_mapHubbleNode.find(nHandle);

@@ -38,7 +38,7 @@ namespace blink {
 	class ScriptState;
 	class HubbleXobj;
 	class HubbleNode;
-	class HubbleWindow;
+	class HubbleGalaxy;
 	class HubbleControl;
 	class HubbleWinform;
 	class ExceptionState;
@@ -116,8 +116,8 @@ namespace blink {
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 	 HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
 
-	 HubbleWindow* getWindow(const String& wndName);
-	 HubbleWindow* getWindow(const int64_t wndHandle);
+	 HubbleGalaxy* getWindow(const String& wndName);
+	 HubbleGalaxy* getWindow(const int64_t wndHandle);
 
 	 // Non-js method
 	 void waitMessage();
@@ -141,14 +141,14 @@ namespace blink {
 	 mutable Member<Element> m_pVisibleContentElement;
 	 HeapHashMap<String, Member<HubbleXobj>> mapCloudSession_;
 	 HeapHashMap<int64_t, Member<HubbleNode>> m_mapHubbleNode;
-	 HeapHashMap<int64_t, Member<HubbleWindow>> m_mapHubbleWindow;
+	 HeapHashMap<int64_t, Member<HubbleGalaxy>> m_mapHubbleGalaxy;
 	 HeapHashMap<int64_t, Member<HubbleWinform>> m_mapWinForm;
 	 HeapHashMap<int64_t, Member<HubbleCompositor>> m_mapHubbleCompositor;
 
 	 map<int64_t, HubbleNode*> m_mapHubbleNodeforEvent;
 	 map<int64_t, HubbleWinform*> m_mapHubbleWinformforEvent;
 	 map<int64_t, HubbleControl*> m_mapHubbleControlforEvent;
-	 map<wstring, HubbleWindow*> m_mapHubbleWindow2;
+	 map<wstring, HubbleGalaxy*> m_mapHubbleGalaxy2;
    private:
 	 base::RunLoop run_loop_;
 	 bool is_pending_;

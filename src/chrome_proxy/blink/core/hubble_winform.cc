@@ -4,7 +4,7 @@
 #include "hubble_event.h"
 #include "hubble_winform.h"
 #include "hubble_control.h"
-#include "hubble_window.h"
+#include "hubble_galaxy.h"
 #include "hubble_compositor.h"
 
 #include "third_party/blink/renderer/core/dom/document.h"
@@ -142,8 +142,8 @@ namespace blink {
 
 	HubbleNode* HubbleWinform::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
 	{
-		auto it = m_mapHubbleWindow.find(WebString(galaxyName).Utf16());
-		if (it != m_mapHubbleWindow.end())
+		auto it = m_mapHubbleGalaxy.find(WebString(galaxyName).Utf16());
+		if (it != m_mapHubbleGalaxy.end())
 		{
 			String clusterName_ = clusterName + "__" + gridName;
 			auto it2 = it->second->m_mapHubbleNode2.find(WebString(clusterName_).Utf16());

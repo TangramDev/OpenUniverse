@@ -21,7 +21,7 @@ using namespace std;
 
 class Hubble;
 class HubbleNode;
-class HubbleWindow;
+class HubbleGalaxy;
 class HubbleWinform;
 class Document;
 class ScriptState;
@@ -50,7 +50,7 @@ friend class Hubble;
   String getStr(const String& strKey);
   HubbleNode* grid();
   HubbleWinform* form();
-  HubbleWindow* galaxy();
+  HubbleGalaxy* galaxy();
 
   void setStr(const String& strKey, const String& value);
   long getLong(const String& strKey);

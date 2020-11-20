@@ -1,7 +1,7 @@
 #include "hubble.h"
 #include "hubble_xobj.h"
 #include "hubble_node.h"
-#include "hubble_window.h"
+#include "hubble_galaxy.h"
 #include "hubble_event.h"
 #include "hubble_winform.h"
 #include "hubble_compositor.h"
@@ -17,37 +17,37 @@
 
 namespace blink {
 
-	HubbleWindow::HubbleWindow(LocalFrame* frame) : DOMWindowClient(frame) {
+	HubbleGalaxy::HubbleGalaxy(LocalFrame* frame) : DOMWindowClient(frame) {
 		m_pHostNode = nullptr;
 		m_pRenderframeImpl = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 	}
 
-	HubbleWindow::~HubbleWindow() {
+	HubbleGalaxy::~HubbleGalaxy() {
 		Hubble* pHubble = hubble_.Get();
 		if (pHubble)
 		{
 			WebString str = name_;
-			auto it = pHubble->m_mapHubbleWindow2.find(str.Utf16());
-			if (it != pHubble->m_mapHubbleWindow2.end())
-				pHubble->m_mapHubbleWindow2.erase(it);
+			auto it = pHubble->m_mapHubbleGalaxy2.find(str.Utf16());
+			if (it != pHubble->m_mapHubbleGalaxy2.end())
+				pHubble->m_mapHubbleGalaxy2.erase(it);
 
-			auto it2 = pHubble->m_mapHubbleWindow.find(handle_);
-			if (it2 != pHubble->m_mapHubbleWindow.end())
-				pHubble->m_mapHubbleWindow.erase(it2);
+			auto it2 = pHubble->m_mapHubbleGalaxy.find(handle_);
+			if (it2 != pHubble->m_mapHubbleGalaxy.end())
+				pHubble->m_mapHubbleGalaxy.erase(it2);
 		}
 	}
 
-	HubbleWindow* HubbleWindow::Create(LocalFrame* frame, const String& strWindowName) {
-		return MakeGarbageCollected<HubbleWindow>(frame, strWindowName);
+	HubbleGalaxy* HubbleGalaxy::Create(LocalFrame* frame, const String& strWindowName) {
+		return MakeGarbageCollected<HubbleGalaxy>(frame, strWindowName);
 	}
 
-	HubbleWindow::HubbleWindow(LocalFrame* frame, const String& strWindowName) : DOMWindowClient(frame)
+	HubbleGalaxy::HubbleGalaxy(LocalFrame* frame, const String& strWindowName) : DOMWindowClient(frame)
 	{
 		name_ = strWindowName;
 	}
 
-	void HubbleWindow::Trace(blink::Visitor* visitor) {
+	void HubbleGalaxy::Trace(blink::Visitor* visitor) {
 		EventTargetWithInlineData::Trace(visitor);
 		ScriptWrappable::Trace(visitor);
 		DOMWindowClient::Trace(visitor);
@@ -57,40 +57,47 @@ namespace blink {
 		visitor->Trace(mapHubbleEventCallback_);
 	}
 
-	void HubbleWindow::AddedEventListener(const AtomicString& event_type,
+	void HubbleGalaxy::AddedEventListener(const AtomicString& event_type,
 		RegisteredEventListener& registered_listener) {
 		EventTargetWithInlineData::AddedEventListener(event_type,
 			registered_listener);
 	}
 
-	String HubbleWindow::name() {
+	String HubbleGalaxy::name() {
 		return name_;
 	}
 
-	String HubbleWindow::getid()
+	String HubbleGalaxy::getid()
 	{
 		return id_;
 	}
 
-	int64_t HubbleWindow::handle() {
+	int64_t HubbleGalaxy::handle() {
 		return handle_;
 	}
 
-	HubbleXobj* HubbleWindow::xobj()
+	HubbleXobj* HubbleGalaxy::xobj()
 	{
 		return innerXobj_;
 	}
 
-	HubbleNode* HubbleWindow::getGrid(const String& nodeName)
+	HubbleNode* HubbleGalaxy::getGrid(const String& clusterName, const String& nodeName)
 	{
-		WebString strName = nodeName;
-		auto it = m_mapHubbleNode2.find(strName.Utf16());
+		if (nodeName == "undefined")
+		{
+			auto it = m_mapRootNode.find(WebString(clusterName).Utf16());
+			if (it != m_mapRootNode.end())
+				return it->second;
+			return nullptr;
+		}
+		String strName = clusterName + "__" + nodeName;
+		auto it = m_mapHubbleNode2.find(WebString(strName).Utf16());
 		if (it != m_mapHubbleNode2.end())
 			return it->second;
 		return nullptr;
 	}
 
-	HubbleNode* HubbleWindow::getGrid(const long nodeHandle)
+	HubbleNode* HubbleGalaxy::getGrid(const long nodeHandle)
 	{
 		auto it = m_mapHubbleNode.find(nodeHandle);
 		if (it != m_mapHubbleNode.end())
@@ -98,22 +105,22 @@ namespace blink {
 		return nullptr;
 	}
 
-	const AtomicString& HubbleWindow::InterfaceName() const {
-		return event_target_names::kHubbleWindow;
+	const AtomicString& HubbleGalaxy::InterfaceName() const {
+		return event_target_names::kHubbleGalaxy;
 	}
 
-	ExecutionContext* HubbleWindow::GetExecutionContext() const {
+	ExecutionContext* HubbleGalaxy::GetExecutionContext() const {
 		return DomWindow()->document();
 	}
 
-	void HubbleWindow::addEventListener(const String& eventName, V8ApplicationCallback* callback)
+	void HubbleGalaxy::addEventListener(const String& eventName, V8ApplicationCallback* callback)
 	{
 		if (callback)
 		{
 			auto it = innerXobj_->session_.m_mapString.find(L"objID");
 			if (it != innerXobj_->session_.m_mapString.end())
 			{
-				hubble_->m_mapHubbleWindow2[WebString(id_).Utf16()] = this;
+				hubble_->m_mapHubbleGalaxy2[WebString(id_).Utf16()] = this;
 				mapHubbleEventCallback_.insert(eventName, callback);
 				innerXobj_->session_.m_mapString[L"listenerType"] = WebString(eventName).Utf16();
 				innerXobj_->session_.m_mapString[L"SenderType"] = L"HubbleControl";
@@ -123,14 +130,14 @@ namespace blink {
 		}
 	}
 
-	void HubbleWindow::removeEventListener(const String& eventName)
+	void HubbleGalaxy::removeEventListener(const String& eventName)
 	{
 		auto it = mapHubbleEventCallback_.find(eventName);
 		if (it != mapHubbleEventCallback_.end())
 			mapHubbleEventCallback_.erase(it);
 	}
 
-	void HubbleWindow::disConnect()
+	void HubbleGalaxy::disConnect()
 	{
 		int nSize = mapHubbleEventCallback_.size();
 		if (nSize)
@@ -143,7 +150,7 @@ namespace blink {
 		}
 	}
 
-	void HubbleWindow::fireEvent(const String& eventName, HubbleXobj* eventParam)
+	void HubbleGalaxy::fireEvent(const String& eventName, HubbleXobj* eventParam)
 	{
 		auto itcallback = mapHubbleEventCallback_.find(eventName);
 		if (itcallback != mapHubbleEventCallback_.end())
@@ -155,7 +162,7 @@ namespace blink {
 		}
 	}
 
-	void HubbleWindow::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback)
+	void HubbleGalaxy::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback)
 	{
 		if (m_pRenderframeImpl)
 		{
@@ -174,7 +181,7 @@ namespace blink {
 		}
 	}
 
-	void HubbleWindow::invokeCallback(wstring callbackid, HubbleXobj* callbackParam)
+	void HubbleGalaxy::invokeCallback(wstring callbackid, HubbleXobj* callbackParam)
 	{
 		auto itcallback = mapHubbleEventCallback_.find(String(callbackid.c_str()));
 		if (itcallback != mapHubbleEventCallback_.end())

@@ -28,14 +28,14 @@ class WebLocalFrameClient;
 class SerializedScriptValue;
 class V8ApplicationCallback;
 
-class CORE_EXPORT HubbleWindow final : public EventTargetWithInlineData,
+class CORE_EXPORT HubbleGalaxy final : public EventTargetWithInlineData,
 									  public DOMWindowClient {
   DEFINE_WRAPPERTYPEINFO();
-  USING_GARBAGE_COLLECTED_MIXIN(HubbleWindow);
+  USING_GARBAGE_COLLECTED_MIXIN(HubbleGalaxy);
 
  public:
-  static HubbleWindow* Create(LocalFrame* frame) { return MakeGarbageCollected<HubbleWindow>(frame); }
-  static HubbleWindow* Create(LocalFrame* frame, const String& strName);
+  static HubbleGalaxy* Create(LocalFrame* frame) { return MakeGarbageCollected<HubbleGalaxy>(frame); }
+  static HubbleGalaxy* Create(LocalFrame* frame, const String& strName);
 
   void Trace(blink::Visitor*) override;
 
@@ -57,10 +57,10 @@ class CORE_EXPORT HubbleWindow final : public EventTargetWithInlineData,
   void fireEvent(const String& eventName, HubbleXobj* eventParam);
   void invokeCallback(wstring callbackid, HubbleXobj* callbackParam);
 
-  HubbleNode* getGrid(const String& nodeName);
+  HubbleNode* getGrid(const String& clusterName, const String& nodeName);
   HubbleNode* getGrid(const long nodeHandle);
 
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewindow)
+  DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblegalaxy)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
 
@@ -68,10 +68,10 @@ class CORE_EXPORT HubbleWindow final : public EventTargetWithInlineData,
   const AtomicString& InterfaceName() const override;
   ExecutionContext* GetExecutionContext() const override;
 
-  HubbleWindow(LocalFrame*);
-  HubbleWindow(LocalFrame*, const String& strWindowName);
+  HubbleGalaxy(LocalFrame*);
+  HubbleGalaxy(LocalFrame*, const String& strWindowName);
 
-  ~HubbleWindow() override;
+  ~HubbleGalaxy() override;
 
   int64_t handle_ = 0;
   mutable Member<HubbleNode> m_pHostNode;
@@ -81,6 +81,7 @@ class CORE_EXPORT HubbleWindow final : public EventTargetWithInlineData,
 
   WebLocalFrameClient* m_pRenderframeImpl;
   
+  map<wstring, HubbleNode*> m_mapRootNode;
   map<int64_t, HubbleNode*> m_mapHubbleNode;
   map<wstring, HubbleNode*> m_mapHubbleNode2;
 private:

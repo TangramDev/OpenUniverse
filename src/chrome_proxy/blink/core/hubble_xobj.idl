@@ -5,7 +5,7 @@
 	readonly attribute DOMString name;
 	readonly attribute HubbleNode grid;
 	readonly attribute HubbleWinform form;
-	readonly attribute HubbleWindow galaxy;
+	readonly attribute HubbleGalaxy galaxy;
 
 	DOMString getStr(DOMString strKey);
 	void setStr(DOMString strKey, DOMString value);

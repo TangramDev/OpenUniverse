@@ -22,7 +22,7 @@ using namespace std;
 class Hubble;
 class HubbleXobj;
 class HubbleNode;
-class HubbleWindow;
+class HubbleGalaxy;
 class HubbleWinform;
 class HubbleControl;
 
@@ -104,7 +104,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   mutable Member<HubbleNode> m_pBindMdiNode;
   mutable Member<HubbleNode> m_pWebBindMdiNode;
 
-  map<wstring, HubbleWindow*> m_mapHubbleWindow;
+  map<wstring, HubbleGalaxy*> m_mapHubbleGalaxy;
 
 
   WebLocalFrameClient* m_pRenderframeImpl;

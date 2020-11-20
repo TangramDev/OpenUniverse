@@ -28,8 +28,8 @@ typedef sequence<any> ObjectArray;
 	HubbleXobj newVar([DefaultValue = Undefined] optional DOMString name);
 	HubbleNode getGrid(long long nodeHandle);
 	HubbleNode getGrid(DOMString galaxyName, DOMString clusterName, DOMString gridName);
-	HubbleWindow getWindow(DOMString wndName);
-	HubbleWindow getWindow(long long wndHandle);
+	HubbleGalaxy getWindow(DOMString wndName);
+	HubbleGalaxy getWindow(long long wndHandle);
 
 	//HubbleWinForm API
 	HubbleWinform createWinForm(DOMString strFormXml, 
