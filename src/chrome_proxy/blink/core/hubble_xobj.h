@@ -50,6 +50,8 @@ friend class Hubble;
   HubbleNode* grid();
   HubbleWinform* form();
   HubbleGalaxy* galaxy();
+  String msgID();
+  void setMsgID(const String& value);
 
   String getStr(const String& strKey);
   void setStr(const String& strKey, const String& value);

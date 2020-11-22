@@ -83,7 +83,9 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void setControlVal(const String& CtrlID, int64_t CtrlHandle, const String& strVal);
   void GetControlsNames(V8ApplicationCallback* callback);
 
-  // Node API:
+  String msgID();
+  void setMsgID(const String& value);
+ // Node API:
   String getStr(const String& strKey);
   void setStr(const String& strKey, const String& value);
   long getLong(const String& strKey);

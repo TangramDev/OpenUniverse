@@ -162,6 +162,24 @@ namespace blink {
 		return 0;
 	}
 
+	void HubbleXobj::setMsgID(const String& value)
+	{
+		WebString str = "msgID";
+		WebString val = value;
+		session_.m_mapString[str.Utf16()] = val.Utf16();
+	}
+
+	String HubbleXobj::msgID()
+	{
+		WebString str = "msgID";
+		auto it = session_.m_mapString.find(str.Utf16());
+		if (it != session_.m_mapString.end())
+		{
+			return String(it->second.c_str());
+		}
+		return L"";
+	}
+
 	void HubbleXobj::setVisibleElement(const String& strKey, Element* value)
 	{
 		auto it = mapVisibleElem.find(strKey);

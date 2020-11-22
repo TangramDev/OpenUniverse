@@ -57,6 +57,10 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   String getid();
   bool isReady();
   long formType();
+
+  String msgID();
+  void setMsgID(const String& value);
+
   HubbleXobj* xobj();
   HubbleNode* mdibindgrid();
   HubbleNode* mdiwebbindgrid();

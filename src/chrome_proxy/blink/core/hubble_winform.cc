@@ -219,6 +219,24 @@ namespace blink {
 		return 0;
 	}
 
+	void HubbleWinform::setMsgID(const String& value)
+	{
+		WebString str = "msgID";
+		WebString val = value;
+		innerXobj_->session_.m_mapString[str.Utf16()] = val.Utf16();
+	}
+
+	String HubbleWinform::msgID()
+	{
+		WebString str = "msgID";
+		auto it = innerXobj_->session_.m_mapString.find(str.Utf16());
+		if (it != innerXobj_->session_.m_mapString.end())
+		{
+			return String(it->second.c_str());
+		}
+		return L"";
+	}
+
 	HubbleGalaxy* HubbleWinform::getGalaxy(const String& galaxyName)
 	{
 		auto it = m_mapHubbleGalaxy.find(WebString(galaxyName).Utf16());

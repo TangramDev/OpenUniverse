@@ -6,6 +6,7 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode grid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform form;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleGalaxy galaxy;
+	attribute DOMString msgID;
 
 	DOMString getStr(DOMString strKey);
 	void setStr(DOMString strKey, DOMString value);
