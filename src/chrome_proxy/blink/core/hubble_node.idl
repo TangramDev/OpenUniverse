@@ -19,6 +19,14 @@
 	void setControlVal(DOMString CtrlID, long long CtrlHandle, DOMString strVal);
 
 	//Node API
+	DOMString getStr(DOMString strKey);
+	void setStr(DOMString strKey, DOMString value);
+	long getLong(DOMString strKey);
+	void setLong(DOMString strKey, long value);
+	long long getInt64(DOMString strKey);
+	void setInt64(DOMString strKey, long long value);
+	float getFloat(DOMString strKey);
+	void setFloat(DOMString strKey, float value);
 	HubbleNode getChild(long nIndex);
 	HubbleNode getChild(long row, long col);
 	HubbleNode getChild(DOMString strName);
@@ -27,15 +35,15 @@
 	void ObserveEx(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional long row, [DefaultValue = Undefined] optional long col, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveCtrl(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
-	readonly attribute long row;
-	readonly attribute long col;
-	readonly attribute long rows;
-	readonly attribute long cols;
-	readonly attribute long long handle;
-	readonly attribute long long hwnd;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long row;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long col;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long rows;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long cols;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long handle;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long hwnd;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
-	readonly attribute DOMString name;
-	readonly attribute DOMString objtype;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString name;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString objtype;
 
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode root;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode parentGrid;

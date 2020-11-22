@@ -124,9 +124,10 @@ HubbleNode* HubbleNode::getChild(const String& strName)
 
 HubbleNode* HubbleNode::getGrid(const String& strName)
 {
+	HubbleNode* root_ = root();
 	WebString str = strName;
-	auto it = m_mapChildNode2.find(str.Utf16());
-	if (it != m_mapChildNode2.end())
+	auto it = root_->m_mapGrid.find(str.Utf16());
+	if (it != root_->m_mapGrid.end())
 		return it->second;
 	return nullptr;
 }
@@ -337,6 +338,85 @@ void HubbleNode::removeEventListener(const String& eventName)
 void HubbleNode::disConnect()
 {
 	innerXobj_->disConnect();
+}
+
+void HubbleNode::setStr(const String& strKey, const String& value)
+{
+	WebString str = strKey;
+	WebString val = value;
+	innerXobj_->session_.m_mapString[str.Utf16()] = val.Utf16();
+	auto it = innerXobj_->session_.m_mapint64.find(WebString(strKey).Utf16());
+	if (it != innerXobj_->session_.m_mapint64.end())
+	{
+		setStr(L"msgID", L"MODIFY_CTRL_VALUE");
+		setStr(L"currentsubobjformodify", strKey);
+		m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
+	}
+}
+
+String HubbleNode::getStr(const String& strKey)
+{
+	WebString str = strKey;
+	auto it = innerXobj_->session_.m_mapString.find(str.Utf16());
+	if (it != innerXobj_->session_.m_mapString.end())
+	{
+		return String(it->second.c_str());
+	}
+	return L"";
+}
+
+void HubbleNode::setLong(const String& strKey, long value)
+{
+	WebString str = strKey;
+	innerXobj_->session_.m_mapLong[str.Utf16()] = value;
+}
+
+long HubbleNode::getLong(const String& strKey)
+{
+	WebString str = strKey;
+	auto it = innerXobj_->session_.m_mapLong.find(str.Utf16());
+	if (it != innerXobj_->session_.m_mapLong.end())
+	{
+		return it->second;
+	}
+	return 0;
+}
+
+void HubbleNode::setInt64(const String& strKey, int64_t value)
+{
+	WebString str = strKey;
+	auto it = innerXobj_->session_.m_mapint64.find(str.Utf16());
+	if (it != innerXobj_->session_.m_mapint64.end())
+	{
+		innerXobj_->session_.m_mapint64.erase(it);
+	}
+	innerXobj_->session_.m_mapint64[str.Utf16()] = value;
+}
+
+int64_t HubbleNode::getInt64(const String& strKey)
+{
+	WebString str = strKey;
+	auto it = innerXobj_->session_.m_mapint64.find(str.Utf16());
+	if (it != innerXobj_->session_.m_mapint64.end())
+	{
+		return it->second;
+	}
+	return 0;
+}
+
+void HubbleNode::setFloat(const String& strKey, float value)
+{
+	WebString str = strKey;
+	innerXobj_->session_.m_mapFloat[str.Utf16()] = value;
+}
+
+float HubbleNode::getFloat(const String& strKey)
+{
+	WebString str = strKey;
+	auto it = innerXobj_->session_.m_mapFloat.find(str.Utf16());
+	if (it != innerXobj_->session_.m_mapFloat.end())
+		return it->second;
+	return 0;
 }
 
 void HubbleNode::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback)

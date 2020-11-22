@@ -23,11 +23,19 @@ typedef sequence<any> ObjectArray;
 	// DOM API
 	void defineElement(DOMString tagName, DOMString html);
 	void renderElement(DOMString tagName, DOMString html);
+	DOMString getStr(DOMString strKey);
+	void setStr(DOMString strKey, DOMString value);
+	long getLong(DOMString strKey);
+	void setLong(DOMString strKey, long value);
+	long long getInt64(DOMString strKey);
+	void setInt64(DOMString strKey, long long value);
+	float getFloat(DOMString strKey);
+	void setFloat(DOMString strKey, float value);
 
 	//HubbleNode API
 	HubbleXobj newVar([DefaultValue = Undefined] optional DOMString name);
 	HubbleNode getGrid(long long nodeHandle);
-	HubbleNode getGrid(DOMString galaxyName, DOMString clusterName, DOMString gridName);
+	HubbleNode getGrid(DOMString galaxyName, DOMString clusterName, [DefaultValue = Undefined]DOMString gridName);
 	HubbleGalaxy getGalaxy(DOMString wndName);
 	HubbleGalaxy getGalaxy(long long wndHandle);
 

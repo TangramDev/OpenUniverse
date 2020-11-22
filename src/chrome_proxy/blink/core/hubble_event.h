@@ -54,6 +54,8 @@ namespace blink {
     void setParam5(const String&);
     HubbleXobj* xobj();
     void setXobj(HubbleXobj*);
+    Element* element();
+    void setElement(Element*);
 
     int64_t handleSource();
     void setHandleSource(const int64_t);
@@ -93,6 +95,8 @@ namespace blink {
     String param5_;
     int64_t handleSource_;
     int64_t handleTarget_;
+
+    Member<Element> element_;
     Member<HubbleXobj> session_;
   };
 

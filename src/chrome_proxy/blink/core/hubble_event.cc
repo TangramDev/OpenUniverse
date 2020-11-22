@@ -34,6 +34,7 @@ namespace blink {
 
   void HubbleEvent::Trace(blink::Visitor* visitor) {
       Event::Trace(visitor);
+      visitor->Trace(element_);
       visitor->Trace(session_);
   }
 
@@ -109,6 +110,14 @@ namespace blink {
 
   void HubbleEvent::setParam5(const String& param5) {
     param5_ = param5;
+  }
+
+  Element* HubbleEvent::element() {
+    return element_.Get();
+  }
+
+  void HubbleEvent::setElement(Element* elem) {
+      element_ = elem;
   }
 
   int64_t HubbleEvent::hwnd()

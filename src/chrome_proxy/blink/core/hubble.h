@@ -119,6 +119,15 @@ namespace blink {
 	 HubbleGalaxy* getGalaxy(const String& wndName);
 	 HubbleGalaxy* getGalaxy(const int64_t wndHandle);
 
+	 String getStr(const String& strKey);
+	 void setStr(const String& strKey, const String& value);
+	 long getLong(const String& strKey);
+	 void setLong(const String& strKey, long value);
+	 int64_t getInt64(const String& strKey);
+	 void setInt64(const String& strKey, int64_t value);
+	 float getFloat(const String& strKey);
+	 void setFloat(const String& strKey, float value);
+
 	 // Non-js method
 	 void waitMessage();
 	 void releaseMessage();

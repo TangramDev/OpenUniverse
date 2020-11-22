@@ -13,10 +13,19 @@
 	void removeEventListener(DOMString eventName);
 	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
-	readonly attribute boolean isReady;
-	readonly attribute long formType;
-	readonly attribute long long handle;
-	readonly attribute DOMString name;
+	DOMString getStr(DOMString strKey);
+	void setStr(DOMString strKey, DOMString value);
+	long getLong(DOMString strKey);
+	void setLong(DOMString strKey, long value);
+	long long getInt64(DOMString strKey);
+	void setInt64(DOMString strKey, long long value);
+	float getFloat(DOMString strKey);
+	void setFloat(DOMString strKey, float value);
+
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute boolean isReady;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long formType;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long handle;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString name;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode mdibindgrid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode mdiwebbindgrid;

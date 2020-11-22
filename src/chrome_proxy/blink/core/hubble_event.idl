@@ -9,6 +9,7 @@
   attribute DOMString param5;
   attribute long long handleSource;
   attribute long long handleTarget;
+  attribute Element element;
   attribute HubbleXobj xobj;
   readonly attribute DOMString name;
   readonly attribute DOMString objtype;

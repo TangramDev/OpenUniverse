@@ -2,10 +2,10 @@
 [
 	Exposed = Window
 ] interface HubbleXobj {
-	readonly attribute DOMString name;
-	readonly attribute HubbleNode grid;
-	readonly attribute HubbleWinform form;
-	readonly attribute HubbleGalaxy galaxy;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString name;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode grid;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform form;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleGalaxy galaxy;
 
 	DOMString getStr(DOMString strKey);
 	void setStr(DOMString strKey, DOMString value);

@@ -47,11 +47,11 @@ friend class Hubble;
 
   String name();
   String getid();
-  String getStr(const String& strKey);
   HubbleNode* grid();
   HubbleWinform* form();
   HubbleGalaxy* galaxy();
 
+  String getStr(const String& strKey);
   void setStr(const String& strKey, const String& value);
   long getLong(const String& strKey);
   void setLong(const String& strKey, long value);
