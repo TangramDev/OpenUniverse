@@ -38,6 +38,7 @@ namespace blink {
 	class ScriptState;
 	class HubbleXobj;
 	class HubbleNode;
+	class HubbleEvent;
 	class HubbleGalaxy;
 	class HubbleControl;
 	class HubbleWinform;
@@ -112,6 +113,9 @@ namespace blink {
 	 void MdiChildReady(HubbleXobj* xobj);
 	 void AllMdiChildRemoved(HubbleXobj* xobj);
 	 void ProcessMessage(HubbleXobj* xobj);
+	 void DispatchGridEvent(Element* elem, const String& eventName);
+	 void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName, const String& xmlTagName);
+
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 	 HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);

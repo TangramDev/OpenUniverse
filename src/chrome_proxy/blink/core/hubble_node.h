@@ -85,7 +85,10 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
 
   String msgID();
   void setMsgID(const String& value);
- // Node API:
+  Element* workElement();
+  void setWorkElement(Element*);
+
+  // Node API:
   String getStr(const String& strKey);
   void setStr(const String& strKey, const String& value);
   long getLong(const String& strKey);
@@ -126,6 +129,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
 
   String name_;
 
+  Member<Element> element_;
   mutable Member<Hubble> hubble_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;

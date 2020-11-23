@@ -36,6 +36,7 @@
 	void ObserveCtrl(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	attribute DOMString msgID;
+	attribute Element workElement;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long row;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long col;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long rows;

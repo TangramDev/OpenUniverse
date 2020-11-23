@@ -38,6 +38,8 @@ typedef sequence<any> ObjectArray;
 	HubbleNode getGrid(DOMString galaxyName, DOMString clusterName, [DefaultValue = Undefined]DOMString gridName);
 	HubbleGalaxy getGalaxy(DOMString wndName);
 	HubbleGalaxy getGalaxy(long long wndHandle);
+	void DispatchGridEvent(Element elem, DOMString eventName);
+	void DispatchGridEvent(HubbleXobj xObj, DOMString ctrlName, DOMString eventName, DOMString xmlTagName);
 
 	//HubbleWinForm API
 	HubbleWinform createWinForm(DOMString strFormXml, 

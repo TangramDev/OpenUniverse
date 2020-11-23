@@ -138,6 +138,7 @@ void HubbleNode::Trace(blink::Visitor* visitor) {
   DOMWindowClient::Trace(visitor);
   visitor->Trace(hubble_);
   visitor->Trace(innerXobj_);
+  visitor->Trace(element_);
   visitor->Trace(m_pParentForm);
   visitor->Trace(m_pVisibleContentElement);
   visitor->Trace(mapHubbleEventCallback_);
@@ -356,6 +357,14 @@ String HubbleNode::msgID()
 		return String(it->second.c_str());
 	}
 	return L"";
+}
+
+Element* HubbleNode::workElement() {
+	return element_.Get();
+}
+
+void HubbleNode::setWorkElement(Element* elem) {
+	element_ = elem;
 }
 
 void HubbleNode::setStr(const String& strKey, const String& value)

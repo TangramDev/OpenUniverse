@@ -14,6 +14,8 @@
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/dom_token_list.h"
 #include "third_party/blink/renderer/core/dom/element.h"
+#include "third_party/blink/renderer/core/dom/node.h"
+#include "third_party/blink/renderer/core/dom/node_list.h"
 #include "third_party/blink/renderer/core/html/html_element.h"
 #include "third_party/blink/renderer/core/html/html_head_element.h"
 #include "third_party/blink/renderer/core/dom/class_collection.h"
@@ -25,6 +27,8 @@
 
 #include "third_party/blink/renderer/bindings/core/v8/v8_hubble_callback.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_application_callback.h"
+#include "third_party/blink/renderer/core/xml/dom_parser.h"
+#include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_html.h"
 
 #include "../../third_party/ChromeRenderDomProxy.h"
 //#include "../../third_party/Markup.cpp"
@@ -422,6 +426,148 @@ namespace blink {
 			form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kAllmdichildremoved, xobj));
 		}
 	}
+
+	void Hubble::DispatchGridEvent(Element* e, const String& eventName)
+	{
+		Element* element = (Element*)e->childNodes()->item(1);
+		if (!!element) {
+			for (unsigned int i = 1; i < element->childNodes()->length(); i++) {
+				Element* elem = (Element*)element->childNodes()->item(i);
+				if (elem)
+				{
+					Node* pNode = elem;
+					if (pNode->getNodeType() == 1) {
+						AtomicString target = "";
+						if (elem->hasAttribute("target") && elem->hasAttribute("galaxy") && elem->hasAttribute("cluster"))
+						{
+							target = elem->getAttribute("target");
+							AtomicString galaxy = elem->getAttribute("galaxy");
+							AtomicString cluster = elem->getAttribute("cluster");
+							if (target!="" && galaxy!="" && cluster!="") {
+								HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
+								if (!!gridfortarget) {
+									gridfortarget->setWorkElement(nullptr);
+									gridfortarget->setWorkElement(elem);
+									gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
+									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
+									gridfortarget->setWorkElement(nullptr);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		//var element = e.childNodes[1];
+		//if (!!element) {
+		//    alert(element.childNodes.length);
+		//    for (var i = 1; i < element.childNodes.length; i++) {
+		//        var elem = element.childNodes[i];
+		//        alert(elem.nodeType);
+		//        if (elem.nodeType == 1) {
+		//           var target = elem.getAttribute("target");
+		//           var galaxy = elem.getAttribute("galaxy");
+		//           var cluster = elem.getAttribute("cluster");
+		//            if (!!target && !!galaxy && !!cluster) {
+		//                var gridfortarget = apppage.getGrid(galaxy, cluster, target);
+		//                if (!!gridfortarget) {
+		//                    gridfortarget.workElement = elem;
+		//                    gridfortarget.msgID = e.id + "_OnClick";
+		//                    gridfortarget.sendMessageToGrid(gridfortarget);
+		//                }
+		//            }
+		//        }
+		//    }
+		//}
+	}
+
+	void Hubble::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName, const String& xmlTagName)
+	{
+		DOMParser* pDOMParser = DOMParser::Create(*(DomWindow()->document()));
+		if (pDOMParser)
+		{
+			ExceptionState exception_state(nullptr,
+				ExceptionState::kExecutionContext,
+				"DOMParser",
+				"");
+			Document* doc = pDOMParser->parseFromString(blink::StringOrTrustedHTML::FromString(xObj->getStr("AfterSelectXml")), "application/xml", exception_state);
+			if (doc)
+			{
+				String webcontent = xObj->getStr("webcontent");
+				String selectCluster = xObj->getStr("selectedkey");
+				String eventName_ = eventName.LowerASCII();
+				AtomicString name = AtomicString(eventName_);
+				ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
+				HTMLCollection* list = pContainerNode->getElementsByTagName(name);
+				if (list->length())
+				{
+					for (unsigned int index = 0; index < list->length(); index++)
+					{
+						Element* onafterselect = list->item(index);
+						for (unsigned int i = 1; i < onafterselect->childNodes()->length(); i++)
+						{ 
+							Element* elem = (Element*)onafterselect->childNodes()->item(i);
+							Node* pNode = elem;
+							if (pNode->getNodeType() == 1) {
+								AtomicString target = elem->getAttribute("target");
+								AtomicString galaxy = elem->getAttribute("galaxy");
+								AtomicString cluster = elem->getAttribute("cluster");
+								if (target!="" && galaxy!="" && cluster!="") {
+									HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
+									if (!!gridfortarget) {
+										gridfortarget->element_ = elem;
+										gridfortarget->setMsgID(ctrlName + "_" + eventName);
+
+										gridfortarget->setStr("targetCluster", selectCluster); 
+										if (gridfortarget->objtype() == "nucleus") {
+											gridfortarget->setStr("content_show", webcontent);
+											gridfortarget->setStr("content_parent", "contents");
+										}
+										gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
+										gridfortarget->setWorkElement(nullptr);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		//var domparser = new DOMParser();
+		//var doc = domparser.parseFromString(e.getStr("AfterSelectXml"), "application/xml");
+		//if (!!doc) {
+		//    var webcontent = e.getStr("webcontent");
+		//    var selectCluster = e.getStr("selectedkey");
+		//    var list = doc.firstChild.getElementsByTagName(eventName.toLowerCase());
+		//    if (list.length) {
+		//        for (var index = 0; index < list.length;index++) {
+		//            var onafterselect = list[index];
+		//            for (var i = 1; i < onafterselect.childNodes.length; i++) {
+		//                var elem = onafterselect.childNodes[i];
+		//                if (elem.nodeType == 1) {
+		//                    var target = elem.getAttribute("target");
+		//                    var galaxy = elem.getAttribute("galaxy");
+		//                    var cluster = elem.getAttribute("cluster");
+		//                    if (!!target&&!!galaxy && !!cluster) {
+		//                        var gridfortarget = apppage.getGrid(galaxy, cluster, target);
+		//                        if (!!gridfortarget) {
+		//                            gridfortarget.workElement = elem;
+		//                            gridfortarget.setStr("targetCluster", selectCluster);
+		//                            gridfortarget.msgID = "treeView1_" + eventName;
+		//                            if (gridfortarget.objtype == "nucleus") {
+		//                                gridfortarget.setStr("content_show", webcontent);
+		//                                gridfortarget.setStr("content_parent", "contents");
+		//                            }
+		//                            gridfortarget.sendMessageToGrid(gridfortarget);
+		//                        }
+		//                    }
+		//                }
+		//            }
+		//        }
+		//    }
+		//}
+	}
+
 	void Hubble::ProcessMessage(HubbleXobj* xobj)
 	{
 		__int64 nHandle = xobj->getInt64(L"formhandle");
