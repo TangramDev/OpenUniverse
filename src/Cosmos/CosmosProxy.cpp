@@ -577,6 +577,19 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 									}
 								}
 							}
+							else if (strType == L"System.Windows.Forms.Button")
+							{
+								Button^ pBtn = (Button^)pChild;
+								CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
+								if (_pChild)
+								{
+									_pChild = _pChild->GetChild(_T("uidata"));
+									if (_pChild)
+									{
+										pBtn->Tag = BSTR2STRING(_pChild->xml());
+									}
+								}
+							}
 
 							if (String::IsNullOrEmpty(name))
 								name = strType;
@@ -584,37 +597,52 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 							if (name == L"mdiclient")
 							{
 							}
-							else
+							else 
 							{
-								if (pParse)
+								if (strType != L"System.Windows.Forms.Button")
 								{
-									CTangramXmlParse* pChildParse = pParse->GetChild(name->ToLower());
-									CTangramXmlParse* pChildParse2 = nullptr;
-									if (pChildParse)
+									if (pParse)
 									{
-										CString strWebName = pChildParse->attr(_T("id"), _T(""));
-										if (strWebName == _T(""))strWebName = pChild->Name;
-										if (strWebName != _T(""))
+										CTangramXmlParse* pChildParse = pParse->GetChild(name->ToLower());
+										CTangramXmlParse* pChildParse2 = nullptr;
+										if (pChildParse)
 										{
-											BindWebObj* pObj = new BindWebObj;
-											pObj->nType = 0;
-											pObj->m_pObjDisp = (IDispatch*)Marshal::GetIUnknownForObject(pChild).ToPointer();
-											pObj->m_hWnd = (HWND)pChild->Handle.ToPointer();
-											pObj->m_strObjName = name;
-											pObj->m_strObjType = strType;
-											pObj->m_strBindObjName = strWebName;
-											pObj->m_strBindData = pChildParse->attr(_T("bindevent"), _T(""));
-											HWND hForm = (HWND)pForm->Handle.ToPointer();
-											::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
+											CString strWebName = pChildParse->attr(_T("id"), _T(""));
+											if (strWebName == _T(""))strWebName = pChild->Name;
+											if (strWebName != _T(""))
+											{
+												BindWebObj* pObj = new BindWebObj;
+												pObj->nType = 0;
+												pObj->m_pObjDisp = (IDispatch*)Marshal::GetIUnknownForObject(pChild).ToPointer();
+												pObj->m_hWnd = (HWND)pChild->Handle.ToPointer();
+												pObj->m_strObjName = name;
+												pObj->m_strObjType = strType;
+												pObj->m_strBindObjName = strWebName;
+												pObj->m_strBindData = pChildParse->attr(_T("bindevent"), _T(""));
+												HWND hForm = (HWND)pForm->Handle.ToPointer();
+												::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
+											}
+											pChildParse2 = pChildParse->GetChild(_T("default"));
 										}
-										pChildParse2 = pChildParse->GetChild(_T("default"));
-									}
 
-									if (pChildParse2)
+										if (pChildParse2)
+										{
+											GalaxyInfo* pInfo = new GalaxyInfo;
+											pInfo->m_pDisp = nullptr;
+											pInfo->m_strGridXml = pChildParse2->xml();
+											pInfo->m_pParentDisp = nullptr;
+											pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
+											m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
+											pInfo->m_strCtrlName = name->ToLower();
+											pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
+											IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+										}
+									}
+									else
 									{
 										GalaxyInfo* pInfo = new GalaxyInfo;
 										pInfo->m_pDisp = nullptr;
-										pInfo->m_strGridXml = pChildParse2->xml();
+										pInfo->m_strGridXml = _T("");
 										pInfo->m_pParentDisp = nullptr;
 										pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 										m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
@@ -622,18 +650,6 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 										pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
 										IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
 									}
-								}
-								else
-								{
-									GalaxyInfo* pInfo = new GalaxyInfo;
-									pInfo->m_pDisp = nullptr;
-									pInfo->m_strGridXml = _T("");
-									pInfo->m_pParentDisp = nullptr;
-									pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-									m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
-									pInfo->m_strCtrlName = name->ToLower();
-									pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-									IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
 								}
 							}
 							::SysFreeString(strName);
@@ -819,33 +835,49 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								}
 							}
 						}
+						else if (strType == L"System.Windows.Forms.Button")
+						{
+							Button^ pBtn = (Button^)pChild;
+							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
+							if (_pChild)
+							{
+								_pChild = _pChild->GetChild(_T("uidata"));
+								if (_pChild)
+								{
+									pBtn->Tag = BSTR2STRING(_pChild->xml());
+								}
+							}
+						}
 					}
 					else
 					{
-						GalaxyInfo* pInfo = new GalaxyInfo;
-						pInfo->m_pDisp = nullptr;
-						pInfo->m_pParentDisp = _pGrid;
-						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-						m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
-						pInfo->m_strGridXml = _T("");
-						pInfo->m_strCtrlName = pChild->Name->ToLower();
-						pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-						IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
-						if (m_pOnCtrlVisible)
+						if (strType != L"System.Windows.Forms.Button")
 						{
-						}
-						else
-						{
-							m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
-						}
-						pChild->VisibleChanged += m_pOnCtrlVisible;
-						if (strType == L"System.Windows.Forms.TreeView")
-						{
-						}
-						else if (strType == L"System.Windows.Forms.ListView")
-						{
-							ListView^ pListView = (ListView^)pChild;
-							pListView->ItemSelectionChanged += gcnew ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
+							GalaxyInfo* pInfo = new GalaxyInfo;
+							pInfo->m_pDisp = nullptr;
+							pInfo->m_pParentDisp = _pGrid;
+							pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
+							m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
+							pInfo->m_strGridXml = _T("");
+							pInfo->m_strCtrlName = pChild->Name->ToLower();
+							pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
+							IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+							if (m_pOnCtrlVisible)
+							{
+							}
+							else
+							{
+								m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
+							}
+							pChild->VisibleChanged += m_pOnCtrlVisible;
+							if (strType == L"System.Windows.Forms.TreeView")
+							{
+							}
+							else if (strType == L"System.Windows.Forms.ListView")
+							{
+								ListView^ pListView = (ListView^)pChild;
+								pListView->ItemSelectionChanged += gcnew ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
+							}
 						}
 					}
 

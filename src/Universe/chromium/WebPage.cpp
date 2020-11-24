@@ -828,6 +828,9 @@ namespace Browser {
 				g_pHubble->LoadCLR();
 			if (g_pHubble->m_pCLRProxy)
 			{
+				IWebPage* pChromeWebPage = (IWebPage*)this;
+				xmlParse.put_attr(_T("webpage"), (__int64)pChromeWebPage);
+				xmlParse.put_attr(_T("webpagehandle"), (__int64)m_hWnd);
 				CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
 				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
 				xmlParse.put_attr(_T("IsMainHubbleWnd"), (__int64)1);

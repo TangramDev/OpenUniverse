@@ -22,7 +22,11 @@
 	float getFloat(DOMString strKey);
 	void setFloat(DOMString strKey, float value);
 
+	void DispatchGridEvent(Element elem, DOMString eventName);
+	void DispatchGridEvent(HubbleXobj xObj, DOMString ctrlName, DOMString eventName);
+
 	attribute DOMString msgID;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] attribute DOMParser xmlParse;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute boolean isReady;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long formType;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long handle;

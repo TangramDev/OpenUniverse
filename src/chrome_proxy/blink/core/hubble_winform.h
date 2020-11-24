@@ -20,6 +20,7 @@ namespace blink {
 using namespace std;
 
 class Hubble;
+class DOMParser;
 class HubbleXobj;
 class HubbleNode;
 class HubbleGalaxy;
@@ -62,6 +63,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   void setMsgID(const String& value);
 
   HubbleXobj* xobj();
+  DOMParser* xmlParse();
   HubbleNode* mdibindgrid();
   HubbleNode* mdiwebbindgrid();
   HubbleWinform* mdiParent();
@@ -75,6 +77,8 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   void setInt64(const String& strKey, int64_t value);
   float getFloat(const String& strKey);
   void setFloat(const String& strKey, float value);
+  void DispatchGridEvent(Element* elem, const String& eventName);
+  void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
   // Message method
   void addEventListener(const String& eventName, V8ApplicationCallback* callback);
@@ -109,6 +113,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   ~HubbleWinform() override;
 
   bool isReady_ = false;
+  mutable Member<DOMParser> DOMParser_;
   mutable Member<Element> m_pContentElement;
   int64_t handle_ = 0;
   int64_t m_nMdiwebbindgridhandle = 0;

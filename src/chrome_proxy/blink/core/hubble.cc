@@ -31,15 +31,15 @@
 #include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_html.h"
 
 #include "../../third_party/ChromeRenderDomProxy.h"
-//#include "../../third_party/Markup.cpp"
 
 namespace blink {
 
 	Hubble::Hubble(LocalFrame* frame) : DOMWindowClient(frame) {
+		url_ = L"";
 		is_pending_ = false;
 		innerXobj_ = newVar(L"");
 		topGrid_ = nullptr;
-		url_ = L"";
+		DOMParser_ = nullptr;
 		m_pRenderframeImpl = nullptr;
 		m_pVisibleContentElement = nullptr;
 	}
@@ -50,6 +50,7 @@ namespace blink {
 	void Hubble::Trace(blink::Visitor* visitor) {
 		EventTargetWithInlineData::Trace(visitor);
 		ScriptWrappable::Trace(visitor);
+		visitor->Trace(DOMParser_);
 		DOMWindowClient::Trace(visitor);
 		visitor->Trace(m_mapHubbleNode);
 		visitor->Trace(m_mapHubbleGalaxy);
@@ -427,23 +428,36 @@ namespace blink {
 		}
 	}
 
+	DOMParser* Hubble::xmlParse()
+	{
+		if (DOMParser_ == nullptr)
+		{
+			DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
+		}
+		return DOMParser_.Get();
+	}
+
 	void Hubble::DispatchGridEvent(Element* e, const String& eventName)
 	{
-		Element* element = (Element*)e->childNodes()->item(1);
+		Element* element = static_cast<Element*>(e->childNodes()->item(1));
 		if (!!element) {
 			for (unsigned int i = 1; i < element->childNodes()->length(); i++) {
-				Element* elem = (Element*)element->childNodes()->item(i);
+				Element* elem = static_cast<Element*>(element->childNodes()->item(i));
 				if (elem)
 				{
 					Node* pNode = elem;
 					if (pNode->getNodeType() == 1) {
 						AtomicString target = "";
-						if (elem->hasAttribute("target") && elem->hasAttribute("galaxy") && elem->hasAttribute("cluster"))
+						if (elem->hasAttribute("target"))
 						{
 							target = elem->getAttribute("target");
-							AtomicString galaxy = elem->getAttribute("galaxy");
-							AtomicString cluster = elem->getAttribute("cluster");
-							if (target!="" && galaxy!="" && cluster!="") {
+							if (target!="") {
+								AtomicString galaxy = elem->getAttribute("galaxy");
+								AtomicString cluster = elem->getAttribute("cluster");
+								if (galaxy == "")
+									galaxy = "default";
+								if (cluster == "")
+									cluster = "__viewport_default__";
 								HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
 								if (!!gridfortarget) {
 									gridfortarget->setWorkElement(nullptr);
@@ -481,20 +495,26 @@ namespace blink {
 		//}
 	}
 
-	void Hubble::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName, const String& xmlTagName)
+	void Hubble::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName)
 	{
-		DOMParser* pDOMParser = DOMParser::Create(*(DomWindow()->document()));
-		if (pDOMParser)
+		String ctrlName_ = ctrlName;
+		if (ctrlName.IsNull() || ctrlName == "")
+		{ 
+			ctrlName_ = xObj->getStr(L"name@page");
+		}
+		if (DOMParser_ == nullptr)
+		{
+			DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
+		}
+		if (DOMParser_)
 		{
 			ExceptionState exception_state(nullptr,
 				ExceptionState::kExecutionContext,
 				"DOMParser",
 				"");
-			Document* doc = pDOMParser->parseFromString(blink::StringOrTrustedHTML::FromString(xObj->getStr("AfterSelectXml")), "application/xml", exception_state);
+			Document* doc = DOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(xObj->getStr(eventName + "Xml")), "application/xml", exception_state);
 			if (doc)
 			{
-				String webcontent = xObj->getStr("webcontent");
-				String selectCluster = xObj->getStr("selectedkey");
 				String eventName_ = eventName.LowerASCII();
 				AtomicString name = AtomicString(eventName_);
 				ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
@@ -503,26 +523,27 @@ namespace blink {
 				{
 					for (unsigned int index = 0; index < list->length(); index++)
 					{
-						Element* onafterselect = list->item(index);
-						for (unsigned int i = 1; i < onafterselect->childNodes()->length(); i++)
+						Element* workItem = list->item(index);
+						for (unsigned int i = 1; i < workItem->childNodes()->length(); i++)
 						{ 
-							Element* elem = (Element*)onafterselect->childNodes()->item(i);
+							Element* elem = (Element*)workItem->childNodes()->item(i);
 							Node* pNode = elem;
-							if (pNode->getNodeType() == 1) {
+							if (pNode->getNodeType() == 1&& elem->hasAttribute("target")) {
 								AtomicString target = elem->getAttribute("target");
-								AtomicString galaxy = elem->getAttribute("galaxy");
-								AtomicString cluster = elem->getAttribute("cluster");
-								if (target!="" && galaxy!="" && cluster!="") {
+								if (target!="") {
+									AtomicString galaxy = elem->getAttribute("galaxy");
+									if (galaxy == "")
+										galaxy = "default";
+									AtomicString cluster = elem->getAttribute("cluster");
+									if (cluster == "")
+									{
+										cluster = "__viewport_default__";
+									}
 									HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
 									if (!!gridfortarget) {
 										gridfortarget->element_ = elem;
-										gridfortarget->setMsgID(ctrlName + "_" + eventName);
-
-										gridfortarget->setStr("targetCluster", selectCluster); 
-										if (gridfortarget->objtype() == "nucleus") {
-											gridfortarget->setStr("content_show", webcontent);
-											gridfortarget->setStr("content_parent", "contents");
-										}
+										gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
+										gridfortarget->xobj()->setSender(xObj);
 										gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 										gridfortarget->setWorkElement(nullptr);
 									}
@@ -534,10 +555,10 @@ namespace blink {
 			}
 		}
 		//var domparser = new DOMParser();
-		//var doc = domparser.parseFromString(e.getStr("AfterSelectXml"), "application/xml");
+		//var doc = domparser.parseFromString(e.getStr("OnAfterSelectXml"), "application/xml");
 		//if (!!doc) {
 		//    var webcontent = e.getStr("webcontent");
-		//    var selectCluster = e.getStr("selectedkey");
+		//    var selectCluster = e.getStr(eventName+"_key");
 		//    var list = doc.firstChild.getElementsByTagName(eventName.toLowerCase());
 		//    if (list.length) {
 		//        for (var index = 0; index < list.length;index++) {

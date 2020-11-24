@@ -7,6 +7,7 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform form;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleGalaxy galaxy;
 	attribute DOMString msgID;
+	attribute HubbleXobj sender;
 
 	DOMString getStr(DOMString strKey);
 	void setStr(DOMString strKey, DOMString value);

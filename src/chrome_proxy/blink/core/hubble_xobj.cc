@@ -17,6 +17,7 @@
 namespace blink {
 
 	HubbleXobj::HubbleXobj() {
+		sender_ = nullptr;
 		m_pRenderframeImpl = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 		session_.m_mapString[L"sessionid"] = WebString(id_).Utf16();
@@ -42,6 +43,7 @@ namespace blink {
 		ScriptWrappable::Trace(visitor);
 		visitor->Trace(mapVisibleElem);
 		visitor->Trace(mapHubbleEventCallback_);
+		visitor->Trace(sender_);
 		visitor->Trace(hubble_);
 	}
 
@@ -81,6 +83,16 @@ namespace blink {
 			return it->value->parentGalaxy();
 		}
 		return nullptr;
+	}
+
+	void HubbleXobj::setSender(HubbleXobj* xobj)
+	{
+		sender_ = xobj;
+	}
+
+	HubbleXobj* HubbleXobj::sender()
+	{
+		return sender_.Get();
 	}
 
 	void HubbleXobj::setStr(const String& strKey, const String& value)

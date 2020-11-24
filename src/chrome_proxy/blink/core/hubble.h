@@ -35,6 +35,7 @@ namespace blink {
 	class Element;
 	class LocalFrame;
 	class Document;
+	class DOMParser;
 	class ScriptState;
 	class HubbleXobj;
 	class HubbleNode;
@@ -81,6 +82,7 @@ namespace blink {
 
 	 HubbleXobj* xobj();
 	 HubbleNode* topGrid();
+	 DOMParser* xmlParse();
 	 String url();
 	 HubbleXobj* getNamedItem(const AtomicString&) const;
 	 HubbleXobj* setNamedItem(HubbleXobj*, ExceptionState&);
@@ -114,7 +116,7 @@ namespace blink {
 	 void AllMdiChildRemoved(HubbleXobj* xobj);
 	 void ProcessMessage(HubbleXobj* xobj);
 	 void DispatchGridEvent(Element* elem, const String& eventName);
-	 void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName, const String& xmlTagName);
+	 void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
@@ -151,6 +153,7 @@ namespace blink {
 	 String url_;
 	 mutable Member<HubbleXobj> innerXobj_;
 	 mutable Member<HubbleNode> topGrid_;
+	 mutable Member<DOMParser> DOMParser_;
 	 mutable Member<Element> m_pVisibleContentElement;
 	 HeapHashMap<String, Member<HubbleXobj>> mapCloudSession_;
 	 HeapHashMap<int64_t, Member<HubbleNode>> m_mapHubbleNode;

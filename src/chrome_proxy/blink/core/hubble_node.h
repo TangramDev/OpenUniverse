@@ -20,6 +20,7 @@ using namespace std;
 
 class Hubble;
 class Element;
+class DOMParser;
 class HubbleXobj;
 class HubbleGalaxy;
 class HubbleWinform;
@@ -65,7 +66,6 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   String getid();
 
   // Message method
-
   void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
   void sendMessageToGrid(HubbleXobj* msg);
   void sendMessageToGrid(HubbleNode* node);
@@ -87,6 +87,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void setMsgID(const String& value);
   Element* workElement();
   void setWorkElement(Element*);
+  DOMParser* xmlParse();
 
   // Node API:
   String getStr(const String& strKey);
@@ -97,6 +98,8 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void setInt64(const String& strKey, int64_t value);
   float getFloat(const String& strKey);
   void setFloat(const String& strKey, float value);
+  void DispatchGridEvent(Element* elem, const String& eventName);
+  void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);
@@ -130,6 +133,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   String name_;
 
   Member<Element> element_;
+  mutable Member<DOMParser> DOMParser_;
   mutable Member<Hubble> hubble_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;

@@ -39,7 +39,7 @@ typedef sequence<any> ObjectArray;
 	HubbleGalaxy getGalaxy(DOMString wndName);
 	HubbleGalaxy getGalaxy(long long wndHandle);
 	void DispatchGridEvent(Element elem, DOMString eventName);
-	void DispatchGridEvent(HubbleXobj xObj, DOMString ctrlName, DOMString eventName, DOMString xmlTagName);
+	void DispatchGridEvent(HubbleXobj xObj, DOMString ctrlName, DOMString eventName);
 
 	//HubbleWinForm API
 	HubbleWinform createWinForm(DOMString strFormXml, 
@@ -50,6 +50,7 @@ typedef sequence<any> ObjectArray;
 	[RaisesException, CEReactions] HubbleXobj ? setNamedItem(HubbleXobj var);
 	[RaisesException, CEReactions] void setNamedItem(DOMString name, HubbleXobj var);
 
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] attribute DOMParser xmlParse;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString url;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode topGrid;

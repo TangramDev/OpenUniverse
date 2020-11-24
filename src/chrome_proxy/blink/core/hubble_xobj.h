@@ -50,8 +50,12 @@ friend class Hubble;
   HubbleNode* grid();
   HubbleWinform* form();
   HubbleGalaxy* galaxy();
+
   String msgID();
   void setMsgID(const String& value);
+
+  HubbleXobj* sender();
+  void setSender(HubbleXobj* value);
 
   String getStr(const String& strKey);
   void setStr(const String& strKey, const String& value);
@@ -76,6 +80,7 @@ friend class Hubble;
   String id_;
   CommonUniverse::IPCSession session_;
   WebLocalFrameClient* m_pRenderframeImpl;
+  mutable Member<HubbleXobj> sender_;
   mutable Member<Hubble> hubble_;
   HeapHashMap<String, Member<Element>> mapVisibleElem;
   HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;

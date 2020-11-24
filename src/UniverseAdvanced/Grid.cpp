@@ -1390,6 +1390,10 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 			pHtmlWnd = (CWebPage*)::GetWindowLongPtr(_hWnd, GWLP_USERDATA);
 		}
 	}
+	if (pHtmlWnd == nullptr)
+	{
+		pHtmlWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+	}
 
 	switch (m_nViewType)
 	{
