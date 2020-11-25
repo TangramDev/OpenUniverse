@@ -388,6 +388,20 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	}
 	return 1;
 	break;
+	case WM_HUBBLE_DATA:
+		if (lParam == 20200204)
+		{
+			BindWebObj* pObj = (BindWebObj*)wParam;
+			if (pObj)
+			{
+				CGrid* pGrid = (CGrid*)pObj->m_pGrid;
+				if (pGrid->m_pParentWinFormWnd && pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd)
+				{
+					::PostMessage(pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd->m_hWnd, WM_COSMOSMSG, 20201125, wParam);
+				}
+			}
+		}
+		break;
 	case WM_HUBBLE_INIT:
 		if (lParam == 20002000)
 		{

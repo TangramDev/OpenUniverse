@@ -154,7 +154,7 @@ void HubbleNode::addEventListener(const String& eventName, V8ApplicationCallback
 {
 	if (callback)
 	{
-		innerXobj_->setInt64(L"senderhandle", handle_);
+		//innerXobj_->setInt64(L"senderhandle", handle_);
 		innerXobj_->addEventListener(eventName, callback);
 	}
 }
@@ -163,7 +163,7 @@ void HubbleNode::addEventListener(const String& subObjName, const String& eventN
 {
 	if (callback)
 	{
-		innerXobj_->setInt64(L"senderhandle", handle_);
+		//innerXobj_->setInt64(L"senderhandle", handle_);
 		innerXobj_->addEventListener(subObjName, eventName, callback);
 	}
 }

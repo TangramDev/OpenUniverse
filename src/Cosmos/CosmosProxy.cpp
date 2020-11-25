@@ -577,16 +577,16 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 									}
 								}
 							}
-							else if (strType == L"System.Windows.Forms.Button")
+							else //if (strType == L"System.Windows.Forms.Button")
 							{
 								Button^ pBtn = (Button^)pChild;
 								CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 								if (_pChild)
 								{
-									_pChild = _pChild->GetChild(_T("uidata"));
-									if (_pChild)
+									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("uidata"));
+									if (_pChild2)
 									{
-										pBtn->Tag = BSTR2STRING(_pChild->xml());
+										pBtn->Tag = BSTR2STRING(_pChild2->xml());
 									}
 								}
 							}
@@ -618,7 +618,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 												pObj->m_strObjName = name;
 												pObj->m_strObjType = strType;
 												pObj->m_strBindObjName = strWebName;
-												pObj->m_strBindData = pChildParse->attr(_T("bindevent"), _T(""));
+												pObj->m_strBindData = pChildParse->xml();//~CTangramXmlParse()attr(_T("bindevent"), _T(""));
 												HWND hForm = (HWND)pForm->Handle.ToPointer();
 												::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
 											}
@@ -835,7 +835,7 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								}
 							}
 						}
-						else if (strType == L"System.Windows.Forms.Button")
+						else //if (strType == L"System.Windows.Forms.Button")
 						{
 							Button^ pBtn = (Button^)pChild;
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);

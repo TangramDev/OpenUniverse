@@ -1243,6 +1243,22 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			g_pHubble->HubbleInit();
 		}
 		break;
+	case WM_HUBBLE_DATA:
+		if (lParam == 20200204)
+		{
+			BindWebObj* pObj = (BindWebObj*)wParam;
+			if (pObj)
+			{
+				CGrid* pGrid = (CGrid*)pObj->m_pGrid;
+				if (pGrid->m_pParentWinFormWnd && pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd)
+				{
+					::PostMessage(pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd->m_hWnd, WM_COSMOSMSG, 20201125, wParam);
+					//pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd->SendChromeIPCMessage()
+				}
+			}
+			//delete pObj;
+		}
+		break;
 	case WM_HUBBLE_APPQUIT:
 	{
 		if (g_pHubble->m_bEclipse == false && g_pHubble->m_bOfficeApp == false)

@@ -324,6 +324,16 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	}
 	return 1;
 	break;
+	case WM_HUBBLE_DATA:
+		if (lParam == 20200204)
+		{
+			BindWebObj* pObj = (BindWebObj*)wParam;
+			if (pObj)
+			{
+				delete pObj;
+			}
+		}
+		break;
 	case WM_HUBBLE_INIT:
 		if (lParam == 20002000)
 		{

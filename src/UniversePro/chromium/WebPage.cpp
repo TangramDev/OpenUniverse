@@ -91,6 +91,21 @@ namespace Browser {
 		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
+		case 20201125:
+		{
+			BindWebObj * pObj = (BindWebObj*)lParam;
+			CGrid* pGrid = (CGrid*)pObj->m_pGrid;
+			if (pGrid&&pGrid->m_pHubbleCloudSession)
+			{
+				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObj"), pObj->m_strObjName);
+				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjData"), pObj->m_strBindData);
+				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjType"), pObj->m_strObjType);
+				pGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("BIND_NATIVEOBJ_IPC_MSG"));
+				pGrid->m_pHubbleCloudSession->SendMessage();
+			}
+			delete pObj;
+		}
+			break;
 		case 20201109:
 		{
 			if (lParam)

@@ -113,6 +113,7 @@ namespace blink {
 	 //HubbleNode API
 	 void MdiChildActive(HubbleXobj* xobj);
 	 void MdiChildReady(HubbleXobj* xobj);
+	 void BindNativeObj(HubbleXobj* xobj);
 	 void AllMdiChildRemoved(HubbleXobj* xobj);
 	 void ProcessMessage(HubbleXobj* xobj);
 	 void DispatchGridEvent(Element* elem, const String& eventName);

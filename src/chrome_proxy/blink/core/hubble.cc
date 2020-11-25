@@ -462,7 +462,8 @@ namespace blink {
 								if (!!gridfortarget) {
 									gridfortarget->setWorkElement(nullptr);
 									gridfortarget->setWorkElement(elem);
-									gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
+									String strMsgID = e->GetIdAttribute() + "_" + eventName;
+									gridfortarget->setMsgID(strMsgID);
 									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 									gridfortarget->setWorkElement(nullptr);
 								}
@@ -540,6 +541,15 @@ namespace blink {
 										cluster = "__viewport_default__";
 									}
 									HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
+									if (gridfortarget == nullptr)
+									{
+										if (xObj->grid())
+										{
+											HubbleWinform* form = xObj->grid()->parentForm();
+											if(form)
+												gridfortarget = form->getGrid(galaxy, cluster, target);
+										}
+									}
 									if (!!gridfortarget) {
 										gridfortarget->element_ = elem;
 										gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
@@ -618,6 +628,120 @@ namespace blink {
 		}
 		DispatchEvent(*blink::HubbleEvent::Create(
 			blink::event_type_names::kHubblemessage, xobj));
+	}
+
+	void Hubble::BindNativeObj(HubbleXobj* xobj)
+	{
+		String ctrlName_ = xobj->getStr(L"BindObj");;
+		if (DOMParser_ == nullptr)
+		{
+			DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
+		}
+		if (DOMParser_)
+		{
+			ExceptionState exception_state(nullptr,
+				ExceptionState::kExecutionContext,
+				"DOMParser",
+				"");
+			Document* doc = DOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(xobj->getStr(L"BindObjData")), "application/xml", exception_state);
+			if (doc)
+			{
+				ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
+				HTMLCollection* list = pContainerNode->Children();
+				if (list->length())
+				{
+					for (unsigned int index = 0; index < list->length(); index++)
+					{
+						Element* workItem = list->item(index);
+						Node* pNode = workItem;
+						if(pNode->getNodeType() == 1)
+						{ 
+							String eventName = workItem->tagName();
+							if(!eventName.IsNull())
+							{ 
+								__int64 nHandle = xobj->getInt64(L"gridobjhandle");
+								HubbleNode* grid = nullptr;
+								if (nHandle)
+								{
+									auto it = m_mapHubbleNode.find(nHandle);
+									if (it != m_mapHubbleNode.end())
+									{
+										grid = it->value.Get();
+									}
+								}
+								if (grid)
+								{
+									xobj->setStr(L"Bindevent", eventName);
+									m_pRenderframeImpl->SendHubbleMessageEx(xobj->session_);
+									//grid->setStr(L"Bind","");
+								}
+								//auto it = session_.m_mapString.find(L"objID");
+								//if (it != session_.m_mapString.end())
+								//{
+								//	hubble_->mapCloudSession_.insert(id_, this);
+								//	String eventName_ = eventName + "@" + SubObjName;
+								//	auto it = mapHubbleEventCallback_.find(eventName_);
+								//	if (it == mapHubbleEventCallback_.end())
+								//	{
+								//		mapHubbleEventCallback_.insert(eventName_, callback);
+								//		//插入callbackID:
+								//		String callbackid_ = WTF::CreateCanonicalUUIDString();
+								//		std::wstring strID = WebString(callbackid_).Utf16();
+								//		setStr(L"callbackid", callbackid_);
+								//		//绑定事件名称与callbackid建立对应关系：
+								//		session_.m_mapString[strID] = WebString(eventName_).Utf16();
+
+								//		//允许RenderFrameImpl根据回调id查找对应的session：
+								//		m_pRenderframeImpl->m_mapHubbleSession[strID] = this;
+								//	}
+								//	else {
+								//		mapHubbleEventCallback_.erase(it);
+								//		mapHubbleEventCallback_.insert(eventName_, callback);
+								//	}
+								//	//通知客户端建立监听连接：
+								//	m_pRenderframeImpl->SendHubbleMessageEx(session_);
+								//}
+							}
+						}
+						//for (unsigned int i = 1; i < workItem->childNodes()->length(); i++)
+						//{
+						//	Element* elem = (Element*)workItem->childNodes()->item(i);
+						//	Node* pNode = elem;
+						//	if (pNode->getNodeType() == 1 && elem->hasAttribute("target")) {
+						//		AtomicString target = elem->getAttribute("target");
+						//		if (target != "") {
+						//			AtomicString galaxy = elem->getAttribute("galaxy");
+						//			if (galaxy == "")
+						//				galaxy = "default";
+						//			AtomicString cluster = elem->getAttribute("cluster");
+						//			if (cluster == "")
+						//			{
+						//				cluster = "__viewport_default__";
+						//			}
+						//			HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
+						//			if (gridfortarget == nullptr)
+						//			{
+						//				if (xObj->grid())
+						//				{
+						//					HubbleWinform* form = xObj->grid()->parentForm();
+						//					if (form)
+						//						gridfortarget = form->getGrid(galaxy, cluster, target);
+						//				}
+						//			}
+						//			if (!!gridfortarget) {
+						//				gridfortarget->element_ = elem;
+						//				gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
+						//				gridfortarget->xobj()->setSender(xObj);
+						//				gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
+						//				gridfortarget->setWorkElement(nullptr);
+						//			}
+						//		}
+						//	}
+						//}
+					}
+				}
+			}
+		}
 	}
 
 	void Hubble::MdiChildReady(HubbleXobj* xobj)

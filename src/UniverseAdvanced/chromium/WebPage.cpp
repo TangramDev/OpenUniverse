@@ -91,6 +91,21 @@ namespace Browser {
 		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
+		case 20201125:
+		{
+			BindWebObj * pObj = (BindWebObj*)lParam;
+			CGrid* pGrid = (CGrid*)pObj->m_pGrid;
+			if (pGrid&&pGrid->m_pHubbleCloudSession)
+			{
+				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObj"), pObj->m_strObjName);
+				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjData"), pObj->m_strBindData);
+				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjType"), pObj->m_strObjType);
+				pGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("BIND_NATIVEOBJ_IPC_MSG"));
+				pGrid->m_pHubbleCloudSession->SendMessage();
+			}
+			delete pObj;
+		}
+			break;
 		case 20201109:
 		{
 			if (lParam)
@@ -139,7 +154,7 @@ namespace Browser {
 					pSession->InsertString(_T("cluster"), pGrid->m_pRootObj->m_strKey);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
-					if(pGrid->m_pGridShareData->m_pHostClientView)
+					if (pGrid->m_pGridShareData->m_pHostClientView)
 						pSession->Insertint64(_T("nucleushandle"), (__int64)pGrid->m_pGridShareData->m_pHostClientView->m_hWnd);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
 					switch (pGrid->m_nViewType)
@@ -223,14 +238,14 @@ namespace Browser {
 										pGrid->m_pParentWinFormWnd->m_pBindMDIGrid = (CGrid*)_pGrid;
 									}
 								}
-								if (m_pGalaxy && m_pGalaxy->m_pWorkGrid && pGrid->m_pParentWinFormWnd)
+								if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid&& pGrid->m_pParentWinFormWnd)
 								{
 									CString strKey = pGrid->m_pParentWinFormWnd->m_strKey;
 									auto it = m_pGalaxy->m_mapGrid.find(strKey);// 
 									if (it != m_pGalaxy->m_mapGrid.end())
 									{
 										it->second->get_Handle(&nHandle);
-										if (nHandle)
+										if(nHandle)
 											pSession->Insertint64(_T("mdiwebbindgridhandle"), nHandle);
 										if (pGrid->m_pParentWinFormWnd)
 										{
@@ -479,7 +494,7 @@ namespace Browser {
 		}
 		for (auto it : m_mapSubWinForm)
 		{
-			::DestroyWindow(it.first);
+			::DestroyWindow(it.first); 
 		}
 		m_mapSubWinForm.erase(m_mapSubWinForm.begin(), m_mapSubWinForm.end());
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
@@ -1618,6 +1633,65 @@ namespace Browser {
 		return S_OK;
 	}
 
+	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid)
+	{
+		if (m_pGalaxy == nullptr) {
+			CGalaxyCluster* pGalaxyCluster = nullptr;
+			auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
+			if (it != g_pHubble->m_mapWindowPage.end())
+				pGalaxyCluster = (CGalaxyCluster*)it->second;
+			else
+			{
+				pGalaxyCluster = new CComObject<CGalaxyCluster>();
+				pGalaxyCluster->m_hWnd = m_hExtendWnd;
+				g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
+
+				for (auto it : g_pHubble->m_mapHubbleAppProxy)
+				{
+					CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
+					if (pProxy)
+						pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pProxy;
+				}
+			}
+			if (pGalaxyCluster) {
+				IGalaxy* pGalaxy = nullptr;
+				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pGalaxy);
+				if (pGalaxy)
+				{
+					m_pGalaxy = (CGalaxy*)pGalaxy;
+					m_pGalaxy->m_pWebPageWnd = this;
+				}
+			}
+		}
+		if (m_pGalaxy)
+		{
+			m_pGalaxy->Observe(bstrKey, bstrXml, pRetGrid);
+			if (*pRetGrid)
+			{
+				m_strCurKey = OLE2T(bstrKey);
+				m_hWebHostWnd = NULL;
+				if (m_pGalaxy->m_pBindingGrid)
+				{
+					m_hWebHostWnd = m_pGalaxy->m_pBindingGrid->m_pHostWnd->m_hWnd;
+				}
+			}
+		}
+		CBrowser* pBrowserWnd = nullptr;
+		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+		if (it != g_pHubble->m_mapBrowserWnd.end())
+		{
+			pBrowserWnd = (CBrowser*)it->second;
+			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
+				::ShowWindow(m_hWnd, SW_HIDE);
+		}
+		if (::IsWindowVisible(m_hWnd))
+		{
+			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
+			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+		}
+		return S_OK;
+	}
+
 	STDMETHODIMP CWebPage::SendXmlMessage(IGrid* sender, BSTR bstrXml)
 	{
 		CGrid* pGrid = (CGrid*)sender;
@@ -1741,65 +1815,6 @@ namespace Browser {
 			}
 		}
 		return S_FALSE;
-	}
-
-	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid)
-	{
-		if (m_pGalaxy == nullptr) {
-			CGalaxyCluster* pGalaxyCluster = nullptr;
-			auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
-			if (it != g_pHubble->m_mapWindowPage.end())
-				pGalaxyCluster = (CGalaxyCluster*)it->second;
-			else
-			{
-				pGalaxyCluster = new CComObject<CGalaxyCluster>();
-				pGalaxyCluster->m_hWnd = m_hExtendWnd;
-				g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
-
-				for (auto it : g_pHubble->m_mapHubbleAppProxy)
-				{
-					CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-					if (pProxy)
-						pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pProxy;
-				}
-			}
-			if (pGalaxyCluster) {
-				IGalaxy* pGalaxy = nullptr;
-				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pGalaxy);
-				if (pGalaxy)
-				{
-					m_pGalaxy = (CGalaxy*)pGalaxy;
-					m_pGalaxy->m_pWebPageWnd = this;
-				}
-			}
-		}
-		if (m_pGalaxy)
-		{
-			m_pGalaxy->Observe(bstrKey, bstrXml, pRetGrid);
-			if (*pRetGrid)
-			{
-				m_strCurKey = OLE2T(bstrKey);
-				m_hWebHostWnd = NULL;
-				if (m_pGalaxy->m_pBindingGrid)
-				{
-					m_hWebHostWnd = m_pGalaxy->m_pBindingGrid->m_pHostWnd->m_hWnd;
-				}
-			}
-		}
-		CBrowser* pBrowserWnd = nullptr;
-		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-		if (it != g_pHubble->m_mapBrowserWnd.end())
-		{
-			pBrowserWnd = (CBrowser*)it->second;
-			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
-				::ShowWindow(m_hWnd, SW_HIDE);
-		}
-		if (::IsWindowVisible(m_hWnd))
-		{
-			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-		}
-		return S_OK;
 	}
 
 	STDMETHODIMP CWebPage::CreateForm(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm)
