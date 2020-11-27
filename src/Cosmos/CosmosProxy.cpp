@@ -1,6 +1,6 @@
 #include "..\CosmosMini\CosmosProxy.h"
 /********************************************************************************
-*					Open Universe - version 1.0.1.15							*
+*					Open Universe - version 1.0.1.20							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1780,7 +1780,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 
 	if (strMsgID == _T("OPEN_XML_CTRL"))
 	{
-		HWND hWnd = (HWND)pSession->Getint64(L"gridobjhandle");
+		HWND hWnd = (HWND)pSession->Getint64(L"gridhandle");
 		IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
 		if (pGrid)
 		{
@@ -1926,7 +1926,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 			{
 				if (_strEventName == _T(""))
 				{
-					HWND hWnd = (HWND)pSession->Getint64(L"gridobjhandle");
+					HWND hWnd = (HWND)pSession->Getint64(L"gridhandle");
 					IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
 					Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 					if (thisNode != nullptr)
@@ -1962,7 +1962,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	}
 	else
 	{
-		HWND hWnd = (HWND)pSession->Getint64(L"gridobjhandle");
+		HWND hWnd = (HWND)pSession->Getint64(L"gridhandle");
 		IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
 		Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
 		Cosmos::Wormhole^ pCloudSession = nullptr;// gcnew Universe::Wormhole(pSession);

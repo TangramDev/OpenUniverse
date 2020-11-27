@@ -113,7 +113,7 @@ namespace blink {
 
   int64_t HubbleEvent::hwnd()
   {
-      int64_t h = session_->getInt64(L"gridobjhandle");
+      int64_t h = session_->getInt64(L"gridhandle");
       if(h==0)
           h = session_->getInt64(L"formhandle");
       if(h==0)

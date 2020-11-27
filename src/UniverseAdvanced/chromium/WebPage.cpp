@@ -1,5 +1,5 @@
 /********************************************************************************
- *					Open Universe - version 1.0.1.15
+ *					Open Universe - version 1.0.1.20
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -147,7 +147,7 @@ namespace Browser {
 					pSession->InsertLong(_T("col"), pGrid->m_nCol);
 					pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
-					pSession->Insertint64(_T("gridobjhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
 					if (pGrid->m_strMessageXml != _T(""))
@@ -1578,7 +1578,7 @@ namespace Browser {
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
 			//IGrid* pGrid = nullptr;
-			HWND hWnd = (HWND)pSession->Getint64(_T("gridobjhandle"));
+			HWND hWnd = (HWND)pSession->Getint64(_T("gridhandle"));
 			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
@@ -1600,7 +1600,7 @@ namespace Browser {
 			int nCol = pSession->GetLong(_T("opencol"));
 			int nRow = pSession->GetLong(_T("openrow"));
 			IGrid* pSplitterNode = nullptr;
-			HWND hWnd = (HWND)pSession->Getint64(_T("gridobjhandle"));
+			HWND hWnd = (HWND)pSession->Getint64(_T("gridhandle"));
 			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
@@ -1735,7 +1735,7 @@ namespace Browser {
 											pSession->InsertLong(_T("col"), pGrid->m_nCol);
 											pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
 											pSession->InsertString(_T("name@page"), pGrid->m_strName);
-											pSession->Insertint64(_T("gridobjhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
+											pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 											pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
 											pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
 											pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);

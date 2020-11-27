@@ -160,7 +160,6 @@ void HubbleNode::addEventListener(const String& eventName, V8ApplicationCallback
 {
 	if (callback)
 	{
-		//innerXobj_->setInt64(L"senderhandle", handle_);
 		innerXobj_->addEventListener(eventName, callback);
 	}
 }
@@ -169,7 +168,6 @@ void HubbleNode::addEventListener(const String& subObjName, const String& eventN
 {
 	if (callback)
 	{
-		//innerXobj_->setInt64(L"senderhandle", handle_);
 		innerXobj_->addEventListener(subObjName, eventName, callback);
 	}
 }
@@ -483,7 +481,7 @@ void HubbleNode::sendMessageToGrid(HubbleXobj* msg)
 	if (msg)
 	{
 		Hubble* pHubble = hubble_.Get();
-		__int64 nHandle = msg->getInt64(L"gridobjhandle");
+		__int64 nHandle = msg->getInt64(L"gridhandle");
 		HubbleNode* grid = nullptr;
 		if (nHandle)
 		{
@@ -552,11 +550,9 @@ void HubbleNode::DispatchGridEvent(Element* e, const String& eventName)
 								gridfortarget = pHubble->getGrid(galaxy, cluster, target);
 							}
 							if (!!gridfortarget) {
-								//gridfortarget->setWorkElement(nullptr);
 								gridfortarget->setWorkElement(elem);
 								gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
 								gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-								//gridfortarget->setWorkElement(nullptr);
 							}
 						}
 					}
@@ -611,43 +607,39 @@ void HubbleNode::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, con
 			AtomicString name = AtomicString(eventName_);
 			ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
 			HTMLCollection* list = pContainerNode->getElementsByTagName(name);
-			if (list->length())
+			for (unsigned int index = 0; index < list->length(); index++)
 			{
-				for (unsigned int index = 0; index < list->length(); index++)
+				Element* workItem = list->item(index);
+				for (unsigned int i = 1; i < workItem->childNodes()->length(); i++)
 				{
-					Element* workItem = list->item(index);
-					for (unsigned int i = 1; i < workItem->childNodes()->length(); i++)
-					{
-						Element* elem = (Element*)workItem->childNodes()->item(i);
-						Node* pNode = elem;
-						AtomicString target = "";
-						if (pNode->getNodeType() == 1&&elem->hasAttribute("target")) {
-							target = elem->getAttribute("target");
-							if (target != "") {
-								AtomicString galaxy = elem->getAttribute("galaxy");
-								if (galaxy == "")
-									galaxy = "default";
-								AtomicString cluster = elem->getAttribute("cluster");
-								if (cluster == "")
-								{
-									if (m_pParentForm)
-										cluster = "default";
-									else
-										cluster = "__viewport_default__";
-								}
-								HubbleNode* gridfortarget = nullptr;
-								if(m_pParentForm)
-									gridfortarget = m_pParentForm->getGrid(galaxy, cluster, target);
-								if (gridfortarget == nullptr)
-								{
-									gridfortarget = hubble_.Get()->getGrid(galaxy, cluster, target);
-								}
-								if (!!gridfortarget) {
-									gridfortarget->element_ = elem;
-									gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
-									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-									//gridfortarget->setWorkElement(nullptr);
-								}
+					Element* elem = (Element*)workItem->childNodes()->item(i);
+					Node* pNode = elem;
+					AtomicString target = "";
+					if (pNode->getNodeType() == 1 && elem->hasAttribute("target")) {
+						target = elem->getAttribute("target");
+						if (target != "") {
+							AtomicString galaxy = elem->getAttribute("galaxy");
+							if (galaxy == "")
+								galaxy = "default";
+							AtomicString cluster = elem->getAttribute("cluster");
+							if (cluster == "")
+							{
+								if (m_pParentForm)
+									cluster = "default";
+								else
+									cluster = "__viewport_default__";
+							}
+							HubbleNode* gridfortarget = nullptr;
+							if (m_pParentForm)
+								gridfortarget = m_pParentForm->getGrid(galaxy, cluster, target);
+							if (gridfortarget == nullptr)
+							{
+								gridfortarget = hubble_.Get()->getGrid(galaxy, cluster, target);
+							}
+							if (!!gridfortarget) {
+								gridfortarget->element_ = elem;
+								gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
+								gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 							}
 						}
 					}
@@ -695,42 +687,37 @@ void HubbleNode::ProcessNodeMessage(const String& msgID)
 	if (messageElem_ && msgID.IsNull() == false && msgID != "")
 	{
 		HTMLCollection* list = messageElem_->getElementsByTagName(AtomicString(msgID.LowerASCII()));
-		if (list) {
-			for (unsigned int i = 0; i < list->length(); i++)
+		for (unsigned int i = 0; i < list->length(); i++)
+		{
+			HTMLCollection* plist = list->item(i)->Children();
+			for (unsigned int i = 0; i < plist->length(); i++)
 			{
-				HTMLCollection* plist = list->item(i)->Children();
-				if (plist)
+				Element* elem = plist->item(i);
+				AtomicString target = "";
+				if (elem->hasAttribute("target"))
 				{
-					for (unsigned int i = 0; i < plist->length(); i++)
-					{
-						Element* elem = plist->item(i);
-						AtomicString target = "";
-						if (elem->hasAttribute("target"))
+					target = elem->getAttribute("target");
+					if (target != "") {
+						AtomicString galaxy = elem->getAttribute("galaxy");
+						AtomicString cluster = elem->getAttribute("cluster");
+						if (galaxy == "")
+							galaxy = "default";
+						if (cluster == "")
+							cluster = "__viewport_default__";
+						HubbleNode* gridfortarget = hubble_->getGrid(galaxy, cluster, target);
+						if (gridfortarget == nullptr)
 						{
-							target = elem->getAttribute("target");
-							if (target != "") {
-								AtomicString galaxy = elem->getAttribute("galaxy");
-								AtomicString cluster = elem->getAttribute("cluster");
-								if (galaxy == "")
-									galaxy = "default";
-								if (cluster == "")
-									cluster = "__viewport_default__";
-								HubbleNode* gridfortarget = hubble_->getGrid(galaxy, cluster, target);
-								if (gridfortarget == nullptr)
-								{
-									HubbleWinform* form = parentForm();
-									if (form)
-									{
-										gridfortarget = form->getGrid(galaxy, cluster, target);
-									}
-								}
-								if (!!gridfortarget) {
-									gridfortarget->setWorkElement(elem);
-									gridfortarget->setMsgID(msgID);
-									gridfortarget->xobj()->setSender(innerXobj_);
-									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-								}
+							HubbleWinform* form = parentForm();
+							if (form)
+							{
+								gridfortarget = form->getGrid(galaxy, cluster, target);
 							}
+						}
+						if (!!gridfortarget) {
+							gridfortarget->setWorkElement(elem);
+							gridfortarget->setMsgID(msgID);
+							gridfortarget->xobj()->setSender(innerXobj_);
+							gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 						}
 					}
 				}

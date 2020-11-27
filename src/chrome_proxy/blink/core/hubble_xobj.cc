@@ -67,7 +67,7 @@ namespace blink {
 
 	HubbleNode* HubbleXobj::grid()
 	{
-		__int64 nHandle = getInt64(L"gridobjhandle");
+		__int64 nHandle = getInt64(L"gridhandle");
 		auto it = hubble_->m_mapHubbleNode.find(nHandle);
 		if (it != hubble_->m_mapHubbleNode.end())
 			return it->value.Get();
@@ -76,7 +76,7 @@ namespace blink {
 
 	HubbleGalaxy* HubbleXobj::galaxy()
 	{
-		__int64 nHandle = getInt64(L"gridobjhandle");
+		__int64 nHandle = getInt64(L"gridhandle");
 		auto it = hubble_->m_mapHubbleNode.find(nHandle);
 		if (it != hubble_->m_mapHubbleNode.end())
 		{

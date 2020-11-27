@@ -10,7 +10,7 @@
  *	   Martin Oberhuber (Wind River) - [316975] memory leak on failure reading .ini file
  *******************************************************************************/
  /********************************************************************************
- *					Open Universe - version 1.0.1.15							*
+ *					Open Universe - version 1.0.1.20							*
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
  *

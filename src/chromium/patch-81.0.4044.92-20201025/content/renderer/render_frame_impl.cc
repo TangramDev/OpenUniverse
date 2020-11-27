@@ -7083,7 +7083,7 @@ void RenderFrameImpl::OnHubbleRendererIPCMsg(
     // return;
   }
   if (strID == L"OPEN_XML_SPLITTER") {
-    auto itnode = mapint64.find(L"gridobjhandle");
+    auto itnode = mapint64.find(L"gridhandle");
     auto itNode = pHubble->m_mapHubbleNode.find(itnode->second);
     if (itNode != pHubble->m_mapHubbleNode.end()) {
       auto itreturnnode = mapint64.find(L"openxmlreturnhandle");
