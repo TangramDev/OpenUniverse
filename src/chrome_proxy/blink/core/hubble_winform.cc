@@ -393,11 +393,11 @@ namespace blink {
 								if (gridfortarget == nullptr)
 									gridfortarget = hubble_.Get()->getGrid(galaxy, cluster, target);
 								if (!!gridfortarget) {
-									gridfortarget->setWorkElement(nullptr);
+									//gridfortarget->setWorkElement(nullptr);
 									gridfortarget->setWorkElement(elem);
 									gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
 									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-									gridfortarget->setWorkElement(nullptr);
+									//gridfortarget->setWorkElement(nullptr);
 								}
 							}
 						}
@@ -481,7 +481,7 @@ namespace blink {
 										gridfortarget->element_ = elem;
 										gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
 										gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-										gridfortarget->setWorkElement(nullptr);
+										//gridfortarget->setWorkElement(nullptr);
 									}
 								}
 							}

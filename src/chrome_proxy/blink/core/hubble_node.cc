@@ -27,6 +27,9 @@ namespace blink {
 
 HubbleNode::HubbleNode(LocalFrame* frame) : DOMWindowClient(frame) {
 	DOMParser_ = nullptr;
+	innerdoc_ = nullptr;
+	innerDOMParser_ = nullptr;
+	messageElem_ = nullptr;
 	m_pParentForm = nullptr;
 	m_pRenderframeImpl = nullptr;
 	m_pVisibleContentElement = nullptr;
@@ -142,10 +145,13 @@ void HubbleNode::Trace(blink::Visitor* visitor) {
   ScriptWrappable::Trace(visitor);
   DOMWindowClient::Trace(visitor);
   visitor->Trace(hubble_);
+  visitor->Trace(innerdoc_);
   visitor->Trace(innerXobj_);
   visitor->Trace(element_);
+  visitor->Trace(messageElem_);
   visitor->Trace(DOMParser_);
   visitor->Trace(m_pParentForm);
+  visitor->Trace(innerDOMParser_);
   visitor->Trace(m_pVisibleContentElement);
   visitor->Trace(mapHubbleEventCallback_);
 }
@@ -499,6 +505,13 @@ void HubbleNode::sendMessageToGrid(HubbleNode* grid)
 	}
 }
 
+Document* HubbleNode::doc()
+{
+	if(innerdoc_)
+		return innerdoc_.Get();
+	return nullptr;
+}
+
 DOMParser* HubbleNode::xmlParse()
 {
 	if (DOMParser_ == nullptr)
@@ -539,11 +552,11 @@ void HubbleNode::DispatchGridEvent(Element* e, const String& eventName)
 								gridfortarget = pHubble->getGrid(galaxy, cluster, target);
 							}
 							if (!!gridfortarget) {
-								gridfortarget->setWorkElement(nullptr);
+								//gridfortarget->setWorkElement(nullptr);
 								gridfortarget->setWorkElement(elem);
 								gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
 								gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-								gridfortarget->setWorkElement(nullptr);
+								//gridfortarget->setWorkElement(nullptr);
 							}
 						}
 					}
@@ -633,7 +646,7 @@ void HubbleNode::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, con
 									gridfortarget->element_ = elem;
 									gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
 									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-									gridfortarget->setWorkElement(nullptr);
+									//gridfortarget->setWorkElement(nullptr);
 								}
 							}
 						}
@@ -675,6 +688,55 @@ void HubbleNode::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, con
 	//        }
 	//    }
 	//}
+}
+
+void HubbleNode::ProcessNodeMessage(const String& msgID)
+{
+	if (messageElem_ && msgID.IsNull() == false && msgID != "")
+	{
+		HTMLCollection* list = messageElem_->getElementsByTagName(AtomicString(msgID.LowerASCII()));
+		if (list) {
+			for (unsigned int i = 0; i < list->length(); i++)
+			{
+				HTMLCollection* plist = list->item(i)->Children();
+				if (plist)
+				{
+					for (unsigned int i = 0; i < plist->length(); i++)
+					{
+						Element* elem = plist->item(i);
+						AtomicString target = "";
+						if (elem->hasAttribute("target"))
+						{
+							target = elem->getAttribute("target");
+							if (target != "") {
+								AtomicString galaxy = elem->getAttribute("galaxy");
+								AtomicString cluster = elem->getAttribute("cluster");
+								if (galaxy == "")
+									galaxy = "default";
+								if (cluster == "")
+									cluster = "__viewport_default__";
+								HubbleNode* gridfortarget = hubble_->getGrid(galaxy, cluster, target);
+								if (gridfortarget == nullptr)
+								{
+									HubbleWinform* form = parentForm();
+									if (form)
+									{
+										gridfortarget = form->getGrid(galaxy, cluster, target);
+									}
+								}
+								if (!!gridfortarget) {
+									gridfortarget->setWorkElement(elem);
+									gridfortarget->setMsgID(msgID);
+									gridfortarget->xobj()->setSender(innerXobj_);
+									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void HubbleNode::invokeCallback(wstring callbackid, HubbleXobj* callbackParam)

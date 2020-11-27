@@ -577,13 +577,13 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 									}
 								}
 							}
-							else //if (strType == L"System.Windows.Forms.Button")
+							else 
 							{
 								Button^ pBtn = (Button^)pChild;
 								CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 								if (_pChild)
 								{
-									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("uidata"));
+									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("message"));
 									if (_pChild2)
 									{
 										pBtn->Tag = BSTR2STRING(_pChild2->xml());
@@ -773,7 +773,11 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								BindWebObj* pObj = new BindWebObj;
 								pObj->nType = 0;
 								pObj->m_pGrid = _pGrid;
-								pObj->m_strBindData = strEvents;
+								CTangramXmlParse* pChildUIData = pChildParse->GetChild(_T("event"));
+								if (pChildUIData)
+									pObj->m_strBindData = pChildUIData->xml();
+								else
+									pObj->m_strBindData = pChildParse->xml();
 								pObj->m_hWnd = hCtrl;
 								pObj->m_strObjName = pChild->Name;
 								pObj->m_strObjType = strType;
@@ -835,13 +839,13 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								}
 							}
 						}
-						else //if (strType == L"System.Windows.Forms.Button")
+						else 
 						{
 							Button^ pBtn = (Button^)pChild;
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{
-								_pChild = _pChild->GetChild(_T("uidata"));
+								_pChild = _pChild->GetChild(_T("event"));
 								if (_pChild)
 								{
 									pBtn->Tag = BSTR2STRING(_pChild->xml());

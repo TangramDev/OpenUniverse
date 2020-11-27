@@ -80,6 +80,7 @@ public:
 	CString							m_strName;
 	CString 						m_strObjTypeID;
 	CString 						m_strCaption;
+	CString 						m_strMessageXml = _T("");
 	CString 						m_strXmlFileFromVS;
 
 	CString							m_strLastIPCMsgID = _T("");

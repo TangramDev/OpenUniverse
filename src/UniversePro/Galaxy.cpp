@@ -2454,6 +2454,9 @@ CGrid* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey, C
 	pCommonData->m_pHubbleParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
 	m_pWorkGrid->m_pHostParse = pParse->GetChild(TGM_GRID);
+	CTangramXmlParse* pParse2 = _pParse->GetChild(_T("message"));
+	if (pParse2)
+		m_pWorkGrid->m_strMessageXml = pParse2->xml();
 
 	CreateGalaxyCluster();
 	m_mapGrid[strKey] = m_pWorkGrid;

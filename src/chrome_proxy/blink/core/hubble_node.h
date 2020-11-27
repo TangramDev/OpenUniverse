@@ -53,6 +53,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   long rows();
   long cols();
   int64_t handle();
+  Document* doc();
   HubbleXobj* xobj();
 
   HubbleNode* root();
@@ -100,6 +101,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void setFloat(const String& strKey, float value);
   void DispatchGridEvent(Element* elem, const String& eventName);
   void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
+  void ProcessNodeMessage(const String& msgID);
 
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);
@@ -133,7 +135,10 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   String name_;
 
   Member<Element> element_;
+  mutable Member<Document> innerdoc_;
+  mutable Member<Element> messageElem_;
   mutable Member<DOMParser> DOMParser_;
+  mutable Member<DOMParser> innerDOMParser_;
   mutable Member<Hubble> hubble_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
