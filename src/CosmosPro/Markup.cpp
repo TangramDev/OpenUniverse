@@ -1593,7 +1593,7 @@ int CMarkup::x_ParseNode( CMarkup::TokenPos& token, CMarkup::NodePos& node )
 
 	int nR = token.nNext;
 	MCD_PCSZ pDoc = &token.szDoc[nR];
-	register unsigned int cD = (unsigned int)*pDoc;
+	unsigned int cD = (unsigned int)*pDoc;
 	if ( ! cD )
 	{
 		node.nLength = 0;

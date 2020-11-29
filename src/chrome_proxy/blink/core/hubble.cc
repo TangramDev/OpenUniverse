@@ -460,12 +460,10 @@ namespace blink {
 									cluster = "__viewport_default__";
 								HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
 								if (!!gridfortarget) {
-									//gridfortarget->setWorkElement(nullptr);
 									gridfortarget->setWorkElement(elem);
 									String strMsgID = e->GetIdAttribute() + "_" + eventName;
 									gridfortarget->setMsgID(strMsgID);
 									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-									//gridfortarget->setWorkElement(nullptr);
 								}
 							}
 						}
@@ -716,10 +714,42 @@ namespace blink {
 				node->innerdoc_ = node->innerDOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(strMessageXml), "application/xml", exception_state);
 				if (node->innerdoc_)
 				{
-					HTMLCollection* list = node->innerdoc_->Children()->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
-					if (list->length())
+					Element* e = node->innerdoc_->Children()->item(0);
+					for (auto* it : *(e->Children()))
 					{
-						node->messageElem_ = list->item(0);
+						AtomicString name = AtomicString(it->tagName());
+						if (it->tagName() == "layout")
+						{
+							node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
+						}
+						else
+						{
+							HTMLCollection* list = e->getElementsByTagName(name);
+							if (list->length())
+							{
+								list = list->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
+								if (list->length())
+								{
+									node->m_mapElement[WebString(it->tagName()).Utf16()] = list->item(0);
+									if (it->tagName() == "message")
+									{
+										node->messageElem_ = list->item(0);
+									}
+									else if (it->tagName() == "event")
+									{
+										node->eventElem_ = list->item(0);
+									}
+									else if (it->tagName() == "ui")
+									{
+										node->uiElem_ = list->item(0);
+									}
+									else if (it->tagName() == "property")
+									{
+										node->propertyElem_ = list->item(0);
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -766,13 +796,48 @@ namespace blink {
 		{
 			WebString str = strname;
 			m_pRootNode->m_mapGrid[str.Utf16()] = node;
-			if (node != m_pRootNode && m_pRootNode->messageElem_)
-			{ 
-				HTMLCollection* list = m_pRootNode->innerdoc_->Children()->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
-				if (list->length())
+			if (node != m_pRootNode)
+			{
+				node->innerdoc_ = m_pRootNode->innerdoc_;
+				if (node->innerdoc_)
 				{
-					node->messageElem_ = list->item(0);
-					node->innerdoc_ = m_pRootNode->innerdoc_;
+					Element* e = node->innerdoc_->Children()->item(0);
+					for (auto* it : *(e->Children()))
+					{
+						AtomicString name = AtomicString(it->tagName());
+						if (it->tagName() == "layout")
+						{
+							node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
+						}
+						else
+						{
+							HTMLCollection* list = e->getElementsByTagName(name);
+							if (list->length())
+							{
+								list = list->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
+								if (list->length())
+								{
+									node->m_mapElement[WebString(it->tagName()).Utf16()] = list->item(0);
+									if (it->tagName() == "message")
+									{
+										node->messageElem_ = list->item(0);
+									}
+									else if (it->tagName() == "event")
+									{
+										node->eventElem_ = list->item(0);
+									}
+									else if (it->tagName() == "ui")
+									{
+										node->uiElem_ = list->item(0);
+									}
+									else if (it->tagName() == "property")
+									{
+										node->propertyElem_ = list->item(0);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}

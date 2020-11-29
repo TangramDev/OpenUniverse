@@ -55,6 +55,10 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode parentGrid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleGalaxy parentGalaxy;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform parentForm;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element uiElement;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element gridElement;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element eventElement;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element propertyElement;
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.20							*
+*					Open Universe - version 1.1.1.21							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -2456,7 +2456,7 @@ CGrid* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey, C
 	m_pWorkGrid->m_pHostParse = pParse->GetChild(TGM_GRID);
 	CTangramXmlParse* pParse2 = _pParse->GetChild(_T("message"));
 	if (pParse2)
-		m_pWorkGrid->m_strMessageXml = pParse2->xml();
+		m_pWorkGrid->m_strMessageXml = _pParse->xml();// pParse2->xml();
 
 	CreateGalaxyCluster();
 	m_mapGrid[strKey] = m_pWorkGrid;

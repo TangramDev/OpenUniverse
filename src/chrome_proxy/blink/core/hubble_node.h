@@ -55,6 +55,10 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   int64_t handle();
   Document* doc();
   HubbleXobj* xobj();
+  Element* uiElement();
+  Element* gridElement();
+  Element* eventElement();
+  Element* propertyElement();
 
   HubbleNode* root();
   HubbleNode* parentGrid();
@@ -137,6 +141,10 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   Member<Element> element_;
   mutable Member<Document> innerdoc_;
   mutable Member<Element> messageElem_;
+  mutable Member<Element> propertyElem_;
+  mutable Member<Element> uiElem_;
+  mutable Member<Element> eventElem_;
+  mutable Member<Element> gridElem_;
   mutable Member<DOMParser> DOMParser_;
   mutable Member<DOMParser> innerDOMParser_;
   mutable Member<Hubble> hubble_;
@@ -147,6 +155,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   WebLocalFrameClient* m_pRenderframeImpl;
   map<int, HubbleNode*> m_mapChildNode;
   map<wstring, HubbleNode*> m_mapGrid;
+  map < wstring, Element* > m_mapElement;
   map<wstring, HubbleNode*> m_mapChildNode2;
 
 private:

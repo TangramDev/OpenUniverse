@@ -30,6 +30,9 @@ HubbleNode::HubbleNode(LocalFrame* frame) : DOMWindowClient(frame) {
 	innerdoc_ = nullptr;
 	innerDOMParser_ = nullptr;
 	messageElem_ = nullptr;
+	propertyElem_ = nullptr;
+	eventElem_ = nullptr;
+	uiElem_ = nullptr;
 	m_pParentForm = nullptr;
 	m_pRenderframeImpl = nullptr;
 	m_pVisibleContentElement = nullptr;
@@ -67,6 +70,27 @@ String HubbleNode::name() {
 String HubbleNode::getid()
 {
 	return id_;
+}
+
+Element* HubbleNode::eventElement()
+{
+	return eventElem_;
+}
+
+Element* HubbleNode::gridElement()
+{
+	return gridElem_;
+}
+
+Element* HubbleNode::uiElement()
+{
+	return uiElem_;
+}
+
+Element* HubbleNode::propertyElement()
+{
+	return propertyElem_;
+
 }
 
 long HubbleNode::row()
@@ -149,10 +173,15 @@ void HubbleNode::Trace(blink::Visitor* visitor) {
   visitor->Trace(innerXobj_);
   visitor->Trace(element_);
   visitor->Trace(messageElem_);
+  visitor->Trace(eventElem_);
+  visitor->Trace(gridElem_);
+  visitor->Trace(uiElem_);
+  visitor->Trace(propertyElem_);
   visitor->Trace(DOMParser_);
   visitor->Trace(m_pParentForm);
   visitor->Trace(innerDOMParser_);
   visitor->Trace(m_pVisibleContentElement);
+  //visitor->Trace(m_mapElement);
   visitor->Trace(mapHubbleEventCallback_);
 }
 
