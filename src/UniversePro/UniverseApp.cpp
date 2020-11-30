@@ -1094,13 +1094,19 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			if (pObj)
 			{
 				CGrid* pGrid = (CGrid*)pObj->m_pGrid;
+				HWND hWebView = NULL;
 				if (pGrid->m_pParentWinFormWnd && pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd)
 				{
-					::PostMessage(pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd->m_hWnd, WM_COSMOSMSG, 20201125, wParam);
-					//pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd->SendChromeIPCMessage()
+					hWebView = pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd->m_hWnd;
 				}
+				else
+				{
+					if (pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
+						hWebView = pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_hWnd;
+				}
+				if (hWebView)
+					::PostMessage(hWebView, WM_COSMOSMSG, 20201125, wParam);
 			}
-			//delete pObj;
 		}
 		break;
 	case WM_HUBBLE_APPQUIT:

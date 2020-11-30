@@ -106,6 +106,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void DispatchGridEvent(Element* elem, const String& eventName);
   void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
   void ProcessNodeMessage(const String& msgID);
+  void ProcessNodeEvent(const String& ctrlName, const String& eventName);
 
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);

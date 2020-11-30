@@ -1042,12 +1042,17 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								TreeView^ pTreeView = (TreeView^)pChild;
 								if (_pChild)
 								{
-									_pChild = _pChild->GetChild(_T("uidata"));
-									if (_pChild)
+									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+									if (_pChild2)
+									{
+										pTreeView->Tag = BSTR2STRING(_pChild2->xml());
+									}
+									_pChild2 = _pChild->GetChild(_T("uidata"));
+									if (_pChild2)
 									{
 										//pTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(&OnNodeMouseDoubleClick);
 										//pTreeView->AfterSelect += gcnew Forms::TreeViewEventHandler(&OnAfterSelect);
-										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 										CtrlInit(0, pChild, pGalaxyCluster->m_pGalaxyCluster);
 									}
 								}
@@ -1057,11 +1062,16 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								ListView^ pListView = (ListView^)pChild;
 								if (_pChild)
 								{
-									_pChild = _pChild->GetChild(_T("uidata"));
-									if (_pChild)
+									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+									if (_pChild2)
+									{
+										pListView->Tag = BSTR2STRING(_pChild2->xml());
+									}
+									_pChild2 = _pChild->GetChild(_T("uidata"));
+									if (_pChild2)
 									{
 										pListView->ItemSelectionChanged += gcnew Forms::ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
-										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 										CtrlInit(1, pChild, pGalaxyCluster->m_pGalaxyCluster);
 									}
 								}
@@ -1330,12 +1340,17 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{
-								_pChild = _pChild->GetChild(_T("uidata"));
-								if (_pChild)
+								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+								if (_pChild2)
+								{
+									pTreeView->Tag = BSTR2STRING(_pChild2->xml());
+								}
+								_pChild2 = _pChild->GetChild(_T("uidata"));
+								if (_pChild2)
 								{
 									//pTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(&OnNodeMouseDoubleClick);
 									//pTreeView->AfterSelect += gcnew Forms::TreeViewEventHandler(&OnAfterSelect);
-									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 									CtrlInit(0, pChild, pGalaxyCluster->m_pGalaxyCluster);
 								}
 							}
@@ -1346,16 +1361,21 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{
-								_pChild = _pChild->GetChild(_T("uidata"));
-								if (_pChild)
+								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+								if (_pChild2)
+								{
+									pListView->Tag = BSTR2STRING(_pChild2->xml());
+								}
+								_pChild2 = _pChild->GetChild(_T("uidata"));
+								if (_pChild2)
 								{
 									pListView->ItemSelectionChanged += gcnew Forms::ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
-									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 									CtrlInit(1, pChild, pGalaxyCluster->m_pGalaxyCluster);
 								}
 							}
 						}
-						else //if (strType == L"System.Windows.Forms.Button")
+						else 
 						{
 							Control^ pBtn = (Control^)pChild;
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);

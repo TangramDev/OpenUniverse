@@ -496,14 +496,22 @@ namespace blink {
 
 	void Hubble::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName)
 	{
-		String strXml = xObj->getStr(eventName + "Xml");
-		if (strXml.IsNull() || strXml == "")
-			return;
 		String ctrlName_ = ctrlName;
 		if (ctrlName.IsNull() || ctrlName == "")
 		{ 
 			ctrlName_ = xObj->getStr(L"name@page");
 		}
+		HubbleNode* grid = xObj->grid();
+		if (grid)
+		{
+			grid->setMsgID(ctrlName_ + "_" + eventName);
+			grid->xobj()->setSender(xObj);
+			grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid->xobj()));
+		}
+
+		String strXml = xObj->getStr(eventName + "Xml");
+		if (strXml.IsNull() || strXml == "")
+			return;
 		if (DOMParser_ == nullptr)
 		{
 			DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
@@ -517,6 +525,7 @@ namespace blink {
 			Document* doc = DOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(xObj->getStr(eventName + "Xml")), "application/xml", exception_state);
 			if (doc)
 			{
+
 				String eventName_ = eventName.LowerASCII();
 				AtomicString name = AtomicString(eventName_);
 				ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
@@ -666,6 +675,30 @@ namespace blink {
 		}
 	}
 
+	void Hubble::BindEvent(HubbleNode* node)
+	{
+		for (auto* it : *(node->eventElem_->Children()))
+		{
+			Element* e = it;
+			Node* pNode = e;
+			if (pNode->getNodeType() == 1)
+			{
+				for (auto* it2 : *(e->Children()))
+				{
+					Element* elem = it2;
+					Node* pNode2 = e;
+					if (pNode2->getNodeType() == 1)
+					{
+						node->setStr(L"msgID", L"BIND_CTRL_EVENT");
+						node->setStr(L"ctrlname", elem->tagName());
+						node->setStr(L"eventname", e->tagName());
+						m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
+					}
+				}
+			}
+		}
+	}
+
 	void Hubble::MdiChildReady(HubbleXobj* xobj)
 	{
 		__int64 handle = xobj->getInt64(L"ready_mdichildhandle");
@@ -698,62 +731,6 @@ namespace blink {
 		node->handle_ = handle;
 		node->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapHubbleNode.insert(handle, node);
-		String strMessageXml = xobj->getStr(L"messagexml");
-		if (strMessageXml.IsNull() == false && strMessageXml != "")
-		{
-			if (node->innerDOMParser_ == nullptr)
-			{
-				node->innerDOMParser_ = DOMParser::Create(*(DomWindow()->document()));
-			}
-			if (node->innerDOMParser_ != nullptr)
-			{
-				ExceptionState exception_state(nullptr,
-					ExceptionState::kExecutionContext,
-					"DOMParser",
-					"");
-				node->innerdoc_ = node->innerDOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(strMessageXml), "application/xml", exception_state);
-				if (node->innerdoc_)
-				{
-					Element* e = node->innerdoc_->Children()->item(0);
-					for (auto* it : *(e->Children()))
-					{
-						AtomicString name = AtomicString(it->tagName());
-						if (it->tagName() == "layout")
-						{
-							node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
-						}
-						else
-						{
-							HTMLCollection* list = e->getElementsByTagName(name);
-							if (list->length())
-							{
-								list = list->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
-								if (list->length())
-								{
-									node->m_mapElement[WebString(it->tagName()).Utf16()] = list->item(0);
-									if (it->tagName() == "message")
-									{
-										node->messageElem_ = list->item(0);
-									}
-									else if (it->tagName() == "event")
-									{
-										node->eventElem_ = list->item(0);
-									}
-									else if (it->tagName() == "ui")
-									{
-										node->uiElem_ = list->item(0);
-									}
-									else if (it->tagName() == "property")
-									{
-										node->propertyElem_ = list->item(0);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 
 		__int64 nGalaxyHandle = xobj->getInt64(L"Galaxyhandle");
 		blink::HubbleGalaxy* pGalaxy = nullptr;
@@ -778,63 +755,101 @@ namespace blink {
 			{
 				bNewGalaxy = true;
 				m_pRootNode = node;
-				pGalaxy = HubbleGalaxy::Create(DomWindow()->GetFrame(), strGalaxyname);
-				pGalaxy->hubble_ = this;
-				pGalaxy->innerXobj_ = xobj;
-				pGalaxy->handle_ = nGalaxyHandle;
-				pGalaxy->m_pRenderframeImpl = m_pRenderframeImpl;
-				m_mapHubbleGalaxy.insert(nGalaxyHandle, pGalaxy);
-				WebString str = strGalaxyname;
-				m_mapHubbleGalaxy2[str.Utf16()] = pGalaxy;
-				str = strClustername;
-				pGalaxy->m_mapRootNode[str.Utf16()] = node;
-				DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 			}
 		}
-
 		if (m_pRootNode)
 		{
 			WebString str = strname;
 			m_pRootNode->m_mapGrid[str.Utf16()] = node;
-			if (node != m_pRootNode)
+
+			String strMessageXml = xobj->getStr(L"hubblexml");
+			xobj->setStr(L"hubblexml", L"");
+			if (strMessageXml.IsNull() == false && strMessageXml != "")
 			{
-				node->innerdoc_ = m_pRootNode->innerdoc_;
-				if (node->innerdoc_)
+				node->innerDOMParser_ = DOMParser::Create(*(DomWindow()->document()));
+				if (node->innerDOMParser_ != nullptr)
 				{
-					Element* e = node->innerdoc_->Children()->item(0);
-					for (auto* it : *(e->Children()))
+					ExceptionState exception_state(nullptr,
+						ExceptionState::kExecutionContext,
+						"DOMParser",
+						"");
+					node->innerdoc_ = node->innerDOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(strMessageXml), "application/xml", exception_state);
+				}
+			}else
+				node->innerdoc_ = m_pRootNode->innerdoc_;
+		}
+		if (bNewGalaxy)
+		{
+			pGalaxy = HubbleGalaxy::Create(DomWindow()->GetFrame(), strGalaxyname);
+			pGalaxy->hubble_ = this;
+			pGalaxy->innerXobj_ = xobj;
+			pGalaxy->handle_ = nGalaxyHandle;
+			pGalaxy->m_pRenderframeImpl = m_pRenderframeImpl;
+			m_mapHubbleGalaxy.insert(nGalaxyHandle, pGalaxy);
+			WebString str = strGalaxyname;
+			m_mapHubbleGalaxy2[str.Utf16()] = pGalaxy;
+			str = strClustername;
+			pGalaxy->m_mapRootNode[str.Utf16()] = node;
+			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
+		}
+
+		if (node->innerdoc_)
+		{
+			Element* e = node->innerdoc_->Children()->item(0);
+			for (auto* it : *(e->Children()))
+			{
+				AtomicString name = AtomicString(it->tagName());
+				if (it->tagName() == "layout")
+				{
+					node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
+				}
+				else
+				{
+					HTMLCollection* list = e->getElementsByTagName(name);
+					if (list->length())
 					{
-						AtomicString name = AtomicString(it->tagName());
-						if (it->tagName() == "layout")
+						list = list->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
+						if (list->length())
 						{
-							node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
-						}
-						else
-						{
-							HTMLCollection* list = e->getElementsByTagName(name);
-							if (list->length())
+							node->m_mapElement[WebString(it->tagName()).Utf16()] = list->item(0);
+							if (it->tagName() == "message")
 							{
-								list = list->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
-								if (list->length())
+								node->messageElem_ = list->item(0);
+							}
+							else if (it->tagName() == "event")
+							{
+								node->eventElem_ = list->item(0);
+								//BindEvent(node);
+								for (auto* it : *(list->item(0)->Children()))
 								{
-									node->m_mapElement[WebString(it->tagName()).Utf16()] = list->item(0);
-									if (it->tagName() == "message")
+									Element* e = it;
+									Node* pNode = e;
+									if (pNode->getNodeType() == 1)
 									{
-										node->messageElem_ = list->item(0);
-									}
-									else if (it->tagName() == "event")
-									{
-										node->eventElem_ = list->item(0);
-									}
-									else if (it->tagName() == "ui")
-									{
-										node->uiElem_ = list->item(0);
-									}
-									else if (it->tagName() == "property")
-									{
-										node->propertyElem_ = list->item(0);
+										for (auto* it2 : *(e->Children()))
+										{
+											Element* elem = it2;
+											Node* pNode2 = e;
+											if (pNode2->getNodeType() == 1)
+											{
+												node->setStr(L"msgID", L"BIND_CTRL_EVENT");
+												node->setStr(L"ctrlname", elem->tagName());
+												node->setStr(L"eventname", e->tagName());
+												m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
+											}
+										}
 									}
 								}
+
+
+							}
+							else if (it->tagName() == "ui")
+							{
+								node->uiElem_ = list->item(0);
+							}
+							else if (it->tagName() == "property")
+							{
+								node->propertyElem_ = list->item(0);
 							}
 						}
 					}

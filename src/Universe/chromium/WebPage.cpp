@@ -131,9 +131,9 @@ namespace Browser {
 					pSession->InsertLong(_T("cols"), pGrid->m_nCols);
 					pSession->InsertLong(_T("row"), pGrid->m_nRow);
 					pSession->InsertLong(_T("col"), pGrid->m_nCol);
-					if (pGrid->m_strMessageXml != _T(""))
+					if (pGrid->m_strHubbleXml != _T(""))
 					{
-						pSession->InsertString(_T("messagexml"), pGrid->m_strMessageXml);
+						pSession->InsertString(_T("hubblexml"), pGrid->m_strHubbleXml);
 					}
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
 					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);

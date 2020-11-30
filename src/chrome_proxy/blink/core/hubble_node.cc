@@ -755,6 +755,59 @@ void HubbleNode::ProcessNodeMessage(const String& msgID)
 	}
 }
 
+void HubbleNode::ProcessNodeEvent(const String& ctrlName, const String& eventName)
+{
+	setMsgID(ctrlName + "_" + eventName);
+	xobj()->setSender(innerXobj_);
+	DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, xobj()));
+
+	if (eventElem_ && ctrlName.IsNull() == false && ctrlName != ""&& eventName.IsNull() == false && eventName != "")
+	{
+		HTMLCollection* list = eventElem_->getElementsByTagName(AtomicString(eventName.LowerASCII()));
+		for (unsigned int i = 0; i < list->length(); i++)
+		{
+			HTMLCollection* plist = list->item(i)->getElementsByTagName(AtomicString(ctrlName.LowerASCII()));
+			for (unsigned int j = 0; j < plist->length(); j++)
+			{
+				Element* elem = plist->item(j);
+				HTMLCollection* plist2 = elem->Children();
+				for (unsigned int k = 0; k < plist2->length(); k++)
+				{
+					elem = plist2->item(k);
+					AtomicString target = "";
+					if (elem->hasAttribute("target"))
+					{
+						target = elem->getAttribute("target");
+						if (target != "") {
+							AtomicString galaxy = elem->getAttribute("galaxy");
+							AtomicString cluster = elem->getAttribute("cluster");
+							if (galaxy == "")
+								galaxy = "default";
+							if (cluster == "")
+								cluster = "__viewport_default__";
+							HubbleNode* gridfortarget = hubble_->getGrid(galaxy, cluster, target);
+							if (gridfortarget == nullptr)
+							{
+								HubbleWinform* form = parentForm();
+								if (form)
+								{
+									gridfortarget = form->getGrid(galaxy, cluster, target);
+								}
+							}
+							if (!!gridfortarget) {
+								gridfortarget->setWorkElement(elem);
+								gridfortarget->setMsgID(ctrlName + "_" + eventName);
+								gridfortarget->xobj()->setSender(innerXobj_);
+								gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 void HubbleNode::invokeCallback(wstring callbackid, HubbleXobj* callbackParam)
 {
 	innerXobj_->invokeCallback(callbackid, callbackParam);

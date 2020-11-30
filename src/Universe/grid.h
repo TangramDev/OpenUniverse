@@ -75,7 +75,7 @@ public:
 	CString							m_strLastIPCParam5 = _T("");
 
 	CString							m_strNodeName;
-	CString 						m_strMessageXml = _T("");
+	CString 						m_strHubbleXml = _T("");
 
 	IDispatch*						m_pDisp;
 	CGrid* 							m_pRootObj;

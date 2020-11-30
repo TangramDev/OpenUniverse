@@ -107,6 +107,12 @@ namespace blink {
 			setStr(L"currentsubobjformodify", strKey);
 			m_pRenderframeImpl->SendHubbleMessageEx(session_);
 		}
+		if (value == "")
+		{
+			auto it = session_.m_mapString.find(WebString(strKey).Utf16());
+			if (it != session_.m_mapString.end())
+				session_.m_mapString.erase(it);
+		}
 	}
 
 	String HubbleXobj::getStr(const String& strKey)

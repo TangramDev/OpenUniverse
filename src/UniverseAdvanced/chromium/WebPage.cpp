@@ -150,9 +150,9 @@ namespace Browser {
 					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
-					if (pGrid->m_strMessageXml != _T(""))
+					if (pGrid->m_strHubbleXml != _T(""))
 					{
-						pSession->InsertString(_T("messagexml"), pGrid->m_strMessageXml);
+						pSession->InsertString(_T("hubblexml"), pGrid->m_strHubbleXml);
 					}
 					pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
 					pSession->InsertString(_T("cluster"), pGrid->m_pRootObj->m_strKey);
