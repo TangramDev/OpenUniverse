@@ -100,6 +100,7 @@ namespace blink {
 	 void removeEventListener(const String& eventName);
 	 void disConnect();
 	 void fireEvent(const String& eventName, HubbleXobj* eventParam);
+	 void BrowserLayout();
 
 	 // DOM method
 	 void defineElement(const String& tagName, const String& html);

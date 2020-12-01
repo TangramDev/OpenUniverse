@@ -56,6 +56,7 @@ BEGIN_MESSAGE_MAP(CGridHelper, CWnd)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetHubbleObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
+	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 // CGridHelper diagnostics
@@ -318,6 +319,15 @@ BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 	if (IsDialogMessage(pMsg))
 		return true;
 	return CWnd::PreTranslateMessage(pMsg);
+}
+
+void CGridHelper::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CWnd::OnShowWindow(bShow, nStatus);
+	if (bShow && m_pGrid->m_pWebBrowser)
+	{
+		::PostMessage(m_pGrid->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+	}
 }
 
 void CGridHelper::OnDestroy()

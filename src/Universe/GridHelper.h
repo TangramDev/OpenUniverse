@@ -52,5 +52,6 @@ protected:
 	afx_msg LRESULT OnTabChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetHubbleObj(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSplitterReposition(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	DECLARE_MESSAGE_MAP()
 };

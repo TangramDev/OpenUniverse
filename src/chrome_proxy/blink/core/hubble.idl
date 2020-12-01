@@ -19,7 +19,7 @@ typedef sequence<any> ObjectArray;
 	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void removeEventListener(DOMString eventName);
-
+	void BrowserLayout();
 	// DOM API
 	void defineElement(DOMString tagName, DOMString html);
 	void renderElement(DOMString tagName, DOMString html);

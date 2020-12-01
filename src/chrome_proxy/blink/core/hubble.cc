@@ -508,6 +508,10 @@ namespace blink {
 			grid->xobj()->setSender(xObj);
 			grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid->xobj()));
 		}
+		else
+		{
+			xObj->fireEvent(ctrlName + "@" + eventName, xObj);
+		}
 
 		String strXml = xObj->getStr(eventName + "Xml");
 		if (strXml.IsNull() || strXml == "")
@@ -525,7 +529,6 @@ namespace blink {
 			Document* doc = DOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(xObj->getStr(eventName + "Xml")), "application/xml", exception_state);
 			if (doc)
 			{
-
 				String eventName_ = eventName.LowerASCII();
 				AtomicString name = AtomicString(eventName_);
 				ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
@@ -1134,6 +1137,18 @@ namespace blink {
 		Vector<String> properties;
 		NamedPropertyEnumerator(properties, exception_state);
 		return properties.Contains(name);
+	}
+
+	void Hubble::BrowserLayout()
+	{
+		if (m_pRenderframeImpl == nullptr)
+		{
+			m_pRenderframeImpl = WebLocalFrameImpl::FromFrame(GetFrame())->Client();
+			innerXobj_->m_pRenderframeImpl = m_pRenderframeImpl;
+		}
+		if (m_pRenderframeImpl) {
+			m_pRenderframeImpl->SendHubbleMessage(L"__Browser_Layout__", L"", L"", L"", L"", L"");
+		}
 	}
 
 	void Hubble::Close()

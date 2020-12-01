@@ -798,7 +798,23 @@ namespace Browser {
 
 	void CWebPage::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
-		if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
+		if (strId.CompareNoCase(_T("__Browser_Layout__")) == 0)
+		{
+			CBrowser* pBrowserWnd = nullptr;
+			auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+			if (it != g_pHubble->m_mapBrowserWnd.end())
+			{
+				pBrowserWnd = (CBrowser*)it->second;
+				if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
+					::ShowWindow(m_hWnd, SW_HIDE);
+			}
+			if (::IsWindowVisible(m_hWnd))
+			{
+				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
+				::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
+			}
+		}
+		else if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
 		{
 			CustomizedDOMElement(strParam1, strParam2);
 		}

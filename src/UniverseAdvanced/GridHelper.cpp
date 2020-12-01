@@ -1222,14 +1222,8 @@ void CGridHelper::OnSize(UINT nType, int cx, int cy)
 void CGridHelper::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CWnd::OnShowWindow(bShow, nStatus);
-	//if (m_pGrid->m_nViewType == TabGrid)
-	//{
-	//	IGrid* pGrid = nullptr;
-	//	m_pGrid->GetNode(0, m_pGrid->m_nActivePage, &pGrid);
-	//	CGrid* _pGrid = (CGrid*)pGrid;
-	//	if (_pGrid&&_pGrid->m_nViewType == Grid)
-	//	{
-	//		((CSplitterWnd*)_pGrid->m_pHostWnd)->RecalcLayout();
-	//	}
-	//}
+	if (bShow&&m_pGrid->m_pWebBrowser)
+	{
+		::PostMessage(m_pGrid->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+	}
 }
