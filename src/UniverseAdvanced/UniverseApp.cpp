@@ -1326,26 +1326,15 @@ LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 	{
 	case WM_WINDOWPOSCHANGED:
 	{
-		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
-		HWND hPWnd = ::GetParent(hWnd);
-		auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
-		if (it != g_pHubble->m_mapBrowserWnd.end())
-		{
-			CBrowser* pBrowser = (CBrowser*)it->second;
-			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
-		}
 		HWND m_hChildWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-		if (::IsWindow(m_hChildWnd)) {
-			if (::IsWindowVisible(hWnd))
-			{
-				RECT rc;
-				::GetClientRect(m_hChildWnd, &rc);
-				if (rc.right != lpwndpos->cx || rc.bottom != lpwndpos->cy)
-					::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, /*SWP_NOREDRAW |*/ SWP_FRAMECHANGED | SWP_NOACTIVATE);
-			}
+		if (::IsWindow(m_hChildWnd)&&::IsWindowVisible(hWnd)) {
+			::PostMessage(::GetParent(hWnd), WM_BROWSERLAYOUT, 0, 4);
+			RECT rc;
+			::GetClientRect(m_hChildWnd, &rc);
+			WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
+			if (rc.right != lpwndpos->cx || rc.bottom != lpwndpos->cy)
+				::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_FRAMECHANGED | SWP_NOREDRAW | SWP_NOACTIVATE);
 		}
-		LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-		return lRes;
 	}
 	break;
 	case WM_HUBBLE_DATA:

@@ -874,33 +874,6 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 					m_Wnd.Attach(m_hWnd);
 					CComPtr<IUnknown> pUnk;
 					m_Wnd.AttachControl(m_pGrid->m_pDisp, &pUnk);
-					CComQIPtr<IWebBrowser2> pWebDisp(m_pGrid->m_pDisp);
-					if (pWebDisp)
-					{
-						bWebCtrl = true;
-						m_pGrid->m_strURL = strURL;
-						if (m_pGrid->m_strURL == _T(""))
-							m_pGrid->m_strURL = strObjTypeID;
-
-						CComPtr<IAxWinAmbientDispatch> spHost;
-						LRESULT hr = m_Wnd.QueryHost(&spHost);
-						if (SUCCEEDED(hr))
-						{
-							CComBSTR bstr;
-							m_pGrid->get_Attribute(CComBSTR("scrollbar"), &bstr);
-							CString str = OLE2T(bstr);
-							if (str == _T("1"))
-								spHost->put_DocHostFlags(DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE | DOCHOSTUIFLAG_THEME);//DOCHOSTUIFLAG_DIALOG|
-							else
-								spHost->put_DocHostFlags(/*DOCHOSTUIFLAG_DIALOG|*/DOCHOSTUIFLAG_SCROLL_NO | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE | DOCHOSTUIFLAG_THEME);
-
-							if (m_pGrid->m_strURL != _T(""))
-							{
-								pWebDisp->Navigate2(&CComVariant(m_pGrid->m_strURL), &CComVariant(navNoReadFromCache | navNoWriteToCache), NULL, NULL, NULL);
-								m_pGrid->m_bWebInit = true;
-							}
-						}
-					}
 					((CGridHelper*)m_pGrid->m_pHostWnd)->m_pGrid = m_pGrid;
 					HWND hPage = m_pGrid->m_pGridShareData->m_pGalaxyCluster->m_hWnd;
 					::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CGridHelper*)m_pGrid->m_pHostWnd), 1963);
@@ -1063,22 +1036,6 @@ LRESULT CGridHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_MOUSEACTIVATE:
 		{
-			break;
-		}
-		case WM_SHOWWINDOW:
-		{
-			if (wParam && m_pGrid->m_strURL != _T(""))
-			{
-				CComQIPtr<IWebBrowser2> pWebCtrl(m_pGrid->m_pDisp);
-				if (pWebCtrl)
-				{
-					if (m_pGrid->m_bWebInit == false)
-					{
-						pWebCtrl->Navigate2(&CComVariant(m_pGrid->m_strURL), &CComVariant(navNoReadFromCache | navNoWriteToCache), NULL, NULL, NULL);
-						m_pGrid->m_bWebInit = true;
-					}
-				}
-			}
 			break;
 		}
 		}

@@ -64,6 +64,7 @@ namespace SessionApi
                 if (sender is UserControl2 userControl2)
                 {
                     session.InsertString("msgID", "FIRE_EVENT");
+                    session.InsertLong("message", 20201204);
                     session.InsertString("currentsubobj", userControl2.Name);
                     session.InsertString("currentevent", "OnMyEvent");
                     session.InsertString("value", e.Value);

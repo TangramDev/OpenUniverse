@@ -3631,45 +3631,45 @@ void CTangramHtmlTreeWnd::Init(CGrid* pGrid)
 
 void CTangramHtmlTreeWnd::WriteData(CString strData)
 {
-	if(m_pWebBrowser2)
-	{
-		CString strScript = strData;
-		CTangramXmlParse m_Parse;
-		if(m_Parse.LoadXml(strScript))
-		{
-			CString strWebScript = m_Parse.attr(_T("CallBack"),_T(""));
-			if(strWebScript!=_T(""))
-			{
-				VARIANT var;
-				BOOL bRet = false;
-				CString strScript2 = _T("try{") +strWebScript + _T("('") + strData +_T("')")+ _T(";} catch(e){}");
-				CComPtr<IDispatch> pDisp = NULL;
-				m_pWebBrowser2->get_Document(&pDisp);
-				if (pDisp)
-				{			
-					CComQIPtr<IHTMLDocument2,&IID_IHTMLDocument2> pDoc2(pDisp);
-					if (pDoc2)
-					{
-						CComQIPtr<IHTMLWindow2,&IID_IHTMLWindow2> pWindow;
-						pDoc2->get_parentWindow(&pWindow);
+	//if(m_pWebBrowser2)
+	//{
+	//	CString strScript = strData;
+	//	CTangramXmlParse m_Parse;
+	//	if(m_Parse.LoadXml(strScript))
+	//	{
+	//		CString strWebScript = m_Parse.attr(_T("CallBack"),_T(""));
+	//		if(strWebScript!=_T(""))
+	//		{
+	//			VARIANT var;
+	//			BOOL bRet = false;
+	//			CString strScript2 = _T("try{") +strWebScript + _T("('") + strData +_T("')")+ _T(";} catch(e){}");
+	//			CComPtr<IDispatch> pDisp = NULL;
+	//			m_pWebBrowser2->get_Document(&pDisp);
+	//			if (pDisp)
+	//			{			
+	//				CComQIPtr<IHTMLDocument2,&IID_IHTMLDocument2> pDoc2(pDisp);
+	//				if (pDoc2)
+	//				{
+	//					CComQIPtr<IHTMLWindow2,&IID_IHTMLWindow2> pWindow;
+	//					pDoc2->get_parentWindow(&pWindow);
 
-						if (pWindow)
-						{
-							try
-							{
-								bRet = (pWindow->execScript(CComBSTR(strScript2),L"",&var) == S_OK);
-							}
-							catch(...)
-							{
-								bRet = false;
-							}
-						}
-					}
-				}	
-				return;
-			}
-		}
-	}
+	//					if (pWindow)
+	//					{
+	//						try
+	//						{
+	//							bRet = (pWindow->execScript(CComBSTR(strScript2),L"",&var) == S_OK);
+	//						}
+	//						catch(...)
+	//						{
+	//							bRet = false;
+	//						}
+	//					}
+	//				}
+	//			}	
+	//			return;
+	//		}
+	//	}
+	//}
 }
 
 CString CTangramHtmlTreeWnd::TangramGetData(CTangramXmlParse* pParse, CTangramHelper* pThisHelper)

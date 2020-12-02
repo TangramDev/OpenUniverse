@@ -37,7 +37,6 @@ CGrid::CGrid()
 	m_nCols = 1;
 	m_nViewType = BlankView;
 	m_bTopObj = false;
-	m_bWebInit = false;
 	m_bCreated = false;
 	m_varTag.vt = VT_EMPTY;
 	m_strKey = _T("");

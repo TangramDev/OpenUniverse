@@ -56,7 +56,6 @@ CGrid::CGrid()
 	m_nViewType = BlankView;
 	m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
-	m_bWebInit = false;
 	m_bCreated = false;
 	m_bNodeDocComplete = false;
 	m_varTag.vt = VT_EMPTY;
@@ -1587,33 +1586,6 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 		if (m_nViewType == ActiveX)
 		{
 			((CGridHelper*)m_pHostWnd)->m_pGrid = this;
-			CComQIPtr<IWebBrowser2> pWebDisp(m_pDisp);
-			if (pWebDisp)
-			{
-				bWebCtrl = true;
-				m_strURL = strURL;
-				if (m_strURL == _T(""))
-					m_strURL = strID;
-
-				CComPtr<IAxWinAmbientDispatch> spHost;
-				LRESULT hr = m_Wnd.QueryHost(&spHost);
-				if (SUCCEEDED(hr))
-				{
-					CComBSTR bstr;
-					get_Attribute(CComBSTR("scrollbar"), &bstr);
-					CString str = OLE2T(bstr);
-					if (str == _T("1"))
-						spHost->put_DocHostFlags(DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE | DOCHOSTUIFLAG_THEME);//DOCHOSTUIFLAG_DIALOG|
-					else
-						spHost->put_DocHostFlags(/*DOCHOSTUIFLAG_DIALOG|*/DOCHOSTUIFLAG_SCROLL_NO | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_ENABLE_FORMS_AUTOCOMPLETE | DOCHOSTUIFLAG_THEME);
-
-					if (m_strURL != _T(""))
-					{
-						pWebDisp->Navigate2(&CComVariant(m_strURL), &CComVariant(navNoReadFromCache | navNoWriteToCache), nullptr, nullptr, nullptr);
-						m_bWebInit = true;
-					}
-				}
-			}
 			HWND hPage = m_pGridShareData->m_pGalaxyCluster->m_hWnd;
 			::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CGridHelper*)m_pHostWnd), 1963);
 		}

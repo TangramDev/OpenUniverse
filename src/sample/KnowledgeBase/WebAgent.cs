@@ -60,6 +60,7 @@ namespace Cas
                 }
                 TreeView treeView = sender as TreeView;
                 cloudWormhole.InsertString("msgID", "FIRE_EVENT");
+                cloudWormhole.InsertLong("message", 20201204);
                 cloudWormhole.InsertInt64("subobjhandle", treeView.Handle.ToInt64());
                 cloudWormhole.InsertString("currentevent", "OnAfterSelect@" + treeView.Name);
                 cloudWormhole.InsertString("currentsubobj", treeView.Name);
@@ -75,6 +76,7 @@ namespace Cas
                 if (button != null)
                 {
                     cloudWormhole.InsertString("msgID", "FIRE_EVENT");
+                    cloudWormhole.InsertLong("message", 20201204);
                     cloudWormhole.InsertString("currentsubobj", button.Name);
                     cloudWormhole.InsertString("currentevent", "OnClick@" + button.Name);
                     cloudWormhole.SendMessage();

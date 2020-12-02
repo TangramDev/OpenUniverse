@@ -38,7 +38,6 @@ namespace blink {
 		url_ = L"";
 		is_pending_ = false;
 		innerXobj_ = newVar(L"");
-		topGrid_ = nullptr;
 		DOMParser_ = nullptr;
 		m_pRenderframeImpl = nullptr;
 		m_pVisibleContentElement = nullptr;
@@ -60,18 +59,12 @@ namespace blink {
 		visitor->Trace(mapCallbackFunction_);
 		visitor->Trace(m_pVisibleContentElement);
 		visitor->Trace(innerXobj_);
-		visitor->Trace(topGrid_);
 		visitor->Trace(mapCloudSession_);
 	}
 
 	String Hubble::url()
 	{
 		return DomWindow()->document()->Url().GetString();
-	}
-
-	HubbleNode* Hubble::topGrid()
-	{
-		return nullptr;
 	}
 
 	HubbleXobj* Hubble::xobj()
@@ -437,7 +430,7 @@ namespace blink {
 		return DOMParser_.Get();
 	}
 
-	void Hubble::DispatchGridEvent(Element* e, const String& eventName)
+	void Hubble::OnMessage(Element* e, const String& eventName)
 	{
 		Element* element = static_cast<Element*>(e->childNodes()->item(1));
 		if (!!element) {
@@ -678,30 +671,6 @@ namespace blink {
 		}
 	}
 
-	void Hubble::BindEvent(HubbleNode* node)
-	{
-		for (auto* it : *(node->eventElem_->Children()))
-		{
-			Element* e = it;
-			Node* pNode = e;
-			if (pNode->getNodeType() == 1)
-			{
-				for (auto* it2 : *(e->Children()))
-				{
-					Element* elem = it2;
-					Node* pNode2 = e;
-					if (pNode2->getNodeType() == 1)
-					{
-						node->setStr(L"msgID", L"BIND_CTRL_EVENT");
-						node->setStr(L"ctrlname", elem->tagName());
-						node->setStr(L"eventname", e->tagName());
-						m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
-					}
-				}
-			}
-		}
-	}
-
 	void Hubble::MdiChildReady(HubbleXobj* xobj)
 	{
 		__int64 handle = xobj->getInt64(L"ready_mdichildhandle");
@@ -822,7 +791,6 @@ namespace blink {
 							else if (it->tagName() == "event")
 							{
 								node->eventElem_ = list->item(0);
-								//BindEvent(node);
 								for (auto* it : *(list->item(0)->Children()))
 								{
 									Element* e = it;
@@ -958,18 +926,21 @@ namespace blink {
 
 	HubbleNode* Hubble::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
 	{
+		String clusterName_ = clusterName;
+		if (clusterName_ == "undefined")
+			clusterName_ = "default";
 		auto it = m_mapHubbleGalaxy2.find(WebString(galaxyName).Utf16());
 		if (it != m_mapHubbleGalaxy2.end())
 		{
 			if (gridName == "undefined")
 			{
-				auto it2 = it->second->m_mapRootNode.find(WebString(clusterName).Utf16());
+				auto it2 = it->second->m_mapRootNode.find(WebString(clusterName_).Utf16());
 				if (it2 != it->second->m_mapRootNode.end())
 					return it2->second;
 				return nullptr;
 			}
 
-			String clusterName_ = clusterName + "__" + gridName;
+			clusterName_ = clusterName + "__" + gridName;
 			auto it2 = it->second->m_mapHubbleNode2.find(WebString(clusterName_).Utf16());
 			if (it2 != it->second->m_mapHubbleNode2.end())
 				return it2->second;
@@ -1137,18 +1108,6 @@ namespace blink {
 		Vector<String> properties;
 		NamedPropertyEnumerator(properties, exception_state);
 		return properties.Contains(name);
-	}
-
-	void Hubble::BrowserLayout()
-	{
-		if (m_pRenderframeImpl == nullptr)
-		{
-			m_pRenderframeImpl = WebLocalFrameImpl::FromFrame(GetFrame())->Client();
-			innerXobj_->m_pRenderframeImpl = m_pRenderframeImpl;
-		}
-		if (m_pRenderframeImpl) {
-			m_pRenderframeImpl->SendHubbleMessage(L"__Browser_Layout__", L"", L"", L"", L"", L"");
-		}
 	}
 
 	void Hubble::Close()

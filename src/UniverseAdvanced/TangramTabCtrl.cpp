@@ -92,20 +92,6 @@ void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		strPath += _T("templatedetail.xml");
 		m_pHubbleTabCtrl->m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pGrid);
-		if (m_pHubbleTabCtrl->m_pWebBrowser2 == nullptr)
-		{
-			IGrid* pWebNode = nullptr;
-			pGrid->GetGrid(0, 1, &pWebNode);
-			if (pWebNode)
-			{
-				CGrid* _pGrid = (CGrid*)pWebNode;
-				CComQIPtr<IWebBrowser2> pWebCtrl(_pGrid->m_pDisp);
-				if (pWebCtrl)
-					m_pHubbleTabCtrl->m_pWebBrowser2 = pWebCtrl.Detach();
-			}
-		}
-		if(m_pHubbleTabCtrl->m_pWebBrowser2)
-			m_pHubbleTabCtrl->m_pWebBrowser2->Navigate2(&CComVariant(strFile), &CComVariant(navNoReadFromCache | navNoWriteToCache), NULL, NULL, NULL);
 	}
 	else if (strText.CompareNoCase(_T("new Template"))==0)
 	{
@@ -534,7 +520,6 @@ CTangramTabCtrl::CTangramTabCtrl()
 	m_strFilter = _T("*.xml");
 	m_pGalaxy = nullptr;
 	m_pGrid = nullptr;
-	m_pWebBrowser2 = nullptr;
 	m_pHubbleListView = nullptr;
 }
 
@@ -746,21 +731,6 @@ void CTangramTabCtrl::FillListCtrl()
 		if (::PathFileExists(strTemplateFile))
 		{
 			m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pGrid);
-			if (m_pWebBrowser2 == nullptr)
-			{
-				CGrid* _pGrid = (CGrid*)pGrid;
-				IGrid* pWebNode = nullptr;
-				_pGrid->GetGrid(0, 1, &pWebNode);
-				if (pWebNode)
-				{
-					CGrid* _pGrid = (CGrid*)pWebNode;
-					CComQIPtr<IWebBrowser2> pWebCtrl(_pGrid->m_pDisp);
-					if (pWebCtrl)
-						m_pWebBrowser2 = pWebCtrl.Detach();
-				}
-			}
-			if (m_pWebBrowser2)
-				m_pWebBrowser2->Navigate2(&CComVariant(strTemplateFile), &CComVariant(navNoReadFromCache | navNoWriteToCache), NULL, NULL, NULL);
 		}
 		else
 		{

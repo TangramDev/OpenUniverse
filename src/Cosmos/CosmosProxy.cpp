@@ -1798,6 +1798,44 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 			}
 		}
 	}
+	else if (strMsgID == _T("BIND_NATIVEOBJ_IPC_MSG"))
+	{
+		auto it = m_mapSession2Wormhole.find(pSession);
+		if (it != m_mapSession2Wormhole.end())
+		{
+			Object^ pObj = nullptr;
+			pObj = it->second->m_pHostObj;
+			Cosmos::Wormhole^ pCloudSession = nullptr;
+			if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))
+			{
+				pCloudSession = gcnew Cosmos::Wormhole(pSession);
+				Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
+			}
+			CString strEventName = pSession->GetString(L"Bindevent");
+			CString strObjName = pSession->GetString(L"BindObj");
+			if (pObj->GetType()->IsSubclassOf(Control::typeid))
+			{
+				Control^ pCtrl = (Control^)pObj;
+				Control^ pSubCtrl = nullptr;
+				if (pCtrl != nullptr)
+				{
+					cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(BSTR2STRING(strObjName), true);
+					if (pArray != nullptr && pArray->Length)
+					{
+						pSubCtrl = pArray[0];
+						Cosmos::Wormhole^ pCloudSession2 = nullptr;
+						if (!Cosmos::Hubble::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
+						{
+							Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
+						}
+
+						Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, BSTR2STRING(strEventName));
+						return;
+					}
+				}
+			}
+		}
+	}
 
 	auto it = m_mapSession2Wormhole.find(pSession);
 	if (it != m_mapSession2Wormhole.end())

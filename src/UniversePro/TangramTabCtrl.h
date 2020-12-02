@@ -55,7 +55,6 @@ public:
 	CGalaxy*		m_pGalaxy;
 	CTangramListView*	m_pHubbleListView;
 	CTangramListCtrl	m_ListCtrl;
-	IWebBrowser2*		m_pWebBrowser2;
 	void RePosition();
 	void FillListCtrl();
 	virtual BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);

@@ -87,6 +87,7 @@ namespace Sunny
                 if (ctrl != null)
                 {
                     thisWormhole.InsertString("msgID", "FIRE_EVENT");
+                    thisSession.InsertLong("message", 20201204);
                     thisWormhole.InsertString("currentsubobj", ctrl.Name);
                     thisWormhole.InsertString("currentevent", "OnMyCustomClick");
                     thisWormhole.InsertString("text1", e.Text1);
@@ -105,6 +106,7 @@ namespace Sunny
                 if (ctrl != null)
                 {
                     thisSession.InsertString("msgID", "FIRE_EVENT");
+                    thisSession.InsertLong("message", 20201204);
                     thisSession.InsertString("currentsubobj", ctrl.Name);
                     thisSession.InsertString("currentevent", "TextChanged@" + ctrl.Name);
                     thisSession.InsertString("text", ctrl.Text);
@@ -129,6 +131,7 @@ namespace Sunny
                 }
                 TreeView treeview = sender as TreeView;
                 thisSession.InsertString("msgID", "FIRE_EVENT");
+                thisSession.InsertLong("message", 20201204);
                 thisSession.InsertInt64("subobjhandle", treeview.Handle.ToInt64());
                 thisSession.InsertString("currentevent", "OnAfterSelect@" + treeview.Name);
                 thisSession.InsertString("currentsubobj", treeview.Name);
@@ -153,6 +156,7 @@ namespace Sunny
             {
                 Control ctrl = sender as Control;
                 thisSession.InsertString("msgID", "FIRE_EVENT");
+                thisSession.InsertLong("message", 20201204);
                 thisSession.InsertString("currentsubobj", ctrl.Name);
                 thisSession.InsertString("currentevent", "OnClick@" + ctrl.Name);
                 if (ctrl != null && ctrl.Tag != null)
@@ -175,6 +179,7 @@ namespace Sunny
             {
                 Form xform = sender as Form;
                 thisSession.InsertString("msgID", "FIRE_EVENT");
+                thisSession.InsertLong("message", 20201204);
                 thisSession.InsertString("currentevent", "SizeChanged");
                 thisSession.InsertString("currentsubobj", "SizeChanged");
                 thisSession.InsertLong("width", xform.Width);

@@ -19,7 +19,7 @@ typedef sequence<any> ObjectArray;
 	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void removeEventListener(DOMString eventName);
-	void BrowserLayout();
+
 	// DOM API
 	void defineElement(DOMString tagName, DOMString html);
 	void renderElement(DOMString tagName, DOMString html);
@@ -35,11 +35,11 @@ typedef sequence<any> ObjectArray;
 	//HubbleNode API
 	HubbleXobj newVar([DefaultValue = Undefined] optional DOMString name);
 	HubbleNode getGrid(long long nodeHandle);
-	HubbleNode getGrid(DOMString galaxyName, DOMString clusterName, [DefaultValue = Undefined]DOMString gridName);
+	HubbleNode getGrid(DOMString galaxyName, [DefaultValue = Undefined]DOMString clusterName, [DefaultValue = Undefined]DOMString gridName);
 	HubbleGalaxy getGalaxy(DOMString wndName);
 	HubbleGalaxy getGalaxy(long long wndHandle);
-	void DispatchGridEvent(Element elem, DOMString eventName);
-	void DispatchGridEvent(HubbleXobj xObj, DOMString ctrlName, DOMString eventName);
+	void OnMessage(Element elem, DOMString eventName);
+	//void DispatchGridEvent(HubbleXobj xObj, DOMString ctrlName, DOMString eventName);
 
 	//HubbleWinForm API
 	HubbleWinform createWinForm(DOMString strFormXml, 
@@ -53,7 +53,6 @@ typedef sequence<any> ObjectArray;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] attribute DOMParser xmlParse;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString url;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode topGrid;
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;

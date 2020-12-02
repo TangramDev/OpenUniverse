@@ -29,6 +29,18 @@
 #define IPC_MDIWINFORM_ACTIVEMDICHILD					20200224
 #define IPC_MDIWINFORM_ACTIVEMDICHILD_ID				_T("MdiWinForm_ActiveMdiChild")
 
+#define IPC_HUBBLE_MSG_BASE								20201202
+#define IPC_HUBBLE_MSG_BindCLRObject					(IPC_HUBBLE_MSG_BASE + 1)
+#define IPC_HUBBLE_MSG_FIRE_EVENT						(IPC_HUBBLE_MSG_BASE + 2)
+#define IPC_HUBBLE_MSG_WINFORM_CREATED					(IPC_HUBBLE_MSG_BASE + 3)
+#define IPC_HUBBLE_MSG_WINFORM_ONCLOSE					(IPC_HUBBLE_MSG_BASE + 4)
+#define IPC_HUBBLE_MSG_Tangram_WndGrid_Created			(IPC_HUBBLE_MSG_BASE + 5)
+#define IPC_HUBBLE_MSG_BIND_NATIVEOBJ_IPC_MSG			(IPC_HUBBLE_MSG_BASE + 6)
+#define IPC_HUBBLE_MSG_MdiWinForm_ActiveMdiChild		(IPC_HUBBLE_MSG_BASE + 7)
+#define IPC_HUBBLE_MSG_MdiWinForm_Ready					(IPC_HUBBLE_MSG_BASE + 8)
+#define IPC_HUBBLE_MSG_MDIFORM_ALLMDICHILDREMOVED		(IPC_HUBBLE_MSG_BASE + 9)
+#define IPC_HUBBLE_MSG_OPEN_XML_SPLITTER				(IPC_HUBBLE_MSG_BASE + 10)
+
 namespace blink {
 	using namespace std;
 
@@ -81,7 +93,6 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(BindCLRObject, kBindclrobject)
 
 	 HubbleXobj* xobj();
-	 HubbleNode* topGrid();
 	 DOMParser* xmlParse();
 	 String url();
 	 HubbleXobj* getNamedItem(const AtomicString&) const;
@@ -100,7 +111,6 @@ namespace blink {
 	 void removeEventListener(const String& eventName);
 	 void disConnect();
 	 void fireEvent(const String& eventName, HubbleXobj* eventParam);
-	 void BrowserLayout();
 
 	 // DOM method
 	 void defineElement(const String& tagName, const String& html);
@@ -114,11 +124,10 @@ namespace blink {
 	 //HubbleNode API
 	 void MdiChildActive(HubbleXobj* xobj);
 	 void MdiChildReady(HubbleXobj* xobj);
-	 void BindEvent(HubbleNode* node);
 	 void BindNativeObj(HubbleXobj* xobj);
 	 void AllMdiChildRemoved(HubbleXobj* xobj);
 	 void ProcessMessage(HubbleXobj* xobj);
-	 void DispatchGridEvent(Element* elem, const String& eventName);
+	 void OnMessage(Element* elem, const String& eventName);
 	 void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
@@ -155,7 +164,6 @@ namespace blink {
 	 WebLocalFrameClient* m_pRenderframeImpl;
 	 String url_;
 	 mutable Member<HubbleXobj> innerXobj_;
-	 mutable Member<HubbleNode> topGrid_;
 	 mutable Member<DOMParser> DOMParser_;
 	 mutable Member<Element> m_pVisibleContentElement;
 	 HeapHashMap<String, Member<HubbleXobj>> mapCloudSession_;

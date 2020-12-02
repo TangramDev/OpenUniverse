@@ -44,7 +44,6 @@ public:
 
 	BOOL							m_bTopObj;
 	BOOL							m_bCreated;
-	BOOL							m_bWebInit;
 
 	GridType						m_nViewType;
 	int								m_nID;

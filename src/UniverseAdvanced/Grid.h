@@ -59,7 +59,6 @@ public:
 
 	BOOL							m_bTopObj;
 	BOOL							m_bCreated;
-	BOOL							m_bWebInit;
 	BOOL							m_bNodeDocComplete;
 
 	GridType						m_nViewType;

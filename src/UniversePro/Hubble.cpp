@@ -1480,6 +1480,7 @@ void CHubble::TangramInitFromeWeb()
 							pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&msg);
 						}
 					}
+					::SetFocus(::GetAncestor(pWnd->m_hWnd,GA_PARENT));
 				}
 			}
 		}

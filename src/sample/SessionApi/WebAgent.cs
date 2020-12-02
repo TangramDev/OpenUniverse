@@ -40,6 +40,7 @@ namespace Cas
                 if (button != null)
                 {
                     session.InsertString("msgID", "FIRE_EVENT");
+                    session.InsertLong("message", 20201204);
                     session.InsertString("currentsubobj", button.Name);
                     session.InsertString("currentevent", "OnClick@" + button.Name);
                     session.SendMessage();

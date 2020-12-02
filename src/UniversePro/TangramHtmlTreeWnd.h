@@ -289,7 +289,6 @@ public:
 	CComObject<CTangramTreeView>* m_pObj;
 	CGridHelper*	m_pHostWnd;
 	CTangramHelper*	m_pHubbleHelper;
-	IWebBrowser2*	m_pWebBrowser2;
 	enum CheckedState { UNUSED1 = 0, 
 						UNCHECKED, CHECKED, TRISTATE, 
 						UNUSED2,
