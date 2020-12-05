@@ -819,8 +819,10 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	HWND hWnd = 0;
 	CGridHelper* pHubbleDesignView = (CGridHelper*)m_pHostWnd;
 	int nCol = m_pHostParse->GetCount();
-	if (nCol && m_strID == _T("") && m_strObjTypeID == _T(""))
+	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_GRID))
+	{
 		m_strObjTypeID = _T("tabbedwnd");
+	}
 	BOOL isAppWnd = false;
 	if (m_strID == _T("activex") || m_strID == _T("clrctrl"))
 	{
@@ -1293,13 +1295,14 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		m_pHostWnd->SendMessage(WM_INITIALUPDATE);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	NodeCreated();
 	m_pGridShareData->m_mapLayoutNodes[m_strName] = this;
 	if (m_strID.CompareNoCase(_T("treeview")))
 	{
 		m_nRows = 1;
 		m_nCols = nCol;
 
-		if (nCol)
+		if (nCol && m_pHostParse->GetChild(TGM_GRID))
 		{
 			m_nViewType = TabGrid;
 			if (m_nActivePage<0 || m_nActivePage>nCol - 1)
@@ -1355,7 +1358,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	if (g_pHubble->m_pActiveGrid && g_pHubble->m_pActiveGrid->m_pGridShareData->m_pGalaxyCluster)
 		g_pHubble->m_pActiveGrid->m_pGridShareData->m_pGalaxyCluster->Fire_NodeCreated(this);
 
-	NodeCreated();
 	return bRet;
 }
 

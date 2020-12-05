@@ -157,6 +157,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   map<int, HubbleNode*> m_mapChildNode;
   map<wstring, HubbleNode*> m_mapGrid;
   map < wstring, Element* > m_mapElement;
+  map < wstring, Element* > m_mapEventInfo;
   map<wstring, HubbleNode*> m_mapChildNode2;
 
 private:

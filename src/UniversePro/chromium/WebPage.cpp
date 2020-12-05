@@ -150,6 +150,7 @@ namespace Browser {
 					{
 						pSession->InsertString(_T("hubblexml"), pGrid->m_strHubbleXml);
 					}
+					pSession->InsertString(_T("gridxml"), pGrid->m_pHostParse->xml());
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
 					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
@@ -924,11 +925,6 @@ namespace Browser {
 							pIPCInfo.m_strParam4 = _pGrid->m_strLastIPCParam4;
 							pIPCInfo.m_strParam5 = _pGrid->m_strLastIPCParam5;
 							_pGrid->m_strLastIPCMsgID = _T("");
-							//_pGrid->m_strLastIPCParam1 = strParam1;
-							//_pGrid->m_strLastIPCParam2 = strParam2;
-							//_pGrid->m_strLastIPCParam3 = strParam3;
-							//_pGrid->m_strLastIPCParam4 = strParam4;
-							//_pGrid->m_strLastIPCParam5 = strParam5;
 							m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
 						}
 						g_pHubble->m_pCurrentIPCMsg = nullptr;

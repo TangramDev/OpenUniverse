@@ -1810,7 +1810,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(bstrObjID))
 		{
-			m_strCurrentWinFormTemplate = bstrObjID;
 			CString strTagName = m_Parse.name();
 			CWebPageImpl* pProxyBase = nullptr;
 			Cosmos::Wormhole^ pCloudSession = nullptr;
@@ -1844,6 +1843,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 				{
 					if (pObj->GetType()->IsSubclassOf(Form::typeid))
 					{
+						m_strCurrentWinFormTemplate = bstrObjID;
 						CString strCaption = m_Parse.attr(_T("caption"), _T(""));
 						Form^ thisForm = (Form^)pObj;
 						if (nHandle)
@@ -2037,6 +2037,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								else
 								{
 									thisForm->Show();
+									thisForm->Focus();
 								}
 
 								thisForm->WindowState = FormWindowState::Normal;
@@ -2418,9 +2419,6 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 							InitGrid(pHostNode, pObj, true, &m_Parse);
 					}
 				}
-				//m_strXml = (LPCTSTR)::SendMessage((HWND)hParent, WM_COSMOSMSG, 0, 20191223);
-				//else
-				//	InitGrid(pHostNode, pObj, true, nullptr);
 			}
 			return pDisp;
 		}

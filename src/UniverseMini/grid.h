@@ -64,13 +64,6 @@ public:
 	CString 						m_strObjTypeID;
 	CString 						m_strCaption;
 
-	CString							m_strLastIPCMsgID = _T("");
-	CString							m_strLastIPCParam1 = _T("");
-	CString							m_strLastIPCParam2 = _T("");
-	CString							m_strLastIPCParam3 = _T("");
-	CString							m_strLastIPCParam4 = _T("");
-	CString							m_strLastIPCParam5 = _T("");
-
 	CString							m_strNodeName;
 
 	IDispatch*						m_pDisp;

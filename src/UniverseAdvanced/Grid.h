@@ -33,10 +33,10 @@ public:
 	CGridShareData();
 	~CGridShareData();
 
-	CGalaxy*		m_pGalaxy = nullptr;
-	CGalaxy*		m_pOldGalaxy = nullptr;
+	CGalaxy*				m_pGalaxy = nullptr;
+	CGalaxy*				m_pOldGalaxy = nullptr;
 	IDispatch*				m_pOfficeObj = nullptr;
-	CGridHelper*				m_pHostClientView = nullptr;
+	CGridHelper*			m_pHostClientView = nullptr;
 	CTangramXmlParse*		m_pHubbleParse = nullptr;
 	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
 	map<CString, CGrid*>	m_mapLayoutNodes;

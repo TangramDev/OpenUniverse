@@ -568,7 +568,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	HWND hWnd = 0;
 	int nCol = m_pHostParse->GetCount();
-	if (nCol && m_strID == _T("") && m_strObjTypeID == _T(""))
+	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_GRID))
 		m_strObjTypeID = _T("tabbedwnd");
 	CGridHelper* pHubbleDesignView = (CGridHelper*)m_pHostWnd;
 	BOOL isAppWnd = false;
@@ -714,7 +714,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		m_nRows = 1;
 		m_nCols = nCol;
 
-		if (nCol)
+		if (nCol && m_pHostParse->GetChild(TGM_GRID))
 		{
 			m_nViewType = TabGrid;
 			if (m_nActivePage<0 || m_nActivePage>nCol - 1)

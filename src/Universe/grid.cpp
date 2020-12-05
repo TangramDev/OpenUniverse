@@ -719,7 +719,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	CWebPage* pHtmlWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
 	HWND hWnd = 0;
 	int nCol = m_pHostParse->GetCount();
-	if (nCol && m_strID == _T("") && m_strObjTypeID == _T(""))
+	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_GRID))
 		m_strObjTypeID = _T("tabbedwnd");
 	CGridHelper* pHubbleDesignView = (CGridHelper*)m_pHostWnd;
 	BOOL isAppWnd = false;
@@ -958,12 +958,13 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		m_pHostWnd->SendMessage(WM_INITIALUPDATE);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
+	NodeCreated();
 	if (m_strID.CompareNoCase(_T("treeview")))
 	{
 		m_nRows = 1;
 		m_nCols = nCol;
 
-		if (nCol)
+		if (nCol && m_pHostParse->GetChild(TGM_GRID))
 		{
 			m_nViewType = TabGrid;
 			if (m_nActivePage<0 || m_nActivePage>nCol - 1)
@@ -1010,7 +1011,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 	}
 
-	NodeCreated();
 
 	return bRet;
 }

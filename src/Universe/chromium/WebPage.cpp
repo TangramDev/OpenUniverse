@@ -135,6 +135,7 @@ namespace Browser {
 					{
 						pSession->InsertString(_T("hubblexml"), pGrid->m_strHubbleXml);
 					}
+					pSession->InsertString(_T("gridxml"), pGrid->m_pHostParse->xml());
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
 					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);

@@ -878,13 +878,22 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		CString strW, strH, strOldWidth, strName = _T("");
 
 		strOldWidth = strWidth;
+		vector<CTangramXmlParse*> vecParse;
 		long nSize = m_pGrid->m_pHostParse->GetCount();
+		for (int i = 0; i < nSize; i++)
+		{
+			CTangramXmlParse* _pChild = m_pGrid->m_pHostParse->GetChild(i);
+			if (_pChild->name().CompareNoCase(TGM_GRID) == 0)
+				vecParse.push_back(_pChild);
+		}
+		nSize = vecParse.size();
 		int nIndex = 0;
-		CTangramXmlParse* pSubItem = m_pGrid->m_pHostParse->GetChild(nIndex);
+		CTangramXmlParse* pSubItem = vecParse[nIndex];
 		if (pSubItem == nullptr)
 		{
 			strName.Format(_T("%s_splitterchild_%i"), m_pGrid->m_strName, 0);
 			pSubItem = m_pGrid->m_pHostParse->AddNode(strName);
+			vecParse.push_back(pSubItem);
 		}
 		for (int i = 0; i < m_pGrid->m_nRows; i++)
 		{
@@ -925,7 +934,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				nIndex++;
 				if (nIndex < nSize)
 				{
-					pSubItem = m_pGrid->m_pHostParse->GetChild(nIndex);
+					pSubItem = vecParse[nIndex];
 				}
 				else
 				{
@@ -933,6 +942,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 					{
 						strName.Format(_T("%s_splitterchild_%i"), m_pGrid->m_strName, nIndex);
 						pSubItem = m_pGrid->m_pHostParse->AddNode(strName);
+						vecParse.push_back(pSubItem);
 					}
 				}
 			}
@@ -963,18 +973,6 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		}
 		if (pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 			m_pHostGrid = pHostNode;
-		//if (m_pHostGrid == nullptr)
-		//{
-		//	if (m_nMasterCol != -1 && m_nMasterRow != -1)
-		//	{
-		//		IGrid* pGrid = nullptr;
-		//		m_pGrid->GetNode(m_nMasterRow, m_nMasterCol, &pGrid);
-		//		if (pGrid)
-		//		{
-		//			m_pHostGrid = (CGrid*)pGrid;
-		//		}
-		//	}
-		//}
 		_RecalcLayout();
 
 		return true;

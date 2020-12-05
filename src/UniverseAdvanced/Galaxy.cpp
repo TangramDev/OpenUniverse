@@ -2935,14 +2935,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 		}
 		::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 
-		//if (m_pWorkGrid != nullptr) {
-		//	if (m_pWorkGrid->m_pWebBrowser&& 
-		//		m_pWorkGrid->m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
-		//	{
-		//		m_pWorkGrid->m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage();
-		//		::PostMessage(m_pWorkGrid->m_pWebBrowser->m_pVisibleWebWnd->m_hWnd, WM_COSMOSMSG, 20200131, 0);
-		//	}
-		//}
 		if (m_pWorkGrid != nullptr) {
 			if (m_pWorkGrid->m_nViewType != Grid) {
 				if (m_pWorkGrid->m_pHostWnd)

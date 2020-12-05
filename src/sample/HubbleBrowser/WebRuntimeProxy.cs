@@ -87,7 +87,7 @@ namespace Sunny
                 if (ctrl != null)
                 {
                     thisWormhole.InsertString("msgID", "FIRE_EVENT");
-                    thisSession.InsertLong("message", 20201204);
+                    //thisSession.InsertLong("message", 20201204);
                     thisWormhole.InsertString("currentsubobj", ctrl.Name);
                     thisWormhole.InsertString("currentevent", "OnMyCustomClick");
                     thisWormhole.InsertString("text1", e.Text1);
