@@ -1,7 +1,7 @@
 #pragma once
 #include "mso.h"
 /********************************************************************************
-*					Open Universe - version 1.1.1.22							*
+*					Open Universe - version 1.1.2.23							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *

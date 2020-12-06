@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.1.1.22							*
+*					Open Universe - version 1.1.2.23							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -157,8 +157,6 @@ public:
 	map<CString, BindWebObj*>				m_mapBindWebObj;
 
 	map<CString, CString>					m_mapKey;
-	//map<CString, HubbleDocTemplateInfo*>	m_mapHubbleFormsTemplateInfo;
-	//map<int, HubbleDocTemplateInfo*>		m_mapHubbleFormsTemplateInfo2;
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CWinForm)
