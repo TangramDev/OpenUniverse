@@ -16,6 +16,7 @@
 #include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/dom/node.h"
 #include "third_party/blink/renderer/core/dom/node_list.h"
+#include "third_party/blink/renderer/core/dom/name_node_list.h"
 #include "third_party/blink/renderer/core/html/html_element.h"
 #include "third_party/blink/renderer/core/html/html_head_element.h"
 #include "third_party/blink/renderer/core/dom/class_collection.h"
@@ -727,7 +728,11 @@ namespace blink {
 
 		if (node->innerdoc_)
 		{
-			node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
+			String name(std::to_string(handle).c_str());
+			blink::NameNodeList* list_ = node->innerdoc_->getElementsByName(AtomicString(name));
+			if (list_->length())
+				node->gridElem_ = (Element*)list_->item(0);
+			//node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
 			if (node->gridElem_)
 			{
 				HTMLCollection* list = node->gridElem_->getElementsByTagName("message");

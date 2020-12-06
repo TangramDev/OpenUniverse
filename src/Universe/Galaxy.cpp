@@ -447,7 +447,6 @@ CGrid* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
 	pCommonData->m_pHubbleParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
-	m_pWorkGrid->m_strHubbleXml = _pParse->xml();
 	m_pWorkGrid->m_pHostParse = pParse->GetChild(TGM_GRID);
 	CreateGalaxyCluster();
 	m_mapGrid[strKey] = m_pWorkGrid;
@@ -463,6 +462,7 @@ CGrid* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 			m_pWorkGrid->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 	}
 
+	m_pWorkGrid->m_strHubbleXml = _pParse->xml();
 	return m_pWorkGrid;
 }
 

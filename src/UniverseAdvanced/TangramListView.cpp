@@ -75,23 +75,6 @@ void CTangramListView::Dump(CDumpContext& dc) const
 #endif
 #endif //_DEBUG
 
-void CTangramListView::FillListViewBySolution()
-{
-	if (g_pHubble->m_nAppID != 9)
-	{
-		return;
-	}
-	m_bFilling = true;
-	if (m_pHubbleTabCtrl)
-	{
-		m_pHubbleTabCtrl->m_pHubbleListView = this;
-		m_pHubbleTabCtrl->m_ListCtrl.DeleteAllItems();
-		m_pHubbleTabCtrl->DeleteAllItems();
-		m_pHubbleTabCtrl->m_strFilter = _T("");
-		m_pHubbleTabCtrl->RePosition();
-	}
-}
-
 // CTangramListView message handlers
 
 void CTangramListView::OnInitialUpdate()

@@ -54,7 +54,6 @@ protected:
 	afx_msg void OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg LRESULT OnActiveTangramPage(WPARAM wParam, LPARAM lParam);
 public:
-	void FillListViewBySolution();
 	void InitTabCtrl(CTangramTabCtrl* pTabCtrl);
 	void ChangeTemplate(int nItem);
 };

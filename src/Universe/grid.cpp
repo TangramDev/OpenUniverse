@@ -866,8 +866,6 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = (hPWnd == g_pHubble->m_hHostBrowserWnd) ? 12 : 0;
-				//::SetParent(m_pWebBrowser->m_hWnd,hWnd);
-				//::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
 			}
 		}
 	}
@@ -997,6 +995,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 void CGrid::NodeCreated()
 {
+	m_pHostParse->put_attr(_T("name"), (__int64)m_pHostWnd->m_hWnd);
 	CWebPage* pHtmlWnd = GetHtmlWnd();
 	m_pGridShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
 	if (pHtmlWnd == nullptr)

@@ -593,8 +593,6 @@ LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 			CTangramListView* pWnd = (CTangramListView*)(it)->m_pHostWnd;
 			pWnd->m_pHubbleTabCtrl = this;
 			pWnd->InitTabCtrl(this);
-			if(m_ListCtrl.m_nListViewIndex == 1)
-				pWnd->FillListViewBySolution();
 		}
 	}
 

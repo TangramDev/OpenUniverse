@@ -1343,6 +1343,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 void CGrid::NodeCreated()
 {
+	m_pHostParse->put_attr(_T("name"), (__int64)m_pHostWnd->m_hWnd);
 	CWebPage* pHtmlWnd = GetHtmlWnd();
 	m_pGridShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
 	if (pHtmlWnd == nullptr)
