@@ -93,7 +93,6 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(BindCLRObject, kBindclrobject)
 
 	 HubbleXobj* xobj();
-	 DOMParser* xmlParse();
 	 String url();
 	 HubbleXobj* getNamedItem(const AtomicString&) const;
 	 HubbleXobj* setNamedItem(HubbleXobj*, ExceptionState&);
@@ -124,7 +123,6 @@ namespace blink {
 	 //HubbleNode API
 	 void MdiChildActive(HubbleXobj* xobj);
 	 void MdiChildReady(HubbleXobj* xobj);
-	 void BindNativeObj(HubbleXobj* xobj);
 	 void AllMdiChildRemoved(HubbleXobj* xobj);
 	 void ProcessMessage(HubbleXobj* xobj);
 	 void OnMessage(Element* elem, const String& eventName);
@@ -164,8 +162,8 @@ namespace blink {
 	 WebLocalFrameClient* m_pRenderframeImpl;
 	 String url_;
 	 mutable Member<HubbleXobj> innerXobj_;
-	 mutable Member<DOMParser> DOMParser_;
 	 mutable Member<Element> m_pVisibleContentElement;
+
 	 HeapHashMap<String, Member<HubbleXobj>> mapCloudSession_;
 	 HeapHashMap<int64_t, Member<HubbleNode>> m_mapHubbleNode;
 	 HeapHashMap<int64_t, Member<HubbleGalaxy>> m_mapHubbleGalaxy;

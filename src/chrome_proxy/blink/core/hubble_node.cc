@@ -28,6 +28,7 @@ namespace blink {
 HubbleNode::HubbleNode(LocalFrame* frame) : DOMWindowClient(frame) {
 	DOMParser_ = nullptr;
 	innerdoc_ = nullptr;
+	rootNode_ = nullptr;
 	innerDOMParser_ = nullptr;
 	messageElem_ = nullptr;
 	propertyElem_ = nullptr;
@@ -172,16 +173,16 @@ void HubbleNode::Trace(blink::Visitor* visitor) {
   visitor->Trace(innerdoc_);
   visitor->Trace(innerXobj_);
   visitor->Trace(element_);
-  visitor->Trace(messageElem_);
   visitor->Trace(eventElem_);
   visitor->Trace(gridElem_);
   visitor->Trace(uiElem_);
+  visitor->Trace(rootNode_);
+  visitor->Trace(messageElem_);
   visitor->Trace(propertyElem_);
   visitor->Trace(DOMParser_);
   visitor->Trace(m_pParentForm);
   visitor->Trace(innerDOMParser_);
   visitor->Trace(m_pVisibleContentElement);
-  //visitor->Trace(m_mapElement);
   visitor->Trace(mapHubbleEventCallback_);
 }
 
@@ -902,16 +903,7 @@ HubbleNode* HubbleNode::parentGrid()
 
 HubbleNode* HubbleNode::root()
 {
-	__int64 nHandle = innerXobj_->getInt64(L"rootgridhandle");
-	if (nHandle)
-	{
-		auto it = hubble_->m_mapHubbleNode.find(nHandle);
-		if (it != hubble_->m_mapHubbleNode.end())
-		{
-			return it->value.Get();
-		}
-	}
-	return nullptr;
+	return rootNode_;
 }
 
 HubbleGalaxy* HubbleNode::parentGalaxy() {

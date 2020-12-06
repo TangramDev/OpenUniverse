@@ -686,7 +686,6 @@ namespace CommonUniverse {
 		map<CString, CComVariant>				m_mapValInfo;
 		map<CString, void*>						m_mapTemplateInfo;
 		map<CString, IHubble*>					m_mapRemoteHubble;
-		map<IGrid*, CString>					m_mapControlScript;
 		map<CString, IUniverseAppProxy*>		m_mapHubbleAppProxy;
 		map<CString, IHubbleWindowProvider*>	m_mapWindowProvider;
 		map<int, HubbleDocTemplateInfo*>		m_mapHubbleDocTemplateInfo;

@@ -198,7 +198,7 @@ public:
 	STDMETHOD(NavigateURL)(BSTR bstrURL, IDispatch* dispObjforScript);
 	STDMETHOD(get_URL)(BSTR* pVal);
 	STDMETHOD(put_URL)(BSTR newVal);
-
+	STDMETHOD(GetUIScript)(BSTR bstrCtrlName, BSTR* bstrVal);
 	STDMETHOD(SendIPCMessage)(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet);
 
 	BEGIN_COM_MAP(CGrid)

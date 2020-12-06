@@ -62,7 +62,6 @@ namespace Browser
 		map<CString, CString>				m_mapStartupsInfo;
 		map<CString, CString>				m_mapeclipsesInfo;
 		map<CString, CString>				m_mapWorkBenchInfo;
-		map<CString, CString>				m_mapUserControlsInfo;
 		map<HWND, CWinForm*>				m_mapWinForm;
 		map<HWND, CWinForm*>				m_mapSubWinForm;
 		map<CString, CMDIChildFormInfo*>	m_mapChildFormsInfo;

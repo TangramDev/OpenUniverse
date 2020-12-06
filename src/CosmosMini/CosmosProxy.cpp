@@ -724,9 +724,6 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 			}
 			InitGrid(_pGrid, pChild, bSave, pParse);
 		}
-		auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(_pGrid);
-		if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
-			theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
 	}
 }
 
@@ -854,6 +851,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 	}
 	
 	theAppProxy.InitControl(pForm, pForm, true, pParse);
+	theAppProxy.m_strCurrentWinFormTemplate = _T("");
 	pForm->Load -= theAppProxy.m_pOnLoad;
 }
 
@@ -1120,19 +1118,14 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 			}
 			if (theApp.m_pHubbleImpl->IsMDIClientGalaxyNode(pHostNode) == false)
 			{
-				if (theApp.m_pHubbleImpl->m_mapControlScript.size())
-				{
-					auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(pHostNode);
-					if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
-					{
-						CString m_strXml = _T("");
-						m_strXml = it->second;
-						theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
-						CTangramXmlParse m_Parse;
-						if (m_strXml != _T("") && m_Parse.LoadXml(m_strXml))
-							InitGrid(pHostNode, pObj, true, &m_Parse);
-					}
-				}
+				BSTR bstrXml = ::SysAllocString(L"");
+				pHostNode->GetUIScript(L"", &bstrXml);
+				CString strXml = OLE2T(bstrXml);
+				CTangramXmlParse m_Parse;
+				if (strXml != _T("") && m_Parse.LoadXml(strXml))
+					InitGrid(pHostNode, pObj, true, &m_Parse);
+
+				::SysFreeString(bstrXml);
 			}
 			return pDisp;
 		}

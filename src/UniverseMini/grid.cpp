@@ -1683,3 +1683,8 @@ STDMETHODIMP CGrid::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra
 {
 	return S_OK;
 }
+
+STDMETHODIMP CGrid::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
+{
+	return S_OK;
+}

@@ -131,7 +131,6 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   HubbleNode(LocalFrame*);
   HubbleNode(LocalFrame*, const String& strNodeXml);
   HubbleNode* AddChild(int64_t nHandle, const String& strNodeName, blink::Hubble*);
-  //HubbleControl* AddCtrl(int64_t nCtrlHandle, const String& strCtrlName, const String& strCtrlType, const String& strCtrlData, const String& strWebPageID, blink::Hubble*);
 
   ~HubbleNode() override;
 
@@ -149,6 +148,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   mutable Member<DOMParser> DOMParser_;
   mutable Member<DOMParser> innerDOMParser_;
   mutable Member<Hubble> hubble_;
+  mutable Member<HubbleNode> rootNode_ ;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
   mutable Member<Element> m_pVisibleContentElement;

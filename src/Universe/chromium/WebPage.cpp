@@ -80,15 +80,15 @@ namespace Browser {
 		case 20201125:
 		{
 			BindWebObj* pObj = (BindWebObj*)lParam;
-			CGrid* pGrid = (CGrid*)pObj->m_pGrid;
-			if (pGrid && pGrid->m_pHubbleCloudSession)
-			{
-				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObj"), pObj->m_strObjName);
-				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjData"), pObj->m_strBindData);
-				pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjType"), pObj->m_strObjType);
-				pGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("BIND_NATIVEOBJ_IPC_MSG"));
-				pGrid->m_pHubbleCloudSession->SendMessage();
-			}
+			//CGrid* pGrid = (CGrid*)pObj->m_pGrid;
+			//if (pGrid && pGrid->m_pHubbleCloudSession)
+			//{
+			//	pGrid->m_pHubbleCloudSession->InsertString(_T("BindObj"), pObj->m_strObjName);
+			//	pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjData"), pObj->m_strBindData);
+			//	pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjType"), pObj->m_strObjType);
+			//	pGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("BIND_NATIVEOBJ_IPC_MSG"));
+			//	pGrid->m_pHubbleCloudSession->SendMessage();
+			//}
 			delete pObj;
 		}
 		break;
@@ -936,10 +936,6 @@ namespace Browser {
 				{
 					m_mapFormsInfo[strUiKey] = m_Parse.xml();
 				}
-				else if (strType.CompareNoCase(_T("usercontrol")) == 0)
-				{
-					m_mapUserControlsInfo[strUiKey] = m_Parse.xml();
-				}
 			}
 		}
 	}
@@ -985,14 +981,6 @@ namespace Browser {
 							}
 						}
 					}
-				}
-			}
-			else if (strType.CompareNoCase(_T("usercontrol")) == 0)
-			{
-				CString strID = m_Parse.attr(_T("uikey"), _T("")).MakeLower();
-				if (strID != _T(""))
-				{
-					m_mapUserControlsInfo[strID] = m_Parse.xml();
 				}
 			}
 			else if (strType.CompareNoCase(_T("browser")) == 0)

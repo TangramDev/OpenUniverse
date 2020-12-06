@@ -127,15 +127,9 @@ void CGrid::InitWndGrid()
 				m_strID = _T("clrctrl");
 			else if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 			{
-				auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapUserControlsInfo.find(m_strObjTypeID);
-				if(it!= m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapUserControlsInfo.end())
+				auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.find(m_strObjTypeID);
+				if (it != m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.end())
 					m_strID = _T("clrctrl");
-				else
-				{
-					it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.find(m_strObjTypeID);
-					if (it != m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.end())
-						m_strID = _T("clrctrl");
-				}
 			}
 		}
 	}
@@ -1056,44 +1050,11 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	{
 		g_pHubble->m_pActiveGrid = this;
 		
-		CString strUIKey = strTag;
 		if (g_pHubble->m_pCLRProxy)
 		{
 			if (pHtmlWnd)
 			{
-				g_pHubble->m_pCLRProxy->m_strCurrentWinFormTemplate = _T("");
-				strUIKey.MakeLower();
-				auto it = pHtmlWnd->m_mapUserControlsInfo.find(strUIKey);
-				if(it != pHtmlWnd->m_mapUserControlsInfo.end())
-				{
-					g_pHubble->m_mapControlScript[this] = it->second;
-					if (it->second != _T(""))
-					{
-						CTangramXmlParse parse;
-						if (parse.LoadXml(it->second))
-						{
-							CString _strTag = parse.attr(_T("objid"), _T(""));
-							if (_strTag != _T(""))
-								strTag = _strTag;
-						}
-					}
-				}
-				else
-				{
-					it = pHtmlWnd->m_mapFormsInfo.find(strUIKey);
-					if (it != pHtmlWnd->m_mapFormsInfo.end())
-						g_pHubble->m_pCLRProxy->m_strCurrentWinFormTemplate = it->second;
-					if (g_pHubble->m_pCLRProxy->m_strCurrentWinFormTemplate != _T(""))
-					{
-						CTangramXmlParse parse;
-						if (parse.LoadXml(g_pHubble->m_pCLRProxy->m_strCurrentWinFormTemplate))
-						{
-							CString _strTag = parse.attr(_T("objid"), _T(""));
-							if (_strTag != _T(""))
-								strTag = _strTag;
-						}
-					}
-				}
+				g_pHubble->m_pCLRProxy->m_strCurrentWinFormTemplate = m_pHostParse->xml();
 			}
 			m_pDisp = g_pHubble->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
 			if (g_pHubble->m_hFormNodeWnd)
@@ -2104,6 +2065,11 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 	//	}
 	//	return S_OK;
 	//}
+	return S_OK;
+}
+
+STDMETHODIMP CGrid::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
+{
 	return S_OK;
 }
 

@@ -1816,6 +1816,10 @@ EXTERN_C const IID IID_IGrid;
             /* [in] */ BSTR bstrName,
             /* [retval][out] */ IGrid **pVal) = 0;
         
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetUIScript( 
+            /* [in] */ BSTR bstrCtrlName,
+            /* [retval][out] */ BSTR *bstrVal) = 0;
+        
     };
     
     
@@ -2201,6 +2205,11 @@ EXTERN_C const IID IID_IGrid;
             /* [in] */ BSTR bstrName,
             /* [retval][out] */ IGrid **pVal);
         
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetUIScript )( 
+            IGrid * This,
+            /* [in] */ BSTR bstrCtrlName,
+            /* [retval][out] */ BSTR *bstrVal);
+        
         END_INTERFACE
     } IGridVtbl;
 
@@ -2458,6 +2467,9 @@ EXTERN_C const IID IID_IGrid;
 
 #define IGrid_GetChildGridByName(This,bstrName,pVal)	\
     ( (This)->lpVtbl -> GetChildGridByName(This,bstrName,pVal) ) 
+
+#define IGrid_GetUIScript(This,bstrCtrlName,bstrVal)	\
+    ( (This)->lpVtbl -> GetUIScript(This,bstrCtrlName,bstrVal) ) 
 
 #endif /* COBJMACROS */
 

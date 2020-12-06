@@ -38,7 +38,6 @@ namespace blink {
 		url_ = L"";
 		is_pending_ = false;
 		innerXobj_ = newVar(L"");
-		DOMParser_ = nullptr;
 		m_pRenderframeImpl = nullptr;
 		m_pVisibleContentElement = nullptr;
 	}
@@ -49,7 +48,6 @@ namespace blink {
 	void Hubble::Trace(blink::Visitor* visitor) {
 		EventTargetWithInlineData::Trace(visitor);
 		ScriptWrappable::Trace(visitor);
-		visitor->Trace(DOMParser_);
 		DOMWindowClient::Trace(visitor);
 		visitor->Trace(m_mapHubbleNode);
 		visitor->Trace(m_mapHubbleGalaxy);
@@ -421,15 +419,6 @@ namespace blink {
 		}
 	}
 
-	DOMParser* Hubble::xmlParse()
-	{
-		if (DOMParser_ == nullptr)
-		{
-			DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
-		}
-		return DOMParser_.Get();
-	}
-
 	void Hubble::OnMessage(Element* e, const String& eventName)
 	{
 		Element* element = static_cast<Element*>(e->childNodes()->item(1));
@@ -557,33 +546,24 @@ namespace blink {
 		}
 		else
 		{
-			if (DOMParser_ == nullptr)
+			String tagName = xObj->getStr(eventName + "TagName");
+			if (grid->doc())
 			{
-				DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
-			}
-			if (DOMParser_)
-			{
-				ExceptionState exception_state(nullptr,
-					ExceptionState::kExecutionContext,
-					"DOMParser",
-					"");
-				Document* doc = DOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(xObj->getStr(eventName + "Xml")), "application/xml", exception_state);
-				if (doc)
+				AtomicString name = AtomicString(tagName);
+				HTMLCollection* list = grid->doc()->getElementsByTagName(name);
+				if (list->length())
 				{
-					String eventName_ = eventName.LowerASCII();
-					AtomicString name = AtomicString(eventName_);
-					ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
-					HTMLCollection* list = pContainerNode->getElementsByTagName(name);
-					for (unsigned int index = 0; index < list->length(); index++)
+					list = list->item(0)->getElementsByTagName(AtomicString(eventName.LowerASCII()));
+					if (list->length())
 					{
-						Element* workItem = list->item(index);
+						Element* workItem = list->item(0);
 						for (unsigned int i = 1; i < workItem->childNodes()->length(); i++)
-						{ 
+						{
 							Element* elem = (Element*)workItem->childNodes()->item(i);
 							Node* pNode = elem;
-							if (pNode->getNodeType() == 1&& elem->hasAttribute("target")) {
+							if (pNode->getNodeType() == 1 && elem->hasAttribute("target")) {
 								AtomicString target = elem->getAttribute("target");
-								if (target!="") {
+								if (target != "") {
 									AtomicString galaxy = elem->getAttribute("galaxy");
 									if (galaxy == "")
 										galaxy = "default";
@@ -598,7 +578,7 @@ namespace blink {
 										if (xObj->grid())
 										{
 											HubbleWinform* form = xObj->grid()->parentForm();
-											if(form)
+											if (form)
 												gridfortarget = form->getGrid(galaxy, cluster, target);
 										}
 									}
@@ -616,120 +596,6 @@ namespace blink {
 			}
 		}
 	}
-
-	//void Hubble::DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName)
-	//{
-	//	String ctrlName_ = ctrlName;
-	//	if (ctrlName.IsNull() || ctrlName == "")
-	//	{ 
-	//		ctrlName_ = xObj->getStr(L"name@page");
-	//	}
-	//	HubbleNode* grid = xObj->grid();
-	//	if (grid)
-	//	{
-	//		grid->setMsgID(ctrlName_ + "_" + eventName);
-	//		grid->xobj()->setSender(xObj);
-	//		grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid->xobj()));
-	//	}
-	//	else
-	//	{
-	//		xObj->fireEvent(ctrlName + "@" + eventName, xObj);
-	//	}
-
-	//	String strXml = xObj->getStr(eventName + "Xml");
-	//	if (strXml.IsNull() || strXml == "")
-	//		return;
-	//	if (DOMParser_ == nullptr)
-	//	{
-	//		DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
-	//	}
-	//	if (DOMParser_)
-	//	{
-	//		ExceptionState exception_state(nullptr,
-	//			ExceptionState::kExecutionContext,
-	//			"DOMParser",
-	//			"");
-	//		Document* doc = DOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(xObj->getStr(eventName + "Xml")), "application/xml", exception_state);
-	//		if (doc)
-	//		{
-	//			String eventName_ = eventName.LowerASCII();
-	//			AtomicString name = AtomicString(eventName_);
-	//			ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
-	//			HTMLCollection* list = pContainerNode->getElementsByTagName(name);
-	//			for (unsigned int index = 0; index < list->length(); index++)
-	//			{
-	//				Element* workItem = list->item(index);
-	//				for (unsigned int i = 1; i < workItem->childNodes()->length(); i++)
-	//				{ 
-	//					Element* elem = (Element*)workItem->childNodes()->item(i);
-	//					Node* pNode = elem;
-	//					if (pNode->getNodeType() == 1&& elem->hasAttribute("target")) {
-	//						AtomicString target = elem->getAttribute("target");
-	//						if (target!="") {
-	//							AtomicString galaxy = elem->getAttribute("galaxy");
-	//							if (galaxy == "")
-	//								galaxy = "default";
-	//							AtomicString cluster = elem->getAttribute("cluster");
-	//							if (cluster == "")
-	//							{
-	//								cluster = "__viewport_default__";
-	//							}
-	//							HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
-	//							if (gridfortarget == nullptr)
-	//							{
-	//								if (xObj->grid())
-	//								{
-	//									HubbleWinform* form = xObj->grid()->parentForm();
-	//									if(form)
-	//										gridfortarget = form->getGrid(galaxy, cluster, target);
-	//								}
-	//							}
-	//							if (!!gridfortarget) {
-	//								gridfortarget->element_ = elem;
-	//								gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
-	//								gridfortarget->xobj()->setSender(xObj);
-	//								gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-	//							}
-	//						}
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//	//var domparser = new DOMParser();
-	//	//var doc = domparser.parseFromString(e.getStr("OnAfterSelectXml"), "application/xml");
-	//	//if (!!doc) {
-	//	//    var webcontent = e.getStr("webcontent");
-	//	//    var selectCluster = e.getStr(eventName+"_key");
-	//	//    var list = doc.firstChild.getElementsByTagName(eventName.toLowerCase());
-	//	//    if (list.length) {
-	//	//        for (var index = 0; index < list.length;index++) {
-	//	//            var onafterselect = list[index];
-	//	//            for (var i = 1; i < onafterselect.childNodes.length; i++) {
-	//	//                var elem = onafterselect.childNodes[i];
-	//	//                if (elem.nodeType == 1) {
-	//	//                    var target = elem.getAttribute("target");
-	//	//                    var galaxy = elem.getAttribute("galaxy");
-	//	//                    var cluster = elem.getAttribute("cluster");
-	//	//                    if (!!target&&!!galaxy && !!cluster) {
-	//	//                        var gridfortarget = apppage.getGrid(galaxy, cluster, target);
-	//	//                        if (!!gridfortarget) {
-	//	//                            gridfortarget.workElement = elem;
-	//	//                            gridfortarget.setStr("targetCluster", selectCluster);
-	//	//                            gridfortarget.msgID = "treeView1_" + eventName;
-	//	//                            if (gridfortarget.objtype == "nucleus") {
-	//	//                                gridfortarget.setStr("content_show", webcontent);
-	//	//                                gridfortarget.setStr("content_parent", "contents");
-	//	//                            }
-	//	//                            gridfortarget.sendMessageToGrid(gridfortarget);
-	//	//                        }
-	//	//                    }
-	//	//                }
-	//	//            }
-	//	//        }
-	//	//    }
-	//	//}
-	//}
 
 	void Hubble::ProcessMessage(HubbleXobj* xobj)
 	{
@@ -756,49 +622,6 @@ namespace blink {
 			}
 		}
 		DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblemessage, xobj));
-	}
-
-	void Hubble::BindNativeObj(HubbleXobj* xobj)
-	{
-		if (DOMParser_ == nullptr)
-		{
-			DOMParser_ = DOMParser::Create(*(DomWindow()->document()));
-		}
-		if (DOMParser_)
-		{
-			ExceptionState exception_state(nullptr,
-				ExceptionState::kExecutionContext,
-				"DOMParser",
-				"");
-			Document* doc = DOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(xobj->getStr(L"BindObjData")), "application/xml", exception_state);
-			if (doc)
-			{
-				ContainerNode* pContainerNode = (ContainerNode*)doc->firstChild();
-				HTMLCollection* list = pContainerNode->Children();
-				for (unsigned int index = 0; index < list->length(); index++)
-				{
-					Element* workItem = list->item(index);
-					Node* pNode = workItem;
-					if (pNode->getNodeType() == 1)
-					{
-						String eventName = workItem->tagName();
-						if (!eventName.IsNull())
-						{
-							__int64 nHandle = xobj->getInt64(L"gridhandle");
-							if (nHandle)
-							{
-								auto it = m_mapHubbleNode.find(nHandle);
-								if (it != m_mapHubbleNode.end())
-								{
-									xobj->setStr(L"Bindevent", eventName);
-									m_pRenderframeImpl->SendHubbleMessageEx(xobj->session_);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 
 	void Hubble::MdiChildReady(HubbleXobj* xobj)
@@ -861,12 +684,13 @@ namespace blink {
 		}
 		if (m_pRootNode)
 		{
+			node->rootNode_ = m_pRootNode;
 			WebString str = strname;
 			m_pRootNode->m_mapGrid[str.Utf16()] = node;
 
 			String strMessageXml = xobj->getStr(L"hubblexml");
 			xobj->setStr(L"hubblexml", L"");
-			if (!m_pRootNode->innerdoc_)//strMessageXml.IsNull() == false && strMessageXml != "")
+			if (!m_pRootNode->innerdoc_)
 			{
 				node->innerDOMParser_ = DOMParser::Create(*(DomWindow()->document()));
 				if (node->innerDOMParser_ != nullptr)
@@ -907,24 +731,23 @@ namespace blink {
 				list = node->gridElem_->getElementsByTagName("event");
 				if (list->length())
 				{
-					node->eventElem_ = list->item(0);
-					for (auto* it : *(list->item(0)->Children()))
+					for (unsigned int index = 0; index < list->length(); index++)
 					{
-						Element* e = it;
-						Node* pNode = e;
-						if (pNode->getNodeType() == 1)
+						HTMLCollection* list2 = list->item(index)->Children();
+						if (list2->length())
 						{
-							for (auto* it2 : *(e->Children()))
+							for (unsigned int i = 0; i < list2->length(); i++)
 							{
-								Element* elem = it2;
-								Node* pNode2 = e;
-								if (pNode2->getNodeType() == 1)
+								Element* e = list2->item(i);
+								Node* pNode = e;
+								Element* pPNode = (Element*)e->parentNode()->parentNode();
+								if (pPNode&&pNode->getNodeType() == 1)
 								{
 									node->setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
-									node->setStr(L"BindObj", e->tagName());
-									node->setStr(L"Bindevent", elem->tagName());
-									String strIndex = elem->tagName() + "@" + e->tagName();
-									node->m_mapEventInfo[WebString(strIndex).Utf16()] = elem;
+									node->setStr(L"BindObj", pPNode->tagName());
+									node->setStr(L"Bindevent", e->tagName());
+									String strIndex = e->tagName() + "@" + pPNode->tagName();
+									node->m_mapEventInfo[WebString(strIndex).Utf16()] = e;
 									m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
 								}
 							}
@@ -932,97 +755,6 @@ namespace blink {
 					}
 				}
 			}
-			//Element* e = node->innerdoc_->Children()->item(0);
-			//for (auto* it : *(e->Children()))
-			//{
-			//	AtomicString name = AtomicString(it->tagName());
-			//	if (it->tagName() == "layout")
-			//	{
-			//		node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
-			//		if (node->gridElem_)
-			//		{
-			//			HTMLCollection* list = node->gridElem_->getElementsByTagName("message");
-			//			if (list->length()) {
-			//				node->messageElem_ = list->item(0);
-			//			}
-			//			list = node->gridElem_->getElementsByTagName("event");
-			//			if (list->length())
-			//			{
-			//				node->eventElem_ = list->item(0);
-			//				for (auto* it : *(list->item(0)->Children()))
-			//				{
-			//					Element* e = it;
-			//					Node* pNode = e;
-			//					if (pNode->getNodeType() == 1)
-			//					{
-			//						for (auto* it2 : *(e->Children()))
-			//						{
-			//							Element* elem = it2;
-			//							Node* pNode2 = e;
-			//							if (pNode2->getNodeType() == 1)
-			//							{
-			//								node->setStr(L"msgID", L"BIND_CTRL_EVENT");
-			//								node->setStr(L"ctrlname", e->tagName());
-			//								node->setStr(L"eventname", elem->tagName());
-			//								String strIndex = elem->tagName() + "@" + e->tagName();
-			//								node->m_mapEventInfo[WebString(strIndex).Utf16()] = elem;
-			//								m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
-			//							}
-			//						}
-			//					}
-			//				}
-			//			}
-			//		}
-			//	}
-			//	else
-			//	{
-			//		HTMLCollection* list = e->getElementsByTagName(name);
-			//		if (list->length())
-			//		{
-			//			list = list->item(0)->getElementsByTagName(AtomicString(strname.LowerASCII()));
-			//			if (list->length())
-			//			{
-			//				node->m_mapElement[WebString(it->tagName()).Utf16()] = list->item(0);
-			//				//if (it->tagName() == "message")
-			//				//{
-			//				//	node->messageElem_ = list->item(0);
-			//				//}
-			//				//else if (it->tagName() == "event")
-			//				//{
-			//				//	node->eventElem_ = list->item(0);
-			//				//	for (auto* it : *(list->item(0)->Children()))
-			//				//	{
-			//				//		Element* e = it;
-			//				//		Node* pNode = e;
-			//				//		if (pNode->getNodeType() == 1)
-			//				//		{
-			//				//			for (auto* it2 : *(e->Children()))
-			//				//			{
-			//				//				Element* elem = it2;
-			//				//				Node* pNode2 = e;
-			//				//				if (pNode2->getNodeType() == 1)
-			//				//				{
-			//				//					node->setStr(L"msgID", L"BIND_CTRL_EVENT");
-			//				//					node->setStr(L"ctrlname", elem->tagName());
-			//				//					node->setStr(L"eventname", e->tagName());
-			//				//					m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
-			//				//				}
-			//				//			}
-			//				//		}
-			//				//	}
-			//				//}
-			//				//else if (it->tagName() == "ui")
-			//				//{
-			//				//	node->uiElem_ = list->item(0);
-			//				//}
-			//				//else if (it->tagName() == "property")
-			//				//{
-			//				//	node->propertyElem_ = list->item(0);
-			//				//}
-			//			}
-			//		}
-			//	}
-			//}
 		}
 		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
 		if (nPHandle)

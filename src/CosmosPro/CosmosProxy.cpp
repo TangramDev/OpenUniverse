@@ -1189,50 +1189,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 			if (pType->IsSubclassOf(UserControl::typeid) == false)
 				InitControl(pForm, pChild, bSave, pParse);
 		}
-		//if (pActiveCtrl != nullptr)
-		//{
-		//	Control^ pChild = pActiveCtrl;
-		//	Type^ pType = pChild->GetType();
-		//	String^ strType = pType->FullName;
-		//	String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
-		//	if ((m_strExtendableTypes->IndexOf(L"|" + strType2 + L"|") != -1 && pChild->Dock == DockStyle::None) || pChild->Dock == DockStyle::Fill)
-		//	{
-		//		bool bExtendable = (pChild->Tag == nullptr);
-		//		if (pChild->Tag != nullptr)
-		//		{
-		//			String^ strTag = pChild->Tag->ToString();
-		//			bExtendable = (strTag->IndexOf(L"|Extendable|") >= 0);
-		//		}
-		//		if (bExtendable)
-		//		{
-		//			if (m_pOnCtrlVisible)
-		//			{
-		//			}
-		//			else
-		//			{
-		//				m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
-		//			}
-		//			pChild->VisibleChanged += m_pOnCtrlVisible;
-
-		//			String^ name = pChild->Name;
-		//			if (String::IsNullOrEmpty(name))
-		//				name = strType;
-		//			BSTR strName = STRING2BSTR(name->ToLower());//OK!
-		//			GalaxyInfo* pInfo = new GalaxyInfo;
-		//			pInfo->m_strGridXml = _T("");
-		//			pInfo->m_pDisp = nullptr;
-		//			pInfo->m_pParentDisp = nullptr;
-		//			pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-		//			m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
-		//			pInfo->m_strCtrlName = pChild->Name->ToLower();
-		//			pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-		//			IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
-		//			::SysFreeString(strName);
-		//		}
-		//	}
-		//	if (pType->IsSubclassOf(UserControl::typeid) == false)
-		//		InitControl(pForm, pChild, bSave, pParse);
-		//}
 	}
 	long nCount = 0;
 	pGalaxyCluster->m_pGalaxyCluster->get_Count(&nCount);
@@ -1428,9 +1384,6 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 			}
 			InitGrid(_pGrid, pChild, bSave, pParse);
 		}
-		auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(_pGrid);
-		if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
-			theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
 	}
 
 	return pGalaxyCluster;
@@ -1729,6 +1682,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 		//_pInfo->m_mapFormsInfo.clear();
 	}
 
+	theAppProxy.m_strCurrentWinFormTemplate = _T("");
 
 	pForm->Load -= theAppProxy.m_pOnLoad;
 }
@@ -2406,19 +2360,14 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 			}
 			if (theApp.m_pHubbleImpl->IsMDIClientGalaxyNode(pHostNode) == false && bProperty == false)
 			{
-				if (theApp.m_pHubbleImpl->m_mapControlScript.size())
-				{
-					auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(pHostNode);
-					if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
-					{
-						CString m_strXml = _T("");
-						m_strXml = it->second;
-						theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
-						CTangramXmlParse m_Parse;
-						if (m_strXml != _T("") && m_Parse.LoadXml(m_strXml))
-							InitGrid(pHostNode, pObj, true, &m_Parse);
-					}
-				}
+				BSTR bstrXml = ::SysAllocString(L"");
+				pHostNode->GetUIScript(L"", &bstrXml);
+				CString strXml = OLE2T(bstrXml);
+				CTangramXmlParse m_Parse;
+				if (strXml != _T("") && m_Parse.LoadXml(strXml))
+					InitGrid(pHostNode, pObj, true, &m_Parse);
+
+				::SysFreeString(bstrXml);
 			}
 			return pDisp;
 		}
@@ -2747,32 +2696,35 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 		{
 			Object^ pObj = nullptr;
 			pObj = it->second->m_pHostObj;
-			Cosmos::Wormhole^ pCloudSession = nullptr;
-			if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))
+			if (pObj)
 			{
-				pCloudSession = gcnew Cosmos::Wormhole(pSession);
-				Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
-			}
-			CString strEventName = pSession->GetString(L"Bindevent");
-			CString strObjName = pSession->GetString(L"BindObj");
-			if (pObj->GetType()->IsSubclassOf(Control::typeid))
-			{
-				Control^ pCtrl = (Control^)pObj;
-				Control^ pSubCtrl = nullptr;
-				if (pCtrl != nullptr)
+				Cosmos::Wormhole^ pCloudSession = nullptr;
+				if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))
 				{
-					cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(BSTR2STRING(strObjName), true);
-					if (pArray != nullptr && pArray->Length)
+					pCloudSession = gcnew Cosmos::Wormhole(pSession);
+					Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
+				}
+				CString strEventName = pSession->GetString(L"Bindevent");
+				CString strObjName = pSession->GetString(L"BindObj");
+				if (pObj->GetType()->IsSubclassOf(Control::typeid))
+				{
+					Control^ pCtrl = (Control^)pObj;
+					Control^ pSubCtrl = nullptr;
+					if (pCtrl != nullptr)
 					{
-						pSubCtrl = pArray[0];
-						Cosmos::Wormhole^ pCloudSession2 = nullptr;
-						if (!Cosmos::Hubble::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
+						cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(BSTR2STRING(strObjName), true);
+						if (pArray != nullptr && pArray->Length)
 						{
-							Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
-						}
+							pSubCtrl = pArray[0];
+							Cosmos::Wormhole^ pCloudSession2 = nullptr;
+							if (!Cosmos::Hubble::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
+							{
+								Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
+							}
 
-						Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, BSTR2STRING(strEventName));
-						return;
+							Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, BSTR2STRING(strEventName));
+							return;
+						}
 					}
 				}
 			}

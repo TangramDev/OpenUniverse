@@ -167,6 +167,8 @@ public:
 	STDMETHOD(get_MasterCol)(int* pVal);
 	STDMETHOD(put_MasterCol)(int newVal);
 	STDMETHOD(put_SaveToConfigFile)(VARIANT_BOOL newVal);
+	STDMETHOD(get_URL)(BSTR* pVal);
+	STDMETHOD(put_URL)(BSTR newVal);
 
 	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ObserveEx)(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
@@ -183,9 +185,7 @@ public:
 	STDMETHOD(get_DockObj)(BSTR bstrName, LONGLONG* pVal);
 	STDMETHOD(put_DockObj)(BSTR bstrName, LONGLONG newVal);
 	STDMETHOD(NavigateURL)(BSTR bstrURL, IDispatch* dispObjforScript);
-	STDMETHOD(get_URL)(BSTR* pVal);
-	STDMETHOD(put_URL)(BSTR newVal);
-
+	STDMETHOD(GetUIScript)(BSTR bstrCtrlName, BSTR* bstrVal);
 	STDMETHOD(SendIPCMessage)(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet);
 
 	BEGIN_COM_MAP(CGrid)

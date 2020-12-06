@@ -48,7 +48,6 @@ namespace Browser
 		CWebPage*							m_pWebWnd;
 		CWebPage*							m_pDevToolWnd;
 		map<CString, CString>				m_mapFormsInfo;
-		map<CString, CString>				m_mapUserControlsInfo;
 		map<HWND, CWinForm*>				m_mapWinForm;
 		map<HWND, CWinForm*>				m_mapSubWinForm;
 

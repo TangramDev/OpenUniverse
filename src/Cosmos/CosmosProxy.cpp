@@ -672,50 +672,50 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 					InitControl(pForm, pChild, bSave, pParse);
 			}
 		}
-		if (pActiveCtrl != nullptr)
-		{
-			Control^ pChild = pActiveCtrl;
-			Type^ pType = pChild->GetType();
-			String^ strType = pType->FullName;
-			String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
-			if ((m_strExtendableTypes->IndexOf(L"|" + strType2 + L"|") != -1 && pChild->Dock == DockStyle::None) || pChild->Dock == DockStyle::Fill)
-			{
-				bool bExtendable = (pChild->Tag == nullptr);
-				if (pChild->Tag != nullptr)
-				{
-					String^ strTag = pChild->Tag->ToString();
-					bExtendable = (strTag->IndexOf(L"|Extendable|") >= 0);
-				}
-				if (bExtendable)
-				{
-					if (m_pOnCtrlVisible)
-					{
-					}
-					else
-					{
-						m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
-					}
-					pChild->VisibleChanged += m_pOnCtrlVisible;
+		//if (pActiveCtrl != nullptr)
+		//{
+		//	Control^ pChild = pActiveCtrl;
+		//	Type^ pType = pChild->GetType();
+		//	String^ strType = pType->FullName;
+		//	String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
+		//	if ((m_strExtendableTypes->IndexOf(L"|" + strType2 + L"|") != -1 && pChild->Dock == DockStyle::None) || pChild->Dock == DockStyle::Fill)
+		//	{
+		//		bool bExtendable = (pChild->Tag == nullptr);
+		//		if (pChild->Tag != nullptr)
+		//		{
+		//			String^ strTag = pChild->Tag->ToString();
+		//			bExtendable = (strTag->IndexOf(L"|Extendable|") >= 0);
+		//		}
+		//		if (bExtendable)
+		//		{
+		//			if (m_pOnCtrlVisible)
+		//			{
+		//			}
+		//			else
+		//			{
+		//				m_pOnCtrlVisible = gcnew EventHandler(CCosmosProxy::OnVisibleChanged);
+		//			}
+		//			pChild->VisibleChanged += m_pOnCtrlVisible;
 
-					String^ name = pChild->Name;
-					if (String::IsNullOrEmpty(name))
-						name = strType;
-					BSTR strName = STRING2BSTR(name->ToLower());//OK!
-					GalaxyInfo* pInfo = new GalaxyInfo;
-					pInfo->m_strGridXml = _T("");
-					pInfo->m_pDisp = nullptr;
-					pInfo->m_pParentDisp = nullptr;
-					pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
-					m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
-					pInfo->m_strCtrlName = pChild->Name->ToLower();
-					pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-					IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
-					::SysFreeString(strName);
-				}
-			}
-			if (pType->IsSubclassOf(UserControl::typeid) == false)
-				InitControl(pForm, pChild, bSave, pParse);
-		}
+		//			String^ name = pChild->Name;
+		//			if (String::IsNullOrEmpty(name))
+		//				name = strType;
+		//			BSTR strName = STRING2BSTR(name->ToLower());//OK!
+		//			GalaxyInfo* pInfo = new GalaxyInfo;
+		//			pInfo->m_strGridXml = _T("");
+		//			pInfo->m_pDisp = nullptr;
+		//			pInfo->m_pParentDisp = nullptr;
+		//			pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
+		//			m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
+		//			pInfo->m_strCtrlName = pChild->Name->ToLower();
+		//			pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
+		//			IGalaxy* _pGalaxy = theApp.m_pHubbleImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
+		//			::SysFreeString(strName);
+		//		}
+		//	}
+		//	if (pType->IsSubclassOf(UserControl::typeid) == false)
+		//		InitControl(pForm, pChild, bSave, pParse);
+		//}
 	}
 }
 
@@ -890,9 +890,6 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 			}
 			InitGrid(_pGrid, pChild, bSave, pParse);
 		}
-		auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(_pGrid);
-		if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
-			theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
 	}
 }
 
@@ -1020,6 +1017,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 	}
 	
 	theAppProxy.InitControl(pForm, pForm, true, pParse);
+	theAppProxy.m_strCurrentWinFormTemplate = _T("");
 	pForm->Load -= theAppProxy.m_pOnLoad;
 }
 
@@ -1494,19 +1492,14 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 			}
 			if (theApp.m_pHubbleImpl->IsMDIClientGalaxyNode(pHostNode) == false)
 			{
-				if (theApp.m_pHubbleImpl->m_mapControlScript.size())
-				{
-					auto it = theApp.m_pHubbleImpl->m_mapControlScript.find(pHostNode);
-					if (it != theApp.m_pHubbleImpl->m_mapControlScript.end())
-					{
-						CString m_strXml = _T("");
-						m_strXml = it->second;
-						theApp.m_pHubbleImpl->m_mapControlScript.erase(it);
-						CTangramXmlParse m_Parse;
-						if (m_strXml != _T("") && m_Parse.LoadXml(m_strXml))
-							InitGrid(pHostNode, pObj, true, &m_Parse);
-					}
-				}
+				BSTR bstrXml = ::SysAllocString(L"");
+				pHostNode->GetUIScript(L"", &bstrXml);
+				CString strXml = OLE2T(bstrXml);
+				CTangramXmlParse m_Parse;
+				if (strXml != _T("") && m_Parse.LoadXml(strXml))
+					InitGrid(pHostNode, pObj, true, &m_Parse);
+
+				::SysFreeString(bstrXml);
 			}
 			return pDisp;
 		}
