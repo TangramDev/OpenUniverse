@@ -228,19 +228,6 @@ namespace CommonUniverse {
 		CString strfilterName;
 	} DocTemplateInfo;
 
-	typedef struct BindWebObj
-	{
-		int nType = -1;
-		HWND m_hWnd = NULL;
-		CString m_strObjName = _T("");
-		CString m_strBindObjName = _T("");
-		CString m_strObjType = _T("");
-		CString m_strBindData = _T("");
-		IGrid* m_pGrid = nullptr;
-		IDispatch* m_pObjDisp = nullptr;
-		LPARAM lParam = 0;
-	} BindWebObj;
-
 	typedef struct HubbleDocTemplateInfo
 	{
 		BOOL			m_bCOMObj;
@@ -1036,15 +1023,9 @@ namespace CommonUniverse {
 
 		virtual ~CWebPageImpl()
 		{
-			for (auto it = m_mapBindWebObj.begin(); it != m_mapBindWebObj.end(); it++)
-			{
-				delete it->second;
-			}
-			m_mapBindWebObj.erase(m_mapBindWebObj.begin(), m_mapBindWebObj.end());
 		}
 
 		IHubble* m_pRemoteHubble = nullptr;
-		map<CString, BindWebObj*>	m_mapBindWebObj;
 		CChromeRenderFrameHost* m_pChromeRenderFrameHost;
 		virtual void SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) = 0;
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) { return nullptr; }

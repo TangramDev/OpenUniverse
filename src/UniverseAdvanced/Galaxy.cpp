@@ -1272,43 +1272,43 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_strKey == _T(""))
 		{
-			CString strPath = m_strPath;
-			strPath.MakeLower();
-			int nPos = strPath.ReverseFind('.');
-			strPath = strPath.Left(nPos);
-			CString strForms = g_pHubble->m_strAppFormsTemplatePath;
-			strForms.MakeLower();
-			strPath.Replace(strForms, _T(""));
-			nPos = strPath.Find(_T("\\"));
-			strPath = strPath.Mid(nPos + 1);
-			nPos = strPath.Find(_T("\\"));
-			strPath = strPath.Mid(nPos + 1);
-			strPath.Replace(_T("\\"), _T("_"));
-			strPath.Replace(_T(" "), _T("_"));
-			m_strKey = strPath;
-			DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-			if (dw & WS_EX_MDICHILD)
-			{
-				HWND h = ::GetParent(::GetParent(m_hWnd));
-				if (h)
-				{
-					CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_HUBBLE_DATA, 0, 20190214);
-					if (pParent)
-					{
-						auto it = pParent->m_mapKey.find(m_strKey);
-						if (it == pParent->m_mapKey.end())
-						{
-							CTangramXmlParse m_Parse;
-							if (m_Parse.LoadFile(m_strPath))
-							{
-								CTangramXmlParse* pChild = m_Parse.GetChild(m_strKey);
-								if (pChild)
-									pParent->m_mapKey[m_strKey] = pChild->xml();
-							}
-						}
-					}
-				}
-			}
+			//CString strPath = m_strPath;
+			//strPath.MakeLower();
+			//int nPos = strPath.ReverseFind('.');
+			//strPath = strPath.Left(nPos);
+			//CString strForms = g_pHubble->m_strAppFormsTemplatePath;
+			//strForms.MakeLower();
+			//strPath.Replace(strForms, _T(""));
+			//nPos = strPath.Find(_T("\\"));
+			//strPath = strPath.Mid(nPos + 1);
+			//nPos = strPath.Find(_T("\\"));
+			//strPath = strPath.Mid(nPos + 1);
+			//strPath.Replace(_T("\\"), _T("_"));
+			//strPath.Replace(_T(" "), _T("_"));
+			//m_strKey = strPath;
+			//DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
+			//if (dw & WS_EX_MDICHILD)
+			//{
+			//	HWND h = ::GetParent(::GetParent(m_hWnd));
+			//	if (h)
+			//	{
+			//		CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_HUBBLE_DATA, 0, 20190214);
+			//		if (pParent)
+			//		{
+			//			auto it = pParent->m_mapKey.find(m_strKey);
+			//			if (it == pParent->m_mapKey.end())
+			//			{
+			//				CTangramXmlParse m_Parse;
+			//				if (m_Parse.LoadFile(m_strPath))
+			//				{
+			//					CTangramXmlParse* pChild = m_Parse.GetChild(m_strKey);
+			//					if (pChild)
+			//						pParent->m_mapKey[m_strKey] = pChild->xml();
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
 		}
 		else
 		{
@@ -1375,71 +1375,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			//		::SHCreateDirectory(nullptr, strDir);
 			//	}
 			//}
-		}
-	}
-	break;
-	case 5:
-	{
-		BindWebObj* pObj = (BindWebObj*)wParam;
-		if ((::GetWindowLong(m_hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD))
-		{
-			auto it = m_mapBindWebObj.find(pObj->m_strBindObjName);
-			if (it != m_mapBindWebObj.end())
-			{
-				m_mapBindWebObj.erase(it);
-			}
-			m_mapBindWebObj[pObj->m_strBindObjName] = pObj;
-		}
-		else if (m_bMdiForm)
-		{
-			auto it = m_mapBindWebObj.find(pObj->m_strBindObjName);
-			if (it != m_mapBindWebObj.end())
-			{
-				m_mapBindWebObj.erase(it);
-			}
-			m_mapBindWebObj[pObj->m_strBindObjName] = pObj;
-		}
-
-		if (m_pOwnerHtmlWnd)
-		{
-			auto it = m_pOwnerHtmlWnd->m_mapBindWebObj.find(pObj->m_strBindObjName);
-			if (it != m_pOwnerHtmlWnd->m_mapBindWebObj.end())
-			{
-				delete it->second;
-				m_pOwnerHtmlWnd->m_mapBindWebObj.erase(it);
-			}
-			m_pOwnerHtmlWnd->m_mapBindWebObj[pObj->m_strBindObjName] = pObj;
-		}
-		else
-		{
-			IGrid* pGrid = nullptr;
-			g_pHubble->GetGridFromHandle((__int64)m_hWnd, &pGrid);
-			if (pGrid)
-			{
-				CGrid* pWndGrid = (CGrid*)pGrid;
-				HWND hWnd = pWndGrid->m_pGridShareData->m_pGalaxy->m_hWnd;
-				BindWebObj* pObj = (BindWebObj*)wParam;
-				CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-				if (m_pHtmlWnd == nullptr)
-				{
-					delete pObj;
-					//for (auto it : g_pHubble->m_mapHtmlWnd)
-					//{
-					//	HWND hHtmlWnd = it.first;
-					//	CWebPage* pWebWnd = (CWebPage*)it.second;
-					//}
-				}
-				else
-				{
-					auto it = m_pHtmlWnd->m_mapBindWebObj.find(pObj->m_strBindObjName);
-					if (it != m_pHtmlWnd->m_mapBindWebObj.end())
-					{
-						delete it->second;
-						m_pHtmlWnd->m_mapBindWebObj.erase(it);
-					}
-					m_pHtmlWnd->m_mapBindWebObj[pObj->m_strBindObjName] = pObj;
-				}
-			}
 		}
 	}
 	break;
@@ -1520,13 +1455,13 @@ LRESULT CWinForm::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			if (m_bMdiForm)
 			{
-				if (m_pOwnerHtmlWnd)
-				{
-					ATLTRACE(_T("\n"));
-					CString strHandle = _T("");
-					strHandle.Format(_T("%d"), m_hWnd);
-					m_pOwnerHtmlWnd->SendChromeIPCMessage(_T("MESSAGE"), m_strKey, strHandle, _T("MainMdiForm:ActiveClient"), m_strKey, L"");
-				}
+				//if (m_pOwnerHtmlWnd)
+				//{
+				//	ATLTRACE(_T("\n"));
+				//	CString strHandle = _T("");
+				//	strHandle.Format(_T("%d"), m_hWnd);
+				//	m_pOwnerHtmlWnd->SendChromeIPCMessage(_T("MESSAGE"), m_strKey, strHandle, _T("MainMdiForm:ActiveClient"), m_strKey, L"");
+				//}
 			}
 			else
 			{

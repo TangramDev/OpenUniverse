@@ -1243,28 +1243,6 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			g_pHubble->HubbleInit();
 		}
 		break;
-	case WM_HUBBLE_DATA:
-		if (lParam == 20200204)
-		{
-			BindWebObj* pObj = (BindWebObj*)wParam;
-			if (pObj)
-			{
-				CGrid* pGrid = (CGrid*)pObj->m_pGrid;
-				HWND hWebView = NULL;
-				if (pGrid->m_pParentWinFormWnd && pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd)
-				{
-					hWebView = pGrid->m_pParentWinFormWnd->m_pOwnerHtmlWnd->m_hWnd;
-				}
-				else
-				{
-					if (pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
-						hWebView = pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_hWnd;
-				}
-				if (hWebView)
-					::PostMessage(hWebView, WM_COSMOSMSG, 20201125, wParam);
-			}
-		}
-		break;
 	case WM_HUBBLE_APPQUIT:
 	{
 		if (g_pHubble->m_bEclipse == false && g_pHubble->m_bOfficeApp == false)
@@ -1341,20 +1319,6 @@ LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 	{
 		switch (lParam)
 		{
-		case 20200202:
-		{
-			LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-			CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-			BindWebObj* pObj = (BindWebObj*)wParam;
-			auto it = m_pHtmlWnd->m_mapBindWebObj.find(pObj->m_strBindObjName);
-			if (it != m_pHtmlWnd->m_mapBindWebObj.end())
-			{
-				delete it->second;
-				m_pHtmlWnd->m_mapBindWebObj.erase(it);
-			}
-			m_pHtmlWnd->m_mapBindWebObj[pObj->m_strBindObjName] = pObj;
-		}
-		break;
 		case 20200203:
 		{
 			LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);

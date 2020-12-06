@@ -77,21 +77,6 @@ namespace Browser {
 		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
-		case 20201125:
-		{
-			BindWebObj* pObj = (BindWebObj*)lParam;
-			//CGrid* pGrid = (CGrid*)pObj->m_pGrid;
-			//if (pGrid && pGrid->m_pHubbleCloudSession)
-			//{
-			//	pGrid->m_pHubbleCloudSession->InsertString(_T("BindObj"), pObj->m_strObjName);
-			//	pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjData"), pObj->m_strBindData);
-			//	pGrid->m_pHubbleCloudSession->InsertString(_T("BindObjType"), pObj->m_strObjType);
-			//	pGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("BIND_NATIVEOBJ_IPC_MSG"));
-			//	pGrid->m_pHubbleCloudSession->SendMessage();
-			//}
-			delete pObj;
-		}
-		break;
 		case 20201109:
 		{
 			if (lParam)
@@ -647,107 +632,8 @@ namespace Browser {
 					return;
 				}
 			}
-			auto it = m_mapBindWebObj.find(strParam4);
-			if (it != m_mapBindWebObj.end())
-			{
-				BindWebObj* pObj = it->second;
-				HWND hWnd = pObj->m_hWnd;
-				switch (pObj->nType)
-				{
-				case 0:
-				{
-					IGalaxy* pGalaxy = nullptr;
-					IGrid* pGrid = nullptr;
-					m_pGalaxy->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)hWnd), CComBSTR(pObj->m_strBindObjName), &pGalaxy);
-					pGalaxy->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pGrid);
-					if (pGrid)
-					{
-						CGrid* _pGrid = (CGrid*)pGrid;
-						_pGrid->m_strLastIPCMsgID = strId;
-						_pGrid->m_strLastIPCParam1 = strParam1;
-						_pGrid->m_strLastIPCParam2 = strParam2;
-						_pGrid->m_strLastIPCParam3 = strParam3;
-						_pGrid->m_strLastIPCParam4 = strParam4;
-						_pGrid->m_strLastIPCParam5 = strParam5;
-					}
-				}
-				break;
-				case 1:
-				{
-					CGrid* _pGrid = (CGrid*)pObj->m_pGrid;
-					IGrid* pGrid = nullptr;
-					_pGrid->Observe(CComBSTR(strParam1 + _T("_") + strParam4), CComBSTR(strParam3), &pGrid);
-					if (pGrid)
-					{
-						CGrid* _pGrid = (CGrid*)pGrid;
-						if (_pGrid->m_strLastIPCMsgID == _T("") || _pGrid->m_strLastIPCMsgID != strId)
-						{
-							_pGrid->m_strLastIPCMsgID = strId;
-							_pGrid->m_strLastIPCParam1 = strParam1;
-							_pGrid->m_strLastIPCParam2 = strParam2;
-							_pGrid->m_strLastIPCParam3 = strParam3;
-							_pGrid->m_strLastIPCParam4 = strParam4;
-							_pGrid->m_strLastIPCParam5 = strParam5;
-						}
-						else if (_pGrid->m_strLastIPCMsgID == strId)
-						{
-							IPCMsg pIPCInfo;
-							pIPCInfo.m_strId = strId;
-							pIPCInfo.m_strParam1 = _pGrid->m_strLastIPCParam1;
-							pIPCInfo.m_strParam2 = _pGrid->m_strLastIPCParam2;
-							pIPCInfo.m_strParam3 = _pGrid->m_strLastIPCParam3;
-							pIPCInfo.m_strParam4 = _pGrid->m_strLastIPCParam4;
-							pIPCInfo.m_strParam5 = _pGrid->m_strLastIPCParam5;
-							_pGrid->m_strLastIPCMsgID = _T("");
-							m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
-						}
-						g_pHubble->m_pCurrentIPCMsg = nullptr;
-					}
-				}
-				break;
-				}
-				return;
-			}
-			else
-			{ 
-				LoadDocument2Viewport(strParam1, strParam3);
-			}
+			LoadDocument2Viewport(strParam1, strParam3);
 		}
-		//else if (strId.CompareNoCase(_T("TO_TOPFRAME")) == 0)
-		//{
-		//	LoadDocument2Viewport(strParam1, strParam2);
-		//	return;
-		//}
-		//else if (strId.CompareNoCase(_T("TO_PARENTNODE")) == 0)
-		//{
-		//	if (m_pParentGrid == nullptr)
-		//	{
-		//		HWND hWnd = ::GetParent(::GetParent(m_hWnd));
-		//		if (::IsWindow(hWnd))
-		//		{
-		//			LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
-		//			HWND _hWnd = (HWND)hWnd;
-		//			if (lRes)
-		//				m_pParentGrid = (CGrid*)lRes;
-		//		}
-		//		else
-		//		{
-		//			m_pParentGrid = m_pGalaxy->m_pBindingGrid->m_pParentObj;
-		//			if (m_pParentGrid && m_pParentGrid->m_nViewType == TabGrid)
-		//			{
-		//				//IGrid* _pGrid = nullptr;
-		//				//m_pGalaxy->m_pBindingGrid->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pGrid);
-		//				return;
-		//			}
-		//		}
-		//	}
-		//	if (m_pParentGrid)
-		//	{
-		//		IGrid* _pGrid = nullptr;
-		//		m_pParentGrid->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pGrid);
-		//	}
-		//	return;
-		//}
 		else
 		{
 			if (g_pHubble->m_pHubbleDelegate)

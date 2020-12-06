@@ -74,25 +74,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_strKey == _T(""))
 		{
-			CString strPath = m_strPath;
-			strPath.MakeLower();
-			int nPos = strPath.ReverseFind('.');
-			strPath = strPath.Left(nPos);
-			CString strForms = g_pHubble->m_strAppFormsTemplatePath;
-			strForms.MakeLower();
-			strPath.Replace(strForms, _T(""));
-			nPos = strPath.Find(_T("\\"));
-			strPath = strPath.Mid(nPos + 1);
-			nPos = strPath.Find(_T("\\"));
-			strPath = strPath.Mid(nPos + 1);
-			strPath.Replace(_T("\\"), _T("_"));
-			strPath.Replace(_T(" "), _T("_"));
-			m_strKey = strPath;
-			DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-			if (dw & WS_EX_MDICHILD)
-			{
-				//Don't Support MDI
-			}
 		}
 		return (LRESULT)m_strKey.GetBuffer();
 	}

@@ -881,32 +881,6 @@ void CCosmosProxy::OnAfterSelect(System::Object^ sender, TreeViewEventArgs^ e)
 				}
 			}
 		}
-		//if (pGalaxy)
-		//{
-		//	CTangramXmlParse m_Parse;
-		//	if (m_Parse.LoadXml(strTag))
-		//	{
-		//		CString strBindName = m_Parse.attr(_T("target"), _T(""));
-		//		CString strActionName = m_Parse.attr(_T("onafterselect"), pCtrl->Name);
-
-		//		if (pGalaxy->m_pGalaxy)
-		//		{
-		//			//__int64 nHandle;
-		//			//pGalaxy->m_pGalaxy->get_HWND(&nHandle);
-		//			//HWND hWnd = (HWND)nHandle;
-		//			//IPCMsg msg;
-		//			//msg.m_strId = _T("WinForm_TreeView_Node_OnAfterSelect");
-		//			//msg.m_strParam1 = strActionName;
-		//			//msg.m_strParam2 = pCtrl->Handle.ToInt64().ToString("d");
-		//			//msg.m_strParam3 = _T("");
-		//			//msg.m_strParam4 = strTag;
-		//			//msg.m_strParam5 = strBindName;
-		//			//theApp.m_pHubbleImpl->m_pCurrentIPCMsg = &msg;
-		//			//::SendMessage(hWnd, WM_HUBBLE_DATA, (WPARAM)&msg, 20200203);
-		//		}
-		//		theApp.m_pHubbleImpl->m_pCurrentIPCMsg = nullptr;
-		//	}
-		//}
 	}
 	pCtrl->Select();
 }
@@ -1124,21 +1098,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 										CTangramXmlParse* pChildParse2 = nullptr;
 										if (_pChild)
 										{
-											CString strWebName = _pChild->attr(_T("id"), _T(""));
-											if (strWebName == _T(""))strWebName = pChild->Name;
-											if (strWebName != _T(""))
-											{
-												BindWebObj* pObj = new BindWebObj;
-												pObj->nType = 0;
-												pObj->m_pObjDisp = (IDispatch*)Marshal::GetIUnknownForObject(pChild).ToPointer();
-												pObj->m_hWnd = (HWND)pChild->Handle.ToPointer();
-												pObj->m_strObjName = name;
-												pObj->m_strObjType = strType;
-												pObj->m_strBindObjName = strWebName;
-												pObj->m_strBindData = _pChild->attr(_T("bindevent"), _T(""));
-												HWND hForm = (HWND)pForm->Handle.ToPointer();
-												::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
-											}
 											pChildParse2 = _pChild->GetChild(_T("default"));
 										}
 
@@ -1244,30 +1203,6 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 						CTangramXmlParse* pChildParse2 = nullptr;
 						if (pChildParse)
 						{
-							CString strWebName = pChildParse->attr(_T("id"), _T(""));
-							if (strWebName == _T(""))strWebName = pChild->Name;
-							if (strWebName != _T(""))
-							{
-								HWND hCtrl = (HWND)pChild->Handle.ToPointer();
-								CString strEvents = pChildParse->attr(_T("bindevent"), _T(""));
-								BindWebObj* pObj = new BindWebObj;
-								pObj->nType = 0;
-								pObj->m_pGrid = _pGrid;
-								CTangramXmlParse* pChildUIData = pChildParse->GetChild(_T("event"));
-								if(pChildUIData)
-									pObj->m_strBindData = pChildUIData->xml();
-								else
-									pObj->m_strBindData = pChildParse->xml();
-								pObj->m_hWnd = hCtrl;
-								pObj->m_strObjName = pChild->Name;
-								pObj->m_strObjType = strType;
-								pObj->m_strBindObjName = strWebName;
-								__int64 nHandle = 0;
-								_pGrid->get_Handle(&nHandle);
-								HWND hWnd = (HWND)nHandle;
-								::PostMessage(theApp.m_pHubbleImpl->m_hHubbleWnd, WM_HUBBLE_DATA, (WPARAM)pObj, (LPARAM)20200204);
-							}
-
 							pChildParse2 = pChildParse->GetChild(_T("default"));
 						}
 						if (pChildParse2)

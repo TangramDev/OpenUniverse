@@ -607,21 +607,6 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 										CTangramXmlParse* pChildParse2 = nullptr;
 										if (pChildParse)
 										{
-											CString strWebName = pChildParse->attr(_T("id"), _T(""));
-											if (strWebName == _T(""))strWebName = pChild->Name;
-											if (strWebName != _T(""))
-											{
-												BindWebObj* pObj = new BindWebObj;
-												pObj->nType = 0;
-												pObj->m_pObjDisp = (IDispatch*)Marshal::GetIUnknownForObject(pChild).ToPointer();
-												pObj->m_hWnd = (HWND)pChild->Handle.ToPointer();
-												pObj->m_strObjName = name;
-												pObj->m_strObjType = strType;
-												pObj->m_strBindObjName = strWebName;
-												pObj->m_strBindData = pChildParse->xml();//~CTangramXmlParse()attr(_T("bindevent"), _T(""));
-												HWND hForm = (HWND)pForm->Handle.ToPointer();
-												::PostMessage(hForm, WM_HUBBLE_DATA, (WPARAM)pObj, 5);
-											}
 											pChildParse2 = pChildParse->GetChild(_T("default"));
 										}
 
@@ -764,30 +749,6 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 						CTangramXmlParse* pChildParse2 = nullptr;
 						if (pChildParse)
 						{
-							CString strWebName = pChildParse->attr(_T("id"), _T(""));
-							if (strWebName == _T(""))strWebName = pChild->Name;
-							if (strWebName != _T(""))
-							{
-								HWND hCtrl = (HWND)pChild->Handle.ToPointer();
-								CString strEvents = pChildParse->attr(_T("bindevent"), _T(""));
-								BindWebObj* pObj = new BindWebObj;
-								pObj->nType = 0;
-								pObj->m_pGrid = _pGrid;
-								CTangramXmlParse* pChildUIData = pChildParse->GetChild(_T("event"));
-								if (pChildUIData)
-									pObj->m_strBindData = pChildUIData->xml();
-								else
-									pObj->m_strBindData = pChildParse->xml();
-								pObj->m_hWnd = hCtrl;
-								pObj->m_strObjName = pChild->Name;
-								pObj->m_strObjType = strType;
-								pObj->m_strBindObjName = strWebName;
-								__int64 nHandle = 0;
-								_pGrid->get_Handle(&nHandle);
-								HWND hWnd = (HWND)nHandle;
-								::PostMessage(theApp.m_pHubbleImpl->m_hHubbleWnd, WM_HUBBLE_DATA, (WPARAM)pObj, (LPARAM)20200204);
-							}
-
 							pChildParse2 = pChildParse->GetChild(_T("default"));
 						}
 						if (pChildParse2)

@@ -34,7 +34,6 @@ public:
 	CWormhole*								m_pWormhole;
 
 	map<CString, CString>					m_mapKey;
-	map<CString, BindWebObj*>				m_mapBindWebObj;
 
 	void SendMessage();
 

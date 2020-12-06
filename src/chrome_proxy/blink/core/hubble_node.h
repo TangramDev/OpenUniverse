@@ -104,9 +104,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   float getFloat(const String& strKey);
   void setFloat(const String& strKey, float value);
   void DispatchGridEvent(Element* elem, const String& eventName);
-  void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
   void ProcessNodeMessage(const String& msgID);
-  void ProcessNodeEvent(const String& ctrlName, const String& eventName);
 
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);
@@ -139,16 +137,15 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   String name_;
 
   Member<Element> element_;
-  mutable Member<Document> innerdoc_;
-  mutable Member<Element> messageElem_;
-  mutable Member<Element> propertyElem_;
-  mutable Member<Element> uiElem_;
-  mutable Member<Element> eventElem_;
-  mutable Member<Element> gridElem_;
-  mutable Member<DOMParser> DOMParser_;
-  mutable Member<DOMParser> innerDOMParser_;
   mutable Member<Hubble> hubble_;
+  mutable Member<Element> uiElem_;
+  mutable Member<Document> innerdoc_;
+  mutable Member<Element> gridElem_;
+  mutable Member<Element> eventElem_;
+  mutable Member<Element> messageElem_;
   mutable Member<HubbleNode> rootNode_ ;
+  mutable Member<Element> propertyElem_;
+  mutable Member<DOMParser> innerDOMParser_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
   mutable Member<Element> m_pVisibleContentElement;

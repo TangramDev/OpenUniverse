@@ -154,7 +154,6 @@ public:
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
-	map<CString, BindWebObj*>				m_mapBindWebObj;
 
 	map<CString, CString>					m_mapKey;
 	void SendMessage();

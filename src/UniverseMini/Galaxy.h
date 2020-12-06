@@ -28,7 +28,6 @@ public:
 	CString									m_strPath;
 
 	map<CString, CString>					m_mapKey;
-	map<CString, BindWebObj*>				m_mapBindWebObj;
 	BEGIN_MSG_MAP(CWinForm)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)

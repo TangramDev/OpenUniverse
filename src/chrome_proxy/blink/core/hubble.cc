@@ -486,14 +486,13 @@ namespace blink {
 		HubbleNode* grid = xObj->grid();
 		if (grid)
 		{
-			grid->setMsgID(ctrlName_ + "_" + eventName);
-			grid->xobj()->setSender(xObj);
-			grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid->xobj()));
 		}
 		else
 		{
 			xObj->fireEvent(ctrlName + "@" + eventName, xObj);
 		}
+
+		HubbleNode* gridfortarget = nullptr;
 
 		String strXml = xObj->getStr(eventName + "Xml");
 		if (strXml.IsNull() || strXml == "")
@@ -504,32 +503,37 @@ namespace blink {
 			if (it != grid->m_mapEventInfo.end())
 			{
 				Element* eventItems = it->second;
-
-				for (auto* it : *(eventItems->Children()))
+				HTMLCollection* list2 = eventItems->Children();
+				if (list2->length())
 				{
-					Element* elem = it;
-					Node* pNode = elem;
-					if(pNode)
-					{ 
-						if (pNode->getNodeType() == 1 && elem->hasAttribute("target")) {
-							AtomicString target = elem->getAttribute("target");
-							if (target != "") {
-								AtomicString galaxy = elem->getAttribute("galaxy");
-								if (galaxy == "")
-									galaxy = "default";
-								AtomicString cluster = elem->getAttribute("cluster");
-								if (cluster == "")
-								{
-									cluster = "__viewport_default__";
-								}
-								HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
-								if (gridfortarget == nullptr)
-								{
-									if (xObj->grid())
+					for (unsigned int i = 0; i < list2->length(); i++)
+					{
+						Element* elem = list2->item(i);
+						Node* pNode = elem;
+						if (pNode)
+						{
+							if (pNode->getNodeType() == 1) {
+								AtomicString target = elem->getAttribute("target");
+								if (target == ""||target.IsNull())
+									gridfortarget = grid;
+								else{
+									AtomicString galaxy = elem->getAttribute("galaxy");
+									if (galaxy == "")
+										galaxy = "default";
+									AtomicString cluster = elem->getAttribute("cluster");
+									if (cluster == "")
 									{
-										HubbleWinform* form = xObj->grid()->parentForm();
-										if (form)
-											gridfortarget = form->getGrid(galaxy, cluster, target);
+										cluster = "__viewport_default__";
+									}
+									gridfortarget = getGrid(galaxy, cluster, target);
+									if (gridfortarget == nullptr)
+									{
+										if (xObj->grid())
+										{
+											HubbleWinform* form = xObj->grid()->parentForm();
+											if (form)
+												gridfortarget = form->getGrid(galaxy, cluster, target);
+										}
 									}
 								}
 								if (!!gridfortarget) {
@@ -561,9 +565,11 @@ namespace blink {
 						{
 							Element* elem = (Element*)workItem->childNodes()->item(i);
 							Node* pNode = elem;
-							if (pNode->getNodeType() == 1 && elem->hasAttribute("target")) {
+							if (pNode->getNodeType() == 1) {
 								AtomicString target = elem->getAttribute("target");
-								if (target != "") {
+								if (target == "" || target.IsNull())
+									gridfortarget = grid;
+								else {
 									AtomicString galaxy = elem->getAttribute("galaxy");
 									if (galaxy == "")
 										galaxy = "default";
@@ -572,7 +578,7 @@ namespace blink {
 									{
 										cluster = "__viewport_default__";
 									}
-									HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
+									gridfortarget = getGrid(galaxy, cluster, target);
 									if (gridfortarget == nullptr)
 									{
 										if (xObj->grid())
@@ -582,12 +588,12 @@ namespace blink {
 												gridfortarget = form->getGrid(galaxy, cluster, target);
 										}
 									}
-									if (!!gridfortarget) {
-										gridfortarget->element_ = elem;
-										gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
-										gridfortarget->xobj()->setSender(xObj);
-										gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-									}
+								}
+								if (!!gridfortarget) {
+									gridfortarget->element_ = elem;
+									gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
+									gridfortarget->xobj()->setSender(xObj);
+									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 								}
 							}
 						}

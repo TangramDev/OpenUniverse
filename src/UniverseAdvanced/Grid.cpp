@@ -100,18 +100,6 @@ void CGrid::InitWndGrid()
 		m_strName.Format(_T("Grid_%p"), (LONGLONG)this);
 	}
 	m_pRootObj->m_mapChildGrid[m_strName] = this;
-	if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
-	{
-		auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj.find(m_strName);
-		if (it == m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj.end())
-		{
-			BindWebObj* pObj = new BindWebObj;
-			pObj->nType = 1;
-			pObj->m_pGrid = this;
-			pObj->m_strBindObjName = m_strName;
-			m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapBindWebObj[m_strName] = pObj;
-		}
-	}
 	m_nActivePage = m_pHostParse->attrInt(TGM_ACTIVE_PAGE, 0);
 	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
 	if (m_pGridShareData->m_pGalaxy && m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)

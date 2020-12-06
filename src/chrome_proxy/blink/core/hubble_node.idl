@@ -20,7 +20,6 @@
 
 	//Node API
 	void DispatchGridEvent(Element elem, DOMString eventName);
-	void DispatchGridEvent(HubbleXobj xObj, DOMString ctrlName, DOMString eventName);
 	DOMString getStr(DOMString strKey);
 	void setStr(DOMString strKey, DOMString value);
 	long getLong(DOMString strKey);
@@ -39,7 +38,7 @@
 
 	attribute DOMString msgID;
 	attribute Element workElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] attribute DOMParser xmlParse;
+
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Document doc;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long row;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long col;
