@@ -10,6 +10,7 @@
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/dom_token_list.h"
 #include "third_party/blink/renderer/core/dom/element.h"
+#include "third_party/blink/renderer/core/dom/document_fragment.h"
 #include "third_party/blink/renderer/core/dom/node.h"
 #include "third_party/blink/renderer/core/dom/node_list.h"
 #include "third_party/blink/renderer/core/html/html_element.h"
@@ -26,7 +27,6 @@
 namespace blink {
 
 	HubbleNode::HubbleNode(LocalFrame* frame) : DOMWindowClient(frame) {
-		innerdoc_ = nullptr;
 		rootNode_ = nullptr;
 		innerDOMParser_ = nullptr;
 		messageElem_ = nullptr;
@@ -35,6 +35,7 @@ namespace blink {
 		uiElem_ = nullptr;
 		m_pParentForm = nullptr;
 		m_pRenderframeImpl = nullptr;
+		DocumentFragment_ = nullptr;
 		m_pVisibleContentElement = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 	}
@@ -91,6 +92,11 @@ namespace blink {
 	{
 		return propertyElem_;
 
+	}
+
+	DocumentFragment* HubbleNode::docFragment()
+	{
+		return DocumentFragment_.Get();
 	}
 
 	long HubbleNode::row()
@@ -169,13 +175,13 @@ namespace blink {
 		ScriptWrappable::Trace(visitor);
 		DOMWindowClient::Trace(visitor);
 		visitor->Trace(hubble_);
-		visitor->Trace(innerdoc_);
 		visitor->Trace(innerXobj_);
 		visitor->Trace(element_);
 		visitor->Trace(eventElem_);
 		visitor->Trace(gridElem_);
 		visitor->Trace(uiElem_);
 		visitor->Trace(rootNode_);
+		visitor->Trace(DocumentFragment_);
 		visitor->Trace(messageElem_);
 		visitor->Trace(propertyElem_);
 		visitor->Trace(m_pParentForm);
@@ -529,13 +535,6 @@ namespace blink {
 		{
 			grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid->xobj()));
 		}
-	}
-
-	Document* HubbleNode::doc()
-	{
-		if (innerdoc_)
-			return innerdoc_.Get();
-		return nullptr;
 	}
 
 	void HubbleNode::DispatchGridEvent(Element* e, const String& eventName)

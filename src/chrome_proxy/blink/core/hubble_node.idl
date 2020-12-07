@@ -39,7 +39,7 @@
 	attribute DOMString msgID;
 	attribute Element workElement;
 
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Document doc;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DocumentFragment docFragment;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long row;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long col;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long rows;

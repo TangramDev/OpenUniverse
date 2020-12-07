@@ -12,6 +12,7 @@
 
 #include "base/guid.h"
 #include "third_party/blink/renderer/core/dom/document.h"
+#include "third_party/blink/renderer/core/dom/document_fragment.h"
 #include "third_party/blink/renderer/core/dom/dom_token_list.h"
 #include "third_party/blink/renderer/core/dom/element.h"
 #include "third_party/blink/renderer/core/dom/node.h"
@@ -552,10 +553,10 @@ namespace blink {
 		else
 		{
 			String tagName = xObj->getStr(eventName + "TagName");
-			if (grid->doc())
+			if (grid->DocumentFragment_)
 			{
 				AtomicString name = AtomicString(tagName);
-				HTMLCollection* list = grid->doc()->getElementsByTagName(name);
+				HTMLCollection* list = grid->DocumentFragment_->getElementsByTagName(name);
 				if (list->length())
 				{
 					list = list->item(0)->getElementsByTagName(AtomicString(eventName.LowerASCII()));
@@ -663,7 +664,7 @@ namespace blink {
 		node->handle_ = handle;
 		node->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapHubbleNode.insert(handle, node);
-
+		String strMessageXml = "";
 		__int64 nGalaxyHandle = xobj->getInt64(L"Galaxyhandle");
 		blink::HubbleGalaxy* pGalaxy = nullptr;
 		HubbleNode* m_pRootNode = nullptr;
@@ -695,21 +696,23 @@ namespace blink {
 			WebString str = strname;
 			m_pRootNode->m_mapGrid[str.Utf16()] = node;
 
-			String strMessageXml = xobj->getStr(L"hubblexml");
-			xobj->setStr(L"hubblexml", L"");
-			if (!m_pRootNode->innerdoc_)
+			strMessageXml = xobj->getStr(L"hubblexml");
+			if (node == m_pRootNode && strMessageXml.IsNull() == false && strMessageXml != "")
 			{
-				node->innerDOMParser_ = DOMParser::Create(*(DomWindow()->document()));
-				if (node->innerDOMParser_ != nullptr)
+				node->DocumentFragment_ = DomWindow()->document()->createDocumentFragment();
+				if (node->DocumentFragment_)
 				{
-					ExceptionState exception_state(nullptr,
-						ExceptionState::kExecutionContext,
-						"DOMParser",
-						"");
-					node->innerdoc_ = node->innerDOMParser_->parseFromString(blink::StringOrTrustedHTML::FromString(strMessageXml), "application/xml", exception_state);
+					ExceptionState exception_state(V8PerIsolateData::MainThreadIsolate(), ExceptionState::kSetterContext,
+						"Element", "outerHTML");
+					Element* e = DomWindow()->document()->CreateElementForBinding("hubble", exception_state);
+					if (e)
+					{
+						e->SetInnerHTMLFromString(strMessageXml, exception_state);
+						node->DocumentFragment_->appendChild(e->firstChild());
+					}
 				}
-			}else
-				node->innerdoc_ = m_pRootNode->innerdoc_;
+			}
+			xobj->setStr(L"hubblexml", L"");
 		}
 		if (bNewGalaxy)
 		{
@@ -726,13 +729,13 @@ namespace blink {
 			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 		}
 
-		if (node->innerdoc_)
+		if (m_pRootNode->DocumentFragment_)
 		{
+			node->DocumentFragment_ = m_pRootNode->DocumentFragment_;
 			String name(std::to_string(handle).c_str());
-			blink::NameNodeList* list_ = node->innerdoc_->getElementsByName(AtomicString(name));
+			blink::NameNodeList* list_ = m_pRootNode->DocumentFragment_->getElementsByName(AtomicString(name));
 			if (list_->length())
 				node->gridElem_ = (Element*)list_->item(0);
-			//node->gridElem_ = node->innerdoc_->getElementById(AtomicString(strname));
 			if (node->gridElem_)
 			{
 				HTMLCollection* list = node->gridElem_->getElementsByTagName("message");
@@ -755,10 +758,10 @@ namespace blink {
 								if (pPNode&&pNode->getNodeType() == 1)
 								{
 									node->setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
-									node->setStr(L"BindObj", pPNode->tagName());
-									node->setStr(L"Bindevent", e->tagName());
+									node->setStr(L"BindObj", pPNode->tagName().LowerASCII());
+									node->setStr(L"Bindevent", e->tagName().LowerASCII());
 									String strIndex = e->tagName() + "@" + pPNode->tagName();
-									node->m_mapEventInfo[WebString(strIndex).Utf16()] = e;
+									node->m_mapEventInfo[WebString(strIndex.LowerASCII()).Utf16()] = e;
 									m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
 								}
 							}

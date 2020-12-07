@@ -29,6 +29,7 @@ class HubbleControl;
 class Document;
 class ScriptState;
 class ExceptionState;
+class DocumentFragment;
 class V8ApplicationCallback;
 class WebLocalFrameClient;
 class SerializedScriptValue;
@@ -53,12 +54,12 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   long rows();
   long cols();
   int64_t handle();
-  Document* doc();
   HubbleXobj* xobj();
   Element* uiElement();
   Element* gridElement();
   Element* eventElement();
   Element* propertyElement();
+  DocumentFragment* docFragment();
 
   HubbleNode* root();
   HubbleNode* parentGrid();
@@ -139,7 +140,6 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   Member<Element> element_;
   mutable Member<Hubble> hubble_;
   mutable Member<Element> uiElem_;
-  mutable Member<Document> innerdoc_;
   mutable Member<Element> gridElem_;
   mutable Member<Element> eventElem_;
   mutable Member<Element> messageElem_;
@@ -149,6 +149,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
   mutable Member<Element> m_pVisibleContentElement;
+  mutable Member <DocumentFragment> DocumentFragment_;
 
   WebLocalFrameClient* m_pRenderframeImpl;
   map<int, HubbleNode*> m_mapChildNode;
