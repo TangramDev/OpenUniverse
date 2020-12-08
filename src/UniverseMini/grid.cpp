@@ -1686,5 +1686,6 @@ STDMETHODIMP CGrid::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra
 
 STDMETHODIMP CGrid::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
 {
+	*bstrVal = CComBSTR(m_pHostParse->xml());
 	return S_OK;
 }

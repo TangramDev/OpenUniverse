@@ -2870,6 +2870,7 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 
 STDMETHODIMP CGrid::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
 {
+	*bstrVal = CComBSTR(m_pHostParse->xml());
 	return S_OK;
 }
 

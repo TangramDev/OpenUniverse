@@ -579,7 +579,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 							}
 							else 
 							{
-								Button^ pBtn = (Button^)pChild;
+								Control^ pBtn = (Control^)pChild;
 								CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 								if (_pChild)
 								{
@@ -802,7 +802,7 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 						}
 						else 
 						{
-							Button^ pBtn = (Button^)pChild;
+							Control^ pBtn = (Control^)pChild;
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{

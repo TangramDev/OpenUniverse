@@ -355,6 +355,8 @@ namespace Browser {
 						{
 							::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 							BrowserLayout();
+							::SetFocus(m_pVisibleWebWnd->m_hWnd);
+							::SetForegroundWindow(m_pVisibleWebWnd->m_hWnd);
 						}
 					}
 					catch (...)

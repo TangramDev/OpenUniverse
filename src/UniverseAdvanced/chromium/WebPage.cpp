@@ -131,15 +131,15 @@ namespace Browser {
 					pSession->InsertLong(_T("row"), pGrid->m_nRow);
 					pSession->InsertLong(_T("col"), pGrid->m_nCol);
 					pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
-					pSession->InsertString(_T("name@page"), pGrid->m_strName);
-					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
-					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
 					if (pGrid->m_strHubbleXml != _T(""))
 					{
 						pSession->InsertString(_T("hubblexml"), pGrid->m_strHubbleXml);
 					}
 					pSession->InsertString(_T("gridxml"), pGrid->m_pHostParse->xml());
+					pSession->InsertString(_T("name@page"), pGrid->m_strName);
+					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
+					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
 					pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
 					pSession->InsertString(_T("cluster"), pGrid->m_pRootObj->m_strKey);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
