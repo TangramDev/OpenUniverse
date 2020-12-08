@@ -1,6 +1,6 @@
 #include "..\CosmosMini\CosmosProxy.h"
 /********************************************************************************
-*					Open Universe - version 1.1.2.23							*
+*					Open Universe - version 1.1.3.24							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *

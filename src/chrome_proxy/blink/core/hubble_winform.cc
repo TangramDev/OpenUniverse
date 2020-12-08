@@ -611,17 +611,13 @@ namespace blink {
 			{
 				ExceptionState exception_state(V8PerIsolateData::MainThreadIsolate(), ExceptionState::kSetterContext,
 					"Element", "outerHTML");
-				Element* e = DomWindow()->document()->CreateElementForBinding("hubble", exception_state);
-				if (e)
-				{
-					e->SetInnerHTMLFromString(strMessageXml, exception_state);
-					DocumentFragment_->appendChild(e->firstChild());
-				}
+				hubble_->helperElem_->SetInnerHTMLFromString(strMessageXml, exception_state);
+				DocumentFragment_->appendChild(hubble_->helperElem_->firstChild());
 
 				if (DocumentFragment_->Children()->length())
 				{
-					Element* formElem = DocumentFragment_->Children()->item(0);
-					HTMLCollection* list_ = formElem->Children();
+					formElem_ = DocumentFragment_->Children()->item(0);
+					HTMLCollection* list_ = formElem_->Children();
 					for (unsigned int i = 0; i < list_->length(); i++)
 					{
 						Element* elem = list_->item(i);
@@ -704,7 +700,7 @@ namespace blink {
 						if (galaxy == "")
 							galaxy = "default";
 						if (cluster == "")
-							cluster = "__viewport_default__";
+							cluster = "default";
 
 						gridfortarget = hubble_->getGrid(galaxy, cluster, target);
 						if (gridfortarget == nullptr) {

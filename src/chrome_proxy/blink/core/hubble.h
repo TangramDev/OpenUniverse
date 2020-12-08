@@ -161,6 +161,7 @@ namespace blink {
 
 	 WebLocalFrameClient* m_pRenderframeImpl;
 	 String url_;
+	 mutable Member<Element> helperElem_;
 	 mutable Member<HubbleXobj> innerXobj_;
 	 mutable Member<Element> m_pVisibleContentElement;
 

@@ -40,8 +40,12 @@ namespace blink {
 		url_ = L"";
 		is_pending_ = false;
 		innerXobj_ = newVar(L"");
+		helperElem_ = nullptr;
 		m_pRenderframeImpl = nullptr;
 		m_pVisibleContentElement = nullptr;
+		ExceptionState exception_state(V8PerIsolateData::MainThreadIsolate(), ExceptionState::kSetterContext,
+			"Element", "creatHelper");
+		helperElem_ = DomWindow()->document()->CreateElementForBinding("hubble", exception_state);
 	}
 
 	Hubble::~Hubble() {
@@ -58,6 +62,7 @@ namespace blink {
 		visitor->Trace(mapHubbleCallback_);
 		visitor->Trace(mapCallbackFunction_);
 		visitor->Trace(m_pVisibleContentElement);
+		visitor->Trace(helperElem_);
 		visitor->Trace(innerXobj_);
 		visitor->Trace(mapCloudSession_);
 	}
@@ -709,12 +714,8 @@ namespace blink {
 				{
 					ExceptionState exception_state(V8PerIsolateData::MainThreadIsolate(), ExceptionState::kSetterContext,
 						"Element", "outerHTML");
-					Element* e = DomWindow()->document()->CreateElementForBinding("hubble", exception_state);
-					if (e)
-					{
-						e->SetInnerHTMLFromString(strMessageXml, exception_state);
-						node->DocumentFragment_->appendChild(e->firstChild());
-					}
+					helperElem_->SetInnerHTMLFromString(strMessageXml, exception_state);
+					node->DocumentFragment_->appendChild(helperElem_->firstChild());
 				}
 			}
 			xobj->setStr(L"hubblexml", L"");
