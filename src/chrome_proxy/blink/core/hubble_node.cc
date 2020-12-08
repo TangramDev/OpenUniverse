@@ -28,7 +28,6 @@ namespace blink {
 
 	HubbleNode::HubbleNode(LocalFrame* frame) : DOMWindowClient(frame) {
 		rootNode_ = nullptr;
-		innerDOMParser_ = nullptr;
 		messageElem_ = nullptr;
 		propertyElem_ = nullptr;
 		eventElem_ = nullptr;
@@ -78,6 +77,11 @@ namespace blink {
 		return eventElem_;
 	}
 
+	Element* HubbleNode::messageElement()
+	{
+		return messageElem_;
+	}
+
 	Element* HubbleNode::gridElement()
 	{
 		return gridElem_;
@@ -91,7 +95,6 @@ namespace blink {
 	Element* HubbleNode::propertyElement()
 	{
 		return propertyElem_;
-
 	}
 
 	DocumentFragment* HubbleNode::docFragment()
@@ -185,7 +188,6 @@ namespace blink {
 		visitor->Trace(messageElem_);
 		visitor->Trace(propertyElem_);
 		visitor->Trace(m_pParentForm);
-		visitor->Trace(innerDOMParser_);
 		visitor->Trace(m_pVisibleContentElement);
 		visitor->Trace(mapHubbleEventCallback_);
 	}

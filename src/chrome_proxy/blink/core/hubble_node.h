@@ -58,6 +58,7 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   Element* uiElement();
   Element* gridElement();
   Element* eventElement();
+  Element* messageElement();
   Element* propertyElement();
   DocumentFragment* docFragment();
 
@@ -93,7 +94,6 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void setMsgID(const String& value);
   Element* workElement();
   void setWorkElement(Element*);
-  DOMParser* xmlParse();
 
   // Node API:
   String getStr(const String& strKey);
@@ -145,7 +145,6 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   mutable Member<Element> messageElem_;
   mutable Member<HubbleNode> rootNode_ ;
   mutable Member<Element> propertyElem_;
-  mutable Member<DOMParser> innerDOMParser_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
   mutable Member<Element> m_pVisibleContentElement;

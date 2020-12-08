@@ -1832,6 +1832,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
 							pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
 							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+							pHubbleSession->InsertString(_T("hubblexml"), m_strCurrentWinFormTemplate);
 							::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
 							if (bNeedQueryOnCloseEvent)
 								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
@@ -1859,7 +1860,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 
 							strFormID = m_Parse.attr(_T("objid"), _T(""));
 							pHubbleSession->InsertString(_T("objid"), strFormID);
-
+							pHubbleSession->InsertString(_T("hubblexml"), m_strCurrentWinFormTemplate);
 							theAppProxy.m_mapSession2Wormhole[pHubbleSession] = pCloudSession;
 							if (thisForm->IsMdiContainer)
 							{

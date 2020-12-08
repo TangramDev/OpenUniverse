@@ -34,6 +34,7 @@ class V8ApplicationCallback;
 class Document;
 class ScriptState;
 class ExceptionState;
+class DocumentFragment;
 class WebLocalFrameClient;
 class SerializedScriptValue;
 class V8ApplicationCallback;
@@ -59,14 +60,21 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   bool isReady();
   long formType();
 
+  Element* uiElement();
+  Element* formElement();
+  Element* eventElement();
+  Element* messageElement();
+  Element* propertyElement();
+
   String msgID();
   void setMsgID(const String& value);
 
   HubbleXobj* xobj();
-  DOMParser* xmlParse();
   HubbleNode* mdibindgrid();
-  HubbleNode* mdiwebbindgrid();
   HubbleWinform* mdiParent();
+  HubbleWinform* activeMDIChild();
+  HubbleNode* mdiwebbindgrid();
+  DocumentFragment* docFragment();
   HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
   HubbleGalaxy* getGalaxy(const String& galaxyName);
   String getStr(const String& strKey);
@@ -78,7 +86,10 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   float getFloat(const String& strKey);
   void setFloat(const String& strKey, float value);
   void DispatchGridEvent(Element* elem, const String& eventName);
-  void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
+  void ProcessFormMessage(const String& msgID);
+
+  void InitWinForm();
+  //void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
   // Message method
   void addEventListener(const String& eventName, V8ApplicationCallback* callback);
@@ -113,21 +124,29 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   ~HubbleWinform() override;
 
   bool isReady_ = false;
-  mutable Member<DOMParser> DOMParser_;
-  mutable Member<Element> m_pContentElement;
   int64_t handle_ = 0;
   int64_t m_nMdiwebbindgridhandle = 0;
   mutable Member<Hubble> hubble_;
   mutable Member<HubbleXobj> innerXobj_;
+  mutable Member<Element> m_pContentElement;
   mutable Member<HubbleNode> m_pBindMdiNode;
   mutable Member<HubbleNode> m_pWebBindMdiNode;
+  mutable Member<HubbleWinform> m_pMDIParent;
+  mutable Member<HubbleWinform> m_pActiveMDIChild;
+  mutable Member <DocumentFragment> DocumentFragment_;
+  mutable Member<Element> uiElem_;
+  mutable Member<Element> formElem_;
+  mutable Member<Element> eventElem_;
+  mutable Member<Element> messageElem_;
+  mutable Member<Element> propertyElem_;
 
   map<wstring, HubbleGalaxy*> m_mapHubbleGalaxy;
 
-
   WebLocalFrameClient* m_pRenderframeImpl;
+  map < wstring, Element* > m_mapEventInfo;
   map<int64_t, Member<HubbleControl>> m_mapChildControl;
   map<std::wstring, Member<HubbleControl>> m_mapChildControl2;
+                                      
 private:
   String id_;
   String name_;

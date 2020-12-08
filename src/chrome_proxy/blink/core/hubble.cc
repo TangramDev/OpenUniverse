@@ -281,6 +281,8 @@ namespace blink {
 		form->innerXobj_->setStr(L"objID", L"WinForm");
 		form->m_pRenderframeImpl = m_pRenderframeImpl;
 		m_mapWinForm.insert(form->handle_, form);
+		form->InitWinForm();
+
 		long nFormType = obj->getLong(L"WinFormType");
 		switch (nFormType)
 		{
@@ -319,6 +321,7 @@ namespace blink {
 			{
 				form = it->value.Get();
 				parentmdiform = form->mdiParent();
+				parentmdiform->m_pActiveMDIChild = form;
 				ExceptionState exception_state(nullptr,
 					ExceptionState::kExecutionContext,
 					"MdiChildActive",
@@ -388,6 +391,7 @@ namespace blink {
 		if (it != m_mapWinForm.end())
 		{
 			form = it->value.Get();
+			form->m_pActiveMDIChild = nullptr;
 			if (m_pVisibleContentElement)
 			{
 				ExceptionState exception_state(nullptr,
@@ -616,6 +620,7 @@ namespace blink {
 			{
 				form = it->value.Get();
 				form->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforwinform, xobj));
+				form->ProcessFormMessage(xobj->getStr(L"msgID"));
 			}
 		}
 		nHandle = xobj->getInt64(L"gridhandle");
@@ -735,9 +740,8 @@ namespace blink {
 			String name(std::to_string(handle).c_str());
 			blink::NameNodeList* list_ = m_pRootNode->DocumentFragment_->getElementsByName(AtomicString(name));
 			if (list_->length())
-				node->gridElem_ = (Element*)list_->item(0);
-			if (node->gridElem_)
 			{
+				node->gridElem_ = (Element*)list_->item(0);
 				HTMLCollection* list = node->gridElem_->getElementsByTagName("message");
 				if (list->length()) {
 					node->messageElem_ = list->item(0);
@@ -755,14 +759,21 @@ namespace blink {
 								Element* e = list2->item(i);
 								Node* pNode = e;
 								Element* pPNode = (Element*)e->parentNode()->parentNode();
-								if (pPNode&&pNode->getNodeType() == 1)
+								if (pPNode&& pPNode->parentNode() == node->gridElem_ &&pNode->getNodeType() == 1)
 								{
-									node->setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
-									node->setStr(L"BindObj", pPNode->tagName().LowerASCII());
-									node->setStr(L"Bindevent", e->tagName().LowerASCII());
-									String strIndex = e->tagName() + "@" + pPNode->tagName();
-									node->m_mapEventInfo[WebString(strIndex.LowerASCII()).Utf16()] = e;
-									m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
+									String name = e->tagName().LowerASCII();
+									String parentname = pPNode->tagName().LowerASCII();
+									String strIndex = name + "@" + parentname;
+									wstring key = WebString(strIndex).Utf16();
+									auto it = node->m_mapEventInfo.find(key);
+									if (it == node->m_mapEventInfo.end())
+									{
+										node->setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
+										node->setStr(L"BindObj", parentname);
+										node->setStr(L"Bindevent", name);
+										node->m_mapEventInfo[key] = e;
+										m_pRenderframeImpl->SendHubbleMessageEx(node->xobj()->session_);
+									}
 								}
 							}
 						}
@@ -857,6 +868,37 @@ namespace blink {
 		DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
 
 		return node;
+	}
+
+	HubbleNode* Hubble::createHubbleWinform(HubbleXobj* xobj)
+	{
+		blink::HubbleWinform* form = nullptr;
+		__int64 handle = xobj->getInt64(L"form");
+		if (handle)
+		{
+			auto it = m_mapWinForm.find(handle);
+			if (it != m_mapWinForm.end()) {
+				form = it->value;
+				handle = xobj->getInt64(L"formhandle");
+				if (handle)
+				{
+					m_mapWinForm.erase(it);
+					m_mapWinForm.insert(handle, form);
+					form->InitWinForm();
+				}
+				if (form) {
+					invokeWinFormCreatedCallback(form);
+					DispatchEvent(*blink::HubbleEvent::Create(
+						blink::event_type_names::kLoadwinform, xobj));
+				}
+			}
+		}
+		else
+		{
+			handle = xobj->getInt64(L"formhandle");
+			form = CreateForm(handle, xobj);
+		}
+		return nullptr;
 	}
 
 	HubbleNode* Hubble::getGrid(const int64_t nodeHandle)

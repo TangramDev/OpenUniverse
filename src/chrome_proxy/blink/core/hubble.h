@@ -47,7 +47,6 @@ namespace blink {
 	class Element;
 	class LocalFrame;
 	class Document;
-	class DOMParser;
 	class ScriptState;
 	class HubbleXobj;
 	class HubbleNode;
@@ -129,6 +128,7 @@ namespace blink {
 	 void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
+	 HubbleNode* createHubbleWinform(HubbleXobj* xobj);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 	 HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
 
