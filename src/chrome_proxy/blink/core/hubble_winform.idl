@@ -8,7 +8,8 @@
 		[DefaultValue = Undefined] optional ApplicationCallback callback);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void addEventListener(DOMString subObjName, DOMString eventName, ApplicationCallback callback);
-	HubbleNode getGrid(DOMString galaxyName, DOMString clusterName, DOMString gridName);
+	HubbleNode getGrid(Element elem);
+	HubbleNode getGrid(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
 	HubbleGalaxy getGalaxy(DOMString galaxyName);
 	void removeEventListener(DOMString eventName);
 	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);

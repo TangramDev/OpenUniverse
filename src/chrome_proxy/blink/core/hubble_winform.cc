@@ -307,13 +307,55 @@ namespace blink {
 
 	HubbleNode* HubbleWinform::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
 	{
+		String clusterName_ = clusterName;
+		if (clusterName == "undefined" || clusterName == "" || clusterName.IsNull() == true)
+			clusterName_ = "default";
+		String gridName_ = gridName;
+		if (gridName == "undefined" || gridName == "" || gridName.IsNull() == true)
+			gridName_ = "default";
 		auto it = m_mapHubbleGalaxy.find(WebString(galaxyName).Utf16());
 		if (it != m_mapHubbleGalaxy.end())
 		{
-			String clusterName_ = clusterName + "__" + gridName;
+			clusterName_ = clusterName_ + "__" + gridName_;
 			auto it2 = it->second->m_mapHubbleNode2.find(WebString(clusterName_).Utf16());
 			if (it2 != it->second->m_mapHubbleNode2.end())
 				return it2->second;
+		}
+		return nullptr;
+	}
+
+	HubbleNode* HubbleWinform::getGrid(Element* elem)
+	{
+		if (elem)
+		{
+			Node* pNode = elem;
+			if (pNode->getNodeType() == 1) {
+				AtomicString target = elem->getAttribute("target");
+				AtomicString galaxy = elem->getAttribute("galaxy");
+				AtomicString cluster = elem->getAttribute("cluster");
+				if (galaxy == "" || galaxy.IsNull() == true)
+					galaxy = "default";
+				if (cluster == "" || cluster.IsNull() == true)
+					cluster = "default";
+				if (target.IsNull() == true || target == "")
+				{
+					auto it = m_mapHubbleGalaxy.find(WebString(galaxy).Utf16());
+					if (it != m_mapHubbleGalaxy.end())
+					{
+						auto it2 = it->second->m_mapRootNode.find(WebString(cluster).Utf16());
+						if (it2 != it->second->m_mapRootNode.end())
+							return it2->second;
+						return nullptr;
+					}
+				}
+				else
+				{
+					HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
+					if (!!gridfortarget) {
+						return gridfortarget;
+					}
+				}
+			}
 		}
 		return nullptr;
 	}
@@ -348,7 +390,7 @@ namespace blink {
 
 	void HubbleWinform::addEventListener(const String& eventName, V8ApplicationCallback* callback)
 	{
-		blink::Hubble* pHubble = (blink::Hubble*)DomWindow()->apppage();
+		blink::Hubble* pHubble = (blink::Hubble*)DomWindow()->cosmos();
 		if (callback)
 		{
 			auto it = innerXobj_->session_.m_mapString.find(L"objID");

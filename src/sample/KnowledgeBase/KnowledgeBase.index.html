@@ -47,7 +47,7 @@
             }
         }
 
-        apppage.onGridCreated = function (e) {
+        cosmos.onGridCreated = function (e) {
             window.grids[e.grid.name] = e.grid;
             if (e.grid.name == 'navcontrol') {
                 e.grid.addEventListener("treeView1", "OnAfterSelect", function (e) {

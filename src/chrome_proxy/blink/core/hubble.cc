@@ -438,28 +438,12 @@ namespace blink {
 				Element* elem = static_cast<Element*>(element->childNodes()->item(i));
 				if (elem)
 				{
-					Node* pNode = elem;
-					if (pNode->getNodeType() == 1) {
-						AtomicString target = "";
-						if (elem->hasAttribute("target"))
-						{
-							target = elem->getAttribute("target");
-							if (target!="") {
-								AtomicString galaxy = elem->getAttribute("galaxy");
-								AtomicString cluster = elem->getAttribute("cluster");
-								if (galaxy == "")
-									galaxy = "default";
-								if (cluster == "")
-									cluster = "__viewport_default__";
-								HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
-								if (!!gridfortarget) {
-									gridfortarget->setWorkElement(elem);
-									String strMsgID = e->GetIdAttribute() + "_" + eventName;
-									gridfortarget->setMsgID(strMsgID);
-									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
-								}
-							}
-						}
+					HubbleNode* gridfortarget = getGrid(elem);
+					if (!!gridfortarget) {
+						gridfortarget->setWorkElement(elem);
+						String strMsgID = e->GetIdAttribute() + "_" + eventName;
+						gridfortarget->setMsgID(strMsgID);
+						gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 					}
 				}
 			}
@@ -902,6 +886,54 @@ namespace blink {
 		return nullptr;
 	}
 
+	HubbleNode* Hubble::getGrid(Element* elem)
+	{
+		if (elem)
+		{
+			//AtomicString target = elem->getAttribute("name");
+			//if (target.IsNull() == false&& target!="")
+			//{
+			//	std::wstring s = WebString(target).Utf16();
+			//	__int64 nHandle = std::stoll(s);
+			//	if (nHandle)
+			//	{
+			//		HubbleNode* gridfortarget = getGrid(nHandle);
+			//		if (gridfortarget)
+			//			return gridfortarget;
+			//	}
+			//}
+			Node* pNode = elem;
+			if (pNode->getNodeType() == 1) {
+				AtomicString target = elem->getAttribute("target");
+				AtomicString galaxy = elem->getAttribute("galaxy");
+				AtomicString cluster = elem->getAttribute("cluster");
+				if (galaxy == "" || galaxy.IsNull() == true)
+					galaxy = "default";
+				if (cluster == "" || cluster.IsNull() == true)
+					cluster = "__viewport_default__";
+				if (target.IsNull() == true || target == "")
+				{
+					auto it = m_mapHubbleGalaxy2.find(WebString(galaxy).Utf16());
+					if (it != m_mapHubbleGalaxy2.end())
+					{
+						auto it2 = it->second->m_mapRootNode.find(WebString(cluster).Utf16());
+						if (it2 != it->second->m_mapRootNode.end())
+							return it2->second;
+						return nullptr;
+					}
+				}
+				else
+				{
+					HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
+					if (!!gridfortarget) {
+						return gridfortarget;
+					}
+				}
+			}
+		}
+		return nullptr;
+	}
+
 	HubbleNode* Hubble::getGrid(const int64_t nodeHandle)
 	{
 		auto it = m_mapHubbleNode.find(nodeHandle);
@@ -913,12 +945,12 @@ namespace blink {
 	HubbleNode* Hubble::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
 	{
 		String clusterName_ = clusterName;
-		if (clusterName_ == "undefined")
+		if (clusterName_ == "undefined"|| clusterName_ == "" || clusterName_.IsNull() == true)
 			clusterName_ = "default";
 		auto it = m_mapHubbleGalaxy2.find(WebString(galaxyName).Utf16());
 		if (it != m_mapHubbleGalaxy2.end())
 		{
-			if (gridName == "undefined")
+			if (gridName == "undefined"|| gridName == "" || gridName.IsNull() == true)
 			{
 				auto it2 = it->second->m_mapRootNode.find(WebString(clusterName_).Utf16());
 				if (it2 != it->second->m_mapRootNode.end())
@@ -1003,7 +1035,7 @@ namespace blink {
 			blink::V8ApplicationCallback* callback = (blink::V8ApplicationCallback*)itcallback->value.Get();
 			ScriptState* callback_relevant_script_state = callback->CallbackRelevantScriptState();
 			ScriptState::Scope callback_relevant_context_scope(callback_relevant_script_state);
-			callback->InvokeAndReportException(nullptr, form->innerXobj_);
+			callback->InvokeAndReportException(form, form->innerXobj_);
 			mapCallbackFunction_.erase(itcallback);
 		}
 	}

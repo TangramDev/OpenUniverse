@@ -75,6 +75,7 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   HubbleWinform* activeMDIChild();
   HubbleNode* mdiwebbindgrid();
   DocumentFragment* docFragment();
+  HubbleNode* getGrid(Element* elem);
   HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
   HubbleGalaxy* getGalaxy(const String& galaxyName);
   String getStr(const String& strKey);

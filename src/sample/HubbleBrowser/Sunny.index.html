@@ -30,13 +30,13 @@
         }
     </style>
     <script type="text/javascript">
-        apppage.onWinFormCreated = function (e) {
+        cosmos.onWinFormCreated = function (e) {
             e.xobj.addEventListener("SizeChanged", function (x) {
                 //alert(x.getStr("currentevent") + " " + "Form width:" + x.getLong("width") + "\nheight:" + x.getLong("height"));
             });
         };
 
-        apppage.onGridCreated = function (e) {
+        cosmos.onGridCreated = function (e) {
             //alert(e.grid.name);
             switch (e.grid.name) {
                 case "SigmaBrowser_ntpctrl":
@@ -63,7 +63,7 @@
                             for (var i = 0; i < list.length; i++) {
                                 var target = list[i].getAttribute("target");
                                 if (target != null) {
-                                    apppage.sendMessage(name, list[i].outerHTML, target);
+                                    cosmos.sendMessage(name, list[i].outerHTML, target);
                                 }
                             }
                             var contentElements = document.getElementsByClassName("contents")[0].children;
@@ -79,7 +79,7 @@
             }
         }
 
-        apppage.onHubbleMessageReceived = function (e) {
+        cosmos.onHubbleMessageReceived = function (e) {
             switch (e.xobj.getStr("msgID")) {
                 case "TANGRAMAPP_READY":
                     {
@@ -90,7 +90,7 @@
             }
         }
 
-        apppage.onMessageReceived = function (e) {
+        cosmos.onMessageReceived = function (e) {
             if (e.param3 != null) {
                 switch (e.param3) {
                     case "MainMdiForm:ActiveClient":
@@ -103,7 +103,7 @@
             }
         }
 
-        apppage.onBindCLRObject = function (e) {
+        cosmos.onBindCLRObject = function (e) {
             //alert(e.name);alert(e.objtype);alert(e.hwnd);
         }
 

@@ -341,7 +341,7 @@ namespace blink {
 			mapHubbleEventCallback_.erase(itcallback);
 			ScriptState* callback_relevant_script_state = callback->CallbackRelevantScriptState();
 			ScriptState::Scope callback_relevant_context_scope(callback_relevant_script_state);
-			callback->InvokeAndReportException(nullptr, callbackParam);
+			callback->InvokeAndReportException(this, callbackParam);
 		}
 	}
 
