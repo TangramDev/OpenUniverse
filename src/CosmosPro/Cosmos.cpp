@@ -2156,18 +2156,7 @@ namespace Cosmos
                         {
                             if (pObj->GetType()->IsSubclassOf(Form::typeid))
                             {
-                                //CString strCaption = m_Parse.attr(_T("caption"), _T(""));
                                 Form^ thisForm = (Form^)pObj;
-                                //if (strCaption != _T(""))
-                                //	thisForm->Text = BSTR2STRING(strCaption);
-                                //if (thisForm->IsMdiContainer)
-                                //{
-                                //	CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
-                                //	if (strBKPage != _T(""))
-                                //	{
-                                //		Hubble::CreateBKPage(thisForm, BSTR2STRING(strBKPage));
-                                //	}
-                                //}
                                 thisForm->Show(parent);
                             }
                             return (Form^)pObj;
@@ -2195,6 +2184,24 @@ namespace Cosmos
             }
         }
         return m_pSession;
+    }
+
+    String^ Hubble::GetUIData(Control^ ctrl)
+    {
+        HWND hWnd = (HWND)ctrl->Handle.ToPointer();
+        auto it = theApp.m_pHubbleImpl->m_mapUIData.find(hWnd);
+        if (it != theApp.m_pHubbleImpl->m_mapUIData.end())
+            return BSTR2STRING(it->second);
+        return L"";
+    }
+
+    String^ Hubble::GetCtrlTag(Control^ ctrl)
+    {
+        HWND hWnd = (HWND)ctrl->Handle.ToPointer();
+        auto it = theApp.m_pHubbleImpl->m_mapCtrlTag.find(hWnd);
+        if (it != theApp.m_pHubbleImpl->m_mapCtrlTag.end())
+            return BSTR2STRING(it->second);
+        return L"";
     }
 
     Object^ Hubble::CreateObject(String^ strObjID)

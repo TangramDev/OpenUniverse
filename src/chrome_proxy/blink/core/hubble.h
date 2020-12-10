@@ -89,7 +89,9 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiWinForm, kLoadmdiwinform)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
+	 DEFINE_ATTRIBUTE_EVENT_LISTENER(CosmosObjectCreated, kCosmosobjectcreated)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(BindCLRObject, kBindclrobject)
+	 DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForObject, kCloudmessageforobject)
 
 	 HubbleXobj* xobj();
 	 String url();
@@ -129,6 +131,7 @@ namespace blink {
 
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
 	 HubbleNode* createHubbleWinform(HubbleXobj* xobj);
+	 void CosmosObjCreated(HubbleXobj* xobj);
 	 HubbleNode* getGrid(Element* e);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 	 HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
@@ -164,6 +167,7 @@ namespace blink {
 	 String url_;
 	 mutable Member<Element> helperElem_;
 	 mutable Member<HubbleXobj> innerXobj_;
+	 mutable Member<Element> ObjectInfoElem_;
 	 mutable Member<Element> m_pVisibleContentElement;
 
 	 HeapHashMap<String, Member<HubbleXobj>> mapCloudSession_;

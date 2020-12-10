@@ -633,10 +633,10 @@ void CCosmosProxy::WindowDestroy(HWND hWnd)
 		delete it6->second;
 		m_mapFormInfo.erase(it6);
 	}
-	auto it7 = theAppProxy.m_mapUIData.find(hWnd);
-	if (it7 != theAppProxy.m_mapUIData.end())
+	auto it7 = theApp.m_pHubbleImpl->m_mapUIData.find(hWnd);
+	if (it7 != theApp.m_pHubbleImpl->m_mapUIData.end())
 	{
-		theAppProxy.m_mapUIData.erase(it7);
+		theApp.m_pHubbleImpl->m_mapUIData.erase(it7);
 	}
 	auto it = m_mapForm.find(hWnd);
 	if (it != m_mapForm.end())
@@ -1016,7 +1016,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								TreeView^ pTreeView = (TreeView^)pChild;
 								if (_pChild)
 								{
-									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 									if (_pChild2)
 									{
 										pTreeView->Tag = BSTR2STRING(_pChild2->xml());
@@ -1026,7 +1026,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 									{
 										//pTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(&OnNodeMouseDoubleClick);
 										//pTreeView->AfterSelect += gcnew Forms::TreeViewEventHandler(&OnAfterSelect);
-										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
+										theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 										CtrlInit(0, pChild, pGalaxyCluster->m_pGalaxyCluster);
 									}
 								}
@@ -1036,7 +1036,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								ListView^ pListView = (ListView^)pChild;
 								if (_pChild)
 								{
-									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 									if (_pChild2)
 									{
 										pListView->Tag = BSTR2STRING(_pChild2->xml());
@@ -1045,7 +1045,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 									if (_pChild2)
 									{
 										pListView->ItemSelectionChanged += gcnew Forms::ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
-										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
+										theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 										CtrlInit(1, pChild, pGalaxyCluster->m_pGalaxyCluster);
 									}
 								}
@@ -1055,7 +1055,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								Control^ pBtn = (Control^)pChild;
 								if (_pChild)
 								{
-									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 									if (_pChild2)
 									{
 										pBtn->Tag = BSTR2STRING(_pChild2->xml());
@@ -1231,7 +1231,7 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{
-								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 								if (_pChild2)
 								{
 									pTreeView->Tag = BSTR2STRING(_pChild2->xml());
@@ -1241,7 +1241,7 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 								{
 									//pTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(&OnNodeMouseDoubleClick);
 									//pTreeView->AfterSelect += gcnew Forms::TreeViewEventHandler(&OnAfterSelect);
-									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
+									theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 									CtrlInit(0, pChild, pGalaxyCluster->m_pGalaxyCluster);
 								}
 							}
@@ -1252,7 +1252,7 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{
-								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("event"));
+								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 								if (_pChild2)
 								{
 									pListView->Tag = BSTR2STRING(_pChild2->xml());
@@ -1261,7 +1261,7 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 								if (_pChild2)
 								{
 									pListView->ItemSelectionChanged += gcnew Forms::ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
-									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
+									theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild2->xml();
 									CtrlInit(1, pChild, pGalaxyCluster->m_pGalaxyCluster);
 								}
 							}
@@ -1272,7 +1272,7 @@ Object^ CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangr
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
 							if (_pChild)
 							{
-								_pChild = _pChild->GetChild(_T("event"));
+								_pChild = _pChild->GetChild(_T("eventmap"));
 								if (_pChild)
 								{
 									pBtn->Tag = BSTR2STRING(_pChild->xml());
@@ -1367,8 +1367,8 @@ void CCosmosProxy::OnMdiChildActivate(System::Object^ sender, System::EventArgs^
 void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyCluster)
 {
 	HWND hWnd = (HWND)ctrl->Handle.ToPointer();
-	auto it = m_mapUIData.find(hWnd);
-	if (it != m_mapUIData.end())
+	auto it = theApp.m_pHubbleImpl->m_mapUIData.find(hWnd);
+	if (it != theApp.m_pHubbleImpl->m_mapUIData.end())
 	{
 		switch (nType)
 		{

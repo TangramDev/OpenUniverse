@@ -6,6 +6,14 @@
 #include "hubble_winform.h"
 
 #include "third_party/blink/renderer/core/dom/document.h"
+#include "third_party/blink/renderer/core/dom/dom_token_list.h"
+#include "third_party/blink/renderer/core/dom/element.h"
+#include "third_party/blink/renderer/core/dom/document_fragment.h"
+#include "third_party/blink/renderer/core/dom/node.h"
+#include "third_party/blink/renderer/core/dom/node_list.h"
+#include "third_party/blink/renderer/core/html/html_element.h"
+#include "third_party/blink/renderer/core/html/html_head_element.h"
+#include "third_party/blink/renderer/core/dom/class_collection.h"
 #include "third_party/blink/renderer/core/html/html_element.h"
 #include "third_party/blink/renderer/core/html/html_head_element.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
@@ -13,6 +21,7 @@
 #include "third_party/blink/public/web/web_local_frame_client.h"
 #include "third_party/blink/renderer/core/frame/web_local_frame_impl.h"
 #include "third_party/blink/renderer/bindings/core/v8/v8_application_callback.h"
+#include "third_party/blink/renderer/bindings/core/v8/string_or_trusted_html.h"
 
 namespace blink {
 
@@ -21,6 +30,12 @@ namespace blink {
 		m_pRenderframeImpl = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 		session_.m_mapString[L"sessionid"] = WebString(id_).Utf16();
+		messageElem_ = nullptr;
+		propertyElem_ = nullptr;
+		eventElem_ = nullptr;
+		uiElem_ = nullptr;
+		DocumentFragment_ = nullptr;
+		m_pVisibleContentElement = nullptr;
 	}
 
 	HubbleXobj::~HubbleXobj() {
@@ -45,6 +60,28 @@ namespace blink {
 		visitor->Trace(mapHubbleEventCallback_);
 		visitor->Trace(sender_);
 		visitor->Trace(hubble_);
+		visitor->Trace(element_);
+		visitor->Trace(eventElem_);
+		visitor->Trace(gridElem_);
+		visitor->Trace(uiElem_);
+		visitor->Trace(DocumentFragment_);
+		visitor->Trace(messageElem_);
+		visitor->Trace(propertyElem_);
+		visitor->Trace(m_pVisibleContentElement);
+	}
+
+	void HubbleXobj::AddedEventListener(const AtomicString& event_type,
+		RegisteredEventListener& registered_listener) {
+		EventTargetWithInlineData::AddedEventListener(event_type,
+			registered_listener);
+	}
+
+	const AtomicString& HubbleXobj::InterfaceName() const {
+		return event_target_names::kHubbleXobj;
+	}
+
+	ExecutionContext* HubbleXobj::GetExecutionContext() const {
+		return hubble_->GetExecutionContext();
 	}
 
 	String HubbleXobj::name() {
@@ -345,5 +382,120 @@ namespace blink {
 		}
 	}
 
+	void HubbleXobj::ProcessNodeMessage(const String& msgID)
+	{
+		HubbleNode* thisGrid = grid();
+		if (thisGrid&&messageElem_ && msgID.IsNull() == false && msgID != "")
+		{
+			HubbleNode* gridfortarget = nullptr;
+			HTMLCollection* list = messageElem_->getElementsByTagName(AtomicString(msgID.LowerASCII()));
+			for (unsigned int i = 0; i < list->length(); i++)
+			{
+				HTMLCollection* plist = list->item(i)->Children();
+				for (unsigned int i = 0; i < plist->length(); i++)
+				{
+					Element* elem = plist->item(i);
+					AtomicString target = "";
+					target = elem->getAttribute("target");
+					if (target.IsNull() || target == "")
+					{
+						gridfortarget = thisGrid;
+					}
+					else {
+						AtomicString galaxy = elem->getAttribute("galaxy");
+						AtomicString cluster = elem->getAttribute("cluster");
+						if (galaxy == "")
+							galaxy = "default";
+						if (cluster == "")
+							cluster = "__viewport_default__";
+
+						gridfortarget = hubble_->getGrid(galaxy, cluster, target);
+						if (gridfortarget == nullptr) {
+							HubbleWinform* form = thisGrid->parentForm();
+							if (form)
+							{
+								gridfortarget = form->getGrid(galaxy, cluster, target);
+							}
+						}
+					}
+					if (!!gridfortarget) {
+						gridfortarget->setWorkElement(elem);
+						gridfortarget->setMsgID(msgID);
+						gridfortarget->xobj()->setSender(gridfortarget->innerXobj_);
+						gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
+					}
+				}
+			}
+		}
+	}
+
+	void HubbleXobj::DispatchGridEvent(Element* e, const String& eventName)
+	{
+		Element* element = static_cast<Element*>(e->childNodes()->item(1));
+		if (!!element) {
+			for (unsigned int i = 1; i < element->childNodes()->length(); i++) {
+				Element* elem = static_cast<Element*>(element->childNodes()->item(i));
+				if (elem)
+				{
+					Node* pNode = elem;
+					if (pNode->getNodeType() == 1) {
+						AtomicString target = "";
+						if (elem->hasAttribute("target"))
+						{
+							target = elem->getAttribute("target");
+							if (target != "") {
+								AtomicString galaxy = elem->getAttribute("galaxy");
+								AtomicString cluster = elem->getAttribute("cluster");
+								if (galaxy == "")
+									galaxy = "default";
+								if (cluster == "")
+									cluster = "__viewport_default__";
+
+								HubbleNode* gridfortarget = hubble_->getGrid(galaxy, cluster, target);
+								if (gridfortarget == nullptr)
+								{
+									HubbleNode* thisGrid = grid();
+									if(thisGrid&&thisGrid->m_pParentForm)
+										gridfortarget = thisGrid->m_pParentForm->getGrid(galaxy, cluster, target);
+									else
+									{
+										HubbleWinform* form_ = form();
+										if(form_)
+											gridfortarget = form_->getGrid(galaxy, cluster, target);
+									}
+								}
+								if (!!gridfortarget) {
+									gridfortarget->setWorkElement(elem);
+									gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
+									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		//var element = e.childNodes[1];
+		//if (!!element) {
+		//    alert(element.childNodes.length);
+		//    for (var i = 1; i < element.childNodes.length; i++) {
+		//        var elem = element.childNodes[i];
+		//        alert(elem.nodeType);
+		//        if (elem.nodeType == 1) {
+		//           var target = elem.getAttribute("target");
+		//           var galaxy = elem.getAttribute("galaxy");
+		//           var cluster = elem.getAttribute("cluster");
+		//            if (!!target && !!galaxy && !!cluster) {
+		//                var gridfortarget = apppage.getGrid(galaxy, cluster, target);
+		//                if (!!gridfortarget) {
+		//                    gridfortarget.workElement = elem;
+		//                    gridfortarget.msgID = e.id + "_OnClick";
+		//                    gridfortarget.sendMessageToGrid(gridfortarget);
+		//                }
+		//            }
+		//        }
+		//    }
+		//}
+	}
 }  // namespace blink
 // end Add by HubbleTeam

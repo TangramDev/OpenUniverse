@@ -688,6 +688,8 @@ namespace CommonUniverse {
 		map<CString, CString>					m_mapJavaNativeInfo;
 		map<CString, CString>					m_mapCreatingWorkBenchInfo;
 		map<HWND, HWND>							m_mapVSWebPage;
+		map<HWND, CString>						m_mapUIData;
+		map<HWND, CString>						m_mapCtrlTag;
 
 		virtual void BrowserAppStart() {}
 		virtual IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*) { return nullptr; }

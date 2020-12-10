@@ -103,7 +103,6 @@ public:
 	void _GetMenuInfo(FormInfo*, ToolStripMenuItem^);
 private:
 	map<HWND, gcroot<Form^>>				m_mapForm;
-	map<HWND, CString>						m_mapUIData;
 	gcroot<Hashtable^>						m_htObjects;
 	gcroot<EventHandler^>					m_pOnLoad;
 	gcroot<EventHandler^>					m_pOnCtrlVisible;

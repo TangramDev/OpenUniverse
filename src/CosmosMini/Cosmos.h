@@ -541,7 +541,8 @@ namespace Cosmos
 	public:
 		static int HubbleInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
-
+		static String^ GetUIData(Control^ ctrl);
+		static String^ GetCtrlTag(Control^ ctrl);
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
 		static Grid^ GetGridFromHandle(IntPtr handle);

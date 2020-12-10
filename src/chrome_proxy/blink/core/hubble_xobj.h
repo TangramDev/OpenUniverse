@@ -27,11 +27,12 @@ class Document;
 class ScriptState;
 class ExceptionState;
 class V8HubbleCallback;
+class DocumentFragment;
 class WebLocalFrameClient;
 class SerializedScriptValue;
 class V8ApplicationCallback;
 
-class CORE_EXPORT HubbleXobj final : public ScriptWrappable{
+class CORE_EXPORT HubbleXobj final : public EventTargetWithInlineData{
   DEFINE_WRAPPERTYPEINFO();
 friend class Hubble;
  public:
@@ -40,10 +41,29 @@ friend class Hubble;
 
   void Trace(blink::Visitor*) override;
 
+  // Called when an event listener has been successfully added.
+  void AddedEventListener(const AtomicString& event_type,
+      RegisteredEventListener&) override;
+  // EventTarget overrides:
+  const AtomicString& InterfaceName() const override;
+  ExecutionContext* GetExecutionContext() const override;
+
+  DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForObject, kCloudmessageforobject)
+
   HubbleXobj();
   HubbleXobj(const String& strNodeName);
 
   ~HubbleXobj() override;
+
+  mutable Member<Element> uiElem_;
+  mutable Member<Element> gridElem_;
+  mutable Member<Element> eventElem_;
+  mutable Member<Element> messageElem_;
+  mutable Member<Element> propertyElem_;
+  mutable Member<Element> m_pVisibleContentElement;
+  mutable Member <DocumentFragment> DocumentFragment_;
+
+  Member<Element> element_;
 
   String name();
   String getid();
@@ -76,6 +96,8 @@ friend class Hubble;
   void fireEvent(const String& eventName, HubbleXobj* eventParam);
   void sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback);
   void invokeCallback(wstring callbackid, HubbleXobj* callbackParam);
+  void ProcessNodeMessage(const String& msgID);
+  void DispatchGridEvent(Element* elem, const String& eventName);
 
   String id_;
   CommonUniverse::IPCSession session_;
@@ -84,6 +106,9 @@ friend class Hubble;
   mutable Member<Hubble> hubble_;
   HeapHashMap<String, Member<Element>> mapVisibleElem;
   HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;
+  map < wstring, Element* > m_mapElement;
+  map < wstring, Element* > m_mapEventInfo;
+
 private:
   String name_;
 };

@@ -594,6 +594,8 @@ namespace Cosmos
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 
 		static Object^ CreateObject(String^ ObjID);
+		static String^ GetCtrlTag(Control^ ctrl);
+		static String^ GetUIData(Control^ ctrl);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
 		//static Browser^ ActiveBrowser();
 		//static Browser^ GetHostBrowser(Object^ obj);

@@ -26,4 +26,6 @@
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void addEventListener(DOMString subObjName, DOMString eventName, ApplicationCallback callback);
 	void removeEventListener(DOMString eventName);
+
+	attribute EventHandler onCloudMessageForObject;
 };

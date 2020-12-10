@@ -34,14 +34,13 @@ class V8ApplicationCallback;
 class WebLocalFrameClient;
 class SerializedScriptValue;
 
-class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
-									  public DOMWindowClient {
+class CORE_EXPORT HubbleNode final : 
+	public EventTargetWithInlineData {
   DEFINE_WRAPPERTYPEINFO();
-  USING_GARBAGE_COLLECTED_MIXIN(HubbleNode);
 
  public:
-  static HubbleNode* Create(LocalFrame* frame) { return MakeGarbageCollected<HubbleNode>(frame); }
-  static HubbleNode* Create(LocalFrame* frame, const String& strHandle);
+  static HubbleNode* Create() { return MakeGarbageCollected<HubbleNode>(); }
+  static HubbleNode* Create(const String& strHandle);
 
   void Trace(blink::Visitor*) override;
 
@@ -104,8 +103,6 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   void setInt64(const String& strKey, int64_t value);
   float getFloat(const String& strKey);
   void setFloat(const String& strKey, float value);
-  void DispatchGridEvent(Element* elem, const String& eventName);
-  void ProcessNodeMessage(const String& msgID);
 
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);
@@ -127,8 +124,8 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
   const AtomicString& InterfaceName() const override;
   ExecutionContext* GetExecutionContext() const override;
 
-  HubbleNode(LocalFrame*);
-  HubbleNode(LocalFrame*, const String& strNodeXml);
+  HubbleNode();
+  HubbleNode(const String& strNodeXml);
   HubbleNode* AddChild(int64_t nHandle, const String& strNodeName, blink::Hubble*);
 
   ~HubbleNode() override;
@@ -137,24 +134,14 @@ class CORE_EXPORT HubbleNode final : public EventTargetWithInlineData,
 
   String name_;
 
-  Member<Element> element_;
   mutable Member<Hubble> hubble_;
-  mutable Member<Element> uiElem_;
-  mutable Member<Element> gridElem_;
-  mutable Member<Element> eventElem_;
-  mutable Member<Element> messageElem_;
   mutable Member<HubbleNode> rootNode_ ;
-  mutable Member<Element> propertyElem_;
   mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
-  mutable Member<Element> m_pVisibleContentElement;
-  mutable Member <DocumentFragment> DocumentFragment_;
 
   WebLocalFrameClient* m_pRenderframeImpl;
   map<int, HubbleNode*> m_mapChildNode;
   map<wstring, HubbleNode*> m_mapGrid;
-  map < wstring, Element* > m_mapElement;
-  map < wstring, Element* > m_mapEventInfo;
   map<wstring, HubbleNode*> m_mapChildNode2;
 
 private:

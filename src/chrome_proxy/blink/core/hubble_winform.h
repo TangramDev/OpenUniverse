@@ -39,14 +39,13 @@ class WebLocalFrameClient;
 class SerializedScriptValue;
 class V8ApplicationCallback;
 
-class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
-									  public DOMWindowClient {
+class CORE_EXPORT HubbleWinform final : 
+    public EventTargetWithInlineData{
   DEFINE_WRAPPERTYPEINFO();
-  USING_GARBAGE_COLLECTED_MIXIN(HubbleWinform);
 
  public:
-  static HubbleWinform* Create(LocalFrame* frame) { return MakeGarbageCollected<HubbleWinform>(frame); }
-  static HubbleWinform* Create(LocalFrame* frame, const String& strHandle);
+  static HubbleWinform* Create() { return MakeGarbageCollected<HubbleWinform>(); }
+  static HubbleWinform* Create(const String& strHandle);
 
   void Trace(blink::Visitor*) override;
 
@@ -119,8 +118,8 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   const AtomicString& InterfaceName() const override;
   ExecutionContext* GetExecutionContext() const override;
 
-  HubbleWinform(LocalFrame*);
-  HubbleWinform(LocalFrame*, const String& strNodeXml);
+  HubbleWinform();
+  HubbleWinform(const String& strNodeXml);
 
   ~HubbleWinform() override;
 
@@ -134,17 +133,11 @@ class CORE_EXPORT HubbleWinform final : public EventTargetWithInlineData,
   mutable Member<HubbleNode> m_pWebBindMdiNode;
   mutable Member<HubbleWinform> m_pMDIParent;
   mutable Member<HubbleWinform> m_pActiveMDIChild;
-  mutable Member <DocumentFragment> DocumentFragment_;
-  mutable Member<Element> uiElem_;
   mutable Member<Element> formElem_;
-  mutable Member<Element> eventElem_;
-  mutable Member<Element> messageElem_;
-  mutable Member<Element> propertyElem_;
 
   map<wstring, HubbleGalaxy*> m_mapHubbleGalaxy;
 
   WebLocalFrameClient* m_pRenderframeImpl;
-  map < wstring, Element* > m_mapEventInfo;
   map<int64_t, Member<HubbleControl>> m_mapChildControl;
   map<std::wstring, Member<HubbleControl>> m_mapChildControl2;
                                       

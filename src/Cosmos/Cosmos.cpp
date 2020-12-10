@@ -1016,6 +1016,24 @@ namespace Cosmos
         return m_pWormhole;
     }
 
+    String^ Hubble::GetUIData(Control^ ctrl)
+    {
+        HWND hWnd = (HWND)ctrl->Handle.ToPointer();
+        auto it = theApp.m_pHubbleImpl->m_mapUIData.find(hWnd);
+        if (it != theApp.m_pHubbleImpl->m_mapUIData.end())
+            return BSTR2STRING(it->second);
+        return L"";
+    }
+
+    String^ Hubble::GetCtrlTag(Control^ ctrl)
+    {
+        HWND hWnd = (HWND)ctrl->Handle.ToPointer();
+        auto it = theApp.m_pHubbleImpl->m_mapCtrlTag.find(hWnd);
+        if (it != theApp.m_pHubbleImpl->m_mapCtrlTag.end())
+            return BSTR2STRING(it->second);
+        return L"";
+    }
+
     Object^ Hubble::CreateObject(String^ strObjID)
     {
         Object^ m_pObj = nullptr;

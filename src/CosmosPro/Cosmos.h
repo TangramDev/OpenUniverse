@@ -976,6 +976,8 @@ namespace Cosmos
 		static int HubbleInit(String^ strInit);
 		static GalaxyCluster^ CreateGalaxyCluster(IntPtr nPageHandle);
 		static GalaxyCluster^ CreateGalaxyCluster(Control^ ctrl, Object^ ExternalObj);
+		static String^ GetUIData(Control^ ctrl);
+		static String^ GetCtrlTag(Control^ ctrl);
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
 		static Type^ GetType(String^ ObjID);

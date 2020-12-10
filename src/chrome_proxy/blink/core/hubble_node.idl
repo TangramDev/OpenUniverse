@@ -19,7 +19,7 @@
 	void setControlVal(DOMString CtrlID, long long CtrlHandle, DOMString strVal);
 
 	//Node API
-	void DispatchGridEvent(Element elem, DOMString eventName);
+	//void DispatchGridEvent(Element elem, DOMString eventName);
 	DOMString getStr(DOMString strKey);
 	void setStr(DOMString strKey, DOMString value);
 	long getLong(DOMString strKey);

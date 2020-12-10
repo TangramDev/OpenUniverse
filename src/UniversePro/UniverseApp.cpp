@@ -1405,6 +1405,14 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		auto it = g_pHubble->m_mapGalaxy2GalaxyCluster.find(hWnd);
 		if (it != g_pHubble->m_mapGalaxy2GalaxyCluster.end())
 			g_pHubble->m_mapGalaxy2GalaxyCluster.erase(it);
+
+		auto it1 = g_pHubble->m_mapUIData.find(hWnd);
+		if (it1 != g_pHubble->m_mapUIData.end())
+			g_pHubble->m_mapUIData.erase(it1);
+		it1 = g_pHubble->m_mapCtrlTag.find(hWnd);
+		if (it1 != g_pHubble->m_mapCtrlTag.end())
+			g_pHubble->m_mapCtrlTag.erase(it1);
+
 		auto it2 = g_pHubble->m_mapHubbleAFXHelperWnd.find(hWnd);
 		if (it2 != g_pHubble->m_mapHubbleAFXHelperWnd.end())
 		{

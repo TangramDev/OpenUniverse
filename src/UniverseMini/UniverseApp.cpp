@@ -411,6 +411,13 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (it != g_pHubble->m_mapGalaxy2GalaxyCluster.end())
 			g_pHubble->m_mapGalaxy2GalaxyCluster.erase(it);
 
+		auto it1 = g_pHubble->m_mapUIData.find(hWnd);
+		if (it1 != g_pHubble->m_mapUIData.end())
+			g_pHubble->m_mapUIData.erase(it1);
+		it1 = g_pHubble->m_mapCtrlTag.find(hWnd);
+		if (it1 != g_pHubble->m_mapCtrlTag.end())
+			g_pHubble->m_mapCtrlTag.erase(it1);
+
 		if (hWnd == g_pHubble->m_hMainWnd)
 		{
 			if (theUniverse.m_bHostCLR && g_pHubble->m_nAppType == APP_BROWSERAPP)

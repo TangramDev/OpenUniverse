@@ -205,10 +205,10 @@ void CCosmosProxy::WindowDestroy(HWND hWnd)
 		delete it3->second;
 		m_mapGalaxyInfo.erase(it3);
 	}
-	auto it7 = theAppProxy.m_mapUIData.find(hWnd);
-	if (it7 != theAppProxy.m_mapUIData.end())
+	auto it7 = theApp.m_pHubbleImpl->m_mapUIData.find(hWnd);
+	if (it7 != theApp.m_pHubbleImpl->m_mapUIData.end())
 	{
-		theAppProxy.m_mapUIData.erase(it7);
+		theApp.m_pHubbleImpl->m_mapUIData.erase(it7);
 	}
 	auto it = m_mapForm.find(hWnd);
 	if (it != m_mapForm.end())
@@ -427,7 +427,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 									_pChild = _pChild->GetChild(_T("uidata"));
 									if (_pChild)
 									{
-										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+										theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
 										CtrlInit(0, pChild, pGalaxyCluster);
 									}
 								}
@@ -442,7 +442,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 									if (_pChild)
 									{
 										pListView->ItemSelectionChanged += gcnew Forms::ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
-										theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+										theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
 										CtrlInit(1, pChild, pGalaxyCluster);
 									}
 								}
@@ -634,7 +634,7 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								_pChild = _pChild->GetChild(_T("uidata"));
 								if (_pChild)
 								{
-									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+									theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
 									CtrlInit(0, pChild, pGalaxyCluster);
 								}
 							}
@@ -649,7 +649,7 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 								if (_pChild)
 								{
 									pListView->ItemSelectionChanged += gcnew Forms::ListViewItemSelectionChangedEventHandler(&OnItemSelectionChanged);
-									theAppProxy.m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
+									theApp.m_pHubbleImpl->m_mapUIData[(HWND)pChild->Handle.ToPointer()] = _pChild->xml();
 									CtrlInit(1, pChild, pGalaxyCluster);
 								}
 							}
@@ -695,8 +695,8 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyCluster)
 {
 	HWND hWnd = (HWND)ctrl->Handle.ToPointer();
-	auto it = m_mapUIData.find(hWnd);
-	if (it != m_mapUIData.end())
+	auto it = theApp.m_pHubbleImpl->m_mapUIData.find(hWnd);
+	if (it != theApp.m_pHubbleImpl->m_mapUIData.end())
 	{
 		switch (nType)
 		{

@@ -118,7 +118,6 @@ public:
 	void _GetMenuInfo(FormInfo*, ToolStripMenuItem^);
 private:
 	map<HWND, gcroot<Form^>>				m_mapForm;
-	map<HWND, CString>						m_mapUIData;
 	gcroot<Hashtable^>						m_htObjects;
 	gcroot<Object^>							m_pHubbleObj;
 	gcroot<Assembly^>						m_pSystemAssembly;
