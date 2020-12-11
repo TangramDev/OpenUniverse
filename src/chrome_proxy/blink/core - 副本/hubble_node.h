@@ -13,7 +13,6 @@
 #include "third_party/blink/renderer/platform/heap/handle.h"
 #include "third_party/blink/renderer/platform/wtf/assertions.h"
 #include "third_party/blink/renderer/platform/wtf/forward.h"
-#include "hubble_xobj.h"
 
 namespace blink {
 
@@ -36,7 +35,7 @@ class WebLocalFrameClient;
 class SerializedScriptValue;
 
 class CORE_EXPORT HubbleNode final : 
-	public HubbleXobj{
+	public EventTargetWithInlineData {
   DEFINE_WRAPPERTYPEINFO();
 
  public:
@@ -45,11 +44,16 @@ class CORE_EXPORT HubbleNode final :
 
   void Trace(blink::Visitor*) override;
 
+  // Called when an event listener has been successfully added.
+  void AddedEventListener(const AtomicString& event_type,
+                          RegisteredEventListener&) override;
+
   long row();
   long col();
   long rows();
   long cols();
   int64_t handle();
+  HubbleXobj* xobj();
   Element* uiElement();
   Element* gridElement();
   Element* eventElement();
@@ -71,7 +75,13 @@ class CORE_EXPORT HubbleNode final :
   void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
   void sendMessageToGrid(HubbleXobj* msg);
   void sendMessageToGrid(HubbleNode* node);
+  void addEventListener(const String& eventName, V8ApplicationCallback* callback);
+  void addEventListener(const String& subObjName, const String& eventName, V8ApplicationCallback* callback);
+  void removeEventListener(const String& eventName);
+  void disConnect();
+  void fireEvent(const String& eventName, HubbleXobj* eventParam);
   void sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback);
+  void invokeCallback(wstring callbackid, HubbleXobj* callbackParam);
   void SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback);
   void ShowWebContent(const String& strParentDivName, const String& strDivName);
 
@@ -79,8 +89,20 @@ class CORE_EXPORT HubbleNode final :
   void setControlVal(const String& CtrlID, int64_t CtrlHandle, const String& strVal);
   void GetControlsNames(V8ApplicationCallback* callback);
 
+  String msgID();
+  void setMsgID(const String& value);
   Element* workElement();
   void setWorkElement(Element*);
+
+  // Node API:
+  String getStr(const String& strKey);
+  void setStr(const String& strKey, const String& value);
+  long getLong(const String& strKey);
+  void setLong(const String& strKey, long value);
+  int64_t getInt64(const String& strKey);
+  void setInt64(const String& strKey, int64_t value);
+  float getFloat(const String& strKey);
+  void setFloat(const String& strKey, float value);
 
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);
@@ -112,14 +134,19 @@ class CORE_EXPORT HubbleNode final :
 
   String name_;
 
+  mutable Member<Hubble> hubble_;
   mutable Member<HubbleNode> rootNode_ ;
+  mutable Member<HubbleXobj> innerXobj_;
   mutable Member<HubbleWinform> m_pParentForm;
 
+  WebLocalFrameClient* m_pRenderframeImpl;
   map<int, HubbleNode*> m_mapChildNode;
   map<wstring, HubbleNode*> m_mapGrid;
   map<wstring, HubbleNode*> m_mapChildNode2;
 
 private:
+  String id_;
+  HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;
 };
 
 }  // namespace blink

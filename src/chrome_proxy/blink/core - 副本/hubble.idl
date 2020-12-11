@@ -1,0 +1,68 @@
+typedef sequence<any> ObjectArray;
+
+[
+	Exposed = Window
+] interface Hubble : EventTarget {
+
+	// Message API
+	void wait(boolean bwait);
+	void sendMessage(DOMString id, DOMString param1, DOMString param2, 
+		[DefaultValue = Undefined] optional DOMString param3, 
+		[DefaultValue = Undefined] optional DOMString param4, 
+		[DefaultValue = Undefined] optional DOMString param5);
+	void sendMessage(HubbleXobj msg,
+		[DefaultValue = Undefined] optional ApplicationCallback callback, 
+		[DefaultValue = Undefined] optional  boolean bwait);
+	void openUrl(DOMString url, long nBrowserWndOpenDisposition,
+		[DefaultValue = Undefined] optional ApplicationCallback callback, 
+		[DefaultValue = Undefined] optional  boolean bwait);
+	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void addEventListener(DOMString eventName, ApplicationCallback callback);
+	void removeEventListener(DOMString eventName);
+
+	// DOM API
+	void defineElement(DOMString tagName, DOMString html);
+	void renderElement(DOMString tagName, DOMString html);
+	DOMString getStr(DOMString strKey);
+	void setStr(DOMString strKey, DOMString value);
+	long getLong(DOMString strKey);
+	void setLong(DOMString strKey, long value);
+	long long getInt64(DOMString strKey);
+	void setInt64(DOMString strKey, long long value);
+	float getFloat(DOMString strKey);
+	void setFloat(DOMString strKey, float value);
+
+	//HubbleNode API
+	HubbleXobj newVar([DefaultValue = Undefined] optional DOMString name);
+	HubbleNode getGrid(Element elem);
+	HubbleNode getGrid(long long nodeHandle);
+	HubbleNode getGrid(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
+	HubbleGalaxy getGalaxy(DOMString wndName);
+	HubbleGalaxy getGalaxy(long long wndHandle);
+	void OnMessage(Element elem, DOMString eventName);
+
+	//HubbleWinForm API
+	HubbleWinform createWinForm(DOMString strFormXml, 
+		long FormType, 
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+
+	[Affects = Nothing] getter HubbleXobj ? getNamedItem(DOMString name);
+	[RaisesException, CEReactions] HubbleXobj ? setNamedItem(HubbleXobj var);
+	[RaisesException, CEReactions] void setNamedItem(DOMString name, HubbleXobj var);
+
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString url;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
+
+	// Event handler attributes
+	attribute EventHandler onMessageReceived;
+	attribute EventHandler onHubbleMessageReceived;
+	attribute EventHandler onGridCreated;
+	attribute EventHandler onLoadWinForm;
+	attribute EventHandler onLoadMdiWinForm;
+	attribute EventHandler onGalaxyCreated;
+	attribute EventHandler onCosmosObjectCreated;
+	attribute EventHandler onMdiChildActivate;
+	attribute EventHandler onWinFormClosed;
+	attribute EventHandler onBindCLRObject;
+	attribute EventHandler onCloudMessageForObject;
+};

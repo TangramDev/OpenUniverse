@@ -1,4 +1,5 @@
 ﻿#include "hubble.h"
+#include "hubble_xobj.h"
 #include "hubble_node.h"
 #include "hubble_event.h"
 #include "hubble_winform.h"
@@ -25,9 +26,10 @@
 
 namespace blink {
 
-	HubbleNode::HubbleNode() :HubbleXobj() {
+	HubbleNode::HubbleNode() {
 		rootNode_ = nullptr;
 		m_pParentForm = nullptr;
+		m_pRenderframeImpl = nullptr;
 		id_ = WTF::CreateCanonicalUUIDString();
 	}
 
@@ -66,54 +68,59 @@ namespace blink {
 
 	Element* HubbleNode::eventElement()
 	{
-		return eventElem_;
+		return innerXobj_->eventElem_;
 	}
 
 	Element* HubbleNode::messageElement()
 	{
-		return messageElem_;
+		return innerXobj_->messageElem_;
 	}
 
 	Element* HubbleNode::gridElement()
 	{
-		return gridElem_;
+		return innerXobj_->gridElem_;
 	}
 
 	Element* HubbleNode::uiElement()
 	{
-		return uiElem_;
+		return innerXobj_->uiElem_;
 	}
 
 	Element* HubbleNode::propertyElement()
 	{
-		return propertyElem_;
+		return innerXobj_->propertyElem_;
 	}
 
 	DocumentFragment* HubbleNode::docFragment()
 	{
-		if (rootNode_)
-			return  rootNode_->DocumentFragment_.Get();
+		if(rootNode_)
+			return  rootNode_->innerXobj_->DocumentFragment_.Get();
 		return nullptr;
 	}
 
 	long HubbleNode::row()
 	{
-		return getLong(L"row");
+		return innerXobj_->getLong(L"row");
 	}
 
 	long HubbleNode::col()
 	{
-		return getLong(L"col");
+		return innerXobj_->getLong(L"col");
 	}
 
 	long HubbleNode::rows()
 	{
-		return getLong(L"rows");
+		return innerXobj_->getLong(L"rows");
 	}
 
 	long HubbleNode::cols()
 	{
-		return getLong(L"cols");
+		return innerXobj_->getLong(L"cols");
+	}
+
+	HubbleXobj* HubbleNode::xobj()
+	{
+		return innerXobj_;
 	}
 
 	HubbleWinform* HubbleNode::parentForm()
@@ -128,10 +135,10 @@ namespace blink {
 
 	HubbleNode* HubbleNode::getChild(long row, long col)
 	{
-		int nIndex = col + row * getLong(L"rows");
+		int nIndex = col + row * innerXobj_->getLong(L"rows");
 		std::wstring strIndex = std::to_wstring(nIndex);
 		String strname = strIndex.c_str();
-		int64_t nHandle = getInt64(strname);
+		int64_t nHandle = innerXobj_->getInt64(strname);
 		if (nHandle)
 		{
 			auto it = hubble_->m_mapHubbleNode.find(nHandle);
@@ -165,18 +172,35 @@ namespace blink {
 	void HubbleNode::Trace(blink::Visitor* visitor) {
 		EventTargetWithInlineData::Trace(visitor);
 		ScriptWrappable::Trace(visitor);
-		HubbleXobj::Trace(visitor);
+		//DOMWindowClient::Trace(visitor);
 		visitor->Trace(hubble_);
+		visitor->Trace(innerXobj_);
 		visitor->Trace(m_pParentForm);
 		visitor->Trace(rootNode_);
 		visitor->Trace(mapHubbleEventCallback_);
+	}
+
+	void HubbleNode::addEventListener(const String& eventName, V8ApplicationCallback* callback)
+	{
+		if (callback)
+		{
+			innerXobj_->addEventListener(eventName, callback);
+		}
+	}
+
+	void HubbleNode::addEventListener(const String& subObjName, const String& eventName, V8ApplicationCallback* callback)
+	{
+		if (callback)
+		{
+			innerXobj_->addEventListener(subObjName, eventName, callback);
+		}
 	}
 
 	void HubbleNode::ShowWebContent(const String& strParentDivName, const String& strDivName)
 	{
 		String contentname = strDivName;
 		String contentparent = strParentDivName;
-		Element* visibleElem2 = getVisibleElement(contentname);
+		Element* visibleElem2 = innerXobj_->getVisibleElement(contentname);
 		ExceptionState exception_state(nullptr,
 			ExceptionState::kExecutionContext,
 			"MdiChildActive",
@@ -197,14 +221,14 @@ namespace blink {
 						{
 							contentElement->classList().remove({ "hidden" }, exception_state);
 							contentElement->classList().add({ "show" }, exception_state);
-							setVisibleElement(contentname, contentElement);
-							if (m_pVisibleContentElement == nullptr)
-								m_pVisibleContentElement = contentElement;
+							innerXobj_->setVisibleElement(contentname, contentElement);
+							if (innerXobj_->m_pVisibleContentElement == nullptr)
+								innerXobj_->m_pVisibleContentElement = contentElement;
 							else
 							{
-								m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
-								m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
-								m_pVisibleContentElement = contentElement;
+								innerXobj_->m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+								innerXobj_->m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+								innerXobj_->m_pVisibleContentElement = contentElement;
 								break;
 							}
 						}
@@ -220,13 +244,13 @@ namespace blink {
 		}
 		else
 		{
-			if (m_pVisibleContentElement != visibleElem2)
+			if (innerXobj_->m_pVisibleContentElement != visibleElem2)
 			{
 				visibleElem2->classList().remove({ "hidden" }, exception_state);
 				visibleElem2->classList().add({ "show" }, exception_state);
-				m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
-				m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
-				m_pVisibleContentElement = visibleElem2;
+				innerXobj_->m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+				innerXobj_->m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+				innerXobj_->m_pVisibleContentElement = visibleElem2;
 			}
 		}
 		//var visibleElem = null;
@@ -268,19 +292,19 @@ namespace blink {
 	{
 		if (m_pRenderframeImpl)
 		{
-			setStr(L"senderid", id_);
+			innerXobj_->setStr(L"senderid", id_);
 			String callbackid_ = WTF::CreateCanonicalUUIDString();
-			setStr(L"msgID", L"OPEN_XML");
-			setStr(L"open_callbackid", callbackid_);
-			setStr(L"openkey", strKey);
-			setStr(L"openxml", xml);
+			innerXobj_->setStr(L"msgID", L"OPEN_XML");
+			innerXobj_->setStr(L"open_callbackid", callbackid_);
+			innerXobj_->setStr(L"openkey", strKey);
+			innerXobj_->setStr(L"openxml", xml);
 			WebString strID = callbackid_;
 			m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
 			if (callback)
 			{
-				mapHubbleEventCallback_.insert(callbackid_, callback);
+				innerXobj_->mapHubbleEventCallback_.insert(callbackid_, callback);
 			}
-			m_pRenderframeImpl->SendHubbleMessageEx(session_);
+			m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
 		}
 	}
 
@@ -288,21 +312,21 @@ namespace blink {
 	{
 		if (m_pRenderframeImpl)
 		{
-			setStr(L"senderid", id_);
-			setStr(L"msgID", L"OPEN_XML_SPLITTER");
-			setStr(L"openkey", strKey);
-			setStr(L"openxml", xml);
-			setLong(L"opencol", col);
-			setLong(L"openrow", row);
+			innerXobj_->setStr(L"senderid", id_);
+			innerXobj_->setStr(L"msgID", L"OPEN_XML_SPLITTER");
+			innerXobj_->setStr(L"openkey", strKey);
+			innerXobj_->setStr(L"openxml", xml);
+			innerXobj_->setLong(L"opencol", col);
+			innerXobj_->setLong(L"openrow", row);
 			String callbackid_ = WTF::CreateCanonicalUUIDString();
-			setStr(L"opencallbackid", callbackid_);
+			innerXobj_->setStr(L"opencallbackid", callbackid_);
 			WebString strID = callbackid_;
 			m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
 			if (callback)
 			{
-				mapHubbleEventCallback_.insert(callbackid_, callback);
+				innerXobj_->mapHubbleEventCallback_.insert(callbackid_, callback);
 			}
-			m_pRenderframeImpl->SendHubbleMessageEx(session_);
+			m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
 		}
 	}
 
@@ -310,20 +334,20 @@ namespace blink {
 	{
 		if (m_pRenderframeImpl)
 		{
-			setStr(L"senderid", id_);
-			setStr(L"msgID", L"OPEN_XML_CTRL");
-			setStr(L"ctrlName", strCtrlName);
-			setStr(L"openkey", strKey);
-			setStr(L"openxml", xml);
+			innerXobj_->setStr(L"senderid", id_);
+			innerXobj_->setStr(L"msgID", L"OPEN_XML_CTRL");
+			innerXobj_->setStr(L"ctrlName", strCtrlName);
+			innerXobj_->setStr(L"openkey", strKey);
+			innerXobj_->setStr(L"openxml", xml);
 			String callbackid_ = WTF::CreateCanonicalUUIDString();
-			setStr(L"opencallbackid", callbackid_);
+			innerXobj_->setStr(L"opencallbackid", callbackid_);
 			WebString strID = callbackid_;
 			m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
 			if (callback)
 			{
-				mapHubbleEventCallback_.insert(callbackid_, callback);
+				innerXobj_->mapHubbleEventCallback_.insert(callbackid_, callback);
 			}
-			m_pRenderframeImpl->SendHubbleMessageEx(session_);
+			m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
 		}
 	}
 
@@ -331,18 +355,130 @@ namespace blink {
 	{
 		if (callback)
 		{
-			setStr(L"eventtype", L"SyncCtrlTextChange");
-			setStr(L"ctrls", strcontrols);
-			addEventListener(L"SyncCtrlTextChange", L"OnTextChanged", callback);
+			innerXobj_->setStr(L"eventtype", L"SyncCtrlTextChange");
+			innerXobj_->setStr(L"ctrls", strcontrols);
+			innerXobj_->addEventListener(L"SyncCtrlTextChange", L"OnTextChanged", callback);
 		}
 	}
 
+	void HubbleNode::fireEvent(const String& eventName, HubbleXobj* eventParam)
+	{
+		innerXobj_->fireEvent(eventName, eventParam);
+	}
+
+	void HubbleNode::removeEventListener(const String& eventName)
+	{
+		innerXobj_->removeEventListener(eventName);
+	}
+
+	void HubbleNode::disConnect()
+	{
+		innerXobj_->disConnect();
+	}
+
+	void HubbleNode::setMsgID(const String& value)
+	{
+		WebString str = "msgID";
+		WebString val = value;
+		innerXobj_->session_.m_mapString[str.Utf16()] = val.Utf16();
+	}
+
+	String HubbleNode::msgID()
+	{
+		WebString str = "msgID";
+		auto it = innerXobj_->session_.m_mapString.find(str.Utf16());
+		if (it != innerXobj_->session_.m_mapString.end())
+		{
+			return String(it->second.c_str());
+		}
+		return L"";
+	}
+
 	Element* HubbleNode::workElement() {
-		return  element_.Get();
+		return  innerXobj_->element_.Get();
 	}
 
 	void HubbleNode::setWorkElement(Element* elem) {
-		element_ = elem;
+		innerXobj_->element_ = elem;
+	}
+
+	void HubbleNode::setStr(const String& strKey, const String& value)
+	{
+		WebString str = strKey;
+		WebString val = value;
+		innerXobj_->session_.m_mapString[str.Utf16()] = val.Utf16();
+		auto it = innerXobj_->session_.m_mapint64.find(WebString(strKey).Utf16());
+		if (it != innerXobj_->session_.m_mapint64.end())
+		{
+			setStr(L"msgID", L"MODIFY_CTRL_VALUE");
+			setStr(L"currentsubobjformodify", strKey);
+			m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
+		}
+	}
+
+	String HubbleNode::getStr(const String& strKey)
+	{
+		WebString str = strKey;
+		auto it = innerXobj_->session_.m_mapString.find(str.Utf16());
+		if (it != innerXobj_->session_.m_mapString.end())
+		{
+			return String(it->second.c_str());
+		}
+		return L"";
+	}
+
+	void HubbleNode::setLong(const String& strKey, long value)
+	{
+		WebString str = strKey;
+		innerXobj_->session_.m_mapLong[str.Utf16()] = value;
+	}
+
+	long HubbleNode::getLong(const String& strKey)
+	{
+		WebString str = strKey;
+		auto it = innerXobj_->session_.m_mapLong.find(str.Utf16());
+		if (it != innerXobj_->session_.m_mapLong.end())
+		{
+			return it->second;
+		}
+		return 0;
+	}
+
+	void HubbleNode::setInt64(const String& strKey, int64_t value)
+	{
+		WebString str = strKey;
+		auto it = innerXobj_->session_.m_mapint64.find(str.Utf16());
+		if (it != innerXobj_->session_.m_mapint64.end())
+		{
+			innerXobj_->session_.m_mapint64.erase(it);
+		}
+		innerXobj_->session_.m_mapint64[str.Utf16()] = value;
+	}
+
+	int64_t HubbleNode::getInt64(const String& strKey)
+	{
+		WebString str = strKey;
+		auto it = innerXobj_->session_.m_mapint64.find(str.Utf16());
+		if (it != innerXobj_->session_.m_mapint64.end())
+		{
+			return it->second;
+		}
+		return 0;
+	}
+
+	void HubbleNode::setFloat(const String& strKey, float value)
+	{
+		WebString str = strKey;
+		innerXobj_->session_.m_mapFloat[str.Utf16()] = value;
+	}
+
+	float HubbleNode::getFloat(const String& strKey)
+	{
+		WebString str = strKey;
+		auto it = innerXobj_->session_.m_mapFloat.find(str.Utf16());
+		if (it != innerXobj_->session_.m_mapFloat.end())
+			return it->second;
+		return 0;
 	}
 
 	void HubbleNode::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback)
@@ -350,7 +486,7 @@ namespace blink {
 		if (m_pRenderframeImpl)
 		{
 			if (msg == nullptr)
-				msg = this;
+				msg = innerXobj_;
 			msg->setStr(L"senderid", id_);
 			String callbackid_ = WTF::CreateCanonicalUUIDString();
 			msg->setStr(L"callbackid", callbackid_);
@@ -385,7 +521,12 @@ namespace blink {
 
 	void HubbleNode::sendMessageToGrid(HubbleNode* grid)
 	{
-		grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid));
+		grid->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid->xobj()));
+	}
+
+	void HubbleNode::invokeCallback(wstring callbackid, HubbleXobj* callbackParam)
+	{
+		innerXobj_->invokeCallback(callbackid, callbackParam);
 	}
 
 	void HubbleNode::setControlVal(const String& CtrlID, int64_t CtrlHandle, const String& strVal)
@@ -425,7 +566,13 @@ namespace blink {
 	}
 
 	String HubbleNode::objtype() {
-		return getStr(L"objtype");
+		return innerXobj_->getStr(L"objtype");
+	}
+
+	void HubbleNode::AddedEventListener(const AtomicString& event_type,
+		RegisteredEventListener& registered_listener) {
+		EventTargetWithInlineData::AddedEventListener(event_type,
+			registered_listener);
 	}
 
 	void HubbleNode::sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5) {
@@ -457,7 +604,7 @@ namespace blink {
 
 	HubbleNode* HubbleNode::parentGrid()
 	{
-		__int64 nHandle = getInt64(L"parentgridhandle");
+		__int64 nHandle = innerXobj_->getInt64(L"parentgridhandle");
 		if (nHandle)
 		{
 			auto it = hubble_->m_mapHubbleNode.find(nHandle);
@@ -475,7 +622,7 @@ namespace blink {
 	}
 
 	HubbleGalaxy* HubbleNode::parentGalaxy() {
-		__int64 nHandle = getInt64(L"Galaxyhandle");
+		__int64 nHandle = innerXobj_->getInt64(L"Galaxyhandle");
 		auto it = hubble_->m_mapHubbleGalaxy.find(nHandle);
 		if (it != hubble_->m_mapHubbleGalaxy.end())
 			return it->value.Get();

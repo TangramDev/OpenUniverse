@@ -1,0 +1,24 @@
+
+[
+	Exposed = Window
+] interface HubbleGalaxy : EventTarget {
+
+	// Message API
+	void sendMessage([DefaultValue = Undefined] optional HubbleXobj msg,
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	void addEventListener(DOMString eventName, ApplicationCallback callback);
+	void removeEventListener(DOMString eventName);
+
+	readonly attribute DOMString name;
+	readonly attribute long long handle;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
+
+	//HubbleNode API
+	HubbleNode getGrid(DOMString clusterName, [DefaultValue = Undefined] optional DOMString nodeName);
+	HubbleNode getGrid(long nodeHandle);
+
+	// Event handler attributes
+	attribute EventHandler onMessageReceived;
+	attribute EventHandler onGridCreated;
+	attribute EventHandler onMdiChildActivate;
+};

@@ -428,8 +428,8 @@ namespace blink {
 					if (!!gridfortarget) {
 						gridfortarget->setWorkElement(elem);
 						gridfortarget->setMsgID(msgID);
-						gridfortarget->setSender(gridfortarget);
-						gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+						gridfortarget->xobj()->setSender(gridfortarget->innerXobj_);
+						gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 					}
 				}
 			}
@@ -474,7 +474,7 @@ namespace blink {
 								if (!!gridfortarget) {
 									gridfortarget->setWorkElement(elem);
 									gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
-									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget->xobj()));
 								}
 							}
 						}

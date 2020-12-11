@@ -1,21 +1,37 @@
 
 [
 	Exposed = Window
-] interface HubbleWinform : HubbleXobj {
+] interface HubbleWinform : EventTarget {
 
 	// Message API
+	void sendMessage([DefaultValue = Undefined] optional HubbleXobj msg,
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	void addEventListener(DOMString eventName, ApplicationCallback callback);
+	void addEventListener(DOMString subObjName, DOMString eventName, ApplicationCallback callback);
 	HubbleNode getGrid(Element elem);
 	HubbleNode getGrid(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
 	HubbleGalaxy getGalaxy(DOMString galaxyName);
+	void removeEventListener(DOMString eventName);
 	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
+
+	DOMString getStr(DOMString strKey);
+	void setStr(DOMString strKey, DOMString value);
+	long getLong(DOMString strKey);
+	void setLong(DOMString strKey, long value);
+	long long getInt64(DOMString strKey);
+	void setInt64(DOMString strKey, long long value);
+	float getFloat(DOMString strKey);
+	void setFloat(DOMString strKey, float value);
 
 	void DispatchGridEvent(Element elem, DOMString eventName);
 
+	attribute DOMString msgID;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DocumentFragment docFragment;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute boolean isReady;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long formType;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long handle;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString name;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode mdibindgrid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode mdiwebbindgrid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform mdiParent;
