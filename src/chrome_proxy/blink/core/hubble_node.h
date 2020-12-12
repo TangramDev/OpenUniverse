@@ -50,12 +50,6 @@ class CORE_EXPORT HubbleNode final :
   long rows();
   long cols();
   int64_t handle();
-  Element* uiElement();
-  Element* gridElement();
-  Element* eventElement();
-  Element* messageElement();
-  Element* propertyElement();
-  DocumentFragment* docFragment();
 
   HubbleNode* root();
   HubbleNode* parentGrid();
@@ -71,16 +65,11 @@ class CORE_EXPORT HubbleNode final :
   void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
   void sendMessageToGrid(HubbleXobj* msg);
   void sendMessageToGrid(HubbleNode* node);
-  void sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback);
-  void SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback);
   void ShowWebContent(const String& strParentDivName, const String& strDivName);
 
   //Control Bind API:
   void setControlVal(const String& CtrlID, int64_t CtrlHandle, const String& strVal);
   void GetControlsNames(V8ApplicationCallback* callback);
-
-  Element* workElement();
-  void setWorkElement(Element*);
 
   HubbleNode* getChild(long nIndex);
   HubbleNode* getChild(long row, long col);
@@ -97,10 +86,6 @@ class CORE_EXPORT HubbleNode final :
   DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForGrid, kCloudmessageforgrid)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
-
-  // EventTarget overrides:
-  const AtomicString& InterfaceName() const override;
-  ExecutionContext* GetExecutionContext() const override;
 
   HubbleNode();
   HubbleNode(const String& strNodeXml);

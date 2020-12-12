@@ -8,7 +8,6 @@
 	void sendMessageToGrid(HubbleNode node);
 
 	void GetControlsNames(ApplicationCallback callback);
-	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ShowWebContent(DOMString strParentDivName, DOMString strDivName);
 	//Control Bind Api:
 	void setControlVal(DOMString CtrlID, long long CtrlHandle, DOMString strVal);
@@ -22,27 +21,18 @@
 	void ObserveEx(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional long row, [DefaultValue = Undefined] optional long col, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveCtrl(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
-	attribute Element workElement;
-
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long row;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long col;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long rows;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long cols;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long handle;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long hwnd;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString name;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString objtype;
 
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode root;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode parentGrid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleGalaxy parentGalaxy;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform parentForm;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element uiElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element messageElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element gridElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element eventElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element propertyElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DocumentFragment docFragment;
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;

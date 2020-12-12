@@ -1,2 +1,0 @@
-callback HubbleCallback = void (object data);
-callback ApplicationCallback = void (HubbleXobj xobj);

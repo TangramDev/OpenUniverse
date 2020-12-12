@@ -11,20 +11,13 @@
 
 	void DispatchGridEvent(Element elem, DOMString eventName);
 
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DocumentFragment docFragment;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute boolean isReady;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long formType;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long handle;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString name;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode mdibindgrid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleNode mdiwebbindgrid;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform mdiParent;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform activeMDIChild;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element uiElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element formElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element eventElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element propertyElement;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element messageElement;
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;

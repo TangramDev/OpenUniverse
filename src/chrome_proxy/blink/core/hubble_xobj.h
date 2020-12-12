@@ -6,6 +6,7 @@
 #include "third_party/blink/renderer/bindings/core/v8/script_value.h"
 #include "third_party/blink/renderer/bindings/core/v8/serialization/transferables.h"
 #include "third_party/blink/renderer/core/execution_context/context_lifecycle_observer.h"
+#include "third_party/blink/renderer/core/dom/events/Event.h"
 #include "third_party/blink/renderer/core/dom/events/event_target.h"
 #include "third_party/blink/renderer/core/event_type_names.h"
 
@@ -56,7 +57,7 @@ namespace blink {
 		~HubbleXobj() override;
 
 		mutable Member<Element> uiElem_;
-		mutable Member<Element> gridElem_;
+		mutable Member<Element> hostElem_;
 		mutable Member<Element> eventElem_;
 		mutable Member<Element> messageElem_;
 		mutable Member<Element> propertyElem_;
@@ -77,6 +78,10 @@ namespace blink {
 		HubbleXobj* sender();
 		void setSender(HubbleXobj* value);
 
+		Element* element();
+		Element* workElement();
+		void setWorkElement(Element*);
+
 		String getStr(const String& strKey);
 		void setStr(const String& strKey, const String& value);
 		long getLong(const String& strKey);
@@ -86,6 +91,10 @@ namespace blink {
 		float getFloat(const String& strKey);
 		void setFloat(const String& strKey, float value);
 
+		Element* uiElement();
+		Element* eventElement();
+		Element* messageElement();
+		Element* propertyElement();
 		DocumentFragment* docFragment();
 		Element* getVisibleElement(const String& strKey);
 		void setVisibleElement(const String& strKey, Element* value);
@@ -99,6 +108,8 @@ namespace blink {
 		void invokeCallback(wstring callbackid, HubbleXobj* callbackParam);
 		void ProcessNodeMessage(const String& msgID);
 		void DispatchGridEvent(Element* elem, const String& eventName);
+		// Message method
+		void SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback);
 
 		String id_;
 		CommonUniverse::IPCSession session_;
@@ -108,7 +119,7 @@ namespace blink {
 		HeapHashMap<String, Member<Element>> mapVisibleElem;
 		HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;
 		map < wstring, Element* > m_mapElement;
-		map < wstring, Element* > m_mapEventInfo;
+		map < wstring, wstring > m_mapMsgInfo;
 
 	private:
 		String name_;

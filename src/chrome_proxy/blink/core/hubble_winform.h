@@ -56,20 +56,10 @@ class CORE_EXPORT HubbleWinform final :
   bool isReady();
   long formType();
 
-  Element* uiElement();
-  Element* formElement();
-  Element* eventElement();
-  Element* messageElement();
-  Element* propertyElement();
-
-  String msgID();
-  void setMsgID(const String& value);
-
   HubbleNode* mdibindgrid();
   HubbleWinform* mdiParent();
   HubbleWinform* activeMDIChild();
   HubbleNode* mdiwebbindgrid();
-  DocumentFragment* docFragment();
   HubbleNode* getGrid(Element* elem);
   HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
   HubbleGalaxy* getGalaxy(const String& galaxyName);
@@ -79,8 +69,6 @@ class CORE_EXPORT HubbleWinform final :
   void InitWinForm();
   //void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
-  // Message method
-  void SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback);
 
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewinform)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
@@ -95,10 +83,6 @@ class CORE_EXPORT HubbleWinform final :
       DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
 
-  // EventTarget overrides:
-  const AtomicString& InterfaceName() const override;
-  ExecutionContext* GetExecutionContext() const override;
-
   HubbleWinform();
   HubbleWinform(const String& strNodeXml);
 
@@ -112,7 +96,6 @@ class CORE_EXPORT HubbleWinform final :
   mutable Member<HubbleNode> m_pWebBindMdiNode;
   mutable Member<HubbleWinform> m_pMDIParent;
   mutable Member<HubbleWinform> m_pActiveMDIChild;
-  mutable Member<Element> formElem_;
 
   map<wstring, HubbleGalaxy*> m_mapHubbleGalaxy;
 

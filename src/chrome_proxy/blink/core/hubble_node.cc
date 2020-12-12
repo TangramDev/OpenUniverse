@@ -64,38 +64,6 @@ namespace blink {
 		return id_;
 	}
 
-	Element* HubbleNode::eventElement()
-	{
-		return eventElem_;
-	}
-
-	Element* HubbleNode::messageElement()
-	{
-		return messageElem_;
-	}
-
-	Element* HubbleNode::gridElement()
-	{
-		return gridElem_;
-	}
-
-	Element* HubbleNode::uiElement()
-	{
-		return uiElem_;
-	}
-
-	Element* HubbleNode::propertyElement()
-	{
-		return propertyElem_;
-	}
-
-	DocumentFragment* HubbleNode::docFragment()
-	{
-		if (rootNode_)
-			return  rootNode_->DocumentFragment_.Get();
-		return nullptr;
-	}
-
 	long HubbleNode::row()
 	{
 		return getLong(L"row");
@@ -327,43 +295,6 @@ namespace blink {
 		}
 	}
 
-	void HubbleNode::SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback)
-	{
-		if (callback)
-		{
-			setStr(L"eventtype", L"SyncCtrlTextChange");
-			setStr(L"ctrls", strcontrols);
-			addEventListener(L"SyncCtrlTextChange", L"OnTextChanged", callback);
-		}
-	}
-
-	Element* HubbleNode::workElement() {
-		return  element_.Get();
-	}
-
-	void HubbleNode::setWorkElement(Element* elem) {
-		element_ = elem;
-	}
-
-	void HubbleNode::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback)
-	{
-		if (m_pRenderframeImpl)
-		{
-			if (msg == nullptr)
-				msg = this;
-			msg->setStr(L"senderid", id_);
-			String callbackid_ = WTF::CreateCanonicalUUIDString();
-			msg->setStr(L"callbackid", callbackid_);
-			WebString strID = callbackid_;
-			m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
-			if (callback)
-			{
-				mapHubbleEventCallback_.insert(callbackid_, callback);
-			}
-			m_pRenderframeImpl->SendHubbleMessageEx(msg->session_);
-		}
-	}
-
 	void HubbleNode::sendMessageToGrid(HubbleXobj* msg)
 	{
 		if (msg)
@@ -493,14 +424,6 @@ namespace blink {
 			m_mapChildNode[nSize] = node;
 		}
 		return node;
-	}
-
-	const AtomicString& HubbleNode::InterfaceName() const {
-		return event_target_names::kGrid;
-	}
-
-	ExecutionContext* HubbleNode::GetExecutionContext() const {
-		return hubble_->GetExecutionContext();
 	}
 
 }  // namespace blink
