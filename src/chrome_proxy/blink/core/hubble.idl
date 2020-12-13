@@ -34,7 +34,7 @@ typedef sequence<any> ObjectArray;
 
 	//HubbleNode API
 	HubbleXobj newVar([DefaultValue = Undefined] optional DOMString name);
-	HubbleNode getGrid(Element elem);
+	HubbleNode getGrid(Element elem, [DefaultValue = Undefined] optional HubbleXobj grid);
 	HubbleNode getGrid(long long nodeHandle);
 	HubbleNode getGrid(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
 	HubbleGalaxy getGalaxy(DOMString wndName);

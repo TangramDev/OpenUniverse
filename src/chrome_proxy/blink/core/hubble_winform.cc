@@ -25,6 +25,7 @@
 namespace blink {
 
 	HubbleWinform::HubbleWinform():HubbleXobj(){
+		m_strFormXml = "";
 		m_pBindMdiNode = nullptr;
 		m_pWebBindMdiNode = nullptr;
 		m_pRenderframeImpl = nullptr;
@@ -49,12 +50,13 @@ namespace blink {
 		mapHubbleEventCallback_.clear();
 	}
 
-	HubbleWinform* HubbleWinform::Create(const String& strNodeName) {
-		return MakeGarbageCollected<HubbleWinform>(strNodeName);
+	HubbleWinform* HubbleWinform::Create(const String& strFormXml) {
+		return MakeGarbageCollected<HubbleWinform>(strFormXml);
 	}
 
 	HubbleWinform::HubbleWinform(const String& strNodeName) 
 	{
+		m_strFormXml = strNodeName;
 		name_ = strNodeName;
 	}
 
@@ -68,26 +70,6 @@ namespace blink {
 		visitor->Trace(m_pActiveMDIChild);
 		visitor->Trace(m_pContentElement);
 		visitor->Trace(m_pWebBindMdiNode);
-	}
-	String HubbleWinform::name() {
-		long nType = getLong(L"WinFormType");
-		String strname = "";
-		switch (nType)
-		{
-		case 2:
-			strname = getStr(L"tagName");
-			break;
-		default:
-		{
-			strname = getStr(L"id");
-			if(strname=="")
-				strname = getStr(L"formname");
-			if(strname=="")
-				strname = getStr(L"tagName");
-		}
-		break;
-		}
-		return strname;
 	}
 
 	HubbleNode* HubbleWinform::mdibindgrid()

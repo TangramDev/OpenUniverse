@@ -132,7 +132,7 @@ namespace blink {
 	 HubbleNode* createHubbleNode(HubbleXobj* xobj);
 	 HubbleNode* createHubbleWinform(HubbleXobj* xobj);
 	 void CosmosObjCreated(HubbleXobj* xobj);
-	 HubbleNode* getGrid(Element* e);
+	 HubbleNode* getGrid(Element* elem, HubbleXobj* grid);
 	 HubbleNode* getGrid(const int64_t nodeHandle);
 	 HubbleNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
 

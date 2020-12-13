@@ -57,7 +57,6 @@ class CORE_EXPORT HubbleNode final :
   HubbleWinform* parentForm();
 
   int64_t hwnd();
-  String name();
   String objtype();
   String getid();
 

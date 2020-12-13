@@ -261,6 +261,10 @@ namespace Cosmos
 		event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
 		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName)
 		{
+			String^ strEventInfo = L"@" + eventName + L"@";
+			if (eventSession->m_strEvents->IndexOf(strEventInfo->ToLower()) != -1)
+				return;
+			eventSession->m_strEvents += strEventInfo->ToLower();
 			OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
 		}
 

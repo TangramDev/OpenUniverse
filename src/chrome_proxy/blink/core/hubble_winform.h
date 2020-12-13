@@ -46,12 +46,11 @@ class CORE_EXPORT HubbleWinform final :
 
  public:
   static HubbleWinform* Create() { return MakeGarbageCollected<HubbleWinform>(); }
-  static HubbleWinform* Create(const String& strHandle);
+  static HubbleWinform* Create(const String& strFormXml);
 
   void Trace(blink::Visitor*) override;
 
   int64_t handle();
-  String name();
   String getid();
   bool isReady();
   long formType();
@@ -91,6 +90,8 @@ class CORE_EXPORT HubbleWinform final :
   bool isReady_ = false;
   int64_t handle_ = 0;
   int64_t m_nMdiwebbindgridhandle = 0;
+  String m_strFormXml;
+  String name_;
   mutable Member<Element> m_pContentElement;
   mutable Member<HubbleNode> m_pBindMdiNode;
   mutable Member<HubbleNode> m_pWebBindMdiNode;
@@ -101,10 +102,6 @@ class CORE_EXPORT HubbleWinform final :
 
   map<int64_t, Member<HubbleControl>> m_mapChildControl;
   map<std::wstring, Member<HubbleControl>> m_mapChildControl2;
-                                      
-private:
-  String name_;
-  String m_strGridXml;
 };
 
 }  // namespace blink

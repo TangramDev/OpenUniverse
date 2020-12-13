@@ -2657,8 +2657,8 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 							{
 								Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
 							}
-
 							Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, BSTR2STRING(strEventName));
+
 							return;
 						}
 					}
@@ -2668,9 +2668,9 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	}
 
 	auto it = m_mapSession2Wormhole.find(pSession);
+	Object^ pObj = nullptr;
 	if (it != m_mapSession2Wormhole.end())
 	{
-		Object^ pObj = nullptr;
 		pObj = it->second->m_pHostObj;
 		if (pObj == nullptr)
 		{
@@ -2703,29 +2703,69 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 				}
 			}
 		}
-		CString strType = pSession->GetString(L"eventtype");
-		CString strCallback = pSession->GetString(L"callbackid");
-		if (pObj != nullptr)
+		if (strMsgID == _T("WINFORM_CREATED"))
 		{
-			Cosmos::Wormhole^ pCloudSession = nullptr;
-			if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))
+			CString strType = pSession->GetString(L"eventtype");
+			CString strCallback = pSession->GetString(L"callbackid");
+			if (pObj != nullptr)
 			{
-				pCloudSession = gcnew Cosmos::Wormhole(pSession);
-				Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
-			}
-			CString strEventName = pSession->GetString(LPCTSTR(strCallback));
-			if (strType == _T("SyncCtrlTextChange"))
-			{
-				if (pObj->GetType()->IsSubclassOf(Control::typeid))
+				Cosmos::Wormhole^ pCloudSession = nullptr;
+				if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))
 				{
-					Control^ pCtrl = (Control^)pObj;
-					Control^ pSubCtrl = nullptr;
-					CString strCtrls = pSession->GetString(L"ctrls");
-					String^ _strCtrls = BSTR2STRING(strCtrls);
-					cli::array<String^, 1>^ s = _strCtrls->Split(';');
-					for each (String ^ _strSubObjName in s)
+					pCloudSession = gcnew Cosmos::Wormhole(pSession);
+					Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
+				}
+				CString strEventName = pSession->GetString(LPCTSTR(strCallback));
+				if (strType == _T("SyncCtrlTextChange"))
+				{
+					if (pObj->GetType()->IsSubclassOf(Control::typeid))
 					{
-						if (String::IsNullOrEmpty(_strSubObjName) == false)
+						Control^ pCtrl = (Control^)pObj;
+						Control^ pSubCtrl = nullptr;
+						CString strCtrls = pSession->GetString(L"ctrls");
+						String^ _strCtrls = BSTR2STRING(strCtrls);
+						cli::array<String^, 1>^ s = _strCtrls->Split(';');
+						for each (String ^ _strSubObjName in s)
+						{
+							if (String::IsNullOrEmpty(_strSubObjName) == false)
+							{
+								cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(_strSubObjName, true);
+								if (pArray != nullptr && pArray->Length)
+								{
+									pSubCtrl = pArray[0];
+									Cosmos::Wormhole^ pCloudSession2 = nullptr;
+									if (!Cosmos::Hubble::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
+									{
+										Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
+									}
+									pSession->Insertint64(pSubCtrl->Name, pSubCtrl->Handle.ToInt64());
+									pSubCtrl->TextChanged += gcnew System::EventHandler(&OnTextChanged);
+								}
+							}
+						}
+					}
+
+					return;
+				}
+				String^ _strEventName = L"";
+				String^ _strSubObjName = L"";
+				int nPos = strEventName.Find(_T("@"));
+				if (nPos != -1)
+				{
+					_strEventName = BSTR2STRING(strEventName.Left(nPos));
+					_strSubObjName = BSTR2STRING(strEventName.Mid(nPos + 1));
+				}
+				else
+				{
+					_strEventName = BSTR2STRING(strEventName);
+				}
+				if (!String::IsNullOrEmpty(_strSubObjName))
+				{
+					if (pObj->GetType()->IsSubclassOf(Control::typeid))
+					{
+						Control^ pCtrl = (Control^)pObj;
+						Control^ pSubCtrl = nullptr;
+						if (pCtrl != nullptr)
 						{
 							cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(_strSubObjName, true);
 							if (pArray != nullptr && pArray->Length)
@@ -2736,79 +2776,42 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 								{
 									Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
 								}
-								pSession->Insertint64(pSubCtrl->Name, pSubCtrl->Handle.ToInt64());
-								pSubCtrl->TextChanged += gcnew System::EventHandler(&OnTextChanged);
+								Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, _strEventName);
+
+								return;
 							}
 						}
 					}
-				}
-
-				return;
-			}
-			String^ _strEventName = L"";
-			String^ _strSubObjName = L"";
-			int nPos = strEventName.Find(_T("@"));
-			if (nPos != -1)
-			{
-				_strEventName = BSTR2STRING(strEventName.Left(nPos));
-				_strSubObjName = BSTR2STRING(strEventName.Mid(nPos + 1));
-			}
-			else
-			{
-				_strEventName = BSTR2STRING(strEventName);
-			}
-			if (!String::IsNullOrEmpty(_strSubObjName))
-			{
-				if (pObj->GetType()->IsSubclassOf(Control::typeid))
-				{
-					Control^ pCtrl = (Control^)pObj;
-					Control^ pSubCtrl = nullptr;
-					if (pCtrl != nullptr)
+					else
 					{
-						cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(_strSubObjName, true);
-						if (pArray != nullptr && pArray->Length)
+						Object^ subObj = Cosmos::Hubble::Fire_OnGetSubObjForWebPage(pObj, _strSubObjName);
+						if (subObj != nullptr)
 						{
-							pSubCtrl = pArray[0];
-							Cosmos::Wormhole^ pCloudSession2 = nullptr;
-							if (!Cosmos::Hubble::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
-							{
-								Cosmos::Hubble::Wormholes[pSubCtrl] = pCloudSession;
-							}
-
-							Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, _strEventName);
+							Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(subObj, pCloudSession, _strEventName);
 							return;
 						}
 					}
 				}
 				else
 				{
-					Object^ subObj = Cosmos::Hubble::Fire_OnGetSubObjForWebPage(pObj, _strSubObjName);
-					if (subObj != nullptr)
+					if (_strEventName == _T(""))
 					{
-						Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(subObj, pCloudSession, _strEventName);
-						return;
-					}
-				}
-			}
-			else
-			{
-				if (_strEventName == _T(""))
-				{
-					HWND hWnd = (HWND)pSession->Getint64(L"gridhandle");
-					IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
-					Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
-					if (thisNode != nullptr)
-					{
-						thisNode->Fire_OnCloudMessageReceived(pCloudSession);
+						HWND hWnd = (HWND)pSession->Getint64(L"gridhandle");
+						IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
+						Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+						if (thisNode != nullptr)
+						{
+							thisNode->Fire_OnCloudMessageReceived(pCloudSession);
+						}
+						else
+						{
+							Cosmos::Hubble::Fire_OnHubbleMsgReceived(pCloudSession);
+						}
 					}
 					else
 					{
-						Cosmos::Hubble::Fire_OnHubbleMsgReceived(pCloudSession);
+						Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pObj, pCloudSession, _strEventName);
 					}
-				}
-				else
-				{
-					Cosmos::Hubble::Fire_OnBindCLRObjToWebPage(pObj, pCloudSession, _strEventName);
 				}
 			}
 		}
@@ -2816,43 +2819,27 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	else
 	{
 		HWND hWnd = (HWND)pSession->Getint64(L"gridhandle");
+		
 		IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
-		Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+		Cosmos::Grid^ thisNode = nullptr;
 		Cosmos::Wormhole^ pCloudSession = nullptr;// gcnew Cosmos::Wormhole(pSession);
-		if (thisNode!=nullptr)
-		{
-			if (thisNode->m_pSession == nullptr)
-			{
-				pCloudSession = gcnew Cosmos::Wormhole(pSession);
-				thisNode->m_pSession = pCloudSession;
-			}
-			else
-			{
-				pCloudSession = thisNode->m_pSession;
-			}
-		}
-		m_mapSession2Wormhole[pSession] = pCloudSession;
-		Cosmos::Hubble::Fire_OnHubbleMsgReceived(pCloudSession);
-	}
-
-	if (strMsgID == _T("OPEN_XML_CTRL"))
-	{
-		HWND hWnd = (HWND)pSession->Getint64(L"gridhandle");
-		IGrid* pGrid = (IGrid*)pSession->Getint64(L"gridobj");
 		if (pGrid)
 		{
-			Cosmos::Grid^ thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
-			CString strName = pSession->GetString(_T("ctrlName"));
-			CString strKey = pSession->GetString(_T("openkey"));
-			CString strXml = pSession->GetString(_T("openxml"));
-			String^ ctrlName = BSTR2STRING(strName);
-			Control^ ctrl = (Control^)thisNode->XObject;
-			cli::array<Control^, 1>^ pArray = ctrl->Controls->Find(ctrlName, true);
-			if (pArray != nullptr && pArray->Length)
+			thisNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+			if (thisNode != nullptr)
 			{
-				Control^ _ctrl = pArray[0];
-				Hubble::Observe(_ctrl, BSTR2STRING(strKey), BSTR2STRING(strXml));
+				if (thisNode->m_pSession == nullptr)
+				{
+					pCloudSession = gcnew Cosmos::Wormhole(pSession);
+					thisNode->m_pSession = pCloudSession;
+				}
+				else
+				{
+					pCloudSession = thisNode->m_pSession;
+				}
 			}
+			m_mapSession2Wormhole[pSession] = pCloudSession;
+			Cosmos::Hubble::Fire_OnHubbleMsgReceived(pCloudSession);
 		}
 	}
 }

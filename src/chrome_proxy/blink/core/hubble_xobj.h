@@ -119,7 +119,6 @@ namespace blink {
 		HeapHashMap<String, Member<Element>> mapVisibleElem;
 		HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;
 		map < wstring, Element* > m_mapElement;
-		map < wstring, wstring > m_mapMsgInfo;
 
 	private:
 		String name_;

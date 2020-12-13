@@ -55,10 +55,6 @@ namespace blink {
 		name_ = strNodeName;
 	}
 
-	String HubbleNode::name() {
-		return name_;
-	}
-
 	String HubbleNode::getid()
 	{
 		return id_;

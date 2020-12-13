@@ -25,6 +25,8 @@ namespace Cosmos
 		float GetFloat(String^ key);
 		__int64 GetInt64(String^ key);
 		void SendMessage();
+
+		String^ m_strEvents = L"";
 	};
 
 	public ref class Browser
