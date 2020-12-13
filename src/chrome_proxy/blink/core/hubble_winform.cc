@@ -202,7 +202,7 @@ namespace blink {
 	}
 
 	int64_t HubbleWinform::handle() {
-		return handle_;
+		return getInt64(L"formhandle");
 	}
 
 	void HubbleWinform::DispatchGridEvent(Element* e, const String& eventName)

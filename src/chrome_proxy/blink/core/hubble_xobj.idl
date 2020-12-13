@@ -37,4 +37,6 @@
 	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	attribute EventHandler onCloudMessageForObject;
+	attribute EventHandler onMessageReceived;
+	attribute EventHandler onGridCreated;
 };

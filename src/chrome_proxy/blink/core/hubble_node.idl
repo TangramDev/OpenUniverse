@@ -35,8 +35,6 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform parentForm;
 
 	// Event handler attributes
-	attribute EventHandler onMessageReceived;
-	attribute EventHandler onGridCreated;
 	attribute EventHandler onHubbleControlCreated;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onWinFormClosed;

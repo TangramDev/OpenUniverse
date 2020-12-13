@@ -78,9 +78,7 @@ class CORE_EXPORT HubbleNode final :
   void ObserveEx(const String& strKey, const String& xml, long row, long col, V8ApplicationCallback* callback);
   void ObserveCtrl(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback);
 
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubble)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(HubbleControlCreated, kHubblecontrolcreated)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForGrid, kCloudmessageforgrid)

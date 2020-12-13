@@ -509,9 +509,9 @@ namespace blink {
 		}
 		if (!!list2)
 		{
-			HubbleNode* gridfortarget = nullptr;
 			for (unsigned int i = 0; i < list2->length(); i++)
 			{
+				HubbleNode* gridfortarget = nullptr;
 				Element* elem = (Element*)list2->item(i);
 				Node* pNode = elem;
 				if (pNode->getNodeType() == 1) {
@@ -883,6 +883,7 @@ namespace blink {
 				{
 					m_mapWinForm.erase(it);
 					m_mapWinForm.insert(handle, form);
+					form->handle_ = handle;
 					form->InitWinForm();
 				}
 				if (form) {

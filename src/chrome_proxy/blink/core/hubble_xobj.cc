@@ -79,12 +79,6 @@ namespace blink {
 	}
 
 	const AtomicString& HubbleXobj::InterfaceName() const {
-		//int64_t nHandle = getInt64(L"gridhandle");
-		//if(nHandle)
-		//	return event_target_names::kGrid;
-		//nHandle = getInt64(L"formhandle");
-		//if (nHandle)
-		//	return event_target_names::kHubbleWinForm;
 		return event_target_names::kHubbleXobj;
 	}
 
@@ -99,8 +93,8 @@ namespace blink {
 			if (hostElem_)
 			{
 				name = hostElem_->GetIdAttribute();
-				if (name == "")
-					name = hostElem_->tagName();
+				if (name == ""||name.IsNull())
+					name = hostElem_->tagName().LowerASCII();
 			}
 		}
 		return name;
@@ -127,9 +121,6 @@ namespace blink {
 		__int64 nHandle = getInt64(L"gridhandle");
 		if (nHandle)
 			return (HubbleNode*)this;
-		//auto it = hubble_->m_mapHubbleNode.find(nHandle);
-		//if (it != hubble_->m_mapHubbleNode.end())
-		//	return it->value.Get();
 		return nullptr;
 	}
 
@@ -140,11 +131,6 @@ namespace blink {
 		{
 			return ((HubbleNode*)this)->parentGalaxy();
 		}
-		//auto it = hubble_->m_mapHubbleNode.find(nHandle);
-		//if (it != hubble_->m_mapHubbleNode.end())
-		//{
-		//	return it->value->parentGalaxy();
-		//}
 		return nullptr;
 	}
 
@@ -548,119 +534,6 @@ namespace blink {
 			}
 		}
 	}
-
-	//void HubbleXobj::ProcessNodeMessage(const String& msgID)
-	//{
-	//	HubbleNode* thisGrid = grid();
-	//	wstring strHandles = L"";
-	//	if (thisGrid && messageElem_ && msgID.IsNull() == false && msgID != "")
-	//	{
-	//		wstring _strID = WebString(msgID).Utf16();
-	//		auto it = m_mapMsgInfo.find(_strID);
-	//		if (it == m_mapMsgInfo.end())
-	//		{
-	//			HubbleNode* gridfortarget = nullptr;
-	//			HTMLCollection* list = messageElem_->getElementsByTagName(AtomicString(msgID.LowerASCII()));
-	//			if (list->length())
-	//			{
-	//				Element* msg = list->item(0);
-	//				HTMLCollection* plist = msg->Children();
-	//				for (unsigned int i = 0; i < plist->length(); i++)
-	//				{
-	//					Element* elem = plist->item(i);
-	//					AtomicString target = "";
-	//					target = elem->getAttribute("target");
-	//					if (target.IsNull() || target == "")
-	//					{
-	//						gridfortarget = thisGrid;
-	//					}
-	//					else {
-	//						AtomicString _strHandle = elem->getAttribute("targetgrid");
-	//						if (_strHandle.IsNull() == false && _strHandle != "")
-	//						{
-	//							String s = _strHandle;
-	//							wstring _strHandle = WebString(s).Utf16();
-	//							__int64 nHandle = std::stoll(_strHandle);
-	//							auto it = hubble_->m_mapHubbleNode.find(nHandle);
-	//							if (it != hubble_->m_mapHubbleNode.end())
-	//							{
-	//								gridfortarget = it->value.Get();
-	//							}
-	//						}
-	//						if (gridfortarget == nullptr)
-	//						{
-	//							AtomicString galaxy = elem->getAttribute("galaxy");
-	//							AtomicString cluster = elem->getAttribute("cluster");
-	//							if (galaxy == "")
-	//								galaxy = "default";
-	//							if (cluster == "")
-	//								cluster = "__viewport_default__";
-
-	//							gridfortarget = hubble_->getGrid(galaxy, cluster, target);
-	//							if (gridfortarget == nullptr) {
-	//								HubbleWinform* form = thisGrid->parentForm();
-	//								if (form)
-	//								{
-	//									gridfortarget = form->getGrid(galaxy, cluster, target);
-	//								}
-	//							}
-	//							if (!!gridfortarget)
-	//							{
-	//								__int64 nHandle = gridfortarget->handle();
-	//								wstring strHandle = std::to_wstring(nHandle);
-	//								elem->setAttribute("targetgrid", AtomicString(String(strHandle.c_str())));
-	//							}
-	//						}
-	//					}
-	//					if (!!gridfortarget) {
-	//						__int64 nHandle = gridfortarget->handle();
-	//						wstring strHandle = std::to_wstring(nHandle);
-	//						strHandles += strHandle + L"|";
-	//						m_mapElement[_strID + L"__" + strHandle] = elem;
-	//						gridfortarget->setWorkElement(elem);
-	//						gridfortarget->setMsgID(msgID);
-	//						gridfortarget->setSender(gridfortarget);
-	//						gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
-	//					}
-	//				}
-	//				if (strHandles != L"")
-	//				{
-	//					msg->setAttribute("gridhandles", AtomicString(String(strHandles.c_str())));
-	//					m_mapMsgInfo[_strID] = strHandles;
-	//				}
-	//			}
-	//		}
-	//		else
-	//		{
-	//			wstring strHandles = it->second;
-	//			const std::vector<std::wstring> strVecHandles = base::SplitString(
-	//				strHandles, L"|", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
-	//			int nCount = strVecHandles.size();
-	//			for (int i = 0; i < nCount; i++)
-	//			{
-	//				__int64 nHandle = std::stoll(strVecHandles[i]);
-	//				if (nHandle)
-	//				{
-	//					auto it = hubble_->m_mapHubbleNode.find(nHandle);
-	//					if (it != hubble_->m_mapHubbleNode.end())
-	//					{
-	//						Element* elem = nullptr;
-	//						auto it1 = m_mapElement.find(_strID + L"__" + std::to_wstring(nHandle));
-	//						if (it1 != m_mapElement.end())
-	//							elem = it1->second;
-	//						HubbleNode* gridfortarget = it->value;
-	//						if (!!gridfortarget) {
-	//							gridfortarget->setWorkElement(elem);
-	//							gridfortarget->setMsgID(msgID);
-	//							gridfortarget->setSender(gridfortarget);
-	//							gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
-	//						}
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
 
 	void HubbleXobj::DispatchGridEvent(Element* e, const String& eventName)
 	{

@@ -18,30 +18,30 @@
 
 namespace blink {
 
-using namespace std;
+	using namespace std;
 
-class Hubble;
-class DOMParser;
-class HubbleXobj;
-class HubbleNode;
-class HubbleGalaxy;
-class HubbleWinform;
-class HubbleControl;
+	class Hubble;
+	class DOMParser;
+	class HubbleXobj;
+	class HubbleNode;
+	class HubbleGalaxy;
+	class HubbleWinform;
+	class HubbleControl;
 
-//for callback:
-class CallbackFunctionBase;
-class V8ApplicationCallback;
+	//for callback:
+	class CallbackFunctionBase;
+	class V8ApplicationCallback;
 
-class Document;
-class ScriptState;
-class ExceptionState;
-class DocumentFragment;
-class WebLocalFrameClient;
-class SerializedScriptValue;
-class V8ApplicationCallback;
+	class Document;
+	class ScriptState;
+	class ExceptionState;
+	class DocumentFragment;
+	class WebLocalFrameClient;
+	class SerializedScriptValue;
+	class V8ApplicationCallback;
 
-class CORE_EXPORT HubbleWinform final : 
-    public HubbleXobj{
+	class CORE_EXPORT HubbleWinform final :
+	public HubbleXobj{
   DEFINE_WRAPPERTYPEINFO();
 
  public:
@@ -69,40 +69,40 @@ class CORE_EXPORT HubbleWinform final :
   //void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
 
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewinform)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(GalaxyCreated, kHubblegalaxycreated)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(AllMdiChildRemoved, kAllmdichildremoved)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForWinForm, kCloudmessageforwinform)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildWinFormReady, kMdichildwinformready)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiWinFormReady, kMdiwinformready)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormReady, kWinformready)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
+    //DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewinform)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
+	//DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(GalaxyCreated, kHubblegalaxycreated)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(AllMdiChildRemoved, kAllmdichildremoved)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForWinForm, kCloudmessageforwinform)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildWinFormReady, kMdichildwinformready)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiWinFormReady, kMdiwinformready)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormReady, kWinformready)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
 
-  HubbleWinform();
-  HubbleWinform(const String& strNodeXml);
+	  HubbleWinform();
+	  HubbleWinform(const String& strNodeXml);
 
-  ~HubbleWinform() override;
+	  ~HubbleWinform() override;
 
-  bool isReady_ = false;
-  int64_t handle_ = 0;
-  int64_t m_nMdiwebbindgridhandle = 0;
-  String m_strFormXml;
-  String name_;
-  mutable Member<Element> m_pContentElement;
-  mutable Member<HubbleNode> m_pBindMdiNode;
-  mutable Member<HubbleNode> m_pWebBindMdiNode;
-  mutable Member<HubbleWinform> m_pMDIParent;
-  mutable Member<HubbleWinform> m_pActiveMDIChild;
+	  bool isReady_ = false;
+	  int64_t handle_ = 0;
+	  int64_t m_nMdiwebbindgridhandle = 0;
+	  String m_strFormXml;
+	  String name_;
+	  mutable Member<Element> m_pContentElement;
+	  mutable Member<HubbleNode> m_pBindMdiNode;
+	  mutable Member<HubbleNode> m_pWebBindMdiNode;
+	  mutable Member<HubbleWinform> m_pMDIParent;
+	  mutable Member<HubbleWinform> m_pActiveMDIChild;
 
-  map<wstring, HubbleGalaxy*> m_mapHubbleGalaxy;
+	  map<wstring, HubbleGalaxy*> m_mapHubbleGalaxy;
 
-  map<int64_t, Member<HubbleControl>> m_mapChildControl;
-  map<std::wstring, Member<HubbleControl>> m_mapChildControl2;
-};
+	  map<int64_t, Member<HubbleControl>> m_mapChildControl;
+	  map<std::wstring, Member<HubbleControl>> m_mapChildControl2;
+	};
 
 }  // namespace blink
 

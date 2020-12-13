@@ -50,6 +50,8 @@ namespace blink {
 		ExecutionContext* GetExecutionContext() const override;
 
 		DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForObject, kCloudmessageforobject)
+		DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubble)
+		DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
 
 			HubbleXobj();
 		HubbleXobj(const String& strNodeName);

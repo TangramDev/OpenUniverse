@@ -7,7 +7,6 @@
 	HubbleNode getGrid(Element elem);
 	HubbleNode getGrid(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
 	HubbleGalaxy getGalaxy(DOMString galaxyName);
-	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	void DispatchGridEvent(Element elem, DOMString eventName);
 
@@ -20,8 +19,6 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleWinform activeMDIChild;
 
 	// Event handler attributes
-	attribute EventHandler onMessageReceived;
-	attribute EventHandler onGridCreated;
 	attribute EventHandler onLoadMdiChildWinForm;
 	attribute EventHandler onCloudMessageForWinForm;
 	attribute EventHandler onGalaxyCreated;
