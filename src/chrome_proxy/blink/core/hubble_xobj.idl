@@ -34,7 +34,7 @@
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void addEventListener(DOMString subObjName, DOMString eventName, ApplicationCallback callback);
 	void removeEventListener(DOMString eventName);
-	void SyncCtrlTextChange(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void BindCtrlValue(DOMString strcontrols, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	attribute EventHandler onCloudMessageForObject;
 	attribute EventHandler onMessageReceived;

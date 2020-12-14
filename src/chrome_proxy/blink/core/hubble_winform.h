@@ -66,12 +66,8 @@ namespace blink {
   void ProcessFormMessage(const String& msgID);
 
   void InitWinForm();
-  //void DispatchGridEvent(HubbleXobj* xObj, const String& ctrlName, const String& eventName);
 
-
-    //DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubblewinform)
 	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
-	//DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
 	DEFINE_ATTRIBUTE_EVENT_LISTENER(GalaxyCreated, kHubblegalaxycreated)
 	DEFINE_ATTRIBUTE_EVENT_LISTENER(AllMdiChildRemoved, kAllmdichildremoved)
 	DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)

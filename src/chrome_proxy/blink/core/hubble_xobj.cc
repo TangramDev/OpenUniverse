@@ -181,13 +181,13 @@ namespace blink {
 		return  DocumentFragment_.Get();
 	}
 
-	void HubbleXobj::SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback)
+	void HubbleXobj::BindCtrlValue(const String& strcontrols, V8ApplicationCallback* callback)
 	{
 		if (callback)
 		{
-			setStr(L"eventtype", L"SyncCtrlTextChange");
+			setStr(L"eventtype", L"BindCtrlValue");
 			setStr(L"ctrls", strcontrols);
-			addEventListener(L"SyncCtrlTextChange", L"OnTextChanged", callback);
+			addEventListener(L"BindCtrlValue", L"OnTextChanged", callback);
 		}
 	}
 

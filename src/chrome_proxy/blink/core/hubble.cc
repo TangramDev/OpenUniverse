@@ -936,7 +936,13 @@ namespace blink {
 							form = grid->grid()->parentForm();
 						}
 						if (form)
+						{
 							gridfortarget = form->getGrid(galaxy, cluster, target);
+							if (gridfortarget == nullptr&&form->mdiParent())
+							{
+								gridfortarget = form->mdiParent()->getGrid(galaxy, cluster, target);
+							}
+						}
 					}
 					if (!!gridfortarget) {
 						return gridfortarget;

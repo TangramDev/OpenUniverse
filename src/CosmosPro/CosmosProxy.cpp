@@ -2716,7 +2716,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 					Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
 				}
 				CString strEventName = pSession->GetString(LPCTSTR(strCallback));
-				if (strType == _T("SyncCtrlTextChange"))
+				if (strType == _T("BindCtrlValue"))
 				{
 					if (pObj->GetType()->IsSubclassOf(Control::typeid))
 					{

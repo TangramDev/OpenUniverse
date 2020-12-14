@@ -111,7 +111,7 @@ namespace blink {
 		void ProcessNodeMessage(const String& msgID);
 		void DispatchGridEvent(Element* elem, const String& eventName);
 		// Message method
-		void SyncCtrlTextChange(const String& strcontrols, V8ApplicationCallback* callback);
+		void BindCtrlValue(const String& strcontrols, V8ApplicationCallback* callback);
 
 		String id_;
 		CommonUniverse::IPCSession session_;

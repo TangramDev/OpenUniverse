@@ -400,7 +400,9 @@ namespace Cosmos
 
     void Hubble::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName)
     {
-        String^ strEventInfo = L"@" + eventName + L"@";
+        Control^ pCtrl = (Control^)SourceObj;
+        String^ strEventInfo = L"@" + pCtrl->Name + L"_" + eventName + L"@";
+        //String^ strEventInfo = L"@" + eventName + L"@";
         if (eventSession->m_strEvents->IndexOf(strEventInfo->ToLower()) != -1)
             return;
         eventSession->m_strEvents += strEventInfo->ToLower();
