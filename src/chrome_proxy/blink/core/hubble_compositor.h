@@ -22,7 +22,6 @@ class Document;
 class HubbleXobj;
 class ScriptState;
 class ExceptionState;
-class V8HubbleCallback;
 class WebLocalFrameClient;
 class SerializedScriptValue;
 

@@ -97,16 +97,18 @@ HWND LegacyRenderWidgetHostHWND::GetParent() {
 }
 
 void LegacyRenderWidgetHostHWND::Show() {
-  ::ShowWindow(hwnd(), SW_SHOW);
   // begin Add by TangramTeam
-  ::PostMessage(m_hWnd, WM_COSMOSMSG, 20201109, 1);
+  ::SendMessage(m_hWnd, WM_COSMOSMSG, 20201109, 1);
   // end Add by TangramTeam
+
+  ::ShowWindow(hwnd(), SW_SHOW);
 }
   void LegacyRenderWidgetHostHWND::Hide() {
-  ::ShowWindow(hwnd(), SW_HIDE);
   // begin Add by TangramTeam
-  ::PostMessage(m_hWnd, WM_COSMOSMSG, 20201109, 0);
+  ::SendMessage(m_hWnd, WM_COSMOSMSG, 20201109, 0);
   // end Add by TangramTeam
+
+  ::ShowWindow(hwnd(), SW_HIDE);
 }
 
 void LegacyRenderWidgetHostHWND::SetBounds(const gfx::Rect& bounds) {

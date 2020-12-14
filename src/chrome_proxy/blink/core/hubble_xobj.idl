@@ -29,6 +29,10 @@
 	void setVisibleElement(DOMString strKey, Element value);
 	Element getVisibleElement(DOMString strKey);
 
+	[Affects = Nothing] Element getElementById(DOMString strID);
+	[Affects = Nothing] NameNodeList getElementsByName(DOMString localName);
+	[Affects = Nothing] HTMLCollection getElementsByTagName(DOMString localName);
+
 	void sendMessage(HubbleXobj msg,
 		[DefaultValue = Undefined] optional ApplicationCallback callback);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);

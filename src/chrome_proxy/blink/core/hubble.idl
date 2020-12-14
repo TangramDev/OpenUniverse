@@ -2,7 +2,7 @@ typedef sequence<any> ObjectArray;
 
 [
 	Exposed = Window
-] interface Hubble : EventTarget {
+] interface Hubble : HubbleXobj {
 
 	// Message API
 	void wait(boolean bwait);
@@ -17,20 +17,10 @@ typedef sequence<any> ObjectArray;
 		[DefaultValue = Undefined] optional ApplicationCallback callback, 
 		[DefaultValue = Undefined] optional  boolean bwait);
 	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
-	void addEventListener(DOMString eventName, ApplicationCallback callback);
-	void removeEventListener(DOMString eventName);
 
 	// DOM API
 	void defineElement(DOMString tagName, DOMString html);
 	void renderElement(DOMString tagName, DOMString html);
-	DOMString getStr(DOMString strKey);
-	void setStr(DOMString strKey, DOMString value);
-	long getLong(DOMString strKey);
-	void setLong(DOMString strKey, long value);
-	long long getInt64(DOMString strKey);
-	void setInt64(DOMString strKey, long long value);
-	float getFloat(DOMString strKey);
-	void setFloat(DOMString strKey, float value);
 
 	//HubbleNode API
 	HubbleXobj newVar([DefaultValue = Undefined] optional DOMString name);
@@ -51,7 +41,6 @@ typedef sequence<any> ObjectArray;
 	[RaisesException, CEReactions] void setNamedItem(DOMString name, HubbleXobj var);
 
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString url;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;

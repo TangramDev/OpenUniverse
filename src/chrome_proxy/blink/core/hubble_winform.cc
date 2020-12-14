@@ -329,7 +329,7 @@ namespace blink {
 				HTMLCollection* plist = list->item(i)->Children();
 				for (unsigned int i = 0; i < plist->length(); i++)
 				{
-					Element* elem = plist->item(i);
+					Element* elem = plist->item(i); 
 					AtomicString target = "";
 					target = elem->getAttribute("target");
 					if (target.IsNull() || target == "")

@@ -1,5 +1,5 @@
 ﻿#include "hubble.h"
-#include "hubble_xobj.h"
+//#include "hubble_xobj.h"
 #include "hubble_node.h"
 #include "hubble_event.h"
 #include "hubble_galaxy.h"
@@ -36,17 +36,26 @@
 
 namespace blink {
 
-	Hubble::Hubble(LocalFrame* frame) : DOMWindowClient(frame) {
+	Hubble::Hubble(LocalFrame* frame) : HubbleXobj() , DOMWindowClient(frame) {
 		url_ = L"";
 		is_pending_ = false;
 		helperElem_ = nullptr;
-		innerXobj_ = newVar(L"");
 		CosmosElem_ = nullptr;
 		m_pRenderframeImpl = nullptr;
+		DocumentFragment_ = nullptr;
 		m_pVisibleContentElement = nullptr;
 		ExceptionState exception_state(V8PerIsolateData::MainThreadIsolate(), ExceptionState::kSetterContext,
 			"Element", "creatHelper");
 		helperElem_ = DomWindow()->document()->CreateElementForBinding("hubble", exception_state);
+		//HTMLCollection* list = DomWindow()->document()->getElementsByTagName("cosmos");
+		//if (list->length())
+		//{
+		//	DocumentFragment_ = DomWindow()->document()->createDocumentFragment();
+		//	if (DocumentFragment_)
+		//	{
+		//		DocumentFragment_->appendChild(list->item(0));
+		//	}
+		//}
 	}
 
 	Hubble::~Hubble() {
@@ -55,15 +64,14 @@ namespace blink {
 	void Hubble::Trace(blink::Visitor* visitor) {
 		EventTargetWithInlineData::Trace(visitor);
 		ScriptWrappable::Trace(visitor);
+		HubbleXobj::Trace(visitor);
 		DOMWindowClient::Trace(visitor);
-		visitor->Trace(innerXobj_);
 		visitor->Trace(helperElem_);
 		visitor->Trace(CosmosElem_);
 		visitor->Trace(m_mapWinForm);
 		visitor->Trace(m_mapHubbleNode);
 		visitor->Trace(mapCloudSession_);
 		visitor->Trace(m_mapHubbleGalaxy);
-		visitor->Trace(mapHubbleCallback_);
 		visitor->Trace(mapCallbackFunction_);
 		visitor->Trace(m_mapHubbleCompositor);
 		visitor->Trace(m_pVisibleContentElement);
@@ -72,90 +80,6 @@ namespace blink {
 	String Hubble::url()
 	{
 		return DomWindow()->document()->Url().GetString();
-	}
-
-	HubbleXobj* Hubble::xobj()
-	{
-		return innerXobj_;
-	}
-
-	void Hubble::setStr(const String& strKey, const String& value)
-	{
-		WebString str = strKey;
-		WebString val = value;
-		innerXobj_->session_.m_mapString[str.Utf16()] = val.Utf16();
-		auto it = innerXobj_->session_.m_mapint64.find(WebString(strKey).Utf16());
-		if (it != innerXobj_->session_.m_mapint64.end())
-		{
-			setStr(L"msgID", L"MODIFY_CTRL_VALUE");
-			setStr(L"currentsubobjformodify", strKey);
-			m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
-		}
-	}
-
-	String Hubble::getStr(const String& strKey)
-	{
-		WebString str = strKey;
-		auto it = innerXobj_->session_.m_mapString.find(str.Utf16());
-		if (it != innerXobj_->session_.m_mapString.end())
-		{
-			return String(it->second.c_str());
-		}
-		return L"";
-	}
-
-	void Hubble::setLong(const String& strKey, long value)
-	{
-		WebString str = strKey;
-		innerXobj_->session_.m_mapLong[str.Utf16()] = value;
-	}
-
-	long Hubble::getLong(const String& strKey)
-	{
-		WebString str = strKey;
-		auto it = innerXobj_->session_.m_mapLong.find(str.Utf16());
-		if (it != innerXobj_->session_.m_mapLong.end())
-		{
-			return it->second;
-		}
-		return 0;
-	}
-
-	void Hubble::setInt64(const String& strKey, int64_t value)
-	{
-		WebString str = strKey;
-		auto it = innerXobj_->session_.m_mapint64.find(str.Utf16());
-		if (it != innerXobj_->session_.m_mapint64.end())
-		{
-			innerXobj_->session_.m_mapint64.erase(it);
-		}
-		innerXobj_->session_.m_mapint64[str.Utf16()] = value;
-	}
-
-	int64_t Hubble::getInt64(const String& strKey)
-	{
-		WebString str = strKey;
-		auto it = innerXobj_->session_.m_mapint64.find(str.Utf16());
-		if (it != innerXobj_->session_.m_mapint64.end())
-		{
-			return it->second;
-		}
-		return 0;
-	}
-
-	void Hubble::setFloat(const String& strKey, float value)
-	{
-		WebString str = strKey;
-		innerXobj_->session_.m_mapFloat[str.Utf16()] = value;
-	}
-
-	float Hubble::getFloat(const String& strKey)
-	{
-		WebString str = strKey;
-		auto it = innerXobj_->session_.m_mapFloat.find(str.Utf16());
-		if (it != innerXobj_->session_.m_mapFloat.end())
-			return it->second;
-		return 0;
 	}
 
 	void Hubble::wait(bool bwait)
@@ -176,7 +100,7 @@ namespace blink {
 		if (m_pRenderframeImpl == nullptr)
 		{
 			m_pRenderframeImpl = WebLocalFrameImpl::FromFrame(GetFrame())->Client();
-			innerXobj_->m_pRenderframeImpl = m_pRenderframeImpl;
+			m_pRenderframeImpl = m_pRenderframeImpl;
 		}
 		if (m_pRenderframeImpl) {
 			if (is_pending_) {
@@ -1018,34 +942,6 @@ namespace blink {
 		sendMessage("TANGRAM_UI_MESSAGE", key, L"", strXml, L"", L"");
 	}
 
-	void Hubble::addEventListener(const String& eventName, V8ApplicationCallback* callback)
-	{
-		if (callback)
-		{
-			innerXobj_->mapHubbleEventCallback_.insert(eventName, callback);
-		}
-	}
-
-	void Hubble::removeEventListener(const String& eventName)
-	{
-		auto it = innerXobj_->mapHubbleEventCallback_.find(eventName);
-		if (it != innerXobj_->mapHubbleEventCallback_.end())
-			innerXobj_->mapHubbleEventCallback_.erase(it);
-	}
-
-	void Hubble::disConnect()
-	{
-		int nSize = innerXobj_->mapHubbleEventCallback_.size();
-		if (nSize)
-		{
-			while (innerXobj_->mapHubbleEventCallback_.size())
-			{
-				auto it = innerXobj_->mapHubbleEventCallback_.begin();
-				innerXobj_->mapHubbleEventCallback_.erase(it);
-			}
-		}
-	}
-
 	void Hubble::invokeWinFormCreatedCallback(HubbleWinform* form)
 	{
 		auto itcallback = mapCallbackFunction_.find((int64_t)form);
@@ -1059,30 +955,18 @@ namespace blink {
 		}
 	}
 
-	void Hubble::fireEvent(const String& eventName, HubbleXobj* eventParam)
-	{
-		auto itcallback = innerXobj_->mapHubbleEventCallback_.find(eventName);
-		if (itcallback != innerXobj_->mapHubbleEventCallback_.end())
-		{
-			blink::V8ApplicationCallback* callback = (blink::V8ApplicationCallback*)itcallback->value.Get();
-			ScriptState* callback_relevant_script_state = callback->CallbackRelevantScriptState();
-			ScriptState::Scope callback_relevant_context_scope(callback_relevant_script_state);
-			callback->InvokeAndReportException(nullptr, eventParam);
-		}
-	}
-
 	void Hubble::sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback, bool bwait = false)
 	{
 		if (m_pRenderframeImpl)
 		{
 			if (msg == nullptr)
-				msg = innerXobj_;
-			msg->setStr(L"senderid", innerXobj_->getid());
+				msg = this;
+			msg->setStr(L"senderid", getid());
 			if (callback)
 			{
 				String callbackid_ = WTF::CreateCanonicalUUIDString();
 				msg->setStr(L"callbackid", callbackid_);
-				innerXobj_->mapHubbleEventCallback_.insert(callbackid_, callback);
+				mapHubbleEventCallback_.insert(callbackid_, callback);
 				WebString strID = callbackid_;
 				m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
 			}
@@ -1096,19 +980,19 @@ namespace blink {
 	{
 		if (m_pRenderframeImpl)
 		{
-			innerXobj_->setStr(L"senderid", innerXobj_->getid());
-			innerXobj_->setStr(L"msgID", L"OPEN_URL");
-			innerXobj_->setStr(L"openurl", url);
-			innerXobj_->setLong(L"BrowserWndOpenDisposition", nBrowserWndOpenDisposition);
+			setStr(L"senderid", getid());
+			setStr(L"msgID", L"OPEN_URL");
+			setStr(L"openurl", url);
+			setLong(L"BrowserWndOpenDisposition", nBrowserWndOpenDisposition);
 			if (callback)
 			{
 				String callbackid_ = WTF::CreateCanonicalUUIDString();
-				innerXobj_->setStr(L"callbackid", callbackid_);
-				innerXobj_->mapHubbleEventCallback_.insert(callbackid_, callback);
+				setStr(L"callbackid", callbackid_);
+				mapHubbleEventCallback_.insert(callbackid_, callback);
 				WebString strID = callbackid_;
 				m_pRenderframeImpl->m_mapHubbleSession[strID.Utf16()] = this;
 			}
-			m_pRenderframeImpl->SendHubbleMessageEx(innerXobj_->session_);
+			m_pRenderframeImpl->SendHubbleMessageEx(session_);
 		}
 		//if (bwait)
 		//	run_loop_.Run();
@@ -1168,10 +1052,6 @@ namespace blink {
 		while (m_mapHubbleCompositor.size())
 		{
 			m_mapHubbleCompositor.erase(m_mapHubbleCompositor.begin());
-		}
-		while (mapHubbleCallback_.size())
-		{
-			mapHubbleCallback_.erase(mapHubbleCallback_.begin());
 		}
 		while (mapCallbackFunction_.size())
 		{

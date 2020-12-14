@@ -603,5 +603,20 @@ namespace blink {
 		//    }
 		//}
 	}
+
+	Element* HubbleXobj::getElementById(const String& strID)
+	{
+		return DocumentFragment_->getElementById(AtomicString(strID));
+	}
+
+	NameNodeList* HubbleXobj::getElementsByName(const String& localName)
+	{
+		return DocumentFragment_->getElementsByName(AtomicString(localName));
+	}
+
+	HTMLCollection* HubbleXobj::getElementsByTagName(const String& localName)
+	{
+		return DocumentFragment_->getElementsByTagName(AtomicString(localName));
+	}
 }  // namespace blink
 // end Add by HubbleTeam

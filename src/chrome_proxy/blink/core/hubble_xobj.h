@@ -27,7 +27,6 @@ namespace blink {
 	class Document;
 	class ScriptState;
 	class ExceptionState;
-	class V8HubbleCallback;
 	class DocumentFragment;
 	class WebLocalFrameClient;
 	class SerializedScriptValue;
@@ -47,13 +46,17 @@ namespace blink {
 			RegisteredEventListener&) override;
 		// EventTarget overrides:
 		const AtomicString& InterfaceName() const override;
+		Element* getElementById(const String& strID);
+		NameNodeList* getElementsByName(const String& localName);
+		HTMLCollection* getElementsByTagName(const String& localName);
+		
 		ExecutionContext* GetExecutionContext() const override;
 
 		DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForObject, kCloudmessageforobject)
 		DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kHubble)
 		DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
 
-			HubbleXobj();
+		HubbleXobj();
 		HubbleXobj(const String& strNodeName);
 
 		~HubbleXobj() override;

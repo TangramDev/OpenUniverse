@@ -19,6 +19,7 @@
 #include "third_party/blink/renderer/platform/wtf/assertions.h"
 #include "third_party/blink/renderer/platform/wtf/forward.h"
 #include "third_party/blink/renderer/platform/wtf/uuid.h"
+#include "hubble_xobj.h"
 
 #define IPC_CLR_CONTROL_CREARED							20200220
 #define IPC_CLR_CONTROL_CREARED_ID						_T("Tangram_CLR_Control_Created")
@@ -56,17 +57,17 @@ namespace blink {
 	class HubbleWinform;
 	class ExceptionState;
 	class HubbleCompositor;
+	class DocumentFragment;
 	class WebLocalFrameClient;
 	class SerializedScriptValue;
 
 	//for callback:
 	class CallbackFunctionBase;
 
-	class V8HubbleCallback;
 	class V8ApplicationCallback;
 
 	class CORE_EXPORT Hubble final :
-	public EventTargetWithInlineData,
+	public HubbleXobj,
 		public DOMWindowClient{
 	DEFINE_WRAPPERTYPEINFO();
 	USING_GARBAGE_COLLECTED_MIXIN(Hubble);
@@ -93,7 +94,6 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(BindCLRObject, kBindclrobject)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForObject, kCloudmessageforobject)
 
-	 HubbleXobj* xobj();
 	 String url();
 	 HubbleXobj* getNamedItem(const AtomicString&) const;
 	 HubbleXobj* setNamedItem(HubbleXobj*, ExceptionState&);
@@ -107,10 +107,6 @@ namespace blink {
 	 void sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback, bool bwait);
 	 void openUrl(const String& url, long nBrowserWndOpenDisposition, V8ApplicationCallback* callback, bool bwait);
 	 void Observe(const String& key, const String& strXml, V8ApplicationCallback* callback);
-	 void addEventListener(const String& eventName, V8ApplicationCallback* callback);
-	 void removeEventListener(const String& eventName);
-	 void disConnect();
-	 void fireEvent(const String& eventName, HubbleXobj* eventParam);
 
 	 // DOM method
 	 void defineElement(const String& tagName, const String& html);
@@ -139,15 +135,6 @@ namespace blink {
 	 HubbleGalaxy* getGalaxy(const String& wndName);
 	 HubbleGalaxy* getGalaxy(const int64_t wndHandle);
 
-	 String getStr(const String& strKey);
-	 void setStr(const String& strKey, const String& value);
-	 long getLong(const String& strKey);
-	 void setLong(const String& strKey, long value);
-	 int64_t getInt64(const String& strKey);
-	 void setInt64(const String& strKey, int64_t value);
-	 float getFloat(const String& strKey);
-	 void setFloat(const String& strKey, float value);
-
 	 // Non-js method
 	 void waitMessage();
 	 void releaseMessage();
@@ -163,10 +150,8 @@ namespace blink {
 	 HubbleXobj* newVar(const String& strName);
 	 void invokeWinFormCreatedCallback(HubbleWinform* form);
 
-	 WebLocalFrameClient* m_pRenderframeImpl;
 	 String url_;
 	 mutable Member<Element> helperElem_;
-	 mutable Member<HubbleXobj> innerXobj_;
 	 mutable Member<Element> CosmosElem_;
 	 mutable Member<Element> m_pVisibleContentElement;
 
@@ -184,7 +169,6 @@ namespace blink {
 	 base::RunLoop run_loop_;
 	 bool is_pending_;
 	 Vector<String> pending_messages_;
-	 HeapHashMap<String, Member<V8HubbleCallback>> mapHubbleCallback_;
 	 HeapHashMap<int64_t, Member<CallbackFunctionBase>> mapCallbackFunction_;
 	};
 }  // namespace blink
