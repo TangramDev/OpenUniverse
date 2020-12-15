@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.1.4.25							*
+*					Open Universe - version 1.1.5.29							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -1064,6 +1064,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 			pHostNode->get_Name(&bstrName);
 			CString strName = OLE2T(bstrName);
 			HWND hWnd = (HWND)pObj->Handle.ToInt64();
+			theApp.m_pHubbleImpl->m_mapGrid[hWnd] = pHostNode;
 			IDispatch* pDisp = (IDispatch*)(Marshal::GetIUnknownForObject(pObj).ToInt64());
 			_pGrid->m_pHostObj = pObj;
 

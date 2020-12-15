@@ -1085,15 +1085,6 @@ IPC_MESSAGE_ROUTED2(FrameHostMsg_PrintCrossProcessSubframe,
                     int /* rendered document cookie */)
 
 // begin Add by TangramTeam
-IPC_MESSAGE_ROUTED7(TangramFrameMsg_Message,
-	long /* nessage index */,
-	std::wstring /* id */,
-    std::wstring /* param1 */,
-    std::wstring /* param2 */,
-    std::wstring /* param3 */,
-    std::wstring /* param4 */,
-    std::wstring /* param5 */)
-
 IPC_MESSAGE_ROUTED4(TangramRendererIPCMsg,
     FrameMsg_TANGRAM_HOST_String_Map /* string map */,
     FrameMsg_TANGRAM_HOST_LONG_Map /* long map*/,

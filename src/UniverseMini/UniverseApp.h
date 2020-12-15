@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.1.4.25								*
+*					Open Universe - version 1.1.5.29								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -32,7 +32,6 @@ public:
 	static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 	static LRESULT CALLBACK HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-	static LRESULT CALLBACK HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
 	static LRESULT CALLBACK ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam);
 	DECLARE_LIBID(LIBID_Universe)

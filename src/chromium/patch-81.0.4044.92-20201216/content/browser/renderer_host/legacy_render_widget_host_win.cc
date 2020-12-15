@@ -100,14 +100,12 @@ void LegacyRenderWidgetHostHWND::Show() {
   // begin Add by TangramTeam
   ::SendMessage(m_hWnd, WM_COSMOSMSG, 20201109, 1);
   // end Add by TangramTeam
-
   ::ShowWindow(hwnd(), SW_SHOW);
 }
   void LegacyRenderWidgetHostHWND::Hide() {
   // begin Add by TangramTeam
   ::SendMessage(m_hWnd, WM_COSMOSMSG, 20201109, 0);
   // end Add by TangramTeam
-
   ::ShowWindow(hwnd(), SW_HIDE);
 }
 

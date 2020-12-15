@@ -941,14 +941,6 @@ class CONTENT_EXPORT RenderFrameImpl
       FrameMsg_TANGRAM_HOST_INT64_Map /* int64 map*/,
       FrameMsg_TANGRAM_HOST_FLOAT_Map /* float map */) override;
 
-  void OnHubbleMessage(long messageindex,
-                        std::wstring id,
-                        std::wstring param1,
-                        std::wstring param2,
-                        std::wstring param3,
-                        std::wstring param4,
-                        std::wstring param5) override;
-
   void OnHubbleRendererIPCMsg(
       FrameMsg_TANGRAM_HOST_String_Map /* string map */,
       FrameMsg_TANGRAM_HOST_LONG_Map /* long map*/,

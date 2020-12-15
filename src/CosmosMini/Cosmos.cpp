@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.1.4.25							*
+*					Open Universe - version 1.1.5.29							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -271,7 +271,14 @@ namespace Cosmos
             return nullptr;
         }
         IGrid* pWndGrid = nullptr;
-        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)ctrl->Handle.ToPointer(), &pWndGrid);
+        HWND hCtrl = (HWND)ctrl->Handle.ToPointer();
+        auto it = theApp.m_pHubbleImpl->m_mapGrid.find(hCtrl);
+        if (it != theApp.m_pHubbleImpl->m_mapGrid.end())
+        {
+            pWndGrid = it->second;
+            return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
+        }
+        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)hCtrl, &pWndGrid);
         if (hr != S_OK || pWndGrid == nullptr)
         {
             return nullptr;

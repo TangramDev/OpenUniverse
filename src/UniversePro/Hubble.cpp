@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
-*					Open Universe - version 1.1.4.25							*
+*					Open Universe - version 1.1.5.29							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -4230,6 +4230,19 @@ STDMETHODIMP CHubble::GetGridFromHandle(LONGLONG hWnd, IGrid** ppRetGrid)
 		{
 			CGrid* pGrid = (CGrid*)lRes;
 			pGrid->QueryInterface(IID_IGrid, (void**)ppRetGrid);
+		}
+		while (lRes == 0)
+		{
+			_hWnd = ::GetParent(_hWnd);
+			if (_hWnd == 0)
+				break;
+			lRes = ::SendMessage(_hWnd, WM_HUBBLE_GETNODE, 0, 0);
+			if(lRes)
+			{
+				CGrid* pGrid = (CGrid*)lRes;
+				pGrid->QueryInterface(IID_IGrid, (void**)ppRetGrid);
+				break;
+			}
 		}
 	}
 	return S_OK;

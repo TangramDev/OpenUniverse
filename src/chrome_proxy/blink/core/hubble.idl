@@ -43,15 +43,15 @@ typedef sequence<any> ObjectArray;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString url;
 
 	// Event handler attributes
-	attribute EventHandler onMessageReceived;
-	attribute EventHandler onHubbleMessageReceived;
 	attribute EventHandler onGridCreated;
 	attribute EventHandler onLoadWinForm;
 	attribute EventHandler onLoadMdiWinForm;
 	attribute EventHandler onGalaxyCreated;
-	attribute EventHandler onCosmosObjectCreated;
-	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onWinFormClosed;
 	attribute EventHandler onBindCLRObject;
+	attribute EventHandler onMdiChildActivate;
+	attribute EventHandler onMessageReceived;
+	attribute EventHandler onCosmosObjectCreated;
 	attribute EventHandler onCloudMessageForObject;
+	attribute EventHandler onHubbleMessageReceived;
 };

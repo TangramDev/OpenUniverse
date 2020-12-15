@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.1.4.25							*
+*					Open Universe - version 1.1.5.29							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -412,9 +412,6 @@ LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 	{
 		HWND m_hChildWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 		if (::IsWindow(m_hChildWnd) && ::IsWindowVisible(hWnd)) {
-			//HWND hPWnd = ::GetParent(hWnd);
-			//if(::GetTopWindow(hPWnd)==hWnd)
-			//	::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 			RECT rc;
 			::GetClientRect(m_hChildWnd, &rc);
 			WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
@@ -492,6 +489,11 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (it != g_pHubble->m_mapGalaxy2GalaxyCluster.end())
 			g_pHubble->m_mapGalaxy2GalaxyCluster.erase(it);
 
+		auto itGrid = g_pHubble->m_mapGrid.find(hWnd);
+		if (itGrid != g_pHubble->m_mapGrid.end())
+		{
+			g_pHubble->m_mapGrid.erase(itGrid);
+		}
 		auto it1 = g_pHubble->m_mapUIData.find(hWnd);
 		if (it1 != g_pHubble->m_mapUIData.end())
 			g_pHubble->m_mapUIData.erase(it1);

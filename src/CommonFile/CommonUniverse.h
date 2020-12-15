@@ -1,5 +1,5 @@
 /********************************************************************************
- *					Open Universe - version 1.1.4.25
+ *					Open Universe - version 1.1.5.29
  **
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.
@@ -680,6 +680,7 @@ namespace CommonUniverse {
 		map<CString, HubbleDocTemplateInfo*>	m_mapHubbleFormsTemplateInfo;
 		map<int, HubbleDocTemplateInfo*>		m_mapHubbleFormsTemplateInfo2;
 		map<HWND, CWebPageImpl*>				m_mapHtmlWnd;
+		map<HWND, IGrid*>						m_mapGrid;
 		map<HWND, IWebPage*>					m_mapFormWebPage;
 		map<HWND, IBrowser*>					m_mapBrowserWnd;
 		map<HWND, IWorkBenchWindow*>			m_mapWorkBenchWnd;

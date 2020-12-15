@@ -111,12 +111,9 @@
 
 // begin Add by TangramTeam
 #include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble.h"
-#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_application.h"
 #include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_control.h"
+#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_galaxy.h"
 #include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_node.h"
-#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_ntp.h"
-#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_userpage.h"
-#include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_window.h"
 #include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_winform.h"
 #include "c:/universework/openuniverse/src/chrome_proxy/blink/core/hubble_xobj.h"
 #include "third_party/blink/renderer/core/frame/web_local_frame_impl.h"
@@ -313,32 +310,11 @@ void LocalDOMWindow::EnqueueDocumentEvent(Event& event, TaskType task_type) {
 }
 
 // begin Add by TangramTeam
-Hubble* LocalDOMWindow::apppage() const {
-  if (!apppage_) {
-    apppage_ = Hubble::Create(GetFrame());
+Hubble* LocalDOMWindow::cosmos() const {
+  if (!cosmos_) {
+    cosmos_ = Hubble::Create(GetFrame());
   }
-  return apppage_.Get();
-}
-
-HubbleNtp* LocalDOMWindow::ntp() const {
-  if (!ntp_) {
-    ntp_ = HubbleNtp::Create(GetFrame());
-  }
-  return ntp_.Get();
-}
-
-HubbleApplication* LocalDOMWindow::application() const {
-  if (!application_) {
-    application_ = HubbleApplication::Create(GetFrame());
-  }
-  return application_.Get();
-}
-
-HubbleUserpage* LocalDOMWindow::userpage() const {
-  if (!userpage_) {
-    userpage_ = HubbleUserpage::Create(GetFrame());
-  }
-  return userpage_.Get();
+  return cosmos_.Get();
 }
 // end Add by TangramTeam
 
@@ -468,8 +444,8 @@ MediaQueryList* LocalDOMWindow::matchMedia(const String& media) {
 
 void LocalDOMWindow::FrameDestroyed() {
   // begin Add by TangramTeam
-  if (apppage_ != nullptr) {
-    apppage()->Close();
+  if (cosmos_ != nullptr) {
+    cosmos()->Close();
   }
   // end Add by TangramTeam
   RemoveAllEventListeners();
@@ -500,9 +476,7 @@ void LocalDOMWindow::Reset() {
   application_cache_ = nullptr;
   trusted_types_ = nullptr;
   // begin Add by TangramTeam
-  apppage_ = nullptr;
-  application_ = nullptr;
-  userpage_ = nullptr;
+  cosmos_ = nullptr;
   // end Add by TangramTeam
 }
 
@@ -1552,9 +1526,60 @@ void LocalDOMWindow::FinishedLoading(FrameLoader::NavigationFinishState state) {
   }
 
   // begin Add by TangramTeam
-  if (apppage_.Get() == nullptr)
-    apppage();
-  if (apppage_) {
+  if (cosmos_.Get() == nullptr)
+    cosmos();
+  // if (cosmos_) {
+  //  AtomicString extraPrefix = "";
+
+  //  // Use a custom prefix.
+  //  HTMLCollection* const extraPrefixElements =
+  //      cosmos_->DocumentFragment_->getElementsByTagName("extraPrefix");
+  //  for (Element* extraPrefixElement : *extraPrefixElements) {
+  //    AtomicString value = extraPrefixElement->getAttribute("value");
+  //    extraPrefix = value;
+  //  }
+
+  //  // TODO: Notify the prefix information to the Tangram.
+
+  //  AtomicString extraPrefixWithDash = "";
+  //  if (extraPrefix != "") {
+  //    extraPrefixWithDash = extraPrefix + "-";
+  //  }
+
+  //  cosmos()->waitMessage();
+
+  //  // Scan all define tags.
+  //  HTMLCollection* const defineElements =
+  //      cosmos_->DocumentFragment_->getElementsByTagName(extraPrefixWithDash +
+  //                                                       "define");
+  //  for (Element* defineElement : *defineElements) {
+  //    String tagName =
+  //        defineElement->getAttribute(extraPrefixWithDash + "tagName");
+  //    if (tagName.IsNull() || tagName.IsEmpty()) {
+  //      tagName = defineElement->getAttribute("tagName");
+  //    }
+  //    if (!tagName.IsNull() && !tagName.IsEmpty()) {
+  //      if (tagName.StartsWith(extraPrefixWithDash,
+  //                             kTextCaseASCIIInsensitive)) {
+  //        tagName = tagName.Substring(extraPrefixWithDash.length());
+  //      }
+  //      String outerHTML = defineElement->OuterHTMLAsString();
+  //      cosmos()->defineElement(tagName, outerHTML);
+
+  //      // Scan tags for specific tagName
+  //      HTMLCollection* const elements =
+  //          cosmos_->DocumentFragment_->getElementsByTagName(
+  //              extraPrefixWithDash + tagName);
+  //      for (Element* element : *elements) {
+  //        String outerHTML = element->OuterHTMLAsString();
+  //        cosmos()->renderElement(tagName, outerHTML);
+  //      }
+  //    }
+  //  }
+
+  //  cosmos()->releaseMessage();
+  //}
+  if (cosmos_) {
     AtomicString extraPrefix = "";
 
     // Use a custom prefix.
@@ -1572,36 +1597,47 @@ void LocalDOMWindow::FinishedLoading(FrameLoader::NavigationFinishState state) {
       extraPrefixWithDash = extraPrefix + "-";
     }
 
-    apppage()->waitMessage();
+    cosmos()->waitMessage();
 
     // Scan all define tags.
-    HTMLCollection* const defineElements =
-        document()->getElementsByTagName(extraPrefixWithDash + "define");
-    for (Element* defineElement : *defineElements) {
-      String tagName =
-          defineElement->getAttribute(extraPrefixWithDash + "tagName");
-      if (tagName.IsNull() || tagName.IsEmpty()) {
-        tagName = defineElement->getAttribute("tagName");
-      }
-      if (!tagName.IsNull() && !tagName.IsEmpty()) {
-        if (tagName.StartsWith(extraPrefixWithDash,
-                               kTextCaseASCIIInsensitive)) {
-          tagName = tagName.Substring(extraPrefixWithDash.length());
+    Element* cosmosElem = nullptr;
+    HTMLCollection* list = document()->getElementsByTagName("cosmos");
+    if (list->length()) {
+      cosmosElem = list->item(0);
+      if (cosmosElem) {
+        cosmos()->DocumentFragment_ = document()->createDocumentFragment();
+        if (cosmos()->DocumentFragment_) {
+          cosmos()->DocumentFragment_->appendChild(cosmosElem);
         }
-        String outerHTML = defineElement->OuterHTMLAsString();
-        apppage()->defineElement(tagName, outerHTML);
+        HTMLCollection* const defineElements =
+            cosmosElem->getElementsByTagName(extraPrefixWithDash + "define");
+        for (Element* defineElement : *defineElements) {
+          String tagName =
+              defineElement->getAttribute(extraPrefixWithDash + "tagName");
+          if (tagName.IsNull() || tagName.IsEmpty()) {
+            tagName = defineElement->getAttribute("tagName");
+          }
+          if (!tagName.IsNull() && !tagName.IsEmpty()) {
+            if (tagName.StartsWith(extraPrefixWithDash,
+                                   kTextCaseASCIIInsensitive)) {
+              tagName = tagName.Substring(extraPrefixWithDash.length());
+            }
+            String outerHTML = defineElement->OuterHTMLAsString();
+            cosmos()->defineElement(tagName, outerHTML);
 
-        // Scan tags for specific tagName
-        HTMLCollection* const elements =
-            document()->getElementsByTagName(extraPrefixWithDash + tagName);
-        for (Element* element : *elements) {
-          String outerHTML = element->OuterHTMLAsString();
-          apppage()->renderElement(tagName, outerHTML);
+            // Scan tags for specific tagName
+            HTMLCollection* const elements =
+                cosmosElem->getElementsByTagName(extraPrefixWithDash + tagName);
+            for (Element* element : *elements) {
+              String outerHTML = element->OuterHTMLAsString();
+              cosmos()->renderElement(tagName, outerHTML);
+            }
+          }
         }
       }
     }
 
-    apppage()->releaseMessage();
+    cosmos()->releaseMessage();
   }
   // end Add by TangramTeam
 }
@@ -1743,10 +1779,7 @@ void LocalDOMWindow::Trace(blink::Visitor* visitor) {
   visitor->Trace(event_listener_observers_);
   visitor->Trace(trusted_types_);
   // begin Add by TangramTeam
-  visitor->Trace(apppage_);
-  visitor->Trace(application_);
-  visitor->Trace(userpage_);
-  visitor->Trace(ntp_);
+  visitor->Trace(cosmos_);
   // end Add by TangramTeam
   DOMWindow::Trace(visitor);
   Supplementable<LocalDOMWindow>::Trace(visitor);

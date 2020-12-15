@@ -13,7 +13,7 @@
  *	   Rapicorp, Inc - Bug 461728 - [Mac] Allow users to specify values in eclipse.ini outside of the installation
  *******************************************************************************/
  /********************************************************************************
- *					Open Universe - version 1.1.4.25							 *
+ *					Open Universe - version 1.1.5.29							 *
  *********************************************************************************
  * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
  *

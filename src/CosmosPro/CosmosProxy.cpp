@@ -1,6 +1,6 @@
 #include "..\CosmosMini\CosmosProxy.h"
 /********************************************************************************
-*					Open Universe - version 1.1.4.25							*
+*					Open Universe - version 1.1.5.29							*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -2277,6 +2277,8 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 			}
 
 			HWND hWnd = (HWND)pObj->Handle.ToInt64();
+			theApp.m_pHubbleImpl->m_mapGrid[hWnd] = pHostNode;
+
 			IDispatch* pDisp = (IDispatch*)(Marshal::GetIUnknownForObject(pObj).ToInt64());
 			_pGrid->m_pHostObj = pObj;
 

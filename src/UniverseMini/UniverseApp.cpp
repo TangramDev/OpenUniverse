@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.1.4.25								*
+*					Open Universe - version 1.1.5.29								*
 *********************************************************************************
 * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.				*
 *
@@ -340,32 +340,6 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_WINDOWPOSCHANGED:
-	{
-		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
-		LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-		HWND m_hChildWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-		if (::IsWindow(m_hChildWnd)) {
-			if (::IsWindowVisible(hWnd))
-			{
-				RECT rc;
-				::GetClientRect(m_hChildWnd, &rc);
-				if (rc.right != lpwndpos->cx || rc.bottom != lpwndpos->cy)
-					::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, /*SWP_NOREDRAW |*/ SWP_FRAMECHANGED | SWP_NOACTIVATE);
-			}
-		}
-		return lRes;
-	}
-	break;
-	}
-
-	return ::DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
 LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
 	if (g_pHubble == nullptr)
@@ -411,6 +385,11 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (it != g_pHubble->m_mapGalaxy2GalaxyCluster.end())
 			g_pHubble->m_mapGalaxy2GalaxyCluster.erase(it);
 
+		auto itGrid = g_pHubble->m_mapGrid.find(hWnd);
+		if (itGrid != g_pHubble->m_mapGrid.end())
+		{
+			g_pHubble->m_mapGrid.erase(itGrid);
+		}
 		auto it1 = g_pHubble->m_mapUIData.find(hWnd);
 		if (it1 != g_pHubble->m_mapUIData.end())
 			g_pHubble->m_mapUIData.erase(it1);

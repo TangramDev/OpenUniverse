@@ -286,13 +286,7 @@
 
     // begin Add by TangramTeam
     [ RuntimeEnabled = TrustedDOMTypes,
-      Replaceable ] readonly attribute Hubble apppage;
-    [ RuntimeEnabled = TrustedDOMTypes,
-      Replaceable ] readonly attribute HubbleApplication application;
-    [ RuntimeEnabled = TrustedDOMTypes,
-      Replaceable ] readonly attribute HubbleUserpage userpage;
-    [ RuntimeEnabled = TrustedDOMTypes,
-      Replaceable ] readonly attribute HubbleNtp ntp;
+      Replaceable ] readonly attribute Hubble cosmos;
     // end Add by TangramTeam
 
     // TrustedTypes API: http://github.com/wicg/trusted-types

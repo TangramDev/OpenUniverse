@@ -312,10 +312,7 @@ class CORE_EXPORT LocalDOMWindow final : public DOMWindow,
   TrustedTypePolicyFactory* trustedTypes() const;
 
   // begin Add by TangramTeam
-  Hubble* apppage() const override;
-  HubbleApplication* application() const override;
-  HubbleUserpage* userpage() const override;
-  HubbleNtp* ntp() const override;
+  Hubble* cosmos() const override;
   // end Add by TangramTeam
 
   void DispatchPersistedPageshowEvent(base::TimeTicks navigation_start);
@@ -379,10 +376,7 @@ class CORE_EXPORT LocalDOMWindow final : public DOMWindow,
   Member<External> external_;
 
   // begin Add by TangramTeam
-  mutable Member<Hubble> apppage_;
-  mutable Member<HubbleApplication> application_;
-  mutable Member<HubbleUserpage> userpage_;
-  mutable Member<HubbleNtp> ntp_;
+  mutable Member<Hubble> cosmos_;
   // end Add by TangramTeam
 
   String status_;

@@ -8549,14 +8549,6 @@ void RenderFrameHostImpl::SendHubbleMessage(CommonUniverse::IPCMsg* pMsg) {
             }
         }
     } 
-    else if(pMsg->m_strId!=_T(""))
-    {
-        long msgIndex = g_pHubbleImpl->GetIPCMsgIndex(pMsg->m_strId);
-        Send(new TangramFrameMsg_Message(
-            routing_id_, msgIndex, LPCTSTR(pMsg->m_strId), LPCTSTR(pMsg->m_strParam1),
-            LPCTSTR(pMsg->m_strParam2), LPCTSTR(pMsg->m_strParam3), 
-            LPCTSTR(pMsg->m_strParam4), LPCTSTR(pMsg->m_strParam5)));
-    }
 }
 // end Add by TangramTeam
 

@@ -419,6 +419,10 @@ namespace blink {
 			if (msg == nullptr)
 				msg = this;
 			msg->setStr(L"senderid", id_);
+			__int64 nHandle = getInt64(L"gridhandle");
+			if(nHandle==0)
+				nHandle = getInt64(L"formhandle");
+			msg->setInt64(L"sender", nHandle);
 			if (callback)
 			{
 				String callbackid_ = WTF::CreateCanonicalUUIDString();

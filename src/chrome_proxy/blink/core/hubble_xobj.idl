@@ -33,7 +33,7 @@
 	[Affects = Nothing] NameNodeList getElementsByName(DOMString localName);
 	[Affects = Nothing] HTMLCollection getElementsByTagName(DOMString localName);
 
-	void sendMessage(HubbleXobj msg,
+	void sendMessage([DefaultValue = Undefined] optional HubbleXobj msg,
 		[DefaultValue = Undefined] optional ApplicationCallback callback);
 	void addEventListener(DOMString eventName, ApplicationCallback callback);
 	void addEventListener(DOMString subObjName, DOMString eventName, ApplicationCallback callback);
