@@ -27,6 +27,19 @@ namespace Cosmos
 		void SendMessage();
 
 		String^ m_strEvents = L"";
+		property String^ EventBindInfo
+		{
+			String^ get()
+			{
+				return m_strEvents->ToLower();
+			};
+			void set(String^ strData)
+			{
+				m_strEvents = strData->ToLower();
+			};
+		}
+
+		bool isBindCLRObjToWebPage(Object^ obj);
 	};
 
 	public ref class Browser

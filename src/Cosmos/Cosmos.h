@@ -64,7 +64,7 @@ namespace Cosmos
 		Object^ m_pHostObj = nullptr;
 		CCosmosGridEvent* m_pGridEvent;
 		CGridCLREvent* m_pGridCLREvent;
-		Cosmos::Wormhole^ m_pWormhole = nullptr;
+		Cosmos::Wormhole^ m_pSession = nullptr;
 
 		// A notification has been created for all nodes in the current layout.
 		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);
@@ -118,11 +118,6 @@ namespace Cosmos
 		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName)
 		{
 			Control^ pCtrl = (Control^)SourceObj;
-			String^ strEventInfo = L"@" + pCtrl->Name + L"_" + eventName + L"@";
-			//String^ strEventInfo = L"@" + eventName + L"@";
-			if (eventSession->m_strEvents->IndexOf(strEventInfo->ToLower()) != -1)
-				return;
-			eventSession->m_strEvents += strEventInfo->ToLower();
 			OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
 		}
 

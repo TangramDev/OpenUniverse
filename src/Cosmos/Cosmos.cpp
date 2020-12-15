@@ -400,13 +400,10 @@ namespace Cosmos
 
     void Hubble::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName)
     {
-        Control^ pCtrl = (Control^)SourceObj;
-        String^ strEventInfo = L"@" + pCtrl->Name + L"_" + eventName + L"@";
-        //String^ strEventInfo = L"@" + eventName + L"@";
-        if (eventSession->m_strEvents->IndexOf(strEventInfo->ToLower()) != -1)
+        if (eventSession->isBindCLRObjToWebPage(SourceObj))
             return;
-        eventSession->m_strEvents += strEventInfo->ToLower();
-        intptr_t nNode = eventSession->m_pWormhole->Getint64(L"gridobj");
+        Control^ pCtrl = (Control^)SourceObj;
+        intptr_t nNode = eventSession->m_pSession->Getint64(L"gridobj");
         if (nNode)
         {
             IGrid* pGrid = (IGrid*)nNode;
@@ -762,7 +759,7 @@ namespace Cosmos
         bool bExists = Hubble::Wormholes->TryGetValue(pObj, pCloudSession);
         if (bExists)
         {
-            pSession = pCloudSession->m_pWormhole;
+            pSession = pCloudSession->m_pSession;
             Type^ pType = pObj->GetType();
             pCloudSession->InsertString(_T("msgID"), _T("BindCLRObject"));
             pCloudSession->InsertString(_T("objtype"), pType->FullName);
@@ -1009,17 +1006,17 @@ namespace Cosmos
     {
         if (m_pGrid)
         {
-            if (m_pWormhole == nullptr)
+            if (m_pSession == nullptr)
             {
                 CSession* pSession = theApp.m_pHubbleImpl->GetCloudSession(m_pGrid);
                 if (pSession)
                 {
-                    m_pWormhole = gcnew Cosmos::Wormhole(pSession);
-                    theAppProxy.m_mapSession2Wormhole[pSession] = m_pWormhole;
+                    m_pSession = gcnew Cosmos::Wormhole(pSession);
+                    theAppProxy.m_mapSession2Wormhole[pSession] = m_pSession;
                 }
             }
         }
-        return m_pWormhole;
+        return m_pSession;
     }
 
     String^ Hubble::GetUIData(Control^ ctrl)

@@ -412,9 +412,9 @@ LRESULT CALLBACK CUniverse::HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 	{
 		HWND m_hChildWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 		if (::IsWindow(m_hChildWnd) && ::IsWindowVisible(hWnd)) {
-			HWND hPWnd = ::GetParent(hWnd);
-			if(::GetTopWindow(hPWnd)==hWnd)
-				::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
+			//HWND hPWnd = ::GetParent(hWnd);
+			//if(::GetTopWindow(hPWnd)==hWnd)
+			//	::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 			RECT rc;
 			::GetClientRect(m_hChildWnd, &rc);
 			WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;

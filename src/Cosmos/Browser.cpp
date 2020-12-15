@@ -36,65 +36,79 @@ namespace Cosmos
 {
 	Wormhole::Wormhole(CSession* pSession)
 	{
-		m_pWormhole = pSession;
+		m_pSession = pSession;
 	}
 
 	void Wormhole::InsertString(String^ key, String^ value)
 	{
-		if(m_pWormhole)
-			m_pWormhole->InsertString(key, value);
+		if(m_pSession)
+			m_pSession->InsertString(key, value);
 	}
 
 	void Wormhole::InsertLong(String^ key, long value)
 	{
-		if(m_pWormhole)
-			m_pWormhole->InsertLong(key, value);
+		if(m_pSession)
+			m_pSession->InsertLong(key, value);
 	}
 
 	void Wormhole::InsertInt64(String^ key, __int64 value)
 	{
-		if(m_pWormhole)
-			m_pWormhole->Insertint64(key, value);
+		if(m_pSession)
+			m_pSession->Insertint64(key, value);
 	}
 
 	void Wormhole::InsertFloat(String^ key, float value)
 	{
-		if(m_pWormhole)
-			m_pWormhole->InsertFloat(key, value);
+		if(m_pSession)
+			m_pSession->InsertFloat(key, value);
 	}
 
 	String^ Wormhole::GetString(String^ key)
 	{
-		if(m_pWormhole)
-			return BSTR2STRING(m_pWormhole->GetString(key));
+		if(m_pSession)
+			return BSTR2STRING(m_pSession->GetString(key));
 		return L"";
 	}
 
 	long Wormhole::GetLong(String^ key)
 	{
-		if(m_pWormhole)
-			return m_pWormhole->GetLong(key);
+		if(m_pSession)
+			return m_pSession->GetLong(key);
 		return 0;
 	}
 
 	__int64 Wormhole::GetInt64(String^ key)
 	{
-		if(m_pWormhole)
-			return m_pWormhole->Getint64(key);
+		if(m_pSession)
+			return m_pSession->Getint64(key);
 		return 0;
 	}
 
 	float Wormhole::GetFloat(String^ key)
 	{
-		if(m_pWormhole)
-			return m_pWormhole->GetFloat(key);
+		if(m_pSession)
+			return m_pSession->GetFloat(key);
 		return 0;
 	}
 
 	void Wormhole::SendMessage()
 	{
-		if (m_pWormhole)
-			return m_pWormhole->SendMessage();
+		if (m_pSession)
+			return m_pSession->SendMessage();
+	}
+
+	bool Wormhole::isBindCLRObjToWebPage(Object^ obj)
+	{
+		if (obj->GetType()->IsSubclassOf(Control::typeid))
+		{
+			Control^ ctrl = (Control^)obj;
+			String^ strInfo = L"@" + ctrl->Name->ToLower() + L"@";
+			if (this->m_strEvents->IndexOf(strInfo) != -1)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	Browser::Browser(IBrowser* pBrowser)

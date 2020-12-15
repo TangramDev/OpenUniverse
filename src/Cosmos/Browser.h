@@ -28,7 +28,7 @@ namespace Cosmos
 	public:
 		Wormhole(CSession* pSession);
 
-		CSession*	m_pWormhole;
+		CSession* m_pSession;
 		Object^ m_pHostObj = nullptr;
 
 		void InsertString(String^ key, String^ value);
@@ -40,6 +40,18 @@ namespace Cosmos
 		float GetFloat(String^ key);
 		__int64 GetInt64(String^ key);
 		void SendMessage();
+		property String^ EventBindInfo
+		{
+			String^ get()
+			{
+				return m_strEvents->ToLower();
+			};
+			void set(String^ strData)
+			{
+				m_strEvents = strData->ToLower();
+			};
+		}
+		bool isBindCLRObjToWebPage(Object^ obj);
 
 		String^ m_strEvents = L"";
 	};

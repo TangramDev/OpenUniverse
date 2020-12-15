@@ -105,6 +105,20 @@ namespace Cosmos
 			return m_pHubbleSession->SendMessage();
 	}
 
+	bool Wormhole::isBindCLRObjToWebPage(Object^ obj)
+	{
+		if (obj->GetType()->IsSubclassOf(Control::typeid))
+		{
+			Control^ ctrl = (Control^)obj;
+			String^ strInfo = L"@" + ctrl->Name->ToLower() + L"@";
+			if (this->m_strEvents->IndexOf(strInfo) != -1)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	Browser::Browser(IBrowser* pBrowser)
 	{
 		m_pWebBrowser = pBrowser;
