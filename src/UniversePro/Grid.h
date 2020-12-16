@@ -81,6 +81,7 @@ public:
 	CString 						m_strCaption;
 	CString 						m_strHubbleXml = _T("");
 	CString 						m_strXmlFileFromVS;
+	CString 						m_strXmlRefGridInfo=_T("");
 
 	CString							m_strLastIPCMsgID = _T("");
 	CString							m_strLastIPCParam1 = _T("");

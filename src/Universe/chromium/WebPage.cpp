@@ -1165,6 +1165,11 @@ namespace Browser {
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
 		}
+		else if (strMsgID == _T("SET_REFGRIDS_IPC_MSG"))
+		{
+			CString strXml = pSession->GetString(_T("RefInfo"));
+			((CGrid*)pGrid)->m_strXmlRefGridInfo = strXml;
+		}
 	}
 
 	STDMETHODIMP CWebPage::get_HostWnd(LONGLONG* Val)

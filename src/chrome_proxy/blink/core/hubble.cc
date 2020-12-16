@@ -669,6 +669,22 @@ namespace blink {
 				if (list->length()) {
 					node->messageElem_ = list->item(0);
 				}
+				list = node->hostElem_->getElementsByTagName("referencemap");
+				if (list->length()) {
+					node->refElem_ = list->item(0);
+					for (unsigned int index = 0; index < list->length(); index++)
+					{
+						Element* e = list->item(index);
+						HubbleNode* grid = getGrid(e, nullptr);
+						if(grid){
+							AtomicString name = grid->hostElem_->getAttribute("name");
+							e->setAttribute("handle", name);
+						}
+					}
+					node->setStr(L"msgID", L"SET_REFGRIDS_IPC_MSG");
+					node->setStr(L"RefInfo", refElem_->OuterHTMLAsString());
+					m_pRenderframeImpl->SendHubbleMessageEx(node->session_);
+				}
 				list = node->hostElem_->getElementsByTagName("eventmap");
 				if (list->length())
 				{

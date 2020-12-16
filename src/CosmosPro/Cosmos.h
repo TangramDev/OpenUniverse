@@ -173,7 +173,7 @@ namespace Cosmos
 		}
 	};
 
-	public ref class Grid
+	public ref class Grid : public Dictionary<String^, Grid^>
 	{
 	public:
 		Grid(IGrid* pGrid);

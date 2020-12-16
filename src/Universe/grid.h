@@ -65,6 +65,7 @@ public:
 	CString							m_strName;
 	CString 						m_strObjTypeID;
 	CString 						m_strCaption;
+	CString 						m_strXmlRefGridInfo = _T("");
 
 	CString							m_strLastIPCMsgID = _T("");
 	CString							m_strLastIPCParam1 = _T("");

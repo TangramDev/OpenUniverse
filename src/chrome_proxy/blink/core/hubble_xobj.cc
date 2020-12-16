@@ -28,6 +28,7 @@ namespace blink {
 
 	HubbleXobj::HubbleXobj() {
 		uiElem_ = nullptr;
+		refElem_ = nullptr;
 		sender_ = nullptr;
 		hostElem_ = nullptr;
 		eventElem_ = nullptr;
@@ -66,6 +67,7 @@ namespace blink {
 		visitor->Trace(eventElem_);
 		visitor->Trace(hostElem_);
 		visitor->Trace(uiElem_);
+		visitor->Trace(refElem_);
 		visitor->Trace(DocumentFragment_);
 		visitor->Trace(messageElem_);
 		visitor->Trace(propertyElem_);
@@ -169,6 +171,11 @@ namespace blink {
 	Element* HubbleXobj::uiElement()
 	{
 		return uiElem_;
+	}
+
+	Element* HubbleXobj::refElement()
+	{
+		return refElem_;
 	}
 
 	Element* HubbleXobj::propertyElement()

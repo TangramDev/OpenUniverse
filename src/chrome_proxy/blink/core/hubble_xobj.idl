@@ -8,6 +8,7 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleGalaxy galaxy;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element element;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element uiElement;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element refElement;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element eventElement;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element propertyElement;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute Element messageElement;

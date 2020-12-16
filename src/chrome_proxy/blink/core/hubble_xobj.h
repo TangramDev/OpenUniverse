@@ -62,6 +62,7 @@ namespace blink {
 		~HubbleXobj() override;
 
 		mutable Member<Element> uiElem_;
+		mutable Member<Element> refElem_;
 		mutable Member<Element> hostElem_;
 		mutable Member<Element> eventElem_;
 		mutable Member<Element> messageElem_;
@@ -97,6 +98,7 @@ namespace blink {
 		void setFloat(const String& strKey, float value);
 
 		Element* uiElement();
+		Element* refElement();
 		Element* eventElement();
 		Element* messageElement();
 		Element* propertyElement();
