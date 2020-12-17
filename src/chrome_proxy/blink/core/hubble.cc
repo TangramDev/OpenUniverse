@@ -36,7 +36,7 @@
 
 namespace blink {
 
-	Hubble::Hubble(LocalFrame* frame) : HubbleXobj() , DOMWindowClient(frame) {
+	Hubble::Hubble(LocalFrame* frame) : HubbleXobj(), DOMWindowClient(frame) {
 		url_ = L"";
 		is_pending_ = false;
 		helperElem_ = nullptr;
@@ -457,12 +457,12 @@ namespace blink {
 						AtomicString target = elem->getAttribute("target");
 						if (target == "" || target.IsNull())
 						{
-							if(xObj->grid())
+							if (xObj->grid())
 								gridfortarget = xObj->grid();
 							else
 							{
 								if (xObj->form())
-								{ 
+								{
 									xObj->form()->element_ = elem;
 									xObj->form()->setMsgID(ctrlName_ + "_" + eventName);
 									xObj->form()->setSender(xObj);
@@ -485,6 +485,8 @@ namespace blink {
 						gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
 						gridfortarget->setSender(xObj);
 						gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+						gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
+						m_pRenderframeImpl->SendHubbleMessageEx(gridfortarget->session_);
 					}
 				}
 			}
@@ -592,16 +594,31 @@ namespace blink {
 	HubbleNode* Hubble::createHubbleNode(HubbleXobj* xobj)
 	{
 		HubbleNode* node = (HubbleNode*)xobj;
-		node->hubble_ = this;
-		String strname = xobj->getStr(L"name@page");
 		__int64 handle = node->handle_;
+		auto itNode = m_mapHubbleNode.find(handle);
+		if (itNode != m_mapHubbleNode.end())
+			return itNode->value.Get();
+		node->hubble_ = this;
+		HubbleWinform* parentform = nullptr;
+		HubbleWinform* parentmdiform = nullptr;
+		String strGalaxyname = xobj->getStr(L"galaxy");
+		String strClustername = xobj->getStr(L"cluster");;
+		String strname = xobj->getStr(L"name@page");
 		m_mapHubbleNode.insert(handle, node);
-		String strMessageXml = "";
+
+		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
+		if (nPHandle)
+		{
+			auto it = m_mapHubbleNode.find(nPHandle);
+			if (it != m_mapHubbleNode.end())
+			{
+				WebString str = strname;
+				it->value->m_mapChildNode2[str.Utf16()] = node;
+			}
+		}
 		__int64 nGalaxyHandle = xobj->getInt64(L"Galaxyhandle");
 		blink::HubbleGalaxy* pGalaxy = nullptr;
 		HubbleNode* m_pRootNode = nullptr;
-		String strGalaxyname = xobj->getStr(L"galaxy");
-		String strClustername = xobj->getStr(L"cluster");;
 		bool bNewGalaxy = false;
 		if (nGalaxyHandle)
 		{
@@ -622,6 +639,27 @@ namespace blink {
 				m_pRootNode = node;
 			}
 		}
+		nPHandle = xobj->getInt64(L"parentFormHandle");
+		if (nPHandle)
+		{
+			auto it = m_mapWinForm.find(nPHandle);
+			if (it != m_mapWinForm.end())
+			{
+				parentform = it->value.Get();
+				node->m_pParentForm = parentform;
+				if (parentform->m_nMdiwebbindgridhandle == handle)
+					parentform->m_pWebBindMdiNode = node;
+				parentform->m_mapHubbleGalaxy[WebString(strGalaxyname).Utf16()] = pGalaxy;
+			}
+			it = m_mapWinForm.find(xobj->getInt64(L"parentMDIFormHandle"));
+			if (it != m_mapWinForm.end())
+			{
+				parentmdiform = it->value.Get();
+			}
+		}
+
+		String strMessageXml = "";
+
 		if (m_pRootNode)
 		{
 			node->rootNode_ = m_pRootNode;
@@ -642,6 +680,95 @@ namespace blink {
 			}
 			xobj->setStr(L"hubblexml", L"");
 		}
+
+		if (m_pRootNode->DocumentFragment_)
+		{
+			node->DocumentFragment_ = m_pRootNode->DocumentFragment_;
+			String name(std::to_string(handle).c_str());
+			blink::NameNodeList* list_ = m_pRootNode->DocumentFragment_->getElementsByName(AtomicString(name));
+			if (list_->length())
+			{
+				node->hostElem_ = (Element*)list_->item(0);
+				for (unsigned int i = 0; i < node->hostElem_->Children()->length(); i++)
+				{
+					Element* e = node->hostElem_->Children()->item(i);
+					Node* pNode = e;
+					if (pNode->getNodeType() == 1)
+					{
+						String strTagName = e->tagName().LowerASCII();
+						if (strTagName == "messagemap" && node->messageElem_ == nullptr)
+						{
+							node->messageElem_ = e;
+						}
+						else if (strTagName == "referencemap" && node->refElem_ == nullptr)
+						{
+							node->refElem_ = e;
+							HTMLCollection* list2 = e->Children();
+							unsigned int nlength = list2->length();
+							if (nlength)
+							{
+								bool breferenced = false;
+								for (unsigned int i = 0; i < nlength; i++)
+								{
+									Element* e = list2->item(i);
+									Node* pNode = e;
+									if (pNode->getNodeType() == 1)
+									{
+										HubbleNode* grid = getGrid(e, node);
+										if (grid) {
+											breferenced = true;
+											AtomicString name = grid->hostElem_->getAttribute("name");
+											e->setAttribute("handle", name);
+										}
+									}
+								}
+								if (breferenced)
+								{
+									node->setStr(L"msgID", L"SET_REFGRIDS_IPC_MSG");
+									node->setStr(L"RefInfo", node->refElem_->OuterHTMLAsString());
+									m_pRenderframeImpl->SendHubbleMessageEx(node->session_);
+								}
+							}
+						}
+						else if (strTagName == "eventmap" && node->eventElem_ == nullptr)
+						{
+							node->eventElem_ = e;
+							HTMLCollection* list = e->Children();
+							unsigned int nCount = list->length();
+							if (nCount)
+							{
+								for (unsigned int i = 0; i < nCount; i++)
+								{
+									Element* elemEvent = list->item(i);
+									Node* pNode = elemEvent;
+									if (pNode->getNodeType() == 1)
+									{
+										String name = elemEvent->tagName().LowerASCII();
+										String eventname = elemEvent->getAttribute("eventname");
+										String strIndex = eventname.LowerASCII() + "@" + name;
+										wstring key = WebString(strIndex).Utf16();
+										auto it = node->m_mapElement.find(key);
+										if (it == node->m_mapElement.end())
+										{
+											node->setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
+											node->setStr(L"BindObj", name);
+											node->setStr(L"Bindevent", eventname);
+											node->m_mapElement[key] = elemEvent;
+											m_pRenderframeImpl->SendHubbleMessageEx(node->session_);
+										}
+									}
+								}
+							}
+						}
+						if (node->messageElem_ && node->refElem_ && node->eventElem_)
+							break;
+					}
+				}
+			}
+
+			node->setStr(L"msgID", L"GRIDOBJ_LOAD_IPC_MSG");
+			m_pRenderframeImpl->SendHubbleMessageEx(node->session_);
+		}
 		if (bNewGalaxy)
 		{
 			pGalaxy = HubbleGalaxy::Create(DomWindow()->GetFrame(), strGalaxyname);
@@ -657,80 +784,6 @@ namespace blink {
 			DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 		}
 
-		if (m_pRootNode->DocumentFragment_)
-		{
-			node->DocumentFragment_ = m_pRootNode->DocumentFragment_;
-			String name(std::to_string(handle).c_str());
-			blink::NameNodeList* list_ = m_pRootNode->DocumentFragment_->getElementsByName(AtomicString(name));
-			if (list_->length())
-			{
-				node->hostElem_ = (Element*)list_->item(0);
-				HTMLCollection* list = node->hostElem_->getElementsByTagName("messagemap");
-				if (list->length()) {
-					node->messageElem_ = list->item(0);
-				}
-				list = node->hostElem_->getElementsByTagName("referencemap");
-				if (list->length()) {
-					node->refElem_ = list->item(0);
-					for (unsigned int index = 0; index < list->length(); index++)
-					{
-						Element* e = list->item(index);
-						HubbleNode* grid = getGrid(e, nullptr);
-						if(grid){
-							AtomicString name = grid->hostElem_->getAttribute("name");
-							e->setAttribute("handle", name);
-						}
-					}
-					node->setStr(L"msgID", L"SET_REFGRIDS_IPC_MSG");
-					node->setStr(L"RefInfo", refElem_->OuterHTMLAsString());
-					m_pRenderframeImpl->SendHubbleMessageEx(node->session_);
-				}
-				list = node->hostElem_->getElementsByTagName("eventmap");
-				if (list->length())
-				{
-					for (unsigned int index = 0; index < list->length(); index++)
-					{
-						HTMLCollection* list2 = list->item(index)->Children();
-						if (list2->length())
-						{
-							for (unsigned int i = 0; i < list2->length(); i++)
-							{
-								Element* e = list2->item(i);
-								Node* pNode = e;
-								Element* pPNode = (Element*)e->parentNode()->parentNode();
-								if (pPNode && pPNode->parentNode() == node->hostElem_ && pNode->getNodeType() == 1)
-								{
-									String name = e->tagName().LowerASCII();
-									String parentname = pPNode->tagName().LowerASCII();
-									String strIndex = name + "@" + parentname;
-									wstring key = WebString(strIndex).Utf16();
-									auto it = node->m_mapElement.find(key);
-									if (it == node->m_mapElement.end())
-									{
-										node->setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
-										node->setStr(L"BindObj", parentname);
-										node->setStr(L"Bindevent", name);
-										node->m_mapElement[key] = e;
-										m_pRenderframeImpl->SendHubbleMessageEx(node->session_);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
-		if (nPHandle)
-		{
-			auto it = m_mapHubbleNode.find(nPHandle);
-			if (it != m_mapHubbleNode.end())
-			{
-				WebString str = strname;
-				it->value->m_mapChildNode2[str.Utf16()] = node;
-			}
-		}
-
 		if (pGalaxy)
 		{
 			strClustername = strClustername + L"__";
@@ -741,27 +794,10 @@ namespace blink {
 			pGalaxy->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
 		}
 
-		nPHandle = xobj->getInt64(L"parentFormHandle");
-		if (nPHandle)
+		if (parentform)
 		{
-			HubbleWinform* parentform = nullptr;
-			HubbleWinform* parentmdiform = nullptr;
-			auto it = m_mapWinForm.find(nPHandle);
-			if (it != m_mapWinForm.end())
-			{
-				parentform = it->value.Get();
-				node->m_pParentForm = parentform;
-				if (parentform->m_nMdiwebbindgridhandle == handle)
-					parentform->m_pWebBindMdiNode = node;
-				parentform->m_mapHubbleGalaxy[WebString(strGalaxyname).Utf16()] = pGalaxy;
-				if (bNewGalaxy)
-					parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
-			}
-			it = m_mapWinForm.find(xobj->getInt64(L"parentMDIFormHandle"));
-			if (it != m_mapWinForm.end())
-			{
-				parentmdiform = it->value.Get();
-			}
+			if (bNewGalaxy)
+				parentform->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kHubblegalaxycreated, xobj));
 
 			if (parentmdiform && parentform)
 			{
@@ -803,7 +839,6 @@ namespace blink {
 				return node;
 			}
 		}
-
 		DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kGridcreated, xobj));
 
 		return node;
@@ -868,7 +903,7 @@ namespace blink {
 				else
 				{
 					HubbleNode* gridfortarget = getGrid(galaxy, cluster, target);
-					if (gridfortarget == nullptr&&grid)
+					if (gridfortarget == nullptr && grid)
 					{
 						HubbleWinform* form = grid->form();
 						if (grid->grid())
@@ -878,7 +913,7 @@ namespace blink {
 						if (form)
 						{
 							gridfortarget = form->getGrid(galaxy, cluster, target);
-							if (gridfortarget == nullptr&&form->mdiParent())
+							if (gridfortarget == nullptr && form->mdiParent())
 							{
 								gridfortarget = form->mdiParent()->getGrid(galaxy, cluster, target);
 							}

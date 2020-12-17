@@ -2673,35 +2673,22 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	}
 	else if (strMsgID == _T("SET_REFGRIDS_IPC_MSG"))
 	{
-		auto it = m_mapSession2Wormhole.find(pSession);
-		if (it != m_mapSession2Wormhole.end())
-		{
-			Object^ pObj = nullptr;
-			pObj = it->second->m_pHostObj;
-			if (pObj)
+		if (thisNode != nullptr) {
+			CString strXml = pSession->GetString(L"RefInfo");
+			CTangramXmlParse m_Parse;
+			if (m_Parse.LoadXml(strXml))
 			{
-				if (!Cosmos::Hubble::Wormholes->TryGetValue(pObj, pCloudSession))
+				int nCount = m_Parse.GetCount();
+				for (int i = 0; i < nCount; i++)
 				{
-					pCloudSession = gcnew Cosmos::Wormhole(pSession);
-					Cosmos::Hubble::Wormholes[pObj] = pCloudSession;
-				}
-				CString strXml = pSession->GetString(L"RefInfo");
-				if (thisNode != nullptr) {
-					CTangramXmlParse m_Parse;
-					if (m_Parse.LoadXml(strXml))
+					CTangramXmlParse* pChild = m_Parse.GetChild(i);
+					IGrid* pRefGrid = nullptr;
+					__int64 hRefWnd = pChild->attrInt64(_T("handle"));
+					CString strName = pChild->attr(_T("refname"),_T(""));
+					theApp.m_pHubble->GetGridFromHandle(hRefWnd, &pRefGrid);
+					if (pRefGrid)
 					{
-						int nCount = m_Parse.GetCount();
-						for (int i = 0; i < nCount; i++)
-						{
-							IGrid* pGrid = nullptr;
-							__int64 hWnd = m_Parse.GetChild(i)->attrInt64(_T("handle"));
-							CString strName = m_Parse.GetChild(i)->attr(_T("refname"),_T(""));
-							theApp.m_pHubble->GetGridFromHandle(hWnd, &pGrid);
-							if (pGrid)
-							{
-								thisNode[BSTR2STRING(strName)] = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
-							}
-						}
+						thisNode[BSTR2STRING(strName)] = theAppProxy._createObject<IGrid, Cosmos::Grid>(pRefGrid);
 					}
 				}
 			}

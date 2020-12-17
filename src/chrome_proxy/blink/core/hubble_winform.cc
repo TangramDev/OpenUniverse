@@ -231,8 +231,11 @@ namespace blink {
 									gridfortarget = hubble_.Get()->getGrid(galaxy, cluster, target);
 								if (!!gridfortarget) {
 									gridfortarget->setWorkElement(elem);
-									gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
+									String msgID = e->GetIdAttribute() + "_" + eventName;
+									gridfortarget->setMsgID(msgID);
 									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+									gridfortarget->setMsgID(msgID);
+									m_pRenderframeImpl->SendHubbleMessageEx(gridfortarget->session_);
 								}
 							}
 						}
@@ -266,38 +269,66 @@ namespace blink {
 						if (pNode->getNodeType() == 1)
 						{
 							String name = elem->tagName().LowerASCII();
-							if (name == "messagemap")
+							if (name == "messagemap" && messageElem_ == nullptr)
 							{
 								messageElem_ = elem;
 							}
-							else
+							else if (name == "referencemap" && refElem_ == nullptr)
 							{
-								HTMLCollection* list = elem->getElementsByTagName("eventmap");
-								for (unsigned int index = 0; index < list->length(); index++)
+								refElem_ = elem;
+								HTMLCollection* list2 = elem->Children();
+								unsigned int nlength = list2->length();
+								if (nlength)
 								{
-									HTMLCollection* list2 = list->item(index)->Children();
-									if (list2->length())
+									bool breferenced = false;
+									for (unsigned int i = 0; i < nlength; i++)
 									{
-										for (unsigned int i = 0; i < list2->length(); i++)
+										Element* e = list2->item(i);
+										Node* pNode = e;
+										if (pNode->getNodeType() == 1)
 										{
-											Element* e = list2->item(i);
-											Node* pNode = e;
-											Element* pPNode = (Element*)e->parentNode()->parentNode();
-											if (pPNode && pPNode == elem && pNode->getNodeType() == 1)
+											HubbleNode* grid = hubble_->getGrid(e, this);
+											if (grid) {
+												breferenced = true;
+												AtomicString name = grid->hostElem_->getAttribute("name");
+												e->setAttribute("handle", name);
+											}
+										}
+									}
+									if (breferenced)
+									{
+										setStr(L"msgID", L"SET_REFGRIDS_IPC_MSG");
+										setStr(L"RefInfo", refElem_->OuterHTMLAsString());
+										m_pRenderframeImpl->SendHubbleMessageEx(session_);
+									}
+								}
+							}
+							else if (name == "eventmap" && eventElem_ == nullptr)
+							{
+								eventElem_ = elem;
+
+								HTMLCollection* list = eventElem_->Children();
+								unsigned int nCount = list->length();
+								if (nCount)
+								{
+									for (unsigned int i = 0; i < nCount; i++)
+									{
+										Element* elemEvent = list->item(i);
+										Node* pNode = elemEvent;
+										if (pNode->getNodeType() == 1)
+										{
+											String name = elemEvent->tagName().LowerASCII();
+											String eventname = elemEvent->getAttribute("eventname");
+											String strIndex = eventname.LowerASCII() + "@" + name;
+											wstring key = WebString(strIndex).Utf16();
+											auto it = m_mapElement.find(key);
+											if (it == m_mapElement.end())
 											{
-												String name = e->tagName().LowerASCII();
-												String parentname = pPNode->tagName().LowerASCII();
-												String strIndex = name + "@" + parentname;
-												wstring key = WebString(strIndex).Utf16();
-												auto it = m_mapElement.find(key);
-												if (it == m_mapElement.end())
-												{
-													setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
-													setStr(L"BindObj", parentname);
-													setStr(L"Bindevent", name);
-													m_mapElement[key] = e;
-													m_pRenderframeImpl->SendHubbleMessageEx(session_);
-												}
+												setStr(L"msgID", L"BIND_NATIVEOBJ_IPC_MSG");
+												setStr(L"BindObj", name);
+												setStr(L"Bindevent", eventname);
+												m_mapElement[key] = elemEvent;
+												m_pRenderframeImpl->SendHubbleMessageEx(session_);
 											}
 										}
 									}
