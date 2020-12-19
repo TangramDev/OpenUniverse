@@ -159,7 +159,6 @@ namespace blink {
 	 HeapHashMap<int64_t, Member<HubbleNode>> m_mapHubbleNode;
 	 HeapHashMap<int64_t, Member<HubbleGalaxy>> m_mapHubbleGalaxy;
 	 HeapHashMap<int64_t, Member<HubbleWinform>> m_mapWinForm;
-	 HeapHashMap<int64_t, Member<HubbleCompositor>> m_mapHubbleCompositor;
 
 	 map<int64_t, HubbleNode*> m_mapHubbleNodeforEvent;
 	 map<int64_t, HubbleWinform*> m_mapHubbleWinformforEvent;

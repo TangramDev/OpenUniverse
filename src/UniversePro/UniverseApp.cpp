@@ -1395,6 +1395,13 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	break;
 	case HCBT_DESTROYWND:
 	{
+		//HANDLE h = ::GetProp(hWnd, _T("CosmosInfo"));
+		HANDLE hData = RemoveProp(hWnd, _T("CosmosInfo"));
+		if (hData)
+		{
+			CosmosInfo* pInfo = (CosmosInfo*)hData;
+			delete pInfo;
+		}
 		if (g_pHubble && g_pHubble->m_bOfficeApp)
 			g_pHubble->WindowDestroy(hWnd);
 		else if (g_pHubble->m_pCLRProxy)

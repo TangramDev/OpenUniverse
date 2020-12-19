@@ -843,12 +843,12 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				pObj->m_pParentObj = m_pGrid;
 
 				m_pGrid->AddChildNode(pObj);
+				pObj->m_nRow = i;
+				pObj->m_nCol = j;
 				pObj->InitWndGrid();
 
 				if (pObj->m_pObjClsInfo)
 				{
-					pObj->m_nRow = i;
-					pObj->m_nCol = j;
 					pObj->m_nWidth = nWidth;
 					pObj->m_nHeigh = nHeight;
 					if (pContext->m_pNewViewClass == nullptr)

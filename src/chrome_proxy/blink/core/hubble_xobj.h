@@ -119,6 +119,7 @@ namespace blink {
 		void BindCtrlValue(const String& strcontrols, V8ApplicationCallback* callback);
 
 		String id_;
+		String name_;
 		CommonUniverse::IPCSession session_;
 		WebLocalFrameClient* m_pRenderframeImpl;
 		mutable Member<HubbleXobj> sender_;
@@ -126,9 +127,6 @@ namespace blink {
 		HeapHashMap<String, Member<Element>> mapVisibleElem;
 		HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;
 		map < wstring, Element* > m_mapElement;
-
-	private:
-		String name_;
 	};
 
 }  // namespace blink

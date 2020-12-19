@@ -206,6 +206,19 @@ namespace CommonUniverse {
 		long m_nHandleTo = 0;
 	} IPCMsg;
 
+	typedef struct CosmosInfo
+	{
+		HWND			m_hCtrlHandle = nullptr;
+		HWND			m_pParentForm;
+		HWND			m_pMDIParent;
+		CString			m_strName;
+		CString			m_strNodeName;
+		CString			m_strGridXml;
+		IGrid*			m_pGrid	= nullptr;
+		IGalaxy*		m_pGalaxy = nullptr;
+		IGalaxyCluster*	m_pGalaxyCluster = nullptr;
+	}CosmosInfo;
+
 	typedef struct GalaxyInfo
 	{
 		HWND			m_hCtrlHandle;

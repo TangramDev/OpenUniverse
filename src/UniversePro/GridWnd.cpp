@@ -915,12 +915,12 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				pObj->m_pParentObj = m_pGrid;
 
 				m_pGrid->AddChildNode(pObj);
+				pObj->m_nRow = i;
+				pObj->m_nCol = j;
 				pObj->InitWndGrid();
 
 				if (pObj->m_pObjClsInfo)
 				{
-					pObj->m_nRow = i;
-					pObj->m_nCol = j;
 					pObj->m_nWidth = nWidth;
 					pObj->m_nHeigh = nHeight;
 					if (pContext->m_pNewViewClass == nullptr)
@@ -1319,6 +1319,12 @@ void CGridWnd::OnSize(UINT nType, int cx, int cy)
 void CGridWnd::OnDestroy()
 {
 	m_pGrid->Fire_Destroy();
+	HANDLE hData = RemoveProp(m_hWnd, _T("CosmosInfo"));
+	if (hData)
+	{
+		CosmosInfo* pInfo = (CosmosInfo*)hData;
+		delete pInfo;
+	}
 	__super::OnDestroy();
 }
 

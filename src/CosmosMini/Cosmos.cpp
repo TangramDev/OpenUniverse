@@ -256,11 +256,11 @@ namespace Cosmos
     Grid^ Hubble::GetGridFromHandle(IntPtr handle)
     {
         IGrid* pWndGrid = nullptr;
-        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)handle.ToPointer(), &pWndGrid);
-        if (hr != S_OK || pWndGrid == nullptr)
-        {
+        CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)handle.ToPointer(), _T("CosmosInfo"));
+        if (pInfo)
+            pWndGrid = pInfo->m_pGrid;
+        else
             return nullptr;
-        }
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
@@ -278,11 +278,11 @@ namespace Cosmos
             pWndGrid = it->second;
             return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
         }
-        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)hCtrl, &pWndGrid);
-        if (hr != S_OK || pWndGrid == nullptr)
-        {
+        CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)hCtrl, _T("CosmosInfo"));
+        if (pInfo)
+            pWndGrid = pInfo->m_pGrid;
+        else
             return nullptr;
-        }
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 

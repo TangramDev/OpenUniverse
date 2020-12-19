@@ -2685,7 +2685,9 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 					IGrid* pRefGrid = nullptr;
 					__int64 hRefWnd = pChild->attrInt64(_T("handle"));
 					CString strName = pChild->attr(_T("refname"),_T(""));
-					theApp.m_pHubble->GetGridFromHandle(hRefWnd, &pRefGrid);
+					CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)hRefWnd, _T("CosmosInfo"));
+					if (pInfo)
+						pRefGrid = pInfo->m_pGrid;
 					if (pRefGrid)
 					{
 						thisNode[BSTR2STRING(strName)] = theAppProxy._createObject<IGrid, Cosmos::Grid>(pRefGrid);

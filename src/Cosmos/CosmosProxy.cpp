@@ -1104,6 +1104,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
 							pHubbleSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent?1:0);
 							pHubbleSession->InsertString(_T("formname"), strFormName);
+							pHubbleSession->InsertString(_T("tagName"), strTagName);
 							pHubbleSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
 							pHubbleSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
 							::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pHubbleSession);
@@ -1124,6 +1125,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								::SysFreeString(bstrName);
 							}
 							pHubbleSession->InsertString(_T("formname"), strFormName);
+							pHubbleSession->InsertString(_T("tagName"), strTagName);
 							pHubbleSession->InsertLong(_T("autodelete"), 0);
 							pHubbleSession->Insertint64(_T("domhandle"), (__int64)pHubbleSession);
 							CString strFormID = m_Parse.attr(_T("id"), _T(""));
@@ -1821,6 +1823,10 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 					__int64 hRefWnd = pChild->attrInt64(_T("handle"));
 					CString strName = pChild->attr(_T("refname"), _T(""));
 					theApp.m_pHubble->GetGridFromHandle(hRefWnd, &pRefGrid);
+					CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)hRefWnd, _T("CosmosInfo"));
+					if (pInfo)
+						pRefGrid = pInfo->m_pGrid;
+
 					if (pRefGrid)
 					{
 						thisNode[BSTR2STRING(strName)] = theAppProxy._createObject<IGrid, Cosmos::Grid>(pRefGrid);

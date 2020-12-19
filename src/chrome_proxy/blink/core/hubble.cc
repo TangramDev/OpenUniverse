@@ -47,15 +47,6 @@ namespace blink {
 		ExceptionState exception_state(V8PerIsolateData::MainThreadIsolate(), ExceptionState::kSetterContext,
 			"Element", "creatHelper");
 		helperElem_ = DomWindow()->document()->CreateElementForBinding("hubble", exception_state);
-		//HTMLCollection* list = DomWindow()->document()->getElementsByTagName("cosmos");
-		//if (list->length())
-		//{
-		//	DocumentFragment_ = DomWindow()->document()->createDocumentFragment();
-		//	if (DocumentFragment_)
-		//	{
-		//		DocumentFragment_->appendChild(list->item(0));
-		//	}
-		//}
 	}
 
 	Hubble::~Hubble() {
@@ -73,7 +64,6 @@ namespace blink {
 		visitor->Trace(mapCloudSession_);
 		visitor->Trace(m_mapHubbleGalaxy);
 		visitor->Trace(mapCallbackFunction_);
-		visitor->Trace(m_mapHubbleCompositor);
 		visitor->Trace(m_pVisibleContentElement);
 	}
 
@@ -486,6 +476,7 @@ namespace blink {
 						gridfortarget->setSender(xObj);
 						gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
 						gridfortarget->setMsgID(ctrlName_ + "_" + eventName);
+						gridfortarget->setStr("eventdata", elem->OuterHTMLAsString());
 						m_pRenderframeImpl->SendHubbleMessageEx(gridfortarget->session_);
 					}
 				}
@@ -744,7 +735,7 @@ namespace blink {
 									if (pNode->getNodeType() == 1)
 									{
 										String name = elemEvent->tagName().LowerASCII();
-										String eventname = elemEvent->getAttribute("eventname");
+										String eventname = elemEvent->getAttribute("event");
 										String strIndex = eventname.LowerASCII() + "@" + name;
 										wstring key = WebString(strIndex).Utf16();
 										auto it = node->m_mapElement.find(key);
@@ -771,11 +762,9 @@ namespace blink {
 		}
 		if (bNewGalaxy)
 		{
-			pGalaxy = HubbleGalaxy::Create(DomWindow()->GetFrame(), strGalaxyname);
+			pGalaxy = HubbleGalaxy::Create(strGalaxyname);
 			pGalaxy->hubble_ = this;
-			pGalaxy->innerXobj_ = xobj;
 			pGalaxy->handle_ = nGalaxyHandle;
-			pGalaxy->m_pRenderframeImpl = m_pRenderframeImpl;
 			m_mapHubbleGalaxy.insert(nGalaxyHandle, pGalaxy);
 			WebString str = strGalaxyname;
 			m_mapHubbleGalaxy2[str.Utf16()] = pGalaxy;
@@ -1099,10 +1088,6 @@ namespace blink {
 		while (m_mapWinForm.size())
 		{
 			m_mapWinForm.erase(m_mapWinForm.begin());
-		}
-		while (m_mapHubbleCompositor.size())
-		{
-			m_mapHubbleCompositor.erase(m_mapHubbleCompositor.begin());
 		}
 		while (mapCallbackFunction_.size())
 		{

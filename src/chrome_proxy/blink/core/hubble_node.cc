@@ -28,7 +28,6 @@ namespace blink {
 	HubbleNode::HubbleNode() :HubbleXobj() {
 		rootNode_ = nullptr;
 		m_pParentForm = nullptr;
-		id_ = WTF::CreateCanonicalUUIDString();
 	}
 
 	HubbleNode::~HubbleNode() {

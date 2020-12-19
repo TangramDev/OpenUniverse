@@ -4223,28 +4223,18 @@ HRESULT CHubble::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** p
 STDMETHODIMP CHubble::GetGridFromHandle(LONGLONG hWnd, IGrid** ppRetGrid)
 {
 	HWND _hWnd = (HWND)hWnd;
-	if (::IsWindow(_hWnd))
+	CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+	while (pInfo == nullptr)
 	{
-		LRESULT lRes = ::SendMessage(_hWnd, WM_HUBBLE_GETNODE, 0, 0);
-		if (lRes)
-		{
-			CGrid* pGrid = (CGrid*)lRes;
-			pGrid->QueryInterface(IID_IGrid, (void**)ppRetGrid);
-		}
-		while (lRes == 0)
-		{
-			_hWnd = ::GetParent(_hWnd);
-			if (_hWnd == 0)
-				break;
-			lRes = ::SendMessage(_hWnd, WM_HUBBLE_GETNODE, 0, 0);
-			if(lRes)
-			{
-				CGrid* pGrid = (CGrid*)lRes;
-				pGrid->QueryInterface(IID_IGrid, (void**)ppRetGrid);
-				break;
-			}
-		}
+		_hWnd = ::GetParent(_hWnd);
+		if (_hWnd == 0)
+			break;
+		pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
 	}
+	if (pInfo)
+		*ppRetGrid = pInfo->m_pGrid;
+	else
+		return S_FALSE;
 	return S_OK;
 }
 

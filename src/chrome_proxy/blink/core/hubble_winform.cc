@@ -32,7 +32,6 @@ namespace blink {
 		m_pContentElement = nullptr;
 		m_pMDIParent = nullptr;
 		m_pActiveMDIChild = nullptr;
-		id_ = WTF::CreateCanonicalUUIDString();
 	}
 
 	HubbleWinform::~HubbleWinform() {
@@ -181,6 +180,10 @@ namespace blink {
 					if (!!gridfortarget) {
 						return gridfortarget;
 					}
+					else
+					{
+						return hubble_->getGrid(elem, this);
+					}
 				}
 			}
 		}
@@ -235,6 +238,7 @@ namespace blink {
 									gridfortarget->setMsgID(msgID);
 									gridfortarget->DispatchEvent(*blink::HubbleEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
 									gridfortarget->setMsgID(msgID);
+									gridfortarget->setStr("eventdata", elem->OuterHTMLAsString());
 									m_pRenderframeImpl->SendHubbleMessageEx(gridfortarget->session_);
 								}
 							}
@@ -287,7 +291,7 @@ namespace blink {
 										Node* pNode = e;
 										if (pNode->getNodeType() == 1)
 										{
-											HubbleNode* grid = hubble_->getGrid(e, this);
+											HubbleNode* grid = getGrid(e);
 											if (grid) {
 												breferenced = true;
 												AtomicString name = grid->hostElem_->getAttribute("name");
@@ -318,7 +322,7 @@ namespace blink {
 										if (pNode->getNodeType() == 1)
 										{
 											String name = elemEvent->tagName().LowerASCII();
-											String eventname = elemEvent->getAttribute("eventname");
+											String eventname = elemEvent->getAttribute("event");
 											String strIndex = eventname.LowerASCII() + "@" + name;
 											wstring key = WebString(strIndex).Utf16();
 											auto it = m_mapElement.find(key);

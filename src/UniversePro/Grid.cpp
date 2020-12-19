@@ -93,27 +93,8 @@ void CGrid::InitWndGrid()
 	ASSERT(m_pGridShareData != nullptr);
 	m_nHeigh = m_pHostParse->attrInt(TGM_HEIGHT, 0);
 	m_nWidth = m_pHostParse->attrInt(TGM_WIDTH, 0);
-	m_strName = m_pHostParse->attr(_T("id"), _T(""));
-	if (m_strName == _T(""))
-	{
-		m_strName.Format(_T("Grid_%p"), (LONGLONG)this);
-	}
-	m_pRootObj->m_mapChildGrid[m_strName] = this;
-	m_nActivePage = m_pHostParse->attrInt(TGM_ACTIVE_PAGE, 0);
-	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
-	if (m_pGridShareData->m_pGalaxy && m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)
-	{
-		m_strNodeName = m_strName + _T("@") + g_pHubble->m_strCurrentKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName;
-		auto it2 = m_pGridShareData->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
-		if (it2 == m_pGridShareData->m_pGalaxyCluster->m_mapGrid.end())
-		{
-			m_pGridShareData->m_pGalaxyCluster->m_mapGrid[m_strNodeName] = this;
-		}
-	}
 	m_strObjTypeID = m_pHostParse->attr(TGM_OBJ_ID, _T(""));
-	m_strObjTypeID.MakeLower();
-	m_strObjTypeID.Trim();
-	if (m_strObjTypeID == TGM_NUCLEUS)
+	if (m_strObjTypeID.CompareNoCase(TGM_NUCLEUS) == 0)
 		m_strID = TGM_NUCLEUS;
 	m_nRows = m_pHostParse->attrInt(TGM_ROWS, 0);
 	m_nCols = m_pHostParse->attrInt(TGM_COLS, 0);
@@ -124,6 +105,8 @@ void CGrid::InitWndGrid()
 	}
 	else
 	{
+		if (m_pHostParse->GetChild(TGM_GRID))
+			m_nViewType = TabGrid;
 		if (m_strID != TGM_NUCLEUS)
 		{
 			m_strID = m_pHostParse->attr(TGM_GRID_TYPE, _T(""));
@@ -133,13 +116,111 @@ void CGrid::InitWndGrid()
 		if (m_strID == _T(""))
 		{
 			if (m_strObjTypeID.Find(_T(",")) != -1)
+			{
 				m_strID = _T("clrctrl");
+				m_nViewType = CLRCtrl;
+			}
 			else if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
 			{
 				auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.find(m_strObjTypeID);
 				if (it != m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.end())
+				{
 					m_strID = _T("clrctrl");
+					m_nViewType = CLRCtrl;
+				}
 			}
+		}
+	}
+	m_strName = m_pHostParse->attr(_T("id"), _T(""));
+	if (m_strName == _T(""))
+	{
+		switch (m_nViewType)
+		{
+		case Grid:
+		{
+			if (this == m_pRootObj)
+			{
+				m_strName = _T("Splitter");
+			}
+		}
+		break;
+		case TabGrid:
+			if (this == m_pRootObj)
+			{
+				if(m_pObjClsInfo)
+					m_strName = m_pObjClsInfo->m_lpszClassName;
+				else
+					m_strName = _T("TabWnd");
+			}
+			break;
+		case CLRCtrl:
+			if (this == m_pRootObj)
+			{
+				int nPos = m_strObjTypeID.Find(_T(","));
+				if (nPos != -1)
+				{
+					m_strName = m_strObjTypeID.Left(nPos);
+					m_strName.Replace(_T("."), _T("_"));
+				}
+			}
+			break;
+		default:
+			if (m_pObjClsInfo && this == m_pRootObj)
+				m_strName = m_pObjClsInfo->m_lpszClassName;
+			break;
+		}
+		if (m_strName == _T(""))
+		{
+			if (m_pParentObj)
+			{
+				CString _strName = m_pParentObj->m_strName;
+				if (m_pParentObj->m_nViewType == Grid)
+				{
+					if (m_nViewType == CLRCtrl)
+					{
+						int nPos = m_strObjTypeID.Find(_T(","));
+						if (nPos != -1)
+						{
+							CString _strCtrlName = m_strObjTypeID.Left(nPos);
+							_strCtrlName.Replace(_T("."), _T("_"));
+							m_strName.Format(_T("%s_%02d%02d_%s"), _strName, m_nRow, m_nCol, _strCtrlName);
+						}
+					}
+					else
+						m_strName.Format(_T("%s_%02d%02d"), _strName, m_nRow, m_nCol);
+				}
+				else
+				{
+					if (m_nViewType == CLRCtrl)
+					{
+						int nPos = m_strObjTypeID.Find(_T(","));
+						if (nPos != -1)
+						{
+							CString _strCtrlName = m_strObjTypeID.Left(nPos);
+							_strCtrlName.Replace(_T("."), _T("_"));
+							m_strName.Format(_T("%s_%s%d"), _strName, _strCtrlName, m_nCol);
+						}
+					}
+					else
+						m_strName.Format(_T("%s_Page%d"), _strName, m_nCol);
+				}
+			}
+			else
+				m_strName.Format(_T("Grid_%p"), (LONGLONG)this);
+		}
+	}
+	m_strObjTypeID.MakeLower();
+	m_strObjTypeID.Trim();
+	m_pRootObj->m_mapChildGrid[m_strName] = this;
+	m_nActivePage = m_pHostParse->attrInt(TGM_ACTIVE_PAGE, 0);
+	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
+	if (m_pGridShareData->m_pGalaxy && m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)
+	{
+		m_strNodeName = m_strName + _T("@") + g_pHubble->m_strCurrentKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName;
+		auto it2 = m_pGridShareData->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
+		if (it2 == m_pGridShareData->m_pGalaxyCluster->m_mapGrid.end())
+		{
+			m_pGridShareData->m_pGalaxyCluster->m_mapGrid[m_strNodeName] = this;
 		}
 	}
 
@@ -1289,8 +1370,8 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					pObj->m_pRootObj = m_pRootObj;
 					pObj->m_pHostParse = pChild;
 					AddChildNode(pObj);
-					pObj->InitWndGrid();
 					pObj->m_nCol = j;
+					pObj->InitWndGrid();
 
 					if (pObj->m_pObjClsInfo)
 					{
@@ -1337,6 +1418,13 @@ void CGrid::NodeCreated()
 	{
 		::PostMessage(pHtmlWnd->m_hWnd, WM_COSMOSMSG, 20200310, (LPARAM)this);
 	}
+	CosmosInfo* pInfo = new CosmosInfo();
+	pInfo->m_pGrid = this;
+	pInfo->m_pGalaxy = this->m_pGridShareData->m_pGalaxy;
+	pInfo->m_pGalaxyCluster = this->m_pGridShareData->m_pGalaxyCluster;
+	pInfo->m_strName = this->m_strName;
+	pInfo->m_strNodeName = this->m_strNodeName;
+	::SetProp(m_pHostWnd->m_hWnd, _T("CosmosInfo"), pInfo);
 }
 
 HWND CGrid::CreateView(HWND hParentWnd, CString strTag)

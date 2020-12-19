@@ -431,86 +431,6 @@ namespace Cosmos
         OnClose();
     }
 
-    //Browser^ Hubble::ActiveBrowser()
-    //{
-    //    IBrowser* pBrowser = nullptr;
-    //    theApp.m_pHubble->get_ActiveChromeBrowserWnd(&pBrowser);
-    //    if (pBrowser)
-    //    {
-    //        auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
-    //        if (it != theAppProxy.m_mapWebBrowser.end())
-    //            return it->second;
-    //        else
-    //        {
-    //            Browser^ pBrowser = gcnew Browser(pBrowser);
-    //            theAppProxy.m_mapWebBrowser[pBrowser] = pBrowser;
-    //            return pBrowser;
-    //        }
-    //    }
-    //    return nullptr;
-    //}
-
-    //Browser^ Hubble::GetHostBrowser(Object^ obj)
-    //{
-    //    if (obj == nullptr)
-    //    {
-    //        return nullptr;
-    //    }
-    //    HWND hWnd = nullptr;
-    //    if (obj->GetType()->IsSubclassOf(Control::typeid) || obj->GetType() == Control::typeid)
-    //    {
-    //        Control^ ctrl = (Control^)obj;
-    //        hWnd = (HWND)(ctrl->Handle.ToPointer());
-    //    }
-    //    else if (obj->GetType()->IsSubclassOf(System::Windows::Media::Visual::typeid) ||
-    //        obj->GetType() == System::Windows::Media::Visual::typeid)
-    //    {
-    //        System::Windows::Media::Visual^ vis = (System::Windows::Media::Visual^)obj;
-    //        System::Windows::PresentationSource^ ps = System::Windows::Interop::HwndSource::FromVisual(vis);
-    //        if (ps != nullptr)
-    //        {
-    //            System::Windows::Interop::HwndSource^ hwnd = (System::Windows::Interop::HwndSource^)ps;
-    //            hWnd = (HWND)(hwnd->Handle.ToPointer());
-    //            hWnd = ::GetParent(hWnd);
-    //            if (::IsWindow(hWnd))
-    //            {
-    //                hWnd = ::GetParent(hWnd);
-    //            }
-    //        }
-    //    }
-    //    if (hWnd == nullptr)
-    //    {
-    //        return nullptr;
-    //    }
-    //    IGrid* pWndGrid = nullptr;
-    //    HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)hWnd, &pWndGrid);
-    //    if (hr != S_OK || pWndGrid == nullptr)
-    //    {
-    //        return nullptr;
-    //    }
-    //    IGalaxy* pGalaxy = nullptr;
-    //    hr = pWndGrid->get_Galaxy(&pGalaxy);
-    //    if (hr != S_OK || pGalaxy == nullptr)
-    //    {
-    //        return nullptr;
-    //    }
-    //    IBrowser* pBrowser = nullptr;
-    //    pGalaxy->get_HostBrowser(&pBrowser);
-    //    if (pBrowser == nullptr)
-    //    {
-    //        return nullptr;
-    //    }
-    //    auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
-    //    if (it != theAppProxy.m_mapWebBrowser.end())
-    //        return it->second;
-    //    else
-    //    {
-    //        Browser^ pBrowser = gcnew Browser(pBrowser);
-    //        theAppProxy.m_mapWebBrowser[pBrowser] = pBrowser;
-    //        return pBrowser;
-    //    }
-    //}
-
     int Hubble::HubbleInit(String^ strInit)
     {
         CString strInfo = strInit;
@@ -543,11 +463,11 @@ namespace Cosmos
     Grid^ Hubble::GetGridFromHandle(IntPtr handle)
     {
         IGrid* pWndGrid = nullptr;
-        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)handle.ToPointer(), &pWndGrid);
-        if (hr != S_OK || pWndGrid == nullptr)
-        {
+        CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)handle.ToPointer(), _T("CosmosInfo"));
+        if (pInfo)
+            pWndGrid = pInfo->m_pGrid;
+        else
             return nullptr;
-        }
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
@@ -566,11 +486,11 @@ namespace Cosmos
             pWndGrid = it->second;
             return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
         }
-        HRESULT hr = theApp.m_pHubble->GetGridFromHandle((LONGLONG)hCtrl, &pWndGrid);
-        if (hr != S_OK || pWndGrid == nullptr)
-        {
+        CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)hCtrl, _T("CosmosInfo"));
+        if (pInfo)
+            pWndGrid = pInfo->m_pGrid;
+        else
             return nullptr;
-        }
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 

@@ -378,8 +378,8 @@ BOOL CGalaxy::CreateGalaxyCluster()
 	else
 		hPWnd = ::GetParent(m_hWnd);
 
-	m_pWorkGrid->m_strName.Trim();
-	m_pWorkGrid->m_strName.MakeLower();
+	//m_pWorkGrid->m_strName.Trim();
+	//m_pWorkGrid->m_strName.MakeLower();
 	m_pWorkGrid->InitWndGrid();
 	HWND hWnd = NULL;
 	if (m_pWorkGrid->m_pObjClsInfo) {

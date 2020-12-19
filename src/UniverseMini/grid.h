@@ -95,7 +95,7 @@ public:
 	BOOL	RemoveChildNode(CGrid* pGrid);
 	CString GetNames();
 
-	void NodeCreated() {};
+	void NodeCreated();
 
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();

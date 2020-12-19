@@ -28,34 +28,18 @@ class WebLocalFrameClient;
 class SerializedScriptValue;
 class V8ApplicationCallback;
 
-class CORE_EXPORT HubbleGalaxy final : public EventTargetWithInlineData,
-									  public DOMWindowClient {
+class CORE_EXPORT HubbleGalaxy final : public HubbleXobj{
   DEFINE_WRAPPERTYPEINFO();
-  USING_GARBAGE_COLLECTED_MIXIN(HubbleGalaxy);
 
  public:
-  static HubbleGalaxy* Create(LocalFrame* frame) { return MakeGarbageCollected<HubbleGalaxy>(frame); }
-  static HubbleGalaxy* Create(LocalFrame* frame, const String& strName);
+  static HubbleGalaxy* Create() { return MakeGarbageCollected<HubbleGalaxy>(); }
+  static HubbleGalaxy* Create(const String& strName);
 
   void Trace(blink::Visitor*) override;
-
-  // Called when an event listener has been successfully added.
-  void AddedEventListener(const AtomicString& event_type,
-                          RegisteredEventListener&) override;
 
   int64_t handle();
   String name();
   String getid();
-  HubbleXobj* xobj();
-
-  // Message method
-  void sendMessage(HubbleXobj* msg, V8ApplicationCallback* callback);
-
-  void addEventListener(const String& eventName, V8ApplicationCallback* callback);
-  void removeEventListener(const String& eventName);
-  void disConnect();
-  void fireEvent(const String& eventName, HubbleXobj* eventParam);
-  void invokeCallback(wstring callbackid, HubbleXobj* callbackParam);
 
   HubbleNode* getGrid(const String& clusterName, const String& nodeName);
   HubbleNode* getGrid(const long nodeHandle);
@@ -64,31 +48,18 @@ class CORE_EXPORT HubbleGalaxy final : public EventTargetWithInlineData,
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
 
-  // EventTarget overrides:
-  const AtomicString& InterfaceName() const override;
-  ExecutionContext* GetExecutionContext() const override;
-
-  HubbleGalaxy(LocalFrame*);
-  HubbleGalaxy(LocalFrame*, const String& strWindowName);
+  HubbleGalaxy();
+  HubbleGalaxy(const String& strWindowName);
 
   ~HubbleGalaxy() override;
 
   int64_t handle_ = 0;
-  mutable Member<HubbleNode> m_pHostNode;
 
-  mutable Member<Hubble> hubble_;
-  mutable Member<HubbleXobj> innerXobj_;
-
-  WebLocalFrameClient* m_pRenderframeImpl;
-  
   map<wstring, HubbleNode*> m_mapRootNode;
   map<int64_t, HubbleNode*> m_mapHubbleNode;
   map<wstring, HubbleNode*> m_mapHubbleNode2;
 private:
-  String id_;
-  String name_;
   String m_strWindowXml;
-  HeapHashMap<String, Member<V8ApplicationCallback>> mapHubbleEventCallback_;
 };
 
 }  // namespace blink

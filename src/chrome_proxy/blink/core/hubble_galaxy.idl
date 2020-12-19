@@ -11,7 +11,6 @@
 
 	readonly attribute DOMString name;
 	readonly attribute long long handle;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute HubbleXobj xobj;
 
 	//HubbleNode API
 	HubbleNode getGrid(DOMString clusterName, [DefaultValue = Undefined] optional DOMString nodeName);

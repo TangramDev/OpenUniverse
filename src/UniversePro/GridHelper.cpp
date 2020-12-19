@@ -561,6 +561,12 @@ void CGridHelper::OnDestroy()
 	}
 
 	m_pGrid->Fire_Destroy();
+	HANDLE hData = RemoveProp(m_hWnd, _T("CosmosInfo"));
+	if (hData)
+	{
+		CosmosInfo* pInfo = (CosmosInfo*)hData;
+		delete pInfo;
+	}
 	CWnd::OnDestroy();
 }
 
