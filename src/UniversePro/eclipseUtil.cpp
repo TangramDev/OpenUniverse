@@ -13,7 +13,7 @@
  /********************************************************************************
  *					DOM Plus for Application - Version 1.1.5.30							 *
  *********************************************************************************
- * Copyright (C) 2002-2020 by Tangram Team.   All Rights Reserved.			 	 *
+ * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.			 	 *
  *
  * THIS SOURCE FILE IS THE PROPERTY OF TANGRAM TEAM AND IS NOT TO
  * BE RE-DISTRIBUTED BY ANY MEANS WHATSOEVER WITHOUT THE EXPRESSED
