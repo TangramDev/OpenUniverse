@@ -33,46 +33,46 @@ namespace CommonUniverse {
 
 		virtual ~CChromeWebFrameClient() {}
 
-		std::map<__int64, __int64> m_mapHubbleNode;
-		std::map<__int64, __int64> m_mapHubbleForm;
-		std::map<__int64, __int64> m_mapHubbleWindow;
-		std::map<__int64, __int64> m_mapHubbleControl;
-		std::map<std::wstring, void*> m_mapHubbleSession;
-		std::map<std::wstring, void*> m_mapHubbleNodeforCallback;
-		std::map<std::wstring, void*> m_mapHubbleWindowforCallback;
-		std::map<std::wstring, void*> m_mapHubbleFormforCallback;
-		std::map<std::wstring, void*> m_mapHubbleControlforCallback;
+		std::map<__int64, __int64> m_mapCosmosNode;
+		std::map<__int64, __int64> m_mapCosmosForm;
+		std::map<__int64, __int64> m_mapCosmosWindow;
+		std::map<__int64, __int64> m_mapCosmosControl;
+		std::map<std::wstring, void*> m_mapCosmosSession;
+		std::map<std::wstring, void*> m_mapCosmosNodeforCallback;
+		std::map<std::wstring, void*> m_mapCosmosWindowforCallback;
+		std::map<std::wstring, void*> m_mapCosmosFormforCallback;
+		std::map<std::wstring, void*> m_mapCosmosControlforCallback;
 
-		virtual void SendHubbleMessage(std::wstring strId,
+		virtual void SendCosmosMessage(std::wstring strId,
 			std::wstring strParam1,
 			std::wstring strParam2,
 			std::wstring strParam3,
 			std::wstring strParam4,
 			std::wstring strParam5) {}
 			
-		virtual void SendHubbleMessage(std::wstring strId,
+		virtual void SendCosmosMessage(std::wstring strId,
 			std::wstring strParam1,
 			__int64 nHandle,
 			__int64 nID,
 			std::wstring strParam4,
 			std::wstring strParam5) {}
 			
-		virtual void SendHubbleMessage(std::wstring strId,
+		virtual void SendCosmosMessage(std::wstring strId,
 			std::wstring strParam1,
 			__int64 fromhandle,
 			std::wstring strParam3,
 			__int64 tohandle,
 			std::wstring strParam5) {}
 
-		virtual void SendHubbleMessageEx(IPCSession& var) {}
+		virtual void SendCosmosMessageEx(IPCSession& var) {}
 
-		virtual void SendHubbleMessage5(
+		virtual void SendCosmosMessage5(
 			FrameMsg_TANGRAM_HOST_String_Map /* string map */,
 			FrameMsg_TANGRAM_HOST_LONG_Map /* long map*/,
 			FrameMsg_TANGRAM_HOST_INT64_Map /* int64 map*/,
 			FrameMsg_TANGRAM_HOST_FLOAT_Map /* float ,ap */) {}
 
-		virtual void OnHubbleMessage(long messageIndex,
+		virtual void OnCosmosMessage(long messageIndex,
 			std::wstring strId,
 			std::wstring strParam1,
 			std::wstring strParam2,

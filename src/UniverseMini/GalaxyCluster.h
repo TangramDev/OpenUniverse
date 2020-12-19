@@ -22,10 +22,10 @@
 class ATL_NO_VTABLE CGalaxyCluster : 
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl <CGalaxyCluster>,
-	public IConnectionPointImpl<CGalaxyCluster, &__uuidof(_IHubbleObjEvents)>,
+	public IConnectionPointImpl<CGalaxyCluster, &__uuidof(_ICosmosObjEvents)>,
 	public IDispatchImpl<IGalaxyCluster, &IID_IGalaxyCluster, &LIBID_Universe, 1, 0>
 {
-	friend CHubble;
+	friend CCosmos;
 public:
 	CGalaxyCluster();
 	virtual ~CGalaxyCluster();
@@ -44,7 +44,7 @@ public:
 	END_COM_MAP()
 
 	BEGIN_CONNECTION_POINT_MAP(CGalaxyCluster)
-		CONNECTION_POINT_ENTRY(__uuidof(_IHubbleObjEvents))
+		CONNECTION_POINT_ENTRY(__uuidof(_ICosmosObjEvents))
 	END_CONNECTION_POINT_MAP()
 
 	void Lock(){}
@@ -82,7 +82,7 @@ public:
 	STDMETHOD(GetCtrlInGrid)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
 	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
-	STDMETHOD(ConnectHubbleCtrl)(IHubbleCtrl* eventSource);
+	STDMETHOD(ConnectCosmosCtrl)(ICosmosCtrl* eventSource);
 	STDMETHOD(CreateGalaxyWithDefaultNode)(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
 	STDMETHOD(ObserveGalaxys)(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	STDMETHOD(get_CurrentDesignGalaxyType)(GalaxyType* pVal);

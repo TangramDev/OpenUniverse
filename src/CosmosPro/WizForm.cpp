@@ -1,3 +1,22 @@
+/********************************************************************************
+*					DOM Plus for Application - Version 1.1.5.30                 *
+*********************************************************************************
+* Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
+*
+* THIS SOURCE FILE IS THE PROPERTY OF TANGRAM TEAM AND IS NOT TO
+* BE RE-DISTRIBUTED BY ANY MEANS WHATSOEVER WITHOUT THE EXPRESSED
+* WRITTEN CONSENT OF TANGRAM TEAM.
+*
+* THIS SOURCE CODE CAN ONLY BE USED UNDER THE TERMS AND CONDITIONS
+* OUTLINED IN THE GPL LICENSE AGREEMENT.TANGRAM TEAM
+* GRANTS TO YOU (ONE SOFTWARE DEVELOPER) THE LIMITED RIGHT TO USE
+* THIS SOFTWARE ON A SINGLE COMPUTER.
+*
+* CONTACT INFORMATION:
+* mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
+* http://www.tangramteam.com/
+*
+********************************************************************************/
 #include "stdafx.h"
 #include "dllmain.h"
 #include "WizForm.h"
@@ -11,7 +30,7 @@ namespace Cosmos {
 		//TODO: Add the constructor code here
 		//
 #ifndef _WIN64
-		Cosmos::Hubble::m_pWizForm = this;
+		Cosmos::Cosmos::m_pWizForm = this;
 		m_pWizCtrlDic->Clear();
 #endif
 	}
@@ -23,7 +42,7 @@ namespace Cosmos {
 	{
 		if (String::IsNullOrEmpty(strData)==false)
 		{
-			Cosmos::Hubble::m_strWizData = strData;
+			Cosmos::Cosmos::m_strWizData = strData;
 		}
 	}
 
@@ -36,7 +55,7 @@ namespace Cosmos {
 			CString strToken = strData.Tokenize(_T("|"), nTokenPos);
 			while (!strToken.IsEmpty())
 			{
-				Cosmos::Hubble::CustomizeDic[BSTR2STRING(strToken)] = L"";
+				Cosmos::Cosmos::CustomizeDic[BSTR2STRING(strToken)] = L"";
 				strToken = strData.Tokenize(_T("|"), nTokenPos);
 			}
 		}

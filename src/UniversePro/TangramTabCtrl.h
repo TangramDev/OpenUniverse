@@ -33,7 +33,7 @@ public:
 	int					m_nListViewSelectedIndex;
 	CString				m_strDir;
 	CString				m_strSubDir;
-	CTangramTabCtrl*	m_pHubbleTabCtrl;
+	CTangramTabCtrl*	m_pCosmosTabCtrl;
 protected:
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult);
@@ -53,7 +53,7 @@ public:
 	CString				m_strFilter;
 	CGrid*			m_pGrid;
 	CGalaxy*		m_pGalaxy;
-	CTangramListView*	m_pHubbleListView;
+	CTangramListView*	m_pCosmosListView;
 	CTangramListCtrl	m_ListCtrl;
 	void RePosition();
 	void FillListCtrl();

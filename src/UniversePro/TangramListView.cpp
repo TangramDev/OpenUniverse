@@ -43,7 +43,7 @@ CTangramListView::CTangramListView()
 	m_nActiveIndex = 0;
 	m_pGalaxy = nullptr;
 	m_pGrid = nullptr;
-	m_pHubbleTabCtrl = nullptr;
+	m_pCosmosTabCtrl = nullptr;
 }
 
 CTangramListView::~CTangramListView()
@@ -84,7 +84,7 @@ void CTangramListView::OnInitialUpdate()
 
 void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 {
-	m_pHubbleTabCtrl = pTabCtrl;
+	m_pCosmosTabCtrl = pTabCtrl;
 	CComBSTR bstrStyle(L"");
 	m_pGrid->get_Attribute(CComBSTR(L"style"), &bstrStyle);
 	m_nStyle = _wtoi(OLE2T(bstrStyle));
@@ -100,36 +100,36 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 		{
 		case 0:
 		{
-			map<CString, HubbleDocTemplateInfo*>*	m_pMapHubbleFormsTemplateInfo = &g_pHubble->m_mapHubbleFormsTemplateInfo;
-			map<int, HubbleDocTemplateInfo*>*		m_pMapHubbleFormsTemplateInfo2 = &g_pHubble->m_mapHubbleFormsTemplateInfo2;
+			map<CString, CosmosDocTemplateInfo*>*	m_pMapCosmosFormsTemplateInfo = &g_pCosmos->m_mapCosmosFormsTemplateInfo;
+			map<int, CosmosDocTemplateInfo*>*		m_pMapCosmosFormsTemplateInfo2 = &g_pCosmos->m_mapCosmosFormsTemplateInfo2;
 			CWinForm* pWnd = nullptr;
-			CString strFormsInfoPath = g_pHubble->m_strAppFormsInfoPath;
-			if (m_pHubbleTabCtrl)
+			CString strFormsInfoPath = g_pCosmos->m_strAppFormsInfoPath;
+			if (m_pCosmosTabCtrl)
 			{
-				HWND hWnd = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+				HWND hWnd = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 				if (hWnd)
 				{
 					pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 					if (pWnd)
 					{
 						strFormsInfoPath = pWnd->m_strChildFormPath;
-						//m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
-						//m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
+						//m_pMapCosmosFormsTemplateInfo = &pWnd->m_mapCosmosFormsTemplateInfo;
+						//m_pMapCosmosFormsTemplateInfo2 = &pWnd->m_mapCosmosFormsTemplateInfo2;
 					}
 				}
 			}
-			if (g_pHubble->m_mapHubbleDocTemplateInfo.size() == 0)
-				g_pHubble->InitHubbleDocManager();
+			if (g_pCosmos->m_mapCosmosDocTemplateInfo.size() == 0)
+				g_pCosmos->InitCosmosDocManager();
 
-			GetListCtrl().SetImageList(&g_pHubble->m_DocImageList, LVSIL_NORMAL);
-			int nCount = g_pHubble->m_mapHubbleDocTemplateInfo.size();
-			for (auto it = g_pHubble->m_mapHubbleDocTemplateInfo.begin(); it != g_pHubble->m_mapHubbleDocTemplateInfo.end(); it++)
+			GetListCtrl().SetImageList(&g_pCosmos->m_DocImageList, LVSIL_NORMAL);
+			int nCount = g_pCosmos->m_mapCosmosDocTemplateInfo.size();
+			for (auto it = g_pCosmos->m_mapCosmosDocTemplateInfo.begin(); it != g_pCosmos->m_mapCosmosDocTemplateInfo.end(); it++)
 			{
 				item.iImage = it->second->m_nImageIndex;
 				item.iItem = it->second->m_nImageIndex;
 				item.iSubItem = 0;
 				CString s = it->second->m_strDocTemplateKey;
-				if (g_pHubble->m_bUsingDefaultAppDocTemplate&&it->second->m_strTemplatePath.Find(g_pHubble->m_strAppCommonDocPath + _T("CommonMFCAppTemplate")) == 0)
+				if (g_pCosmos->m_bUsingDefaultAppDocTemplate&&it->second->m_strTemplatePath.Find(g_pCosmos->m_strAppCommonDocPath + _T("CommonMFCAppTemplate")) == 0)
 				{
 					s = _T("Common DocTemplate");
 				}
@@ -139,15 +139,15 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 			}
 			_wfinddata64_t fd;
 			intptr_t fp = _wfindfirst64(strFormsInfoPath + L"*.ico", &fd);
-			if (g_pHubble->m_bCLRObjTemplateInit == false||pWnd!=nullptr)
+			if (g_pCosmos->m_bCLRObjTemplateInit == false||pWnd!=nullptr)
 			{
 				while (fp != -1)
 				{
 					if ((fd.attrib & FILE_ATTRIBUTE_DIRECTORY) == 0)
 					{
 						HICON hIcon = (HICON)::LoadImage(NULL, strFormsInfoPath + fd.name, IMAGE_ICON, 48, 48, LR_LOADFROMFILE | LR_DEFAULTCOLOR);
-						item.iImage = g_pHubble->m_DocImageList.Add(hIcon);;
-						g_pHubble->m_DocTemplateImageList.Add(hIcon);
+						item.iImage = g_pCosmos->m_DocImageList.Add(hIcon);;
+						g_pCosmos->m_DocTemplateImageList.Add(hIcon);
 						item.iItem = item.iImage;
 						CString s = fd.name;
 						int nPos = s.Replace(_T(".ico"), _T(""));
@@ -158,18 +158,18 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 						nPos = s.Find(_T(","));
 						strText += s.Left(nPos);
 						item.pszText = (LPTSTR)LPCTSTR(strText);
-						HubbleDocTemplateInfo* pInfo = nullptr;
-						auto it = m_pMapHubbleFormsTemplateInfo->find(strType);
-						if (it == m_pMapHubbleFormsTemplateInfo->end())
+						CosmosDocTemplateInfo* pInfo = nullptr;
+						auto it = m_pMapCosmosFormsTemplateInfo->find(strType);
+						if (it == m_pMapCosmosFormsTemplateInfo->end())
 						{
-							pInfo = new HubbleDocTemplateInfo();
+							pInfo = new CosmosDocTemplateInfo();
 							pInfo->m_nImageIndex = item.iImage;// item.iItem;
 							pInfo->m_strExt = _T(".formxml");
 							pInfo->m_strFilter = _T("*.formxml");
 							pInfo->m_strProxyID = strType;
-							(*m_pMapHubbleFormsTemplateInfo)[strType] = pInfo;
+							(*m_pMapCosmosFormsTemplateInfo)[strType] = pInfo;
 						}
-						(*m_pMapHubbleFormsTemplateInfo2)[GetListCtrl().InsertItem(&item)] = pInfo;
+						(*m_pMapCosmosFormsTemplateInfo2)[GetListCtrl().InsertItem(&item)] = pInfo;
 					}
 					if (_wfindnext64(fp, &fd) == -1)
 					{
@@ -177,7 +177,7 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 					}
 				}
 				if(pWnd==nullptr)
-					g_pHubble->m_bCLRObjTemplateInit = true;
+					g_pCosmos->m_bCLRObjTemplateInit = true;
 			}
 			else
 			{
@@ -194,8 +194,8 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 						nPos = s.Find(_T(","));
 						strText += s.Left(nPos);
 						item.pszText = (LPTSTR)LPCTSTR(strText);
-						auto it = m_pMapHubbleFormsTemplateInfo->find(strType);
-						if (it != m_pMapHubbleFormsTemplateInfo->end())
+						auto it = m_pMapCosmosFormsTemplateInfo->find(strType);
+						if (it != m_pMapCosmosFormsTemplateInfo->end())
 						{
 							item.iItem = item.iImage = it->second->m_nImageIndex;
 							GetListCtrl().InsertItem(&item);
@@ -203,16 +203,16 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 						else
 						{
 							HICON hIcon = (HICON)::LoadImage(NULL, strFormsInfoPath + fd.name, IMAGE_ICON, 48, 48, LR_LOADFROMFILE | LR_DEFAULTCOLOR);
-							item.iImage = g_pHubble->m_DocImageList.Add(hIcon);;
-							g_pHubble->m_DocTemplateImageList.Add(hIcon);
-							HubbleDocTemplateInfo* pInfo = nullptr;
-							pInfo = new HubbleDocTemplateInfo();
+							item.iImage = g_pCosmos->m_DocImageList.Add(hIcon);;
+							g_pCosmos->m_DocTemplateImageList.Add(hIcon);
+							CosmosDocTemplateInfo* pInfo = nullptr;
+							pInfo = new CosmosDocTemplateInfo();
 							pInfo->m_nImageIndex = item.iImage;// item.iItem;
 							pInfo->m_strExt = _T(".formxml");
 							pInfo->m_strFilter = _T("*.formxml");
 							pInfo->m_strProxyID = strType;
-							(*m_pMapHubbleFormsTemplateInfo)[strType] = pInfo;
-							(*m_pMapHubbleFormsTemplateInfo2)[GetListCtrl().InsertItem(&item)] = pInfo;
+							(*m_pMapCosmosFormsTemplateInfo)[strType] = pInfo;
+							(*m_pMapCosmosFormsTemplateInfo2)[GetListCtrl().InsertItem(&item)] = pInfo;
 						}
 					}
 					if (_wfindnext64(fp, &fd) == -1)
@@ -225,7 +225,7 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 		break;
 		case 1:
 		{
-			if (g_pHubble->m_nAppID != 9)
+			if (g_pCosmos->m_nAppID != 9)
 			{
 				break;
 			}
@@ -248,12 +248,12 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 			::GetModuleFileName(nullptr, szBuffer, MAX_PATH);
 			CString strPath = CString(szBuffer);
 
-			auto it = g_pHubble->m_mapHubbleDocTemplateInfo.find(0);
-			if (it != g_pHubble->m_mapHubbleDocTemplateInfo.end())
+			auto it = g_pCosmos->m_mapCosmosDocTemplateInfo.find(0);
+			if (it != g_pCosmos->m_mapCosmosDocTemplateInfo.end())
 			{
-				m_pHubbleTabCtrl->m_nImageIndex = it->second->m_nImageIndex;
-				m_pHubbleTabCtrl->m_ListCtrl.m_strDir = it->second->m_strTemplatePath;
-				CString m_strDocTemplatePath = m_pHubbleTabCtrl->m_ListCtrl.m_strDir;
+				m_pCosmosTabCtrl->m_nImageIndex = it->second->m_nImageIndex;
+				m_pCosmosTabCtrl->m_ListCtrl.m_strDir = it->second->m_strTemplatePath;
+				CString m_strDocTemplatePath = m_pCosmosTabCtrl->m_ListCtrl.m_strDir;
 				CString strKey = it->second->m_strDocTemplateKey;
 				if (::PathIsDirectory(m_strDocTemplatePath) == false)
 				{
@@ -282,7 +282,7 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 				m_strDocTemplatePath += _T("*.*");
 
 				CString strCaption = _T("");
-				CGrid* pGrid = m_pHubbleTabCtrl->m_pGrid;
+				CGrid* pGrid = m_pCosmosTabCtrl->m_pGrid;
 				if (pGrid)
 				{
 					strCaption = _T("Current Selected Document Template: ");
@@ -302,7 +302,7 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 						if (str != _T(".."))
 						{
 							tcItem.pszText = LPWSTR(LPCWSTR(str));
-							CString strDocTemplatePath = m_pHubbleTabCtrl->m_ListCtrl.m_strDir + str + _T("\\") + it->second->m_strFilter;
+							CString strDocTemplatePath = m_pCosmosTabCtrl->m_ListCtrl.m_strDir + str + _T("\\") + it->second->m_strFilter;
 
 							_wfinddata_t fd;
 							fd.attrib = FILE_ATTRIBUTE_DIRECTORY;
@@ -326,21 +326,21 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 							}
 
 							if (nItem)
-								m_pHubbleTabCtrl->InsertItem(nIndex, &tcItem);
+								m_pCosmosTabCtrl->InsertItem(nIndex, &tcItem);
 
 							nIndex++;
 						}
 					}
 				}
 				_findclose(pf);
-				m_pHubbleTabCtrl->m_strFilter = it->second->m_strFilter;
-				m_pHubbleTabCtrl->FillListCtrl();
+				m_pCosmosTabCtrl->m_strFilter = it->second->m_strFilter;
+				m_pCosmosTabCtrl->FillListCtrl();
 			}
 		}
 		break;
 	case 1:
 		{
-			if (g_pHubble->m_nAppID != 9)
+			if (g_pCosmos->m_nAppID != 9)
 			{
 				break;
 			}
@@ -353,27 +353,27 @@ void CTangramListView::ChangeTemplate(int nItem)
 {
 	if (m_bCreated == FALSE)
 		return;
-	if (m_pHubbleTabCtrl == nullptr)
+	if (m_pCosmosTabCtrl == nullptr)
 		return;
-	if (m_pHubbleTabCtrl->m_ListCtrl.m_strDir == _T(""))
+	if (m_pCosmosTabCtrl->m_ListCtrl.m_strDir == _T(""))
 		return;
 	switch (m_nStyle)
 	{
 	case 0:
 		{
-			auto it = g_pHubble->m_mapHubbleDocTemplateInfo.find(nItem);
-			if (it != g_pHubble->m_mapHubbleDocTemplateInfo.end())
+			auto it = g_pCosmos->m_mapCosmosDocTemplateInfo.find(nItem);
+			if (it != g_pCosmos->m_mapCosmosDocTemplateInfo.end())
 			{
-				CString strDir = g_pHubble->m_strAppCommonDocPath + it->second->m_strProxyID + _T("\\");
-				if (m_nActiveIndex != nItem|| m_pHubbleTabCtrl->m_ListCtrl.m_strDir != strDir)
+				CString strDir = g_pCosmos->m_strAppCommonDocPath + it->second->m_strProxyID + _T("\\");
+				if (m_nActiveIndex != nItem|| m_pCosmosTabCtrl->m_ListCtrl.m_strDir != strDir)
 				{
-					m_pHubbleTabCtrl->m_ListCtrl.m_nListViewSelectedIndex = nItem;
-					m_pHubbleTabCtrl->DeleteAllItems();
-					m_pHubbleTabCtrl->m_strFilter = it->second->m_strFilter;
-					m_pHubbleTabCtrl->m_nImageIndex = it->second->m_nImageIndex;
+					m_pCosmosTabCtrl->m_ListCtrl.m_nListViewSelectedIndex = nItem;
+					m_pCosmosTabCtrl->DeleteAllItems();
+					m_pCosmosTabCtrl->m_strFilter = it->second->m_strFilter;
+					m_pCosmosTabCtrl->m_nImageIndex = it->second->m_nImageIndex;
 					CString strKey = it->second->m_strDocTemplateKey;
 					CString strCaption = _T("");
-					CGrid* pGrid = m_pHubbleTabCtrl->m_pGrid;
+					CGrid* pGrid = m_pCosmosTabCtrl->m_pGrid;
 					if (pGrid)
 					{
 						strCaption = _T("Current Selected Document Template: ");
@@ -384,8 +384,8 @@ void CTangramListView::ChangeTemplate(int nItem)
 					TCITEM tcItem;
 					tcItem.mask = TCIF_TEXT;
 					int nIndex = 0;
-					m_pHubbleTabCtrl->m_ListCtrl.m_strDir = it->second->m_strTemplatePath;
-					CString m_strDocTemplatePath = m_pHubbleTabCtrl->m_ListCtrl.m_strDir;
+					m_pCosmosTabCtrl->m_ListCtrl.m_strDir = it->second->m_strTemplatePath;
+					CString m_strDocTemplatePath = m_pCosmosTabCtrl->m_ListCtrl.m_strDir;
 					if (::PathIsDirectory(m_strDocTemplatePath) == false)
 					{
 						if (::SHCreateDirectoryEx(NULL, m_strDocTemplatePath, NULL))
@@ -424,7 +424,7 @@ void CTangramListView::ChangeTemplate(int nItem)
 								if (str != _T(".."))
 								{
 									tcItem.pszText = LPWSTR(LPCWSTR(str));
-									CString strDocTemplatePath = m_pHubbleTabCtrl->m_ListCtrl.m_strDir + str + _T("\\") + it->second->m_strFilter;
+									CString strDocTemplatePath = m_pCosmosTabCtrl->m_ListCtrl.m_strDir + str + _T("\\") + it->second->m_strFilter;
 
 									_wfinddata_t fd;
 									fd.attrib = FILE_ATTRIBUTE_DIRECTORY;
@@ -448,59 +448,59 @@ void CTangramListView::ChangeTemplate(int nItem)
 									}
 
 									if(nItem)
-										m_pHubbleTabCtrl->InsertItem(nIndex, &tcItem);
+										m_pCosmosTabCtrl->InsertItem(nIndex, &tcItem);
 									nIndex++;
 								}
 							}
 						}
 						_findclose(pf);
 						m_nActiveIndex = nItem;
-						m_pHubbleTabCtrl->FillListCtrl();
+						m_pCosmosTabCtrl->FillListCtrl();
 					}
 				}
 			}
 			else
 			{
-				map<CString, HubbleDocTemplateInfo*>*	m_pMapHubbleFormsTemplateInfo = &g_pHubble->m_mapHubbleFormsTemplateInfo;
-				map<int, HubbleDocTemplateInfo*>*		m_pMapHubbleFormsTemplateInfo2 = &g_pHubble->m_mapHubbleFormsTemplateInfo2;
+				map<CString, CosmosDocTemplateInfo*>*	m_pMapCosmosFormsTemplateInfo = &g_pCosmos->m_mapCosmosFormsTemplateInfo;
+				map<int, CosmosDocTemplateInfo*>*		m_pMapCosmosFormsTemplateInfo2 = &g_pCosmos->m_mapCosmosFormsTemplateInfo2;
 				CWinForm* pWnd = nullptr;
-				if (m_pHubbleTabCtrl)
+				if (m_pCosmosTabCtrl)
 				{
-					HWND hWnd = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+					HWND hWnd = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 					if (hWnd)
 					{
 						pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 						if (pWnd)
 						{
-							//m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
-							//m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
+							//m_pMapCosmosFormsTemplateInfo = &pWnd->m_mapCosmosFormsTemplateInfo;
+							//m_pMapCosmosFormsTemplateInfo2 = &pWnd->m_mapCosmosFormsTemplateInfo2;
 						}
 					}
 				}
 				CString strText = GetListCtrl().GetItemText(nItem, 0);
-				auto it2 = m_pMapHubbleFormsTemplateInfo2->find(nItem);
-				if (it2 != m_pMapHubbleFormsTemplateInfo2->end())
+				auto it2 = m_pMapCosmosFormsTemplateInfo2->find(nItem);
+				if (it2 != m_pMapCosmosFormsTemplateInfo2->end())
 				{
-					CString strDir = g_pHubble->m_strAppFormsTemplatePath;
+					CString strDir = g_pCosmos->m_strAppFormsTemplatePath;
 					if (pWnd)
 					{
 						strDir = pWnd->m_strChildFormPath;
 					}
 
-					if (m_nActiveIndex != nItem || m_pHubbleTabCtrl->m_ListCtrl.m_strDir != strDir)
+					if (m_nActiveIndex != nItem || m_pCosmosTabCtrl->m_ListCtrl.m_strDir != strDir)
 					{
-						m_pHubbleTabCtrl->m_ListCtrl.m_nListViewSelectedIndex = nItem;
-						m_pHubbleTabCtrl->DeleteAllItems();
-						m_pHubbleTabCtrl->m_strFilter = it2->second->m_strFilter;
-						m_pHubbleTabCtrl->m_nImageIndex = it2->second->m_nImageIndex;
+						m_pCosmosTabCtrl->m_ListCtrl.m_nListViewSelectedIndex = nItem;
+						m_pCosmosTabCtrl->DeleteAllItems();
+						m_pCosmosTabCtrl->m_strFilter = it2->second->m_strFilter;
+						m_pCosmosTabCtrl->m_nImageIndex = it2->second->m_nImageIndex;
 						TCITEM tcItem;
 						tcItem.mask = TCIF_TEXT;
 						int nIndex = 0;
-						m_pHubbleTabCtrl->m_ListCtrl.m_strDir = strDir + strText + _T("\\");
-						CString m_strDocTemplatePath = m_pHubbleTabCtrl->m_ListCtrl.m_strDir;
+						m_pCosmosTabCtrl->m_ListCtrl.m_strDir = strDir + strText + _T("\\");
+						CString m_strDocTemplatePath = m_pCosmosTabCtrl->m_ListCtrl.m_strDir;
 						CString strKey = it2->second->m_strDocTemplateKey;
 						CString strCaption = _T("");
-						CGrid* pGrid = m_pHubbleTabCtrl->m_pGrid;
+						CGrid* pGrid = m_pCosmosTabCtrl->m_pGrid;
 						if (pGrid)
 						{
 							strCaption = _T("Current Selected Document Template: ");
@@ -509,7 +509,7 @@ void CTangramListView::ChangeTemplate(int nItem)
 						}
 						strCaption = _T("Create New Tangram Document");
 						tcItem.mask = TCIF_TEXT;
-						//m_pHubbleTabCtrl->m_ListCtrl.m_strDir = it2->second->m_strTemplatePath;
+						//m_pCosmosTabCtrl->m_ListCtrl.m_strDir = it2->second->m_strTemplatePath;
 						if (::PathIsDirectory(m_strDocTemplatePath) == false)
 						{
 							if (::SHCreateDirectoryEx(NULL, m_strDocTemplatePath, NULL))
@@ -548,7 +548,7 @@ void CTangramListView::ChangeTemplate(int nItem)
 									if (str != _T(".."))
 									{
 										tcItem.pszText = LPWSTR(LPCWSTR(str));
-										CString strDocTemplatePath = m_pHubbleTabCtrl->m_ListCtrl.m_strDir + str + _T("\\") + it2->second->m_strFilter;
+										CString strDocTemplatePath = m_pCosmosTabCtrl->m_ListCtrl.m_strDir + str + _T("\\") + it2->second->m_strFilter;
 
 										_wfinddata_t fd;
 										fd.attrib = FILE_ATTRIBUTE_DIRECTORY;
@@ -572,25 +572,25 @@ void CTangramListView::ChangeTemplate(int nItem)
 										}
 
 										if (nItem)
-											m_pHubbleTabCtrl->InsertItem(nIndex, &tcItem);
+											m_pCosmosTabCtrl->InsertItem(nIndex, &tcItem);
 										nIndex++;
 									}
 								}
 							}
 							_findclose(pf);
 							m_nActiveIndex = nItem;
-							m_pHubbleTabCtrl->m_pHubbleListView = this;
-							m_pHubbleTabCtrl->FillListCtrl();
+							m_pCosmosTabCtrl->m_pCosmosListView = this;
+							m_pCosmosTabCtrl->FillListCtrl();
 						}
 					}
 				}
 			}
-			m_pHubbleTabCtrl->RePosition();
+			m_pCosmosTabCtrl->RePosition();
 		}
 		break;
 	case 1:
 		{
-			if (g_pHubble->m_nAppID != 9)
+			if (g_pCosmos->m_nAppID != 9)
 			{
 				break;
 			}
@@ -601,7 +601,7 @@ void CTangramListView::ChangeTemplate(int nItem)
 
 BOOL CTangramListView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveGrid;
+	m_pGrid = g_pCosmos->m_pActiveGrid;
 	m_pGrid->m_pHostWnd = this;
 	m_pGrid->m_nViewType = TangramListView;
 	m_pGrid->m_nID = nID;
@@ -609,12 +609,12 @@ BOOL CTangramListView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 	BOOL bRet = CListView::Create(lpszClassName, lpszWindowName, dwStyle| LVS_ICON| LVS_AUTOARRANGE| LVS_SINGLESEL| LVS_SHAREIMAGELISTS| LVS_SHOWSELALWAYS, rect, pParentWnd, nID, pContext);
 	if (::FindResource(NULL, _T("TANGRAMBK.PNG"), _T("IMAGES")) == nullptr)
 	{
-		::GetModuleFileName(theApp.m_hInstance, g_pHubble->m_szBuffer, MAX_PATH);
-		CString strPath = g_pHubble->m_szBuffer;
+		::GetModuleFileName(theApp.m_hInstance, g_pCosmos->m_szBuffer, MAX_PATH);
+		CString strPath = g_pCosmos->m_szBuffer;
 		int nPos = strPath.ReverseFind('\\');
-		strPath = strPath.Left(nPos + 1) + _T("HubbleInit.dll");
-		//CString strPath = g_pHubble->m_strProgramFilePath;
-		//strPath += _T("\\tangram\\HubbleInit.dll");
+		strPath = strPath.Left(nPos + 1) + _T("CosmosInit.dll");
+		//CString strPath = g_pCosmos->m_strProgramFilePath;
+		//strPath += _T("\\tangram\\CosmosInit.dll");
 		if (::PathFileExists(strPath))
 		{
 			strURL = _T("res://");
@@ -624,8 +624,8 @@ BOOL CTangramListView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 	}
 	else
 	{
-		::GetModuleFileName(NULL, g_pHubble->m_szBuffer, MAX_PATH);
-		strURL = _T("res://") + CString(g_pHubble->m_szBuffer) + _T("/images/tangrambk.png");
+		::GetModuleFileName(NULL, g_pCosmos->m_szBuffer, MAX_PATH);
+		strURL = _T("res://") + CString(g_pCosmos->m_szBuffer) + _T("/images/tangrambk.png");
 	}
 	SendMessage(WM_INITIALUPDATE);
 	if(strURL!=_T(""))
@@ -654,14 +654,14 @@ BOOL CTangramListView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 
 int CTangramListView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	if (g_pHubble->m_pUniverseAppProxy)
+	if (g_pCosmos->m_pUniverseAppProxy)
 	{
-		HWND hMenuWnd = g_pHubble->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pHubble->m_pActiveGrid = m_pGrid;
-	g_pHubble->m_bWinFormActived = false;
+	g_pCosmos->m_pActiveGrid = m_pGrid;
+	g_pCosmos->m_bWinFormActived = false;
 	return MA_ACTIVATE;
 }
 
@@ -677,25 +677,25 @@ void CTangramListView::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 
 LRESULT CTangramListView::OnActiveTangramPage(WPARAM wParam, LPARAM lParam)
 {
-	if (m_pHubbleTabCtrl)
+	if (m_pCosmosTabCtrl)
 	{
 		int nCount = GetListCtrl().GetSelectedCount();
 		POSITION nPos = GetListCtrl().GetFirstSelectedItemPosition();
 		int nIndex = GetListCtrl().GetNextSelectedItem(nPos);
 		GetListCtrl().SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
-		m_pHubbleTabCtrl->m_ListCtrl.m_nListViewIndex = wParam;
+		m_pCosmosTabCtrl->m_ListCtrl.m_nListViewIndex = wParam;
 		switch (wParam)
 		{
 		case 0:
 			{
 				int width = 320, heigh = 90, clines = 3;
 				CComBSTR bstrVal("");
-				m_pHubbleTabCtrl->m_pGrid->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
+				m_pCosmosTabCtrl->m_pGrid->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
 				if (!CString(bstrVal).IsEmpty())
 				{
 					_stscanf_s(CString(bstrVal), _T("SizeandcLines(%d,%d,%d)"), &width, &heigh, &clines);
 				}
-				m_pHubbleTabCtrl->m_ListCtrl.SetImageList(&g_pHubble->m_DocTemplateImageList, LVSIL_NORMAL);
+				m_pCosmosTabCtrl->m_ListCtrl.SetImageList(&g_pCosmos->m_DocTemplateImageList, LVSIL_NORMAL);
 				SIZE size = { width, heigh };
 				LVTILEVIEWINFO tileViewInfo = { 0 };
 
@@ -705,10 +705,10 @@ LRESULT CTangramListView::OnActiveTangramPage(WPARAM wParam, LPARAM lParam)
 				tileViewInfo.cLines = clines;
 				tileViewInfo.sizeTile = size;
 
-				ListView_SetTileViewInfo(m_pHubbleTabCtrl->m_ListCtrl.m_hWnd, &tileViewInfo);
-				ListView_SetView(m_pHubbleTabCtrl->m_ListCtrl.m_hWnd, LV_VIEW_TILE);
-				auto it = g_pHubble->m_mapHubbleDocTemplateInfo.find(nIndex);
-				if (it != g_pHubble->m_mapHubbleDocTemplateInfo.end())
+				ListView_SetTileViewInfo(m_pCosmosTabCtrl->m_ListCtrl.m_hWnd, &tileViewInfo);
+				ListView_SetView(m_pCosmosTabCtrl->m_ListCtrl.m_hWnd, LV_VIEW_TILE);
+				auto it = g_pCosmos->m_mapCosmosDocTemplateInfo.find(nIndex);
+				if (it != g_pCosmos->m_mapCosmosDocTemplateInfo.end())
 				{
 					ChangeTemplate(nIndex);
 				}
@@ -716,7 +716,7 @@ LRESULT CTangramListView::OnActiveTangramPage(WPARAM wParam, LPARAM lParam)
 			break;
 		case 1:
 			{
-				if (g_pHubble->m_nAppID != 9)
+				if (g_pCosmos->m_nAppID != 9)
 				{
 					break;
 				}

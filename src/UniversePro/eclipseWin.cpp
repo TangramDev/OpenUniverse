@@ -33,7 +33,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "eclipseOS.h"
 #include "eclipseUtil.h"
 #include "eclipseCommon.h"

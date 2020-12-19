@@ -12,7 +12,7 @@
 ********************************************************************************/
 
 #include "../stdafx.h"
-#include "../Hubble.h"
+#include "../Cosmos.h"
 #include "../UniverseApp.h"
 #include "../grid.h"
 #include "../Wormhole.h"
@@ -38,8 +38,8 @@ namespace Browser {
 		m_pGalaxyCluster = nullptr;
 		m_pGalaxy = nullptr;
 		m_hWebHostWnd = m_hExtendWnd = m_hChildWnd = NULL;
-		m_pChromeRenderFrameHost = g_pHubble->m_pCreatingChromeRenderFrameHostBase;
-		g_pHubble->m_pCreatingChromeRenderFrameHostBase = nullptr;
+		m_pChromeRenderFrameHost = g_pCosmos->m_pCreatingChromeRenderFrameHostBase;
+		g_pCosmos->m_pCreatingChromeRenderFrameHostBase = nullptr;
 	}
 
 	CWebPage::~CWebPage() {
@@ -48,29 +48,29 @@ namespace Browser {
 	LRESULT CWebPage::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
 		CBrowser* pParent = nullptr;
-		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-		if (it != g_pHubble->m_mapBrowserWnd.end())
+		auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+		if (it != g_pCosmos->m_mapBrowserWnd.end())
 		{
 			pParent = (CBrowser*)it->second;
 		}
 		HWND hPWnd = ::GetParent(pParent->m_hWnd);
 		if (hPWnd != NULL)
 		{
-			g_pHubble->m_pActiveHtmlWnd = this;
-			g_pHubble->m_pGalaxy = nullptr;
-			g_pHubble->m_bWinFormActived = false;
-			g_pHubble->m_hActiveWnd = nullptr;
+			g_pCosmos->m_pActiveHtmlWnd = this;
+			g_pCosmos->m_pGalaxy = nullptr;
+			g_pCosmos->m_bWinFormActived = false;
+			g_pCosmos->m_hActiveWnd = nullptr;
 			LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 20190331, 1);
 			m_pChromeRenderFrameHost->ShowWebPage(true);
 			return lRes;
 		}
 		else
-			g_pHubble->m_pActiveHtmlWnd = nullptr;
+			g_pCosmos->m_pActiveHtmlWnd = nullptr;
 		return DefWindowProc(uMsg, wParam, lParam);
 	}
 
-	LRESULT CWebPage::OnHubbleMsg(UINT uMsg,
+	LRESULT CWebPage::OnCosmosMsg(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
@@ -103,10 +103,10 @@ namespace Browser {
 		case 20200310:
 		{
 			CGrid* pGrid = (CGrid*)lParam;
-			if (pGrid && pGrid->m_pHubbleCloudSession == nullptr)
+			if (pGrid && pGrid->m_pCosmosCloudSession == nullptr)
 			{
-				pGrid->m_pHubbleCloudSession = (CWormhole*)((CHubbleImpl*)g_pHubble)->CreateCloudSession(this);
-				CWormhole* pSession = pGrid->m_pHubbleCloudSession;
+				pGrid->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+				CWormhole* pSession = pGrid->m_pCosmosCloudSession;
 				if (pSession)
 				{
 					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
@@ -117,9 +117,9 @@ namespace Browser {
 					pSession->InsertLong(_T("row"), pGrid->m_nRow);
 					pSession->InsertLong(_T("col"), pGrid->m_nCol);
 					pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
-					if (pGrid->m_strHubbleXml != _T(""))
+					if (pGrid->m_strCosmosXml != _T(""))
 					{
-						pSession->InsertString(_T("hubblexml"), pGrid->m_strHubbleXml);
+						pSession->InsertString(_T("cosmosxml"), pGrid->m_strCosmosXml);
 					}
 					pSession->InsertString(_T("gridxml"), pGrid->m_pHostParse->xml());
 					pSession->InsertString(_T("name@page"), pGrid->m_strName);
@@ -129,7 +129,7 @@ namespace Browser {
 					pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
 					pSession->InsertString(_T("cluster"), pGrid->m_pRootObj->m_strKey);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
+					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pCosmosCloudSession);
 					if (pGrid->m_pGridShareData->m_pHostClientView)
 						pSession->Insertint64(_T("nucleushandle"), (__int64)pGrid->m_pGridShareData->m_pHostClientView->m_hWnd);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
@@ -173,23 +173,23 @@ namespace Browser {
 					}
 					if (pGrid->m_pDisp)
 					{
-						pGrid->m_pHubbleCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
-						if (g_pHubble->m_pCLRProxy)
+						pGrid->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
+						if (g_pCosmos->m_pCLRProxy)
 						{
-							g_pHubble->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
+							g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
 						}
 					}
-					m_pChromeRenderFrameHost->SendHubbleMessage(pSession->m_pSession);
+					m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
 				}
 			}
 		}
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession)
+			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid->m_pCosmosCloudSession)
 			{
-				m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
-				m_pGalaxy->m_pWorkGrid->m_pHubbleCloudSession->SendMessage();
+				m_pGalaxy->m_pWorkGrid->m_pCosmosCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
+				m_pGalaxy->m_pWorkGrid->m_pCosmosCloudSession->SendMessage();
 			}
 		}
 		break;
@@ -207,8 +207,8 @@ namespace Browser {
 			IPCMsg* pMsg = (IPCMsg*)lParam;
 			if (pMsg && m_pChromeRenderFrameHost)
 			{
-				m_pChromeRenderFrameHost->SendHubbleMessage(pMsg);
-				g_pHubble->m_pCurrentIPCMsg = nullptr;
+				m_pChromeRenderFrameHost->SendCosmosMessage(pMsg);
+				g_pCosmos->m_pCurrentIPCMsg = nullptr;
 			}
 		}
 		break;
@@ -234,10 +234,10 @@ namespace Browser {
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
-		if (g_pHubble->m_bChromeNeedClosed == false && lParam) {
+		if (g_pCosmos->m_bChromeNeedClosed == false && lParam) {
 			HWND hNewPWnd = (HWND)lParam;
-			::GetClassName(hNewPWnd, g_pHubble->m_szBuffer, 256);
-			CString strName = CString(g_pHubble->m_szBuffer);
+			::GetClassName(hNewPWnd, g_pCosmos->m_szBuffer, 256);
+			CString strName = CString(g_pCosmos->m_szBuffer);
 			if (strName.Find(_T("Chrome_WidgetWin_"))==0)
 			{
 				if (m_hExtendWnd)
@@ -253,14 +253,14 @@ namespace Browser {
 					bNewParent = true;
 				}
 				CBrowser* pBrowserWnd = nullptr;
-				auto it = g_pHubble->m_mapBrowserWnd.find(hNewPWnd);
-				if (it == g_pHubble->m_mapBrowserWnd.end())
+				auto it = g_pCosmos->m_mapBrowserWnd.find(hNewPWnd);
+				if (it == g_pCosmos->m_mapBrowserWnd.end())
 				{
 					if (::IsWindowVisible(hNewPWnd)) {
 						pBrowserWnd = new CComObject<CBrowser>();
 						pBrowserWnd->SubclassWindow(hNewPWnd);
-						g_pHubble->m_mapBrowserWnd[hNewPWnd] = pBrowserWnd;
-						pBrowserWnd->m_pBrowser = g_pHubble->m_pActiveBrowser;
+						g_pCosmos->m_mapBrowserWnd[hNewPWnd] = pBrowserWnd;
+						pBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
 						if (pBrowserWnd->m_pBrowser)
 							pBrowserWnd->m_pBrowser->m_pProxy = pBrowserWnd;
 						if (pBrowserWnd && m_hExtendWnd) {
@@ -291,17 +291,17 @@ namespace Browser {
 					bNewParent = true;
 				}
 				CBrowser* pChromeBrowserWnd = nullptr;
-				auto it = g_pHubble->m_mapBrowserWnd.find(hNewPWnd);
-				if (it != g_pHubble->m_mapBrowserWnd.end())
+				auto it = g_pCosmos->m_mapBrowserWnd.find(hNewPWnd);
+				if (it != g_pCosmos->m_mapBrowserWnd.end())
 				{
 					pChromeBrowserWnd = (CBrowser*)it->second;
-					g_pHubble->m_pActiveBrowser = pChromeBrowserWnd->m_pBrowser;
+					g_pCosmos->m_pActiveBrowser = pChromeBrowserWnd->m_pBrowser;
 					if (pChromeBrowserWnd && m_hExtendWnd) {
 						if (::IsWindowVisible(m_hWnd)) {
 							pChromeBrowserWnd->m_pVisibleWebWnd = this;
 							if (bNewParent)
 							{
-								g_pHubble->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
+								g_pCosmos->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
 								pChromeBrowserWnd->BrowserLayout();
 								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
 							}
@@ -321,8 +321,8 @@ namespace Browser {
 					if (::IsWindowVisible(hNewPWnd)) {
 						pChromeBrowserWnd = new CComObject<CBrowser>();
 						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
-						g_pHubble->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
-						pChromeBrowserWnd->m_pBrowser = g_pHubble->m_pActiveBrowser;
+						g_pCosmos->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
+						pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
 						pChromeBrowserWnd->m_pBrowser->m_pProxy = pChromeBrowserWnd;
 						if (pChromeBrowserWnd && m_hExtendWnd) {
 							::SetParent(m_hExtendWnd, hNewPWnd);
@@ -355,8 +355,8 @@ namespace Browser {
 		{
 			::DestroyWindow(it.second->m_hWnd);
 		}
-		if (g_pHubble->m_pCLRProxy)
-			g_pHubble->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CWebPageImpl*)this, (IWebPage*)this, 1);
+		if (g_pCosmos->m_pCLRProxy)
+			g_pCosmos->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CWebPageImpl*)this, (IWebPage*)this, 1);
 
 		m_hExtendWnd = nullptr;
 
@@ -378,15 +378,15 @@ namespace Browser {
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
-		if (g_pHubble->m_bChromeNeedClosed == false && ::IsWindow(m_hExtendWnd))
+		if (g_pCosmos->m_bChromeNeedClosed == false && ::IsWindow(m_hExtendWnd))
 		{
 			if (wParam) {
 				CBrowser* pBrowserWnd = nullptr;
 				HWND hPWnd = ::GetParent(m_hWnd);
 				if (!m_bDevToolWnd)
 				{
-					auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
-					if (it != g_pHubble->m_mapBrowserWnd.end()) {
+					auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
+					if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 						pBrowserWnd = (CBrowser*)it->second;
 						pBrowserWnd->m_pVisibleWebWnd = this;
 					}
@@ -411,20 +411,20 @@ namespace Browser {
 
 	void CWebPage::OnFinalMessage(HWND hWnd) {
 		CBrowser* pPWnd = nullptr;
-		auto it2 = g_pHubble->m_mapBrowserWnd.find(::GetParent(hWnd));
-		if (it2 != g_pHubble->m_mapBrowserWnd.end())
+		auto it2 = g_pCosmos->m_mapBrowserWnd.find(::GetParent(hWnd));
+		if (it2 != g_pCosmos->m_mapBrowserWnd.end())
 		{
 			pPWnd = (CBrowser*)it2->second;
 			if (pPWnd->m_pVisibleWebWnd == this)
 				pPWnd->m_pVisibleWebWnd = nullptr;
 		}
-		auto it = g_pHubble->m_mapHtmlWnd.find(hWnd);
-		if (it != g_pHubble->m_mapHtmlWnd.end())
+		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+		if (it != g_pCosmos->m_mapHtmlWnd.end())
 		{
-			g_pHubble->m_mapHtmlWnd.erase(it);
+			g_pCosmos->m_mapHtmlWnd.erase(it);
 		}
-		if (g_pHubble->m_pActiveHtmlWnd == this)
-			g_pHubble->m_pActiveHtmlWnd = nullptr;
+		if (g_pCosmos->m_pActiveHtmlWnd == this)
+			g_pCosmos->m_pActiveHtmlWnd = nullptr;
 		CWindowImpl::OnFinalMessage(hWnd);
 		delete this;
 	}
@@ -440,9 +440,9 @@ namespace Browser {
 			pIPCInfo.m_strParam3 = strParam3;
 			pIPCInfo.m_strParam4 = strParam4;
 			pIPCInfo.m_strParam5 = strParam5;
-			m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
+			m_pChromeRenderFrameHost->SendCosmosMessage(&pIPCInfo);
 		}
-		g_pHubble->m_pCurrentIPCMsg = nullptr;
+		g_pCosmos->m_pCurrentIPCMsg = nullptr;
 	}
 
 	LRESULT CWebPage::OnChromeIPCMsgReceived(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -464,18 +464,18 @@ namespace Browser {
 			if (pIPCInfo->m_strId.CompareNoCase(_T("TANGRAM_CTRL_VALUE_MESSAGE")) == 0)
 			{
 				HWND hCtrl = (HWND)pIPCInfo->m_nHandleFrom;
-				if (g_pHubble->m_pCLRProxy)
+				if (g_pCosmos->m_pCLRProxy)
 				{
-					IDispatch* pCtrl = g_pHubble->m_pCLRProxy->GetCtrlFromHandle(hCtrl);
+					IDispatch* pCtrl = g_pCosmos->m_pCLRProxy->GetCtrlFromHandle(hCtrl);
 					if (pCtrl)
-						g_pHubble->m_pCLRProxy->SetCtrlValueByName(pCtrl, CComBSTR(""), true, CComBSTR(strParam4));
+						g_pCosmos->m_pCLRProxy->SetCtrlValueByName(pCtrl, CComBSTR(""), true, CComBSTR(strParam4));
 				}
 			}
 			else
 			{
 				HandleChromeIPCMessage(strId, strParam1, strParam2, strParam3, strParam4, strParam5);
 			}
-			g_pHubble->m_pCurrentIPCMsg = nullptr;
+			g_pCosmos->m_pCurrentIPCMsg = nullptr;
 		}
 
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
@@ -490,14 +490,14 @@ namespace Browser {
 	void CWebPage::LoadDocument2Viewport(CString strName, CString strXML)
 	{
 		HWND hPPWnd = ::GetParent(::GetParent(m_hWnd));
-		if (m_pRemoteHubble)
+		if (m_pRemoteCosmos)
 		{
 			CString strInfo = _T("");
 			strInfo.Format(_T("loaddocument2viewport:%I64d"), hPPWnd);
 			CString strData = strName;
 			strData += _T("|");
 			strData += strXML;
-			m_pRemoteHubble->put_AppKeyValue(CComBSTR(strInfo), CComVariant(strData));
+			m_pRemoteCosmos->put_AppKeyValue(CComBSTR(strInfo), CComVariant(strData));
 		}
 		if (m_hExtendWnd == nullptr)
 		{
@@ -517,14 +517,14 @@ namespace Browser {
 		{
 			if (m_pGalaxy == nullptr) {
 				CGalaxyCluster* pGalaxyCluster = nullptr;
-				auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
-				if (it != g_pHubble->m_mapWindowPage.end())
+				auto it = g_pCosmos->m_mapWindowPage.find(m_hExtendWnd);
+				if (it != g_pCosmos->m_mapWindowPage.end())
 					pGalaxyCluster = (CGalaxyCluster*)it->second;
 				else
 				{
 					pGalaxyCluster = new CComObject<CGalaxyCluster>();
 					pGalaxyCluster->m_hWnd = m_hExtendWnd;
-					g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
+					g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 				}
 				if (pGalaxyCluster) {
 					IGalaxy* pGalaxy = nullptr;
@@ -552,8 +552,8 @@ namespace Browser {
 			}
 		}
 		CBrowser* pBrowserWnd = nullptr;
-		auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-		if (it != g_pHubble->m_mapBrowserWnd.end())
+		auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+		if (it != g_pCosmos->m_mapBrowserWnd.end())
 		{
 			pBrowserWnd = (CBrowser*)it->second;
 			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
@@ -587,14 +587,14 @@ namespace Browser {
 	//	{
 	//		if (m_pGalaxy == nullptr) {
 	//			CGalaxyCluster* pGalaxyCluster = nullptr;
-	//			auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
-	//			if (it != g_pHubble->m_mapWindowPage.end())
+	//			auto it = g_pCosmos->m_mapWindowPage.find(m_hExtendWnd);
+	//			if (it != g_pCosmos->m_mapWindowPage.end())
 	//				pGalaxyCluster = (CGalaxyCluster*)it->second;
 	//			else
 	//			{
 	//				pGalaxyCluster = new CComObject<CGalaxyCluster>();
 	//				pGalaxyCluster->m_hWnd = m_hExtendWnd;
-	//				g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
+	//				g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 	//			}
 	//			if (pGalaxyCluster) {
 	//				IGalaxy* pGalaxy = nullptr;
@@ -622,8 +622,8 @@ namespace Browser {
 	//		}
 	//	}
 	//	CBrowser* pBrowserWnd = nullptr;
-	//	auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-	//	if (it != g_pHubble->m_mapBrowserWnd.end())
+	//	auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+	//	if (it != g_pCosmos->m_mapBrowserWnd.end())
 	//	{
 	//		pBrowserWnd = (CBrowser*)it->second;
 	//		if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
@@ -641,8 +641,8 @@ namespace Browser {
 		if (strId.CompareNoCase(_T("__Browser_Layout__")) == 0)
 		{
 			CBrowser* pBrowserWnd = nullptr;
-			auto it = g_pHubble->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-			if (it != g_pHubble->m_mapBrowserWnd.end())
+			auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
 				pBrowserWnd = (CBrowser*)it->second;
 				if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
@@ -665,13 +665,13 @@ namespace Browser {
 			{
 				CustomizedDocElement(m_strDocXml);
 			}
-			if (g_pHubble->m_pHostHtmlWnd == nullptr && g_pHubble->m_strAppXml != _T(""))
+			if (g_pCosmos->m_pHostHtmlWnd == nullptr && g_pCosmos->m_strAppXml != _T(""))
 			{
-				g_pHubble->m_pHostHtmlWnd = this;
-				g_pHubble->HubbleInitFromeWeb();
-				if (g_pHubble->m_strMainWndXml != _T(""))
+				g_pCosmos->m_pHostHtmlWnd = this;
+				g_pCosmos->CosmosInitFromeWeb();
+				if (g_pCosmos->m_strMainWndXml != _T(""))
 				{
-					CustomizedMainWindowElement(g_pHubble->m_strMainWndXml);
+					CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
 				}
 				auto t = create_task([this]()
 					{
@@ -716,8 +716,8 @@ namespace Browser {
 		}
 		else
 		{
-			if (g_pHubble->m_pHubbleDelegate)
-				g_pHubble->m_pHubbleDelegate->IPCMsg(m_hWnd, strId, strParam1, strParam2); // TODO: Missing parameters
+			if (g_pCosmos->m_pCosmosDelegate)
+				g_pCosmos->m_pCosmosDelegate->IPCMsg(m_hWnd, strId, strParam1, strParam2); // TODO: Missing parameters
 		}
 	}
 
@@ -773,15 +773,15 @@ namespace Browser {
 	{
 		if (strRuleName.CompareNoCase(_T("application")) == 0)
 		{
-			if (g_pHubble->m_strAppXml == _T(""))
+			if (g_pCosmos->m_strAppXml == _T(""))
 			{
-				g_pHubble->m_strAppXml = strHTML;
+				g_pCosmos->m_strAppXml = strHTML;
 			}
 		}
 		else if (strRuleName.CompareNoCase(_T("mainWindow")) == 0)
 		{
-			if (g_pHubble->m_strMainWndXml == _T(""))
-				g_pHubble->m_strMainWndXml = strHTML;
+			if (g_pCosmos->m_strMainWndXml == _T(""))
+				g_pCosmos->m_strMainWndXml = strHTML;
 		}
 		else if (strRuleName.CompareNoCase(_T("webBrowser")) == 0)
 		{
@@ -813,7 +813,7 @@ namespace Browser {
 		}
 		else
 		{
-			g_pHubble->m_pHubbleDelegate->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
+			g_pCosmos->m_pCosmosDelegate->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
 		}
 	}
 
@@ -822,17 +822,17 @@ namespace Browser {
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
 		{
-			if (g_pHubble->m_pCLRProxy == nullptr)
-				g_pHubble->LoadCLR();
-			if (g_pHubble->m_pCLRProxy)
+			if (g_pCosmos->m_pCLRProxy == nullptr)
+				g_pCosmos->LoadCLR();
+			if (g_pCosmos->m_pCLRProxy)
 			{
 				IWebPage* pChromeWebPage = (IWebPage*)this;
 				xmlParse.put_attr(_T("webpage"), (__int64)pChromeWebPage);
 				xmlParse.put_attr(_T("webpagehandle"), (__int64)m_hWnd);
 				CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
 				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
-				xmlParse.put_attr(_T("IsMainHubbleWnd"), (__int64)1);
-				IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
+				xmlParse.put_attr(_T("IsMainCosmosWnd"), (__int64)1);
+				IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 			}
 		}
 	}
@@ -842,16 +842,16 @@ namespace Browser {
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
 		{
-			if (g_pHubble->m_pCLRProxy == nullptr)
-				g_pHubble->LoadCLR();
-			if (g_pHubble->m_pCLRProxy)
+			if (g_pCosmos->m_pCLRProxy == nullptr)
+				g_pCosmos->LoadCLR();
+			if (g_pCosmos->m_pCLRProxy)
 			{
 				CWebPageImpl* pProxyBase = (CWebPageImpl*)this;
 				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pProxyBase);
 				IWebPage* pChromeWebPage = (IWebPage*)this;
 				xmlParse.put_attr(_T("webpage"), (__int64)pChromeWebPage);
 				xmlParse.put_attr(_T("webpagehandle"), (__int64)m_hWnd);
-				IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
+				IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 			}
 		}
 	}
@@ -874,7 +874,7 @@ namespace Browser {
 						CString strURLHeader = strUrl.Left(nPos2);
 						if (strURLHeader.CompareNoCase(_T("host")) == 0)
 						{
-							strUrl = g_pHubble->m_strAppPath + strUrl.Mid(nPos2 + 1);
+							strUrl = g_pCosmos->m_strAppPath + strUrl.Mid(nPos2 + 1);
 						}
 					}
 					strUrls = strUrls + strUrl + _T("|");
@@ -885,7 +885,7 @@ namespace Browser {
 				strUrls = "chrome://newtab|";
 			}
 
-			g_pHubble->m_pBrowserFactory->CreateBrowser(NULL, strUrls);
+			g_pCosmos->m_pBrowserFactory->CreateBrowser(NULL, strUrls);
 		}
 	}
 
@@ -928,15 +928,15 @@ namespace Browser {
 				if (strStartup != _T(""))
 				{
 					CString strID = strStartup.MakeLower();
-					if (g_pHubble->m_pCLRProxy == nullptr)
-						g_pHubble->LoadCLR();
-					if (g_pHubble->m_pCLRProxy)
+					if (g_pCosmos->m_pCLRProxy == nullptr)
+						g_pCosmos->LoadCLR();
+					if (g_pCosmos->m_pCLRProxy)
 					{
 						auto it = m_mapFormsInfo.find(strID);
 						if (it != m_mapFormsInfo.end())
 						{
-							IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(it->second);
-							HWND hwnd = g_pHubble->m_pCLRProxy->GetCtrlHandle(pDisp);
+							IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(it->second);
+							HWND hwnd = g_pCosmos->m_pCLRProxy->GetCtrlHandle(pDisp);
 							if (hwnd)
 							{
 								CWinForm* pForm = (CWinForm*)::SendMessage(hwnd, WM_HUBBLE_DATA, 0, 20190214);
@@ -962,12 +962,12 @@ namespace Browser {
 						CString strURLHeader = strUrl.Left(nPos2);
 						if (strURLHeader.CompareNoCase(_T("host")) == 0)
 						{
-							strUrl = g_pHubble->m_strAppPath + strUrl.Mid(nPos2 + 1);
+							strUrl = g_pCosmos->m_strAppPath + strUrl.Mid(nPos2 + 1);
 						}
 					}
 					strUrls = strUrls + strUrl + _T("|");
 				}
-				g_pHubble->m_pBrowserFactory->CreateBrowser(NULL, strUrls);
+				g_pCosmos->m_pBrowserFactory->CreateBrowser(NULL, strUrls);
 			}
 		}
 	}
@@ -980,7 +980,7 @@ namespace Browser {
 			CString strTarget = rootXML.GetAttrib(_T("target"));
 			if (strTarget.CompareNoCase(_T("ntp")) == 0)
 			{
-				g_pHubble->m_strNtpXml = strHTML;
+				g_pCosmos->m_strNtpXml = strHTML;
 			}
 		}
 	}
@@ -991,7 +991,7 @@ namespace Browser {
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
 		{
 			CString strKey = rootXML.GetAttrib(_T("key"));
-			g_pHubble->m_mapValInfo[strKey] = CComVariant(strHTML);
+			g_pCosmos->m_mapValInfo[strKey] = CComVariant(strHTML);
 		}
 	}
 
@@ -1012,9 +1012,9 @@ namespace Browser {
 
 	void CWebPage::OnNTPLoaded()
 	{
-		if (g_pHubble->m_strNtpXml != _T(""))
+		if (g_pCosmos->m_strNtpXml != _T(""))
 		{
-			LoadDocument2Viewport(_T("__NTP_DEFAULT__"), g_pHubble->m_strNtpXml);
+			LoadDocument2Viewport(_T("__NTP_DEFAULT__"), g_pCosmos->m_strNtpXml);
 		}
 	}
 
@@ -1026,13 +1026,13 @@ namespace Browser {
 			if (l == 0)
 			{
 				CWinForm* pWnd = new CWinForm();
-				g_pHubble->m_hFormNodeWnd = NULL;
-				g_pHubble->m_hFormNodeWnd = (HWND)hwnd;
+				g_pCosmos->m_hFormNodeWnd = NULL;
+				g_pCosmos->m_hFormNodeWnd = (HWND)hwnd;
 				pWnd->SubclassWindow(hwnd);
 				pWnd->m_pOwnerHtmlWnd = this;
-				g_pHubble->m_mapFormWebPage[hwnd] = this;
+				g_pCosmos->m_mapFormWebPage[hwnd] = this;
 				m_mapWinForm[hwnd] = pWnd;
-				::PostMessage(g_pHubble->m_hFormNodeWnd, WM_WINFORMCREATED, 0, 0);
+				::PostMessage(g_pCosmos->m_hFormNodeWnd, WM_WINFORMCREATED, 0, 0);
 			}
 		}
 	}
@@ -1043,8 +1043,8 @@ namespace Browser {
 		IGrid* pGrid = (IGrid*)pSession->Getint64(_T("gridobj"));
 		if (pGrid)
 		{
-			if(((CGrid*)pGrid)->m_pHubbleCloudSession==nullptr) 
-				((CGrid*)pGrid)->m_pHubbleCloudSession = (CWormhole*)pSession;
+			if(((CGrid*)pGrid)->m_pCosmosCloudSession==nullptr) 
+				((CGrid*)pGrid)->m_pCosmosCloudSession = (CWormhole*)pSession;
 		}
 		if (strMsgID == _T("CREATE_WINFORM"))
 		{
@@ -1055,9 +1055,9 @@ namespace Browser {
 			CTangramXmlParse xmlParse;
 			if (xmlParse.LoadXml(strFormXml))
 			{
-				if (g_pHubble->m_pCLRProxy == nullptr)
-					g_pHubble->LoadCLR();
-				if (g_pHubble->m_pCLRProxy)
+				if (g_pCosmos->m_pCLRProxy == nullptr)
+					g_pCosmos->LoadCLR();
+				if (g_pCosmos->m_pCLRProxy)
 				{
 					CWebPageImpl* pProxyBase = (CWebPageImpl*)this;
 					xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pProxyBase);
@@ -1073,13 +1073,13 @@ namespace Browser {
 						xmlParse.put_attr(_T("model"), 1);
 					}
 					pSession->m_pOwner = this;
-					IDispatch* pDisp = g_pHubble->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
+					IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 				}
 			}
 		}
 		else if(strMsgID == _T("OPEN_URL"))
 		{ 
-			CString strPath = g_pHubble->m_strAppPath;
+			CString strPath = g_pCosmos->m_strAppPath;
 			CString strUrl = pSession->GetString(_T("openurl"));
 			long nPos = pSession->GetLong(_T("BrowserWndOpenDisposition"));
 			int _nPos = strUrl.Find(_T("host:"));
@@ -1098,12 +1098,12 @@ namespace Browser {
 				{
 					if (nPos == 200)
 					{
-						HWND hWnd = ::CreateWindow(L"Hubble Grid Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pHubble->m_hChildHostWnd, 0, AfxGetInstanceHandle(), NULL);
-						g_pHubble->m_hTempBrowserWnd = g_pHubble->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
-						::SetWindowPos(g_pHubble->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 200, 200, SWP_NOACTIVATE);
+						HWND hWnd = ::CreateWindow(L"Cosmos Grid Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pCosmos->m_hChildHostWnd, 0, AfxGetInstanceHandle(), NULL);
+						g_pCosmos->m_hTempBrowserWnd = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
+						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 200, 200, SWP_NOACTIVATE);
 					}
 					else
-						g_pHubble->m_pBrowserFactory->CreateBrowser(0, strUrl);
+						g_pCosmos->m_pBrowserFactory->CreateBrowser(0, strUrl);
 				}
 				else
 				{
@@ -1113,7 +1113,7 @@ namespace Browser {
 					CString strDisposition = _T("");
 					strDisposition.Format(_T("%d"), nPos);
 					msg.m_strParam2 = strDisposition;
-					m_pChromeRenderFrameHost->SendHubbleMessage(&msg);
+					m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
 				}
 			}
 		}
@@ -1188,15 +1188,15 @@ namespace Browser {
 
 	STDMETHODIMP CWebPage::CreateForm(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm)
 	{
-		if (g_pHubble->m_pCLRProxy == nullptr)
-			g_pHubble->LoadCLR();
+		if (g_pCosmos->m_pCLRProxy == nullptr)
+			g_pCosmos->LoadCLR();
 		if (hParent == 0)
 			hParent = (__int64)m_hWnd;
 		CString strKey = OLE2T(bstrKey);
 		auto it = this->m_mapFormsInfo.find(strKey.MakeLower());
 		if (it != m_mapFormsInfo.end())
 		{
-			*pRetForm = g_pHubble->m_pCLRProxy->CreateWinForm((HWND)hParent, CComBSTR(it->second));
+			*pRetForm = g_pCosmos->m_pCLRProxy->CreateWinForm((HWND)hParent, CComBSTR(it->second));
 		}
 		return S_OK;
 	}
@@ -1225,10 +1225,10 @@ namespace Browser {
 								CGrid* pTarget = it->second;
 								if (pTarget)
 								{
-									if (pGrid->m_pHubbleCloudSession == nullptr)
+									if (pGrid->m_pCosmosCloudSession == nullptr)
 									{
-										pGrid->m_pHubbleCloudSession = (CWormhole*)((CHubbleImpl*)g_pHubble)->CreateCloudSession(this);
-										CWormhole* pSession = pGrid->m_pHubbleCloudSession;
+										pGrid->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+										CWormhole* pSession = pGrid->m_pCosmosCloudSession;
 										if (pSession)
 										{
 											pSession->InsertString(_T("msgID"), strMsgID);
@@ -1246,7 +1246,7 @@ namespace Browser {
 											pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
 											pSession->InsertString(_T("cluster"), pGrid->m_pRootObj->m_strKey);
 											pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
-											pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pHubbleCloudSession);
+											pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pCosmosCloudSession);
 											pSession->InsertString(_T("objID"), _T("wndnode"));
 											switch (pGrid->m_nViewType)
 											{
@@ -1288,21 +1288,21 @@ namespace Browser {
 											}
 											if (pGrid->m_pDisp)
 											{
-												pGrid->m_pHubbleCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
-												if (g_pHubble->m_pCLRProxy)
+												pGrid->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
+												if (g_pCosmos->m_pCLRProxy)
 												{
-													g_pHubble->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
+													g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
 												}
 											}
-											pGrid->m_pHubbleCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
-											m_pChromeRenderFrameHost->SendHubbleMessage(pSession->m_pSession);
+											pGrid->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+											m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
 										}
 									}
 									else
 									{
-										pGrid->m_pHubbleCloudSession->InsertString(_T("msgID"), strMsgID);
-										pGrid->m_pHubbleCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
-										m_pChromeRenderFrameHost->SendHubbleMessage(pGrid->m_pHubbleCloudSession->m_pSession);
+										pGrid->m_pCosmosCloudSession->InsertString(_T("msgID"), strMsgID);
+										pGrid->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+										m_pChromeRenderFrameHost->SendCosmosMessage(pGrid->m_pCosmosCloudSession->m_pSession);
 									}
 								}
 							}
@@ -1330,14 +1330,14 @@ namespace Browser {
 	{
 		if (m_pGalaxy == nullptr) {
 			CGalaxyCluster* pGalaxyCluster = nullptr;
-			auto it = g_pHubble->m_mapWindowPage.find(m_hExtendWnd);
-			if (it != g_pHubble->m_mapWindowPage.end())
+			auto it = g_pCosmos->m_mapWindowPage.find(m_hExtendWnd);
+			if (it != g_pCosmos->m_mapWindowPage.end())
 				pGalaxyCluster = (CGalaxyCluster*)it->second;
 			else
 			{
 				pGalaxyCluster = new CComObject<CGalaxyCluster>();
 				pGalaxyCluster->m_hWnd = m_hExtendWnd;
-				g_pHubble->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
+				g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 			}
 			if (pGalaxyCluster) {
 				IGalaxy* pGalaxy = nullptr;

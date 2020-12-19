@@ -47,9 +47,9 @@ protected:
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnHubbleMsg(WPARAM wParam,LPARAM lParam);
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnTabChange(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnGetHubbleObj(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnGetCosmosObj(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSplitterReposition(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 };

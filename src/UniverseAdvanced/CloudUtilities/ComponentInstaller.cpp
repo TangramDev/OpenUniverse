@@ -22,7 +22,7 @@
 
 #include "..\stdafx.h"
 #include "..\UniverseApp.h"
-#include "..\Hubble.h"
+#include "..\Cosmos.h"
 #include "XZip.h"
 #include "XUnzip.h"
 #include "ComponentInstaller.h"
@@ -76,7 +76,7 @@ namespace Utilities
 				m_strHostFile = m_Parse.attr(_T("FileName"), _T(""));
 			if (m_strHostFile != _T(""))
 			{
-				m_strHostFile = g_pHubble->m_strAppDataPath + m_strHostFile;
+				m_strHostFile = g_pCosmos->m_strAppDataPath + m_strHostFile;
 				if (::PathFileExists(m_strHostFile))
 				{
 					BOOL bModifyed = false;
@@ -110,7 +110,7 @@ namespace Utilities
 								strFilePath = _T("");
 								if (strName == _T(""))
 								{
-									strFilePath = g_pHubble->m_strAppPath + ze.name;
+									strFilePath = g_pCosmos->m_strAppPath + ze.name;
 								}
 								else if (strName.CompareNoCase(_T("Templates")) == 0)
 								{
@@ -120,8 +120,8 @@ namespace Utilities
 									hModule = ::GetModuleHandle(_T("CloudAppStudioToolWnd.dll"));
 									if (hModule)
 									{
-										GetModuleFileName(hModule, g_pHubble->m_szBuffer, MAX_PATH * sizeof(TCHAR));
-										m_strModulePath = CString(g_pHubble->m_szBuffer);
+										GetModuleFileName(hModule, g_pCosmos->m_szBuffer, MAX_PATH * sizeof(TCHAR));
+										m_strModulePath = CString(g_pCosmos->m_szBuffer);
 										nPos = m_strModulePath.ReverseFind('\\');
 										m_strModulePath = m_strModulePath.Left(nPos + 1);
 									}
@@ -130,27 +130,27 @@ namespace Utilities
 								else if (strName.CompareNoCase(_T("COMDll")) == 0)
 								{
 									nIndex = 1;
-									strFilePath = g_pHubble->m_strAppPath + _T("TangramCOMAssemblies\\") + strName;
+									strFilePath = g_pCosmos->m_strAppPath + _T("TangramCOMAssemblies\\") + strName;
 								}
 								else if (strName.CompareNoCase(_T("CommonCLRDll")) == 0)
 								{
 									nIndex = 1;
-									strFilePath = g_pHubble->m_strProgramFilePath + _T("Tangram\\TangramCOMAssemblies\\") + strName;
+									strFilePath = g_pCosmos->m_strProgramFilePath + _T("Tangram\\TangramCOMAssemblies\\") + strName;
 								}
 								else if (strName.CompareNoCase(_T("CLRDll")) == 0)
 								{
 									nIndex = 2;
-									strFilePath = g_pHubble->m_strAppPath + _T("TangramAssemblies\\") + strName;
+									strFilePath = g_pCosmos->m_strAppPath + _T("TangramAssemblies\\") + strName;
 								}
 								else if (strName.CompareNoCase(_T("CommonCOMDll")) == 0)
 								{
 									nIndex = 4;
-									strFilePath = g_pHubble->m_strProgramFilePath + _T("Tangram\\TangramAssemblies\\") + strName;
+									strFilePath = g_pCosmos->m_strProgramFilePath + _T("Tangram\\TangramAssemblies\\") + strName;
 								}
 								else if (strName.CompareNoCase(_T("msi")) == 0)
 								{
 									nIndex = 3;
-									strFilePath = g_pHubble->m_strAppDataPath + _T("TangramMSI\\") + strName;
+									strFilePath = g_pCosmos->m_strAppDataPath + _T("TangramMSI\\") + strName;
 								}
 
 								TCHAR targetname[MAX_PATH];
@@ -343,7 +343,7 @@ namespace Utilities
 	//				SetFileAttributes(strFilePath, FILE_ATTRIBUTE_NORMAL);
 	//				if (::PathFileExists(strFilePath))
 	//				{
-	//					g_pHubble->ImportHubbleDocTemplate(strFilePath);
+	//					g_pCosmos->ImportCosmosDocTemplate(strFilePath);
 	//				}
 	//			}
 	//			CloseZip(hz);

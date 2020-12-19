@@ -56,9 +56,9 @@ namespace Cosmos
 	//};
 
 	/// <summary>
-	/// Summary for Hubble
+	/// Summary for Cosmos
 	/// </summary>
-	interface class IHubbleApp;
+	interface class ICosmosApp;
 
 	ref class Grid;
 	ref class GalaxyCluster;
@@ -334,7 +334,7 @@ namespace Cosmos
 		void Init();
 
 	public:
-		//void SaveHubbleDoc(String^ m_strName);
+		//void SaveCosmosDoc(String^ m_strName);
 		Object^ ActiveMethod(String^ strMethod, cli::array<Object^, 1>^ p);
 		//[DispId(0x000001)]
 		//[ComVisibleAttribute(true)]
@@ -816,7 +816,7 @@ namespace Cosmos
 		Object^ actionData;
 		Grid^ bindTreeNode = nullptr;
 		Grid^ bindListViewNode = nullptr;
-		Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = nullptr;
+		Dictionary<String^, MethodInfo^>^ m_pCosmosCLRMethodDic = nullptr;
 		Dictionary<String^, Object^>^ m_pPlugInDic = nullptr;
 		System::Void LoadNode(TreeNode^ pGrid, CTangramXmlParse* pParse);
 
@@ -927,7 +927,7 @@ namespace Cosmos
 				CComPtr<IGalaxyCluster> pGalaxyCluster = NULL;
 				m_pGalaxy->get_GalaxyCluster(&pGalaxyCluster);
 
-				return theAppProxy._createObject<IGalaxyCluster, Cosmos::GalaxyCluster>(pGalaxyCluster);
+				return theAppProxy._createObject<IGalaxyCluster, ::Cosmos::GalaxyCluster>(pGalaxyCluster);
 			}
 		}
 		private:
@@ -941,25 +941,25 @@ namespace Cosmos
 		~WpfApplication() {};
 	};
 
-	public ref class Hubble
+	public ref class Cosmos
 	{
 	public:
-		Hubble(IHubble* pHubble);
-		~Hubble();
+		Cosmos(ICosmos* pCosmos);
+		~Cosmos();
 	private:
-		Hubble();
+		Cosmos();
 		static bool IsAppInit = false;
 		static bool IsWebRuntimeInit = false;
 
-		static Hubble^ m_pHubble;
-		static Dictionary<String^, MethodInfo^>^ m_pHubbleCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
-		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
+		static Cosmos^ m_pCosmos;
+		static Dictionary<String^, MethodInfo^>^ m_pCosmosCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
+		static Dictionary<String^, Type^>^ m_pCosmosCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<String^, Type^>^ m_pAppFormTypeDic = nullptr;
 		static Dictionary<String^, Type^>^ m_pAppMDIFormTypeDic = nullptr;
 		static Dictionary<Control^, String^>^ m_pControlRelationDic = nullptr;
 		static Dictionary<Object^, Wormhole^>^ m_pWormholes = gcnew Dictionary<Object^, Wormhole^>();
 		static Dictionary<String^, String^>^ CustomizeDictionary = gcnew Dictionary<String^, String^>();
-		static Dictionary<String^, Object^>^ m_pHubbleCLRObjDic = gcnew Dictionary<String^, Object^>();
+		static Dictionary<String^, Object^>^ m_pCosmosCLRObjDic = gcnew Dictionary<String^, Object^>();
 	public:
 #ifndef _WIN64
 		static IntPtr m_nHWebRuntimeToolWndPane = IntPtr::Zero;
@@ -970,11 +970,11 @@ namespace Cosmos
 		static String^ m_strAppData = L"";
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 		static Form^ m_pMainForm = nullptr;
-		static Dictionary<String^, TangramAppProxy^>^ m_pHubbleAppProxyDic = gcnew Dictionary<String^, TangramAppProxy^>();
+		//static Dictionary<String^, TangramAppProxy^>^ m_pCosmosAppProxyDic = gcnew Dictionary<String^, TangramAppProxy^>();
 		static Dictionary<Object^, Grid^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Grid^>();
 
 		static String^ ComputeHash(String^ source);
-		static int HubbleInit(String^ strInit);
+		static int CosmosInit(String^ strInit);
 		static GalaxyCluster^ CreateGalaxyCluster(IntPtr nPageHandle);
 		static GalaxyCluster^ CreateGalaxyCluster(Control^ ctrl, Object^ ExternalObj);
 		static String^ GetUIData(Control^ ctrl);
@@ -1002,15 +1002,15 @@ namespace Cosmos
 		static Wormhole^ GetWormholeFromObj(Object^ obj);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 
-		Cosmos::IHubbleApp^ m_pUniverseAppProxy;
+		Cosmos::ICosmosApp^ m_pUniverseAppProxy;
 
 		static void SetControlRelation(Control^ ctrl, String^ strTypes);
 
 		static void ExportAllCLRObjInfo();
 
-		static Hubble^ GetHubble();
+		static Cosmos^ GetCosmos();
 
-		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
+		static Cosmos^ InitCosmosApp(bool bSupportCrashReporting, CosmosAppType AppType);
 
 		static bool WebRuntimeInit();
 		static void InitEclipse();
@@ -1137,11 +1137,11 @@ namespace Cosmos
 		static void ShowVSToolBox(IntPtr nHandle);
 		static bool ReplaceHTML(Object^ doc, String^ originHTML, String^ newHTML);
 #endif
-		delegate void HubbleActionDelegate(Grid^ SourceObj, String^ strInfo);
-		static event HubbleActionDelegate^ OnHubbleActionDelegate;
-		static void Fire_OnHubbleActionDelegate(Grid^ SourceObj, String^ strInfo)
+		delegate void CosmosActionDelegate(Grid^ SourceObj, String^ strInfo);
+		static event CosmosActionDelegate^ OnCosmosActionDelegate;
+		static void Fire_OnCosmosActionDelegate(Grid^ SourceObj, String^ strInfo)
 		{
-			OnHubbleActionDelegate(SourceObj, strInfo);
+			OnCosmosActionDelegate(SourceObj, strInfo);
 		}
 
 		static property Dictionary<String^, String^>^ CustomizeDic
@@ -1188,9 +1188,9 @@ namespace Cosmos
 			void set(CosmosAppType nType);
 		}
 
-		static property Hubble^ TangramCore
+		static property Cosmos^ TangramCore
 		{
-			Hubble^ get();
+			Cosmos^ get();
 		}
 
 		static property String^ CurrentDesigningTangramXml
@@ -1219,8 +1219,8 @@ namespace Cosmos
 		//{
 		//	Dictionary<String^, Type^>^ get()
 		//	{
-		//		if (Cosmos::Hubble::m_pAppFormTypeDicEvent != nullptr)
-		//			Cosmos::Hubble::m_pAppFormTypeDicEvent->WaitOne();
+		//		if (Cosmos::Cosmos::m_pAppFormTypeDicEvent != nullptr)
+		//			Cosmos::Cosmos::m_pAppFormTypeDicEvent->WaitOne();
 		//		return m_pAppFormTypeDic;
 		//	}
 		//}
@@ -1229,29 +1229,29 @@ namespace Cosmos
 		//{
 		//	Dictionary<String^, Type^>^ get()
 		//	{
-		//		if (Cosmos::Hubble::m_pAppFormTypeDicEvent != nullptr)
-		//			Cosmos::Hubble::m_pAppFormTypeDicEvent->WaitOne();
+		//		if (Cosmos::Cosmos::m_pAppFormTypeDicEvent != nullptr)
+		//			Cosmos::Cosmos::m_pAppFormTypeDicEvent->WaitOne();
 		//		return m_pAppMDIFormTypeDic;
 		//	}
 		//}
 
-		static property Dictionary<String^, TangramAppProxy^>^ TangramAppProxyDictionary
+		//static property Dictionary<String^, TangramAppProxy^>^ TangramAppProxyDictionary
+		//{
+		//	Dictionary<String^, TangramAppProxy^>^ get()
+		//	{
+		//		return m_pCosmosAppProxyDic;
+		//	}
+		//}
+
+		static property Cosmos^ RemoteTangram[String ^]
 		{
-			Dictionary<String^, TangramAppProxy^>^ get()
-			{
-				return m_pHubbleAppProxyDic;
-			}
+			Cosmos ^ get(String ^ strAppID);
 		}
 
-		static property Hubble^ RemoteTangram[String ^]
-		{
-			Hubble ^ get(String ^ strAppID);
-		}
-
-		static property TangramAppProxy^ AppProxy[String ^]
-		{
-			TangramAppProxy ^ get(String ^ strAppID);
-		}
+		//static property TangramAppProxy^ AppProxy[String ^]
+		//{
+		//	TangramAppProxy ^ get(String ^ strAppID);
+		//}
 
 		static property WorkBenchWindow^ ActiveWorkBenchWindow
 		{
@@ -1351,24 +1351,24 @@ namespace Cosmos
 		}
 
 		delegate void TangramDebugDelegate(String^ strInfo);
-		static event TangramDebugDelegate^ OnHubbleDebugDelegate;
-		static void Fire_OnHubbleDebugDelegate(String^ strDebugInfo)
+		static event TangramDebugDelegate^ OnCosmosDebugDelegate;
+		static void Fire_OnCosmosDebugDelegate(String^ strDebugInfo)
 		{
-			OnHubbleDebugDelegate(strDebugInfo);
+			OnCosmosDebugDelegate(strDebugInfo);
 		}
 
-		delegate void HubbleMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2);
-		static event HubbleMsg^ OnHubbleMsg;
-		static void Fire_OnHubbleMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2)
+		delegate void CosmosMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2);
+		static event CosmosMsg^ OnCosmosMsg;
+		static void Fire_OnCosmosMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2)
 		{
-			OnHubbleMsg(hWnd, strType, strParam1, strParam2);
+			OnCosmosMsg(hWnd, strType, strParam1, strParam2);
 		}
 
-		delegate void HubbleMsgReceived(Cosmos::Wormhole^ cloudSession);
-		static event HubbleMsgReceived^ OnHubbleMsgReceived;
-		static void Fire_OnHubbleMsgReceived(Cosmos::Wormhole^ cloudSession)
+		delegate void CosmosMsgReceived(Cosmos::Wormhole^ cloudSession);
+		static event CosmosMsgReceived^ OnCosmosMsgReceived;
+		static void Fire_OnCosmosMsgReceived(Cosmos::Wormhole^ cloudSession)
 		{
-			OnHubbleMsgReceived(cloudSession);
+			OnCosmosMsgReceived(cloudSession);
 		}
 
 		delegate void CustomizedDOMElement(IntPtr hWnd, String^ strRuleName, String^ strHTML);
@@ -1379,10 +1379,10 @@ namespace Cosmos
 		}
 
 		//delegate void TangramAppData(String^ strAppData);
-		//static event TangramAppData^ OnHubbleAppData;
-		//static void Fire_OnHubbleAppData(String^ strAppData)
+		//static event TangramAppData^ OnCosmosAppData;
+		//static void Fire_OnCosmosAppData(String^ strAppData)
 		//{
-		//	OnHubbleAppData(strAppData);
+		//	OnCosmosAppData(strAppData);
 		//}
 
 		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid);
@@ -1397,7 +1397,7 @@ namespace Cosmos
 			String ^ get(String ^ iIndex);
 			void set(String^ iIndex, String^ newVal);
 		}
-		static void OnHubble_DebugDelegate(System::String^ strInfo);
+		static void OnCosmos_DebugDelegate(System::String^ strInfo);
 };
 
 	/// <summary>
@@ -1573,7 +1573,7 @@ namespace Cosmos
 		String^ GetPageXML();
 
 	protected:
-		CGalaxyClusterEvent* m_pHubbleClrEvent;
+		CGalaxyClusterEvent* m_pCosmosClrEvent;
 
 		~GalaxyCluster();
 	};
@@ -1769,11 +1769,11 @@ namespace Cosmos
 	//	}
 	//};
 
-	public interface class IHubbleEventObjProxy
+	public interface class ICosmosEventObjProxy
 	{
 	};
 
-	public interface class IHubbleWndGridProxy
+	public interface class ICosmosWndGridProxy
 	{
 		virtual void OnObserverComplete();
 		virtual void OnDestroy();
@@ -1796,7 +1796,7 @@ namespace Cosmos
 		virtual void OnClrControlCreated(Grid^ Node, Control^ Ctrl, String^ CtrlName, IntPtr CtrlHandle);
 		virtual void OnTabChange(Grid^ sender, LONG ActivePage, LONG OldPage);
 		virtual void OnControlNotify(Grid^ sender, LONG NotifyCode, LONG CtrlID, IntPtr CtrlHandle, String^ CtrlClassName);
-		virtual void OnHubbleEvent(IHubbleEventObjProxy^ NotifyObj);
+		virtual void OnCosmosEvent(ICosmosEventObjProxy^ NotifyObj);
 	};
 
 	public interface class IGalaxyProxy
@@ -1809,12 +1809,12 @@ namespace Cosmos
 		virtual void OnConnect(String^ bstrKey, IntPtr nHandle);
 	};
 
-	public interface class IHubbleApp
+	public interface class ICosmosApp
 	{
 		[DispId(0x000001)]
 		virtual void TangramClose();
 		[DispId(0x000002)]
-		virtual IHubbleWndGridProxy^ OnGridInit(Grid^ pNewNode);
+		virtual ICosmosWndGridProxy^ OnGridInit(Grid^ pNewNode);
 		[DispId(0x000003)]
 		virtual IGalaxyProxy^ OnGalaxyCreated(Galaxy^ pNewFrame);
 		[DispId(0x000004)]
@@ -1822,6 +1822,6 @@ namespace Cosmos
 		[DispId(0x000005)]
 		virtual void OnObserverComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid);
 		[DispId(0x000006)]
-		virtual void OnHubbleEvent(IHubbleEventObjProxy^ NotifyObj);
+		virtual void OnCosmosEvent(ICosmosEventObjProxy^ NotifyObj);
 	};
 }

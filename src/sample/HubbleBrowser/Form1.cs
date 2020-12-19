@@ -30,7 +30,7 @@ namespace Sunny
                     "</grid>" +
                 "</layout>" +
               "</content1>";
-            Grid node = Hubble.Observe(listView1, "test", xml);
+            Grid node = Cosmos.Cosmos.Observe(listView1, "test", xml);
             node.OnTabChange += Node_OnTabChange1; node.OnIPCMessageReceived += Node_OnIPCMessageReceived; ;
         }
 

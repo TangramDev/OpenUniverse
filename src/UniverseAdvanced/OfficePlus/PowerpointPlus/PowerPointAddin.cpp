@@ -48,7 +48,7 @@ namespace OfficePlus
 
 		void CPowerPntObject::OnObjDestory()
 		{
-			CPowerPntAddin* pAddin = ((CPowerPntAddin*)g_pHubble);
+			CPowerPntAddin* pAddin = ((CPowerPntAddin*)g_pCosmos);
 
 			if (pAddin->m_pActivePowerPntObject == this)
 			{
@@ -77,10 +77,10 @@ namespace OfficePlus
 				}
 				if (nCount == 0)
 				{
-					CCloudAddinPresentation* pHubblePresentation = NULL;
-					auto it = ((CPowerPntAddin*)g_pHubble)->m_mapHubblePres.find(strKey);
-					if (it != ((CPowerPntAddin*)g_pHubble)->m_mapHubblePres.end())
-						((CPowerPntAddin*)g_pHubble)->m_mapHubblePres.erase(it);
+					CCloudAddinPresentation* pCosmosPresentation = NULL;
+					auto it = ((CPowerPntAddin*)g_pCosmos)->m_mapCosmosPres.find(strKey);
+					if (it != ((CPowerPntAddin*)g_pCosmos)->m_mapCosmosPres.end())
+						((CPowerPntAddin*)g_pCosmos)->m_mapCosmosPres.erase(it);
 					delete m_pPresentation;
 				}
 			}
@@ -149,8 +149,8 @@ namespace OfficePlus
 			Pres->get_FullName(&bstrName);
 			CString strKey = OLE2T(bstrName);
 			m_pCurrentSavingPresentation = nullptr;
-			auto it = m_mapHubblePres.find(strKey);
-			if (it != m_mapHubblePres.end())
+			auto it = m_mapCosmosPres.find(strKey);
+			if (it != m_mapCosmosPres.end())
 				m_pCurrentSavingPresentation = it->second;
 			CString strXml = _T("");
 			CTangramXmlParse* pParse = nullptr;
@@ -210,11 +210,11 @@ namespace OfficePlus
 			CString strNewKey = OLE2T(bstrName);
 			if (m_pCurrentSavingPresentation&&m_pCurrentSavingPresentation->m_strKey != strNewKey)
 			{
-				auto it = m_mapHubblePres.find(strNewKey);
-				if (it != m_mapHubblePres.end())
+				auto it = m_mapCosmosPres.find(strNewKey);
+				if (it != m_mapCosmosPres.end())
 				{
-					m_mapHubblePres.erase(it);
-					m_mapHubblePres[strNewKey] = m_pCurrentSavingPresentation;
+					m_mapCosmosPres.erase(it);
+					m_mapCosmosPres[strNewKey] = m_pCurrentSavingPresentation;
 					m_pCurrentSavingPresentation->m_strKey = strNewKey;
 					m_pCurrentSavingPresentation = nullptr;
 				}
@@ -227,7 +227,7 @@ namespace OfficePlus
 			strID.MakeLower();
 			if (strID.Find(_T("powerpoint.application")) == 0)
 				return put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-			return CHubble::StartApplication(bstrAppID, bstrXml);
+			return CCosmos::StartApplication(bstrAppID, bstrXml);
 		}
 
 		STDMETHODIMP CPowerPntAddin::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
@@ -240,23 +240,23 @@ namespace OfficePlus
 			strKey.MakeLower();
 			if (strKey == _T("doctemplate"))
 			{
-				auto it = g_pHubble->m_mapValInfo.find(_T("doctemplate"));
-				if (it != g_pHubble->m_mapValInfo.end())
+				auto it = g_pCosmos->m_mapValInfo.find(_T("doctemplate"));
+				if (it != g_pCosmos->m_mapValInfo.end())
 				{
 					::VariantClear(&it->second);
-					g_pHubble->m_mapValInfo.erase(it);
+					g_pCosmos->m_mapValInfo.erase(it);
 				}
-				g_pHubble->m_mapValInfo[strKey] = newVal;
+				g_pCosmos->m_mapValInfo[strKey] = newVal;
 				CComPtr<_Presentation> pDoc;
 				CComVariant varTemplate(L"");
 				CComPtr<PowerPoint::Presentations> pPresentations;
 				m_pApplication->get_Presentations(&pPresentations);
 				pPresentations->Add(Office::MsoTriState::msoTrue, &pDoc);
 			}
-			return CHubble::put_AppKeyValue(bstrKey, newVal);
+			return CCosmos::put_AppKeyValue(bstrKey, newVal);
 		}
 
-		STDMETHODIMP CPowerPntAddin::HubbleCommand(IDispatch* RibbonControl)
+		STDMETHODIMP CPowerPntAddin::CosmosCommand(IDispatch* RibbonControl)
 		{
 			if (m_spRibbonUI)
 				m_spRibbonUI->Invalidate();
@@ -270,15 +270,15 @@ namespace OfficePlus
 				CString strTag = OLE2T(bstrTag);
 				if (strTag.CompareNoCase(_T("opentangramfile")) == 0)
 				{
-					CComPtr<IHubbleDoc> pDoc;
+					CComPtr<ICosmosDoc> pDoc;
 					return this->OpenTangramFile(&pDoc);
 				}
 				int nPos = strTag.Find(_T("@"));
 				CString strPath = m_strAppCommonDocPath + strTag;
 				if (::PathFileExists(strPath))
 				{
-					CComPtr<IHubbleDoc> pDoc;
-					return this->OpenHubbleDocFile(strPath.AllocSysString(), &pDoc);
+					CComPtr<ICosmosDoc> pDoc;
+					return this->OpenCosmosDocFile(strPath.AllocSysString(), &pDoc);
 				}
 			}
 			CString strTag = OLE2T(bstrTag);
@@ -298,18 +298,18 @@ namespace OfficePlus
 			}
 			else
 				return S_FALSE;
-			CCloudAddinPresentation* pHubblePresentation = pPntObject->m_pPresentation;
+			CCloudAddinPresentation* pCosmosPresentation = pPntObject->m_pPresentation;
 			switch (nCmdIndex)
 			{
 			case 100:
 			{
-				CGalaxy* pGalaxy = pHubblePresentation->m_pGalaxy;
+				CGalaxy* pGalaxy = pCosmosPresentation->m_pGalaxy;
 				if (pGalaxy == nullptr)
 					break;
-				if (pHubblePresentation->m_bDesignState == false)
+				if (pCosmosPresentation->m_bDesignState == false)
 				{
 					pGalaxy->m_bDesignerState = true;
-					pHubblePresentation->m_bDesignState = true;
+					pCosmosPresentation->m_bDesignState = true;
 					CreateCommonDesignerToolBar();
 					CGrid* pGrid = pGalaxy->m_pWorkGrid;
 					if (pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
@@ -326,7 +326,7 @@ namespace OfficePlus
 				else
 				{
 					pGalaxy->m_bDesignerState = false;
-					pHubblePresentation->m_bDesignState = false;
+					pCosmosPresentation->m_bDesignState = false;
 				}
 			}
 			break;
@@ -339,7 +339,7 @@ namespace OfficePlus
 				}
 				else
 				{
-					CString strXml = pHubblePresentation->m_strTaskPaneXml;
+					CString strXml = pCosmosPresentation->m_strTaskPaneXml;
 					if (strXml != _T(""))
 					{
 						CTangramXmlParse m_Parse;
@@ -358,7 +358,7 @@ namespace OfficePlus
 							_pCustomTaskPane->AddRef();
 							_pCustomTaskPane->put_Visible(true);
 							m_mapTaskPaneMap[(LONG)pPntObject->m_hForm] = _pCustomTaskPane;
-							CComPtr<IHubbleCtrl> pCtrlDisp;
+							CComPtr<ICosmosCtrl> pCtrlDisp;
 							_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 							if (pCtrlDisp)
 							{
@@ -366,32 +366,32 @@ namespace OfficePlus
 								pCtrlDisp->get_HWND(&hWnd);
 								HWND hPWnd = ::GetParent((HWND)hWnd);
 								pPntObject->m_hTaskPane = (HWND)hWnd;
-								if (pHubblePresentation->m_pTaskPaneGalaxyCluster == nullptr)
+								if (pCosmosPresentation->m_pTaskPaneGalaxyCluster == nullptr)
 								{
-									auto it = g_pHubble->m_mapWindowPage.find(hPWnd);
-									if (it != g_pHubble->m_mapWindowPage.end())
-										pHubblePresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
+									auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
+									if (it != g_pCosmos->m_mapWindowPage.end())
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 									else
 									{
-										pHubblePresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
-										pHubblePresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pHubble->m_mapWindowPage[hPWnd] = pHubblePresentation->m_pTaskPaneGalaxyCluster;
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
+										g_pCosmos->m_mapWindowPage[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
 									}
 
-									if (pHubblePresentation->m_pTaskPaneGalaxyCluster)
+									if (pCosmosPresentation->m_pTaskPaneGalaxyCluster)
 									{
 										IGalaxy* pGalaxy = nullptr;
-										pHubblePresentation->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant(hWnd), CComBSTR(L"TaskPane"), &pGalaxy);
-										pHubblePresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
-										if (pHubblePresentation->m_pTaskPaneGalaxy)
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant(hWnd), CComBSTR(L"TaskPane"), &pGalaxy);
+										pCosmosPresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
+										if (pCosmosPresentation->m_pTaskPaneGalaxy)
 										{
 											IGrid* pGrid = nullptr;
-											pHubblePresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
+											pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
 										}
 									}
 								}
 								else
-									pHubblePresentation->m_pTaskPaneGalaxy->ModifyHost(hWnd);
+									pCosmosPresentation->m_pTaskPaneGalaxy->ModifyHost(hWnd);
 							}
 						}
 					}
@@ -461,17 +461,17 @@ namespace OfficePlus
 				{
 					m_pActivePowerPntObject = (CPowerPntObject*)it->second;
 
-					CCloudAddinPresentation* pHubblePresentation = m_pActivePowerPntObject->m_pPresentation;
+					CCloudAddinPresentation* pCosmosPresentation = m_pActivePowerPntObject->m_pPresentation;
 
-					if (pHubblePresentation->m_pGalaxy)
-						pHubblePresentation->m_pGalaxy->ModifyHost((LONGLONG)m_pActivePowerPntObject->m_hClient);
+					if (pCosmosPresentation->m_pGalaxy)
+						pCosmosPresentation->m_pGalaxy->ModifyHost((LONGLONG)m_pActivePowerPntObject->m_hClient);
 
-					if (pHubblePresentation->m_pTaskPaneGalaxy)
+					if (pCosmosPresentation->m_pTaskPaneGalaxy)
 					{
 						if (::IsWindow(m_pActivePowerPntObject->m_hTaskPane))
-							pHubblePresentation->m_pTaskPaneGalaxy->ModifyHost((LONGLONG)m_pActivePowerPntObject->m_hTaskPane);
+							pCosmosPresentation->m_pTaskPaneGalaxy->ModifyHost((LONGLONG)m_pActivePowerPntObject->m_hTaskPane);
 						else
-							pHubblePresentation->m_pTaskPaneGalaxy->ModifyHost((LONGLONG)m_pActivePowerPntObject->m_hTaskPaneChildWnd);
+							pCosmosPresentation->m_pTaskPaneGalaxy->ModifyHost((LONGLONG)m_pActivePowerPntObject->m_hTaskPaneChildWnd);
 					}
 					CGalaxy* pGalaxy = m_pActivePowerPntObject->m_pPresentation->m_pGalaxy;
 					if (pGalaxy)
@@ -536,21 +536,21 @@ namespace OfficePlus
 				CString strKey = OLE2T(bstrName);
 
 				bool bNewWindow = false;
-				CCloudAddinPresentation* pHubblePresentation = nullptr;// 
-				auto it = m_mapHubblePres.find(strKey);
-				if (it != m_mapHubblePres.end())
+				CCloudAddinPresentation* pCosmosPresentation = nullptr;// 
+				auto it = m_mapCosmosPres.find(strKey);
+				if (it != m_mapCosmosPres.end())
 				{
-					pHubblePresentation = it->second;
+					pCosmosPresentation = it->second;
 					bNewWindow = true;
 				}
 				else
 				{
-					pHubblePresentation = new CCloudAddinPresentation();
-					m_mapHubblePres[strKey] = pHubblePresentation;
+					pCosmosPresentation = new CCloudAddinPresentation();
+					m_mapCosmosPres[strKey] = pCosmosPresentation;
 				}
-				pHubblePresentation->m_strKey = strKey;
-				(*pHubblePresentation)[hWnd] = pPowerPntWndObj;
-				pPowerPntWndObj->m_pPresentation = pHubblePresentation;
+				pCosmosPresentation->m_strKey = strKey;
+				(*pCosmosPresentation)[hWnd] = pPowerPntWndObj;
+				pPowerPntWndObj->m_pPresentation = pCosmosPresentation;
 				if (bNewWindow)
 					return;
 
@@ -564,11 +564,11 @@ namespace OfficePlus
 					if (bLoad == false)
 						return;
 					CString strNewDocInfo = _T("");
-					pHubblePresentation->m_strTaskPaneTitle = m_Parse.attr(_T("title"), _T("TaskPane"));
-					pHubblePresentation->m_nWidth = m_Parse.attrInt(_T("width"), 200);
-					pHubblePresentation->m_nHeight = m_Parse.attrInt(_T("height"), 300);
-					pHubblePresentation->m_nMsoCTPDockPosition = (MsoCTPDockPosition)m_Parse.attrInt(_T("dockposition"), 4);
-					pHubblePresentation->m_nMsoCTPDockPositionRestrict = (MsoCTPDockPositionRestrict)m_Parse.attrInt(_T("dockpositionrestrict"), 3);
+					pCosmosPresentation->m_strTaskPaneTitle = m_Parse.attr(_T("title"), _T("TaskPane"));
+					pCosmosPresentation->m_nWidth = m_Parse.attrInt(_T("width"), 200);
+					pCosmosPresentation->m_nHeight = m_Parse.attrInt(_T("height"), 300);
+					pCosmosPresentation->m_nMsoCTPDockPosition = (MsoCTPDockPosition)m_Parse.attrInt(_T("dockposition"), 4);
+					pCosmosPresentation->m_nMsoCTPDockPositionRestrict = (MsoCTPDockPositionRestrict)m_Parse.attrInt(_T("dockpositionrestrict"), 3);
 					pPowerPntWndObj->m_pPresentation->m_strDocXml = m_Parse.xml();
 					AddDocXml(pDoc, CComBSTR(pPowerPntWndObj->m_pPresentation->m_strDocXml), CComBSTR(L"tangram"));
 					CTangramXmlParse* pParse = m_Parse.GetChild(_T("taskpaneui"));
@@ -597,7 +597,7 @@ namespace OfficePlus
 							_pCustomTaskPane->AddRef();
 							_pCustomTaskPane->put_Visible(true);
 							m_mapTaskPaneMap[(LONG)pPowerPntWndObj->m_hForm] = _pCustomTaskPane;
-							CComPtr<IHubbleCtrl> pCtrlDisp;
+							CComPtr<ICosmosCtrl> pCtrlDisp;
 							_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 							if (pCtrlDisp)
 							{
@@ -605,32 +605,32 @@ namespace OfficePlus
 								pCtrlDisp->get_HWND(&hWnd);
 								HWND hPWnd = ::GetParent((HWND)hWnd);
 								pPowerPntWndObj->m_hTaskPane = (HWND)hWnd;
-								if (pHubblePresentation->m_pTaskPaneGalaxyCluster == nullptr)
+								if (pCosmosPresentation->m_pTaskPaneGalaxyCluster == nullptr)
 								{
-									auto it = g_pHubble->m_mapWindowPage.find(hPWnd);
-									if (it != g_pHubble->m_mapWindowPage.end())
-										pHubblePresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
+									auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
+									if (it != g_pCosmos->m_mapWindowPage.end())
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 									else
 									{
-										pHubblePresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
-										pHubblePresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pHubble->m_mapWindowPage[hPWnd] = pHubblePresentation->m_pTaskPaneGalaxyCluster;
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
+										g_pCosmos->m_mapWindowPage[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
 									}
 
-									if (pHubblePresentation->m_pTaskPaneGalaxyCluster)
+									if (pCosmosPresentation->m_pTaskPaneGalaxyCluster)
 									{
 										IGalaxy* pGalaxy = nullptr;
-										pHubblePresentation->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant(hWnd), CComBSTR(L"TaskPane"), &pGalaxy);
-										pHubblePresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
-										if (pHubblePresentation->m_pTaskPaneGalaxy)
+										pCosmosPresentation->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant(hWnd), CComBSTR(L"TaskPane"), &pGalaxy);
+										pCosmosPresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
+										if (pCosmosPresentation->m_pTaskPaneGalaxy)
 										{
 											IGrid* pGrid = nullptr;
-											pHubblePresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
+											pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
 										}
 									}
 								}
 								else
-									pHubblePresentation->m_pTaskPaneGalaxy->ModifyHost(hWnd);
+									pCosmosPresentation->m_pTaskPaneGalaxy->ModifyHost(hWnd);
 							}
 						}
 					}
@@ -683,7 +683,7 @@ namespace OfficePlus
 									_pCustomTaskPane->AddRef();
 									_pCustomTaskPane->put_Visible(true);
 									m_mapTaskPaneMap[(LONG)pPowerPntWndObj->m_hForm] = _pCustomTaskPane;
-									CComPtr<IHubbleCtrl> pCtrlDisp;
+									CComPtr<ICosmosCtrl> pCtrlDisp;
 									_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 									if (pCtrlDisp)
 									{
@@ -691,32 +691,32 @@ namespace OfficePlus
 										pCtrlDisp->get_HWND(&hWnd);
 										HWND hPWnd = ::GetParent((HWND)hWnd);
 										pPowerPntWndObj->m_hTaskPane = (HWND)hWnd;
-										if (pHubblePresentation->m_pTaskPaneGalaxyCluster == nullptr)
+										if (pCosmosPresentation->m_pTaskPaneGalaxyCluster == nullptr)
 										{
-											auto it = g_pHubble->m_mapWindowPage.find(hPWnd);
-											if (it != g_pHubble->m_mapWindowPage.end())
-												pHubblePresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
+											auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
+											if (it != g_pCosmos->m_mapWindowPage.end())
+												pCosmosPresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 											else
 											{
-												pHubblePresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
-												pHubblePresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-												g_pHubble->m_mapWindowPage[hPWnd] = pHubblePresentation->m_pTaskPaneGalaxyCluster;
+												pCosmosPresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
+												pCosmosPresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
+												g_pCosmos->m_mapWindowPage[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
 											}
 
-											if (pHubblePresentation->m_pTaskPaneGalaxyCluster)
+											if (pCosmosPresentation->m_pTaskPaneGalaxyCluster)
 											{
 												IGalaxy* pGalaxy = nullptr;
-												pHubblePresentation->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant(hWnd), CComBSTR(L"TaskPane"), &pGalaxy);
-												pHubblePresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
-												if (pHubblePresentation->m_pTaskPaneGalaxy)
+												pCosmosPresentation->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant(hWnd), CComBSTR(L"TaskPane"), &pGalaxy);
+												pCosmosPresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
+												if (pCosmosPresentation->m_pTaskPaneGalaxy)
 												{
 													IGrid* pGrid = nullptr;
-													pHubblePresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
+													pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
 												}
 											}
 										}
 										else
-											pHubblePresentation->m_pTaskPaneGalaxy->ModifyHost(hWnd);
+											pCosmosPresentation->m_pTaskPaneGalaxy->ModifyHost(hWnd);
 									}
 								}
 							}
@@ -738,7 +738,7 @@ namespace OfficePlus
 			}
 		}
 
-		HRESULT CPowerPntAddin::CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv)
+		HRESULT CPowerPntAddin::CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv)
 		{
 			return CPowerPntAppCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
@@ -750,7 +750,7 @@ namespace OfficePlus
 
 		STDMETHODIMP CPowerPntAppCtrl::put_AppCtrl(VARIANT_BOOL newVal)
 		{
-			g_pHubble->m_pHubbleAppCtrl = this;
+			g_pCosmos->m_pCosmosAppCtrl = this;
 			return S_OK;
 		}
 		void CPowerPntAppCtrl::OnFinalMessage(HWND hWnd)
@@ -775,9 +775,9 @@ namespace OfficePlus
 			return S_OK;
 		}
 
-		STDMETHODIMP CPowerPntAppCtrl::get_Hubble(IHubble** pVal)
+		STDMETHODIMP CPowerPntAppCtrl::get_Cosmos(ICosmos** pVal)
 		{
-			*pVal = g_pHubble;
+			*pVal = g_pCosmos;
 			return S_OK;
 		}
 	}

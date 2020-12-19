@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "UniverseApp.h"
 #include "Wormhole.h"
 
@@ -56,7 +56,7 @@ void CWormhole::SendMessage()
 {
 	if (m_pOwner)
 	{
-		m_pOwner->m_pChromeRenderFrameHost->SendHubbleMessage(m_pSession);
+		m_pOwner->m_pChromeRenderFrameHost->SendCosmosMessage(m_pSession);
 	}
 }
 

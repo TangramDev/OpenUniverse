@@ -18,92 +18,92 @@
 *
 ********************************************************************************/
 
-// TangramCtrl.cpp : Implementation of CHubbleCtrl
+// TangramCtrl.cpp : Implementation of CCosmosCtrl
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Grid.h"
 #include "Galaxy.h"
-#include "HubbleCtrl.h"
+#include "CosmosCtrl.h"
 
-HRESULT WINAPI CHubbleCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
+HRESULT WINAPI CCosmosCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
 {
-	if (g_pHubble->m_strCurrentAppID == _T(""))
+	if (g_pCosmos->m_strCurrentAppID == _T(""))
 	{
-		if(g_pHubble->m_pHubbleDelegate->m_pJVM)
+		if(g_pCosmos->m_pCosmosDelegate->m_pJVM)
 		{
 			return CEclipseCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
-		if (g_pHubble->m_pUniverseAppProxy)
+		if (g_pCosmos->m_pUniverseAppProxy)
 		{
-			HRESULT hr = g_pHubble->m_pUniverseAppProxy->CreateHubbleCtrl(pv, riid, ppv);
+			HRESULT hr = g_pCosmos->m_pUniverseAppProxy->CreateCosmosCtrl(pv, riid, ppv);
 			if (hr == S_OK)
 				return hr;
 		}
-		return CHubbleCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
+		return CCosmosCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 	}
 	else
 	{
-		IHubbleCtrl* pCtrl = nullptr;
-		HRESULT hr = g_pHubble->CreateHubbleCtrl(g_pHubble->m_strCurrentAppID.AllocSysString(), &pCtrl);
+		ICosmosCtrl* pCtrl = nullptr;
+		HRESULT hr = g_pCosmos->CreateCosmosCtrl(g_pCosmos->m_strCurrentAppID.AllocSysString(), &pCtrl);
 		if (hr == S_OK)
 		{
 			*ppv = pCtrl;
 			return hr;
 		}
-		g_pHubble->m_strCurrentAppID = _T("");
+		g_pCosmos->m_strCurrentAppID = _T("");
 		return S_FALSE;
 	}
 };
 
-// CHubbleCtrl
-CHubbleCtrlBase::CHubbleCtrlBase()
+// CCosmosCtrl
+CCosmosCtrlBase::CCosmosCtrlBase()
 {
 	m_bWindowOnly = true;
 	m_hWnd = NULL;
 #ifdef _DEBUG
-	g_pHubble->m_nTangramCtrl++;
+	g_pCosmos->m_nTangramCtrl++;
 #endif
 }
 
-CHubbleCtrlBase::~CHubbleCtrlBase()
+CCosmosCtrlBase::~CCosmosCtrlBase()
 {
 #ifdef _DEBUG
-	g_pHubble->m_nTangramCtrl--;
+	g_pCosmos->m_nTangramCtrl--;
 #endif
 }
 
-void CHubbleCtrlBase::OnFinalMessage(HWND hWnd)
+void CCosmosCtrlBase::OnFinalMessage(HWND hWnd)
 {
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
-		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IHubbleCtrl*)this);
+		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((ICosmosCtrl*)this);
 	}
 	__super::OnFinalMessage(hWnd);
 }
 
-STDMETHODIMP CHubbleCtrl::get_HWND(LONGLONG* pVal)
+STDMETHODIMP CCosmosCtrl::get_HWND(LONGLONG* pVal)
 {
 	*pVal = (LONGLONG)m_hWnd;
 	return S_OK;
 }
 
-STDMETHODIMP CHubbleCtrl::get_Hubble(IHubble** pVal)
+STDMETHODIMP CCosmosCtrl::get_Cosmos(ICosmos** pVal)
 {
-	*pVal = g_pHubble;
+	*pVal = g_pCosmos;
 	return S_OK;
 }
 
-CHubbleAppCtrl::CHubbleAppCtrl()
+CCosmosAppCtrl::CCosmosAppCtrl()
 {
 }
 
-CHubbleAppCtrl::~CHubbleAppCtrl()
+CCosmosAppCtrl::~CCosmosAppCtrl()
 {
-	if (g_pHubble->m_pHubbleAppCtrl == (CHubbleAppCtrl*)this)
-		g_pHubble->m_pHubbleAppCtrl = nullptr;
+	if (g_pCosmos->m_pCosmosAppCtrl == (CCosmosAppCtrl*)this)
+		g_pCosmos->m_pCosmosAppCtrl = nullptr;
 }
 
-HRESULT CHubbleAppCtrl::Fire_HubbleEvent(IHubbleEventObj* pEventObj)
+HRESULT CCosmosAppCtrl::Fire_CosmosEvent(ICosmosEventObj* pEventObj)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -115,9 +115,9 @@ HRESULT CHubbleAppCtrl::Fire_HubbleEvent(IHubbleEventObj* pEventObj)
 		DISPPARAMS params = { avarParams, NULL, 1, 0 };
 		for (int iConnection = 0; iConnection < cConnections; iConnection++)
 		{
-			g_pHubble->Lock();
+			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
-			g_pHubble->Unlock();
+			g_pCosmos->Unlock();
 			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
 			if (pConnection)
 			{
@@ -129,13 +129,13 @@ HRESULT CHubbleAppCtrl::Fire_HubbleEvent(IHubbleEventObj* pEventObj)
 	return hr;
 }
 
-STDMETHODIMP CHubbleCtrl::get_tag(VARIANT* pVal)
+STDMETHODIMP CCosmosCtrl::get_tag(VARIANT* pVal)
 {
 	return S_OK;
 }
 
 
-STDMETHODIMP CHubbleCtrl::put_tag(VARIANT newVal)
+STDMETHODIMP CCosmosCtrl::put_tag(VARIANT newVal)
 {
 	return S_OK;
 }

@@ -62,7 +62,7 @@ public:
 	map<int, gcroot<ToolStripMenuItem^>> m_mapShortcutItem;
 };
 
-class CCosmosProxy : public IHubbleCLRImpl
+class CCosmosProxy : public ICosmosCLRImpl
 {
 public: 
 	CCosmosProxy();
@@ -87,7 +87,7 @@ public:
 
 	CMenuHelperWnd*										m_pWorkingMenuHelperWnd = nullptr;
 	gcroot<Form^>										m_pCurrentPForm;
-	gcroot<System::Windows::Application^>				m_pHubbleWpfApp;
+	gcroot<System::Windows::Application^>				m_pCosmosWpfApp;
 	gcroot<PropertyGrid^>								m_pPropertyGrid;
 	Object^ _getObject(Object^ key);
 	bool _insertObject(Object^ key, Object^ val);
@@ -114,12 +114,12 @@ public:
 	void ExportCLRObjInfo(CString strPath);
 	void ExportAllCLRObjInfo(CString _strPath);
 	IDispatch* CreateCLRObj(CString bstrObjID);
-	void HubbleAction(BSTR bstrXml, void*);
+	void CosmosAction(BSTR bstrXml, void*);
 	void _GetMenuInfo(FormInfo*, ToolStripMenuItem^);
 private:
 	map<HWND, gcroot<Form^>>				m_mapForm;
 	gcroot<Hashtable^>						m_htObjects;
-	gcroot<Object^>							m_pHubbleObj;
+	gcroot<Object^>							m_pCosmosObj;
 	gcroot<Assembly^>						m_pSystemAssembly;
 	gcroot<EventHandler^>					m_pOnLoad;
 	gcroot<EventHandler^>					m_pOnMdiChildActivate;
@@ -141,7 +141,7 @@ private:
 	BSTR GetCtrlType(IDispatch* pCtrl);
 	IDispatch* GetCtrlFromHandle(HWND hWnd);
 	HWND IsGalaxy(IDispatch* ctrl);
-	void ReleaseHubbleObj(IDispatch*);
+	void ReleaseCosmosObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);
 	HRESULT NavigateURL(IGrid* pGrid, CString strURL, IDispatch* dispObjforScript);
@@ -276,7 +276,7 @@ extern _ATL_FUNC_INFO Destroy;
 extern _ATL_FUNC_INFO TabChange;
 extern _ATL_FUNC_INFO IPCMsg2;
 
-class CGalaxyClusterEvent : public IDispEventSimpleImpl</*nID =*/ 1, CGalaxyClusterEvent, &__uuidof(_IHubbleObjEvents)>
+class CGalaxyClusterEvent : public IDispEventSimpleImpl</*nID =*/ 1, CGalaxyClusterEvent, &__uuidof(_ICosmosObjEvents)>
 {
 public:
 	CGalaxyClusterEvent();
@@ -289,10 +289,10 @@ public:
 	void __stdcall  OnInitialize(IDispatch* pHtmlWnd, BSTR bstrUrl);
 	void __stdcall  OnIPCMsg(IGalaxy* sender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 	BEGIN_SINK_MAP(CGalaxyClusterEvent)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x00000001, OnInitialize, &Initialize)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x00000006, OnDestroy, &Destroy)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x00000009, OnTabChange, &TabChange)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IHubbleObjEvents), /*dispid =*/ 0x0000000d, OnIPCMsg, &IPCMsg2)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_ICosmosObjEvents), /*dispid =*/ 0x00000001, OnInitialize, &Initialize)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_ICosmosObjEvents), /*dispid =*/ 0x00000006, OnDestroy, &Destroy)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_ICosmosObjEvents), /*dispid =*/ 0x00000009, OnTabChange, &TabChange)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_ICosmosObjEvents), /*dispid =*/ 0x0000000d, OnIPCMsg, &IPCMsg2)
 	END_SINK_MAP()
 };
 

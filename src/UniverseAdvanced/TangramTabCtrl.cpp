@@ -43,11 +43,11 @@ CTangramListCtrl::CTangramListCtrl()
 	m_strDir = _T("");
 	m_strSubDir = _T("");
 
-	if (g_pHubble->m_strExeName.CompareNoCase(_T("excel")) == 0)
+	if (g_pCosmos->m_strExeName.CompareNoCase(_T("excel")) == 0)
 	{
-		auto it = g_pHubble->m_mapValInfo.find(_T("exceldesignstate"));
-		if (it == g_pHubble->m_mapValInfo.end())
-			g_pHubble->m_mapValInfo[_T("exceldesignstate")] = CComVariant((VARIANT_BOOL)true);
+		auto it = g_pCosmos->m_mapValInfo.find(_T("exceldesignstate"));
+		if (it == g_pCosmos->m_mapValInfo.end())
+			g_pCosmos->m_mapValInfo[_T("exceldesignstate")] = CComVariant((VARIANT_BOOL)true);
 	}
 }
 
@@ -66,42 +66,42 @@ END_MESSAGE_MAP()
 
 void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	if (m_pHubbleTabCtrl->m_pGalaxy == nullptr)
+	if (m_pCosmosTabCtrl->m_pGalaxy == nullptr)
 	{
 		IGalaxy* pGalaxy = nullptr;
 		IGalaxyCluster* _pGalaxyCluster = nullptr;
-		g_pHubble->CreateGalaxyCluster((__int64)m_hWnd, &_pGalaxyCluster);
+		g_pCosmos->CreateGalaxyCluster((__int64)m_hWnd, &_pGalaxyCluster);
 		CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)_pGalaxyCluster;
 		if (pGalaxyCluster)
 		{
-			auto it = pGalaxyCluster->m_mapGalaxy.find(m_pHubbleTabCtrl->m_ListCtrl.m_hWnd);
+			auto it = pGalaxyCluster->m_mapGalaxy.find(m_pCosmosTabCtrl->m_ListCtrl.m_hWnd);
 			if (it == pGalaxyCluster->m_mapGalaxy.end())
 			{
-				pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)m_pHubbleTabCtrl->m_ListCtrl.m_hWnd), CComBSTR("HostListView"), &pGalaxy);
+				pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)m_pCosmosTabCtrl->m_ListCtrl.m_hWnd), CComBSTR("HostListView"), &pGalaxy);
 				if (pGalaxy)
-					m_pHubbleTabCtrl->m_pGalaxy = (CGalaxy*)pGalaxy;
+					m_pCosmosTabCtrl->m_pGalaxy = (CGalaxy*)pGalaxy;
 			}
 		}
 	}
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 	CString strText = GetItemText(pNMLV->iItem, 0);
 	CString strFile = m_strDir + m_strSubDir + _T("\\") + strText + _T(".html");
-	CString strPath = g_pHubble->m_strAppCommonDocPath;
+	CString strPath = g_pCosmos->m_strAppCommonDocPath;
 	IGrid* pGrid = nullptr;
 	if (::PathFileExists(strFile))
 	{
 		strPath += _T("templatedetail.xml");
-		m_pHubbleTabCtrl->m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pGrid);
+		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pGrid);
 	}
 	else if (strText.CompareNoCase(_T("new Template"))==0)
 	{
 		strPath += _T("newtemplate.xml");
-		m_pHubbleTabCtrl->m_pGalaxy->Observe(CComBSTR("newtemplate"), CComBSTR(strPath), &pGrid);
+		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("newtemplate"), CComBSTR(strPath), &pGrid);
 	}
 	else
 	{
 		CString strXml = _T("<tangram><layout><grid name=\"start\" gridtype=\"nucleus\" /></layout></tangram>"); 
-		m_pHubbleTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pGrid);
+		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pGrid);
 	}
 
 	*pResult = 0;
@@ -110,20 +110,20 @@ void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	if (g_pHubble->m_pMDIMainWnd == nullptr&&g_pHubble->m_pActiveMDIChildWnd)
+	if (g_pCosmos->m_pMDIMainWnd == nullptr&&g_pCosmos->m_pActiveMDIChildWnd)
 	{
-		if (::IsChild(g_pHubble->m_pActiveMDIChildWnd->m_hWnd, g_pHubble->m_hTemplateWnd))
+		if (::IsChild(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd, g_pCosmos->m_hTemplateWnd))
 		{
 			RECT rc;
-			::GetWindowRect(g_pHubble->m_pDocTemplateFrame->m_pWorkGrid->m_pHostWnd->m_hWnd, &rc);
-			g_pHubble->m_pActiveMDIChildWnd->ScreenToClient(&rc);
+			::GetWindowRect(g_pCosmos->m_pDocTemplateFrame->m_pWorkGrid->m_pHostWnd->m_hWnd, &rc);
+			g_pCosmos->m_pActiveMDIChildWnd->ScreenToClient(&rc);
 
-			::ShowWindow(g_pHubble->m_hTemplateWnd, SW_HIDE);
-			::SetParent(g_pHubble->m_hTemplateWnd, g_pHubble->m_hHostWnd);
-			::ShowWindow(g_pHubble->m_pActiveMDIChildWnd->m_pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, SW_SHOW);
-			::SetWindowLongPtr(g_pHubble->m_pActiveMDIChildWnd->m_hChild,GWLP_ID, AFX_IDW_PANE_FIRST);
+			::ShowWindow(g_pCosmos->m_hTemplateWnd, SW_HIDE);
+			::SetParent(g_pCosmos->m_hTemplateWnd, g_pCosmos->m_hHostWnd);
+			::ShowWindow(g_pCosmos->m_pActiveMDIChildWnd->m_pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, SW_SHOW);
+			::SetWindowLongPtr(g_pCosmos->m_pActiveMDIChildWnd->m_hChild,GWLP_ID, AFX_IDW_PANE_FIRST);
 
-			::SetWindowPos(g_pHubble->m_pActiveMDIChildWnd->m_hChild, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_FRAMECHANGED);
+			::SetWindowPos(g_pCosmos->m_pActiveMDIChildWnd->m_hChild, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_FRAMECHANGED);
 		}
 		int nItem = pNMItemActivate->iItem;
 		if (nItem == -1)
@@ -135,15 +135,15 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 		{
 		case 0:
 			{
-				auto it = g_pHubble->m_mapHubbleDocTemplateInfo.find(m_nListViewSelectedIndex);
-				if (it != g_pHubble->m_mapHubbleDocTemplateInfo.end())
+				auto it = g_pCosmos->m_mapCosmosDocTemplateInfo.find(m_nListViewSelectedIndex);
+				if (it != g_pCosmos->m_mapCosmosDocTemplateInfo.end())
 				{
 					CString strTemplateFile = m_strDir + m_strSubDir + _T("\\") + GetItemText(nItem, 0);// +it->second->m_strFilter.Mid(1);
 					if(it->second->m_strFilter!=_T("*.*"))
 						strTemplateFile += it->second->m_strFilter.Mid(1);;
 					if (it->second->m_bCOMObj)
 					{
-						g_pHubble->StartApplication(it->second->m_strProxyID.AllocSysString(), strTemplateFile.AllocSysString());
+						g_pCosmos->StartApplication(it->second->m_strProxyID.AllocSysString(), strTemplateFile.AllocSysString());
 					}
 					else
 					{
@@ -154,17 +154,17 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 						BOOL bOK = FALSE;
 						if (strLib == _T("") || strLib.CompareNoCase(_T("default")) == 0)
 						{
-							pProxy = g_pHubble->m_pUniverseAppProxy;
+							pProxy = g_pCosmos->m_pUniverseAppProxy;
 						}
-						auto it2 = g_pHubble->m_mapHubbleAppProxy.find(it->second->m_strProxyID);
-						if (it2 == g_pHubble->m_mapHubbleAppProxy.end())
+						auto it2 = g_pCosmos->m_mapCosmosAppProxy.find(it->second->m_strProxyID);
+						if (it2 == g_pCosmos->m_mapCosmosAppProxy.end())
 						{
 							if (::LoadLibrary(it->second->m_strLib))
 							{
-								if (g_pHubble->m_hForegroundIdleHook == NULL)
-									g_pHubble->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
-								it2 = g_pHubble->m_mapHubbleAppProxy.find(it->second->m_strProxyID);
-								if (it2 != g_pHubble->m_mapHubbleAppProxy.end())
+								if (g_pCosmos->m_hForegroundIdleHook == NULL)
+									g_pCosmos->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
+								it2 = g_pCosmos->m_mapCosmosAppProxy.find(it->second->m_strProxyID);
+								if (it2 != g_pCosmos->m_mapCosmosAppProxy.end())
 								{
 									pProxy = (IUniverseAppProxy*)it2->second;
 								}
@@ -175,54 +175,54 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 							pProxy = it2->second;
 						}
 						if (it->second->m_strLib == _T(""))
-							pProxy = g_pHubble->m_pUniverseAppProxy;
+							pProxy = g_pCosmos->m_pUniverseAppProxy;
 
 						if (pProxy&&it->second->m_strLib != _T(""))
 						{
-							auto it2 = g_pHubble->m_mapTemplateInfo.find(it->second->m_strExt);
-							if (it2 != g_pHubble->m_mapTemplateInfo.end())
+							auto it2 = g_pCosmos->m_mapTemplateInfo.find(it->second->m_strExt);
+							if (it2 != g_pCosmos->m_mapTemplateInfo.end())
 							{
 								CTangramXmlParse m_Parse;
 								if (m_Parse.LoadFile(strTemplateFile))
 								{
-									g_pHubble->m_pActiveMDIChildWnd = nullptr;
-									g_pHubble->m_strCurrentFrameID = m_Parse.attr(_T("mainframeid"), _T("default"));
-									CString strAppTitle = m_Parse.attr(_T("apptitle"), g_pHubble->m_strCurrentFrameID);
-									g_pHubble->m_strCurrentFrameID.MakeLower();
-									g_pHubble->m_strCurrentDocTemplateXml = m_Parse.xml();
+									g_pCosmos->m_pActiveMDIChildWnd = nullptr;
+									g_pCosmos->m_strCurrentFrameID = m_Parse.attr(_T("mainframeid"), _T("default"));
+									CString strAppTitle = m_Parse.attr(_T("apptitle"), g_pCosmos->m_strCurrentFrameID);
+									g_pCosmos->m_strCurrentFrameID.MakeLower();
+									g_pCosmos->m_strCurrentDocTemplateXml = m_Parse.xml();
 									pProxy->m_strCreatingFrameTitle = strAppTitle;
-									pProxy->CreateNewDocument(g_pHubble->m_strCurrentFrameID, strAppTitle, it2->second, false);
+									pProxy->CreateNewDocument(g_pCosmos->m_strCurrentFrameID, strAppTitle, it2->second, false);
 								}
 							}
 						}
 						else
 						{
-							auto it2 = g_pHubble->m_mapValInfo.find(_T("exceldesignstate"));
-							if (it2 != g_pHubble->m_mapValInfo.end())
+							auto it2 = g_pCosmos->m_mapValInfo.find(_T("exceldesignstate"));
+							if (it2 != g_pCosmos->m_mapValInfo.end())
 							{
 								return;
 							}
 							IGrid* pGrid = nullptr;
-							CGalaxy* pGalaxy = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy;
+							CGalaxy* pGalaxy = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy;
 							pGalaxy->Observe(pGalaxy->m_strLastKey.AllocSysString(), CComBSTR(_T("")), &pGrid);
-							HubbleDocTemplateInfo* pHubbleDocTemplateInfo = it->second;
-							g_pHubble->m_pHubbleDocTemplateInfo = pHubbleDocTemplateInfo;
-							g_pHubble->m_strTemplatePath = strTemplateFile;
+							CosmosDocTemplateInfo* pCosmosDocTemplateInfo = it->second;
+							g_pCosmos->m_pCosmosDocTemplateInfo = pCosmosDocTemplateInfo;
+							g_pCosmos->m_strTemplatePath = strTemplateFile;
 							CTangramXmlParse m_Parse;
-							if (m_Parse.LoadFile(g_pHubble->m_strTemplatePath))
+							if (m_Parse.LoadFile(g_pCosmos->m_strTemplatePath))
 							{
-								g_pHubble->m_strStartupCLRObj = strTemplateFile;
-								g_pHubble->m_strTemplatePath = m_Parse.xml();
+								g_pCosmos->m_strStartupCLRObj = strTemplateFile;
+								g_pCosmos->m_strTemplatePath = m_Parse.xml();
 								//fix at 20170715
-								::SendMessage(g_pHubble->m_pActiveMDIChildWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pHubbleDocTemplateInfo->m_pDocTemplate, TANGRAM_CONST_NEWDOC);
-								if (g_pHubble->m_nAppType != 1965)
+								::SendMessage(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pCosmosDocTemplateInfo->m_pDocTemplate, TANGRAM_CONST_NEWDOC);
+								if (g_pCosmos->m_nAppType != 1965)
 								{
-									g_pHubble->m_pActiveMDIChildWnd->OnCreateDoc(g_pHubble->m_strTemplatePath);
-									g_pHubble->m_strTemplatePath = _T("");
+									g_pCosmos->m_pActiveMDIChildWnd->OnCreateDoc(g_pCosmos->m_strTemplatePath);
+									g_pCosmos->m_strTemplatePath = _T("");
 								}
 							}
 						}
-						g_pHubble->m_bNewFile = FALSE;
+						g_pCosmos->m_bNewFile = FALSE;
 					}
 				}
 			}
@@ -231,12 +231,12 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 		return;
 	}
 	IGrid* pGrid = nullptr;
-	CGalaxy* pGalaxy = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy;
+	CGalaxy* pGalaxy = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy;
 	int nItem = pNMItemActivate->iItem;
 	if (nItem == -1)
 	{
-		::GetClassName(pGalaxy->m_hWnd, g_pHubble->m_szBuffer, MAX_PATH);
-		CString strName = g_pHubble->m_szBuffer;
+		::GetClassName(pGalaxy->m_hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+		CString strName = g_pCosmos->m_szBuffer;
 		CString strKey = pGalaxy->m_strLastKey;
 		if (pGalaxy->m_pWebPageWnd)
 		{
@@ -244,7 +244,7 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 			{
 				strKey = _T("__default__key__for__chrome__");
 			}
-			pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pHubble->m_strDefaultXml), &pGrid);
+			pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pCosmos->m_strDefaultXml), &pGrid);
 		}
 		else
 		{
@@ -258,10 +258,10 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 	case 0:
 	{
 		HWND hWnd = pGalaxy->GetParent().m_hWnd;
-		if (hWnd != g_pHubble->m_hHostWnd)
+		if (hWnd != g_pCosmos->m_hHostWnd)
 		{
-			::GetClassName(pGalaxy->m_hWnd, g_pHubble->m_szBuffer, MAX_PATH);
-			CString strName = g_pHubble->m_szBuffer;
+			::GetClassName(pGalaxy->m_hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+			CString strName = g_pCosmos->m_szBuffer;
 			CString strKey = pGalaxy->m_strLastKey;
 			if (pGalaxy->m_pWebPageWnd)
 			{
@@ -269,29 +269,29 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 				{
 					strKey = _T("__default__key__for__chrome__");
 				}
-				pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pHubble->m_strDefaultXml), &pGrid);
+				pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pCosmos->m_strDefaultXml), &pGrid);
 			}
 			else
 			{
-				if (g_pHubble->m_strExeName.CompareNoCase(_T("excel")))
+				if (g_pCosmos->m_strExeName.CompareNoCase(_T("excel")))
 					pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(_T("")), &pGrid);
 			}
 		}
 
-		auto it = g_pHubble->m_mapHubbleDocTemplateInfo.find(m_nListViewSelectedIndex);
-		if (it != g_pHubble->m_mapHubbleDocTemplateInfo.end())
+		auto it = g_pCosmos->m_mapCosmosDocTemplateInfo.find(m_nListViewSelectedIndex);
+		if (it != g_pCosmos->m_mapCosmosDocTemplateInfo.end())
 		{
 			CString strTemplateFile = m_strDir + m_strSubDir + _T("\\") + GetItemText(nItem, 0);
 			if (it->second->m_strFilter != _T("*.*"))
 				strTemplateFile += it->second->m_strFilter.Mid(1);
 			if (it->second->m_bCOMObj)
 			{
-				if (g_pHubble->m_bEclipse)
+				if (g_pCosmos->m_bEclipse)
 				{
 
 				}
 				else
-					g_pHubble->StartApplication(it->second->m_strProxyID.AllocSysString(), strTemplateFile.AllocSysString());
+					g_pCosmos->StartApplication(it->second->m_strProxyID.AllocSysString(), strTemplateFile.AllocSysString());
 			}
 			else
 			{
@@ -302,17 +302,17 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 				BOOL bOK = FALSE;
 				if (strLib == _T("") || strLib.CompareNoCase(_T("default")) == 0)
 				{
-					pProxy = g_pHubble->m_pUniverseAppProxy;
+					pProxy = g_pCosmos->m_pUniverseAppProxy;
 				}
-				auto it2 = g_pHubble->m_mapHubbleAppProxy.find(it->second->m_strProxyID);
-				if (it2 == g_pHubble->m_mapHubbleAppProxy.end())
+				auto it2 = g_pCosmos->m_mapCosmosAppProxy.find(it->second->m_strProxyID);
+				if (it2 == g_pCosmos->m_mapCosmosAppProxy.end())
 				{
 					if (::LoadLibrary(it->second->m_strLib))
 					{
-						if (g_pHubble->m_hForegroundIdleHook == NULL)
-							g_pHubble->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
-						it2 = g_pHubble->m_mapHubbleAppProxy.find(it->second->m_strProxyID);
-						if (it2 != g_pHubble->m_mapHubbleAppProxy.end())
+						if (g_pCosmos->m_hForegroundIdleHook == NULL)
+							g_pCosmos->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
+						it2 = g_pCosmos->m_mapCosmosAppProxy.find(it->second->m_strProxyID);
+						if (it2 != g_pCosmos->m_mapCosmosAppProxy.end())
 						{
 							pProxy = (IUniverseAppProxy*)it2->second;
 						}
@@ -323,25 +323,25 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 					pProxy = it2->second;
 				}
 				if (it->second->m_strLib == _T(""))
-					pProxy = g_pHubble->m_pUniverseAppProxy;
+					pProxy = g_pCosmos->m_pUniverseAppProxy;
 
 				if (pProxy&&it->second->m_pDocTemplate==nullptr/*it->second->m_strLib != _T("")*/)
 				{
 					bool bCreateDoc = false;
-					auto it2 = g_pHubble->m_mapTemplateInfo.find(it->second->m_strExt);
-					if (it2 != g_pHubble->m_mapTemplateInfo.end())
+					auto it2 = g_pCosmos->m_mapTemplateInfo.find(it->second->m_strExt);
+					if (it2 != g_pCosmos->m_mapTemplateInfo.end())
 					{
 						CTangramXmlParse m_Parse;
 						if (m_Parse.LoadFile(strTemplateFile))
 						{
-							g_pHubble->m_pActiveMDIChildWnd = nullptr;
-							g_pHubble->m_strCurrentFrameID = m_Parse.attr(_T("mainframeid"), _T("default"));
-							CString strAppTitle = m_Parse.attr(_T("apptitle"), g_pHubble->m_strCurrentFrameID);
-							g_pHubble->m_strCurrentFrameID.MakeLower();
-							g_pHubble->m_strCurrentDocTemplateXml = m_Parse.xml();
+							g_pCosmos->m_pActiveMDIChildWnd = nullptr;
+							g_pCosmos->m_strCurrentFrameID = m_Parse.attr(_T("mainframeid"), _T("default"));
+							CString strAppTitle = m_Parse.attr(_T("apptitle"), g_pCosmos->m_strCurrentFrameID);
+							g_pCosmos->m_strCurrentFrameID.MakeLower();
+							g_pCosmos->m_strCurrentDocTemplateXml = m_Parse.xml();
 							pProxy->m_strCreatingFrameTitle = strAppTitle;
 							bCreateDoc = true;
-							pProxy->CreateNewDocument(g_pHubble->m_strCurrentFrameID, strAppTitle, it2->second, false);
+							pProxy->CreateNewDocument(g_pCosmos->m_strCurrentFrameID, strAppTitle, it2->second, false);
 						}
 					}
 					if (bCreateDoc == false)
@@ -359,97 +359,97 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 					}
 					//else
 					//{
-					//	HubbleDocTemplateInfo* pHubbleDocTemplateInfo = it->second;
-					//	g_pHubble->m_pHubbleDocTemplateInfo = pHubbleDocTemplateInfo;
-					//	g_pHubble->m_strTemplatePath = strTemplateFile;
+					//	CosmosDocTemplateInfo* pCosmosDocTemplateInfo = it->second;
+					//	g_pCosmos->m_pCosmosDocTemplateInfo = pCosmosDocTemplateInfo;
+					//	g_pCosmos->m_strTemplatePath = strTemplateFile;
 					//	CTangramXmlParse m_Parse;
-					//	if (m_Parse.LoadFile(g_pHubble->m_strTemplatePath))
+					//	if (m_Parse.LoadFile(g_pCosmos->m_strTemplatePath))
 					//	{
-					//		if (g_pHubble->m_pMDIMainWnd)
+					//		if (g_pCosmos->m_pMDIMainWnd)
 					//		{
-					//			::SendMessage(g_pHubble->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)pHubbleDocTemplateInfo->m_pDocTemplate, TANGRAM_CONST_NEWDOC);
-					//			if (g_pHubble->m_strDefaultTemplate2 == _T(""))
-					//				g_pHubble->m_pMDIMainWnd->OnCreateDoc(_T(""));
+					//			::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)pCosmosDocTemplateInfo->m_pDocTemplate, TANGRAM_CONST_NEWDOC);
+					//			if (g_pCosmos->m_strDefaultTemplate2 == _T(""))
+					//				g_pCosmos->m_pMDIMainWnd->OnCreateDoc(_T(""));
 					//		}
 					//	}
 					//}
 				}
 				else
 				{
-					HubbleDocTemplateInfo* pHubbleDocTemplateInfo = it->second;
-					g_pHubble->m_pHubbleDocTemplateInfo = pHubbleDocTemplateInfo;
-					g_pHubble->m_strTemplatePath = strTemplateFile;
+					CosmosDocTemplateInfo* pCosmosDocTemplateInfo = it->second;
+					g_pCosmos->m_pCosmosDocTemplateInfo = pCosmosDocTemplateInfo;
+					g_pCosmos->m_strTemplatePath = strTemplateFile;
 					CTangramXmlParse m_Parse;
-					if (m_Parse.LoadFile(g_pHubble->m_strTemplatePath))
+					if (m_Parse.LoadFile(g_pCosmos->m_strTemplatePath))
 					{
-						if (g_pHubble->m_pMDIMainWnd)
+						if (g_pCosmos->m_pMDIMainWnd)
 						{
-							::SendMessage(g_pHubble->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)pHubbleDocTemplateInfo->m_pDocTemplate, TANGRAM_CONST_NEWDOC);
-							if(g_pHubble->m_strDefaultTemplate2==_T(""))
-								g_pHubble->m_pMDIMainWnd->OnCreateDoc(_T(""));
+							::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)pCosmosDocTemplateInfo->m_pDocTemplate, TANGRAM_CONST_NEWDOC);
+							if(g_pCosmos->m_strDefaultTemplate2==_T(""))
+								g_pCosmos->m_pMDIMainWnd->OnCreateDoc(_T(""));
 						}
 					}
 				}
 			}
-			g_pHubble->m_bNewFile = FALSE;
+			g_pCosmos->m_bNewFile = FALSE;
 		}
 		else
 		{
 			CWinForm* pWnd = nullptr;
-			map<CString, HubbleDocTemplateInfo*>*	m_pMapHubbleFormsTemplateInfo = &g_pHubble->m_mapHubbleFormsTemplateInfo;
-			map<int, HubbleDocTemplateInfo*>*		m_pMapHubbleFormsTemplateInfo2 = &g_pHubble->m_mapHubbleFormsTemplateInfo2;
+			map<CString, CosmosDocTemplateInfo*>*	m_pMapCosmosFormsTemplateInfo = &g_pCosmos->m_mapCosmosFormsTemplateInfo;
+			map<int, CosmosDocTemplateInfo*>*		m_pMapCosmosFormsTemplateInfo2 = &g_pCosmos->m_mapCosmosFormsTemplateInfo2;
 			CString strFormsInfoPath = _T("");
 			HWND hParent = NULL;
-			if (m_pHubbleTabCtrl)
+			if (m_pCosmosTabCtrl)
 			{
-				hParent = m_pHubbleTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+				hParent = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 				if (hParent)
 				{
 					//pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 					//if (pWnd)
 					//{
 					//	strFormsInfoPath = pWnd->m_strChildFormPath;
-					//	//m_pMapHubbleFormsTemplateInfo = &pWnd->m_mapHubbleFormsTemplateInfo;
-					//	//m_pMapHubbleFormsTemplateInfo2 = &pWnd->m_mapHubbleFormsTemplateInfo2;
+					//	//m_pMapCosmosFormsTemplateInfo = &pWnd->m_mapCosmosFormsTemplateInfo;
+					//	//m_pMapCosmosFormsTemplateInfo2 = &pWnd->m_mapCosmosFormsTemplateInfo2;
 					//}
 				}
 			}
 
-			CString strItem = m_pHubbleTabCtrl->m_pHubbleListView->GetListCtrl().GetItemText(m_nListViewSelectedIndex, 0);
+			CString strItem = m_pCosmosTabCtrl->m_pCosmosListView->GetListCtrl().GetItemText(m_nListViewSelectedIndex, 0);
 			CString strTemplateFile = _T("");
 			if (strFormsInfoPath == _T(""))
 				strTemplateFile = m_strDir + m_strSubDir + _T("\\") + GetItemText(nItem, 0);
 			else
 				strTemplateFile = strFormsInfoPath + strItem + _T("\\") + m_strSubDir + _T("\\") + GetItemText(nItem, 0);
-			auto it = m_pMapHubbleFormsTemplateInfo->find(strItem);
-			if (it != m_pMapHubbleFormsTemplateInfo->end())
+			auto it = m_pMapCosmosFormsTemplateInfo->find(strItem);
+			if (it != m_pMapCosmosFormsTemplateInfo->end())
 			{
-				if (g_pHubble->m_pCLRProxy == nullptr)
-					g_pHubble->LoadCLR();
-				if (g_pHubble->m_pCLRProxy)
+				if (g_pCosmos->m_pCLRProxy == nullptr)
+					g_pCosmos->LoadCLR();
+				if (g_pCosmos->m_pCLRProxy)
 				{
-					g_pHubble->m_strAppCurrentFormTemplatePath = strTemplateFile + it->second->m_strExt;
+					g_pCosmos->m_strAppCurrentFormTemplatePath = strTemplateFile + it->second->m_strExt;
 					if(strFormsInfoPath==_T(""))
-						g_pHubble->m_pCLRProxy->Extend(strItem, strTemplateFile, _T("tangram:creatingform"));
+						g_pCosmos->m_pCLRProxy->Extend(strItem, strTemplateFile, _T("tangram:creatingform"));
 					else
-						g_pHubble->m_pCLRProxy->Extend(strItem, strTemplateFile, _T("tangram:creatingmdichildform"));
+						g_pCosmos->m_pCLRProxy->Extend(strItem, strTemplateFile, _T("tangram:creatingmdichildform"));
 				}
 			}
 			else
 			{
-				auto it = m_pMapHubbleFormsTemplateInfo2->find(m_nListViewSelectedIndex);
-				if (it != m_pMapHubbleFormsTemplateInfo2->end())
+				auto it = m_pMapCosmosFormsTemplateInfo2->find(m_nListViewSelectedIndex);
+				if (it != m_pMapCosmosFormsTemplateInfo2->end())
 				{
-					if (g_pHubble->m_pCLRProxy == nullptr)
-						g_pHubble->LoadCLR();
-					if (g_pHubble->m_pCLRProxy)
+					if (g_pCosmos->m_pCLRProxy == nullptr)
+						g_pCosmos->LoadCLR();
+					if (g_pCosmos->m_pCLRProxy)
 					{
-						g_pHubble->m_strAppCurrentFormTemplatePath = strTemplateFile + it->second->m_strExt;
-						if (::IsChild(g_pHubble->m_hHostWnd, m_hWnd))
+						g_pCosmos->m_strAppCurrentFormTemplatePath = strTemplateFile + it->second->m_strExt;
+						if (::IsChild(g_pCosmos->m_hHostWnd, m_hWnd))
 						{
 							if (pNMItemActivate->iItem == 0)
 							{
-								CWinForm* pWnd = (CWinForm*)g_pHubble->m_pCLRProxy->Extend(it->second->m_strProxyID, m_strDir, L"tangram:creatingform:design:new");
+								CWinForm* pWnd = (CWinForm*)g_pCosmos->m_pCLRProxy->Extend(it->second->m_strProxyID, m_strDir, L"tangram:creatingform:design:new");
 								if (pWnd)
 								{
 									CString strFile = pWnd->m_strPath;
@@ -482,7 +482,7 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 						else
 						{
 							if(strFormsInfoPath==_T(""))
-								g_pHubble->m_pCLRProxy->Extend(it->second->m_strProxyID, strTemplateFile + it->second->m_strExt, L"tangram:creatingform");
+								g_pCosmos->m_pCLRProxy->Extend(it->second->m_strProxyID, strTemplateFile + it->second->m_strExt, L"tangram:creatingform");
 							else
 							{
 								CString str = _T(""); 
@@ -493,7 +493,7 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 									strFeatures = _T("tangram:creatingmdichildform:design");
 								}
 
-								g_pHubble->m_pCLRProxy->Extend(str, strTemplateFile + it->second->m_strExt, strFeatures);
+								g_pCosmos->m_pCLRProxy->Extend(str, strTemplateFile + it->second->m_strExt, strFeatures);
 							}
 						}
 					}
@@ -520,7 +520,7 @@ CTangramTabCtrl::CTangramTabCtrl()
 	m_strFilter = _T("*.xml");
 	m_pGalaxy = nullptr;
 	m_pGrid = nullptr;
-	m_pHubbleListView = nullptr;
+	m_pCosmosListView = nullptr;
 }
 
 CTangramTabCtrl::~CTangramTabCtrl()
@@ -538,14 +538,14 @@ END_MESSAGE_MAP()
 
 BOOL CTangramTabCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
-	m_pGrid = g_pHubble->m_pActiveGrid;
+	m_pGrid = g_pCosmos->m_pActiveGrid;
 	m_pGrid->m_pHostWnd = this;
 	m_pGrid->m_nViewType = TabCtrl;
 	m_pGrid->m_nID = nID;
 	BOOL bRet = CTabCtrl::Create(dwStyle| TCS_MULTILINE|WS_CLIPCHILDREN, rect, pParentWnd, nID);
 	m_ListCtrl.Create(WS_CHILD | WS_VISIBLE| LVS_AUTOARRANGE | LVS_SINGLESEL | LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS, CRect(0, 0, 0, 0), this, 0);
-	m_ListCtrl.m_pHubbleTabCtrl = this;
-	::GetModuleFileName(theApp.m_hInstance, g_pHubble->m_szBuffer, MAX_PATH);
+	m_ListCtrl.m_pCosmosTabCtrl = this;
+	::GetModuleFileName(theApp.m_hInstance, g_pCosmos->m_szBuffer, MAX_PATH);
 
 	int width=320, heigh=90, clines=3;
 	CComBSTR bstrVal("");
@@ -566,9 +566,9 @@ BOOL CTangramTabCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, 
 
 	ListView_SetTileViewInfo(m_ListCtrl.m_hWnd, &tileViewInfo);
 	ListView_SetView(m_ListCtrl.m_hWnd, LV_VIEW_TILE);
-	CString strPath = g_pHubble->m_szBuffer;
+	CString strPath = g_pCosmos->m_szBuffer;
 	int nPos = strPath.ReverseFind('\\');
-	strPath = strPath.Left(nPos + 1) + _T("HubbleInit.dll");
+	strPath = strPath.Left(nPos + 1) + _T("CosmosInit.dll");
 	if (::PathFileExists(strPath))
 	{
 		CString strURL = _T("res://");
@@ -588,9 +588,9 @@ LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 	CString strKey = OLE2T(bstrKey);
 	if (strKey == _T("TangramList"))
 	{
-		if (g_pHubble->m_DocTemplateImageList.m_hImageList == 0)
-			g_pHubble->m_DocTemplateImageList.Create(32, 32, ILC_COLOR32, 0, 4);
-		m_ListCtrl.SetImageList(&g_pHubble->m_DocTemplateImageList, LVSIL_NORMAL);
+		if (g_pCosmos->m_DocTemplateImageList.m_hImageList == 0)
+			g_pCosmos->m_DocTemplateImageList.Create(32, 32, ILC_COLOR32, 0, 4);
+		m_ListCtrl.SetImageList(&g_pCosmos->m_DocTemplateImageList, LVSIL_NORMAL);
 	}
 	if (strKey == _T("TangramListCLR"))
 	{
@@ -607,7 +607,7 @@ LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 		for (auto it : *pWndGridCollection->m_pGrids)
 		{
 			CTangramListView* pWnd = (CTangramListView*)(it)->m_pHostWnd;
-			pWnd->m_pHubbleTabCtrl = this;
+			pWnd->m_pCosmosTabCtrl = this;
 			pWnd->InitTabCtrl(this);
 		}
 	}
@@ -626,14 +626,14 @@ void CTangramTabCtrl::PostNcDestroy()
 
 int CTangramTabCtrl::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	if (g_pHubble->m_pUniverseAppProxy)
+	if (g_pCosmos->m_pUniverseAppProxy)
 	{
-		HWND hMenuWnd = g_pHubble->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pHubble->m_pActiveGrid = m_pGrid;
-	g_pHubble->m_bWinFormActived = false;
+	g_pCosmos->m_pActiveGrid = m_pGrid;
+	g_pCosmos->m_bWinFormActived = false;
 	return MA_ACTIVATE;
 }
 
@@ -666,7 +666,7 @@ void CTangramTabCtrl::FillListCtrl()
 {
 	m_ListCtrl.DeleteAllItems();
 	TCITEM TabCtrlItem;
-	TabCtrlItem.pszText = g_pHubble->m_szBuffer;
+	TabCtrlItem.pszText = g_pCosmos->m_szBuffer;
 	TabCtrlItem.mask |= TCIF_TEXT;
 	TabCtrlItem.cchTextMax = 256;
 	int index = GetCurSel();
@@ -682,7 +682,7 @@ void CTangramTabCtrl::FillListCtrl()
 	int nItem = 0;
 
 	// Create `New Template` icon when tab control belong to designer window.
-	if (::IsChild(g_pHubble->m_hHostWnd, m_hWnd))
+	if (::IsChild(g_pCosmos->m_hHostWnd, m_hWnd))
 	{
 		item.iItem = nItem;
 		item.pszText = L"New Template";
@@ -721,7 +721,7 @@ void CTangramTabCtrl::FillListCtrl()
 	_findclose(pf);
 	RePosition();
 	::InvalidateRect(m_hWnd, nullptr, true);
-	CString strPath = g_pHubble->m_strAppCommonDocPath + _T("templatedetail.xml");
+	CString strPath = g_pCosmos->m_strAppCommonDocPath + _T("templatedetail.xml");
 	if (::PathFileExists(strPath))
 	{
 		IGrid* pGrid = nullptr;
@@ -732,7 +732,7 @@ void CTangramTabCtrl::FillListCtrl()
 		}
 		else
 		{
-			strPath = g_pHubble->m_strAppCommonDocPath + _T("default.xml");
+			strPath = g_pCosmos->m_strAppCommonDocPath + _T("default.xml");
 			if(m_pGalaxy)
 				m_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strPath), &pGrid);
 		}

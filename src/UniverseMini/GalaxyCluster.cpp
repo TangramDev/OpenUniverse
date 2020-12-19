@@ -17,24 +17,24 @@
 #include "grid.h"
 #include "Galaxy.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 
 CGridShareData::CGridShareData()
 {
 	m_pOldGalaxy		= nullptr;
-	m_pHubbleParse		= nullptr;
+	m_pCosmosParse		= nullptr;
 	m_pHostClientView	= nullptr;
 #ifdef _DEBUG
-	g_pHubble->m_nTangramNodeCommonData++;
+	g_pCosmos->m_nTangramNodeCommonData++;
 #endif	
 };
 
 CGridShareData::~CGridShareData()
 {
-	if (m_pHubbleParse)
-		delete m_pHubbleParse;
+	if (m_pCosmosParse)
+		delete m_pCosmosParse;
 #ifdef _DEBUG
-	g_pHubble->m_nTangramNodeCommonData--;
+	g_pCosmos->m_nTangramNodeCommonData--;
 #endif	
 };
 
@@ -44,25 +44,25 @@ CGalaxyCluster::CGalaxyCluster()
 	m_hWnd								= 0;
 	m_pUniverseAppProxy					= nullptr;
 #ifdef _DEBUG
-	g_pHubble->m_nTangram++;
+	g_pCosmos->m_nTangram++;
 #endif	
 }
 
 CGalaxyCluster::~CGalaxyCluster()
 {
 #ifdef _DEBUG
-	g_pHubble->m_nTangram--;
+	g_pCosmos->m_nTangram--;
 #endif	
 
 	m_mapGalaxy.erase(m_mapGalaxy.begin(), m_mapGalaxy.end());
 	m_mapGrid.erase(m_mapGrid.begin(), m_mapGrid.end());
-	auto it = g_pHubble->m_mapWindowPage.find(m_hWnd);
-	if (it != g_pHubble->m_mapWindowPage.end())
+	auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
+	if (it != g_pCosmos->m_mapWindowPage.end())
 	{
-		g_pHubble->m_mapWindowPage.erase(it);
+		g_pCosmos->m_mapWindowPage.erase(it);
 	}
-	if (g_pHubble->m_mapWindowPage.size() == 0)
-		g_pHubble->Close();
+	if (g_pCosmos->m_mapWindowPage.size() == 0)
+		g_pCosmos->Close();
 }
 
 STDMETHODIMP CGalaxyCluster::get_Count(long* pCount)
@@ -166,13 +166,13 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 	BSTR bstrName = strGalaxyName.MakeLower().AllocSysString();
 	if (ParentObj.vt == VT_DISPATCH&&HostWnd.vt == VT_BSTR)
 	{
-		if (g_pHubble->m_pCLRProxy)
+		if (g_pCosmos->m_pCLRProxy)
 		{
 			IDispatch* pDisp = nullptr;
-			pDisp = g_pHubble->m_pCLRProxy->GetCtrlByName(ParentObj.pdispVal, HostWnd.bstrVal, true);
+			pDisp = g_pCosmos->m_pCLRProxy->GetCtrlByName(ParentObj.pdispVal, HostWnd.bstrVal, true);
 			if (pDisp)
 			{
-				h = g_pHubble->m_pCLRProxy->GetCtrlHandle(pDisp);
+				h = g_pCosmos->m_pCLRProxy->GetCtrlHandle(pDisp);
 				if (h)
 				{
 					HRESULT hr = CreateGalaxy(CComVariant(0), CComVariant((long)h), bstrName, pRetFrame);
@@ -186,16 +186,16 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 	}
 	if (HostWnd.vt == VT_DISPATCH)
 	{
-		if (g_pHubble->m_pCLRProxy)
+		if (g_pCosmos->m_pCLRProxy)
 		{
-			h = g_pHubble->m_pCLRProxy->IsGalaxy(HostWnd.pdispVal);
+			h = g_pCosmos->m_pCLRProxy->IsGalaxy(HostWnd.pdispVal);
 			if (h)
 			{
 				CString strName = strGalaxyName;
 				if (strName == _T(""))
 				{
 					::SysFreeString(bstrName);
-					bstrGalaxyName = g_pHubble->m_pCLRProxy->GetCtrlName(HostWnd.pdispVal);
+					bstrGalaxyName = g_pCosmos->m_pCLRProxy->GetCtrlName(HostWnd.pdispVal);
 					strName = OLE2T(bstrGalaxyName);
 					if (strName == _T(""))
 						bstrGalaxyName = CComBSTR(L"Default");
@@ -250,7 +250,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			if (it == m_mapGalaxy.end())
 			{
 				DWORD dwID = ::GetWindowThreadProcessId(_hWnd, NULL);
-				CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+				CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 
 				CGalaxy* m_pExtenderGalaxy = new CComObject<CGalaxy>();
 				CString strName = strGalaxyName;
@@ -262,8 +262,8 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					m_pExtenderGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
 				else if(bIsMDI)
 					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
-				::GetClassName(::GetParent(_hWnd), g_pHubble->m_szBuffer, MAX_PATH);
-				CString strClassName = CString(g_pHubble->m_szBuffer);
+				::GetClassName(::GetParent(_hWnd), g_pCosmos->m_szBuffer, MAX_PATH);
+				CString strClassName = CString(g_pCosmos->m_szBuffer);
 				if (strClassName.Find(_T("MDIClient")) == 0)
 				{
 					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
@@ -295,9 +295,9 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 
 STDMETHODIMP CGalaxyCluster::GetGalaxyFromCtrl(IDispatch* CtrlObj, IGalaxy** ppGalaxy)
 {
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
-		HWND h = g_pHubble->m_pCLRProxy->IsGalaxy(CtrlObj);
+		HWND h = g_pCosmos->m_pCLRProxy->IsGalaxy(CtrlObj);
 		if (h)
 		{
 			auto it = m_mapGalaxy.find(h);
@@ -371,9 +371,9 @@ void CGalaxyCluster::BeforeDestory()
 	for (auto it: m_mapGalaxy)
 		it.second->Destroy();
 
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
-		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IGalaxyCluster*)this);
+		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGalaxyCluster*)this);
 	}
 }
 
@@ -476,14 +476,14 @@ STDMETHODIMP CGalaxyCluster::get_Parent(IGalaxyCluster** pVal)
 	if (hWnd == NULL)
 		return S_OK;
 
-	auto it = g_pHubble->m_mapWindowPage.find(hWnd);
-	while (it == g_pHubble->m_mapWindowPage.end())
+	auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
+	while (it == g_pCosmos->m_mapWindowPage.end())
 	{
 		hWnd = ::GetParent(hWnd);
 		if (hWnd == NULL)
 			return S_OK;
-		it = g_pHubble->m_mapWindowPage.find(hWnd);
-		if (it != g_pHubble->m_mapWindowPage.end())
+		it = g_pCosmos->m_mapWindowPage.find(hWnd);
+		if (it != g_pCosmos->m_mapWindowPage.end())
 		{
 			*pVal = it->second;
 			return S_OK;
@@ -527,14 +527,14 @@ STDMETHODIMP CGalaxyCluster::put_xtml(BSTR strKey, BSTR newVal)
 
 STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 {
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
 		IDispatch* pDisp = nullptr;
-		pDisp =g_pHubble->m_pCLRProxy->GetCtrlByName(Parent, CtrlName, true);
+		pDisp =g_pCosmos->m_pCLRProxy->GetCtrlByName(Parent, CtrlName, true);
 		if (pDisp)
 		{
 			HWND h = 0;
-			h = g_pHubble->m_pCLRProxy->IsGalaxy(pDisp);
+			h = g_pCosmos->m_pCLRProxy->IsGalaxy(pDisp);
 			if (h)
 			{
 				CString strGalaxyName = OLE2T(GalaxyName);
@@ -566,18 +566,18 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 	bool bMDI = false;
 	if (MdiForm.vt == VT_DISPATCH)
 	{
-		if (g_pHubble->m_pCLRProxy)
+		if (g_pCosmos->m_pCLRProxy)
 		{
-			h = g_pHubble->m_pCLRProxy->GetMDIClientHandle(MdiForm.pdispVal);
+			h = g_pCosmos->m_pCLRProxy->GetMDIClientHandle(MdiForm.pdispVal);
 			if (h)
 				bMDI = true;
 			else
 			{
-				h = g_pHubble->m_pCLRProxy->IsGalaxy(MdiForm.pdispVal);
+				h = g_pCosmos->m_pCLRProxy->IsGalaxy(MdiForm.pdispVal);
 				if (h)
 				{
 					CComBSTR bstrName(L"");
-					bstrName = g_pHubble->m_pCLRProxy->GetCtrlName(MdiForm.pdispVal);
+					bstrName = g_pCosmos->m_pCLRProxy->GetCtrlName(MdiForm.pdispVal);
 					CString strKey = OLE2T(bstrKey);
 					if (strKey == _T(""))
 						bstrKey = CComBSTR(L"Default");
@@ -690,7 +690,7 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::ConnectHubbleCtrl(IHubbleCtrl* eventSource)
+STDMETHODIMP CGalaxyCluster::ConnectCosmosCtrl(ICosmosCtrl* eventSource)
 {
 	return S_OK;
 }
@@ -718,9 +718,9 @@ STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR
 
 STDMETHODIMP CGalaxyCluster::get_CurrentDesignGalaxyType(GalaxyType* pVal)
 {
-	if (g_pHubble->m_pDesignGrid)
+	if (g_pCosmos->m_pDesignGrid)
 	{
-		CGalaxy* pGalaxy = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
+		CGalaxy* pGalaxy = g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
 		*pVal = pGalaxy->m_nGalaxyType;
 	}
 	else
@@ -731,8 +731,8 @@ STDMETHODIMP CGalaxyCluster::get_CurrentDesignGalaxyType(GalaxyType* pVal)
 
 STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IGrid** pVal)
 {
-	if (g_pHubble->m_pDesignGrid)
-		*pVal = g_pHubble->m_pDesignGrid;
+	if (g_pCosmos->m_pDesignGrid)
+		*pVal = g_pCosmos->m_pDesignGrid;
 
 	return S_OK;
 }

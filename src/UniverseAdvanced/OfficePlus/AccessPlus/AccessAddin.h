@@ -45,7 +45,7 @@ namespace OfficePlus
 			//CUniverse:
 			STDMETHOD(GetObjectFromWnd)(LONG hWnd, IDispatch** ppObjFromWnd);
 			STDMETHOD(GetCustomUI)(BSTR RibbonID, BSTR * RibbonXml);
-			STDMETHOD(HubbleCommand)(IDispatch* RibbonControl);
+			STDMETHOD(CosmosCommand)(IDispatch* RibbonControl);
 			HRESULT OnConnection(IDispatch* pHostApp, int ConnectMode);
 			HRESULT OnDisconnection(int DisConnectMode);
 			void WindowCreated(CString strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);

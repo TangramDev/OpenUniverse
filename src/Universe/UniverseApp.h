@@ -23,7 +23,7 @@ namespace Browser
 
 using namespace Browser;
 
-typedef HRESULT(__stdcall* HubbleCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
+typedef HRESULT(__stdcall* CosmosCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 
 class CUniverse :
 	public CWinApp,
@@ -38,9 +38,9 @@ public:
 	void SetHook(DWORD ThreadID);
 
 	static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam);
-	static LRESULT CALLBACK HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-	static LRESULT CALLBACK HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-	static LRESULT CALLBACK HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
+	static LRESULT CALLBACK CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
+	static LRESULT CALLBACK CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
+	static LRESULT CALLBACK CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
 	static LRESULT CALLBACK ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam);
 	DECLARE_LIBID(LIBID_Universe)
@@ -53,4 +53,4 @@ private:
 };
 
 extern CUniverse theUniverse;
-extern CHubble* g_pHubble;
+extern CCosmos* g_pCosmos;

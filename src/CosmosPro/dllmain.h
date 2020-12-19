@@ -20,14 +20,14 @@
 
 // dllmain.h : Declaration of module class.
 
-#include "HubbleEvents.h"
+#include "CosmosEvents.h"
 #include <cstring>
 #include <iostream>
 
 class CGridCLREvent;
 
 class CCosmos :
-	public IHubbleDelegate,
+	public ICosmosDelegate,
 	public IUniverseAppProxy
 {
 public:
@@ -39,8 +39,8 @@ public:
 	bool									m_bBrowserModeInit = false;
 	DWORD									m_dwThreadID;
 	HWND									m_hHostWnd;
-	IHubble*								m_pHubble;
-	IHubble*								m_pHubbleVS = nullptr;
+	ICosmos*								m_pCosmos;
+	ICosmos*								m_pCosmosVS = nullptr;
 	//IVSExtender*							m_pVSExtender;
 
 	CString									m_strAppPath;
@@ -67,17 +67,17 @@ public:
 		return NULL;
 	};
 
-	virtual void HubbleInit() {};
+	virtual void CosmosInit() {};
 	virtual CString GetNTPXml() { return _T(""); };
 	virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
 
-	void InitHubbleApp(bool bCrashReporting);
+	void InitCosmosApp(bool bCrashReporting);
 	void ExitJVM();
 private:
-	//CHubbleEvents:
-	void OnHubbleClose();
+	//CCosmosEvents:
+	void OnCosmosClose();
 	void OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
-	HWND InitHubbleApp();
+	HWND InitCosmosApp();
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
 	virtual bool EclipseAppInit();
 	virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2);

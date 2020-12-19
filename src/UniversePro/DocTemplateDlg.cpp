@@ -23,7 +23,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "DocTemplateDlg.h"
 
 
@@ -82,8 +82,8 @@ BOOL CDocTemplateDlg::OnInitDialog()
 	CString strWildcard = _T("");
 	if (::PathIsDirectory(m_strDir) == false)
 	{
-		m_strDocTemplatePath = g_pHubble->m_strAppPath + m_strDir;
-		strWildcard = g_pHubble->m_strAppPath + m_strDir + _T("*.*");
+		m_strDocTemplatePath = g_pCosmos->m_strAppPath + m_strDir;
+		strWildcard = g_pCosmos->m_strAppPath + m_strDir + _T("*.*");
 	}
 	else
 	{
@@ -241,7 +241,7 @@ void CDocTemplateDlg::OnTcnSelchangeTemplatetab(NMHDR *pNMHDR, LRESULT *pResult)
 	m_TemplateList.DeleteAllItems();
 	*pResult = 0;
 	TCITEM TabCtrlItem ;
-	TabCtrlItem.pszText = g_pHubble->m_szBuffer;;
+	TabCtrlItem.pszText = g_pCosmos->m_szBuffer;;
 	TabCtrlItem.mask|=TCIF_TEXT;
 	TabCtrlItem.cchTextMax = 256;
 	int index = m_tabCtrl.GetCurSel();

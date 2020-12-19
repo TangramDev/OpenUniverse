@@ -48,18 +48,18 @@ public:
 	HWND m_hParent;
 	BEGIN_MSG_MAP(CAFXHelperWnd)
 		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanging)
 	END_MSG_MAP()
 
 private:
 	void OnFinalMessage(HWND hWnd);
 	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnHubbleMg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosMg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
-class CHubbleDocTemplate;
+class CCosmosDocTemplate;
 class CUniverseMDIChild;
 class CUniverseMDIMain :
 	public CWindowImpl<CUniverseMDIMain, CWindow>
@@ -70,9 +70,9 @@ public:
 
 	HWND									m_hMDIClient;
 	CGalaxyCluster*								m_pGalaxyCluster;
-	CHubbleDocTemplate*					m_pDocTemplate;
+	CCosmosDocTemplate*					m_pDocTemplate;
 	map<HWND, CString>						m_mapDesignableWnd;
-	map<CString, CHubbleDocTemplate*>		m_mapHubbleDocTemplate;
+	map<CString, CCosmosDocTemplate*>		m_mapCosmosDocTemplate;
 	BEGIN_MSG_MAP(CUniverseMDIMain)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
@@ -105,14 +105,14 @@ public:
 	CGalaxy*			m_pGalaxy;
 	map<HWND, CString>	m_mapDesignableWnd;
 
-	CHubbleDocTemplate* m_pDocTemplate;
+	CCosmosDocTemplate* m_pDocTemplate;
 	BEGIN_MSG_MAP(CUniverseMDIChild)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanged)
 		MESSAGE_HANDLER(WM_CONTROLBARCREATED, OnControlBarCreated)
@@ -126,7 +126,7 @@ private:
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMDIActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnWindowPosChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnControlBarCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	void OnFinalMessage(HWND hWnd);
@@ -160,12 +160,12 @@ public:
 
 	BEGIN_MSG_MAP(CWinForm)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)
 		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
 		MESSAGE_HANDLER(WM_GETDPISCALEDSIZE, OnGetDPIScaledSize)
 		MESSAGE_HANDLER(WM_WINFORMCREATED, OnFormCreated)
-		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnHubbleGetXml)
+		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnCosmosGetXml)
 		MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
@@ -180,8 +180,8 @@ private:
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -191,39 +191,39 @@ public:
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
-class CHubbleDocWnd :
-	public CWindowImpl<CHubbleDocWnd, CWindow>
+class CCosmosDocWnd :
+	public CWindowImpl<CCosmosDocWnd, CWindow>
 {
 public:
-	CHubbleDocWnd(void);
-	virtual ~CHubbleDocWnd(void);
+	CCosmosDocWnd(void);
+	virtual ~CCosmosDocWnd(void);
 
 	HWND m_hView;
 	CString	m_strKey;
 	CString m_strWndID;
 	CGalaxy* m_pGalaxy;
 	CGalaxyCluster* m_pParentPage;
-	CHubbleDocFrame* m_pDocFrame;
+	CCosmosDocFrame* m_pDocFrame;
 
 	map<CString, HWND> m_mapCtrlBar;
-	BEGIN_MSG_MAP(CHubbleDocWnd)
+	BEGIN_MSG_MAP(CCosmosDocWnd)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
-		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnHubbleGetXml)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
+		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnCosmosGetXml)
 		MESSAGE_HANDLER(WM_CONTROLBARCREATED, OnCtrlBarCreated)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
 
 private:
-	void CtrlBarDocActiveNotify(IHubbleDoc* pDoc, IGrid* pGridInDoc, IGrid* pGridInCtrlBar, HWND hCtrlBar);
+	void CtrlBarDocActiveNotify(ICosmosDoc* pDoc, IGrid* pGridInDoc, IGrid* pGridInCtrlBar, HWND hCtrlBar);
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnCtrlBarCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 };
 
@@ -254,7 +254,7 @@ public:
 	CString											m_strCurrentXml;
 	CString											m_strHostWebBrowserNodeName = _T("");
 	CEclipseWnd*									m_pWorkBenchFrame;
-	CHubbleDocTemplate*								m_pHubbleDocTemplate;
+	CCosmosDocTemplate*								m_pCosmosDocTemplate;
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
@@ -269,7 +269,7 @@ public:
 	CGrid*											m_pBindingGrid;
 	CGalaxy*										m_pSubGalaxy;
 	GalaxyInfo*										m_pGalaxyInfo;
-	CHubbleDoc*										m_pDoc;
+	CCosmosDoc*										m_pDoc;
 	map<CString, CGrid*>							m_mapGrid;
 	map<CString, CGrid*>							m_mapNeedSaveToConfigNode;
 	map<CString, VARIANT>							m_mapVal;
@@ -309,7 +309,7 @@ public:
 		MESSAGE_HANDLER(WM_VSCROLL, OnHScroll)
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)
 		MESSAGE_HANDLER(WM_NCDESTROY, OnNcDestroy)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
 		MESSAGE_HANDLER(WM_PARENTNOTIFY, OnParentNotify)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
@@ -332,7 +332,7 @@ private:
 	LRESULT OnHScroll(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnNcDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnTabChanged(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnHubbleMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnParentNotify(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
@@ -351,7 +351,7 @@ private:
 	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);
 	STDMETHOD(put_DesignerState)(VARIANT_BOOL newVal);
-	STDMETHOD(get_HubbleDoc)(IHubbleDoc** pVal);
+	STDMETHOD(get_CosmosDoc)(ICosmosDoc** pVal);
 	STDMETHOD(get_GalaxyType)(GalaxyType* pVal);
 	STDMETHOD(get_Name)(BSTR* pVal);
 	STDMETHOD(get_HostBrowser)(IBrowser** ppChromeWebBrowser);

@@ -63,9 +63,9 @@ BEGIN_MESSAGE_MAP(CGridHelper, CWnd)
 	ON_WM_WINDOWPOSCHANGED()
 	ON_WM_WINDOWPOSCHANGING()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
-	ON_MESSAGE(WM_COSMOSMSG, OnHubbleMsg)
-	ON_MESSAGE(WM_HUBBLE_DATA, OnHubbleData)
-	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetHubbleObj)
+	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_MESSAGE(WM_HUBBLE_DATA, OnCosmosData)
+	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
@@ -91,7 +91,7 @@ void CGridHelper::Dump(CDumpContext& dc) const
 //CGridHelper message handlers
 BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveGrid;
+	m_pGrid = g_pCosmos->m_pActiveGrid;
 	m_pGrid->m_nID = nID;
 	m_pGrid->m_pHostWnd = this;
 
@@ -102,7 +102,7 @@ BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 
 		m_pGrid->m_pGridShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		HWND hWnd = CreateWindow(L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		HWND hWnd = CreateWindow(L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		if (m_pGrid->m_pParentObj)
 		{
@@ -111,10 +111,10 @@ BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 				::PostMessage(::GetParent(m_hWnd), WM_HOSTNODEFORSPLITTERCREATED, m_pGrid->m_nRow, m_pGrid->m_nCol);
 				ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			}
-			else if (g_pHubble->m_pMDIMainWnd && pGalaxy->m_nGalaxyType == GalaxyType::MDIClientGalaxy && pGalaxy->m_pBindingGrid)
+			else if (g_pCosmos->m_pMDIMainWnd && pGalaxy->m_nGalaxyType == GalaxyType::MDIClientGalaxy && pGalaxy->m_pBindingGrid)
 			{
 				RECT rc = { 0,0,0,0 };
-				if (::SendMessage(g_pHubble->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)&rc, 19921989) == 19921989)
+				if (::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)&rc, 19921989) == 19921989)
 				{
 					::SetWindowPos(pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,  /*SWP_NOSENDCHANGING| SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
 				}
@@ -145,12 +145,12 @@ LRESULT CGridHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 
 int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	if (g_pHubble->m_pCLRProxy)
-		g_pHubble->m_pCLRProxy->HideMenuStripPopup();
-	if (g_pHubble->m_pActiveHtmlWnd)
+	if (g_pCosmos->m_pCLRProxy)
+		g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
+	if (g_pCosmos->m_pActiveHtmlWnd)
 	{
-		::PostMessage(g_pHubble->m_pActiveHtmlWnd->m_hWnd, WM_COSMOSMSG, 20190331, 0);
-		g_pHubble->m_pActiveHtmlWnd = nullptr;
+		::PostMessage(g_pCosmos->m_pActiveHtmlWnd->m_hWnd, WM_COSMOSMSG, 20190331, 0);
+		g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	}
 
 	CGalaxy* pGalaxy = m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
@@ -163,29 +163,29 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	else if (g_pHubble->m_pActiveAppProxy)
+	else if (g_pCosmos->m_pActiveAppProxy)
 	{
-		HWND hMenuWnd = g_pHubble->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
 	BOOL b = pGalaxy->m_bDesignerState;
-	if (g_pHubble->m_pDesignerGalaxyCluster)
-		if (pGalaxy->m_pGalaxyCluster == g_pHubble->m_pDesignerGalaxyCluster || m_pGrid->m_strObjTypeID != _T(""))
+	if (g_pCosmos->m_pDesignerGalaxyCluster)
+		if (pGalaxy->m_pGalaxyCluster == g_pCosmos->m_pDesignerGalaxyCluster || m_pGrid->m_strObjTypeID != _T(""))
 			b = false;
 	if (m_pGrid->m_nViewType == BlankView && m_pGrid->m_strObjTypeID == _T(""))
 		b = true;
-	if (g_pHubble->m_pDocDOMTree && g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pDocDOMTree && g_pCosmos->m_pCLRProxy)
 	{
 		if (b)
 		{
-			if (g_pHubble->m_hVSToolBoxWnd)
+			if (g_pCosmos->m_hVSToolBoxWnd)
 			{
-				if (::IsChild(g_pHubble->m_hVSToolBoxWnd, m_hWnd) == false)
-					g_pHubble->m_pCLRProxy->SelectGrid(m_pGrid);
+				if (::IsChild(g_pCosmos->m_hVSToolBoxWnd, m_hWnd) == false)
+					g_pCosmos->m_pCLRProxy->SelectGrid(m_pGrid);
 			}
-			else if (::IsChild(g_pHubble->m_hHostWnd, m_hWnd) == false)
-				g_pHubble->m_pCLRProxy->SelectGrid(m_pGrid);
+			else if (::IsChild(g_pCosmos->m_hHostWnd, m_hWnd) == false)
+				g_pCosmos->m_pCLRProxy->SelectGrid(m_pGrid);
 		}
 	}
 	if (m_pGrid && m_pGrid->m_pGridShareData->m_pGalaxyCluster)
@@ -193,10 +193,10 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 	if ((m_pGrid->m_nViewType == TabGrid || m_pGrid->m_nViewType == Grid))
 	{
-		if (g_pHubble->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy)
+		if (g_pCosmos->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy)
 			::SetFocus(m_hWnd);
-		g_pHubble->m_pActiveGrid = m_pGrid;
-		g_pHubble->m_bWinFormActived = false;
+		g_pCosmos->m_pActiveGrid = m_pGrid;
+		g_pCosmos->m_bWinFormActived = false;
 		return MA_ACTIVATE;
 	}
 
@@ -206,26 +206,26 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if ((m_pGrid->m_nViewType != TabGrid && m_pGrid->m_nViewType != Grid))
 		{
-			if (g_pHubble->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy || g_pHubble->m_pActiveGrid != m_pGrid)
+			if (g_pCosmos->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy || g_pCosmos->m_pActiveGrid != m_pGrid)
 				::SetFocus(m_hWnd);
 		}
 	}
-	g_pHubble->m_pActiveGrid = m_pGrid;
-	g_pHubble->m_bWinFormActived = false;
-	g_pHubble->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+	g_pCosmos->m_pActiveGrid = m_pGrid;
+	g_pCosmos->m_bWinFormActived = false;
+	g_pCosmos->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
 
-	CWebPage* pHtmlWnd = g_pHubble->m_pGalaxy->m_pWebPageWnd;
+	CWebPage* pHtmlWnd = g_pCosmos->m_pGalaxy->m_pWebPageWnd;
 	CString strID = m_pGrid->m_strName;
 
 	if ((m_pGrid->m_nViewType == ActiveX || m_pGrid->m_nViewType == CLRCtrl))
 	{
 		if (pHtmlWnd)
 		{
-			CWormhole* pSession = m_pGrid->m_pHubbleCloudSession;
+			CWormhole* pSession = m_pGrid->m_pCosmosCloudSession;
 			if (pSession)
 			{
 				pSession->InsertString(_T("msgID"), IPC_NODE_ONMOUSEACTIVATE_ID);
-				pHtmlWnd->m_pChromeRenderFrameHost->SendHubbleMessage(pSession->m_pSession);
+				pHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
 			}
 		}
 		return MA_NOACTIVATE;
@@ -233,65 +233,65 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 	if (b && m_bCreateExternal == false && m_pGrid->m_strID.CompareNoCase(TGM_NUCLEUS))
 	{
-		g_pHubble->CreateCommonDesignerToolBar();
-		if (g_pHubble->m_pHostViewDesignerNode)
+		g_pCosmos->CreateCommonDesignerToolBar();
+		if (g_pCosmos->m_pHostViewDesignerNode)
 		{
 			HWND hwnd = pGalaxy->m_hWnd;
-			::GetClassName(::GetParent(hwnd), g_pHubble->m_szBuffer, MAX_PATH);
-			CString strName = CString(g_pHubble->m_szBuffer);
+			::GetClassName(::GetParent(hwnd), g_pCosmos->m_szBuffer, MAX_PATH);
+			CString strName = CString(g_pCosmos->m_szBuffer);
 			if (strName.Find(_T("Afx:ControlBar:")) != -1)
 			{
 				pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
 			}
-			::GetClassName(hwnd, g_pHubble->m_szBuffer, MAX_PATH);
-			strName = CString(g_pHubble->m_szBuffer);
+			::GetClassName(hwnd, g_pCosmos->m_szBuffer, MAX_PATH);
+			strName = CString(g_pCosmos->m_szBuffer);
 			CUniverseMDIChild* pWnd = (CUniverseMDIChild*)::SendMessage(::GetParent(pGalaxy->m_hWnd), WM_COSMOSMSG, 0, 19631222);
 			if (pWnd)
 			{
-				g_pHubble->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show Host MFC View for MFC Document"));
+				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show Host MFC View for MFC Document"));
 			}
 			else if (strName == _T("MDIClient"))
 			{
-				g_pHubble->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show MDI Client"));
+				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show MDI Client"));
 			}
 			else if (pGalaxy->m_pGalaxyInfo)
 			{
 				CString s = _T("");
 				s.Format(_T("Show .NET Ctrl \"%s\" at Control '%s'"), pGalaxy->m_pGalaxyInfo->m_strCtrlName, pGalaxy->m_pGalaxyInfo->m_strParentCtrlName);
-				g_pHubble->m_pHostViewDesignerNode->put_Caption(CComBSTR(s));
+				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(s));
 			}
 			else if (pGalaxy->m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
 			{
-				g_pHubble->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show Control Bar Host Object"));
+				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show Control Bar Host Object"));
 			}
 			else
 			{
-				g_pHubble->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Create Host Node"));
+				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Create Host Node"));
 			}
 		}
 		if (m_pGrid->m_pDisp == NULL)
 		{
-			if (::IsWindow(g_pHubble->m_hHostWnd) == false)
+			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
 			{
-				g_pHubble->m_hHostWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", _T("Tangram Designer Helper Window"), WS_OVERLAPPED | WS_CAPTION, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-				g_pHubble->m_mapValInfo[_T("hostwindow")] = CComVariant((LONGLONG)g_pHubble->m_hHostWnd);
+				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", _T("Tangram Designer Helper Window"), WS_OVERLAPPED | WS_CAPTION, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
+				g_pCosmos->m_mapValInfo[_T("hostwindow")] = CComVariant((LONGLONG)g_pCosmos->m_hHostWnd);
 			}
-			if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid != m_pGrid)
+			if (g_pCosmos->m_pDesignGrid && g_pCosmos->m_pDesignGrid != m_pGrid)
 			{
-				CGridHelper* pWnd = ((CGridHelper*)g_pHubble->m_pDesignGrid->m_pHostWnd);
+				CGridHelper* pWnd = ((CGridHelper*)g_pCosmos->m_pDesignGrid->m_pHostWnd);
 				if (pWnd && ::IsWindow(pWnd->m_hWnd))
 				{
 					pWnd->Invalidate(true);
 				}
 			}
-			g_pHubble->m_pDesignGrid = m_pGrid;
+			g_pCosmos->m_pDesignGrid = m_pGrid;
 			Invalidate(true);
 		}
 
-		if (g_pHubble->m_pDesigningFrame != pGalaxy)
+		if (g_pCosmos->m_pDesigningFrame != pGalaxy)
 		{
-			g_pHubble->m_pHostDesignUINode = m_pGrid->m_pRootObj;
-			g_pHubble->m_pDesigningFrame = pGalaxy;
+			g_pCosmos->m_pHostDesignUINode = m_pGrid->m_pRootObj;
+			g_pCosmos->m_pDesigningFrame = pGalaxy;
 			pGalaxy->UpdateDesignerTreeInfo();
 		}
 	}
@@ -312,7 +312,7 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			pIPCInfo.m_strParam4 = strHandle;
 			//strHandle.Format(_T("%d"), m_pRootObj->m_pHostWnd->m_hWnd);
 			pIPCInfo.m_strParam5 = _T("wndnode");
-			pHtmlWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
+			pHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&pIPCInfo);
 		}
 		return MA_ACTIVATEANDEAT;
 	}
@@ -360,12 +360,12 @@ BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
 		CBrush br(&bit);
 		pDC->FillRect(&rt, &br);
-		if (bInDesignState && g_pHubble->m_pDesignGrid == m_pGrid)
+		if (bInDesignState && g_pCosmos->m_pDesignGrid == m_pGrid)
 		{
 			pDC->SetTextColor(RGB(255, 0, 255));
-			CString str = g_pHubble->GetDesignerInfo(_T("SelectedText"));
+			CString str = g_pCosmos->GetDesignerInfo(_T("SelectedText"));
 			if (str == _T(""))
-				strText = _T("\n\n  ") + g_pHubble->m_strGridSelectedText;
+				strText = _T("\n\n  ") + g_pCosmos->m_strGridSelectedText;
 			else
 				strText = _T("\n\n  ") + str;
 		}
@@ -376,15 +376,15 @@ BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 			CString strInfo = _T("\n\n  ");
 			if (bInDesignState)
 			{
-				CString str = g_pHubble->GetDesignerInfo(_T("DesignerTip1"));
+				CString str = g_pCosmos->GetDesignerInfo(_T("DesignerTip1"));
 				if (str == _T(""))
-					strInfo = strInfo + g_pHubble->m_strDesignerTip1;
+					strInfo = strInfo + g_pCosmos->m_strDesignerTip1;
 				else
 					strInfo = strInfo + str;
 			}
-			CString str = g_pHubble->GetDesignerInfo(_T("DesignerTip2"));
+			CString str = g_pCosmos->GetDesignerInfo(_T("DesignerTip2"));
 			if (str == _T(""))
-				strInfo = strInfo + _T("\n  ") + g_pHubble->m_strDesignerTip2;
+				strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
 			else
 				strInfo = strInfo + _T("\n  ") + str;
 			if (pGalaxy->m_pParentGrid)
@@ -421,8 +421,8 @@ BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 		//		if (lRes > 0)
 		//		{
 		//			IUniverseAppProxy* pProxy = (IUniverseAppProxy*)lRes;
-		//			auto it = g_pHubble->m_mapTemplateInfo.find(strKey);
-		//			if (it != g_pHubble->m_mapTemplateInfo.end())
+		//			auto it = g_pCosmos->m_mapTemplateInfo.find(strKey);
+		//			if (it != g_pCosmos->m_mapTemplateInfo.end())
 		//			{
 		//				CString strInfo = _T("");
 		//				strInfo.Format(_T("  MDIClientGalaxy for Document Template : %s"), strKey);
@@ -457,8 +457,8 @@ BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 		//		if (lRes > 0)
 		//		{
 		//			IUniverseAppProxy* pProxy = (IUniverseAppProxy*)lRes;
-		//			auto it = g_pHubble->m_mapTemplateInfo.find(strKey);
-		//			if (it != g_pHubble->m_mapTemplateInfo.end())
+		//			auto it = g_pCosmos->m_mapTemplateInfo.find(strKey);
+		//			if (it != g_pCosmos->m_mapTemplateInfo.end())
 		//			{
 		//				CString strInfo = _T("");
 		//				strInfo.Format(_T("  Control Bar for Document Template: %s"), strKey);
@@ -525,7 +525,7 @@ BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 				VARIANT_BOOL bShiftKey = false;
 				if (::GetKeyState(VK_SHIFT) < 0)  // shift pressed
 					bShiftKey = true;
-				hr = g_pHubble->m_pCLRProxy->ProcessCtrlMsg(::GetWindow(m_hWnd, GW_CHILD), bShiftKey ? true : false);
+				hr = g_pCosmos->m_pCLRProxy->ProcessCtrlMsg(::GetWindow(m_hWnd, GW_CHILD), bShiftKey ? true : false);
 				if (hr == S_OK)
 					return true;
 				return false;
@@ -541,7 +541,7 @@ BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 	{
 		if (m_pGrid->m_nViewType == CLRCtrl)
 		{
-			if (g_pHubble->m_pCLRProxy->ProcessFormMsg(m_hWnd, pMsg, 0))
+			if (g_pCosmos->m_pCLRProxy->ProcessFormMsg(m_hWnd, pMsg, 0))
 				return true;
 			return false;
 		}
@@ -553,11 +553,11 @@ BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 
 void CGridHelper::OnDestroy()
 {
-	if (g_pHubble->m_pDesignGrid == m_pGrid)
+	if (g_pCosmos->m_pDesignGrid == m_pGrid)
 	{
-		if (g_pHubble->m_pCLRProxy)
-			g_pHubble->m_pCLRProxy->SelectGrid(NULL);
-		g_pHubble->m_pDesignGrid = NULL;
+		if (g_pCosmos->m_pCLRProxy)
+			g_pCosmos->m_pCLRProxy->SelectGrid(NULL);
+		g_pCosmos->m_pDesignGrid = NULL;
 	}
 
 	m_pGrid->Fire_Destroy();
@@ -600,7 +600,7 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 			pGalaxy->HostPosChanged();
 		}
 		if (_pGrid->m_pWebBrowser) {
-			g_pHubble->m_pActiveHtmlWnd = _pGrid->m_pWebBrowser->m_pVisibleWebWnd;
+			g_pCosmos->m_pActiveHtmlWnd = _pGrid->m_pWebBrowser->m_pVisibleWebWnd;
 		}
 		if (nOldPage != wParam)
 		{
@@ -646,12 +646,12 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	return lRes;
 }
 
-LRESULT CGridHelper::OnHubbleData(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnCosmosData(WPARAM wParam, LPARAM lParam)
 {
 	return CWnd::DefWindowProc(WM_HUBBLE_DATA, wParam, lParam);
 }
 
-LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam && lParam == 20201028)
 	{
@@ -677,32 +677,32 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 			break;
 		case 20190602:
 		{
-			CWinForm* pHubbleWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 20190214);
-			if (pHubbleWinFormWnd)
-				return (LRESULT)pHubbleWinFormWnd->m_pChildFormsInfo;
+			CWinForm* pCosmosWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 20190214);
+			if (pCosmosWinFormWnd)
+				return (LRESULT)pCosmosWinFormWnd->m_pChildFormsInfo;
 			return 0;
 		}
 		break;
 		//case 20201028:
 		//{
 		//	m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
-		//	if (g_pHubble->m_hTempBrowserWnd)
+		//	if (g_pCosmos->m_hTempBrowserWnd)
 		//	{
-		//		hPWnd = g_pHubble->m_hTempBrowserWnd;
-		//		g_pHubble->m_hTempBrowserWnd = NULL;
+		//		hPWnd = g_pCosmos->m_hTempBrowserWnd;
+		//		g_pCosmos->m_hTempBrowserWnd = NULL;
 		//	}
-		//	else if (g_pHubble->m_pHtmlWndCreated == nullptr)
+		//	else if (g_pCosmos->m_pHtmlWndCreated == nullptr)
 		//	{
-		//		hPWnd = g_pHubble->m_hHostBrowserWnd;
+		//		hPWnd = g_pCosmos->m_hHostBrowserWnd;
 		//		::SetParent(hPWnd, hWnd);
 		//	}
 		//	else
 		//	{
-		//		hPWnd = ::GetParent(g_pHubble->m_pHtmlWndCreated->m_hWnd);
+		//		hPWnd = ::GetParent(g_pCosmos->m_pHtmlWndCreated->m_hWnd);
 		//	}
-		//	g_pHubble->m_hParent = NULL;
-		//	auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
-		//	if (it != g_pHubble->m_mapBrowserWnd.end())
+		//	g_pCosmos->m_hParent = NULL;
+		//	auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
+		//	if (it != g_pCosmos->m_mapBrowserWnd.end())
 		//	{
 		//		m_pWebBrowser = (CBrowser*)it->second;
 		//		::SetParent(hPWnd, hWnd);
@@ -741,21 +741,21 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 				break;
 			}
 			CString strObjTypeID = (LPCTSTR)lParam;
-			if (strObjTypeID.Find(_T(",")) != -1 && g_pHubble->m_pCLRProxy)
+			if (strObjTypeID.Find(_T(",")) != -1 && g_pCosmos->m_pCLRProxy)
 			{
-				m_pGrid->m_pDisp = g_pHubble->m_pCLRProxy->CreateObject(strObjTypeID.AllocSysString(), m_hWnd, m_pGrid);
+				m_pGrid->m_pDisp = g_pCosmos->m_pCLRProxy->CreateObject(strObjTypeID.AllocSysString(), m_hWnd, m_pGrid);
 
 				if (m_pGrid->m_pDisp)
 				{
 					m_pGrid->m_pGridShareData->m_mapLayoutNodes[m_pGrid->m_strName] = m_pGrid;
 					m_pGrid->m_nViewType = CLRCtrl;
-					if (g_pHubble->m_hFormNodeWnd)
+					if (g_pCosmos->m_hFormNodeWnd)
 					{
-						m_hFormWnd = g_pHubble->m_hFormNodeWnd;
+						m_hFormWnd = g_pCosmos->m_hFormNodeWnd;
 						RECT rc;
 						::GetClientRect(m_hWnd, &rc);
 						::SetWindowPos(m_hFormWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-						g_pHubble->m_hFormNodeWnd = nullptr;
+						g_pCosmos->m_hFormNodeWnd = nullptr;
 						return 0;
 					}
 					CAxWindow m_Wnd;
@@ -866,10 +866,10 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 						strTemp = strTemp.Left(nPos);
 						if (::PathFileExists(strTemp) == false)
 						{
-							strTemp = g_pHubble->m_strAppPath + strTemp;
+							strTemp = g_pCosmos->m_strAppPath + strTemp;
 							if (::PathFileExists(strTemp) == false)
 							{
-								strTemp = g_pHubble->m_strProgramFilePath + _T("Tangram\\") + strTemp;
+								strTemp = g_pCosmos->m_strProgramFilePath + _T("Tangram\\") + strTemp;
 								if (::PathFileExists(strTemp) == false)
 								{
 									strURL = _T("about:blank");
@@ -932,8 +932,8 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 	{
 		RECT rc;
 		::GetClientRect(m_hWnd, &rc);
-		m_pGrid->m_hHostWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
-		m_pGrid->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pGrid->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		m_pGrid->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+		m_pGrid->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pGrid->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
 		IGalaxy* pGalaxy = nullptr;
 		m_pGrid->m_pGridShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pOldNode->m_hChildHostWnd), CComBSTR(L"Design"), &pGalaxy);
 		((CGalaxy*)pGalaxy)->m_pDoc = m_pGrid->m_pGridShareData->m_pGalaxy->m_pDoc;
@@ -979,15 +979,15 @@ LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
 			m_pGrid->m_vChildNodes.push_back(((CGrid*)pGrid));
 		}
 
-		strXml = m_pGrid->m_pGridShareData->m_pHubbleParse->xml();
-		g_pHubble->m_pDesignGrid = m_pGrid;
-		g_pHubble->m_pHostDesignUINode = m_pGrid->m_pRootObj;
-		if (g_pHubble->m_pHostDesignUINode)
+		strXml = m_pGrid->m_pGridShareData->m_pCosmosParse->xml();
+		g_pCosmos->m_pDesignGrid = m_pGrid;
+		g_pCosmos->m_pHostDesignUINode = m_pGrid->m_pRootObj;
+		if (g_pCosmos->m_pHostDesignUINode)
 		{
-			CTangramHtmlTreeWnd* pTreeCtrl = g_pHubble->m_pDocDOMTree;
+			CTangramHtmlTreeWnd* pTreeCtrl = g_pCosmos->m_pDocDOMTree;
 			if (pTreeCtrl)
 			{
-				pTreeCtrl->DeleteItem(g_pHubble->m_pDocDOMTree->m_hFirstRoot);
+				pTreeCtrl->DeleteItem(g_pCosmos->m_pDocDOMTree->m_hFirstRoot);
 
 				if (pTreeCtrl->m_pHostXmlParse)
 				{
@@ -1016,15 +1016,15 @@ LRESULT CGridHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
 
-LRESULT CGridHelper::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 	{
 		HWND hBrowser = (HWND)lParam;
 		if (::IsWindow(hBrowser))
 		{
-			auto it = g_pHubble->m_mapBrowserWnd.find(hBrowser);
-			if (it != g_pHubble->m_mapBrowserWnd.end())
+			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
 				m_pGrid->m_pWebBrowser = (CBrowser*)it->second;
 			}
@@ -1047,8 +1047,8 @@ LRESULT CGridHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 			HWND hWnd = (HWND)lParam;
 			if (::IsWindow(hWnd) && m_pGrid)
 			{
-				::GetClassName(hWnd, g_pHubble->m_szBuffer, MAX_PATH);
-				m_pGrid->Fire_ControlNotify(m_pGrid, HIWORD(wParam), LOWORD(wParam), lParam, CComBSTR(g_pHubble->m_szBuffer));
+				::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+				m_pGrid->Fire_ControlNotify(m_pGrid, HIWORD(wParam), LOWORD(wParam), lParam, CComBSTR(g_pCosmos->m_szBuffer));
 			}
 
 			return res;
@@ -1095,8 +1095,8 @@ LRESULT CBKWnd::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_pGrid)
 	{
-		g_pHubble->m_pActiveGrid = m_pGrid;
-		g_pHubble->m_bWinFormActived = false;
+		g_pCosmos->m_pActiveGrid = m_pGrid;
+		g_pCosmos->m_bWinFormActived = false;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
@@ -1113,7 +1113,7 @@ LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		IGrid* pGrid = nullptr;
 		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pGrid);
 		m_pGalaxy = (CGalaxy*)pGalaxy;
-		g_pHubble->m_mapBKFrame[m_hChild] = m_pGalaxy;
+		g_pCosmos->m_mapBKFrame[m_hChild] = m_pGalaxy;
 	}
 	return 1;
 }

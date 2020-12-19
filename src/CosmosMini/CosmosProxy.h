@@ -3,12 +3,19 @@
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *
-* This SOURCE CODE is governed by a BSD - style license that can be
-* found in the LICENSE file.
+* THIS SOURCE FILE IS THE PROPERTY OF TANGRAM TEAM AND IS NOT TO
+* BE RE-DISTRIBUTED BY ANY MEANS WHATSOEVER WITHOUT THE EXPRESSED
+* WRITTEN CONSENT OF TANGRAM TEAM.
+*
+* THIS SOURCE CODE CAN ONLY BE USED UNDER THE TERMS AND CONDITIONS
+* OUTLINED IN THE GPL LICENSE AGREEMENT.TANGRAM TEAM
+* GRANTS TO YOU (ONE SOFTWARE DEVELOPER) THE LIMITED RIGHT TO USE
+* THIS SOFTWARE ON A SINGLE COMPUTER.
 *
 * CONTACT INFORMATION:
 * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
-* https://www.tangram.dev
+* http://www.tangramteam.com/
+*
 ********************************************************************************/
 
 // CosmosProxy.h : Declaration of the CCosmosProxy
@@ -23,7 +30,7 @@ using namespace System::Reflection;
 using namespace System::Diagnostics;
 using namespace System::Collections;
 
-class CCosmosProxy : public IHubbleCLRImpl
+class CCosmosProxy : public ICosmosCLRImpl
 {
 public: 
 	CCosmosProxy();
@@ -61,7 +68,7 @@ public:
 	}
 
 	IDispatch* CreateCLRObj(CString bstrObjID);
-	void HubbleAction(BSTR bstrXml, void*);
+	void CosmosAction(BSTR bstrXml, void*);
 private:
 	map<HWND, gcroot<Form^>>				m_mapForm;
 	gcroot<Hashtable^>						m_htObjects;
@@ -84,7 +91,7 @@ private:
 	BSTR GetCtrlType(IDispatch* pCtrl);
 	IDispatch* GetCtrlFromHandle(HWND hWnd);
 	HWND IsGalaxy(IDispatch* ctrl);
-	void ReleaseHubbleObj(IDispatch*);
+	void ReleaseCosmosObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);
 	HRESULT NavigateURL(IGrid* pGrid, CString strURL, IDispatch* dispObjforScript);

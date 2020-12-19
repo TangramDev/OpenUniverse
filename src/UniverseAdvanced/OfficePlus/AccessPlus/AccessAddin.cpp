@@ -35,7 +35,7 @@ namespace OfficePlus
 		{
 		}
 
-		STDMETHODIMP CAccessAddin::HubbleCommand(IDispatch* RibbonControl)
+		STDMETHODIMP CAccessAddin::CosmosCommand(IDispatch* RibbonControl)
 		{
 			if (m_spRibbonUI)
 				m_spRibbonUI->Invalidate();

@@ -164,7 +164,7 @@
 #include "eclipseConfig.h"
 #include "eclipseCommon.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -508,7 +508,7 @@ int GetLaunchMode()
 {
 	_TCHAR* errorMsg = NULL, * msg = nullptr;
 
-	if (g_pHubble->launchMode == -1)
+	if (g_pCosmos->launchMode == -1)
 	{
 		/* arg[0] should be the full pathname of this program. */
 		if (program == nullptr)
@@ -524,8 +524,8 @@ int GetLaunchMode()
 		if (programDir == nullptr)
 			programDir = getProgramDir();
 
-		g_pHubble->launchMode = determineVM(&msg);
-		if (g_pHubble->launchMode == -1) {
+		g_pCosmos->launchMode = determineVM(&msg);
+		if (g_pCosmos->launchMode == -1) {
 			/* problem */
 			errorMsg = (_TCHAR*)malloc((_tcslen(noVMMsg) + _tcslen(officialName) + _tcslen(msg) + 1) * sizeof(_TCHAR));
 			_stprintf(errorMsg, noVMMsg, officialName, msg);
@@ -625,7 +625,7 @@ static int _run(int argc, _TCHAR * argv[], _TCHAR * vmArgs[])
 	}
 
 #ifdef _WIN32
-	if (g_pHubble->launchMode == LAUNCH_JNI && (debug || needConsole)) {
+	if (g_pCosmos->launchMode == LAUNCH_JNI && (debug || needConsole)) {
 		createConsole();
 	}
 #endif
@@ -634,13 +634,13 @@ static int _run(int argc, _TCHAR * argv[], _TCHAR * vmArgs[])
 	if (!noSplash && showSplashArg)
 	{
 		splashBitmap = findSplash(showSplashArg);
-		if (splashBitmap != NULL && g_pHubble->launchMode == LAUNCH_JNI) {
+		if (splashBitmap != NULL && g_pCosmos->launchMode == LAUNCH_JNI) {
 			showSplash(splashBitmap);
 		}
 	}
 
 	/* not using JNI launching, need some shared data */
-	if (g_pHubble->launchMode == LAUNCH_EXE && createSharedData(&sharedID, MAX_SHARED_LENGTH)) {
+	if (g_pCosmos->launchMode == LAUNCH_EXE && createSharedData(&sharedID, MAX_SHARED_LENGTH)) {
 		if (debug) {
 			if (!suppressErrors)
 				displayMessage(officialName, shareMsg);
@@ -655,7 +655,7 @@ static int _run(int argc, _TCHAR * argv[], _TCHAR * vmArgs[])
 #endif
 #endif
 	/* the startup jarFile goes on the classpath */
-	if (g_pHubble->launchMode == LAUNCH_JNI) {
+	if (g_pCosmos->launchMode == LAUNCH_JNI) {
 		cp = (_TCHAR*)malloc((_tcslen(CLASSPATH_PREFIX) + _tcslen(jarFile) + 1) * sizeof(_TCHAR));
 		cp = _tcscpy(cp, CLASSPATH_PREFIX);
 		_tcscat(cp, jarFile);
@@ -669,13 +669,13 @@ static int _run(int argc, _TCHAR * argv[], _TCHAR * vmArgs[])
 
 	/* Get the command to start the Java VM. */
 	userVMarg = vmArgs;
-	getVMCommand(g_pHubble->launchMode, argc, argv, &vmCommandArgs, &progCommandArgs);
+	getVMCommand(g_pCosmos->launchMode, argc, argv, &vmCommandArgs, &progCommandArgs);
 
-	if (g_pHubble->launchMode == LAUNCH_EXE) {
+	if (g_pCosmos->launchMode == LAUNCH_EXE) {
 		vmCommand = buildLaunchCommand(javaVM, vmCommandArgs, progCommandArgs);
 	}
 
-	int launchMode = g_pHubble->launchMode;
+	int launchMode = g_pCosmos->launchMode;
 	/* While the Java VM should be restarted */
 	while (running)
 	{
@@ -685,8 +685,8 @@ static int _run(int argc, _TCHAR * argv[], _TCHAR * vmArgs[])
 		if (launchMode == LAUNCH_JNI)
 		{
 			OutputDebugString(_T("\n***************begin Create JVM***************\n"));
-			if (g_pHubble->m_pCLRProxy)
-				g_pHubble->m_pCLRProxy->HubbleAction(_T("<begin_create_jvm_for_eclipse/>"), nullptr);
+			if (g_pCosmos->m_pCLRProxy)
+				g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_create_jvm_for_eclipse/>"), nullptr);
 
 			TRACE(_T("\n***************%s***************\n\n"),CString(jarFile));
 			javaResults = startJavaVM(jniLib, vmCommandArgs, progCommandArgs, jarFile);
@@ -844,9 +844,9 @@ static int _run(int argc, _TCHAR * argv[], _TCHAR * vmArgs[])
 	running = javaResults->launchResult != 0 ? javaResults->launchResult : javaResults->runResult;
 	free(javaResults);
 	ATLTRACE(_T("begin quit eclipse\n"));
-	if (g_pHubble)
+	if (g_pCosmos)
 	{
-		::DestroyWindow(g_pHubble->m_hHostWnd);
+		::DestroyWindow(g_pCosmos->m_hHostWnd);
 	}
 	ATLTRACE(_T("end quit eclipse\n"));
 	return running;
@@ -1530,7 +1530,7 @@ _TCHAR* findStartupJar() {
 	_tcscat(pluginsPath, _T("plugins"));
 
 	/* equinox startup jar? */
-	CString strPreFix = g_pHubble->m_strStartJarPath;
+	CString strPreFix = g_pCosmos->m_strStartJarPath;
 	file = findFile(pluginsPath, strPreFix.GetBuffer());
 	strPreFix.ReleaseBuffer();
 	//file = findFile(pluginsPath, DEFAULT_EQUINOX_STARTUP);
@@ -1861,7 +1861,7 @@ static int determineVM(_TCHAR * *msg) {
 	if (jniLib != NULL)
 	{
 		free(javaVM);//bug for eclipse
-		if (g_pHubble->m_b64bitSystem)
+		if (g_pCosmos->m_b64bitSystem)
 		{
 			if (::loadLibrary(jniLib) == NULL)
 			{
@@ -1891,7 +1891,7 @@ static int determineVM(_TCHAR * *msg) {
 							if (jniLib != NULL && ::loadLibrary(jniLib) != NULL) {
 								if (_tcsncmp(_T("1.8"), keyName, 3) == 0)
 								{
-									g_pHubble->m_nJVMVersion = JNI_VERSION_1_8;
+									g_pCosmos->m_nJVMVersion = JNI_VERSION_1_8;
 									int nPos = _strJniPath.Find(_T("\\bin\\"));
 									if (nPos != -1 && _strPath.Find(_strJniPath) == -1)
 									{
@@ -1915,16 +1915,16 @@ static int determineVM(_TCHAR * *msg) {
 									switch (nVer)
 									{
 									case 16:
-										g_pHubble->m_nJVMVersion = JNI_VERSION_1_6;
+										g_pCosmos->m_nJVMVersion = JNI_VERSION_1_6;
 										break;
 									case 14:
-										g_pHubble->m_nJVMVersion = JNI_VERSION_1_4;
+										g_pCosmos->m_nJVMVersion = JNI_VERSION_1_4;
 										break;
 									case 12:
-										g_pHubble->m_nJVMVersion = JNI_VERSION_1_2;
+										g_pCosmos->m_nJVMVersion = JNI_VERSION_1_2;
 										break;
 									case 11:
-										g_pHubble->m_nJVMVersion = JNI_VERSION_1_1;
+										g_pCosmos->m_nJVMVersion = JNI_VERSION_1_1;
 										break;
 									}
 									strJniPath = _strJniPath = jniLib;
@@ -1964,7 +1964,7 @@ static int determineVM(_TCHAR * *msg) {
 								if (jniLib != NULL && ::loadLibrary(jniLib) != NULL) {
 									if (_tcsncmp(_T("1.8"), keyName, 3) == 0)
 									{
-										g_pHubble->m_nJVMVersion = JNI_VERSION_1_8;
+										g_pCosmos->m_nJVMVersion = JNI_VERSION_1_8;
 										int nPos = _strJniPath.Find(_T("\\bin\\"));
 										if (nPos != -1 && _strPath.Find(_strJniPath) == -1)
 										{
@@ -2000,16 +2000,16 @@ static int determineVM(_TCHAR * *msg) {
 										switch (nVer)
 										{
 										case 16:
-											g_pHubble->m_nJVMVersion = JNI_VERSION_1_6;
+											g_pCosmos->m_nJVMVersion = JNI_VERSION_1_6;
 											break;
 										case 14:
-											g_pHubble->m_nJVMVersion = JNI_VERSION_1_4;
+											g_pCosmos->m_nJVMVersion = JNI_VERSION_1_4;
 											break;
 										case 12:
-											g_pHubble->m_nJVMVersion = JNI_VERSION_1_2;
+											g_pCosmos->m_nJVMVersion = JNI_VERSION_1_2;
 											break;
 										case 11:
-											g_pHubble->m_nJVMVersion = JNI_VERSION_1_1;
+											g_pCosmos->m_nJVMVersion = JNI_VERSION_1_1;
 											break;
 										}
 										strJniPath = _strJniPath = jniLib;

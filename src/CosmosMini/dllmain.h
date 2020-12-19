@@ -13,14 +13,14 @@
 
 // dllmain.h : Declaration of module class.
 
-#include "HubbleEvents.h"
+#include "CosmosEvents.h"
 #include <cstring>
 #include <iostream>
 
 class CGridCLREvent;
 
 class CCosmos :
-	public IHubbleDelegate,
+	public ICosmosDelegate,
 	public IUniverseAppProxy
 {
 public:
@@ -31,19 +31,19 @@ public:
 	bool									m_bBrowserModeInit = false;
 	DWORD									m_dwThreadID;
 	HWND									m_hHostWnd;
-	IHubble*								m_pHubble;
+	ICosmos*								m_pCosmos;
 
 	CString									m_strAppPath;
 
 	CString GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifiedName);
 
-	void InitHubbleApp(bool bCrashReporting);
+	void InitCosmosApp(bool bCrashReporting);
 private:
 	void ProcessMsg(MSG* msg);
 	//CCosmosCoreEvents:
-	void OnHubbleClose();
+	void OnCosmosClose();
 	void OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
-	void HubbleInit() {};
+	void CosmosInit() {};
 	bool OnUniversePreTranslateMessage(MSG* pMsg);
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
 };

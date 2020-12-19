@@ -3,12 +3,19 @@
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *
-* This SOURCE CODE is governed by a BSD - style license that can be
-* found in the LICENSE file.
+* THIS SOURCE FILE IS THE PROPERTY OF TANGRAM TEAM AND IS NOT TO
+* BE RE-DISTRIBUTED BY ANY MEANS WHATSOEVER WITHOUT THE EXPRESSED
+* WRITTEN CONSENT OF TANGRAM TEAM.
+*
+* THIS SOURCE CODE CAN ONLY BE USED UNDER THE TERMS AND CONDITIONS
+* OUTLINED IN THE GPL LICENSE AGREEMENT.TANGRAM TEAM
+* GRANTS TO YOU (ONE SOFTWARE DEVELOPER) THE LIMITED RIGHT TO USE
+* THIS SOFTWARE ON A SINGLE COMPUTER.
 *
 * CONTACT INFORMATION:
 * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
-* https://www.tangram.dev
+* http://www.tangramteam.com/
+*
 ********************************************************************************/
 
 #pragma once
@@ -37,7 +44,7 @@ extern CCosmosProxy theAppProxy;
 namespace Cosmos
 {
 	/// <summary>
-	/// Summary for Hubble
+	/// Summary for Cosmos
 	/// </summary>
 
 	ref class Grid;
@@ -571,27 +578,27 @@ namespace Cosmos
 		IGalaxy* m_pGalaxy;
 	};
 
-	public ref class Hubble
+	public ref class Cosmos
 	{
 	public:
-		Hubble(IHubble* pHubble);
-		~Hubble();
+		Cosmos(ICosmos* pCosmos);
+		~Cosmos();
 	private:
-		Hubble() {};
+		Cosmos() {};
 		static bool IsAppInit = false;
 		static bool IsWebRuntimeInit = false;
 
-		static Hubble^ m_pHubble;
+		static Cosmos^ m_pCosmos;
 		static Form^ m_pMainForm = nullptr;
-		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
+		static Dictionary<String^, Type^>^ m_pCosmosCLRTypeDic = gcnew Dictionary<String^, Type^>();
 		static Dictionary<Object^, Wormhole^>^ m_pWormholes = gcnew Dictionary<Object^, Wormhole^>();
 
-		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
+		static Cosmos^ InitCosmosApp(bool bSupportCrashReporting, CosmosAppType AppType);
 		static bool WebRuntimeInit();
 		static Type^ GetType(String^ ObjID);
 		static void OnFormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e);
 	public:
-		static int HubbleInit(String^ strInit);
+		static int CosmosInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 
 		static Object^ CreateObject(String^ ObjID);
@@ -607,7 +614,7 @@ namespace Cosmos
 		static Wormhole^ GetWormholeFromObj(Object^ obj);
 		static void SendXmlMessage(Grid^ sender, String^ strXml);
 
-		static Hubble^ GetHubble();
+		static Cosmos^ GetCosmos();
 
 		static void Run();
 		static void Run(Form^ Mainform);
@@ -710,18 +717,18 @@ namespace Cosmos
 			OnObserverComplete(hWnd, bstrUrl, pRootGrid);
 		}
 
-		delegate void HubbleMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2);
-		static event HubbleMsg^ OnHubbleMsg;
-		static void Fire_OnHubbleMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2)
+		delegate void CosmosMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2);
+		static event CosmosMsg^ OnCosmosMsg;
+		static void Fire_OnCosmosMsg(IntPtr hWnd, String^ strType, String^ strParam1, String^ strParam2)
 		{
-			OnHubbleMsg(hWnd, strType, strParam1, strParam2);
+			OnCosmosMsg(hWnd, strType, strParam1, strParam2);
 		}
 
-		delegate void HubbleMsgReceived(Cosmos::Wormhole^ cloudSession);
-		static event HubbleMsgReceived^ OnHubbleMsgReceived;
-		static void Fire_OnHubbleMsgReceived(Cosmos::Wormhole^ cloudSession)
+		delegate void CosmosMsgReceived(Cosmos::Wormhole^ cloudSession);
+		static event CosmosMsgReceived^ OnCosmosMsgReceived;
+		static void Fire_OnCosmosMsgReceived(Cosmos::Wormhole^ cloudSession)
 		{
-			OnHubbleMsgReceived(cloudSession);
+			OnCosmosMsgReceived(cloudSession);
 		}
 
 		delegate void CustomizedDOMElement(IntPtr hWnd, String^ strRuleName, String^ strHTML);

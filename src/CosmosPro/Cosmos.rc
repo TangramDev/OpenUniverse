@@ -74,12 +74,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "TangramTeam"
-            VALUE "FileDescription", "Hubble CLR Runtime"
+            VALUE "FileDescription", "Cosmos CLR Runtime"
             VALUE "FileVersion", "10.0.0.0"
             VALUE "InternalName", "Cosmos.dll"
             VALUE "LegalCopyright", "TangramTeam.  All rights reserved."
             VALUE "OriginalFilename", "Cosmos.dll"
-            VALUE "ProductName", "Hubble CLR Runtime"
+            VALUE "ProductName", "Cosmos CLR Runtime"
             VALUE "ProductVersion", "10.0.0.0"
         END
     END

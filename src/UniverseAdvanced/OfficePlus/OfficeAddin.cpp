@@ -38,7 +38,7 @@
 using namespace VBIDE;
 /*
 Private Sub MDIForm_Load()
-Set TangramCore = CreateObject("Hubble.hubble")
+Set TangramCore = CreateObject("Cosmos.hubble")
 Dim tangram As Object
 Set tangram = TangramCore.CreateGalaxyCluster(Me.hWnd)
 Dim frameX As Object
@@ -91,12 +91,12 @@ namespace OfficePlus
 	{
 		CComQIPtr<COMAddIn> _pAddInInst(pAddInInst);
 		if (_pAddInInst)
-			_pAddInInst->put_Object((IHubble*)this);
+			_pAddInInst->put_Object((ICosmos*)this);
 
 		if (::IsWindow(m_hHostWnd) == false)
 		{
-			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Hubble Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theApp.m_hInstance, NULL);
+			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
+			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theApp.m_hInstance, NULL);
 		}
 		OnConnection(pApplication, ConnectMode);
 		return S_OK;
@@ -105,16 +105,16 @@ namespace OfficePlus
 	STDMETHODIMP COfficeAddin::OnDisconnection(AddInDesignerObjects::ext_DisconnectMode RemoveMode, SAFEARRAY ** /*custom*/)
 	{
 		m_bOfficeAddinUnLoad = true;
-		g_pHubble->m_pActiveAppProxy = nullptr;
+		g_pCosmos->m_pActiveAppProxy = nullptr;
 		if (m_pCTPFactory)
 			m_pCTPFactory.Detach();
 		OnDisconnection(RemoveMode);
 
-		g_pHubble->m_pDesignerGalaxyCluster = nullptr;
+		g_pCosmos->m_pDesignerGalaxyCluster = nullptr;
 		if (::IsWindow(m_hHostWnd))
 			::DestroyWindow(m_hHostWnd);
-		if (::IsWindow(m_hHubbleWnd))
-			::DestroyWindow(m_hHubbleWnd);
+		if (::IsWindow(m_hCosmosWnd))
+			::DestroyWindow(m_hCosmosWnd);
 		return S_OK;
 	}
 
@@ -319,12 +319,12 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeAddin::HubbleCommand(IDispatch* RibbonControl)
+	STDMETHODIMP COfficeAddin::CosmosCommand(IDispatch* RibbonControl)
 	{
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeAddin::HubbleOnLoad(IDispatch* RibbonControl)
+	STDMETHODIMP COfficeAddin::CosmosOnLoad(IDispatch* RibbonControl)
 	{
 		m_spRibbonUI = RibbonControl;
 		Tangram_OnLoad(RibbonControl);
@@ -348,7 +348,7 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeAddin::HubbleGetImage(BSTR strValue, IPictureDisp ** ppDispImage)
+	STDMETHODIMP COfficeAddin::CosmosGetImage(BSTR strValue, IPictureDisp ** ppDispImage)
 	{
 		CImage m_Image;
 		TCHAR szPath[MAX_PATH] = { 0 };
@@ -394,22 +394,22 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeAddin::HubbleGetItemCount(IDispatch* RibbonControl, long* nCount)
+	STDMETHODIMP COfficeAddin::CosmosGetItemCount(IDispatch* RibbonControl, long* nCount)
 	{
 		return Tangram_GetItemCount(RibbonControl, nCount);
 	}
 
-	STDMETHODIMP COfficeAddin::HubbleGetItemLabel(IDispatch* RibbonControl, long nIndex, BSTR* bstrLabel)
+	STDMETHODIMP COfficeAddin::CosmosGetItemLabel(IDispatch* RibbonControl, long nIndex, BSTR* bstrLabel)
 	{
 		return Tangram_GetItemLabel(RibbonControl, nIndex, bstrLabel);
 	}
 
-	STDMETHODIMP COfficeAddin::HubbleGetItemID(IDispatch* RibbonControl, long nIndex, BSTR* bstrID)
+	STDMETHODIMP COfficeAddin::CosmosGetItemID(IDispatch* RibbonControl, long nIndex, BSTR* bstrID)
 	{
 		return Tangram_GetItemID(RibbonControl, nIndex, bstrID);
 	}
 
-	STDMETHODIMP COfficeAddin::HubbleGetVisible(IDispatch* RibbonControl, VARIANT* varVisible)
+	STDMETHODIMP COfficeAddin::CosmosGetVisible(IDispatch* RibbonControl, VARIANT* varVisible)
 	{
 		return S_OK;
 	}
@@ -426,11 +426,11 @@ namespace OfficePlus
 		CString strName = this->m_strExeName;
 		if (::IsWindow(m_hHostWnd) == false)
 		{
-			auto it = g_pHubble->m_mapValInfo.find(_T("designertoolcaption"));
-			if (it != g_pHubble->m_mapValInfo.end())
+			auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
+			if (it != g_pCosmos->m_mapValInfo.end())
 				m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Hubble Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
+			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
 		}
 		if (m_hHostWnd&&m_pDesignerGalaxyCluster == nullptr)
 		{
@@ -441,14 +441,14 @@ namespace OfficePlus
 
 			if (m_pDesignerGalaxyCluster == nullptr)
 			{
-				auto it = g_pHubble->m_mapWindowPage.find(m_hHostWnd);
-				if (it != g_pHubble->m_mapWindowPage.end())
+				auto it = g_pCosmos->m_mapWindowPage.find(m_hHostWnd);
+				if (it != g_pCosmos->m_mapWindowPage.end())
 					m_pDesignerGalaxyCluster = (CGalaxyCluster*)it->second;
 				else
 				{
 					m_pDesignerGalaxyCluster = new CComObject<CGalaxyCluster>();
 					m_pDesignerGalaxyCluster->m_hWnd = m_hHostWnd;
-					g_pHubble->m_mapWindowPage[m_hHostWnd] = m_pDesignerGalaxyCluster;
+					g_pCosmos->m_mapWindowPage[m_hHostWnd] = m_pDesignerGalaxyCluster;
 				}
 
 				CString strPath = m_strExeName + _T(".designer");
@@ -489,7 +489,7 @@ namespace OfficePlus
 
 	STDMETHODIMP COfficeExtender::Close()
 	{
-		g_pHubble->m_pExtender = nullptr;
+		g_pCosmos->m_pExtender = nullptr;
 		delete this;
 		return S_OK;
 	}
@@ -500,13 +500,13 @@ namespace OfficePlus
 		strID.Trim();
 		if (strID != _T(""))
 		{
-			IHubble* pHubble = nullptr;
-			m_pAddin->get_RemoteHubble(bstrID, &pHubble);
-			if (pHubble)
+			ICosmos* pCosmos = nullptr;
+			m_pAddin->get_RemoteCosmos(bstrID, &pCosmos);
+			if (pCosmos)
 			{
 				IWorkBenchWindow* pRet = nullptr;
-				IHubbleExtender* pExtender = nullptr;
-				pHubble->get_Extender(&pExtender);
+				ICosmosExtender* pExtender = nullptr;
+				pCosmos->get_Extender(&pExtender);
 				if (pExtender)
 				{
 					CComQIPtr<IEclipseExtender> pEclipse(pExtender);
@@ -568,14 +568,14 @@ namespace OfficePlus
 					HWND hChild = ::GetWindow(hWnd, GW_CHILD);
 					IGalaxy* pGalaxy = nullptr;
 					CGalaxyCluster* pGalaxyCluster = nullptr;
-					auto it = g_pHubble->m_mapWindowPage.find(hChild);
-					if (it != g_pHubble->m_mapWindowPage.end())
+					auto it = g_pCosmos->m_mapWindowPage.find(hChild);
+					if (it != g_pCosmos->m_mapWindowPage.end())
 						pGalaxyCluster = (CGalaxyCluster*)it->second;
 					else
 					{
 						pGalaxyCluster = new CComObject<CGalaxyCluster>();
 						pGalaxyCluster->m_hWnd = hChild;
-						g_pHubble->m_mapWindowPage[hChild] = pGalaxyCluster;
+						g_pCosmos->m_mapWindowPage[hChild] = pGalaxyCluster;
 					}
 
 					pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hChild), CComBSTR(L"UserForm"), &pGalaxy);
@@ -784,14 +784,14 @@ namespace OfficePlus
 			m_hClient = ::CreateWindowEx(NULL, L"Tangram Remote Helper Window", _T("Tangram Office Plus Addin Helper Window"), WS_CHILD, 0, 0, 0, 0, (HWND)m_hForm, NULL, theApp.m_hInstance, NULL);
 			m_hChildClient = ::CreateWindowEx(NULL, L"Tangram Remote Helper Window", _T("Tangram Excel Helper Window"), WS_CHILD, 0, 0, 0, 0, (HWND)m_hClient, NULL, AfxGetInstanceHandle(), NULL);
 
-			auto it = g_pHubble->m_mapWindowPage.find(m_hClient);
-			if (it != g_pHubble->m_mapWindowPage.end())
+			auto it = g_pCosmos->m_mapWindowPage.find(m_hClient);
+			if (it != g_pCosmos->m_mapWindowPage.end())
 				m_pGalaxyCluster = (CGalaxyCluster*)it->second;
 			else
 			{
 				m_pGalaxyCluster = new CComObject<CGalaxyCluster>();
 				m_pGalaxyCluster->m_hWnd = m_hClient;
-				g_pHubble->m_mapWindowPage[m_hClient] = m_pGalaxyCluster;
+				g_pCosmos->m_mapWindowPage[m_hClient] = m_pGalaxyCluster;
 			}
 
 			if (m_pGalaxyCluster == nullptr)
@@ -811,7 +811,7 @@ namespace OfficePlus
 		return m_pGalaxy->Observe(bstrKey, bstrXml, ppGrid);
 	}
 
-	STDMETHODIMP COfficeObject::UnloadHubble()
+	STDMETHODIMP COfficeObject::UnloadCosmos()
 	{
 		if (m_pGalaxyCluster)
 		{

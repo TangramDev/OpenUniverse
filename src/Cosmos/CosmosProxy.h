@@ -52,7 +52,7 @@ public:
 	map<int, gcroot<ToolStripMenuItem^>> m_mapShortcutItem;
 };
 
-class CCosmosProxy : public IHubbleCLRImpl
+class CCosmosProxy : public ICosmosCLRImpl
 {
 public: 
 	CCosmosProxy();
@@ -99,7 +99,7 @@ public:
 	}
 
 	IDispatch* CreateCLRObj(CString bstrObjID);
-	void HubbleAction(BSTR bstrXml, void*);
+	void CosmosAction(BSTR bstrXml, void*);
 	void _GetMenuInfo(FormInfo*, ToolStripMenuItem^);
 private:
 	map<HWND, gcroot<Form^>>				m_mapForm;
@@ -123,7 +123,7 @@ private:
 	BSTR GetCtrlType(IDispatch* pCtrl);
 	IDispatch* GetCtrlFromHandle(HWND hWnd);
 	HWND IsGalaxy(IDispatch* ctrl);
-	void ReleaseHubbleObj(IDispatch*);
+	void ReleaseCosmosObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);
 	HRESULT NavigateURL(IGrid* pGrid, CString strURL, IDispatch* dispObjforScript);

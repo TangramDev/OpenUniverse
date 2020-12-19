@@ -1,14 +1,21 @@
 /********************************************************************************
-*					DOM Plus for Application - Version 1.1.5.30								*
+*					DOM Plus for Application - Version 1.1.5.30                 *
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *
-* This SOURCE CODE is governed by a BSD - style license that can be
-* found in the LICENSE file.
+* THIS SOURCE FILE IS THE PROPERTY OF TANGRAM TEAM AND IS NOT TO
+* BE RE-DISTRIBUTED BY ANY MEANS WHATSOEVER WITHOUT THE EXPRESSED
+* WRITTEN CONSENT OF TANGRAM TEAM.
+*
+* THIS SOURCE CODE CAN ONLY BE USED UNDER THE TERMS AND CONDITIONS
+* OUTLINED IN THE GPL LICENSE AGREEMENT.TANGRAM TEAM
+* GRANTS TO YOU (ONE SOFTWARE DEVELOPER) THE LIMITED RIGHT TO USE
+* THIS SOFTWARE ON A SINGLE COMPUTER.
 *
 * CONTACT INFORMATION:
 * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
-* https://www.tangram.dev
+* http://www.tangramteam.com/
+*
 ********************************************************************************/
 
 #pragma once
@@ -33,7 +40,7 @@ public:
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 		MESSAGE_HANDLER(WM_WINFORMCREATED, OnFormCreated)
-		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnHubbleGetXml)
+		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnCosmosGetXml)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()
@@ -44,7 +51,7 @@ private:
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -102,7 +109,7 @@ public:
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)
 		MESSAGE_HANDLER(WM_NCDESTROY, OnNcDestroy)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_PARENTNOTIFY, OnParentNotify)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_HUBBLE_ACTIVEPAGE, OnTabChanged)
@@ -118,7 +125,7 @@ private:
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnNcDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnTabChanged(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnHubbleMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnParentNotify(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
@@ -135,7 +142,7 @@ private:
 	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);
 	STDMETHOD(put_DesignerState)(VARIANT_BOOL newVal);
-	STDMETHOD(get_HubbleDoc)(IHubbleDoc** pVal);
+	STDMETHOD(get_CosmosDoc)(ICosmosDoc** pVal);
 	STDMETHOD(get_GalaxyType)(GalaxyType* pVal);
 	STDMETHOD(get_Name)(BSTR* pVal);
 	STDMETHOD(get_HostBrowser)(IBrowser** ppChromeWebBrowser);

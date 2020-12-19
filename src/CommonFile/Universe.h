@@ -44,11 +44,11 @@
 
 /* Forward Declarations */ 
 
-#ifndef __IHubbleExtender_FWD_DEFINED__
-#define __IHubbleExtender_FWD_DEFINED__
-typedef interface IHubbleExtender IHubbleExtender;
+#ifndef __ICosmosExtender_FWD_DEFINED__
+#define __ICosmosExtender_FWD_DEFINED__
+typedef interface ICosmosExtender ICosmosExtender;
 
-#endif 	/* __IHubbleExtender_FWD_DEFINED__ */
+#endif 	/* __ICosmosExtender_FWD_DEFINED__ */
 
 
 #ifndef __IEclipseExtender_FWD_DEFINED__
@@ -65,32 +65,32 @@ typedef interface IOfficeExtender IOfficeExtender;
 #endif 	/* __IOfficeExtender_FWD_DEFINED__ */
 
 
-#ifndef __IHubbleTreeNode_FWD_DEFINED__
-#define __IHubbleTreeNode_FWD_DEFINED__
-typedef interface IHubbleTreeNode IHubbleTreeNode;
+#ifndef __ICosmosTreeNode_FWD_DEFINED__
+#define __ICosmosTreeNode_FWD_DEFINED__
+typedef interface ICosmosTreeNode ICosmosTreeNode;
 
-#endif 	/* __IHubbleTreeNode_FWD_DEFINED__ */
-
-
-#ifndef __IHubbleTreeViewCallBack_FWD_DEFINED__
-#define __IHubbleTreeViewCallBack_FWD_DEFINED__
-typedef interface IHubbleTreeViewCallBack IHubbleTreeViewCallBack;
-
-#endif 	/* __IHubbleTreeViewCallBack_FWD_DEFINED__ */
+#endif 	/* __ICosmosTreeNode_FWD_DEFINED__ */
 
 
-#ifndef __IHubbleTreeView_FWD_DEFINED__
-#define __IHubbleTreeView_FWD_DEFINED__
-typedef interface IHubbleTreeView IHubbleTreeView;
+#ifndef __ICosmosTreeViewCallBack_FWD_DEFINED__
+#define __ICosmosTreeViewCallBack_FWD_DEFINED__
+typedef interface ICosmosTreeViewCallBack ICosmosTreeViewCallBack;
 
-#endif 	/* __IHubbleTreeView_FWD_DEFINED__ */
+#endif 	/* __ICosmosTreeViewCallBack_FWD_DEFINED__ */
 
 
-#ifndef __IHubbleEventObj_FWD_DEFINED__
-#define __IHubbleEventObj_FWD_DEFINED__
-typedef interface IHubbleEventObj IHubbleEventObj;
+#ifndef __ICosmosTreeView_FWD_DEFINED__
+#define __ICosmosTreeView_FWD_DEFINED__
+typedef interface ICosmosTreeView ICosmosTreeView;
 
-#endif 	/* __IHubbleEventObj_FWD_DEFINED__ */
+#endif 	/* __ICosmosTreeView_FWD_DEFINED__ */
+
+
+#ifndef __ICosmosEventObj_FWD_DEFINED__
+#define __ICosmosEventObj_FWD_DEFINED__
+typedef interface ICosmosEventObj ICosmosEventObj;
+
+#endif 	/* __ICosmosEventObj_FWD_DEFINED__ */
 
 
 #ifndef __IGrid_FWD_DEFINED__
@@ -107,25 +107,25 @@ typedef interface IAppExtender IAppExtender;
 #endif 	/* __IAppExtender_FWD_DEFINED__ */
 
 
-#ifndef __IHubbleDoc_FWD_DEFINED__
-#define __IHubbleDoc_FWD_DEFINED__
-typedef interface IHubbleDoc IHubbleDoc;
+#ifndef __ICosmosDoc_FWD_DEFINED__
+#define __ICosmosDoc_FWD_DEFINED__
+typedef interface ICosmosDoc ICosmosDoc;
 
-#endif 	/* __IHubbleDoc_FWD_DEFINED__ */
-
-
-#ifndef __IHubbleDocTemplate_FWD_DEFINED__
-#define __IHubbleDocTemplate_FWD_DEFINED__
-typedef interface IHubbleDocTemplate IHubbleDocTemplate;
-
-#endif 	/* __IHubbleDocTemplate_FWD_DEFINED__ */
+#endif 	/* __ICosmosDoc_FWD_DEFINED__ */
 
 
-#ifndef __IHubble_FWD_DEFINED__
-#define __IHubble_FWD_DEFINED__
-typedef interface IHubble IHubble;
+#ifndef __ICosmosDocTemplate_FWD_DEFINED__
+#define __ICosmosDocTemplate_FWD_DEFINED__
+typedef interface ICosmosDocTemplate ICosmosDocTemplate;
 
-#endif 	/* __IHubble_FWD_DEFINED__ */
+#endif 	/* __ICosmosDocTemplate_FWD_DEFINED__ */
+
+
+#ifndef __ICosmos_FWD_DEFINED__
+#define __ICosmos_FWD_DEFINED__
+typedef interface ICosmos ICosmos;
+
+#endif 	/* __ICosmos_FWD_DEFINED__ */
 
 
 #ifndef __IGalaxy_FWD_DEFINED__
@@ -177,18 +177,18 @@ typedef interface IOfficeObject IOfficeObject;
 #endif 	/* __IOfficeObject_FWD_DEFINED__ */
 
 
-#ifndef __IHubbleCtrl_FWD_DEFINED__
-#define __IHubbleCtrl_FWD_DEFINED__
-typedef interface IHubbleCtrl IHubbleCtrl;
+#ifndef __ICosmosCtrl_FWD_DEFINED__
+#define __ICosmosCtrl_FWD_DEFINED__
+typedef interface ICosmosCtrl ICosmosCtrl;
 
-#endif 	/* __IHubbleCtrl_FWD_DEFINED__ */
+#endif 	/* __ICosmosCtrl_FWD_DEFINED__ */
 
 
-#ifndef __IHubbleAppCtrl_FWD_DEFINED__
-#define __IHubbleAppCtrl_FWD_DEFINED__
-typedef interface IHubbleAppCtrl IHubbleAppCtrl;
+#ifndef __ICosmosAppCtrl_FWD_DEFINED__
+#define __ICosmosAppCtrl_FWD_DEFINED__
+typedef interface ICosmosAppCtrl ICosmosAppCtrl;
 
-#endif 	/* __IHubbleAppCtrl_FWD_DEFINED__ */
+#endif 	/* __ICosmosAppCtrl_FWD_DEFINED__ */
 
 
 #ifndef __IEclipseCtrl_FWD_DEFINED__
@@ -198,11 +198,11 @@ typedef interface IEclipseCtrl IEclipseCtrl;
 #endif 	/* __IEclipseCtrl_FWD_DEFINED__ */
 
 
-#ifndef ___IHubble_FWD_DEFINED__
-#define ___IHubble_FWD_DEFINED__
-typedef interface _IHubble _IHubble;
+#ifndef ___ICosmos_FWD_DEFINED__
+#define ___ICosmos_FWD_DEFINED__
+typedef interface _ICosmos _ICosmos;
 
-#endif 	/* ___IHubble_FWD_DEFINED__ */
+#endif 	/* ___ICosmos_FWD_DEFINED__ */
 
 
 #ifndef __Universe_FWD_DEFINED__
@@ -224,30 +224,30 @@ typedef interface _IGridEvents _IGridEvents;
 #endif 	/* ___IGridEvents_FWD_DEFINED__ */
 
 
-#ifndef ___IHubbleObjEvents_FWD_DEFINED__
-#define ___IHubbleObjEvents_FWD_DEFINED__
-typedef interface _IHubbleObjEvents _IHubbleObjEvents;
+#ifndef ___ICosmosObjEvents_FWD_DEFINED__
+#define ___ICosmosObjEvents_FWD_DEFINED__
+typedef interface _ICosmosObjEvents _ICosmosObjEvents;
 
-#endif 	/* ___IHubbleObjEvents_FWD_DEFINED__ */
-
-
-#ifndef ___IHubbleAppEvents_FWD_DEFINED__
-#define ___IHubbleAppEvents_FWD_DEFINED__
-typedef interface _IHubbleAppEvents _IHubbleAppEvents;
-
-#endif 	/* ___IHubbleAppEvents_FWD_DEFINED__ */
+#endif 	/* ___ICosmosObjEvents_FWD_DEFINED__ */
 
 
-#ifndef __HubbleCtrl_FWD_DEFINED__
-#define __HubbleCtrl_FWD_DEFINED__
+#ifndef ___ICosmosAppEvents_FWD_DEFINED__
+#define ___ICosmosAppEvents_FWD_DEFINED__
+typedef interface _ICosmosAppEvents _ICosmosAppEvents;
+
+#endif 	/* ___ICosmosAppEvents_FWD_DEFINED__ */
+
+
+#ifndef __CosmosCtrl_FWD_DEFINED__
+#define __CosmosCtrl_FWD_DEFINED__
 
 #ifdef __cplusplus
-typedef class HubbleCtrl HubbleCtrl;
+typedef class CosmosCtrl CosmosCtrl;
 #else
-typedef struct HubbleCtrl HubbleCtrl;
+typedef struct CosmosCtrl CosmosCtrl;
 #endif /* __cplusplus */
 
-#endif 	/* __HubbleCtrl_FWD_DEFINED__ */
+#endif 	/* __CosmosCtrl_FWD_DEFINED__ */
 
 
 #ifndef __UniverseExtender_FWD_DEFINED__
@@ -324,10 +324,10 @@ typedef /* [helpstring] */
 enum ObjEventType
     {
         TangramNode	= 0,
-        HubbleDocEvent	= 0x1,
+        CosmosDocEvent	= 0x1,
         TangramNodeAllChildNode	= 0x2,
-        HubbleDocAllGalaxyAllChildNode	= 0x3,
-        HubbleDocAllGalaxyAllTopGrid	= 0x4,
+        CosmosDocAllGalaxyAllChildNode	= 0x3,
+        CosmosDocAllGalaxyAllTopGrid	= 0x4,
         TangramGalaxyAllTopGridAllChildNode	= 0x5,
         TangramGalaxyAllTopGrid	= 0x6,
         GalaxyClusterAllGalaxyAllTopGridAllChildNode	= 0x7,
@@ -336,8 +336,8 @@ enum ObjEventType
         GalaxyClusterCtrlBarGalaxyAllTopGrid	= 0xa,
         GalaxyClusterNotCtrlBarGalaxyAllTopGridAllChildNode	= 0xb,
         GalaxyClusterNotCtrlBarGalaxyAllTopGrid	= 0xc,
-        HubbleDocAllCtrlBarGalaxyAllChildNode	= 0xd,
-        HubbleDocAllCtrlBarGalaxy	= 0xe
+        CosmosDocAllCtrlBarGalaxyAllChildNode	= 0xd,
+        CosmosDocAllCtrlBarGalaxy	= 0xe
     } 	ObjEventType;
 
 typedef /* [helpstring] */ 
@@ -362,19 +362,19 @@ enum GridType
 extern RPC_IF_HANDLE __MIDL_itf_Universe_0000_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_Universe_0000_0000_v0_0_s_ifspec;
 
-#ifndef __IHubbleExtender_INTERFACE_DEFINED__
-#define __IHubbleExtender_INTERFACE_DEFINED__
+#ifndef __ICosmosExtender_INTERFACE_DEFINED__
+#define __ICosmosExtender_INTERFACE_DEFINED__
 
-/* interface IHubbleExtender */
+/* interface ICosmosExtender */
 /* [unique][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleExtender;
+EXTERN_C const IID IID_ICosmosExtender;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060120160101")
-    IHubbleExtender : public IDispatch
+    ICosmosExtender : public IDispatch
     {
     public:
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
@@ -388,34 +388,34 @@ EXTERN_C const IID IID_IHubbleExtender;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleExtenderVtbl
+    typedef struct ICosmosExtenderVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleExtender * This,
+            ICosmosExtender * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleExtender * This);
+            ICosmosExtender * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleExtender * This);
+            ICosmosExtender * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleExtender * This,
+            ICosmosExtender * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleExtender * This,
+            ICosmosExtender * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleExtender * This,
+            ICosmosExtender * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -423,7 +423,7 @@ EXTERN_C const IID IID_IHubbleExtender;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleExtender * This,
+            ICosmosExtender * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -442,19 +442,19 @@ EXTERN_C const IID IID_IHubbleExtender;
             _Out_opt_  UINT *puArgErr);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
-            IHubbleExtender * This);
+            ICosmosExtender * This);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveWorkBenchWindow )( 
-            IHubbleExtender * This,
+            ICosmosExtender * This,
             BSTR bstrID,
             /* [retval][out] */ IWorkBenchWindow **pVal);
         
         END_INTERFACE
-    } IHubbleExtenderVtbl;
+    } ICosmosExtenderVtbl;
 
-    interface IHubbleExtender
+    interface ICosmosExtender
     {
-        CONST_VTBL struct IHubbleExtenderVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosExtenderVtbl *lpVtbl;
     };
 
     
@@ -462,33 +462,33 @@ EXTERN_C const IID IID_IHubbleExtender;
 #ifdef COBJMACROS
 
 
-#define IHubbleExtender_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosExtender_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleExtender_AddRef(This)	\
+#define ICosmosExtender_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleExtender_Release(This)	\
+#define ICosmosExtender_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleExtender_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosExtender_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosExtender_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosExtender_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosExtender_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleExtender_Close(This)	\
+#define ICosmosExtender_Close(This)	\
     ( (This)->lpVtbl -> Close(This) ) 
 
-#define IHubbleExtender_get_ActiveWorkBenchWindow(This,bstrID,pVal)	\
+#define ICosmosExtender_get_ActiveWorkBenchWindow(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_ActiveWorkBenchWindow(This,bstrID,pVal) ) 
 
 #endif /* COBJMACROS */
@@ -499,7 +499,7 @@ EXTERN_C const IID IID_IHubbleExtender;
 
 
 
-#endif 	/* __IHubbleExtender_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosExtender_INTERFACE_DEFINED__ */
 
 
 #ifndef __IEclipseExtender_INTERFACE_DEFINED__
@@ -514,7 +514,7 @@ EXTERN_C const IID IID_IEclipseExtender;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060120160918")
-    IEclipseExtender : public IHubbleExtender
+    IEclipseExtender : public ICosmosExtender
     {
     public:
     };
@@ -649,7 +649,7 @@ EXTERN_C const IID IID_IOfficeExtender;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060119631222")
-    IOfficeExtender : public IHubbleExtender
+    IOfficeExtender : public ICosmosExtender
     {
     public:
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddVBAFormsScript( 
@@ -838,19 +838,19 @@ EXTERN_C const IID IID_IOfficeExtender;
 #endif 	/* __IOfficeExtender_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleTreeNode_INTERFACE_DEFINED__
-#define __IHubbleTreeNode_INTERFACE_DEFINED__
+#ifndef __ICosmosTreeNode_INTERFACE_DEFINED__
+#define __ICosmosTreeNode_INTERFACE_DEFINED__
 
-/* interface IHubbleTreeNode */
+/* interface ICosmosTreeNode */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleTreeNode;
+EXTERN_C const IID IID_ICosmosTreeNode;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-06011982C951")
-    IHubbleTreeNode : public IDispatch
+    ICosmosTreeNode : public IDispatch
     {
     public:
     };
@@ -858,34 +858,34 @@ EXTERN_C const IID IID_IHubbleTreeNode;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleTreeNodeVtbl
+    typedef struct ICosmosTreeNodeVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleTreeNode * This,
+            ICosmosTreeNode * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleTreeNode * This);
+            ICosmosTreeNode * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleTreeNode * This);
+            ICosmosTreeNode * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleTreeNode * This,
+            ICosmosTreeNode * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleTreeNode * This,
+            ICosmosTreeNode * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleTreeNode * This,
+            ICosmosTreeNode * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -893,7 +893,7 @@ EXTERN_C const IID IID_IHubbleTreeNode;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleTreeNode * This,
+            ICosmosTreeNode * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -912,11 +912,11 @@ EXTERN_C const IID IID_IHubbleTreeNode;
             _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
-    } IHubbleTreeNodeVtbl;
+    } ICosmosTreeNodeVtbl;
 
-    interface IHubbleTreeNode
+    interface ICosmosTreeNode
     {
-        CONST_VTBL struct IHubbleTreeNodeVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosTreeNodeVtbl *lpVtbl;
     };
 
     
@@ -924,26 +924,26 @@ EXTERN_C const IID IID_IHubbleTreeNode;
 #ifdef COBJMACROS
 
 
-#define IHubbleTreeNode_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosTreeNode_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleTreeNode_AddRef(This)	\
+#define ICosmosTreeNode_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleTreeNode_Release(This)	\
+#define ICosmosTreeNode_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleTreeNode_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosTreeNode_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleTreeNode_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosTreeNode_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleTreeNode_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosTreeNode_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleTreeNode_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosTreeNode_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
@@ -955,22 +955,22 @@ EXTERN_C const IID IID_IHubbleTreeNode;
 
 
 
-#endif 	/* __IHubbleTreeNode_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosTreeNode_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleTreeViewCallBack_INTERFACE_DEFINED__
-#define __IHubbleTreeViewCallBack_INTERFACE_DEFINED__
+#ifndef __ICosmosTreeViewCallBack_INTERFACE_DEFINED__
+#define __ICosmosTreeViewCallBack_INTERFACE_DEFINED__
 
-/* interface IHubbleTreeViewCallBack */
+/* interface ICosmosTreeViewCallBack */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleTreeViewCallBack;
+EXTERN_C const IID IID_ICosmosTreeViewCallBack;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-0601198283A6")
-    IHubbleTreeViewCallBack : public IDispatch
+    ICosmosTreeViewCallBack : public IDispatch
     {
     public:
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_WndGrid( 
@@ -980,7 +980,7 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
             long *retVal) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnInitTreeView( 
-            IHubbleTreeView *pTangramTreeView,
+            ICosmosTreeView *pTangramTreeView,
             BSTR bstrXml) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnClick( 
@@ -993,7 +993,7 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnNewPage( 
             int nNewPage) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleAction( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosAction( 
             BSTR bstrXml,
             /* [retval][out] */ BSTR *bstrRetXml) = 0;
         
@@ -1002,34 +1002,34 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleTreeViewCallBackVtbl
+    typedef struct ICosmosTreeViewCallBackVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleTreeViewCallBack * This);
+            ICosmosTreeViewCallBack * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleTreeViewCallBack * This);
+            ICosmosTreeViewCallBack * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -1037,7 +1037,7 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -1056,42 +1056,42 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
             _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WndGrid )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             IGrid *newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Pages )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             long *retVal);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnInitTreeView )( 
-            IHubbleTreeViewCallBack * This,
-            IHubbleTreeView *pTangramTreeView,
+            ICosmosTreeViewCallBack * This,
+            ICosmosTreeView *pTangramTreeView,
             BSTR bstrXml);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnClick )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             BSTR bstrXml,
             BSTR bstrXmlData);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnInit )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             BSTR bstrXml);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnNewPage )( 
-            IHubbleTreeViewCallBack * This,
+            ICosmosTreeViewCallBack * This,
             int nNewPage);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleAction )( 
-            IHubbleTreeViewCallBack * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosAction )( 
+            ICosmosTreeViewCallBack * This,
             BSTR bstrXml,
             /* [retval][out] */ BSTR *bstrRetXml);
         
         END_INTERFACE
-    } IHubbleTreeViewCallBackVtbl;
+    } ICosmosTreeViewCallBackVtbl;
 
-    interface IHubbleTreeViewCallBack
+    interface ICosmosTreeViewCallBack
     {
-        CONST_VTBL struct IHubbleTreeViewCallBackVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosTreeViewCallBackVtbl *lpVtbl;
     };
 
     
@@ -1099,49 +1099,49 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
 #ifdef COBJMACROS
 
 
-#define IHubbleTreeViewCallBack_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosTreeViewCallBack_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleTreeViewCallBack_AddRef(This)	\
+#define ICosmosTreeViewCallBack_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleTreeViewCallBack_Release(This)	\
+#define ICosmosTreeViewCallBack_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleTreeViewCallBack_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosTreeViewCallBack_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleTreeViewCallBack_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosTreeViewCallBack_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleTreeViewCallBack_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosTreeViewCallBack_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleTreeViewCallBack_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosTreeViewCallBack_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleTreeViewCallBack_put_WndGrid(This,newVal)	\
+#define ICosmosTreeViewCallBack_put_WndGrid(This,newVal)	\
     ( (This)->lpVtbl -> put_WndGrid(This,newVal) ) 
 
-#define IHubbleTreeViewCallBack_get_Pages(This,retVal)	\
+#define ICosmosTreeViewCallBack_get_Pages(This,retVal)	\
     ( (This)->lpVtbl -> get_Pages(This,retVal) ) 
 
-#define IHubbleTreeViewCallBack_OnInitTreeView(This,pTangramTreeView,bstrXml)	\
+#define ICosmosTreeViewCallBack_OnInitTreeView(This,pTangramTreeView,bstrXml)	\
     ( (This)->lpVtbl -> OnInitTreeView(This,pTangramTreeView,bstrXml) ) 
 
-#define IHubbleTreeViewCallBack_OnClick(This,bstrXml,bstrXmlData)	\
+#define ICosmosTreeViewCallBack_OnClick(This,bstrXml,bstrXmlData)	\
     ( (This)->lpVtbl -> OnClick(This,bstrXml,bstrXmlData) ) 
 
-#define IHubbleTreeViewCallBack_OnInit(This,bstrXml)	\
+#define ICosmosTreeViewCallBack_OnInit(This,bstrXml)	\
     ( (This)->lpVtbl -> OnInit(This,bstrXml) ) 
 
-#define IHubbleTreeViewCallBack_OnNewPage(This,nNewPage)	\
+#define ICosmosTreeViewCallBack_OnNewPage(This,nNewPage)	\
     ( (This)->lpVtbl -> OnNewPage(This,nNewPage) ) 
 
-#define IHubbleTreeViewCallBack_HubbleAction(This,bstrXml,bstrRetXml)	\
-    ( (This)->lpVtbl -> HubbleAction(This,bstrXml,bstrRetXml) ) 
+#define ICosmosTreeViewCallBack_CosmosAction(This,bstrXml,bstrRetXml)	\
+    ( (This)->lpVtbl -> CosmosAction(This,bstrXml,bstrRetXml) ) 
 
 #endif /* COBJMACROS */
 
@@ -1151,27 +1151,27 @@ EXTERN_C const IID IID_IHubbleTreeViewCallBack;
 
 
 
-#endif 	/* __IHubbleTreeViewCallBack_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosTreeViewCallBack_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleTreeView_INTERFACE_DEFINED__
-#define __IHubbleTreeView_INTERFACE_DEFINED__
+#ifndef __ICosmosTreeView_INTERFACE_DEFINED__
+#define __ICosmosTreeView_INTERFACE_DEFINED__
 
-/* interface IHubbleTreeView */
+/* interface ICosmosTreeView */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleTreeView;
+EXTERN_C const IID IID_ICosmosTreeView;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-0601198283A5")
-    IHubbleTreeView : public IDispatch
+    ICosmosTreeView : public IDispatch
     {
     public:
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TangramTreeViewCallBack( 
             BSTR bstrKey,
-            /* [in] */ IHubbleTreeViewCallBack *newVal) = 0;
+            /* [in] */ ICosmosTreeViewCallBack *newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FirstRoot( 
             /* [retval][out] */ long *pVal) = 0;
@@ -1189,34 +1189,34 @@ EXTERN_C const IID IID_IHubbleTreeView;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleTreeViewVtbl
+    typedef struct ICosmosTreeViewVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleTreeView * This);
+            ICosmosTreeView * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleTreeView * This);
+            ICosmosTreeView * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -1224,7 +1224,7 @@ EXTERN_C const IID IID_IHubbleTreeView;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -1243,30 +1243,30 @@ EXTERN_C const IID IID_IHubbleTreeView;
             _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TangramTreeViewCallBack )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             BSTR bstrKey,
-            /* [in] */ IHubbleTreeViewCallBack *newVal);
+            /* [in] */ ICosmosTreeViewCallBack *newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstRoot )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             /* [retval][out] */ long *pVal);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddTreeNode )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             long hItem,
             BSTR bstrXml);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InsertNode )( 
-            IHubbleTreeView * This,
+            ICosmosTreeView * This,
             BSTR bstrXml,
             /* [retval][out] */ long *hItem);
         
         END_INTERFACE
-    } IHubbleTreeViewVtbl;
+    } ICosmosTreeViewVtbl;
 
-    interface IHubbleTreeView
+    interface ICosmosTreeView
     {
-        CONST_VTBL struct IHubbleTreeViewVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosTreeViewVtbl *lpVtbl;
     };
 
     
@@ -1274,39 +1274,39 @@ EXTERN_C const IID IID_IHubbleTreeView;
 #ifdef COBJMACROS
 
 
-#define IHubbleTreeView_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosTreeView_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleTreeView_AddRef(This)	\
+#define ICosmosTreeView_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleTreeView_Release(This)	\
+#define ICosmosTreeView_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleTreeView_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosTreeView_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleTreeView_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosTreeView_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleTreeView_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosTreeView_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleTreeView_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosTreeView_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleTreeView_put_TangramTreeViewCallBack(This,bstrKey,newVal)	\
+#define ICosmosTreeView_put_TangramTreeViewCallBack(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_TangramTreeViewCallBack(This,bstrKey,newVal) ) 
 
-#define IHubbleTreeView_get_FirstRoot(This,pVal)	\
+#define ICosmosTreeView_get_FirstRoot(This,pVal)	\
     ( (This)->lpVtbl -> get_FirstRoot(This,pVal) ) 
 
-#define IHubbleTreeView_AddTreeNode(This,hItem,bstrXml)	\
+#define ICosmosTreeView_AddTreeNode(This,hItem,bstrXml)	\
     ( (This)->lpVtbl -> AddTreeNode(This,hItem,bstrXml) ) 
 
-#define IHubbleTreeView_InsertNode(This,bstrXml,hItem)	\
+#define ICosmosTreeView_InsertNode(This,bstrXml,hItem)	\
     ( (This)->lpVtbl -> InsertNode(This,bstrXml,hItem) ) 
 
 #endif /* COBJMACROS */
@@ -1317,22 +1317,22 @@ EXTERN_C const IID IID_IHubbleTreeView;
 
 
 
-#endif 	/* __IHubbleTreeView_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosTreeView_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleEventObj_INTERFACE_DEFINED__
-#define __IHubbleEventObj_INTERFACE_DEFINED__
+#ifndef __ICosmosEventObj_INTERFACE_DEFINED__
+#define __ICosmosEventObj_INTERFACE_DEFINED__
 
-/* interface IHubbleEventObj */
+/* interface ICosmosEventObj */
 /* [unique][helpstring][nonextensible][hidden][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleEventObj;
+EXTERN_C const IID IID_ICosmosEventObj;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060120160928")
-    IHubbleEventObj : public IDispatch
+    ICosmosEventObj : public IDispatch
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_eventSource( 
@@ -1374,34 +1374,34 @@ EXTERN_C const IID IID_IHubbleEventObj;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleEventObjVtbl
+    typedef struct ICosmosEventObjVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleEventObj * This);
+            ICosmosEventObj * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleEventObj * This);
+            ICosmosEventObj * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -1409,7 +1409,7 @@ EXTERN_C const IID IID_IHubbleEventObj;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -1428,55 +1428,55 @@ EXTERN_C const IID IID_IHubbleEventObj;
             _Out_opt_  UINT *puArgErr);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_eventSource )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [retval][out] */ IDispatch **pVal);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_eventSource )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [in] */ IDispatch *eventSource);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Index )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [retval][out] */ int *nVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Index )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             int newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventName )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             /* [retval][out] */ BSTR *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventName )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             BSTR newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Object )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             int nIndex,
             /* [retval][out] */ IDispatch **pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Object )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             int nIndex,
             IDispatch *newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             int nIndex,
             /* [retval][out] */ VARIANT *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
-            IHubbleEventObj * This,
+            ICosmosEventObj * This,
             int nIndex,
             VARIANT newVal);
         
         END_INTERFACE
-    } IHubbleEventObjVtbl;
+    } ICosmosEventObjVtbl;
 
-    interface IHubbleEventObj
+    interface ICosmosEventObj
     {
-        CONST_VTBL struct IHubbleEventObjVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosEventObjVtbl *lpVtbl;
     };
 
     
@@ -1484,57 +1484,57 @@ EXTERN_C const IID IID_IHubbleEventObj;
 #ifdef COBJMACROS
 
 
-#define IHubbleEventObj_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosEventObj_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleEventObj_AddRef(This)	\
+#define ICosmosEventObj_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleEventObj_Release(This)	\
+#define ICosmosEventObj_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleEventObj_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosEventObj_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleEventObj_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosEventObj_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleEventObj_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosEventObj_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleEventObj_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosEventObj_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleEventObj_get_eventSource(This,pVal)	\
+#define ICosmosEventObj_get_eventSource(This,pVal)	\
     ( (This)->lpVtbl -> get_eventSource(This,pVal) ) 
 
-#define IHubbleEventObj_put_eventSource(This,eventSource)	\
+#define ICosmosEventObj_put_eventSource(This,eventSource)	\
     ( (This)->lpVtbl -> put_eventSource(This,eventSource) ) 
 
-#define IHubbleEventObj_get_Index(This,nVal)	\
+#define ICosmosEventObj_get_Index(This,nVal)	\
     ( (This)->lpVtbl -> get_Index(This,nVal) ) 
 
-#define IHubbleEventObj_put_Index(This,newVal)	\
+#define ICosmosEventObj_put_Index(This,newVal)	\
     ( (This)->lpVtbl -> put_Index(This,newVal) ) 
 
-#define IHubbleEventObj_get_EventName(This,pVal)	\
+#define ICosmosEventObj_get_EventName(This,pVal)	\
     ( (This)->lpVtbl -> get_EventName(This,pVal) ) 
 
-#define IHubbleEventObj_put_EventName(This,newVal)	\
+#define ICosmosEventObj_put_EventName(This,newVal)	\
     ( (This)->lpVtbl -> put_EventName(This,newVal) ) 
 
-#define IHubbleEventObj_get_Object(This,nIndex,pVal)	\
+#define ICosmosEventObj_get_Object(This,nIndex,pVal)	\
     ( (This)->lpVtbl -> get_Object(This,nIndex,pVal) ) 
 
-#define IHubbleEventObj_put_Object(This,nIndex,newVal)	\
+#define ICosmosEventObj_put_Object(This,nIndex,newVal)	\
     ( (This)->lpVtbl -> put_Object(This,nIndex,newVal) ) 
 
-#define IHubbleEventObj_get_Value(This,nIndex,pVal)	\
+#define ICosmosEventObj_get_Value(This,nIndex,pVal)	\
     ( (This)->lpVtbl -> get_Value(This,nIndex,pVal) ) 
 
-#define IHubbleEventObj_put_Value(This,nIndex,newVal)	\
+#define ICosmosEventObj_put_Value(This,nIndex,newVal)	\
     ( (This)->lpVtbl -> put_Value(This,nIndex,newVal) ) 
 
 #endif /* COBJMACROS */
@@ -1545,7 +1545,7 @@ EXTERN_C const IID IID_IHubbleEventObj;
 
 
 
-#endif 	/* __IHubbleEventObj_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosEventObj_INTERFACE_DEFINED__ */
 
 
 #ifndef __IGrid_INTERFACE_DEFINED__
@@ -2612,19 +2612,19 @@ EXTERN_C const IID IID_IAppExtender;
 #endif 	/* __IAppExtender_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleDoc_INTERFACE_DEFINED__
-#define __IHubbleDoc_INTERFACE_DEFINED__
+#ifndef __ICosmosDoc_INTERFACE_DEFINED__
+#define __ICosmosDoc_INTERFACE_DEFINED__
 
-/* interface IHubbleDoc */
+/* interface ICosmosDoc */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleDoc;
+EXTERN_C const IID IID_ICosmosDoc;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060120161101")
-    IHubbleDoc : public IDispatch
+    ICosmosDoc : public IDispatch
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TemplateXml( 
@@ -2651,34 +2651,34 @@ EXTERN_C const IID IID_IHubbleDoc;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleDocVtbl
+    typedef struct ICosmosDocVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleDoc * This);
+            ICosmosDoc * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleDoc * This);
+            ICosmosDoc * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -2686,7 +2686,7 @@ EXTERN_C const IID IID_IHubbleDoc;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -2705,36 +2705,36 @@ EXTERN_C const IID IID_IHubbleDoc;
             _Out_opt_  UINT *puArgErr);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TemplateXml )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [retval][out] */ BSTR *bstrVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TemplateXml )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [in] */ BSTR newVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocType )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [in] */ BSTR newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocID )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocID )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             /* [in] */ LONGLONG newVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyWndXml )( 
-            IHubbleDoc * This,
+            ICosmosDoc * This,
             BSTR bstrWndID,
             /* [retval][out] */ BSTR *bstrWndScriptVal);
         
         END_INTERFACE
-    } IHubbleDocVtbl;
+    } ICosmosDocVtbl;
 
-    interface IHubbleDoc
+    interface ICosmosDoc
     {
-        CONST_VTBL struct IHubbleDocVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosDocVtbl *lpVtbl;
     };
 
     
@@ -2742,45 +2742,45 @@ EXTERN_C const IID IID_IHubbleDoc;
 #ifdef COBJMACROS
 
 
-#define IHubbleDoc_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosDoc_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleDoc_AddRef(This)	\
+#define ICosmosDoc_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleDoc_Release(This)	\
+#define ICosmosDoc_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleDoc_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosDoc_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleDoc_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosDoc_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleDoc_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosDoc_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleDoc_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosDoc_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleDoc_get_TemplateXml(This,bstrVal)	\
+#define ICosmosDoc_get_TemplateXml(This,bstrVal)	\
     ( (This)->lpVtbl -> get_TemplateXml(This,bstrVal) ) 
 
-#define IHubbleDoc_put_TemplateXml(This,newVal)	\
+#define ICosmosDoc_put_TemplateXml(This,newVal)	\
     ( (This)->lpVtbl -> put_TemplateXml(This,newVal) ) 
 
-#define IHubbleDoc_put_DocType(This,newVal)	\
+#define ICosmosDoc_put_DocType(This,newVal)	\
     ( (This)->lpVtbl -> put_DocType(This,newVal) ) 
 
-#define IHubbleDoc_get_DocID(This,pVal)	\
+#define ICosmosDoc_get_DocID(This,pVal)	\
     ( (This)->lpVtbl -> get_DocID(This,pVal) ) 
 
-#define IHubbleDoc_put_DocID(This,newVal)	\
+#define ICosmosDoc_put_DocID(This,newVal)	\
     ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
 
-#define IHubbleDoc_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
+#define ICosmosDoc_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
     ( (This)->lpVtbl -> GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal) ) 
 
 #endif /* COBJMACROS */
@@ -2791,22 +2791,22 @@ EXTERN_C const IID IID_IHubbleDoc;
 
 
 
-#endif 	/* __IHubbleDoc_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosDoc_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleDocTemplate_INTERFACE_DEFINED__
-#define __IHubbleDocTemplate_INTERFACE_DEFINED__
+#ifndef __ICosmosDocTemplate_INTERFACE_DEFINED__
+#define __ICosmosDocTemplate_INTERFACE_DEFINED__
 
-/* interface IHubbleDocTemplate */
+/* interface ICosmosDocTemplate */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleDocTemplate;
+EXTERN_C const IID IID_ICosmosDocTemplate;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060120170707")
-    IHubbleDocTemplate : public IDispatch
+    ICosmosDocTemplate : public IDispatch
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TemplateXml( 
@@ -2833,34 +2833,34 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleDocTemplateVtbl
+    typedef struct ICosmosDocTemplateVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleDocTemplate * This);
+            ICosmosDocTemplate * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleDocTemplate * This);
+            ICosmosDocTemplate * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -2868,7 +2868,7 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -2887,36 +2887,36 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
             _Out_opt_  UINT *puArgErr);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TemplateXml )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [retval][out] */ BSTR *bstrVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TemplateXml )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [in] */ BSTR newVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocType )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [in] */ BSTR newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocID )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocID )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             /* [in] */ LONGLONG newVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyWndXml )( 
-            IHubbleDocTemplate * This,
+            ICosmosDocTemplate * This,
             BSTR bstrWndID,
             /* [retval][out] */ BSTR *bstrWndScriptVal);
         
         END_INTERFACE
-    } IHubbleDocTemplateVtbl;
+    } ICosmosDocTemplateVtbl;
 
-    interface IHubbleDocTemplate
+    interface ICosmosDocTemplate
     {
-        CONST_VTBL struct IHubbleDocTemplateVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosDocTemplateVtbl *lpVtbl;
     };
 
     
@@ -2924,45 +2924,45 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
 #ifdef COBJMACROS
 
 
-#define IHubbleDocTemplate_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosDocTemplate_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleDocTemplate_AddRef(This)	\
+#define ICosmosDocTemplate_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleDocTemplate_Release(This)	\
+#define ICosmosDocTemplate_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleDocTemplate_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosDocTemplate_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleDocTemplate_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosDocTemplate_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleDocTemplate_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosDocTemplate_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleDocTemplate_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosDocTemplate_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleDocTemplate_get_TemplateXml(This,bstrVal)	\
+#define ICosmosDocTemplate_get_TemplateXml(This,bstrVal)	\
     ( (This)->lpVtbl -> get_TemplateXml(This,bstrVal) ) 
 
-#define IHubbleDocTemplate_put_TemplateXml(This,newVal)	\
+#define ICosmosDocTemplate_put_TemplateXml(This,newVal)	\
     ( (This)->lpVtbl -> put_TemplateXml(This,newVal) ) 
 
-#define IHubbleDocTemplate_put_DocType(This,newVal)	\
+#define ICosmosDocTemplate_put_DocType(This,newVal)	\
     ( (This)->lpVtbl -> put_DocType(This,newVal) ) 
 
-#define IHubbleDocTemplate_get_DocID(This,pVal)	\
+#define ICosmosDocTemplate_get_DocID(This,pVal)	\
     ( (This)->lpVtbl -> get_DocID(This,pVal) ) 
 
-#define IHubbleDocTemplate_put_DocID(This,newVal)	\
+#define ICosmosDocTemplate_put_DocID(This,newVal)	\
     ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
 
-#define IHubbleDocTemplate_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
+#define ICosmosDocTemplate_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
     ( (This)->lpVtbl -> GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal) ) 
 
 #endif /* COBJMACROS */
@@ -2973,22 +2973,22 @@ EXTERN_C const IID IID_IHubbleDocTemplate;
 
 
 
-#endif 	/* __IHubbleDocTemplate_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosDocTemplate_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubble_INTERFACE_DEFINED__
-#define __IHubble_INTERFACE_DEFINED__
+#ifndef __ICosmos_INTERFACE_DEFINED__
+#define __ICosmos_INTERFACE_DEFINED__
 
-/* interface IHubble */
+/* interface ICosmos */
 /* [unique][helpstring][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubble;
+EXTERN_C const IID IID_ICosmos;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060119820001")
-    IHubble : public IDispatch
+    ICosmos : public IDispatch
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostChromeBrowserWnd( 
@@ -3022,15 +3022,15 @@ EXTERN_C const IID IID_IHubble;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreatingGrid( 
             /* [retval][out] */ IGrid **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHubble( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteCosmos( 
             BSTR bstrID,
-            /* [retval][out] */ IHubble **pVal) = 0;
+            /* [retval][out] */ ICosmos **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
-            /* [retval][out] */ IHubbleExtender **pVal) = 0;
+            /* [retval][out] */ ICosmosExtender **pVal) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
-            /* [in] */ IHubbleExtender *newVal) = 0;
+            /* [in] */ ICosmosExtender *newVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHelperHWND( 
             /* [retval][out] */ LONGLONG *pVal) = 0;
@@ -3041,10 +3041,10 @@ EXTERN_C const IID IID_IHubble;
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
             /* [retval][out] */ IGrid **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HubbleDoc( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CosmosDoc( 
             LONGLONG AppProxy,
             LONGLONG nDocID,
-            /* [retval][out] */ IHubbleDoc **pVal) = 0;
+            /* [retval][out] */ ICosmosDoc **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocTemplate( 
             BSTR bstrID,
@@ -3141,9 +3141,9 @@ EXTERN_C const IID IID_IHubble;
             VARIANT_BOOL bFindInChild,
             BSTR bstrVal) = 0;
         
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE CreateHubbleCtrl( 
+        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE CreateCosmosCtrl( 
             BSTR bstrAppID,
-            /* [retval][out] */ IHubbleCtrl **ppRetCtrl) = 0;
+            /* [retval][out] */ ICosmosCtrl **ppRetCtrl) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetWindowClientDefaultNode( 
             IDispatch *pAddDisp,
@@ -3159,13 +3159,13 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ BSTR *bstrTemplatePath) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenTangramFile( 
-            /* [retval][out] */ IHubbleDoc **ppDoc) = 0;
+            /* [retval][out] */ ICosmosDoc **ppDoc) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateHubbleEventObj( 
-            /* [retval][out] */ IHubbleEventObj **ppHubbleEventObj) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateCosmosEventObj( 
+            /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FireHubbleEventObj( 
-            IHubbleEventObj *pHubbleEventObj) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FireCosmosEventObj( 
+            ICosmosEventObj *pCosmosEventObj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
             LONGLONG hWnd,
@@ -3181,9 +3181,9 @@ EXTERN_C const IID IID_IHubble;
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenHubbleDocFile( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenCosmosDocFile( 
             BSTR bstrFilePath,
-            /* [retval][out] */ IHubbleDoc **ppDoc) = 0;
+            /* [retval][out] */ ICosmosDoc **ppDoc) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
             BSTR strInitXml,
@@ -3196,7 +3196,7 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NewWorkBench( 
-            BSTR bstrHubbleDoc,
+            BSTR bstrCosmosDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateBrowser( 
@@ -3204,7 +3204,7 @@ EXTERN_C const IID IID_IHubble;
             BSTR strUrls,
             /* [retval][out] */ IBrowser **ppRet) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE HubbleNotify( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CosmosNotify( 
             BSTR strXml1,
             BSTR strXml2,
             LONGLONG wParam,
@@ -3220,30 +3220,30 @@ EXTERN_C const IID IID_IHubble;
             IDispatch *pVSObj,
             LONGLONG nHandle) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleCommand( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetImage( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosGetImage( 
             BSTR strValue,
             /* [retval][out] */ IPictureDisp **ppdispImage) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetVisible( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosGetVisible( 
             IDispatch *RibbonControl,
             /* [retval][out] */ VARIANT *varVisible) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleOnLoad( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosOnLoad( 
             IDispatch *RibbonControl) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetItemCount( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosGetItemCount( 
             IDispatch *RibbonControl,
             /* [retval][out] */ long *nCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetItemLabel( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosGetItemLabel( 
             IDispatch *RibbonControl,
             long nIndex,
             /* [retval][out] */ BSTR *bstrLabel) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE HubbleGetItemID( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosGetItemID( 
             IDispatch *RibbonControl,
             long nIndex,
             /* [retval][out] */ BSTR *bstrID) = 0;
@@ -3253,34 +3253,34 @@ EXTERN_C const IID IID_IHubble;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleVtbl
+    typedef struct ICosmosVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubble * This,
+            ICosmos * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubble * This);
+            ICosmos * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubble * This);
+            ICosmos * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubble * This,
+            ICosmos * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubble * This,
+            ICosmos * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubble * This,
+            ICosmos * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -3288,7 +3288,7 @@ EXTERN_C const IID IID_IHubble;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubble * This,
+            ICosmos * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -3307,137 +3307,137 @@ EXTERN_C const IID IID_IHubble;
             _Out_opt_  UINT *puArgErr);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostChromeBrowserWnd )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppKeyValue )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrKey,
             /* [retval][out] */ VARIANT *pVal);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppKeyValue )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrKey,
             /* [in] */ VARIANT newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppExtender )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrKey,
             /* [retval][out] */ IDispatch **pVal);
         
         /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppExtender )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrKey,
             /* [in] */ IDispatch *newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootNodes )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ IGridCollection **ppGridColletion);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWnd )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveGrid )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ IGrid **pVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreatingGrid )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ IGrid **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHubble )( 
-            IHubble * This,
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteCosmos )( 
+            ICosmos * This,
             BSTR bstrID,
-            /* [retval][out] */ IHubble **pVal);
+            /* [retval][out] */ ICosmos **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
-            IHubble * This,
-            /* [retval][out] */ IHubbleExtender **pVal);
+            ICosmos * This,
+            /* [retval][out] */ ICosmosExtender **pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
-            IHubble * This,
-            /* [in] */ IHubbleExtender *newVal);
+            ICosmos * This,
+            /* [in] */ ICosmosExtender *newVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHelperHWND )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteHelperHWND )( 
-            IHubble * This,
+            ICosmos * This,
             /* [in] */ LONGLONG newVal);
         
         /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ IGrid **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HubbleDoc )( 
-            IHubble * This,
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CosmosDoc )( 
+            ICosmos * This,
             LONGLONG AppProxy,
             LONGLONG nDocID,
-            /* [retval][out] */ IHubbleDoc **pVal);
+            /* [retval][out] */ ICosmosDoc **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocTemplate )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrID,
             /* [retval][out] */ LONGLONG *pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveChromeBrowserWnd )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateNode )( 
-            IHubble * This,
+            ICosmos * This,
             IGrid *pGrid,
             BSTR bstrBrowserID,
             BSTR bstrXml,
             /* [retval][out] */ IGrid **pVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxyCluster )( 
-            IHubble * This,
+            ICosmos * This,
             LONGLONG hWnd,
             /* [retval][out] */ IGalaxyCluster **ppGalaxyCluster);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateOfficeDocument )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrXml);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateCLRObj )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrObjID,
             /* [retval][out] */ IDispatch **ppDisp);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartApplication )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrAppID,
             BSTR bstrXml);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxy )( 
-            IHubble * This,
+            ICosmos * This,
             LONGLONG hHostWnd,
             /* [retval][out] */ IGalaxy **ppGalaxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetItemText )( 
-            IHubble * This,
+            ICosmos * This,
             IGrid *pGrid,
             long nCtrlID,
             LONG nMaxLengeh,
             /* [retval][out] */ BSTR *bstrRet);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetItemText )( 
-            IHubble * This,
+            ICosmos * This,
             IGrid *pGrid,
             long nCtrlID,
             BSTR bstrText);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCLRControl )( 
-            IHubble * This,
+            ICosmos * This,
             IDispatch *CtrlDisp,
             BSTR bstrName,
             /* [retval][out] */ IDispatch **ppRetDisp);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
-            IHubble * This,
+            ICosmos * This,
             LONGLONG hWnd,
             BSTR bstrContext,
             BSTR bstrCaption,
@@ -3445,61 +3445,61 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ int *nRet);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Encode )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrSRC,
             VARIANT_BOOL bEncode,
             /* [retval][out] */ BSTR *bstrRet);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetHostFocus )( 
-            IHubble * This);
+            ICosmos * This);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdateGrid )( 
-            IHubble * This,
+            ICosmos * This,
             IGrid *pGrid);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewGUID )( 
-            IHubble * This,
+            ICosmos * This,
             /* [retval][out] */ BSTR *retVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownLoadFile )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR strFileURL,
             BSTR bstrTargetFile,
             BSTR bstrActionXml);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
-            IHubble * This,
+            ICosmos * This,
             IDispatch *pCtrl,
             BSTR bstrName,
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGridFromHandle )( 
-            IHubble * This,
+            ICosmos * This,
             LONGLONG hWnd,
             /* [retval][out] */ IGrid **ppRetGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlValueByName )( 
-            IHubble * This,
+            ICosmos * This,
             IDispatch *pCtrl,
             BSTR bstrName,
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ BSTR *bstrVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetCtrlValueByName )( 
-            IHubble * This,
+            ICosmos * This,
             IDispatch *pCtrl,
             BSTR bstrName,
             VARIANT_BOOL bFindInChild,
             BSTR bstrVal);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *CreateHubbleCtrl )( 
-            IHubble * This,
+        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *CreateCosmosCtrl )( 
+            ICosmos * This,
             BSTR bstrAppID,
-            /* [retval][out] */ IHubbleCtrl **ppRetCtrl);
+            /* [retval][out] */ ICosmosCtrl **ppRetCtrl);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetWindowClientDefaultNode )( 
-            IHubble * This,
+            ICosmos * This,
             IDispatch *pAddDisp,
             LONGLONG hParent,
             BSTR bstrWndClaName,
@@ -3507,26 +3507,26 @@ EXTERN_C const IID IID_IHubble;
             /* [retval][out] */ IGrid **ppGrid);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDocTemplateXml )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrCaption,
             BSTR bstrPath,
             BSTR bstrFilter,
             /* [retval][out] */ BSTR *bstrTemplatePath);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenTangramFile )( 
-            IHubble * This,
-            /* [retval][out] */ IHubbleDoc **ppDoc);
+            ICosmos * This,
+            /* [retval][out] */ ICosmosDoc **ppDoc);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateHubbleEventObj )( 
-            IHubble * This,
-            /* [retval][out] */ IHubbleEventObj **ppHubbleEventObj);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateCosmosEventObj )( 
+            ICosmos * This,
+            /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FireHubbleEventObj )( 
-            IHubble * This,
-            IHubbleEventObj *pHubbleEventObj);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FireCosmosEventObj )( 
+            ICosmos * This,
+            ICosmosEventObj *pCosmosEventObj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
-            IHubble * This,
+            ICosmos * This,
             LONGLONG hWnd,
             BSTR bstrGalaxys,
             BSTR bstrKey,
@@ -3534,103 +3534,103 @@ EXTERN_C const IID IID_IHubble;
             VARIANT_BOOL bSaveToConfigFile);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeletePage )( 
-            IHubble * This,
+            ICosmos * This,
             LONGLONG PageHandle);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *LoadDocComponent )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenHubbleDocFile )( 
-            IHubble * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenCosmosDocFile )( 
+            ICosmos * This,
             BSTR bstrFilePath,
-            /* [retval][out] */ IHubbleDoc **ppDoc);
+            /* [retval][out] */ ICosmosDoc **ppDoc);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCLRApp )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR strInitXml,
             /* [retval][out] */ LONGLONG *llHandle);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateOutLookObj )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrObjType,
             int nType,
             BSTR bstrURL,
             /* [retval][out] */ IDispatch **ppRetDisp);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NewWorkBench )( 
-            IHubble * This,
-            BSTR bstrHubbleDoc,
+            ICosmos * This,
+            BSTR bstrCosmosDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateBrowser )( 
-            IHubble * This,
+            ICosmos * This,
             ULONGLONG hParentWnd,
             BSTR strUrls,
             /* [retval][out] */ IBrowser **ppRet);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *HubbleNotify )( 
-            IHubble * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CosmosNotify )( 
+            ICosmos * This,
             BSTR strXml1,
             BSTR strXml2,
             LONGLONG wParam,
             LONGLONG lParam);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteGalaxy )( 
-            IHubble * This,
+            ICosmos * This,
             IGalaxy *pGalaxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
-            IHubble * This);
+            ICosmos * This);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *SelectVSObj )( 
-            IHubble * This,
+            ICosmos * This,
             BSTR bstrData,
             IDispatch *pVSObj,
             LONGLONG nHandle);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleCommand )( 
-            IHubble * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
+            ICosmos * This,
             IDispatch *RibbonControl);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetImage )( 
-            IHubble * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosGetImage )( 
+            ICosmos * This,
             BSTR strValue,
             /* [retval][out] */ IPictureDisp **ppdispImage);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetVisible )( 
-            IHubble * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosGetVisible )( 
+            ICosmos * This,
             IDispatch *RibbonControl,
             /* [retval][out] */ VARIANT *varVisible);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleOnLoad )( 
-            IHubble * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosOnLoad )( 
+            ICosmos * This,
             IDispatch *RibbonControl);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetItemCount )( 
-            IHubble * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosGetItemCount )( 
+            ICosmos * This,
             IDispatch *RibbonControl,
             /* [retval][out] */ long *nCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetItemLabel )( 
-            IHubble * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosGetItemLabel )( 
+            ICosmos * This,
             IDispatch *RibbonControl,
             long nIndex,
             /* [retval][out] */ BSTR *bstrLabel);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *HubbleGetItemID )( 
-            IHubble * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosGetItemID )( 
+            ICosmos * This,
             IDispatch *RibbonControl,
             long nIndex,
             /* [retval][out] */ BSTR *bstrID);
         
         END_INTERFACE
-    } IHubbleVtbl;
+    } ICosmosVtbl;
 
-    interface IHubble
+    interface ICosmos
     {
-        CONST_VTBL struct IHubbleVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosVtbl *lpVtbl;
     };
 
     
@@ -3638,214 +3638,214 @@ EXTERN_C const IID IID_IHubble;
 #ifdef COBJMACROS
 
 
-#define IHubble_QueryInterface(This,riid,ppvObject)	\
+#define ICosmos_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubble_AddRef(This)	\
+#define ICosmos_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubble_Release(This)	\
+#define ICosmos_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubble_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmos_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubble_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmos_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubble_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmos_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubble_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmos_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubble_get_HostChromeBrowserWnd(This,ppChromeWebBrowser)	\
+#define ICosmos_get_HostChromeBrowserWnd(This,ppChromeWebBrowser)	\
     ( (This)->lpVtbl -> get_HostChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
-#define IHubble_get_AppKeyValue(This,bstrKey,pVal)	\
+#define ICosmos_get_AppKeyValue(This,bstrKey,pVal)	\
     ( (This)->lpVtbl -> get_AppKeyValue(This,bstrKey,pVal) ) 
 
-#define IHubble_put_AppKeyValue(This,bstrKey,newVal)	\
+#define ICosmos_put_AppKeyValue(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppKeyValue(This,bstrKey,newVal) ) 
 
-#define IHubble_get_AppExtender(This,bstrKey,pVal)	\
+#define ICosmos_get_AppExtender(This,bstrKey,pVal)	\
     ( (This)->lpVtbl -> get_AppExtender(This,bstrKey,pVal) ) 
 
-#define IHubble_put_AppExtender(This,bstrKey,newVal)	\
+#define ICosmos_put_AppExtender(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppExtender(This,bstrKey,newVal) ) 
 
-#define IHubble_get_RootNodes(This,ppGridColletion)	\
+#define ICosmos_get_RootNodes(This,ppGridColletion)	\
     ( (This)->lpVtbl -> get_RootNodes(This,ppGridColletion) ) 
 
-#define IHubble_get_HostWnd(This,pVal)	\
+#define ICosmos_get_HostWnd(This,pVal)	\
     ( (This)->lpVtbl -> get_HostWnd(This,pVal) ) 
 
-#define IHubble_get_CurrentActiveGrid(This,pVal)	\
+#define ICosmos_get_CurrentActiveGrid(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentActiveGrid(This,pVal) ) 
 
-#define IHubble_get_CreatingGrid(This,pVal)	\
+#define ICosmos_get_CreatingGrid(This,pVal)	\
     ( (This)->lpVtbl -> get_CreatingGrid(This,pVal) ) 
 
-#define IHubble_get_RemoteHubble(This,bstrID,pVal)	\
-    ( (This)->lpVtbl -> get_RemoteHubble(This,bstrID,pVal) ) 
+#define ICosmos_get_RemoteCosmos(This,bstrID,pVal)	\
+    ( (This)->lpVtbl -> get_RemoteCosmos(This,bstrID,pVal) ) 
 
-#define IHubble_get_Extender(This,pVal)	\
+#define ICosmos_get_Extender(This,pVal)	\
     ( (This)->lpVtbl -> get_Extender(This,pVal) ) 
 
-#define IHubble_put_Extender(This,newVal)	\
+#define ICosmos_put_Extender(This,newVal)	\
     ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
 
-#define IHubble_get_RemoteHelperHWND(This,pVal)	\
+#define ICosmos_get_RemoteHelperHWND(This,pVal)	\
     ( (This)->lpVtbl -> get_RemoteHelperHWND(This,pVal) ) 
 
-#define IHubble_put_RemoteHelperHWND(This,newVal)	\
+#define ICosmos_put_RemoteHelperHWND(This,newVal)	\
     ( (This)->lpVtbl -> put_RemoteHelperHWND(This,newVal) ) 
 
-#define IHubble_get_DesignNode(This,pVal)	\
+#define ICosmos_get_DesignNode(This,pVal)	\
     ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 
 
-#define IHubble_get_HubbleDoc(This,AppProxy,nDocID,pVal)	\
-    ( (This)->lpVtbl -> get_HubbleDoc(This,AppProxy,nDocID,pVal) ) 
+#define ICosmos_get_CosmosDoc(This,AppProxy,nDocID,pVal)	\
+    ( (This)->lpVtbl -> get_CosmosDoc(This,AppProxy,nDocID,pVal) ) 
 
-#define IHubble_get_DocTemplate(This,bstrID,pVal)	\
+#define ICosmos_get_DocTemplate(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_DocTemplate(This,bstrID,pVal) ) 
 
-#define IHubble_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
+#define ICosmos_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
     ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
-#define IHubble_NavigateNode(This,pGrid,bstrBrowserID,bstrXml,pVal)	\
+#define ICosmos_NavigateNode(This,pGrid,bstrBrowserID,bstrXml,pVal)	\
     ( (This)->lpVtbl -> NavigateNode(This,pGrid,bstrBrowserID,bstrXml,pVal) ) 
 
-#define IHubble_CreateGalaxyCluster(This,hWnd,ppGalaxyCluster)	\
+#define ICosmos_CreateGalaxyCluster(This,hWnd,ppGalaxyCluster)	\
     ( (This)->lpVtbl -> CreateGalaxyCluster(This,hWnd,ppGalaxyCluster) ) 
 
-#define IHubble_CreateOfficeDocument(This,bstrXml)	\
+#define ICosmos_CreateOfficeDocument(This,bstrXml)	\
     ( (This)->lpVtbl -> CreateOfficeDocument(This,bstrXml) ) 
 
-#define IHubble_CreateCLRObj(This,bstrObjID,ppDisp)	\
+#define ICosmos_CreateCLRObj(This,bstrObjID,ppDisp)	\
     ( (This)->lpVtbl -> CreateCLRObj(This,bstrObjID,ppDisp) ) 
 
-#define IHubble_StartApplication(This,bstrAppID,bstrXml)	\
+#define ICosmos_StartApplication(This,bstrAppID,bstrXml)	\
     ( (This)->lpVtbl -> StartApplication(This,bstrAppID,bstrXml) ) 
 
-#define IHubble_GetGalaxy(This,hHostWnd,ppGalaxy)	\
+#define ICosmos_GetGalaxy(This,hHostWnd,ppGalaxy)	\
     ( (This)->lpVtbl -> GetGalaxy(This,hHostWnd,ppGalaxy) ) 
 
-#define IHubble_GetItemText(This,pGrid,nCtrlID,nMaxLengeh,bstrRet)	\
+#define ICosmos_GetItemText(This,pGrid,nCtrlID,nMaxLengeh,bstrRet)	\
     ( (This)->lpVtbl -> GetItemText(This,pGrid,nCtrlID,nMaxLengeh,bstrRet) ) 
 
-#define IHubble_SetItemText(This,pGrid,nCtrlID,bstrText)	\
+#define ICosmos_SetItemText(This,pGrid,nCtrlID,bstrText)	\
     ( (This)->lpVtbl -> SetItemText(This,pGrid,nCtrlID,bstrText) ) 
 
-#define IHubble_GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp)	\
+#define ICosmos_GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp)	\
     ( (This)->lpVtbl -> GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp) ) 
 
-#define IHubble_MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet)	\
+#define ICosmos_MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet)	\
     ( (This)->lpVtbl -> MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet) ) 
 
-#define IHubble_Encode(This,bstrSRC,bEncode,bstrRet)	\
+#define ICosmos_Encode(This,bstrSRC,bEncode,bstrRet)	\
     ( (This)->lpVtbl -> Encode(This,bstrSRC,bEncode,bstrRet) ) 
 
-#define IHubble_SetHostFocus(This)	\
+#define ICosmos_SetHostFocus(This)	\
     ( (This)->lpVtbl -> SetHostFocus(This) ) 
 
-#define IHubble_UpdateGrid(This,pGrid)	\
+#define ICosmos_UpdateGrid(This,pGrid)	\
     ( (This)->lpVtbl -> UpdateGrid(This,pGrid) ) 
 
-#define IHubble_NewGUID(This,retVal)	\
+#define ICosmos_NewGUID(This,retVal)	\
     ( (This)->lpVtbl -> NewGUID(This,retVal) ) 
 
-#define IHubble_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
+#define ICosmos_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
     ( (This)->lpVtbl -> DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml) ) 
 
-#define IHubble_GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp)	\
+#define ICosmos_GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp) ) 
 
-#define IHubble_GetGridFromHandle(This,hWnd,ppRetGrid)	\
+#define ICosmos_GetGridFromHandle(This,hWnd,ppRetGrid)	\
     ( (This)->lpVtbl -> GetGridFromHandle(This,hWnd,ppRetGrid) ) 
 
-#define IHubble_GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
+#define ICosmos_GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
     ( (This)->lpVtbl -> GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal) ) 
 
-#define IHubble_SetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
+#define ICosmos_SetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
     ( (This)->lpVtbl -> SetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal) ) 
 
-#define IHubble_CreateHubbleCtrl(This,bstrAppID,ppRetCtrl)	\
-    ( (This)->lpVtbl -> CreateHubbleCtrl(This,bstrAppID,ppRetCtrl) ) 
+#define ICosmos_CreateCosmosCtrl(This,bstrAppID,ppRetCtrl)	\
+    ( (This)->lpVtbl -> CreateCosmosCtrl(This,bstrAppID,ppRetCtrl) ) 
 
-#define IHubble_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppGrid)	\
+#define ICosmos_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppGrid)	\
     ( (This)->lpVtbl -> GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppGrid) ) 
 
-#define IHubble_GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath)	\
+#define ICosmos_GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath)	\
     ( (This)->lpVtbl -> GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath) ) 
 
-#define IHubble_OpenTangramFile(This,ppDoc)	\
+#define ICosmos_OpenTangramFile(This,ppDoc)	\
     ( (This)->lpVtbl -> OpenTangramFile(This,ppDoc) ) 
 
-#define IHubble_CreateHubbleEventObj(This,ppHubbleEventObj)	\
-    ( (This)->lpVtbl -> CreateHubbleEventObj(This,ppHubbleEventObj) ) 
+#define ICosmos_CreateCosmosEventObj(This,ppCosmosEventObj)	\
+    ( (This)->lpVtbl -> CreateCosmosEventObj(This,ppCosmosEventObj) ) 
 
-#define IHubble_FireHubbleEventObj(This,pHubbleEventObj)	\
-    ( (This)->lpVtbl -> FireHubbleEventObj(This,pHubbleEventObj) ) 
+#define ICosmos_FireCosmosEventObj(This,pCosmosEventObj)	\
+    ( (This)->lpVtbl -> FireCosmosEventObj(This,pCosmosEventObj) ) 
 
-#define IHubble_ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
+#define ICosmos_ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
     ( (This)->lpVtbl -> ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 
 
-#define IHubble_DeletePage(This,PageHandle)	\
+#define ICosmos_DeletePage(This,PageHandle)	\
     ( (This)->lpVtbl -> DeletePage(This,PageHandle) ) 
 
-#define IHubble_LoadDocComponent(This,bstrLib,llAppProxy)	\
+#define ICosmos_LoadDocComponent(This,bstrLib,llAppProxy)	\
     ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
 
-#define IHubble_OpenHubbleDocFile(This,bstrFilePath,ppDoc)	\
-    ( (This)->lpVtbl -> OpenHubbleDocFile(This,bstrFilePath,ppDoc) ) 
+#define ICosmos_OpenCosmosDocFile(This,bstrFilePath,ppDoc)	\
+    ( (This)->lpVtbl -> OpenCosmosDocFile(This,bstrFilePath,ppDoc) ) 
 
-#define IHubble_InitCLRApp(This,strInitXml,llHandle)	\
+#define ICosmos_InitCLRApp(This,strInitXml,llHandle)	\
     ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
 
-#define IHubble_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
+#define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
     ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
-#define IHubble_NewWorkBench(This,bstrHubbleDoc,ppWorkBenchWindow)	\
-    ( (This)->lpVtbl -> NewWorkBench(This,bstrHubbleDoc,ppWorkBenchWindow) ) 
+#define ICosmos_NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow)	\
+    ( (This)->lpVtbl -> NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow) ) 
 
-#define IHubble_CreateBrowser(This,hParentWnd,strUrls,ppRet)	\
+#define ICosmos_CreateBrowser(This,hParentWnd,strUrls,ppRet)	\
     ( (This)->lpVtbl -> CreateBrowser(This,hParentWnd,strUrls,ppRet) ) 
 
-#define IHubble_HubbleNotify(This,strXml1,strXml2,wParam,lParam)	\
-    ( (This)->lpVtbl -> HubbleNotify(This,strXml1,strXml2,wParam,lParam) ) 
+#define ICosmos_CosmosNotify(This,strXml1,strXml2,wParam,lParam)	\
+    ( (This)->lpVtbl -> CosmosNotify(This,strXml1,strXml2,wParam,lParam) ) 
 
-#define IHubble_DeleteGalaxy(This,pGalaxy)	\
+#define ICosmos_DeleteGalaxy(This,pGalaxy)	\
     ( (This)->lpVtbl -> DeleteGalaxy(This,pGalaxy) ) 
 
-#define IHubble_InitEclipseApp(This)	\
+#define ICosmos_InitEclipseApp(This)	\
     ( (This)->lpVtbl -> InitEclipseApp(This) ) 
 
-#define IHubble_SelectVSObj(This,bstrData,pVSObj,nHandle)	\
+#define ICosmos_SelectVSObj(This,bstrData,pVSObj,nHandle)	\
     ( (This)->lpVtbl -> SelectVSObj(This,bstrData,pVSObj,nHandle) ) 
 
-#define IHubble_HubbleCommand(This,RibbonControl)	\
-    ( (This)->lpVtbl -> HubbleCommand(This,RibbonControl) ) 
+#define ICosmos_CosmosCommand(This,RibbonControl)	\
+    ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 
 
-#define IHubble_HubbleGetImage(This,strValue,ppdispImage)	\
-    ( (This)->lpVtbl -> HubbleGetImage(This,strValue,ppdispImage) ) 
+#define ICosmos_CosmosGetImage(This,strValue,ppdispImage)	\
+    ( (This)->lpVtbl -> CosmosGetImage(This,strValue,ppdispImage) ) 
 
-#define IHubble_HubbleGetVisible(This,RibbonControl,varVisible)	\
-    ( (This)->lpVtbl -> HubbleGetVisible(This,RibbonControl,varVisible) ) 
+#define ICosmos_CosmosGetVisible(This,RibbonControl,varVisible)	\
+    ( (This)->lpVtbl -> CosmosGetVisible(This,RibbonControl,varVisible) ) 
 
-#define IHubble_HubbleOnLoad(This,RibbonControl)	\
-    ( (This)->lpVtbl -> HubbleOnLoad(This,RibbonControl) ) 
+#define ICosmos_CosmosOnLoad(This,RibbonControl)	\
+    ( (This)->lpVtbl -> CosmosOnLoad(This,RibbonControl) ) 
 
-#define IHubble_HubbleGetItemCount(This,RibbonControl,nCount)	\
-    ( (This)->lpVtbl -> HubbleGetItemCount(This,RibbonControl,nCount) ) 
+#define ICosmos_CosmosGetItemCount(This,RibbonControl,nCount)	\
+    ( (This)->lpVtbl -> CosmosGetItemCount(This,RibbonControl,nCount) ) 
 
-#define IHubble_HubbleGetItemLabel(This,RibbonControl,nIndex,bstrLabel)	\
-    ( (This)->lpVtbl -> HubbleGetItemLabel(This,RibbonControl,nIndex,bstrLabel) ) 
+#define ICosmos_CosmosGetItemLabel(This,RibbonControl,nIndex,bstrLabel)	\
+    ( (This)->lpVtbl -> CosmosGetItemLabel(This,RibbonControl,nIndex,bstrLabel) ) 
 
-#define IHubble_HubbleGetItemID(This,RibbonControl,nIndex,bstrID)	\
-    ( (This)->lpVtbl -> HubbleGetItemID(This,RibbonControl,nIndex,bstrID) ) 
+#define ICosmos_CosmosGetItemID(This,RibbonControl,nIndex,bstrID)	\
+    ( (This)->lpVtbl -> CosmosGetItemID(This,RibbonControl,nIndex,bstrID) ) 
 
 #endif /* COBJMACROS */
 
@@ -3855,7 +3855,7 @@ EXTERN_C const IID IID_IHubble;
 
 
 
-#endif 	/* __IHubble_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmos_INTERFACE_DEFINED__ */
 
 
 #ifndef __IGalaxy_INTERFACE_DEFINED__
@@ -3915,8 +3915,8 @@ EXTERN_C const IID IID_IGalaxy;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HubbleDoc( 
-            /* [retval][out] */ IHubbleDoc **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CosmosDoc( 
+            /* [retval][out] */ ICosmosDoc **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyType( 
             /* [retval][out] */ GalaxyType *pVal) = 0;
@@ -4059,9 +4059,9 @@ EXTERN_C const IID IID_IGalaxy;
             IGalaxy * This,
             /* [retval][out] */ BSTR *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HubbleDoc )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CosmosDoc )( 
             IGalaxy * This,
-            /* [retval][out] */ IHubbleDoc **pVal);
+            /* [retval][out] */ ICosmosDoc **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyType )( 
             IGalaxy * This,
@@ -4175,8 +4175,8 @@ EXTERN_C const IID IID_IGalaxy;
 #define IGalaxy_get_GalaxyXML(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyXML(This,pVal) ) 
 
-#define IGalaxy_get_HubbleDoc(This,pVal)	\
-    ( (This)->lpVtbl -> get_HubbleDoc(This,pVal) ) 
+#define IGalaxy_get_CosmosDoc(This,pVal)	\
+    ( (This)->lpVtbl -> get_CosmosDoc(This,pVal) ) 
 
 #define IGalaxy_get_GalaxyType(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyType(This,pVal) ) 
@@ -4488,8 +4488,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IDispatch *ctrl,
             /* [retval][out] */ IGalaxy **ppGalaxy) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectHubbleCtrl( 
-            IHubbleCtrl *eventSource) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectCosmosCtrl( 
+            ICosmosCtrl *eventSource) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxyWithDefaultNode( 
             ULONGLONG hGalaxyWnd,
@@ -4695,9 +4695,9 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IDispatch *ctrl,
             /* [retval][out] */ IGalaxy **ppGalaxy);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectHubbleCtrl )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectCosmosCtrl )( 
             IGalaxyCluster * This,
-            IHubbleCtrl *eventSource);
+            ICosmosCtrl *eventSource);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxyWithDefaultNode )( 
             IGalaxyCluster * This,
@@ -4832,8 +4832,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_GetGalaxyFromCtrl(This,ctrl,ppGalaxy)	\
     ( (This)->lpVtbl -> GetGalaxyFromCtrl(This,ctrl,ppGalaxy) ) 
 
-#define IGalaxyCluster_ConnectHubbleCtrl(This,eventSource)	\
-    ( (This)->lpVtbl -> ConnectHubbleCtrl(This,eventSource) ) 
+#define IGalaxyCluster_ConnectCosmosCtrl(This,eventSource)	\
+    ( (This)->lpVtbl -> ConnectCosmosCtrl(This,eventSource) ) 
 
 #define IGalaxyCluster_CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid)	\
     ( (This)->lpVtbl -> CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid) ) 
@@ -4880,7 +4880,7 @@ EXTERN_C const IID IID_IWorkBenchWindow;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
             /* [retval][out] */ LONGLONG *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HubbleCtrl( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CosmosCtrl( 
             LONGLONG hWnd,
             /* [retval][out] */ IEclipseCtrl **pVal) = 0;
         
@@ -4985,7 +4985,7 @@ EXTERN_C const IID IID_IWorkBenchWindow;
             IWorkBenchWindow * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HubbleCtrl )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CosmosCtrl )( 
             IWorkBenchWindow * This,
             LONGLONG hWnd,
             /* [retval][out] */ IEclipseCtrl **pVal);
@@ -5071,8 +5071,8 @@ EXTERN_C const IID IID_IWorkBenchWindow;
 #define IWorkBenchWindow_get_Handle(This,pVal)	\
     ( (This)->lpVtbl -> get_Handle(This,pVal) ) 
 
-#define IWorkBenchWindow_get_HubbleCtrl(This,hWnd,pVal)	\
-    ( (This)->lpVtbl -> get_HubbleCtrl(This,hWnd,pVal) ) 
+#define IWorkBenchWindow_get_CosmosCtrl(This,hWnd,pVal)	\
+    ( (This)->lpVtbl -> get_CosmosCtrl(This,hWnd,pVal) ) 
 
 #define IWorkBenchWindow_get_GalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
@@ -5475,7 +5475,7 @@ EXTERN_C const IID IID_IOfficeObject;
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UnloadHubble( void) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UnloadCosmos( void) = 0;
         
     };
     
@@ -5545,7 +5545,7 @@ EXTERN_C const IID IID_IOfficeObject;
             BSTR bstrXml,
             /* [retval][out] */ IGrid **ppGrid);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UnloadHubble )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UnloadCosmos )( 
             IOfficeObject * This);
         
         END_INTERFACE
@@ -5590,8 +5590,8 @@ EXTERN_C const IID IID_IOfficeObject;
 #define IOfficeObject_Observe(This,bstrKey,bstrXml,ppGrid)	\
     ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppGrid) ) 
 
-#define IOfficeObject_UnloadHubble(This)	\
-    ( (This)->lpVtbl -> UnloadHubble(This) ) 
+#define IOfficeObject_UnloadCosmos(This)	\
+    ( (This)->lpVtbl -> UnloadCosmos(This) ) 
 
 #endif /* COBJMACROS */
 
@@ -5604,26 +5604,26 @@ EXTERN_C const IID IID_IOfficeObject;
 #endif 	/* __IOfficeObject_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleCtrl_INTERFACE_DEFINED__
-#define __IHubbleCtrl_INTERFACE_DEFINED__
+#ifndef __ICosmosCtrl_INTERFACE_DEFINED__
+#define __ICosmosCtrl_INTERFACE_DEFINED__
 
-/* interface IHubbleCtrl */
+/* interface ICosmosCtrl */
 /* [unique][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleCtrl;
+EXTERN_C const IID IID_ICosmosCtrl;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-0601198231DC")
-    IHubbleCtrl : public IDispatch
+    ICosmosCtrl : public IDispatch
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HWND( 
             /* [retval][out] */ LONGLONG *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Hubble( 
-            /* [retval][out] */ IHubble **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Cosmos( 
+            /* [retval][out] */ ICosmos **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_tag( 
             /* [retval][out] */ VARIANT *pVal) = 0;
@@ -5636,34 +5636,34 @@ EXTERN_C const IID IID_IHubbleCtrl;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleCtrlVtbl
+    typedef struct ICosmosCtrlVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleCtrl * This);
+            ICosmosCtrl * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleCtrl * This);
+            ICosmosCtrl * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -5671,7 +5671,7 @@ EXTERN_C const IID IID_IHubbleCtrl;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -5690,27 +5690,27 @@ EXTERN_C const IID IID_IHubbleCtrl;
             _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hubble )( 
-            IHubbleCtrl * This,
-            /* [retval][out] */ IHubble **pVal);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cosmos )( 
+            ICosmosCtrl * This,
+            /* [retval][out] */ ICosmos **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tag )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [retval][out] */ VARIANT *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tag )( 
-            IHubbleCtrl * This,
+            ICosmosCtrl * This,
             /* [in] */ VARIANT newVal);
         
         END_INTERFACE
-    } IHubbleCtrlVtbl;
+    } ICosmosCtrlVtbl;
 
-    interface IHubbleCtrl
+    interface ICosmosCtrl
     {
-        CONST_VTBL struct IHubbleCtrlVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosCtrlVtbl *lpVtbl;
     };
 
     
@@ -5718,39 +5718,39 @@ EXTERN_C const IID IID_IHubbleCtrl;
 #ifdef COBJMACROS
 
 
-#define IHubbleCtrl_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosCtrl_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleCtrl_AddRef(This)	\
+#define ICosmosCtrl_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleCtrl_Release(This)	\
+#define ICosmosCtrl_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleCtrl_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosCtrl_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleCtrl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosCtrl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleCtrl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosCtrl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleCtrl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosCtrl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleCtrl_get_HWND(This,pVal)	\
+#define ICosmosCtrl_get_HWND(This,pVal)	\
     ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
 
-#define IHubbleCtrl_get_Hubble(This,pVal)	\
-    ( (This)->lpVtbl -> get_Hubble(This,pVal) ) 
+#define ICosmosCtrl_get_Cosmos(This,pVal)	\
+    ( (This)->lpVtbl -> get_Cosmos(This,pVal) ) 
 
-#define IHubbleCtrl_get_tag(This,pVal)	\
+#define ICosmosCtrl_get_tag(This,pVal)	\
     ( (This)->lpVtbl -> get_tag(This,pVal) ) 
 
-#define IHubbleCtrl_put_tag(This,newVal)	\
+#define ICosmosCtrl_put_tag(This,newVal)	\
     ( (This)->lpVtbl -> put_tag(This,newVal) ) 
 
 #endif /* COBJMACROS */
@@ -5761,22 +5761,22 @@ EXTERN_C const IID IID_IHubbleCtrl;
 
 
 
-#endif 	/* __IHubbleCtrl_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosCtrl_INTERFACE_DEFINED__ */
 
 
-#ifndef __IHubbleAppCtrl_INTERFACE_DEFINED__
-#define __IHubbleAppCtrl_INTERFACE_DEFINED__
+#ifndef __ICosmosAppCtrl_INTERFACE_DEFINED__
+#define __ICosmosAppCtrl_INTERFACE_DEFINED__
 
-/* interface IHubbleAppCtrl */
+/* interface ICosmosAppCtrl */
 /* [unique][nonextensible][dual][uuid][object] */ 
 
 
-EXTERN_C const IID IID_IHubbleAppCtrl;
+EXTERN_C const IID IID_ICosmosAppCtrl;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060120161001")
-    IHubbleAppCtrl : public IHubbleCtrl
+    ICosmosAppCtrl : public ICosmosCtrl
     {
     public:
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AppCtrl( 
@@ -5787,34 +5787,34 @@ EXTERN_C const IID IID_IHubbleAppCtrl;
     
 #else 	/* C style interface */
 
-    typedef struct IHubbleAppCtrlVtbl
+    typedef struct ICosmosAppCtrlVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IHubbleAppCtrl * This);
+            ICosmosAppCtrl * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IHubbleAppCtrl * This);
+            ICosmosAppCtrl * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -5822,7 +5822,7 @@ EXTERN_C const IID IID_IHubbleAppCtrl;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -5841,31 +5841,31 @@ EXTERN_C const IID IID_IHubbleAppCtrl;
             _Out_opt_  UINT *puArgErr);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hubble )( 
-            IHubbleAppCtrl * This,
-            /* [retval][out] */ IHubble **pVal);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cosmos )( 
+            ICosmosAppCtrl * This,
+            /* [retval][out] */ ICosmos **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tag )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [retval][out] */ VARIANT *pVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tag )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [in] */ VARIANT newVal);
         
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppCtrl )( 
-            IHubbleAppCtrl * This,
+            ICosmosAppCtrl * This,
             /* [in] */ VARIANT_BOOL newVal);
         
         END_INTERFACE
-    } IHubbleAppCtrlVtbl;
+    } ICosmosAppCtrlVtbl;
 
-    interface IHubbleAppCtrl
+    interface ICosmosAppCtrl
     {
-        CONST_VTBL struct IHubbleAppCtrlVtbl *lpVtbl;
+        CONST_VTBL struct ICosmosAppCtrlVtbl *lpVtbl;
     };
 
     
@@ -5873,43 +5873,43 @@ EXTERN_C const IID IID_IHubbleAppCtrl;
 #ifdef COBJMACROS
 
 
-#define IHubbleAppCtrl_QueryInterface(This,riid,ppvObject)	\
+#define ICosmosAppCtrl_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define IHubbleAppCtrl_AddRef(This)	\
+#define ICosmosAppCtrl_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define IHubbleAppCtrl_Release(This)	\
+#define ICosmosAppCtrl_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define IHubbleAppCtrl_GetTypeInfoCount(This,pctinfo)	\
+#define ICosmosAppCtrl_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define IHubbleAppCtrl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define ICosmosAppCtrl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define IHubbleAppCtrl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define ICosmosAppCtrl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define IHubbleAppCtrl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define ICosmosAppCtrl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IHubbleAppCtrl_get_HWND(This,pVal)	\
+#define ICosmosAppCtrl_get_HWND(This,pVal)	\
     ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
 
-#define IHubbleAppCtrl_get_Hubble(This,pVal)	\
-    ( (This)->lpVtbl -> get_Hubble(This,pVal) ) 
+#define ICosmosAppCtrl_get_Cosmos(This,pVal)	\
+    ( (This)->lpVtbl -> get_Cosmos(This,pVal) ) 
 
-#define IHubbleAppCtrl_get_tag(This,pVal)	\
+#define ICosmosAppCtrl_get_tag(This,pVal)	\
     ( (This)->lpVtbl -> get_tag(This,pVal) ) 
 
-#define IHubbleAppCtrl_put_tag(This,newVal)	\
+#define ICosmosAppCtrl_put_tag(This,newVal)	\
     ( (This)->lpVtbl -> put_tag(This,newVal) ) 
 
 
-#define IHubbleAppCtrl_put_AppCtrl(This,newVal)	\
+#define ICosmosAppCtrl_put_AppCtrl(This,newVal)	\
     ( (This)->lpVtbl -> put_AppCtrl(This,newVal) ) 
 
 #endif /* COBJMACROS */
@@ -5920,7 +5920,7 @@ EXTERN_C const IID IID_IHubbleAppCtrl;
 
 
 
-#endif 	/* __IHubbleAppCtrl_INTERFACE_DEFINED__ */
+#endif 	/* __ICosmosAppCtrl_INTERFACE_DEFINED__ */
 
 
 #ifndef __IEclipseCtrl_INTERFACE_DEFINED__
@@ -5935,7 +5935,7 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("19631222-1992-0612-1965-060120160912")
-    IEclipseCtrl : public IHubbleCtrl
+    IEclipseCtrl : public ICosmosCtrl
     {
     public:
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Handle( 
@@ -6045,9 +6045,9 @@ EXTERN_C const IID IID_IEclipseCtrl;
             IEclipseCtrl * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hubble )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cosmos )( 
             IEclipseCtrl * This,
-            /* [retval][out] */ IHubble **pVal);
+            /* [retval][out] */ ICosmos **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tag )( 
             IEclipseCtrl * This,
@@ -6153,8 +6153,8 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #define IEclipseCtrl_get_HWND(This,pVal)	\
     ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
 
-#define IEclipseCtrl_get_Hubble(This,pVal)	\
-    ( (This)->lpVtbl -> get_Hubble(This,pVal) ) 
+#define IEclipseCtrl_get_Cosmos(This,pVal)	\
+    ( (This)->lpVtbl -> get_Cosmos(This,pVal) ) 
 
 #define IEclipseCtrl_get_tag(This,pVal)	\
     ( (This)->lpVtbl -> get_tag(This,pVal) ) 
@@ -6220,52 +6220,52 @@ EXTERN_C const IID IID_IEclipseCtrl;
 
 EXTERN_C const IID LIBID_Universe;
 
-#ifndef ___IHubble_DISPINTERFACE_DEFINED__
-#define ___IHubble_DISPINTERFACE_DEFINED__
+#ifndef ___ICosmos_DISPINTERFACE_DEFINED__
+#define ___ICosmos_DISPINTERFACE_DEFINED__
 
-/* dispinterface _IHubble */
+/* dispinterface _ICosmos */
 /* [helpstring][uuid] */ 
 
 
-EXTERN_C const IID DIID__IHubble;
+EXTERN_C const IID DIID__ICosmos;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
     MIDL_INTERFACE("19631222-1992-0612-1965-060119821002")
-    _IHubble : public IDispatch
+    _ICosmos : public IDispatch
     {
     };
     
 #else 	/* C style interface */
 
-    typedef struct _IHubbleVtbl
+    typedef struct _ICosmosVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            _IHubble * This,
+            _ICosmos * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            _IHubble * This);
+            _ICosmos * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            _IHubble * This);
+            _ICosmos * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            _IHubble * This,
+            _ICosmos * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            _IHubble * This,
+            _ICosmos * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            _IHubble * This,
+            _ICosmos * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -6273,7 +6273,7 @@ EXTERN_C const IID DIID__IHubble;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            _IHubble * This,
+            _ICosmos * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -6292,11 +6292,11 @@ EXTERN_C const IID DIID__IHubble;
             _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
-    } _IHubbleVtbl;
+    } _ICosmosVtbl;
 
-    interface _IHubble
+    interface _ICosmos
     {
-        CONST_VTBL struct _IHubbleVtbl *lpVtbl;
+        CONST_VTBL struct _ICosmosVtbl *lpVtbl;
     };
 
     
@@ -6304,26 +6304,26 @@ EXTERN_C const IID DIID__IHubble;
 #ifdef COBJMACROS
 
 
-#define _IHubble_QueryInterface(This,riid,ppvObject)	\
+#define _ICosmos_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define _IHubble_AddRef(This)	\
+#define _ICosmos_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define _IHubble_Release(This)	\
+#define _ICosmos_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define _IHubble_GetTypeInfoCount(This,pctinfo)	\
+#define _ICosmos_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define _IHubble_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define _ICosmos_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define _IHubble_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define _ICosmos_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define _IHubble_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define _ICosmos_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 #endif /* COBJMACROS */
@@ -6332,7 +6332,7 @@ EXTERN_C const IID DIID__IHubble;
 #endif 	/* C style interface */
 
 
-#endif 	/* ___IHubble_DISPINTERFACE_DEFINED__ */
+#endif 	/* ___ICosmos_DISPINTERFACE_DEFINED__ */
 
 
 EXTERN_C const CLSID CLSID_Universe;
@@ -6458,52 +6458,52 @@ EXTERN_C const IID DIID__IGridEvents;
 #endif 	/* ___IGridEvents_DISPINTERFACE_DEFINED__ */
 
 
-#ifndef ___IHubbleObjEvents_DISPINTERFACE_DEFINED__
-#define ___IHubbleObjEvents_DISPINTERFACE_DEFINED__
+#ifndef ___ICosmosObjEvents_DISPINTERFACE_DEFINED__
+#define ___ICosmosObjEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _IHubbleObjEvents */
+/* dispinterface _ICosmosObjEvents */
 /* [helpstring][uuid] */ 
 
 
-EXTERN_C const IID DIID__IHubbleObjEvents;
+EXTERN_C const IID DIID__ICosmosObjEvents;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
     MIDL_INTERFACE("19631222-1992-0612-1965-060119821992")
-    _IHubbleObjEvents : public IDispatch
+    _ICosmosObjEvents : public IDispatch
     {
     };
     
 #else 	/* C style interface */
 
-    typedef struct _IHubbleObjEventsVtbl
+    typedef struct _ICosmosObjEventsVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            _IHubbleObjEvents * This,
+            _ICosmosObjEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            _IHubbleObjEvents * This);
+            _ICosmosObjEvents * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            _IHubbleObjEvents * This);
+            _ICosmosObjEvents * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            _IHubbleObjEvents * This,
+            _ICosmosObjEvents * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            _IHubbleObjEvents * This,
+            _ICosmosObjEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            _IHubbleObjEvents * This,
+            _ICosmosObjEvents * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -6511,7 +6511,7 @@ EXTERN_C const IID DIID__IHubbleObjEvents;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            _IHubbleObjEvents * This,
+            _ICosmosObjEvents * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -6530,11 +6530,11 @@ EXTERN_C const IID DIID__IHubbleObjEvents;
             _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
-    } _IHubbleObjEventsVtbl;
+    } _ICosmosObjEventsVtbl;
 
-    interface _IHubbleObjEvents
+    interface _ICosmosObjEvents
     {
-        CONST_VTBL struct _IHubbleObjEventsVtbl *lpVtbl;
+        CONST_VTBL struct _ICosmosObjEventsVtbl *lpVtbl;
     };
 
     
@@ -6542,26 +6542,26 @@ EXTERN_C const IID DIID__IHubbleObjEvents;
 #ifdef COBJMACROS
 
 
-#define _IHubbleObjEvents_QueryInterface(This,riid,ppvObject)	\
+#define _ICosmosObjEvents_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define _IHubbleObjEvents_AddRef(This)	\
+#define _ICosmosObjEvents_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define _IHubbleObjEvents_Release(This)	\
+#define _ICosmosObjEvents_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define _IHubbleObjEvents_GetTypeInfoCount(This,pctinfo)	\
+#define _ICosmosObjEvents_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define _IHubbleObjEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define _ICosmosObjEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define _IHubbleObjEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define _ICosmosObjEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define _IHubbleObjEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define _ICosmosObjEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 #endif /* COBJMACROS */
@@ -6570,55 +6570,55 @@ EXTERN_C const IID DIID__IHubbleObjEvents;
 #endif 	/* C style interface */
 
 
-#endif 	/* ___IHubbleObjEvents_DISPINTERFACE_DEFINED__ */
+#endif 	/* ___ICosmosObjEvents_DISPINTERFACE_DEFINED__ */
 
 
-#ifndef ___IHubbleAppEvents_DISPINTERFACE_DEFINED__
-#define ___IHubbleAppEvents_DISPINTERFACE_DEFINED__
+#ifndef ___ICosmosAppEvents_DISPINTERFACE_DEFINED__
+#define ___ICosmosAppEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _IHubbleAppEvents */
+/* dispinterface _ICosmosAppEvents */
 /* [helpstring][uuid] */ 
 
 
-EXTERN_C const IID DIID__IHubbleAppEvents;
+EXTERN_C const IID DIID__ICosmosAppEvents;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
     MIDL_INTERFACE("19631222-1992-0612-1965-060120160930")
-    _IHubbleAppEvents : public IDispatch
+    _ICosmosAppEvents : public IDispatch
     {
     };
     
 #else 	/* C style interface */
 
-    typedef struct _IHubbleAppEventsVtbl
+    typedef struct _ICosmosAppEventsVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            _IHubbleAppEvents * This,
+            _ICosmosAppEvents * This,
             /* [in] */ REFIID riid,
             /* [annotation][iid_is][out] */ 
             _COM_Outptr_  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            _IHubbleAppEvents * This);
+            _ICosmosAppEvents * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            _IHubbleAppEvents * This);
+            _ICosmosAppEvents * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            _IHubbleAppEvents * This,
+            _ICosmosAppEvents * This,
             /* [out] */ UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            _IHubbleAppEvents * This,
+            _ICosmosAppEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
             /* [out] */ ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            _IHubbleAppEvents * This,
+            _ICosmosAppEvents * This,
             /* [in] */ REFIID riid,
             /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [range][in] */ UINT cNames,
@@ -6626,7 +6626,7 @@ EXTERN_C const IID DIID__IHubbleAppEvents;
             /* [size_is][out] */ DISPID *rgDispId);
         
         /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            _IHubbleAppEvents * This,
+            _ICosmosAppEvents * This,
             /* [annotation][in] */ 
             _In_  DISPID dispIdMember,
             /* [annotation][in] */ 
@@ -6645,11 +6645,11 @@ EXTERN_C const IID DIID__IHubbleAppEvents;
             _Out_opt_  UINT *puArgErr);
         
         END_INTERFACE
-    } _IHubbleAppEventsVtbl;
+    } _ICosmosAppEventsVtbl;
 
-    interface _IHubbleAppEvents
+    interface _ICosmosAppEvents
     {
-        CONST_VTBL struct _IHubbleAppEventsVtbl *lpVtbl;
+        CONST_VTBL struct _ICosmosAppEventsVtbl *lpVtbl;
     };
 
     
@@ -6657,26 +6657,26 @@ EXTERN_C const IID DIID__IHubbleAppEvents;
 #ifdef COBJMACROS
 
 
-#define _IHubbleAppEvents_QueryInterface(This,riid,ppvObject)	\
+#define _ICosmosAppEvents_QueryInterface(This,riid,ppvObject)	\
     ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
 
-#define _IHubbleAppEvents_AddRef(This)	\
+#define _ICosmosAppEvents_AddRef(This)	\
     ( (This)->lpVtbl -> AddRef(This) ) 
 
-#define _IHubbleAppEvents_Release(This)	\
+#define _ICosmosAppEvents_Release(This)	\
     ( (This)->lpVtbl -> Release(This) ) 
 
 
-#define _IHubbleAppEvents_GetTypeInfoCount(This,pctinfo)	\
+#define _ICosmosAppEvents_GetTypeInfoCount(This,pctinfo)	\
     ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
 
-#define _IHubbleAppEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define _ICosmosAppEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
 
-#define _IHubbleAppEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define _ICosmosAppEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
 
-#define _IHubbleAppEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define _ICosmosAppEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 #endif /* COBJMACROS */
@@ -6685,15 +6685,15 @@ EXTERN_C const IID DIID__IHubbleAppEvents;
 #endif 	/* C style interface */
 
 
-#endif 	/* ___IHubbleAppEvents_DISPINTERFACE_DEFINED__ */
+#endif 	/* ___ICosmosAppEvents_DISPINTERFACE_DEFINED__ */
 
 
-EXTERN_C const CLSID CLSID_HubbleCtrl;
+EXTERN_C const CLSID CLSID_CosmosCtrl;
 
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("19631222-1992-0612-1965-060120071001")
-HubbleCtrl;
+CosmosCtrl;
 #endif
 
 EXTERN_C const CLSID CLSID_UniverseExtender;

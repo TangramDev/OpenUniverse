@@ -15,18 +15,18 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "GridHelper.h"
 #include "GridWnd.h"
 #include "grid.h"
 #include "Galaxy.h"
-#include "HubbleEvents.h"
+#include "CosmosEvents.h"
 #include "GridWnd.h"
 #include "universe.c"
 
 CGrid::CGrid()
 {
-	g_pHubble->m_nTangramObj++;
+	g_pCosmos->m_nTangramObj++;
 	m_nID = 0;
 	m_nRow = 0;
 	m_nCol = 0;
@@ -53,7 +53,7 @@ CGrid::CGrid()
 	m_pCurrentExNode = nullptr;
 	m_pHostParse = nullptr;
 	m_pGridShareData = nullptr;
-	g_pHubble->m_pActiveGrid = this;
+	g_pCosmos->m_pActiveGrid = this;
 }
 
 
@@ -179,7 +179,7 @@ void CGrid::InitWndGrid()
 	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
 	if (m_pGridShareData->m_pGalaxy && m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)
 	{
-		m_strNodeName = m_strName + _T("@") + g_pHubble->m_strCurrentKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName;
+		m_strNodeName = m_strName + _T("@") + g_pCosmos->m_strCurrentKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName;
 		auto it2 = m_pGridShareData->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
 		if (it2 == m_pGridShareData->m_pGalaxyCluster->m_mapGrid.end())
 		{
@@ -187,24 +187,24 @@ void CGrid::InitWndGrid()
 		}
 	}
 
-	auto it = g_pHubble->m_TabWndClassInfoDictionary.find(m_strID);
-	if (it != g_pHubble->m_TabWndClassInfoDictionary.end())
+	auto it = g_pCosmos->m_TabWndClassInfoDictionary.find(m_strID);
+	if (it != g_pCosmos->m_TabWndClassInfoDictionary.end())
 		m_pObjClsInfo = it->second;
 	else
 		m_pObjClsInfo = RUNTIME_CLASS(CGridHelper);
 
-	for (auto it : g_pHubble->m_mapHubbleAppProxy)
+	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 	{
-		CGridProxy* pHubbleWndGridProxy = it.second->OnGridInit(this);
-		if (pHubbleWndGridProxy)
-			m_mapWndGridProxy[it.second] = pHubbleWndGridProxy;
+		CGridProxy* pCosmosWndGridProxy = it.second->OnGridInit(this);
+		if (pCosmosWndGridProxy)
+			m_mapWndGridProxy[it.second] = pCosmosWndGridProxy;
 	}
 }
 
 CGrid::~CGrid()
 {
-	if (g_pHubble->m_pActiveGrid == this)
-		g_pHubble->m_pActiveGrid = nullptr;
+	if (g_pCosmos->m_pActiveGrid == this)
+		g_pCosmos->m_pActiveGrid = nullptr;
 	if (m_pGridShareData->m_pOldGalaxy)
 		m_pGridShareData->m_pGalaxy = m_pGridShareData->m_pOldGalaxy;
 	CGalaxy * pGalaxy = m_pGridShareData->m_pGalaxy;
@@ -243,7 +243,7 @@ CGrid::~CGrid()
 		m_pCLREventConnector = nullptr;
 	}
 
-	g_pHubble->m_nTangramObj--;
+	g_pCosmos->m_nTangramObj--;
 #ifdef _DEBUG
 #endif
 	HRESULT hr = S_OK;
@@ -314,7 +314,7 @@ STDMETHODIMP CGrid::LoadXML(int nType, BSTR bstrXML)
 
 STDMETHODIMP CGrid::ActiveTabPage(IGrid * _pGrid)
 {
-	g_pHubble->m_pActiveGrid = this;
+	g_pCosmos->m_pActiveGrid = this;
 	HWND hWnd = m_pHostWnd->m_hWnd;
 	if (::IsWindow(hWnd))
 	{
@@ -366,7 +366,7 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 				{
 					RECT rc;
 					::GetClientRect(m_pHostWnd->m_hWnd, &rc);
-					m_hHostWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pHostWnd->m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+					m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pHostWnd->m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
 				}
 				else
 				{
@@ -541,10 +541,10 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 			m_strID = strVal;
 		ATLTRACE(_T("Modify CGrid Attribute: ID: %s Value: %s\n"), strID, strVal);
 		CGalaxy* pGalaxy = nullptr;
-		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pHubble->m_pDesignGrid)
+		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pCosmos->m_pDesignGrid)
 		{
-			pGalaxy = g_pHubble->m_pDesignGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
-			if (g_pHubble->m_pDesignGrid && pGalaxy->m_pBindingGrid)
+			pGalaxy = g_pCosmos->m_pDesignGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
+			if (g_pCosmos->m_pDesignGrid && pGalaxy->m_pBindingGrid)
 			{
 				CGrid* pOldNode = pGalaxy->m_pBindingGrid;
 				if (pOldNode->m_pGridShareData->m_pOldGalaxy)
@@ -569,7 +569,7 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 					pWnd->m_pHostGrid = this;
 				}
 				pOldNode->m_strID = _T("");
-				if (pOldNode->m_pRootObj == g_pHubble->m_pDesignGrid->m_pRootObj)
+				if (pOldNode->m_pRootObj == g_pCosmos->m_pDesignGrid->m_pRootObj)
 					pOldNode->m_pHostParse->put_attr(TGM_GRID_TYPE, _T(""));
 				ATLTRACE(_T("Modify CGrid HostView Attribute: ID:%s Value: %s\n"), strID, strVal);
 				pOldNode->m_pHostWnd->Invalidate();
@@ -585,12 +585,12 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 				pTopGrid = pTopGrid->m_pRootObj;
 			}
 			m_pHostParse->put_attr(TGM_GRID_TYPE, TGM_NUCLEUS);
-			if (g_pHubble->m_pDesignGrid)
+			if (g_pCosmos->m_pDesignGrid)
 			{
 				pGalaxy->m_pBindingGrid = this;
-				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pOldGalaxy = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
-				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy = m_pRootObj->m_pGridShareData->m_pGalaxy;
-				g_pHubble->m_pDesignGrid->m_pGridShareData->m_pHostClientView = m_pRootObj->m_pGridShareData->m_pHostClientView;
+				g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pOldGalaxy = g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
+				g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy = m_pRootObj->m_pGridShareData->m_pGalaxy;
+				g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pHostClientView = m_pRootObj->m_pGridShareData->m_pHostClientView;
 			}
 
 			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
@@ -635,7 +635,7 @@ STDMETHODIMP CGrid::get_Handle(LONGLONG * pVal)
 
 STDMETHODIMP CGrid::get_OuterXml(BSTR * pVal)
 {
-	*pVal = m_pGridShareData->m_pHubbleParse->xml().AllocSysString();
+	*pVal = m_pGridShareData->m_pCosmosParse->xml().AllocSysString();
 	return S_OK;
 }
 
@@ -659,11 +659,11 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	int nCol = m_pHostParse->GetCount();
 	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_GRID))
 		m_strObjTypeID = _T("tabbedwnd");
-	CGridHelper* pHubbleDesignView = (CGridHelper*)m_pHostWnd;
+	CGridHelper* pCosmosDesignView = (CGridHelper*)m_pHostWnd;
 	BOOL isAppWnd = false;
 	if ( m_strID == _T("clrctrl"))
 	{
-		g_pHubble->LoadCLR();
+		g_pCosmos->LoadCLR();
 		m_nViewType = CLRCtrl;
 
 		hWnd = CreateView(pParentWnd->m_hWnd, m_strObjTypeID);
@@ -678,14 +678,14 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			{
 				IUniverseAppProxy* pProxy = nullptr;
 				CString strKey = m_strID.Mid(nPos + 1);
-				auto it = g_pHubble->m_mapHubbleAppProxy.find(strKey);
-				if (it != g_pHubble->m_mapHubbleAppProxy.end())
+				auto it = g_pCosmos->m_mapCosmosAppProxy.find(strKey);
+				if (it != g_pCosmos->m_mapCosmosAppProxy.end())
 				{
 					pProxy = it->second;
 				}
 				else
 				{
-					CString strPath = g_pHubble->m_strAppPath;
+					CString strPath = g_pCosmos->m_strAppPath;
 					nPos = strKey.Find(_T("."));
 					CString strAppName = strKey.Left(nPos);
 					HMODULE hHandle = nullptr;
@@ -694,14 +694,14 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 						hHandle = ::LoadLibrary(strdll);
 					if (hHandle == nullptr)
 					{
-						strdll = g_pHubble->m_strAppCommonDocPath2 + strKey + _T("\\") + strAppName + _T(".dll");
+						strdll = g_pCosmos->m_strAppCommonDocPath2 + strKey + _T("\\") + strAppName + _T(".dll");
 						if (::PathFileExists(strdll))
 							hHandle = ::LoadLibrary(strdll);
 					}
 					if (hHandle)
 					{
-						it = g_pHubble->m_mapHubbleAppProxy.find(strKey.MakeLower());
-						if (it != g_pHubble->m_mapHubbleAppProxy.end())
+						it = g_pCosmos->m_mapCosmosAppProxy.find(strKey.MakeLower());
+						if (it != g_pCosmos->m_mapCosmosAppProxy.end())
 						{
 							pProxy = it->second;
 						}
@@ -711,24 +711,24 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 			if (m_nViewType!=CLRCtrl&&::IsWindow(hWnd) == false&&m_strObjTypeID != _T(""))
 			{
-				IHubbleWindowProvider* pViewFactoryDisp = nullptr;
-				auto it = g_pHubble->m_mapWindowProvider.find(m_strObjTypeID);
-				if (it != g_pHubble->m_mapWindowProvider.end())
+				ICosmosWindowProvider* pViewFactoryDisp = nullptr;
+				auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
+				if (it != g_pCosmos->m_mapWindowProvider.end())
 				{
 					pViewFactoryDisp = it->second;
 				}
 				else
 				{
-					if (it == g_pHubble->m_mapWindowProvider.end())
+					if (it == g_pCosmos->m_mapWindowProvider.end())
 					{
 						if (m_strID.CompareNoCase(_T("TreeView")))
 						{
-							CString strLib = g_pHubble->m_strAppPath + _T("TabbedWnd.dll");
+							CString strLib = g_pCosmos->m_strAppPath + _T("TabbedWnd.dll");
 							if (::PathFileExists(strLib))
 							{
 								::LoadLibrary(strLib);
-								auto it = g_pHubble->m_mapWindowProvider.find(m_strObjTypeID);
-								if (it != g_pHubble->m_mapWindowProvider.end())
+								auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
+								if (it != g_pCosmos->m_mapWindowProvider.end())
 								{
 									pViewFactoryDisp = it->second;
 								}
@@ -736,19 +736,19 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 							if (pViewFactoryDisp == nullptr)
 							{
 								CString strLib = _T("");
-								CString strPath = g_pHubble->m_strAppPath + _T("wincomponent\\") + m_strObjTypeID + _T(".component");
+								CString strPath = g_pCosmos->m_strAppPath + _T("wincomponent\\") + m_strObjTypeID + _T(".component");
 								CTangramXmlParse m_Parse;
 								if (::PathFileExists(strPath))
 								{
 									if (m_Parse.LoadFile(strPath))
 									{
-										strLib = g_pHubble->m_strAppPath + _T("wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
+										strLib = g_pCosmos->m_strAppPath + _T("wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
 									}
 								}
 								if (::PathFileExists(strLib)&&::LoadLibrary(strLib))
 								{
-									auto it = g_pHubble->m_mapWindowProvider.find(m_strObjTypeID);
-									if (it != g_pHubble->m_mapWindowProvider.end())
+									auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
+									if (it != g_pCosmos->m_mapWindowProvider.end())
 									{
 										pViewFactoryDisp = it->second;
 									}
@@ -767,7 +767,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		}
 	}
 
-	if (!::IsWindow(m_pHostWnd->m_hWnd) && hWnd && pHubbleDesignView->SubclassWindow(hWnd))
+	if (!::IsWindow(m_pHostWnd->m_hWnd) && hWnd && pCosmosDesignView->SubclassWindow(hWnd))
 	{
 		if (isAppWnd == false)
 			::SetWindowLong(hWnd, GWL_STYLE, dwStyle | WS_CHILD | /*WS_VISIBLE | */WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
@@ -778,7 +778,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		}
 		::SetWindowLong(hWnd, GWL_ID, nID);
 
-		pHubbleDesignView->m_bCreateExternal = true;
+		pCosmosDesignView->m_bCreateExternal = true;
 		if(m_nViewType==BlankView)
 			m_nViewType = TabGrid;
 		bRet = true;
@@ -786,7 +786,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	if (hWnd == 0)
 	{
-		hWnd = CreateWindow(L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		hWnd = CreateWindow(L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		if (::IsWindow(m_pHostWnd->m_hWnd) == false)
 			bRet = m_pHostWnd->SubclassWindow(hWnd);
 	}
@@ -872,12 +872,12 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	break;
 	case CLRCtrl:
 	{
-		g_pHubble->m_pActiveGrid = this;
+		g_pCosmos->m_pActiveGrid = this;
 		
 		CString strUIKey = strTag;
-		if (g_pHubble->m_pCLRProxy)
+		if (g_pCosmos->m_pCLRProxy)
 		{
-			m_pDisp = g_pHubble->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
+			m_pDisp = g_pCosmos->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
 			if (m_pDisp == nullptr)
 			{
 				((CGridHelper*)m_pHostWnd)->m_bCreateExternal = false;
@@ -891,20 +891,20 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	{
 		if (m_nViewType == CLRCtrl)
 		{
-			if (g_pHubble->m_hFormNodeWnd && (::GetWindowLongPtr(g_pHubble->m_hFormNodeWnd, GWL_STYLE) & WS_CHILD))
+			if (g_pCosmos->m_hFormNodeWnd && (::GetWindowLongPtr(g_pCosmos->m_hFormNodeWnd, GWL_STYLE) & WS_CHILD))
 			{
 				HWND hCtrl = NULL;
-				if (g_pHubble->m_pCLRProxy)
-					hCtrl = g_pHubble->m_pCLRProxy->GetCtrlHandle(m_pDisp);
-				if (hCtrl == g_pHubble->m_hFormNodeWnd)
+				if (g_pCosmos->m_pCLRProxy)
+					hCtrl = g_pCosmos->m_pCLRProxy->GetCtrlHandle(m_pDisp);
+				if (hCtrl == g_pCosmos->m_hFormNodeWnd)
 				{
-					HWND hWnd = g_pHubble->m_hFormNodeWnd;
-					g_pHubble->m_hFormNodeWnd = nullptr;
+					HWND hWnd = g_pCosmos->m_hFormNodeWnd;
+					g_pCosmos->m_hFormNodeWnd = nullptr;
 					return hWnd;
 				}
 			}
 		}
-		auto hWnd = ::CreateWindowEx(NULL, L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
+		auto hWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
 		CAxWindow m_Wnd;
 		m_Wnd.Attach(hWnd);
 		CComPtr<IUnknown> pUnk;
@@ -1233,26 +1233,26 @@ STDMETHODIMP CGrid::get_NameAtWindowPage(BSTR * pVal)
 
 STDMETHODIMP CGrid::GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch * *ppRetDisp)
 {
-	if (g_pHubble->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
-		* ppRetDisp = g_pHubble->m_pCLRProxy->GetCtrlByName(m_pDisp, bstrName, bFindInChild ? true : false);
+	if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
+		* ppRetDisp = g_pCosmos->m_pCLRProxy->GetCtrlByName(m_pDisp, bstrName, bFindInChild ? true : false);
 
 	return S_OK;
 }
 
 STDMETHODIMP CGrid::GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR * bstrVal)
 {
-	//if (g_pHubble->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
+	//if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
 	//{
-	//	*bstrVal = g_pHubble->m_pCLRProxy->GetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false);
+	//	*bstrVal = g_pCosmos->m_pCLRProxy->GetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false);
 	//}
 	return S_OK;
 }
 
 STDMETHODIMP CGrid::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal)
 {
-	//if (g_pHubble->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
+	//if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
 	//{
-	//	g_pHubble->m_pCLRProxy->SetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false, bstrVal);
+	//	g_pCosmos->m_pCLRProxy->SetCtrlValueByName(m_pDisp, bstrName, bFindInChild ? true : false, bstrVal);
 	//}
 	return S_OK;
 }
@@ -1260,15 +1260,15 @@ STDMETHODIMP CGrid::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild,
 CGridCollection::CGridCollection()
 {
 	m_pGrids = &m_vGrids;
-	g_pHubble->m_mapWndGridCollection[(__int64)this] = this;
+	g_pCosmos->m_mapWndGridCollection[(__int64)this] = this;
 }
 
 CGridCollection::~CGridCollection()
 {
-	auto it = g_pHubble->m_mapWndGridCollection.find((__int64)this);
-	if (it != g_pHubble->m_mapWndGridCollection.end())
+	auto it = g_pCosmos->m_mapWndGridCollection.find((__int64)this);
+	if (it != g_pCosmos->m_mapWndGridCollection.end())
 	{
-		g_pHubble->m_mapWndGridCollection.erase(it);
+		g_pCosmos->m_mapWndGridCollection.erase(it);
 	}
 	m_vGrids.clear();
 }
@@ -1608,9 +1608,9 @@ HRESULT CGrid::Fire_ObserveComplete()
 		DISPPARAMS params = { NULL, NULL, 0, 0 };
 		for (int iConnection = 0; iConnection < cConnections; iConnection++)
 		{
-			g_pHubble->Lock();
+			g_pCosmos->Lock();
 			CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
-			g_pHubble->Unlock();
+			g_pCosmos->Unlock();
 
 			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection.p);
 
@@ -1639,9 +1639,9 @@ HRESULT CGrid::Fire_Destroy()
 		DISPPARAMS params = { NULL, NULL, 0, 0 };
 		for (int iConnection = 0; iConnection < cConnections; iConnection++)
 		{
-			g_pHubble->Lock();
+			g_pCosmos->Lock();
 			CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
-			g_pHubble->Unlock();
+			g_pCosmos->Unlock();
 
 			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection.p);
 
@@ -1657,9 +1657,9 @@ HRESULT CGrid::Fire_Destroy()
 		it.second->OnDestroy();
 	}
 
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
-		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IGrid*)this);
+		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGrid*)this);
 	}
 	return hr;
 }
@@ -1678,9 +1678,9 @@ HRESULT CGrid::Fire_TabChange(LONG ActivePage, LONG OldPage)
 		DISPPARAMS params = { avarParams, NULL, 2, 0 };
 		for (int iConnection = 0; iConnection < cConnections; iConnection++)
 		{
-			g_pHubble->Lock();
+			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
-			g_pHubble->Unlock();
+			g_pCosmos->Unlock();
 			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 
 			if (pConnection)
@@ -1717,9 +1717,9 @@ HRESULT CGrid::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 		DISPPARAMS params = { avarParams, NULL, 5, 0 };
 		for (int iConnection = 0; iConnection < cConnections; iConnection++)
 		{
-			g_pHubble->Lock();
+			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
-			g_pHubble->Unlock();
+			g_pCosmos->Unlock();
 			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 
 			if (pConnection)

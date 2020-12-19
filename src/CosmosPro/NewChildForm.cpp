@@ -29,7 +29,7 @@ namespace Cosmos {
 		String^ strXml = NewTemplateListView->SelectedItems[0]->Tag->ToString();
 		if (String::IsNullOrEmpty(strXml) == false)
 		{
-			IDispatch* pFormDisp = theApp.m_pHubbleImpl->m_pCLRProxy->CreateCLRObj(strXml);
+			IDispatch* pFormDisp = theApp.m_pCosmosImpl->m_pCLRProxy->CreateCLRObj(strXml);
 		}
 		Close();
 	}

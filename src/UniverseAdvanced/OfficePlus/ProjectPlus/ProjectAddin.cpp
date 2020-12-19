@@ -35,7 +35,7 @@ namespace OfficePlus
 		{
 		}
 
-		STDMETHODIMP CProjectAddin::HubbleCommand(IDispatch* RibbonControl)
+		STDMETHODIMP CProjectAddin::CosmosCommand(IDispatch* RibbonControl)
 		{
 			if (m_spRibbonUI)
 				m_spRibbonUI->Invalidate();
@@ -72,7 +72,7 @@ namespace OfficePlus
 			return (*RibbonXml ? S_OK : E_OUTOFMEMORY);
 		}
 
-		HRESULT CProjectAddin::CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv)
+		HRESULT CProjectAddin::CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv)
 		{
 			return CProjectAppCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
@@ -93,7 +93,7 @@ namespace OfficePlus
 
 		STDMETHODIMP CProjectAppCtrl::put_AppCtrl(VARIANT_BOOL newVal)
 		{
-			g_pHubble->m_pHubbleAppCtrl = this;
+			g_pCosmos->m_pCosmosAppCtrl = this;
 
 			return S_OK;
 		}
@@ -115,9 +115,9 @@ namespace OfficePlus
 			return S_OK;
 		}
 
-		STDMETHODIMP CProjectAppCtrl::get_Hubble(IHubble** pVal)
+		STDMETHODIMP CProjectAppCtrl::get_Cosmos(ICosmos** pVal)
 		{
-			*pVal = g_pHubble;
+			*pVal = g_pCosmos;
 			return S_OK;
 		}
 	}

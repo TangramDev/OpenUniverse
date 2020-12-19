@@ -32,8 +32,8 @@ namespace Cosmos
         m_pGridCLREvent = m_pGridEvent->m_pGridCLREvent;
         m_pGridEvent->m_pGridCLREvent->m_pGrid = this;
         HRESULT hr = m_pGridEvent->DispEventAdvise(pGrid);
-        if (theApp.m_pHubbleImpl)
-            theApp.m_pHubbleImpl->AttachGrid(m_pGridEvent);
+        if (theApp.m_pCosmosImpl)
+            theApp.m_pCosmosImpl->AttachGrid(m_pGridEvent);
         m_pGrid = pGrid;
         LONGLONG nValue = (LONGLONG)pGrid;
         theAppProxy._insertObject(nValue, this);
@@ -50,7 +50,7 @@ namespace Cosmos
         CComPtr<IGalaxy> pGalaxy;
         m_pGrid->get_Galaxy(&pGalaxy);
 
-        return theAppProxy._createObject<IGalaxy, Cosmos::Galaxy>(pGalaxy);
+        return theAppProxy._createObject<IGalaxy, ::Cosmos::Galaxy>(pGalaxy);
     }
 
     String^ Grid::Caption::get()
@@ -131,17 +131,17 @@ namespace Cosmos
         OnTabChange(ActivePage, OldGrid);
     }
 
-    Hubble::Hubble(IHubble* pHubble)
+    Cosmos::Cosmos(ICosmos* pCosmos)
     {
     }
 
-    Hubble::~Hubble(void)
+    Cosmos::~Cosmos(void)
     {
     }
 
-    Hubble^ Hubble::GetHubble()
+    Cosmos^ Cosmos::GetCosmos()
     {
-        if (theApp.m_pHubble == nullptr)
+        if (theApp.m_pCosmos == nullptr)
         {
             HMODULE hModule = ::GetModuleHandle(L"universe.dll");
             if (hModule == nullptr) {
@@ -149,67 +149,67 @@ namespace Cosmos
                 if (SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer) ==
                     S_OK) {
                     ATL::CString m_strProgramFilePath = ATL::CString(m_szBuffer);
-                    m_strProgramFilePath += _T("\\Hubble\\universe.dll");
+                    m_strProgramFilePath += _T("\\Cosmos\\universe.dll");
                     if (::PathFileExists(m_strProgramFilePath)) {
                         hModule = ::LoadLibrary(m_strProgramFilePath);
                     }
                 }
             }
             if (hModule) {
-                typedef CHubbleImpl* (__stdcall* GetHubbleImpl)(IHubble**);
-                GetHubbleImpl _pHubbleImplFunction;
-                _pHubbleImplFunction = (GetHubbleImpl)GetProcAddress(hModule, "GetHubbleImpl");
-                if (_pHubbleImplFunction != NULL) {
-                    theApp.m_pHubbleImpl = _pHubbleImplFunction(&theApp.m_pHubble);
-                    if (theApp.m_pHubbleImpl->m_nAppType == 0)
-                        theApp.m_pHubbleImpl->m_nAppType = APP_BROWSERAPP;
-                    theApp.m_pHubbleImpl->m_pHubbleDelegate = (IHubbleDelegate*)&theApp;
-                    theApp.m_pHubbleImpl->m_pUniverseAppProxy = (IUniverseAppProxy*)&theApp;
-                    theApp.m_pHubbleImpl->m_pCLRProxy = &theAppProxy;
+                typedef CCosmosImpl* (__stdcall* GetCosmosImpl)(ICosmos**);
+                GetCosmosImpl _pCosmosImplFunction;
+                _pCosmosImplFunction = (GetCosmosImpl)GetProcAddress(hModule, "GetCosmosImpl");
+                if (_pCosmosImplFunction != NULL) {
+                    theApp.m_pCosmosImpl = _pCosmosImplFunction(&theApp.m_pCosmos);
+                    if (theApp.m_pCosmosImpl->m_nAppType == 0)
+                        theApp.m_pCosmosImpl->m_nAppType = APP_BROWSERAPP;
+                    theApp.m_pCosmosImpl->m_pCosmosDelegate = (ICosmosDelegate*)&theApp;
+                    theApp.m_pCosmosImpl->m_pUniverseAppProxy = (IUniverseAppProxy*)&theApp;
+                    theApp.m_pCosmosImpl->m_pCLRProxy = &theAppProxy;
                 }
             }
         }
-        if (m_pHubble == nullptr)
-            m_pHubble = gcnew Hubble();
-        return m_pHubble;
+        if (m_pCosmos == nullptr)
+            m_pCosmos = gcnew Cosmos();
+        return m_pCosmos;
     }
 
-    Hubble^ Hubble::InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType)
+    Cosmos^ Cosmos::InitCosmosApp(bool bSupportCrashReporting, CosmosAppType AppType)
     {
-        if (m_pHubble == nullptr)
-            m_pHubble = gcnew Hubble();
+        if (m_pCosmos == nullptr)
+            m_pCosmos = gcnew Cosmos();
         if (theApp.m_bBrowserModeInit)
-            return m_pHubble;
-        theApp.m_pHubbleImpl->m_nAppType = (DWORD)AppType;
+            return m_pCosmos;
+        theApp.m_pCosmosImpl->m_nAppType = (DWORD)AppType;
         //m_nAppType = AppType;
         switch (AppType)
         {
         case CosmosAppType::APPBROWSER:
         case CosmosAppType::APPBROWSER_ECLIPSE:
-            theApp.InitHubbleApp(bSupportCrashReporting);
+            theApp.InitCosmosApp(bSupportCrashReporting);
             break;
         case CosmosAppType::APPECLIPSE:
             break;
         case CosmosAppType::APPBROWSERAPP:
             break;
         }
-        return m_pHubble;
+        return m_pCosmos;
     }
 
-    Grid^ Hubble::CreatingGrid::get()
+    Grid^ Cosmos::CreatingGrid::get()
     {
         Object^ pRetObject = nullptr;
-        if (theApp.m_pHubble)
+        if (theApp.m_pCosmos)
         {
             IGrid* pGrid = nullptr;
-            theApp.m_pHubble->get_CreatingGrid(&pGrid);
+            theApp.m_pCosmos->get_CreatingGrid(&pGrid);
             if (pGrid)
                 return theAppProxy._createObject<IGrid, Grid>(pGrid);
         }
         return nullptr;
     }
 
-    bool Hubble::Fire_OnAppInit()
+    bool Cosmos::Fire_OnAppInit()
     {
         if (IsAppInit == false)
         {
@@ -219,12 +219,12 @@ namespace Cosmos
         return false;
     }
 
-    void Hubble::Fire_OnClose()
+    void Cosmos::Fire_OnClose()
     {
         OnClose();
     }
 
-    int Hubble::HubbleInit(String^ strInit)
+    int Cosmos::CosmosInit(String^ strInit)
     {
         CString strInfo = strInit;
         if (strInfo != _T(""))
@@ -232,19 +232,19 @@ namespace Cosmos
             __int64 nPointer = _wtoi64(strInfo);
             if (nPointer)
             {
-                theApp.m_pHubbleImpl = (CHubbleImpl*)nPointer;
-                theApp.m_pHubbleImpl->m_pCLRProxy = &theAppProxy;
-                theApp.m_pHubbleImpl->m_pCosmosAppProxy = static_cast<IUniverseAppProxy*>(&theApp);
+                theApp.m_pCosmosImpl = (CCosmosImpl*)nPointer;
+                theApp.m_pCosmosImpl->m_pCLRProxy = &theAppProxy;
+                theApp.m_pCosmosImpl->m_pCosmosAppProxy = static_cast<IUniverseAppProxy*>(&theApp);
                 //20180817
-                if (theApp.m_pHubble == nullptr)
+                if (theApp.m_pCosmos == nullptr)
                 {
                     HMODULE hModule = ::GetModuleHandle(_T("universe.dll"));
                     if (hModule) {
-                        typedef IHubble* (__stdcall* GetHubble)();
-                        GetHubble _pHubbleFunction;
-                        _pHubbleFunction = (GetHubble)GetProcAddress(hModule, "GetHubble");
-                        if (_pHubbleFunction != NULL) {
-                            theApp.m_pHubble = _pHubbleFunction();
+                        typedef ICosmos* (__stdcall* GetCosmos)();
+                        GetCosmos _pCosmosFunction;
+                        _pCosmosFunction = (GetCosmos)GetProcAddress(hModule, "GetCosmos");
+                        if (_pCosmosFunction != NULL) {
+                            theApp.m_pCosmos = _pCosmosFunction();
                         }
                     }
                 }
@@ -253,7 +253,7 @@ namespace Cosmos
         return 0;
     };
 
-    Grid^ Hubble::GetGridFromHandle(IntPtr handle)
+    Grid^ Cosmos::GetGridFromHandle(IntPtr handle)
     {
         IGrid* pWndGrid = nullptr;
         CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)handle.ToPointer(), _T("CosmosInfo"));
@@ -264,7 +264,7 @@ namespace Cosmos
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
-    Grid^ Hubble::GetGridFromControl(Control^ ctrl)
+    Grid^ Cosmos::GetGridFromControl(Control^ ctrl)
     {
         if (ctrl == nullptr)
         {
@@ -272,8 +272,8 @@ namespace Cosmos
         }
         IGrid* pWndGrid = nullptr;
         HWND hCtrl = (HWND)ctrl->Handle.ToPointer();
-        auto it = theApp.m_pHubbleImpl->m_mapGrid.find(hCtrl);
-        if (it != theApp.m_pHubbleImpl->m_mapGrid.end())
+        auto it = theApp.m_pCosmosImpl->m_mapGrid.find(hCtrl);
+        if (it != theApp.m_pCosmosImpl->m_mapGrid.end())
         {
             pWndGrid = it->second;
             return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
@@ -286,14 +286,14 @@ namespace Cosmos
         return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
     }
 
-    Grid^ Hubble::Observe(Control^ ctrl, String^ key, String^ strGridXml)
+    Grid^ Cosmos::Observe(Control^ ctrl, String^ key, String^ strGridXml)
     {
         if (ctrl != nullptr)
         {
             if (ctrl->Dock != DockStyle::Fill && ctrl->Dock != DockStyle::None)
                 return nullptr;
             IGalaxy* pGalaxy = nullptr;
-            theApp.m_pHubble->GetGalaxy((__int64)ctrl->Handle.ToPointer(), &pGalaxy);
+            theApp.m_pCosmos->GetGalaxy((__int64)ctrl->Handle.ToPointer(), &pGalaxy);
             if (pGalaxy)
             {
                 IGrid* pGrid = nullptr;
@@ -356,7 +356,7 @@ namespace Cosmos
                     if (pForm2 != nullptr)
                     {
                         IGalaxyCluster* pGalaxyCluster = nullptr;
-                        theApp.m_pHubble->CreateGalaxyCluster(pForm2->Handle.ToInt64(), &pGalaxyCluster);
+                        theApp.m_pCosmos->CreateGalaxyCluster(pForm2->Handle.ToInt64(), &pGalaxyCluster);
                         if (pGalaxyCluster != nullptr)
                         {
                             IGalaxy* pGalaxy = nullptr;
@@ -424,7 +424,7 @@ namespace Cosmos
                 }
                 else
                 {
-                    theApp.m_pHubble->CreateGalaxyCluster((__int64)_hTopWnd, &pGalaxyCluster);
+                    theApp.m_pCosmos->CreateGalaxyCluster((__int64)_hTopWnd, &pGalaxyCluster);
                     if (pGalaxyCluster != nullptr)
                     {
                         BSTR bstrName = STRING2BSTR(ctrl->Name);
@@ -449,7 +449,7 @@ namespace Cosmos
         return nullptr;
     }
 
-    Type^ Hubble::GetType(String^ strObjID)
+    Type^ Cosmos::GetType(String^ strObjID)
     {
         if (String::IsNullOrEmpty(strObjID) == true)
             return nullptr;
@@ -459,9 +459,9 @@ namespace Cosmos
         Type^ pType = nullptr;
         if (m_strID != L"")
         {
-            Monitor::Enter(m_pHubbleCLRTypeDic);
+            Monitor::Enter(m_pCosmosCLRTypeDic);
             String^ strID = nullptr;
-            if (m_pHubbleCLRTypeDic->TryGetValue(m_strID, pType) == false)
+            if (m_pCosmosCLRTypeDic->TryGetValue(m_strID, pType) == false)
             {
                 BSTR bstrID = STRING2BSTR(m_strID);
                 CString _strID = OLE2T(bstrID);
@@ -473,7 +473,7 @@ namespace Cosmos
                     if (s1 == _T("host"))
                     {
                         CString s = _strID.Left(nIndex);
-                        _strID = _strID.Left(nIndex + 1) + theApp.m_pHubbleImpl->m_strExeName;
+                        _strID = _strID.Left(nIndex + 1) + theApp.m_pCosmosImpl->m_strExeName;
                         _strID.MakeLower();
                     }
                 }
@@ -501,7 +501,7 @@ namespace Cosmos
                         try
                         {
                             if (strLibName.CompareNoCase(_T("Cosmos")) == 0)
-                                m_pDotNetAssembly = GetHubble()->GetType()->Assembly;
+                                m_pDotNetAssembly = GetCosmos()->GetType()->Assembly;
                             else
                             {
                                 auto it = theAppProxy.m_mapAssembly.find(strLib);
@@ -516,23 +516,23 @@ namespace Cosmos
                         }
                         catch (ArgumentNullException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject: " + e->Message);
                         }
                         catch (ArgumentException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject: " + e->Message);
                         }
                         catch (FileNotFoundException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject: " + e->Message);
                         }
                         catch (FileLoadException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject: " + e->Message);
                         }
                         catch (BadImageFormatException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject: " + e->Message);
                         }
                     }
                     if (m_pDotNetAssembly != nullptr)
@@ -543,44 +543,44 @@ namespace Cosmos
                         }
                         catch (TypeLoadException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject Assembly->GetType: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject Assembly->GetType: " + e->Message);
                         }
                         catch (ArgumentNullException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject Assembly->GetType: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject Assembly->GetType: " + e->Message);
                         }
                         catch (ArgumentException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject Assembly->GetType: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject Assembly->GetType: " + e->Message);
                         }
                         catch (FileNotFoundException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject Assembly->GetType: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject Assembly->GetType: " + e->Message);
                         }
                         catch (FileLoadException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject Assembly->GetType: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject Assembly->GetType: " + e->Message);
                         }
                         catch (BadImageFormatException ^ e)
                         {
-                            Debug::WriteLine(L"Hubble CreateObject Assembly->GetType: " + e->Message);
+                            Debug::WriteLine(L"Cosmos CreateObject Assembly->GetType: " + e->Message);
                         }
                         finally
                         {
                             if (pType != nullptr)
                             {
-                                m_pHubbleCLRTypeDic->Add(m_strID, pType);
+                                m_pCosmosCLRTypeDic->Add(m_strID, pType);
                             }
                         }
                     }
                 }
             }
-            Monitor::Exit(m_pHubbleCLRTypeDic);
+            Monitor::Exit(m_pCosmosCLRTypeDic);
         }
         return pType;
     }
 
-    Form^ Hubble::CreateForm(IWin32Window^ parent, String^ strObjID)
+    Form^ Cosmos::CreateForm(IWin32Window^ parent, String^ strObjID)
     {
         Object^ m_pObj = nullptr;
         int nIndex = strObjID->IndexOf(L"<");
@@ -615,25 +615,25 @@ namespace Cosmos
         return nullptr;
     }
 
-    String^ Hubble::GetCtrlTag(Control^ ctrl)
+    String^ Cosmos::GetCtrlTag(Control^ ctrl)
     {
         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
-        auto it = theApp.m_pHubbleImpl->m_mapCtrlTag.find(hWnd);
-        if (it != theApp.m_pHubbleImpl->m_mapCtrlTag.end())
+        auto it = theApp.m_pCosmosImpl->m_mapCtrlTag.find(hWnd);
+        if (it != theApp.m_pCosmosImpl->m_mapCtrlTag.end())
             return BSTR2STRING(it->second);
         return L"";
     }
 
-    String^ Hubble::GetUIData(Control^ ctrl)
+    String^ Cosmos::GetUIData(Control^ ctrl)
     {
         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
-        auto it = theApp.m_pHubbleImpl->m_mapUIData.find(hWnd);
-        if (it != theApp.m_pHubbleImpl->m_mapUIData.end())
+        auto it = theApp.m_pCosmosImpl->m_mapUIData.find(hWnd);
+        if (it != theApp.m_pCosmosImpl->m_mapUIData.end())
             return BSTR2STRING(it->second);
         return L"";
     }
 
-    Object^ Hubble::CreateObject(String^ strObjID)
+    Object^ Cosmos::CreateObject(String^ strObjID)
     {
         Object^ m_pObj = nullptr;
         int nIndex = strObjID->IndexOf(L"<");
@@ -658,7 +658,7 @@ namespace Cosmos
                                 CString strCaption = m_Parse.attr(_T("caption"), _T(""));
                                 Form^ thisForm = (Form^)pObj;
                                 if (m_Parse.attrBool(_T("mainwindow")))
-                                    theApp.m_pHubbleImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
+                                    theApp.m_pCosmosImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
                                 if (strCaption != _T(""))
                                     thisForm->Text = BSTR2STRING(strCaption);
                                 thisForm->Show();
@@ -679,39 +679,39 @@ namespace Cosmos
             }
             catch (TypeLoadException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (ArgumentNullException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (ArgumentException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (NotSupportedException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (TargetInvocationException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (MethodAccessException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (InvalidComObjectException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (MissingMethodException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
             catch (COMException ^ e)
             {
-                Debug::WriteLine(L"Hubble CreateObject Activator::CreateInstance: " + e->Message);
+                Debug::WriteLine(L"Cosmos CreateObject Activator::CreateInstance: " + e->Message);
             }
         }
 
@@ -756,15 +756,15 @@ namespace Cosmos
 
     Grid^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        Cosmos::Grid^ pRetNode = nullptr;
+        ::Cosmos::Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IGrid> pGrid;
         m_pGalaxy->Observe(blayerName, blayerXML, &pGrid);
         if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
-            Cosmos::Grid^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IGrid, ::Cosmos::Grid>(pGrid);
+            ::Cosmos::Grid^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

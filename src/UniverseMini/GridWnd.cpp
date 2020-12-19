@@ -15,7 +15,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "grid.h"
 #include "Galaxy.h"
 #include "GridHelper.h"
@@ -107,7 +107,7 @@ BEGIN_MESSAGE_MAP(CGridWnd, CSplitterWnd)
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEACTIVATE()
 	ON_MESSAGE(WM_TABCHANGE, OnActivePage)
-	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetHubbleObj)
+	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_COSMOSMSG, OnSplitterNodeAdd)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_HOSTNODEFORSPLITTERCREATED, OnSplitterCreated)
@@ -272,13 +272,13 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	}
 	IGrid* _pGrid = nullptr;
 	CString str = (LPCTSTR)lParam;
-	CGrid* pOldNode = (CGrid*)g_pHubble->m_pDesignGrid;
+	CGrid* pOldNode = (CGrid*)g_pCosmos->m_pDesignGrid;
 	CTangramXmlParse* pOld = pOldNode->m_pHostParse;
 
 	long	m_nRow;
-	g_pHubble->m_pDesignGrid->get_Row(&m_nRow);
+	g_pCosmos->m_pDesignGrid->get_Row(&m_nRow);
 	long	m_nCol;
-	g_pHubble->m_pDesignGrid->get_Col(&m_nCol);
+	g_pCosmos->m_pDesignGrid->get_Col(&m_nCol);
 	IGrid* _pOldNode = nullptr;
 	m_pGrid->GetGrid(m_nRow, m_nCol, &_pOldNode);
 	CGrid* _pOldNode2 = (CGrid*)_pOldNode;
@@ -308,7 +308,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 			m_pGrid->m_vChildNodes.erase(it);
 			m_pGrid->m_vChildNodes.push_back(pGrid);
 			pOldNode->m_pHostWnd->DestroyWindow();
-			g_pHubble->m_pDesignGrid = nullptr;
+			g_pCosmos->m_pDesignGrid = nullptr;
 			RecalcLayout();
 		}
 	}
@@ -709,7 +709,7 @@ void CGridWnd::_RecalcLayout()
 
 BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveGrid;
+	m_pGrid = g_pCosmos->m_pActiveGrid;
 	m_pGrid->m_pHostWnd = this;
 	m_pGrid->m_nViewType = Grid;
 	m_pGrid->m_nID = nID;
@@ -906,7 +906,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	return false;
 }
 
-LRESULT CGridWnd::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridWnd::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 		return (LRESULT)m_pGrid;
@@ -1023,7 +1023,7 @@ void CGridWnd::OnDrawSplitter(CDC* pDC, ESplitType nType, const CRect& rectArg)
 
 BOOL CGridWnd::PreCreateWindow(CREATESTRUCT& cs)
 {
-	cs.lpszClass = g_pHubble->m_lpszSplitterClass;
+	cs.lpszClass = g_pCosmos->m_lpszSplitterClass;
 	cs.style |= WS_CLIPSIBLINGS;
 	return CSplitterWnd::PreCreateWindow(cs);
 }
@@ -1115,9 +1115,9 @@ int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	else if ((long)(g_pHubble->m_pActiveAppProxy) > 1)
+	else if ((long)(g_pCosmos->m_pActiveAppProxy) > 1)
 	{
-		HWND hMenuWnd = g_pHubble->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}

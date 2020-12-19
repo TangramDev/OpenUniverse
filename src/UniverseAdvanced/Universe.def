@@ -8,7 +8,7 @@ EXPORTS
 	DllRegisterServer				PRIVATE
 	DllUnregisterServer				PRIVATE
 	FreeCLR							PRIVATE
-	GetHubble						PRIVATE
-	GetHubbleImpl					PRIVATE
+	GetCosmos						PRIVATE
+	GetCosmosImpl					PRIVATE
 	JNI_OnLoad						PRIVATE
 	SetMainDllLoader				PRIVATE

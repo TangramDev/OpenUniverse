@@ -54,8 +54,8 @@ namespace OfficePlus
 				OutLook::Pages* pPages = NULL;
 				m_pOutLookInspector->m_pInspector->get_ModifiedFormPages((IDispatch**)&pPages);
 				HWND hwnd = ::GetDlgItem(m_hWnd, IDC_EDIT_OUTLOOKPAGE);
-				::GetWindowText(hwnd, g_pHubble->m_szBuffer, 255);
-				m_strName = CString(g_pHubble->m_szBuffer);
+				::GetWindowText(hwnd, g_pCosmos->m_szBuffer, 255);
+				m_strName = CString(g_pCosmos->m_szBuffer);
 				m_strName.Trim();
 				if (m_strName != _T(""))
 				{

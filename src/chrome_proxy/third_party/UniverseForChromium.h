@@ -27,7 +27,7 @@
 #include "base/win/windows_undefines.inc"
 
 #include "../../CommonFile/CommonUniverse.h"
-extern CommonUniverse::CHubbleImpl* g_pHubbleImpl;
+extern CommonUniverse::CCosmosImpl* g_pCosmosImpl;
 
 // Undefine the poisonous defines
 #include "base/win/windows_undefines.inc"

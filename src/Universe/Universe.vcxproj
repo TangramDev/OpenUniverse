@@ -330,7 +330,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Galaxy.cpp" />
-    <ClCompile Include="Hubble.cpp" />
+    <ClCompile Include="Cosmos.cpp" />
     <ClCompile Include="grid.cpp" />
     <ClCompile Include="GalaxyCluster.cpp" />
     <ClCompile Include="GridWnd.cpp" />
@@ -350,7 +350,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UniverseApp.h" />
     <ClInclude Include="Galaxy.h" />
-    <ClInclude Include="hubble.h" />
+    <ClInclude Include="Cosmos.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="GalaxyCluster.h" />
     <ClInclude Include="GridWnd.h" />

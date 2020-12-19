@@ -1,0 +1,42 @@
+
+[
+	Exposed = Window
+] interface CosmosNode : CosmosXobj {
+
+	// Message API
+	void sendMessageToGrid(CosmosXobj msg);
+	void sendMessageToGrid(CosmosNode node);
+
+	void GetControlsNames(ApplicationCallback callback);
+	void ShowWebContent(DOMString strParentDivName, DOMString strDivName);
+	//Control Bind Api:
+	void setControlVal(DOMString CtrlID, long long CtrlHandle, DOMString strVal);
+
+	//Node API
+	CosmosNode getChild(long nIndex);
+	CosmosNode getChild(long row, long col);
+	CosmosNode getChild(DOMString strName);
+	CosmosNode getGrid(DOMString strName);
+	void Observe(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void ObserveEx(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional long row, [DefaultValue = Undefined] optional long col, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void ObserveCtrl(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
+
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long row;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long col;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long rows;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long cols;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long handle;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute long long hwnd;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString objtype;
+
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosNode root;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosNode parentGrid;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosGalaxy parentGalaxy;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosWinform parentForm;
+
+	// Event handler attributes
+	attribute EventHandler onCosmosControlCreated;
+	attribute EventHandler onMdiChildActivate;
+	attribute EventHandler onWinFormClosed;
+	attribute EventHandler onCloudMessageForGrid;
+};

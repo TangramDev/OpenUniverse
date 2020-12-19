@@ -36,7 +36,7 @@ CWPFView::CWPFView()
 {
 	m_RespondMouseActive = false;
 	m_pGrid = nullptr;
-	m_pHubbleWPFObj = nullptr;
+	m_pCosmosWPFObj = nullptr;
 }
 
 CWPFView::~CWPFView()
@@ -80,19 +80,19 @@ void CWPFView::Dump(CDumpContext& dc) const
 
 BOOL CWPFView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveGrid;
+	m_pGrid = g_pCosmos->m_pActiveGrid;
 	m_pGrid->m_pHostWnd = this;
 	m_pGrid->m_nViewType = TangramWPFCtrl;
 	m_pGrid->m_nID = nID;
 
-	g_pHubble->LoadCLR();
-	m_pHubbleWPFObj = g_pHubble->m_pCLRProxy->CreateWPFControl(m_pGrid, pParentWnd->m_hWnd, nID);
-	if (m_pHubbleWPFObj&&::IsWindow(m_pHubbleWPFObj->m_hwndWPF))
+	g_pCosmos->LoadCLR();
+	m_pCosmosWPFObj = g_pCosmos->m_pCLRProxy->CreateWPFControl(m_pGrid, pParentWnd->m_hWnd, nID);
+	if (m_pCosmosWPFObj&&::IsWindow(m_pCosmosWPFObj->m_hwndWPF))
 	{
-		BOOL bSubclass =  SubclassWindow(m_pHubbleWPFObj->m_hwndWPF);
+		BOOL bSubclass =  SubclassWindow(m_pCosmosWPFObj->m_hwndWPF);
 		if (bSubclass)
 		{
-			m_pGrid->m_pDisp = m_pHubbleWPFObj->m_pDisp;
+			m_pGrid->m_pDisp = m_pCosmosWPFObj->m_pDisp;
 			m_pGrid->m_pGridShareData->m_pGalaxy->m_mapWPFView[m_hWnd] = this;
 			UINT nIndex = ::GetWindowLongPtr(::GetParent(m_hWnd), GWLP_USERDATA);
 			if (nIndex == 1992)
@@ -105,22 +105,22 @@ BOOL CWPFView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 
 int CWPFView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	if (g_pHubble->m_pUniverseAppProxy)
+	if (g_pCosmos->m_pUniverseAppProxy)
 	{
-		HWND hMenuWnd = g_pHubble->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pHubble->m_pActiveGrid = m_pGrid;
+	g_pCosmos->m_pActiveGrid = m_pGrid;
 	::SetFocus(m_hWnd);
-	g_pHubble->m_bWinFormActived = false;
+	g_pCosmos->m_bWinFormActived = false;
 
-	g_pHubble->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
-	g_pHubble->m_pGalaxy->HostPosChanged();
-	g_pHubble->m_pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd),false);
+	g_pCosmos->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+	g_pCosmos->m_pGalaxy->HostPosChanged();
+	g_pCosmos->m_pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd),false);
 
 	long nIndex = (long)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
-	if (m_RespondMouseActive||nIndex == 1963||m_pHubbleWPFObj->IsVisible()==false)
+	if (m_RespondMouseActive||nIndex == 1963||m_pCosmosWPFObj->IsVisible()==false)
 	{
 		::SetWindowLongPtr(m_hWnd, GWLP_USERDATA, 0);
 		RECT rc;
@@ -144,7 +144,7 @@ void CWPFView::OnDestroy()
 	if (it != pGalaxy->m_mapVisibleWPFView.end())
 		pGalaxy->m_mapVisibleWPFView.erase(it);
 
-	g_pHubble->m_pCLRProxy->WindowDestroy(m_hWnd);
+	g_pCosmos->m_pCLRProxy->WindowDestroy(m_hWnd);
 	CView::OnDestroy();
 }
 
@@ -167,9 +167,9 @@ void CWPFView::OnMouseMove(UINT nFlags, CPoint point)
 	long nIndex = (long)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 	if (nIndex == 1963)
 	{
-		g_pHubble->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
-		g_pHubble->m_pGalaxy->HostPosChanged();
-		g_pHubble->m_pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
+		g_pCosmos->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+		g_pCosmos->m_pGalaxy->HostPosChanged();
+		g_pCosmos->m_pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
 		::SetWindowLongPtr(m_hWnd, GWLP_USERDATA, 0);
 
 		RECT rc;

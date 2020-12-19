@@ -39,7 +39,7 @@ public:
 #endif
 	BOOL			m_RespondMouseActive;
 	CGrid*		m_pGrid;
-	CWPFObj* m_pHubbleWPFObj;
+	CWPFObj* m_pCosmosWPFObj;
 protected:
 	DECLARE_MESSAGE_MAP()
 public:

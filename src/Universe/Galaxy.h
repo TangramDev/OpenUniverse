@@ -42,7 +42,7 @@ public:
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 		MESSAGE_HANDLER(WM_WINFORMCREATED, OnFormCreated)
-		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnHubbleGetXml)
+		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnCosmosGetXml)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()
@@ -53,7 +53,7 @@ private:
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -117,7 +117,7 @@ public:
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)
 		MESSAGE_HANDLER(WM_NCDESTROY, OnNcDestroy)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_PARENTNOTIFY, OnParentNotify)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_HUBBLE_ACTIVEPAGE, OnTabChanged)
@@ -133,7 +133,7 @@ private:
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnNcDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnTabChanged(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnHubbleMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnParentNotify(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
@@ -150,7 +150,7 @@ private:
 	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);
 	STDMETHOD(put_DesignerState)(VARIANT_BOOL newVal);
-	STDMETHOD(get_HubbleDoc)(IHubbleDoc** pVal);
+	STDMETHOD(get_CosmosDoc)(ICosmosDoc** pVal);
 	STDMETHOD(get_GalaxyType)(GalaxyType* pVal);
 	STDMETHOD(get_Name)(BSTR* pVal);
 	STDMETHOD(get_HostBrowser)(IBrowser** ppChromeWebBrowser);

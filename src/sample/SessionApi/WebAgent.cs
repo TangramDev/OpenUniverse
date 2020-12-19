@@ -11,7 +11,7 @@ namespace Cas
     {
         public static int Load(string args)
         {
-            Cosmos.Hubble.OnBindCLRObjToWebPage += Tangram_OnBindCLRObjToWebPage;
+            Cosmos.Cosmos.Cosmos.OnBindCLRObjToWebPage += Tangram_OnBindCLRObjToWebPage;
             return 0;
         }
 
@@ -34,7 +34,7 @@ namespace Cas
         private static void Button_Click(object sender, EventArgs e)
         {
             Cosmos.Wormhole session = null;
-            if (Cosmos.Hubble.Wormholes.TryGetValue(sender, out session))
+            if (Cosmos.Cosmos.Cosmos.Wormholes.TryGetValue(sender, out session))
             {
                 Button button = sender as Button;
                 if (button != null)

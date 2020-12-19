@@ -34,7 +34,7 @@ namespace OfficePlus
 		CExcelWorkBook::CExcelWorkBook(void)
 		{
 #ifdef _DEBUG
-			g_pHubble->m_nOfficeDocs++;
+			g_pCosmos->m_nOfficeDocs++;
 #endif			
 			m_bCreating						= FALSE;
 			m_pDocGalaxyCluster				= nullptr;
@@ -52,13 +52,13 @@ namespace OfficePlus
 		CExcelWorkBook::~CExcelWorkBook(void)
 		{
 #ifdef _DEBUG
-			g_pHubble->m_nOfficeDocs--;
+			g_pCosmos->m_nOfficeDocs--;
 #endif			
 		}
 
 		void CExcelWorkBook::InitWorkBook()
 		{
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			 
 			auto t = create_task([pAddin, this]()
 			{
@@ -187,21 +187,21 @@ namespace OfficePlus
 			if (m_bCreating==false)
 			{
 				VARIANT_BOOL bDesignState = false;
-				strSheetName = g_pHubble->GetNewGUID();
+				strSheetName = g_pCosmos->GetNewGUID();
 				strSheetName.Replace(_T("-"), _T(""));
 				strSheetName = _T("Sheet") + strSheetName;
-				CString strPath = g_pHubble->m_strExeName;
+				CString strPath = g_pCosmos->m_strExeName;
 				strPath += _T("WorkSheet");
-				CString strTemplate = g_pHubble->GetDocTemplateXml(_T("Please select WorkSheet Template:"), strPath, _T(".SheetXml"));
-				auto it = g_pHubble->m_mapValInfo.find(_T("fromvisualstudio"));
-				if (it != g_pHubble->m_mapValInfo.end())
+				CString strTemplate = g_pCosmos->GetDocTemplateXml(_T("Please select WorkSheet Template:"), strPath, _T(".SheetXml"));
+				auto it = g_pCosmos->m_mapValInfo.find(_T("fromvisualstudio"));
+				if (it != g_pCosmos->m_mapValInfo.end())
 				{
 					bDesignState = it->second.boolVal;
 				}
 				else
 				{
-					it = g_pHubble->m_mapValInfo.find(_T("exceldesignstate"));
-					if (it != g_pHubble->m_mapValInfo.end())
+					it = g_pCosmos->m_mapValInfo.find(_T("exceldesignstate"));
+					if (it != g_pCosmos->m_mapValInfo.end())
 					{
 						bDesignState = it->second.boolVal;
 					}
@@ -233,9 +233,9 @@ namespace OfficePlus
 					strSheetXml += _T(">");
 					if (bDesignState&&::MessageBox(::GetActiveWindow(), _T("Do you want to create a taskpane Object with this sheet?"), _T("New Sheet"), MB_YESNO) == IDYES)
 					{
-						strPath = g_pHubble->m_strExeName;
+						strPath = g_pCosmos->m_strExeName;
 						strPath += _T("worksheetTaskPanel");
-						strTemplate = g_pHubble->GetDocTemplateXml(_T("Please select WorkSheet TaskPanel Template:"), strPath, _T(".TaskPanelXml"));
+						strTemplate = g_pCosmos->GetDocTemplateXml(_T("Please select WorkSheet TaskPanel Template:"), strPath, _T(".TaskPanelXml"));
 						if (strTemplate == _T(""))
 						{
 							if (bDesignState)
@@ -312,7 +312,7 @@ namespace OfficePlus
 
 		void CExcelWorkBook::OnBeforeSave(VARIANT_BOOL SaveAsUI, VARIANT_BOOL* Cancel)
 		{
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			if (m_pTaskPaneGalaxy)
 			{
 				m_pTaskPaneGalaxy->UpdateGrid();
@@ -352,11 +352,11 @@ namespace OfficePlus
 
 		void CExcelWorkBook::OnSheetActivate(IDispatch* Sh)
 		{
-			g_pHubble->m_pDesignGrid = nullptr;
+			g_pCosmos->m_pDesignGrid = nullptr;
 			if (m_pGalaxy == nullptr)
 				return;
 
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			CComQIPtr<Excel::_Worksheet> pSheet(Sh);
 			CExcelObject* pExcelWorkBookWnd = pAddin->m_pActiveExcelObject;
 
@@ -433,7 +433,7 @@ namespace OfficePlus
 						_pCustomTaskPane->AddRef();
 						pAddin->m_mapTaskPaneMap[(long)pAddin->m_pActiveExcelObject->m_hForm] = _pCustomTaskPane;
 						_pCustomTaskPane->put_Visible(true);
-						CComPtr<IHubbleCtrl> pCtrlDisp;
+						CComPtr<ICosmosCtrl> pCtrlDisp;
 						_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 						if (pCtrlDisp)
 						{
@@ -450,7 +450,7 @@ namespace OfficePlus
 
 								m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 								m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-								g_pHubble->m_mapWindowPage[hPWnd] = m_pTaskPaneGalaxyCluster;
+								g_pCosmos->m_mapWindowPage[hPWnd] = m_pTaskPaneGalaxyCluster;
 
 								IGalaxy* pTaskPaneFrame = nullptr;
 								m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hWnd), CComBSTR(L"TaskPane"), &pTaskPaneFrame);
@@ -488,7 +488,7 @@ namespace OfficePlus
 		CExcelWorkSheet::CExcelWorkSheet(void)
 		{
 #ifdef _DEBUG
-			g_pHubble->m_nOfficeDocsSheet++;
+			g_pCosmos->m_nOfficeDocsSheet++;
 #endif	
 			m_pSheet			= nullptr;
 			m_strKey			= _T("");
@@ -498,7 +498,7 @@ namespace OfficePlus
 		CExcelWorkSheet::~CExcelWorkSheet(void)
 		{
 #ifdef _DEBUG
-			g_pHubble->m_nOfficeDocsSheet--;
+			g_pCosmos->m_nOfficeDocsSheet--;
 #endif	
 			m_pSheet			= nullptr;
 			m_strKey			= _T("");

@@ -23,7 +23,7 @@
 // stdafx.obj will contain the pre-compiled type information
 
 #include "stdafx.h"
-#include "HubbleEvents.cpp"
+#include "CosmosEvents.cpp"
 #include "TangramXmlParse.cpp"
 
 void DefaultExceptionProcess(JNIEnv *env)

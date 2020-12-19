@@ -37,7 +37,7 @@ extern CCosmosProxy theAppProxy;
 namespace Cosmos
 {
 	/// <summary>
-	/// Summary for Hubble
+	/// Summary for Cosmos
 	/// </summary>
 
 	ref class Grid;
@@ -523,23 +523,23 @@ namespace Cosmos
 		IGalaxy* m_pGalaxy;
 	};
 
-	public ref class Hubble
+	public ref class Cosmos
 	{
 	public:
-		Hubble(IHubble* pHubble);
-		~Hubble();
+		Cosmos(ICosmos* pCosmos);
+		~Cosmos();
 	private:
-		Hubble() {};
+		Cosmos() {};
 		static bool IsAppInit = false;
 
-		static Hubble^ m_pHubble;
+		static Cosmos^ m_pCosmos;
 		static Form^ m_pMainForm = nullptr;
-		static Dictionary<String^, Type^>^ m_pHubbleCLRTypeDic = gcnew Dictionary<String^, Type^>();
+		static Dictionary<String^, Type^>^ m_pCosmosCLRTypeDic = gcnew Dictionary<String^, Type^>();
 
-		static Hubble^ InitHubbleApp(bool bSupportCrashReporting, CosmosAppType AppType);
+		static Cosmos^ InitCosmosApp(bool bSupportCrashReporting, CosmosAppType AppType);
 		static Type^ GetType(String^ ObjID);
 	public:
-		static int HubbleInit(String^ strInit);
+		static int CosmosInit(String^ strInit);
 		static System::Drawing::Icon^ m_pDefaultIcon = nullptr;
 		static String^ GetUIData(Control^ ctrl);
 		static String^ GetCtrlTag(Control^ ctrl);
@@ -549,7 +549,7 @@ namespace Cosmos
 		static Grid^ GetGridFromControl(Control^ ctrl);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 
-		static Hubble^ GetHubble();
+		static Cosmos^ GetCosmos();
 
 		static property Grid^ CreatingGrid
 		{

@@ -31,7 +31,7 @@ namespace Browser
 
 using namespace Browser;
 
-typedef HRESULT(__stdcall* HubbleCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
+typedef HRESULT(__stdcall* CosmosCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 
 class CHelperWnd :
 	public CWindowImpl<CHelperWnd, CWindow>
@@ -104,14 +104,14 @@ public:
 	CString m_strToolType = _T("");
 	BEGIN_MSG_MAP(CGenericPaneWnd)
 		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
-		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnHubbleData)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
+		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnCosmosData)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanging)
 	END_MSG_MAP()
 	void OnFinalMessage(HWND hWnd);
 	LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnHubbleData(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnCosmosData(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
@@ -129,9 +129,9 @@ public:
 	void SetHook(DWORD ThreadID);
 
 	static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam);
-	static LRESULT CALLBACK HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-	static LRESULT CALLBACK HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-	static LRESULT CALLBACK HubbleExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
+	static LRESULT CALLBACK CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
+	static LRESULT CALLBACK CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
+	static LRESULT CALLBACK CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
 	static LRESULT CALLBACK ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam);
 
@@ -147,4 +147,4 @@ private:
 //TANGRAM_OBJECT_ENTRY_AUTO(CLSID_Universe, CUniverse)
 
 extern CUniverse theApp;
-extern CHubble* g_pHubble;
+extern CCosmos* g_pCosmos;

@@ -42,67 +42,67 @@ using System::Runtime::InteropServices::Marshal;
 
 namespace Cosmos
 {
-	Wormhole::Wormhole(CSession* pHubbleSession)
+	Wormhole::Wormhole(CSession* pCosmosSession)
 	{
-		m_pHubbleSession = pHubbleSession;
+		m_pCosmosSession = pCosmosSession;
 	}
 
 	void Wormhole::InsertString(String^ key, String^ value)
 	{
-		if(m_pHubbleSession)
-			m_pHubbleSession->InsertString(key, value);
+		if(m_pCosmosSession)
+			m_pCosmosSession->InsertString(key, value);
 	}
 
 	void Wormhole::InsertLong(String^ key, long value)
 	{
-		if(m_pHubbleSession)
-			m_pHubbleSession->InsertLong(key, value);
+		if(m_pCosmosSession)
+			m_pCosmosSession->InsertLong(key, value);
 	}
 
 	void Wormhole::InsertInt64(String^ key, __int64 value)
 	{
-		if(m_pHubbleSession)
-			m_pHubbleSession->Insertint64(key, value);
+		if(m_pCosmosSession)
+			m_pCosmosSession->Insertint64(key, value);
 	}
 
 	void Wormhole::InsertFloat(String^ key, float value)
 	{
-		if(m_pHubbleSession)
-			m_pHubbleSession->InsertFloat(key, value);
+		if(m_pCosmosSession)
+			m_pCosmosSession->InsertFloat(key, value);
 	}
 
 	String^ Wormhole::GetString(String^ key)
 	{
-		if(m_pHubbleSession)
-			return BSTR2STRING(m_pHubbleSession->GetString(key));
+		if(m_pCosmosSession)
+			return BSTR2STRING(m_pCosmosSession->GetString(key));
 		return L"";
 	}
 
 	long Wormhole::GetLong(String^ key)
 	{
-		if(m_pHubbleSession)
-			return m_pHubbleSession->GetLong(key);
+		if(m_pCosmosSession)
+			return m_pCosmosSession->GetLong(key);
 		return 0;
 	}
 
 	__int64 Wormhole::GetInt64(String^ key)
 	{
-		if(m_pHubbleSession)
-			return m_pHubbleSession->Getint64(key);
+		if(m_pCosmosSession)
+			return m_pCosmosSession->Getint64(key);
 		return 0;
 	}
 
 	float Wormhole::GetFloat(String^ key)
 	{
-		if(m_pHubbleSession)
-			return m_pHubbleSession->GetFloat(key);
+		if(m_pCosmosSession)
+			return m_pCosmosSession->GetFloat(key);
 		return 0;
 	}
 
 	void Wormhole::SendMessage()
 	{
-		if (m_pHubbleSession)
-			return m_pHubbleSession->SendMessage();
+		if (m_pCosmosSession)
+			return m_pCosmosSession->SendMessage();
 	}
 
 	bool Wormhole::isBindCLRObjToWebPage(Object^ obj)
@@ -172,7 +172,7 @@ namespace Cosmos
 		if (m_pWebPage)
 		{
 			IDispatch* pFormDisp = nullptr;
-			pFormDisp = theApp.m_pHubbleImpl->m_pCLRProxy->CreateWinForm(m_hWnd, STRING2BSTR(strFormKey));
+			pFormDisp = theApp.m_pCosmosImpl->m_pCLRProxy->CreateWinForm(m_hWnd, STRING2BSTR(strFormKey));
 			return (Form^)Marshal::GetObjectForIUnknown((IntPtr)pFormDisp);
 		}
 		return nullptr;

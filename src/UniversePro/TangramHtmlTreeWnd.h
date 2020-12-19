@@ -122,7 +122,7 @@ struct CTangramXHtmlTreeNode
 		m_pszNote          = 0;
 		m_nTipWidth        = 0;
 		m_hWaitItemMsg	   = 0;
-		m_pHubbleTreeNode = NULL;
+		m_pCosmosTreeNode = NULL;
 		m_hItem = NULL;
 		m_nCount++;
 	}
@@ -134,12 +134,12 @@ struct CTangramXHtmlTreeNode
 			delete [] m_pszNote;
 		m_pszNote = 0;
 		m_nCount--;
-		if(m_pHubbleTreeNode)
+		if(m_pCosmosTreeNode)
 		{
-			DWORD dwRef = m_pHubbleTreeNode->Release();
+			DWORD dwRef = m_pCosmosTreeNode->Release();
 			while(dwRef)
 			{
-				dwRef = m_pHubbleTreeNode->Release();
+				dwRef = m_pCosmosTreeNode->Release();
 			}
 		}
 	}
@@ -173,7 +173,7 @@ struct CTangramXHtmlTreeNode
 	static int m_nCount;				// incremented in ctor, decremented in dtor
 	
 	CTangramXmlParse*	m_pXmlParse;
-	IHubbleTreeNode*	m_pHubbleTreeNode;
+	ICosmosTreeNode*	m_pCosmosTreeNode;
 
 	map<CString, CGrid*> m_mapBindNode;
 	HTREEITEM m_hItem;
@@ -288,7 +288,7 @@ public:
 	NodeMap			m_mapSelectedNodeDic;
 	CComObject<CTangramTreeView>* m_pObj;
 	CGridHelper*	m_pHostWnd;
-	CTangramHelper*	m_pHubbleHelper;
+	CTangramHelper*	m_pCosmosHelper;
 	enum CheckedState { UNUSED1 = 0, 
 						UNCHECKED, CHECKED, TRISTATE, 
 						UNUSED2,
@@ -649,7 +649,7 @@ public:
 	afx_msg void OnSysColorChange();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg LRESULT OnDesignNode(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnGetHubbleXmlParse(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnGetCosmosXmlParse(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUpdateXMLNode(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnInsertXMLNode(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnInsertData(WPARAM wParam, LPARAM lParam);

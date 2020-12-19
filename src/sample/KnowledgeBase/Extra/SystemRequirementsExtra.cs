@@ -22,7 +22,7 @@ namespace KnowledgeBase
 
         private void SystemRequirementsExtra_Load(object sender, EventArgs e)
         {
-            thisGrid = Hubble.CreatingGrid;
+            thisGrid = Cosmos.Cosmos.CreatingGrid;
             if (thisGrid != null)
             {
                 thisGrid.OnCloudMessageReceived += ThisNode_OnCloudMessageReceived;

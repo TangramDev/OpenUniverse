@@ -17,7 +17,7 @@ namespace SessionApi
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            Hubble.Run(new Form1());
+            Cosmos.Cosmos.Run(new Form1());
         }
     }
 }

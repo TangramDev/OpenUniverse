@@ -16,7 +16,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "GridHelper.h"
 #include "grid.h"
 #include "Galaxy.h"
@@ -48,8 +48,8 @@ BEGIN_MESSAGE_MAP(CGridHelper, CWnd)
 	ON_WM_MOUSEACTIVATE()
 	ON_WM_WINDOWPOSCHANGED()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
-	ON_MESSAGE(WM_COSMOSMSG, OnHubbleMsg)
-	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetHubbleObj)
+	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
 END_MESSAGE_MAP()
@@ -73,7 +73,7 @@ void CGridHelper::Dump(CDumpContext& dc) const
 //CGridHelper message handlers
 BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveGrid;
+	m_pGrid = g_pCosmos->m_pActiveGrid;
 	m_pGrid->m_nID = nID;
 	m_pGrid->m_pHostWnd = this;
 
@@ -84,7 +84,7 @@ BOOL CGridHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 
 		m_pGrid->m_pGridShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		HWND hWnd = CreateWindow(L"Hubble Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		HWND hWnd = CreateWindow(L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		if (m_pGrid->m_pParentObj)
 		{
@@ -117,8 +117,8 @@ LRESULT CGridHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 
 int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	if (g_pHubble->m_pCLRProxy)
-		g_pHubble->m_pCLRProxy->HideMenuStripPopup();
+	if (g_pCosmos->m_pCLRProxy)
+		g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
 
 	CGalaxy* pGalaxy = m_pGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
 	HWND hWnd = pGalaxy->m_pGalaxyCluster->m_hWnd;
@@ -130,9 +130,9 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	else if (g_pHubble->m_pActiveAppProxy)
+	else if (g_pCosmos->m_pActiveAppProxy)
 	{
-		HWND hMenuWnd = g_pHubble->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
@@ -142,10 +142,10 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 	if ((m_pGrid->m_nViewType == TabGrid || m_pGrid->m_nViewType == Grid))
 	{
-		if (g_pHubble->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy)
+		if (g_pCosmos->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy)
 			::SetFocus(m_hWnd);
-		g_pHubble->m_pActiveGrid = m_pGrid;
-		g_pHubble->m_bWinFormActived = false;
+		g_pCosmos->m_pActiveGrid = m_pGrid;
+		g_pCosmos->m_bWinFormActived = false;
 		return MA_ACTIVATE;
 	}
 
@@ -155,13 +155,13 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if ((m_pGrid->m_nViewType != TabGrid && m_pGrid->m_nViewType != Grid))
 		{
-			if (g_pHubble->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy || g_pHubble->m_pActiveGrid != m_pGrid)
+			if (g_pCosmos->m_pGalaxy != m_pGrid->m_pGridShareData->m_pGalaxy || g_pCosmos->m_pActiveGrid != m_pGrid)
 				::SetFocus(m_hWnd);
 		}
 	}
-	g_pHubble->m_pActiveGrid = m_pGrid;
-	g_pHubble->m_bWinFormActived = false;
-	g_pHubble->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+	g_pCosmos->m_pActiveGrid = m_pGrid;
+	g_pCosmos->m_bWinFormActived = false;
+	g_pCosmos->m_pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
 
 	CString strID = m_pGrid->m_strName;
 
@@ -174,15 +174,15 @@ int CGridHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		&& m_pGrid->m_strID.CompareNoCase(TGM_NUCLEUS)
 		&&m_pGrid->m_pDisp == NULL)
 	{
-		if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid != m_pGrid)
+		if (g_pCosmos->m_pDesignGrid && g_pCosmos->m_pDesignGrid != m_pGrid)
 		{
-			CGridHelper* pWnd = ((CGridHelper*)g_pHubble->m_pDesignGrid->m_pHostWnd);
+			CGridHelper* pWnd = ((CGridHelper*)g_pCosmos->m_pDesignGrid->m_pHostWnd);
 			if (pWnd && ::IsWindow(pWnd->m_hWnd))
 			{
 				pWnd->Invalidate(true);
 			}
 		}
-		g_pHubble->m_pDesignGrid = m_pGrid;
+		g_pCosmos->m_pDesignGrid = m_pGrid;
 		Invalidate(true);
 	}
 
@@ -219,10 +219,10 @@ BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
 		CBrush br(&bit);
 		pDC->FillRect(&rt, &br);
-		if (bInDesignState && g_pHubble->m_pDesignGrid == m_pGrid)
+		if (bInDesignState && g_pCosmos->m_pDesignGrid == m_pGrid)
 		{
 			pDC->SetTextColor(RGB(255, 0, 255));
-			strText = _T("\n\n  ") + g_pHubble->m_strGridSelectedText;
+			strText = _T("\n\n  ") + g_pCosmos->m_strGridSelectedText;
 		}
 		else
 		{
@@ -231,9 +231,9 @@ BOOL CGridHelper::OnEraseBkgnd(CDC* pDC)
 			CString strInfo = _T("\n\n  ");
 			if (bInDesignState)
 			{
-				strInfo = strInfo + g_pHubble->m_strDesignerTip1;
+				strInfo = strInfo + g_pCosmos->m_strDesignerTip1;
 			}
-			strInfo = strInfo + _T("\n  ") + g_pHubble->m_strDesignerTip2;
+			strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
 			strText.Format(strInfo, m_pGrid->m_strName, CString(OLE2T(bstrCaption)));
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}
@@ -258,7 +258,7 @@ BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 				VARIANT_BOOL bShiftKey = false;
 				if (::GetKeyState(VK_SHIFT) < 0)  // shift pressed
 					bShiftKey = true;
-				hr = g_pHubble->m_pCLRProxy->ProcessCtrlMsg(::GetWindow(m_hWnd, GW_CHILD), bShiftKey ? true : false);
+				hr = g_pCosmos->m_pCLRProxy->ProcessCtrlMsg(::GetWindow(m_hWnd, GW_CHILD), bShiftKey ? true : false);
 				if (hr == S_OK)
 					return true;
 				return false;
@@ -274,7 +274,7 @@ BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 	{
 		if (m_pGrid->m_nViewType == CLRCtrl)
 		{
-			if (g_pHubble->m_pCLRProxy->ProcessFormMsg(m_hWnd, pMsg, 0))
+			if (g_pCosmos->m_pCLRProxy->ProcessFormMsg(m_hWnd, pMsg, 0))
 				return true;
 			return false;
 		}
@@ -286,9 +286,9 @@ BOOL CGridHelper::PreTranslateMessage(MSG* pMsg)
 
 void CGridHelper::OnDestroy()
 {
-	if (g_pHubble->m_pDesignGrid == m_pGrid)
+	if (g_pCosmos->m_pDesignGrid == m_pGrid)
 	{
-		g_pHubble->m_pDesignGrid = NULL;
+		g_pCosmos->m_pDesignGrid = NULL;
 	}
 
 	m_pGrid->Fire_Destroy();
@@ -360,7 +360,7 @@ LRESULT CGridHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	return lRes;
 }
 
-LRESULT CGridHelper::OnHubbleMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
@@ -394,7 +394,7 @@ LRESULT CGridHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
 
-LRESULT CGridHelper::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridHelper::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 	{

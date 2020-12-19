@@ -27,7 +27,7 @@ public:
 	CGridCLREvent();
 	virtual ~CGridCLREvent();
 
-	gcroot<Cosmos::Grid^>	m_pGrid;
+	gcroot<::Cosmos::Grid^>	m_pGrid;
 
 	void OnDestroy();
 	void OnGridAddInsCreated();

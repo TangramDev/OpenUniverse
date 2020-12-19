@@ -22,7 +22,7 @@
 #include "stdafx.h"
 #pragma warning(disable : 4786)
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "TangramHtmlTreeWnd.h"
 #include "XNamedColors.h"
 #include "TangramXmlParse.h"
@@ -109,7 +109,7 @@ BEGIN_MESSAGE_MAP(CTangramHtmlTreeWnd, CTreeCtrl)
 	ON_MESSAGE(WM_HUBBLE_DESIGNERCMD, OnDesignNode)
 	ON_MESSAGE(WM_HUBBLE_UPDATENODE,OnUpdateXMLNode)
 	ON_MESSAGE(WM_INSERTTREENODE,OnInsertXMLNode)	
-	ON_MESSAGE(WM_HUBBLE_GETTREEINFO,OnGetHubbleXmlParse)
+	ON_MESSAGE(WM_HUBBLE_GETTREEINFO,OnGetCosmosXmlParse)
 	ON_MESSAGE(WM_REFRESHDATA,OnInsertData)	
 	ON_MESSAGE(WM_GETSELECTEDNODEINFO,OnGetSelectedNodeInfo)	
 	//}}AFX_MSG_MAP
@@ -201,7 +201,7 @@ CTangramHtmlTreeWnd::CTangramHtmlTreeWnd()
 	m_strInnerRelationNodes		= _T("");
 	m_pObj = new CComObject<CTangramTreeView>;
 	m_pObj->AddRef();
-	m_pObj->m_pHubbleHtmlTreeWnd = this;
+	m_pObj->m_pCosmosHtmlTreeWnd = this;
 	//m_Links.SetAppCommands()
 }
 
@@ -723,8 +723,8 @@ void CTangramHtmlTreeWnd::UpdateData(CString strData)
 			delete m_pHostXmlParse;
 		}
 		m_pHostXmlParse = _pHostXmlParse;
-		if(g_pHubble->m_pHostDesignUINode)
-			g_pHubble->m_pHostDesignUINode->m_pDocXmlParseNode = m_pHostXmlParse;
+		if(g_pCosmos->m_pHostDesignUINode)
+			g_pCosmos->m_pHostDesignUINode->m_pDocXmlParseNode = m_pHostXmlParse;
 		m_hFirstRoot = LoadXmlFromXmlParse(m_pHostXmlParse);// , CTangramHtmlTreeWnd::ConvertToUnicode);
 		ExpandAll();
 		return;
@@ -1491,8 +1491,8 @@ int CTangramHtmlTreeWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT 
 {
 	if (m_pHostWnd)
 	{
-		g_pHubble->m_pActiveGrid = m_pHostWnd->m_pGrid;
-		g_pHubble->m_pGalaxy = m_pHostWnd->m_pGrid->m_pGridShareData->m_pGalaxy;
+		g_pCosmos->m_pActiveGrid = m_pHostWnd->m_pGrid;
+		g_pCosmos->m_pGalaxy = m_pHostWnd->m_pGrid->m_pGridShareData->m_pGalaxy;
 	}
 	return MA_ACTIVATE;
 	//return CFormView::OnMouseActivate(pDesktopWnd, nHitTest, message);
@@ -2635,8 +2635,8 @@ HTREEITEM CTangramHtmlTreeWnd::InsertItem(LPTVINSERTSTRUCT lpInsertStruct, CTang
 		pXTCD->m_strTangramItemID		= pData->m_strTangramItemID;
 		CTangramTreeNode* pGrid			= new CComObject<CTangramTreeNode>;
 		pGrid->m_pXHTMLTREEDATA			= pXTCD;
-		pXTCD->m_pHubbleTreeNode		= pGrid;//new CComObject<CTangramTreeNode>;
-		pXTCD->m_pHubbleTreeNode->AddRef();
+		pXTCD->m_pCosmosTreeNode		= pGrid;//new CComObject<CTangramTreeNode>;
+		pXTCD->m_pCosmosTreeNode->AddRef();
 		if (pData->m_pXmlParse)
 			pXTCD->m_pXmlParse = pData->m_pXmlParse;
 	}
@@ -3489,19 +3489,19 @@ void CTangramHtmlTreeWnd::Init(CGrid* pGrid)
 			if (nPos == -1)
 			{
 				IGrid* pGrid = NULL;
-				CComPtr<IGridCollection> pHubbleNodeCollection;
-				pRootGrid->GetGrids(CComBSTR(strCallBackNode), &pGrid, &pHubbleNodeCollection, &nCount);
+				CComPtr<IGridCollection> pCosmosNodeCollection;
+				pRootGrid->GetGrids(CComBSTR(strCallBackNode), &pGrid, &pCosmosNodeCollection, &nCount);
 				if (pGrid)
 				{
 					CComPtr<IDispatch> pdisp;
 					pGrid->get_Extender(&pdisp);
 					if (pdisp)
 					{
-						CComQIPtr<IHubbleTreeViewCallBack> pIHubbleTreeViewCallBack(pdisp);
-						if (pIHubbleTreeViewCallBack)
+						CComQIPtr<ICosmosTreeViewCallBack> pICosmosTreeViewCallBack(pdisp);
+						if (pICosmosTreeViewCallBack)
 						{
-							m_pObj->put_TangramTreeViewCallBack(bstrCallBackNode, pIHubbleTreeViewCallBack.p);
-							pIHubbleTreeViewCallBack->OnInitTreeView(m_pObj, CComBSTR(L"MainIMHistory"));
+							m_pObj->put_TangramTreeViewCallBack(bstrCallBackNode, pICosmosTreeViewCallBack.p);
+							pICosmosTreeViewCallBack->OnInitTreeView(m_pObj, CComBSTR(L"MainIMHistory"));
 						}
 					}
 				}
@@ -3514,18 +3514,18 @@ void CTangramHtmlTreeWnd::Init(CGrid* pGrid)
 				if (strID != _T(""))
 				{
 					IGrid* pGrid = NULL;
-					CComPtr<IGridCollection> pHubbleNodeCollection;
-					pRootGrid->GetGrids(CComBSTR(strID), &pGrid, &pHubbleNodeCollection, &nCount);
+					CComPtr<IGridCollection> pCosmosNodeCollection;
+					pRootGrid->GetGrids(CComBSTR(strID), &pGrid, &pCosmosNodeCollection, &nCount);
 					if (pGrid)
 					{
 						CComPtr<IDispatch> pdisp;
 						pGrid->get_Extender(&pdisp);
 						if (pdisp)
 						{
-							CComQIPtr<IHubbleTreeViewCallBack> pIHubbleTreeViewCallBack(pdisp);
-							if (pIHubbleTreeViewCallBack)
+							CComQIPtr<ICosmosTreeViewCallBack> pICosmosTreeViewCallBack(pdisp);
+							if (pICosmosTreeViewCallBack)
 							{
-								m_pObj->put_TangramTreeViewCallBack(strID.AllocSysString(), pIHubbleTreeViewCallBack.p);
+								m_pObj->put_TangramTreeViewCallBack(strID.AllocSysString(), pICosmosTreeViewCallBack.p);
 							}
 						}
 					}
@@ -3533,18 +3533,18 @@ void CTangramHtmlTreeWnd::Init(CGrid* pGrid)
 				if (nPos == -1)
 				{
 					IGrid* pGrid = NULL;
-					CComPtr<IGridCollection> pHubbleNodeCollection;
-					pRootGrid->GetGrids(CComBSTR(strCallBackNode), &pGrid, &pHubbleNodeCollection, &nCount);
+					CComPtr<IGridCollection> pCosmosNodeCollection;
+					pRootGrid->GetGrids(CComBSTR(strCallBackNode), &pGrid, &pCosmosNodeCollection, &nCount);
 					if (pGrid)
 					{
 						CComPtr<IDispatch> pdisp;
 						pGrid->get_Extender(&pdisp);
 						if (pdisp)
 						{
-							CComQIPtr<IHubbleTreeViewCallBack> pIHubbleTreeViewCallBack(pdisp);
-							if (pIHubbleTreeViewCallBack)
+							CComQIPtr<ICosmosTreeViewCallBack> pICosmosTreeViewCallBack(pdisp);
+							if (pICosmosTreeViewCallBack)
 							{
-								m_pObj->put_TangramTreeViewCallBack(bstrCallBackNode, pIHubbleTreeViewCallBack.p);
+								m_pObj->put_TangramTreeViewCallBack(bstrCallBackNode, pICosmosTreeViewCallBack.p);
 							}
 						}
 					}
@@ -3581,7 +3581,7 @@ void CTangramHtmlTreeWnd::Init(CGrid* pGrid)
 				//				CComPtr<IGrid> pGrid2;
 				//				CString strXml = pParse->GetChild(strKey)->xml();
 				//				CComPtr<IGrid> _pGrid;
-				//				theApp.m_pHubbleManager->NavigateXTML(h, strXml.AllocSysString(), &_pGrid);
+				//				theApp.m_pCosmosManager->NavigateXTML(h, strXml.AllocSysString(), &_pGrid);
 				//				//pGrid->Navigate(CComBSTR(strKey),CComBSTR(strXml),&pGrid2);
 				//			}
 				//			nPos = strIDs.Find(_T(","));
@@ -3614,7 +3614,7 @@ void CTangramHtmlTreeWnd::Init(CGrid* pGrid)
 				//			if (h)
 				//			{
 				//				CComPtr<IGrid> _pGrid;
-				//				theApp.m_pHubbleManager->NavigateXTML(h, strXml.AllocSysString(), &_pGrid);
+				//				theApp.m_pCosmosManager->NavigateXTML(h, strXml.AllocSysString(), &_pGrid);
 				//				//pGrid->Navigate(CComBSTR(strKey),CComBSTR(strXml),&pGrid2);
 				//			}
 				//		}
@@ -4121,22 +4121,22 @@ BOOL CTangramHtmlTreeWnd::OnClick(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 		if (pXTCD->m_bEnabled)
 		{
 			CString _strXml = _T("");
-			if (g_pHubble->m_pDocDOMTree == this)
+			if (g_pCosmos->m_pDocDOMTree == this)
 			{
 				CTangramXmlParse* pParse = pXTCD->m_pXmlParse;
 				CString strNodeName = pParse->attr(_T("id"),_T(""));
 				IGrid* _pGrid = NULL;
-				if (g_pHubble->m_pDesignGrid)
+				if (g_pCosmos->m_pDesignGrid)
 				{
-					CGrid* pRootGrid = g_pHubble->m_pDesignGrid->m_pRootObj;
+					CGrid* pRootGrid = g_pCosmos->m_pDesignGrid->m_pRootObj;
 					IGrid* _pGrid = NULL;
 					long nCount = 0;
 					CComPtr<IGridCollection> pCol;
 					pRootGrid->GetGrids(strNodeName.AllocSysString(), &_pGrid, &pCol, &nCount);
 					if (_pGrid)
 					{
-						if (g_pHubble->m_pCLRProxy)
-							g_pHubble->m_pCLRProxy->SelectGrid(_pGrid);
+						if (g_pCosmos->m_pCLRProxy)
+							g_pCosmos->m_pCLRProxy->SelectGrid(_pGrid);
 					}
 				}
 			}
@@ -4193,7 +4193,7 @@ BOOL CTangramHtmlTreeWnd::OnRClick(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 	m_strSelectNodeInfo = GetSelectedNodeInfo(m_strMainKey + _T(","));
 	//if(m_pWebBrowser2)
 	//{
-	//	theApp.m_pHubbleManager->PopupMenu(0,0,CComBSTR(m_pHostWnd->m_strXmlMenuScript),m_pWebBrowser2,(LONGLONG)m_hWnd);
+	//	theApp.m_pCosmosManager->PopupMenu(0,0,CComBSTR(m_pHostWnd->m_strXmlMenuScript),m_pWebBrowser2,(LONGLONG)m_hWnd);
 	//}
 	//else
 	//	::SendMessage(m_hAsynHostWnd,WM_SETMENU,(WPARAM)m_strSelectNodeInfo.GetBuffer(),0);
@@ -4319,8 +4319,8 @@ BOOL CTangramHtmlTreeWnd::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 				{
 					m_Parse.put_attr(_T("TreeViewHandle"),(__int64)hItem);
 					m_Parse.put_attr(_T("TreeViewWndHandle"),(__int64)m_hWnd);
-					auto it = m_pObj->m_mapHubbleTreeViewCallBack.end();
-					for(it = m_pObj->m_mapHubbleTreeViewCallBack.begin(); it!=m_pObj->m_mapHubbleTreeViewCallBack.end();it++)
+					auto it = m_pObj->m_mapCosmosTreeViewCallBack.end();
+					for(it = m_pObj->m_mapCosmosTreeViewCallBack.begin(); it!=m_pObj->m_mapCosmosTreeViewCallBack.end();it++)
 					{
 						BSTR bstrXml = pXTCD->m_strTangramXML.AllocSysString();
 						it->second->OnClick(m_Parse.xml().AllocSysString(),CComBSTR(L""));
@@ -4387,7 +4387,7 @@ BOOL CTangramHtmlTreeWnd::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 		{
 			//IGrid* pGrid = NULL;
 			//::SetWindowText(::GetParent(m_hWnd),_T("TangramTop"));
-			////theApp.m_pHubbleManager->NavigateXTML((LONGLONG)m_hWnd,CComBSTR(pXTCD->m_strTangramXML),&pGrid);
+			////theApp.m_pCosmosManager->NavigateXTML((LONGLONG)m_hWnd,CComBSTR(pXTCD->m_strTangramXML),&pGrid);
 			//m_bAttached = true;
 			//if(m_pGalaxy==NULL)
 			//{
@@ -4404,7 +4404,7 @@ BOOL CTangramHtmlTreeWnd::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 			}
 			m_bAttached = true;
 			IGrid* pGrid = NULL;
-			//theApp.m_pHubbleManager->NavigateXTML((long)m_hWnd,CComBSTR(pXTCD->m_strTangramXML),&pGrid);
+			//theApp.m_pCosmosManager->NavigateXTML((long)m_hWnd,CComBSTR(pXTCD->m_strTangramXML),&pGrid);
 		}
 	}
 	else if(pXTCD->m_strTangramXML==_T("")&&m_bAttached)
@@ -4622,15 +4622,15 @@ HTREEITEM CTangramHtmlTreeWnd::LoadXmlFromString(LPCTSTR lpszXML, ConvertAction 
 
 				if (pParse)
 				{
-					//CComPtr<IHubbleRestObj> p;
+					//CComPtr<ICosmosRestObj> p;
 					//p.CoCreateInstance(CComBSTR(L"TangramEx.TangramRestObj.1"));
 					//if (p)
 					//{
-					//	IHubbleRestObj* m_pHubbleRestObj = p.Detach();
-					//	m_pHubbleRestObj->put_Header(CComBSTR(_T("UserID")), CComBSTR(theApp.m_strUserID));
+					//	ICosmosRestObj* m_pCosmosRestObj = p.Detach();
+					//	m_pCosmosRestObj->put_Header(CComBSTR(_T("UserID")), CComBSTR(theApp.m_strUserID));
 					//	//CString strHandle = _T("");
 					//	//strHandle.Format(_T("%p"), (LONGLONG)hItem);
-					//	//m_pHubbleRestObj->put_Header(CComBSTR(_T("TreeItem")), CComBSTR(strHandle));
+					//	//m_pCosmosRestObj->put_Header(CComBSTR(_T("TreeItem")), CComBSTR(strHandle));
 					//	CTangramXmlParse* pHeaders = m_Parse.GetChild(_T("Headers"));
 					//	if (pHeaders)
 					//	{
@@ -4639,16 +4639,16 @@ HTREEITEM CTangramHtmlTreeWnd::LoadXmlFromString(LPCTSTR lpszXML, ConvertAction 
 					//		for (int i = 0; i<nCount; i++)
 					//		{
 					//			pChild = pHeaders->GetChild(i);
-					//			m_pHubbleRestObj->put_Header(CComBSTR(pChild->attr(_T("key"), _T(""))), CComBSTR(pChild->attr(_T("value"), _T(""))));
+					//			m_pCosmosRestObj->put_Header(CComBSTR(pChild->attr(_T("key"), _T(""))), CComBSTR(pChild->attr(_T("value"), _T(""))));
 					//		}
 					//	}
-					//	//m_pHubbleRestObj->put_Header(CComBSTR(L"FileId"), CComBSTR(_strID));
+					//	//m_pCosmosRestObj->put_Header(CComBSTR(L"FileId"), CComBSTR(_strID));
 					//	CComQIPtr<IRestNotify> pCloudAddinRestNotify(this->m_pHostWnd->m_pGrid);
-					//	m_pHubbleRestObj->put_NotifyHandle((LONGLONG)m_hWnd);
-					//	m_pHubbleRestObj->RestData(1, strURL.AllocSysString(), L"", L"", 0);
+					//	m_pCosmosRestObj->put_NotifyHandle((LONGLONG)m_hWnd);
+					//	m_pCosmosRestObj->RestData(1, strURL.AllocSysString(), L"", L"", 0);
 					//}
 				}
-				//else if (theApp.m_pHubbleManager)
+				//else if (theApp.m_pCosmosManager)
 				//{
 				//	if(m_strMainKey==_T(""))
 				//	{
@@ -4671,9 +4671,9 @@ HTREEITEM CTangramHtmlTreeWnd::LoadXmlFromString(LPCTSTR lpszXML, ConvertAction 
 				//	}
 				//	strAsynXml.Format(_T("<AsynBottomObj ID=\"%s-%x\" ObjID=\"shell.explorer.2\" ExtID=\"%s\" URL=\"%s\" Visible=\"0\"/>"),_T("TangramTreeRoot"),m_hWnd,strObjID,strURL);
 				//	if(theApp.m_pAppDisp)
-				//		theApp.m_pHubbleManager->CreateAsynObject(CComBSTR(strAsynXml),theApp.m_pAppDisp,CComBSTR(L""),(LONGLONG)m_hWnd);
+				//		theApp.m_pCosmosManager->CreateAsynObject(CComBSTR(strAsynXml),theApp.m_pAppDisp,CComBSTR(L""),(LONGLONG)m_hWnd);
 				//	else
-				//		theApp.m_pHubbleManager->CreateAsynObject(CComBSTR(strAsynXml),theApp.m_pHubbleManager,CComBSTR(L""),(LONGLONG)m_hWnd);
+				//		theApp.m_pCosmosManager->CreateAsynObject(CComBSTR(strAsynXml),theApp.m_pCosmosManager,CComBSTR(L""),(LONGLONG)m_hWnd);
 				//}
 			}
 		}
@@ -5225,7 +5225,7 @@ LRESULT CTangramHtmlTreeWnd::OnDesignNode(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CTangramHtmlTreeWnd::OnGetHubbleXmlParse(WPARAM wParam, LPARAM lParam)
+LRESULT CTangramHtmlTreeWnd::OnGetCosmosXmlParse(WPARAM wParam, LPARAM lParam)
 {
 	return (LRESULT)m_pHostXmlParse;
 }

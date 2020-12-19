@@ -16,14 +16,14 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "dllmain.h"
-#include "HubbleEvents.cpp"
+#include "CosmosEvents.cpp"
 #include <shellapi.h>
 #include <shlobj.h>
 
 CCosmos::CCosmos()
 {
 	ATLTRACE(_T("Loading CCosmos :%p\n"), this);
-	m_pHubble = nullptr;
+	m_pCosmos = nullptr;
 	m_dwThreadID = ::GetCurrentThreadId();
 	TCHAR file[MAX_PATH];
 	GetModuleFileName(::GetModuleHandle(nullptr), file, MAX_PATH * sizeof(TCHAR));
@@ -39,7 +39,7 @@ CCosmos::~CCosmos()
 	BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
 }
 
-void CCosmos::InitHubbleApp(bool bCrashReporting)
+void CCosmos::InitCosmosApp(bool bCrashReporting)
 {
 	if (m_bBrowserModeInit)
 		return;
@@ -136,7 +136,7 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 	}
 	if (strLib != _T(""))
 	{
-		if (strLib.CompareNoCase(theApp.m_pHubbleImpl->m_strExeName) == 0)
+		if (strLib.CompareNoCase(theApp.m_pCosmosImpl->m_strExeName) == 0)
 		{
 			strPath = m_strAppPath + strLib + _T(".exe");
 		}

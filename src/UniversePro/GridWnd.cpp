@@ -117,7 +117,7 @@ BEGIN_MESSAGE_MAP(CGridWnd, CSplitterWnd)
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEACTIVATE()
 	ON_MESSAGE(WM_TABCHANGE, OnActivePage)
-	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetHubbleObj)
+	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_COSMOSMSG, OnSplitterNodeAdd)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_HOSTNODEFORSPLITTERCREATED, OnSplitterCreated)
@@ -287,13 +287,13 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	}
 	IGrid* _pGrid = nullptr;
 	CString str = (LPCTSTR)lParam;
-	CGrid* pOldNode = (CGrid*)g_pHubble->m_pDesignGrid;
+	CGrid* pOldNode = (CGrid*)g_pCosmos->m_pDesignGrid;
 	CTangramXmlParse* pOld = pOldNode->m_pHostParse;
 
 	long	m_nRow;
-	g_pHubble->m_pDesignGrid->get_Row(&m_nRow);
+	g_pCosmos->m_pDesignGrid->get_Row(&m_nRow);
 	long	m_nCol;
-	g_pHubble->m_pDesignGrid->get_Col(&m_nCol);
+	g_pCosmos->m_pDesignGrid->get_Col(&m_nCol);
 	IGrid* _pOldNode = nullptr;
 	m_pGrid->GetGrid(m_nRow, m_nCol, &_pOldNode);
 	CGrid* _pOldNode2 = (CGrid*)_pOldNode;
@@ -326,29 +326,29 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 			m_pGrid->m_vChildNodes.erase(it);
 			m_pGrid->m_vChildNodes.push_back(pGrid);
 			pOldNode->m_pHostWnd->DestroyWindow();
-			CString strXml = m_pGrid->m_pGridShareData->m_pHubbleParse->xml();
-			g_pHubble->m_pHostDesignUINode = m_pGrid->m_pGridShareData->m_pGalaxy->m_pWorkGrid;
-			if (g_pHubble->m_pHostDesignUINode)
+			CString strXml = m_pGrid->m_pGridShareData->m_pCosmosParse->xml();
+			g_pCosmos->m_pHostDesignUINode = m_pGrid->m_pGridShareData->m_pGalaxy->m_pWorkGrid;
+			if (g_pCosmos->m_pHostDesignUINode)
 			{
-				CTangramHtmlTreeWnd* pTreeCtrl = g_pHubble->m_pDocDOMTree;
-				pTreeCtrl->DeleteItem(g_pHubble->m_pDocDOMTree->m_hFirstRoot);
+				CTangramHtmlTreeWnd* pTreeCtrl = g_pCosmos->m_pDocDOMTree;
+				pTreeCtrl->DeleteItem(g_pCosmos->m_pDocDOMTree->m_hFirstRoot);
 
 				if (pTreeCtrl->m_pHostXmlParse)
 				{
 					delete pTreeCtrl->m_pHostXmlParse;
 				}
-				g_pHubble->InitDesignerTreeCtrl(strXml);
-				g_pHubble->m_pHostDesignUINode->m_pDocXmlParseNode = pTreeCtrl->m_pHostXmlParse;
+				g_pCosmos->InitDesignerTreeCtrl(strXml);
+				g_pCosmos->m_pHostDesignUINode->m_pDocXmlParseNode = pTreeCtrl->m_pHostXmlParse;
 			}
 #ifndef _WIN64
-			if (g_pHubble->m_strExeName == _T("devenv"))
+			if (g_pCosmos->m_strExeName == _T("devenv"))
 			{
-				//VisualStudioPlus::CVSAddin* pAddin = (VisualStudioPlus::CVSAddin*)g_pHubble;
+				//VisualStudioPlus::CVSAddin* pAddin = (VisualStudioPlus::CVSAddin*)g_pCosmos;
 				//if (pAddin->m_pOutputWindowPane)
 				//	pAddin->m_pOutputWindowPane->OutputString(strXml.AllocSysString());
 			}
 #endif
-			g_pHubble->m_pDesignGrid = nullptr;
+			g_pCosmos->m_pDesignGrid = nullptr;
 			RecalcLayout();
 		}
 	}
@@ -375,11 +375,11 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 
 LRESULT CGridWnd::OnActivePage(WPARAM wParam, LPARAM lParam)
 {
-	if (g_pHubble->m_pDocDOMTree && g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pDocDOMTree && g_pCosmos->m_pCLRProxy)
 	{
 		CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
 		if (pGalaxy->m_bDesignerState)
-			g_pHubble->m_pCLRProxy->SelectGrid(m_pGrid);
+			g_pCosmos->m_pCLRProxy->SelectGrid(m_pGrid);
 	}
 	return CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);;
 }
@@ -467,12 +467,12 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	{
 		pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
 		::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
-		if (pGalaxy->m_bDesignerState && g_pHubble->m_pDesignGrid)
+		if (pGalaxy->m_bDesignerState && g_pCosmos->m_pDesignGrid)
 		{
-			g_pHubble->UpdateGrid(g_pHubble->m_pDesignGrid->m_pRootObj);
+			g_pCosmos->UpdateGrid(g_pCosmos->m_pDesignGrid->m_pRootObj);
 			CComBSTR bstrXml(L"");
-			g_pHubble->m_pDesignGrid->m_pRootObj->get_DocXml(&bstrXml);
-			g_pHubble->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
+			g_pCosmos->m_pDesignGrid->m_pRootObj->get_DocXml(&bstrXml);
+			g_pCosmos->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
 		}
 		
 		CWebPage* pWebWnd = nullptr;
@@ -480,8 +480,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;
 		}
-		else if (g_pHubble->m_pDesignGrid && g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
-			pWebWnd = g_pHubble->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+		else if (g_pCosmos->m_pDesignGrid && g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
+			pWebWnd = g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
 		pGalaxy->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
@@ -777,7 +777,7 @@ void CGridWnd::_RecalcLayout()
 
 BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pHubble->m_pActiveGrid;
+	m_pGrid = g_pCosmos->m_pActiveGrid;
 	m_pGrid->m_pHostWnd = this;
 	m_pGrid->m_nViewType = Grid;
 	m_pGrid->m_nID = nID;
@@ -980,7 +980,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	return false;
 }
 
-LRESULT CGridWnd::OnGetHubbleObj(WPARAM wParam, LPARAM lParam)
+LRESULT CGridWnd::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pGrid)
 		return (LRESULT)m_pGrid;
@@ -1097,7 +1097,7 @@ void CGridWnd::OnDrawSplitter(CDC* pDC, ESplitType nType, const CRect& rectArg)
 
 BOOL CGridWnd::PreCreateWindow(CREATESTRUCT& cs)
 {
-	cs.lpszClass = g_pHubble->m_lpszSplitterClass;
+	cs.lpszClass = g_pCosmos->m_lpszSplitterClass;
 	cs.style |= WS_CLIPSIBLINGS;
 	return CSplitterWnd::PreCreateWindow(cs);
 }
@@ -1181,22 +1181,22 @@ CWnd* CGridWnd::GetActivePane(int* pRow, int* pCol)
 
 int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	if (g_pHubble->m_pActiveHtmlWnd)
+	if (g_pCosmos->m_pActiveHtmlWnd)
 	{
-		g_pHubble->m_pActiveHtmlWnd = nullptr;
+		g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	}
 
 	CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
 
-	if (g_pHubble->m_pDocDOMTree)
+	if (g_pCosmos->m_pDocDOMTree)
 	{
-		if (g_pHubble->m_hVSToolBoxWnd)
+		if (g_pCosmos->m_hVSToolBoxWnd)
 		{
-			if (::IsChild(g_pHubble->m_hVSToolBoxWnd, m_hWnd) == false)
-				g_pHubble->m_pCLRProxy->SelectGrid(m_pGrid);
+			if (::IsChild(g_pCosmos->m_hVSToolBoxWnd, m_hWnd) == false)
+				g_pCosmos->m_pCLRProxy->SelectGrid(m_pGrid);
 		}
-		else if (g_pHubble->m_pCLRProxy && ::IsChild(g_pHubble->m_hHostWnd, m_hWnd) == false)
-			g_pHubble->m_pCLRProxy->SelectGrid(m_pGrid);
+		else if (g_pCosmos->m_pCLRProxy && ::IsChild(g_pCosmos->m_hHostWnd, m_hWnd) == false)
+			g_pCosmos->m_pCLRProxy->SelectGrid(m_pGrid);
 	}
 
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
@@ -1205,9 +1205,9 @@ int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	else if ((long)(g_pHubble->m_pActiveAppProxy) > 1)
+	else if ((long)(g_pCosmos->m_pActiveAppProxy) > 1)
 	{
-		HWND hMenuWnd = g_pHubble->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}

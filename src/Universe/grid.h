@@ -29,7 +29,7 @@ public:
 	CGalaxy*					m_pGalaxy;
 	CGalaxy*					m_pOldGalaxy;
 	CGridHelper*				m_pHostClientView;
-	CTangramXmlParse*			m_pHubbleParse;
+	CTangramXmlParse*			m_pCosmosParse;
 	CGalaxyCluster*				m_pGalaxyCluster;
 };
 
@@ -75,7 +75,7 @@ public:
 	CString							m_strLastIPCParam5 = _T("");
 
 	CString							m_strNodeName;
-	CString 						m_strHubbleXml = _T("");
+	CString 						m_strCosmosXml = _T("");
 
 	IDispatch*						m_pDisp;
 	CGrid* 							m_pRootObj;
@@ -95,7 +95,7 @@ public:
 	IDispatch*						m_pExtender;
 	CGridVector						m_vChildNodes;
 	CGrid*							m_pCurrentExNode;
-	CWormhole*						m_pHubbleCloudSession;
+	CWormhole*						m_pCosmosCloudSession;
 	map<CGrid*, CString>			m_mapExtendNode;
 	map<CString, CGrid*>			m_mapChildGrid;
 	CComObject<CGridCollection>*	m_pChildNodeCollection;

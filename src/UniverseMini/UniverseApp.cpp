@@ -15,7 +15,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h" 
-#include "Hubble.h" 
+#include "Cosmos.h" 
 #include <VersionHelpers.h> 
 #include <shellscalingapi.h>
 
@@ -29,7 +29,7 @@
 
 // Description  : the unique App object
 CUniverse theUniverse;
-CHubble* g_pHubble = nullptr;
+CCosmos* g_pCosmos = nullptr;
 
 CUniverse::CUniverse()
 {
@@ -38,8 +38,8 @@ CUniverse::CUniverse()
 
 CUniverse::~CUniverse()
 {
-	if (g_pHubble)
-		delete g_pHubble;
+	if (g_pCosmos)
+		delete g_pCosmos;
 
 	OutputDebugString(_T("******************************Exit CUniverse******************************\n"));
 }
@@ -70,20 +70,20 @@ BOOL CUniverse::InitInstance()
 	m_bHostCLR = (BOOL)::GetModuleHandle(_T("mscoreei.dll"));
 
 	{
-		new CComObject < CHubble >;
-		g_pHubble->m_strExeName = strExeName;
-		g_pHubble->m_dwThreadID = ::GetCurrentThreadId();
-		if (g_pHubble->m_hCBTHook == nullptr)
-			g_pHubble->m_hCBTHook = SetWindowsHookEx(WH_CBT, CUniverse::CBTProc, NULL, g_pHubble->m_dwThreadID);
-		theUniverse.SetHook(g_pHubble->m_dwThreadID);
+		new CComObject < CCosmos >;
+		g_pCosmos->m_strExeName = strExeName;
+		g_pCosmos->m_dwThreadID = ::GetCurrentThreadId();
+		if (g_pCosmos->m_hCBTHook == nullptr)
+			g_pCosmos->m_hCBTHook = SetWindowsHookEx(WH_CBT, CUniverse::CBTProc, NULL, g_pCosmos->m_dwThreadID);
+		theUniverse.SetHook(g_pCosmos->m_dwThreadID);
 #ifndef _WIN64
 #else
-		g_pHubble->m_bEnableProcessFormTabKey = true;
-		if (g_pHubble->m_hForegroundIdleHook == NULL)
-			g_pHubble->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
+		g_pCosmos->m_bEnableProcessFormTabKey = true;
+		if (g_pCosmos->m_hForegroundIdleHook == NULL)
+			g_pCosmos->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
 #endif	
 	}
-	if (g_pHubble)
+	if (g_pCosmos)
 	{
 		WNDCLASS wndClass;
 		wndClass.style = CS_DBLCLKS;
@@ -99,30 +99,30 @@ BOOL CUniverse::InitInstance()
 
 		RegisterClass(&wndClass);
 
-		g_pHubble->m_lpszSplitterClass = wndClass.lpszClassName;
+		g_pCosmos->m_lpszSplitterClass = wndClass.lpszClassName;
 
-		wndClass.lpfnWndProc = HubbleWndProc;
+		wndClass.lpfnWndProc = CosmosWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpszClassName = L"Hubble Grid Class";
+		wndClass.lpszClassName = L"Cosmos Grid Class";
 
 		RegisterClass(&wndClass);
 
-		wndClass.lpfnWndProc = HubbleMsgWndProc;
+		wndClass.lpfnWndProc = CosmosMsgWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
 		wndClass.lpszClassName = L"Tangram Message Window Class";
 
 		RegisterClass(&wndClass);
 
-		g_pHubble->m_strExeName = strExeName;
-		g_pHubble->m_dwThreadID = ::GetCurrentThreadId();
-		g_pHubble->HubbleLoad();
-		SetHook(g_pHubble->m_dwThreadID);
+		g_pCosmos->m_strExeName = strExeName;
+		g_pCosmos->m_dwThreadID = ::GetCurrentThreadId();
+		g_pCosmos->CosmosLoad();
+		SetHook(g_pCosmos->m_dwThreadID);
 		if (bOfficeApp || ::GetModuleHandle(_T("msenv.dll")))
-			g_pHubble->Init();
+			g_pCosmos->Init();
 		else
 		{
 			//#ifdef _WIN64
-			g_pHubble->m_strStartupURL = _T("");
+			g_pCosmos->m_strStartupURL = _T("");
 			int nPos = path.ReverseFind('.');
 			int nPos2 = path.ReverseFind('\\');
 			CString strPath = path.Left(nPos + 1);
@@ -131,14 +131,14 @@ BOOL CUniverse::InitInstance()
 			CString strInitWebPage = strPath + _T("index.html");
 			CString strInitEclipse = strPath + _T("eclipse");
 			bool bSupportBrowser = (::PathFileExists(strInitWebPage) && !::PathIsDirectory(strInitWebPage));
-			if (g_pHubble->m_strStartupURL == _T(""))
+			if (g_pCosmos->m_strStartupURL == _T(""))
 			{
 				if (bSupportBrowser)
 				{
 					if (bHasChromeRT)
 					{
-						g_pHubble->m_strStartupURL = strInitWebPage;
-						g_pHubble->m_nAppType = APP_BROWSERAPP;
+						g_pCosmos->m_strStartupURL = strInitWebPage;
+						g_pCosmos->m_nAppType = APP_BROWSERAPP;
 					}
 				}
 				else
@@ -146,17 +146,17 @@ BOOL CUniverse::InitInstance()
 					strPath = strPath + _T("win32");
 					if (::PathFileExists(strPath) && !::PathIsDirectory(strPath))
 					{
-						g_pHubble->m_nAppType = APP_WIN32;
-						g_pHubble->m_strStartupURL = strPath;
+						g_pCosmos->m_nAppType = APP_WIN32;
+						g_pCosmos->m_strStartupURL = strPath;
 					}
 					else if (bHasChromeRT)
 					{
-						g_pHubble->m_nAppType = APP_BROWSER;
-						g_pHubble->m_strStartupURL = _T("");
+						g_pCosmos->m_nAppType = APP_BROWSER;
+						g_pCosmos->m_strStartupURL = _T("");
 					}
 				}
 			}
-			::PostAppMessage(g_pHubble->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
+			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
 		}
 	}
 
@@ -166,8 +166,8 @@ BOOL CUniverse::InitInstance()
 int CUniverse::ExitInstance()
 {
 	ATLTRACE(_T("Begin Tangram ExitInstance :%p\n"), this);
-	if (g_pHubble) {
-		g_pHubble->ExitInstance();
+	if (g_pCosmos) {
+		g_pCosmos->ExitInstance();
 	}
 	AfxOleTerm(FALSE);
 	ATLTRACE(_T("End Tangram ExitInstance :%p\n"), this);
@@ -175,34 +175,34 @@ int CUniverse::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
 	switch (msg)
 	{
 	case WM_CLOSE:
 	{
-		::ShowWindow(g_pHubble->m_hHostWnd, SW_HIDE);
+		::ShowWindow(g_pCosmos->m_hHostWnd, SW_HIDE);
 	}
 	return 0;
 	case WM_DESTROY:
 	{
-		if (hWnd == g_pHubble->m_hHostWnd)
+		if (hWnd == g_pCosmos->m_hHostWnd)
 		{
-			g_pHubble->m_pActiveAppProxy = nullptr;
+			g_pCosmos->m_pActiveAppProxy = nullptr;
 
-			if (g_pHubble->m_pCLRProxy)
+			if (g_pCosmos->m_pCLRProxy)
 			{
-				if (g_pHubble->m_pCosmosAppProxy)
-					g_pHubble->m_pCosmosAppProxy->OnHubbleClose();
+				if (g_pCosmos->m_pCosmosAppProxy)
+					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
 			}
 
-			if (::IsWindow(g_pHubble->m_hHostBrowserWnd))
+			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
 			{
-				::SendMessage(g_pHubble->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
+				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
 			}
 
-			if (g_pHubble->m_hForegroundIdleHook)
-				UnhookWindowsHookEx(g_pHubble->m_hForegroundIdleHook);
+			if (g_pCosmos->m_hForegroundIdleHook)
+				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
 		}
 		break;
 	}
@@ -211,7 +211,7 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	{
 		if (wParam == PBT_APMRESUMEAUTOMATIC)
 		{
-			for (auto it : g_pHubble->m_mapThreadInfo)
+			for (auto it : g_pCosmos->m_mapThreadInfo)
 			{
 				if (it.second)
 				{
@@ -225,11 +225,11 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	}
 	break;
 	case WM_WINDOWPOSCHANGED:
-		if (hWnd == g_pHubble->m_hHostWnd)
+		if (hWnd == g_pCosmos->m_hHostWnd)
 		{
 			RECT rc;
-			::GetClientRect(g_pHubble->m_hHostWnd, &rc);
-			::SetWindowPos(g_pHubble->m_hChildHostWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+			::GetClientRect(g_pCosmos->m_hHostWnd, &rc);
+			::SetWindowPos(g_pCosmos->m_hChildHostWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
 		break;
 	case WM_COSMOSMSG:
@@ -237,16 +237,16 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		{
 		case TANGRAM_CHROME_APP_INIT:
 		{
-			if (g_pHubble->m_hMainWnd == NULL && g_pHubble->m_pUniverseAppProxy)
-				g_pHubble->m_hMainWnd = g_pHubble->m_pUniverseAppProxy->InitHubbleApp();
+			if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
+				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
 		}
 		break;
 		case 20200120:
 		{
 			HWND h = (HWND)wParam;
-			if (g_pHubble->m_pCLRProxy)
+			if (g_pCosmos->m_pCLRProxy)
 			{
-				g_pHubble->m_pCLRProxy->OnWinFormActivate(h, 4);
+				g_pCosmos->m_pCLRProxy->OnWinFormActivate(h, 4);
 			}
 		}
 		break;
@@ -256,7 +256,7 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	{
 		HWND hwnd = (HWND)wParam;
 		IGalaxy* pGalaxy = nullptr;
-		g_pHubble->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
+		g_pCosmos->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
 		if (pGalaxy)
 		{
 			IGrid* pGrid = nullptr;
@@ -281,25 +281,25 @@ LRESULT CALLBACK CUniverse::HubbleWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 
 LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	if (g_pHubble->m_pHubbleDelegate)
+	if (g_pCosmos->m_pCosmosDelegate)
 	{
-		g_pHubble->m_pHubbleDelegate->ForegroundIdleProc();
+		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
 	}
-	for (auto it : g_pHubble->m_mapHubbleAppProxy)
+	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 		it.second->OnForegroundIdleProc();
-	return CallNextHookEx(g_pHubble->m_hForegroundIdleHook, nCode, wParam, lParam);
+	return CallNextHookEx(g_pCosmos->m_hForegroundIdleHook, nCode, wParam, lParam);
 }
 
-LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
 	switch (msg)
 	{
 	case WM_CREATE:
 	{
-		if (g_pHubble->m_hHubbleWnd == NULL)
+		if (g_pCosmos->m_hCosmosWnd == NULL)
 		{
-			g_pHubble->m_hHubbleWnd = hWnd;
-			g_pHubble->HubbleInit();
+			g_pCosmos->m_hCosmosWnd = hWnd;
+			g_pCosmos->CosmosInit();
 		}
 	}
 	break;
@@ -309,10 +309,10 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		if (l == 0)
 		{
 			CWinForm* pWnd = new CWinForm();
-			g_pHubble->m_hFormNodeWnd = NULL;
-			g_pHubble->m_hFormNodeWnd = (HWND)wParam;
+			g_pCosmos->m_hFormNodeWnd = NULL;
+			g_pCosmos->m_hFormNodeWnd = (HWND)wParam;
 			pWnd->SubclassWindow((HWND)wParam);
-			::PostMessage(g_pHubble->m_hFormNodeWnd, WM_WINFORMCREATED, 0, 0);
+			::PostMessage(g_pCosmos->m_hFormNodeWnd, WM_WINFORMCREATED, 0, 0);
 		}
 	}
 	break;
@@ -327,7 +327,7 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	case WM_HUBBLE_INIT:
 		if (lParam == 20002000)
 		{
-			g_pHubble->HubbleInit();
+			g_pCosmos->CosmosInit();
 		}
 		break;
 		case WM_HUBBLE_APPQUIT:
@@ -342,9 +342,9 @@ LRESULT CALLBACK CUniverse::HubbleMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 
 LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	if (g_pHubble == nullptr)
+	if (g_pCosmos == nullptr)
 		return 0;
-	LRESULT hr = CallNextHookEx(g_pHubble->m_hCBTHook, nCode, wParam, lParam);
+	LRESULT hr = CallNextHookEx(g_pCosmos->m_hCBTHook, nCode, wParam, lParam);
 	HWND hWnd = (HWND)wParam;
 	switch (nCode)
 	{
@@ -354,16 +354,16 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		LPCTSTR lpszName = pCreateWnd->lpcs->lpszName;
 		HWND hPWnd = pCreateWnd->lpcs->hwndParent;
 		DWORD dwID = (DWORD)pCreateWnd->lpcs->hMenu;
-		::GetClassName(hWnd, g_pHubble->m_szBuffer, MAX_PATH);
-		CString strClassName = CString(g_pHubble->m_szBuffer);
-		::GetClassName(hPWnd, g_pHubble->m_szBuffer, MAX_PATH);
-		CString strPClassName = CString(g_pHubble->m_szBuffer);
+		::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+		CString strClassName = CString(g_pCosmos->m_szBuffer);
+		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+		CString strPClassName = CString(g_pCosmos->m_szBuffer);
 
 		if (HIWORD(pCreateWnd->lpcs->lpszClass))
 		{
-			if (g_pHubble->m_pCLRProxy)
+			if (g_pCosmos->m_pCLRProxy)
 			{
-				g_pHubble->m_pCLRProxy->WindowCreated(strClassName, lpszName, hPWnd, hWnd);
+				g_pCosmos->m_pCLRProxy->WindowCreated(strClassName, lpszName, hPWnd, hWnd);
 			}
 		}
 		if ((pCreateWnd->lpcs->style & WS_CHILD) == 0)
@@ -371,38 +371,38 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			LRESULT lRes = ::SendMessage(hWnd, WM_QUERYAPPPROXY, 0, 0);
 			if (lRes > 0)
 			{
-				g_pHubble->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
+				g_pCosmos->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
 			}
 		}
 	}
 	break;
 	case HCBT_DESTROYWND:
 	{
-		if (g_pHubble->m_pCLRProxy)
-			g_pHubble->m_pCLRProxy->WindowDestroy(hWnd);
+		if (g_pCosmos->m_pCLRProxy)
+			g_pCosmos->m_pCLRProxy->WindowDestroy(hWnd);
 
-		auto it = g_pHubble->m_mapGalaxy2GalaxyCluster.find(hWnd);
-		if (it != g_pHubble->m_mapGalaxy2GalaxyCluster.end())
-			g_pHubble->m_mapGalaxy2GalaxyCluster.erase(it);
+		auto it = g_pCosmos->m_mapGalaxy2GalaxyCluster.find(hWnd);
+		if (it != g_pCosmos->m_mapGalaxy2GalaxyCluster.end())
+			g_pCosmos->m_mapGalaxy2GalaxyCluster.erase(it);
 
-		auto itGrid = g_pHubble->m_mapGrid.find(hWnd);
-		if (itGrid != g_pHubble->m_mapGrid.end())
+		auto itGrid = g_pCosmos->m_mapGrid.find(hWnd);
+		if (itGrid != g_pCosmos->m_mapGrid.end())
 		{
-			g_pHubble->m_mapGrid.erase(itGrid);
+			g_pCosmos->m_mapGrid.erase(itGrid);
 		}
-		auto it1 = g_pHubble->m_mapUIData.find(hWnd);
-		if (it1 != g_pHubble->m_mapUIData.end())
-			g_pHubble->m_mapUIData.erase(it1);
-		it1 = g_pHubble->m_mapCtrlTag.find(hWnd);
-		if (it1 != g_pHubble->m_mapCtrlTag.end())
-			g_pHubble->m_mapCtrlTag.erase(it1);
+		auto it1 = g_pCosmos->m_mapUIData.find(hWnd);
+		if (it1 != g_pCosmos->m_mapUIData.end())
+			g_pCosmos->m_mapUIData.erase(it1);
+		it1 = g_pCosmos->m_mapCtrlTag.find(hWnd);
+		if (it1 != g_pCosmos->m_mapCtrlTag.end())
+			g_pCosmos->m_mapCtrlTag.erase(it1);
 
-		if (hWnd == g_pHubble->m_hMainWnd)
+		if (hWnd == g_pCosmos->m_hMainWnd)
 		{
-			if (theUniverse.m_bHostCLR && g_pHubble->m_nAppType == APP_BROWSERAPP)
-				g_pHubble->m_nAppType = APP_BROWSER;
-			::DestroyWindow(g_pHubble->m_hHostWnd);
-			if (theUniverse.m_bHostCLR && g_pHubble->m_nAppType == 0)
+			if (theUniverse.m_bHostCLR && g_pCosmos->m_nAppType == APP_BROWSERAPP)
+				g_pCosmos->m_nAppType = APP_BROWSER;
+			::DestroyWindow(g_pCosmos->m_hHostWnd);
+			if (theUniverse.m_bHostCLR && g_pCosmos->m_nAppType == 0)
 				::PostQuitMessage(20191116);
 		}
 	}
@@ -426,22 +426,22 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		break;
 	case HCBT_ACTIVATE:
 	{
-		g_pHubble->m_hActiveWnd = hWnd;
-		if (g_pHubble->m_pCLRProxy)
+		g_pCosmos->m_hActiveWnd = hWnd;
+		if (g_pCosmos->m_pCLRProxy)
 		{
-			g_pHubble->m_bWinFormActived = g_pHubble->m_pCLRProxy->IsWinForm(hWnd);
-			if (g_pHubble->m_bWinFormActived)
+			g_pCosmos->m_bWinFormActived = g_pCosmos->m_pCLRProxy->IsWinForm(hWnd);
+			if (g_pCosmos->m_bWinFormActived)
 			{
-				g_pHubble->m_pGalaxy = nullptr;
+				g_pCosmos->m_pGalaxy = nullptr;
 			}
 		}
 		LRESULT lRes = ::SendMessage(hWnd, WM_QUERYAPPPROXY, 0, 0);
 		if (lRes > 0)
 		{
-			g_pHubble->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
+			g_pCosmos->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
 		}
 		else
-			g_pHubble->m_pActiveAppProxy = nullptr;
+			g_pCosmos->m_pActiveAppProxy = nullptr;
 	}
 	break;
 	}
@@ -454,7 +454,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 {
 	LPMSG lpMsg = (LPMSG)lParam;
 	DWORD dwID = ::GetCurrentThreadId();
-	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+	CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 	if (lpMsg->message == WM_TIMER)
 		return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 	if (nCode >= 0)
@@ -467,15 +467,15 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 			case WM_QUIT:
 			{
-				if (::GetCurrentThreadId() == g_pHubble->m_dwThreadID)
+				if (::GetCurrentThreadId() == g_pCosmos->m_dwThreadID)
 				{
-					if (::IsWindow(g_pHubble->m_hHostWnd))
-						::DestroyWindow(g_pHubble->m_hHostWnd);
-					if (::IsWindow(g_pHubble->m_hHubbleWnd))
-						::DestroyWindow(g_pHubble->m_hHubbleWnd);
+					if (::IsWindow(g_pCosmos->m_hHostWnd))
+						::DestroyWindow(g_pCosmos->m_hHostWnd);
+					if (::IsWindow(g_pCosmos->m_hCosmosWnd))
+						::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 				}
-				if (g_pHubble->m_pCosmosAppProxy)
-					g_pHubble->m_pCosmosAppProxy->OnHubbleClose();
+				if (g_pCosmos->m_pCosmosAppProxy)
+					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
 			}
 			break;
 			default:
@@ -490,8 +490,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			case WM_SYSKEYDOWN:
 			{
 				if (::GetAsyncKeyState(VK_MENU) < 0 &&
-					g_pHubble->m_pHubbleDelegate &&
-					g_pHubble->m_pHubbleDelegate->OnUniversePreTranslateMessage(lpMsg))
+					g_pCosmos->m_pCosmosDelegate &&
+					g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
 				{
 					return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 				}
@@ -500,23 +500,23 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			case WM_KEYDOWN:
 			{
 				CGridHelper* pWnd = nullptr;
-				if (g_pHubble->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
+				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
 				}
-				if (g_pHubble->m_pActiveGrid)
+				if (g_pCosmos->m_pActiveGrid)
 				{
-					if (g_pHubble->m_pActiveGrid->m_nViewType != Grid)
+					if (g_pCosmos->m_pActiveGrid->m_nViewType != Grid)
 					{
-						pWnd = (CGridHelper*)g_pHubble->m_pActiveGrid->m_pHostWnd;
+						pWnd = (CGridHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pHubble->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveGrid = nullptr;
 							if (lpMsg->wParam != VK_TAB)
 								break;
-							else if (g_pHubble->m_bWinFormActived == false)
+							else if (g_pCosmos->m_bWinFormActived == false)
 							{
-								g_pHubble->m_pGalaxy = nullptr;
+								g_pCosmos->m_pGalaxy = nullptr;
 							}
 						}
 					}
@@ -525,11 +525,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				switch (lpMsg->wParam)
 				{
 				case VK_TAB:
-					if (g_pHubble->m_bWinFormActived && g_pHubble->m_bEnableProcessFormTabKey && g_pHubble->m_pCLRProxy->ProcessFormMsg(g_pHubble->m_hActiveWnd, lpMsg, 0))
+					if (g_pCosmos->m_bWinFormActived && g_pCosmos->m_bEnableProcessFormTabKey && g_pCosmos->m_pCLRProxy->ProcessFormMsg(g_pCosmos->m_hActiveWnd, lpMsg, 0))
 					{
 						break;
 					}
-					if (g_pHubble->m_pGalaxy && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						lpMsg->hwnd = NULL;
 						lpMsg->lParam = 0;
@@ -548,11 +548,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							lpMsg->wParam = 0;
 							lpMsg->message = 0;
 						}
-						if (((__int64)g_pHubble->m_pActiveAppProxy) > 1)
-							g_pHubble->m_pActiveAppProxy->UniversePreTranslateMessage(lpMsg);
-						//else if (((__int64)g_pHubble->m_pUniverseAppProxy) > 1)
+						if (((__int64)g_pCosmos->m_pActiveAppProxy) > 1)
+							g_pCosmos->m_pActiveAppProxy->UniversePreTranslateMessage(lpMsg);
+						//else if (((__int64)g_pCosmos->m_pUniverseAppProxy) > 1)
 						//{
-						//	g_pHubble->m_pUniverseAppProxy->UniversePreTranslateMessage(lpMsg);
+						//	g_pCosmos->m_pUniverseAppProxy->UniversePreTranslateMessage(lpMsg);
 						//}
 					}
 					break;
@@ -565,7 +565,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case VK_RIGHT:
 				case VK_DOWN:
 				case VK_BACK:
-					if (g_pHubble->m_bWinFormActived && g_pHubble->m_bEnableProcessFormTabKey && g_pHubble->m_pCLRProxy->ProcessFormMsg(g_pHubble->m_hActiveWnd, lpMsg, 0))
+					if (g_pCosmos->m_bWinFormActived && g_pCosmos->m_bEnableProcessFormTabKey && g_pCosmos->m_pCLRProxy->ProcessFormMsg(g_pCosmos->m_hActiveWnd, lpMsg, 0))
 					{
 						TranslateMessage(lpMsg);
 						::DispatchMessage(lpMsg);
@@ -576,9 +576,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 						break;
 					}
-					if (g_pHubble->m_pGalaxy && g_pHubble->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
-						if (g_pHubble->m_pCLRProxy && g_pHubble->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
+						if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
 						{
 							//TranslateMessage(lpMsg);
 							::DispatchMessage(lpMsg);
@@ -594,16 +594,16 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						lpMsg->message = 0;
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 					}
-					if (g_pHubble->m_pHubbleDelegate)
+					if (g_pCosmos->m_pCosmosDelegate)
 					{
-						if (g_pHubble->m_pHubbleDelegate->OnUniversePreTranslateMessage(lpMsg))
+						if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
 							break;
 					}
 					break;
 				case VK_DELETE:
-					if (g_pHubble->m_pActiveGrid)
+					if (g_pCosmos->m_pActiveGrid)
 					{
-						if (g_pHubble->m_pActiveGrid->m_nViewType == ActiveX)
+						if (g_pCosmos->m_pActiveGrid->m_nViewType == ActiveX)
 						{
 							pWnd->PreTranslateMessage(lpMsg);
 							lpMsg->hwnd = NULL;
@@ -618,17 +618,17 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					break;
 				case VK_RETURN:
 				{
-					if (g_pHubble->m_pHubbleDelegate)
+					if (g_pCosmos->m_pCosmosDelegate)
 					{
-						if (g_pHubble->m_pHubbleDelegate->OnUniversePreTranslateMessage(lpMsg))
+						if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
 							break;
 					}
-					if (g_pHubble->m_pGalaxy && g_pHubble->m_pActiveGrid)
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid)
 					{
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pHubble->m_pActiveGrid = nullptr;
-							g_pHubble->m_pGalaxy = nullptr;
+							g_pCosmos->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pGalaxy = nullptr;
 						}
 						else if (pWnd)
 						{
@@ -640,10 +640,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							break;
 						}
 					}
-					if (g_pHubble->m_bOfficeApp)
+					if (g_pCosmos->m_bOfficeApp)
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 					TranslateMessage(lpMsg);
-					if (g_pHubble->m_strExeName != _T("devenv"))
+					if (g_pCosmos->m_strExeName != _T("devenv"))
 					{
 						DispatchMessage(lpMsg);
 						lpMsg->hwnd = NULL;
@@ -661,16 +661,16 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 0x5a://Ctrl+Z
 					if (::GetKeyState(VK_CONTROL) < 0)  // control pressed
 					{
-						if (g_pHubble->m_pActiveGrid && pWnd && !::IsWindow(pWnd->m_hWnd))
+						if (g_pCosmos->m_pActiveGrid && pWnd && !::IsWindow(pWnd->m_hWnd))
 						{
-							g_pHubble->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveGrid = nullptr;
 						}
-						if (g_pHubble->m_pActiveGrid)
+						if (g_pCosmos->m_pActiveGrid)
 						{
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
-							if (g_pHubble->m_pActiveGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
+							if (g_pCosmos->m_pActiveGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 							{
 								if (pWnd)
 									pWnd->PreTranslateMessage(lpMsg);
@@ -689,28 +689,28 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			case WM_HUBBLE_INIT:
 			{
 				if (lpMsg->wParam == 20191005)
-					g_pHubble->Init();
+					g_pCosmos->Init();
 			}
 			break;
 			case WM_MOUSEMOVE:
 			{
-				if ((long)(g_pHubble->m_pActiveAppProxy) > 1)
+				if ((long)(g_pCosmos->m_pActiveAppProxy) > 1)
 				{
-					g_pHubble->m_pActiveAppProxy->MouseMoveProxy(lpMsg->hwnd);
+					g_pCosmos->m_pActiveAppProxy->MouseMoveProxy(lpMsg->hwnd);
 				}
-				else if (g_pHubble->m_pUniverseAppProxy)
+				else if (g_pCosmos->m_pUniverseAppProxy)
 				{
-					g_pHubble->m_pUniverseAppProxy->MouseMoveProxy(lpMsg->hwnd);
+					g_pCosmos->m_pUniverseAppProxy->MouseMoveProxy(lpMsg->hwnd);
 				}
-				if (g_pHubble->m_pHubbleDelegate)
+				if (g_pCosmos->m_pCosmosDelegate)
 				{
-					if (g_pHubble->m_pHubbleDelegate->OnUniversePreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
 						break;
 				}
-				if ((long)(g_pHubble->m_pActiveAppProxy) > 1)
-					g_pHubble->m_pActiveAppProxy->UniversePreTranslateMessage(lpMsg);
-				else if (g_pHubble->m_pUniverseAppProxy)
-					g_pHubble->m_pUniverseAppProxy->UniversePreTranslateMessage(lpMsg);
+				if ((long)(g_pCosmos->m_pActiveAppProxy) > 1)
+					g_pCosmos->m_pActiveAppProxy->UniversePreTranslateMessage(lpMsg);
+				else if (g_pCosmos->m_pUniverseAppProxy)
+					g_pCosmos->m_pUniverseAppProxy->UniversePreTranslateMessage(lpMsg);
 			}
 			break;
 			case WM_NCLBUTTONDOWN:
@@ -722,10 +722,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				//case WM_POINTERUP:
 			case WM_SETWNDFOCUSE:
 			{
-				g_pHubble->ProcessMsg(lpMsg);
+				g_pCosmos->ProcessMsg(lpMsg);
 				//::DispatchMessage(lpMsg);
 				//for m_strStartupCLRObj support
-				//if (g_pHubble->m_pActiveWinFormWnd && g_pHubble->m_bEnableProcessFormTabKey && g_pHubble->m_pCLRProxy->ProcessFormMsg(g_pHubble->m_pActiveWinFormWnd->m_hWnd, lpMsg, 0))
+				//if (g_pCosmos->m_pActiveWinFormWnd && g_pCosmos->m_bEnableProcessFormTabKey && g_pCosmos->m_pCLRProxy->ProcessFormMsg(g_pCosmos->m_pActiveWinFormWnd->m_hWnd, lpMsg, 0))
 				//{
 				//	TranslateMessage(lpMsg);
 				//	::DispatchMessage(lpMsg);
@@ -738,19 +738,19 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				//}
 				if (lpMsg->message == WM_LBUTTONDOWN || lpMsg->message == WM_LBUTTONUP)
 				{
-					if (g_pHubble->m_pActiveWinFormWnd)
+					if (g_pCosmos->m_pActiveWinFormWnd)
 					{
 						//::SendMessage(lpMsg->hwnd, lpMsg->message, lpMsg->wParam, lpMsg->lParam);
-						g_pHubble->m_pCLRProxy->ProcessFormMsg(g_pHubble->m_pActiveWinFormWnd->m_hWnd, lpMsg, 0);
+						g_pCosmos->m_pCLRProxy->ProcessFormMsg(g_pCosmos->m_pActiveWinFormWnd->m_hWnd, lpMsg, 0);
 					}
 				}
-				if ((long)(g_pHubble->m_pActiveAppProxy) > 1)
-					g_pHubble->m_pActiveAppProxy->UniversePreTranslateMessage(lpMsg);
-				else if (g_pHubble->m_pUniverseAppProxy)
-					g_pHubble->m_pUniverseAppProxy->UniversePreTranslateMessage(lpMsg);
-				if (g_pHubble->m_pHubbleDelegate)
+				if ((long)(g_pCosmos->m_pActiveAppProxy) > 1)
+					g_pCosmos->m_pActiveAppProxy->UniversePreTranslateMessage(lpMsg);
+				else if (g_pCosmos->m_pUniverseAppProxy)
+					g_pCosmos->m_pUniverseAppProxy->UniversePreTranslateMessage(lpMsg);
+				if (g_pCosmos->m_pCosmosDelegate)
 				{
-					if (g_pHubble->m_pHubbleDelegate->OnUniversePreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
 						break;
 				}
 				return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
@@ -772,10 +772,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				if (hModule) {
 					FuncInitApp = (_InitApp)GetProcAddress(hModule, "InitApp");
 					if (FuncInitApp != NULL) {
-						HWND hWnd = g_pHubble->m_pHubbleDelegate->GetMainWnd();
+						HWND hWnd = g_pCosmos->m_pCosmosDelegate->GetMainWnd();
 						if (::IsWindow(hWnd))
 						{
-							g_pHubble->m_hMainWnd = hWnd;
+							g_pCosmos->m_hMainWnd = hWnd;
 						}
 
 						FuncInitApp(false);
@@ -791,9 +791,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 				case 1:
 				{
-					g_pHubble->m_bCreatingDevTool = true;
-					auto it = g_pHubble->m_mapBrowserWnd.find(::GetActiveWindow());
-					if (it != g_pHubble->m_mapBrowserWnd.end())
+					g_pCosmos->m_bCreatingDevTool = true;
+					auto it = g_pCosmos->m_mapBrowserWnd.find(::GetActiveWindow());
+					if (it != g_pCosmos->m_mapBrowserWnd.end())
 					{
 						ATLTRACE(_T("\n"));
 					}
@@ -808,22 +808,22 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 				case 20191004:
 				{
-					if (g_pHubble->m_pCLRProxy)
+					if (g_pCosmos->m_pCLRProxy)
 					{
-						g_pHubble->m_pCLRProxy->HubbleAction(CComBSTR("setmainform"), nullptr);
+						g_pCosmos->m_pCLRProxy->CosmosAction(CComBSTR("setmainform"), nullptr);
 					}
 				}
 				break;
 				case 20190511:
 				{
-					::DestroyWindow(g_pHubble->m_hHostWnd);
+					::DestroyWindow(g_pCosmos->m_hHostWnd);
 				}
 				break;
 				case 20191022:
 				{
-					if (g_pHubble->m_pCLRProxy)
+					if (g_pCosmos->m_pCLRProxy)
 					{
-						g_pHubble->m_pCLRProxy->HubbleAction(CComBSTR("startclrapp"), nullptr);
+						g_pCosmos->m_pCLRProxy->CosmosAction(CComBSTR("startclrapp"), nullptr);
 					}
 				}
 				break;
@@ -843,7 +843,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 
 void CUniverse::SetHook(DWORD ThreadID)
 {
-	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(ThreadID);
+	CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(ThreadID);
 	if (pThreadInfo && pThreadInfo->m_hGetMessageHook == NULL)
 	{
 		pThreadInfo->m_hGetMessageHook = SetWindowsHookEx(WH_GETMESSAGE, GetMessageProc, NULL, ThreadID);

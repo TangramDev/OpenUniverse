@@ -37,7 +37,7 @@ public:
 	CGalaxy*				m_pOldGalaxy = nullptr;
 	IDispatch*				m_pOfficeObj = nullptr;
 	CGridHelper*			m_pHostClientView = nullptr;
-	CTangramXmlParse*		m_pHubbleParse = nullptr;
+	CTangramXmlParse*		m_pCosmosParse = nullptr;
 	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
 	map<CString, CGrid*>	m_mapLayoutNodes;
 	map<CString, CGrid*>	m_mapAxNodes;
@@ -79,7 +79,7 @@ public:
 	CString							m_strName;
 	CString 						m_strObjTypeID;
 	CString 						m_strCaption;
-	CString 						m_strHubbleXml = _T("");
+	CString 						m_strCosmosXml = _T("");
 	CString 						m_strXmlFileFromVS;
 	CString 						m_strXmlRefGridInfo=_T("");
 
@@ -99,7 +99,7 @@ public:
 	CWinForm*						m_pParentWinFormWnd;
 	CTangramXmlParse*				m_pHostParse;
 	CTangramXmlParse* 				m_pDocXmlParseNode;
-	IHubbleWindow*					m_pWindow;
+	ICosmosWindow*					m_pWindow;
 	CMDIChildFormInfo*				m_pChildFormsInfo;
 	CGridShareData*					m_pGridShareData;
 	CBrowser*						m_pWebBrowser;
@@ -114,7 +114,7 @@ public:
 	CGridVector						m_vChildNodes;
 	CGrid*							m_pCurrentExNode;
 	CWebPage*						m_pWebPage = nullptr;
-	CWormhole*						m_pHubbleCloudSession;
+	CWormhole*						m_pCosmosCloudSession;
 	map<CString, CGalaxy*>			m_mapSubFrame;
 	map<CGrid*, CString>			m_mapExtendNode;
 	map<CString, CGrid*>			m_mapChildGrid;

@@ -100,7 +100,7 @@ using namespace concurrency;
 
 class CGrid;
 class CGridHelper;
-class CHubble;
+class CCosmos;
 class CGalaxy;
 class CUniverse;
 class CGridEvents;

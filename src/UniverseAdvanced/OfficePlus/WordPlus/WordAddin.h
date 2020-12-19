@@ -69,7 +69,7 @@ namespace OfficePlus
 			STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
 			STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml);
 			STDMETHOD(GetCustomUI)(BSTR RibbonID, BSTR * RibbonXml);
-			STDMETHOD(HubbleCommand)(IDispatch* RibbonControl);
+			STDMETHOD(CosmosCommand)(IDispatch* RibbonControl);
 			STDMETHOD(StartApplication)(BSTR bstrAppID, BSTR bstrXml);
 
 			HRESULT OnConnection(IDispatch* pHostApp, int ConnectMode);
@@ -81,7 +81,7 @@ namespace OfficePlus
 			void ConnectOfficeObj(HWND hWnd);
 			bool OnActiveOfficeObj(HWND hWnd);
 			void OnDocActivate(CWordObject*);
-			HRESULT CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv);
+			HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv);
 		};
 
 		class CWordAppObjEvents :
@@ -125,18 +125,18 @@ namespace OfficePlus
 
 		// CWordAppCtrl
 		class ATL_NO_VTABLE CWordAppCtrl :
-			public CHubbleAppCtrl,
+			public CCosmosAppCtrl,
 			public IOleObjectImpl<CWordAppCtrl>,
 			public IPersistStorageImpl<CWordAppCtrl>,
 			public IPersistStreamInitImpl<CWordAppCtrl>,
-			public CComCoClass<CWordAppCtrl, &CLSID_HubbleCtrl>,
-			public IDispatchImpl<IHubbleAppCtrl, &IID_IHubbleAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public CComCoClass<CWordAppCtrl, &CLSID_CosmosCtrl>,
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			CWordAppCtrl();
 
 			BEGIN_COM_MAP(CWordAppCtrl)
-				COM_INTERFACE_ENTRY(IHubbleAppCtrl)
+				COM_INTERFACE_ENTRY(ICosmosAppCtrl)
 				COM_INTERFACE_ENTRY(IDispatch)
 				COM_INTERFACE_ENTRY(IOleObject)
 				COM_INTERFACE_ENTRY(IViewObject)
@@ -151,11 +151,11 @@ namespace OfficePlus
 			void OnFinalMessage(HWND hWnd);
 
 		public:
-			// IHubbleAppCtrl
+			// ICosmosAppCtrl
 			STDMETHOD(get_tag)(VARIANT* pVal);
 			STDMETHOD(put_tag)(VARIANT newVal);
 			STDMETHOD(get_HWND)(LONGLONG* pVal);
-			STDMETHOD(get_Hubble)(IHubble** pVal);
+			STDMETHOD(get_Cosmos)(ICosmos** pVal);
 			STDMETHOD(put_AppCtrl)(VARIANT_BOOL newVal);
 		};
 	}

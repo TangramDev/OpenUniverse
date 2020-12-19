@@ -119,9 +119,9 @@ CTangramXmlParse* CTangramXmlParse::AddNode(CTangramXmlParse* pParse, CString st
 			HRESULT hr = elem->appendChild(pElem,&pNode);
 			if (hr == S_OK)
 			{
-				CTangramXmlParse* pHubbleXmlParse = new CTangramXmlParse(pNode);
-				m_aChildElements.push_back(pHubbleXmlParse);
-				return pHubbleXmlParse;
+				CTangramXmlParse* pCosmosXmlParse = new CTangramXmlParse(pNode);
+				m_aChildElements.push_back(pCosmosXmlParse);
+				return pCosmosXmlParse;
 			}
 		}
 	}
@@ -493,9 +493,9 @@ CTangramXmlParse* CTangramXmlParse::AddNode(CString name)
 		{
 			if (elem->appendChild(pElement,NULL) == S_OK)
 			{
-				CTangramXmlParse* pHubbleXmlParse = new CTangramXmlParse(pElement);
-				m_aChildElements.push_back(pHubbleXmlParse);
-				return pHubbleXmlParse;
+				CTangramXmlParse* pCosmosXmlParse = new CTangramXmlParse(pElement);
+				m_aChildElements.push_back(pCosmosXmlParse);
+				return pCosmosXmlParse;
 			}
 		}
 	}

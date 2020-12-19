@@ -3,6 +3,6 @@
 LIBRARY      "Universe.DLL"
 
 EXPORTS
-	GetHubble						PRIVATE
-	GetHubbleImpl					PRIVATE
+	GetCosmos						PRIVATE
+	GetCosmosImpl					PRIVATE
 	SetMainDllLoader				PRIVATE

@@ -56,7 +56,7 @@ namespace Browser {
 		BEGIN_MSG_MAP(CBrowser)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 			MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
-			MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+			MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 			MESSAGE_HANDLER(WM_TABCHANGE, OnChromeTabChange)
 			MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 			MESSAGE_HANDLER(WM_BROWSERLAYOUT, OnBrowserLayout)
@@ -78,7 +78,7 @@ namespace Browser {
 		void OnFinalMessage(HWND hWnd) override;
 		LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 		LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+		LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 		LRESULT OnBrowserLayout(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 		LRESULT OnChromeTabChange(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 		LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);

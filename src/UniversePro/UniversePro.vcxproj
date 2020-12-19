@@ -363,7 +363,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Galaxy.cpp" />
-    <ClCompile Include="Hubble.cpp" />
+    <ClCompile Include="Cosmos.cpp" />
     <ClCompile Include="TangramHtmlTreeExWnd.cpp" />
     <ClCompile Include="TangramHtmlTreeWnd.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -441,7 +441,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="eclipseShm.h" />
     <ClInclude Include="eclipseunicode.h" />
     <ClInclude Include="eclipseUtil.h" />
-    <ClInclude Include="HubbleCtrl.h" />
+    <ClInclude Include="CosmosCtrl.h" />
     <ClInclude Include="TangramListView.h" />
     <ClInclude Include="TangramTabCtrl.h" />
     <ClInclude Include="PPDrawManager.h" />
@@ -450,7 +450,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="universeApp.h" />
     <ClInclude Include="Galaxy.h" />
-    <ClInclude Include="hubble.h" />
+    <ClInclude Include="Cosmos.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GalaxyCluster.h" />
     <ClInclude Include="GridWnd.h" />

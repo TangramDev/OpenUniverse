@@ -27,7 +27,7 @@ public:
 	CGalaxy*					m_pGalaxy;
 	CGalaxy*					m_pOldGalaxy;
 	CGridHelper*				m_pHostClientView;
-	CTangramXmlParse*			m_pHubbleParse;
+	CTangramXmlParse*			m_pCosmosParse;
 	CGalaxyCluster*				m_pGalaxyCluster;
 };
 

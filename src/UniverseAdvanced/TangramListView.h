@@ -32,7 +32,7 @@ protected:
 
 public:
 	IGalaxy* m_pGalaxy;
-	CTangramTabCtrl* m_pHubbleTabCtrl;
+	CTangramTabCtrl* m_pCosmosTabCtrl;
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

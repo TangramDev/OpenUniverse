@@ -39,7 +39,7 @@ namespace OfficePlus
 		{
 		}
 
-		STDMETHODIMP CVisioAddin::HubbleCommand(IDispatch* RibbonControl)
+		STDMETHODIMP CVisioAddin::CosmosCommand(IDispatch* RibbonControl)
 		{
 			if (m_spRibbonUI)
 				m_spRibbonUI->Invalidate();
@@ -80,7 +80,7 @@ namespace OfficePlus
 		{
 		}
 
-		HRESULT CVisioAddin::CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv)
+		HRESULT CVisioAddin::CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv)
 		{
 			return CVisioAppCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
@@ -92,7 +92,7 @@ namespace OfficePlus
 
 		STDMETHODIMP CVisioAppCtrl::put_AppCtrl(VARIANT_BOOL newVal)
 		{
-			g_pHubble->m_pHubbleAppCtrl = this;
+			g_pCosmos->m_pCosmosAppCtrl = this;
 
 			return S_OK;
 		}
@@ -119,9 +119,9 @@ namespace OfficePlus
 			return S_OK;
 		}
 
-		STDMETHODIMP CVisioAppCtrl::get_Hubble(IHubble** pVal)
+		STDMETHODIMP CVisioAppCtrl::get_Cosmos(ICosmos** pVal)
 		{
-			*pVal = g_pHubble;
+			*pVal = g_pCosmos;
 			return S_OK;
 		}
 	}

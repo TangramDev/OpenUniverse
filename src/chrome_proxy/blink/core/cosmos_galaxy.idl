@@ -1,0 +1,23 @@
+
+[
+	Exposed = Window
+] interface CosmosGalaxy : EventTarget {
+
+	// Message API
+	void sendMessage([DefaultValue = Undefined] optional CosmosXobj msg,
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	void addEventListener(DOMString eventName, ApplicationCallback callback);
+	void removeEventListener(DOMString eventName);
+
+	readonly attribute DOMString name;
+	readonly attribute long long handle;
+
+	//CosmosNode API
+	CosmosNode getGrid(DOMString clusterName, [DefaultValue = Undefined] optional DOMString nodeName);
+	CosmosNode getGrid(long nodeHandle);
+
+	// Event handler attributes
+	attribute EventHandler onMessageReceived;
+	attribute EventHandler onGridCreated;
+	attribute EventHandler onMdiChildActivate;
+};

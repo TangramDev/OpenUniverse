@@ -3,12 +3,19 @@
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *
-* This SOURCE CODE is governed by a BSD - style license that can be
-* found in the LICENSE file.
+* THIS SOURCE FILE IS THE PROPERTY OF TANGRAM TEAM AND IS NOT TO
+* BE RE-DISTRIBUTED BY ANY MEANS WHATSOEVER WITHOUT THE EXPRESSED
+* WRITTEN CONSENT OF TANGRAM TEAM.
+*
+* THIS SOURCE CODE CAN ONLY BE USED UNDER THE TERMS AND CONDITIONS
+* OUTLINED IN THE GPL LICENSE AGREEMENT.TANGRAM TEAM
+* GRANTS TO YOU (ONE SOFTWARE DEVELOPER) THE LIMITED RIGHT TO USE
+* THIS SOFTWARE ON A SINGLE COMPUTER.
 *
 * CONTACT INFORMATION:
 * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
-* https://www.tangram.dev
+* http://www.tangramteam.com/
+*
 ********************************************************************************/
 
 #include "stdafx.h"
@@ -164,7 +171,7 @@ namespace Cosmos
 		if (m_pWebPage)
 		{
 			IDispatch* pFormDisp = nullptr;
-			pFormDisp = theApp.m_pHubbleImpl->m_pCLRProxy->CreateWinForm(m_hWnd, STRING2BSTR(strFormKey));
+			pFormDisp = theApp.m_pCosmosImpl->m_pCLRProxy->CreateWinForm(m_hWnd, STRING2BSTR(strFormKey));
 			return (Form^)Marshal::GetObjectForIUnknown((IntPtr)pFormDisp);
 		}
 		return nullptr;

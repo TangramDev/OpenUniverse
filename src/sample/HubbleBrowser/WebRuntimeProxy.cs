@@ -9,11 +9,11 @@ namespace Sunny
     {
         private static int Init(string argument)
         {
-            Hubble.OnBindCLRObjToWebPage += Cosmos_OnBindCLRObjToWebPage;
-            Hubble.OnGetSubObjForWebPage += Tangram_OnGetSubObjForWebPage;
-            Hubble.OnHubbleMsg += Cosmos_OnHubbleMsg;
-            Hubble.OnCustomizedDOMElement += Cosmos_OnCustomizedDOMElement;
-            Hubble.OnHubbleMsgReceived += Cosmos_OnHubbleMsgReceived;
+            Cosmos.Cosmos.OnBindCLRObjToWebPage += Cosmos_OnBindCLRObjToWebPage;
+            Cosmos.Cosmos.OnGetSubObjForWebPage += Tangram_OnGetSubObjForWebPage;
+            Cosmos.Cosmos.OnHubbleMsg += Cosmos_OnHubbleMsg;
+            Cosmos.Cosmos.OnCustomizedDOMElement += Cosmos_OnCustomizedDOMElement;
+            Cosmos.Cosmos.OnHubbleMsgReceived += Cosmos_OnHubbleMsgReceived;
             return 0;
         }
 
@@ -81,7 +81,7 @@ namespace Sunny
 
         private static void UcButtonsAndTextBoxes_MyCustomClick(object sender, DemoComponents.ucButtonsAndTextBoxes.MyEventArgs e)
         {
-            if (Cosmos.Hubble.Wormholes.TryGetValue(sender, out Wormhole thisWormhole))
+            if (Cosmos.Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Wormhole thisWormhole))
             {
                 Control ctrl = sender as Control;
                 if (ctrl != null)
@@ -100,7 +100,7 @@ namespace Sunny
 
         private static void TextBox_TextChanged(object sender, EventArgs e)
         {
-            if (Cosmos.Hubble.Wormholes.TryGetValue(sender, out Wormhole thisSession))
+            if (Cosmos.Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Wormhole thisSession))
             {
                 TextBox ctrl = sender as TextBox;
                 if (ctrl != null)
@@ -117,7 +117,7 @@ namespace Sunny
 
         private static void ThisTreeview_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (Hubble.Wormholes.TryGetValue(sender, out Wormhole thisSession))
+            if (Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Wormhole thisSession))
             {
                 if (e.Node.Tag != null)
                 {
@@ -152,7 +152,7 @@ namespace Sunny
 
         private static void Thisbtn_Click(object sender, EventArgs e)
         {
-            if (Cosmos.Hubble.Wormholes.TryGetValue(sender, out Wormhole thisSession))
+            if (Cosmos.Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Wormhole thisSession))
             {
                 Control ctrl = sender as Control;
                 thisSession.InsertString("msgID", "FIRE_EVENT");
@@ -175,7 +175,7 @@ namespace Sunny
 
         private static void ThisForm_SizeChanged(object sender, EventArgs e)
         {
-            if (Hubble.Wormholes.TryGetValue(sender, out Wormhole thisSession))
+            if (Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Wormhole thisSession))
             {
                 Form xform = sender as Form;
                 thisSession.InsertString("msgID", "FIRE_EVENT");

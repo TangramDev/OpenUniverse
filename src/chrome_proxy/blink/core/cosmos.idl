@@ -1,0 +1,57 @@
+typedef sequence<any> ObjectArray;
+
+[
+	Exposed = Window
+] interface Cosmos : CosmosXobj {
+
+	// Message API
+	void wait(boolean bwait);
+	void sendMessage(DOMString id, DOMString param1, DOMString param2, 
+		[DefaultValue = Undefined] optional DOMString param3, 
+		[DefaultValue = Undefined] optional DOMString param4, 
+		[DefaultValue = Undefined] optional DOMString param5);
+	void sendMessage(CosmosXobj msg,
+		[DefaultValue = Undefined] optional ApplicationCallback callback, 
+		[DefaultValue = Undefined] optional  boolean bwait);
+	void openUrl(DOMString url, long nBrowserWndOpenDisposition,
+		[DefaultValue = Undefined] optional ApplicationCallback callback, 
+		[DefaultValue = Undefined] optional  boolean bwait);
+	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
+
+	// DOM API
+	void defineElement(DOMString tagName, DOMString html);
+	void renderElement(DOMString tagName, DOMString html);
+
+	//CosmosNode API
+	CosmosXobj newVar([DefaultValue = Undefined] optional DOMString name);
+	CosmosNode getGrid(Element elem, [DefaultValue = Undefined] optional CosmosXobj grid);
+	CosmosNode getGrid(long long nodeHandle);
+	CosmosNode getGrid(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
+	CosmosGalaxy getGalaxy(DOMString wndName);
+	CosmosGalaxy getGalaxy(long long wndHandle);
+	void OnMessage(Element elem, DOMString eventName);
+
+	//CosmosWinForm API
+	CosmosWinform createWinForm(DOMString strFormXml, 
+		long FormType, 
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+
+	[Affects = Nothing] getter CosmosXobj ? getNamedItem(DOMString name);
+	[RaisesException, CEReactions] CosmosXobj ? setNamedItem(CosmosXobj var);
+	[RaisesException, CEReactions] void setNamedItem(DOMString name, CosmosXobj var);
+
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString url;
+
+	// Event handler attributes
+	attribute EventHandler onGridCreated;
+	attribute EventHandler onLoadWinForm;
+	attribute EventHandler onLoadMdiWinForm;
+	attribute EventHandler onGalaxyCreated;
+	attribute EventHandler onWinFormClosed;
+	attribute EventHandler onBindCLRObject;
+	attribute EventHandler onMdiChildActivate;
+	attribute EventHandler onMessageReceived;
+	attribute EventHandler onCosmosObjectCreated;
+	attribute EventHandler onCloudMessageForObject;
+	attribute EventHandler onCosmosMessageReceived;
+};

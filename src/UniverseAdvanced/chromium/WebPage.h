@@ -48,7 +48,7 @@ namespace Browser
 		CString								m_strAppProxyID;
 
 		CGalaxy*							m_pGalaxy;
-		CHubbleDoc*							m_pDoc;
+		CCosmosDoc*							m_pDoc;
 		CGrid*								m_pParentGrid;
 		CGrid*								m_pBindGrid;
 		CWinForm*							m_pBindWinForm;
@@ -69,7 +69,7 @@ namespace Browser
 		BEGIN_MSG_MAP(CWebPage)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 			MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-			MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+			MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 			MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 			MESSAGE_HANDLER(WM_CHROMEIPCMSG, OnChromeIPCMsgReceived)
 			MESSAGE_HANDLER(WM_CHROMEWNDPARENTCHANGED, OnParentChanged)
@@ -121,7 +121,7 @@ namespace Browser
 		void OnFinalMessage(HWND hWnd) override;
 		LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
-		LRESULT OnHubbleMsg(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnParentChanged(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnChromeIPCMsgReceived(UINT, WPARAM, LPARAM, BOOL&);

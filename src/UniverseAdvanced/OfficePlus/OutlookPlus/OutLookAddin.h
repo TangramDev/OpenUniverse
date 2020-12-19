@@ -27,7 +27,7 @@
 #include "../OfficeAddin.h"
 #include "OutLookPlusEvents.h"
 #include "..\..\officeplus\wordplus\msword.h"
-#include "..\..\HubbleCtrl.h"
+#include "..\..\CosmosCtrl.h"
 
 using namespace Word;
 using namespace Office;
@@ -90,13 +90,13 @@ namespace OfficePlus
 			IDispatch*									m_pCurLoadItem;
 			CComPtr<OutLook::_Application>				m_pApplication;
 
-			CInspectorItems*							m_pHubbleInspectorItems;
+			CInspectorItems*							m_pCosmosInspectorItems;
 			COutLookExplorer*							m_pActiveOutlookExplorer;
 			COutLookInspector*							m_pCurOpenItem;
 			CComPtr<_Explorers>							m_pExplorers;
 
 			map<int, CString>							m_mapItemName;
-			map<long, CInspectorItem*>					m_mapHubbleInspectorItem;
+			map<long, CInspectorItem*>					m_mapCosmosInspectorItem;
 			map<CString, CString>						m_mapUIXML;
 			map<CString, _Explorer*>					m_mapDesignExplorer;
 			map<HWND, COutLookInspector*>				m_mapInspector;
@@ -106,8 +106,8 @@ namespace OfficePlus
 			void AddFormPageToInspector(_Inspector* pInspector, CString strPageName, CString strInfoXml, BOOL bShowInSpector, BOOL bSetCurrentPage);
 			void WriteFolderPropertyToStore(MAPIFolder* pFolder, CString strSubject, CString strPropertyName, CString strData);
 
-			CString GetHubblePropertyFromItem(IDispatch* pItem, CString strPropertyName);
-			CString GetHubblePropertyFromInspector(_Inspector* pInspector, CString strPropertyName);
+			CString GetCosmosPropertyFromItem(IDispatch* pItem, CString strPropertyName);
+			CString GetCosmosPropertyFromInspector(_Inspector* pInspector, CString strPropertyName);
 			CString GetPropertyFromItem(IDispatch* pItem, CString strPropertyName);
 			CString GetPropertyFromInspector(_Inspector* pInspector, CString strPropertyName);
 			CString GetFolderPropertyFromStore(MAPIFolder* pFolder, CString strSubject, CString strPropertyName);
@@ -145,15 +145,15 @@ namespace OfficePlus
 			void __stdcall OnNewInspector(_Inspector* Inspector);
 			//end COutLookInspectorsEvents
 
-			//CHubble:
+			//CCosmos:
 			void WindowDestroy(HWND hWnd);
 			void WindowCreated(CString strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 			HRESULT OnConnection(IDispatch* pHostApp, int ConnectMode);
 			HRESULT OnDisconnection(int DisConnectMode);
 			CString GetDefaultFolderXml(_Store* pStore, OlDefaultFolders m_folderenum);
-			HRESULT CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv);
+			HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv);
 			STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
-			STDMETHOD(HubbleCommand)(IDispatch* RibbonControl);
+			STDMETHOD(CosmosCommand)(IDispatch* RibbonControl);
 			STDMETHOD(GetCustomUI)(BSTR RibbonID, BSTR * RibbonXml);
 		};
 
@@ -170,13 +170,13 @@ namespace OfficePlus
 			IGalaxy*	m_pGalaxy;
 			COutLookExplorer*	m_pOutLookExplorer;
 		private:
-			LRESULT OnHubbleSave(UINT, WPARAM, LPARAM, BOOL&);
-			LRESULT OnHubbleMsg(UINT, WPARAM, LPARAM, BOOL&);
+			LRESULT OnCosmosSave(UINT, WPARAM, LPARAM, BOOL&);
+			LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 			LRESULT OnItemLoad(UINT, WPARAM, LPARAM, BOOL&);
 			void OnFinalMessage(HWND hWnd);
 			BEGIN_MSG_MAP(CInspectorContainerWnd)
-				MESSAGE_HANDLER(WM_HUBBLE_SAVE, OnHubbleSave)
-				MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+				MESSAGE_HANDLER(WM_HUBBLE_SAVE, OnCosmosSave)
+				MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 				MESSAGE_HANDLER(WM_HUBBLE_ITEMLOAD, OnItemLoad)
 			END_MSG_MAP()
 		};
@@ -249,7 +249,7 @@ namespace OfficePlus
 			map<CString, HWND>						m_mapFolderWnd;
 			IDispatch*								m_pOnlineItem;
 
-			void HubbleCommand(int nIndex);
+			void CosmosCommand(int nIndex);
 
 			void SetDesignState();
 
@@ -356,7 +356,7 @@ namespace OfficePlus
 			map<CString, COutLookPageWnd*>	m_mapOutLookPage;
 
 			void ActivePage();
-			void HubbleCommand(int nIndex);
+			void CosmosCommand(int nIndex);
 
 		private:
 			void __stdcall OnActivate();
@@ -401,18 +401,18 @@ namespace OfficePlus
 
 		// COutLookAppCtrl
 		class ATL_NO_VTABLE COutLookAppCtrl :
-			public CHubbleAppCtrl,
+			public CCosmosAppCtrl,
 			public IOleObjectImpl<COutLookAppCtrl>,
 			public IPersistStorageImpl<COutLookAppCtrl>,
 			public IPersistStreamInitImpl<COutLookAppCtrl>,
-			public CComCoClass<COutLookAppCtrl, &CLSID_HubbleCtrl>,
-			public IDispatchImpl<IHubbleAppCtrl, &IID_IHubbleAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public CComCoClass<COutLookAppCtrl, &CLSID_CosmosCtrl>,
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			COutLookAppCtrl();
 
 			BEGIN_COM_MAP(COutLookAppCtrl)
-				COM_INTERFACE_ENTRY(IHubbleAppCtrl)
+				COM_INTERFACE_ENTRY(ICosmosAppCtrl)
 				COM_INTERFACE_ENTRY(IDispatch)
 				COM_INTERFACE_ENTRY(IOleObject)
 				COM_INTERFACE_ENTRY(IViewObject)
@@ -428,11 +428,11 @@ namespace OfficePlus
 			void OnFinalMessage(HWND hWnd);
 
 		public:
-			// IHubbleAppCtrl
+			// ICosmosAppCtrl
 			STDMETHOD(get_tag)(VARIANT* pVal);
 			STDMETHOD(put_tag)(VARIANT newVal);
 			STDMETHOD(get_HWND)(LONGLONG* pVal);
-			STDMETHOD(get_Hubble)(IHubble** pVal);
+			STDMETHOD(get_Cosmos)(ICosmos** pVal);
 			STDMETHOD(put_AppCtrl)(VARIANT_BOOL newVal);
 		};
 	}

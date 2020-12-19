@@ -33,7 +33,7 @@ namespace OfficePlus
 		CWordDocument::CWordDocument(void)
 		{
 #ifdef _DEBUG
-			g_pHubble->m_nOfficeDocs++;
+			g_pCosmos->m_nOfficeDocs++;
 #endif			
 			m_pDoc					= nullptr;
 			m_pGalaxy				= nullptr;
@@ -46,7 +46,7 @@ namespace OfficePlus
 		CWordDocument::~CWordDocument(void)
 		{
 #ifdef _DEBUG
-			g_pHubble->m_nOfficeDocs--;
+			g_pCosmos->m_nOfficeDocs--;
 #endif			
 		}
 
@@ -57,16 +57,16 @@ namespace OfficePlus
 
 		void CWordDocument::InitDocument()
 		{
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
 			IStream* pStream = 0;
 			IStream* pStream2 = 0;
-			HRESULT hr = ::CoMarshalInterThreadInterfaceInStream(IID_IHubble, (IHubble*)g_pHubble, &pStream);
+			HRESULT hr = ::CoMarshalInterThreadInterfaceInStream(IID_ICosmos, (ICosmos*)g_pCosmos, &pStream);
 			hr = ::CoMarshalInterThreadInterfaceInStream(IID__Document, m_pDoc, &pStream2);
 			auto t = create_task([pAddin,pStream, pStream2, this]()
 			{
 				CoInitializeEx(NULL, COINIT_MULTITHREADED);
-				IHubble* _pAddin = nullptr;
-				HRESULT hr = ::CoGetInterfaceAndReleaseStream(pStream, IID_IHubble, (LPVOID *)&_pAddin);
+				ICosmos* _pAddin = nullptr;
+				HRESULT hr = ::CoGetInterfaceAndReleaseStream(pStream, IID_ICosmos, (LPVOID *)&_pAddin);
 				_Document* _pDoc = nullptr;
 				hr = ::CoGetInterfaceAndReleaseStream(pStream2, IID__Document, (LPVOID *)&_pDoc);
 				if (m_strDocXml == _T(""))
@@ -93,7 +93,7 @@ namespace OfficePlus
 					nPos = strData.ReverseFind('>');
 					strData = strData.Left(nPos);
 					strData.Trim();
-					strVal = g_pHubble->GetXmlData(strData, _strXml);
+					strVal = g_pCosmos->GetXmlData(strData, _strXml);
 					strKey = _T("</layout>");
 					nPos = _strXml.Find(strKey);
 					_strXml = _strXml.Mid(nPos + 9);
@@ -113,7 +113,7 @@ namespace OfficePlus
 					nPos = strData.ReverseFind('>');
 					strData = strData.Left(nPos);
 					strData.Trim();
-					strVal = g_pHubble->GetXmlData(strData, _strXml);
+					strVal = g_pCosmos->GetXmlData(strData, _strXml);
 					strKey = _T("</layout>");
 					nPos = _strXml.Find(strKey);
 					_strXml = _strXml.Mid(nPos + 9);
@@ -121,7 +121,7 @@ namespace OfficePlus
 					m_mapDocUIInfo[strData] = strVal;
 				}
 
-				_strXml = g_pHubble->GetXmlData(_T("userforms"), m_strDocXml);
+				_strXml = g_pCosmos->GetXmlData(_T("userforms"), m_strDocXml);
 				strKey = _T("<layout>");
 				nPos = _strXml.Find(strKey);
 				while (nPos != -1)
@@ -132,7 +132,7 @@ namespace OfficePlus
 					nPos = strData.ReverseFind('>');
 					strData = strData.Left(nPos);
 					strData.Trim();
-					strVal = g_pHubble->GetXmlData(strData, _strXml);
+					strVal = g_pCosmos->GetXmlData(strData, _strXml);
 					strKey = _T("</layout>");
 					nPos = _strXml.Find(strKey);
 					_strXml = _strXml.Mid(nPos + 9);
@@ -157,7 +157,7 @@ namespace OfficePlus
 		{
 			if (m_pOfficeObj != nullptr)
 			{
-				CWordAddin* pAddin = ((CWordAddin*)g_pHubble);
+				CWordAddin* pAddin = ((CWordAddin*)g_pCosmos);
 
 				if (pAddin->m_pActiveWordObject == this)
 				{
@@ -194,7 +194,7 @@ namespace OfficePlus
 				{
 					if (m_pWordPlusDoc->m_pGalaxy)
 					{
-						::PostMessage(g_pHubble->m_hHostWnd, WM_COSMOSMSG, (WPARAM)m_pWordPlusDoc->m_pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, 1992);
+						::PostMessage(g_pCosmos->m_hHostWnd, WM_COSMOSMSG, (WPARAM)m_pWordPlusDoc->m_pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, 1992);
 					}
 					HRESULT hr = S_OK;
 					hr = m_pWordPlusDoc->DispEventUnadvise(m_pWordPlusDoc->m_pDoc);

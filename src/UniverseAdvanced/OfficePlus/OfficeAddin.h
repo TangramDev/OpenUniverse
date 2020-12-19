@@ -19,8 +19,8 @@
 ********************************************************************************/
 
 // TangramAddin.h : Declaration of the COfficeAddin
-#include "..\Hubble.h"
-#include "..\HubbleCtrl.h"
+#include "..\Cosmos.h"
+#include "..\CosmosCtrl.h"
 #pragma once
 
 typedef map<LONG, Office::_CustomTaskPane*> CTaskPaneMap;
@@ -64,7 +64,7 @@ namespace OfficePlus
 
 	// COfficeAddin
 	class ATL_NO_VTABLE COfficeAddin :
-		public CHubble
+		public CCosmos
 		,public IDispatchImpl<IRibbonExtensibility, &__uuidof(IRibbonExtensibility), &LIBID_Office, /* wMajor = */ 2, /* wMinor = */ 4>,
 		public IDispatchImpl<ICustomTaskPaneConsumer, &__uuidof(ICustomTaskPaneConsumer), &LIBID_Office, /* wMajor = */ 2, /* wMinor = */ 4>,
 		public IDispatchImpl<AddInDesignerObjects::_IDTExtensibility2, &AddInDesignerObjects::IID__IDTExtensibility2, &AddInDesignerObjects::LIBID_AddInDesignerObjects, 1, 0>
@@ -86,8 +86,8 @@ namespace OfficePlus
 		void OnCloseOfficeObj(CString strName, HWND hWnd);
 		void _AddDocXml(_CustomXMLParts* pCustomXMLParts, BSTR bstrXml, BSTR bstrKey);
 		BEGIN_COM_MAP(COfficeAddin)
-			COM_INTERFACE_ENTRY(IHubble)
-			COM_INTERFACE_ENTRY2(IDispatch, IHubble)
+			COM_INTERFACE_ENTRY(ICosmos)
+			COM_INTERFACE_ENTRY2(IDispatch, ICosmos)
 			COM_INTERFACE_ENTRY(IConnectionPointContainer)
 			COM_INTERFACE_ENTRY(IRibbonExtensibility)
 			COM_INTERFACE_ENTRY(ICustomTaskPaneConsumer)
@@ -114,7 +114,7 @@ namespace OfficePlus
 		//virtual HRESULT BeginShutdown(void) { return S_OK; };
 		virtual CString GetFormXml(CString strFormName) { return _T(""); };
 
-		virtual HRESULT CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_FALSE; };
+		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_FALSE; };
 		virtual void CreateCommonDesignerToolBar();
 
 	protected:
@@ -134,13 +134,13 @@ namespace OfficePlus
 		STDMETHOD(CTPFactoryAvailable)(ICTPFactory * CTPFactoryInst);
 
 		CString GetDocXmlByKey(IDispatch* pDocdisp, BSTR bstrKey) { return _T(""); };
-		STDMETHOD(HubbleCommand)(IDispatch* RibbonControl);
-		STDMETHOD(HubbleGetImage)(BSTR strValue, IPictureDisp ** ppDispImage);
-		STDMETHOD(HubbleGetVisible)(IDispatch* RibbonControl, VARIANT* varVisible);
-		STDMETHOD(HubbleOnLoad)(IDispatch* RibbonControl);
-		STDMETHOD(HubbleGetItemCount)(IDispatch* RibbonControl, long* nCount);
-		STDMETHOD(HubbleGetItemLabel)(IDispatch* RibbonControl, long nIndex, BSTR* bstrLabel);
-		STDMETHOD(HubbleGetItemID)(IDispatch* RibbonControl, long nIndex, BSTR* bstrID);
+		STDMETHOD(CosmosCommand)(IDispatch* RibbonControl);
+		STDMETHOD(CosmosGetImage)(BSTR strValue, IPictureDisp ** ppDispImage);
+		STDMETHOD(CosmosGetVisible)(IDispatch* RibbonControl, VARIANT* varVisible);
+		STDMETHOD(CosmosOnLoad)(IDispatch* RibbonControl);
+		STDMETHOD(CosmosGetItemCount)(IDispatch* RibbonControl, long* nCount);
+		STDMETHOD(CosmosGetItemLabel)(IDispatch* RibbonControl, long nIndex, BSTR* bstrLabel);
+		STDMETHOD(CosmosGetItemID)(IDispatch* RibbonControl, long nIndex, BSTR* bstrID);
 		STDMETHOD(get_RemoteHelperHWND)(LONGLONG* pVal);
 
 		void AddDocXml(IDispatch* pDocdisp, BSTR bstrXml, BSTR bstrKey) {};
@@ -195,7 +195,7 @@ namespace OfficePlus
 
 		STDMETHOD(Show)(VARIANT_BOOL bShow);
 		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid);
-		STDMETHOD(UnloadHubble)();
+		STDMETHOD(UnloadCosmos)();
 
 		void Lock() {}
 		void Unlock() {}

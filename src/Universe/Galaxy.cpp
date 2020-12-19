@@ -16,7 +16,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "GridWnd.h"
 #include "GridHelper.h"
 #include "grid.h"
@@ -51,17 +51,17 @@ void CWinForm :: SendMessage()
 LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	g_pHubble->m_pActiveWinFormWnd = this;
-	if (g_pHubble->m_pCLRProxy)
+	g_pCosmos->m_pActiveWinFormWnd = this;
+	if (g_pCosmos->m_pCLRProxy)
 	{
-		g_pHubble->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
+		g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
 	}
 	return lRes;
 }
 
 LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (g_pHubble->m_mapBrowserWnd.size())
+	if (g_pCosmos->m_mapBrowserWnd.size())
 	{
 		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 		if (pSession)
@@ -69,12 +69,12 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			int nCount = 0;
 			if (m_bMainForm)
 			{
-				nCount = g_pHubble->m_mapNeedQueryOnClose.size();
+				nCount = g_pCosmos->m_mapNeedQueryOnClose.size();
 				if (nCount > 1)
 				{
 					pSession->InsertLong(_T("FormAppNeedClosed"), nCount);
 				}
-				for (auto it : g_pHubble->m_mapNeedQueryOnClose)
+				for (auto it : g_pCosmos->m_mapNeedQueryOnClose)
 				{
 					if (it.second != this)
 					{
@@ -109,11 +109,11 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 		}
 	}
-	if (g_pHubble->m_pActiveWinFormWnd == this)
-		g_pHubble->m_pActiveWinFormWnd = nullptr;
-	auto it = g_pHubble->m_mapNeedQueryOnClose.find(m_hWnd);
-	if (it != g_pHubble->m_mapNeedQueryOnClose.end())
-		g_pHubble->m_mapNeedQueryOnClose.erase(it);
+	if (g_pCosmos->m_pActiveWinFormWnd == this)
+		g_pCosmos->m_pActiveWinFormWnd = nullptr;
+	auto it = g_pCosmos->m_mapNeedQueryOnClose.find(m_hWnd);
+	if (it != g_pCosmos->m_mapNeedQueryOnClose.end())
+		g_pCosmos->m_mapNeedQueryOnClose.erase(it);
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -144,7 +144,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			//strPath.MakeLower();
 			//int nPos = strPath.ReverseFind('.');
 			//strPath = strPath.Left(nPos);
-			//CString strForms = g_pHubble->m_strAppFormsTemplatePath;
+			//CString strForms = g_pCosmos->m_strAppFormsTemplatePath;
 			//strForms.MakeLower();
 			//strPath.Replace(strForms, _T(""));
 			//nPos = strPath.Find(_T("\\"));
@@ -195,7 +195,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			m_bMainForm = true;
 		else
 		{
-			g_pHubble->m_mapNeedQueryOnClose[m_hWnd] = this;
+			g_pCosmos->m_mapNeedQueryOnClose[m_hWnd] = this;
 		}
 	}
 		break;
@@ -203,7 +203,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	CString strGalaxyName = (LPCTSTR)wParam;
 	CString currentKey = (LPCTSTR)lParam;
@@ -225,12 +225,12 @@ LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					{
 						CString s = pParse2->xml();
 						//LRESULT res = (LRESULT)LPSTR(LPCTSTR(s));
-						auto it = g_pHubble->m_mapValInfo.find(strIndex);
-						if (it != g_pHubble->m_mapValInfo.end())
+						auto it = g_pCosmos->m_mapValInfo.find(strIndex);
+						if (it != g_pCosmos->m_mapValInfo.end())
 						{
-							g_pHubble->m_mapValInfo.erase(it);
+							g_pCosmos->m_mapValInfo.erase(it);
 						}
-						g_pHubble->m_mapValInfo[strIndex] = CComVariant(s);
+						g_pCosmos->m_mapValInfo[strIndex] = CComVariant(s);
 						return 1;
 					}
 				}
@@ -246,12 +246,12 @@ LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
 			if (pParse2)
 			{
-				auto it = g_pHubble->m_mapValInfo.find(strIndex);
-				if (it != g_pHubble->m_mapValInfo.end())
+				auto it = g_pCosmos->m_mapValInfo.find(strIndex);
+				if (it != g_pCosmos->m_mapValInfo.end())
 				{
-					g_pHubble->m_mapValInfo.erase(it);
+					g_pCosmos->m_mapValInfo.erase(it);
 				}
-				g_pHubble->m_mapValInfo[strIndex] = CComVariant(pParse2->xml());
+				g_pCosmos->m_mapValInfo[strIndex] = CComVariant(pParse2->xml());
 				return 1;
 			}
 		}
@@ -261,8 +261,8 @@ LRESULT CWinForm::OnHubbleGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	g_pHubble->m_pActiveHtmlWnd = nullptr;
-	g_pHubble->m_pActiveWinFormWnd = this;
+	g_pCosmos->m_pActiveHtmlWnd = nullptr;
+	g_pCosmos->m_pActiveWinFormWnd = this;
 	::BringWindowToTop(m_hWnd);
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
@@ -275,24 +275,24 @@ LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	{
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20200115);
 	};
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
-		g_pHubble->m_pCLRProxy->PreWindowPosChanging(m_hWnd, (WINDOWPOS*)lParam, 1);
+		g_pCosmos->m_pCLRProxy->PreWindowPosChanging(m_hWnd, (WINDOWPOS*)lParam, 1);
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
 LRESULT CWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	g_pHubble->m_hFormNodeWnd = nullptr;
+	g_pCosmos->m_hFormNodeWnd = nullptr;
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
 void CWinForm::OnFinalMessage(HWND hWnd)
 {
-	auto it = g_pHubble->m_mapFormWebPage.find(hWnd);
-	if (it != g_pHubble->m_mapFormWebPage.end())
-		g_pHubble->m_mapFormWebPage.erase(it);
+	auto it = g_pCosmos->m_mapFormWebPage.find(hWnd);
+	if (it != g_pCosmos->m_mapFormWebPage.end())
+		g_pCosmos->m_mapFormWebPage.erase(it);
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
 }
@@ -319,20 +319,20 @@ CGalaxy::CGalaxy()
 	m_pParentGrid = nullptr;
 	m_nGalaxyType = NOGalaxy;
 #ifdef _DEBUG
-	g_pHubble->m_nTangramFrame++;
+	g_pCosmos->m_nTangramFrame++;
 #endif
 }
 
 CGalaxy::~CGalaxy()
 {
 #ifdef _DEBUG
-	g_pHubble->m_nTangramFrame--;
+	g_pCosmos->m_nTangramFrame--;
 #endif	
 	//if (m_pGalaxyInfo)
 	//	delete m_pGalaxyInfo;
-	if (g_pHubble->m_pGalaxy == this)
-		g_pHubble->m_pGalaxy = nullptr;
-	for (auto it : g_pHubble->m_mapThreadInfo)
+	if (g_pCosmos->m_pGalaxy == this)
+		g_pCosmos->m_pGalaxy = nullptr;
+	for (auto it : g_pCosmos->m_mapThreadInfo)
 	{
 		if (it.second)
 		{
@@ -401,9 +401,9 @@ void CGalaxy::HostPosChanged()
 
 HWND CGalaxy::GetWinForm(HWND hForm)
 {
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
-		int nForm = g_pHubble->m_pCLRProxy->IsWinForm(hForm);
+		int nForm = g_pCosmos->m_pCLRProxy->IsWinForm(hForm);
 		while (nForm >= 1)
 		{
 			m_pWorkGrid->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
@@ -412,7 +412,7 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 			{
 				CGrid* pGrid = (CGrid*)lRes;
 				hForm = pGrid->m_pRootObj->m_pGridShareData->m_pGalaxyCluster->m_hWnd;
-				nForm = g_pHubble->m_pCLRProxy->IsWinForm(hForm);
+				nForm = g_pCosmos->m_pCLRProxy->IsWinForm(hForm);
 			}
 			else
 			{
@@ -422,7 +422,7 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 		if (nForm == 0)
 		{
 			hForm = ::GetParent(hForm);
-			while (g_pHubble->m_pCLRProxy->IsWinForm(hForm) == 0)
+			while (g_pCosmos->m_pCLRProxy->IsWinForm(hForm) == 0)
 			{
 				hForm = ::GetParent(hForm);
 				if (hForm == NULL)
@@ -445,7 +445,7 @@ CGrid* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	m_pWorkGrid->m_pGridShareData = pCommonData;
 	pCommonData->m_pGalaxy = this;
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
-	pCommonData->m_pHubbleParse = _pParse;
+	pCommonData->m_pCosmosParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
 	m_pWorkGrid->m_pHostParse = pParse->GetChild(TGM_GRID);
 	CreateGalaxyCluster();
@@ -453,7 +453,7 @@ CGrid* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 
 	m_pWorkGrid->m_strKey = strKey;
 	m_pWorkGrid->Fire_ObserveComplete();
-	if (g_pHubble->m_pCLRProxy)
+	if (g_pCosmos->m_pCLRProxy)
 	{
 		CGalaxyCluster* pGalaxyCluster = m_pGalaxyCluster;
 		HWND hForm = pGalaxyCluster->m_hWnd;
@@ -462,7 +462,7 @@ CGrid* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 			m_pWorkGrid->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 	}
 
-	m_pWorkGrid->m_strHubbleXml = _pParse->xml();
+	m_pWorkGrid->m_strCosmosXml = _pParse->xml();
 	return m_pWorkGrid;
 }
 
@@ -573,11 +573,11 @@ STDMETHODIMP CGalaxy::ModifyHost(LONGLONG hHostWnd)
 	m_pWorkGrid->m_pHostWnd->GetWindowRect(&rc);
 	if (::IsWindow(m_hWnd)) {
 		HWND hTangramWnd = m_pGalaxyCluster->m_hWnd;
-		auto it = g_pHubble->m_mapWindowPage.find(hTangramWnd);
-		if (it != g_pHubble->m_mapWindowPage.end())
-			g_pHubble->m_mapWindowPage.erase(it);
+		auto it = g_pCosmos->m_mapWindowPage.find(hTangramWnd);
+		if (it != g_pCosmos->m_mapWindowPage.end())
+			g_pCosmos->m_mapWindowPage.erase(it);
 		m_pGalaxyCluster->m_hWnd = hTangramWnd;
-		g_pHubble->m_mapWindowPage[hTangramWnd] = m_pGalaxyCluster;
+		g_pCosmos->m_mapWindowPage[hTangramWnd] = m_pGalaxyCluster;
 
 		auto it2 = m_pGalaxyCluster->m_mapGalaxy.find(m_hWnd);
 		if (it2 != m_pGalaxyCluster->m_mapGalaxy.end()) {
@@ -586,7 +586,7 @@ STDMETHODIMP CGalaxy::ModifyHost(LONGLONG hHostWnd)
 			m_pGalaxyCluster->m_mapWnd[m_strGalaxyName] = _hHostWnd;
 			DWORD dwID = ::GetWindowThreadProcessId(_hHostWnd, NULL);
 			TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
-			CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+			CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 			theUniverse.SetHook(dwID);
 			auto iter = pThreadInfo->m_mapGalaxy.find(m_hWnd);
 			if (iter != pThreadInfo->m_mapGalaxy.end()) {
@@ -656,7 +656,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 	CString _strXml = OLE2T(bstrXml);
 	DWORD dwID = ::GetWindowThreadProcessId(m_hHostWnd, NULL);
 	TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
-	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+	CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 	theUniverse.SetHook(dwID);
 
 	CString strCurrentKey = OLE2T(bstrKey);
@@ -667,10 +667,10 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 		m_strLastKey = m_strCurrentKey;
 		m_strCurrentKey = strCurrentKey;
 	}
-	g_pHubble->m_pGalaxy = this;
+	g_pCosmos->m_pGalaxy = this;
 
 	m_strCurrentKey = m_strCurrentKey.MakeLower();
-	g_pHubble->m_strCurrentKey = m_strCurrentKey;
+	g_pCosmos->m_strCurrentKey = m_strCurrentKey;
 	CString strXml = _T("");
 	auto it = m_mapGrid.find(m_strCurrentKey);
 
@@ -691,8 +691,8 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 			}
 			else
 			{
-				auto it = g_pHubble->m_mapValInfo.find(m_strGalaxyName + L"_" + m_strCurrentKey);
-				if (it != g_pHubble->m_mapValInfo.end())
+				auto it = g_pCosmos->m_mapValInfo.find(m_strGalaxyName + L"_" + m_strCurrentKey);
+				if (it != g_pCosmos->m_mapValInfo.end())
 				{
 					strXml = OLE2T(it->second.bstrVal);
 				}
@@ -720,7 +720,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 
 		Unlock();
 		m_bObserve = true;
-		m_pWorkGrid = g_pHubble->ObserveEx((long)m_hHostWnd, _T(""), strXml);
+		m_pWorkGrid = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkGrid == nullptr)
 			return S_FALSE;
 		if (::GetWindowLong(::GetParent(m_hWnd), GWL_EXSTYLE) & WS_EX_MDICHILD)
@@ -728,14 +728,14 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 	}
 	m_pBindingGrid = m_pWorkGrid->m_pGridShareData->m_pHostClientView ? m_pWorkGrid->m_pGridShareData->m_pHostClientView->m_pGrid : nullptr;
 
-	g_pHubble->m_strCurrentKey = _T("");
+	g_pCosmos->m_strCurrentKey = _T("");
 	*ppRetGrid = (IGrid*)m_pWorkGrid;
-	for (auto it : g_pHubble->m_mapHubbleAppProxy)
+	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 	{
 		it.second->OnObserverComplete(m_hHostWnd, strXml, m_pWorkGrid);
 	}
-	if (g_pHubble->m_pCosmosAppProxy)
-		g_pHubble->m_pCosmosAppProxy->OnObserverComplete(m_hHostWnd, strXml, m_pWorkGrid);
+	if (g_pCosmos->m_pCosmosAppProxy)
+		g_pCosmos->m_pCosmosAppProxy->OnObserverComplete(m_hHostWnd, strXml, m_pWorkGrid);
 
 	if (pOldNode && pOldNode != m_pWorkGrid)
 	{
@@ -768,7 +768,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 			}
 
 			HRESULT hr = S_OK;
-			int cConnections = g_pHubble->m_vec.GetSize();
+			int cConnections = g_pCosmos->m_vec.GetSize();
 			if (cConnections) {
 				CComVariant avarParams[3];
 				avarParams[2] = (long)m_hHostWnd;
@@ -779,9 +779,9 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 				avarParams[0].vt = VT_DISPATCH;
 				DISPPARAMS params = { avarParams, NULL, 3, 0 };
 				for (int iConnection = 0; iConnection < cConnections; iConnection++) {
-					g_pHubble->Lock();
-					CComPtr<IUnknown> punkConnection = g_pHubble->m_vec.GetAt(iConnection);
-					g_pHubble->Unlock();
+					g_pCosmos->Lock();
+					CComPtr<IUnknown> punkConnection = g_pCosmos->m_vec.GetAt(iConnection);
+					g_pCosmos->Unlock();
 					IDispatch* pConnection = static_cast<IDispatch*>(punkConnection.p);
 					if (pConnection) {
 						CComVariant varResult;
@@ -823,9 +823,9 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
 				pIPCInfo.m_strParam3 = pGrid->m_strLastIPCParam5;
 				pIPCInfo.m_strParam4 = pGrid->m_strLastIPCParam4;
 				pIPCInfo.m_strParam5 = pGrid->m_strLastIPCParam3;
-				m_pWebPageWnd->m_pChromeRenderFrameHost->SendHubbleMessage(&pIPCInfo);
+				m_pWebPageWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&pIPCInfo);
 			}
-			g_pHubble->m_pCurrentIPCMsg = nullptr;
+			g_pCosmos->m_pCurrentIPCMsg = nullptr;
 		}
 	}
 	//end Add 20200218
@@ -909,34 +909,34 @@ void CGalaxy::OnFinalMessage(HWND hWnd)
 
 LRESULT CGalaxy::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (g_pHubble->m_pActiveHtmlWnd)
+	if (g_pCosmos->m_pActiveHtmlWnd)
 	{
-		g_pHubble->m_pActiveHtmlWnd = nullptr;
+		g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	}
 
-	if ((long)(g_pHubble->m_pActiveAppProxy) > 1)
+	if ((long)(g_pCosmos->m_pActiveAppProxy) > 1)
 	{
-		HWND hMenuWnd = g_pHubble->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
+		HWND hMenuWnd = g_pCosmos->m_pActiveAppProxy->GetActivePopupMenu(nullptr);
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
 
 	{
-		g_pHubble->m_hActiveWnd = 0;
-		g_pHubble->m_bWinFormActived = false;
-		g_pHubble->m_pActiveGrid = nullptr;
-		g_pHubble->m_pGalaxy = nullptr;
+		g_pCosmos->m_hActiveWnd = 0;
+		g_pCosmos->m_bWinFormActived = false;
+		g_pCosmos->m_pActiveGrid = nullptr;
+		g_pCosmos->m_pGalaxy = nullptr;
 	}
 	//bug fix for winform:
 	//++++++++++++++++begin+++++++++++
 	HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-	if (hTop != nullptr && g_pHubble->m_pCLRProxy)
+	if (hTop != nullptr && g_pCosmos->m_pCLRProxy)
 	{
-		g_pHubble->m_bWinFormActived = g_pHubble->m_pCLRProxy->IsWinForm(hTop);
-		if (g_pHubble->m_bWinFormActived)
+		g_pCosmos->m_bWinFormActived = g_pCosmos->m_pCLRProxy->IsWinForm(hTop);
+		if (g_pCosmos->m_bWinFormActived)
 		{
-			g_pHubble->m_hActiveWnd = hTop;
-			g_pHubble->m_pGalaxy = this;
+			g_pCosmos->m_hActiveWnd = hTop;
+			g_pCosmos->m_pGalaxy = this;
 		}
 	}
 	//++++++++++++++++end+++++++++++
@@ -946,14 +946,14 @@ LRESULT CGalaxy::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (g_pHubble->m_pCLRProxy) {
-		g_pHubble->m_pCLRProxy->ReleaseHubbleObj((IGalaxy*)this);
+	if (g_pCosmos->m_pCLRProxy) {
+		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGalaxy*)this);
 	}
 	m_pGalaxyCluster->BeforeDestory();
 
 	DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 	TRACE(_T("OpenEx ThreadInfo:%x\n"), dwID);
-	CommonThreadInfo* pThreadInfo = g_pHubble->GetThreadInfo(dwID);
+	CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 	if (pThreadInfo)
 	{
 		//theApp.SetHook(dwID);
@@ -967,7 +967,7 @@ LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CGalaxy::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
@@ -1020,7 +1020,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 {
 	LRESULT hr = DefWindowProc(uMsg, wParam, lParam);
 
-	if (g_pHubble->m_pBrowserFactory && g_pHubble->m_bChromeNeedClosed)
+	if (g_pCosmos->m_pBrowserFactory && g_pCosmos->m_bChromeNeedClosed)
 		return hr;
 
 	WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
@@ -1128,7 +1128,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 LRESULT CGalaxy::OnParentNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	g_pHubble->m_pGalaxy = nullptr;
+	g_pCosmos->m_pGalaxy = nullptr;
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -1237,7 +1237,7 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxy::get_HubbleDoc(IHubbleDoc** pVal)
+STDMETHODIMP CGalaxy::get_CosmosDoc(ICosmosDoc** pVal)
 {
 	return S_OK;
 }
@@ -1261,8 +1261,8 @@ STDMETHODIMP CGalaxy::get_HostBrowser(IBrowser** ppChromeWebBrowser)
 		HWND hPWnd = ::GetParent(m_pWebPageWnd->m_hWnd);
 		if (::IsWindow(hPWnd))
 		{
-			auto it = g_pHubble->m_mapBrowserWnd.find(hPWnd);
-			if (it != g_pHubble->m_mapBrowserWnd.end())
+			auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
 				*ppChromeWebBrowser = it->second;
 				return S_OK;

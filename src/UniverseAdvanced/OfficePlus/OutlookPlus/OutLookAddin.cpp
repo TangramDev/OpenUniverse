@@ -44,7 +44,7 @@ namespace OfficePlus
 			m_strDesignExplorerStoreID	= _T("");
 			m_nGetClassDispID = -1;
 			m_pCurOpenItem = nullptr;
-			m_pHubbleInspectorItems = nullptr;
+			m_pCosmosInspectorItems = nullptr;
 			m_pOutLookAppObjEvents = nullptr;
 			m_pOutLookAppObjEvents2 = nullptr;
 			m_strDesignerToolBarCaption = _T("OutLook Designer");
@@ -84,15 +84,15 @@ namespace OfficePlus
 			if (m_pOutLookAppObjEvents2)
 				hr = m_pOutLookAppObjEvents2->DispEventUnadvise(m_pApplication);
 			//hr = ((COutLookStoresEvents_12*)this)->DispEventUnadvise(m_pStores);
-			if (m_pHubbleInspectorItems)
+			if (m_pCosmosInspectorItems)
 			{
-				hr = m_pHubbleInspectorItems->DispEventUnadvise(m_pHubbleInspectorItems->m_pItems);
-				m_pHubbleInspectorItems->m_pItems->Release();
-				delete m_pHubbleInspectorItems;
+				hr = m_pCosmosInspectorItems->DispEventUnadvise(m_pCosmosInspectorItems->m_pItems);
+				m_pCosmosInspectorItems->m_pItems->Release();
+				delete m_pCosmosInspectorItems;
 			}
 
-			if (g_pHubble->m_pExtender)
-				g_pHubble->m_pExtender->Close();
+			if (g_pCosmos->m_pExtender)
+				g_pCosmos->m_pExtender->Close();
 
 			m_bCanClose = true;
 			//m_nRef = 3;
@@ -101,8 +101,8 @@ namespace OfficePlus
 		void COutLookAddin::OnNewMailEx(BSTR EntryIDCollection)
 		{
 			int nIndex = 0x0000fab5;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -125,8 +125,8 @@ namespace OfficePlus
 		void COutLookAddin::OnAttachmentContextMenuDisplay(CommandBar* CommandBar, AttachmentSelection* Attachments) 
 		{
 			int nIndex = 0x0000fb3e;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -149,8 +149,8 @@ namespace OfficePlus
 		void COutLookAddin::OnFolderContextMenuDisplay(CommandBar* CommandBar, OutLook::Folder* Folder) 
 		{
 			int nIndex = 0x0000fb42;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -173,8 +173,8 @@ namespace OfficePlus
 		void COutLookAddin::OnStoreContextMenuDisplay(CommandBar* CommandBar, Store* Store)
 		{
 			int nIndex = 0x0000fb43;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -197,8 +197,8 @@ namespace OfficePlus
 		void COutLookAddin::OnShortcutContextMenuDisplay(CommandBar* CommandBar, OutlookBarShortcut* Shortcut) 
 		{
 			int nIndex = 0x0000fb44;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -221,8 +221,8 @@ namespace OfficePlus
 		void COutLookAddin::OnViewContextMenuDisplay(CommandBar* CommandBar, OutLook::View* View)
 		{
 			int nIndex = 0x0000fb40;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -245,8 +245,8 @@ namespace OfficePlus
 		void COutLookAddin::OnItemContextMenuDisplay(CommandBar* CommandBar, OutLook::Selection* Selection)
 		{
 			int nIndex = 0x0000fb41;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -270,8 +270,8 @@ namespace OfficePlus
 			int nIndex = 0x0000fba6;
 			//IDispatch* pDisp = nullptr;
 			//m_pApplication->QueryInterface(IID_IDispatch, (void**)pDisp);
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -293,25 +293,25 @@ namespace OfficePlus
 
 		void COutLookAddin::OnItemLoad(IDispatch* pDisp)
 		{
-			CInspectorItem* pHubbleInspectorItem = new CInspectorItem();
-			m_mapHubbleInspectorItem[(long)pHubbleInspectorItem] = pHubbleInspectorItem;
-			pHubbleInspectorItem->m_pItem = pDisp;
-			HRESULT hr = ((COutLookItemEvents*)pHubbleInspectorItem)->DispEventAdvise(pDisp);
+			CInspectorItem* pCosmosInspectorItem = new CInspectorItem();
+			m_mapCosmosInspectorItem[(long)pCosmosInspectorItem] = pCosmosInspectorItem;
+			pCosmosInspectorItem->m_pItem = pDisp;
+			HRESULT hr = ((COutLookItemEvents*)pCosmosInspectorItem)->DispEventAdvise(pDisp);
 			if (hr == S_OK)
 			{
 				pDisp->AddRef();
-				//hr = ((COutLookItemEvents_10*)pHubbleInspectorItem)->DispEventAdvise(pDisp);
-				::PostMessage(m_hHostWnd, WM_HUBBLE_ITEMLOAD, (WPARAM)pHubbleInspectorItem, 0);
+				//hr = ((COutLookItemEvents_10*)pCosmosInspectorItem)->DispEventAdvise(pDisp);
+				::PostMessage(m_hHostWnd, WM_HUBBLE_ITEMLOAD, (WPARAM)pCosmosInspectorItem, 0);
 			}
 			else
 			{
-				delete pHubbleInspectorItem;
+				delete pCosmosInspectorItem;
 			}
 			int nIndex = 0x0000fba7;
 			//IDispatch* pDisp2 = nullptr;
 			//m_pApplication->QueryInterface(IID_IDispatch, (void**)pDisp2);
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -334,8 +334,8 @@ namespace OfficePlus
 			int nIndex = 0x0000fc01;
 			//IDispatch* pDisp = nullptr;
 			//m_pApplication->QueryInterface(IID_IDispatch, (void**)pDisp);
-			auto it2 = g_pHubble->m_mapObjEventDic.find(m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -398,18 +398,18 @@ namespace OfficePlus
 			}
 		}
 
-		CString COutLookAddin::GetHubblePropertyFromInspector(_Inspector* pInspector, CString strPropertyName)
+		CString COutLookAddin::GetCosmosPropertyFromInspector(_Inspector* pInspector, CString strPropertyName)
 		{
 			CComPtr<IDispatch> pItem;
 			pInspector->get_CurrentItem(&pItem);
 			if (pItem)
 			{
-				return GetHubblePropertyFromItem(pItem, strPropertyName);
+				return GetCosmosPropertyFromItem(pItem, strPropertyName);
 			}
 			return _T("");
 		}
 
-		CString COutLookAddin::GetHubblePropertyFromItem(IDispatch* pItem, CString strPropertyName)
+		CString COutLookAddin::GetCosmosPropertyFromItem(IDispatch* pItem, CString strPropertyName)
 		{
 			CString strRet = _T("");
 			if (pItem)
@@ -715,10 +715,10 @@ namespace OfficePlus
 					}
 				}
 			}
-			return CHubble::AttachObjEvent(pDisp, nEventIndex);
+			return CCosmos::AttachObjEvent(pDisp, nEventIndex);
 		}
 
-		STDMETHODIMP COutLookAddin::HubbleCommand(IDispatch* RibbonControl)
+		STDMETHODIMP COutLookAddin::CosmosCommand(IDispatch* RibbonControl)
 		{
 			if (m_spRibbonUI)
 				m_spRibbonUI->Invalidate();
@@ -732,15 +732,15 @@ namespace OfficePlus
 				CString strTag = OLE2T(bstrTag);
 				if (strTag.CompareNoCase(_T("opentangramfile")) == 0)
 				{
-					CComPtr<IHubbleDoc> pDoc;
+					CComPtr<ICosmosDoc> pDoc;
 					return this->OpenTangramFile(&pDoc);
 				}
 				int nPos = strTag.Find(_T("@"));
 				CString strPath = m_strAppCommonDocPath + strTag;
 				if (::PathFileExists(strPath))
 				{
-					CComPtr<IHubbleDoc> pDoc;
-					return this->OpenHubbleDocFile(strPath.AllocSysString(), &pDoc);
+					CComPtr<ICosmosDoc> pDoc;
+					return this->OpenCosmosDocFile(strPath.AllocSysString(), &pDoc);
 				}
 			}
 
@@ -753,7 +753,7 @@ namespace OfficePlus
 			auto it = m_mapInspector.find(hWnd);
 			if (it != m_mapInspector.end())
 			{
-				it->second->HubbleCommand(nCmdIndex);
+				it->second->CosmosCommand(nCmdIndex);
 				pObj->Init(_T("OutLookInspector"), 0, it->second->m_pInspector);
 			}
 			else
@@ -761,7 +761,7 @@ namespace OfficePlus
 				auto it = m_mapOutLookPlusExplorerMap.find(hWnd);
 				if (it != m_mapOutLookPlusExplorerMap.end())
 				{
-					it->second->HubbleCommand(nCmdIndex);
+					it->second->CosmosCommand(nCmdIndex);
 					CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
 					pObj->Init(_T("OutLookExplorer"), 0, it->second->m_pExplorer.p);
 				}
@@ -1014,11 +1014,11 @@ namespace OfficePlus
 			//if (m_pOutLookAppObjEvents2)
 			//	m_pOutLookAppObjEvents2->DispEventUnadvise(m_pApplication);
 			////hr = ((COutLookStoresEvents_12*)this)->DispEventUnadvise(m_pStores);
-			//if (m_pHubbleInspectorItems)
+			//if (m_pCosmosInspectorItems)
 			//{
-			//	m_pHubbleInspectorItems->DispEventUnadvise(m_pHubbleInspectorItems->m_pItems);
-			//	m_pHubbleInspectorItems->m_pItems->Release();
-			//	delete m_pHubbleInspectorItems;
+			//	m_pCosmosInspectorItems->DispEventUnadvise(m_pCosmosInspectorItems->m_pItems);
+			//	m_pCosmosInspectorItems->m_pItems->Release();
+			//	delete m_pCosmosInspectorItems;
 			//}
 			//m_pApplication.p->Release();
 			//m_pApplication.Detach();
@@ -1038,7 +1038,7 @@ namespace OfficePlus
 			return S_OK;
 		}
 
-		HRESULT COutLookAddin::CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv)
+		HRESULT COutLookAddin::CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv)
 		{
 			return COutLookAppCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
@@ -1411,9 +1411,9 @@ namespace OfficePlus
 		{
 		}
 
-		void COutLookExplorer::HubbleCommand(int nIndex)
+		void COutLookExplorer::CosmosCommand(int nIndex)
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			switch (nIndex)
 			{
 			case 100:
@@ -1506,15 +1506,15 @@ namespace OfficePlus
 				m_hWnd = ::GetActiveWindow();
 			CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
 			pObj->Init(_T("ExplorerActivate"), 0x0000f001, m_pExplorer);
-			if(g_pHubble)
-				g_pHubble->FireAppEvent(pObj);
+			if(g_pCosmos)
+				g_pCosmos->FireAppEvent(pObj);
 		}
 
 		void COutLookExplorer::OnFolderSwitch()
 		{
 			if (m_hWnd == NULL)
 				m_hWnd = ::GetActiveWindow();
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			CComPtr<OutLook::MAPIFolder> _pFolder;
 			m_pExplorer->get_CurrentFolder(&_pFolder);
 			CString strXml = _T("");
@@ -1556,12 +1556,12 @@ namespace OfficePlus
 				if (strXml != _T(""))
 				{
 					IGalaxy* pGalaxy = nullptr;
-					g_pHubble->GetGalaxy((LONGLONG)_hwnd, &pGalaxy);
+					g_pCosmos->GetGalaxy((LONGLONG)_hwnd, &pGalaxy);
 					if (pGalaxy == nullptr)
 					{
 						IGalaxyCluster* pGalaxyCluster = nullptr;
-						g_pHubble->CreateGalaxyCluster((LONGLONG)m_hOutLookToday, &pGalaxyCluster);
-						if (::PathFileExists(g_pHubble->m_strAppPath+_T("outlooktoday.appxml")))
+						g_pCosmos->CreateGalaxyCluster((LONGLONG)m_hOutLookToday, &pGalaxyCluster);
+						if (::PathFileExists(g_pCosmos->m_strAppPath+_T("outlooktoday.appxml")))
 							strXml = _T("outlooktoday.appxml");
 						if (pGalaxyCluster)
 							pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)_hwnd), CComBSTR(L"OutLook"), &pGalaxy);
@@ -1580,10 +1580,10 @@ namespace OfficePlus
 			{
 				CComBSTR bstrScript(L"");
 				HRESULT hr;
-				if (pAddin->m_pHubbleInspectorItems)
+				if (pAddin->m_pCosmosInspectorItems)
 				{
-					hr = pAddin->m_pHubbleInspectorItems->DispEventUnadvise(pAddin->m_pHubbleInspectorItems->m_pItems);
-					hr = pAddin->m_pHubbleInspectorItems->m_pItems->Release();
+					hr = pAddin->m_pCosmosInspectorItems->DispEventUnadvise(pAddin->m_pCosmosInspectorItems->m_pItems);
+					hr = pAddin->m_pCosmosInspectorItems->m_pItems->Release();
 				}
 
 				CComQIPtr<OutLook::MAPIFolder> pFolder(m_pNewFolder);
@@ -1592,19 +1592,19 @@ namespace OfficePlus
 					pFolder->get_Name(&bstrScript);
 					CComPtr<_Items> pItems;
 					pFolder->get_Items(&pItems);
-					if (pAddin->m_pHubbleInspectorItems == nullptr)
-						pAddin->m_pHubbleInspectorItems = new CInspectorItems;
-					pAddin->m_pHubbleInspectorItems->m_pItems = pItems.p;
-					pAddin->m_pHubbleInspectorItems->m_pItems->AddRef();
-					hr = pAddin->m_pHubbleInspectorItems->DispEventAdvise(pItems.p);
+					if (pAddin->m_pCosmosInspectorItems == nullptr)
+						pAddin->m_pCosmosInspectorItems = new CInspectorItems;
+					pAddin->m_pCosmosInspectorItems->m_pItems = pItems.p;
+					pAddin->m_pCosmosInspectorItems->m_pItems->AddRef();
+					hr = pAddin->m_pCosmosInspectorItems->DispEventAdvise(pItems.p);
 					long nCount = 0;
 					pItems->get_Count(&nCount);
 					if (nCount == 0 && m_pInspectorContainerWnd)
 					{
 						if (m_pInspectorContainerWnd->m_pGalaxy)
 						{
-							HWND hwnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pHubble->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-							HWND hChildWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL);
+							HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+							HWND hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL);
 							m_pInspectorContainerWnd->m_pGalaxy->ModifyHost((long)hChildWnd);
 							::DestroyWindow(hwnd);
 							m_pInspectorContainerWnd->m_pGalaxy = nullptr;
@@ -1618,7 +1618,7 @@ namespace OfficePlus
 		void COutLookExplorer::OnBeforeFolderSwitch(IDispatch* NewFolder, VARIANT_BOOL* Cancel)
 		{
 			CComBSTR bstrScript(L"");
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			
 			CComQIPtr<OutLook::MAPIFolder> pFolder(NewFolder);
 			if (pFolder)
@@ -1724,7 +1724,7 @@ namespace OfficePlus
 				hr = ((COutLookNavigationGroupsEvents_12*)this)->DispEventUnadvise(m_pNavigationGroups);
 			if (m_pCurrentModule)
 				m_pCurrentModule->Release();
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			auto it = pAddin->m_mapOutLookPlusExplorerMap.find(m_hWnd);
 			if (it != pAddin->m_mapOutLookPlusExplorerMap.end())
 			{
@@ -1811,10 +1811,10 @@ namespace OfficePlus
 			//m_pOnlineItem = Item;
 			//	m_pOnlineItem->AddRef();
 
-			//	CComPtr<IHubbleWindow> pWnd;
+			//	CComPtr<ICosmosWindow> pWnd;
 			//	CString strUrl = m_strUIScript;
 			//	strUrl.Replace(_T("%s"), theApp.m_strUser);
-			//	theApp.m_pHubbleManager->AddToolBarForWnd((LONGLONG)theApp.m_hPWwbWnd, (LONGLONG)theApp.m_hWwbWnd, (IDispatch*)m_pOnlineItem, CComBSTR(strUrl), &m_pOnLineItemHostWindow);
+			//	theApp.m_pCosmosManager->AddToolBarForWnd((LONGLONG)theApp.m_hPWwbWnd, (LONGLONG)theApp.m_hWwbWnd, (IDispatch*)m_pOnlineItem, CComBSTR(strUrl), &m_pOnLineItemHostWindow);
 			//	m_pOnLineItemHostWindow->AddRef();
 			//	m_pOnLineItemHostWindow->put_Extender(m_pOnlineItem);
 			//	theApp.m_hPWwbWnd = NULL;
@@ -1907,7 +1907,7 @@ namespace OfficePlus
 					//if (::IsChild(m_hWnd, theApp.m_pSolutionHelperWnd->m_hWnd) == false)
 					//{
 					//	::SetParent(theApp.m_pSolutionHelperWnd->m_hWnd, m_hWnd);
-					//	theApp.m_pSolutionFrame->ModifyHost((LONGLONG)m_pHubbleSolutionHostWnd->m_hWnd, (LONGLONG)m_hNavWnd);
+					//	theApp.m_pSolutionFrame->ModifyHost((LONGLONG)m_pCosmosSolutionHostWnd->m_hWnd, (LONGLONG)m_hNavWnd);
 					//}
 					//if (m_hNavWnd&&theApp.m_pSolutionFrame)
 					//{
@@ -1972,7 +1972,7 @@ namespace OfficePlus
 
 			HWND hRet = NULL;
 			HWND hWnd = ::GetActiveWindow();
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			BOOL bHaveView = false;
 				
 			CComVariant m_v;
@@ -2046,7 +2046,7 @@ namespace OfficePlus
 
 		void COutLookExplorer::SetDesignState()
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			HWND hWnd = ::GetActiveWindow();
 			HWND _hwnd = NULL;
 			CInspectorContainerWnd* pWnd = nullptr;
@@ -2117,10 +2117,10 @@ namespace OfficePlus
 			}
 			pWnd->m_pOutLookExplorer = this;
 			IGalaxy* pGalaxy = nullptr;
-			g_pHubble->GetGalaxy((LONGLONG)pWnd->m_hWnd, &pWnd->m_pGalaxy);
+			g_pCosmos->GetGalaxy((LONGLONG)pWnd->m_hWnd, &pWnd->m_pGalaxy);
 			if (pWnd->m_pGalaxy == nullptr)
 			{
-				g_pHubble->CreateGalaxyCluster((LONGLONG)::GetParent(pWnd->m_hWnd), &pWnd->m_pGalaxyCluster);
+				g_pCosmos->CreateGalaxyCluster((LONGLONG)::GetParent(pWnd->m_hWnd), &pWnd->m_pGalaxyCluster);
 				if (pWnd->m_pGalaxyCluster)
 					pWnd->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pWnd->m_hWnd), CComBSTR(L""), &pWnd->m_pGalaxy);
 			}
@@ -2152,17 +2152,17 @@ namespace OfficePlus
 
 		void CInspectorItem::OnRead()
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			m_strXml = pAddin->GetHubblePropertyFromItem(m_pItem, _T("Tangram"));
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			m_strXml = pAddin->GetCosmosPropertyFromItem(m_pItem, _T("Tangram"));
 		}
 
 		void CInspectorItem::OnUnload()
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			long nKey = (long)this;
-			auto it = pAddin->m_mapHubbleInspectorItem.find(nKey);
-			if (it != pAddin->m_mapHubbleInspectorItem.end())
-				pAddin->m_mapHubbleInspectorItem.erase(it);
+			auto it = pAddin->m_mapCosmosInspectorItem.find(nKey);
+			if (it != pAddin->m_mapCosmosInspectorItem.end())
+				pAddin->m_mapCosmosInspectorItem.erase(it);
 			HRESULT hr = ((COutLookItemEvents*)this)->DispEventUnadvise(m_pItem);
 			//hr = ((COutLookItemEvents_10*)this)->DispEventUnadvise(m_pItem);
 			ULONG dw = m_pItem->Release();
@@ -2212,14 +2212,14 @@ namespace OfficePlus
 
 		COutLookInspector::~COutLookInspector(void)
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			if (pAddin->m_pCurOpenItem == this)
 				pAddin->m_pCurOpenItem = nullptr;
 		}
 
 		void COutLookInspector::OnPageChange(BSTR ActivePageName) 
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			m_strActivePageName = OLE2T(ActivePageName);
 			m_strActivePageName.Trim();
 			m_strActivePageName.Replace(_T(" "), _T("_"));
@@ -2228,7 +2228,7 @@ namespace OfficePlus
 
 		void COutLookInspector::OnActivate()
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			HWND hActive = ::GetActiveWindow();
 			if (m_hHostWnd)
 				hActive = m_hHostWnd;
@@ -2258,11 +2258,11 @@ namespace OfficePlus
 			if (m_hHostWnd)
 			{
 				HRESULT hr = S_FALSE;
-				COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+				COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 				if (m_pTaskPaneGalaxyCluster)
 				{
-					HWND _hWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pHubble->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-					HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+					HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+					HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
 					if (::IsWindow(m_hWnd))
 					{
 						m_pTaskPaneGalaxy->ModifyHost((long)_hChildWnd);
@@ -2286,17 +2286,17 @@ namespace OfficePlus
 			delete this;
 		}
 
-		void COutLookInspector::HubbleCommand(int nIndex)
+		void COutLookInspector::CosmosCommand(int nIndex)
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			switch (nIndex)
 			{
 			case 100:
 			{
-				CString strXml = pAddin->GetHubblePropertyFromInspector(m_pInspector, _T("Tangram"));
+				CString strXml = pAddin->GetCosmosPropertyFromInspector(m_pInspector, _T("Tangram"));
 				if (strXml == _T(""))
 				{
-					CString str = g_pHubble->m_strExeName;
+					CString str = g_pCosmos->m_strExeName;
 					CString strCaption = _T("");
 					str += _T("\\");
 					switch (m_OlObjectClass)
@@ -2393,7 +2393,7 @@ namespace OfficePlus
 								_pCustomTaskPane->AddRef();
 								_pCustomTaskPane->put_Visible(true);
 								pAddin->m_mapTaskPaneMap[(LONG)m_hHostWnd] = _pCustomTaskPane;
-								CComPtr<IHubbleCtrl> pCtrlDisp;
+								CComPtr<ICosmosCtrl> pCtrlDisp;
 								_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 								if (pCtrlDisp)
 								{
@@ -2408,7 +2408,7 @@ namespace OfficePlus
 
 									if (m_pTaskPaneGalaxyCluster == nullptr)
 									{
-										HRESULT hr = g_pHubble->CreateGalaxyCluster((LONGLONG)hPWnd, &m_pTaskPaneGalaxyCluster);
+										HRESULT hr = g_pCosmos->CreateGalaxyCluster((LONGLONG)hPWnd, &m_pTaskPaneGalaxyCluster);
 										if (m_pTaskPaneGalaxyCluster)
 										{
 											m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hWnd), CComBSTR(L"TaskPane"), &m_pTaskPaneGalaxy);
@@ -2464,7 +2464,7 @@ namespace OfficePlus
 			HWND hActive = ::GetActiveWindow();
 			if (hActive == NULL)
 				return;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			BOOL bInExplorer = false;
 			auto it = pAddin->m_mapOutLookPlusExplorerMap.find(hActive);
 			if (it != pAddin->m_mapOutLookPlusExplorerMap.end())
@@ -2509,7 +2509,7 @@ namespace OfficePlus
 			}
 			else
 			{
-				CString strXml = pAddin->GetHubblePropertyFromItem(m_pDisp, _T("Tangram"));
+				CString strXml = pAddin->GetCosmosPropertyFromItem(m_pDisp, _T("Tangram"));
 				//if (strXml == _T(""))
 				//{
 				//	switch (m_OlObjectClass)
@@ -2553,7 +2553,7 @@ namespace OfficePlus
 				m_pActiveOutLookPage = new COutLookPageWnd();
 				m_pActiveOutLookPage->m_pOutLookInspector = this;
 				m_pActiveOutLookPage->m_strName = m_strActivePageName;
-				m_pActiveOutLookPage->m_strXml = g_pHubble->GetXmlData(m_strActivePageName, strXml);
+				m_pActiveOutLookPage->m_strXml = g_pCosmos->GetXmlData(m_strActivePageName, strXml);
 				OutLook::Pages* pPages = nullptr;
 				m_pInspector->get_ModifiedFormPages((IDispatch**)&pPages);
 				CComPtr<IDispatch> pItem;
@@ -2652,7 +2652,7 @@ namespace OfficePlus
 
 		void COutLookInspector::OnWrite(VARIANT_BOOL* Cancel)
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			IStream* pStream = 0;
 			HRESULT hr = ::CoMarshalInterThreadInterfaceInStream(IID__Inspector, m_pInspector, &pStream);
 
@@ -2676,13 +2676,13 @@ namespace OfficePlus
 							strKeys += _T(",");
 							CGrid* pGrid = pGalaxy->m_pWorkGrid;
 							pAddin->UpdateGrid(pGrid);
-							strPageData += pGrid->m_pGridShareData->m_pHubbleParse->xml();
+							strPageData += pGrid->m_pGridShareData->m_pCosmosParse->xml();
 						}
 					}
-					strXml = pAddin->GetHubblePropertyFromInspector(pInspector, _T("Tangram"));
+					strXml = pAddin->GetCosmosPropertyFromInspector(pInspector, _T("Tangram"));
 					//theApp.Unlock();
 					CString strData = _T("");
-					CString strPagesXml = g_pHubble->GetXmlData(_T("OutLookPages"), strXml);
+					CString strPagesXml = g_pCosmos->GetXmlData(_T("OutLookPages"), strXml);
 					strData = _T("<OutLookPages>");
 					if (strPagesXml != _T(""))
 					{
@@ -2702,7 +2702,7 @@ namespace OfficePlus
 							_strKey += strName;
 							_strKey += _T(",");
 							if (strKeys.Find(_strKey) == -1)
-								strData += g_pHubble->GetXmlData(strName, strPagesXml);
+								strData += g_pCosmos->GetXmlData(strName, strPagesXml);
 							strKey = _T("</layout>");
 							nPos = strPagesXml.Find(strKey);
 							strPagesXml = strPagesXml.Mid(nPos + 9);
@@ -2805,7 +2805,7 @@ namespace OfficePlus
 
 		void COutLookPageWnd::ActivePage()
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 			HWND hActive = ::GetActiveWindow();
 			auto it = pAddin->m_mapOutLookPlusExplorerMap.find(hActive);
 			if (it == pAddin->m_mapOutLookPlusExplorerMap.end())
@@ -2849,7 +2849,7 @@ namespace OfficePlus
 					BSTR bstrName = m_strName.AllocSysString();
 					if (m_pGalaxyCluster == nullptr)
 					{
-						g_pHubble->CreateGalaxyCluster((LONGLONG)m_hWnd, &m_pGalaxyCluster);
+						g_pCosmos->CreateGalaxyCluster((LONGLONG)m_hWnd, &m_pGalaxyCluster);
 						if (m_pGalaxyCluster)
 						{
 							m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)m_hFrameWnd), bstrName, &m_pGalaxy);
@@ -2873,7 +2873,7 @@ namespace OfficePlus
 				m_bDesignState = true;
 				if (m_pGalaxyCluster == nullptr)
 				{
-					g_pHubble->CreateGalaxyCluster((LONGLONG)m_hWnd, &m_pGalaxyCluster);
+					g_pCosmos->CreateGalaxyCluster((LONGLONG)m_hWnd, &m_pGalaxyCluster);
 					if (m_pGalaxyCluster)
 					{
 						BSTR bstrName = m_strName.AllocSysString();
@@ -2881,7 +2881,7 @@ namespace OfficePlus
 						if (m_pGalaxy)
 						{
 							m_pGalaxy->put_DesignerState(true);
-							g_pHubble->CreateCommonDesignerToolBar();
+							g_pCosmos->CreateCommonDesignerToolBar();
 							IGrid* pGrid = nullptr;
 							if (m_strXml == _T(""))
 							{
@@ -2890,9 +2890,9 @@ namespace OfficePlus
 								m_strXml.Format(_T("<%s><layout><grid name=\"Start\" /></layout></%s>"), strName, strName);
 							}
 							m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pGrid);
-							g_pHubble->m_pDesigningFrame = (CGalaxy*)m_pGalaxy;
-							g_pHubble->m_pDesigningFrame->m_bDesignerState = true;
-							g_pHubble->m_pDesigningFrame->UpdateDesignerTreeInfo();
+							g_pCosmos->m_pDesigningFrame = (CGalaxy*)m_pGalaxy;
+							g_pCosmos->m_pDesigningFrame->m_bDesignerState = true;
+							g_pCosmos->m_pDesigningFrame->UpdateDesignerTreeInfo();
 						}
 						::SysFreeString(bstrName);
 					}
@@ -2924,7 +2924,7 @@ namespace OfficePlus
 		{
 		}
 
-		LRESULT CInspectorContainerWnd::OnHubbleSave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+		LRESULT CInspectorContainerWnd::OnCosmosSave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			if (m_pOutLookExplorer)
 			{
@@ -2935,17 +2935,17 @@ namespace OfficePlus
 				{
 					CGalaxy* pGalaxy = (CGalaxy*)m_pGalaxy;
 					CComBSTR bstrXml(L"");
-					COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
+					COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 					pAddin->UpdateGrid(pGalaxy->m_pWorkGrid);
 					pGalaxy->GetXml(_T(""), &bstrXml);
-					CString strXml = g_pHubble->GetXmlData(_T("Tangram"), OLE2T(bstrXml));
+					CString strXml = g_pCosmos->GetXmlData(_T("Tangram"), OLE2T(bstrXml));
 					pAddin->WriteFolderPropertyToStore(pFolder, _T("Tangram"), _T("TangramProperties"), strXml);
 				}
 			}
 			return  DefWindowProc(uMsg, wParam, lParam);
 		}
 
-		LRESULT CInspectorContainerWnd::OnHubbleMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+		LRESULT CInspectorContainerWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			if (m_pGalaxy&&wParam == 4096)
 			{
@@ -2959,8 +2959,8 @@ namespace OfficePlus
 		{
 			if (m_pGalaxy)
 			{
-				HWND hwnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, g_pHubble->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-				m_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
+				HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+				m_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
 				::DestroyWindow(hwnd);
 				m_pGalaxy = nullptr;
 				m_pGalaxyCluster = nullptr;
@@ -2971,7 +2971,7 @@ namespace OfficePlus
 				if (m_Parse.LoadXml(m_strXml))
 				{
 					m_hFrameWnd = ::GetWindow(m_hWnd, GW_CHILD);
-					g_pHubble->CreateGalaxyCluster((LONGLONG)m_hWnd, &m_pGalaxyCluster);
+					g_pCosmos->CreateGalaxyCluster((LONGLONG)m_hWnd, &m_pGalaxyCluster);
 					m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hFrameWnd), CComBSTR(L"Default"), &m_pGalaxy);
 					if (m_pGalaxy)
 					{
@@ -2998,7 +2998,7 @@ namespace OfficePlus
 
 		STDMETHODIMP COutLookAppCtrl::put_AppCtrl(VARIANT_BOOL newVal)
 		{
-			g_pHubble->m_pHubbleAppCtrl = this;
+			g_pCosmos->m_pCosmosAppCtrl = this;
 
 			return S_OK;
 		}
@@ -3025,18 +3025,18 @@ namespace OfficePlus
 			return S_OK;
 		}
 
-		STDMETHODIMP COutLookAppCtrl::get_Hubble(IHubble** pVal)
+		STDMETHODIMP COutLookAppCtrl::get_Cosmos(ICosmos** pVal)
 		{
-			*pVal = g_pHubble;
+			*pVal = g_pCosmos;
 			return S_OK;
 		}
 
 		void COutLookAppObjEvents::OnItemSend(IDispatch* Item, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x0000f002;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3053,7 +3053,7 @@ namespace OfficePlus
 					var1.pboolVal = Cancel;
 					pObj->m_mapVar[0] = var1;
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -3061,9 +3061,9 @@ namespace OfficePlus
 		void COutLookAppObjEvents::OnNewMail()
 		{
 			int nIndex = 0x0000f003;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3073,16 +3073,16 @@ namespace OfficePlus
 					CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
 					pObj->Init(_T("NewMail"), nIndex, pAddin->m_pApplication.p);
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
 		void COutLookAppObjEvents::OnReminder(IDispatch* Item)
 		{
 			int nIndex = 0x0000f004;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3094,7 +3094,7 @@ namespace OfficePlus
 					pObj->m_mapDisp[0] = Item;
 					pObj->m_mapDisp[0]->AddRef();
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -3102,9 +3102,9 @@ namespace OfficePlus
 		void COutLookAppObjEvents::OnOptionsPagesAdd(PropertyPages* Pages)
 		{
 			int nIndex = 0x0000f005;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3117,7 +3117,7 @@ namespace OfficePlus
 					pObj->m_mapDisp[0] = Pages;
 					pObj->m_mapDisp[0]->AddRef();
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -3125,9 +3125,9 @@ namespace OfficePlus
 		void COutLookAppObjEvents::OnStartup()
 		{
 			int nIndex = 0x0000f006;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3137,7 +3137,7 @@ namespace OfficePlus
 					CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
 					pObj->Init(_T("Startup"), nIndex, pAddin->m_pApplication.p);
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -3145,9 +3145,9 @@ namespace OfficePlus
 		void COutLookAppObjEvents::OnQuit()
 		{
 			int nIndex = 0x0000f007;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3157,7 +3157,7 @@ namespace OfficePlus
 					CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
 					pObj->Init(_T("Quit"), nIndex, pAddin->m_pApplication.p);
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -3165,9 +3165,9 @@ namespace OfficePlus
 		void COutLookAppObjEvents2::OnAdvancedSearchComplete(Search* SearchObject) 
 		{
 			int nIndex = 0x0000fa6a;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3179,7 +3179,7 @@ namespace OfficePlus
 					pObj->m_mapDisp[0] = SearchObject;
 					pObj->m_mapDisp[0]->AddRef();
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -3187,9 +3187,9 @@ namespace OfficePlus
 		void COutLookAppObjEvents2::OnAdvancedSearchStopped(Search* SearchObject)
 		{
 			int nIndex = 0x0000fa6b;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3202,7 +3202,7 @@ namespace OfficePlus
 					pObj->m_mapDisp[0] = SearchObject;
 					pObj->m_mapDisp[0]->AddRef();
 
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -3210,9 +3210,9 @@ namespace OfficePlus
 		void COutLookAppObjEvents2::OnMAPILogonComplete() 
 		{
 			int nIndex = 0x0000fa90;
-			COutLookAddin* pAddin = (COutLookAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -3221,7 +3221,7 @@ namespace OfficePlus
 				{
 					CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
 					pObj->Init(_T("MAPILogonComplete"), nIndex, pAddin->m_pApplication.p);
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}

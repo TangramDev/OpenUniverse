@@ -62,8 +62,8 @@ namespace OfficePlus
 				auto it = m_mapValInfo.find(_T("designertoolcaption"));
 				if (it != m_mapValInfo.end())
 					m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-				m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Hubble Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-				m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Hubble Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
+				m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+				m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
 			if (m_hHostWnd && m_pDesignerGalaxyCluster == nullptr)
 			{
@@ -74,14 +74,14 @@ namespace OfficePlus
 
 				if (m_pDesignerGalaxyCluster == nullptr)
 				{
-					auto it = g_pHubble->m_mapWindowPage.find(m_hHostWnd);
-					if (it != g_pHubble->m_mapWindowPage.end())
+					auto it = g_pCosmos->m_mapWindowPage.find(m_hHostWnd);
+					if (it != g_pCosmos->m_mapWindowPage.end())
 						m_pDesignerGalaxyCluster = (CGalaxyCluster*)it->second;
 					else
 					{
 						m_pDesignerGalaxyCluster = new CComObject<CGalaxyCluster>();
 						m_pDesignerGalaxyCluster->m_hWnd = m_hHostWnd;
-						g_pHubble->m_mapWindowPage[m_hHostWnd] = m_pDesignerGalaxyCluster;
+						g_pCosmos->m_mapWindowPage[m_hHostWnd] = m_pDesignerGalaxyCluster;
 					}
 
 					CString strPath = m_strExeName + _T(".designer");
@@ -134,7 +134,7 @@ namespace OfficePlus
 					m_mapValInfo[_T("exceldesignstate")] = CComVariant((VARIANT_BOOL)true);
 				return put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
 			}
-			return CHubble::StartApplication(bstrAppID, bstrXml);
+			return CCosmos::StartApplication(bstrAppID, bstrXml);
 		}
 
 		STDMETHODIMP CExcelAddin::AttachObjEvent(IDispatch* pDisp, int nEventIndex)
@@ -144,7 +144,7 @@ namespace OfficePlus
 				m_pExcelAppObjEvents = new CExcelAppObjEvents();
 				m_pExcelAppObjEvents->DispEventAdvise(m_pExcelApplication);
 			}
-			return CHubble::AttachObjEvent(pDisp, nEventIndex);
+			return CCosmos::AttachObjEvent(pDisp, nEventIndex);
 		}
 
 		CString CExcelAddin::GetDocXmlByKey(IDispatch* pDocdisp, BSTR bstrKey)
@@ -250,8 +250,8 @@ namespace OfficePlus
 			case WM_RBUTTONDOWN:
 			case WM_POINTERDOWN:
 			{
-				::GetClassName(lpMsg->hwnd, g_pHubble->m_szBuffer, MAX_PATH);
-				CString strClassName = CString(g_pHubble->m_szBuffer);
+				::GetClassName(lpMsg->hwnd, g_pCosmos->m_szBuffer, MAX_PATH);
+				CString strClassName = CString(g_pCosmos->m_szBuffer);
 				if (strClassName.Find(_T("Afx:ToolBar:")) == 0)
 				{
 					ATLTRACE(_T("Afx:ToolBar:%x\n"), lpMsg->hwnd);
@@ -452,7 +452,7 @@ namespace OfficePlus
 
 		}
 
-		STDMETHODIMP CExcelAddin::HubbleCommand(IDispatch* RibbonControl)
+		STDMETHODIMP CExcelAddin::CosmosCommand(IDispatch* RibbonControl)
 		{
 			if (m_spRibbonUI)
 				m_spRibbonUI->Invalidate();
@@ -466,7 +466,7 @@ namespace OfficePlus
 				CString strTag = OLE2T(bstrTag);
 				if (strTag.CompareNoCase(_T("opentangramfile")) == 0)
 				{
-					CComPtr<IHubbleDoc> pDoc;
+					CComPtr<ICosmosDoc> pDoc;
 					return this->OpenTangramFile(&pDoc);
 				}
 				int nPos = strTag.Find(_T("@"));
@@ -475,8 +475,8 @@ namespace OfficePlus
 				{
 					if (m_spRibbonUI)
 						m_spRibbonUI->ActivateTabMso(L"TabHome");
-					CComPtr<IHubbleDoc> pDoc;
-					return this->OpenHubbleDocFile(strPath.AllocSysString(), &pDoc);
+					CComPtr<ICosmosDoc> pDoc;
+					return this->OpenCosmosDocFile(strPath.AllocSysString(), &pDoc);
 				}
 			}
 
@@ -588,7 +588,7 @@ namespace OfficePlus
 									HRESULT hr = m_pCTPFactory->CreateCTP(L"Tangram.Ctrl.1", m_pWorkBook->m_strTaskPaneTitle.AllocSysString(), vWindow, &_pCustomTaskPane);
 									_pCustomTaskPane->AddRef();
 									m_mapTaskPaneMap[(long)m_pActiveExcelObject->m_hForm] = _pCustomTaskPane;
-									CComPtr<IHubbleCtrl> pCtrlDisp;
+									CComPtr<ICosmosCtrl> pCtrlDisp;
 									_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 									if (pCtrlDisp)
 									{
@@ -604,7 +604,7 @@ namespace OfficePlus
 											m_Wnd.Detach();
 											m_pWorkBook->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 											m_pWorkBook->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-											g_pHubble->m_mapWindowPage[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
+											g_pCosmos->m_mapWindowPage[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
 											IGalaxy* pTaskPaneFrame = nullptr;
 											m_pWorkBook->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hWnd), CComBSTR(L"TaskPane"), &pTaskPaneFrame);
 											m_pWorkBook->m_pTaskPaneGalaxy = (CGalaxy*)pTaskPaneFrame;
@@ -687,7 +687,7 @@ namespace OfficePlus
 			pObj->m_mapVar[0] = CComVariant(bstrID);
 			pObj->m_mapVar[1] = CComVariant(bstrTag);
 
-			g_pHubble->FireAppEvent(pObj);
+			g_pCosmos->FireAppEvent(pObj);
 
 			return S_OK;
 		}
@@ -711,8 +711,8 @@ namespace OfficePlus
 			{
 				m_pExcelAppObjEvents->DispEventAdvise(m_pExcelApplication);
 			}
-			if (g_pHubble->m_hForegroundIdleHook == NULL)
-				g_pHubble->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
+			if (g_pCosmos->m_hForegroundIdleHook == NULL)
+				g_pCosmos->m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
 			BSTR bstrCap = ::SysAllocString(L"");
 			m_pExcelApplication->get_Caption(&bstrCap);
 			CString strCaption = OLE2T(bstrCap);
@@ -787,27 +787,27 @@ namespace OfficePlus
 			strKey.MakeLower();
 			if (strKey == _T("doctemplate"))
 			{
-				auto it = g_pHubble->m_mapValInfo.find(_T("doctemplate"));
-				if (it != g_pHubble->m_mapValInfo.end())
+				auto it = g_pCosmos->m_mapValInfo.find(_T("doctemplate"));
+				if (it != g_pCosmos->m_mapValInfo.end())
 				{
 					::VariantClear(&it->second);
-					g_pHubble->m_mapValInfo.erase(it);
+					g_pCosmos->m_mapValInfo.erase(it);
 				}
 				CComPtr<Workbooks> pWorkBooks;
 				m_pExcelApplication->get_Workbooks(&pWorkBooks);
 				if (pWorkBooks)
 				{
 					CString strXml = OLE2T(newVal.bstrVal);
-					g_pHubble->m_mapValInfo[strKey] = newVal;
+					g_pCosmos->m_mapValInfo[strKey] = newVal;
 					CComPtr<_Workbook> pWorkbook;
 					CComVariant varTemplate(L"");
 					pWorkBooks->Add(varTemplate, 0, &pWorkbook);
 				}
 			}
-			return CHubble::put_AppKeyValue(bstrKey, newVal);
+			return CCosmos::put_AppKeyValue(bstrKey, newVal);
 		}
 
-		HRESULT CExcelAddin::CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv)
+		HRESULT CExcelAddin::CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv)
 		{
 			return CExcelAppCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
@@ -998,7 +998,7 @@ namespace OfficePlus
 		{
 			CComPtr<IDispatch> pDisp;
 			m_pWorkBook->m_pWorkBook->get_ActiveSheet(&pDisp);
-			CString strName = g_pHubble->GetPropertyFromObject(pDisp, _T("Name"));
+			CString strName = g_pCosmos->GetPropertyFromObject(pDisp, _T("Name"));
 			if (strName != m_strActiveSheetName)
 			{
 				ATLTRACE(_T("namechanged: oleName: %s, newName:%s\n"), m_strActiveSheetName, strName);
@@ -1009,16 +1009,16 @@ namespace OfficePlus
 		{
 			if (m_pWorkBook->m_strDocXml == _T(""))
 				return;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 
-			auto it = g_pHubble->m_mapWindowPage.find(m_hClient);
-			if (it != g_pHubble->m_mapWindowPage.end())
+			auto it = g_pCosmos->m_mapWindowPage.find(m_hClient);
+			if (it != g_pCosmos->m_mapWindowPage.end())
 				m_pWorkBook->m_pDocGalaxyCluster = (CGalaxyCluster*)it->second;
 			else
 			{
 				m_pWorkBook->m_pDocGalaxyCluster = new CComObject<CGalaxyCluster>();
 				m_pWorkBook->m_pDocGalaxyCluster->m_hWnd = m_hClient;
-				g_pHubble->m_mapWindowPage[m_hClient] = m_pWorkBook->m_pDocGalaxyCluster;
+				g_pCosmos->m_mapWindowPage[m_hClient] = m_pWorkBook->m_pDocGalaxyCluster;
 			}
 
 			if (m_pWorkBook->m_pDocGalaxyCluster)
@@ -1098,7 +1098,7 @@ namespace OfficePlus
 								HRESULT hr = pAddin->m_pCTPFactory->CreateCTP(L"Tangram.Ctrl.1", m_pWorkBook->m_strTaskPaneTitle.AllocSysString(), vWindow, &_pCustomTaskPane);
 								_pCustomTaskPane->AddRef();
 								pAddin->m_mapTaskPaneMap[(long)m_hForm] = _pCustomTaskPane;
-								CComPtr<IHubbleCtrl> pCtrlDisp;
+								CComPtr<ICosmosCtrl> pCtrlDisp;
 								_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 								if (pCtrlDisp)
 								{
@@ -1114,7 +1114,7 @@ namespace OfficePlus
 										m_Wnd.Detach();
 										m_pWorkBook->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 										m_pWorkBook->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pHubble->m_mapWindowPage[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
+										g_pCosmos->m_mapWindowPage[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
 
 										IGalaxy* pTaskPaneFrame = nullptr;
 										m_pWorkBook->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hWnd), CComBSTR(L"TaskPane"), &pTaskPaneFrame);
@@ -1161,9 +1161,9 @@ namespace OfficePlus
 			HWND hActiveWnd = ::GetActiveWindow();
 			if (hActiveWnd == m_hForm)
 			{
-				if (g_pHubble->m_pActiveGrid && (::IsChild(g_pHubble->m_pActiveGrid->m_pHostWnd->m_hWnd, hWnd) || hWnd == g_pHubble->m_pActiveGrid->m_pHostWnd->m_hWnd))
+				if (g_pCosmos->m_pActiveGrid && (::IsChild(g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd, hWnd) || hWnd == g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd))
 				{
-					if (g_pHubble->m_pActiveGrid->m_nViewType == GridType::Grid || g_pHubble->m_pActiveGrid->m_nViewType == GridType::TangramTreeView)
+					if (g_pCosmos->m_pActiveGrid->m_nViewType == GridType::Grid || g_pCosmos->m_pActiveGrid->m_nViewType == GridType::TangramTreeView)
 						return;
 					if (::IsWindowEnabled(m_hExcelEdit))
 						::EnableWindow(m_hExcelEdit, false);
@@ -1172,16 +1172,16 @@ namespace OfficePlus
 						::PostMessage(m_hChildClient, WM_KEYDOWN, VK_TAB, 0);
 						::PostMessage(m_hChildClient, WM_KEYDOWN, VK_LEFT, 0);
 						::EnableWindow(m_hExcelEdit2, false);
-						::PostMessage(g_pHubble->m_pActiveGrid->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
+						::PostMessage(g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
 					}
 				}
 				else
 				{
 					::EnableWindow(m_hExcelEdit, true);
 					::EnableWindow(m_hExcelEdit2, true);
-					if (::IsWindowVisible(m_hChildClient) == false && g_pHubble->m_pActiveGrid)
+					if (::IsWindowVisible(m_hChildClient) == false && g_pCosmos->m_pActiveGrid)
 					{
-						::PostMessage(g_pHubble->m_pActiveGrid->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
+						::PostMessage(g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
 					}
 				}
 			}
@@ -1201,12 +1201,12 @@ namespace OfficePlus
 		{
 			if (m_pOfficeObj != nullptr)
 			{
-				CExcelAddin* pAddin = ((CExcelAddin*)g_pHubble);
+				CExcelAddin* pAddin = ((CExcelAddin*)g_pCosmos);
 
 				if (pAddin->m_pActiveExcelObject == this)
 				{
 					pAddin->m_pActiveExcelObject = nullptr;
-					g_pHubble->m_pActiveGrid = nullptr;
+					g_pCosmos->m_pActiveGrid = nullptr;
 				}
 
 				auto it2 = m_pWorkBook->m_mapExcelWorkBookWnd.find(m_hChildClient);
@@ -1280,7 +1280,7 @@ namespace OfficePlus
 
 		STDMETHODIMP CExcelAppCtrl::put_AppCtrl(VARIANT_BOOL newVal)
 		{
-			g_pHubble->m_pHubbleAppCtrl = this;
+			g_pCosmos->m_pCosmosAppCtrl = this;
 
 			return S_OK;
 		}
@@ -1291,9 +1291,9 @@ namespace OfficePlus
 			return S_OK;
 		}
 
-		STDMETHODIMP CExcelAppCtrl::get_Hubble(IHubble** pVal)
+		STDMETHODIMP CExcelAppCtrl::get_Cosmos(ICosmos** pVal)
 		{
-			*pVal = g_pHubble;
+			*pVal = g_pCosmos;
 			return S_OK;
 		}
 
@@ -1305,9 +1305,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnNewWorkbook(_Workbook* Wb)
 		{
 			int nIndex = 0x0000061d;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1326,9 +1326,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetSelectionChange(IDispatch* Sh, Excel::Range* Target)
 		{
 			int nIndex = 0x00000616;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1349,9 +1349,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetBeforeDoubleClick(IDispatch* Sh, Excel::Range* Target, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000617;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1374,9 +1374,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetBeforeRightClick(IDispatch* Sh, Excel::Range* Target, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000618;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1402,9 +1402,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetActivate(IDispatch* Sh)
 		{
 			int nIndex = 0x00000619;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1423,9 +1423,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetDeactivate(IDispatch* Sh)
 		{
 			int nIndex = 0x0000061a;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1444,9 +1444,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetCalculate(IDispatch* Sh)
 		{
 			int nIndex = 0x0000061b;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1465,9 +1465,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetChange(IDispatch* Sh, Excel::Range* Target)
 		{
 			int nIndex = 0x0000061c;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1488,9 +1488,9 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookOpen(_Workbook* Wb)
 		{
 			int nIndex = 0x0000061f;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1509,7 +1509,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookActivate(_Workbook* Wb)
 		{
 			int nIndex = 0x00000620;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1530,7 +1530,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookDeactivate(_Workbook* Wb)
 		{
 			int nIndex = 0x00000621;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1551,7 +1551,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookBeforeClose(_Workbook* Wb, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000622;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1574,7 +1574,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookBeforeSave(_Workbook* Wb, VARIANT_BOOL SaveAsUI, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000623;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1601,7 +1601,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookBeforePrint(_Workbook* Wb, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000624;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1624,7 +1624,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookNewSheet(_Workbook* Wb, IDispatch* Sh)
 		{
 			int nIndex = 0x00000625;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1647,7 +1647,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookAddinInstall(_Workbook* Wb)
 		{
 			int nIndex = 0x00000626;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1668,7 +1668,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookAddinUninstall(_Workbook* Wb)
 		{
 			int nIndex = 0x00000627;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1689,7 +1689,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWindowResize(_Workbook* Wb, Excel::Window* Wn)
 		{
 			int nIndex = 0x00000612;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1713,7 +1713,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWindowActivate(_Workbook* Wb, Excel::Window* Wn)
 		{
 			int nIndex = 0x00000614;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1737,7 +1737,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWindowDeactivate(_Workbook* Wb, Excel::Window* Wn)
 		{
 			int nIndex = 0x00000615;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1760,7 +1760,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetFollowHyperlink(IDispatch* Sh, Excel::Hyperlink* Target)
 		{
 			int nIndex = 0x0000073e;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1783,7 +1783,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetPivotTableUpdate(IDispatch* Sh, PivotTable* Target)
 		{
 			int nIndex = 0x0000086d;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1806,7 +1806,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookPivotTableCloseConnection(_Workbook* Wb, PivotTable* Target)
 		{
 			int nIndex = 0x00000870;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1829,7 +1829,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookPivotTableOpenConnection(_Workbook* Wb, PivotTable* Target)
 		{
 			int nIndex = 0x00000871;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1852,7 +1852,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookSync(_Workbook* Wb, MsoSyncEventType SyncEvent)
 		{
 			int nIndex = 0x000008f1;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1877,7 +1877,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookBeforeXmlImport(_Workbook* Wb, XmlMap* Map, BSTR Url, VARIANT_BOOL IsRefresh, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x000008f2;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1912,7 +1912,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookAfterXmlImport(_Workbook* Wb, XmlMap* Map, VARIANT_BOOL IsRefresh, XlXmlImportResult Result)
 		{
 			int nIndex = 0x000008f3;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1943,7 +1943,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookBeforeXmlExport(_Workbook* Wb, XmlMap* Map, BSTR Url, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x000008f4;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -1974,7 +1974,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookAfterXmlExport(_Workbook* Wb, XmlMap* Map, BSTR Url, XlXmlExportResult Result)
 		{
 			int nIndex = 0x000008f5;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2005,7 +2005,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookRowsetComplete(_Workbook* Wb, BSTR Description, BSTR Sheet, VARIANT_BOOL Success)
 		{
 			int nIndex = 0x00000a33;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2038,7 +2038,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnAfterCalculate()
 		{
 			int nIndex = 0x00000a34;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2057,7 +2057,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetPivotTableAfterValueChange(IDispatch* Sh, PivotTable* TargetPivotTable, Excel::Range* TargetRange)
 		{
 			int nIndex = 0x00000b4f;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2082,7 +2082,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetPivotTableBeforeAllocateChanges(IDispatch* Sh, PivotTable* TargetPivotTable, long ValueChangeStart, long ValueChangeEnd, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000b50;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2117,7 +2117,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetPivotTableBeforeCommitChanges(IDispatch* Sh, PivotTable* TargetPivotTable, long ValueChangeStart, long ValueChangeEnd, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000b51;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2152,7 +2152,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetPivotTableBeforeDiscardChanges(IDispatch* Sh, PivotTable* TargetPivotTable, long ValueChangeStart, long ValueChangeEnd)
 		{
 			int nIndex = 0x00000b52;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2183,7 +2183,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnProtectedViewWindowOpen(Excel::ProtectedViewWindow* Pvw)
 		{
 			int nIndex = 0x00000b57;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2204,7 +2204,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnProtectedViewWindowBeforeEdit(Excel::ProtectedViewWindow* Pvw, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000b59;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2229,7 +2229,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnProtectedViewWindowBeforeClose(Excel::ProtectedViewWindow* Pvw, XlProtectedViewCloseReason Reason, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000b5a;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2258,7 +2258,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnProtectedViewWindowResize(Excel::ProtectedViewWindow* Pvw)
 		{
 			int nIndex = 0x00000b5c;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2279,7 +2279,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnProtectedViewWindowActivate(Excel::ProtectedViewWindow* Pvw)
 		{
 			int nIndex = 0x00000b5d;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2300,7 +2300,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnProtectedViewWindowDeactivate(Excel::ProtectedViewWindow* Pvw)
 		{
 			int nIndex = 0x00000b5e;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2321,7 +2321,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookAfterSave(_Workbook* Wb, VARIANT_BOOL Success)
 		{
 			int nIndex = 0x00000b5f;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2346,7 +2346,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookNewChart(_Workbook* Wb, Excel::Chart* Ch)
 		{
 			int nIndex = 0x00000b60;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2369,7 +2369,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetLensGalleryRenderComplete(IDispatch* Sh)
 		{
 			int nIndex = 0x00000c03;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2390,7 +2390,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetTableUpdate(IDispatch* Sh, TableObject* Target)
 		{
 			int nIndex = 0x00000c04;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2413,7 +2413,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnWorkbookModelChange(_Workbook* Wb, ModelChanges* Changes)
 		{
 			int nIndex = 0x00000c08;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{
@@ -2436,7 +2436,7 @@ namespace OfficePlus
 		void CExcelAppObjEvents::OnSheetBeforeDelete(IDispatch* Sh)
 		{
 			int nIndex = 0x00000c07;
-			CExcelAddin* pAddin = (CExcelAddin*)g_pHubble;
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			auto it2 = pAddin->m_mapObjEventDic.find(pAddin->m_pExcelApplication.p);
 			if (it2 != pAddin->m_mapObjEventDic.end())
 			{

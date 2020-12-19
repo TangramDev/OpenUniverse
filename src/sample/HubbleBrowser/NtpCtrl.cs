@@ -72,7 +72,7 @@ namespace Sunny
 
         private void NtpCtrl_Load(object sender, EventArgs e)
         {
-            thisNode = Hubble.CreatingGrid;
+            thisNode = Cosmos.Cosmos.CreatingGrid;
             //Control Topctrl = this.TopLevelControl;
             //IntPtr h = Handle;
             //IntPtr h1 = Topctrl.Handle;
@@ -92,7 +92,7 @@ namespace Sunny
                 "</grid>" +
             "</layout>" +
             "</content1>";
-            Grid grid = Hubble.Observe(this, "test", xml);
+            Grid grid = Cosmos.Cosmos.Observe(this, "test", xml);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -107,7 +107,7 @@ namespace Sunny
                     "</grid>" +
                 "</layout>" +
               "</content1>";
-            Grid grid = Hubble.Observe(treeView1, "test", xml);
+            Grid grid = Cosmos.Cosmos.Observe(treeView1, "test", xml);
         }
     }
 

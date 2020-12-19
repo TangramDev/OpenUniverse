@@ -29,7 +29,7 @@ struct CTangramXHtmlTreeNode;
 
 class CTangramTreeNode :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IHubbleTreeNode, &IID_IHubbleTreeNode, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+	public IDispatchImpl<ICosmosTreeNode, &IID_ICosmosTreeNode, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
 	CTangramTreeNode();
@@ -38,7 +38,7 @@ DECLARE_NO_REGISTRY()
 
 
 BEGIN_COM_MAP(CTangramTreeNode)
-	COM_INTERFACE_ENTRY(IHubbleTreeNode)
+	COM_INTERFACE_ENTRY(ICosmosTreeNode)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 

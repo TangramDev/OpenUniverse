@@ -28,19 +28,19 @@
 // CTangramTreeView
 CTangramTreeView::CTangramTreeView()
 {
-	m_pHubbleHtmlTreeWnd = NULL;
+	m_pCosmosHtmlTreeWnd = NULL;
 }
 
 
-STDMETHODIMP CTangramTreeView::put_TangramTreeViewCallBack(BSTR bstrKey, IHubbleTreeViewCallBack* newVal)
+STDMETHODIMP CTangramTreeView::put_TangramTreeViewCallBack(BSTR bstrKey, ICosmosTreeViewCallBack* newVal)
 {
 	CString strKey = OLE2T(bstrKey);
 	strKey.Trim();
 	strKey.MakeLower();
-	auto it = m_mapHubbleTreeViewCallBack.find(strKey);
-	if(it==m_mapHubbleTreeViewCallBack.end())
+	auto it = m_mapCosmosTreeViewCallBack.find(strKey);
+	if(it==m_mapCosmosTreeViewCallBack.end())
 	{
-		m_mapHubbleTreeViewCallBack[strKey] = newVal;
+		m_mapCosmosTreeViewCallBack[strKey] = newVal;
 		newVal->AddRef();
 	}
 
@@ -49,16 +49,16 @@ STDMETHODIMP CTangramTreeView::put_TangramTreeViewCallBack(BSTR bstrKey, IHubble
 
 void CTangramTreeView::FinalRelease()
 {
-	for(auto it : m_mapHubbleTreeViewCallBack)
+	for(auto it : m_mapCosmosTreeViewCallBack)
 	{
 		it.second->Release();
 	}
-	m_mapHubbleTreeViewCallBack.erase(m_mapHubbleTreeViewCallBack.begin(),m_mapHubbleTreeViewCallBack.end());
+	m_mapCosmosTreeViewCallBack.erase(m_mapCosmosTreeViewCallBack.begin(),m_mapCosmosTreeViewCallBack.end());
 }
 
 STDMETHODIMP CTangramTreeView::AddTreeNode(long hItem, BSTR bstrXml)
 {
-	if(m_pHubbleHtmlTreeWnd)
+	if(m_pCosmosHtmlTreeWnd)
 	{
 		CTangramXmlParse m_Parse;
 		if(m_Parse.LoadXml(OLE2T(bstrXml)))
@@ -66,18 +66,18 @@ STDMETHODIMP CTangramTreeView::AddTreeNode(long hItem, BSTR bstrXml)
 			int nCount = 0;
 			if((HTREEITEM)hItem)
 			{
-				HTREEITEM hChild = m_pHubbleHtmlTreeWnd->GetChildItem((HTREEITEM)hItem);
-				CTangramXHtmlTreeNode *pXTCD = m_pHubbleHtmlTreeWnd->GetItemDataStruct((HTREEITEM)hChild);
+				HTREEITEM hChild = m_pCosmosHtmlTreeWnd->GetChildItem((HTREEITEM)hItem);
+				CTangramXHtmlTreeNode *pXTCD = m_pCosmosHtmlTreeWnd->GetItemDataStruct((HTREEITEM)hChild);
 				if(pXTCD->m_bWaitingFor)
-					m_pHubbleHtmlTreeWnd->DeleteItem(hChild);
+					m_pCosmosHtmlTreeWnd->DeleteItem(hChild);
 			}
 				
-			CTangramXHtmlTreeNode *pXTCD = m_pHubbleHtmlTreeWnd->GetItemDataStruct((HTREEITEM)hItem);
+			CTangramXHtmlTreeNode *pXTCD = m_pCosmosHtmlTreeWnd->GetItemDataStruct((HTREEITEM)hItem);
 			if(pXTCD)
 				pXTCD->m_strTangramXML = _T("");
 
-			m_pHubbleHtmlTreeWnd->LoadXml(&m_Parse,(HTREEITEM)hItem,nCount);
-			m_pHubbleHtmlTreeWnd->Expand((HTREEITEM)hItem,TVE_EXPAND);
+			m_pCosmosHtmlTreeWnd->LoadXml(&m_Parse,(HTREEITEM)hItem,nCount);
+			m_pCosmosHtmlTreeWnd->Expand((HTREEITEM)hItem,TVE_EXPAND);
 		}
 	}
 
@@ -86,13 +86,13 @@ STDMETHODIMP CTangramTreeView::AddTreeNode(long hItem, BSTR bstrXml)
 
 STDMETHODIMP CTangramTreeView::InsertNode(BSTR bstrXml, long* hItem)
 {
-	if(m_pHubbleHtmlTreeWnd)
+	if(m_pCosmosHtmlTreeWnd)
 	{
 		CTangramXmlParse m_Parse;
 		if(m_Parse.LoadXml(OLE2T(bstrXml)))
 		{
 			int nCount = 0;
-			HTREEITEM _hItem = m_pHubbleHtmlTreeWnd->InsertXmlItem(&m_Parse,0);
+			HTREEITEM _hItem = m_pCosmosHtmlTreeWnd->InsertXmlItem(&m_Parse,0);
 			* hItem = (long)_hItem;
 		}
 	}
@@ -101,9 +101,9 @@ STDMETHODIMP CTangramTreeView::InsertNode(BSTR bstrXml, long* hItem)
 
 STDMETHODIMP CTangramTreeView::get_FirstRoot(long* pVal)
 {
-	if(m_pHubbleHtmlTreeWnd&&m_pHubbleHtmlTreeWnd->m_hFirstRoot)
+	if(m_pCosmosHtmlTreeWnd&&m_pCosmosHtmlTreeWnd->m_hFirstRoot)
 	{
-		* pVal = (long)m_pHubbleHtmlTreeWnd->m_hFirstRoot;
+		* pVal = (long)m_pCosmosHtmlTreeWnd->m_hFirstRoot;
 	}
 
 	return S_OK;

@@ -21,8 +21,8 @@
 
 #pragma once
 #include <jni.h>
-#include "../Hubble.h"
-#include "../HubbleCtrl.h"
+#include "../Cosmos.h"
+#include "../CosmosCtrl.h"
 #include "tangrambase.h"
 
 class CEclipseWnd;
@@ -67,7 +67,7 @@ public:
 	CGrid*							m_pHostGrid;
 	CGalaxy*						m_pGalaxy;
 	map<HWND, CEclipseCtrl*>		m_mapCtrl;
-	CHubbleDoc*						m_pDoc;
+	CCosmosDoc*						m_pDoc;
 	IUniverseAppProxy*				m_pAppProxy;
 	void Show(CString strID);
 	BEGIN_COM_MAP(CEclipseWnd)
@@ -80,10 +80,10 @@ public:
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
 		MESSAGE_HANDLER(WM_QUERYAPPPROXY, OnQueryAppProxy)
-		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnHubbleGetXml)
+		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnCosmosGetXml)
 	END_MSG_MAP()
 protected:
 	ULONG InternalAddRef() { return 1; }
@@ -95,15 +95,15 @@ protected:
 	LRESULT OnQueryAppProxy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 
 	void OnFinalMessage(HWND hWnd);
 
 	STDMETHOD(get_Count)(long* pCount);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_Handle)(LONGLONG* pVal);
-	STDMETHOD(get_HubbleCtrl)(LONGLONG hWnd, IEclipseCtrl** pVal);
+	STDMETHOD(get_CosmosCtrl)(LONGLONG hWnd, IEclipseCtrl** pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_Galaxy)(IGalaxy** pVal);
 	STDMETHOD(Active)();
@@ -119,21 +119,21 @@ public:
 
 // CEclipseCtrl
 class ATL_NO_VTABLE CEclipseCtrl :
-	public CHubbleCtrlBase,
+	public CCosmosCtrlBase,
 	public IOleObjectImpl<CEclipseCtrl>,
 	public IPersistStorageImpl<CEclipseCtrl>,
 	public IPersistStreamInitImpl<CEclipseCtrl>,
 	public IConnectionPointContainerImpl<CEclipseCtrl>,
-	public CComCoClass<CEclipseCtrl, &CLSID_HubbleCtrl>,
-	public IConnectionPointImpl<CEclipseCtrl, &DIID__IHubbleObjEvents>,
+	public CComCoClass<CEclipseCtrl, &CLSID_CosmosCtrl>,
+	public IConnectionPointImpl<CEclipseCtrl, &DIID__ICosmosObjEvents>,
 	public IDispatchImpl<IEclipseCtrl, &IID_IEclipseCtrl, &LIBID_Universe, 1, 0>
 {
 public:
 	HWND						m_hEclipseViewWnd;
 	VARIANT						m_varTag;
 	CGrid*						m_pCurGrid;
-	map<CString, CString>		m_mapHubbleInfo;
-	map<CString, HWND>			m_mapHubbleHandle;
+	map<CString, CString>		m_mapCosmosInfo;
+	map<CString, HWND>			m_mapCosmosHandle;
 	map<CString, CGalaxy*>		m_mapGalaxy;
 
 	CEclipseWnd*				m_pEclipseWnd;
@@ -154,7 +154,7 @@ public:
 	END_COM_MAP()
 
 	BEGIN_CONNECTION_POINT_MAP(CEclipseCtrl)
-		CONNECTION_POINT_ENTRY(DIID__IHubbleObjEvents)
+		CONNECTION_POINT_ENTRY(DIID__ICosmosObjEvents)
 	END_CONNECTION_POINT_MAP()
 
 	HRESULT FinalConstruct();
@@ -163,7 +163,7 @@ public:
 public:
 	BEGIN_MSG_MAP(CEclipseCtrl)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnHubbleMsg)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 	END_MSG_MAP()
 
 	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
@@ -177,14 +177,14 @@ public:
 	HRESULT Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPage);
 	HRESULT Fire_Event(IGrid* sender, IDispatch* EventArg);
 	HRESULT Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
-	HRESULT Fire_HubbleEvent(IHubbleEventObj* pEventObj);
+	HRESULT Fire_CosmosEvent(ICosmosEventObj* pEventObj);
 
 	// IEclipseCtrl
 	STDMETHOD(get_tag)(VARIANT* pVal);
 	STDMETHOD(put_tag)(VARIANT newVal);
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(put_Handle)(BSTR bstrHandleName, LONGLONG newVal);
-	STDMETHOD(get_Hubble)(IHubble** pVal);
+	STDMETHOD(get_Cosmos)(ICosmos** pVal);
 	STDMETHOD(get_EclipseViewHandle)(LONGLONG* pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_WorkBenchWindow)(IWorkBenchWindow** pVal);
@@ -200,6 +200,6 @@ public:
 
 private:
 	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnHubbleMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 };
 

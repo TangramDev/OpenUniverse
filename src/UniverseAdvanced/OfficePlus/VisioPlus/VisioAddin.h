@@ -21,7 +21,7 @@
 
 #pragma once
 #include "../OfficeAddin.h"
-#include "..\..\HubbleCtrl.h"
+#include "..\..\CosmosCtrl.h"
 
 namespace OfficePlus
 {
@@ -34,28 +34,28 @@ namespace OfficePlus
 			CVisioAddin();
 			virtual ~CVisioAddin();
 			//CUniverse:
-			STDMETHOD(HubbleCommand)(IDispatch* RibbonControl);
+			STDMETHOD(CosmosCommand)(IDispatch* RibbonControl);
 			STDMETHOD(GetCustomUI)(BSTR RibbonID, BSTR * RibbonXml);
 			HRESULT OnConnection(IDispatch* pHostApp, int ConnectMode);
 			HRESULT OnDisconnection(int DisConnectMode);
 			void WindowCreated(CString strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
-			HRESULT CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv);
+			HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv);
 		};
 
 		// CVisioAppCtrl
 		class ATL_NO_VTABLE CVisioAppCtrl :
-			public CHubbleAppCtrl,
+			public CCosmosAppCtrl,
 			public IOleObjectImpl<CVisioAppCtrl>,
 			public IPersistStorageImpl<CVisioAppCtrl>,
 			public IPersistStreamInitImpl<CVisioAppCtrl>,
-			public CComCoClass<CVisioAppCtrl, &CLSID_HubbleCtrl>,
-			public IDispatchImpl<IHubbleAppCtrl, &IID_IHubbleAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public CComCoClass<CVisioAppCtrl, &CLSID_CosmosCtrl>,
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			CVisioAppCtrl();
 
 			BEGIN_COM_MAP(CVisioAppCtrl)
-				COM_INTERFACE_ENTRY(IHubbleAppCtrl)
+				COM_INTERFACE_ENTRY(ICosmosAppCtrl)
 				COM_INTERFACE_ENTRY(IDispatch)
 				COM_INTERFACE_ENTRY(IOleObject)
 				COM_INTERFACE_ENTRY(IViewObject)
@@ -71,11 +71,11 @@ namespace OfficePlus
 			void OnFinalMessage(HWND hWnd);
 
 		public:
-			// IHubbleAppCtrl
+			// ICosmosAppCtrl
 			STDMETHOD(get_tag)(VARIANT* pVal);
 			STDMETHOD(put_tag)(VARIANT newVal);
 			STDMETHOD(get_HWND)(LONGLONG* pVal);
-			STDMETHOD(get_Hubble)(IHubble** pVal);
+			STDMETHOD(get_Cosmos)(ICosmos** pVal);
 			STDMETHOD(put_AppCtrl)(VARIANT_BOOL newVal);
 		};
 	}

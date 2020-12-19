@@ -31,7 +31,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Hubble.h"
+#include "Cosmos.h"
 #include "eclipseJNI.h"
 #include "eclipseCommon.h"
 #include "eclipseOS.h"
@@ -120,12 +120,12 @@ jstring tangram_extend(JNIEnv * env, jobject obj, jstring key, jstring data, jst
 		_data = JNI_GetStringChars(env, data);
 	}
 	CString strRet = _T("");
-	if (g_pHubble)
+	if (g_pCosmos)
 	{
 		CString strFeatures = _features;
 		CString strKey = _key;
 		CString strData = _data;
-		strRet = g_pHubble->tangram_for_eclipse(strKey, strData, strFeatures);
+		strRet = g_pCosmos->tangram_for_eclipse(strKey, strData, strFeatures);
 	}
 	if (_features != NULL) {
 		JNI_ReleaseStringChars(env, features, _features);
@@ -217,7 +217,7 @@ jstring get_os_recommended_folder(JNIEnv * env, jobject obj) {
 
 void registerNatives(JNIEnv *env) {
 	/*begin Add by Tangram Team*/
-	if (g_pHubble)
+	if (g_pCosmos)
 	{
 		jclass systemClass = NULL;
 		jmethodID loadMethod = NULL;
@@ -243,7 +243,7 @@ void registerNatives(JNIEnv *env) {
 		}
 	}
 	/*end Add by Tangram Team*/
-	jclass bridge = env->FindClass(g_pHubble->m_strBridgeJavaClass);
+	jclass bridge = env->FindClass(g_pCosmos->m_strBridgeJavaClass);
 	//jclass bridge = env->FindClass("org/eclipse/equinox/launcher/JNIBridge");
 	if (bridge != NULL) {
 		JNINativeMethod natives[7];
@@ -278,7 +278,7 @@ void registerNatives(JNIEnv *env) {
 		env->ExceptionClear();
 	}
 
-	g_pHubble->InitJNIForTangram();
+	g_pCosmos->InitJNIForTangram();
 }
 
 
@@ -459,7 +459,7 @@ JavaResults * startJavaJNI(_TCHAR* libPath, _TCHAR* vmArgs[], _TCHAR* progArgs[]
 		//begin Add by Tangram Team
 		int nIndex = -1;
 		CString stroption = CString(vmArgs[i]);
-		stroption = g_pHubble->ConfigJavaVMInfo(stroption);
+		stroption = g_pCosmos->ConfigJavaVMInfo(stroption);
 		if (stroption == _T(""))
 			options[i].optionString = toNarrow(vmArgs[i]);
 		else
@@ -475,7 +475,7 @@ JavaResults * startJavaJNI(_TCHAR* libPath, _TCHAR* vmArgs[], _TCHAR* progArgs[]
 	init_args.version = JNI_VERSION_1_4;
 #else		
 
-	init_args.version = g_pHubble->m_nJVMVersion;
+	init_args.version = g_pCosmos->m_nJVMVersion;
 #endif
 	init_args.options = options;
 	init_args.nOptions = numVMArgs;
@@ -490,19 +490,19 @@ JavaResults * startJavaJNI(_TCHAR* libPath, _TCHAR* vmArgs[], _TCHAR* progArgs[]
 		free(options);
 		OutputDebugString(_T("Success createJavaVM\n"));
 		/*begin Add by Tangram Team*/
-		if (g_pHubble)
+		if (g_pCosmos)
 		{
-			g_pHubble->m_pHubbleDelegate->m_pJVM = jvm;
-			g_pHubble->m_pHubbleDelegate->m_pJVMenv = env;
+			g_pCosmos->m_pCosmosDelegate->m_pJVM = jvm;
+			g_pCosmos->m_pCosmosDelegate->m_pJVMenv = env;
 			if (env)
 			{
-				g_pHubble->m_pHubbleDelegate->systemClass = env->FindClass("java/lang/System");
+				g_pCosmos->m_pCosmosDelegate->systemClass = env->FindClass("java/lang/System");
 				try
 				{
-					if (g_pHubble->m_pHubbleDelegate->systemClass != nullptr)
+					if (g_pCosmos->m_pCosmosDelegate->systemClass != nullptr)
 					{
-						g_pHubble->m_pHubbleDelegate->exitMethod = env->GetStaticMethodID(g_pHubble->m_pHubbleDelegate->systemClass, "exit", "(I)V");
-						g_pHubble->m_pHubbleDelegate->loadMethod = env->GetStaticMethodID(g_pHubble->m_pHubbleDelegate->systemClass, "load", "(Ljava/lang/String;)V");
+						g_pCosmos->m_pCosmosDelegate->exitMethod = env->GetStaticMethodID(g_pCosmos->m_pCosmosDelegate->systemClass, "exit", "(I)V");
+						g_pCosmos->m_pCosmosDelegate->loadMethod = env->GetStaticMethodID(g_pCosmos->m_pCosmosDelegate->systemClass, "load", "(Ljava/lang/String;)V");
 					}
 				}
 				catch (...)
@@ -517,7 +517,7 @@ JavaResults * startJavaJNI(_TCHAR* libPath, _TCHAR* vmArgs[], _TCHAR* progArgs[]
 		/*end Add by Tangram Team*/
 		registerNatives(env);
 		USES_CONVERSION;
-		char * mainClassName = W2A(g_pHubble->InitEclipse(jarFile));
+		char * mainClassName = W2A(g_pCosmos->InitEclipse(jarFile));
 
 		if (mainClassName != NULL) {
 			mainClass = env->FindClass(mainClassName);
@@ -592,7 +592,7 @@ void cleanupVM(int exitCode) {
 	/* we call System.exit() unless osgi.noShutdown is set */
 	ATLTRACE(_T("before quit eclipse\n"));
 	if (shouldShutdown(env)) {
-		if (g_pHubble)
+		if (g_pCosmos)
 		{
 			ATLTRACE(_T("begin quit eclipse\n"));
 			FreeLibrary((HMODULE)theApp.m_hInstance);

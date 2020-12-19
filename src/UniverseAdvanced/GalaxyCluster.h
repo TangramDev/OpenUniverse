@@ -31,10 +31,10 @@
 class ATL_NO_VTABLE CGalaxyCluster : 
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl <CGalaxyCluster>,
-	public IConnectionPointImpl<CGalaxyCluster, &__uuidof(_IHubbleObjEvents)>,
+	public IConnectionPointImpl<CGalaxyCluster, &__uuidof(_ICosmosObjEvents)>,
 	public IDispatchImpl<IGalaxyCluster, &IID_IGalaxyCluster, &LIBID_Universe, 1, 0>
 {
-	friend CHubble;
+	friend CCosmos;
 public:
 	CGalaxyCluster();
 	virtual ~CGalaxyCluster();
@@ -50,9 +50,9 @@ public:
 	CString										m_strXmlBottom;
 
 	CGalaxy*									m_pBKGalaxy;
-	CHubbleDoc*									m_pActiveDoc;
+	CCosmosDoc*									m_pActiveDoc;
 	IUniverseAppProxy*							m_pUniverseAppProxy;
-	CHubbleDocTemplate*							m_pHubbleDocTemplate;
+	CCosmosDocTemplate*							m_pCosmosDocTemplate;
 	map<CString, CString>						m_strMapKey;
 	map<HWND, CGalaxy*>							m_mapCtrlBarGalaxy;
 	map<CString, HWND>							m_mapWnd;
@@ -72,7 +72,7 @@ public:
 	END_COM_MAP()
 
 	BEGIN_CONNECTION_POINT_MAP(CGalaxyCluster)
-		CONNECTION_POINT_ENTRY(__uuidof(_IHubbleObjEvents))
+		CONNECTION_POINT_ENTRY(__uuidof(_ICosmosObjEvents))
 	END_CONNECTION_POINT_MAP()
 
 	void Lock(){}
@@ -88,7 +88,7 @@ public:
 	HRESULT Fire_NodeMouseActivate(IGrid * pActiveNode);
 	HRESULT Fire_ClrControlCreated(IGrid * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
 	HRESULT Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPage);
-	HRESULT Fire_HubbleEvent(IHubbleEventObj* pEventObj);
+	HRESULT Fire_CosmosEvent(ICosmosEventObj* pEventObj);
 	HRESULT Fire_IPCMsg(IGalaxy* pSender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 
 	//void OnNodeDocComplete(WPARAM);
@@ -124,7 +124,7 @@ public:
 	STDMETHOD(GetCtrlInGrid)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
 	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
 	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
-	STDMETHOD(ConnectHubbleCtrl)(IHubbleCtrl* eventSource);
+	STDMETHOD(ConnectCosmosCtrl)(ICosmosCtrl* eventSource);
 	STDMETHOD(CreateGalaxyWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
 	STDMETHOD(ObserveGalaxys)(BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	STDMETHOD(get_CurrentDesignGalaxyType)(GalaxyType* pVal);

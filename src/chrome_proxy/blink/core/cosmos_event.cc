@@ -1,0 +1,189 @@
+#include "cosmos_xobj.h"
+#include "cosmos_event.h"
+#include "cosmos_node.h"
+#include "cosmos_winform.h"
+
+namespace blink {
+
+  CosmosEvent* CosmosEvent::Create(const AtomicString& event_type,
+    const String& eventId,
+    const String& param1,
+    const String& param2,
+    const String& param3,
+    const String& param4,
+    const String& param5,
+    const int64_t handleSource,
+    const int64_t handleTarget, CosmosXobj* session) {
+      return MakeGarbageCollected<CosmosEvent>(event_type, eventId, param1, param2, param3, param4, param5, handleSource, handleTarget, session);
+  }
+
+  CosmosEvent* CosmosEvent::Create(const AtomicString& event_type,
+    const String& eventId,
+    const String& param1,
+    const int64_t handleSource,
+    const String& param3,
+    const int64_t handleTarget,
+    const String& param5) {
+      return MakeGarbageCollected<CosmosEvent>(event_type, eventId, param1, "", param3, "", param5, handleSource, handleTarget, nullptr);
+  }
+  
+  CosmosEvent* CosmosEvent::Create(const AtomicString& event_type, CosmosXobj* session)
+  {
+      return MakeGarbageCollected<CosmosEvent>(event_type, "", "", "", "", "", "", 0, 0, session);
+  }
+
+  void CosmosEvent::Trace(blink::Visitor* visitor) {
+      Event::Trace(visitor);
+      visitor->Trace(session_);
+  }
+
+  CosmosXobj* CosmosEvent::xobj()
+  {
+      return session_;
+  }
+
+  void CosmosEvent::setXobj(CosmosXobj* session)
+  {
+      session_ = session;
+  }
+
+  String CosmosEvent::eventId() {
+      return eventId_;
+  }
+
+  int64_t CosmosEvent::handleSource() {
+      return handleSource_;
+  }
+
+  void CosmosEvent::setHandleSource(const int64_t handleSource) {
+      handleSource_ = handleSource;
+  }
+
+  int64_t CosmosEvent::handleTarget() {
+      return handleTarget_;
+  }
+
+  void CosmosEvent::setHandleTarget(const int64_t handleTarget) {
+      handleTarget_ = handleTarget;
+  }
+
+  void CosmosEvent::setEventId(const String& eventId) {
+      eventId_ = eventId;
+  }
+
+  String CosmosEvent::param1() {
+      return param1_;
+  }
+
+  void CosmosEvent::setParam1(const String& param1) {
+      param1_ = param1;
+  }
+
+  String CosmosEvent::param2() {
+    return param2_;
+  }
+
+  void CosmosEvent::setParam2(const String& param2) {
+    param2_ = param2;
+  }
+
+  String CosmosEvent::param3() {
+    return param3_;
+  }
+
+  void CosmosEvent::setParam3(const String& param3) {
+    param3_ = param3;
+  }
+
+  String CosmosEvent::param4() {
+    return param4_;
+  }
+
+  void CosmosEvent::setParam4(const String& param4) {
+      param4_ = param4;
+  }
+
+  String CosmosEvent::param5() {
+    return param5_;
+  }
+
+  void CosmosEvent::setParam5(const String& param5) {
+    param5_ = param5;
+  }
+
+  int64_t CosmosEvent::hwnd()
+  {
+      int64_t h = session_->getInt64(L"gridhandle");
+      if(h==0)
+          h = session_->getInt64(L"formhandle");
+      if(h==0)
+          h = session_->getInt64(L"hwnd");
+      if(h==0)
+          h = session_->getInt64(L"hWnd");
+      return h;
+  }
+
+  String CosmosEvent::name() {
+    return session_->name();
+  }
+
+  String CosmosEvent::objtype() {
+    return session_->getStr(L"objtype");
+  }
+
+  CosmosWinform* CosmosEvent::form()
+  {
+      if (session_)
+          return session_->form();
+      return nullptr;
+  }
+
+  CosmosNode* CosmosEvent::grid()
+  {
+      if (session_)
+          return session_->grid();
+      return nullptr;
+  }
+
+  CosmosGalaxy* CosmosEvent::galaxy()
+  {
+      if (session_)
+      {
+          CosmosNode* node = session_->grid();
+          if (node)
+          {
+              return node->parentGalaxy();
+          }
+      }
+      return nullptr;
+  }
+
+  CosmosEvent::CosmosEvent() : Event("", Bubbles::kNo, Cancelable::kNo) {
+
+  }
+
+  CosmosEvent::CosmosEvent(const AtomicString& event_type,
+    const String& eventId,
+    const String& param1,
+    const String& param2,
+    const String& param3,
+    const String& param4,
+    const String& param5,
+    const int64_t handleSource,
+    const int64_t handleTarget,
+      CosmosXobj* session)
+    : Event(event_type, Bubbles::kNo, Cancelable::kNo) {
+    eventId_ = eventId;
+    param1_ = param1;
+    param2_ = param2;
+    param3_ = param3;
+    param4_ = param4;
+    param5_ = param5;
+    handleSource_ = handleSource;
+    handleTarget_ = handleTarget;
+    session_ = session;
+  }
+
+  CosmosEvent::~CosmosEvent() = default;
+
+}  // namespace blink

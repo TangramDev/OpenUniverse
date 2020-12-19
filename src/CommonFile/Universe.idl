@@ -1,5 +1,5 @@
 /********************************************************************************
-*					Open Universe - version 1.0.1.12							*
+*				DOM Plus for Application - Version 1.1.5.30						*
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *
@@ -30,12 +30,12 @@ import "ocidl.idl";
 interface IGalaxyCluster;
 interface IGrid;
 interface IGalaxy;
-interface IHubble;
-interface IHubbleCtrl;
+interface ICosmos;
+interface ICosmosCtrl;
 interface IWorkBenchWindow;
-interface IHubbleTreeView;
+interface ICosmosTreeView;
 interface IEclipseCtrl;
-interface IHubbleDoc;
+interface ICosmosDoc;
 interface IWebPage;
 interface IBrowser;
 interface IGridCollection;
@@ -94,10 +94,10 @@ typedef
 enum ObjEventType
 {
 	TangramNode = 0x00000000,
-	HubbleDocEvent = 0x00000001,
+	CosmosDocEvent = 0x00000001,
 	TangramNodeAllChildNode = 0x00000002,
-	HubbleDocAllGalaxyAllChildNode = 0x00000003,
-	HubbleDocAllGalaxyAllTopGrid = 0x00000004,
+	CosmosDocAllGalaxyAllChildNode = 0x00000003,
+	CosmosDocAllGalaxyAllTopGrid = 0x00000004,
 	TangramGalaxyAllTopGridAllChildNode = 0x00000005,
 	TangramGalaxyAllTopGrid = 0x00000006,
 	GalaxyClusterAllGalaxyAllTopGridAllChildNode = 0x00000007,
@@ -106,8 +106,8 @@ enum ObjEventType
 	GalaxyClusterCtrlBarGalaxyAllTopGrid = 0x0000000a,
 	GalaxyClusterNotCtrlBarGalaxyAllTopGridAllChildNode = 0x0000000b,
 	GalaxyClusterNotCtrlBarGalaxyAllTopGrid = 0x0000000c,
-	HubbleDocAllCtrlBarGalaxyAllChildNode = 0x0000000d,
-	HubbleDocAllCtrlBarGalaxy = 0x0000000e
+	CosmosDocAllCtrlBarGalaxyAllChildNode = 0x0000000d,
+	CosmosDocAllCtrlBarGalaxy = 0x0000000e
 }ObjEventType;
 
 typedef
@@ -138,7 +138,7 @@ enum GridType
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IHubbleExtender : IDispatch {
+interface ICosmosExtender : IDispatch {
 	[id(0)] HRESULT Close();
 	[propget, id(1)] HRESULT ActiveWorkBenchWindow(BSTR bstrID, [out, retval] IWorkBenchWindow** pVal);
 };
@@ -150,7 +150,7 @@ interface IHubbleExtender : IDispatch {
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IEclipseExtender : IHubbleExtender {
+interface IEclipseExtender : ICosmosExtender {
 };
 
 [
@@ -160,7 +160,7 @@ interface IEclipseExtender : IHubbleExtender {
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IOfficeExtender : IHubbleExtender {
+interface IOfficeExtender : ICosmosExtender {
 	[id(101)] HRESULT AddVBAFormsScript(IDispatch* OfficeObject, BSTR bstrKey, BSTR bstrXml);
 	[id(102)] HRESULT InitVBAForm([in] IDispatch* newVal, [in]long nStyle, BSTR bstrXml, [out, retval] IGrid** ppGrid);
 	[id(103)] HRESULT GetGalaxyFromVBAForm(IDispatch* pForm, [out, retval] IGalaxy** ppGalaxy);
@@ -173,10 +173,10 @@ interface IOfficeExtender : IHubbleExtender {
 	uuid(19631222-1992-0612-1965-06011982C951),
 	dual,
 	nonextensible,
-	helpstring("IHubbleTreeNode Interface"),
+	helpstring("ICosmosTreeNode Interface"),
 	pointer_default(unique)
 ]
-interface IHubbleTreeNode : IDispatch {
+interface ICosmosTreeNode : IDispatch {
 };
 
 [
@@ -184,17 +184,17 @@ interface IHubbleTreeNode : IDispatch {
 	uuid(19631222-1992-0612-1965-0601198283A6),
 	dual,
 	nonextensible,
-	helpstring("IHubbleTreeViewCallBack Interface"),
+	helpstring("ICosmosTreeViewCallBack Interface"),
 	pointer_default(unique)
 ]
-interface IHubbleTreeViewCallBack : IDispatch {
+interface ICosmosTreeViewCallBack : IDispatch {
 	[propput, id(1), helpstring("property WndGrid")] HRESULT WndGrid(IGrid* newVal);
 	[propget, id(2), helpstring("property Pages")] HRESULT Pages(long* retVal);
-	[id(100), helpstring("method OnInitTreeView")] HRESULT OnInitTreeView(IHubbleTreeView* pTangramTreeView, BSTR bstrXml);
+	[id(100), helpstring("method OnInitTreeView")] HRESULT OnInitTreeView(ICosmosTreeView* pTangramTreeView, BSTR bstrXml);
 	[id(101), helpstring("method OnClick")] HRESULT OnClick(BSTR bstrXml, BSTR bstrXmlData);
 	[id(102), helpstring("method OnInit")] HRESULT OnInit(BSTR bstrXml);
 	[id(103), helpstring("method OnNewPage")] HRESULT OnNewPage(int nNewPage);
-	[id(104), helpstring("method HubbleAction")] HRESULT HubbleAction(BSTR bstrXml, [out, retval] BSTR* bstrRetXml);
+	[id(104), helpstring("method CosmosAction")] HRESULT CosmosAction(BSTR bstrXml, [out, retval] BSTR* bstrRetXml);
 };
 
 [
@@ -202,11 +202,11 @@ interface IHubbleTreeViewCallBack : IDispatch {
 	uuid(19631222-1992-0612-1965-0601198283A5),
 	dual,
 	nonextensible,
-	helpstring("IHubbleTreeView Interface"),
+	helpstring("ICosmosTreeView Interface"),
 	pointer_default(unique)
 ]
-interface IHubbleTreeView : IDispatch {
-	[propput, id(1), helpstring("property TangramTreeViewCallBack")] HRESULT TangramTreeViewCallBack(BSTR bstrKey, [in] IHubbleTreeViewCallBack* newVal);
+interface ICosmosTreeView : IDispatch {
+	[propput, id(1), helpstring("property TangramTreeViewCallBack")] HRESULT TangramTreeViewCallBack(BSTR bstrKey, [in] ICosmosTreeViewCallBack* newVal);
 	[propget, id(2), helpstring("property FirstRoot")] HRESULT FirstRoot([out, retval] long* pVal);
 	[id(3), helpstring("method AddTreeNode")] HRESULT AddTreeNode(long hItem, BSTR bstrXml);
 	[id(4), helpstring("method InsertNode")] HRESULT InsertNode(BSTR bstrXml, [out, retval] long* hItem);
@@ -218,10 +218,10 @@ interface IHubbleTreeView : IDispatch {
 	dual,
 	hidden,
 	nonextensible,
-	helpstring("IHubbleEventObj Interface"),
+	helpstring("ICosmosEventObj Interface"),
 	pointer_default(unique)
 ]
-interface IHubbleEventObj : IDispatch {
+interface ICosmosEventObj : IDispatch {
 	[propget, id(0)] HRESULT eventSource([out, retval] IDispatch** pVal);
 	[propput, id(0), helpstring("eventSource")] HRESULT eventSource([in] IDispatch* eventSource);
 	[propget, id(1)] HRESULT Index([out, retval] int* nVal);
@@ -336,10 +336,10 @@ interface IAppExtender : IDispatch {
 	uuid(19631222-1992-0612-1965-060120161101),
 	dual,
 	nonextensible,
-	helpstring("IHubbleDoc Interface"),
+	helpstring("ICosmosDoc Interface"),
 	pointer_default(unique)
 ]
-interface IHubbleDoc : IDispatch {
+interface ICosmosDoc : IDispatch {
 	[propget, id(1)] HRESULT TemplateXml([out, retval] BSTR* bstrVal);
 	[propput, id(1)] HRESULT TemplateXml([in] BSTR newVal);
 	[propput, id(2)] HRESULT DocType([in] BSTR newVal);
@@ -354,10 +354,10 @@ interface IHubbleDoc : IDispatch {
 	uuid(19631222-1992-0612-1965-060120170707),
 	dual,
 	nonextensible,
-	helpstring("IHubbleDocTemplate Interface"),
+	helpstring("ICosmosDocTemplate Interface"),
 	pointer_default(unique)
 ]
-interface IHubbleDocTemplate : IDispatch {
+interface ICosmosDocTemplate : IDispatch {
 	[propget, id(1)] HRESULT TemplateXml([out, retval] BSTR* bstrVal);
 	[propput, id(1)] HRESULT TemplateXml([in] BSTR newVal);
 	[propput, id(2)] HRESULT DocType([in] BSTR newVal);
@@ -372,10 +372,10 @@ interface IHubbleDocTemplate : IDispatch {
 	uuid(19631222-1992-0612-1965-060119820001),
 	dual,
 	nonextensible,
-	helpstring("IHubble Interface"),
+	helpstring("ICosmos Interface"),
 	pointer_default(unique)
 ]
-interface IHubble : IDispatch {
+interface ICosmos : IDispatch {
 	[propget, id(1)] HRESULT HostChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 	[propget, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [out, retval] VARIANT* pVal);
 	[propput, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [in] VARIANT newVal);
@@ -385,13 +385,13 @@ interface IHubble : IDispatch {
 	[propget, id(5)] HRESULT HostWnd([out, retval] LONGLONG* pVal);
 	[propget, id(6), helpstring("property CurrentActiveNode")] HRESULT CurrentActiveGrid([out, retval] IGrid** pVal);
 	[propget, id(7), helpstring("property CreatingNode")] HRESULT CreatingGrid([out, retval] IGrid** pVal);
-	[propget, id(8)] HRESULT RemoteHubble(BSTR bstrID, [out, retval] IHubble** pVal);
-	[propget, id(9)] HRESULT Extender([out, retval] IHubbleExtender** pVal);
-	[propput, id(9)] HRESULT Extender([in] IHubbleExtender* newVal);
+	[propget, id(8)] HRESULT RemoteCosmos(BSTR bstrID, [out, retval] ICosmos** pVal);
+	[propget, id(9)] HRESULT Extender([out, retval] ICosmosExtender** pVal);
+	[propput, id(9)] HRESULT Extender([in] ICosmosExtender* newVal);
 	[propget, id(10)] HRESULT RemoteHelperHWND([out, retval] LONGLONG* pVal);
 	[propput, id(10)] HRESULT RemoteHelperHWND([in]LONGLONG newVal);
 	[propget, id(11), hidden] HRESULT DesignNode([out, retval] IGrid** pVal);
-	[propget, id(13)] HRESULT HubbleDoc(LONGLONG AppProxy, LONGLONG nDocID, [out, retval] IHubbleDoc** pVal);
+	[propget, id(13)] HRESULT CosmosDoc(LONGLONG AppProxy, LONGLONG nDocID, [out, retval] ICosmosDoc** pVal);
 	[propget, id(14)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
 	[propget, id(15)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 
@@ -415,32 +415,32 @@ interface IHubble : IDispatch {
 	[id(0x00112)] HRESULT GetGridFromHandle(LONGLONG hWnd, [out, retval] IGrid** ppRetGrid);
 	[id(0x00113)] HRESULT GetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
 	[id(0x00114)] HRESULT SetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
-	[id(0x00115), hidden] HRESULT CreateHubbleCtrl(BSTR bstrAppID, [out, retval] IHubbleCtrl** ppRetCtrl);
+	[id(0x00115), hidden] HRESULT CreateCosmosCtrl(BSTR bstrAppID, [out, retval] ICosmosCtrl** ppRetCtrl);
 	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IGrid** ppGrid);
 	[id(0x00119)] HRESULT GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, [out, retval] BSTR* bstrTemplatePath);
-	[id(0x0011a)] HRESULT OpenTangramFile([out, retval] IHubbleDoc** ppDoc);
-	[id(0x0011b)] HRESULT CreateHubbleEventObj([out, retval]IHubbleEventObj** ppHubbleEventObj);
-	[id(0x0011c)] HRESULT FireHubbleEventObj(IHubbleEventObj* pHubbleEventObj);
+	[id(0x0011a)] HRESULT OpenTangramFile([out, retval] ICosmosDoc** ppDoc);
+	[id(0x0011b)] HRESULT CreateCosmosEventObj([out, retval]ICosmosEventObj** ppCosmosEventObj);
+	[id(0x0011c)] HRESULT FireCosmosEventObj(ICosmosEventObj* pCosmosEventObj);
 	[id(0x0011d)] HRESULT ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	[id(0x0011e)] HRESULT DeletePage(LONGLONG PageHandle);
 	[id(0x0011f)] HRESULT LoadDocComponent(BSTR bstrLib, [out, retval] LONGLONG* llAppProxy);
-	[id(0x00120)] HRESULT OpenHubbleDocFile(BSTR bstrFilePath, [out, retval] IHubbleDoc** ppDoc);
+	[id(0x00120)] HRESULT OpenCosmosDocFile(BSTR bstrFilePath, [out, retval] ICosmosDoc** ppDoc);
 	[id(0x00121)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
 	[id(0x00122), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
-	[id(0x00123)] HRESULT NewWorkBench(BSTR bstrHubbleDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
+	[id(0x00123)] HRESULT NewWorkBench(BSTR bstrCosmosDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
 	[id(0x00124), helpstring("method Create ChromeWebBrowser")] HRESULT CreateBrowser(ULONGLONG hParentWnd, BSTR strUrls, [out, retval]IBrowser** ppRet);
-	[id(0x00125)] HRESULT HubbleNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
+	[id(0x00125)] HRESULT CosmosNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
 	[id(0x00126)] HRESULT DeleteGalaxy(IGalaxy* pGalaxy);
 	[id(0x00127)] HRESULT InitEclipseApp();
 	[id(0x00128)] HRESULT SelectVSObj(BSTR bstrData, IDispatch* pVSObj, LONGLONG nHandle);
 
-	[id(0x001000), helpstring("method HubbleCommand")] HRESULT HubbleCommand(IDispatch* RibbonControl);
-	[id(0x001001), helpstring("method HubbleGetImage")] HRESULT HubbleGetImage(BSTR strValue, [out, retval] IPictureDisp** ppdispImage);
-	[id(0x001002), helpstring("method HubbleGetVisible")] HRESULT HubbleGetVisible(IDispatch* RibbonControl, [out, retval] VARIANT* varVisible);
-	[id(0x001003), helpstring("method HubbleOnLoad")] HRESULT HubbleOnLoad(IDispatch* RibbonControl);
-	[id(0x001004), helpstring("method HubbleGetItemCount")] HRESULT HubbleGetItemCount(IDispatch* RibbonControl, [out, retval] long* nCount);
-	[id(0x001005), helpstring("method HubbleGetItemLabel")] HRESULT HubbleGetItemLabel(IDispatch* RibbonControl, long nIndex, [out, retval] BSTR* bstrLabel);
-	[id(0x001006), helpstring("method HubbleGetItemID")] HRESULT HubbleGetItemID(IDispatch* RibbonControl, long nIndex, [out, retval]BSTR* bstrID);
+	[id(0x001000), helpstring("method CosmosCommand")] HRESULT CosmosCommand(IDispatch* RibbonControl);
+	[id(0x001001), helpstring("method CosmosGetImage")] HRESULT CosmosGetImage(BSTR strValue, [out, retval] IPictureDisp** ppdispImage);
+	[id(0x001002), helpstring("method CosmosGetVisible")] HRESULT CosmosGetVisible(IDispatch* RibbonControl, [out, retval] VARIANT* varVisible);
+	[id(0x001003), helpstring("method CosmosOnLoad")] HRESULT CosmosOnLoad(IDispatch* RibbonControl);
+	[id(0x001004), helpstring("method CosmosGetItemCount")] HRESULT CosmosGetItemCount(IDispatch* RibbonControl, [out, retval] long* nCount);
+	[id(0x001005), helpstring("method CosmosGetItemLabel")] HRESULT CosmosGetItemLabel(IDispatch* RibbonControl, long nIndex, [out, retval] BSTR* bstrLabel);
+	[id(0x001006), helpstring("method CosmosGetItemID")] HRESULT CosmosGetItemID(IDispatch* RibbonControl, long nIndex, [out, retval]BSTR* bstrID);
 };
 
 [
@@ -465,7 +465,7 @@ interface IGalaxy : IDispatch {
 	[propget, id(7), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(8), helpstring("property RootGrids")] HRESULT RootGrids([out, retval]IGridCollection** ppGridColletion);
 	[propget, id(9)] HRESULT GalaxyXML([out, retval] BSTR* pVal);
-	[propget, id(10)] HRESULT HubbleDoc([out, retval] IHubbleDoc** pVal);
+	[propget, id(10)] HRESULT CosmosDoc([out, retval] ICosmosDoc** pVal);
 	[propget, id(11)] HRESULT GalaxyType([out, retval] GalaxyType* pVal);
 	[propget, id(12)] HRESULT Name([out, retval] BSTR* pVal);
 	[propget, id(13)] HRESULT HostBrowser([out, retval] IBrowser** ppChromeWebBrowser);
@@ -528,7 +528,7 @@ interface IGalaxyCluster : IDispatch {
 	[id(104)] HRESULT GetGrid(BSTR bstrGalaxyName, BSTR bstrNodeName, [out, retval] IGrid** pRetNode);
 	[id(105)] HRESULT GetCtrlInGrid(BSTR NodeName, BSTR CtrlName, [out, retval] IDispatch** ppCtrl);
 	[id(106)] HRESULT GetGalaxyFromCtrl(IDispatch* ctrl, [out, retval] IGalaxy** ppGalaxy);
-	[id(107)] HRESULT ConnectHubbleCtrl(IHubbleCtrl* eventSource);
+	[id(107)] HRESULT ConnectCosmosCtrl(ICosmosCtrl* eventSource);
 	[id(108)] HRESULT CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, [out, retval] IGrid** ppGrid);
 	[id(109)] HRESULT ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 };
@@ -545,7 +545,7 @@ interface IWorkBenchWindow : IDispatch {
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
 	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(2)] HRESULT Handle([out, retval] LONGLONG* pVal);
-	[propget, id(3)] HRESULT HubbleCtrl(LONGLONG hWnd, [out, retval] IEclipseCtrl** pVal);
+	[propget, id(3)] HRESULT CosmosCtrl(LONGLONG hWnd, [out, retval] IEclipseCtrl** pVal);
 	[propget, id(4)] HRESULT GalaxyCluster([out, retval] IGalaxyCluster** pVal);
 	[propget, id(5)] HRESULT Galaxy([out, retval] IGalaxy** pVal);
 
@@ -598,7 +598,7 @@ interface IWebPage : IDispatch {
 interface IOfficeObject : IDispatch {
 	[id(1)] HRESULT Show(VARIANT_BOOL bShow);
 	[id(2)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
-	[id(3)] HRESULT UnloadHubble();
+	[id(3)] HRESULT UnloadCosmos();
 };
 
 [
@@ -608,9 +608,9 @@ interface IOfficeObject : IDispatch {
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IHubbleCtrl : IDispatch {
+interface ICosmosCtrl : IDispatch {
 	[propget, id(1), helpstring("property HWND")] HRESULT HWND([out, retval] LONGLONG* pVal);
-	[propget, id(2)] HRESULT Hubble([out, retval] IHubble** pVal);
+	[propget, id(2)] HRESULT Cosmos([out, retval] ICosmos** pVal);
 	[propget, id(1000)] HRESULT tag([out, retval] VARIANT* pVal);
 	[propput, id(1000)] HRESULT tag([in] VARIANT newVal);
 };
@@ -622,7 +622,7 @@ interface IHubbleCtrl : IDispatch {
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IHubbleAppCtrl : IHubbleCtrl {
+interface ICosmosAppCtrl : ICosmosCtrl {
 	[propput, id(100)] HRESULT AppCtrl([in] VARIANT_BOOL newVal);
 };
 
@@ -633,7 +633,7 @@ interface IHubbleAppCtrl : IHubbleCtrl {
 	nonextensible,
 	pointer_default(unique)
 ]
-interface IEclipseCtrl : IHubbleCtrl {
+interface IEclipseCtrl : ICosmosCtrl {
 	[propput, id(101), helpstring("Universe Galaxy Window for SWT")] HRESULT Handle(BSTR bstrHandleName, [in] LONGLONG newVal);
 	[propget, id(102)] HRESULT EclipseViewHandle([out, retval] LONGLONG* pVal);
 	[propget, id(103)] HRESULT GalaxyCluster([out, retval] IGalaxyCluster** pVal);
@@ -658,15 +658,15 @@ library Universe
 {
 	[
 		uuid(19631222-1992-0612-1965-060119821002),
-		helpstring("_IHubble Interface")
+		helpstring("_ICosmos Interface")
 	]
-	dispinterface _IHubble
+	dispinterface _ICosmos
 	{
 		properties:
 		methods:
 			[id(1), helpstring("method OpenComplete")] HRESULT OpenComplete(LONG hWnd, BSTR bstrUrl, IGrid * pRootGrid);
 			[id(2)] HRESULT Close();
-			[id(3)] HRESULT HubbleEvent(IHubbleEventObj* NotifyObj);
+			[id(3)] HRESULT CosmosEvent(ICosmosEventObj* NotifyObj);
 	};
 
 	[
@@ -676,8 +676,8 @@ library Universe
 	]
 	coclass Universe
 	{
-		[default] interface IHubble;
-		[default, source] dispinterface _IHubble;
+		[default] interface ICosmos;
+		[default, source] dispinterface _ICosmos;
 	};
 
 	[
@@ -700,9 +700,9 @@ library Universe
 
 	[
 		uuid(19631222-1992-0612-1965-060119821992),
-		helpstring("_IHubbleObjEvents Interface")
+		helpstring("_ICosmosObjEvents Interface")
 	]
-	dispinterface _IHubbleObjEvents
+	dispinterface _ICosmosObjEvents
 	{
 	properties:
 	methods:
@@ -717,29 +717,29 @@ library Universe
 		[id(9)] HRESULT TabChange(IGrid* sender, LONG ActivePage, LONG OldPage);
 		[id(10)] HRESULT Event(IDispatch* sender, IDispatch* EventArg);
 		[id(11)] HRESULT ControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, long CtrlHandle, BSTR CtrlClassName);
-		[id(12)] HRESULT HubbleEvent(IHubbleEventObj* NotifyObj);
+		[id(12)] HRESULT CosmosEvent(ICosmosEventObj* NotifyObj);
 		[id(13)] HRESULT IPCMsg(IGalaxy* pSender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 	};
 
 	[
 		uuid(19631222-1992-0612-1965-060120160930),
-		helpstring("_IHubbleAppEvents Interface")
+		helpstring("_ICosmosAppEvents Interface")
 	]
-	dispinterface _IHubbleAppEvents
+	dispinterface _ICosmosAppEvents
 	{
 	properties:
 	methods:
-		[id(1)] HRESULT HubbleEvent(IHubbleEventObj * NotifyObj);
+		[id(1)] HRESULT CosmosEvent(ICosmosEventObj * NotifyObj);
 	};
 
 	[
 		uuid(19631222-1992-0612-1965-060120071001),
 		control
 	]
-	coclass HubbleCtrl
+	coclass CosmosCtrl
 	{
-		[default] interface IHubbleCtrl;
-		[default, source] dispinterface 	_IHubbleObjEvents;
+		[default] interface ICosmosCtrl;
+		[default, source] dispinterface 	_ICosmosObjEvents;
 	};
 
 	[
@@ -751,6 +751,6 @@ library Universe
 		interface IEclipseCtrl;
 		interface IEclipseExtender;
 		interface IOfficeExtender;
-		interface IHubbleAppCtrl;
+		interface ICosmosAppCtrl;
 	};
 };

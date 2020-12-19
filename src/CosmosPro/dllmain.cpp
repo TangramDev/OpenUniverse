@@ -24,14 +24,14 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "dllmain.h"
-#include "HubbleEvents.cpp"
+#include "CosmosEvents.cpp"
 #include <shellapi.h>
 #include <shlobj.h>
 
 CCosmos::CCosmos()
 {
 	ATLTRACE(_T("Loading CCosmos :%p\n"), this);
-	m_pHubble = nullptr;
+	m_pCosmos = nullptr;
 	//m_pVSExtender = nullptr;
 	m_dwThreadID = ::GetCurrentThreadId();
 	TCHAR file[MAX_PATH];
@@ -48,7 +48,7 @@ CCosmos::~CCosmos()
 	BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
 }
 
-void CCosmos::InitHubbleApp(bool bCrashReporting)
+void CCosmos::InitCosmosApp(bool bCrashReporting)
 {
 	if (m_bBrowserModeInit)
 		return;
@@ -76,10 +76,10 @@ void CCosmos::ExitJVM()
 				_T("\n\n***************For CLR Developer***************\n")
 				_T("***************Exit Eclipse JVM from CLR***************\n\n")
 			);
-			if (m_pHubbleImpl && m_pHubbleImpl->m_mapWindowProvider.size())
+			if (m_pCosmosImpl && m_pCosmosImpl->m_mapWindowProvider.size())
 			{
-				while (m_pHubbleImpl->m_mapWindowProvider.size())
-					m_pHubbleImpl->m_mapWindowProvider.erase(m_pHubbleImpl->m_mapWindowProvider.begin());
+				while (m_pCosmosImpl->m_mapWindowProvider.size())
+					m_pCosmosImpl->m_mapWindowProvider.erase(m_pCosmosImpl->m_mapWindowProvider.begin());
 			}
 			m_pJVMenv->CallStaticVoidMethod(systemClass, exitMethod, 0);
 			OutputDebugString(
@@ -202,7 +202,7 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 	}
 	if (strLib != _T(""))
 	{
-		if (strLib.CompareNoCase(theApp.m_pHubbleImpl->m_strExeName) == 0)
+		if (strLib.CompareNoCase(theApp.m_pCosmosImpl->m_strExeName) == 0)
 		{
 			strPath = m_strAppPath + strLib + _T(".exe");
 		}
@@ -247,9 +247,9 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 				}//FindNextFile
 				else
 				{
-					if (theApp.m_pHubbleImpl)
+					if (theApp.m_pCosmosImpl)
 					{
-						strPath = theApp.m_pHubbleImpl->m_strAppCommonFormsPath + strLib + _T(".dll");
+						strPath = theApp.m_pCosmosImpl->m_strAppCommonFormsPath + strLib + _T(".dll");
 						if (::PathFileExists(strPath))
 						{
 							return strObjName + _T("|") + strLib + _T("|") + strPath;
@@ -266,7 +266,7 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 			}//while
 
 			// Find .shared directory
-			CString strSharedPath = theApp.m_pHubbleImpl->m_strAppDataPath;// OLE2T(pVal.bstrVal);
+			CString strSharedPath = theApp.m_pCosmosImpl->m_strAppDataPath;// OLE2T(pVal.bstrVal);
 			hFind = FindFirstFile(strSharedPath + _T(".shared\\*.*"), &FindFileData); // find the first file
 			if (hFind == INVALID_HANDLE_VALUE)
 			{

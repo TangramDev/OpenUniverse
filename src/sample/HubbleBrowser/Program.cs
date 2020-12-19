@@ -28,7 +28,7 @@ namespace Sunny
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Hubble.Run(/*new Form1()*/);
+            Cosmos.Cosmos.Run(/*new Form1()*/);
         }
     }
 }

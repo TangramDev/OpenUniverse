@@ -21,7 +21,7 @@
 
 #include "..\stdafx.h"
 #include "..\UniverseApp.h"
-#include "..\Hubble.h"
+#include "..\Cosmos.h"
 #include "Psapi.h"
 #include "Wininet.h"
 #include <Mmsystem.h>
@@ -123,7 +123,7 @@ namespace Utilities
 		HANDLE hFile = INVALID_HANDLE_VALUE;
 		if (m_strFilePath.CompareNoCase(_T("\\TangramMsi\\Tangram.msi")) == 0)
 		{
-			m_strFilePath = g_pHubble->m_strAppDataPath + _T("\\TangramMsi\\Tangram.msi");
+			m_strFilePath = g_pCosmos->m_strAppDataPath + _T("\\TangramMsi\\Tangram.msi");
 			bTangramMsi = true;
 		}
 		int nPos = m_strFilePath.ReverseFind('\\');
@@ -269,7 +269,7 @@ namespace Utilities
 			m_Installer.InstallComponent(m_strActionXml);
 		}
 		//发送下载成功消息
-		::PostMessage(g_pHubble->m_hHostWnd, WM_DOWNLOAD_MSG, (WPARAM)this, (LPARAM)true);
+		::PostMessage(g_pCosmos->m_hHostWnd, WM_DOWNLOAD_MSG, (WPARAM)this, (LPARAM)true);
 		return true;
 	}
 
@@ -284,7 +284,7 @@ namespace Utilities
 			{
 				if (!InerDownloadAFile())
 				{
-					::PostMessage(g_pHubble->m_hHostWnd, WM_DOWNLOAD_MSG, (WPARAM)this, (LPARAM)false);
+					::PostMessage(g_pCosmos->m_hHostWnd, WM_DOWNLOAD_MSG, (WPARAM)this, (LPARAM)false);
 				}
 				else
 				{

@@ -80,14 +80,14 @@ namespace OfficePlus
 			CWordDocument* pWordDoc = (CWordDocument*)wParam;
 			CWordObject* pWordWnd = pWordDoc->begin()->second;
 
-			auto it = g_pHubble->m_mapWindowPage.find(pWordWnd->m_hChildClient);
-			if (it != g_pHubble->m_mapWindowPage.end())
+			auto it = g_pCosmos->m_mapWindowPage.find(pWordWnd->m_hChildClient);
+			if (it != g_pCosmos->m_mapWindowPage.end())
 				pWordDoc->m_pDocGalaxyCluster = (CGalaxyCluster*)it->second;
 			else
 			{
 				pWordDoc->m_pDocGalaxyCluster = new CComObject<CGalaxyCluster>();
 				pWordDoc->m_pDocGalaxyCluster->m_hWnd = pWordWnd->m_hChildClient;
-				g_pHubble->m_mapWindowPage[pWordWnd->m_hChildClient] = pWordWnd->m_pGalaxyCluster;
+				g_pCosmos->m_mapWindowPage[pWordWnd->m_hChildClient] = pWordWnd->m_pGalaxyCluster;
 			}
 
 			if (pWordDoc->m_pDocGalaxyCluster)
@@ -138,7 +138,7 @@ namespace OfficePlus
 							_pCustomTaskPane->AddRef();
 							_pCustomTaskPane->put_Visible(true);
 							m_mapTaskPaneMap[(long)m_pActiveWordObject->m_hForm] = _pCustomTaskPane;
-							CComPtr<IHubbleCtrl> pCtrlDisp;
+							CComPtr<ICosmosCtrl> pCtrlDisp;
 							_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 							if (pCtrlDisp)
 							{
@@ -153,14 +153,14 @@ namespace OfficePlus
 								CWordDocument* m_pDoc = pWordWnd->m_pWordPlusDoc;
 								if (m_pDoc->m_pTaskPaneGalaxyCluster == nullptr)
 								{
-									auto it = g_pHubble->m_mapWindowPage.find(hPWnd);
-									if (it != g_pHubble->m_mapWindowPage.end())
+									auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
+									if (it != g_pCosmos->m_mapWindowPage.end())
 										m_pDoc->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 									else
 									{
 										m_pDoc->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 										m_pDoc->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pHubble->m_mapWindowPage[hPWnd] = m_pDoc->m_pTaskPaneGalaxyCluster;
+										g_pCosmos->m_mapWindowPage[hPWnd] = m_pDoc->m_pTaskPaneGalaxyCluster;
 									}
 
 									if (m_pDoc->m_pTaskPaneGalaxyCluster)
@@ -514,10 +514,10 @@ namespace OfficePlus
 			strID.MakeLower();
 			if (strID.Find(_T("word.application")) == 0)
 				return put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-			return CHubble::StartApplication(bstrAppID, bstrXml);
+			return CCosmos::StartApplication(bstrAppID, bstrXml);
 		}
 
-		STDMETHODIMP CWordAddin::HubbleCommand(IDispatch* RibbonControl)
+		STDMETHODIMP CWordAddin::CosmosCommand(IDispatch* RibbonControl)
 		{
 			if (m_spRibbonUI)
 				m_spRibbonUI->Invalidate();
@@ -531,15 +531,15 @@ namespace OfficePlus
 				CString strTag = OLE2T(bstrTag);
 				if (strTag.CompareNoCase(_T("opentangramfile")) == 0)
 				{
-					CComPtr<IHubbleDoc> pDoc;
+					CComPtr<ICosmosDoc> pDoc;
 					return this->OpenTangramFile(&pDoc);
 				}
 				int nPos = strTag.Find(_T("@"));
 				CString strPath = m_strAppCommonDocPath + strTag;
 				if (::PathFileExists(strPath))
 				{
-					CComPtr<IHubbleDoc> pDoc;
-					return this->OpenHubbleDocFile(strPath.AllocSysString(), &pDoc);
+					CComPtr<ICosmosDoc> pDoc;
+					return this->OpenCosmosDocFile(strPath.AllocSysString(), &pDoc);
 				}
 			}
 			if (m_pActiveWordObject == nullptr)
@@ -620,7 +620,7 @@ namespace OfficePlus
 							_pCustomTaskPane->AddRef();
 							_pCustomTaskPane->put_Visible(true);
 							m_mapTaskPaneMap[(long)m_pActiveWordObject->m_hForm] = _pCustomTaskPane;
-							CComPtr<IHubbleCtrl> pCtrlDisp;
+							CComPtr<ICosmosCtrl> pCtrlDisp;
 							_pCustomTaskPane->get_ContentControl((IDispatch**)&pCtrlDisp);
 							if (pCtrlDisp)
 							{
@@ -911,7 +911,7 @@ namespace OfficePlus
 					m_pWordAppObjEvents2->DispEventAdvise(m_pApplication);
 				}
 			}
-			return CHubble::AttachObjEvent(pDisp, nEventIndex);
+			return CCosmos::AttachObjEvent(pDisp, nEventIndex);
 		}
 
 		STDMETHODIMP CWordAddin::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
@@ -925,12 +925,12 @@ namespace OfficePlus
 			if (strKey == _T("doctemplate"))
 			{
 				auto it = m_mapValInfo.find(_T("doctemplate"));
-				if (it != g_pHubble->m_mapValInfo.end())
+				if (it != g_pCosmos->m_mapValInfo.end())
 				{
 					::VariantClear(&it->second);
-					g_pHubble->m_mapValInfo.erase(it);
+					g_pCosmos->m_mapValInfo.erase(it);
 				}
-				g_pHubble->m_mapValInfo[strKey] = newVal;
+				g_pCosmos->m_mapValInfo[strKey] = newVal;
 				CComPtr<Documents> pDocsDisp2;
 				m_pApplication->get_Documents(&pDocsDisp2);
 				if (pDocsDisp2)
@@ -944,7 +944,7 @@ namespace OfficePlus
 					return pDocsDisp2->Add(&varTemplate, &varNew, &varTypr, &varVisible, &pDoc);
 				}
 			}
-			return CHubble::put_AppKeyValue(bstrKey, newVal);
+			return CCosmos::put_AppKeyValue(bstrKey, newVal);
 		}
 
 		bool CWordAddin::OnActiveOfficeObj(HWND hWnd)
@@ -981,7 +981,7 @@ namespace OfficePlus
 			}
 		}
 
-		HRESULT CWordAddin::CreateHubbleCtrl(void* pv, REFIID riid, LPVOID* ppv)
+		HRESULT CWordAddin::CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv)
 		{
 			return CWordAppCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
@@ -1072,9 +1072,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnEPostagePropertyDialog(_Document* Doc)
 		{
 			int nIndex = 0x0000000f;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1085,7 +1085,7 @@ namespace OfficePlus
 					pObj->Init(_T("EPostagePropertyDialog"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = Doc;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1093,9 +1093,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnEPostageInsert(_Document* Doc)
 		{
 			int nIndex = 0x00000010;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1106,7 +1106,7 @@ namespace OfficePlus
 					pObj->Init(_T("EPostageInsert"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = Doc;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1114,9 +1114,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeAfterMerge(_Document* Doc, Word::Document* DocResult)
 		{
 			int nIndex = 0x00000011;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1129,7 +1129,7 @@ namespace OfficePlus
 					pObj->m_mapDisp[0]->AddRef();
 					pObj->m_mapDisp[1] = (_Document*)DocResult;
 					pObj->m_mapDisp[1]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1137,9 +1137,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeAfterRecordMerge(_Document* Doc)
 		{
 			int nIndex = 0x00000012;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1150,7 +1150,7 @@ namespace OfficePlus
 					pObj->Init(_T("MailMergeAfterRecordMerge"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = Doc;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1158,9 +1158,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeBeforeMerge(_Document* Doc, long StartRecord, long EndRecord, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000013;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1183,7 +1183,7 @@ namespace OfficePlus
 					var3.vt = VT_BOOL | VT_BYREF;
 					var3.pboolVal = Cancel;
 					pObj->m_mapVar[2] = var3;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1191,9 +1191,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeBeforeRecordMerge(_Document* Doc, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000014;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1208,7 +1208,7 @@ namespace OfficePlus
 					var3.vt = VT_BOOL | VT_BYREF;
 					var3.pboolVal = Cancel;
 					pObj->m_mapVar[0] = var3;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1216,9 +1216,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeDataSourceLoad(_Document* Doc) 
 		{
 			int nIndex = 0x00000015;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1229,7 +1229,7 @@ namespace OfficePlus
 					pObj->Init(_T("MailMergeDataSourceLoad"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = Doc;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1237,9 +1237,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeDataSourceValidate(_Document* Doc, VARIANT_BOOL* Handled) 
 		{
 			int nIndex = 0x00000016;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1254,7 +1254,7 @@ namespace OfficePlus
 					var3.vt = VT_BOOL | VT_BYREF;
 					var3.pboolVal = Handled;
 					pObj->m_mapVar[0] = var3;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1262,9 +1262,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeWizardSendToCustom(_Document* Doc)
 		{
 			int nIndex = 0x00000017;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1275,7 +1275,7 @@ namespace OfficePlus
 					pObj->Init(_T("MailMergeWizardSendToCustom"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = Doc;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1283,9 +1283,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnMailMergeWizardStateChange(_Document* Doc, int* FromState, int* ToState, VARIANT_BOOL* Handled) 
 		{
 			int nIndex = 0x00000018;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1308,7 +1308,7 @@ namespace OfficePlus
 					var3.vt = VT_BOOL | VT_BYREF;
 					var3.pboolVal = Handled;
 					pObj->m_mapVar[2] = var3;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1316,9 +1316,9 @@ namespace OfficePlus
 		void CWordAppObjEvents::OnWindowSize(_Document* Doc, Word::Window* Wn)
 		{
 			int nIndex = 0x00000019;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1331,7 +1331,7 @@ namespace OfficePlus
 					pObj->m_mapDisp[0]->AddRef();
 					pObj->m_mapDisp[1] = Wn;
 					pObj->m_mapDisp[1]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1339,9 +1339,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnXMLSelectionChange(Word::Selection* Sel, XMLNode* OldXMLNode, XMLNode* NewXMLNode, long* Reason)
 		{
 			int nIndex = 0x0000001a;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1360,7 +1360,7 @@ namespace OfficePlus
 					var1.vt = VT_I4|VT_BYREF;
 					var1.plVal = Reason;
 					pObj->m_mapVar[0] = var1;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1368,9 +1368,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnXMLValidationError(XMLNode* XMLNode)
 		{
 			int nIndex = 0x0000001b;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1381,7 +1381,7 @@ namespace OfficePlus
 					pObj->Init(_T("XMLValidationError"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = XMLNode;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1389,9 +1389,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnDocumentSync(_Document* Doc, MsoSyncEventType SyncEvent) 
 		{
 			int nIndex = 0x0000001c;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1406,7 +1406,7 @@ namespace OfficePlus
 					var1.vt = VT_I4;
 					var1.intVal = SyncEvent;
 					pObj->m_mapVar[0] = var1;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1414,9 +1414,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnMailMergeDataSourceValidate2(_Document* Doc, VARIANT_BOOL* Handled)
 		{
 			int nIndex = 0x0000001e;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1431,7 +1431,7 @@ namespace OfficePlus
 					var1.vt = VT_BOOL | VT_BYREF;
 					var1.pboolVal = Handled;
 					pObj->m_mapVar[0] = var1;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1439,9 +1439,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnProtectedViewWindowOpen(ProtectedViewWindow* PvWindow) 
 		{
 			int nIndex = 0x0000001f;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1452,7 +1452,7 @@ namespace OfficePlus
 					pObj->Init(_T("ProtectedViewWindowOpen"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = PvWindow;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1460,9 +1460,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnProtectedViewWindowBeforeEdit(ProtectedViewWindow* PvWindow, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000020;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1477,7 +1477,7 @@ namespace OfficePlus
 					var1.vt = VT_BOOL | VT_BYREF;
 					var1.pboolVal = Cancel;
 					pObj->m_mapVar[0] = var1;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1485,9 +1485,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnProtectedViewWindowBeforeClose(ProtectedViewWindow* PvWindow, int CloseReason, VARIANT_BOOL* Cancel)
 		{
 			int nIndex = 0x00000021;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1506,7 +1506,7 @@ namespace OfficePlus
 					var1.vt = VT_BOOL | VT_BYREF;
 					var1.pboolVal = Cancel;
 					pObj->m_mapVar[1] = var1;
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1514,9 +1514,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnProtectedViewWindowSize(ProtectedViewWindow* PvWindow) 
 		{
 			int nIndex = 0x00000022;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1527,7 +1527,7 @@ namespace OfficePlus
 					pObj->Init(_T("ProtectedViewWindowSize"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = PvWindow;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1535,9 +1535,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnProtectedViewWindowActivate(ProtectedViewWindow* PvWindow) 
 		{
 			int nIndex = 0x00000023;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1548,7 +1548,7 @@ namespace OfficePlus
 					pObj->Init(_T("ProtectedViewWindowActivate"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = PvWindow;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1556,9 +1556,9 @@ namespace OfficePlus
 		void CWordAppObjEvents2::OnProtectedViewWindowDeactivate(ProtectedViewWindow* PvWindow)
 		{
 			int nIndex = 0x00000024;
-			CWordAddin* pAddin = (CWordAddin*)g_pHubble;
-			auto it2 = g_pHubble->m_mapObjEventDic.find(pAddin->m_pApplication.p);
-			if (it2 != g_pHubble->m_mapObjEventDic.end())
+			CWordAddin* pAddin = (CWordAddin*)g_pCosmos;
+			auto it2 = g_pCosmos->m_mapObjEventDic.find(pAddin->m_pApplication.p);
+			if (it2 != g_pCosmos->m_mapObjEventDic.end())
 			{
 				CString strEventIndexs = it2->second;
 				CString strIndex = _T("");
@@ -1569,7 +1569,7 @@ namespace OfficePlus
 					pObj->Init(_T("ProtectedViewWindowDeactivate"), nIndex, pAddin->m_pApplication.p);
 					pObj->m_mapDisp[0] = PvWindow;
 					pObj->m_mapDisp[0]->AddRef();
-					g_pHubble->FireAppEvent(pObj);
+					g_pCosmos->FireAppEvent(pObj);
 				}
 			}
 		}
@@ -1597,7 +1597,7 @@ namespace OfficePlus
 
 		STDMETHODIMP CWordAppCtrl::put_AppCtrl(VARIANT_BOOL newVal)
 		{
-			g_pHubble->m_pHubbleAppCtrl = this;
+			g_pCosmos->m_pCosmosAppCtrl = this;
 
 			return S_OK;
 		}
@@ -1608,9 +1608,9 @@ namespace OfficePlus
 			return S_OK;
 		}
 
-		STDMETHODIMP CWordAppCtrl::get_Hubble(IHubble** pVal)
+		STDMETHODIMP CWordAppCtrl::get_Cosmos(ICosmos** pVal)
 		{
-			*pVal = g_pHubble;
+			*pVal = g_pCosmos;
 			return S_OK;
 		}
 	}

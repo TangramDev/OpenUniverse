@@ -38,7 +38,7 @@ namespace SessionApi
 
         private void UserControl2_Load(object sender, EventArgs e)
         {
-            thisNode = Cosmos.Hubble.CreatingGrid;
+            thisNode = Cosmos.Cosmos.Cosmos.CreatingGrid;
             thisNode.OnBindCLRObjToWebPage += ThisNode_OnBindCLRObjToWebPage;
         }
 
@@ -59,7 +59,7 @@ namespace SessionApi
 
         private void UserControl2_MyEvent(object sender, MyEventArgs e)
         {
-            if (Cosmos.Hubble.Wormholes.TryGetValue(sender, out Cosmos.Wormhole session))
+            if (Cosmos.Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Cosmos.Wormhole session))
             {
                 if (sender is UserControl2 userControl2)
                 {
