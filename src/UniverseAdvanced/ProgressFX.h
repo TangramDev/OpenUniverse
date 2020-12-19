@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 /********************************************************************************
-*					Open Universe - version 1.1.5.29							*
+*					DOM Plus for Application - Version 1.1.5.30                 *
 *********************************************************************************
 * Copyright (C) 2002-2018 by Tangram Team.   All Rights Reserved.				*
 *
