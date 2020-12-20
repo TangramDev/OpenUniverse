@@ -28,7 +28,7 @@ using namespace System::Data;
 using namespace System::Drawing;
 
 
-namespace Cosmos {
+namespace Universe {
 
 	ref class Grid;
 	/// <summary>

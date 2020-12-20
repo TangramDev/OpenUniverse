@@ -555,4 +555,4 @@ namespace Browser {
 		}
 		return S_OK;
 	}
-}  // namespace Universe
+}  

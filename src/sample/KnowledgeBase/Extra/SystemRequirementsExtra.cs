@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Cosmos;
+using Universe;
 
 namespace KnowledgeBase
 {
@@ -22,7 +22,7 @@ namespace KnowledgeBase
 
         private void SystemRequirementsExtra_Load(object sender, EventArgs e)
         {
-            thisGrid = Cosmos.Cosmos.CreatingGrid;
+            thisGrid = Cosmos.CreatingGrid;
             if (thisGrid != null)
             {
                 thisGrid.OnCloudMessageReceived += ThisNode_OnCloudMessageReceived;

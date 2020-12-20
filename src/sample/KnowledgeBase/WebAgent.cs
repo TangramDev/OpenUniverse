@@ -12,8 +12,8 @@ namespace Cas
     {
         public static int Load(string args)
         {
-            Cosmos.Cosmos.Cosmos.OnBindCLRObjToWebPage += Tangram_OnBindCLRObjToWebPage;
-            Cosmos.Cosmos.Cosmos.OnHubbleMsgReceived += Tangram_OnTangramCloudMsgReceived;
+            Cosmos.Cosmos.OnBindCLRObjToWebPage += Tangram_OnBindCLRObjToWebPage;
+            Cosmos.Cosmos.OnHubbleMsgReceived += Tangram_OnTangramCloudMsgReceived;
             return 0;
         }
 
@@ -47,7 +47,7 @@ namespace Cas
 
         private static void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (Cosmos.Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Cosmos.Wormhole cloudWormhole))
+            if (Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Cosmos.Wormhole cloudWormhole))
             {
                 if (e.Node.Tag != null)
                 {
@@ -70,7 +70,7 @@ namespace Cas
 
         private static void Button_Click(object sender, EventArgs e)
         {
-            if (Cosmos.Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Cosmos.Wormhole cloudWormhole))
+            if (Cosmos.Cosmos.Wormholes.TryGetValue(sender, out Cosmos.Wormhole cloudWormhole))
             {
                 Button button = sender as Button;
                 if (button != null)

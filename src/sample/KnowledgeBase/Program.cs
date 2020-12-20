@@ -16,7 +16,7 @@ namespace KnowledgeBase
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Cosmos.Cosmos.Cosmos.Run();
+            Cosmos.Cosmos.Run();
         }
     }
 }

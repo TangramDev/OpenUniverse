@@ -50,8 +50,8 @@ void CGridCLREvent::OnGridAddInsCreated()
 
 void CGridCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	::Cosmos::Grid^ pActiveGrid = m_pGrid->GetGrid(0, nActivePage);
-	::Cosmos::Grid^ pOldGrid = m_pGrid->GetGrid(0, nOldPage);
+	Universe::Grid^ pActiveGrid = m_pGrid->GetGrid(0, nActivePage);
+	Universe::Grid^ pOldGrid = m_pGrid->GetGrid(0, nOldPage);
 	m_pGrid->Fire_OnTabChange(pActiveGrid, pOldGrid);
 }
 

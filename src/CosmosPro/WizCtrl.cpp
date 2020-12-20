@@ -23,7 +23,7 @@
 #include "WizForm.h"
 #include "Cosmos.h"
 
-namespace Cosmos
+namespace Universe
 {
 	System::Void WizCtrl::WizCtrl_Load(System::Object^ sender, System::EventArgs^ e) {
 #ifndef _WIN64

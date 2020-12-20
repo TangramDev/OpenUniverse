@@ -30,7 +30,7 @@ class CEclipseCtrl;
 
 class ATL_NO_VTABLE CEclipseExtender :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IEclipseExtender, &IID_IEclipseExtender, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+	public IDispatchImpl<IEclipseExtender, &IID_IEclipseExtender, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
 	CEclipseExtender(void);
@@ -48,7 +48,7 @@ public:
 class ATL_NO_VTABLE CEclipseWnd :
 	public CWindowImpl<CEclipseWnd, CWindow>,
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IWorkBenchWindow, &IID_IWorkBenchWindow, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+	public IDispatchImpl<IWorkBenchWindow, &IID_IWorkBenchWindow, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
 	CEclipseWnd(void);
@@ -126,7 +126,7 @@ class ATL_NO_VTABLE CEclipseCtrl :
 	public IConnectionPointContainerImpl<CEclipseCtrl>,
 	public CComCoClass<CEclipseCtrl, &CLSID_CosmosCtrl>,
 	public IConnectionPointImpl<CEclipseCtrl, &DIID__ICosmosObjEvents>,
-	public IDispatchImpl<IEclipseCtrl, &IID_IEclipseCtrl, &LIBID_Universe, 1, 0>
+	public IDispatchImpl<IEclipseCtrl, &IID_IEclipseCtrl, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	HWND						m_hEclipseViewWnd;

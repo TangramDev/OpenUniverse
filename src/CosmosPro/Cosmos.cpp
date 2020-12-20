@@ -41,7 +41,7 @@ using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 using namespace System::IO::Compression;
 
-namespace Cosmos
+namespace Universe
 {
     TangramAppProxy::TangramAppProxy()
     {
@@ -115,7 +115,7 @@ namespace Cosmos
 
         if (pGalaxyCluster)
         {
-            return theAppProxy._createObject<IGalaxyCluster, ::Cosmos::GalaxyCluster>(pGalaxyCluster);
+            return theAppProxy._createObject<IGalaxyCluster, Universe::GalaxyCluster>(pGalaxyCluster);
         }
         return nullptr;
     }
@@ -124,7 +124,7 @@ namespace Cosmos
     {
         CComPtr<IGalaxy> _pGalaxy;
         m_pGrid->get_Galaxy(&_pGalaxy);
-        return theAppProxy._createObject<IGalaxy, ::Cosmos::Galaxy>(_pGalaxy);
+        return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(_pGalaxy);
     }
 
     String^ Grid::Caption::get()
@@ -384,7 +384,7 @@ namespace Cosmos
 
     Cosmos::~Cosmos(void)
     {
-        for each (KeyValuePair<String^, Object^>^ dic in Cosmos::Cosmos::m_pCosmosCLRObjDic)
+        for each (KeyValuePair<String^, Object^>^ dic in Universe::Cosmos::m_pCosmosCLRObjDic)
         {
             if (dic->Value != nullptr)
             {
@@ -577,12 +577,12 @@ namespace Cosmos
 
     System::Drawing::Icon^ Cosmos::DefaultIcon::get()
     {
-        if (Cosmos::Cosmos::m_pDefaultIcon == nullptr)
+        if (Universe::Cosmos::m_pDefaultIcon == nullptr)
         {
             Form^ _pForm = gcnew Form();
-            Cosmos::Cosmos::m_pDefaultIcon = _pForm->Icon;
+            Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
         }
-        return Cosmos::Cosmos::m_pDefaultIcon;
+        return Universe::Cosmos::m_pDefaultIcon;
     }
 
     bool Cosmos::WebRuntimeInit()
@@ -778,12 +778,12 @@ namespace Cosmos
 
     String^ Cosmos::WizData::get()
     {
-        return Cosmos::Cosmos::m_strWizData;
+        return Universe::Cosmos::m_strWizData;
     }
 
     void Cosmos::WizData::set(String^ strXml)
     {
-        Cosmos::Cosmos::m_strWizData = strXml;
+        Universe::Cosmos::m_strWizData = strXml;
     }
 
     //TangramAppProxy^ Cosmos::AppProxy::get(String^ strKey)
@@ -858,7 +858,7 @@ namespace Cosmos
         return OnGetSubObjForWebPage(SourceObj, subObjName);
     }
 
-    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, ::Cosmos::Wormhole^ eventSession, String^ eventName)
+    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName)
     {
         if (eventSession->isBindCLRObjToWebPage(SourceObj))
             return;
@@ -1335,8 +1335,8 @@ namespace Cosmos
 
     Wormhole^ Cosmos::GetWormholeFromObj(Object^ obj)
     {
-        ::Cosmos::Wormhole^ pCloudSession = nullptr;
-        bool bExists = Cosmos::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
+        Universe::Wormhole^ pCloudSession = nullptr;
+        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
         if (bExists)
         {
             return pCloudSession;
@@ -1368,9 +1368,9 @@ namespace Cosmos
         {
             pProxy = it->second->m_pProxy;
         }
-        ::Cosmos::Wormhole^ pCloudSession = nullptr;
+        Universe::Wormhole^ pCloudSession = nullptr;
         CSession* pSession = nullptr;
-        bool bExists = Cosmos::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
+        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
         if (bExists)
         {
             pSession = pCloudSession->m_pCosmosSession;
@@ -2108,7 +2108,7 @@ namespace Cosmos
 
     Browser^ Cosmos::CreateBrowserRemote(IntPtr ParentHandle, String^ strUrls)
     {
-        Cosmos::Cosmos::GetCosmos();
+        Universe::Cosmos::GetCosmos();
         HWND hPWnd = (HWND)ParentHandle.ToPointer();
         if (theApp.m_pCosmosVS == nullptr)
         {
@@ -2185,7 +2185,7 @@ namespace Cosmos
         return nullptr;
     }
 
-    ::Cosmos::Wormhole^ ::Cosmos::Grid::Wormhole::get()
+    Universe::Wormhole^ Universe::Grid::Wormhole::get()
     {
         if (m_pGrid)
         {
@@ -2194,7 +2194,7 @@ namespace Cosmos
                 CSession* pSession = theApp.m_pCosmosImpl->GetCloudSession(m_pGrid);
                 if (pSession)
                 {
-                    m_pSession = gcnew ::Cosmos::Wormhole(pSession);
+                    m_pSession = gcnew Universe::Wormhole(pSession);
                     theAppProxy.m_mapSession2Wormhole[pSession] = m_pSession;
                 }
             }
@@ -2390,7 +2390,7 @@ namespace Cosmos
                         name += m_pBindTreeView->Name;
                         name += L"." + BSTR2STRING(bstrName);
                         BSTR strName = STRING2BSTR(name->ToLower());
-                        ::Cosmos::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
+                        Universe::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
                         pGalaxy->Observe(L"default", CComBSTR(_pParse->xml()), &_pGrid);
                         ::SysFreeString(strName);
                     }
@@ -2421,11 +2421,11 @@ namespace Cosmos
     {
         if (m_pBindTreeView != nullptr)
         {
-            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &::Cosmos::Grid::OnNodeMouseDoubleClick);
-            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &::Cosmos::Grid::OnAfterSelect);
+            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &Universe::Grid::OnNodeMouseDoubleClick);
+            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &Universe::Grid::OnAfterSelect);
 
             if (String::IsNullOrEmpty(m_strTreeViewData) == true)
-                m_strTreeViewData = Cosmos::Cosmos::m_strWizData;
+                m_strTreeViewData = Universe::Cosmos::m_strWizData;
             if (String::IsNullOrEmpty(m_strTreeViewData) == false)
             {
                 BSTR bstrXml = STRING2BSTR(m_strTreeViewData);
@@ -2487,7 +2487,7 @@ namespace Cosmos
                                     pHostNode->Observe(BSTR2STRING(m_Parse.name()), BSTR2STRING(pChild->xml()));
                                 else if (strAction == _T("openurl"))
                                 {
-                                    Cosmos::Cosmos::CreateBrowser(System::IntPtr::Zero, BSTR2STRING(pChild->attr(_T("url"), _T("")) + _T("|")));
+                                    Universe::Cosmos::CreateBrowser(System::IntPtr::Zero, BSTR2STRING(pChild->attr(_T("url"), _T("")) + _T("|")));
                                 }
                             }
 
@@ -2670,15 +2670,15 @@ namespace Cosmos
 
     Grid^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        ::Cosmos::Grid^ pRetNode = nullptr;
+        Universe::Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IGrid> pGrid;
         m_pGalaxy->Observe(blayerName, blayerXML, &pGrid);
         if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IGrid, ::Cosmos::Grid>(pGrid);
-            ::Cosmos::Grid^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
+            Universe::Grid^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);
@@ -2704,11 +2704,11 @@ namespace Cosmos
     }
 }
 
-void ::Cosmos::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
+void Universe::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
 {
     if (String::IsNullOrEmpty(strInfo) == false)
     {
         strInfo->Replace("ShowWebPage:", "");
-        ::Cosmos::Cosmos::CreateBrowser(IntPtr::Zero, strInfo->Replace(L"ShowWebPage:", L""));
+        Universe::Cosmos::CreateBrowser(IntPtr::Zero, strInfo->Replace(L"ShowWebPage:", L""));
     }
 }

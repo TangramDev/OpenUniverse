@@ -40,7 +40,7 @@ using namespace System::Threading::Tasks;
 
 using System::Runtime::InteropServices::Marshal;
 
-namespace Cosmos
+namespace Universe
 {
 	Wormhole::Wormhole(CSession* pCosmosSession)
 	{

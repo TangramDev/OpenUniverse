@@ -19,7 +19,7 @@
 ********************************************************************************/
 #pragma once
 
-namespace Cosmos {
+namespace Universe {
 
 	using namespace System;
 	using namespace System::ComponentModel;

@@ -205,16 +205,16 @@ typedef interface _ICosmos _ICosmos;
 #endif 	/* ___ICosmos_FWD_DEFINED__ */
 
 
-#ifndef __Universe_FWD_DEFINED__
-#define __Universe_FWD_DEFINED__
+#ifndef __DOMPlus_FWD_DEFINED__
+#define __DOMPlus_FWD_DEFINED__
 
 #ifdef __cplusplus
-typedef class Universe Universe;
+typedef class DOMPlus DOMPlus;
 #else
-typedef struct Universe Universe;
+typedef struct DOMPlus DOMPlus;
 #endif /* __cplusplus */
 
-#endif 	/* __Universe_FWD_DEFINED__ */
+#endif 	/* __DOMPlus_FWD_DEFINED__ */
 
 
 #ifndef ___IGridEvents_FWD_DEFINED__
@@ -6211,14 +6211,14 @@ EXTERN_C const IID IID_IEclipseCtrl;
 
 
 
-#ifndef __Universe_LIBRARY_DEFINED__
-#define __Universe_LIBRARY_DEFINED__
+#ifndef __DOMPlus_LIBRARY_DEFINED__
+#define __DOMPlus_LIBRARY_DEFINED__
 
-/* library Universe */
+/* library DOMPlus */
 /* [helpstring][version][uuid] */ 
 
 
-EXTERN_C const IID LIBID_Universe;
+EXTERN_C const IID LIBID_DOMPlus;
 
 #ifndef ___ICosmos_DISPINTERFACE_DEFINED__
 #define ___ICosmos_DISPINTERFACE_DEFINED__
@@ -6335,12 +6335,12 @@ EXTERN_C const IID DIID__ICosmos;
 #endif 	/* ___ICosmos_DISPINTERFACE_DEFINED__ */
 
 
-EXTERN_C const CLSID CLSID_Universe;
+EXTERN_C const CLSID CLSID_DOMPlus;
 
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("19631222-1992-0612-1965-060119990606")
-Universe;
+DOMPlus;
 #endif
 
 #ifndef ___IGridEvents_DISPINTERFACE_DEFINED__
@@ -6703,7 +6703,7 @@ EXTERN_C const CLSID CLSID_UniverseExtender;
 class DECLSPEC_UUID("19631222-1992-0612-1965-060100000000")
 UniverseExtender;
 #endif
-#endif /* __Universe_LIBRARY_DEFINED__ */
+#endif /* __DOMPlus_LIBRARY_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
 

@@ -13,7 +13,7 @@
 
 using System;
 using System.Windows.Forms;
-using Cosmos;
+using Universe;
 
 namespace Sunny
 {
@@ -28,7 +28,7 @@ namespace Sunny
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Cosmos.Cosmos.Run(/*new Form1()*/);
+            Cosmos.Run(/*new Form1()*/);
         }
     }
 }

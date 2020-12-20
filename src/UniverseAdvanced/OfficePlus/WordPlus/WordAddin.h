@@ -130,7 +130,7 @@ namespace OfficePlus
 			public IPersistStorageImpl<CWordAppCtrl>,
 			public IPersistStreamInitImpl<CWordAppCtrl>,
 			public CComCoClass<CWordAppCtrl, &CLSID_CosmosCtrl>,
-			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			CWordAppCtrl();

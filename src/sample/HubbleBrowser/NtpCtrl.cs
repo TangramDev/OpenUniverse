@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Cosmos;
+using Universe;
 
 namespace Sunny
 {
@@ -72,7 +72,7 @@ namespace Sunny
 
         private void NtpCtrl_Load(object sender, EventArgs e)
         {
-            thisNode = Cosmos.Cosmos.CreatingGrid;
+            thisNode = Cosmos.CreatingGrid;
             //Control Topctrl = this.TopLevelControl;
             //IntPtr h = Handle;
             //IntPtr h1 = Topctrl.Handle;
@@ -92,7 +92,7 @@ namespace Sunny
                 "</grid>" +
             "</layout>" +
             "</content1>";
-            Grid grid = Cosmos.Cosmos.Observe(this, "test", xml);
+            Grid grid = Cosmos.Observe(this, "test", xml);
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -107,7 +107,7 @@ namespace Sunny
                     "</grid>" +
                 "</layout>" +
               "</content1>";
-            Grid grid = Cosmos.Cosmos.Observe(treeView1, "test", xml);
+            Grid grid = Cosmos.Observe(treeView1, "test", xml);
         }
     }
 

@@ -1353,4 +1353,4 @@ namespace Browser {
 			return m_pGalaxy->Observe(bstrKey, bstrXml, pRetGrid);
 		return S_OK;
 	}
-}  // namespace Universe
+}  

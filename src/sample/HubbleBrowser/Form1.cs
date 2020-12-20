@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Cosmos;
+using Universe;
 
 namespace Sunny
 {
@@ -30,7 +30,7 @@ namespace Sunny
                     "</grid>" +
                 "</layout>" +
               "</content1>";
-            Grid node = Cosmos.Cosmos.Observe(listView1, "test", xml);
+            Grid node = Cosmos.Observe(listView1, "test", xml);
             node.OnTabChange += Node_OnTabChange1; node.OnIPCMessageReceived += Node_OnIPCMessageReceived; ;
         }
 

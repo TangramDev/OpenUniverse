@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Cosmos;
+using Universe;
 namespace SessionApi
 {
     static class Program
@@ -17,7 +17,7 @@ namespace SessionApi
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            Cosmos.Cosmos.Run(new Form1());
+            Cosmos.Run(new Form1());
         }
     }
 }

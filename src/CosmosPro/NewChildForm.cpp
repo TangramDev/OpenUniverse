@@ -24,7 +24,7 @@
 #include "CosmosProxy.h"
 #include "NewChildForm.h"
 
-namespace Cosmos {
+namespace Universe {
 	System::Void NewChildForm::NewTemplateListView_DoubleClick(System::Object^ sender, System::EventArgs^ e) {
 		String^ strXml = NewTemplateListView->SelectedItems[0]->Tag->ToString();
 		if (String::IsNullOrEmpty(strXml) == false)

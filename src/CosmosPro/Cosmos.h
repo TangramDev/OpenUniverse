@@ -42,7 +42,7 @@ extern CCosmosProxy theAppProxy;
 class CGridCLREvent;
 class CCosmosGridEvent;
 
-namespace Cosmos
+namespace Universe
 {
 	//[Guid("54499D5E-AC2F-4F8B-9782-C00A9BB2F4E2")]
 	//[ComVisibleAttribute(true)]
@@ -185,7 +185,7 @@ namespace Cosmos
 		TreeView^ m_pBindTreeView = nullptr;
 		CCosmosGridEvent* m_pGridEvent;
 		CGridCLREvent* m_pGridCLREvent;
-		Cosmos::Wormhole^ m_pSession = nullptr;
+		Universe::Wormhole^ m_pSession = nullptr;
 
 		void NavigateTreeInit();
 		//virtual void CloseForm(Object^ pForm){};
@@ -257,9 +257,9 @@ namespace Cosmos
 			OnCloudMessageReceived(cloudSession);
 		}
 
-		delegate void BindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName);
+		delegate void BindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName);
 		event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
-		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName)
+		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName)
 		{
 			Control^ pCtrl = (Control^)SourceObj;
 			OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
@@ -278,7 +278,7 @@ namespace Cosmos
 
 		property Wormhole^ Wormhole
 		{
-			Cosmos::Wormhole^ get();
+			Universe::Wormhole^ get();
 		}
 
 		property TreeView^ BindTreeView
@@ -362,7 +362,7 @@ namespace Cosmos
 		[BrowsableAttribute(false)]
 		property GalaxyCluster^ GalaxyCluster
 		{
-			Cosmos::GalaxyCluster^ get();
+			Universe::GalaxyCluster^ get();
 		}
 
 		property String^ Name
@@ -551,19 +551,19 @@ namespace Cosmos
 		[BrowsableAttribute(false)]
 		property Galaxy^ Galaxy
 		{
-			Cosmos::Galaxy^ get();
+			Universe::Galaxy^ get();
 		}
 
 		[BrowsableAttribute(false)]
-		property Cosmos::Galaxy^ HostGalaxy
+		property Universe::Galaxy^ HostGalaxy
 		{
-			Cosmos::Galaxy^ get()
+			Universe::Galaxy^ get()
 			{
 				CComPtr<IGalaxy> pGalaxy;
 				m_pGrid->get_HostGalaxy(&pGalaxy);
 				if (pGalaxy)
 				{
-					return theAppProxy._createObject<IGalaxy, Cosmos::Galaxy>(pGalaxy);
+					return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
 				}
 				return nullptr;
 			}
@@ -889,23 +889,23 @@ namespace Cosmos
 
 		property Grid^ VisibleGrid
 		{
-			Cosmos::Grid ^ get()
+			Universe::Grid ^ get()
 			{
 				IGrid* pGrid = nullptr;
 				m_pGalaxy->get_VisibleGrid(&pGrid);
-				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+				return theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
 			}
 		}
 
 		property Grid^ Grid[Object ^]
 		{
-			Cosmos::Grid ^ get(Object ^ index)
+			Universe::Grid ^ get(Object ^ index)
 			{
 				VARIANT var;
 				Marshal::GetNativeVariantForObject(index,(System::IntPtr) & var);
 				IGrid* pGrid = nullptr;
 				m_pGalaxy->get_Grid(var, &pGrid);
-				return theAppProxy._createObject<IGrid, Cosmos::Grid>(pGrid);
+				return theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
 			}
 		}
 
@@ -922,12 +922,12 @@ namespace Cosmos
 
 		property GalaxyCluster^ GalaxyCluster
 		{
-			Cosmos::GalaxyCluster^ get()
+			Universe::GalaxyCluster^ get()
 			{
 				CComPtr<IGalaxyCluster> pGalaxyCluster = NULL;
 				m_pGalaxy->get_GalaxyCluster(&pGalaxyCluster);
 
-				return theAppProxy._createObject<IGalaxyCluster, ::Cosmos::GalaxyCluster>(pGalaxyCluster);
+				return theAppProxy._createObject<IGalaxyCluster, ::Universe::GalaxyCluster>(pGalaxyCluster);
 			}
 		}
 		private:
@@ -1002,7 +1002,7 @@ namespace Cosmos
 		static Wormhole^ GetWormholeFromObj(Object^ obj);
 		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 
-		Cosmos::ICosmosApp^ m_pUniverseAppProxy;
+		Universe::ICosmosApp^ m_pUniverseAppProxy;
 
 		static void SetControlRelation(Control^ ctrl, String^ strTypes);
 
@@ -1152,9 +1152,9 @@ namespace Cosmos
 			};
 		}
 
-		static property Dictionary<Object^, Cosmos::Wormhole^>^ Wormholes
+		static property Dictionary<Object^, Universe::Wormhole^>^ Wormholes
 		{
-			Dictionary<Object^, Cosmos::Wormhole^>^ get()
+			Dictionary<Object^, Universe::Wormhole^>^ get()
 			{
 				return m_pWormholes;
 			};
@@ -1219,8 +1219,8 @@ namespace Cosmos
 		//{
 		//	Dictionary<String^, Type^>^ get()
 		//	{
-		//		if (Cosmos::Cosmos::m_pAppFormTypeDicEvent != nullptr)
-		//			Cosmos::Cosmos::m_pAppFormTypeDicEvent->WaitOne();
+		//		if (Universe::Universe::m_pAppFormTypeDicEvent != nullptr)
+		//			Universe::Universe::m_pAppFormTypeDicEvent->WaitOne();
 		//		return m_pAppFormTypeDic;
 		//	}
 		//}
@@ -1229,8 +1229,8 @@ namespace Cosmos
 		//{
 		//	Dictionary<String^, Type^>^ get()
 		//	{
-		//		if (Cosmos::Cosmos::m_pAppFormTypeDicEvent != nullptr)
-		//			Cosmos::Cosmos::m_pAppFormTypeDicEvent->WaitOne();
+		//		if (Universe::Universe::m_pAppFormTypeDicEvent != nullptr)
+		//			Universe::Universe::m_pAppFormTypeDicEvent->WaitOne();
 		//		return m_pAppMDIFormTypeDic;
 		//	}
 		//}
@@ -1332,9 +1332,9 @@ namespace Cosmos
 		static event GetSubObjForWebPage^ OnGetSubObjForWebPage;
 		static Object^ Fire_OnGetSubObjForWebPage(Object^ SourceObj, String^ subObjName);
 
-		delegate void BindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession ,String^ eventName);
+		delegate void BindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession ,String^ eventName);
 		static event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
-		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName);
+		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName);
 
 		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid);
 		static event OpenComplete^ OnObserverComplete;
@@ -1364,9 +1364,9 @@ namespace Cosmos
 			OnCosmosMsg(hWnd, strType, strParam1, strParam2);
 		}
 
-		delegate void CosmosMsgReceived(Cosmos::Wormhole^ cloudSession);
+		delegate void CosmosMsgReceived(Universe::Wormhole^ cloudSession);
 		static event CosmosMsgReceived^ OnCosmosMsgReceived;
-		static void Fire_OnCosmosMsgReceived(Cosmos::Wormhole^ cloudSession)
+		static void Fire_OnCosmosMsgReceived(Universe::Wormhole^ cloudSession)
 		{
 			OnCosmosMsgReceived(cloudSession);
 		}
@@ -1403,7 +1403,7 @@ namespace Cosmos
 	/// <summary>
 	/// GalaxyCluster 
 	/// </summary>
-	//[ComSourceInterfacesAttribute(Cosmos::IManagerExtender::typeid)]
+	//[ComSourceInterfacesAttribute(Universe::IManagerExtender::typeid)]
 	public ref class GalaxyCluster : public IWin32Window, public Dictionary<String^, Galaxy^>
 	{
 	public:

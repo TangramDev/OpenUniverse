@@ -32,7 +32,7 @@ class ATL_NO_VTABLE CGalaxyCluster :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl <CGalaxyCluster>,
 	public IConnectionPointImpl<CGalaxyCluster, &__uuidof(_ICosmosObjEvents)>,
-	public IDispatchImpl<IGalaxyCluster, &IID_IGalaxyCluster, &LIBID_Universe, 1, 0>
+	public IDispatchImpl<IGalaxyCluster, &IID_IGalaxyCluster, &LIBID_DOMPlus, 1, 0>
 {
 	friend CCosmos;
 public:

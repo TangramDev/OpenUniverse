@@ -29,7 +29,7 @@ struct CTangramXHtmlTreeNode;
 
 class CTangramTreeNode :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<ICosmosTreeNode, &IID_ICosmosTreeNode, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
+	public IDispatchImpl<ICosmosTreeNode, &IID_ICosmosTreeNode, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
 	CTangramTreeNode();

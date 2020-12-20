@@ -79,7 +79,7 @@
             }
         }
 
-        cosmos.onHubbleMessageReceived = function (e) {
+        cosmos.onCosmosMessageReceived = function (e) {
             switch (e.xobj.getStr("msgID")) {
                 case "TANGRAMAPP_READY":
                     {

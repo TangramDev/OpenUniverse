@@ -140,7 +140,7 @@ void CGrid::InitWndGrid()
 		{
 			if (this == m_pRootObj)
 			{
-				m_strName = _T("Splitter");
+				m_strName = _T("Grid");
 			}
 		}
 		break;
@@ -150,7 +150,7 @@ void CGrid::InitWndGrid()
 				if(m_pObjClsInfo)
 					m_strName = m_pObjClsInfo->m_lpszClassName;
 				else
-					m_strName = _T("TabWnd");
+					m_strName = _T("Tabs");
 			}
 			break;
 		case CLRCtrl:

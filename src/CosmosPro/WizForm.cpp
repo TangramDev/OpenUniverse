@@ -22,7 +22,7 @@
 #include "WizForm.h"
 #include "Cosmos.h"
 
-namespace Cosmos {
+namespace Universe {
 	WizForm::WizForm(void)
 	{
 		InitializeComponent();
@@ -30,7 +30,7 @@ namespace Cosmos {
 		//TODO: Add the constructor code here
 		//
 #ifndef _WIN64
-		Cosmos::Cosmos::m_pWizForm = this;
+		Universe::Cosmos::m_pWizForm = this;
 		m_pWizCtrlDic->Clear();
 #endif
 	}
@@ -42,7 +42,7 @@ namespace Cosmos {
 	{
 		if (String::IsNullOrEmpty(strData)==false)
 		{
-			Cosmos::Cosmos::m_strWizData = strData;
+			Universe::Cosmos::m_strWizData = strData;
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace Cosmos {
 			CString strToken = strData.Tokenize(_T("|"), nTokenPos);
 			while (!strToken.IsEmpty())
 			{
-				Cosmos::Cosmos::CustomizeDic[BSTR2STRING(strToken)] = L"";
+				Universe::Cosmos::CustomizeDic[BSTR2STRING(strToken)] = L"";
 				strToken = strData.Tokenize(_T("|"), nTokenPos);
 			}
 		}

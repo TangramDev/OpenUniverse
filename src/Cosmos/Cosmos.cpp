@@ -29,7 +29,7 @@ using namespace System::Diagnostics;
 using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 
-namespace Cosmos
+namespace Universe
 {
     Grid::Grid(IGrid* pGrid)
     {
@@ -58,7 +58,7 @@ namespace Cosmos
         CComPtr<IGalaxy> pGalaxy;
         m_pGrid->get_Galaxy(&pGalaxy);
 
-        return theAppProxy._createObject<IGalaxy, ::Cosmos::Galaxy>(pGalaxy);
+        return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
     }
 
     String^ Grid::Caption::get()
@@ -281,12 +281,12 @@ namespace Cosmos
 
     //System::Drawing::Icon^ Cosmos::DefaultIcon::get()
     //{
-    //    if (Cosmos::Cosmos::m_pDefaultIcon == nullptr)
+    //    if (Universe::Cosmos::m_pDefaultIcon == nullptr)
     //    {
     //        Form^ _pForm = gcnew Form();
-    //        Cosmos::Cosmos::m_pDefaultIcon = _pForm->Icon;
+    //        Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
     //    }
-    //    return Cosmos::Cosmos::m_pDefaultIcon;
+    //    return Universe::Cosmos::m_pDefaultIcon;
     //}
 
     bool Cosmos::WebRuntimeInit()
@@ -405,7 +405,7 @@ namespace Cosmos
         return OnGetSubObjForWebPage(SourceObj, subObjName);
     }
 
-    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, ::Cosmos::Wormhole^ eventSession, String^ eventName)
+    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName)
     {
         if (eventSession->isBindCLRObjToWebPage(SourceObj))
             return;
@@ -867,8 +867,8 @@ namespace Cosmos
 
     Wormhole^ Cosmos::GetWormholeFromObj(Object^ obj)
     {
-        ::Cosmos::Wormhole^ pCloudSession = nullptr;
-        bool bExists = Cosmos::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
+        Universe::Wormhole^ pCloudSession = nullptr;
+        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
         if (bExists)
         {
             return pCloudSession;
@@ -946,7 +946,7 @@ namespace Cosmos
                 CSession* pSession = theApp.m_pCosmosImpl->GetCloudSession(m_pGrid);
                 if (pSession)
                 {
-                    m_pSession = gcnew ::Cosmos::Wormhole(pSession);
+                    m_pSession = gcnew Universe::Wormhole(pSession);
                     theAppProxy.m_mapSession2Wormhole[pSession] = m_pSession;
                 }
             }
@@ -1095,15 +1095,15 @@ namespace Cosmos
 
     Grid^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        ::Cosmos::Grid^ pRetNode = nullptr;
+        Universe::Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IGrid> pGrid;
         m_pGalaxy->Observe(blayerName, blayerXML, &pGrid);
         if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IGrid, ::Cosmos::Grid>(pGrid);
-            ::Cosmos::Grid^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
+            Universe::Grid^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

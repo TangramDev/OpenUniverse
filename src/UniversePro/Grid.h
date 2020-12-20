@@ -51,7 +51,7 @@ class ATL_NO_VTABLE CGrid :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CGrid>,
 	public IConnectionPointImpl<CGrid, &__uuidof(_IGridEvents)>,
-	public IDispatchImpl<IGrid, &IID_IGrid, &LIBID_Universe, 1, 0>
+	public IDispatchImpl<IGrid, &IID_IGrid, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CGrid();
@@ -249,7 +249,7 @@ private:
 
 class ATL_NO_VTABLE CGridCollection :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IGridCollection, &IID_IGridCollection, &LIBID_Universe, 1, 0>
+	public IDispatchImpl<IGridCollection, &IID_IGridCollection, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CGridCollection();
