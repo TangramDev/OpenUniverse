@@ -40,7 +40,7 @@ using namespace System::Threading::Tasks;
 
 using System::Runtime::InteropServices::Marshal;
 
-namespace Universe
+namespace DOMPlus
 {
 	Wormhole::Wormhole(CSession* pCosmosSession)
 	{
@@ -176,11 +176,5 @@ namespace Universe
 			return (Form^)Marshal::GetObjectForIUnknown((IntPtr)pFormDisp);
 		}
 		return nullptr;
-	}
-
-	CloudForm::CloudForm(IBrowser* pWebBrowser)
-	{
-		m_hWnd = nullptr;
-		m_pChromeWebBrowserHost = pWebBrowser;
 	}
 }

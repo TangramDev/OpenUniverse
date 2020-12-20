@@ -53,10 +53,10 @@ void CGridCLREvent::OnDestroy()
 	}
 	if (m_pGrid->m_pHostObj)
 	{
-		Universe::Grid^ pGrid = nullptr;
-		if (Universe::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pGrid->m_pHostObj, pGrid))
+		DOMPlus::Grid^ pGrid = nullptr;
+		if (DOMPlus::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pGrid->m_pHostObj, pGrid))
 		{
-			Universe::Cosmos::m_pFrameworkElementDic->Remove(m_pGrid->m_pHostObj);
+			DOMPlus::Cosmos::m_pFrameworkElementDic->Remove(m_pGrid->m_pHostObj);
 		}
 	}
 	m_pGrid->Fire_OnDestroy(m_pGrid);
@@ -75,8 +75,8 @@ void CGridCLREvent::OnGridAddInsCreated()
 
 void CGridCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	Universe::Grid^ pActiveGrid = m_pGrid->GetGrid(0, nActivePage);
-	Universe::Grid^ pOldGrid = m_pGrid->GetGrid(0, nOldPage);
+	DOMPlus::Grid^ pActiveGrid = m_pGrid->GetGrid(0, nActivePage);
+	DOMPlus::Grid^ pOldGrid = m_pGrid->GetGrid(0, nOldPage);
 	m_pGrid->Fire_OnTabChange(pActiveGrid, pOldGrid);
 }
 

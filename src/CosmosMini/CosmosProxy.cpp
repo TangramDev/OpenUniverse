@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <sstream>
 
-using namespace Universe;
+using namespace DOMPlus;
 using namespace System::Windows;
 #pragma managed(push, off)
 CCosmos theApp;
@@ -94,7 +94,7 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 		}
 	}
 
-	Universe::Cosmos::GetCosmos();
+	DOMPlus::Cosmos::GetCosmos();
 }
 
 CCosmosProxy::~CCosmosProxy()
@@ -113,7 +113,7 @@ CCosmosProxy::~CCosmosProxy()
 void CCosmos::ProcessMsg(MSG* msg) {
 	if (msg)
 	{
-		//Universe::Cosmos::Fire_OnAppMsgLoop((IntPtr)msg->hwnd, (IntPtr)(__int32)msg->message, (IntPtr)(__int32)msg->wParam, (IntPtr)msg->lParam);
+		//DOMPlus::Cosmos::Fire_OnAppMsgLoop((IntPtr)msg->hwnd, (IntPtr)(__int32)msg->message, (IntPtr)(__int32)msg->wParam, (IntPtr)msg->lParam);
 		::TranslateMessage(msg);
 		::DispatchMessage(msg);
 	}
@@ -303,7 +303,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
 	
-	Universe::Grid^ pGrid = Universe::Cosmos::GetGridFromControl(m_pCurrentForm);
+	DOMPlus::Grid^ pGrid = DOMPlus::Cosmos::GetGridFromControl(m_pCurrentForm);
 	if (pGrid)
 	{
 		Galaxy^ pGalaxy = pGrid->Galaxy;
@@ -565,7 +565,7 @@ void CCosmosProxy::InitGrid(IGrid* _pGrid, Control^ pCtrl, bool bSave, CTangramX
 	IGalaxyCluster* pGalaxyCluster = nullptr;
 	_pGrid->get_GalaxyCluster(&pGalaxyCluster);
 
-	Universe::Grid^ pGrid = (Universe::Grid^)theAppProxy._createObject<IGrid, Universe::Grid>(_pGrid);
+	DOMPlus::Grid^ pGrid = (DOMPlus::Grid^)theAppProxy._createObject<IGrid, DOMPlus::Grid>(_pGrid);
 	if (pGrid)
 	{
 		for each (Control ^ pChild in pCtrl->Controls)
@@ -847,7 +847,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 			CString strObjID = m_Parse.attr(_T("objid"), _T(""));
 			if (strObjID != _T(""))
 			{
-				Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(strObjID));
+				Object^ pObj = DOMPlus::Cosmos::CreateObject(BSTR2STRING(strObjID));
 
 				if (pObj != nullptr)
 				{
@@ -885,7 +885,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		}
 	}
 
-	Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(bstrObjID));
+	Object^ pObj = DOMPlus::Cosmos::CreateObject(BSTR2STRING(bstrObjID));
 
 	if (pObj != nullptr)
 	{
@@ -1033,8 +1033,8 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode)
 {
 	String^ strID = BSTR2STRING(bstrObjID);
-	Object^ _pObj = Universe::Cosmos::CreateObject(strID);
-	Universe::Grid^ _pGrid = (Universe::Grid^)_createObject<IGrid, Universe::Grid>(pHostNode);
+	Object^ _pObj = DOMPlus::Cosmos::CreateObject(strID);
+	DOMPlus::Grid^ _pGrid = (DOMPlus::Grid^)_createObject<IGrid, DOMPlus::Grid>(pHostNode);
 	if (_pObj == nullptr)
 	{
 		System::Windows::Forms::Label^ label = (gcnew System::Windows::Forms::Label());
@@ -1077,7 +1077,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHost
 				theApp.m_pCosmosImpl->m_hFormNodeWnd = hWnd;
 				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD | WS_VISIBLE);
 				::SetWindowLongPtr(hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & ~(WS_EX_APPWINDOW/*|WS_EX_CLIENTEDGE*/));
-				Universe::Cosmos::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pGrid);
+				DOMPlus::Cosmos::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pGrid);
 
 				((Form^)pObj)->Show();
 				return pDisp;
@@ -1590,7 +1590,7 @@ bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)
 void CCosmos::OnCosmosClose()
 {
 	AtlTrace(_T("*************Begin CCosmos::OnClose:  ****************\n"));
-	Universe::Cosmos::GetCosmos()->Fire_OnClose();
+	DOMPlus::Cosmos::GetCosmos()->Fire_OnClose();
 	FormCollection^ pCollection = Forms::Application::OpenForms;
 	int nCount = pCollection->Count;
 	while (pCollection->Count > 0) {
@@ -1606,9 +1606,9 @@ void CCosmos::OnCosmosClose()
 
 void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid)
 {
-	Universe::Grid^ _pRootNode = theAppProxy._createObject<IGrid, Universe::Grid>(pRootGrid);
+	DOMPlus::Grid^ _pRootNode = theAppProxy._createObject<IGrid, DOMPlus::Grid>(pRootGrid);
 	IntPtr nHandle = (IntPtr)hWnd;
-	Universe::Cosmos::GetCosmos()->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
+	DOMPlus::Cosmos::GetCosmos()->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
 	_pRootNode->Fire_RootGridCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
 }

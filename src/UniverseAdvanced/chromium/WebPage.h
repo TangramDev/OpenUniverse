@@ -29,7 +29,7 @@ namespace Browser
 		public CWebPageImpl,
 		public CWindowImpl<CWebPage, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
-		public IDispatchImpl<IWebPage, &_uuidof(IWebPage), &LIBID_DOMPlus, 1, 0>
+		public IDispatchImpl<IWebPage, &_uuidof(IWebPage), &LIBID_World, 1, 0>
 	{
 	public:
 		CWebPage();

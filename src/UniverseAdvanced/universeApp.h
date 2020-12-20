@@ -141,7 +141,7 @@ public:
 
 	static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
 
-	DECLARE_LIBID(LIBID_DOMPlus)
+	DECLARE_LIBID(LIBID_World)
 
 private:
 	int ExitInstance();
@@ -150,7 +150,7 @@ private:
 	static LRESULT CALLBACK GetMessageProc(int nCode, WPARAM wParam, LPARAM lParam);
 };
 
-TANGRAM_OBJECT_ENTRY_AUTO(CLSID_DOMPlus, CUniverse)
+TANGRAM_OBJECT_ENTRY_AUTO(CLSID_World, CUniverse)
 
 extern CUniverse theApp;
 extern CCosmos* g_pCosmos;

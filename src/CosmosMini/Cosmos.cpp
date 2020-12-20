@@ -21,7 +21,7 @@ using namespace System::Diagnostics;
 using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 
-namespace Universe
+namespace DOMPlus
 {
     Grid::Grid(IGrid* pGrid)
     {
@@ -50,7 +50,7 @@ namespace Universe
         CComPtr<IGalaxy> pGalaxy;
         m_pGrid->get_Galaxy(&pGalaxy);
 
-        return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
+        return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
     }
 
     String^ Grid::Caption::get()
@@ -756,15 +756,15 @@ namespace Universe
 
     Grid^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        Universe::Grid^ pRetNode = nullptr;
+        DOMPlus::Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IGrid> pGrid;
         m_pGalaxy->Observe(blayerName, blayerXML, &pGrid);
         if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
-            Universe::Grid^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IGrid, DOMPlus::Grid>(pGrid);
+            DOMPlus::Grid^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

@@ -375,8 +375,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="NewChildForm.cpp" />
     <ClCompile Include="GridCLREvent.cpp" />
     <ClCompile Include="Cosmos.cpp" />
-    <ClCompile Include="WizCtrl.cpp" />
-    <ClCompile Include="WizForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssemblyLocalor.h" />
@@ -392,12 +390,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     </ClInclude>
     <ClInclude Include="GridCLREvent.h" />
     <ClInclude Include="Cosmos.h" />
-    <ClInclude Include="WizCtrl.h">
-      <FileType>CppControl</FileType>
-    </ClInclude>
-    <ClInclude Include="WizForm.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Cosmos.rc" />
@@ -409,12 +401,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <EmbeddedResource Include="NewChildForm.resx">
       <DependentUpon>NewChildForm.h</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WizCtrl.resx">
-      <DependentUpon>WizCtrl.h</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WizForm.resx">
-      <DependentUpon>WizForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

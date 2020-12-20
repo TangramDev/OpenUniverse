@@ -652,9 +652,9 @@ interface IEclipseCtrl : ICosmosCtrl {
 [
 	uuid(19631222-1992-0612-1965-060119820911),
 	version(1.0),
-	helpstring("DOMPlus 8.0 Type Library")
+	helpstring("World 8.0 Type Library")
 ]
-library DOMPlus
+library World
 {
 	[
 		uuid(19631222-1992-0612-1965-060119821002),
@@ -674,7 +674,7 @@ library DOMPlus
 		appobject,
 		helpstring("DOMPlus Class")
 	]
-	coclass DOMPlus
+	coclass World
 	{
 		[default] interface ICosmos;
 		[default, source] dispinterface _ICosmos;

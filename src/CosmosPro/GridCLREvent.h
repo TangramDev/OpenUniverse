@@ -27,7 +27,7 @@
 #include "TangramBase.h"       // main symbols
 using namespace System;
 using namespace System::Reflection;
-using namespace Universe;
+using namespace DOMPlus;
 
 class CGridCLREvent
 {
@@ -35,7 +35,7 @@ public:
 	CGridCLREvent();
 	virtual ~CGridCLREvent();
 
-	gcroot<Universe::Grid^>	m_pGrid;
+	gcroot<DOMPlus::Grid^>	m_pGrid;
 
 	void OnDestroy();
 	void OnGridAddInsCreated();

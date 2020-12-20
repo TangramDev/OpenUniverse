@@ -34,7 +34,7 @@ class CGridCLREvent;
 class CCosmosGridEvent;
 extern CCosmosProxy theAppProxy;
 
-namespace Universe
+namespace DOMPlus
 {
 	/// <summary>
 	/// Summary for Cosmos
@@ -274,18 +274,18 @@ namespace Universe
 
 		property Galaxy^ Galaxy
 		{
-			Universe::Galaxy^ get();
+			DOMPlus::Galaxy^ get();
 		}
 
-		property Universe::Galaxy^ HostGalaxy
+		property DOMPlus::Galaxy^ HostGalaxy
 		{
-			Universe::Galaxy^ get()
+			DOMPlus::Galaxy^ get()
 			{
 				CComPtr<IGalaxy> pGalaxy;
 				m_pGrid->get_HostGalaxy(&pGalaxy);
 				if (pGalaxy)
 				{
-					return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
+					return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
 				}
 				return nullptr;
 			}
@@ -512,11 +512,11 @@ namespace Universe
 
 		property Grid^ VisibleGrid
 		{
-			Universe::Grid^ get()
+			DOMPlus::Grid^ get()
 			{
 				IGrid* pGrid = nullptr;
 				m_pGalaxy->get_VisibleGrid(&pGrid);
-				return theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
+				return theAppProxy._createObject<IGrid, DOMPlus::Grid>(pGrid);
 			}
 		}
 	private:

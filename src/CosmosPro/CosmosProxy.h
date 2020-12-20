@@ -27,7 +27,7 @@
 #include "Browser.h"
 #include "resource.h"       // main symbols
 
-using namespace Universe;
+using namespace DOMPlus;
 using namespace System::Collections;
 using namespace System::Diagnostics;
 using namespace System::Reflection;

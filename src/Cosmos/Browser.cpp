@@ -39,7 +39,7 @@ using namespace System::Runtime::InteropServices;
 
 using System::Runtime::InteropServices::Marshal;
 
-namespace Universe
+namespace DOMPlus
 {
 	Wormhole::Wormhole(CSession* pSession)
 	{

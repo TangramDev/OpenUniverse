@@ -26,7 +26,6 @@
 #include "GridCLREvent.h"
 #include "Cosmos.h"
 #include "Browser.h"
-#include "WizCtrl.h"
 #include "Markup.h"
 
 #ifdef _WIN32
@@ -41,24 +40,8 @@ using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 using namespace System::IO::Compression;
 
-namespace Universe
+namespace DOMPlus
 {
-    TangramAppProxy::TangramAppProxy()
-    {
-        m_pUniverseAppProxy = nullptr;
-    }
-
-    TangramAppProxy::~TangramAppProxy()
-    {
-
-    }
-
-    void TangramAppProxy::Init()
-    {
-        //if (m_pUniverseAppProxy)
-        //	m_pUniverseAppProxy->Init();
-    }
-
     Grid^ GridCollection::default::get(int iIndex)
     {
         IGrid* pGrid = nullptr;
@@ -115,7 +98,7 @@ namespace Universe
 
         if (pGalaxyCluster)
         {
-            return theAppProxy._createObject<IGalaxyCluster, Universe::GalaxyCluster>(pGalaxyCluster);
+            return theAppProxy._createObject<IGalaxyCluster, DOMPlus::GalaxyCluster>(pGalaxyCluster);
         }
         return nullptr;
     }
@@ -124,7 +107,7 @@ namespace Universe
     {
         CComPtr<IGalaxy> _pGalaxy;
         m_pGrid->get_Galaxy(&_pGalaxy);
-        return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(_pGalaxy);
+        return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(_pGalaxy);
     }
 
     String^ Grid::Caption::get()
@@ -384,7 +367,7 @@ namespace Universe
 
     Cosmos::~Cosmos(void)
     {
-        for each (KeyValuePair<String^, Object^>^ dic in Universe::Cosmos::m_pCosmosCLRObjDic)
+        for each (KeyValuePair<String^, Object^>^ dic in DOMPlus::Cosmos::m_pCosmosCLRObjDic)
         {
             if (dic->Value != nullptr)
             {
@@ -577,12 +560,12 @@ namespace Universe
 
     System::Drawing::Icon^ Cosmos::DefaultIcon::get()
     {
-        if (Universe::Cosmos::m_pDefaultIcon == nullptr)
+        if (DOMPlus::Cosmos::m_pDefaultIcon == nullptr)
         {
             Form^ _pForm = gcnew Form();
-            Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
+            DOMPlus::Cosmos::m_pDefaultIcon = _pForm->Icon;
         }
-        return Universe::Cosmos::m_pDefaultIcon;
+        return DOMPlus::Cosmos::m_pDefaultIcon;
     }
 
     bool Cosmos::WebRuntimeInit()
@@ -778,34 +761,13 @@ namespace Universe
 
     String^ Cosmos::WizData::get()
     {
-        return Universe::Cosmos::m_strWizData;
+        return DOMPlus::Cosmos::m_strWizData;
     }
 
     void Cosmos::WizData::set(String^ strXml)
     {
-        Universe::Cosmos::m_strWizData = strXml;
+        DOMPlus::Cosmos::m_strWizData = strXml;
     }
-
-    //TangramAppProxy^ Cosmos::AppProxy::get(String^ strKey)
-    //{
-    //    String^ _strKey = strKey->ToLower()->Trim();
-    //    TangramAppProxy^ _pProxy = nullptr;
-    //    //if (m_pCosmosAppProxyDic->TryGetValue(_strKey, _pProxy) != true)
-    //    //{
-    //    //    CComBSTR bstrKey(STRING2BSTR(_strKey));
-    //    //    LONGLONG llProxy = 0;
-    //    //    theApp.m_pCosmos->LoadDocComponent(bstrKey, &llProxy);
-    //    //    if (llProxy)
-    //    //    {
-    //    //        IUniverseAppProxy* pProxy = (IUniverseAppProxy*)llProxy;
-    //    //        _pProxy = gcnew TangramAppProxy();
-    //    //        _pProxy->m_pUniverseAppProxy = pProxy;
-    //    //        m_pCosmosAppProxyDic[_strKey] = _pProxy;
-    //    //    }
-    //    //}
-
-    //    return _pProxy;
-    //}
 
     WorkBenchWindow^ Cosmos::ActiveWorkBenchWindow::get()
     {
@@ -858,7 +820,7 @@ namespace Universe
         return OnGetSubObjForWebPage(SourceObj, subObjName);
     }
 
-    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName)
+    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName)
     {
         if (eventSession->isBindCLRObjToWebPage(SourceObj))
             return;
@@ -1335,8 +1297,8 @@ namespace Universe
 
     Wormhole^ Cosmos::GetWormholeFromObj(Object^ obj)
     {
-        Universe::Wormhole^ pCloudSession = nullptr;
-        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
+        DOMPlus::Wormhole^ pCloudSession = nullptr;
+        bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
         if (bExists)
         {
             return pCloudSession;
@@ -1368,9 +1330,9 @@ namespace Universe
         {
             pProxy = it->second->m_pProxy;
         }
-        Universe::Wormhole^ pCloudSession = nullptr;
+        DOMPlus::Wormhole^ pCloudSession = nullptr;
         CSession* pSession = nullptr;
-        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
+        bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
         if (bExists)
         {
             pSession = pCloudSession->m_pCosmosSession;
@@ -2108,7 +2070,7 @@ namespace Universe
 
     Browser^ Cosmos::CreateBrowserRemote(IntPtr ParentHandle, String^ strUrls)
     {
-        Universe::Cosmos::GetCosmos();
+        DOMPlus::Cosmos::GetCosmos();
         HWND hPWnd = (HWND)ParentHandle.ToPointer();
         if (theApp.m_pCosmosVS == nullptr)
         {
@@ -2185,7 +2147,7 @@ namespace Universe
         return nullptr;
     }
 
-    Universe::Wormhole^ Universe::Grid::Wormhole::get()
+    DOMPlus::Wormhole^ DOMPlus::Grid::Wormhole::get()
     {
         if (m_pGrid)
         {
@@ -2194,7 +2156,7 @@ namespace Universe
                 CSession* pSession = theApp.m_pCosmosImpl->GetCloudSession(m_pGrid);
                 if (pSession)
                 {
-                    m_pSession = gcnew Universe::Wormhole(pSession);
+                    m_pSession = gcnew DOMPlus::Wormhole(pSession);
                     theAppProxy.m_mapSession2Wormhole[pSession] = m_pSession;
                 }
             }
@@ -2390,7 +2352,7 @@ namespace Universe
                         name += m_pBindTreeView->Name;
                         name += L"." + BSTR2STRING(bstrName);
                         BSTR strName = STRING2BSTR(name->ToLower());
-                        Universe::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
+                        DOMPlus::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
                         pGalaxy->Observe(L"default", CComBSTR(_pParse->xml()), &_pGrid);
                         ::SysFreeString(strName);
                     }
@@ -2421,11 +2383,11 @@ namespace Universe
     {
         if (m_pBindTreeView != nullptr)
         {
-            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &Universe::Grid::OnNodeMouseDoubleClick);
-            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &Universe::Grid::OnAfterSelect);
+            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &DOMPlus::Grid::OnNodeMouseDoubleClick);
+            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &DOMPlus::Grid::OnAfterSelect);
 
             if (String::IsNullOrEmpty(m_strTreeViewData) == true)
-                m_strTreeViewData = Universe::Cosmos::m_strWizData;
+                m_strTreeViewData = DOMPlus::Cosmos::m_strWizData;
             if (String::IsNullOrEmpty(m_strTreeViewData) == false)
             {
                 BSTR bstrXml = STRING2BSTR(m_strTreeViewData);
@@ -2487,7 +2449,7 @@ namespace Universe
                                     pHostNode->Observe(BSTR2STRING(m_Parse.name()), BSTR2STRING(pChild->xml()));
                                 else if (strAction == _T("openurl"))
                                 {
-                                    Universe::Cosmos::CreateBrowser(System::IntPtr::Zero, BSTR2STRING(pChild->attr(_T("url"), _T("")) + _T("|")));
+                                    DOMPlus::Cosmos::CreateBrowser(System::IntPtr::Zero, BSTR2STRING(pChild->attr(_T("url"), _T("")) + _T("|")));
                                 }
                             }
 
@@ -2670,15 +2632,15 @@ namespace Universe
 
     Grid^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        Universe::Grid^ pRetNode = nullptr;
+        DOMPlus::Grid^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IGrid> pGrid;
         m_pGalaxy->Observe(blayerName, blayerXML, &pGrid);
         if (pGrid)
         {
-            pRetNode = theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
-            Universe::Grid^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IGrid, DOMPlus::Grid>(pGrid);
+            DOMPlus::Grid^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);
@@ -2704,11 +2666,11 @@ namespace Universe
     }
 }
 
-void Universe::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
+void DOMPlus::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
 {
     if (String::IsNullOrEmpty(strInfo) == false)
     {
         strInfo->Replace("ShowWebPage:", "");
-        Universe::Cosmos::CreateBrowser(IntPtr::Zero, strInfo->Replace(L"ShowWebPage:", L""));
+        DOMPlus::Cosmos::CreateBrowser(IntPtr::Zero, strInfo->Replace(L"ShowWebPage:", L""));
     }
 }

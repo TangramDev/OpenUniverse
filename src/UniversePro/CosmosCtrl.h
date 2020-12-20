@@ -91,7 +91,7 @@ class ATL_NO_VTABLE CCosmosCtrl :
 	public CCosmosCtrlBase,
 	public IOleObjectImpl<CCosmosCtrl>,
 	public CComCoClass<CCosmosCtrl, &CLSID_CosmosCtrl>,
-	public IDispatchImpl<ICosmosCtrl, &IID_ICosmosCtrl, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<ICosmosCtrl, &IID_ICosmosCtrl, &LIBID_World, 1, 0>
 {
 public:
 	DECLARE_REGISTRY_RESOURCEID(IDR_TANGRAMCTRL)

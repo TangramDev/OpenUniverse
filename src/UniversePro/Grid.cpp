@@ -208,6 +208,7 @@ void CGrid::InitWndGrid()
 			else
 				m_strName.Format(_T("Grid_%p"), (LONGLONG)this);
 		}
+		m_pHostParse->put_attr(_T("id"), m_strName);
 	}
 	m_strObjTypeID.MakeLower();
 	m_strObjTypeID.Trim();

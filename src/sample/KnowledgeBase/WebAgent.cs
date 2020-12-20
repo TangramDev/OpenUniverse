@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-
+using DOMPlus;
 namespace Cas
 {
     public class WebAgent
     {
         public static int Load(string args)
         {
-            Cosmos.Cosmos.OnBindCLRObjToWebPage += Tangram_OnBindCLRObjToWebPage;
-            Cosmos.Cosmos.OnHubbleMsgReceived += Tangram_OnTangramCloudMsgReceived;
+            Cosmos.OnBindCLRObjToWebPage += Tangram_OnBindCLRObjToWebPage;
+            Cosmos.OnHubbleMsgReceived += Tangram_OnTangramCloudMsgReceived;
             return 0;
         }
 
-        private static void Tangram_OnTangramCloudMsgReceived(Cosmos.Wormhole cloudWormhole)
+        private static void Tangram_OnTangramCloudMsgReceived(Wormhole cloudWormhole)
         {
             Console.WriteLine("msgID: " + cloudWormhole.GetString("msgID"));
         }

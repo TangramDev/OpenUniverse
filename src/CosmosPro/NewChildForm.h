@@ -19,7 +19,7 @@
 ********************************************************************************/
 #pragma once
 
-namespace Universe {
+namespace DOMPlus {
 
 	using namespace System;
 	using namespace System::ComponentModel;

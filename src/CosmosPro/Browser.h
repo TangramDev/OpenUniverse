@@ -25,7 +25,7 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
-namespace Universe
+namespace DOMPlus
 {
 	ref class Grid;
 	ref class Galaxy;
@@ -95,13 +95,5 @@ namespace Universe
 		}
 
 		Form^ CreateForm(String^ strFormKey);
-	};
-
-	public ref class CloudForm
-	{
-	public:
-		HWND					m_hWnd;
-		IBrowser*				m_pChromeWebBrowserHost;
-		CloudForm(IBrowser* pBrowser);
 	};
 }

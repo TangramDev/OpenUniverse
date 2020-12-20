@@ -406,7 +406,7 @@ namespace OfficePlus
 			public IPersistStorageImpl<COutLookAppCtrl>,
 			public IPersistStreamInitImpl<COutLookAppCtrl>,
 			public CComCoClass<COutLookAppCtrl, &CLSID_CosmosCtrl>,
-			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_World, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			COutLookAppCtrl();

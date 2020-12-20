@@ -25,7 +25,7 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
-namespace Universe
+namespace DOMPlus
 {
 	ref class Grid;
 	ref class Galaxy;

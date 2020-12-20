@@ -43,7 +43,7 @@ public:
 	static LRESULT CALLBACK CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
 	static LRESULT CALLBACK ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam);
-	DECLARE_LIBID(LIBID_DOMPlus)
+	DECLARE_LIBID(LIBID_World)
 
 private:
 	int ExitInstance();

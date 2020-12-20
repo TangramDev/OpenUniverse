@@ -19,7 +19,7 @@
 #include "TangramBase.h"       
 #include "Browser.h"
 
-using namespace Universe;
+using namespace DOMPlus;
 using namespace System::Reflection;
 using namespace System::Diagnostics;
 using namespace System::Collections;

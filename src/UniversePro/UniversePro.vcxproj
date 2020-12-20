@@ -348,7 +348,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="eclipseUtil.cpp" />
     <ClCompile Include="eclipseWin.cpp" />
     <ClCompile Include="eclipseWinCommon.cpp" />
-    <ClCompile Include="HubbleCtrl.cpp" />
+    <ClCompile Include="CosmosCtrl.cpp" />
     <ClCompile Include="TangramListView.cpp" />
     <ClCompile Include="TangramTabCtrl.cpp" />
     <ClCompile Include="CreateCheckboxImageList.cpp" />

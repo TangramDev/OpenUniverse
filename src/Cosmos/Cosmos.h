@@ -41,7 +41,7 @@ class CGridCLREvent;
 class CCosmosGridEvent;
 extern CCosmosProxy theAppProxy;
 
-namespace Universe
+namespace DOMPlus
 {
 	/// <summary>
 	/// Summary for Cosmos
@@ -71,7 +71,7 @@ namespace Universe
 		Object^ m_pHostObj = nullptr;
 		CCosmosGridEvent* m_pGridEvent;
 		CGridCLREvent* m_pGridCLREvent;
-		Universe::Wormhole^ m_pSession = nullptr;
+		DOMPlus::Wormhole^ m_pSession = nullptr;
 
 		// A notification has been created for all nodes in the current layout.
 		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);
@@ -120,9 +120,9 @@ namespace Universe
 			OnCloudMessageReceived(cloudSession);
 		}
 
-		delegate void BindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName);
+		delegate void BindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName);
 		event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
-		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName)
+		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName)
 		{
 			Control^ pCtrl = (Control^)SourceObj;
 			OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
@@ -141,7 +141,7 @@ namespace Universe
 
 		property Wormhole^ Wormhole
 		{
-			Universe::Wormhole^ get();
+			DOMPlus::Wormhole^ get();
 		}
 
 	public:
@@ -328,18 +328,18 @@ namespace Universe
 
 		property Galaxy^ Galaxy
 		{
-			Universe::Galaxy^ get();
+			DOMPlus::Galaxy^ get();
 		}
 
-		property Universe::Galaxy^ HostGalaxy
+		property DOMPlus::Galaxy^ HostGalaxy
 		{
-			Universe::Galaxy^ get()
+			DOMPlus::Galaxy^ get()
 			{
 				CComPtr<IGalaxy> pGalaxy;
 				m_pGrid->get_HostGalaxy(&pGalaxy);
 				if (pGalaxy)
 				{
-					return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
+					return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
 				}
 				return nullptr;
 			}
@@ -567,11 +567,11 @@ namespace Universe
 
 		property Grid^ VisibleGrid
 		{
-			Universe::Grid^ get()
+			DOMPlus::Grid^ get()
 			{
 				IGrid* pGrid = nullptr;
 				m_pGalaxy->get_VisibleGrid(&pGrid);
-				return theAppProxy._createObject<IGrid, Universe::Grid>(pGrid);
+				return theAppProxy._createObject<IGrid, DOMPlus::Grid>(pGrid);
 			}
 		}
 	private:

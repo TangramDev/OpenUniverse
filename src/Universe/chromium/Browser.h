@@ -21,7 +21,7 @@ namespace Browser {
 		public CBrowserImpl, 
 		public CWindowImpl<CBrowser, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
-		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_DOMPlus, 1, 0>
+		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_World, 1, 0>
 	{
 		friend class CGrid;
 	public:

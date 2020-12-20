@@ -9,7 +9,7 @@ class CTangramHtmlTreeWnd;
 
 class CTangramTreeView :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<ICosmosTreeView, &IID_ICosmosTreeView, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
+	public IDispatchImpl<ICosmosTreeView, &IID_ICosmosTreeView, &LIBID_World, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
 	CTangramTreeView();
