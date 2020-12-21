@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 /********************************************************************************
-*					DOM Plus for Application - Version 1.1.5.30                 *
+*					DOM Plus for Application - Version 1.1.6.35                 *
 *********************************************************************************
 * Copyright (C) 2002-2018 by Tangram Team.   All Rights Reserved.				*
 *

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					DOM Plus for Application - Version 1.1.5.30                 *
+*					DOM Plus for Application - Version 1.1.6.35                 *
 *********************************************************************************
 * Copyright (C) 2006-2013 by Tangram Team.   All Rights Reserved.				*
 *

@@ -1,6 +1,6 @@
 #include "..\CosmosMini\CosmosProxy.h"
 /********************************************************************************
-*					DOM Plus for Application - Version 1.1.5.30                 *
+*					DOM Plus for Application - Version 1.1.6.35                 *
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *

@@ -1,5 +1,5 @@
 /********************************************************************************
-*					DOM Plus for Application - Version 1.1.5.30                 *
+*					DOM Plus for Application - Version 1.1.6.35                 *
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *
@@ -23,12 +23,12 @@
 //
 
 #include "stdafx.h"
-#include "UniverseApp.h"
-#include "XobjHelper.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
 #include "Wormhole.h"
+#include "XobjHelper.h"
+#include "UniverseApp.h"
 #include "TangramHtmlTreeWnd.h"
 #include "OfficePlus\ExcelPlus\ExcelAddin.h"
 #include "OfficePlus\ExcelPlus\ExcelPlusWnd.h"

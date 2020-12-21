@@ -11,7 +11,7 @@
  * Martin Oberhuber (Wind River) - [176805] Support Solaris9 by adding setenv()
  *******************************************************************************/
  /********************************************************************************
- *					DOM Plus for Application - Version 1.1.5.30                 *
+ *					DOM Plus for Application - Version 1.1.6.35                 *
  *********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
  *
