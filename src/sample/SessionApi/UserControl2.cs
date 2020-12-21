@@ -38,7 +38,7 @@ namespace SessionApi
 
         private void UserControl2_Load(object sender, EventArgs e)
         {
-            thisNode = Cosmos.Cosmos.CreatingGrid;
+            thisNode = Cosmos.Cosmos.CreatingXobj;
             thisNode.OnBindCLRObjToWebPage += ThisNode_OnBindCLRObjToWebPage;
         }
 

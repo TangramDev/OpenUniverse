@@ -20,8 +20,8 @@
 
 #include "../../stdafx.h"
 #include "../../UniverseApp.h"
-#include "../../GridHelper.h"
-#include "../../Grid.h"
+#include "../../XobjHelper.h"
+#include "../../Xobj.h"
 #include "../../Galaxy.h"
 #include "../../TangramHtmlTreeWnd.h"
 #include "fm20.h"
@@ -62,8 +62,8 @@ namespace OfficePlus
 				auto it = m_mapValInfo.find(_T("designertoolcaption"));
 				if (it != m_mapValInfo.end())
 					m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-				m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-				m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
+				m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+				m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
 			if (m_hHostWnd && m_pDesignerGalaxyCluster == nullptr)
 			{
@@ -231,7 +231,7 @@ namespace OfficePlus
 				return;
 			if (hWnd == m_pActiveExcelObject->m_hExcelEdit)
 			{
-				m_pActiveGrid = nullptr;
+				m_pActiveXobj = nullptr;
 				if (::IsWindowVisible(m_pActiveExcelObject->m_hChildClient) == FALSE)
 				{
 					::PostMessage(m_pActiveExcelObject->m_hChildClient, WM_SETWNDFOCUSE, 0, 0);
@@ -262,7 +262,7 @@ namespace OfficePlus
 						break;
 					}
 				}
-				if (m_pActiveGrid == nullptr)
+				if (m_pActiveXobj == nullptr)
 					::SetFocus(lpMsg->hwnd);
 			}
 			m_pActiveExcelObject->ProcessMouseDownMsg(lpMsg->hwnd);
@@ -519,7 +519,7 @@ namespace OfficePlus
 					if (m_pDesignerFrame == nullptr)
 						break;
 
-					CXobj* pXobj = m_pDesignerFrame->m_pWorkGrid;
+					CXobj* pXobj = m_pDesignerFrame->m_pWorkXobj;
 					m_pDesignerFrame->HostPosChanged();
 					m_pDesigningFrame = m_pWorkBook->m_pGalaxy;
 					m_pDesigningFrame->UpdateDesignerTreeInfo();
@@ -1161,9 +1161,9 @@ namespace OfficePlus
 			HWND hActiveWnd = ::GetActiveWindow();
 			if (hActiveWnd == m_hForm)
 			{
-				if (g_pCosmos->m_pActiveGrid && (::IsChild(g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd, hWnd) || hWnd == g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd))
+				if (g_pCosmos->m_pActiveXobj && (::IsChild(g_pCosmos->m_pActiveXobj->m_pHostWnd->m_hWnd, hWnd) || hWnd == g_pCosmos->m_pActiveXobj->m_pHostWnd->m_hWnd))
 				{
-					if (g_pCosmos->m_pActiveGrid->m_nViewType == GridType::Grid || g_pCosmos->m_pActiveGrid->m_nViewType == GridType::TangramTreeView)
+					if (g_pCosmos->m_pActiveXobj->m_nViewType == Grid || g_pCosmos->m_pActiveXobj->m_nViewType == TangramTreeView)
 						return;
 					if (::IsWindowEnabled(m_hExcelEdit))
 						::EnableWindow(m_hExcelEdit, false);
@@ -1172,16 +1172,16 @@ namespace OfficePlus
 						::PostMessage(m_hChildClient, WM_KEYDOWN, VK_TAB, 0);
 						::PostMessage(m_hChildClient, WM_KEYDOWN, VK_LEFT, 0);
 						::EnableWindow(m_hExcelEdit2, false);
-						::PostMessage(g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
+						::PostMessage(g_pCosmos->m_pActiveXobj->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
 					}
 				}
 				else
 				{
 					::EnableWindow(m_hExcelEdit, true);
 					::EnableWindow(m_hExcelEdit2, true);
-					if (::IsWindowVisible(m_hChildClient) == false && g_pCosmos->m_pActiveGrid)
+					if (::IsWindowVisible(m_hChildClient) == false && g_pCosmos->m_pActiveXobj)
 					{
-						::PostMessage(g_pCosmos->m_pActiveGrid->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
+						::PostMessage(g_pCosmos->m_pActiveXobj->m_pHostWnd->m_hWnd, WM_SETWNDFOCUSE, (WPARAM)hWnd, (LPARAM)m_hChildClient);
 					}
 				}
 			}
@@ -1206,7 +1206,7 @@ namespace OfficePlus
 				if (pAddin->m_pActiveExcelObject == this)
 				{
 					pAddin->m_pActiveExcelObject = nullptr;
-					g_pCosmos->m_pActiveGrid = nullptr;
+					g_pCosmos->m_pActiveXobj = nullptr;
 				}
 
 				auto it2 = m_pWorkBook->m_mapExcelWorkBookWnd.find(m_hChildClient);

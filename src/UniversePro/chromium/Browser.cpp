@@ -20,8 +20,8 @@
 
 #include "../stdafx.h"
 #include "../UniverseApp.h"
-#include "../Grid.h"
-#include "../GridHelper.h"
+#include "../Xobj.h"
+#include "../XobjHelper.h"
 #include "../Galaxy.h"
 #include "WebPage.h"
 #include "Browser.h"
@@ -32,9 +32,9 @@ namespace Browser {
 		m_heightfix = 0;
 		m_hOldTab = NULL;
 		m_bTabChange = false;
-		m_pRemoteGrid = nullptr;
+		m_pRemoteXobj = nullptr;
 		m_pBrowser = nullptr;
-		m_pParentGrid = nullptr;
+		m_pParentXobj = nullptr;
 		m_fdevice_scale_factor = 1.0f;
 		m_strCurKey = _T("");
 		m_pVisibleWebWnd = nullptr;
@@ -374,7 +374,7 @@ namespace Browser {
 				CGalaxy* pGalaxy = m_pVisibleWebWnd->m_pGalaxy;
 				if (pGalaxy)
 				{
-					CXobj* pXobj = pGalaxy->m_pWorkGrid;
+					CXobj* pXobj = pGalaxy->m_pWorkXobj;
 					CXobjHelper* pWnd = (CXobjHelper*)(pXobj->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}
@@ -534,20 +534,20 @@ namespace Browser {
 		delete this;
 	}
 
-	STDMETHODIMP CBrowser::get_RemoteGrid(IXobj** pVal)
+	STDMETHODIMP CBrowser::get_RemoteXobj(IXobj** pVal)
 	{
-		if (m_pRemoteGrid != nullptr)
+		if (m_pRemoteXobj != nullptr)
 		{
-			*pVal = m_pRemoteGrid;
+			*pVal = m_pRemoteXobj;
 		}
 		return S_OK;
 	}
 
-	STDMETHODIMP CBrowser::put_RemoteGrid(IXobj* newVal)
+	STDMETHODIMP CBrowser::put_RemoteXobj(IXobj* newVal)
 	{
 		CComQIPtr<IXobj>pXobj(newVal);
 		if (pXobj)
-			m_pRemoteGrid = pXobj.Detach();
+			m_pRemoteXobj = pXobj.Detach();
 		//if (m_pRemoteNode == nullptr)
 		//{
 		//	IStream* pStream = 0;

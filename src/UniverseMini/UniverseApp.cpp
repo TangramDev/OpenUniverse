@@ -19,8 +19,8 @@
 #include <VersionHelpers.h> 
 #include <shellscalingapi.h>
 
-#include "GridHelper.h"
-#include "grid.h"
+#include "XobjHelper.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include <io.h>
 #include <stdio.h>
@@ -95,7 +95,7 @@ BOOL CUniverse::InitInstance()
 		wndClass.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 		wndClass.hbrBackground = 0;
 		wndClass.lpszMenuName = NULL;
-		wndClass.lpszClassName = _T("Tangram Grid Class");
+		wndClass.lpszClassName = _T("DOMPlus GridWindow Class");
 
 		RegisterClass(&wndClass);
 
@@ -103,7 +103,7 @@ BOOL CUniverse::InitInstance()
 
 		wndClass.lpfnWndProc = CosmosWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpszClassName = L"Cosmos Grid Class";
+		wndClass.lpszClassName = L"Cosmos Xobj Class";
 
 		RegisterClass(&wndClass);
 
@@ -385,10 +385,10 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (it != g_pCosmos->m_mapGalaxy2GalaxyCluster.end())
 			g_pCosmos->m_mapGalaxy2GalaxyCluster.erase(it);
 
-		auto itGrid = g_pCosmos->m_mapGrid.find(hWnd);
-		if (itGrid != g_pCosmos->m_mapGrid.end())
+		auto itXobj = g_pCosmos->m_mapXobj.find(hWnd);
+		if (itXobj != g_pCosmos->m_mapXobj.end())
 		{
-			g_pCosmos->m_mapGrid.erase(itGrid);
+			g_pCosmos->m_mapXobj.erase(itXobj);
 		}
 		auto it1 = g_pCosmos->m_mapUIData.find(hWnd);
 		if (it1 != g_pCosmos->m_mapUIData.end())
@@ -504,14 +504,14 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					g_bRecturnPressed = true;
 				}
-				if (g_pCosmos->m_pActiveGrid)
+				if (g_pCosmos->m_pActiveXobj)
 				{
-					if (g_pCosmos->m_pActiveGrid->m_nViewType != Grid)
+					if (g_pCosmos->m_pActiveXobj->m_nViewType != Grid)
 					{
-						pWnd = (CXobjHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
+						pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pCosmos->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveXobj = nullptr;
 							if (lpMsg->wParam != VK_TAB)
 								break;
 							else if (g_pCosmos->m_bWinFormActived == false)
@@ -529,7 +529,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					{
 						break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						lpMsg->hwnd = NULL;
 						lpMsg->lParam = 0;
@@ -576,7 +576,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 						break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
 						{
@@ -601,9 +601,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					}
 					break;
 				case VK_DELETE:
-					if (g_pCosmos->m_pActiveGrid)
+					if (g_pCosmos->m_pActiveXobj)
 					{
-						if (g_pCosmos->m_pActiveGrid->m_nViewType == ActiveX)
+						if (g_pCosmos->m_pActiveXobj->m_nViewType == ActiveX)
 						{
 							pWnd->PreTranslateMessage(lpMsg);
 							lpMsg->hwnd = NULL;
@@ -623,11 +623,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
 							break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid)
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj)
 					{
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pCosmos->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveXobj = nullptr;
 							g_pCosmos->m_pGalaxy = nullptr;
 						}
 						else if (pWnd)
@@ -661,16 +661,16 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 0x5a://Ctrl+Z
 					if (::GetKeyState(VK_CONTROL) < 0)  // control pressed
 					{
-						if (g_pCosmos->m_pActiveGrid && pWnd && !::IsWindow(pWnd->m_hWnd))
+						if (g_pCosmos->m_pActiveXobj && pWnd && !::IsWindow(pWnd->m_hWnd))
 						{
-							g_pCosmos->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveXobj = nullptr;
 						}
-						if (g_pCosmos->m_pActiveGrid)
+						if (g_pCosmos->m_pActiveXobj)
 						{
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
-							if (g_pCosmos->m_pActiveGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
+							if (g_pCosmos->m_pActiveXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 							{
 								if (pWnd)
 									pWnd->PreTranslateMessage(lpMsg);

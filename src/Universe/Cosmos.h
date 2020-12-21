@@ -76,15 +76,15 @@ public:
 
 	CWinForm*							m_pActiveWinFormWnd;
 
-	CXobj*								m_pActiveGrid;
-	CXobj*								m_pDesignGrid;
+	CXobj*								m_pActiveXobj;
+	CXobj*								m_pDesignXobj;
 	CGalaxy*							m_pGalaxy;
 
 	map<CString, long>					m_mapIPCMsgIndexDic;
 
 	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
-	map<__int64, CXobjCollection*>		m_mapWndGridCollection;
-	map<CXobj*, CString>				m_mapGridForHtml;
+	map<__int64, CXobjCollection*>		m_mapWndXobjCollection;
+	map<CXobj*, CString>				m_mapXobjForHtml;
 	map<CString, HWND>					m_mapSingleWndApp;
 	map<HWND, CWinForm*>				m_mapNeedQueryOnClose;
 
@@ -98,9 +98,9 @@ public:
 		CONNECTION_POINT_ENTRY(__uuidof(_ICosmos))
 	END_CONNECTION_POINT_MAP()
 
-	STDMETHOD(get_RootNodes)(IXobjCollection** pGridColletion);
-	STDMETHOD(get_CurrentActiveGrid)(IXobj** pVal);
-	STDMETHOD(get_CreatingGrid)(IXobj** pVal);
+	STDMETHOD(get_RootNodes)(IXobjCollection** pXobjColletion);
+	STDMETHOD(get_CurrentActiveXobj)(IXobj** pVal);
+	STDMETHOD(get_CreatingXobj)(IXobj** pVal);
 	STDMETHOD(get_DesignNode)(IXobj** pVal);
 	STDMETHOD(get_AppExtender)(BSTR bstrKey, IDispatch** pVal);
 	STDMETHOD(put_AppExtender)(BSTR bstrKey, IDispatch* newVal);
@@ -128,11 +128,11 @@ public:
 	STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml) { return S_OK; };
 	STDMETHOD(FireCosmosEventObj)(ICosmosEventObj* pCosmosEventObj);
 	STDMETHOD(GetGalaxy)(LONGLONG hHostWnd, IGalaxy** ppGalaxy);
-	STDMETHOD(GetGridFromHandle)(LONGLONG hWnd, IXobj** ppRetGrid);
+	STDMETHOD(GetXobjFromHandle)(LONGLONG hWnd, IXobj** ppRetXobj);
 	STDMETHOD(GetCtrlByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
 	STDMETHOD(GetDocTemplateXml)(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath);
-	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppGrid);
+	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppXobj);
 	STDMETHOD(GetItemText)(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet);
 	STDMETHOD(GetCLRControl)(IDispatch* CtrlDisp, BSTR bstrNames, IDispatch** ppRetDisp);
 	STDMETHOD(MessageBox)(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, int* nRet);
@@ -141,7 +141,7 @@ public:
 	STDMETHOD(SetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	STDMETHOD(SetItemText)(IXobj* pXobj, long nCtrlID, BSTR bstrRet);
 	STDMETHOD(SetHostFocus)(void);
-	STDMETHOD(UpdateGrid)(IXobj* pXobj);
+	STDMETHOD(UpdateXobj)(IXobj* pXobj);
 	STDMETHOD(CosmosCommand)(IDispatch* RibbonControl) { return S_OK; };
 	STDMETHOD(CosmosGetImage)(BSTR strValue, IPictureDisp ** ppDispImage) { return S_OK; };
 	STDMETHOD(CosmosGetVisible)(IDispatch* RibbonControl, VARIANT* varVisible) { return S_OK; };
@@ -216,7 +216,7 @@ private:
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
 
 	void CosmosLoad();
-	void AttachGrid(void* pXobjEvents);
+	void AttachXobj(void* pXobjEvents);
 
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
 	IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag);

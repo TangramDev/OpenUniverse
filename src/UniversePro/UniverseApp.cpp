@@ -28,8 +28,8 @@
 #include "CloudUtilities\DownLoad.h"
 #include "EclipsePlus\EclipseAddin.h"
 
-#include "GridHelper.h"
-#include "Grid.h"
+#include "XobjHelper.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "Galaxy.h"
 #include "WPFView.h"
@@ -356,7 +356,7 @@ BOOL CUniverse::InitInstance()
 		wndClass.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 		wndClass.hbrBackground = 0;
 		wndClass.lpszMenuName = NULL;
-		wndClass.lpszClassName = _T("Tangram Grid Class");
+		wndClass.lpszClassName = _T("DOMPlus GridWindow Class");
 
 		RegisterClass(&wndClass);
 
@@ -364,7 +364,7 @@ BOOL CUniverse::InitInstance()
 
 		wndClass.lpfnWndProc = CosmosWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
-		wndClass.lpszClassName = L"Cosmos Grid Class";
+		wndClass.lpszClassName = L"Cosmos Xobj Class";
 
 		RegisterClass(&wndClass);
 
@@ -1253,7 +1253,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				if (g_pCosmos->m_pMDIMainWnd)
 				{
 					CString strClsName = CString(pCreateWnd->lpcs->lpszClass);
-					if (strClsName.CompareNoCase(_T("Cosmos Grid Class")) && strClsName.CompareNoCase(_T("Tangram Grid Class")))
+					if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("DOMPlus GridWindow Class")))
 						::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_CONTROLBARCREATED, (WPARAM)hPWnd, (LPARAM)hWnd);
 				}
 				else
@@ -1261,7 +1261,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 					if (g_pCosmos->m_pActiveMDIChildWnd && ::IsWindow(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd))
 					{
 						CString strClsName = CString(pCreateWnd->lpcs->lpszClass);
-						if (strClsName.CompareNoCase(_T("Cosmos Grid Class")) && strClsName.CompareNoCase(_T("Tangram Grid Class")))
+						if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("DOMPlus GridWindow Class")))
 							::PostMessage(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd, WM_CONTROLBARCREATED, (WPARAM)hPWnd, (LPARAM)hWnd);
 					}
 				}
@@ -1277,8 +1277,8 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
 				if (it != g_pCosmos->m_mapValInfo.end())
 					g_pCosmos->m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
+				g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
 			if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)pCreateWnd->lpcs->lpCreateParams, TANGRAM_CONST_PANE_FIRST) == 1992)
 			{
@@ -1418,10 +1418,10 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (it1 != g_pCosmos->m_mapCtrlTag.end())
 			g_pCosmos->m_mapCtrlTag.erase(it1);
 
-		auto itGrid = g_pCosmos->m_mapGrid.find(hWnd);
-		if (itGrid != g_pCosmos->m_mapGrid.end())
+		auto itXobj = g_pCosmos->m_mapXobj.find(hWnd);
+		if (itXobj != g_pCosmos->m_mapXobj.end())
 		{
-			g_pCosmos->m_mapGrid.erase(itGrid);
+			g_pCosmos->m_mapXobj.erase(itXobj);
 		}
 		auto it2 = g_pCosmos->m_mapCosmosAFXHelperWnd.find(hWnd);
 		if (it2 != g_pCosmos->m_mapCosmosAFXHelperWnd.end())
@@ -1554,17 +1554,17 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					g_bRecturnPressed = true;
 				}
-				if (g_pCosmos->m_pActiveGrid)
+				if (g_pCosmos->m_pActiveXobj)
 				{
-					if (g_pCosmos->m_pActiveGrid->m_nViewType != Grid)
+					if (g_pCosmos->m_pActiveXobj->m_nViewType != Grid)
 					{
-						if (g_pCosmos->m_pActiveGrid->m_nViewType == TangramWPFCtrl)
-							pView = (CWPFView*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
+						if (g_pCosmos->m_pActiveXobj->m_nViewType == TangramWPFCtrl)
+							pView = (CWPFView*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						else
-							pWnd = (CXobjHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
+							pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pCosmos->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveXobj = nullptr;
 							if (lpMsg->wParam != VK_TAB)
 								break;
 							else if (g_pCosmos->m_bWinFormActived == false)
@@ -1605,7 +1605,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					{
 						break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						lpMsg->hwnd = NULL;
 						lpMsg->lParam = 0;
@@ -1684,7 +1684,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 						break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
 						{
@@ -1718,9 +1718,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					}
 					break;
 				case VK_DELETE:
-					if (g_pCosmos->m_pActiveGrid)
+					if (g_pCosmos->m_pActiveXobj)
 					{
-						if (g_pCosmos->m_pActiveGrid->m_nViewType == ActiveX)
+						if (g_pCosmos->m_pActiveXobj->m_nViewType == ActiveX)
 						{
 							pWnd->PreTranslateMessage(lpMsg);
 							lpMsg->hwnd = NULL;
@@ -1740,11 +1740,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
 							break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid)
+					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj)
 					{
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
-							g_pCosmos->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveXobj = nullptr;
 							g_pCosmos->m_pGalaxy = nullptr;
 						}
 						else if (pWnd)
@@ -1778,18 +1778,18 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 0x5a://Ctrl+Z
 					if (::GetKeyState(VK_CONTROL) < 0)  // control pressed
 					{
-						if (g_pCosmos->m_pActiveGrid && pWnd && !::IsWindow(pWnd->m_hWnd))
+						if (g_pCosmos->m_pActiveXobj && pWnd && !::IsWindow(pWnd->m_hWnd))
 						{
-							g_pCosmos->m_pActiveGrid = nullptr;
+							g_pCosmos->m_pActiveXobj = nullptr;
 						}
-						if (g_pCosmos->m_pActiveGrid)
+						if (g_pCosmos->m_pActiveXobj)
 						{
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
 							else if (pView)
 								hWnd = pView->m_hWnd;
-							if ((g_pCosmos->m_pActiveGrid->m_nViewType == ActiveX || g_pCosmos->m_pActiveGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
+							if ((g_pCosmos->m_pActiveXobj->m_nViewType == ActiveX || g_pCosmos->m_pActiveXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
 							{
 								if (pWnd)
 									pWnd->PreTranslateMessage(lpMsg);
@@ -1851,9 +1851,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				//if (MK_LBUTTON == lpMsg->wParam)
 				//{
 				//	CWnd* pWnd = nullptr;
-				//	if (g_pCosmos->m_pActiveGrid)
-				//		pWnd = (CXobjHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
-				//	if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
+				//	if (g_pCosmos->m_pActiveXobj)
+				//		pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
+				//	if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 				//	{
 				//		if (g_pCosmos->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
 				//		{
@@ -2079,13 +2079,13 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				break;
 				case 2019111701:
 				{
-					if (g_pCosmos->m_mapGridForHtml.size())
+					if (g_pCosmos->m_mapXobjForHtml.size())
 					{
-						for (auto it : g_pCosmos->m_mapGridForHtml)
+						for (auto it : g_pCosmos->m_mapXobjForHtml)
 						{
 							it.first->put_URL(CComBSTR(it.second));
 						}
-						g_pCosmos->m_mapGridForHtml.erase(g_pCosmos->m_mapGridForHtml.begin(), g_pCosmos->m_mapGridForHtml.end());
+						g_pCosmos->m_mapXobjForHtml.erase(g_pCosmos->m_mapXobjForHtml.begin(), g_pCosmos->m_mapXobjForHtml.end());
 					}
 					//CString strHelper = g_pCosmos->m_strAppPath + _T("tangramhelper.xml");
 					//if (::PathFileExists(strHelper))
@@ -2241,7 +2241,7 @@ CString CUniverse::GetFileVer()
 	return strVersion;
 }
 
-JNIEXPORT void JNICALL Java_Tangram_Host_Tangram_InitTangram(JNIEnv* env, jobject obj, jobject jTangram, jobject jGalaxyCluster, jobject jGalaxy, jobject jWndGrid)
+JNIEXPORT void JNICALL Java_Tangram_Host_Tangram_InitTangram(JNIEnv* env, jobject obj, jobject jTangram, jobject jGalaxyCluster, jobject jGalaxy, jobject jWndXobj)
 {
 	jclass cls = env->GetObjectClass(obj);
 

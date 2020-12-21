@@ -23,7 +23,7 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "WPFView.h"
-#include "Grid.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
 
@@ -80,7 +80,7 @@ void CWPFView::Dump(CDumpContext& dc) const
 
 BOOL CWPFView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_pHostWnd = this;
 	m_pXobj->m_nViewType = TangramWPFCtrl;
 	m_pXobj->m_nID = nID;
@@ -111,7 +111,7 @@ int CWPFView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pCosmos->m_pActiveGrid = m_pXobj;
+	g_pCosmos->m_pActiveXobj = m_pXobj;
 	::SetFocus(m_hWnd);
 	g_pCosmos->m_bWinFormActived = false;
 

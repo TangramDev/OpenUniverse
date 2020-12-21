@@ -19,7 +19,7 @@
 ********************************************************************************/
 
 
-// Grid.h : Declaration of the CXobj
+// Xobj.h : Declaration of the CXobj
 
 #include "GalaxyCluster.h"
 #include "chromium/Browser.h"
@@ -42,7 +42,7 @@ public:
 	map<CString, CXobj*>	m_mapLayoutNodes;
 	map<CString, CXobj*>	m_mapAxNodes;
 	map<CString, CXobj*>	m_mapCLRNodes;
-	map<CString, CXobj*>	m_mapCppGrids;
+	map<CString, CXobj*>	m_mapCppXobjs;
 	CMapStringToPtr			m_PlugInDispDictionary;
 };
 
@@ -61,7 +61,7 @@ public:
 	BOOL							m_bCreated;
 	BOOL							m_bNodeDocComplete;
 
-	GridType						m_nViewType;
+	XobjType						m_nViewType;
 	int								m_nID;
 	int								m_nActivePage;
 	int								m_nWidth;
@@ -81,7 +81,7 @@ public:
 	CString 						m_strCaption;
 	CString 						m_strCosmosXml = _T("");
 	CString 						m_strXmlFileFromVS;
-	CString 						m_strXmlRefGridInfo = _T("");
+	CString 						m_strXmlRefXobjInfo=_T("");
 
 	CString							m_strLastIPCMsgID = _T("");
 	CString							m_strLastIPCParam1 = _T("");
@@ -111,18 +111,18 @@ public:
 
 	VARIANT							m_varTag;
 	IDispatch*						m_pExtender;
-	CGridVector						m_vChildNodes;
+	CXobjVector						m_vChildNodes;
 	CXobj*							m_pCurrentExNode;
 	CWebPage*						m_pWebPage = nullptr;
 	CWormhole*						m_pCosmosCloudSession;
 	map<CString, CGalaxy*>			m_mapSubFrame;
 	map<CXobj*, CString>			m_mapExtendNode;
-	map<CString, CXobj*>			m_mapChildGrid;
+	map<CString, CXobj*>			m_mapChildXobj;
 	CComObject<CXobjCollection>*	m_pChildNodeCollection;
 
-	map<IUniverseAppProxy*, CGridProxy*> m_mapWndGridProxy;
+	map<IUniverseAppProxy*, CXobjProxy*> m_mapWndXobjProxy;
 
-	void	InitWndGrid();
+	void	InitWndXobj();
 	BOOL	Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext);
 	BOOL	PreTranslateMessage(MSG* pMsg);
 	BOOL	AddChildNode(CXobj* pXobj);
@@ -133,9 +133,9 @@ public:
 
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
-	HRESULT Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
-	HRESULT Fire_GridAddInsCreated();
-	HRESULT Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
+	HRESULT Fire_XobjAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	HRESULT Fire_XobjAddInsCreated();
+	HRESULT Fire_XobjDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL);
 	HRESULT Fire_ControlNotify(IXobj * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
 	HRESULT Fire_TabChange(LONG ActivePage, LONG OldPage);
 	HRESULT Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
@@ -163,9 +163,9 @@ public:
 	STDMETHOD(get_Row)(long* nRow);
 	STDMETHOD(get_Col)(long* nCol);
 	STDMETHOD(get_Objects)(long nType, IXobjCollection** );
-	STDMETHOD(get_GridType)(GridType* nType);
-	STDMETHOD(get_ParentGrid)(IXobj** ppGrid);
-	STDMETHOD(get_RootGrid)(IXobj** ppGrid);
+	STDMETHOD(get_XobjType)(XobjType* nType);
+	STDMETHOD(get_ParentXobj)(IXobj** ppXobj);
+	STDMETHOD(get_RootXobj)(IXobj** ppXobj);
 	STDMETHOD(get_OuterXml)(BSTR* pVal);
 	STDMETHOD(get_Key)(BSTR* pVal);
 	STDMETHOD(get_Galaxy)(IGalaxy** pVal);
@@ -177,8 +177,8 @@ public:
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_NameAtWindowPage)(BSTR* pVal);
 	STDMETHOD(get_DocXml)(BSTR* pVal);
-	STDMETHOD(get_HostGrid)(IXobj** pVal);
-	STDMETHOD(put_HostGrid)(IXobj* newVal);
+	STDMETHOD(get_HostXobj)(IXobj** pVal);
+	STDMETHOD(put_HostXobj)(IXobj* newVal);
 	STDMETHOD(get_ActivePage)(int* pVal);
 	STDMETHOD(put_ActivePage)(int newVal);
 	STDMETHOD(get_OfficeObj)(IDispatch** pVal);
@@ -205,26 +205,27 @@ public:
 	STDMETHOD(get_MasterCol)(int* pVal);
 	STDMETHOD(put_MasterCol)(int newVal);
 	STDMETHOD(put_SaveToConfigFile)(VARIANT_BOOL newVal);
+	STDMETHOD(get_URL)(BSTR* pVal);
+	STDMETHOD(put_URL)(BSTR newVal);
 
-	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
-	STDMETHOD(ObserveEx)(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
+	STDMETHOD(ObserveEx)(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
 	STDMETHOD(ActiveTabPage)(IXobj* pXobj);
-	STDMETHOD(GetGrid)(long nRow, long nCol,IXobj** ppGrid);
-	STDMETHOD(GetGrids)(BSTR bstrName, IXobj** ppGrid, IXobjCollection** ppGrids, long* pCount);
+	STDMETHOD(GetXobj)(long nRow, long nCol,IXobj** ppXobj);
+	STDMETHOD(GetXobjs)(BSTR bstrName, IXobj** ppXobj, IXobjCollection** ppXobjs, long* pCount);
 	STDMETHOD(GetCtrlByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
-	STDMETHOD(GetChildGridByName)(BSTR bstrName, IXobj** pVal);
 	STDMETHOD(GetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
 	STDMETHOD(SetCtrlValueByName)(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	STDMETHOD(LoadXML)(int nType, BSTR bstrXML);
 	STDMETHOD(Show)();
-	STDMETHOD(GetGridByName)(BSTR bstrName, IXobjCollection** pVal);
+	STDMETHOD(GetXobjByName)(BSTR bstrName, IXobjCollection** pVal);
+	STDMETHOD(GetChildXobjByName)(BSTR bstrName, IXobj** pVal);
 	STDMETHOD(get_DockObj)(BSTR bstrName, LONGLONG* pVal);
 	STDMETHOD(put_DockObj)(BSTR bstrName, LONGLONG newVal);
 	STDMETHOD(NavigateURL)(BSTR bstrURL, IDispatch* dispObjforScript);
-	STDMETHOD(get_URL)(BSTR* pVal);
-	STDMETHOD(put_URL)(BSTR newVal);
-	STDMETHOD(GetUIScript)(BSTR bstrCtrlName, BSTR* bstrVal);
+
 	STDMETHOD(SendIPCMessage)(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet);
+	STDMETHOD(GetUIScript)(BSTR bstrCtrlName, BSTR* bstrVal);
 
 	BEGIN_COM_MAP(CXobj)
 		COM_INTERFACE_ENTRY(IXobj)
@@ -240,8 +241,8 @@ public:
 
 private:
 	CString _GetNames(CXobj* pXobj);
-	void _get_Objects(CXobj* pXobj, UINT32& nType, CXobjCollection* pGridColletion);
-	int _getNodes(CXobj* pXobj, CString& strName, CXobj**ppRetGrid, CXobjCollection* pGrids);
+	void _get_Objects(CXobj* pXobj, UINT32& nType, CXobjCollection* pXobjColletion);
+	int _getNodes(CXobj* pXobj, CString& strName, CXobj**ppRetXobj, CXobjCollection* pXobjs);
 };
 
 // CXobjCollection
@@ -259,11 +260,11 @@ public:
 		COM_INTERFACE_ENTRY(IDispatch)
 	END_COM_MAP()
 
-	STDMETHOD(get_GridCount)(long* pCount);
-	STDMETHOD(get_Item)(long iIndex, IXobj ** ppGrid);
+	STDMETHOD(get_XobjCount)(long* pCount);
+	STDMETHOD(get_Item)(long iIndex, IXobj ** ppXobj);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
-	CGridVector*	m_pXobjs;
+	CXobjVector*	m_pXobjs;
 
 private:
-	CGridVector	m_vGrids;
+	CXobjVector	m_vXobjs;
 };

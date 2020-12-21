@@ -1,5 +1,5 @@
 /********************************************************************************
-*					DOM Plus for Application - Version 1.1.5.30                 *
+*					DOM Plus for Application - Version 1.1.5.30								*
 *********************************************************************************
 * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
 *
@@ -17,13 +17,10 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Cosmos.h"
-#include "GridHelper.h"
-#include "grid.h"
+#include "XobjHelper.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
-#include "Wormhole.h"
-
-#include "chromium/WebPage.h"
 
 // CXobjHelper
 
@@ -33,11 +30,10 @@ CXobjHelper::CXobjHelper()
 {
 	m_hFormWnd = NULL;
 	m_bNoMove = false;
-	m_bBKWnd = false;
 	m_bCreateExternal = false;
 	m_bEraseBkgnd = true;
 	m_pXobj = nullptr;
-	m_pParentGrid = nullptr;
+	m_pParentXobj = nullptr;
 	m_pOleInPlaceActiveObject = nullptr;
 	m_strKey = m_strXml = _T("");
 }
@@ -56,7 +52,6 @@ BEGIN_MESSAGE_MAP(CXobjHelper, CWnd)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
-	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 // CXobjHelper diagnostics
@@ -78,18 +73,18 @@ void CXobjHelper::Dump(CDumpContext& dc) const
 //CXobjHelper message handlers
 BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_nID = nID;
 	m_pXobj->m_pHostWnd = this;
 
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-		pGalaxy->m_pBindingGrid = m_pXobj;
+		pGalaxy->m_pBindingXobj = m_pXobj;
 
 		m_pXobj->m_pXobjShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		HWND hWnd = CreateWindow(L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		if (m_pXobj->m_pParentObj)
 		{
@@ -99,7 +94,6 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 				ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			}
 		}
-		m_pXobj->NodeCreated();
 		return bRet;
 	}
 	return m_pXobj->Create(dwStyle, rect, pParentWnd, nID, pContext);
@@ -125,16 +119,11 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
 	if (g_pCosmos->m_pCLRProxy)
 		g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
-	if (g_pCosmos->m_pActiveHtmlWnd)
-	{
-		::PostMessage(g_pCosmos->m_pActiveHtmlWnd->m_hWnd, WM_COSMOSMSG, 20190331, 0);
-		g_pCosmos->m_pActiveHtmlWnd = nullptr;
-	}
-	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
-	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
-		::BringWindowToTop(hWnd);
 
 	CGalaxy* pGalaxy = m_pXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy;
+	HWND hWnd = pGalaxy->m_pGalaxyCluster->m_hWnd;
+	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
+		::BringWindowToTop(hWnd);
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
 		HWND hMenuWnd = pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
@@ -155,7 +144,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy)
 			::SetFocus(m_hWnd);
-		g_pCosmos->m_pActiveGrid = m_pXobj;
+		g_pCosmos->m_pActiveXobj = m_pXobj;
 		g_pCosmos->m_bWinFormActived = false;
 		return MA_ACTIVATE;
 	}
@@ -166,28 +155,18 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if ((m_pXobj->m_nViewType != TabGrid && m_pXobj->m_nViewType != Grid))
 		{
-			if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy || g_pCosmos->m_pActiveGrid != m_pXobj)
+			if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy || g_pCosmos->m_pActiveXobj != m_pXobj)
 				::SetFocus(m_hWnd);
 		}
 	}
-	g_pCosmos->m_pActiveGrid = m_pXobj;
+	g_pCosmos->m_pActiveXobj = m_pXobj;
 	g_pCosmos->m_bWinFormActived = false;
 	g_pCosmos->m_pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 
-	CWebPage* pHtmlWnd = g_pCosmos->m_pGalaxy->m_pWebPageWnd;
 	CString strID = m_pXobj->m_strName;
 
 	if (m_pXobj->m_nViewType == CLRCtrl)
 	{
-		if (pHtmlWnd)
-		{
-			CWormhole* pSession = m_pXobj->m_pCosmosCloudSession;
-			if (pSession)
-			{
-				pSession->InsertString(_T("msgID"), IPC_NODE_ONMOUSEACTIVATE_ID);
-				pHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
-			}
-		}
 		return MA_NOACTIVATE;
 	}
 
@@ -195,36 +174,20 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		&& m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS)
 		&&m_pXobj->m_pDisp == NULL)
 	{
-		if (g_pCosmos->m_pDesignGrid && g_pCosmos->m_pDesignGrid != m_pXobj)
+		if (g_pCosmos->m_pDesignXobj && g_pCosmos->m_pDesignXobj != m_pXobj)
 		{
-			CXobjHelper* pWnd = ((CXobjHelper*)g_pCosmos->m_pDesignGrid->m_pHostWnd);
+			CXobjHelper* pWnd = ((CXobjHelper*)g_pCosmos->m_pDesignXobj->m_pHostWnd);
 			if (pWnd && ::IsWindow(pWnd->m_hWnd))
 			{
 				pWnd->Invalidate(true);
 			}
 		}
-		g_pCosmos->m_pDesignGrid = m_pXobj;
+		g_pCosmos->m_pDesignXobj = m_pXobj;
 		Invalidate(true);
 	}
 
 	if (m_bCreateExternal == false)
 	{
-		if (pHtmlWnd)
-		{
-			IPCMsg pIPCInfo;
-			pIPCInfo.m_strId = IPC_NODE_ONMOUSEACTIVATE_ID;
-			pIPCInfo.m_strParam1 = strID;
-			CString strHandle = _T("");
-			strHandle.Format(_T("%d"), m_hWnd);
-			pIPCInfo.m_strParam2 = strHandle;
-			strHandle.Format(_T("%d"), m_pXobj->m_nViewType);
-			pIPCInfo.m_strParam3 = strHandle;
-			strHandle.Format(_T("%d"), pGalaxy->m_hWnd);
-			pIPCInfo.m_strParam4 = strHandle;
-			//strHandle.Format(_T("%d"), m_pRootObj->m_pHostWnd->m_hWnd);
-			pIPCInfo.m_strParam5 = _T("wndnode");
-			pHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&pIPCInfo);
-		}
 		return MA_ACTIVATEANDEAT;
 	}
 	else
@@ -256,10 +219,10 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
 		CBrush br(&bit);
 		pDC->FillRect(&rt, &br);
-		if (bInDesignState && g_pCosmos->m_pDesignGrid == m_pXobj)
+		if (bInDesignState && g_pCosmos->m_pDesignXobj == m_pXobj)
 		{
 			pDC->SetTextColor(RGB(255, 0, 255));
-			strText = _T("\n\n  ") + g_pCosmos->m_strGridSelectedText;
+			strText = _T("\n\n  ") + g_pCosmos->m_strXobjSelectedText;
 		}
 		else
 		{
@@ -321,20 +284,11 @@ BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
 	return CWnd::PreTranslateMessage(pMsg);
 }
 
-void CXobjHelper::OnShowWindow(BOOL bShow, UINT nStatus)
-{
-	CWnd::OnShowWindow(bShow, nStatus);
-	if (bShow && m_pXobj->m_pWebBrowser)
-	{
-		::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
-	}
-}
-
 void CXobjHelper::OnDestroy()
 {
-	if (g_pCosmos->m_pDesignGrid == m_pXobj)
+	if (g_pCosmos->m_pDesignXobj == m_pXobj)
 	{
-		g_pCosmos->m_pDesignGrid = NULL;
+		g_pCosmos->m_pDesignXobj = NULL;
 	}
 
 	m_pXobj->Fire_Destroy();
@@ -353,7 +307,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	int nOldPage = m_pXobj->m_nActivePage;
 	m_pXobj->m_nActivePage = (int)wParam;
 	IXobj* pXobj = nullptr;
-	m_pXobj->GetGrid(0, wParam, &pXobj);
+	m_pXobj->GetXobj(0, wParam, &pXobj);
 
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (pXobj)
@@ -366,9 +320,6 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		else
 		{
 			pGalaxy->HostPosChanged();
-		}
-		if (_pXobj->m_pWebBrowser) {
-			g_pCosmos->m_pActiveHtmlWnd = _pXobj->m_pWebBrowser->m_pVisibleWebWnd;
 		}
 		if (nOldPage != wParam)
 		{
@@ -403,10 +354,6 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	if (nOldPage != wParam)
 	{
 		m_pXobj->Fire_TabChange(wParam, lParam);
-		if (pGalaxy->m_pWebPageWnd)
-		{
-			::SendMessage(::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-		}
 	}
 
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
@@ -415,14 +362,6 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 
 LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
-	if (wParam && lParam == 20201028)
-	{
-		RECT rect;
-		::GetClientRect(m_hWnd, &rect);
-		m_pXobj->m_pWebBrowser = (CBrowser*)wParam;
-		::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-		return -1;
-	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
 		switch (lParam)
@@ -435,10 +374,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			break;
 		case 20200128:
 		{
-			if (m_pXobj && m_pXobj->m_pWebBrowser)
-			{
-				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
-			}
 		}
 		break;
 		default:
@@ -463,15 +398,6 @@ LRESULT CXobjHelper::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pXobj)
 	{
-		HWND hBrowser = (HWND)lParam;
-		if (::IsWindow(hBrowser))
-		{
-			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())
-			{
-				m_pXobj->m_pWebBrowser = (CBrowser*)it->second;
-			}
-		}
 		return (LRESULT)m_pXobj;
 	}
 	return CWnd::DefWindowProc(WM_HUBBLE_GETNODE, wParam, lParam);;
@@ -511,7 +437,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (m_bNoMove)
 		{
 			lpwndpos->flags |= SWP_NOMOVE;
-			CXobjHelper* pGridWnd = (CXobjHelper*)m_pXobj->m_pHostWnd;
+			CXobjHelper* pXobjWnd = (CXobjHelper*)m_pXobj->m_pHostWnd;
 			if (m_pXobj->m_pParentObj->m_nViewType == Grid)
 			{
 				CGridWnd* pWnd = (CGridWnd*)m_pXobj->m_pParentObj->m_pHostWnd;
@@ -537,11 +463,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		}
 	}
 
-	if (m_pXobj->m_pWebBrowser)
 	{
-		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE);// | SWP_NOREDRAW);
-	}
-	else {
 		if (m_hFormWnd)
 			::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)

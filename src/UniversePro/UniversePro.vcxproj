@@ -366,7 +366,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="Cosmos.cpp" />
     <ClCompile Include="TangramHtmlTreeExWnd.cpp" />
     <ClCompile Include="TangramHtmlTreeWnd.cpp" />
-    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Xobj.cpp" />
     <ClCompile Include="GalaxyCluster.cpp" />
     <ClCompile Include="GridWnd.cpp" />
     <ClCompile Include="TangramTreeNode.cpp" />
@@ -387,7 +387,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="GridHelper.cpp" />
+    <ClCompile Include="XobjHelper.cpp" />
     <ClCompile Include="VisualStylesXP.cpp" />
     <ClCompile Include="WPFView.cpp" />
     <ClCompile Include="XHtmlDraw.cpp">
@@ -451,7 +451,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="universeApp.h" />
     <ClInclude Include="Galaxy.h" />
     <ClInclude Include="Cosmos.h" />
-    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Xobj.h" />
     <ClInclude Include="GalaxyCluster.h" />
     <ClInclude Include="GridWnd.h" />
     <ClInclude Include="TangramTreeNode.h" />
@@ -460,7 +460,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="CloudUtilities\DownLoad.h" />
     <ClInclude Include="CloudUtilities\XUnzip.h" />
     <ClInclude Include="CloudUtilities\XZip.h" />
-    <ClInclude Include="GridHelper.h" />
+    <ClInclude Include="XobjHelper.h" />
     <ClInclude Include="WPFView.h" />
     <ClInclude Include="XHtmlDraw.h" />
     <ClInclude Include="XHtmlDrawLink.h" />

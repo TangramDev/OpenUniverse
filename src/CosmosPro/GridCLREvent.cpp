@@ -62,22 +62,22 @@ void CXobjCLREvent::OnDestroy()
 	m_pXobj->Fire_OnDestroy(m_pXobj);
 }
 
-void CXobjCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+void CXobjCLREvent::OnXobjAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	Object^ pAddinObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pAddIndisp)));
-	m_pXobj->Fire_GridAddInCreated(m_pXobj, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
+	m_pXobj->Fire_XobjAddInCreated(m_pXobj, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
 }
 
-void CXobjCLREvent::OnGridAddInsCreated()
+void CXobjCLREvent::OnXobjAddInsCreated()
 {
-	m_pXobj->Fire_GridAddInsCreated(m_pXobj);
+	m_pXobj->Fire_XobjAddInsCreated(m_pXobj);
 }
 
 void CXobjCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	DOMPlus::Xobj^ pActiveGrid = m_pXobj->GetGrid(0, nActivePage);
-	DOMPlus::Xobj^ pOldGrid = m_pXobj->GetGrid(0, nOldPage);
-	m_pXobj->Fire_OnTabChange(pActiveGrid, pOldGrid);
+	DOMPlus::Xobj^ pActiveXobj = m_pXobj->GetXobj(0, nActivePage);
+	DOMPlus::Xobj^ pOldXobj = m_pXobj->GetXobj(0, nOldPage);
+	m_pXobj->Fire_OnTabChange(pActiveXobj, pOldXobj);
 }
 
 void CXobjCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)

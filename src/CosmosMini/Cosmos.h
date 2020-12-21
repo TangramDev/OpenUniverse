@@ -65,11 +65,11 @@ namespace DOMPlus
 		CXobjCLREvent* m_pXobjCLREvent;
 
 		// A notification has been created for all nodes in the current layout.
-		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Xobj^ pRootGrid);
-		event RootGridCreated^ OnRootGridCreated;
-		void Fire_RootGridCreated(IntPtr nHandle, String^ strUrl, Xobj^ pRootGrid)
+		delegate void RootXobjCreated(IntPtr nHandle, String^ strUrl, Xobj^ pRootXobj);
+		event RootXobjCreated^ OnRootXobjCreated;
+		void Fire_RootXobjCreated(IntPtr nHandle, String^ strUrl, Xobj^ pRootXobj)
 		{
-			OnRootGridCreated(nHandle, strUrl, pRootGrid);
+			OnRootXobjCreated(nHandle, strUrl, pRootXobj);
 		}
 
 		delegate void ObserveComplete(Xobj^ sender);
@@ -86,9 +86,9 @@ namespace DOMPlus
 			OnDestroy(sender);
 		}
 
-		delegate void TabChange(Xobj^ ActiveGrid, Xobj^ OldGrid);
+		delegate void TabChange(Xobj^ ActiveXobj, Xobj^ OldXobj);
 		event TabChange^ OnTabChange;
-		void Fire_OnTabChange(Xobj^ ActiveGrid, Xobj^ OldGrid);
+		void Fire_OnTabChange(Xobj^ ActiveXobj, Xobj^ OldXobj);
 
 	public:
 		Xobj^ Observe(String^ layerName, String^ layerXML);
@@ -291,34 +291,34 @@ namespace DOMPlus
 			}
 		}
 
-		property Xobj^ RootGrid
+		property Xobj^ RootXobj
 		{
 			Xobj^ get()
 			{
-				CComPtr<IXobj> pRootGrid;
-				m_pXobj->get_RootGrid(&pRootGrid);
+				CComPtr<IXobj> pRootXobj;
+				m_pXobj->get_RootXobj(&pRootXobj);
 
-				return theAppProxy._createObject<IXobj, Xobj>(pRootGrid);
+				return theAppProxy._createObject<IXobj, Xobj>(pRootXobj);
 			}
 		}
 
-		property Xobj^ ParentGrid
+		property Xobj^ ParentXobj
 		{
 			Xobj^ get()
 			{
 				CComPtr<IXobj> pXobj;
-				m_pXobj->get_ParentGrid(&pXobj);
+				m_pXobj->get_ParentXobj(&pXobj);
 
 				return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 			}
 		}
 
-		property Xobj^ HostGrid
+		property Xobj^ HostXobj
 		{
 			Xobj^ get()
 			{
 				IXobj* pXobj = nullptr;
-				m_pXobj->get_HostGrid(&pXobj);
+				m_pXobj->get_HostXobj(&pXobj);
 				if (pXobj == NULL)
 					return nullptr;
 				return theAppProxy._createObject<IXobj, Xobj>(pXobj);
@@ -421,13 +421,13 @@ namespace DOMPlus
 			}
 		}
 
-		property ::GridType GridType
+		property ::XobjType XobjType
 		{
-			::GridType get()
+			::XobjType get()
 			{
-				::GridType type;
-				m_pXobj->get_GridType(&type);
-				return (::GridType)type;
+				::XobjType type;
+				m_pXobj->get_XobjType(&type);
+				return (::XobjType)type;
 			}
 		}
 
@@ -462,18 +462,18 @@ namespace DOMPlus
 			}
 		}
 
-		Xobj^ GetGrid(int nRow, int nCol)
+		Xobj^ GetXobj(int nRow, int nCol)
 		{
 			IXobj* pXobj;
-			m_pXobj->GetGrid(nRow, nCol, &pXobj);
+			m_pXobj->GetXobj(nRow, nCol, &pXobj);
 			return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 		}
 
-		Xobj^ GetChildGrid(String^ strName)
+		Xobj^ GetChildXobj(String^ strName)
 		{
 			IXobj* pXobj;
 			BSTR bstrName = STRING2BSTR(strName);
-			m_pXobj->GetChildGridByName(bstrName, &pXobj);
+			m_pXobj->GetChildXobjByName(bstrName, &pXobj);
 			::SysFreeString(bstrName);
 			return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 		}
@@ -510,12 +510,12 @@ namespace DOMPlus
 			}
 		}
 
-		property Xobj^ VisibleGrid
+		property Xobj^ VisibleXobj
 		{
 			DOMPlus::Xobj^ get()
 			{
 				IXobj* pXobj = nullptr;
-				m_pGalaxy->get_VisibleGrid(&pXobj);
+				m_pGalaxy->get_VisibleXobj(&pXobj);
 				return theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
 			}
 		}
@@ -545,13 +545,13 @@ namespace DOMPlus
 		static String^ GetCtrlTag(Control^ ctrl);
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
-		static Xobj^ GetGridFromHandle(IntPtr handle);
-		static Xobj^ GetGridFromControl(Control^ ctrl);
-		static Xobj^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
+		static Xobj^ GetXobjFromHandle(IntPtr handle);
+		static Xobj^ GetXobjFromControl(Control^ ctrl);
+		static Xobj^ Observe(Control^ ctrl, String^ key, String^ strXobjXml);
 
 		static Cosmos^ GetCosmos();
 
-		static property Xobj^ CreatingGrid
+		static property Xobj^ CreatingXobj
 		{
 			Xobj^ get();
 		}
@@ -584,11 +584,11 @@ namespace DOMPlus
 		};
 		static bool Fire_OnAppInit();
 
-		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootGrid);
+		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootXobj);
 		static event OpenComplete^ OnObserverComplete;
-		static void Fire_OnObserverComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootGrid)
+		static void Fire_OnObserverComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootXobj)
 		{
-			OnObserverComplete(hWnd, bstrUrl, pRootGrid);
+			OnObserverComplete(hWnd, bstrUrl, pRootXobj);
 		}
 
 		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Xobj^ pXobj);

@@ -21,7 +21,7 @@
 
 #include "../../stdafx.h"
 #include "../../UniverseApp.h"
-#include "../../Grid.h"
+#include "../../Xobj.h"
 #include "../../Galaxy.h"
 #include "WordPlusDoc.h"
 #include "WordAddin.h"
@@ -162,7 +162,7 @@ namespace OfficePlus
 				if (pAddin->m_pActiveWordObject == this)
 				{
 					pAddin->m_pActiveWordObject = nullptr;
-					pAddin->m_pActiveGrid = nullptr;
+					pAddin->m_pActiveXobj = nullptr;
 				}
 
 				auto it2 = m_pWordPlusDoc->find(m_hChildClient);
@@ -194,7 +194,7 @@ namespace OfficePlus
 				{
 					if (m_pWordPlusDoc->m_pGalaxy)
 					{
-						::PostMessage(g_pCosmos->m_hHostWnd, WM_COSMOSMSG, (WPARAM)m_pWordPlusDoc->m_pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, 1992);
+						::PostMessage(g_pCosmos->m_hHostWnd, WM_COSMOSMSG, (WPARAM)m_pWordPlusDoc->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, 1992);
 					}
 					HRESULT hr = S_OK;
 					hr = m_pWordPlusDoc->DispEventUnadvise(m_pWordPlusDoc->m_pDoc);

@@ -24,7 +24,7 @@
 #include "stdafx.h"
 #include "TangramListView.h"
 #include "UniverseApp.h"
-#include "Grid.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "TangramTabCtrl.h"
 #include <io.h>
@@ -601,7 +601,7 @@ void CTangramListView::ChangeTemplate(int nItem)
 
 BOOL CTangramListView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_pHostWnd = this;
 	m_pXobj->m_nViewType = TangramListView;
 	m_pXobj->m_nID = nID;
@@ -660,7 +660,7 @@ int CTangramListView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT mes
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pCosmos->m_pActiveGrid = m_pXobj;
+	g_pCosmos->m_pActiveXobj = m_pXobj;
 	g_pCosmos->m_bWinFormActived = false;
 	return MA_ACTIVATE;
 }

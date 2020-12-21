@@ -24,8 +24,8 @@
 #include <stdlib.h>
 #include <sstream>
 
-#include "GridHelper.h"
-#include "grid.h"
+#include "XobjHelper.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
 #include "CosmosEvents.h"
@@ -87,9 +87,9 @@ CCosmos::CCosmos()
 	m_hVSToolBoxWnd = NULL;
 	m_hForegroundIdleHook = NULL;
 	m_lpszSplitterClass = nullptr;
-	m_pActiveGrid = nullptr;
+	m_pActiveXobj = nullptr;
 	m_pGalaxy = nullptr;
-	m_pDesignGrid = nullptr;
+	m_pDesignXobj = nullptr;
 	m_pRootNodes = nullptr;
 	m_pUniverseAppProxy = nullptr;
 	m_pCosmosAppProxy = nullptr;
@@ -103,7 +103,7 @@ CCosmos::CCosmos()
 	m_strCurrentAppID = _T("");
 	m_strConfigFile = _T("");
 	m_strAppCommonDocPath = _T("");
-	m_strGridSelectedText = _T("");
+	m_strXobjSelectedText = _T("");
 	m_strTemplatePath = _T("");
 	m_strDesignerTip1 = _T("");
 	m_strDesignerTip2 = _T("");
@@ -163,9 +163,9 @@ void CCosmos::Init()
 		HWND hWnd = ::CreateWindowEx(WS_EX_NOACTIVATE, _T("Tangram Message Window Class"), _T(""), WS_VISIBLE | WS_POPUP, 0, 0, 0, 0, nullptr, nullptr, theUniverse.m_hInstance, nullptr);
 	}
 
-	if (m_strGridSelectedText == _T(""))
+	if (m_strXobjSelectedText == _T(""))
 	{
-		m_strGridSelectedText = m_strGridSelectedText + _T("  ----Please Select an Object Type From Designer ToolBox for this Tangram View----") +
+		m_strXobjSelectedText = m_strXobjSelectedText + _T("  ----Please Select an Object Type From Designer ToolBox for this Tangram View----") +
 			_T("\n  you can use Tangram XML to various applications such as ") +
 			_T("\n  .net framework application, MFC Application, Eclipcse RCP, ") +
 			_T("\n  Office Application etc.") +
@@ -192,8 +192,8 @@ void CCosmos::Init()
 		CString strExeName = m_strExeName;
 		strExeName.MakeLower();
 		m_strDesignerToolBarCaption = strExeName + _T(" - ") + m_strDesignerToolBarCaption;
-		m_hHostWnd = ::CreateWindowEx(WS_EX_PALETTEWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theUniverse.m_hInstance, NULL);
-		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theUniverse.m_hInstance, NULL);
+		m_hHostWnd = ::CreateWindowEx(WS_EX_PALETTEWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theUniverse.m_hInstance, NULL);
+		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theUniverse.m_hInstance, NULL);
 	}
 }
 
@@ -227,9 +227,9 @@ CCosmos::~CCosmos()
 		}
 	}
 
-	while (m_mapWndGridCollection.size())
+	while (m_mapWndXobjCollection.size())
 	{
-		auto it = m_mapWndGridCollection.begin();
+		auto it = m_mapWndXobjCollection.begin();
 		delete it->second;
 	}
 
@@ -552,7 +552,7 @@ void CCosmos::ProcessMsg(LPMSG lpMsg)
 	}
 }
 
-void CCosmos::AttachGrid(void* pXobjEvents)
+void CCosmos::AttachXobj(void* pXobjEvents)
 {
 	CXobjEvents* m_pCLREventConnector = (CXobjEvents*)pXobjEvents;
 	CXobj* pXobj = (CXobj*)m_pCLREventConnector->m_pXobj;
@@ -616,7 +616,7 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 	{
 		CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 		_pGalaxy->m_pGalaxyInfo = pInfo;
-		_pGalaxy->m_strCurrentXml = pInfo->m_strGridXml;
+		_pGalaxy->m_strCurrentXml = pInfo->m_strXobjXml;
 		CComQIPtr<IXobj> pParentNode(pInfo->m_pParentDisp);
 		IXobj* pXobj = nullptr;
 		CString str = _T("");
@@ -807,14 +807,14 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 		return nullptr;
 	}
 
-	CTangramXmlParse* pWndGrid = m_pParse->GetChild(TGM_CLUSTER);
-	if (pWndGrid == nullptr)
+	CTangramXmlParse* pWndXobj = m_pParse->GetChild(TGM_CLUSTER);
+	if (pWndXobj == nullptr)
 	{
 		delete m_pParse;
 		return nullptr;
 	}
 
-	CTangramXmlParse* pXobj = pWndGrid->GetChild(TGM_GRID);
+	CTangramXmlParse* pXobj = pWndXobj->GetChild(TGM_GRID);
 	if (pXobj == nullptr)
 	{
 		delete m_pParse;
@@ -834,9 +834,9 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 			pWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 	}
 
-	CXobj* pRootGrid = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
+	CXobj* pRootXobj = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
 	m_strCurrentKey = _T("");
-	return pRootGrid;
+	return pRootXobj;
 }
 
 STDMETHODIMP CCosmos::get_ActiveChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
@@ -862,7 +862,7 @@ STDMETHODIMP CCosmos::get_HostChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_RootNodes(IXobjCollection** pGridColletion)
+STDMETHODIMP CCosmos::get_RootNodes(IXobjCollection** pXobjColletion)
 {
 	if (m_pRootNodes == nullptr)
 	{
@@ -878,19 +878,19 @@ STDMETHODIMP CCosmos::get_RootNodes(IXobjCollection** pGridColletion)
 		for (auto fit : pGalaxy->m_mapGalaxy)
 		{
 			CGalaxy* pGalaxy = fit.second;
-			for (auto it : pGalaxy->m_mapGrid)
+			for (auto it : pGalaxy->m_mapXobj)
 			{
 				m_pRootNodes->m_pXobjs->push_back(it.second);
 			}
 		}
 	}
-	return m_pRootNodes->QueryInterface(IID_IXobjCollection, (void**)pGridColletion);
+	return m_pRootNodes->QueryInterface(IID_IXobjCollection, (void**)pXobjColletion);
 }
 
-STDMETHODIMP CCosmos::get_CurrentActiveGrid(IXobj** pVal)
+STDMETHODIMP CCosmos::get_CurrentActiveXobj(IXobj** pVal)
 {
-	if (m_pActiveGrid)
-		*pVal = m_pActiveGrid;
+	if (m_pActiveXobj)
+		*pVal = m_pActiveXobj;
 
 	return S_OK;
 }
@@ -921,10 +921,10 @@ STDMETHODIMP CCosmos::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_CreatingGrid(IXobj** pVal)
+STDMETHODIMP CCosmos::get_CreatingXobj(IXobj** pVal)
 {
-	if (m_pActiveGrid)
-		*pVal = m_pActiveGrid;
+	if (m_pActiveXobj)
+		*pVal = m_pActiveXobj;
 
 	return S_OK;
 }
@@ -996,9 +996,9 @@ STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
 {
 	//if (::IsWindow(m_hHostWnd) == false)
 	//{
-	//	m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theUniverse.m_hInstance, NULL);
+	//	m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theUniverse.m_hInstance, NULL);
 	//	if (::IsWindow(m_hHostWnd))
-	//		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theUniverse.m_hInstance, NULL);
+	//		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theUniverse.m_hInstance, NULL);
 	//}
 	//*pVal = (LONGLONG)m_hHostWnd;
 	return S_OK;
@@ -1142,7 +1142,7 @@ STDMETHODIMP CCosmos::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 STDMETHODIMP CCosmos::NavigateNode(IXobj* _pXobj, BSTR bstrBrowserID, BSTR bstrXml, IXobj** pVal)
 {
 	CXobj* pXobj = (CXobj*)_pXobj;
-	if (pXobj->m_nViewType == GridType::Grid)
+	if (pXobj->m_nViewType == Grid)
 	{
 		IXobj* pRet = nullptr;
 		pXobj->m_pParentObj->ObserveEx(pXobj->m_nRow, pXobj->m_nCol, bstrBrowserID, bstrXml, pVal);
@@ -1338,7 +1338,7 @@ STDMETHODIMP CCosmos::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR b
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::UpdateGrid(IXobj* pXobj)
+STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 {
 	return S_OK;
 }
@@ -1380,7 +1380,7 @@ HRESULT CCosmos::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** p
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::GetGridFromHandle(LONGLONG hWnd, IXobj** ppRetGrid)
+STDMETHODIMP CCosmos::GetXobjFromHandle(LONGLONG hWnd, IXobj** ppRetXobj)
 {
 	HWND _hWnd = (HWND)hWnd;
 	CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
@@ -1392,7 +1392,7 @@ STDMETHODIMP CCosmos::GetGridFromHandle(LONGLONG hWnd, IXobj** ppRetGrid)
 		pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
 	}
 	if (pInfo)
-		*ppRetGrid = pInfo->m_pXobj;
+		*ppRetXobj = pInfo->m_pXobj;
 	else
 		return S_FALSE;
 	return S_OK;
@@ -1457,7 +1457,7 @@ STDMETHODIMP CCosmos::get_CosmosDoc(LONGLONG AppProxy, LONGLONG nDocID, ICosmosD
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppGrid)
+STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppXobj)
 {
 	return S_FALSE;
 }
@@ -1487,8 +1487,8 @@ STDMETHODIMP CCosmos::DeleteGalaxy(IGalaxy* pGalaxy)
 	CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 	if (_pGalaxy)
 	{
-		HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-		_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
+		HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
 		::DestroyWindow(hwnd);
 	}
 	return S_OK;
@@ -1512,22 +1512,22 @@ STDMETHODIMP CCosmos::DeletePage(LONGLONG GalaxyClusterHandle)
 				pGalaxy->m_pGalaxyCluster = nullptr;
 				RECT rc;
 				HWND hwnd = pGalaxy->m_hWnd;
-				int nSize = pGalaxy->m_mapGrid.size();
+				int nSize = pGalaxy->m_mapXobj.size();
 				if (nSize > 1)
 				{
-					for (auto it : pGalaxy->m_mapGrid)
+					for (auto it : pGalaxy->m_mapXobj)
 					{
-						if (it.second != pGalaxy->m_pWorkGrid)
+						if (it.second != pGalaxy->m_pWorkXobj)
 						{
-							::SetParent(it.second->m_pHostWnd->m_hWnd, pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd);
+							::SetParent(it.second->m_pHostWnd->m_hWnd, pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd);
 						}
 					}
 				}
-				if (pGalaxy->m_pWorkGrid)
+				if (pGalaxy->m_pWorkXobj)
 				{
-					::GetWindowRect(pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, &rc);
+					::GetWindowRect(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, &rc);
 					pGalaxy->GetParent().ScreenToClient(&rc);
-					::DestroyWindow(pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd);
+					::DestroyWindow(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd);
 					::SetWindowPos(hwnd, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE);
 				}
 			}
@@ -1681,12 +1681,12 @@ CChromeBrowserBase* CCosmos::GetChromeBrowserBase(HWND hHostWnd)
 
 IBrowser* CCosmos::GetHostBrowser(HWND hNodeWnd)
 {
-	IXobj* pWndGrid = nullptr;
-	HRESULT hr = g_pCosmos->GetGridFromHandle((LONGLONG)hNodeWnd, &pWndGrid);
-	if (hr == S_OK && pWndGrid != nullptr)
+	IXobj* pWndXobj = nullptr;
+	HRESULT hr = g_pCosmos->GetXobjFromHandle((LONGLONG)hNodeWnd, &pWndXobj);
+	if (hr == S_OK && pWndXobj != nullptr)
 	{
 		IGalaxy* pGalaxy = nullptr;
-		hr = pWndGrid->get_Galaxy(&pGalaxy);
+		hr = pWndXobj->get_Galaxy(&pGalaxy);
 		if (hr == S_OK && pGalaxy != nullptr)
 		{
 			IBrowser* pBrowser = nullptr;

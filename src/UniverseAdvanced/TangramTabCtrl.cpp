@@ -23,7 +23,7 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Grid.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "TangramTabCtrl.h"
 #include "TangramListView.h"
@@ -115,12 +115,12 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 		if (::IsChild(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd, g_pCosmos->m_hTemplateWnd))
 		{
 			RECT rc;
-			::GetWindowRect(g_pCosmos->m_pDocTemplateFrame->m_pWorkGrid->m_pHostWnd->m_hWnd, &rc);
+			::GetWindowRect(g_pCosmos->m_pDocTemplateFrame->m_pWorkXobj->m_pHostWnd->m_hWnd, &rc);
 			g_pCosmos->m_pActiveMDIChildWnd->ScreenToClient(&rc);
 
 			::ShowWindow(g_pCosmos->m_hTemplateWnd, SW_HIDE);
 			::SetParent(g_pCosmos->m_hTemplateWnd, g_pCosmos->m_hHostWnd);
-			::ShowWindow(g_pCosmos->m_pActiveMDIChildWnd->m_pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, SW_SHOW);
+			::ShowWindow(g_pCosmos->m_pActiveMDIChildWnd->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, SW_SHOW);
 			::SetWindowLongPtr(g_pCosmos->m_pActiveMDIChildWnd->m_hChild,GWLP_ID, AFX_IDW_PANE_FIRST);
 
 			::SetWindowPos(g_pCosmos->m_pActiveMDIChildWnd->m_hChild, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_FRAMECHANGED);
@@ -538,7 +538,7 @@ END_MESSAGE_MAP()
 
 BOOL CTangramTabCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
-	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_pHostWnd = this;
 	m_pXobj->m_nViewType = TabCtrl;
 	m_pXobj->m_nID = nID;
@@ -599,12 +599,12 @@ LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 	CXobj* pXobj = m_pXobj->m_pRootObj;
 	IXobj* _pXobj = nullptr;
 	long nCount = 0;
-	pXobj->GetGrids(bstrKey, &_pXobj, &pColl, &nCount);
+	pXobj->GetXobjs(bstrKey, &_pXobj, &pColl, &nCount);
 	if (_pXobj)
 	{
-		CXobjCollection* pWndGridCollection = (CXobjCollection*)pColl.p;
+		CXobjCollection* pWndXobjCollection = (CXobjCollection*)pColl.p;
 
-		for (auto it : *pWndGridCollection->m_pXobjs)
+		for (auto it : *pWndXobjCollection->m_pXobjs)
 		{
 			CTangramListView* pWnd = (CTangramListView*)(it)->m_pHostWnd;
 			pWnd->m_pCosmosTabCtrl = this;
@@ -632,7 +632,7 @@ int CTangramTabCtrl::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT mess
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pCosmos->m_pActiveGrid = m_pXobj;
+	g_pCosmos->m_pActiveXobj = m_pXobj;
 	g_pCosmos->m_bWinFormActived = false;
 	return MA_ACTIVATE;
 }

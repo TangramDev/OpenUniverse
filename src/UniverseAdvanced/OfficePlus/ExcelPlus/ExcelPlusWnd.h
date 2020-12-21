@@ -70,7 +70,7 @@ namespace OfficePlus
 			CString m_strKey;
 			CString m_strSheetName;
 			_Worksheet* m_pSheet;
-			map<CString, CXobj*> m_mapGridMap;
+			map<CString, CXobj*> m_mapXobjMap;
 		};
 	}
 }

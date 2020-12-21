@@ -16,7 +16,7 @@
 	readonly attribute DOMString name;
 	readonly attribute DOMString type;
 	readonly attribute CosmosXobj xobj;
-	readonly attribute CosmosNode parentGrid;
+	readonly attribute CosmosNode parent;
 	readonly attribute CosmosWinform parentForm;
 	readonly attribute CosmosControl parentControl;
 	

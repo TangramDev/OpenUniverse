@@ -42,7 +42,7 @@ private:
 	void ProcessMsg(MSG* msg);
 	//CCosmosCoreEvents:
 	void OnCosmosClose();
-	void OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootGrid);
+	void OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootXobj);
 	void CosmosInit() {};
 	bool OnUniversePreTranslateMessage(MSG* pMsg);
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
@@ -61,7 +61,7 @@ private:
 	void __stdcall  OnObserverComplete();
 	void __stdcall  OnDestroy();
 	void __stdcall  OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
-	void __stdcall  OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	void __stdcall  OnXobjAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	void __stdcall  OnTabChange(int nActivePage, int nOldPage);
 	void __stdcall  OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
 };

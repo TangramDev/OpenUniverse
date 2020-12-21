@@ -84,7 +84,7 @@ namespace DOMPlus
 			virtual IntPtr get();
 		}
 
-		property Xobj^ ParentGrid
+		property Xobj^ ParentXobj
 		{
 			Xobj^ get();
 		}

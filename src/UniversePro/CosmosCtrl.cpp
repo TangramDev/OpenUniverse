@@ -21,7 +21,7 @@
 // TangramCtrl.cpp : Implementation of CCosmosCtrl
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "Grid.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "CosmosCtrl.h"
 

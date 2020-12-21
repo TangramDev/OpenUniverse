@@ -119,8 +119,8 @@ namespace blink {
 	{
 		CosmosNode* root_ = root();
 		WebString str = strName;
-		auto it = root_->m_mapGrid.find(str.Utf16());
-		if (it != root_->m_mapGrid.end())
+		auto it = root_->m_mapXobj.find(str.Utf16());
+		if (it != root_->m_mapXobj.end())
 			return it->second;
 		return nullptr;
 	}
@@ -290,12 +290,12 @@ namespace blink {
 		}
 	}
 
-	void CosmosNode::sendMessageToGrid(CosmosXobj* msg)
+	void CosmosNode::sendMessageToXobj(CosmosXobj* msg)
 	{
 		if (msg)
 		{
 			Cosmos* pCosmos = cosmos_.Get();
-			__int64 nHandle = msg->getInt64(L"gridhandle");
+			__int64 nHandle = msg->getInt64(L"xobjhandle");
 			CosmosNode* grid = nullptr;
 			if (nHandle)
 			{
@@ -309,7 +309,7 @@ namespace blink {
 		}
 	}
 
-	void CosmosNode::sendMessageToGrid(CosmosNode* grid)
+	void CosmosNode::sendMessageToXobj(CosmosNode* grid)
 	{
 		grid->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, grid));
 	}
@@ -381,9 +381,9 @@ namespace blink {
 		return handle_;
 	}
 
-	CosmosNode* CosmosNode::parentGrid()
+	CosmosNode* CosmosNode::parent()
 	{
-		__int64 nHandle = getInt64(L"parentgridhandle");
+		__int64 nHandle = getInt64(L"parenthandle");
 		if (nHandle)
 		{
 			auto it = cosmos_->m_mapCosmosNode.find(nHandle);

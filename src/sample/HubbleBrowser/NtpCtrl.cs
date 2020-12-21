@@ -72,7 +72,7 @@ namespace Sunny
 
         private void NtpCtrl_Load(object sender, EventArgs e)
         {
-            thisNode = Cosmos.CreatingGrid;
+            thisNode = Cosmos.CreatingXobj;
             //Control Topctrl = this.TopLevelControl;
             //IntPtr h = Handle;
             //IntPtr h1 = Topctrl.Handle;

@@ -43,14 +43,14 @@
                     {
                         e.grid.addEventListener("button1", "OnClick", function (e) {
                             e.grid.Observe("key1", document.getElementById("mainwindow_1").outerHTML);
-                            if (e.grid.parentGrid != null && e.grid.parentGrid.xobj.getLong("gridtype") == 4) {
-                                e.grid.parentGrid.ObserveEx("key1", document.getElementById("mainwindow_2").outerHTML);
+                            if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
+                                e.grid.parent.ObserveEx("key1", document.getElementById("mainwindow_2").outerHTML);
                             }
                         });
                         e.grid.addEventListener("button2", "OnClick", function (e) {
                             e.grid.Observe("key2", document.getElementById("mainwindow_2").outerHTML);
-                            if (e.grid.parentGrid != null && e.grid.parentGrid.xobj.getLong("gridtype") == 4) {
-                                e.grid.parentGrid.ObserveEx("key2", document.getElementById("mainwindow_1").outerHTML);
+                            if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
+                                e.grid.parent.ObserveEx("key2", document.getElementById("mainwindow_1").outerHTML);
                             }
                         });
                     }

@@ -4,8 +4,8 @@
 ] interface CosmosNode : CosmosXobj {
 
 	// Message API
-	void sendMessageToGrid(CosmosXobj msg);
-	void sendMessageToGrid(CosmosNode node);
+	void sendMessageToXobj(CosmosXobj msg);
+	void sendMessageToXobj(CosmosNode node);
 
 	void GetControlsNames(ApplicationCallback callback);
 	void ShowWebContent(DOMString strParentDivName, DOMString strDivName);
@@ -30,7 +30,7 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString objtype;
 
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosNode root;
-	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosNode parentGrid;
+	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosNode parent;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosGalaxy parentGalaxy;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosWinform parentForm;
 

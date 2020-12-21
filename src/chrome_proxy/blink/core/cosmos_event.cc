@@ -113,7 +113,7 @@ namespace blink {
 
   int64_t CosmosEvent::hwnd()
   {
-      int64_t h = session_->getInt64(L"gridhandle");
+      int64_t h = session_->getInt64(L"xobjhandle");
       if(h==0)
           h = session_->getInt64(L"formhandle");
       if(h==0)

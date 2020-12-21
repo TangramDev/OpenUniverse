@@ -218,7 +218,7 @@ public:
 	void OnFinalMessage(HWND hWnd);
 
 private:
-	void CtrlBarDocActiveNotify(ICosmosDoc* pDoc, IXobj* pGridInDoc, IXobj* pGridInCtrlBar, HWND hCtrlBar);
+	void CtrlBarDocActiveNotify(ICosmosDoc* pDoc, IXobj* pXobjInDoc, IXobj* pXobjInCtrlBar, HWND hCtrlBar);
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
@@ -263,19 +263,19 @@ public:
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster;
-	CXobj*											m_pParentGrid;
-	CXobj*											m_pWorkGrid;
+	CXobj*											m_pParentXobj;
+	CXobj*											m_pWorkXobj;
 	CXobj*											m_pContainerNode;
-	CXobj*											m_pBindingGrid;
+	CXobj*											m_pBindingXobj;
 	CGalaxy*										m_pSubGalaxy;
 	GalaxyInfo*										m_pGalaxyInfo;
 	CCosmosDoc*										m_pDoc;
-	map<CString, CXobj*>							m_mapGrid;
+	map<CString, CXobj*>							m_mapXobj;
 	map<CString, CXobj*>							m_mapNeedSaveToConfigNode;
 	map<CString, VARIANT>							m_mapVal;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;
-	map<CString, CXobj*>							m_mapGridScript;
+	map<CString, CXobj*>							m_mapXobjScript;
 	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}
@@ -285,13 +285,13 @@ public:
 	HWND GetWinForm(HWND hForm);
 	void UpdateDesignerTreeInfo();
 	void UpdateVisualWPFMap(HWND, BOOL);
-	CTangramXmlParse* UpdateGrid();
+	CTangramXmlParse* UpdateXobj();
 	BOOL CreateGalaxyCluster();
 	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);
-	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
 	STDMETHOD(GetXml)(BSTR bstrRootName, BSTR* bstrRet);
 
 	BEGIN_COM_MAP(CGalaxy)
@@ -340,13 +340,13 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 
 	STDMETHOD(get_Count)(long* pCount);
-	STDMETHOD(get_Grid)(VARIANT vIndex, IXobj **ppGrid);
+	STDMETHOD(get_Xobj)(VARIANT vIndex, IXobj **ppXobj);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_CurrentNavigateKey)(BSTR* pVal);
-	STDMETHOD(get_VisibleGrid)(IXobj** pVal);
-	STDMETHOD(get_RootGrids)(IXobjCollection** pGridColletion);
+	STDMETHOD(get_VisibleXobj)(IXobj** pVal);
+	STDMETHOD(get_RootXobjs)(IXobjCollection** pXobjColletion);
 	STDMETHOD(get_GalaxyData)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);

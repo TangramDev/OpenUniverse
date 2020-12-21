@@ -327,21 +327,21 @@ enum ObjEventType
         CosmosDocEvent	= 0x1,
         TangramNodeAllChildNode	= 0x2,
         CosmosDocAllGalaxyAllChildNode	= 0x3,
-        CosmosDocAllGalaxyAllTopGrid	= 0x4,
-        TangramGalaxyAllTopGridAllChildNode	= 0x5,
-        TangramGalaxyAllTopGrid	= 0x6,
-        GalaxyClusterAllGalaxyAllTopGridAllChildNode	= 0x7,
-        GalaxyClusterAllGalaxyAllTopGrid	= 0x8,
-        GalaxyClusterCtrlBarGalaxyAllTopGridAllChildNode	= 0x9,
-        GalaxyClusterCtrlBarGalaxyAllTopGrid	= 0xa,
-        GalaxyClusterNotCtrlBarGalaxyAllTopGridAllChildNode	= 0xb,
-        GalaxyClusterNotCtrlBarGalaxyAllTopGrid	= 0xc,
+        CosmosDocAllGalaxyAllTopXobj	= 0x4,
+        TangramGalaxyAllTopXobjAllChildNode	= 0x5,
+        TangramGalaxyAllTopXobj	= 0x6,
+        GalaxyClusterAllGalaxyAllTopXobjAllChildNode	= 0x7,
+        GalaxyClusterAllGalaxyAllTopXobj	= 0x8,
+        GalaxyClusterCtrlBarGalaxyAllTopXobjAllChildNode	= 0x9,
+        GalaxyClusterCtrlBarGalaxyAllTopXobj	= 0xa,
+        GalaxyClusterNotCtrlBarGalaxyAllTopXobjAllChildNode	= 0xb,
+        GalaxyClusterNotCtrlBarGalaxyAllTopXobj	= 0xc,
         CosmosDocAllCtrlBarGalaxyAllChildNode	= 0xd,
         CosmosDocAllCtrlBarGalaxy	= 0xe
     } 	ObjEventType;
 
 typedef /* [helpstring] */ 
-enum GridType
+enum XobjType
     {
         BlankView	= 0x1,
         ActiveX	= 0x2,
@@ -355,7 +355,7 @@ enum GridType
         TangramListView	= 0x200,
         TabCtrl	= 0x400,
         TangramWPFCtrl	= 0x800
-    } 	GridType;
+    } 	XobjType;
 
 
 
@@ -661,15 +661,15 @@ EXTERN_C const IID IID_IOfficeExtender;
             /* [in] */ IDispatch *newVal,
             /* [in] */ long nStyle,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGalaxyFromVBAForm( 
             IDispatch *pForm,
             /* [retval][out] */ IGalaxy **ppGalaxy) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetActiveTopGrid( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetActiveTopXobj( 
             IDispatch *pForm,
-            /* [retval][out] */ IXobj **WndGrid) = 0;
+            /* [retval][out] */ IXobj **WndXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObjectFromWnd( 
             LONG hWnd,
@@ -752,17 +752,17 @@ EXTERN_C const IID IID_IOfficeExtender;
             /* [in] */ IDispatch *newVal,
             /* [in] */ long nStyle,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyFromVBAForm )( 
             IOfficeExtender * This,
             IDispatch *pForm,
             /* [retval][out] */ IGalaxy **ppGalaxy);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetActiveTopGrid )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetActiveTopXobj )( 
             IOfficeExtender * This,
             IDispatch *pForm,
-            /* [retval][out] */ IXobj **WndGrid);
+            /* [retval][out] */ IXobj **WndXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObjectFromWnd )( 
             IOfficeExtender * This,
@@ -815,14 +815,14 @@ EXTERN_C const IID IID_IOfficeExtender;
 #define IOfficeExtender_AddVBAFormsScript(This,OfficeObject,bstrKey,bstrXml)	\
     ( (This)->lpVtbl -> AddVBAFormsScript(This,OfficeObject,bstrKey,bstrXml) ) 
 
-#define IOfficeExtender_InitVBAForm(This,newVal,nStyle,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> InitVBAForm(This,newVal,nStyle,bstrXml,ppGrid) ) 
+#define IOfficeExtender_InitVBAForm(This,newVal,nStyle,bstrXml,ppXobj)	\
+    ( (This)->lpVtbl -> InitVBAForm(This,newVal,nStyle,bstrXml,ppXobj) ) 
 
 #define IOfficeExtender_GetGalaxyFromVBAForm(This,pForm,ppGalaxy)	\
     ( (This)->lpVtbl -> GetGalaxyFromVBAForm(This,pForm,ppGalaxy) ) 
 
-#define IOfficeExtender_GetActiveTopGrid(This,pForm,WndGrid)	\
-    ( (This)->lpVtbl -> GetActiveTopGrid(This,pForm,WndGrid) ) 
+#define IOfficeExtender_GetActiveTopXobj(This,pForm,WndXobj)	\
+    ( (This)->lpVtbl -> GetActiveTopXobj(This,pForm,WndXobj) ) 
 
 #define IOfficeExtender_GetObjectFromWnd(This,hWnd,ppObjFromWnd)	\
     ( (This)->lpVtbl -> GetObjectFromWnd(This,hWnd,ppObjFromWnd) ) 
@@ -973,7 +973,7 @@ EXTERN_C const IID IID_ICosmosTreeViewCallBack;
     ICosmosTreeViewCallBack : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_WndGrid( 
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_WndXobj( 
             IXobj *newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Pages( 
@@ -1055,7 +1055,7 @@ EXTERN_C const IID IID_ICosmosTreeViewCallBack;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WndGrid )( 
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WndXobj )( 
             ICosmosTreeViewCallBack * This,
             IXobj *newVal);
         
@@ -1122,8 +1122,8 @@ EXTERN_C const IID IID_ICosmosTreeViewCallBack;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define ICosmosTreeViewCallBack_put_WndGrid(This,newVal)	\
-    ( (This)->lpVtbl -> put_WndGrid(This,newVal) ) 
+#define ICosmosTreeViewCallBack_put_WndXobj(This,newVal)	\
+    ( (This)->lpVtbl -> put_WndXobj(This,newVal) ) 
 
 #define ICosmosTreeViewCallBack_get_Pages(This,retVal)	\
     ( (This)->lpVtbl -> get_Pages(This,retVal) ) 
@@ -1564,7 +1564,7 @@ EXTERN_C const IID IID_IXobj;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChildNodes( 
-            /* [retval][out] */ IXobjCollection **ppGridColletion) = 0;
+            /* [retval][out] */ IXobjCollection **ppXobjColletion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rows( 
             /* [retval][out] */ long *nRows) = 0;
@@ -1578,11 +1578,11 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Col( 
             /* [retval][out] */ long *nCol) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GridType( 
-            /* [retval][out] */ GridType *nType) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XobjType( 
+            /* [retval][out] */ XobjType *nType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentGrid( 
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentXobj( 
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
             /* [retval][out] */ BSTR *pVal) = 0;
@@ -1593,8 +1593,8 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
             /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootGrid( 
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootXobj( 
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XObject( 
             /* [retval][out] */ VARIANT *pVar) = 0;
@@ -1617,7 +1617,7 @@ EXTERN_C const IID IID_IXobj;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Objects( 
             /* [in] */ long nType,
-            /* [retval][out] */ IXobjCollection **ppGridColletion) = 0;
+            /* [retval][out] */ IXobjCollection **ppXobjColletion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
             /* [retval][out] */ LONGLONG *hWnd) = 0;
@@ -1716,10 +1716,10 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Vmax( 
             /* [in] */ int newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostGrid( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostGrid( 
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostXobj( 
             /* [in] */ IXobj *newVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActivePage( 
@@ -1755,16 +1755,16 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE ActiveTabPage( 
             IXobj *pXobj) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGrids( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetXobjs( 
             /* [in] */ BSTR bstrName,
-            /* [out] */ IXobj **ppGrid,
-            /* [out] */ IXobjCollection **ppGrids,
+            /* [out] */ IXobj **ppXobj,
+            /* [out] */ IXobjCollection **ppXobjs,
             /* [retval][out] */ long *pCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetGrid( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetXobj( 
             /* [in] */ long nRow,
             /* [in] */ long nCol,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlByName( 
             BSTR bstrName,
@@ -1781,7 +1781,7 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid) = 0;
+            /* [retval][out] */ IXobj **ppRetXobj) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadXML( 
             int nType,
@@ -1792,9 +1792,9 @@ EXTERN_C const IID IID_IXobj;
             int nCol,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid) = 0;
+            /* [retval][out] */ IXobj **ppRetXobj) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGridByName( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetXobjByName( 
             /* [in] */ BSTR bstrName,
             /* [retval][out] */ IXobjCollection **pVal) = 0;
         
@@ -1812,7 +1812,7 @@ EXTERN_C const IID IID_IXobj;
             BSTR bstrURL,
             IDispatch *dispObjforScript) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetChildGridByName( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetChildXobjByName( 
             /* [in] */ BSTR bstrName,
             /* [retval][out] */ IXobj **pVal) = 0;
         
@@ -1880,7 +1880,7 @@ EXTERN_C const IID IID_IXobj;
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ChildNodes )( 
             IXobj * This,
-            /* [retval][out] */ IXobjCollection **ppGridColletion);
+            /* [retval][out] */ IXobjCollection **ppXobjColletion);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rows )( 
             IXobj * This,
@@ -1898,13 +1898,13 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             /* [retval][out] */ long *nCol);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GridType )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XobjType )( 
             IXobj * This,
-            /* [retval][out] */ GridType *nType);
+            /* [retval][out] */ XobjType *nType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentGrid )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentXobj )( 
             IXobj * This,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_URL )( 
             IXobj * This,
@@ -1918,9 +1918,9 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             /* [retval][out] */ IGalaxyCluster **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootGrid )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootXobj )( 
             IXobj * This,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XObject )( 
             IXobj * This,
@@ -1950,7 +1950,7 @@ EXTERN_C const IID IID_IXobj;
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Objects )( 
             IXobj * This,
             /* [in] */ long nType,
-            /* [retval][out] */ IXobjCollection **ppGridColletion);
+            /* [retval][out] */ IXobjCollection **ppXobjColletion);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
             IXobj * This,
@@ -2080,11 +2080,11 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             /* [in] */ int newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostGrid )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostXobj )( 
             IXobj * This,
             /* [retval][out] */ IXobj **pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostGrid )( 
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostXobj )( 
             IXobj * This,
             /* [in] */ IXobj *newVal);
         
@@ -2132,18 +2132,18 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             IXobj *pXobj);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGrids )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetXobjs )( 
             IXobj * This,
             /* [in] */ BSTR bstrName,
-            /* [out] */ IXobj **ppGrid,
-            /* [out] */ IXobjCollection **ppGrids,
+            /* [out] */ IXobj **ppXobj,
+            /* [out] */ IXobjCollection **ppXobjs,
             /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetGrid )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetXobj )( 
             IXobj * This,
             /* [in] */ long nRow,
             /* [in] */ long nCol,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
             IXobj * This,
@@ -2163,7 +2163,7 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid);
+            /* [retval][out] */ IXobj **ppRetXobj);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoadXML )( 
             IXobj * This,
@@ -2176,9 +2176,9 @@ EXTERN_C const IID IID_IXobj;
             int nCol,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid);
+            /* [retval][out] */ IXobj **ppRetXobj);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGridByName )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetXobjByName )( 
             IXobj * This,
             /* [in] */ BSTR bstrName,
             /* [retval][out] */ IXobjCollection **pVal);
@@ -2200,7 +2200,7 @@ EXTERN_C const IID IID_IXobj;
             BSTR bstrURL,
             IDispatch *dispObjforScript);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetChildGridByName )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetChildXobjByName )( 
             IXobj * This,
             /* [in] */ BSTR bstrName,
             /* [retval][out] */ IXobj **pVal);
@@ -2246,8 +2246,8 @@ EXTERN_C const IID IID_IXobj;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IXobj_get_ChildNodes(This,ppGridColletion)	\
-    ( (This)->lpVtbl -> get_ChildNodes(This,ppGridColletion) ) 
+#define IXobj_get_ChildNodes(This,ppXobjColletion)	\
+    ( (This)->lpVtbl -> get_ChildNodes(This,ppXobjColletion) ) 
 
 #define IXobj_get_Rows(This,nRows)	\
     ( (This)->lpVtbl -> get_Rows(This,nRows) ) 
@@ -2261,11 +2261,11 @@ EXTERN_C const IID IID_IXobj;
 #define IXobj_get_Col(This,nCol)	\
     ( (This)->lpVtbl -> get_Col(This,nCol) ) 
 
-#define IXobj_get_GridType(This,nType)	\
-    ( (This)->lpVtbl -> get_GridType(This,nType) ) 
+#define IXobj_get_XobjType(This,nType)	\
+    ( (This)->lpVtbl -> get_XobjType(This,nType) ) 
 
-#define IXobj_get_ParentGrid(This,ppGrid)	\
-    ( (This)->lpVtbl -> get_ParentGrid(This,ppGrid) ) 
+#define IXobj_get_ParentXobj(This,ppXobj)	\
+    ( (This)->lpVtbl -> get_ParentXobj(This,ppXobj) ) 
 
 #define IXobj_get_URL(This,pVal)	\
     ( (This)->lpVtbl -> get_URL(This,pVal) ) 
@@ -2276,8 +2276,8 @@ EXTERN_C const IID IID_IXobj;
 #define IXobj_get_GalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
 
-#define IXobj_get_RootGrid(This,ppGrid)	\
-    ( (This)->lpVtbl -> get_RootGrid(This,ppGrid) ) 
+#define IXobj_get_RootXobj(This,ppXobj)	\
+    ( (This)->lpVtbl -> get_RootXobj(This,ppXobj) ) 
 
 #define IXobj_get_XObject(This,pVar)	\
     ( (This)->lpVtbl -> get_XObject(This,pVar) ) 
@@ -2297,8 +2297,8 @@ EXTERN_C const IID IID_IXobj;
 #define IXobj_put_Name(This,bstrName)	\
     ( (This)->lpVtbl -> put_Name(This,bstrName) ) 
 
-#define IXobj_get_Objects(This,nType,ppGridColletion)	\
-    ( (This)->lpVtbl -> get_Objects(This,nType,ppGridColletion) ) 
+#define IXobj_get_Objects(This,nType,ppXobjColletion)	\
+    ( (This)->lpVtbl -> get_Objects(This,nType,ppXobjColletion) ) 
 
 #define IXobj_get_Handle(This,hWnd)	\
     ( (This)->lpVtbl -> get_Handle(This,hWnd) ) 
@@ -2393,11 +2393,11 @@ EXTERN_C const IID IID_IXobj;
 #define IXobj_put_Vmax(This,newVal)	\
     ( (This)->lpVtbl -> put_Vmax(This,newVal) ) 
 
-#define IXobj_get_HostGrid(This,pVal)	\
-    ( (This)->lpVtbl -> get_HostGrid(This,pVal) ) 
+#define IXobj_get_HostXobj(This,pVal)	\
+    ( (This)->lpVtbl -> get_HostXobj(This,pVal) ) 
 
-#define IXobj_put_HostGrid(This,newVal)	\
-    ( (This)->lpVtbl -> put_HostGrid(This,newVal) ) 
+#define IXobj_put_HostXobj(This,newVal)	\
+    ( (This)->lpVtbl -> put_HostXobj(This,newVal) ) 
 
 #define IXobj_get_ActivePage(This,pVal)	\
     ( (This)->lpVtbl -> get_ActivePage(This,pVal) ) 
@@ -2432,11 +2432,11 @@ EXTERN_C const IID IID_IXobj;
 #define IXobj_ActiveTabPage(This,pXobj)	\
     ( (This)->lpVtbl -> ActiveTabPage(This,pXobj) ) 
 
-#define IXobj_GetGrids(This,bstrName,ppGrid,ppGrids,pCount)	\
-    ( (This)->lpVtbl -> GetGrids(This,bstrName,ppGrid,ppGrids,pCount) ) 
+#define IXobj_GetXobjs(This,bstrName,ppXobj,ppXobjs,pCount)	\
+    ( (This)->lpVtbl -> GetXobjs(This,bstrName,ppXobj,ppXobjs,pCount) ) 
 
-#define IXobj_GetGrid(This,nRow,nCol,ppGrid)	\
-    ( (This)->lpVtbl -> GetGrid(This,nRow,nCol,ppGrid) ) 
+#define IXobj_GetXobj(This,nRow,nCol,ppXobj)	\
+    ( (This)->lpVtbl -> GetXobj(This,nRow,nCol,ppXobj) ) 
 
 #define IXobj_GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,bstrName,bFindInChild,ppCtrlDisp) ) 
@@ -2444,17 +2444,17 @@ EXTERN_C const IID IID_IXobj;
 #define IXobj_SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes)	\
     ( (This)->lpVtbl -> SendIPCMessage(This,bstrTo,bstrPayload,bstrExtra,bstrMsgId,bstrRes) ) 
 
-#define IXobj_Observe(This,bstrKey,bstrXml,ppRetGrid)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetGrid) ) 
+#define IXobj_Observe(This,bstrKey,bstrXml,ppRetXobj)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetXobj) ) 
 
 #define IXobj_LoadXML(This,nType,bstrXML)	\
     ( (This)->lpVtbl -> LoadXML(This,nType,bstrXML) ) 
 
-#define IXobj_ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetGrid)	\
-    ( (This)->lpVtbl -> ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetGrid) ) 
+#define IXobj_ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetXobj)	\
+    ( (This)->lpVtbl -> ObserveEx(This,nRow,nCol,bstrKey,bstrXml,ppRetXobj) ) 
 
-#define IXobj_GetGridByName(This,bstrName,pVal)	\
-    ( (This)->lpVtbl -> GetGridByName(This,bstrName,pVal) ) 
+#define IXobj_GetXobjByName(This,bstrName,pVal)	\
+    ( (This)->lpVtbl -> GetXobjByName(This,bstrName,pVal) ) 
 
 #define IXobj_GetCtrlValueByName(This,bstrName,bFindInChild,bstrVal)	\
     ( (This)->lpVtbl -> GetCtrlValueByName(This,bstrName,bFindInChild,bstrVal) ) 
@@ -2465,8 +2465,8 @@ EXTERN_C const IID IID_IXobj;
 #define IXobj_NavigateURL(This,bstrURL,dispObjforScript)	\
     ( (This)->lpVtbl -> NavigateURL(This,bstrURL,dispObjforScript) ) 
 
-#define IXobj_GetChildGridByName(This,bstrName,pVal)	\
-    ( (This)->lpVtbl -> GetChildGridByName(This,bstrName,pVal) ) 
+#define IXobj_GetChildXobjByName(This,bstrName,pVal)	\
+    ( (This)->lpVtbl -> GetChildXobjByName(This,bstrName,pVal) ) 
 
 #define IXobj_GetUIScript(This,bstrCtrlName,bstrVal)	\
     ( (This)->lpVtbl -> GetUIScript(This,bstrCtrlName,bstrVal) ) 
@@ -3011,15 +3011,15 @@ EXTERN_C const IID IID_ICosmos;
             /* [in] */ IDispatch *newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootNodes( 
-            /* [retval][out] */ IXobjCollection **ppGridColletion) = 0;
+            /* [retval][out] */ IXobjCollection **ppXobjColletion) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWnd( 
             /* [retval][out] */ LONGLONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentActiveGrid( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentActiveXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreatingGrid( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CreatingXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteCosmos( 
@@ -3108,7 +3108,7 @@ EXTERN_C const IID IID_ICosmos;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetHostFocus( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdateGrid( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdateXobj( 
             IXobj *pXobj) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewGUID( 
@@ -3125,9 +3125,9 @@ EXTERN_C const IID IID_ICosmos;
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGridFromHandle( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetXobjFromHandle( 
             LONGLONG hWnd,
-            /* [retval][out] */ IXobj **ppRetGrid) = 0;
+            /* [retval][out] */ IXobj **ppRetXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlValueByName( 
             IDispatch *pCtrl,
@@ -3150,7 +3150,7 @@ EXTERN_C const IID IID_ICosmos;
             LONGLONG hParent,
             BSTR bstrWndClaName,
             BSTR bstrGalaxyClusterName,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDocTemplateXml( 
             BSTR bstrCaption,
@@ -3332,17 +3332,17 @@ EXTERN_C const IID IID_ICosmos;
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootNodes )( 
             ICosmos * This,
-            /* [retval][out] */ IXobjCollection **ppGridColletion);
+            /* [retval][out] */ IXobjCollection **ppXobjColletion);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWnd )( 
             ICosmos * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveGrid )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveXobj )( 
             ICosmos * This,
             /* [retval][out] */ IXobj **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreatingGrid )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CreatingXobj )( 
             ICosmos * This,
             /* [retval][out] */ IXobj **pVal);
         
@@ -3453,7 +3453,7 @@ EXTERN_C const IID IID_ICosmos;
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetHostFocus )( 
             ICosmos * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdateGrid )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *UpdateXobj )( 
             ICosmos * This,
             IXobj *pXobj);
         
@@ -3474,10 +3474,10 @@ EXTERN_C const IID IID_ICosmos;
             VARIANT_BOOL bFindInChild,
             /* [retval][out] */ IDispatch **ppCtrlDisp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGridFromHandle )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetXobjFromHandle )( 
             ICosmos * This,
             LONGLONG hWnd,
-            /* [retval][out] */ IXobj **ppRetGrid);
+            /* [retval][out] */ IXobj **ppRetXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlValueByName )( 
             ICosmos * This,
@@ -3504,7 +3504,7 @@ EXTERN_C const IID IID_ICosmos;
             LONGLONG hParent,
             BSTR bstrWndClaName,
             BSTR bstrGalaxyClusterName,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDocTemplateXml )( 
             ICosmos * This,
@@ -3676,17 +3676,17 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_put_AppExtender(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppExtender(This,bstrKey,newVal) ) 
 
-#define ICosmos_get_RootNodes(This,ppGridColletion)	\
-    ( (This)->lpVtbl -> get_RootNodes(This,ppGridColletion) ) 
+#define ICosmos_get_RootNodes(This,ppXobjColletion)	\
+    ( (This)->lpVtbl -> get_RootNodes(This,ppXobjColletion) ) 
 
 #define ICosmos_get_HostWnd(This,pVal)	\
     ( (This)->lpVtbl -> get_HostWnd(This,pVal) ) 
 
-#define ICosmos_get_CurrentActiveGrid(This,pVal)	\
-    ( (This)->lpVtbl -> get_CurrentActiveGrid(This,pVal) ) 
+#define ICosmos_get_CurrentActiveXobj(This,pVal)	\
+    ( (This)->lpVtbl -> get_CurrentActiveXobj(This,pVal) ) 
 
-#define ICosmos_get_CreatingGrid(This,pVal)	\
-    ( (This)->lpVtbl -> get_CreatingGrid(This,pVal) ) 
+#define ICosmos_get_CreatingXobj(This,pVal)	\
+    ( (This)->lpVtbl -> get_CreatingXobj(This,pVal) ) 
 
 #define ICosmos_get_RemoteCosmos(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_RemoteCosmos(This,bstrID,pVal) ) 
@@ -3751,8 +3751,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_SetHostFocus(This)	\
     ( (This)->lpVtbl -> SetHostFocus(This) ) 
 
-#define ICosmos_UpdateGrid(This,pXobj)	\
-    ( (This)->lpVtbl -> UpdateGrid(This,pXobj) ) 
+#define ICosmos_UpdateXobj(This,pXobj)	\
+    ( (This)->lpVtbl -> UpdateXobj(This,pXobj) ) 
 
 #define ICosmos_NewGUID(This,retVal)	\
     ( (This)->lpVtbl -> NewGUID(This,retVal) ) 
@@ -3763,8 +3763,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp) ) 
 
-#define ICosmos_GetGridFromHandle(This,hWnd,ppRetGrid)	\
-    ( (This)->lpVtbl -> GetGridFromHandle(This,hWnd,ppRetGrid) ) 
+#define ICosmos_GetXobjFromHandle(This,hWnd,ppRetXobj)	\
+    ( (This)->lpVtbl -> GetXobjFromHandle(This,hWnd,ppRetXobj) ) 
 
 #define ICosmos_GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal)	\
     ( (This)->lpVtbl -> GetCtrlValueByName(This,pCtrl,bstrName,bFindInChild,bstrVal) ) 
@@ -3775,8 +3775,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_CreateCosmosCtrl(This,bstrAppID,ppRetCtrl)	\
     ( (This)->lpVtbl -> CreateCosmosCtrl(This,bstrAppID,ppRetCtrl) ) 
 
-#define ICosmos_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppGrid)	\
-    ( (This)->lpVtbl -> GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppGrid) ) 
+#define ICosmos_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppXobj)	\
+    ( (This)->lpVtbl -> GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppXobj) ) 
 
 #define ICosmos_GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath)	\
     ( (This)->lpVtbl -> GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath) ) 
@@ -3873,9 +3873,9 @@ EXTERN_C const IID IID_IGalaxy;
     IGalaxy : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Grid( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Xobj( 
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
             /* [retval][out] */ IUnknown **ppVal) = 0;
@@ -3883,7 +3883,7 @@ EXTERN_C const IID IID_IGalaxy;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HWND( 
             /* [retval][out] */ LONGLONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VisibleGrid( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VisibleXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentNavigateKey( 
@@ -3909,8 +3909,8 @@ EXTERN_C const IID IID_IGalaxy;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
             /* [retval][out] */ long *pCount) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootGrids( 
-            /* [retval][out] */ IXobjCollection **ppGridColletion) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootXobjs( 
+            /* [retval][out] */ IXobjCollection **ppXobjColletion) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
@@ -3940,7 +3940,7 @@ EXTERN_C const IID IID_IGalaxy;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid) = 0;
+            /* [retval][out] */ IXobj **ppRetXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetXml( 
             BSTR bstrRootName,
@@ -4004,10 +4004,10 @@ EXTERN_C const IID IID_IGalaxy;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Grid )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Xobj )( 
             IGalaxy * This,
             /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IGalaxy * This,
@@ -4017,7 +4017,7 @@ EXTERN_C const IID IID_IGalaxy;
             IGalaxy * This,
             /* [retval][out] */ LONGLONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VisibleGrid )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VisibleXobj )( 
             IGalaxy * This,
             /* [retval][out] */ IXobj **pVal);
         
@@ -4051,9 +4051,9 @@ EXTERN_C const IID IID_IGalaxy;
             IGalaxy * This,
             /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootGrids )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootXobjs )( 
             IGalaxy * This,
-            /* [retval][out] */ IXobjCollection **ppGridColletion);
+            /* [retval][out] */ IXobjCollection **ppXobjColletion);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyXML )( 
             IGalaxy * This,
@@ -4093,7 +4093,7 @@ EXTERN_C const IID IID_IGalaxy;
             IGalaxy * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid);
+            /* [retval][out] */ IXobj **ppRetXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetXml )( 
             IGalaxy * This,
@@ -4136,8 +4136,8 @@ EXTERN_C const IID IID_IGalaxy;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IGalaxy_get_Grid(This,vIndex,ppGrid)	\
-    ( (This)->lpVtbl -> get_Grid(This,vIndex,ppGrid) ) 
+#define IGalaxy_get_Xobj(This,vIndex,ppXobj)	\
+    ( (This)->lpVtbl -> get_Xobj(This,vIndex,ppXobj) ) 
 
 #define IGalaxy_get__NewEnum(This,ppVal)	\
     ( (This)->lpVtbl -> get__NewEnum(This,ppVal) ) 
@@ -4145,8 +4145,8 @@ EXTERN_C const IID IID_IGalaxy;
 #define IGalaxy_get_HWND(This,pVal)	\
     ( (This)->lpVtbl -> get_HWND(This,pVal) ) 
 
-#define IGalaxy_get_VisibleGrid(This,pVal)	\
-    ( (This)->lpVtbl -> get_VisibleGrid(This,pVal) ) 
+#define IGalaxy_get_VisibleXobj(This,pVal)	\
+    ( (This)->lpVtbl -> get_VisibleXobj(This,pVal) ) 
 
 #define IGalaxy_get_CurrentNavigateKey(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentNavigateKey(This,pVal) ) 
@@ -4169,8 +4169,8 @@ EXTERN_C const IID IID_IGalaxy;
 #define IGalaxy_get_Count(This,pCount)	\
     ( (This)->lpVtbl -> get_Count(This,pCount) ) 
 
-#define IGalaxy_get_RootGrids(This,ppGridColletion)	\
-    ( (This)->lpVtbl -> get_RootGrids(This,ppGridColletion) ) 
+#define IGalaxy_get_RootXobjs(This,ppXobjColletion)	\
+    ( (This)->lpVtbl -> get_RootXobjs(This,ppXobjColletion) ) 
 
 #define IGalaxy_get_GalaxyXML(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyXML(This,pVal) ) 
@@ -4199,8 +4199,8 @@ EXTERN_C const IID IID_IGalaxy;
 #define IGalaxy_ModifyHost(This,hHostWnd)	\
     ( (This)->lpVtbl -> ModifyHost(This,hHostWnd) ) 
 
-#define IGalaxy_Observe(This,bstrKey,bstrXml,ppRetGrid)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetGrid) ) 
+#define IGalaxy_Observe(This,bstrKey,bstrXml,ppRetXobj)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppRetXobj) ) 
 
 #define IGalaxy_GetXml(This,bstrRootName,bstrRet)	\
     ( (This)->lpVtbl -> GetXml(This,bstrRootName,bstrRet) ) 
@@ -4231,7 +4231,7 @@ EXTERN_C const IID IID_IXobjCollection;
     IXobjCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GridCount( 
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XobjCount( 
             /* [retval][out] */ long *pCount) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
@@ -4299,7 +4299,7 @@ EXTERN_C const IID IID_IXobjCollection;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GridCount )( 
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XobjCount )( 
             IXobjCollection * This,
             /* [retval][out] */ long *pCount);
         
@@ -4348,8 +4348,8 @@ EXTERN_C const IID IID_IXobjCollection;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IXobjCollection_get_GridCount(This,pCount)	\
-    ( (This)->lpVtbl -> get_GridCount(This,pCount) ) 
+#define IXobjCollection_get_XobjCount(This,pCount)	\
+    ( (This)->lpVtbl -> get_XobjCount(This,pCount) ) 
 
 #define IXobjCollection_get_Item(This,iIndex,ppTopWindow)	\
     ( (This)->lpVtbl -> get_Item(This,iIndex,ppTopWindow) ) 
@@ -4409,7 +4409,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrExtenderName,
             /* [in] */ IDispatch *newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Grid( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Xobj( 
             BSTR bstrNodeName,
             /* [retval][out] */ IXobj **pVal) = 0;
         
@@ -4436,7 +4436,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Height( 
             /* [in] */ long newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GridNames( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XobjNames( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
@@ -4466,20 +4466,20 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR GalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid) = 0;
+            /* [retval][out] */ IXobj **ppRetXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveCtrl( 
             VARIANT Ctrl,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid) = 0;
+            /* [retval][out] */ IXobj **ppRetXobj) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGrid( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetXobj( 
             BSTR bstrGalaxyName,
             BSTR bstrNodeName,
             /* [retval][out] */ IXobj **pRetNode) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlInGrid( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlInXobj( 
             BSTR NodeName,
             BSTR CtrlName,
             /* [retval][out] */ IDispatch **ppCtrl) = 0;
@@ -4497,7 +4497,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrDefaultNodeKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfig,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
             BSTR bstrGalaxys,
@@ -4596,7 +4596,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrExtenderName,
             /* [in] */ IDispatch *newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Grid )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Xobj )( 
             IGalaxyCluster * This,
             BSTR bstrNodeName,
             /* [retval][out] */ IXobj **pVal);
@@ -4631,7 +4631,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IGalaxyCluster * This,
             /* [in] */ long newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GridNames )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XobjNames )( 
             IGalaxyCluster * This,
             /* [retval][out] */ BSTR *pVal);
         
@@ -4669,22 +4669,22 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR GalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid);
+            /* [retval][out] */ IXobj **ppRetXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveCtrl )( 
             IGalaxyCluster * This,
             VARIANT Ctrl,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid);
+            /* [retval][out] */ IXobj **ppRetXobj);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGrid )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetXobj )( 
             IGalaxyCluster * This,
             BSTR bstrGalaxyName,
             BSTR bstrNodeName,
             /* [retval][out] */ IXobj **pRetNode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlInGrid )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlInXobj )( 
             IGalaxyCluster * This,
             BSTR NodeName,
             BSTR CtrlName,
@@ -4706,7 +4706,7 @@ EXTERN_C const IID IID_IGalaxyCluster;
             BSTR bstrDefaultNodeKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfig,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
             IGalaxyCluster * This,
@@ -4772,8 +4772,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_put_Extender(This,bstrExtenderName,newVal)	\
     ( (This)->lpVtbl -> put_Extender(This,bstrExtenderName,newVal) ) 
 
-#define IGalaxyCluster_get_Grid(This,bstrNodeName,pVal)	\
-    ( (This)->lpVtbl -> get_Grid(This,bstrNodeName,pVal) ) 
+#define IGalaxyCluster_get_Xobj(This,bstrNodeName,pVal)	\
+    ( (This)->lpVtbl -> get_Xobj(This,bstrNodeName,pVal) ) 
 
 #define IGalaxyCluster_get_XObject(This,bstrName,pVal)	\
     ( (This)->lpVtbl -> get_XObject(This,bstrName,pVal) ) 
@@ -4796,8 +4796,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_put_Height(This,newVal)	\
     ( (This)->lpVtbl -> put_Height(This,newVal) ) 
 
-#define IGalaxyCluster_get_GridNames(This,pVal)	\
-    ( (This)->lpVtbl -> get_GridNames(This,pVal) ) 
+#define IGalaxyCluster_get_XobjNames(This,pVal)	\
+    ( (This)->lpVtbl -> get_XobjNames(This,pVal) ) 
 
 #define IGalaxyCluster_get_Parent(This,pVal)	\
     ( (This)->lpVtbl -> get_Parent(This,pVal) ) 
@@ -4817,17 +4817,17 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy)	\
     ( (This)->lpVtbl -> CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy) ) 
 
-#define IGalaxyCluster_Observe(This,Parent,CtrlName,GalaxyName,bstrKey,bstrXml,ppRetGrid)	\
-    ( (This)->lpVtbl -> Observe(This,Parent,CtrlName,GalaxyName,bstrKey,bstrXml,ppRetGrid) ) 
+#define IGalaxyCluster_Observe(This,Parent,CtrlName,GalaxyName,bstrKey,bstrXml,ppRetXobj)	\
+    ( (This)->lpVtbl -> Observe(This,Parent,CtrlName,GalaxyName,bstrKey,bstrXml,ppRetXobj) ) 
 
-#define IGalaxyCluster_ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetGrid)	\
-    ( (This)->lpVtbl -> ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetGrid) ) 
+#define IGalaxyCluster_ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetXobj)	\
+    ( (This)->lpVtbl -> ObserveCtrl(This,Ctrl,bstrKey,bstrXml,ppRetXobj) ) 
 
-#define IGalaxyCluster_GetGrid(This,bstrGalaxyName,bstrNodeName,pRetNode)	\
-    ( (This)->lpVtbl -> GetGrid(This,bstrGalaxyName,bstrNodeName,pRetNode) ) 
+#define IGalaxyCluster_GetXobj(This,bstrGalaxyName,bstrNodeName,pRetNode)	\
+    ( (This)->lpVtbl -> GetXobj(This,bstrGalaxyName,bstrNodeName,pRetNode) ) 
 
-#define IGalaxyCluster_GetCtrlInGrid(This,NodeName,CtrlName,ppCtrl)	\
-    ( (This)->lpVtbl -> GetCtrlInGrid(This,NodeName,CtrlName,ppCtrl) ) 
+#define IGalaxyCluster_GetCtrlInXobj(This,NodeName,CtrlName,ppCtrl)	\
+    ( (This)->lpVtbl -> GetCtrlInXobj(This,NodeName,CtrlName,ppCtrl) ) 
 
 #define IGalaxyCluster_GetGalaxyFromCtrl(This,ctrl,ppGalaxy)	\
     ( (This)->lpVtbl -> GetGalaxyFromCtrl(This,ctrl,ppGalaxy) ) 
@@ -4835,8 +4835,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_ConnectCosmosCtrl(This,eventSource)	\
     ( (This)->lpVtbl -> ConnectCosmosCtrl(This,eventSource) ) 
 
-#define IGalaxyCluster_CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid)	\
-    ( (This)->lpVtbl -> CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppGrid) ) 
+#define IGalaxyCluster_CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppXobj)	\
+    ( (This)->lpVtbl -> CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppXobj) ) 
 
 #define IGalaxyCluster_ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
     ( (This)->lpVtbl -> ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 
@@ -4897,18 +4897,18 @@ EXTERN_C const IID IID_IWorkBenchWindow;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveInView( 
             int nIndex,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid) = 0;
+            /* [retval][out] */ IXobj **ppRetXobj) = 0;
         
     };
     
@@ -5008,20 +5008,20 @@ EXTERN_C const IID IID_IWorkBenchWindow;
             IWorkBenchWindow * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
             IWorkBenchWindow * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveInView )( 
             IWorkBenchWindow * This,
             int nIndex,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppRetGrid);
+            /* [retval][out] */ IXobj **ppRetXobj);
         
         END_INTERFACE
     } IWorkBenchWindowVtbl;
@@ -5086,14 +5086,14 @@ EXTERN_C const IID IID_IWorkBenchWindow;
 #define IWorkBenchWindow_CloseTangramUI(This)	\
     ( (This)->lpVtbl -> CloseTangramUI(This) ) 
 
-#define IWorkBenchWindow_Observe(This,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppGrid) ) 
+#define IWorkBenchWindow_Observe(This,bstrKey,bstrXml,ppXobj)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppXobj) ) 
 
-#define IWorkBenchWindow_ObserveEx(This,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> ObserveEx(This,bstrKey,bstrXml,ppGrid) ) 
+#define IWorkBenchWindow_ObserveEx(This,bstrKey,bstrXml,ppXobj)	\
+    ( (This)->lpVtbl -> ObserveEx(This,bstrKey,bstrXml,ppXobj) ) 
 
-#define IWorkBenchWindow_ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetGrid)	\
-    ( (This)->lpVtbl -> ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetGrid) ) 
+#define IWorkBenchWindow_ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetXobj)	\
+    ( (This)->lpVtbl -> ObserveInView(This,nIndex,bstrKey,bstrXml,ppRetXobj) ) 
 
 #endif /* COBJMACROS */
 
@@ -5121,10 +5121,10 @@ EXTERN_C const IID IID_IBrowser;
     IBrowser : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteGrid( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteGrid( 
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteXobj( 
             /* [in] */ IXobj *newVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenURL( 
@@ -5194,11 +5194,11 @@ EXTERN_C const IID IID_IBrowser;
             /* [annotation][out] */ 
             _Out_opt_  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteGrid )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteXobj )( 
             IBrowser * This,
             /* [retval][out] */ IXobj **pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteGrid )( 
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteXobj )( 
             IBrowser * This,
             /* [in] */ IXobj *newVal);
         
@@ -5249,11 +5249,11 @@ EXTERN_C const IID IID_IBrowser;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IBrowser_get_RemoteGrid(This,pVal)	\
-    ( (This)->lpVtbl -> get_RemoteGrid(This,pVal) ) 
+#define IBrowser_get_RemoteXobj(This,pVal)	\
+    ( (This)->lpVtbl -> get_RemoteXobj(This,pVal) ) 
 
-#define IBrowser_put_RemoteGrid(This,newVal)	\
-    ( (This)->lpVtbl -> put_RemoteGrid(This,newVal) ) 
+#define IBrowser_put_RemoteXobj(This,newVal)	\
+    ( (This)->lpVtbl -> put_RemoteXobj(This,newVal) ) 
 
 #define IBrowser_OpenURL(This,bstrURL,nDisposition,bstrKey,bstrXml)	\
     ( (This)->lpVtbl -> OpenURL(This,bstrURL,nDisposition,bstrKey,bstrXml) ) 
@@ -5301,7 +5301,7 @@ EXTERN_C const IID IID_IWebPage;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **pRetGrid) = 0;
+            /* [retval][out] */ IXobj **pRetXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE SendXmlMessage( 
             IXobj *sender,
@@ -5383,7 +5383,7 @@ EXTERN_C const IID IID_IWebPage;
             IWebPage * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **pRetGrid);
+            /* [retval][out] */ IXobj **pRetXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *SendXmlMessage )( 
             IWebPage * This,
@@ -5435,8 +5435,8 @@ EXTERN_C const IID IID_IWebPage;
 #define IWebPage_CreateForm(This,bstrKey,hParent,pRetForm)	\
     ( (This)->lpVtbl -> CreateForm(This,bstrKey,hParent,pRetForm) ) 
 
-#define IWebPage_Observe(This,bstrKey,bstrXml,pRetGrid)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,pRetGrid) ) 
+#define IWebPage_Observe(This,bstrKey,bstrXml,pRetXobj)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,pRetXobj) ) 
 
 #define IWebPage_SendXmlMessage(This,sender,bstrXml)	\
     ( (This)->lpVtbl -> SendXmlMessage(This,sender,bstrXml) ) 
@@ -5473,7 +5473,7 @@ EXTERN_C const IID IID_IOfficeObject;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Observe( 
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE UnloadCosmos( void) = 0;
         
@@ -5543,7 +5543,7 @@ EXTERN_C const IID IID_IOfficeObject;
             IOfficeObject * This,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *UnloadCosmos )( 
             IOfficeObject * This);
@@ -5587,8 +5587,8 @@ EXTERN_C const IID IID_IOfficeObject;
 #define IOfficeObject_Show(This,bShow)	\
     ( (This)->lpVtbl -> Show(This,bShow) ) 
 
-#define IOfficeObject_Observe(This,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppGrid) ) 
+#define IOfficeObject_Observe(This,bstrKey,bstrXml,ppXobj)	\
+    ( (This)->lpVtbl -> Observe(This,bstrKey,bstrXml,ppXobj) ) 
 
 #define IOfficeObject_UnloadCosmos(This)	\
     ( (This)->lpVtbl -> UnloadCosmos(This) ) 
@@ -5957,7 +5957,7 @@ EXTERN_C const IID IID_IEclipseCtrl;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TopGalaxy( 
             /* [retval][out] */ IGalaxy **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveTopGrid( 
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveTopXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AppKeyValue( 
@@ -5972,13 +5972,13 @@ EXTERN_C const IID IID_IEclipseCtrl;
             BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveEx( 
             BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid) = 0;
+            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCtrl( 
             BSTR bstrXml) = 0;
@@ -6082,7 +6082,7 @@ EXTERN_C const IID IID_IEclipseCtrl;
             IEclipseCtrl * This,
             /* [retval][out] */ IGalaxy **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveTopGrid )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveTopXobj )( 
             IEclipseCtrl * This,
             /* [retval][out] */ IXobj **pVal);
         
@@ -6101,14 +6101,14 @@ EXTERN_C const IID IID_IEclipseCtrl;
             BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveEx )( 
             IEclipseCtrl * This,
             BSTR bstrGalaxyName,
             BSTR bstrKey,
             BSTR bstrXml,
-            /* [retval][out] */ IXobj **ppGrid);
+            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCtrl )( 
             IEclipseCtrl * This,
@@ -6181,8 +6181,8 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #define IEclipseCtrl_get_TopGalaxy(This,pVal)	\
     ( (This)->lpVtbl -> get_TopGalaxy(This,pVal) ) 
 
-#define IEclipseCtrl_get_ActiveTopGrid(This,pVal)	\
-    ( (This)->lpVtbl -> get_ActiveTopGrid(This,pVal) ) 
+#define IEclipseCtrl_get_ActiveTopXobj(This,pVal)	\
+    ( (This)->lpVtbl -> get_ActiveTopXobj(This,pVal) ) 
 
 #define IEclipseCtrl_get_AppKeyValue(This,bstrKey,pVal)	\
     ( (This)->lpVtbl -> get_AppKeyValue(This,bstrKey,pVal) ) 
@@ -6190,11 +6190,11 @@ EXTERN_C const IID IID_IEclipseCtrl;
 #define IEclipseCtrl_put_AppKeyValue(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppKeyValue(This,bstrKey,newVal) ) 
 
-#define IEclipseCtrl_Observe(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> Observe(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid) ) 
+#define IEclipseCtrl_Observe(This,bstrGalaxyName,bstrKey,bstrXml,ppXobj)	\
+    ( (This)->lpVtbl -> Observe(This,bstrGalaxyName,bstrKey,bstrXml,ppXobj) ) 
 
-#define IEclipseCtrl_ObserveEx(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid)	\
-    ( (This)->lpVtbl -> ObserveEx(This,bstrGalaxyName,bstrKey,bstrXml,ppGrid) ) 
+#define IEclipseCtrl_ObserveEx(This,bstrGalaxyName,bstrKey,bstrXml,ppXobj)	\
+    ( (This)->lpVtbl -> ObserveEx(This,bstrGalaxyName,bstrKey,bstrXml,ppXobj) ) 
 
 #define IEclipseCtrl_InitCtrl(This,bstrXml)	\
     ( (This)->lpVtbl -> InitCtrl(This,bstrXml) ) 

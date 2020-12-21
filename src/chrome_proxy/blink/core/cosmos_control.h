@@ -54,7 +54,7 @@ class CORE_EXPORT CosmosControl final : public EventTargetWithInlineData,
   String type();
   String getid();
   CosmosXobj* xobj();
-  CosmosNode* parentGrid();
+  CosmosNode* parent();
   CosmosWinform* parentForm();
   CosmosControl* parentControl();
 

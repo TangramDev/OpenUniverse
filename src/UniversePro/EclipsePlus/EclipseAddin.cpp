@@ -21,7 +21,7 @@
 
 #include "../stdafx.h"
 #include "../UniverseApp.h"
-#include "../Grid.h"
+#include "../Xobj.h"
 #include "../Galaxy.h"
 #include "../CosmosCtrl.h"
 #include "../GridWnd.h"
@@ -87,8 +87,8 @@ CEclipseWnd::CEclipseWnd(void)
 {
 	m_pDoc = nullptr;
 	m_pGalaxy = nullptr;
-	m_pCurGrid = nullptr;
-	m_pHostGrid = nullptr;
+	m_pCurXobj = nullptr;
+	m_pHostXobj = nullptr;
 	m_strXml = _T("");
 	m_strPath = _T("");
 	m_strAppProxyID = _T("");
@@ -218,8 +218,8 @@ STDMETHODIMP CEclipseWnd::CloseTangramUI()
 {
 	if (m_pGalaxy)
 	{
-		HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-		HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+		HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
 		if (::IsWindow(m_hWnd))
 		{
 			m_pGalaxy->ModifyHost((LONGLONG)_hChildWnd);
@@ -290,7 +290,7 @@ STDMETHODIMP CEclipseWnd::get_Galaxy(IGalaxy** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CEclipseWnd::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
+STDMETHODIMP CEclipseWnd::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj)
 {
 	CString strKey = OLE2T(bstrKey);
 	strKey.Trim();
@@ -339,34 +339,34 @@ STDMETHODIMP CEclipseWnd::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
 	}
 	if (m_pGalaxy)
 	{
-		hr = m_pGalaxy->Observe(bstrKey, bstrXml, ppGrid);
-		if (*ppGrid)
+		hr = m_pGalaxy->Observe(bstrKey, bstrXml, ppXobj);
+		if (*ppXobj)
 		{
-			m_pCurGrid = (CXobj*)*ppGrid;
+			m_pCurXobj = (CXobj*)*ppXobj;
 		}
 	}
 	return hr;
 } 
 
-STDMETHODIMP CEclipseWnd::ObserveEx(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
+STDMETHODIMP CEclipseWnd::ObserveEx(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj)
 {
-	HRESULT hr = Observe(bstrKey, bstrXml, ppGrid);
-	if (*ppGrid)
+	HRESULT hr = Observe(bstrKey, bstrXml, ppXobj);
+	if (*ppXobj)
 	{
-		m_pCurGrid = (CXobj*)*ppGrid;
-		m_pCurGrid->put_SaveToConfigFile(true);
+		m_pCurXobj = (CXobj*)*ppXobj;
+		m_pCurXobj->put_SaveToConfigFile(true);
 	}
 	return hr;
 } 
 
-STDMETHODIMP CEclipseWnd::ObserveInView(int nIndex, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
+STDMETHODIMP CEclipseWnd::ObserveInView(int nIndex, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
 	IEclipseCtrl* pCtrl = nullptr;
 	get_Ctrl(CComVariant((int)nIndex), &pCtrl);
 	if (pCtrl)
 	{
 		IXobj* pXobj = nullptr;
-		return pCtrl->Observe(CComBSTR(L"EclipseView"), bstrKey, bstrXml, ppRetGrid);
+		return pCtrl->Observe(CComBSTR(L"EclipseView"), bstrKey, bstrXml, ppRetXobj);
 	}
 
 	return S_OK;
@@ -680,29 +680,29 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 				for (auto it : m_pGalaxyCluster->m_mapGalaxy)
 				{
 					CGalaxy* pGalaxy = it.second;
-					for (auto it2 : pGalaxy->m_mapGrid)
+					for (auto it2 : pGalaxy->m_mapXobj)
 					{
-						CXobj* pWndGrid = (CXobj*)it2.second;
-						if (pWndGrid)
+						CXobj* pWndXobj = (CXobj*)it2.second;
+						if (pWndXobj)
 						{
-							if (pWndGrid->m_pWindow)
+							if (pWndXobj->m_pWindow)
 							{
-								if (pWndGrid->m_nActivePage > 0)
+								if (pWndXobj->m_nActivePage > 0)
 								{
 									CString strVal = _T("");
-									strVal.Format(_T("%d"), pWndGrid->m_nActivePage);
-									pWndGrid->m_pHostParse->put_attr(_T("activepage"), strVal);
+									strVal.Format(_T("%d"), pWndXobj->m_nActivePage);
+									pWndXobj->m_pHostParse->put_attr(_T("activepage"), strVal);
 								}
-								pWndGrid->m_pWindow->Save();
+								pWndXobj->m_pWindow->Save();
 							}
-							if (pWndGrid->m_nViewType == Grid)
+							if (pWndXobj->m_nViewType == Grid)
 							{
-								((CGridWnd*)pWndGrid->m_pHostWnd)->Save();
+								((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
 							}
-							g_pCosmos->UpdateGrid(pWndGrid);
-							for (auto it2 : pWndGrid->m_vChildNodes)
+							g_pCosmos->UpdateXobj(pWndXobj);
+							for (auto it2 : pWndXobj->m_vChildNodes)
 							{
-								g_pCosmos->UpdateGrid(it2);
+								g_pCosmos->UpdateXobj(it2);
 							}
 						}
 					}
@@ -710,8 +710,8 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 				for (auto it : m_pGalaxyCluster->m_mapNeedSaveGalaxy)
 				{
 					CGalaxy* pGalaxy = it.second;
-					auto it2 = pGalaxy->m_mapGrid.find(_T("default"));
-					if (it2 != pGalaxy->m_mapGrid.end())
+					auto it2 = pGalaxy->m_mapXobj.find(_T("default"));
+					if (it2 != pGalaxy->m_mapXobj.end())
 					{
 						CXobj* _pXobj = (CXobj*)it2->second;
 						if (pGalaxy->m_strGalaxyName.Find(_T("@")) == -1)
@@ -821,7 +821,7 @@ CEclipseCtrl::CEclipseCtrl()
 	m_varTag.vt = VT_BSTR;
 	m_varTag.bstrVal = ::SysAllocString(L"");
 	m_hEclipseViewWnd = NULL;
-	m_pCurGrid = nullptr;
+	m_pCurXobj = nullptr;
 	m_pEclipseWnd = nullptr;
 	m_pGalaxyClusterProxy = nullptr;
 }
@@ -888,14 +888,14 @@ HRESULT CEclipseCtrl::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_NodeCreated(IXobj * pGridCreated)
+HRESULT CEclipseCtrl::Fire_NodeCreated(IXobj * pXobjCreated)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
 	{
 		CComVariant avarParams[1];
-		avarParams[0] = pGridCreated;
+		avarParams[0] = pXobjCreated;
 		avarParams[0].vt = VT_DISPATCH;
 		DISPPARAMS params = { avarParams, NULL, 1, 0 };
 		for (int iConnection = 0; iConnection < cConnections; iConnection++)
@@ -912,18 +912,18 @@ HRESULT CEclipseCtrl::Fire_NodeCreated(IXobj * pGridCreated)
 		}
 	}
 	if (m_pGalaxyClusterProxy)
-		m_pGalaxyClusterProxy->OnGridCreated(pGridCreated);
+		m_pGalaxyClusterProxy->OnXobjCreated(pXobjCreated);
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_AddInCreated(IXobj * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
+HRESULT CEclipseCtrl::Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
 	{
 		CComVariant avarParams[4];
-		avarParams[3] = pRootGrid;
+		avarParams[3] = pRootXobj;
 		avarParams[2] = pAddIn;
 		avarParams[2].vt = VT_DISPATCH;
 		avarParams[1] = bstrID;
@@ -945,7 +945,7 @@ HRESULT CEclipseCtrl::Fire_AddInCreated(IXobj * pRootGrid, IDispatch * pAddIn, B
 		}
 	}
 	if (m_pGalaxyClusterProxy)
-		m_pGalaxyClusterProxy->OnAddInCreated(pRootGrid, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
+		m_pGalaxyClusterProxy->OnAddInCreated(pRootXobj, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
 	return hr;
 }
 
@@ -1274,14 +1274,14 @@ STDMETHODIMP CEclipseCtrl::put_Handle(BSTR bstrHandleName, LONGLONG newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
+STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj)
 {
 	CString strGalaxyName = OLE2T(bstrGalaxyName);
 	if (strGalaxyName == _T(""))
 		strGalaxyName = _T("EclipseView");
 	if (strGalaxyName.CompareNoCase(_T("TopView")) == 0)
 	{
-		return m_pEclipseWnd->Observe(bstrKey, bstrXml, ppGrid);
+		return m_pEclipseWnd->Observe(bstrKey, bstrXml, ppXobj);
 	}
 	auto it = m_mapCosmosHandle.find(strGalaxyName);
 	if (it == m_mapCosmosHandle.end())
@@ -1308,7 +1308,7 @@ STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrX
 			return S_FALSE;
 		}
 		m_mapGalaxy[strGalaxyName] = (CGalaxy*)pGalaxy;
-		HRESULT hr = pGalaxy->Observe(bstrKey, bstrXml, ppGrid);
+		HRESULT hr = pGalaxy->Observe(bstrKey, bstrXml, ppXobj);
 		if (hr == S_OK&&strGalaxyName.CompareNoCase(_T("EclipseView")) == 0)
 		{
 			if (strGalaxyName.CompareNoCase(_T("EclipseView")) == 0)
@@ -1317,21 +1317,21 @@ STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrX
 			}
 			else
 				((CGalaxy*)pGalaxy)->m_nGalaxyType = EclipseSWTGalaxy;
-			(*ppGrid)->put_SaveToConfigFile(true);
+			(*ppXobj)->put_SaveToConfigFile(true);
 		}
 		return hr;
 	}
-	HRESULT hr = it2->second->Observe(bstrKey, bstrXml, ppGrid);
+	HRESULT hr = it2->second->Observe(bstrKey, bstrXml, ppXobj);
 	if(hr==S_OK&&strGalaxyName.CompareNoCase(_T("EclipseView")) == 0)
-		(*ppGrid)->put_SaveToConfigFile(true);
+		(*ppXobj)->put_SaveToConfigFile(true);
 	return hr;
 }
 	
-STDMETHODIMP CEclipseCtrl::ObserveEx(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
+STDMETHODIMP CEclipseCtrl::ObserveEx(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj)
 {
-	HRESULT hr = Observe(bstrGalaxyName, bstrKey, bstrXml, ppGrid);
-	if (hr == S_OK&&*ppGrid != nullptr)
-		(*ppGrid)->put_SaveToConfigFile(true);
+	HRESULT hr = Observe(bstrGalaxyName, bstrKey, bstrXml, ppXobj);
+	if (hr == S_OK&&*ppXobj != nullptr)
+		(*ppXobj)->put_SaveToConfigFile(true);
 	return S_OK;
 }
 
@@ -1435,11 +1435,11 @@ STDMETHODIMP CEclipseCtrl::get_TopGalaxy(IGalaxy** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CEclipseCtrl::get_ActiveTopGrid(IXobj** pVal)
+STDMETHODIMP CEclipseCtrl::get_ActiveTopXobj(IXobj** pVal)
 {
 	if (m_pEclipseWnd)
 	{
-		*pVal = m_pEclipseWnd->m_pGalaxy->m_pWorkGrid;
+		*pVal = m_pEclipseWnd->m_pGalaxy->m_pWorkXobj;
 	}
 
 	return S_OK;

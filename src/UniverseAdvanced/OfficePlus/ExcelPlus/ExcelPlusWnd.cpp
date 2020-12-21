@@ -19,7 +19,7 @@
 ********************************************************************************/
 
 #include "../../stdafx.h"
-#include "../../Grid.h"
+#include "../../Xobj.h"
 #include "../../Galaxy.h"
 #include "../../UniverseApp.h"
 #include "../../GalaxyCluster.h"
@@ -315,11 +315,11 @@ namespace OfficePlus
 			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 			if (m_pTaskPaneGalaxy)
 			{
-				m_pTaskPaneGalaxy->UpdateGrid();
+				m_pTaskPaneGalaxy->UpdateXobj();
 			}
 			if (m_pGalaxy)
 			{
-				m_pGalaxy->UpdateGrid();
+				m_pGalaxy->UpdateXobj();
 				HWND hPWnd = m_pGalaxy->GetTopLevelParent().m_hWnd;
 				auto it1 = pAddin->m_mapTaskPaneMap.find((long)hPWnd);
 				if (it1 != pAddin->m_mapTaskPaneMap.end())
@@ -352,7 +352,7 @@ namespace OfficePlus
 
 		void CExcelWorkBook::OnSheetActivate(IDispatch* Sh)
 		{
-			g_pCosmos->m_pDesignGrid = nullptr;
+			g_pCosmos->m_pDesignXobj = nullptr;
 			if (m_pGalaxy == nullptr)
 				return;
 

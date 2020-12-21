@@ -215,7 +215,7 @@ public:
 	{
 		MDF_IGNORECASE = 8,
 	};
-	enum MarkupGridFlags
+	enum MarkupXobjFlags
 	{
 		MNF_WITHCDATA      = 0x01,
 		MNF_WITHNOLINES    = 0x02,
@@ -226,7 +226,7 @@ public:
 		MNF_NONENDED   = 0x100000,
 		MNF_ILLDATA    = 0x200000,
 	};
-	enum MarkupGridType
+	enum MarkupXobjType
 	{
 		MNT_ELEMENT					= 1,  // 0x01
 		MNT_TEXT					= 2,  // 0x02
@@ -342,7 +342,7 @@ protected:
 		int iElemPrev; // if this is first, iElemPrev points to last
 	};
 
-	enum MarkupGridFlagsInternal
+	enum MarkupXobjFlagsInternal
 	{
 		MNF_REPLACE    = 0x001000,
 		MNF_INSERT     = 0x002000,

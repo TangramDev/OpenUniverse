@@ -14,8 +14,8 @@
 #include "../stdafx.h"
 #include "../UniverseApp.h"
 #include "../Cosmos.h"
-#include "../grid.h"
-#include "../GridHelper.h"
+#include "../Xobj.h"
+#include "../XobjHelper.h"
 #include "../Galaxy.h"
 #include "../GridWnd.h"
 #include "Browser.h"
@@ -28,7 +28,7 @@ namespace Browser {
 		m_hOldTab = NULL;
 		m_bTabChange = false;
 		m_pBrowser = nullptr;
-		m_pParentGrid = nullptr;
+		m_pParentXobj = nullptr;
 		m_fdevice_scale_factor = 1.0f;
 		m_strCurKey = _T("");
 		m_pVisibleWebWnd = nullptr;
@@ -351,7 +351,7 @@ namespace Browser {
 				CGalaxy* pGalaxy = m_pVisibleWebWnd->m_pGalaxy;
 				if (pGalaxy)
 				{
-					CXobj* pXobj = pGalaxy->m_pWorkGrid;
+					CXobj* pXobj = pGalaxy->m_pWorkXobj;
 					CXobjHelper* pWnd = (CXobjHelper*)(pXobj->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}
@@ -510,12 +510,12 @@ namespace Browser {
 		delete this;
 	}
 
-	STDMETHODIMP CBrowser::get_RemoteGrid(IXobj** pVal)
+	STDMETHODIMP CBrowser::get_RemoteXobj(IXobj** pVal)
 	{
 		return S_OK;
 	}
 
-	STDMETHODIMP CBrowser::put_RemoteGrid(IXobj* newVal)
+	STDMETHODIMP CBrowser::put_RemoteXobj(IXobj* newVal)
 	{
 		return S_OK;
 	}

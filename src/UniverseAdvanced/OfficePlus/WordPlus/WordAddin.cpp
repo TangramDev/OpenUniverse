@@ -20,8 +20,8 @@
 
 #include "../../stdafx.h"
 #include "../../UniverseApp.h"
-#include "../../GridHelper.h"
-#include "../../Grid.h"
+#include "../../XobjHelper.h"
+#include "../../Xobj.h"
 #include "../../Galaxy.h"
 #include "../../TangramHtmlTreeWnd.h"
 #include "fm20.h"
@@ -129,10 +129,10 @@ namespace OfficePlus
 							vWindow.pdispVal = nullptr;
 							Office::_CustomTaskPane* _pCustomTaskPane;
 							CString strCap = _T("");
-							CTangramXmlParse* pGridParse = m_Parse.FindItem(TGM_GRID);
-							strCap = pGridParse->attr(_T("caption"), _T(""));
+							CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_GRID);
+							strCap = pXobjParse->attr(_T("caption"), _T(""));
 							if (strCap == _T(""))
-								strCap = pGridParse->attr(_T("id"), _T(""));;
+								strCap = pXobjParse->attr(_T("id"), _T(""));;
 							CComBSTR bstrCap(strCap);
 							HRESULT hr = m_pCTPFactory->CreateCTP(L"Tangram.Ctrl.1", bstrCap, vWindow, &_pCustomTaskPane);
 							_pCustomTaskPane->AddRef();
@@ -453,10 +453,10 @@ namespace OfficePlus
 			{
 				CGalaxy* pGalaxy = it->second->m_pGalaxy;
 				if (pGalaxy)
-					pGalaxy->UpdateGrid();
+					pGalaxy->UpdateXobj();
 				pGalaxy = it->second->m_pTaskPaneGalaxy;
 				if (pGalaxy)
-					pGalaxy->UpdateGrid();
+					pGalaxy->UpdateXobj();
 			}
 			int nIndex = 0x00000008;
 			auto it2 = m_mapObjEventDic.find(m_pApplication.p);
@@ -566,7 +566,7 @@ namespace OfficePlus
 						pGalaxy->m_bDesignerState = true;
 						pWnd->m_bDesignState = true;
 						CreateCommonDesignerToolBar();
-						CXobj* pXobj = pGalaxy->m_pWorkGrid;
+						CXobj* pXobj = pGalaxy->m_pWorkXobj;
 						if (pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 						{
 							CString strXml = _T("<documentui><layout><xobj name=\"Start\" /></layout></documentui>");
@@ -611,10 +611,10 @@ namespace OfficePlus
 							vWindow.pdispVal = nullptr;
 							Office::_CustomTaskPane* _pCustomTaskPane;
 							CString strCap = _T("");
-							CTangramXmlParse* pGridParse = m_Parse.FindItem(TGM_GRID);
-							strCap = pGridParse->attr(_T("caption"), _T(""));
+							CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_GRID);
+							strCap = pXobjParse->attr(_T("caption"), _T(""));
 							if (strCap == _T(""))
-								strCap = pGridParse->attr(_T("id"), _T(""));;
+								strCap = pXobjParse->attr(_T("id"), _T(""));;
 							CComBSTR bstrCap(strCap);
 							HRESULT hr = m_pCTPFactory->CreateCTP(L"Tangram.Ctrl.1", bstrCap, vWindow, &_pCustomTaskPane);
 							_pCustomTaskPane->AddRef();

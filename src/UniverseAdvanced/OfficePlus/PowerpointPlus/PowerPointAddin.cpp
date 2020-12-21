@@ -20,7 +20,7 @@
 
 #include "../../stdafx.h"
 #include "../../UniverseApp.h"
-#include "../../Grid.h"
+#include "../../Xobj.h"
 #include "../../Galaxy.h"
 #include "../../GalaxyCluster.h"
 #include "../../TangramHtmlTreeWnd.h"
@@ -53,7 +53,7 @@ namespace OfficePlus
 			if (pAddin->m_pActivePowerPntObject == this)
 			{
 				pAddin->m_pActivePowerPntObject = nullptr;
-				pAddin->m_pActiveGrid = nullptr;
+				pAddin->m_pActiveXobj = nullptr;
 			}
 			if (m_pPresentation)
 			{
@@ -163,7 +163,7 @@ namespace OfficePlus
 				CGalaxy* pGalaxy = m_pCurrentSavingPresentation->m_pGalaxy;
 				if (pGalaxy)
 				{
-					pParse = pGalaxy->UpdateGrid();
+					pParse = pGalaxy->UpdateXobj();
 					strXml = _GetDocXmlByKey(pCustomXMLParts.p, CComBSTR(L"tangram"));
 					CTangramXmlParse m_Parse;
 					if (m_Parse.LoadXml(strXml))
@@ -183,7 +183,7 @@ namespace OfficePlus
 				pGalaxy = m_pCurrentSavingPresentation->m_pTaskPaneGalaxy;
 				if (pGalaxy)
 				{
-					pParse = pGalaxy->UpdateGrid();
+					pParse = pGalaxy->UpdateXobj();
 					strXml = _GetDocXmlByKey(pCustomXMLParts.p, CComBSTR(L"tangram"));
 					CTangramXmlParse m_Parse;
 					if (m_Parse.LoadXml(strXml))
@@ -311,7 +311,7 @@ namespace OfficePlus
 					pGalaxy->m_bDesignerState = true;
 					pCosmosPresentation->m_bDesignState = true;
 					CreateCommonDesignerToolBar();
-					CXobj* pXobj = pGalaxy->m_pWorkGrid;
+					CXobj* pXobj = pGalaxy->m_pWorkXobj;
 					if (pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 					{
 						CString strXml = _T("<documentui><layout><xobj name=\"Start\" /></layout></documentui>");

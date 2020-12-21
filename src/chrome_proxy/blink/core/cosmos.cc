@@ -506,7 +506,7 @@ namespace blink {
 					form->ProcessFormMessage(xobj->getStr(L"msgID"));
 				}
 			}
-			nHandle = xobj->getInt64(L"gridhandle");
+			nHandle = xobj->getInt64(L"xobjhandle");
 			if (nHandle)
 			{
 				auto it = m_mapCosmosNode.find(nHandle);
@@ -596,7 +596,7 @@ namespace blink {
 		String strname = xobj->getStr(L"name@page");
 		m_mapCosmosNode.insert(handle, node);
 
-		__int64 nPHandle = xobj->getInt64(L"parentgridhandle");
+		__int64 nPHandle = xobj->getInt64(L"parenthandle");
 		if (nPHandle)
 		{
 			auto it = m_mapCosmosNode.find(nPHandle);
@@ -654,7 +654,7 @@ namespace blink {
 		{
 			node->rootNode_ = m_pRootNode;
 			WebString str = strname;
-			m_pRootNode->m_mapGrid[str.Utf16()] = node;
+			m_pRootNode->m_mapXobj[str.Utf16()] = node;
 
 			strMessageXml = xobj->getStr(L"cosmosxml");
 			if (node == m_pRootNode && strMessageXml.IsNull() == false && strMessageXml != "")
@@ -792,7 +792,7 @@ namespace blink {
 				CosmosNode* pNode = parentform->mdibindgrid();
 				if (pNode == nullptr)
 				{
-					int64_t nHandle = xobj->getInt64(L"BindMdiGridHandle");
+					int64_t nHandle = xobj->getInt64(L"BindMdiXobjHandle");
 					if (nHandle)
 					{
 						auto it1 = m_mapCosmosNode.find(nHandle);

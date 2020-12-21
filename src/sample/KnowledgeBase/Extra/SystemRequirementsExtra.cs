@@ -13,7 +13,7 @@ namespace KnowledgeBase
 {
     public partial class SystemRequirementsExtra : UserControl
     {
-        private Grid thisGrid = null;
+        private Xobj thisGrid = null;
 
         public SystemRequirementsExtra()
         {
@@ -22,7 +22,7 @@ namespace KnowledgeBase
 
         private void SystemRequirementsExtra_Load(object sender, EventArgs e)
         {
-            thisGrid = Cosmos.CreatingGrid;
+            thisGrid = Cosmos.CreatingXobj;
             if (thisGrid != null)
             {
                 thisGrid.OnCloudMessageReceived += ThisNode_OnCloudMessageReceived;

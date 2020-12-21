@@ -11,14 +11,14 @@
 * https://www.tangram.dev
 ********************************************************************************/
 
-// Grid.cpp : implementation file
+// Xobj.cpp : implementation file
 
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Cosmos.h"
-#include "grid.h"
+#include "Xobj.h"
 #include "Galaxy.h"
-#include "GridHelper.h"
+#include "XobjHelper.h"
 #include "GridWnd.h"
 
 struct AUX_DATA
@@ -90,7 +90,7 @@ CGridWnd::CGridWnd()
 	bInited = false;
 	m_bCreated = false;
 	m_pXobj = nullptr;
-	m_pHostGrid = nullptr;
+	m_pHostXobj = nullptr;
 	m_nHostWidth = m_nHostHeight = 0;
 	m_nMasterRow = m_nMasterCol = -1;
 	m_Vmin = m_Vmax = m_Hmin = m_Hmax = 0;
@@ -162,7 +162,7 @@ void CGridWnd::TrackRowSize(int y, int row)
 		if (GetStyle() & SPLS_DYNAMIC_SPLIT)
 			DeleteRow(row + 1);
 	}
-	if (m_pHostGrid && row != m_nRows - 1)
+	if (m_pHostXobj && row != m_nRows - 1)
 	{
 		ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
 
@@ -211,7 +211,7 @@ void CGridWnd::TrackColumnSize(int x, int col)
 		if (GetStyle() & SPLS_DYNAMIC_SPLIT)
 			DeleteColumn(col + 1);
 	}
-	if (m_pHostGrid && col != m_nCols - 1)
+	if (m_pHostXobj && col != m_nCols - 1)
 	{
 		ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
 
@@ -272,15 +272,15 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	}
 	IXobj* _pXobj = nullptr;
 	CString str = (LPCTSTR)lParam;
-	CXobj* pOldNode = (CXobj*)g_pCosmos->m_pDesignGrid;
+	CXobj* pOldNode = (CXobj*)g_pCosmos->m_pDesignXobj;
 	CTangramXmlParse* pOld = pOldNode->m_pHostParse;
 
 	long	m_nRow;
-	g_pCosmos->m_pDesignGrid->get_Row(&m_nRow);
+	g_pCosmos->m_pDesignXobj->get_Row(&m_nRow);
 	long	m_nCol;
-	g_pCosmos->m_pDesignGrid->get_Col(&m_nCol);
+	g_pCosmos->m_pDesignXobj->get_Col(&m_nCol);
 	IXobj* _pOldNode = nullptr;
-	m_pXobj->GetGrid(m_nRow, m_nCol, &_pOldNode);
+	m_pXobj->GetXobj(m_nRow, m_nCol, &_pOldNode);
 	CXobj* _pOldNode2 = (CXobj*)_pOldNode;
 	CTangramXmlParse* _pOldParse = _pOldNode2->m_pHostParse;
 	m_pXobj->ObserveEx(m_nRow, m_nCol, CComBSTR(L""), str.AllocSysString(), &_pXobj);
@@ -289,14 +289,14 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 		pXobj->m_pXobjShareData->m_pGalaxy->m_bDesignerState = true;
-		CGridVector::iterator it;
+		CXobjVector::iterator it;
 		it = find(m_pXobj->m_vChildNodes.begin(), m_pXobj->m_vChildNodes.end(), pOldNode);
 
 		if (it != m_pXobj->m_vChildNodes.end())
 		{
 			pXobj->m_pRootObj = m_pXobj->m_pRootObj;
 			pXobj->m_pParentObj = m_pXobj;
-			CGridVector vec = pXobj->m_vChildNodes;
+			CXobjVector vec = pXobj->m_vChildNodes;
 			CXobj* pChildNode = nullptr;
 			for (auto it2 : pXobj->m_vChildNodes)
 			{
@@ -308,7 +308,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 			m_pXobj->m_vChildNodes.erase(it);
 			m_pXobj->m_vChildNodes.push_back(pXobj);
 			pOldNode->m_pHostWnd->DestroyWindow();
-			g_pCosmos->m_pDesignGrid = nullptr;
+			g_pCosmos->m_pDesignXobj = nullptr;
 			RecalcLayout();
 		}
 	}
@@ -344,7 +344,7 @@ void CGridWnd::StartTracking(int ht)
 	if (ht == noHit)
 		return;
 
-	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkGrid;
+	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
 		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
@@ -407,7 +407,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	if (!m_bTracking)
 		return;
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-	CXobj* pXobj = pGalaxy->m_pWorkGrid;
+	CXobj* pXobj = pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
 		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
@@ -672,8 +672,8 @@ void CGridWnd::_RecalcLayout()
 	GetInsideRect(rectInside);
 
 	// layout columns (restrict to possible sizes)
-	_LayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap, m_pHostGrid, true);
-	_LayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap, m_pHostGrid, false);
+	_LayoutRowCol(m_pColInfo, m_nCols, rectInside.Width(), m_cxSplitterGap, m_pHostXobj, true);
+	_LayoutRowCol(m_pRowInfo, m_nRows, rectInside.Height(), m_cySplitterGap, m_pHostXobj, false);
 
 	// give the hint for the maximum number of HWNDs
 	AFX_SIZEPARENTPARAMS layout;
@@ -709,7 +709,7 @@ void CGridWnd::_RecalcLayout()
 
 BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_pHostWnd = this;
 	m_pXobj->m_nViewType = Grid;
 	m_pXobj->m_nID = nID;
@@ -845,7 +845,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				m_pXobj->AddChildNode(pObj);
 				pObj->m_nRow = i;
 				pObj->m_nCol = j;
-				pObj->InitWndGrid();
+				pObj->InitWndXobj();
 
 				if (pObj->m_pObjClsInfo)
 				{
@@ -857,7 +857,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				}
 				if (m_nMasterRow == i && m_nMasterCol == j)
 				{
-					m_pHostGrid = pObj;
+					m_pHostXobj = pObj;
 				}
 				nIndex++;
 				if (nIndex < nSize)
@@ -883,9 +883,9 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		CXobj* pParent = nullptr;
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 		bool bHasHostView = false;
-		if (pGalaxy->m_pBindingGrid)
+		if (pGalaxy->m_pBindingXobj)
 		{
-			pHostNode = pGalaxy->m_pBindingGrid;
+			pHostNode = pGalaxy->m_pBindingXobj;
 			if (::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 			{
 				bHasHostView = true;
@@ -898,7 +898,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 			}
 		}
 		if (pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
-			m_pHostGrid = pHostNode;
+			m_pHostXobj = pHostNode;
 		_RecalcLayout();
 
 		return true;

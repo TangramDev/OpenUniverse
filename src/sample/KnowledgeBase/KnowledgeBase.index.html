@@ -63,8 +63,8 @@
                             if (nativeElms.length > 0) {
                                 var nativeElm = nativeElms[0];
 
-                                var parentgrid = e.grid.parentGrid;
-                                var type = e.grid.parentGrid.xobj.getLong("gridtype");
+                                var parentgrid = e.grid.parent;
+                                var type = e.grid.parent.xobj.getLong("gridtype");
                                 if (parentgrid != null&&type==4) {
                                    parentgrid.ObserveEx(name, nativeElm.outerHTML, 0, 1);
                                 }

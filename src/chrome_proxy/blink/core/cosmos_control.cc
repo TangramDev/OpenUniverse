@@ -51,7 +51,7 @@ namespace blink {
 		return handle_;
 	}
 
-	CosmosNode* CosmosControl::parentGrid()
+	CosmosNode* CosmosControl::parent()
 	{
 		return m_pParentNode;
 	}

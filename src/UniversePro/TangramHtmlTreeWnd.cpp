@@ -30,8 +30,8 @@
 #include "XHtmlDraw.h"
 #include "CreateCheckboxImageList.h"
 #include "tangramtreeview.h"
-#include "GridHelper.h"
-#include "Grid.h"
+#include "XobjHelper.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "TangramBase.h"
 
@@ -1491,7 +1491,7 @@ int CTangramHtmlTreeWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT 
 {
 	if (m_pHostWnd)
 	{
-		g_pCosmos->m_pActiveGrid = m_pHostWnd->m_pXobj;
+		g_pCosmos->m_pActiveXobj = m_pHostWnd->m_pXobj;
 		g_pCosmos->m_pGalaxy = m_pHostWnd->m_pXobj->m_pXobjShareData->m_pGalaxy;
 	}
 	return MA_ACTIVATE;
@@ -3476,9 +3476,9 @@ void CTangramHtmlTreeWnd::Init(CXobj* pXobj)
 {
 	if (pXobj)
 	{
-		CXobj* pRootGrid = pXobj->m_pRootObj;
-		if (pRootGrid == NULL)
-			pRootGrid = pXobj;
+		CXobj* pRootXobj = pXobj->m_pRootObj;
+		if (pRootXobj == NULL)
+			pRootXobj = pXobj;
 		CComBSTR bstrCallBackNode(L"");
 		pXobj->get_Attribute(CComBSTR(L"CallBackNode"), &bstrCallBackNode);
 		CString strCallBackNode = OLE2T(bstrCallBackNode);
@@ -3490,7 +3490,7 @@ void CTangramHtmlTreeWnd::Init(CXobj* pXobj)
 			{
 				IXobj* pXobj = NULL;
 				CComPtr<IXobjCollection> pCosmosNodeCollection;
-				pRootGrid->GetGrids(CComBSTR(strCallBackNode), &pXobj, &pCosmosNodeCollection, &nCount);
+				pRootXobj->GetXobjs(CComBSTR(strCallBackNode), &pXobj, &pCosmosNodeCollection, &nCount);
 				if (pXobj)
 				{
 					CComPtr<IDispatch> pdisp;
@@ -3515,7 +3515,7 @@ void CTangramHtmlTreeWnd::Init(CXobj* pXobj)
 				{
 					IXobj* pXobj = NULL;
 					CComPtr<IXobjCollection> pCosmosNodeCollection;
-					pRootGrid->GetGrids(CComBSTR(strID), &pXobj, &pCosmosNodeCollection, &nCount);
+					pRootXobj->GetXobjs(CComBSTR(strID), &pXobj, &pCosmosNodeCollection, &nCount);
 					if (pXobj)
 					{
 						CComPtr<IDispatch> pdisp;
@@ -3534,7 +3534,7 @@ void CTangramHtmlTreeWnd::Init(CXobj* pXobj)
 				{
 					IXobj* pXobj = NULL;
 					CComPtr<IXobjCollection> pCosmosNodeCollection;
-					pRootGrid->GetGrids(CComBSTR(strCallBackNode), &pXobj, &pCosmosNodeCollection, &nCount);
+					pRootXobj->GetXobjs(CComBSTR(strCallBackNode), &pXobj, &pCosmosNodeCollection, &nCount);
 					if (pXobj)
 					{
 						CComPtr<IDispatch> pdisp;
@@ -3578,11 +3578,11 @@ void CTangramHtmlTreeWnd::Init(CXobj* pXobj)
 				//			this->m_pHostWnd->m_pXobj->get_BindWnd(CComBSTR(strKey), &h);
 				//			if (h)
 				//			{
-				//				CComPtr<IXobj> pGrid2;
+				//				CComPtr<IXobj> pXobj2;
 				//				CString strXml = pParse->GetChild(strKey)->xml();
 				//				CComPtr<IXobj> _pXobj;
 				//				theApp.m_pCosmosManager->NavigateXTML(h, strXml.AllocSysString(), &_pXobj);
-				//				//pXobj->Navigate(CComBSTR(strKey),CComBSTR(strXml),&pGrid2);
+				//				//pXobj->Navigate(CComBSTR(strKey),CComBSTR(strXml),&pXobj2);
 				//			}
 				//			nPos = strIDs.Find(_T(","));
 				//			if (nPos == -1)
@@ -3603,11 +3603,11 @@ void CTangramHtmlTreeWnd::Init(CXobj* pXobj)
 				//		CString strKey = strIDs.Left(nPos);
 				//		strIDs = strIDs.Mid(nPos + 1);
 				//		CComPtr<IXobj> pXobj;
-				//		CComPtr<IXobjCollection> pGridCollection;
-				//		pRootGrid->GetNodes(CComBSTR(strKey), &pXobj, &pGridCollection, &nCount);
+				//		CComPtr<IXobjCollection> pXobjCollection;
+				//		pRootXobj->GetNodes(CComBSTR(strKey), &pXobj, &pXobjCollection, &nCount);
 				//		if (pXobj)
 				//		{
-				//			CComPtr<IXobj> pGrid2;
+				//			CComPtr<IXobj> pXobj2;
 				//			CString strXml = pParse->GetChild(strKey)->xml();
 				//			LONGLONG h = 0;
 				//			pXobj->get_Handle(&h);
@@ -3615,7 +3615,7 @@ void CTangramHtmlTreeWnd::Init(CXobj* pXobj)
 				//			{
 				//				CComPtr<IXobj> _pXobj;
 				//				theApp.m_pCosmosManager->NavigateXTML(h, strXml.AllocSysString(), &_pXobj);
-				//				//pXobj->Navigate(CComBSTR(strKey),CComBSTR(strXml),&pGrid2);
+				//				//pXobj->Navigate(CComBSTR(strKey),CComBSTR(strXml),&pXobj2);
 				//			}
 				//		}
 				//		nPos = strIDs.Find(_T(","));
@@ -4126,25 +4126,25 @@ BOOL CTangramHtmlTreeWnd::OnClick(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 				CTangramXmlParse* pParse = pXTCD->m_pXmlParse;
 				CString strNodeName = pParse->attr(_T("id"),_T(""));
 				IXobj* _pXobj = NULL;
-				if (g_pCosmos->m_pDesignGrid)
+				if (g_pCosmos->m_pDesignXobj)
 				{
-					CXobj* pRootGrid = g_pCosmos->m_pDesignGrid->m_pRootObj;
+					CXobj* pRootXobj = g_pCosmos->m_pDesignXobj->m_pRootObj;
 					IXobj* _pXobj = NULL;
 					long nCount = 0;
 					CComPtr<IXobjCollection> pCol;
-					pRootGrid->GetGrids(strNodeName.AllocSysString(), &_pXobj, &pCol, &nCount);
+					pRootXobj->GetXobjs(strNodeName.AllocSysString(), &_pXobj, &pCol, &nCount);
 					if (_pXobj)
 					{
 						if (g_pCosmos->m_pCLRProxy)
-							g_pCosmos->m_pCLRProxy->SelectGrid(_pXobj);
+							g_pCosmos->m_pCLRProxy->SelectXobj(_pXobj);
 					}
 				}
 			}
 			
-			IXobj* pRootGrid = NULL;
+			IXobj* pRootXobj = NULL;
 			if (m_pHostWnd)
 			{
-				m_pHostWnd->m_pXobj->get_RootGrid(&pRootGrid);
+				m_pHostWnd->m_pXobj->get_RootXobj(&pRootXobj);
 			}
 			if (pXTCD->m_strTangramXML != _T("")/*&&m_LasthItem!=hItem*/)
 			{
@@ -4238,10 +4238,10 @@ BOOL CTangramHtmlTreeWnd::OnDblclk(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 	{
 		CTangramXHtmlTreeNode *pXTCD = GetItemDataStruct(hItem);
 		
-		IXobj* pRootGrid=NULL;
+		IXobj* pRootXobj=NULL;
 		if (m_pHostWnd)
 		{
-			m_pHostWnd->m_pXobj->get_RootGrid(&pRootGrid);
+			m_pHostWnd->m_pXobj->get_RootXobj(&pRootXobj);
 		}
 
 		if (pXTCD && !pXTCD->m_bEnabled)
@@ -4351,10 +4351,10 @@ BOOL CTangramHtmlTreeWnd::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 			}
 			else
 			{
-				CComPtr<IXobj> pRootGrid;
+				CComPtr<IXobj> pRootXobj;
 				if (m_pHostWnd)
 				{
-					m_pHostWnd->m_pXobj->get_RootGrid(&pRootGrid);
+					m_pHostWnd->m_pXobj->get_RootXobj(&pRootXobj);
 				}
 				
 				pXTCD->m_strRelationNodes = m_Parse.attr(_T("RelationNodes"),_T(""));
@@ -5347,8 +5347,8 @@ LRESULT CTangramHtmlTreeWnd::OnInsertData(WPARAM wParam, LPARAM lParam)
 		}
 		else
 		{
-			map<CString,HTREEITEM>::iterator it = m_mapGridDic.find(strID);
-			if(it!=m_mapGridDic.end())
+			map<CString,HTREEITEM>::iterator it = m_mapXobjDic.find(strID);
+			if(it!=m_mapXobjDic.end())
 			{
 				CTangramXmlParse m_Parse;
 				if(m_Parse.LoadXml(strData))
@@ -5365,7 +5365,7 @@ LRESULT CTangramHtmlTreeWnd::OnInsertData(WPARAM wParam, LPARAM lParam)
 						SetCheck(hItem,bCheck);
 					}
 
-					m_mapGridDic.erase(it);
+					m_mapXobjDic.erase(it);
 				}
 			}
 		}

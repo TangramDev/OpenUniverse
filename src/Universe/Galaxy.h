@@ -86,12 +86,12 @@ public:
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster;
-	CXobj*											m_pParentGrid;
-	CXobj*											m_pWorkGrid;
+	CXobj*											m_pParentXobj;
+	CXobj*											m_pWorkXobj;
 	CXobj*											m_pContainerNode;
-	CXobj*											m_pBindingGrid;
+	CXobj*											m_pBindingXobj;
 	GalaxyInfo*										m_pGalaxyInfo;
-	map<CString, CXobj*>							m_mapGrid;
+	map<CString, CXobj*>							m_mapXobj;
 	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}
@@ -105,7 +105,7 @@ public:
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);
-	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
 	STDMETHOD(GetXml)(BSTR bstrRootName, BSTR* bstrRet);
 
 	BEGIN_COM_MAP(CGalaxy)
@@ -139,13 +139,13 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 
 	STDMETHOD(get_Count)(long* pCount);
-	STDMETHOD(get_Grid)(VARIANT vIndex, IXobj **ppGrid);
+	STDMETHOD(get_Xobj)(VARIANT vIndex, IXobj **ppXobj);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_CurrentNavigateKey)(BSTR* pVal);
-	STDMETHOD(get_VisibleGrid)(IXobj** pVal);
-	STDMETHOD(get_RootGrids)(IXobjCollection** pGridColletion);
+	STDMETHOD(get_VisibleXobj)(IXobj** pVal);
+	STDMETHOD(get_RootXobjs)(IXobjCollection** pXobjColletion);
 	STDMETHOD(get_GalaxyData)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);

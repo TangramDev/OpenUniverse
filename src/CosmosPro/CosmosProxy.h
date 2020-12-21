@@ -158,14 +158,14 @@ private:
 	void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage*, int nState);
 	void HideMenuStripPopup();
 	bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType);
-	void ConnectGridToWebPage(IXobj*, bool);
+	void ConnectXobjToWebPage(IXobj*, bool);
 	void OnCloudMsgReceived(CSession*);
 
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);
-	void SelectGrid(IXobj* );
+	void SelectXobj(IXobj* );
 	Object^ InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
-	Object^ InitGrid(IXobj* pXobj, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
+	Object^ InitXobj(IXobj* pXobj, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue);
 	IDispatch* CreateWinForm(HWND hParent, BSTR strXML);
 

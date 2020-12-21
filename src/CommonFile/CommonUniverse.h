@@ -36,9 +36,9 @@
 #define IPC_CLR_CONTROL_CREARED							20200220
 #define IPC_CLR_CONTROL_CREARED_ID						_T("Tangram_CLR_Control_Created")
 #define IPC_NODE_CREARED								20200221
-#define IPC_NODE_CREARED_ID								_T("Tangram_WndGrid_Created")
+#define IPC_NODE_CREARED_ID								_T("Cosmos_WndXobj_Created")
 #define IPC_NODE_ONMOUSEACTIVATE						20200222
-#define IPC_NODE_ONMOUSEACTIVATE_ID						_T("Tangram_WndGrid_OnMouseActivate")
+#define IPC_NODE_ONMOUSEACTIVATE_ID						_T("Tangram_WndXobj_OnMouseActivate")
 #define IPC_MDIWINFORM_ACTIVEMDICHILD					20200224
 #define IPC_MDIWINFORM_ACTIVEMDICHILD_ID				_T("MdiWinForm_ActiveMdiChild")
 
@@ -47,7 +47,7 @@
 #define IPC_HUBBLE_MSG_FIRE_EVENT						(IPC_HUBBLE_MSG_BASE + 2)
 #define IPC_HUBBLE_MSG_WINFORM_CREATED					(IPC_HUBBLE_MSG_BASE + 3)
 #define IPC_HUBBLE_MSG_WINFORM_ONCLOSE					(IPC_HUBBLE_MSG_BASE + 4)
-#define IPC_HUBBLE_MSG_Tangram_WndGrid_Created			(IPC_HUBBLE_MSG_BASE + 5)
+#define IPC_HUBBLE_MSG_Tangram_WndXobj_Created			(IPC_HUBBLE_MSG_BASE + 5)
 #define IPC_HUBBLE_MSG_BIND_NATIVEOBJ_IPC_MSG			(IPC_HUBBLE_MSG_BASE + 6)
 #define IPC_HUBBLE_MSG_MdiWinForm_ActiveMdiChild		(IPC_HUBBLE_MSG_BASE + 7)
 #define IPC_HUBBLE_MSG_MdiWinForm_Ready					(IPC_HUBBLE_MSG_BASE + 8)
@@ -213,7 +213,7 @@ namespace CommonUniverse {
 		HWND			m_pMDIParent;
 		CString			m_strName;
 		CString			m_strNodeName;
-		CString			m_strGridXml;
+		CString			m_strXobjXml;
 		IXobj*			m_pXobj	= nullptr;
 		IGalaxy*		m_pGalaxy = nullptr;
 		IGalaxyCluster*	m_pGalaxyCluster = nullptr;
@@ -226,7 +226,7 @@ namespace CommonUniverse {
 		IDispatch*		m_pParentDisp;
 		CString			m_strCtrlName;
 		CString			m_strGalaxyName;
-		CString			m_strGridXml;
+		CString			m_strXobjXml;
 		CString			m_strParentCtrlName;
 	}GalaxyInfo;
 
@@ -344,19 +344,19 @@ namespace CommonUniverse {
 		virtual void Focusable(BOOL bFocus) {}
 	};
 
-	class CGridProxy
+	class CXobjProxy
 	{
 	public:
-		CGridProxy() {}
-		virtual ~CGridProxy() {}
+		CXobjProxy() {}
+		virtual ~CXobjProxy() {}
 
 		bool	m_bAutoDelete;
 
 		virtual void OnObserverComplete() {}
 		virtual void OnDestroy() {}
-		virtual void OnGridAddInCreated(IDispatch* pAddIndisp, CString bstrAddInID, CString bstrAddInXml) {}
-		virtual void OnGridAddInsCreated() {}
-		virtual void OnGridDocumentComplete(IDispatch* ExtenderDisp, CString bstrURL) {}
+		virtual void OnXobjAddInCreated(IDispatch* pAddIndisp, CString bstrAddInID, CString bstrAddInXml) {}
+		virtual void OnXobjAddInsCreated() {}
+		virtual void OnXobjDocumentComplete(IDispatch* ExtenderDisp, CString bstrURL) {}
 		virtual void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {}
 		virtual void OnTabChange(LONG ActivePage, LONG OldPage) {}
 		virtual void OnCosmosDocEvent(ICosmosEventObj* pEventObj) {}
@@ -371,8 +371,8 @@ namespace CommonUniverse {
 		bool	m_bAutoDelete;
 
 		virtual void OnGalaxyClusterLoaded(IDispatch* sender, CString url) {}
-		virtual void OnGridCreated(IXobj* pGridCreated) {}
-		virtual void OnAddInCreated(IXobj* pRootGrid, IDispatch* pAddIn, CString bstrID, CString bstrAddInXml) {}
+		virtual void OnXobjCreated(IXobj* pXobjCreated) {}
+		virtual void OnAddInCreated(IXobj* pRootXobj, IDispatch* pAddIn, CString bstrID, CString bstrAddInXml) {}
 		virtual void OnBeforeOpenXml(CString bstrXml, HWND hWnd) {}
 		virtual void OnOpenXmlComplete(CString bstrXml, HWND hWnd, IXobj* pRetRootNode) {}
 		virtual void OnDestroy() {}
@@ -476,16 +476,16 @@ namespace CommonUniverse {
 		virtual LRESULT OnForegroundIdleProc() { return 0; }
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
 		virtual void OnCosmosClose() {}
-		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootGrid) {}
+		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
 		virtual void RegistWndClassToCosmos() {}
-		virtual void OnActiveDocument(ICosmosDoc* ActiveDoc, IXobj* pGridInDoc, IXobj* pGridInCtrlBar, HWND hCtrlBar) {}
+		virtual void OnActiveDocument(ICosmosDoc* ActiveDoc, IXobj* pXobjInDoc, IXobj* pXobjInCtrlBar, HWND hCtrlBar) {}
 		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
 		virtual ICosmosDoc* CreateNewDocument(LPCTSTR lpszFrameID, LPCTSTR lpszAppTitle, void* pDocTemplate, BOOL bNewFrame) { return NULL; }
 		virtual ICosmosDoc* OpenDocument(void* pDocTemplate, CString strFile, BOOL bNewFrame) { return NULL; }
-		virtual CGridProxy* OnGridInit(IXobj* pNewNode) { return nullptr; }
+		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode) { return nullptr; }
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalaxy) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
@@ -539,7 +539,7 @@ namespace CommonUniverse {
 		virtual void CosmosAction(BSTR bstrXml, void*) {}
 		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) { return CComBSTR(""); }
 		virtual void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal) {}
-		virtual void SelectGrid(IXobj*) {}
+		virtual void SelectXobj(IXobj*) {}
 		virtual void SelectObj(IDispatch*) {}
 		virtual void ReleaseCosmosObj(IDispatch*) {}
 		virtual void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {}
@@ -559,7 +559,7 @@ namespace CommonUniverse {
 		virtual void HideMenuStripPopup() {}
 		virtual bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType) { return false; }
 		virtual void OnCloudMsgReceived(CSession*) {}
-		virtual void ConnectGridToWebPage(IXobj*, bool) {}
+		virtual void ConnectXobjToWebPage(IXobj*, bool) {}
 	};
 
 	class CCosmosImpl {
@@ -634,7 +634,7 @@ namespace CommonUniverse {
 		CString									m_strAppControlsInfoPath;
 		CString									m_strAppFormsTemplatePath;
 		CString									m_strAppCurrentFormTemplatePath;
-		CString									m_strGridSelectedText;
+		CString									m_strXobjSelectedText;
 		CString									m_strDesignerTip1;
 		CString									m_strDesignerTip2;
 		CString									m_strDesignerXml;
@@ -693,7 +693,7 @@ namespace CommonUniverse {
 		map<CString, CosmosDocTemplateInfo*>	m_mapCosmosFormsTemplateInfo;
 		map<int, CosmosDocTemplateInfo*>		m_mapCosmosFormsTemplateInfo2;
 		map<HWND, CWebPageImpl*>				m_mapHtmlWnd;
-		map<HWND, IXobj*>						m_mapGrid;
+		map<HWND, IXobj*>						m_mapXobj;
 		map<HWND, IWebPage*>					m_mapFormWebPage;
 		map<HWND, IBrowser*>					m_mapBrowserWnd;
 		map<HWND, IWorkBenchWindow*>			m_mapWorkBenchWnd;
@@ -716,7 +716,7 @@ namespace CommonUniverse {
 		virtual HICON GetAppIcon(int nIndex) { return NULL; }
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) { return nullptr; }
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) { return nullptr; }
-		virtual void AttachGrid(void* pXobjEvents) {}
+		virtual void AttachXobj(void* pXobjEvents) {}
 		virtual void CosmosInit() {}
 		virtual ICosmosDoc* ConnectCosmosDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hGalaxy, LPCTSTR strDocType) { return nullptr; }
 		virtual CString GetNewLayoutNodeName(BSTR strObjTypeID, IXobj* pDesignNode) { return _T(""); }
@@ -1046,7 +1046,7 @@ namespace CommonUniverse {
 		virtual void SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) = 0;
 		virtual CChromeBrowserBase* GetChromeBrowserBase(HWND) { return nullptr; }
 		virtual void OnWinFormCreated(HWND) {}
-		virtual IXobj* GetParentGrid() { return nullptr; }
+		virtual IXobj* GetParentXobj() { return nullptr; }
 		virtual IGalaxy* GetGalaxy() { return nullptr; }
 		virtual void OnCloudMsgReceived(CSession*) {}
 	};

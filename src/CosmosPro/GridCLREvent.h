@@ -38,10 +38,10 @@ public:
 	gcroot<DOMPlus::Xobj^>	m_pXobj;
 
 	void OnDestroy();
-	void OnGridAddInsCreated();
+	void OnXobjAddInsCreated();
 	void OnObserverComplete(IXobj* pXobj);
 	void OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
-	void OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
+	void OnXobjAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	void OnTabChange(int nActivePage, int nOldPage);
 	void OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra);
 };

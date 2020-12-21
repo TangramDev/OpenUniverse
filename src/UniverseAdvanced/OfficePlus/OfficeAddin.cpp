@@ -23,7 +23,7 @@
 #include "../stdafx.h"
 #include "../UniverseApp.h"
 #include "../Galaxy.h"
-#include "../Grid.h"
+#include "../Xobj.h"
 #include "../TangramHtmlTreeWnd.h"
 #include "../CloudUtilities/DownLoad.h"
 //#include "../VisualStudioPlus/VSAddin.h"
@@ -95,8 +95,8 @@ namespace OfficePlus
 
 		if (::IsWindow(m_hHostWnd) == false)
 		{
-			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theApp.m_hInstance, NULL);
+			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
+			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theApp.m_hInstance, NULL);
 		}
 		OnConnection(pApplication, ConnectMode);
 		return S_OK;
@@ -429,8 +429,8 @@ namespace OfficePlus
 			auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
 			if (it != g_pCosmos->m_mapValInfo.end())
 				m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Grid Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
+			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
 		}
 		if (m_hHostWnd&&m_pDesignerGalaxyCluster == nullptr)
 		{
@@ -524,7 +524,7 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeExtender::InitVBAForm(IDispatch* pFormDisp, long nStyle, BSTR bstrXml, IXobj** ppGrid)
+	STDMETHODIMP COfficeExtender::InitVBAForm(IDispatch* pFormDisp, long nStyle, BSTR bstrXml, IXobj** ppXobj)
 	{
 		CComQIPtr<IOleWindow> pOleWnd(pFormDisp);
 		if (pOleWnd)
@@ -599,7 +599,7 @@ namespace OfficePlus
 							}
 						}
 						m_pAddin->OnVbaFormInit(hWnd, _pGalaxy);
-						*ppGrid = pXobj;
+						*ppXobj = pXobj;
 					}
 					return S_OK;
 				}
@@ -713,7 +713,7 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeExtender::GetActiveTopGrid(IDispatch* pForm, IXobj** WndGrid)
+	STDMETHODIMP COfficeExtender::GetActiveTopXobj(IDispatch* pForm, IXobj** WndXobj)
 	{
 		CComQIPtr<IOleWindow> pOleWnd(pForm);
 		if (pOleWnd)
@@ -723,7 +723,7 @@ namespace OfficePlus
 			auto it = m_pAddin->m_mapVBAForm.find(hWnd);
 			if (it != m_pAddin->m_mapVBAForm.end())
 			{
-				*WndGrid = it->second->m_pWorkGrid;
+				*WndXobj = it->second->m_pWorkXobj;
 			}
 		}
 		return S_OK;
@@ -767,7 +767,7 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeObject::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
+	STDMETHODIMP COfficeObject::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj)
 	{
 		CString strKey = OLE2T(bstrKey);
 		strKey.Trim();
@@ -808,7 +808,7 @@ namespace OfficePlus
 			}
 		}
 
-		return m_pGalaxy->Observe(bstrKey, bstrXml, ppGrid);
+		return m_pGalaxy->Observe(bstrKey, bstrXml, ppXobj);
 	}
 
 	STDMETHODIMP COfficeObject::UnloadCosmos()

@@ -107,7 +107,7 @@ class CXobjEvents;
 class CGalaxyCluster;
 class CXobjCollection;
 
-typedef vector<CXobj*> CGridVector;
+typedef vector<CXobj*> CXobjVector;
 
 #include <afxcview.h>
 #include <afxdlgs.h>

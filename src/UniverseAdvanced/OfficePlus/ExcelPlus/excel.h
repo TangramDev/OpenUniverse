@@ -35921,7 +35921,7 @@ DiagramNodeChildren : Office::_IMsoDispObj
         /*[out,retval]*/ IUnknown * * ppunkEnum ) = 0;
       virtual HRESULT __stdcall Item (
         /*[in]*/ VARIANT Index,
-        /*[out,retval]*/ struct DiagramNode * * ppGrid ) = 0;
+        /*[out,retval]*/ struct DiagramNode * * ppXobj ) = 0;
       virtual HRESULT __stdcall AddNode (
         /*[in]*/ VARIANT Index,
         /*[in]*/ enum Office::MsoDiagramNodeType nodeType,
@@ -35954,14 +35954,14 @@ DiagramNode : Office::_IMsoDispObj
         /*[in]*/ enum Office::MsoRelativeNodePosition pos ) = 0;
       virtual HRESULT __stdcall ReplaceNode (
         /*[in]*/ struct DiagramNode * pTargetNode ) = 0;
-      virtual HRESULT __stdcall SwapGrid (
+      virtual HRESULT __stdcall SwapXobj (
         /*[in]*/ struct DiagramNode * pTargetNode,
         /*[in]*/ VARIANT_BOOL swapChildren ) = 0;
       virtual HRESULT __stdcall CloneNode (
         /*[in]*/ VARIANT_BOOL copyChildren,
         /*[in]*/ struct DiagramNode * pTargetNode,
         /*[in]*/ enum Office::MsoRelativeNodePosition pos,
-        /*[out,retval]*/ struct DiagramNode * * ppGrid ) = 0;
+        /*[out,retval]*/ struct DiagramNode * * ppXobj ) = 0;
       virtual HRESULT __stdcall TransferChildren (
         /*[in]*/ struct DiagramNode * pReceivingNode ) = 0;
       virtual HRESULT __stdcall NextNode (

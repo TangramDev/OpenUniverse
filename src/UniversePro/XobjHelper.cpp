@@ -24,8 +24,8 @@
 
 #include "stdafx.h"
 #include "UniverseApp.h"
-#include "GridHelper.h"
-#include "Grid.h"
+#include "XobjHelper.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
 #include "Wormhole.h"
@@ -46,7 +46,7 @@ CXobjHelper::CXobjHelper()
 	m_bEraseBkgnd = true;
 	m_pXobj = nullptr;
 	m_pXHtmlTree = nullptr;
-	m_pParentGrid = nullptr;
+	m_pParentXobj = nullptr;
 	m_pOleInPlaceActiveObject = nullptr;
 	m_strKey = m_strXml = _T("");
 }
@@ -91,18 +91,18 @@ void CXobjHelper::Dump(CDumpContext& dc) const
 //CXobjHelper message handlers
 BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_nID = nID;
 	m_pXobj->m_pHostWnd = this;
 
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-		pGalaxy->m_pBindingGrid = m_pXobj;
+		pGalaxy->m_pBindingXobj = m_pXobj;
 
 		m_pXobj->m_pXobjShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		HWND hWnd = CreateWindow(L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		if (m_pXobj->m_pParentObj)
 		{
@@ -111,12 +111,12 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 				::PostMessage(::GetParent(m_hWnd), WM_HOSTNODEFORSPLITTERCREATED, m_pXobj->m_nRow, m_pXobj->m_nCol);
 				ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			}
-			else if (g_pCosmos->m_pMDIMainWnd && pGalaxy->m_nGalaxyType == GalaxyType::MDIClientGalaxy && pGalaxy->m_pBindingGrid)
+			else if (g_pCosmos->m_pMDIMainWnd && pGalaxy->m_nGalaxyType == GalaxyType::MDIClientGalaxy && pGalaxy->m_pBindingXobj)
 			{
 				RECT rc = { 0,0,0,0 };
 				if (::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)&rc, 19921989) == 19921989)
 				{
-					::SetWindowPos(pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,  /*SWP_NOSENDCHANGING| SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
+					::SetWindowPos(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,  /*SWP_NOSENDCHANGING| SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
 				}
 			}
 		}
@@ -182,10 +182,10 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			if (g_pCosmos->m_hVSToolBoxWnd)
 			{
 				if (::IsChild(g_pCosmos->m_hVSToolBoxWnd, m_hWnd) == false)
-					g_pCosmos->m_pCLRProxy->SelectGrid(m_pXobj);
+					g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
 			}
 			else if (::IsChild(g_pCosmos->m_hHostWnd, m_hWnd) == false)
-				g_pCosmos->m_pCLRProxy->SelectGrid(m_pXobj);
+				g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
 		}
 	}
 	if (m_pXobj && m_pXobj->m_pXobjShareData->m_pGalaxyCluster)
@@ -195,7 +195,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy)
 			::SetFocus(m_hWnd);
-		g_pCosmos->m_pActiveGrid = m_pXobj;
+		g_pCosmos->m_pActiveXobj = m_pXobj;
 		g_pCosmos->m_bWinFormActived = false;
 		return MA_ACTIVATE;
 	}
@@ -206,11 +206,11 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if ((m_pXobj->m_nViewType != TabGrid && m_pXobj->m_nViewType != Grid))
 		{
-			if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy || g_pCosmos->m_pActiveGrid != m_pXobj)
+			if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy || g_pCosmos->m_pActiveXobj != m_pXobj)
 				::SetFocus(m_hWnd);
 		}
 	}
-	g_pCosmos->m_pActiveGrid = m_pXobj;
+	g_pCosmos->m_pActiveXobj = m_pXobj;
 	g_pCosmos->m_bWinFormActived = false;
 	g_pCosmos->m_pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 
@@ -273,18 +273,18 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		{
 			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
 			{
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", _T("Tangram Designer Helper Window"), WS_OVERLAPPED | WS_CAPTION, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
+				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", _T("Tangram Designer Helper Window"), WS_OVERLAPPED | WS_CAPTION, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
 				g_pCosmos->m_mapValInfo[_T("hostwindow")] = CComVariant((LONGLONG)g_pCosmos->m_hHostWnd);
 			}
-			if (g_pCosmos->m_pDesignGrid && g_pCosmos->m_pDesignGrid != m_pXobj)
+			if (g_pCosmos->m_pDesignXobj && g_pCosmos->m_pDesignXobj != m_pXobj)
 			{
-				CXobjHelper* pWnd = ((CXobjHelper*)g_pCosmos->m_pDesignGrid->m_pHostWnd);
+				CXobjHelper* pWnd = ((CXobjHelper*)g_pCosmos->m_pDesignXobj->m_pHostWnd);
 				if (pWnd && ::IsWindow(pWnd->m_hWnd))
 				{
 					pWnd->Invalidate(true);
 				}
 			}
-			g_pCosmos->m_pDesignGrid = m_pXobj;
+			g_pCosmos->m_pDesignXobj = m_pXobj;
 			Invalidate(true);
 		}
 
@@ -360,12 +360,12 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
 		CBrush br(&bit);
 		pDC->FillRect(&rt, &br);
-		if (bInDesignState && g_pCosmos->m_pDesignGrid == m_pXobj)
+		if (bInDesignState && g_pCosmos->m_pDesignXobj == m_pXobj)
 		{
 			pDC->SetTextColor(RGB(255, 0, 255));
 			CString str = g_pCosmos->GetDesignerInfo(_T("SelectedText"));
 			if (str == _T(""))
-				strText = _T("\n\n  ") + g_pCosmos->m_strGridSelectedText;
+				strText = _T("\n\n  ") + g_pCosmos->m_strXobjSelectedText;
 			else
 				strText = _T("\n\n  ") + str;
 		}
@@ -387,21 +387,21 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 				strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
 			else
 				strInfo = strInfo + _T("\n  ") + str;
-			if (pGalaxy->m_pParentGrid)
+			if (pGalaxy->m_pParentXobj)
 			{
 				CString strTip = _T("");
-				if (pGalaxy->m_pParentGrid->m_nViewType == CLRCtrl)
+				if (pGalaxy->m_pParentXobj->m_nViewType == CLRCtrl)
 				{
-					strTip.Format(_T("Sub Frame for .NET CLRCtrl: %s"), pGalaxy->m_pParentGrid->m_strName);
+					strTip.Format(_T("Sub Frame for .NET CLRCtrl: %s"), pGalaxy->m_pParentXobj->m_strName);
 					strInfo = strInfo + _T("\n  ") + strTip;
-					strTip.Format(_T("CLRCtrl Type: %s"), pGalaxy->m_pParentGrid->m_strObjTypeID);
+					strTip.Format(_T("CLRCtrl Type: %s"), pGalaxy->m_pParentXobj->m_strObjTypeID);
 					strInfo = strInfo + _T("\n  ") + strTip;
 				}
-				else if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentGrid->m_nViewType == ActiveX)
+				else if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentXobj->m_nViewType == ActiveX)
 				{
-					strTip.Format(_T("Sub Frame for ActiveX Control: %s"), pGalaxy->m_pParentGrid->m_strName);
+					strTip.Format(_T("Sub Frame for ActiveX Control: %s"), pGalaxy->m_pParentXobj->m_strName);
 					strInfo = strInfo + _T("\n  ") + strTip;
-					strTip.Format(_T("ActiveX ID: %s"), pGalaxy->m_pParentGrid->m_strObjTypeID);
+					strTip.Format(_T("ActiveX ID: %s"), pGalaxy->m_pParentXobj->m_strObjTypeID);
 					strInfo = strInfo + _T("\n  ") + strTip;
 				}
 			}
@@ -553,11 +553,11 @@ BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
 
 void CXobjHelper::OnDestroy()
 {
-	if (g_pCosmos->m_pDesignGrid == m_pXobj)
+	if (g_pCosmos->m_pDesignXobj == m_pXobj)
 	{
 		if (g_pCosmos->m_pCLRProxy)
-			g_pCosmos->m_pCLRProxy->SelectGrid(NULL);
-		g_pCosmos->m_pDesignGrid = NULL;
+			g_pCosmos->m_pCLRProxy->SelectXobj(NULL);
+		g_pCosmos->m_pDesignXobj = NULL;
 	}
 
 	m_pXobj->Fire_Destroy();
@@ -582,7 +582,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	int nOldPage = m_pXobj->m_nActivePage;
 	m_pXobj->m_nActivePage = (int)wParam;
 	IXobj* pXobj = nullptr;
-	m_pXobj->GetGrid(0, wParam, &pXobj);
+	m_pXobj->GetXobj(0, wParam, &pXobj);
 
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (pXobj)
@@ -932,8 +932,8 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	{
 		RECT rc;
 		::GetClientRect(m_hWnd, &rc);
-		m_pXobj->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
-		m_pXobj->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Cosmos Grid Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pXobj->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		m_pXobj->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+		m_pXobj->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pXobj->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
 		IGalaxy* pGalaxy = nullptr;
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pOldNode->m_hChildHostWnd), CComBSTR(L"Design"), &pGalaxy);
 		((CGalaxy*)pGalaxy)->m_pDoc = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pDoc;
@@ -980,7 +980,7 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		}
 
 		strXml = m_pXobj->m_pXobjShareData->m_pCosmosParse->xml();
-		g_pCosmos->m_pDesignGrid = m_pXobj;
+		g_pCosmos->m_pDesignXobj = m_pXobj;
 		g_pCosmos->m_pHostDesignUINode = m_pXobj->m_pRootObj;
 		if (g_pCosmos->m_pHostDesignUINode)
 		{
@@ -1095,7 +1095,7 @@ LRESULT CBKWnd::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_pXobj)
 	{
-		g_pCosmos->m_pActiveGrid = m_pXobj;
+		g_pCosmos->m_pActiveXobj = m_pXobj;
 		g_pCosmos->m_bWinFormActived = false;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
@@ -1144,7 +1144,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (m_bNoMove)
 		{
 			lpwndpos->flags |= SWP_NOMOVE;
-			CXobjHelper* pGridWnd = (CXobjHelper*)m_pXobj->m_pHostWnd;
+			CXobjHelper* pXobjWnd = (CXobjHelper*)m_pXobj->m_pHostWnd;
 			if (m_pXobj->m_pParentObj->m_nViewType == Grid)
 			{
 				CGridWnd* pWnd = (CGridWnd*)m_pXobj->m_pParentObj->m_pHostWnd;

@@ -41,7 +41,7 @@ namespace Browser
 		CString								m_strAppProxyID;
 
 		CGalaxy*							m_pGalaxy;
-		CXobj*								m_pParentGrid;
+		CXobj*								m_pParentXobj;
 		IUniverseAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
 
@@ -72,7 +72,7 @@ namespace Browser
 
 	private:
 		CString m_strDocXml;
-		IXobj* GetParentGrid() { return (IXobj*)m_pParentGrid; }
+		IXobj* GetParentXobj() { return (IXobj*)m_pParentXobj; }
 		IGalaxy* GetGalaxy() { return (IGalaxy*)m_pGalaxy; }
 		CString FindToken(CString pszContent, CString pszDelimiter, int& nStart);
 		void LoadDocument2Viewport(CString strName, CString strXML);
@@ -101,7 +101,7 @@ namespace Browser
 		STDMETHOD(get_HostWnd)(LONGLONG* Val);
 		STDMETHOD(put_HostWnd)(LONGLONG newVal);
 		STDMETHOD(CreateForm)(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm);
-		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** pRetGrid);
+		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** pRetXobj);
 		STDMETHOD(SendXmlMessage)(IXobj* sender, BSTR bstrXml);
 		CChromeBrowserBase* GetChromeBrowserBase(HWND) override;
 	};

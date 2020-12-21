@@ -18,8 +18,8 @@
 #include "UniverseApp.h"
 #include "Cosmos.h"
 #include "GridWnd.h"
-#include "GridHelper.h"
-#include "grid.h"
+#include "XobjHelper.h"
+#include "Xobj.h"
 #include "Galaxy.h"
 
 CWinForm::CWinForm(void)
@@ -213,12 +213,12 @@ CGalaxy::CGalaxy()
 	m_bDesignerState = true;
 	m_hPWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
-	m_pWorkGrid = nullptr;
+	m_pWorkXobj = nullptr;
 	m_pRootNodes = nullptr;
-	m_pBindingGrid = nullptr;
+	m_pBindingXobj = nullptr;
 	m_pContainerNode = nullptr;
 	m_pGalaxyInfo = nullptr;
-	m_pParentGrid = nullptr;
+	m_pParentXobj = nullptr;
 	m_nGalaxyType = NOGalaxy;
 #ifdef _DEBUG
 	g_pCosmos->m_nTangramFrame++;
@@ -265,22 +265,22 @@ void CGalaxy::HostPosChanged()
 	if (::IsWindow(m_hWnd) == false)
 		return;
 	HWND hwnd = m_hWnd;
-	CXobj* pTopGrid = m_pWorkGrid;
+	CXobj* pTopXobj = m_pWorkXobj;
 	CGalaxy* _pGalaxy = this;
 	if (!_pGalaxy->m_bDesignerState)
-		while (pTopGrid && pTopGrid->m_pRootObj != pTopGrid)
+		while (pTopXobj && pTopXobj->m_pRootObj != pTopXobj)
 		{
-			_pGalaxy = pTopGrid->m_pRootObj->m_pXobjShareData->m_pGalaxy;
+			_pGalaxy = pTopXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy;
 			hwnd = _pGalaxy->m_hWnd;
-			pTopGrid = _pGalaxy->m_pWorkGrid;
+			pTopXobj = _pGalaxy->m_pWorkXobj;
 		}
 	if (::IsWindow(hwnd) == false)
 		return;
 	HWND hPWnd = ::GetParent(m_hWnd);
-	if (::IsWindow(_pGalaxy->m_pWorkGrid->m_pHostWnd->m_hWnd))
+	if (::IsWindow(_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd))
 	{
 		RECT rt1;
-		_pGalaxy->m_pWorkGrid->m_pHostWnd->GetWindowRect(&rt1);
+		_pGalaxy->m_pWorkXobj->m_pHostWnd->GetWindowRect(&rt1);
 
 		::ScreenToClient(hPWnd, (LPPOINT)&rt1);
 		::ScreenToClient(hPWnd, ((LPPOINT)&rt1) + 1);
@@ -308,7 +308,7 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 		int nForm = g_pCosmos->m_pCLRProxy->IsWinForm(hForm);
 		while (nForm >= 1)
 		{
-			m_pWorkGrid->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 			LRESULT lRes = ::SendMessage(hForm, WM_HUBBLE_GETNODE, 0, 0);
 			if (lRes)
 			{
@@ -341,31 +341,31 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 
 CXobj* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CString strFile)
 {
-	m_pWorkGrid = new CComObject<CXobj>;
-	m_pWorkGrid->m_pRootObj = m_pWorkGrid;
+	m_pWorkXobj = new CComObject<CXobj>;
+	m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 	CXobjShareData* pCommonData = new CXobjShareData();
-	m_pWorkGrid->m_pXobjShareData = pCommonData;
+	m_pWorkXobj->m_pXobjShareData = pCommonData;
 	pCommonData->m_pGalaxy = this;
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
 	pCommonData->m_pCosmosParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
-	m_pWorkGrid->m_pHostParse = pParse->GetChild(TGM_GRID);
+	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_GRID);
 
 	CreateGalaxyCluster();
-	m_mapGrid[strKey] = m_pWorkGrid;
+	m_mapXobj[strKey] = m_pWorkXobj;
 
-	m_pWorkGrid->m_strKey = strKey;
-	m_pWorkGrid->Fire_ObserveComplete();
+	m_pWorkXobj->m_strKey = strKey;
+	m_pWorkXobj->Fire_ObserveComplete();
 	if (g_pCosmos->m_pCLRProxy)
 	{
 		CGalaxyCluster* pGalaxyCluster = m_pGalaxyCluster;
 		HWND hForm = pGalaxyCluster->m_hWnd;
 		hForm = GetWinForm(hForm);
 		if (hForm)
-			m_pWorkGrid->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 	}
 
-	return m_pWorkGrid;
+	return m_pWorkXobj;
 }
 
 BOOL CGalaxy::CreateGalaxyCluster()
@@ -378,17 +378,17 @@ BOOL CGalaxy::CreateGalaxyCluster()
 	else
 		hPWnd = ::GetParent(m_hWnd);
 
-	//m_pWorkGrid->m_strName.Trim();
-	//m_pWorkGrid->m_strName.MakeLower();
-	m_pWorkGrid->InitWndGrid();
+	//m_pWorkXobj->m_strName.Trim();
+	//m_pWorkXobj->m_strName.MakeLower();
+	m_pWorkXobj->InitWndXobj();
 	HWND hWnd = NULL;
-	if (m_pWorkGrid->m_pObjClsInfo) {
+	if (m_pWorkXobj->m_pObjClsInfo) {
 		RECT rc;
 		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
-		m_pWorkGrid->m_pRootObj = m_pWorkGrid;
+		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
-		m_Context.m_pNewViewClass = m_pWorkGrid->m_pObjClsInfo;
-		CWnd* pWnd = (CWnd*)m_pWorkGrid->m_pObjClsInfo->CreateObject();
+		m_Context.m_pNewViewClass = m_pWorkXobj->m_pObjClsInfo;
+		CWnd* pWnd = (CWnd*)m_pWorkXobj->m_pObjClsInfo->CreateObject();
 		GetWindowRect(&rc);
 		if (pParentWnd)
 			pParentWnd->ScreenToClient(&rc);
@@ -399,11 +399,11 @@ BOOL CGalaxy::CreateGalaxyCluster()
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOACTIVATE);//|SWP_NOREDRAWSWP_NOZORDER);
 	}
 
-	m_pWorkGrid->m_bCreated = true;
+	m_pWorkXobj->m_bCreated = true;
 	return true;
 }
 
-STDMETHODIMP CGalaxy::get_RootGrids(IXobjCollection** pGridColletion)
+STDMETHODIMP CGalaxy::get_RootXobjs(IXobjCollection** pXobjColletion)
 {
 	if (m_pRootNodes == nullptr) {
 		CComObject<CXobjCollection>::CreateInstance(&m_pRootNodes);
@@ -411,11 +411,11 @@ STDMETHODIMP CGalaxy::get_RootGrids(IXobjCollection** pGridColletion)
 	}
 
 	m_pRootNodes->m_pXobjs->clear();
-	for (auto it : m_mapGrid) {
+	for (auto it : m_mapXobj) {
 		m_pRootNodes->m_pXobjs->push_back(it.second);
 	}
 
-	return m_pRootNodes->QueryInterface(IID_IXobjCollection, (void**)pGridColletion);
+	return m_pRootNodes->QueryInterface(IID_IXobjCollection, (void**)pXobjColletion);
 }
 
 STDMETHODIMP CGalaxy::get_GalaxyData(BSTR bstrKey, VARIANT* pVal)
@@ -433,9 +433,9 @@ STDMETHODIMP CGalaxy::Detach(void)
 	if (::IsWindow(m_hWnd))
 	{
 		m_bDetached = true;
-		::ShowWindow(m_pWorkGrid->m_pHostWnd->m_hWnd, SW_HIDE);
+		::ShowWindow(m_pWorkXobj->m_pHostWnd->m_hWnd, SW_HIDE);
 		RECT rect;
-		m_pWorkGrid->m_pHostWnd->GetWindowRect(&rect);
+		m_pWorkXobj->m_pHostWnd->GetWindowRect(&rect);
 		m_hHostWnd = UnsubclassWindow(true);
 		if (::IsWindow(m_hHostWnd)) {
 			HWND m_hParentWnd = ::GetParent(m_hHostWnd);
@@ -453,7 +453,7 @@ STDMETHODIMP CGalaxy::Attach(void)
 
 	if (!::IsWindow(m_hWnd)) {
 		m_bDetached = false;
-		::ShowWindow(m_pWorkGrid->m_pHostWnd->m_hWnd, SW_SHOW);
+		::ShowWindow(m_pWorkXobj->m_pHostWnd->m_hWnd, SW_SHOW);
 		SubclassWindow(m_hHostWnd);
 	}
 	HostPosChanged();
@@ -467,12 +467,12 @@ STDMETHODIMP CGalaxy::ModifyHost(LONGLONG hHostWnd)
 	{
 		return S_OK;
 	}
-	if (m_pWorkGrid == nullptr)
+	if (m_pWorkXobj == nullptr)
 		return S_FALSE;
 	HWND hParent = (HWND)::GetParent(_hHostWnd);
 	CWindow m_Parent;
 	RECT rc;
-	m_pWorkGrid->m_pHostWnd->GetWindowRect(&rc);
+	m_pWorkXobj->m_pHostWnd->GetWindowRect(&rc);
 	if (::IsWindow(m_hWnd)) {
 		HWND hTangramWnd = m_pGalaxyCluster->m_hWnd;
 		auto it = g_pCosmos->m_mapWindowPage.find(hTangramWnd);
@@ -514,15 +514,15 @@ STDMETHODIMP CGalaxy::ModifyHost(LONGLONG hHostWnd)
 	m_Parent.Attach(hParent);
 	m_Parent.ScreenToClient(&rc);
 	m_Parent.Detach();
-	for (auto it : m_mapGrid)
+	for (auto it : m_mapXobj)
 	{
-		if (it.second != m_pWorkGrid)
+		if (it.second != m_pWorkXobj)
 		{
-			::SetParent(it.second->m_pHostWnd->m_hWnd, m_pWorkGrid->m_pHostWnd->m_hWnd);
+			::SetParent(it.second->m_pHostWnd->m_hWnd, m_pWorkXobj->m_pHostWnd->m_hWnd);
 		}
 	}
-	::SetParent(m_pWorkGrid->m_pHostWnd->m_hWnd, ::GetParent(_hHostWnd));
-	::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+	::SetParent(m_pWorkXobj->m_pHostWnd->m_hWnd, ::GetParent(_hHostWnd));
+	::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 	HostPosChanged();
 	return S_OK;
 }
@@ -536,10 +536,10 @@ STDMETHODIMP CGalaxy::get_HWND(LONGLONG* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxy::get_VisibleGrid(IXobj** pVal)
+STDMETHODIMP CGalaxy::get_VisibleXobj(IXobj** pVal)
 {
-	if (m_pWorkGrid)
-		*pVal = m_pWorkGrid;
+	if (m_pWorkXobj)
+		*pVal = m_pWorkXobj;
 	return S_OK;
 }
 
@@ -551,7 +551,7 @@ STDMETHODIMP CGalaxy::get_GalaxyCluster(IGalaxyCluster** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
+STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
 	if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
 		m_nGalaxyType = GalaxyType::MDIClientGalaxy;
@@ -574,11 +574,11 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 	m_strCurrentKey = m_strCurrentKey.MakeLower();
 	g_pCosmos->m_strCurrentKey = m_strCurrentKey;
 	CString strXml = _T("");
-	auto it = m_mapGrid.find(m_strCurrentKey);
+	auto it = m_mapXobj.find(m_strCurrentKey);
 
-	CXobj* pOldNode = m_pWorkGrid;
-	if (it != m_mapGrid.end())
-		m_pWorkGrid = it->second;
+	CXobj* pOldNode = m_pWorkXobj;
+	if (it != m_mapXobj.end())
+		m_pWorkXobj = it->second;
 	else
 	{
 		bool bAtTemplate = false;
@@ -622,38 +622,38 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 
 		Unlock();
 		m_bObserve = true;
-		m_pWorkGrid = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
-		if (m_pWorkGrid == nullptr)
+		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
+		if (m_pWorkXobj == nullptr)
 			return S_FALSE;
 		if (::GetWindowLong(::GetParent(m_hWnd), GWL_EXSTYLE) & WS_EX_MDICHILD)
 			m_bMDIChild = true;
 	}
-	m_pBindingGrid = m_pWorkGrid->m_pXobjShareData->m_pHostClientView ? m_pWorkGrid->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
+	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
 
 	g_pCosmos->m_strCurrentKey = _T("");
-	*ppRetGrid = (IXobj*)m_pWorkGrid;
+	*ppRetXobj = (IXobj*)m_pWorkXobj;
 	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 	{
-		it.second->OnObserverComplete(m_hHostWnd, strXml, m_pWorkGrid);
+		it.second->OnObserverComplete(m_hHostWnd, strXml, m_pWorkXobj);
 	}
 	if (g_pCosmos->m_pCosmosAppProxy)
-		g_pCosmos->m_pCosmosAppProxy->OnObserverComplete(m_hHostWnd, strXml, m_pWorkGrid);
+		g_pCosmos->m_pCosmosAppProxy->OnObserverComplete(m_hHostWnd, strXml, m_pWorkXobj);
 
-	if (pOldNode && pOldNode != m_pWorkGrid)
+	if (pOldNode && pOldNode != m_pWorkXobj)
 	{
 		RECT  rc;
 		if (::IsWindow(pOldNode->m_pHostWnd->m_hWnd))
 			::GetWindowRect(pOldNode->m_pHostWnd->m_hWnd, &rc);
-		CWnd* pWnd = m_pWorkGrid->m_pHostWnd;
+		CWnd* pWnd = m_pWorkXobj->m_pHostWnd;
 		HWND hParent = ::GetParent(m_hWnd);
 
 		CWnd::FromHandle(hParent)->ScreenToClient(&rc);
-		for (auto it : m_mapGrid)
+		for (auto it : m_mapXobj)
 		{
 			HWND hwnd = it.second->m_pHostWnd->m_hWnd;
-			BOOL bTop = (it.second == m_pWorkGrid);
+			BOOL bTop = (it.second == m_pWorkXobj);
 			it.second->m_bTopObj = bTop;
-			::SetWindowLongPtr(hwnd, GWLP_ID, bTop ? m_pWorkGrid->m_nID : 0);
+			::SetWindowLongPtr(hwnd, GWLP_ID, bTop ? m_pWorkXobj->m_nID : 0);
 			::SetParent(hwnd, bTop ? hParent : pWnd->m_hWnd);
 			if (!bTop)
 			{
@@ -663,10 +663,10 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 
 		::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 
-		if (m_pWorkGrid != nullptr) {
-			if (m_pWorkGrid->m_nViewType != Grid) {
-				if (m_pWorkGrid->m_pHostWnd)
-					m_pWorkGrid->m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
+		if (m_pWorkXobj != nullptr) {
+			if (m_pWorkXobj->m_nViewType != Grid) {
+				if (m_pWorkXobj->m_pHostWnd)
+					m_pWorkXobj->m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 			}
 
 			HRESULT hr = S_OK;
@@ -677,7 +677,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 				avarParams[2].vt = VT_I4;
 				avarParams[1] = strXml.AllocSysString();
 				avarParams[1].vt = VT_BSTR;
-				avarParams[0] = (IXobj*)m_pWorkGrid;
+				avarParams[0] = (IXobj*)m_pWorkXobj;
 				avarParams[0].vt = VT_DISPATCH;
 				DISPPARAMS params = { avarParams, NULL, 3, 0 };
 				for (int iConnection = 0; iConnection < cConnections; iConnection++) {
@@ -698,15 +698,15 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 
 	HostPosChanged();
 	//Add 20200218
-	if (m_pBindingGrid)
+	if (m_pBindingXobj)
 	{
-		CXobj* _pHostNode = m_pBindingGrid;
+		CXobj* _pHostNode = m_pBindingXobj;
 		if (_pHostNode->m_pHostGalaxy)
 		{
 			CGalaxy* _pGalaxy = _pHostNode->m_pHostGalaxy;
 			while (_pGalaxy)
 			{
-				_pHostNode = _pGalaxy->m_pBindingGrid;
+				_pHostNode = _pGalaxy->m_pBindingXobj;
 				if (_pHostNode && _pHostNode->m_pHostGalaxy)
 					_pGalaxy = _pHostNode->m_pHostGalaxy;
 				else
@@ -715,12 +715,12 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 		}
 	}
 	//end Add 20200218
-	if (m_pWorkGrid->m_pHostGalaxy)
+	if (m_pWorkXobj->m_pHostGalaxy)
 	{
 		IXobj* pXobj = nullptr;
-		m_pWorkGrid->m_pHostGalaxy->Observe(CComBSTR(m_pWorkGrid->m_pHostGalaxy->m_strCurrentKey), CComBSTR(""), &pXobj);
+		m_pWorkXobj->m_pHostGalaxy->Observe(CComBSTR(m_pWorkXobj->m_pHostGalaxy->m_strCurrentKey), CComBSTR(""), &pXobj);
 	}
-	for (auto it : m_pWorkGrid->m_mapExtendNode)
+	for (auto it : m_pWorkXobj->m_mapExtendNode)
 	{
 		IXobj* pXobj = nullptr;
 		it.first->Observe(CComBSTR(it.second), CComBSTR(""), &pXobj);
@@ -760,7 +760,7 @@ LRESULT CGalaxy::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		g_pCosmos->m_hActiveWnd = 0;
 		g_pCosmos->m_bWinFormActived = false;
-		g_pCosmos->m_pActiveGrid = nullptr;
+		g_pCosmos->m_pActiveXobj = nullptr;
 		g_pCosmos->m_pGalaxy = nullptr;
 	}
 	//bug fix for winform:
@@ -855,7 +855,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 	WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 
-	if (m_pBindingGrid)
+	if (m_pBindingXobj)
 	{
 		RECT rect = { 0,0,0,0 };
 		HWND hPWnd = ::GetParent(m_hWnd);
@@ -866,15 +866,15 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->cx = rect.right - rect.left;
 			lpwndpos->cy = rect.bottom - rect.top;
 		}
-		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED); //| SWP_NOREDRAW);// ); 
-		CXobj* _pHostNode = m_pBindingGrid;
+		::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED); //| SWP_NOREDRAW);// ); 
+		CXobj* _pHostNode = m_pBindingXobj;
 		if (_pHostNode->m_pHostGalaxy)
 		{
 			CGalaxy* _pGalaxy = _pHostNode->m_pHostGalaxy;
 			while (_pGalaxy)
 			{
-				if (_pGalaxy->m_pBindingGrid)
-					_pHostNode = _pGalaxy->m_pBindingGrid;
+				if (_pGalaxy->m_pBindingXobj)
+					_pHostNode = _pGalaxy->m_pBindingXobj;
 				else
 					break;
 				if (_pHostNode && _pHostNode->m_pHostGalaxy)
@@ -908,7 +908,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			lpwndpos->flags &= ~SWP_HIDEWINDOW;
 			lpwndpos->flags |= SWP_SHOWWINDOW | SWP_NOZORDER;
 			//begin fix bug for .net Control or Window Form
-			CXobj* _pParentNode = m_pBindingGrid->m_pParentObj;
+			CXobj* _pParentNode = m_pBindingXobj->m_pParentObj;
 			if (_pParentNode)
 			{
 				switch (_pParentNode->m_nViewType)
@@ -931,8 +931,8 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			{
 				if (m_pContainerNode->m_nViewType == CLRCtrl)
 				{
-					CXobjHelper* pGridWnd = (CXobjHelper*)m_pContainerNode->m_pHostWnd;
-					pGridWnd->m_bNoMove = true;
+					CXobjHelper* pXobjWnd = (CXobjHelper*)m_pContainerNode->m_pHostWnd;
+					pXobjWnd->m_bNoMove = true;
 				}
 			}
 			//end fix bug for .net Control or Window Form
@@ -945,7 +945,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	}
 	else
 	{
-		::SetWindowPos(m_pWorkGrid->m_pHostWnd->m_hWnd, HWND_TOP, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
+		::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_TOP, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
 		lpwndpos->flags &= ~SWP_SHOWWINDOW;
 		lpwndpos->flags |= SWP_HIDEWINDOW;
 	}
@@ -985,21 +985,21 @@ STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 
 STDMETHODIMP CGalaxy::get_Count(long* pCount)
 {
-	*pCount = (long)m_mapGrid.size();
+	*pCount = (long)m_mapXobj.size();
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxy::get_Grid(VARIANT vIndex, IXobj** ppGrid)
+STDMETHODIMP CGalaxy::get_Xobj(VARIANT vIndex, IXobj** ppXobj)
 {
 	if (vIndex.vt == VT_I4)
 	{
-		long lCount = m_mapGrid.size();
+		long lCount = m_mapXobj.size();
 		int iIndex = vIndex.lVal;
 		if (iIndex < 0 || iIndex >= lCount) return E_INVALIDARG;
 
-		auto it = m_mapGrid.begin();
+		auto it = m_mapXobj.begin();
 		int iPos = 0;
-		while (it != m_mapGrid.end())
+		while (it != m_mapXobj.end())
 		{
 			if (iPos == iIndex) break;
 			iPos++;
@@ -1007,17 +1007,17 @@ STDMETHODIMP CGalaxy::get_Grid(VARIANT vIndex, IXobj** ppGrid)
 		}
 
 		CXobj* pXobj = it->second;
-		*ppGrid = pXobj;
+		*ppXobj = pXobj;
 		return S_OK;
 	}
 
 	if (vIndex.vt == VT_BSTR)
 	{
 		CString strKey = OLE2T(vIndex.bstrVal);
-		auto it = m_mapGrid.find(strKey);
-		if (it != m_mapGrid.end())
+		auto it = m_mapXobj.find(strKey);
+		if (it != m_mapXobj.end())
 		{
-			*ppGrid = it->second;
+			*ppXobj = it->second;
 			return S_OK;
 		}
 		return E_INVALIDARG;
@@ -1037,11 +1037,11 @@ STDMETHODIMP CGalaxy::get__NewEnum(IUnknown** ppVal)
 	if (SUCCEEDED(hr))
 	{
 		pe->AddRef();
-		long nLen = (long)m_mapGrid.size();
+		long nLen = (long)m_mapXobj.size();
 		VARIANT* rgvar = new VARIANT[nLen];
 		ZeroMemory(rgvar, sizeof(VARIANT) * nLen);
 		VARIANT* pItem = rgvar;
-		for (auto it : m_mapGrid)
+		for (auto it : m_mapXobj)
 		{
 			IUnknown* pDisp = nullptr;
 			CXobj* pObj = it.second;

@@ -63,8 +63,8 @@ public:
 	CString							m_strFrameID;
 	CString							m_strNodeName;
 	CGalaxyCluster*					m_pGalaxyCluster;
-	CXobj*							m_pCurGrid;
-	CXobj*							m_pHostGrid;
+	CXobj*							m_pCurXobj;
+	CXobj*							m_pHostXobj;
 	CGalaxy*						m_pGalaxy;
 	map<HWND, CEclipseCtrl*>		m_mapCtrl;
 	CCosmosDoc*						m_pDoc;
@@ -108,12 +108,12 @@ protected:
 	STDMETHOD(get_Galaxy)(IGalaxy** pVal);
 	STDMETHOD(Active)();
 	STDMETHOD(CloseTangramUI)();
-	STDMETHOD(ObserveEx)(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid);
-	STDMETHOD(ObserveInView)(int nIndex, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
+	STDMETHOD(ObserveEx)(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
+	STDMETHOD(ObserveInView)(int nIndex, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
 
 public:
 	STDMETHOD(get_Ctrl)(VARIANT vIndex, IEclipseCtrl **ppCtrl);
-	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
 	void CreatePage(BOOL bSaveToConfigFile);
 };
 
@@ -131,7 +131,7 @@ class ATL_NO_VTABLE CEclipseCtrl :
 public:
 	HWND						m_hEclipseViewWnd;
 	VARIANT						m_varTag;
-	CXobj*						m_pCurGrid;
+	CXobj*						m_pCurXobj;
 	map<CString, CString>		m_mapCosmosInfo;
 	map<CString, HWND>			m_mapCosmosHandle;
 	map<CString, CGalaxy*>		m_mapGalaxy;
@@ -167,8 +167,8 @@ public:
 	END_MSG_MAP()
 
 	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
-	HRESULT Fire_NodeCreated(IXobj * pGridCreated);
-	HRESULT Fire_AddInCreated(IXobj * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
+	HRESULT Fire_NodeCreated(IXobj * pXobjCreated);
+	HRESULT Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
 	HRESULT Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd);
 	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj * pRetRootNode);
 	HRESULT Fire_Destroy();
@@ -190,12 +190,12 @@ public:
 	STDMETHOD(get_WorkBenchWindow)(IWorkBenchWindow** pVal);
 	STDMETHOD(get_TopGalaxy)(IGalaxy** pVal);
 	STDMETHOD(get_TopGalaxyCluster)(IGalaxyCluster** pVal);
-	STDMETHOD(get_ActiveTopGrid)(IXobj** pVal);
+	STDMETHOD(get_ActiveTopXobj)(IXobj** pVal);
 	STDMETHOD(get_AppKeyValue)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
 
-	STDMETHOD(Observe)(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid);
-	STDMETHOD(ObserveEx)(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid);
+	STDMETHOD(Observe)(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
+	STDMETHOD(ObserveEx)(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
 	STDMETHOD(InitCtrl)(BSTR bstrXml);
 
 private:

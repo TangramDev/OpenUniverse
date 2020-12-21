@@ -18,7 +18,7 @@
                     {
                         e.grid.addEventListener("button1", "OnClick", function (e) {
                             alert(e.getStr("currentsubobj") + "xxx测试 was clicked.");
-                            alert(e.grid.parentGrid.getChild(0, 0));
+                            alert(e.grid.parent.getChild(0, 0));
                             alert(1);
                         });
                         e.grid.root.getChild(0, 0).addEventListener("button2", "OnClick", function (e) {

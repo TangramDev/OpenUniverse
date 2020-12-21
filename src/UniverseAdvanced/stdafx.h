@@ -133,7 +133,7 @@ class CCommonCtrl;
 class CTangramHtmlTreeWnd;
 class CAFXHelperWnd;
 
-typedef vector<CXobj*> CGridVector;
+typedef vector<CXobj*> CXobjVector;
 
 #include "vbe6ext.h"
 #include <afxcview.h>

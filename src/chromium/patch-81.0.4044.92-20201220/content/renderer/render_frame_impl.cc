@@ -6984,13 +6984,13 @@ void RenderFrameImpl::OnCosmosRendererIPCMsg(
   else {
     __int64 nHandle = 0;
 
-    auto it = mapint64.find(L"gridhandle");
+    auto it = mapint64.find(L"xobjhandle");
     if (it != mapint64.end())
       nHandle = it->second;
     if (nHandle) {
-      auto itGrid = pCosmos->m_mapCosmosNode.find(nHandle);
-      if (itGrid != pCosmos->m_mapCosmosNode.end())
-        var = itGrid->value.Get();
+      auto itXobj = pCosmos->m_mapCosmosNode.find(nHandle);
+      if (itXobj != pCosmos->m_mapCosmosNode.end())
+        var = itXobj->value.Get();
       else {
         auto it2 = mapString.find(L"name@page");
         if (it2 != mapString.end()) {
@@ -7094,7 +7094,7 @@ void RenderFrameImpl::OnCosmosRendererIPCMsg(
       }
       return;
     }
-  } else if (strID == L"Tangram_WndGrid_Created") {
+  } else if (strID == L"Tangram_WndXobj_Created") {
     pCosmos->createCosmosNode(var);
   } else if (strID == L"MdiWinForm_ActiveMdiChild") {
     pCosmos->MdiChildActive(var);
@@ -7105,7 +7105,7 @@ void RenderFrameImpl::OnCosmosRendererIPCMsg(
   } else if (strID == L"COSMOS_OBJECT_CREATED") {
     pCosmos->CosmosObjCreated(var);
   } else if (strID == L"OPEN_XML_SPLITTER") {
-    auto itnode = mapint64.find(L"gridhandle");
+    auto itnode = mapint64.find(L"xobjhandle");
     auto itNode = pCosmos->m_mapCosmosNode.find(itnode->second);
     if (itNode != pCosmos->m_mapCosmosNode.end()) {
       auto itreturnnode = mapint64.find(L"openxmlreturnhandle");

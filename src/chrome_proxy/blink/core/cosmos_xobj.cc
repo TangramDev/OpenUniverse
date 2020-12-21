@@ -120,7 +120,7 @@ namespace blink {
 
 	CosmosNode* CosmosXobj::grid()
 	{
-		__int64 nHandle = getInt64(L"gridhandle");
+		__int64 nHandle = getInt64(L"xobjhandle");
 		if (nHandle)
 			return (CosmosNode*)this;
 		return nullptr;
@@ -128,7 +128,7 @@ namespace blink {
 
 	CosmosGalaxy* CosmosXobj::galaxy()
 	{
-		__int64 nHandle = getInt64(L"gridhandle");
+		__int64 nHandle = getInt64(L"xobjhandle");
 		if (nHandle)
 		{
 			return ((CosmosNode*)this)->parentGalaxy();
@@ -426,7 +426,7 @@ namespace blink {
 			if (msg == nullptr)
 				msg = this;
 			msg->setStr(L"senderid", id_);
-			__int64 nHandle = getInt64(L"gridhandle");
+			__int64 nHandle = getInt64(L"xobjhandle");
 			if(nHandle==0)
 				nHandle = getInt64(L"formhandle");
 			msg->setInt64(L"sender", nHandle);
@@ -457,9 +457,9 @@ namespace blink {
 
 	void CosmosXobj::ProcessNodeMessage(const String& msgID)
 	{
-		CosmosNode* thisGrid = grid();
+		CosmosNode* thisXobj = grid();
 		wstring strHandles = L"";
-		if (thisGrid && messageElem_ && msgID.IsNull() == false && msgID != "")
+		if (thisXobj && messageElem_ && msgID.IsNull() == false && msgID != "")
 		{
 			wstring _strID = WebString(msgID).Utf16();
 			CosmosNode* xobjfortarget = nullptr;
@@ -507,7 +507,7 @@ namespace blink {
 						target = elem->getAttribute("target");
 						if (target.IsNull() || target == "")
 						{
-							xobjfortarget = thisGrid;
+							xobjfortarget = thisXobj;
 						}
 						else {
 							AtomicString galaxy = elem->getAttribute("galaxy");
@@ -519,7 +519,7 @@ namespace blink {
 
 							xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
 							if (xobjfortarget == nullptr) {
-								CosmosWinform* form = thisGrid->parentForm();
+								CosmosWinform* form = thisXobj->parentForm();
 								if (form)
 								{
 									xobjfortarget = form->getXobj(galaxy, cluster, target);
@@ -571,9 +571,9 @@ namespace blink {
 								CosmosNode* xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
 								if (xobjfortarget == nullptr)
 								{
-									CosmosNode* thisGrid = grid();
-									if (thisGrid && thisGrid->m_pParentForm)
-										xobjfortarget = thisGrid->m_pParentForm->getXobj(galaxy, cluster, target);
+									CosmosNode* thisXobj = grid();
+									if (thisXobj && thisXobj->m_pParentForm)
+										xobjfortarget = thisXobj->m_pParentForm->getXobj(galaxy, cluster, target);
 									else
 									{
 										CosmosWinform* form_ = form();
@@ -607,7 +607,7 @@ namespace blink {
 		//                if (!!xobjfortarget) {
 		//                    xobjfortarget.workElement = elem;
 		//                    xobjfortarget.msgID = e.id + "_OnClick";
-		//                    xobjfortarget.sendMessageToGrid(xobjfortarget);
+		//                    xobjfortarget.sendMessageToXobj(xobjfortarget);
 		//                }
 		//            }
 		//        }

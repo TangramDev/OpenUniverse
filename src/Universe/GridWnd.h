@@ -25,7 +25,7 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-	CXobj* m_pHostGrid;
+	CXobj* m_pHostXobj;
 	bool bInited;
 	int m_nHostWidth, m_nHostHeight;
 	int m_Vmin,m_Vmax,m_Hmin,m_Hmax;

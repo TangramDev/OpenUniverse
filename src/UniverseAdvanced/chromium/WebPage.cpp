@@ -22,10 +22,10 @@
 
 #include "../stdafx.h"
 #include "../UniverseApp.h"
-#include "../Grid.h"
+#include "../Xobj.h"
 #include "../Wormhole.h"
 #include "../Galaxy.h"
-#include "../GridHelper.h"
+#include "../XobjHelper.h"
 #include "../GridWnd.h"
 #include "../Markup.h" 
 #include "WebPage.h"
@@ -43,9 +43,9 @@ namespace Browser {
 		m_strCurKey = _T("");
 		m_strCurXml = _T("");
 		m_strDocXml = _T("");
-		m_pParentGrid = nullptr;
+		m_pParentXobj = nullptr;
 		m_strAppProxyID = _T("");
-		m_pBindGrid = nullptr;
+		m_pBindXobj = nullptr;
 		m_pGalaxyCluster = nullptr;
 		m_pGalaxy = nullptr;
 		m_hWebHostWnd = m_hExtendWnd = m_hChildWnd = NULL;
@@ -137,8 +137,8 @@ namespace Browser {
 					}
 					pSession->InsertString(_T("gridxml"), pXobj->m_pHostParse->xml());
 					pSession->InsertString(_T("name@page"), pXobj->m_strName);
-					pSession->Insertint64(_T("gridhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("gridobj"), (__int64)(IXobj*)pXobj);
+					pSession->Insertint64(_T("xobjhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("xobj"), (__int64)(IXobj*)pXobj);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 					pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
 					pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
@@ -179,7 +179,7 @@ namespace Browser {
 					}
 					if (pXobj->m_pParentObj)
 					{
-						pSession->Insertint64(_T("parentgridhandle"), (__int64)pXobj->m_pParentObj->m_pHostWnd->m_hWnd);
+						pSession->Insertint64(_T("parenthandle"), (__int64)pXobj->m_pParentObj->m_pHostWnd->m_hWnd);
 					}
 
 					CWinForm* pMDIPForm = nullptr;
@@ -217,22 +217,22 @@ namespace Browser {
 							if (pGalaxy)
 							{
 								IXobj* _pXobj = nullptr;
-								pGalaxy->get_VisibleGrid(&_pXobj);
+								pGalaxy->get_VisibleXobj(&_pXobj);
 								__int64 nHandle = 0;
 								if (_pXobj)
 								{
 									_pXobj->get_Handle(&nHandle);
-									pSession->Insertint64(_T("BindMdiGridHandle"), nHandle);
+									pSession->Insertint64(_T("BindMdiXobjHandle"), nHandle);
 									if (pXobj->m_pParentWinFormWnd)
 									{
 										pXobj->m_pParentWinFormWnd->m_pBindMDIXobj = (CXobj*)_pXobj;
 									}
 								}
-								if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid&& pXobj->m_pParentWinFormWnd)
+								if (m_pGalaxy&&m_pGalaxy->m_pWorkXobj&& pXobj->m_pParentWinFormWnd)
 								{
 									CString strKey = pXobj->m_pParentWinFormWnd->m_strKey;
-									auto it = m_pGalaxy->m_mapGrid.find(strKey);// 
-									if (it != m_pGalaxy->m_mapGrid.end())
+									auto it = m_pGalaxy->m_mapXobj.find(strKey);// 
+									if (it != m_pGalaxy->m_mapXobj.end())
 									{
 										it->second->get_Handle(&nHandle);
 										if(nHandle)
@@ -251,7 +251,7 @@ namespace Browser {
 						pXobj->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
 						if (g_pCosmos->m_pCLRProxy)
 						{
-							g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pXobj, true);
+							g_pCosmos->m_pCLRProxy->ConnectXobjToWebPage(pXobj, true);
 						}
 					}
 					m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
@@ -261,12 +261,12 @@ namespace Browser {
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy&&m_pGalaxy->m_pWorkGrid)
+			if (m_pGalaxy&&m_pGalaxy->m_pWorkXobj)
 			{
-				if (m_pGalaxy->m_pWorkGrid->m_pCosmosCloudSession)
+				if (m_pGalaxy->m_pWorkXobj->m_pCosmosCloudSession)
 				{
-					m_pGalaxy->m_pWorkGrid->m_pCosmosCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
-					m_pGalaxy->m_pWorkGrid->m_pCosmosCloudSession->SendMessage();
+					m_pGalaxy->m_pWorkXobj->m_pCosmosCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
+					m_pGalaxy->m_pWorkXobj->m_pCosmosCloudSession->SendMessage();
 				}
 			}
 		}
@@ -760,9 +760,9 @@ namespace Browser {
 				{
 					m_strCurKey = strName;
 					m_hWebHostWnd = NULL;
-					if (m_pGalaxy->m_pBindingGrid)
+					if (m_pGalaxy->m_pBindingXobj)
 					{
-						m_hWebHostWnd = m_pGalaxy->m_pBindingGrid->m_pHostWnd->m_hWnd;
+						m_hWebHostWnd = m_pGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 					}
 				}
 			}
@@ -867,7 +867,7 @@ namespace Browser {
 		}
 		else if (strId.CompareNoCase(_T("TO_PARENTNODE")) == 0)
 		{
-			if (m_pParentGrid == nullptr)
+			if (m_pParentXobj == nullptr)
 			{
 				HWND hWnd = ::GetParent(::GetParent(m_hWnd));
 				if (::IsWindow(hWnd))
@@ -875,23 +875,23 @@ namespace Browser {
 					LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 					HWND _hWnd = (HWND)hWnd;
 					if (lRes)
-						m_pParentGrid = (CXobj*)lRes;
+						m_pParentXobj = (CXobj*)lRes;
 				}
 				else
 				{
-					m_pParentGrid = m_pGalaxy->m_pBindingGrid->m_pParentObj;
-					if (m_pParentGrid && m_pParentGrid->m_nViewType == TabGrid)
+					m_pParentXobj = m_pGalaxy->m_pBindingXobj->m_pParentObj;
+					if (m_pParentXobj && m_pParentXobj->m_nViewType== TabGrid)
 					{
 						//IXobj* _pXobj = nullptr;
-						//m_pGalaxy->m_pBindingGrid->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pXobj);
+						//m_pGalaxy->m_pBindingXobj->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pXobj);
 						return;
 					}
 				}
 			}
-			if (m_pParentGrid)
+			if (m_pParentXobj)
 			{
 				IXobj* _pXobj = nullptr;
-				m_pParentGrid->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pXobj);
+				m_pParentXobj->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pXobj);
 			}
 			return;
 		}
@@ -900,7 +900,7 @@ namespace Browser {
 			HWND hWnd = ::GetParent(::GetParent(m_hWnd));
 			if (::IsWindow(hWnd))
 			{
-				if (m_pBindGrid == nullptr)
+				if (m_pBindXobj == nullptr)
 				{
 					CXobj* pXobj = nullptr;
 					LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
@@ -917,18 +917,18 @@ namespace Browser {
 							CComPtr<IXobjCollection> pCosmosNodeCollection;
 							IXobj* _pXobj = nullptr;
 							long nCount = 0;
-							pXobj->m_pRootObj->GetGrids(bstrName, &_pXobj, &pCosmosNodeCollection, &nCount);
+							pXobj->m_pRootObj->GetXobjs(bstrName, &_pXobj, &pCosmosNodeCollection, &nCount);
 							if (_pXobj)
 							{
-								m_pBindGrid = (CXobj*)_pXobj;
+								m_pBindXobj = (CXobj*)_pXobj;
 							}
 						}
 					}
 				}
-				if (m_pBindGrid)
+				if (m_pBindXobj)
 				{
 					IXobj* _pXobj = nullptr;
-					m_pBindGrid->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pXobj);
+					m_pBindXobj->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pXobj);
 				}
 			}
 			return;
@@ -942,7 +942,7 @@ namespace Browser {
 				if (m_pBindWinForm)
 				{
 					//IXobj* _pXobj = nullptr;
-					//m_pBindGrid->Observe(CComBSTR(strMsgId), CComBSTR(strParam1), &_pXobj);
+					//m_pBindXobj->Observe(CComBSTR(strMsgId), CComBSTR(strParam1), &_pXobj);
 				}
 			}
 		}
@@ -1394,7 +1394,7 @@ namespace Browser {
 	void CWebPage::OnCloudMsgReceived(CSession* pSession)
 	{
 		CString strMsgID = pSession->GetString(L"msgID");
-		IXobj* pXobj = (IXobj*)pSession->Getint64(_T("gridobj"));
+		IXobj* pXobj = (IXobj*)pSession->Getint64(_T("xobj"));
 		if (pXobj)
 		{
 			if (((CXobj*)pXobj)->m_pCosmosCloudSession == nullptr)
@@ -1475,7 +1475,7 @@ namespace Browser {
 				{
 					if (nPos == 200)
 					{
-						HWND hWnd = ::CreateWindow(L"Cosmos Grid Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pCosmos->m_hChildHostWnd, 0, AfxGetInstanceHandle(), NULL);
+						HWND hWnd = ::CreateWindow(L"Cosmos Xobj Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pCosmos->m_hChildHostWnd, 0, AfxGetInstanceHandle(), NULL);
 						g_pCosmos->m_hTempBrowserWnd = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
 						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 200, 200, SWP_NOACTIVATE);
 					}
@@ -1499,7 +1499,7 @@ namespace Browser {
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
 			//IXobj* pXobj = nullptr;
-			HWND hWnd = (HWND)pSession->Getint64(_T("gridhandle"));
+			HWND hWnd = (HWND)pSession->Getint64(_T("xobjhandle"));
 			CXobj* pParent = (CXobj*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
@@ -1521,7 +1521,7 @@ namespace Browser {
 			int nCol = pSession->GetLong(_T("opencol"));
 			int nRow = pSession->GetLong(_T("openrow"));
 			IXobj* pSplitterNode = nullptr;
-			HWND hWnd = (HWND)pSession->Getint64(_T("gridhandle"));
+			HWND hWnd = (HWND)pSession->Getint64(_T("xobjhandle"));
 			CXobj* pParent = (CXobj*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
@@ -1545,7 +1545,7 @@ namespace Browser {
 		else if (strMsgID == _T("SET_REFGRIDS_IPC_MSG"))
 		{
 			CString strXml = pSession->GetString(_T("RefInfo"));
-			((CXobj*)pXobj)->m_strXmlRefGridInfo = strXml;
+			((CXobj*)pXobj)->m_strXmlRefXobjInfo = strXml;
 		}
 	}
 
@@ -1563,7 +1563,7 @@ namespace Browser {
 		return S_OK;
 	}
 
-	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** pRetGrid)
+	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** pRetXobj)
 	{
 		if (m_pGalaxy == nullptr) {
 			CGalaxyCluster* pGalaxyCluster = nullptr;
@@ -1595,14 +1595,14 @@ namespace Browser {
 		}
 		if (m_pGalaxy)
 		{
-			m_pGalaxy->Observe(bstrKey, bstrXml, pRetGrid);
-			if (*pRetGrid)
+			m_pGalaxy->Observe(bstrKey, bstrXml, pRetXobj);
+			if (*pRetXobj)
 			{
 				m_strCurKey = OLE2T(bstrKey);
 				m_hWebHostWnd = NULL;
-				if (m_pGalaxy->m_pBindingGrid)
+				if (m_pGalaxy->m_pBindingXobj)
 				{
-					m_hWebHostWnd = m_pGalaxy->m_pBindingGrid->m_pHostWnd->m_hWnd;
+					m_hWebHostWnd = m_pGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 				}
 			}
 		}
@@ -1640,8 +1640,8 @@ namespace Browser {
 						for (int i = 0; i < nCount; i++)
 						{
 							CString strName = pChild->GetChild(i)->name();
-							auto it = pXobj->m_pRootObj->m_mapChildGrid.find(strName);
-							if (it != pXobj->m_pRootObj->m_mapChildGrid.end())
+							auto it = pXobj->m_pRootObj->m_mapChildXobj.find(strName);
+							if (it != pXobj->m_pRootObj->m_mapChildXobj.end())
 							{
 								CXobj* pTarget = it->second;
 								if (pTarget)
@@ -1661,8 +1661,8 @@ namespace Browser {
 											pSession->InsertLong(_T("col"), pXobj->m_nCol);
 											pSession->InsertString(_T("objtype"), pXobj->m_strObjTypeID);
 											pSession->InsertString(_T("name@page"), pXobj->m_strName);
-											pSession->Insertint64(_T("gridhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
-											pSession->Insertint64(_T("gridobj"), (__int64)(IXobj*)pXobj);
+											pSession->Insertint64(_T("xobjhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
+											pSession->Insertint64(_T("xobj"), (__int64)(IXobj*)pXobj);
 											pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 											pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
 											pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
@@ -1701,7 +1701,7 @@ namespace Browser {
 											}
 											if (pXobj->m_pParentObj)
 											{
-												pSession->Insertint64(_T("parentgridhandle"), (__int64)pXobj->m_pParentObj->m_pHostWnd->m_hWnd);
+												pSession->Insertint64(_T("parenthandle"), (__int64)pXobj->m_pParentObj->m_pHostWnd->m_hWnd);
 											}
 											if (pXobj->m_pParentWinFormWnd)
 											{
@@ -1712,7 +1712,7 @@ namespace Browser {
 												pXobj->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
 												if (g_pCosmos->m_pCLRProxy)
 												{
-													g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pXobj, true);
+													g_pCosmos->m_pCLRProxy->ConnectXobjToWebPage(pXobj, true);
 												}
 											}
 											pXobj->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());

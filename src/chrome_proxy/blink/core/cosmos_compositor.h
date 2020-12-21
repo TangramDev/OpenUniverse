@@ -63,7 +63,7 @@ class CORE_EXPORT CosmosCompositor final : public EventTargetWithInlineData,
 private:
   String id_;
   String name_;
-  String m_strGridXml;
+  String m_strXobjXml;
 };
 
 }  // namespace blink

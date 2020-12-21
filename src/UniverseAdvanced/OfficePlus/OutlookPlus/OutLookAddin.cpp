@@ -21,7 +21,7 @@
 #include "../../stdafx.h"
 #include "../../UniverseApp.h"
 #include "../../Galaxy.h"
-#include "../../Grid.h"
+#include "../../Xobj.h"
 #include "universe.h"
 #include "fm20.h"
 #include "outlctl.h"
@@ -1603,8 +1603,8 @@ namespace OfficePlus
 					{
 						if (m_pInspectorContainerWnd->m_pGalaxy)
 						{
-							HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-							HWND hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL);
+							HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+							HWND hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL);
 							m_pInspectorContainerWnd->m_pGalaxy->ModifyHost((long)hChildWnd);
 							::DestroyWindow(hwnd);
 							m_pInspectorContainerWnd->m_pGalaxy = nullptr;
@@ -2261,8 +2261,8 @@ namespace OfficePlus
 				COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 				if (m_pTaskPaneGalaxyCluster)
 				{
-					HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-					HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
+					HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+					HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
 					if (::IsWindow(m_hWnd))
 					{
 						m_pTaskPaneGalaxy->ModifyHost((long)_hChildWnd);
@@ -2382,9 +2382,9 @@ namespace OfficePlus
 								CString strCap = _T("");
 								if (pParse)
 								{
-									CTangramXmlParse* pGridParse = m_Parse.FindItem(TGM_GRID);
-									if(pGridParse)
-										strCap = pGridParse->attr(_T("caption"), _T(""));
+									CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_GRID);
+									if(pXobjParse)
+										strCap = pXobjParse->attr(_T("caption"), _T(""));
 								}
 								if (strCap == _T(""))
 									strCap = _T("Start");
@@ -2674,8 +2674,8 @@ namespace OfficePlus
 						{
 							strKeys += it.first;
 							strKeys += _T(",");
-							CXobj* pXobj = pGalaxy->m_pWorkGrid;
-							pAddin->UpdateGrid(pXobj);
+							CXobj* pXobj = pGalaxy->m_pWorkXobj;
+							pAddin->UpdateXobj(pXobj);
 							strPageData += pXobj->m_pXobjShareData->m_pCosmosParse->xml();
 						}
 					}
@@ -2936,7 +2936,7 @@ namespace OfficePlus
 					CGalaxy* pGalaxy = (CGalaxy*)m_pGalaxy;
 					CComBSTR bstrXml(L"");
 					COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
-					pAddin->UpdateGrid(pGalaxy->m_pWorkGrid);
+					pAddin->UpdateXobj(pGalaxy->m_pWorkXobj);
 					pGalaxy->GetXml(_T(""), &bstrXml);
 					CString strXml = g_pCosmos->GetXmlData(_T("Tangram"), OLE2T(bstrXml));
 					pAddin->WriteFolderPropertyToStore(pFolder, _T("Tangram"), _T("TangramProperties"), strXml);
@@ -2959,8 +2959,8 @@ namespace OfficePlus
 		{
 			if (m_pGalaxy)
 			{
-				HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-				m_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Grid Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
+				HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+				m_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
 				::DestroyWindow(hwnd);
 				m_pGalaxy = nullptr;
 				m_pGalaxyCluster = nullptr;

@@ -22,11 +22,11 @@
 #include "cosmos_xobj.h"
 
 #define IPC_CLR_CONTROL_CREARED							20200220
-#define IPC_CLR_CONTROL_CREARED_ID						_T("Tangram_CLR_Control_Created")
+#define IPC_CLR_CONTROL_CREARED_ID						_T("Cosmos_CLR_Control_Created")
 #define IPC_NODE_CREARED								20200221
-#define IPC_NODE_CREARED_ID								_T("Tangram_WndGrid_Created")
+#define IPC_NODE_CREARED_ID								_T("Cosmos_WndXobj_Created")
 #define IPC_NODE_ONMOUSEACTIVATE						20200222
-#define IPC_NODE_ONMOUSEACTIVATE_ID						_T("Tangram_WndGrid_OnMouseActivate")
+#define IPC_NODE_ONMOUSEACTIVATE_ID						_T("Cosmos_WndXobj_OnMouseActivate")
 #define IPC_MDIWINFORM_ACTIVEMDICHILD					20200224
 #define IPC_MDIWINFORM_ACTIVEMDICHILD_ID				_T("MdiWinForm_ActiveMdiChild")
 
@@ -35,7 +35,7 @@
 #define IPC_HUBBLE_MSG_FIRE_EVENT						(IPC_HUBBLE_MSG_BASE + 2)
 #define IPC_HUBBLE_MSG_WINFORM_CREATED					(IPC_HUBBLE_MSG_BASE + 3)
 #define IPC_HUBBLE_MSG_WINFORM_ONCLOSE					(IPC_HUBBLE_MSG_BASE + 4)
-#define IPC_HUBBLE_MSG_Tangram_WndGrid_Created			(IPC_HUBBLE_MSG_BASE + 5)
+#define IPC_HUBBLE_MSG_Tangram_WndXobj_Created			(IPC_HUBBLE_MSG_BASE + 5)
 #define IPC_HUBBLE_MSG_BIND_NATIVEOBJ_IPC_MSG			(IPC_HUBBLE_MSG_BASE + 6)
 #define IPC_HUBBLE_MSG_MdiWinForm_ActiveMdiChild		(IPC_HUBBLE_MSG_BASE + 7)
 #define IPC_HUBBLE_MSG_MdiWinForm_Ready					(IPC_HUBBLE_MSG_BASE + 8)

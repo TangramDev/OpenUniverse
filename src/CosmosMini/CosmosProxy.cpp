@@ -258,7 +258,7 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 							name = strType;
 						BSTR strName = STRING2BSTR(name->ToLower());
 						GalaxyInfo* pInfo = new GalaxyInfo;
-						pInfo->m_strGridXml = _T("");
+						pInfo->m_strXobjXml = _T("");
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 						pInfo->m_pDisp = nullptr;
 						pInfo->m_pParentDisp = nullptr;
@@ -303,7 +303,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
 	
-	DOMPlus::Xobj^ pXobj = DOMPlus::Cosmos::GetGridFromControl(m_pCurrentForm);
+	DOMPlus::Xobj^ pXobj = DOMPlus::Cosmos::GetXobjFromControl(m_pCurrentForm);
 	if (pXobj)
 	{
 		Galaxy^ pGalaxy = pXobj->Galaxy;
@@ -469,7 +469,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 									{
 										GalaxyInfo* pInfo = new GalaxyInfo;
 										pInfo->m_pDisp = nullptr;
-										pInfo->m_strGridXml = pChildParse2->xml();
+										pInfo->m_strXobjXml = pChildParse2->xml();
 										pInfo->m_pParentDisp = nullptr;
 										pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 										m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
@@ -482,7 +482,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 								{
 									GalaxyInfo* pInfo = new GalaxyInfo;
 									pInfo->m_pDisp = nullptr;
-									pInfo->m_strGridXml = _T("");
+									pInfo->m_strXobjXml = _T("");
 									pInfo->m_pParentDisp = nullptr;
 									pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 									m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
@@ -541,7 +541,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 						name = strType;
 					BSTR strName = STRING2BSTR(name->ToLower());//OK!
 					GalaxyInfo* pInfo = new GalaxyInfo;
-					pInfo->m_strGridXml = _T("");
+					pInfo->m_strXobjXml = _T("");
 					pInfo->m_pDisp = nullptr;
 					pInfo->m_pParentDisp = nullptr;
 					pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
@@ -558,7 +558,7 @@ void CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangram
 	}
 }
 
-void CCosmosProxy::InitGrid(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
+void CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
 {
 	if (::IsChild(theApp.m_pCosmosImpl->m_hHostWnd, (HWND)pCtrl->Handle.ToInt64()))
 		return ;
@@ -612,7 +612,7 @@ void CCosmosProxy::InitGrid(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangramX
 							pInfo->m_pParentDisp = _pXobj;
 							pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 							m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
-							pInfo->m_strGridXml = pChildParse2->xml();
+							pInfo->m_strXobjXml = pChildParse2->xml();
 							pInfo->m_strCtrlName = _strName;
 							pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
 							IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
@@ -662,7 +662,7 @@ void CCosmosProxy::InitGrid(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangramX
 						pInfo->m_pParentDisp = _pXobj;
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
 						m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
-						pInfo->m_strGridXml = _T("");
+						pInfo->m_strXobjXml = _T("");
 						pInfo->m_strCtrlName = pChild->Name->ToLower();
 						pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
 						IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster, pInfo);
@@ -687,7 +687,7 @@ void CCosmosProxy::InitGrid(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangramX
 					::SysFreeString(strName);
 				}
 			}
-			InitGrid(_pXobj, pChild, bSave, pParse);
+			InitXobj(_pXobj, pChild, bSave, pParse);
 		}
 	}
 }
@@ -1026,7 +1026,7 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 	return nullptr;
 }
 //
-//void CCosmosProxy::SelectGrid(IXobj* pXobj)
+//void CCosmosProxy::SelectXobj(IXobj* pXobj)
 //{
 //}
 
@@ -1058,13 +1058,13 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 			pHostNode->get_Handle(&h);
 			if (h)
 				::SendMessage((HWND)h, WM_COSMOSMSG, 0, 19920612);
-			IXobj* pRootGrid = NULL;
-			pHostNode->get_RootGrid(&pRootGrid);
+			IXobj* pRootXobj = NULL;
+			pHostNode->get_RootXobj(&pRootXobj);
 			CComBSTR bstrName(L"");
 			pHostNode->get_Name(&bstrName);
 			CString strName = OLE2T(bstrName);
 			HWND hWnd = (HWND)pObj->Handle.ToInt64();
-			theApp.m_pCosmosImpl->m_mapGrid[hWnd] = pHostNode;
+			theApp.m_pCosmosImpl->m_mapXobj[hWnd] = pHostNode;
 			IDispatch* pDisp = (IDispatch*)(Marshal::GetIUnknownForObject(pObj).ToInt64());
 			_pXobj->m_pHostObj = pObj;
 
@@ -1089,7 +1089,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 				CString strXml = OLE2T(bstrXml);
 				CTangramXmlParse m_Parse;
 				if (strXml != _T("") && m_Parse.LoadXml(strXml))
-					InitGrid(pHostNode, pObj, true, &m_Parse);
+					InitXobj(pHostNode, pObj, true, &m_Parse);
 
 				::SysFreeString(bstrXml);
 			}
@@ -1314,7 +1314,7 @@ void CCosmosProxy::SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool b
 	}
 }
 
-void CCosmosProxy::ConnectGridToWebPage(IXobj* pXobj, bool bAdd)
+void CCosmosProxy::ConnectXobjToWebPage(IXobj* pXobj, bool bAdd)
 {
 }
 
@@ -1455,7 +1455,7 @@ void CCosmosXobjEvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 		m_pXobjCLREvent->OnDocumentComplete(pDocdisp, bstrUrl);
 }
 
-void CCosmosXobjEvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+void CCosmosXobjEvent::OnXobjAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 }
 
@@ -1604,13 +1604,13 @@ void CCosmos::OnCosmosClose()
 	AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
 }
 
-void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootGrid)
+void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootXobj)
 {
-	DOMPlus::Xobj^ _pRootNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pRootGrid);
+	DOMPlus::Xobj^ _pRootNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pRootXobj);
 	IntPtr nHandle = (IntPtr)hWnd;
 	DOMPlus::Cosmos::GetCosmos()->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
-	_pRootNode->Fire_RootGridCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
+	_pRootNode->Fire_RootXobjCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
 }
 
 void CCosmosProxy::OnApplicationExit(System::Object^ sender, System::EventArgs^ e)

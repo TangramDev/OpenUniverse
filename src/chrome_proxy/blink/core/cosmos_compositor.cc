@@ -29,7 +29,7 @@ CosmosCompositor* CosmosCompositor::Create(LocalFrame* frame, const String& strN
 
 CosmosCompositor::CosmosCompositor(LocalFrame* frame, const String& strNodeXml) : DOMWindowClient(frame)
 {
-	m_strGridXml = strNodeXml;
+	m_strXobjXml = strNodeXml;
 }
 
 void CosmosCompositor::Trace(blink::Visitor* visitor) {

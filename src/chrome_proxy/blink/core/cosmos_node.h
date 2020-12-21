@@ -52,7 +52,7 @@ class CORE_EXPORT CosmosNode final :
   int64_t handle();
 
   CosmosNode* root();
-  CosmosNode* parentGrid();
+  CosmosNode* parent();
   CosmosGalaxy* parentGalaxy();
   CosmosWinform* parentForm();
 
@@ -62,8 +62,8 @@ class CORE_EXPORT CosmosNode final :
 
   // Message method
   void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
-  void sendMessageToGrid(CosmosXobj* msg);
-  void sendMessageToGrid(CosmosNode* node);
+  void sendMessageToXobj(CosmosXobj* msg);
+  void sendMessageToXobj(CosmosNode* node);
   void ShowWebContent(const String& strParentDivName, const String& strDivName);
 
   //Control Bind API:
@@ -98,7 +98,7 @@ class CORE_EXPORT CosmosNode final :
   mutable Member<CosmosWinform> m_pParentForm;
 
   map<int, CosmosNode*> m_mapChildNode;
-  map<wstring, CosmosNode*> m_mapGrid;
+  map<wstring, CosmosNode*> m_mapXobj;
   map<wstring, CosmosNode*> m_mapChildNode2;
 
 private:

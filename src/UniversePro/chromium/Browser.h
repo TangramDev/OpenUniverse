@@ -42,15 +42,15 @@ namespace Browser {
 		HWND		m_hDrawWnd;
 		HWND		m_hOldTab;
 		CString		m_strCurKey;
-		CXobj*		m_pParentGrid;
+		CXobj*		m_pParentXobj;
 		CWebPage*	m_pVisibleWebWnd;
-		IXobj*		m_pRemoteGrid;
+		IXobj*		m_pRemoteXobj;
 		LRESULT		BrowserLayout();
 
 		map<HWND, CWebPage*> m_mapNorifyPage;
 
-		STDMETHOD(get_RemoteGrid)(IXobj** pVal);
-		STDMETHOD(put_RemoteGrid)(IXobj* newVal);
+		STDMETHOD(get_RemoteXobj)(IXobj** pVal);
+		STDMETHOD(put_RemoteXobj)(IXobj* newVal);
 		STDMETHOD(AddURLs)(BSTR bstrURLs);
 		STDMETHOD(OpenURL)(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml);
 		BEGIN_MSG_MAP(CBrowser)

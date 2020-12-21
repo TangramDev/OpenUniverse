@@ -166,7 +166,7 @@ struct CTangramXHtmlTreeNode
 									// unchecked
 	int		m_nSeparators;			// count of children that are separators
 	int		m_nType;
-	GridType	m_nNodeType;
+	XobjType	m_nNodeType;
 	TCHAR * m_pszNote;				// note for tooltip
 	int		m_nTipWidth;				// width of tooltip for note
 	CXHtmlDraw::XHTMLDRAWSTRUCT ds;	// HTML draw info
@@ -284,7 +284,7 @@ public:
 	map<HWND,CString> m_mapOutRelationWnd;	
 
 	CImageList		m_Images;
-	NodeDictionary	m_mapGridDic;
+	NodeDictionary	m_mapXobjDic;
 	NodeMap			m_mapSelectedNodeDic;
 	CComObject<CTangramTreeView>* m_pObj;
 	CXobjHelper*	m_pHostWnd;
