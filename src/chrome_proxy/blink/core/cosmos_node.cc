@@ -115,7 +115,7 @@ namespace blink {
 		return nullptr;
 	}
 
-	CosmosNode* CosmosNode::getGrid(const String& strName)
+	CosmosNode* CosmosNode::getXobj(const String& strName)
 	{
 		CosmosNode* root_ = root();
 		WebString str = strName;
@@ -303,7 +303,7 @@ namespace blink {
 				if (it != pCosmos->m_mapCosmosNode.end())
 				{
 					grid = it->value.Get();
-					grid->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforgrid, msg));
+					grid->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, msg));
 				}
 			}
 		}
@@ -311,7 +311,7 @@ namespace blink {
 
 	void CosmosNode::sendMessageToGrid(CosmosNode* grid)
 	{
-		grid->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforgrid, grid));
+		grid->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, grid));
 	}
 
 	void CosmosNode::setControlVal(const String& CtrlID, int64_t CtrlHandle, const String& strVal)

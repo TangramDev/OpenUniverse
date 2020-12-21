@@ -36,9 +36,9 @@
             });
         };
 
-        cosmos.onGridCreated = function (e) {
-            //alert(e.grid.name);
-            switch (e.grid.name) {
+        cosmos.onXobjCreated = function (e) {
+            //alert(e.xobj.name);
+            switch (e.xobj.name) {
                 case "SigmaBrowser_ntpctrl":
                     {
                         e.grid.addEventListener("button1", "OnClick", function (e) {
@@ -123,20 +123,20 @@
         </modules>
         <ntp>
             <layout>
-                <grid id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
-                    <grid objid="nucleus"></grid>
-                    <grid objid="Sunny.ntpctrl,Sunny"></grid>
-                </grid>
+                <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                    <xobj objid="nucleus"></xobj>
+                    <xobj objid="Sunny.ntpctrl,Sunny"></xobj>
+                </xobj>
             </layout>
         </ntp>
         <defaultworkbench>
             <layout>
-                <grid style="18">
-                    <grid id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></grid>
-                    <grid id='test1 x' caption='Page 2' url="https://www.csdn.net|https://www.tangram.dev"></grid>
-                    <grid id='test2 y' caption='Page 3'></grid>
-                    <grid id='test3 z' caption='Page 4'></grid>
-                </grid>
+                <xobj style="18">
+                    <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
+                    <xobj id='test1 x' caption='Page 2' url="https://www.csdn.net|https://www.tangram.dev"></xobj>
+                    <xobj id='test2 y' caption='Page 3'></xobj>
+                    <xobj id='test3 z' caption='Page 4'></xobj>
+                </xobj>
             </layout>
         </defaultworkbench>
         <urls><url url="https://www.tangram.dev"></url></urls>
@@ -147,26 +147,26 @@
         <mainclient id="mainworkclient">
             <default>
                 <layout>
-                    <grid style="39" activepage="1">
-                        <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
-                            <grid objid="nucleus"></grid>
-                            <grid objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></grid>
-                        </grid>
-                        <grid caption="Virtual Web Browser Engine for Application" url="host"></grid>
-                    </grid>
+                    <xobj style="39" activepage="1">
+                        <xobj caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></xobj>
+                        </xobj>
+                        <xobj caption="Virtual Web Browser Engine for Application" url="host"></xobj>
+                    </xobj>
                 </layout>
             </default>
         </mainclient>
         <panel1 id="mainworkclient">
             <default>
                 <layout>
-                    <grid style="39" activepage="1">
-                        <grid caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
-                            <grid objid="nucleus"></grid>
-                            <grid objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></grid>
-                        </grid>
-                        <grid caption="Virtual Web Browser Engine for Application" url="host"></grid>
-                    </grid>
+                    <xobj style="39" activepage="1">
+                        <xobj caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="Sunny.ntpctrl,Sunny" id="SigmaBrowser_ntpctrl"></xobj>
+                        </xobj>
+                        <xobj caption="Virtual Web Browser Engine for Application" url="host"></xobj>
+                    </xobj>
                 </layout>
             </default>
         </panel1>
@@ -192,29 +192,29 @@
     </gridTemplate>
     <webViewport>
         <layout>
-            <grid rows="1" cols="2" width="350,100,">
-                <grid objid="navDetails" id="navCtrl"></grid>
-                <grid objid="nucleus" id="mainClient"></grid>
-            </grid>
+            <xobj rows="1" cols="2" width="350,100,">
+                <xobj objid="navDetails" id="navCtrl"></xobj>
+                <xobj objid="nucleus" id="mainClient"></xobj>
+            </xobj>
         </layout>
     </webViewport>
 
     <form1 id="mainwindow_1">
         <layout>
-            <grid id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
-                <grid id='tangramtabctrl_Page2' objid="nucleus" caption=''></grid>
-                <grid id='test1'></grid>
-            </grid>
+            <xobj id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
+                <xobj id='tangramtabctrl_Page2' objid="nucleus" caption=''></xobj>
+                <xobj id='test1'></xobj>
+            </xobj>
         </layout>
     </form1>
     <form id="mainwindow_2">
         <layout>
-            <grid style="18">
-                <grid id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></grid>
-                <grid id='test1' caption='Page 2'></grid>
-                <grid id='test2' caption='Page 3'></grid>
-                <grid id='test3' caption='Page 4'></grid>
-            </grid>
+            <xobj style="18">
+                <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
+                <xobj id='test1' caption='Page 2'></xobj>
+                <xobj id='test2' caption='Page 3'></xobj>
+                <xobj id='test3' caption='Page 4'></xobj>
+            </xobj>
         </layout>
     </form>
 
@@ -225,10 +225,10 @@
             <p>This is a New and Dynamic Desktop Software World where you can combine most of the existing component frameworks, such as .NET, Java, COM, C++, Web and Office etc. ...</p>
             <content target="mainClient">
                 <layout>
-                    <grid style="39">
-                        <grid caption="Virtual Web Browser Engine for Application" objid="nucleus"></grid>
-                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Customize your own WebBrowser"></grid>
-                    </grid>
+                    <xobj style="39">
+                        <xobj caption="Virtual Web Browser Engine for Application" objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Customize your own WebBrowser"></xobj>
+                    </xobj>
                 </layout>
             </content>
         </article>
@@ -237,11 +237,11 @@
             <p>Virtual Web Browser Engine for Application constructs a new mixed world of native UI elements and web elements. In this world, a new web page is defined. While taking into account the standard web page, the ability to use native components as DOM elements is added ...</p>
             <content1 target="mainClient">
                 <layout>
-                    <grid style="18">
-                        <grid caption="The mixed world of web and native UI" objid="nucleus"></grid>
-                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></grid>
-                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></grid>
-                    </grid>
+                    <xobj style="18">
+                        <xobj caption="The mixed world of web and native UI" objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
                 </layout>
             </content1>
         </article>
@@ -250,17 +250,17 @@
             <p>Grid grid refers to a grid structure with m rows and n columns. As a container grid, each child grid can carry a specific programmable object ...</p>
             <content2 target="mainClient">
                 <layout>
-                    <grid rows="3" cols="3" width="150,100,50" height="200,180,50">
-                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                        <grid objid="nucleus"></grid>
-                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                    </grid>
+                    <xobj rows="3" cols="3" width="150,100,50" height="200,180,50">
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                    </xobj>
                 </layout>
             </content2>
         </article>
@@ -269,20 +269,20 @@
             <p>Nested Grid means that a Grid can be a child grid of another Grid. We allow nested structures to mean that developers can use "lines" to plan the layout of a rectangular structure ... ...</p>
             <content3 target="mainClient">
                 <layout>
-                    <grid rows="1" cols="2" width="200,100,">
-                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                        <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="nucleus"></grid>
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                        </grid>
-                    </grid>
+                    <xobj rows="1" cols="2" width="200,100,">
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        <xobj caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        </xobj>
+                    </xobj>
                 </layout>
             </content3>
         </article>
@@ -291,11 +291,11 @@
             <p>A Tabbed grid is a container grid which include a group of titled “tab structures". A tabbed grid with n tabs is equivalent to a "1 row and n columns" Grid ...</p>
             <content4 target="mainClient">
                 <layout>
-                    <grid style="23">
-                        <grid caption="Introduction to Tabbed grid" objid="nucleus"></grid>
-                        <grid objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Second Page"></grid>
-                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></grid>
-                    </grid>
+                    <xobj style="23">
+                        <xobj caption="Introduction to Tabbed grid" objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
                 </layout>
             </content4>
         </article>
@@ -304,21 +304,21 @@
             <p>Compound grid refers to the "composite structure" formed by various container nodes. We allow Tabbed grid and Grid grid to "composite nest" so that developers can implement a more comprehensive UI layout ...</p>
             <content5 target="mainClient">
                 <layout>
-                    <grid style="23">
-                        <grid caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="nucleus"></grid>
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                        </grid>
-                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></grid>
-                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></grid>
-                    </grid>
+                    <xobj style="23">
+                        <xobj caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
                 </layout>
             </content5>
         </article>
@@ -327,25 +327,25 @@
             <p>What is shown here is a three times composite page structure. Because the "tab structure" can have various "styles", each specific sub grid can carry various programmable objects, based on this, a comprehensive page structure can be formed. Thanks to the flexible and powerful description mechanism of HTML, so that the web page can present a page with dual advantages of native-web application...</p>
             <content6 target="mainClient">
                 <layout>
-                    <grid style="23">
-                        <grid caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid style="18" activepage="1">
-                                <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></grid>
-                                <grid objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></grid>
-                                <grid objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></grid>
-                            </grid>
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl1,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl3,SunnyCtrl"></grid>
-                            <grid objid="SunnyCtrl.UserControl2,SunnyCtrl"></grid>
-                        </grid>
-                        <grid objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></grid>
-                        <grid objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></grid>
-                    </grid>
+                    <xobj style="23">
+                        <xobj caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj style="18" activepage="1">
+                                <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="First Page"></xobj>
+                                <xobj objid="nucleus" caption="Compound grid World Gives You An Unexpected Surprise"></xobj>
+                                <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Third Page"></xobj>
+                            </xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
+                        <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                    </xobj>
                 </layout>
             </content6>
         </article>

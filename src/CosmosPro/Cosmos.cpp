@@ -42,59 +42,59 @@ using namespace System::IO::Compression;
 
 namespace DOMPlus
 {
-    Grid^ GridCollection::default::get(int iIndex)
+    Xobj^ GridCollection::default::get(int iIndex)
     {
-        IGrid* pGrid = nullptr;
-        m_pGridCollection->get_Item(iIndex, &pGrid);
-        return theAppProxy._createObject<IGrid, Grid>(pGrid);
+        IXobj* pXobj = nullptr;
+        m_pXobjCollection->get_Item(iIndex, &pXobj);
+        return theAppProxy._createObject<IXobj, Xobj>(pXobj);
     }
 
-    Grid::Grid(IGrid* pGrid)
+    Xobj::Xobj(IXobj* pXobj)
     {
         m_hWnd = NULL;
-        m_pGridEvent = new CCosmosGridEvent();
-        m_pGridEvent->m_pGrid = pGrid;
-        m_pGridEvent->m_pGridCLREvent = new CGridCLREvent();
-        m_pGridCLREvent = m_pGridEvent->m_pGridCLREvent;
-        m_pGridEvent->m_pGridCLREvent->m_pGrid = this;
-        HRESULT hr = m_pGridEvent->DispEventAdvise(pGrid);
+        m_pXobjEvent = new CCosmosXobjEvent();
+        m_pXobjEvent->m_pXobj = pXobj;
+        m_pXobjEvent->m_pXobjCLREvent = new CXobjCLREvent();
+        m_pXobjCLREvent = m_pXobjEvent->m_pXobjCLREvent;
+        m_pXobjEvent->m_pXobjCLREvent->m_pXobj = this;
+        HRESULT hr = m_pXobjEvent->DispEventAdvise(pXobj);
         if (theApp.m_pCosmosImpl)
-            theApp.m_pCosmosImpl->AttachGrid(m_pGridEvent);
+            theApp.m_pCosmosImpl->AttachGrid(m_pXobjEvent);
         m_pChildNodes = nullptr;
-        SetNewNode(pGrid);
-        LONGLONG nValue = (LONGLONG)pGrid;
+        SetNewNode(pXobj);
+        LONGLONG nValue = (LONGLONG)pXobj;
         theAppProxy._insertObject(nValue, this);
         actionData = nullptr;
     }
 
-    Grid::~Grid()
+    Xobj::~Xobj()
     {
         if (m_pChildNodes)
         {
             delete m_pChildNodes;
         }
-        delete m_pGridCLREvent;
-        //LONGLONG nValue = (LONGLONG)m_pGrid;
+        delete m_pXobjCLREvent;
+        //LONGLONG nValue = (LONGLONG)m_pXobj;
         //theAppProxy._removeObject(nValue);
         SetNewNode(NULL);
     }
 
-    GridCollection^ Grid::ChildNodes::get()
+    GridCollection^ Xobj::ChildNodes::get()
     {
         if (m_pChildNodes == nullptr)
         {
-            CComPtr<IGridCollection> pGrids;
+            CComPtr<IXobjCollection> pGrids;
 
-            m_pGrid->get_ChildNodes(&pGrids);
+            m_pXobj->get_ChildNodes(&pGrids);
             m_pChildNodes = gcnew GridCollection(pGrids);
         }
         return m_pChildNodes;
     }
 
-    GalaxyCluster^ Grid::GalaxyCluster::get()
+    GalaxyCluster^ Xobj::GalaxyCluster::get()
     {
         IGalaxyCluster* pGalaxyCluster = nullptr;
-        m_pGrid->get_GalaxyCluster(&pGalaxyCluster);
+        m_pXobj->get_GalaxyCluster(&pGalaxyCluster);
 
         if (pGalaxyCluster)
         {
@@ -103,44 +103,44 @@ namespace DOMPlus
         return nullptr;
     }
 
-    Galaxy^ Grid::Galaxy::get()
+    Galaxy^ Xobj::Galaxy::get()
     {
         CComPtr<IGalaxy> _pGalaxy;
-        m_pGrid->get_Galaxy(&_pGalaxy);
+        m_pXobj->get_Galaxy(&_pGalaxy);
         return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(_pGalaxy);
     }
 
-    String^ Grid::Caption::get()
+    String^ Xobj::Caption::get()
     {
-        if (m_pGrid)
+        if (m_pXobj)
         {
             CComBSTR bstrCap("");
-            m_pGrid->get_Caption(&bstrCap);
+            m_pXobj->get_Caption(&bstrCap);
             String^ strCap = BSTR2STRING(bstrCap);
             return strCap;
         }
         return "";
     }
 
-    String^ Grid::URL::get()
+    String^ Xobj::URL::get()
     {
-        if (m_pGrid)
+        if (m_pXobj)
         {
             ::GridType nType;
-            m_pGrid->get_GridType(&nType);
+            m_pXobj->get_GridType(&nType);
             CComBSTR bstrCap("");
             switch (nType)
             {
             case BlankView:
             {
-                m_pGrid->get_URL(&bstrCap);
+                m_pXobj->get_URL(&bstrCap);
                 return BSTR2STRING(bstrCap);
             }
             break;
             case ActiveX:
             {
                 CComVariant var;
-                m_pGrid->get_XObject(&var);
+                m_pXobj->get_XObject(&var);
             }
             break;
             default:
@@ -150,18 +150,18 @@ namespace DOMPlus
         return "";
     }
 
-    void Grid::URL::set(String^ newVal)
+    void Xobj::URL::set(String^ newVal)
     {
-        if (m_pGrid)
+        if (m_pXobj)
         {
             ::GridType nType;
-            m_pGrid->get_GridType(&nType);
+            m_pXobj->get_GridType(&nType);
             switch (nType)
             {
             case BlankView:
                 if (nType == BlankView)
                 {
-                    m_pGrid->put_URL(STRING2BSTR(newVal));
+                    m_pXobj->put_URL(STRING2BSTR(newVal));
 
                 }
                 break;
@@ -175,22 +175,22 @@ namespace DOMPlus
         }
     }
 
-    void Grid::Init()
+    void Xobj::Init()
     {
         LONGLONG h = 0;
-        if (m_pGrid)
+        if (m_pXobj)
         {
-            m_pGrid->get_Handle(&h);
+            m_pXobj->get_Handle(&h);
             ::SendMessage((HWND)h, WM_COSMOSMSG, 1, 0);
         }
     }
 
-    Object^ Grid::PlugIn::get(String^ strObjName)
+    Object^ Xobj::PlugIn::get(String^ strObjName)
     {
         Object^ pObj = nullptr;
-        if (m_pGrid)
+        if (m_pXobj)
         {
-            Grid^ pRootGrid = this->RootGrid;
+            Xobj^ pRootGrid = this->RootGrid;
             if (pRootGrid->m_pPlugInDic == nullptr)
             {
                 pRootGrid->m_pPlugInDic = gcnew Dictionary<String^, Object^>();
@@ -198,7 +198,7 @@ namespace DOMPlus
             if (pRootGrid->m_pPlugInDic->TryGetValue(strObjName, pObj) == false)
             {
                 IDispatch* pDisp = nullptr;
-                LRESULT hr = m_pGrid->get_AxPlugIn(STRING2BSTR(strObjName), &pDisp);
+                LRESULT hr = m_pXobj->get_AxPlugIn(STRING2BSTR(strObjName), &pDisp);
                 if (SUCCEEDED(hr) && pDisp)
                 {
                     Object^ pObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pDisp)));
@@ -210,12 +210,12 @@ namespace DOMPlus
         return pObj;
     }
 
-    void Grid::Fire_OnTabChange(Grid^ ActivePage, Grid^ OldGrid)
+    void Xobj::Fire_OnTabChange(Xobj^ ActivePage, Xobj^ OldGrid)
     {
         OnTabChange(ActivePage, OldGrid);
     }
 
-    Grid^ Cosmos::Observe(Control^ ctrl, String^ key, String^ strGridXml)
+    Xobj^ Cosmos::Observe(Control^ ctrl, String^ key, String^ strGridXml)
     {
         if (ctrl != nullptr)
         {
@@ -225,14 +225,14 @@ namespace DOMPlus
             theApp.m_pCosmos->GetGalaxy((__int64)ctrl->Handle.ToPointer(), &pGalaxy);
             if (pGalaxy)
             {
-                IGrid* pGrid = nullptr;
+                IXobj* pXobj = nullptr;
                 BSTR bstrKey = STRING2BSTR(key);
                 BSTR bstrXml = STRING2BSTR(strGridXml);
-                pGalaxy->Observe(bstrKey, bstrXml, &pGrid);
+                pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
                 ::SysFreeString(bstrKey);
                 ::SysFreeString(bstrXml);
-                if (pGrid)
-                    return theAppProxy._createObject<IGrid, Grid>(pGrid);
+                if (pXobj)
+                    return theAppProxy._createObject<IXobj, Xobj>(pXobj);
                 return nullptr;
             }
             HWND hTopWnd = nullptr;
@@ -300,33 +300,33 @@ namespace DOMPlus
             if (hTopWnd != nullptr)
             {
                 HWND _hTopWnd = hTopWnd;
-                Grid^ pGrid = GetGridFromHandle((IntPtr)hTopWnd);
-                while (pGrid == nullptr)
+                Xobj^ pXobj = GetGridFromHandle((IntPtr)hTopWnd);
+                while (pXobj == nullptr)
                 {
                     hTopWnd = ::GetParent(hTopWnd);
-                    pGrid = GetGridFromHandle((IntPtr)hTopWnd);
+                    pXobj = GetGridFromHandle((IntPtr)hTopWnd);
                 }
-                if (pGrid != nullptr)
+                if (pXobj != nullptr)
                 {
                     IGalaxyCluster* pIGalaxyCluster = nullptr;
-                    pGrid->m_pGrid->get_GalaxyCluster(&pIGalaxyCluster);
+                    pXobj->m_pXobj->get_GalaxyCluster(&pIGalaxyCluster);
                     if (pIGalaxyCluster)
                     {
                         String^ strName = ctrl->Name;
                         BSTR bstrName = STRING2BSTR(strName);
-                        Grid^ _pRetGrid = nullptr;
+                        Xobj^ _pRetGrid = nullptr;
                         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
                         pIGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)hWnd), bstrName, &pGalaxy);
                         if (pGalaxy)
                         {
-                            IGrid* pGrid = nullptr;
+                            IXobj* pXobj = nullptr;
                             BSTR bstrKey = STRING2BSTR(key);
                             BSTR bstrXml = STRING2BSTR(strGridXml);
-                            pGalaxy->Observe(bstrKey, bstrXml, &pGrid);
+                            pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
                             ::SysFreeString(bstrKey);
                             ::SysFreeString(bstrXml);
-                            if (pGrid)
-                                _pRetGrid = theAppProxy._createObject<IGrid, Grid>(pGrid);
+                            if (pXobj)
+                                _pRetGrid = theAppProxy._createObject<IXobj, Xobj>(pXobj);
                         }
                         ::SysFreeString(bstrName);
                         ::InvalidateRect(hWnd, nullptr, true);
@@ -637,7 +637,7 @@ namespace DOMPlus
 
     String^ Cosmos::CurrentDesigningTangramXml::get()
     {
-        IGrid* pDesignerNode = nullptr;
+        IXobj* pDesignerNode = nullptr;
         theApp.m_pCosmos->get_DesignNode(&pDesignerNode);
         if (pDesignerNode == NULL)
             return L"";
@@ -675,15 +675,15 @@ namespace DOMPlus
         return m_strAppData;
     }
 
-    Grid^ Cosmos::CreatingGrid::get()
+    Xobj^ Cosmos::CreatingGrid::get()
     {
         Object^ pRetObject = nullptr;
         if (theApp.m_pCosmos)
         {
-            IGrid* pGrid = nullptr;
-            theApp.m_pCosmos->get_CreatingGrid(&pGrid);
-            if (pGrid)
-                return theAppProxy._createObject<IGrid, Grid>(pGrid);
+            IXobj* pXobj = nullptr;
+            theApp.m_pCosmos->get_CreatingGrid(&pXobj);
+            if (pXobj)
+                return theAppProxy._createObject<IXobj, Xobj>(pXobj);
         }
         return nullptr;
     }
@@ -828,8 +828,8 @@ namespace DOMPlus
         intptr_t nNode = eventSession->m_pCosmosSession->Getint64(L"gridobj");
         if (nNode)
         {
-            IGrid* pGrid = (IGrid*)nNode;
-            Grid^ thisNode = theAppProxy._createObject<IGrid, Grid>(pGrid);
+            IXobj* pXobj = (IXobj*)nNode;
+            Xobj^ thisNode = theAppProxy._createObject<IXobj, Xobj>(pXobj);
             if (thisNode != nullptr)
             {
                 thisNode->Fire_OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
@@ -1098,8 +1098,8 @@ namespace DOMPlus
                                         pManager->CreateGalaxy(CComVariant((LONGLONG)hWnd), CComVariant((__int64)hWndChild), CComBSTR("default"), &pIGalaxy);
                                         if (pIGalaxy)
                                         {
-                                            IGrid* pGrid = nullptr;
-                                            pIGalaxy->Observe(CComBSTR("default"), CComBSTR(pVSParse->xml()), &pGrid);
+                                            IXobj* pXobj = nullptr;
+                                            pIGalaxy->Observe(CComBSTR("default"), CComBSTR(pVSParse->xml()), &pXobj);
                                         }
                                     }
                                 }
@@ -1124,7 +1124,7 @@ namespace DOMPlus
         }
     }
 
-    Grid^ Cosmos::ExtendMDIClient(Form^ pForm, String^ strKey, String^ strXml)
+    Xobj^ Cosmos::ExtendMDIClient(Form^ pForm, String^ strKey, String^ strXml)
     {
         Control^ mdiclient = Cosmos::GetMDIClient(pForm);
         if (mdiclient)
@@ -1194,10 +1194,10 @@ namespace DOMPlus
         {
             return nullptr;
         }
-        IGrid* pWndGrid = nullptr;
+        IXobj* pWndGrid = nullptr;
         CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hWnd, _T("CosmosInfo"));
         if (pInfo)
-            pWndGrid = pInfo->m_pGrid;
+            pWndGrid = pInfo->m_pXobj;
         if (pWndGrid == nullptr)
         {
             return nullptr;
@@ -1252,12 +1252,12 @@ namespace DOMPlus
         }
     }
 
-    Grid^ Cosmos::GetGridFromHandle(IntPtr handle)
+    Xobj^ Cosmos::GetGridFromHandle(IntPtr handle)
     {
-        IGrid* pWndGrid = nullptr;
+        IXobj* pWndGrid = nullptr;
         CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)handle.ToPointer(), _T("CosmosInfo"));
         if (pInfo)
-            pWndGrid = pInfo->m_pGrid;
+            pWndGrid = pInfo->m_pXobj;
         else
             return nullptr;
         //HRESULT hr = theApp.m_pCosmos->GetGridFromHandle((LONGLONG)handle.ToPointer(), &pWndGrid);
@@ -1265,29 +1265,29 @@ namespace DOMPlus
         //{
         //    return nullptr;
         //}
-        return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
+        return theAppProxy._createObject<IXobj, Xobj>(pWndGrid);
     }
 
-    Grid^ Cosmos::GetGridFromControl(Control^ ctrl)
+    Xobj^ Cosmos::GetGridFromControl(Control^ ctrl)
     {
         if (ctrl == nullptr)
         {
             return nullptr;
         }
-        IGrid* pWndGrid = nullptr;
+        IXobj* pWndGrid = nullptr;
         HWND hCtrl = (HWND)ctrl->Handle.ToPointer();
         auto it = theApp.m_pCosmosImpl->m_mapGrid.find(hCtrl);
         if (it != theApp.m_pCosmosImpl->m_mapGrid.end())
         {
             pWndGrid = it->second;
-            return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
+            return theAppProxy._createObject<IXobj, Xobj>(pWndGrid);
         }
         CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hCtrl, _T("CosmosInfo"));
         if (pInfo)
-            pWndGrid = pInfo->m_pGrid;
+            pWndGrid = pInfo->m_pXobj;
         else
             return nullptr;
-        return theAppProxy._createObject<IGrid, Grid>(pWndGrid);
+        return theAppProxy._createObject<IXobj, Xobj>(pWndGrid);
     }
 
     void Cosmos::UpdateNewTabPageLayout(String^ newTabPageLayout)
@@ -1306,18 +1306,18 @@ namespace DOMPlus
         return nullptr;
     }
 
-    void Cosmos::SendXmlMessage(Grid^ sender, String^ strXml)
+    void Cosmos::SendXmlMessage(Xobj^ sender, String^ strXml)
     {
         BSTR bstrXml = STRING2BSTR(strXml);
         IWebPage* pPage = nullptr;
-        sender->m_pGrid->get_WebPage(&pPage);
+        sender->m_pXobj->get_WebPage(&pPage);
         if (pPage)
         {
             BSTR bstrXml = STRING2BSTR(strXml);
-            pPage->SendXmlMessage(sender->m_pGrid, bstrXml);
+            pPage->SendXmlMessage(sender->m_pXobj, bstrXml);
             ::SysFreeString(bstrXml);
         }
-        //theApp.m_pCosmos->SendXmlMessage(sender->m_pGrid, bstrXml);
+        //theApp.m_pCosmos->SendXmlMessage(sender->m_pXobj, bstrXml);
         ::SysFreeString(bstrXml);
     }
 
@@ -2147,13 +2147,13 @@ namespace DOMPlus
         return nullptr;
     }
 
-    DOMPlus::Wormhole^ DOMPlus::Grid::Wormhole::get()
+    DOMPlus::Wormhole^ DOMPlus::Xobj::Wormhole::get()
     {
-        if (m_pGrid)
+        if (m_pXobj)
         {
             if (m_pSession == nullptr)
             {
-                CSession* pSession = theApp.m_pCosmosImpl->GetCloudSession(m_pGrid);
+                CSession* pSession = theApp.m_pCosmosImpl->GetCloudSession(m_pXobj);
                 if (pSession)
                 {
                     m_pSession = gcnew DOMPlus::Wormhole(pSession);
@@ -2292,43 +2292,43 @@ namespace DOMPlus
         return m_pObj;
     }
 
-    Grid^ Grid::Observe(String^ layerName, String^ layerXML)
+    Xobj^ Xobj::Observe(String^ layerName, String^ layerXML)
     {
-        if (m_pGrid)
+        if (m_pXobj)
         {
             BSTR blayerName = STRING2BSTR(layerName);
             BSTR blayerXML = STRING2BSTR(layerXML);
-            IGrid* pGrid = nullptr;
-            m_pGrid->Observe(blayerName, blayerXML, &pGrid);
+            IXobj* pXobj = nullptr;
+            m_pXobj->Observe(blayerName, blayerXML, &pXobj);
             ::SysFreeString(blayerName);
             ::SysFreeString(blayerXML);
-            if (pGrid)
+            if (pXobj)
             {
-                return theAppProxy._createObject<IGrid, Grid>(pGrid);
+                return theAppProxy._createObject<IXobj, Xobj>(pXobj);
             }
         }
         return nullptr;
     }
 
-    Grid^ Grid::ObserveChild(int rowNum, int colNum, String^ layerName, String^ layerXML)
+    Xobj^ Xobj::ObserveChild(int rowNum, int colNum, String^ layerName, String^ layerXML)
     {
-        if (m_pGrid)
+        if (m_pXobj)
         {
             BSTR blayerName = STRING2BSTR(layerName);
             BSTR blayerXML = STRING2BSTR(layerXML);
-            IGrid* pGrid = nullptr;
-            m_pGrid->ObserveEx(rowNum, colNum, blayerName, blayerXML, &pGrid);
+            IXobj* pXobj = nullptr;
+            m_pXobj->ObserveEx(rowNum, colNum, blayerName, blayerXML, &pXobj);
             ::SysFreeString(blayerName);
             ::SysFreeString(blayerXML);
-            if (pGrid)
+            if (pXobj)
             {
-                return theAppProxy._createObject<IGrid, Grid>(pGrid);
+                return theAppProxy._createObject<IXobj, Xobj>(pXobj);
             }
         }
         return nullptr;
     }
 
-    System::Void Grid::LoadNode(TreeNode^ pGrid, CTangramXmlParse* pParse)
+    System::Void Xobj::LoadNode(TreeNode^ pXobj, CTangramXmlParse* pParse)
     {
         if (pParse)
         {
@@ -2344,16 +2344,16 @@ namespace DOMPlus
                         HWND hWnd = (HWND)m_pBindTreeView->Handle.ToPointer();
 
                         IGalaxy* pGalaxy = nullptr;
-                        IGrid* _pGrid = nullptr;
-                        m_pGrid->get_Galaxy(&pGalaxy);
+                        IXobj* _pXobj = nullptr;
+                        m_pXobj->get_Galaxy(&pGalaxy);
                         CComBSTR bstrName("");
                         pGalaxy->get_Name(&bstrName);
-                        String^ name = pGrid->Name + L".";
+                        String^ name = pXobj->Name + L".";
                         name += m_pBindTreeView->Name;
                         name += L"." + BSTR2STRING(bstrName);
                         BSTR strName = STRING2BSTR(name->ToLower());
                         DOMPlus::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
-                        pGalaxy->Observe(L"default", CComBSTR(_pParse->xml()), &_pGrid);
+                        pGalaxy->Observe(L"default", CComBSTR(_pParse->xml()), &_pXobj);
                         ::SysFreeString(strName);
                     }
                     else
@@ -2361,7 +2361,7 @@ namespace DOMPlus
                         bool isTreeNode = _pParse->attrBool(_T("treenode"), false);
                         if (isTreeNode)
                         {
-                            TreeNode^ pChildNode = pGrid->Nodes->Add(BSTR2STRING(_pParse->text()));
+                            TreeNode^ pChildNode = pXobj->Nodes->Add(BSTR2STRING(_pParse->text()));
                             if (pChildNode)
                             {
                                 CString strTagName = name + _T("_tag");
@@ -2379,12 +2379,12 @@ namespace DOMPlus
         }
     }
 
-    void Grid::NavigateTreeInit()
+    void Xobj::NavigateTreeInit()
     {
         if (m_pBindTreeView != nullptr)
         {
-            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &DOMPlus::Grid::OnNodeMouseDoubleClick);
-            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &DOMPlus::Grid::OnAfterSelect);
+            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &DOMPlus::Xobj::OnNodeMouseDoubleClick);
+            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &DOMPlus::Xobj::OnAfterSelect);
 
             if (String::IsNullOrEmpty(m_strTreeViewData) == true)
                 m_strTreeViewData = DOMPlus::Cosmos::m_strWizData;
@@ -2406,14 +2406,14 @@ namespace DOMPlus
         }
     }
 
-    void Grid::OnNodeMouseDoubleClick(System::Object^ sender, System::Windows::Forms::TreeNodeMouseClickEventArgs^ e)
+    void Xobj::OnNodeMouseDoubleClick(System::Object^ sender, System::Windows::Forms::TreeNodeMouseClickEventArgs^ e)
     {
         if (e->Node->Tag)
         {
             String^ strTag = e->Node->Tag->ToString();
 
             {
-                Grid^ pHostNode = nullptr;// hostnode->HostNode;
+                Xobj^ pHostNode = nullptr;// hostnode->HostNode;
                 if (bindTreeNode == nullptr)
                 {
                     String^ name = Attribute[L"bindnode"];
@@ -2461,14 +2461,14 @@ namespace DOMPlus
         }
     }
 
-    void Grid::OnAfterSelect(System::Object^ sender, System::Windows::Forms::TreeViewEventArgs^ e)
+    void Xobj::OnAfterSelect(System::Object^ sender, System::Windows::Forms::TreeViewEventArgs^ e)
     {
         if (e->Node->Tag)
         {
             String^ strTag = e->Node->Tag->ToString();
 
             {
-                Grid^ pHostNode = nullptr;
+                Xobj^ pHostNode = nullptr;
                 if (bindTreeNode == nullptr)
                 {
                     String^ name = Attribute[L"bindnode"];
@@ -2482,7 +2482,7 @@ namespace DOMPlus
                 }
                 if (bindTreeNode != nullptr)
                     pHostNode = bindTreeNode;
-                //Grid^ 
+                //Xobj^ 
                 if (pHostNode == nullptr)
                 {
                     pHostNode = HostGrid;
@@ -2502,7 +2502,7 @@ namespace DOMPlus
         }
     }
 
-    Object^ Grid::ActiveMethod(String^ strMethod, cli::array<Object^, 1>^ p)
+    Object^ Xobj::ActiveMethod(String^ strMethod, cli::array<Object^, 1>^ p)
     {
         Object^ pRetObj = nullptr;
         if (m_pHostObj != nullptr)
@@ -2584,18 +2584,18 @@ namespace DOMPlus
         m_pGalaxyCluster->ObserveGalaxys(STRING2BSTR(strFrames), STRING2BSTR(strKey), STRING2BSTR(bstrXml), bSaveToConfigFile);
     }
 
-    Grid^ GalaxyCluster::GetGrid(String^ strName, String^ strGalaxyName)
+    Xobj^ GalaxyCluster::GetGrid(String^ strName, String^ strGalaxyName)
     {
         if (String::IsNullOrEmpty(strName) || String::IsNullOrEmpty(strGalaxyName))
             return nullptr;
         BSTR bstrXml = STRING2BSTR(strName);
         BSTR bstrGalaxyName = STRING2BSTR(strGalaxyName);
-        CComPtr<IGrid> pGrid;
-        m_pGalaxyCluster->GetGrid(bstrXml, bstrGalaxyName, &pGrid);
-        Grid^ pRetNode = nullptr;
-        if (pGrid)
+        CComPtr<IXobj> pXobj;
+        m_pGalaxyCluster->GetGrid(bstrXml, bstrGalaxyName, &pXobj);
+        Xobj^ pRetNode = nullptr;
+        if (pXobj)
         {
-            pRetNode = theAppProxy._createObject<IGrid, Grid>(pGrid);
+            pRetNode = theAppProxy._createObject<IXobj, Xobj>(pXobj);
         }
         ::SysFreeString(bstrXml);
         ::SysFreeString(bstrGalaxyName);
@@ -2630,17 +2630,17 @@ namespace DOMPlus
         theApp.m_pCosmosImpl->m_pCurrentIPCMsg = nullptr;
     }
 
-    Grid^ Galaxy::Observe(String^ layerName, String^ layerXML)
+    Xobj^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        DOMPlus::Grid^ pRetNode = nullptr;
+        DOMPlus::Xobj^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
-        CComPtr<IGrid> pGrid;
-        m_pGalaxy->Observe(blayerName, blayerXML, &pGrid);
-        if (pGrid)
+        CComPtr<IXobj> pXobj;
+        m_pGalaxy->Observe(blayerName, blayerXML, &pXobj);
+        if (pXobj)
         {
-            pRetNode = theAppProxy._createObject<IGrid, DOMPlus::Grid>(pGrid);
-            DOMPlus::Grid^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
+            DOMPlus::Xobj^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

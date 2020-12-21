@@ -85,7 +85,7 @@ namespace blink {
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kCosmos)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(CosmosMessageReceived, kCosmosmessage)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
-	 DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
+	 DEFINE_ATTRIBUTE_EVENT_LISTENER(XobjCreated, kXobjcreated)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(GalaxyCreated, kCosmosgalaxycreated)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
 	 DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiWinForm, kLoadmdiwinform)
@@ -123,14 +123,14 @@ namespace blink {
 	 void AllMdiChildRemoved(CosmosXobj* xobj);
 	 void ProcessMessage(CosmosXobj* xobj);
 	 void OnMessage(Element* elem, const String& eventName);
-	 void DispatchGridEvent(CosmosXobj* xObj, const String& ctrlName, const String& eventName);
+	 void DispatchXobjEvent(CosmosXobj* xObj, const String& ctrlName, const String& eventName);
 
 	 CosmosNode* createCosmosNode(CosmosXobj* xobj);
 	 CosmosNode* createCosmosWinform(CosmosXobj* xobj);
 	 void CosmosObjCreated(CosmosXobj* xobj);
-	 CosmosNode* getGrid(Element* elem, CosmosXobj* grid);
-	 CosmosNode* getGrid(const int64_t nodeHandle);
-	 CosmosNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
+	 CosmosNode* getXobj(Element* elem, CosmosXobj* grid);
+	 CosmosNode* getXobj(const int64_t nodeHandle);
+	 CosmosNode* getXobj(const String& galaxyName, const String& clusterName, const String& gridName);
 
 	 CosmosGalaxy* getGalaxy(const String& wndName);
 	 CosmosGalaxy* getGalaxy(const int64_t wndHandle);

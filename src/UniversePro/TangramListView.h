@@ -43,7 +43,7 @@ protected:
 	BOOL			m_bFilling;
 	int				m_nStyle;
 	int				m_nActiveIndex;
-	CGrid*		m_pGrid;
+	CXobj*		m_pXobj;
 	CImageList		m_ImageList;
 
 	virtual void OnInitialUpdate();

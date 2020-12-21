@@ -47,9 +47,9 @@
             }
         }
 
-        cosmos.onGridCreated = function (e) {
-            window.grids[e.grid.name] = e.grid;
-            if (e.grid.name == 'navcontrol') {
+        cosmos.onXobjCreated = function (e) {
+            window.grids[e.xobj.name] = e.grid;
+            if (e.xobj.name == 'navcontrol') {
                 e.grid.addEventListener("treeView1", "OnAfterSelect", function (e) {
                     var name = e.getStr("name");
                     var contentElements = document.getElementsByClassName("contents")[0].children;
@@ -86,7 +86,7 @@
         <panel1>
             <default>
                 <layout>
-                    <grid url="host"></grid>
+                    <xobj url="host"></xobj>
                 </layout>
             </default>
         </panel1>
@@ -118,10 +118,10 @@
     </gridTemplate>
     <webviewport>
         <layout>
-            <grid rows="1" cols="2" width="400,400,">
-                <grid objid="navcontrol" id="navcontrol"></grid>
-                <grid objid="nucleus" id="main"></grid>
-            </grid>
+            <xobj rows="1" cols="2" width="400,400,">
+                <xobj objid="navcontrol" id="navcontrol"></xobj>
+                <xobj objid="nucleus" id="main"></xobj>
+            </xobj>
         </layout>
     </webviewport>
     <div class="contents">
@@ -138,10 +138,10 @@
             </ul>
             <native>
                 <layout>
-                    <grid rows="2" cols="1" height="400,400,">
-                        <grid objid="nucleus"></grid>
-                        <grid id="system_requirements_extra" objid="KnowledgeBase.SystemRequirementsExtra,KnowledgeBase"></grid>
-                    </grid>
+                    <xobj rows="2" cols="1" height="400,400,">
+                        <xobj objid="nucleus"></xobj>
+                        <xobj id="system_requirements_extra" objid="KnowledgeBase.SystemRequirementsExtra,KnowledgeBase"></xobj>
+                    </xobj>
                 </layout>
             </native>
         </div>

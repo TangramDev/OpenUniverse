@@ -16,7 +16,7 @@
 	CosmosNode getChild(long nIndex);
 	CosmosNode getChild(long row, long col);
 	CosmosNode getChild(DOMString strName);
-	CosmosNode getGrid(DOMString strName);
+	CosmosNode getXobj(DOMString strName);
 	void Observe(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveEx(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional long row, [DefaultValue = Undefined] optional long col, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveCtrl(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
@@ -38,5 +38,5 @@
 	attribute EventHandler onCosmosControlCreated;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onWinFormClosed;
-	attribute EventHandler onCloudMessageForGrid;
+	attribute EventHandler onCloudMessageForXobj;
 };

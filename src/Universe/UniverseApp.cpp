@@ -301,10 +301,10 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		g_pCosmos->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
 		if (pGalaxy)
 		{
-			IGrid* pGrid = nullptr;
-			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pGrid);
+			IXobj* pXobj = nullptr;
+			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pXobj);
 			LONGLONG h = 0;
-			pGrid->get_Handle(&h);
+			pXobj->get_Handle(&h);
 			HWND hWnd = (HWND)h;
 			//::InvalidateRect(hWnd, nullptr, true);
 		}
@@ -603,7 +603,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CGridHelper* pWnd = nullptr;
+				CXobjHelper* pWnd = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -612,7 +612,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (g_pCosmos->m_pActiveGrid->m_nViewType != Grid)
 					{
-						pWnd = (CGridHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
+						pWnd = (CXobjHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveGrid = nullptr;
@@ -1019,10 +1019,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					CWebPage* pWnd = ((CBrowser*)it->second)->m_pVisibleWebWnd;
 					if (pWnd && ::IsWindow(pWnd->m_hWnd) && pWnd->m_pGalaxy)
 					{
-						IGrid* pGrid = nullptr;
+						IXobj* pXobj = nullptr;
 						if (g_bRecturnPressed == false)
 						{
-							pWnd->m_pGalaxy->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pCosmos->m_strDefaultXml : _T("")), &pGrid);
+							pWnd->m_pGalaxy->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pCosmos->m_strDefaultXml : _T("")), &pXobj);
 							::SendMessage(it->first, WM_BROWSERLAYOUT, 0, 4);
 						}
 						g_bRecturnPressed = false;

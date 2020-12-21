@@ -351,8 +351,8 @@ namespace Browser {
 				CGalaxy* pGalaxy = m_pVisibleWebWnd->m_pGalaxy;
 				if (pGalaxy)
 				{
-					CGrid* pGrid = pGalaxy->m_pWorkGrid;
-					CGridHelper* pWnd = (CGridHelper*)(pGrid->m_pHostWnd);
+					CXobj* pXobj = pGalaxy->m_pWorkGrid;
+					CXobjHelper* pWnd = (CXobjHelper*)(pXobj->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}
 			}
@@ -510,12 +510,12 @@ namespace Browser {
 		delete this;
 	}
 
-	STDMETHODIMP CBrowser::get_RemoteGrid(IGrid** pVal)
+	STDMETHODIMP CBrowser::get_RemoteGrid(IXobj** pVal)
 	{
 		return S_OK;
 	}
 
-	STDMETHODIMP CBrowser::put_RemoteGrid(IGrid* newVal)
+	STDMETHODIMP CBrowser::put_RemoteGrid(IXobj* newVal)
 	{
 		return S_OK;
 	}

@@ -13,11 +13,11 @@
 	readonly attribute long long handle;
 
 	//CosmosNode API
-	CosmosNode getGrid(DOMString clusterName, [DefaultValue = Undefined] optional DOMString nodeName);
-	CosmosNode getGrid(long nodeHandle);
+	CosmosNode getXobj(DOMString clusterName, [DefaultValue = Undefined] optional DOMString nodeName);
+	CosmosNode getXobj(long nodeHandle);
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;
-	attribute EventHandler onGridCreated;
+	attribute EventHandler onXobjCreated;
 	attribute EventHandler onMdiChildActivate;
 };

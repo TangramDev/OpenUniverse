@@ -126,12 +126,12 @@ private:
 	gcroot<EventHandler^>					m_pOnCtrlVisible;
 
 	virtual void OnCLRHostExit();
-	CWPFObj* CreateWPFControl(IGrid* pGrid, HWND hPWnd, UINT nID);
+	CWPFObj* CreateWPFControl(IXobj* pXobj, HWND hPWnd, UINT nID);
 	HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	HRESULT ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey);
 	BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton);
-	IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IGrid* pHostNode);
+	IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode);
 	int IsWinForm(HWND hWnd);
 	IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames);
 	BSTR GetCtrlName(IDispatch* pCtrl);
@@ -144,7 +144,7 @@ private:
 	void ReleaseCosmosObj(IDispatch*);
 	BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild);
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);
-	HRESULT NavigateURL(IGrid* pGrid, CString strURL, IDispatch* dispObjforScript);
+	HRESULT NavigateURL(IXobj* pXobj, CString strURL, IDispatch* dispObjforScript);
 	Control^ GetCanSelect(Control^ ctrl, bool direct);
 	void SelectObj(IDispatch*);
 
@@ -158,19 +158,19 @@ private:
 	void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage*, int nState);
 	void HideMenuStripPopup();
 	bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType);
-	void ConnectGridToWebPage(IGrid*, bool);
+	void ConnectGridToWebPage(IXobj*, bool);
 	void OnCloudMsgReceived(CSession*);
 
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);
-	void SelectGrid(IGrid* );
+	void SelectGrid(IXobj* );
 	Object^ InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
-	Object^ InitGrid(IGrid* pGrid, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
+	Object^ InitGrid(IXobj* pXobj, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue);
 	IDispatch* CreateWinForm(HWND hParent, BSTR strXML);
 
 	void CtrlInit(int nType, Control^ treeview, IGalaxyCluster* pGalaxyCluster);
-	System::Void LoadNode(TreeView^ pTreeView, TreeNode^ pGrid, IGalaxyCluster* pGalaxyCluster, CTangramXmlParse* pParse);
+	System::Void LoadNode(TreeView^ pTreeView, TreeNode^ pXobj, IGalaxyCluster* pGalaxyCluster, CTangramXmlParse* pParse);
 	static void OnLoad(Object ^sender, EventArgs ^e);
 	static void OnMdiChildActivate(Object ^sender, EventArgs ^e);
 	static void OnApplicationExit(Object ^sender, EventArgs ^e);
@@ -285,7 +285,7 @@ public:
 	gcroot<Object^> m_pGalaxyCluster;
 
 	void __stdcall  OnDestroy();
-	void __stdcall  OnTabChange(IGrid* sender, int nActivePage,int nOldPage);
+	void __stdcall  OnTabChange(IXobj* sender, int nActivePage,int nOldPage);
 	void __stdcall  OnInitialize(IDispatch* pHtmlWnd, BSTR bstrUrl);
 	void __stdcall  OnIPCMsg(IGalaxy* sender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 	BEGIN_SINK_MAP(CGalaxyClusterEvent)

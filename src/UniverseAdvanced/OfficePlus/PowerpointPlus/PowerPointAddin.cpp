@@ -311,11 +311,11 @@ namespace OfficePlus
 					pGalaxy->m_bDesignerState = true;
 					pCosmosPresentation->m_bDesignState = true;
 					CreateCommonDesignerToolBar();
-					CGrid* pGrid = pGalaxy->m_pWorkGrid;
-					if (pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
+					CXobj* pXobj = pGalaxy->m_pWorkGrid;
+					if (pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 					{
-						CString strXml = _T("<documentui><layout><grid name=\"Start\" /></layout></documentui>");
-						IGrid* pDesignNode = nullptr;
+						CString strXml = _T("<documentui><layout><xobj name=\"Start\" /></layout></documentui>");
+						IXobj* pDesignNode = nullptr;
 						pGalaxy->Observe(CComBSTR(L"default-inDesigning"), CComBSTR(strXml), &pDesignNode);
 					}
 
@@ -385,8 +385,8 @@ namespace OfficePlus
 										pCosmosPresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
 										if (pCosmosPresentation->m_pTaskPaneGalaxy)
 										{
-											IGrid* pGrid = nullptr;
-											pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
+											IXobj* pXobj = nullptr;
+											pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pXobj);
 										}
 									}
 								}
@@ -624,8 +624,8 @@ namespace OfficePlus
 										pCosmosPresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
 										if (pCosmosPresentation->m_pTaskPaneGalaxy)
 										{
-											IGrid* pGrid = nullptr;
-											pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
+											IXobj* pXobj = nullptr;
+											pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pXobj);
 										}
 									}
 								}
@@ -643,8 +643,8 @@ namespace OfficePlus
 						IGalaxy* pGalaxy = nullptr;
 						pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pPowerPntWndObj->m_hClient), CComBSTR(L"Document"), &pGalaxy);
 						pPowerPntWndObj->m_pPresentation->m_pGalaxy = (CGalaxy*)pGalaxy;
-						IGrid* pGrid = nullptr;
-						pGalaxy->Observe(CComBSTR(L"Default"), CComBSTR(pParse->xml()), &pGrid);
+						IXobj* pXobj = nullptr;
+						pGalaxy->Observe(CComBSTR(L"Default"), CComBSTR(pParse->xml()), &pXobj);
 					}
 				}
 				else
@@ -710,8 +710,8 @@ namespace OfficePlus
 												pCosmosPresentation->m_pTaskPaneGalaxy = (CGalaxy*)pGalaxy;
 												if (pCosmosPresentation->m_pTaskPaneGalaxy)
 												{
-													IGrid* pGrid = nullptr;
-													pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
+													IXobj* pXobj = nullptr;
+													pCosmosPresentation->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pXobj);
 												}
 											}
 										}
@@ -729,8 +729,8 @@ namespace OfficePlus
 								IGalaxy* pGalaxy = nullptr;
 								pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pPowerPntWndObj->m_hClient), CComBSTR(L"Document"), &pGalaxy);
 								pPowerPntWndObj->m_pPresentation->m_pGalaxy = (CGalaxy*)pGalaxy;
-								IGrid* pGrid = nullptr;
-								pGalaxy->Observe(CComBSTR(L"Default"), CComBSTR(pParse->xml()), &pGrid);
+								IXobj* pXobj = nullptr;
+								pGalaxy->Observe(CComBSTR(L"Default"), CComBSTR(pParse->xml()), &pXobj);
 							}
 						}
 					}

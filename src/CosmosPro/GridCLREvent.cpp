@@ -24,63 +24,63 @@
 
 using namespace System::Runtime::InteropServices;
 
-CGridCLREvent::CGridCLREvent()
+CXobjCLREvent::CXobjCLREvent()
 {
 }
 
 
-CGridCLREvent::~CGridCLREvent()
+CXobjCLREvent::~CXobjCLREvent()
 {
-	//delete m_pGrid;
+	//delete m_pXobj;
 }
 
-void CGridCLREvent::OnObserverComplete(IGrid* pGrid)
+void CXobjCLREvent::OnObserverComplete(IXobj* pXobj)
 {
-	m_pGrid->Fire_ObserveComplete(m_pGrid);
+	m_pXobj->Fire_ObserveComplete(m_pXobj);
 }
 
-void CGridCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
+void CXobjCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 {
 	Object^ pObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pDocdisp)));
-	m_pGrid->Fire_OnDocumentComplete(m_pGrid, pObj, BSTR2STRING(bstrUrl));
+	m_pXobj->Fire_OnDocumentComplete(m_pXobj, pObj, BSTR2STRING(bstrUrl));
 }
 
-void CGridCLREvent::OnDestroy()
+void CXobjCLREvent::OnDestroy()
 {
-	if (theAppProxy.m_pPropertyGrid&&theAppProxy.m_pPropertyGrid->SelectedObject==(Object^)m_pGrid)
+	if (theAppProxy.m_pPropertyGrid&&theAppProxy.m_pPropertyGrid->SelectedObject==(Object^)m_pXobj)
 	{
 		theAppProxy.m_pPropertyGrid->SelectedObject = nullptr;
 	}
-	if (m_pGrid->m_pHostObj)
+	if (m_pXobj->m_pHostObj)
 	{
-		DOMPlus::Grid^ pGrid = nullptr;
-		if (DOMPlus::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pGrid->m_pHostObj, pGrid))
+		DOMPlus::Xobj^ pXobj = nullptr;
+		if (DOMPlus::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pXobj->m_pHostObj, pXobj))
 		{
-			DOMPlus::Cosmos::m_pFrameworkElementDic->Remove(m_pGrid->m_pHostObj);
+			DOMPlus::Cosmos::m_pFrameworkElementDic->Remove(m_pXobj->m_pHostObj);
 		}
 	}
-	m_pGrid->Fire_OnDestroy(m_pGrid);
+	m_pXobj->Fire_OnDestroy(m_pXobj);
 }
 
-void CGridCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+void CXobjCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	Object^ pAddinObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pAddIndisp)));
-	m_pGrid->Fire_GridAddInCreated(m_pGrid, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
+	m_pXobj->Fire_GridAddInCreated(m_pXobj, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
 }
 
-void CGridCLREvent::OnGridAddInsCreated()
+void CXobjCLREvent::OnGridAddInsCreated()
 {
-	m_pGrid->Fire_GridAddInsCreated(m_pGrid);
+	m_pXobj->Fire_GridAddInsCreated(m_pXobj);
 }
 
-void CGridCLREvent::OnTabChange(int nActivePage, int nOldPage)
+void CXobjCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	DOMPlus::Grid^ pActiveGrid = m_pGrid->GetGrid(0, nActivePage);
-	DOMPlus::Grid^ pOldGrid = m_pGrid->GetGrid(0, nOldPage);
-	m_pGrid->Fire_OnTabChange(pActiveGrid, pOldGrid);
+	DOMPlus::Xobj^ pActiveGrid = m_pXobj->GetGrid(0, nActivePage);
+	DOMPlus::Xobj^ pOldGrid = m_pXobj->GetGrid(0, nOldPage);
+	m_pXobj->Fire_OnTabChange(pActiveGrid, pOldGrid);
 }
 
-void CGridCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
+void CXobjCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
 {
-	m_pGrid->Fire_OnIPCMessageReceived(BSTR2STRING(bstrFrom), BSTR2STRING(bstrTo), BSTR2STRING(bstrMsgId), BSTR2STRING(bstrPayload), BSTR2STRING(bstrExtra));
+	m_pXobj->Fire_OnIPCMessageReceived(BSTR2STRING(bstrFrom), BSTR2STRING(bstrTo), BSTR2STRING(bstrMsgId), BSTR2STRING(bstrPayload), BSTR2STRING(bstrExtra));
 }

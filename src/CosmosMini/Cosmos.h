@@ -30,8 +30,8 @@ using namespace System::Threading::Tasks;
 
 using System::Runtime::InteropServices::Marshal;
 
-class CGridCLREvent;
-class CCosmosGridEvent;
+class CXobjCLREvent;
+class CCosmosXobjEvent;
 extern CCosmosProxy theAppProxy;
 
 namespace DOMPlus
@@ -40,7 +40,7 @@ namespace DOMPlus
 	/// Summary for Cosmos
 	/// </summary>
 
-	ref class Grid;
+	ref class Xobj;
 	ref class Galaxy;
 
 	public enum class CosmosAppType
@@ -53,46 +53,46 @@ namespace DOMPlus
 		APPOTHER = 0
 	};
 
-	public ref class Grid
+	public ref class Xobj
 	{
 	public:
-		Grid(IGrid* pGrid);
-		~Grid();
+		Xobj(IXobj* pXobj);
+		~Xobj();
 
-		IGrid* m_pGrid;
+		IXobj* m_pXobj;
 		Object^ m_pHostObj = nullptr;
-		CCosmosGridEvent* m_pGridEvent;
-		CGridCLREvent* m_pGridCLREvent;
+		CCosmosXobjEvent* m_pXobjEvent;
+		CXobjCLREvent* m_pXobjCLREvent;
 
 		// A notification has been created for all nodes in the current layout.
-		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid);
+		delegate void RootGridCreated(IntPtr nHandle, String^ strUrl, Xobj^ pRootGrid);
 		event RootGridCreated^ OnRootGridCreated;
-		void Fire_RootGridCreated(IntPtr nHandle, String^ strUrl, Grid^ pRootGrid)
+		void Fire_RootGridCreated(IntPtr nHandle, String^ strUrl, Xobj^ pRootGrid)
 		{
 			OnRootGridCreated(nHandle, strUrl, pRootGrid);
 		}
 
-		delegate void ObserveComplete(Grid^ sender);
+		delegate void ObserveComplete(Xobj^ sender);
 		event ObserveComplete^ OnObserveComplete;
-		void Fire_ObserveComplete(Grid^ sender)
+		void Fire_ObserveComplete(Xobj^ sender)
 		{
 			OnObserveComplete(sender);
 		}
 
-		delegate void Destroy(Grid^ sender);
+		delegate void Destroy(Xobj^ sender);
 		event Destroy^ OnDestroy;
-		void Fire_OnDestroy(Grid^ sender)
+		void Fire_OnDestroy(Xobj^ sender)
 		{
 			OnDestroy(sender);
 		}
 
-		delegate void TabChange(Grid^ ActiveGrid, Grid^ OldGrid);
+		delegate void TabChange(Xobj^ ActiveGrid, Xobj^ OldGrid);
 		event TabChange^ OnTabChange;
-		void Fire_OnTabChange(Grid^ ActiveGrid, Grid^ OldGrid);
+		void Fire_OnTabChange(Xobj^ ActiveGrid, Xobj^ OldGrid);
 
 	public:
-		Grid^ Observe(String^ layerName, String^ layerXML);
-		Grid^ ObserveChild(int rowNum, int colName, String^ layerName, String^ layerXML);
+		Xobj^ Observe(String^ layerName, String^ layerXML);
+		Xobj^ ObserveChild(int rowNum, int colName, String^ layerName, String^ layerXML);
 
 		property String^ Caption
 		{
@@ -100,7 +100,7 @@ namespace DOMPlus
 			void set(String^ strCaption)
 			{
 				BSTR bstrCap = STRING2BSTR(strCaption);
-				m_pGrid->put_Caption(bstrCap);
+				m_pXobj->put_Caption(bstrCap);
 				::SysFreeString(bstrCap);
 			}
 		}
@@ -109,10 +109,10 @@ namespace DOMPlus
 		{
 			String^ get()
 			{
-				if (m_pGrid)
+				if (m_pXobj)
 				{
 					CComBSTR bstrCap("");
-					m_pGrid->get_Name(&bstrCap);
+					m_pXobj->get_Name(&bstrCap);
 					return BSTR2STRING(bstrCap);
 				}
 				return "";
@@ -120,9 +120,9 @@ namespace DOMPlus
 
 			void set(String^ newVal)
 			{
-				if (m_pGrid)
+				if (m_pXobj)
 				{
-					m_pGrid->put_Name(STRING2BSTR(newVal));
+					m_pXobj->put_Name(STRING2BSTR(newVal));
 				}
 			}
 		}
@@ -141,7 +141,7 @@ namespace DOMPlus
 					return m_pHostObj;
 
 				VARIANT var;
-				m_pGrid->get_XObject(&var);
+				m_pXobj->get_XObject(&var);
 
 				try
 				{
@@ -164,12 +164,12 @@ namespace DOMPlus
 			System::Drawing::Color get()
 			{
 				OLE_COLOR rgb;
-				m_pGrid->get_rgbMiddle(&rgb);
+				m_pXobj->get_rgbMiddle(&rgb);
 				return System::Drawing::ColorTranslator::FromOle(rgb);
 			}
 			void set(System::Drawing::Color newVal)
 			{
-				m_pGrid->put_rgbMiddle(System::Drawing::ColorTranslator::ToOle(newVal));
+				m_pXobj->put_rgbMiddle(System::Drawing::ColorTranslator::ToOle(newVal));
 			}
 		}
 
@@ -178,12 +178,12 @@ namespace DOMPlus
 			Drawing::Color get()
 			{
 				OLE_COLOR rgb;
-				m_pGrid->get_rgbLeftTop(&rgb);
+				m_pXobj->get_rgbLeftTop(&rgb);
 				return System::Drawing::ColorTranslator::FromOle(rgb);
 			}
 			void set(System::Drawing::Color newVal)
 			{
-				m_pGrid->put_rgbLeftTop(System::Drawing::ColorTranslator::ToOle(newVal));
+				m_pXobj->put_rgbLeftTop(System::Drawing::ColorTranslator::ToOle(newVal));
 			}
 		}
 
@@ -192,12 +192,12 @@ namespace DOMPlus
 			Drawing::Color get()
 			{
 				OLE_COLOR rgb;
-				m_pGrid->get_rgbRightBottom(&rgb);
+				m_pXobj->get_rgbRightBottom(&rgb);
 				return Drawing::ColorTranslator::FromOle(rgb);
 			}
 			void set(Drawing::Color newVal)
 			{
-				m_pGrid->put_rgbRightBottom(System::Drawing::ColorTranslator::ToOle(newVal));
+				m_pXobj->put_rgbRightBottom(System::Drawing::ColorTranslator::ToOle(newVal));
 			}
 		}
 
@@ -207,7 +207,7 @@ namespace DOMPlus
 			{
 				Object^ pRetObject = nullptr;
 				IDispatch* pDisp = NULL;
-				m_pGrid->get_Extender(&pDisp);
+				m_pXobj->get_Extender(&pDisp);
 				if (pDisp)
 					pRetObject = Marshal::GetObjectForIUnknown((IntPtr)pDisp);
 				return pRetObject;
@@ -215,7 +215,7 @@ namespace DOMPlus
 			void set(Object^ obj)
 			{
 				IDispatch* pDisp = (IDispatch*)Marshal::GetIUnknownForObject(obj).ToPointer();
-				m_pGrid->put_Extender(pDisp);
+				m_pXobj->put_Extender(pDisp);
 			}
 		}
 
@@ -225,7 +225,7 @@ namespace DOMPlus
 			{
 				Object^ pRetObject = nullptr;
 				VARIANT var;
-				m_pGrid->get_Tag(&var);
+				m_pXobj->get_Tag(&var);
 				try
 				{
 					pRetObject = Marshal::GetObjectForNativeVariant((System::IntPtr) & var);
@@ -247,7 +247,7 @@ namespace DOMPlus
 				{
 					VARIANT var;
 					Marshal::GetNativeVariantForObject(obj, (System::IntPtr) & var);
-					m_pGrid->put_Tag(var);
+					m_pXobj->put_Tag(var);
 				}
 				catch (ArgumentException^ e)
 				{
@@ -261,14 +261,14 @@ namespace DOMPlus
 			int get()
 			{
 				int nPage = 0;
-				m_pGrid->get_ActivePage(&nPage);
+				m_pXobj->get_ActivePage(&nPage);
 
 				return nPage;
 			}
 
 			void set(int nPage)
 			{
-				m_pGrid->put_ActivePage(nPage);
+				m_pXobj->put_ActivePage(nPage);
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace DOMPlus
 			DOMPlus::Galaxy^ get()
 			{
 				CComPtr<IGalaxy> pGalaxy;
-				m_pGrid->get_HostGalaxy(&pGalaxy);
+				m_pXobj->get_HostGalaxy(&pGalaxy);
 				if (pGalaxy)
 				{
 					return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
@@ -291,37 +291,37 @@ namespace DOMPlus
 			}
 		}
 
-		property Grid^ RootGrid
+		property Xobj^ RootGrid
 		{
-			Grid^ get()
+			Xobj^ get()
 			{
-				CComPtr<IGrid> pRootGrid;
-				m_pGrid->get_RootGrid(&pRootGrid);
+				CComPtr<IXobj> pRootGrid;
+				m_pXobj->get_RootGrid(&pRootGrid);
 
-				return theAppProxy._createObject<IGrid, Grid>(pRootGrid);
+				return theAppProxy._createObject<IXobj, Xobj>(pRootGrid);
 			}
 		}
 
-		property Grid^ ParentGrid
+		property Xobj^ ParentGrid
 		{
-			Grid^ get()
+			Xobj^ get()
 			{
-				CComPtr<IGrid> pGrid;
-				m_pGrid->get_ParentGrid(&pGrid);
+				CComPtr<IXobj> pXobj;
+				m_pXobj->get_ParentGrid(&pXobj);
 
-				return theAppProxy._createObject<IGrid, Grid>(pGrid);
+				return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 			}
 		}
 
-		property Grid^ HostGrid
+		property Xobj^ HostGrid
 		{
-			Grid^ get()
+			Xobj^ get()
 			{
-				IGrid* pGrid = nullptr;
-				m_pGrid->get_HostGrid(&pGrid);
-				if (pGrid == NULL)
+				IXobj* pXobj = nullptr;
+				m_pXobj->get_HostGrid(&pXobj);
+				if (pXobj == NULL)
 					return nullptr;
-				return theAppProxy._createObject<IGrid, Grid>(pGrid);
+				return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 			}
 		}
 
@@ -330,7 +330,7 @@ namespace DOMPlus
 			int get()
 			{
 				long nValue = 0;
-				m_pGrid->get_Col(&nValue);
+				m_pXobj->get_Col(&nValue);
 				return nValue;
 			}
 		}
@@ -340,7 +340,7 @@ namespace DOMPlus
 			int get()
 			{
 				long nValue = 0;
-				m_pGrid->get_Row(&nValue);
+				m_pXobj->get_Row(&nValue);
 				return nValue;
 			}
 		}
@@ -350,12 +350,12 @@ namespace DOMPlus
 			int get()
 			{
 				int nValue = 0;
-				m_pGrid->get_Hmin(&nValue);
+				m_pXobj->get_Hmin(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pGrid->put_Hmin(newVal);
+				m_pXobj->put_Hmin(newVal);
 			}
 		}
 
@@ -364,12 +364,12 @@ namespace DOMPlus
 			int get()
 			{
 				int nValue = 0;
-				m_pGrid->get_Hmax(&nValue);
+				m_pXobj->get_Hmax(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pGrid->put_Hmax(newVal);
+				m_pXobj->put_Hmax(newVal);
 			}
 		}
 
@@ -378,12 +378,12 @@ namespace DOMPlus
 			int get()
 			{
 				int nValue = 0;
-				m_pGrid->get_Vmin(&nValue);
+				m_pXobj->get_Vmin(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pGrid->put_Vmin(newVal);
+				m_pXobj->put_Vmin(newVal);
 			}
 		}
 
@@ -392,12 +392,12 @@ namespace DOMPlus
 			int get()
 			{
 				int nValue = 0;
-				m_pGrid->get_Vmax(&nValue);
+				m_pXobj->get_Vmax(&nValue);
 				return nValue;
 			}
 			void set(int newVal)
 			{
-				m_pGrid->put_Vmax(newVal);
+				m_pXobj->put_Vmax(newVal);
 			}
 		}
 
@@ -406,7 +406,7 @@ namespace DOMPlus
 			int get()
 			{
 				long nValue = 0;
-				m_pGrid->get_Rows(&nValue);
+				m_pXobj->get_Rows(&nValue);
 				return nValue;
 			}
 		}
@@ -416,7 +416,7 @@ namespace DOMPlus
 			int get()
 			{
 				long nValue = 0;
-				m_pGrid->get_Cols(&nValue);
+				m_pXobj->get_Cols(&nValue);
 				return nValue;
 			}
 		}
@@ -426,7 +426,7 @@ namespace DOMPlus
 			::GridType get()
 			{
 				::GridType type;
-				m_pGrid->get_GridType(&type);
+				m_pXobj->get_GridType(&type);
 				return (::GridType)type;
 			}
 		}
@@ -438,7 +438,7 @@ namespace DOMPlus
 				if (m_hWnd)
 					return (__int64)m_hWnd;
 				__int64 h = 0;
-				m_pGrid->get_Handle(&h);
+				m_pXobj->get_Handle(&h);
 				m_hWnd = (HWND)h;
 				return h;
 			}
@@ -449,40 +449,40 @@ namespace DOMPlus
 			String ^ get(String ^ strKey)
 			{
 				BSTR bstrVal;
-				m_pGrid->get_Attribute(STRING2BSTR(strKey),&bstrVal);
+				m_pXobj->get_Attribute(STRING2BSTR(strKey),&bstrVal);
 
 				return BSTR2STRING(bstrVal);
 			}
 
 			void set(String ^ strKey, String ^ strVal)
 			{
-				m_pGrid->put_Attribute(
+				m_pXobj->put_Attribute(
 					STRING2BSTR(strKey),
 					STRING2BSTR(strVal));
 			}
 		}
 
-		Grid^ GetGrid(int nRow, int nCol)
+		Xobj^ GetGrid(int nRow, int nCol)
 		{
-			IGrid* pGrid;
-			m_pGrid->GetGrid(nRow, nCol, &pGrid);
-			return theAppProxy._createObject<IGrid, Grid>(pGrid);
+			IXobj* pXobj;
+			m_pXobj->GetGrid(nRow, nCol, &pXobj);
+			return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 		}
 
-		Grid^ GetChildGrid(String^ strName)
+		Xobj^ GetChildGrid(String^ strName)
 		{
-			IGrid* pGrid;
+			IXobj* pXobj;
 			BSTR bstrName = STRING2BSTR(strName);
-			m_pGrid->GetChildGridByName(bstrName, &pGrid);
+			m_pXobj->GetChildGridByName(bstrName, &pXobj);
 			::SysFreeString(bstrName);
-			return theAppProxy._createObject<IGrid, Grid>(pGrid);
+			return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 		}
 	private:
 		HWND m_hWnd;
 		void Init();
 	};
 
-	public ref class Galaxy : public Dictionary<String^, Grid^>
+	public ref class Galaxy : public Dictionary<String^, Xobj^>
 	{
 	public:
 		Galaxy(IGalaxy* pGalaxy)
@@ -498,7 +498,7 @@ namespace DOMPlus
 			theAppProxy._removeObject(nValue);
 		}
 
-		Grid^ Observe(String^ layerName, String^ layerXML);
+		Xobj^ Observe(String^ layerName, String^ layerXML);
 
 		property IntPtr Handle
 		{
@@ -510,13 +510,13 @@ namespace DOMPlus
 			}
 		}
 
-		property Grid^ VisibleGrid
+		property Xobj^ VisibleGrid
 		{
-			DOMPlus::Grid^ get()
+			DOMPlus::Xobj^ get()
 			{
-				IGrid* pGrid = nullptr;
-				m_pGalaxy->get_VisibleGrid(&pGrid);
-				return theAppProxy._createObject<IGrid, DOMPlus::Grid>(pGrid);
+				IXobj* pXobj = nullptr;
+				m_pGalaxy->get_VisibleGrid(&pXobj);
+				return theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
 			}
 		}
 	private:
@@ -545,15 +545,15 @@ namespace DOMPlus
 		static String^ GetCtrlTag(Control^ ctrl);
 		static Object^ CreateObject(String^ ObjID);
 		static Form^ CreateForm(IWin32Window^ parent, String^ ObjID);
-		static Grid^ GetGridFromHandle(IntPtr handle);
-		static Grid^ GetGridFromControl(Control^ ctrl);
-		static Grid^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
+		static Xobj^ GetGridFromHandle(IntPtr handle);
+		static Xobj^ GetGridFromControl(Control^ ctrl);
+		static Xobj^ Observe(Control^ ctrl, String^ key, String^ strGridXml);
 
 		static Cosmos^ GetCosmos();
 
-		static property Grid^ CreatingGrid
+		static property Xobj^ CreatingGrid
 		{
-			Grid^ get();
+			Xobj^ get();
 		}
 
 		delegate void Close();
@@ -584,18 +584,18 @@ namespace DOMPlus
 		};
 		static bool Fire_OnAppInit();
 
-		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid);
+		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootGrid);
 		static event OpenComplete^ OnObserverComplete;
-		static void Fire_OnObserverComplete(IntPtr hWnd, String^ bstrUrl, Grid^ pRootGrid)
+		static void Fire_OnObserverComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootGrid)
 		{
 			OnObserverComplete(hWnd, bstrUrl, pRootGrid);
 		}
 
-		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid);
+		delegate void FormNodeCreated(String^ bstrObjID, Form^ pForm, Xobj^ pXobj);
 		static event FormNodeCreated^ OnFormNodeCreated;
-		static void Fire_OnFormNodeCreated(String^ bstrObjID, Form^ pForm, Grid^ pGrid)
+		static void Fire_OnFormNodeCreated(String^ bstrObjID, Form^ pForm, Xobj^ pXobj)
 		{
-			OnFormNodeCreated(bstrObjID, pForm, pGrid);
+			OnFormNodeCreated(bstrObjID, pForm, pXobj);
 		}
 	};
 }

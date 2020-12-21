@@ -19,7 +19,7 @@
 #include "UniverseApp.h"
 #include "Cosmos.h"
 
-CGridShareData::CGridShareData()
+CXobjShareData::CXobjShareData()
 {
 	m_pOldGalaxy		= nullptr;
 	m_pCosmosParse		= nullptr;
@@ -29,7 +29,7 @@ CGridShareData::CGridShareData()
 #endif	
 };
 
-CGridShareData::~CGridShareData()
+CXobjShareData::~CXobjShareData()
 {
 	if (m_pCosmosParse)
 		delete m_pCosmosParse;
@@ -309,7 +309,7 @@ STDMETHODIMP CGalaxyCluster::GetGalaxyFromCtrl(IDispatch* CtrlObj, IGalaxy** ppG
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::GetGrid(BSTR bstrGalaxyName, BSTR bstrNodeName, IGrid** pRetNode)
+STDMETHODIMP CGalaxyCluster::GetGrid(BSTR bstrGalaxyName, BSTR bstrNodeName, IXobj** pRetNode)
 {
 	CString strKey = OLE2T(bstrGalaxyName);
 	CString strName = OLE2T(bstrNodeName);
@@ -328,12 +328,12 @@ STDMETHODIMP CGalaxyCluster::GetGrid(BSTR bstrGalaxyName, BSTR bstrNodeName, IGr
 				strName = strName.MakeLower();
 				auto it2 = pGalaxy->m_mapGrid.find(strName);
 				if (it2 != pGalaxy->m_mapGrid.end())
-					*pRetNode = (IGrid*)it2->second;
+					*pRetNode = (IXobj*)it2->second;
 				else
 				{
 					it2 = m_mapGrid.find(strName);
 					if (it2 != m_mapGrid.end())
-						*pRetNode = (IGrid*)it2->second;
+						*pRetNode = (IXobj*)it2->second;
 				}
 			}
 		}
@@ -377,7 +377,7 @@ void CGalaxyCluster::BeforeDestory()
 	}
 }
 
-STDMETHODIMP CGalaxyCluster::get_Grid(BSTR bstrNodeName, IGrid** pVal)
+STDMETHODIMP CGalaxyCluster::get_Grid(BSTR bstrNodeName, IXobj** pVal)
 {
 	CString strName = OLE2T(bstrNodeName);
 	if (strName == _T(""))
@@ -508,9 +508,9 @@ STDMETHODIMP CGalaxyCluster::GetCtrlInGrid(BSTR NodeName, BSTR CtrlName, IDispat
 	if (it2 == m_mapGrid.end())
 		return S_OK;
 
-	CGrid* pGrid = it2->second;
-	if (pGrid)
-		pGrid->GetCtrlByName(CtrlName, true, ppCtrl);
+	CXobj* pXobj = it2->second;
+	if (pXobj)
+		pXobj->GetCtrlByName(CtrlName, true, ppCtrl);
 
 	return S_OK;
 }
@@ -525,7 +525,7 @@ STDMETHODIMP CGalaxyCluster::put_xtml(BSTR strKey, BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
+STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 {
 	if (g_pCosmos->m_pCLRProxy)
 	{
@@ -560,7 +560,7 @@ STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR Gala
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
+STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 {
 	HWND h = 0;
 	bool bMDI = false;
@@ -706,7 +706,7 @@ STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid)
+STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IXobj** ppGrid)
 {
 	return S_OK;
 }
@@ -720,7 +720,7 @@ STDMETHODIMP CGalaxyCluster::get_CurrentDesignGalaxyType(GalaxyType* pVal)
 {
 	if (g_pCosmos->m_pDesignGrid)
 	{
-		CGalaxy* pGalaxy = g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
+		CGalaxy* pGalaxy = g_pCosmos->m_pDesignGrid->m_pXobjShareData->m_pGalaxy;
 		*pVal = pGalaxy->m_nGalaxyType;
 	}
 	else
@@ -729,7 +729,7 @@ STDMETHODIMP CGalaxyCluster::get_CurrentDesignGalaxyType(GalaxyType* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IGrid** pVal)
+STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IXobj** pVal)
 {
 	if (g_pCosmos->m_pDesignGrid)
 		*pVal = g_pCosmos->m_pDesignGrid;

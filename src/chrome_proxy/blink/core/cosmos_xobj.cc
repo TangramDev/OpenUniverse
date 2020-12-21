@@ -462,7 +462,7 @@ namespace blink {
 		if (thisGrid && messageElem_ && msgID.IsNull() == false && msgID != "")
 		{
 			wstring _strID = WebString(msgID).Utf16();
-			CosmosNode* gridfortarget = nullptr;
+			CosmosNode* xobjfortarget = nullptr;
 			HTMLCollection* list = messageElem_->getElementsByTagName(AtomicString(msgID.LowerASCII()));
 			if (list->length())
 			{
@@ -487,12 +487,12 @@ namespace blink {
 								auto it1 = m_mapElement.find(_strID + L"__" + std::to_wstring(nHandle));
 								if (it1 != m_mapElement.end())
 									elem = it1->second;
-								CosmosNode* gridfortarget = it->value;
-								if (!!gridfortarget) {
-									gridfortarget->setWorkElement(elem);
-									gridfortarget->setMsgID(msgID);
-									gridfortarget->setSender(gridfortarget);
-									gridfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+								CosmosNode* xobjfortarget = it->value;
+								if (!!xobjfortarget) {
+									xobjfortarget->setWorkElement(elem);
+									xobjfortarget->setMsgID(msgID);
+									xobjfortarget->setSender(xobjfortarget);
+									xobjfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xobjfortarget));
 								}
 							}
 						}
@@ -507,7 +507,7 @@ namespace blink {
 						target = elem->getAttribute("target");
 						if (target.IsNull() || target == "")
 						{
-							gridfortarget = thisGrid;
+							xobjfortarget = thisGrid;
 						}
 						else {
 							AtomicString galaxy = elem->getAttribute("galaxy");
@@ -517,24 +517,24 @@ namespace blink {
 							if (cluster == "")
 								cluster = "__viewport_default__";
 
-							gridfortarget = cosmos_->getGrid(galaxy, cluster, target);
-							if (gridfortarget == nullptr) {
+							xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
+							if (xobjfortarget == nullptr) {
 								CosmosWinform* form = thisGrid->parentForm();
 								if (form)
 								{
-									gridfortarget = form->getGrid(galaxy, cluster, target);
+									xobjfortarget = form->getXobj(galaxy, cluster, target);
 								}
 							}
 						}
-						if (!!gridfortarget) {
-							__int64 nHandle = gridfortarget->handle();
+						if (!!xobjfortarget) {
+							__int64 nHandle = xobjfortarget->handle();
 							wstring strHandle = std::to_wstring(nHandle);
 							strHandles += strHandle + L"|";
 							m_mapElement[_strID + L"__" + strHandle] = elem;
-							gridfortarget->setWorkElement(elem);
-							gridfortarget->setMsgID(msgID);
-							gridfortarget->setSender(gridfortarget);
-							gridfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+							xobjfortarget->setWorkElement(elem);
+							xobjfortarget->setMsgID(msgID);
+							xobjfortarget->setSender(xobjfortarget);
+							xobjfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xobjfortarget));
 						}
 					}
 					if (strHandles != L"")
@@ -546,7 +546,7 @@ namespace blink {
 		}
 	}
 
-	void CosmosXobj::DispatchGridEvent(Element* e, const String& eventName)
+	void CosmosXobj::DispatchXobjEvent(Element* e, const String& eventName)
 	{
 		Element* element = static_cast<Element*>(e->childNodes()->item(1));
 		if (!!element) {
@@ -568,23 +568,23 @@ namespace blink {
 								if (cluster == "")
 									cluster = "__viewport_default__";
 
-								CosmosNode* gridfortarget = cosmos_->getGrid(galaxy, cluster, target);
-								if (gridfortarget == nullptr)
+								CosmosNode* xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
+								if (xobjfortarget == nullptr)
 								{
 									CosmosNode* thisGrid = grid();
 									if (thisGrid && thisGrid->m_pParentForm)
-										gridfortarget = thisGrid->m_pParentForm->getGrid(galaxy, cluster, target);
+										xobjfortarget = thisGrid->m_pParentForm->getXobj(galaxy, cluster, target);
 									else
 									{
 										CosmosWinform* form_ = form();
 										if (form_)
-											gridfortarget = form_->getGrid(galaxy, cluster, target);
+											xobjfortarget = form_->getXobj(galaxy, cluster, target);
 									}
 								}
-								if (!!gridfortarget) {
-									gridfortarget->setWorkElement(elem);
-									gridfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
-									gridfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+								if (!!xobjfortarget) {
+									xobjfortarget->setWorkElement(elem);
+									xobjfortarget->setMsgID(e->GetIdAttribute() + "_" + eventName);
+									xobjfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xobjfortarget));
 								}
 							}
 						}
@@ -603,11 +603,11 @@ namespace blink {
 		//           var galaxy = elem.getAttribute("galaxy");
 		//           var cluster = elem.getAttribute("cluster");
 		//            if (!!target && !!galaxy && !!cluster) {
-		//                var gridfortarget = apppage.getGrid(galaxy, cluster, target);
-		//                if (!!gridfortarget) {
-		//                    gridfortarget.workElement = elem;
-		//                    gridfortarget.msgID = e.id + "_OnClick";
-		//                    gridfortarget.sendMessageToGrid(gridfortarget);
+		//                var xobjfortarget = apppage.getXobj(galaxy, cluster, target);
+		//                if (!!xobjfortarget) {
+		//                    xobjfortarget.workElement = elem;
+		//                    xobjfortarget.msgID = e.id + "_OnClick";
+		//                    xobjfortarget.sendMessageToGrid(xobjfortarget);
 		//                }
 		//            }
 		//        }

@@ -465,8 +465,8 @@ namespace OfficePlus
 							HRESULT hr = m_pDesignerGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)m_hChildHostWnd), CComBSTR(L"DeignerTool"), &pGalaxy);
 							if (pGalaxy)
 							{
-								IGrid* pGrid = nullptr;
-								pGalaxy->Observe(CComBSTR(L"DeignerToolBox"), CComBSTR(m_strDesignerXml), &pGrid);
+								IXobj* pXobj = nullptr;
+								pGalaxy->Observe(CComBSTR(L"DeignerToolBox"), CComBSTR(m_strDesignerXml), &pXobj);
 								m_pDesignerFrame = (CGalaxy*)pGalaxy;
 								m_pDesignerFrame->m_bDesignerState = false;
 							}
@@ -524,7 +524,7 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeExtender::InitVBAForm(IDispatch* pFormDisp, long nStyle, BSTR bstrXml, IGrid** ppGrid)
+	STDMETHODIMP COfficeExtender::InitVBAForm(IDispatch* pFormDisp, long nStyle, BSTR bstrXml, IXobj** ppGrid)
 	{
 		CComQIPtr<IOleWindow> pOleWnd(pFormDisp);
 		if (pOleWnd)
@@ -582,24 +582,24 @@ namespace OfficePlus
 
 					if (pGalaxy)
 					{
-						IGrid* pGrid = nullptr;
-						pGalaxy->Observe(bstrName, CComBSTR(strXml), &pGrid);
+						IXobj* pXobj = nullptr;
+						pGalaxy->Observe(bstrName, CComBSTR(strXml), &pXobj);
 
 						CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-						if (nStyle&&pGrid)
+						if (nStyle&&pXobj)
 						{
 							m_pAddin->m_mapVBAForm[hWnd] = _pGalaxy;
 							::SetWindowLong(hWnd, GWL_STYLE, ::GetWindowLong(hWnd, GWL_STYLE) | WS_SIZEBOX | WS_BORDER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);//::SetWindowLong(hWnd, GWL_STYLE, ::GetWindowLong(hWnd, GWL_STYLE)|nStyle);
 							if (nStyle == 10)
 							{
 								_pGalaxy->m_bDesignerState = true;
-								CGrid* _pGrid = (CGrid*)pGrid;
-								_pGrid->m_pGridShareData->m_pOfficeObj = pFormDisp;
-								_pGrid->m_pGridShareData->m_pOfficeObj->AddRef();
+								CXobj* _pXobj = (CXobj*)pXobj;
+								_pXobj->m_pXobjShareData->m_pOfficeObj = pFormDisp;
+								_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();
 							}
 						}
 						m_pAddin->OnVbaFormInit(hWnd, _pGalaxy);
-						*ppGrid = pGrid;
+						*ppGrid = pXobj;
 					}
 					return S_OK;
 				}
@@ -713,7 +713,7 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeExtender::GetActiveTopGrid(IDispatch* pForm, IGrid** WndGrid)
+	STDMETHODIMP COfficeExtender::GetActiveTopGrid(IDispatch* pForm, IXobj** WndGrid)
 	{
 		CComQIPtr<IOleWindow> pOleWnd(pForm);
 		if (pOleWnd)
@@ -767,7 +767,7 @@ namespace OfficePlus
 		return S_OK;
 	}
 
-	STDMETHODIMP COfficeObject::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid)
+	STDMETHODIMP COfficeObject::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
 	{
 		CString strKey = OLE2T(bstrKey);
 		strKey.Trim();

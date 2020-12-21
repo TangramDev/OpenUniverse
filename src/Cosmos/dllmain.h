@@ -17,7 +17,7 @@
 #include <cstring>
 #include <iostream>
 
-class CGridCLREvent;
+class CXobjCLREvent;
 
 class CCosmos :
 	public ICosmosDelegate,
@@ -63,7 +63,7 @@ public:
 private:
 	//CCosmosCoreEvents:
 	void OnCosmosClose();
-	void OnObserverComplete(HWND hWnd, CString strUrl, IGrid* pRootGrid);
+	void OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootGrid);
 	HWND InitCosmosApp();
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
 	virtual bool EclipseAppInit() { return false; };
@@ -73,13 +73,13 @@ private:
 
 extern CCosmos theApp;
 
-class CCosmosGridEvent : public CGridEvents
+class CCosmosXobjEvent : public CXobjEvents
 {
 public:
-	CCosmosGridEvent();
-	virtual ~CCosmosGridEvent();
+	CCosmosXobjEvent();
+	virtual ~CCosmosXobjEvent();
 
-	CGridCLREvent* m_pGridCLREvent;
+	CXobjCLREvent* m_pXobjCLREvent;
 private:
 	void __stdcall  OnObserverComplete();
 	void __stdcall  OnDestroy();

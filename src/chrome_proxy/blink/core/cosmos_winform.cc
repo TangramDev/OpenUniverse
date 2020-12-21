@@ -131,7 +131,7 @@ namespace blink {
 		return nullptr;
 	}
 
-	CosmosNode* CosmosWinform::getGrid(const String& galaxyName, const String& clusterName, const String& gridName)
+	CosmosNode* CosmosWinform::getXobj(const String& galaxyName, const String& clusterName, const String& gridName)
 	{
 		String clusterName_ = clusterName;
 		if (clusterName == "undefined" || clusterName == "" || clusterName.IsNull() == true)
@@ -150,7 +150,7 @@ namespace blink {
 		return nullptr;
 	}
 
-	CosmosNode* CosmosWinform::getGrid(Element* elem)
+	CosmosNode* CosmosWinform::getXobj(Element* elem)
 	{
 		if (elem)
 		{
@@ -176,13 +176,13 @@ namespace blink {
 				}
 				else
 				{
-					CosmosNode* gridfortarget = getGrid(galaxy, cluster, target);
-					if (!!gridfortarget) {
-						return gridfortarget;
+					CosmosNode* xobjfortarget = getXobj(galaxy, cluster, target);
+					if (!!xobjfortarget) {
+						return xobjfortarget;
 					}
 					else
 					{
-						return cosmos_->getGrid(elem, this);
+						return cosmos_->getXobj(elem, this);
 					}
 				}
 			}
@@ -208,7 +208,7 @@ namespace blink {
 		return getInt64(L"formhandle");
 	}
 
-	void CosmosWinform::DispatchGridEvent(Element* e, const String& eventName)
+	void CosmosWinform::DispatchXobjEvent(Element* e, const String& eventName)
 	{
 		Element* element = static_cast<Element*>(e->childNodes()->item(1));
 		if (!!element) {
@@ -229,17 +229,17 @@ namespace blink {
 									galaxy = "default";
 								if (cluster == "")
 									cluster = "default";
-								CosmosNode* gridfortarget = getGrid(galaxy, cluster, target);
-								if (gridfortarget == nullptr)
-									gridfortarget = cosmos_.Get()->getGrid(galaxy, cluster, target);
-								if (!!gridfortarget) {
-									gridfortarget->setWorkElement(elem);
+								CosmosNode* xobjfortarget = getXobj(galaxy, cluster, target);
+								if (xobjfortarget == nullptr)
+									xobjfortarget = cosmos_.Get()->getXobj(galaxy, cluster, target);
+								if (!!xobjfortarget) {
+									xobjfortarget->setWorkElement(elem);
 									String msgID = e->GetIdAttribute() + "_" + eventName;
-									gridfortarget->setMsgID(msgID);
-									gridfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
-									gridfortarget->setMsgID(msgID);
-									gridfortarget->setStr("eventdata", elem->OuterHTMLAsString());
-									m_pRenderframeImpl->SendCosmosMessageEx(gridfortarget->session_);
+									xobjfortarget->setMsgID(msgID);
+									xobjfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xobjfortarget));
+									xobjfortarget->setMsgID(msgID);
+									xobjfortarget->setStr("eventdata", elem->OuterHTMLAsString());
+									m_pRenderframeImpl->SendCosmosMessageEx(xobjfortarget->session_);
 								}
 							}
 						}
@@ -291,7 +291,7 @@ namespace blink {
 										Node* pNode = e;
 										if (pNode->getNodeType() == 1)
 										{
-											CosmosNode* grid = getGrid(e);
+											CosmosNode* grid = getXobj(e);
 											if (grid) {
 												breferenced = true;
 												AtomicString name = grid->hostElem_->getAttribute("name");
@@ -357,7 +357,7 @@ namespace blink {
 	{
 		if (messageElem_ && msgID.IsNull() == false && msgID != "")
 		{
-			CosmosNode* gridfortarget = nullptr;
+			CosmosNode* xobjfortarget = nullptr;
 			HTMLCollection* list = messageElem_->getElementsByTagName(AtomicString(msgID.LowerASCII()));
 			for (unsigned int i = 0; i < list->length(); i++)
 			{
@@ -378,30 +378,30 @@ namespace blink {
 						if (cluster == "")
 							cluster = "default";
 
-						gridfortarget = cosmos_->getGrid(galaxy, cluster, target);
-						if (gridfortarget == nullptr) {
-							gridfortarget = getGrid(galaxy, cluster, target);
+						xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
+						if (xobjfortarget == nullptr) {
+							xobjfortarget = getXobj(galaxy, cluster, target);
 						}
-						if (gridfortarget == nullptr) {
+						if (xobjfortarget == nullptr) {
 							CosmosWinform* Parentform = mdiParent();
 							if(Parentform)
-								gridfortarget = Parentform->getGrid(galaxy, cluster, target);
+								xobjfortarget = Parentform->getXobj(galaxy, cluster, target);
 						}
-						if (gridfortarget == nullptr) {
+						if (xobjfortarget == nullptr) {
 							long nFormType = getLong(L"WinFormType");
 							if (nFormType == 2)
 							{
 								CosmosWinform* childform = activeMDIChild();
 								if(childform)
-									gridfortarget = childform->getGrid(galaxy, cluster, target);
+									xobjfortarget = childform->getXobj(galaxy, cluster, target);
 							}
 						}
 					}
-					if (!!gridfortarget) {
-						gridfortarget->setWorkElement(elem);
-						gridfortarget->setMsgID(msgID);
-						gridfortarget->setSender(this);
-						gridfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforgrid, gridfortarget));
+					if (!!xobjfortarget) {
+						xobjfortarget->setWorkElement(elem);
+						xobjfortarget->setMsgID(msgID);
+						xobjfortarget->setSender(this);
+						xobjfortarget->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xobjfortarget));
 					}
 				}
 			}

@@ -47,7 +47,7 @@ class CORE_EXPORT CosmosCompositor final : public EventTargetWithInlineData,
   
 
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kCosmoscompositor)
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
+  DEFINE_ATTRIBUTE_EVENT_LISTENER(XobjCreated, kXobjcreated)
 
   // EventTarget overrides:
   const AtomicString& InterfaceName() const override;

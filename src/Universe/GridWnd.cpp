@@ -91,7 +91,7 @@ CGridWnd::CGridWnd()
 {
 	bInited = false;
 	m_bCreated = false;
-	m_pGrid = nullptr;
+	m_pXobj = nullptr;
 	m_pHostGrid = nullptr;
 	m_nHostWidth = m_nHostHeight = 0;
 	m_nMasterRow = m_nMasterCol = -1;
@@ -259,7 +259,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 		break;
 		case 2:
 		{
-			m_pGrid->m_pGridShareData->m_pGalaxy->HostPosChanged();
+			m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 			return 0;
 		}
 		break;
@@ -272,43 +272,43 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
-	IGrid* _pGrid = nullptr;
+	IXobj* _pXobj = nullptr;
 	CString str = (LPCTSTR)lParam;
-	CGrid* pOldNode = (CGrid*)g_pCosmos->m_pDesignGrid;
+	CXobj* pOldNode = (CXobj*)g_pCosmos->m_pDesignGrid;
 	CTangramXmlParse* pOld = pOldNode->m_pHostParse;
 
 	long	m_nRow;
 	g_pCosmos->m_pDesignGrid->get_Row(&m_nRow);
 	long	m_nCol;
 	g_pCosmos->m_pDesignGrid->get_Col(&m_nCol);
-	IGrid* _pOldNode = nullptr;
-	m_pGrid->GetGrid(m_nRow, m_nCol, &_pOldNode);
-	CGrid* _pOldNode2 = (CGrid*)_pOldNode;
+	IXobj* _pOldNode = nullptr;
+	m_pXobj->GetGrid(m_nRow, m_nCol, &_pOldNode);
+	CXobj* _pOldNode2 = (CXobj*)_pOldNode;
 	CTangramXmlParse* _pOldParse = _pOldNode2->m_pHostParse;
-	m_pGrid->ObserveEx(m_nRow, m_nCol, CComBSTR(L""), str.AllocSysString(), &_pGrid);
-	CGrid* pGrid = (CGrid*)_pGrid;
-	if (pGrid && pOldNode)
+	m_pXobj->ObserveEx(m_nRow, m_nCol, CComBSTR(L""), str.AllocSysString(), &_pXobj);
+	CXobj* pXobj = (CXobj*)_pXobj;
+	if (pXobj && pOldNode)
 	{
-		CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
-		pGrid->m_pGridShareData->m_pGalaxy->m_bDesignerState = true;
+		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
+		pXobj->m_pXobjShareData->m_pGalaxy->m_bDesignerState = true;
 		CGridVector::iterator it;
-		it = find(m_pGrid->m_vChildNodes.begin(), m_pGrid->m_vChildNodes.end(), pOldNode);
+		it = find(m_pXobj->m_vChildNodes.begin(), m_pXobj->m_vChildNodes.end(), pOldNode);
 
-		if (it != m_pGrid->m_vChildNodes.end())
+		if (it != m_pXobj->m_vChildNodes.end())
 		{
-			pGrid->m_pRootObj = m_pGrid->m_pRootObj;
-			pGrid->m_pParentObj = m_pGrid;
-			CGridVector vec = pGrid->m_vChildNodes;
-			CGrid* pChildNode = nullptr;
-			for (auto it2 : pGrid->m_vChildNodes)
+			pXobj->m_pRootObj = m_pXobj->m_pRootObj;
+			pXobj->m_pParentObj = m_pXobj;
+			CGridVector vec = pXobj->m_vChildNodes;
+			CXobj* pChildNode = nullptr;
+			for (auto it2 : pXobj->m_vChildNodes)
 			{
 				pChildNode = it2;
-				pChildNode->m_pRootObj = m_pGrid->m_pRootObj;
+				pChildNode->m_pRootObj = m_pXobj->m_pRootObj;
 			}
-			CTangramXmlParse* pNew = pGrid->m_pHostParse;
-			CTangramXmlParse* pRet = m_pGrid->m_pHostParse->ReplaceNode(pOld, pNew, _T(""));
-			m_pGrid->m_vChildNodes.erase(it);
-			m_pGrid->m_vChildNodes.push_back(pGrid);
+			CTangramXmlParse* pNew = pXobj->m_pHostParse;
+			CTangramXmlParse* pRet = m_pXobj->m_pHostParse->ReplaceNode(pOld, pNew, _T(""));
+			m_pXobj->m_vChildNodes.erase(it);
+			m_pXobj->m_vChildNodes.push_back(pXobj);
 			pOldNode->m_pHostWnd->DestroyWindow();
 			g_pCosmos->m_pDesignGrid = nullptr;
 			RecalcLayout();
@@ -320,7 +320,7 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 LRESULT CGridWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
 	//RecalcLayout();
-	//m_pGrid->m_pGridShareData->m_pGalaxy->HostPosChanged();
+	//m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	return -1;
 }
@@ -346,13 +346,13 @@ void CGridWnd::StartTracking(int ht)
 	if (ht == noHit)
 		return;
 
-	CGrid* pGrid = m_pGrid->m_pGridShareData->m_pGalaxy->m_pWorkGrid;
-	if (pGrid && pGrid->m_pGridShareData->m_pHostClientView)
+	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkGrid;
+	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pGrid->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
+		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
 	}
 
-	HWND hWnd = m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
 		::BringWindowToTop(hWnd);
 
@@ -408,13 +408,13 @@ void CGridWnd::StopTracking(BOOL bAccept)
 {
 	if (!m_bTracking)
 		return;
-	CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
-	CGrid* pGrid = pGalaxy->m_pWorkGrid;
-	if (pGrid && pGrid->m_pGridShareData->m_pHostClientView)
+	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
+	CXobj* pXobj = pGalaxy->m_pWorkGrid;
+	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pGrid->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
+		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
 		::InvalidateRect(pGalaxy->m_hWnd, NULL, false);
-		pGrid->m_pHostWnd->Invalidate();
+		pXobj->m_pHostWnd->Invalidate();
 	}
 
 	CSplitterWnd::StopTracking(bAccept);
@@ -428,8 +428,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;
 		}
-		else if (g_pCosmos->m_pDesignGrid && g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
-			pWebWnd = g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+		else if (g_pCosmos->m_pDesignGrid && g_pCosmos->m_pDesignGrid->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
+			pWebWnd = g_pCosmos->m_pDesignGrid->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 		pGalaxy->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
@@ -437,10 +437,10 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			LRESULT lRes = ::SendMessage(h, WM_HUBBLE_GETNODE, 0, 0);
 			if (lRes)
 			{
-				CGrid* pRetNode = (CGrid*)lRes;
+				CXobj* pRetNode = (CXobj*)lRes;
 				if (pRetNode && pRetNode->m_nViewType == Grid)
 				{
-					pRetNode->m_pGridShareData->m_pGalaxy->HostPosChanged();
+					pRetNode->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 				}
 			}
 		}
@@ -456,7 +456,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 void CGridWnd::PostNcDestroy()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	delete m_pGrid;
+	delete m_pXobj;
 	CSplitterWnd::PostNcDestroy();
 	delete this;
 }
@@ -464,7 +464,7 @@ void CGridWnd::PostNcDestroy()
 // Generic routine:
 //  for X direction: pInfo = m_pColInfo, nMax = m_nMaxCols, nSize = cx
 //  for Y direction: pInfo = m_pRowInfo, nMax = m_nMaxRows, nSize = cy
-void CGridWnd::_LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CGrid* pHostNode, bool bCol)
+void CGridWnd::_LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CXobj* pHostNode, bool bCol)
 {
 	ASSERT(pInfoArray != NULL);
 	ASSERT(nMax > 0);
@@ -723,15 +723,15 @@ void CGridWnd::_RecalcLayout()
 
 BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pCosmos->m_pActiveGrid;
-	m_pGrid->m_pHostWnd = this;
-	m_pGrid->m_nViewType = Grid;
-	m_pGrid->m_nID = nID;
-	m_pGrid->m_pDisp = nullptr;
+	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj->m_pHostWnd = this;
+	m_pXobj->m_nViewType = Grid;
+	m_pXobj->m_nID = nID;
+	m_pXobj->m_pDisp = nullptr;
 
 	int r, g, b;
 	CComBSTR bstrVal(L"");
-	m_pGrid->get_Attribute(CComBSTR("lefttopcolor"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR("lefttopcolor"), &bstrVal);
 	if (!CString(bstrVal).IsEmpty())
 	{
 		_stscanf_s(CString(bstrVal), _T("RGB(%d,%d,%d)"), &r, &g, &b);
@@ -743,7 +743,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	}
 
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR("rightbottomcolor"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR("rightbottomcolor"), &bstrVal);
 	if (!CString(bstrVal).IsEmpty())
 	{
 		_stscanf_s(CString(bstrVal), _T("RGB(%d,%d,%d)"), &r, &g, &b);
@@ -754,7 +754,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		rgbRightBottom = RGB(240, 240, 240);
 	}
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR(L"middlecolor"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR(L"middlecolor"), &bstrVal);
 	if (!CString(bstrVal).IsEmpty())
 	{
 		_stscanf_s(CString(bstrVal), _T("RGB(%d,%d,%d)"), &r, &g, &b);
@@ -766,19 +766,19 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	}
 
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR(L"splitterwidth"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR(L"splitterwidth"), &bstrVal);
 	m_cxSplitterGap = m_cySplitterGap = m_cxSplitter = m_cySplitter = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 7;
 
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR(L"borderwidth"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR(L"borderwidth"), &bstrVal);
 	m_cxBorder = m_cyBorder = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 2;
 
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR(L"vmin"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR(L"vmin"), &bstrVal);
 	m_Vmin = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 0;
 
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR(L"vmax"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR(L"vmax"), &bstrVal);
 	if (!CString(bstrVal).IsEmpty())
 	{
 		m_Vmax = _ttoi(CString(bstrVal));
@@ -788,11 +788,11 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	else
 		m_Vmax = 65535;
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR(L"hmin"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR(L"hmin"), &bstrVal);
 	m_Hmin = !CString(bstrVal).IsEmpty() ? _ttoi(CString(bstrVal)) : 0;
 
 	bstrVal.Empty();
-	m_pGrid->get_Attribute(CComBSTR(L"hmax"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR(L"hmax"), &bstrVal);
 	if (!CString(bstrVal).IsEmpty())
 	{
 		m_Hmax = _ttoi(CString(bstrVal));
@@ -802,21 +802,21 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	else
 		m_Hmax = 65535;
 
-	m_pGrid->m_nRows = m_pGrid->m_pHostParse->attrInt(TGM_ROWS, 0);
-	m_pGrid->m_nCols = m_pGrid->m_pHostParse->attrInt(TGM_COLS, 0);
+	m_pXobj->m_nRows = m_pXobj->m_pHostParse->attrInt(TGM_ROWS, 0);
+	m_pXobj->m_nCols = m_pXobj->m_pHostParse->attrInt(TGM_COLS, 0);
 
-	m_nMasterRow = m_pGrid->m_pHostParse->attrInt(L"masterrow", -1);
-	m_nMasterCol = m_pGrid->m_pHostParse->attrInt(L"mastercol", -1);
+	m_nMasterRow = m_pXobj->m_pHostParse->attrInt(L"masterrow", -1);
+	m_nMasterCol = m_pXobj->m_pHostParse->attrInt(L"mastercol", -1);
 
 	if (nID == 0)
 		nID = 1;
 
-	if (CreateStatic(pParentWnd, m_pGrid->m_nRows, m_pGrid->m_nCols, dwStyle, nID))
+	if (CreateStatic(pParentWnd, m_pXobj->m_nRows, m_pXobj->m_nCols, dwStyle, nID))
 	{
-		m_pGrid->NodeCreated();
-		CString strWidth = m_pGrid->m_pHostParse->attr(TGM_WIDTH, _T(""));
+		m_pXobj->NodeCreated();
+		CString strWidth = m_pXobj->m_pHostParse->attr(TGM_WIDTH, _T(""));
 		strWidth += _T(",");
-		CString strHeight = m_pGrid->m_pHostParse->attr(TGM_HEIGHT, _T(""));
+		CString strHeight = m_pXobj->m_pHostParse->attr(TGM_HEIGHT, _T(""));
 		strHeight += _T(",");
 
 		int nWidth, nHeight, nPos;
@@ -824,10 +824,10 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 
 		strOldWidth = strWidth;
 		vector<CTangramXmlParse*> vecParse;
-		long nSize = m_pGrid->m_pHostParse->GetCount();
+		long nSize = m_pXobj->m_pHostParse->GetCount();
 		for (int i = 0; i < nSize; i++)
 		{
-			CTangramXmlParse* _pChild = m_pGrid->m_pHostParse->GetChild(i);
+			CTangramXmlParse* _pChild = m_pXobj->m_pHostParse->GetChild(i);
 			if (_pChild->name().CompareNoCase(TGM_GRID) == 0)
 				vecParse.push_back(_pChild);
 		}
@@ -836,11 +836,11 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		CTangramXmlParse* pSubItem = vecParse[nIndex];
 		if (pSubItem == nullptr)
 		{
-			strName.Format(_T("%s_splitterchild_%i"), m_pGrid->m_strName, 0);
-			pSubItem = m_pGrid->m_pHostParse->AddNode(strName);
+			strName.Format(_T("%s_splitterchild_%i"), m_pXobj->m_strName, 0);
+			pSubItem = m_pXobj->m_pHostParse->AddNode(strName);
 			vecParse.push_back(pSubItem);
 		}
-		for (int i = 0; i < m_pGrid->m_nRows; i++)
+		for (int i = 0; i < m_pXobj->m_nRows; i++)
 		{
 			nPos = strHeight.Find(_T(","));
 			strH = strHeight.Left(nPos);
@@ -848,18 +848,18 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 			nHeight = _ttoi(strH);
 
 			strWidth = strOldWidth;
-			for (int j = 0; j < m_pGrid->m_nCols; j++)
+			for (int j = 0; j < m_pXobj->m_nCols; j++)
 			{
 				nPos = strWidth.Find(_T(","));
 				strW = strWidth.Left(nPos);
 				strWidth = strWidth.Mid(nPos + 1);
 				nWidth = _ttoi(strW);
-				CGrid* pObj = new CComObject<CGrid>;
-				pObj->m_pRootObj = m_pGrid->m_pRootObj;
+				CXobj* pObj = new CComObject<CXobj>;
+				pObj->m_pRootObj = m_pXobj->m_pRootObj;
 				pObj->m_pHostParse = pSubItem;
-				pObj->m_pParentObj = m_pGrid;
+				pObj->m_pParentObj = m_pXobj;
 
-				m_pGrid->AddChildNode(pObj);
+				m_pXobj->AddChildNode(pObj);
 				pObj->m_nRow = i;
 				pObj->m_nCol = j;
 				pObj->InitWndGrid();
@@ -869,7 +869,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 					pObj->m_nWidth = nWidth;
 					pObj->m_nHeigh = nHeight;
 					if (pContext->m_pNewViewClass == nullptr)
-						pContext->m_pNewViewClass = RUNTIME_CLASS(CGridHelper);
+						pContext->m_pNewViewClass = RUNTIME_CLASS(CXobjHelper);
 					CreateView(pObj->m_nRow, pObj->m_nCol, pObj->m_pObjClsInfo, CSize(max(pObj->m_nWidth, m_Hmin), max(pObj->m_nHeigh, m_Vmin)), pContext);
 				}
 				if (m_nMasterRow == i && m_nMasterCol == j)
@@ -883,10 +883,10 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				}
 				else
 				{
-					if (nIndex < m_pGrid->m_nCols * m_pGrid->m_nRows)
+					if (nIndex < m_pXobj->m_nCols * m_pXobj->m_nRows)
 					{
-						strName.Format(_T("%s_splitterchild_%i"), m_pGrid->m_strName, nIndex);
-						pSubItem = m_pGrid->m_pHostParse->AddNode(strName);
+						strName.Format(_T("%s_splitterchild_%i"), m_pXobj->m_strName, nIndex);
+						pSubItem = m_pXobj->m_pHostParse->AddNode(strName);
 						vecParse.push_back(pSubItem);
 					}
 				}
@@ -894,11 +894,11 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		}
 		SetWindowPos(NULL, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER | SWP_NOREDRAW);
 
-		SetWindowText(m_pGrid->m_strNodeName);
+		SetWindowText(m_pXobj->m_strNodeName);
 		m_bCreated = true;
-		CGrid* pHostNode = nullptr;
-		CGrid* pParent = nullptr;
-		CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+		CXobj* pHostNode = nullptr;
+		CXobj* pParent = nullptr;
+		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 		bool bHasHostView = false;
 		if (pGalaxy->m_pBindingGrid)
 		{
@@ -907,7 +907,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 			{
 				bHasHostView = true;
 				pParent = pHostNode->m_pParentObj;
-				while (pParent != m_pGrid)
+				while (pParent != m_pXobj)
 				{
 					pHostNode = pParent;
 					pParent = pHostNode->m_pParentObj;
@@ -925,8 +925,8 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 
 LRESULT CGridWnd::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
-	if (m_pGrid)
-		return (LRESULT)m_pGrid;
+	if (m_pXobj)
+		return (LRESULT)m_pXobj;
 	return (long)CWnd::DefWindowProc(WM_HUBBLE_GETNODE, wParam, lParam);;
 }
 
@@ -1129,7 +1129,7 @@ int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	}
 
-	CGalaxy* pGalaxy = m_pGrid->m_pGridShareData->m_pGalaxy;
+	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
@@ -1154,7 +1154,7 @@ void CGridWnd::Save()
 
 	int minCx, minCy;
 
-	for (int i = 0; i < m_pGrid->m_nRows; i++)
+	for (int i = 0; i < m_pXobj->m_nRows; i++)
 	{
 		int iHeight;
 		CString strH;
@@ -1164,7 +1164,7 @@ void CGridWnd::Save()
 		strHeight += strH;
 	}
 
-	for (int j = 0; j < m_pGrid->m_nCols; j++)
+	for (int j = 0; j < m_pXobj->m_nCols; j++)
 	{
 		int iWidth;
 		CString strW;
@@ -1174,8 +1174,8 @@ void CGridWnd::Save()
 		strWidth += strW;
 	}
 
-	m_pGrid->put_Attribute(CComBSTR(TGM_HEIGHT), CComBSTR(strHeight));
-	m_pGrid->put_Attribute(CComBSTR(TGM_WIDTH), CComBSTR(strWidth));
+	m_pXobj->put_Attribute(CComBSTR(TGM_HEIGHT), CComBSTR(strHeight));
+	m_pXobj->put_Attribute(CComBSTR(TGM_WIDTH), CComBSTR(strWidth));
 }
 
 void CGridWnd::OnMouseMove(UINT nFlags, CPoint point)
@@ -1250,7 +1250,7 @@ void CGridWnd::OnSize(UINT nType, int cx, int cy)
 
 void CGridWnd::OnDestroy()
 {
-	m_pGrid->Fire_Destroy();
+	m_pXobj->Fire_Destroy();
 	__super::OnDestroy();
 }
 

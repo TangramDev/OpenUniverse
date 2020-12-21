@@ -27,7 +27,7 @@ using namespace System::Windows::Forms;
 
 namespace DOMPlus
 {
-	ref class Grid;
+	ref class Xobj;
 	ref class Galaxy;
 
 	public ref class Wormhole
@@ -84,9 +84,9 @@ namespace DOMPlus
 			virtual IntPtr get();
 		}
 
-		property Grid^ ParentGrid
+		property Xobj^ ParentGrid
 		{
-			Grid^ get();
+			Xobj^ get();
 		}
 
 		property Galaxy^ HostGalaxy

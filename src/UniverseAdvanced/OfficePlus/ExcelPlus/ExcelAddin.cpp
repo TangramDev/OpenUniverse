@@ -98,8 +98,8 @@ namespace OfficePlus
 								HRESULT hr = m_pDesignerGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)m_hChildHostWnd), CComBSTR(L"DeignerTool"), &pGalaxy);
 								if (pGalaxy)
 								{
-									IGrid* pGrid = nullptr;
-									pGalaxy->Observe(CComBSTR(L"DeignerToolBox"), CComBSTR(m_strDesignerXml), &pGrid);
+									IXobj* pXobj = nullptr;
+									pGalaxy->Observe(CComBSTR(L"DeignerToolBox"), CComBSTR(m_strDesignerXml), &pXobj);
 									m_pDesignerFrame = (CGalaxy*)pGalaxy;
 									m_pDesignerFrame->m_bDesignerState = false;
 								}
@@ -192,8 +192,8 @@ namespace OfficePlus
 					strXml = pWorkBook->m_mapWorkSheetInfo[_T("Default")];
 				}
 
-				IGrid* pGrid = nullptr;
-				pWorkBook->m_pGalaxy->Observe(strName.AllocSysString(), CComBSTR(strXml), &pGrid);
+				IXobj* pXobj = nullptr;
+				pWorkBook->m_pGalaxy->Observe(strName.AllocSysString(), CComBSTR(strXml), &pXobj);
 			}
 
 			CGalaxy* pGalaxy = pExcelObject->m_pWorkBook->m_pGalaxy;
@@ -519,7 +519,7 @@ namespace OfficePlus
 					if (m_pDesignerFrame == nullptr)
 						break;
 
-					CGrid* pGrid = m_pDesignerFrame->m_pWorkGrid;
+					CXobj* pXobj = m_pDesignerFrame->m_pWorkGrid;
 					m_pDesignerFrame->HostPosChanged();
 					m_pDesigningFrame = m_pWorkBook->m_pGalaxy;
 					m_pDesigningFrame->UpdateDesignerTreeInfo();
@@ -610,13 +610,13 @@ namespace OfficePlus
 											m_pWorkBook->m_pTaskPaneGalaxy = (CGalaxy*)pTaskPaneFrame;
 											if (m_pWorkBook->m_pTaskPaneGalaxy)
 											{
-												IGrid* pGrid = nullptr;
-												m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pGrid);
-												CGrid* _pGrid = (CGrid*)pGrid;
-												if (_pGrid->m_pGridShareData->m_pOfficeObj == nullptr && pDisp)
+												IXobj* pXobj = nullptr;
+												m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pXobj);
+												CXobj* _pXobj = (CXobj*)pXobj;
+												if (_pXobj->m_pXobjShareData->m_pOfficeObj == nullptr && pDisp)
 												{
-													_pGrid->m_pGridShareData->m_pOfficeObj = pDisp;
-													_pGrid->m_pGridShareData->m_pOfficeObj->AddRef();
+													_pXobj->m_pXobjShareData->m_pOfficeObj = pDisp;
+													_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();
 												}
 											}
 											_pCustomTaskPane->put_DockPosition(m_pWorkBook->m_nMsoCTPDockPosition);
@@ -635,8 +635,8 @@ namespace OfficePlus
 									_pCustomTaskPane->put_Visible(true);
 									if (m_pWorkBook->m_pTaskPaneGalaxy)
 									{
-										IGrid* pGrid = nullptr;
-										m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pGrid);
+										IXobj* pXobj = nullptr;
+										m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pXobj);
 									}
 								}
 							}
@@ -1074,13 +1074,13 @@ namespace OfficePlus
 							CString strKey = strName;
 							strName += _T("_default");
 							CTangramXmlParse* pParse2 = pParse->GetChild(_T("sheet"));
-							IGrid* pGrid = nullptr;
-							m_pWorkBook->m_pGalaxy->Observe(strName.AllocSysString(), pParse2->xml().AllocSysString(), &pGrid);
-							CGrid* _pGrid = (CGrid*)pGrid;
-							if (_pGrid->m_pGridShareData->m_pOfficeObj == nullptr && pDisp)
+							IXobj* pXobj = nullptr;
+							m_pWorkBook->m_pGalaxy->Observe(strName.AllocSysString(), pParse2->xml().AllocSysString(), &pXobj);
+							CXobj* _pXobj = (CXobj*)pXobj;
+							if (_pXobj->m_pXobjShareData->m_pOfficeObj == nullptr && pDisp)
 							{
-								_pGrid->m_pGridShareData->m_pOfficeObj = pDisp;
-								_pGrid->m_pGridShareData->m_pOfficeObj->AddRef();
+								_pXobj->m_pXobjShareData->m_pOfficeObj = pDisp;
+								_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();
 							}
 						}
 						pParse = pParse->GetChild(_T("taskpane"));
@@ -1126,13 +1126,13 @@ namespace OfficePlus
 										_pCustomTaskPane->put_Visible(true);
 										if (m_pWorkBook->m_pTaskPaneGalaxy)
 										{
-											IGrid* pGrid = nullptr;
-											m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pGrid);
-											CGrid* _pGrid = (CGrid*)pGrid;
-											if (_pGrid->m_pGridShareData->m_pOfficeObj == nullptr && pDisp)
+											IXobj* pXobj = nullptr;
+											m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pXobj);
+											CXobj* _pXobj = (CXobj*)pXobj;
+											if (_pXobj->m_pXobjShareData->m_pOfficeObj == nullptr && pDisp)
 											{
-												_pGrid->m_pGridShareData->m_pOfficeObj = pDisp;
-												_pGrid->m_pGridShareData->m_pOfficeObj->AddRef();
+												_pXobj->m_pXobjShareData->m_pOfficeObj = pDisp;
+												_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();
 											}
 										}
 									}
@@ -1146,8 +1146,8 @@ namespace OfficePlus
 								_pCustomTaskPane->put_Visible(true);
 								if (m_pWorkBook->m_pTaskPaneGalaxy)
 								{
-									IGrid* pGrid = nullptr;
-									m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pGrid);
+									IXobj* pXobj = nullptr;
+									m_pWorkBook->m_pTaskPaneGalaxy->Observe(CComBSTR(strName), pParse->xml().AllocSysString(), &pXobj);
 								}
 							}
 						}

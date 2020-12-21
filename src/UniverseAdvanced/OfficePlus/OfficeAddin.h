@@ -162,10 +162,10 @@ namespace OfficePlus
 	public:
 		STDMETHOD(Close)();
 		STDMETHOD(get_ActiveWorkBenchWindow)(BSTR bstrID, IWorkBenchWindow** pVal);
-		STDMETHOD(InitVBAForm)(IDispatch*, long, BSTR bstrXml, IGrid** ppRetGrid);
+		STDMETHOD(InitVBAForm)(IDispatch*, long, BSTR bstrXml, IXobj** ppRetGrid);
 		STDMETHOD(AddVBAFormsScript)(IDispatch* OfficeObject, BSTR bstrKey, BSTR bstrXml);
 		STDMETHOD(GetGalaxyFromVBAForm)(IDispatch* pForm, IGalaxy** ppGalaxy);
-		STDMETHOD(GetActiveTopGrid)(IDispatch* pForm, IGrid** WndGrid);
+		STDMETHOD(GetActiveTopGrid)(IDispatch* pForm, IXobj** WndGrid);
 		STDMETHOD(GetObjectFromWnd)(LONG hWnd, IDispatch** ppObjFromWnd);
 	};
 
@@ -194,7 +194,7 @@ namespace OfficePlus
 		END_COM_MAP()
 
 		STDMETHOD(Show)(VARIANT_BOOL bShow);
-		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid);
+		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid);
 		STDMETHOD(UnloadCosmos)();
 
 		void Lock() {}

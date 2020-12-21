@@ -648,7 +648,7 @@ struct __declspec(uuid("000208c1-0001-0000-c000-000000000046"))
 struct __declspec(uuid("000208c2-0001-0000-c000-000000000046"))
 /* interface */ IHiLoLines;
 struct __declspec(uuid("000208c3-0001-0000-c000-000000000046"))
-/* interface */ IGridlines;
+/* interface */ IXobjlines;
 struct __declspec(uuid("000208c4-0001-0000-c000-000000000046"))
 /* interface */ IDropLines;
 struct __declspec(uuid("00024437-0001-0000-c000-000000000046"))
@@ -2214,7 +2214,7 @@ _COM_SMARTPTR_TYPEDEF(ITrendline, __uuidof(ITrendline));
 _COM_SMARTPTR_TYPEDEF(ICorners, __uuidof(ICorners));
 _COM_SMARTPTR_TYPEDEF(ISeriesLines, __uuidof(ISeriesLines));
 _COM_SMARTPTR_TYPEDEF(IHiLoLines, __uuidof(IHiLoLines));
-_COM_SMARTPTR_TYPEDEF(IGridlines, __uuidof(IGridlines));
+_COM_SMARTPTR_TYPEDEF(IXobjlines, __uuidof(IXobjlines));
 _COM_SMARTPTR_TYPEDEF(IDropLines, __uuidof(IDropLines));
 _COM_SMARTPTR_TYPEDEF(ILeaderLines, __uuidof(ILeaderLines));
 _COM_SMARTPTR_TYPEDEF(IUpBars, __uuidof(IUpBars));
@@ -23600,7 +23600,7 @@ IHiLoLines : IDispatch
 };
 
 struct __declspec(uuid("000208c3-0001-0000-c000-000000000046"))
-IGridlines : IDispatch
+IXobjlines : IDispatch
 {
     //
     // Raw methods provided by interface
@@ -37409,7 +37409,7 @@ extern "C" const GUID __declspec(selectany) IID_ISeriesLines =
     {0x000208c1,0x0001,0x0000,{0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}};
 extern "C" const GUID __declspec(selectany) IID_IHiLoLines =
     {0x000208c2,0x0001,0x0000,{0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}};
-extern "C" const GUID __declspec(selectany) IID_IGridlines =
+extern "C" const GUID __declspec(selectany) IID_IXobjlines =
     {0x000208c3,0x0001,0x0000,{0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}};
 extern "C" const GUID __declspec(selectany) IID_IDropLines =
     {0x000208c4,0x0001,0x0000,{0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}};

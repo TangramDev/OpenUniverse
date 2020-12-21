@@ -16,45 +16,45 @@
 
 using namespace System::Runtime::InteropServices;
 
-CGridCLREvent::CGridCLREvent()
+CXobjCLREvent::CXobjCLREvent()
 {
 }
 
 
-CGridCLREvent::~CGridCLREvent()
+CXobjCLREvent::~CXobjCLREvent()
 {
-	//delete m_pGrid;
+	//delete m_pXobj;
 }
 
-void CGridCLREvent::OnObserverComplete(IGrid* pGrid)
+void CXobjCLREvent::OnObserverComplete(IXobj* pXobj)
 {
-	m_pGrid->Fire_ObserveComplete(m_pGrid);
+	m_pXobj->Fire_ObserveComplete(m_pXobj);
 }
 
-void CGridCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
-{
-}
-
-void CGridCLREvent::OnDestroy()
-{
-	m_pGrid->Fire_OnDestroy(m_pGrid);
-}
-
-void CGridCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+void CXobjCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 {
 }
 
-void CGridCLREvent::OnGridAddInsCreated()
+void CXobjCLREvent::OnDestroy()
+{
+	m_pXobj->Fire_OnDestroy(m_pXobj);
+}
+
+void CXobjCLREvent::OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 }
 
-void CGridCLREvent::OnTabChange(int nActivePage, int nOldPage)
+void CXobjCLREvent::OnGridAddInsCreated()
 {
-	DOMPlus::Grid^ pActiveGrid = m_pGrid->GetGrid(0, nActivePage);
-	DOMPlus::Grid^ pOldGrid = m_pGrid->GetGrid(0, nOldPage);
-	m_pGrid->Fire_OnTabChange(pActiveGrid, pOldGrid);
 }
 
-void CGridCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
+void CXobjCLREvent::OnTabChange(int nActivePage, int nOldPage)
+{
+	DOMPlus::Xobj^ pActiveGrid = m_pXobj->GetGrid(0, nActivePage);
+	DOMPlus::Xobj^ pOldGrid = m_pXobj->GetGrid(0, nOldPage);
+	m_pXobj->Fire_OnTabChange(pActiveGrid, pOldGrid);
+}
+
+void CXobjCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
 {
 }

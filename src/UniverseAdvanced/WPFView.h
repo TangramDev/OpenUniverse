@@ -22,7 +22,7 @@
 
 
 // CWPFView view
-class CGrid;
+class CXobj;
 class CWPFView : public CView
 {
 	DECLARE_DYNCREATE(CWPFView)
@@ -38,7 +38,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 	BOOL			m_RespondMouseActive;
-	CGrid*		m_pGrid;
+	CXobj*		m_pXobj;
 	CWPFObj* m_pCosmosWPFObj;
 protected:
 	DECLARE_MESSAGE_MAP()

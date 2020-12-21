@@ -7066,7 +7066,7 @@ void RenderFrameImpl::OnCosmosRendererIPCMsg(
       if (itID != mapString.end()) {
         const std::vector<std::wstring> eventnames = base::SplitString(itID->second, L"@", base::TRIM_WHITESPACE,
                               base::SPLIT_WANT_NONEMPTY);
-        pCosmos->DispatchGridEvent(var, eventnames[1].c_str(),
+        pCosmos->DispatchXobjEvent(var, eventnames[1].c_str(),
                                    eventnames[0].c_str());
       }
       return;

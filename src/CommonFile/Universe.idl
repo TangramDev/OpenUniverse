@@ -28,7 +28,7 @@ import "oaidl.idl";
 import "ocidl.idl";
 
 interface IGalaxyCluster;
-interface IGrid;
+interface IXobj;
 interface IGalaxy;
 interface ICosmos;
 interface ICosmosCtrl;
@@ -38,7 +38,7 @@ interface IEclipseCtrl;
 interface ICosmosDoc;
 interface IWebPage;
 interface IBrowser;
-interface IGridCollection;
+interface IXobjCollection;
 
 typedef
 [
@@ -162,9 +162,9 @@ interface IEclipseExtender : ICosmosExtender {
 ]
 interface IOfficeExtender : ICosmosExtender {
 	[id(101)] HRESULT AddVBAFormsScript(IDispatch* OfficeObject, BSTR bstrKey, BSTR bstrXml);
-	[id(102)] HRESULT InitVBAForm([in] IDispatch* newVal, [in]long nStyle, BSTR bstrXml, [out, retval] IGrid** ppGrid);
+	[id(102)] HRESULT InitVBAForm([in] IDispatch* newVal, [in]long nStyle, BSTR bstrXml, [out, retval] IXobj** ppGrid);
 	[id(103)] HRESULT GetGalaxyFromVBAForm(IDispatch* pForm, [out, retval] IGalaxy** ppGalaxy);
-	[id(104)] HRESULT GetActiveTopGrid(IDispatch* pForm, [out, retval] IGrid** WndGrid);
+	[id(104)] HRESULT GetActiveTopGrid(IDispatch* pForm, [out, retval] IXobj** WndGrid);
 	[id(105)] HRESULT GetObjectFromWnd(LONG hWnd, [out, retval] IDispatch** ppObjFromWnd);
 };
 
@@ -188,7 +188,7 @@ interface ICosmosTreeNode : IDispatch {
 	pointer_default(unique)
 ]
 interface ICosmosTreeViewCallBack : IDispatch {
-	[propput, id(1), helpstring("property WndGrid")] HRESULT WndGrid(IGrid* newVal);
+	[propput, id(1), helpstring("property WndGrid")] HRESULT WndGrid(IXobj* newVal);
 	[propget, id(2), helpstring("property Pages")] HRESULT Pages(long* retVal);
 	[id(100), helpstring("method OnInitTreeView")] HRESULT OnInitTreeView(ICosmosTreeView* pTangramTreeView, BSTR bstrXml);
 	[id(101), helpstring("method OnClick")] HRESULT OnClick(BSTR bstrXml, BSTR bstrXmlData);
@@ -236,21 +236,21 @@ interface ICosmosEventObj : IDispatch {
 
 [
 	uuid(19631222-1992-0612-1965-060119820004),
-	helpstring("IGrid Interface"),
+	helpstring("IXobj Interface"),
 	pointer_default(unique)
 ]
-interface IGrid : IDispatch {
-	[propget, id(1), helpstring("property ChildNodes")] HRESULT ChildNodes([out, retval]IGridCollection** ppGridColletion);
+interface IXobj : IDispatch {
+	[propget, id(1), helpstring("property ChildNodes")] HRESULT ChildNodes([out, retval]IXobjCollection** ppGridColletion);
 	[propget, id(2), helpstring("property Rows")] HRESULT Rows([out, retval]long* nRows);
 	[propget, id(3), helpstring("property Cols")] HRESULT Cols([out, retval]long* nCols);
 	[propget, id(4), helpstring("property Row")] HRESULT Row([out, retval]long* nRow);
 	[propget, id(5), helpstring("property Col")] HRESULT Col([out, retval]long* nCol);
 	[propget, id(6), helpstring("property NodeType")] HRESULT GridType([out, retval]GridType* nType);
-	[propget, id(7), helpstring("property ParentGrid")] HRESULT ParentGrid([out, retval]IGrid** ppGrid);
+	[propget, id(7), helpstring("property ParentGrid")] HRESULT ParentGrid([out, retval]IXobj** ppGrid);
 	[propget, id(8)] HRESULT URL([out, retval] BSTR* pVal);
 	[propput, id(8)] HRESULT URL([in] BSTR newVal);
 	[propget, id(9)] HRESULT GalaxyCluster([out, retval] IGalaxyCluster** pVal);
-	[propget, id(10), helpstring("property RootNode")] HRESULT RootGrid([out, retval]IGrid** ppGrid);
+	[propget, id(10), helpstring("property RootNode")] HRESULT RootGrid([out, retval]IXobj** ppGrid);
 	[propget, id(11), helpstring("property XObject")] HRESULT XObject([out, retval] VARIANT* pVar);
 	[propget, id(12), helpstring("property PlugIn")] HRESULT AxPlugIn([in] BSTR bstrPlugInName, [out, retval] IDispatch** pVal);
 	[propget, id(13), helpstring("When this Node is Contained in a Tabbed Node, "
@@ -258,7 +258,7 @@ interface IGrid : IDispatch {
 	[propput, id(13), helpstring("property Caption")] HRESULT Caption([in] BSTR bstrCaption);
 	[propget, id(14), helpstring("property Name")] HRESULT Name([out, retval] BSTR* pVal);
 	[propput, id(14), helpstring("property Name")] HRESULT Name([in] BSTR bstrName);
-	[propget, id(15), helpstring("property Objects")] HRESULT Objects([in]long nType, [out, retval]IGridCollection** ppGridColletion);
+	[propget, id(15), helpstring("property Objects")] HRESULT Objects([in]long nType, [out, retval]IXobjCollection** ppGridColletion);
 	[propget, id(16), helpstring("property Handle")] HRESULT Handle([out, retval]LONGLONG* hWnd);
 	[propget, id(17), helpstring("property Attribute")] HRESULT Attribute([in]BSTR bstrKey, [out, retval] BSTR* pVal);
 	[propput, id(17), helpstring("property Attribute")] HRESULT Attribute([in]BSTR bstrKey, [in]BSTR bstrVal);
@@ -290,8 +290,8 @@ interface IGrid : IDispatch {
 	[propput, id(34)] HRESULT Vmin([in] int newVal);
 	[propget, id(35)] HRESULT Vmax([out, retval] int* pVal);
 	[propput, id(35)] HRESULT Vmax([in] int newVal);
-	[propget, id(36)] HRESULT HostGrid([out, retval] IGrid** pVal);
-	[propput, id(36)] HRESULT HostGrid([in] IGrid* newVal);
+	[propget, id(36)] HRESULT HostGrid([out, retval] IXobj** pVal);
+	[propput, id(36)] HRESULT HostGrid([in] IXobj* newVal);
 	[propget, id(37)] HRESULT ActivePage([out, retval] int* pVal);
 	[propput, id(37)] HRESULT ActivePage([in] int newVal);
 	[propget, id(38), helpstring("property HostGalaxy")] HRESULT HostGalaxy([out, retval] IGalaxy** pVal);
@@ -303,19 +303,19 @@ interface IGrid : IDispatch {
 	[propput, id(42)] HRESULT SaveToConfigFile([in] VARIANT_BOOL newVal);
 	[propget, id(43), helpstring("property WebPage")] HRESULT WebPage([out, retval] IWebPage** pVal);
 
-	[id(100), hidden] HRESULT ActiveTabPage(IGrid* pGrid);
-	[id(101), helpstring("method GetNodes")] HRESULT GetGrids([in]BSTR bstrName, [out]IGrid** ppGrid, [out]IGridCollection** ppGrids, [out, retval]long* pCount);
-	[id(102), helpstring("method GetNode")] HRESULT GetGrid([in]long nRow, [in]long nCol, [out, retval]IGrid** ppGrid);
+	[id(100), hidden] HRESULT ActiveTabPage(IXobj* pXobj);
+	[id(101), helpstring("method GetNodes")] HRESULT GetGrids([in]BSTR bstrName, [out]IXobj** ppGrid, [out]IXobjCollection** ppGrids, [out, retval]long* pCount);
+	[id(102), helpstring("method GetNode")] HRESULT GetGrid([in]long nRow, [in]long nCol, [out, retval]IXobj** ppGrid);
 	[id(103)] HRESULT GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
 	[id(104)] HRESULT SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, [out, retval] BSTR* bstrRes);
-	[id(105)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
+	[id(105)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetGrid);
 	[id(106), helpstring("method LoadXML")] HRESULT LoadXML(int nType, BSTR bstrXML);
-	[id(107)] HRESULT ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
-	[id(108)] HRESULT GetGridByName([in]BSTR bstrName, [out, retval] IGridCollection** pVal);
+	[id(107)] HRESULT ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetGrid);
+	[id(108)] HRESULT GetGridByName([in]BSTR bstrName, [out, retval] IXobjCollection** pVal);
 	[id(109)] HRESULT GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
 	[id(110)] HRESULT SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	[id(112)] HRESULT NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript);
-	[id(113)] HRESULT GetChildGridByName([in]BSTR bstrName, [out, retval] IGrid** pVal);
+	[id(113)] HRESULT GetChildGridByName([in]BSTR bstrName, [out, retval] IXobj** pVal);
 	[id(114)] HRESULT GetUIScript([in]BSTR bstrCtrlName, [out, retval]  BSTR* bstrVal);
 };
 
@@ -381,42 +381,42 @@ interface ICosmos : IDispatch {
 	[propput, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [in] VARIANT newVal);
 	[propget, id(3), helpstring("property AppExtender")] HRESULT AppExtender(BSTR bstrKey, [out, retval] IDispatch** pVal);
 	[propput, id(3), helpstring("property AppExtender")] HRESULT AppExtender(BSTR bstrKey, [in] IDispatch* newVal);
-	[propget, id(4), helpstring("property RootNodes")] HRESULT RootNodes([out, retval]IGridCollection** ppGridColletion);
+	[propget, id(4), helpstring("property RootNodes")] HRESULT RootNodes([out, retval]IXobjCollection** ppGridColletion);
 	[propget, id(5)] HRESULT HostWnd([out, retval] LONGLONG* pVal);
-	[propget, id(6), helpstring("property CurrentActiveNode")] HRESULT CurrentActiveGrid([out, retval] IGrid** pVal);
-	[propget, id(7), helpstring("property CreatingNode")] HRESULT CreatingGrid([out, retval] IGrid** pVal);
+	[propget, id(6), helpstring("property CurrentActiveNode")] HRESULT CurrentActiveGrid([out, retval] IXobj** pVal);
+	[propget, id(7), helpstring("property CreatingNode")] HRESULT CreatingGrid([out, retval] IXobj** pVal);
 	[propget, id(8)] HRESULT RemoteCosmos(BSTR bstrID, [out, retval] ICosmos** pVal);
 	[propget, id(9)] HRESULT Extender([out, retval] ICosmosExtender** pVal);
 	[propput, id(9)] HRESULT Extender([in] ICosmosExtender* newVal);
 	[propget, id(10)] HRESULT RemoteHelperHWND([out, retval] LONGLONG* pVal);
 	[propput, id(10)] HRESULT RemoteHelperHWND([in]LONGLONG newVal);
-	[propget, id(11), hidden] HRESULT DesignNode([out, retval] IGrid** pVal);
+	[propget, id(11), hidden] HRESULT DesignNode([out, retval] IXobj** pVal);
 	[propget, id(13)] HRESULT CosmosDoc(LONGLONG AppProxy, LONGLONG nDocID, [out, retval] ICosmosDoc** pVal);
 	[propget, id(14)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
 	[propget, id(15)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 
-	[id(0x00100)] HRESULT NavigateNode(IGrid* pGrid, BSTR bstrBrowserID, BSTR bstrXml, [out, retval] IGrid** pVal);
+	[id(0x00100)] HRESULT NavigateNode(IXobj* pXobj, BSTR bstrBrowserID, BSTR bstrXml, [out, retval] IXobj** pVal);
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);
 	[id(0x00102)] HRESULT CreateOfficeDocument(BSTR bstrXml);
 	[id(0x00103), helpstring("method Create CLR Object")] HRESULT CreateCLRObj(BSTR bstrObjID, [out, retval]IDispatch** ppDisp);
 	[id(0x00104)] HRESULT StartApplication(BSTR bstrAppID, BSTR bstrXml);
 	[id(0x00105), helpstring("method GetGalaxy")] HRESULT GetGalaxy(LONGLONG hHostWnd, [out, retval] IGalaxy** ppGalaxy);
-	[id(0x00106)] HRESULT GetItemText(IGrid* pGrid, long nCtrlID, LONG nMaxLengeh, [out, retval] BSTR* bstrRet);
-	[id(0x00107)] HRESULT SetItemText(IGrid* pGrid, long nCtrlID, BSTR bstrText);
+	[id(0x00106)] HRESULT GetItemText(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, [out, retval] BSTR* bstrRet);
+	[id(0x00107)] HRESULT SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText);
 	[id(0x00108)] HRESULT GetCLRControl(IDispatch* CtrlDisp, BSTR bstrName, [out, retval] IDispatch** ppRetDisp);
 	[id(0x00109), helpstring("method MessageBox")] HRESULT MessageBox(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, [out, retval] int* nRet);
 	[id(0x0010a), helpstring("method Encode")] HRESULT Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, [out, retval] BSTR* bstrRet);
 	[id(0x0010b), helpstring("method SetHostFocus")] HRESULT SetHostFocus(void);
-	[id(0x0010c)] HRESULT UpdateGrid(IGrid* pGrid);
+	[id(0x0010c)] HRESULT UpdateGrid(IXobj* pXobj);
 	[id(0x0010d), helpstring("method NewGUID")] HRESULT NewGUID([out, retval] BSTR* retVal);
 	//[id(0x0010e)] HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	[id(0x00110)] HRESULT DownLoadFile(BSTR strFileURL, BSTR bstrTargetFile, BSTR bstrActionXml);
 	[id(0x00111)] HRESULT GetCtrlByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
-	[id(0x00112)] HRESULT GetGridFromHandle(LONGLONG hWnd, [out, retval] IGrid** ppRetGrid);
+	[id(0x00112)] HRESULT GetGridFromHandle(LONGLONG hWnd, [out, retval] IXobj** ppRetGrid);
 	[id(0x00113)] HRESULT GetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
 	[id(0x00114)] HRESULT SetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	[id(0x00115), hidden] HRESULT CreateCosmosCtrl(BSTR bstrAppID, [out, retval] ICosmosCtrl** ppRetCtrl);
-	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IGrid** ppGrid);
+	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IXobj** ppGrid);
 	[id(0x00119)] HRESULT GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, [out, retval] BSTR* bstrTemplatePath);
 	[id(0x0011a)] HRESULT OpenTangramFile([out, retval] ICosmosDoc** ppDoc);
 	[id(0x0011b)] HRESULT CreateCosmosEventObj([out, retval]ICosmosEventObj** ppCosmosEventObj);
@@ -452,10 +452,10 @@ interface ICosmos : IDispatch {
 	pointer_default(unique)
 ]
 interface IGalaxy : IDispatch {
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Grid([in]VARIANT vIndex, [out, retval]IGrid** ppGrid);
+	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Grid([in]VARIANT vIndex, [out, retval]IXobj** ppGrid);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
 	[propget, id(1), helpstring("property HWND")] HRESULT HWND([out, retval] LONGLONG* pVal);
-	[propget, id(2), helpstring("property VisibleGrid")] HRESULT VisibleGrid([out, retval] IGrid** pVal);
+	[propget, id(2), helpstring("property VisibleGrid")] HRESULT VisibleGrid([out, retval] IXobj** pVal);
 	[propget, id(3)] HRESULT CurrentNavigateKey([out, retval] BSTR* pVal);
 	[propget, id(4)] HRESULT GalaxyCluster([out, retval] IGalaxyCluster** pVal);
 	[propget, id(5)] HRESULT GalaxyData(BSTR bstrKey, [out, retval] VARIANT* pVal);
@@ -463,7 +463,7 @@ interface IGalaxy : IDispatch {
 	[propget, id(6), hidden] HRESULT DesignerState([out, retval] VARIANT_BOOL* pVal);
 	[propput, id(6), hidden] HRESULT DesignerState([in] VARIANT_BOOL newVal);
 	[propget, id(7), helpstring("")] HRESULT Count([out, retval]long* pCount);
-	[propget, id(8), helpstring("property RootGrids")] HRESULT RootGrids([out, retval]IGridCollection** ppGridColletion);
+	[propget, id(8), helpstring("property RootGrids")] HRESULT RootGrids([out, retval]IXobjCollection** ppGridColletion);
 	[propget, id(9)] HRESULT GalaxyXML([out, retval] BSTR* pVal);
 	[propget, id(10)] HRESULT CosmosDoc([out, retval] ICosmosDoc** pVal);
 	[propget, id(11)] HRESULT GalaxyType([out, retval] GalaxyType* pVal);
@@ -474,7 +474,7 @@ interface IGalaxy : IDispatch {
 	[id(101), helpstring("method Detach")] HRESULT Detach(void);
 	[id(102), helpstring("method Attach")] HRESULT Attach(void);
 	[id(103), helpstring("method ModifyHost")] HRESULT ModifyHost(LONGLONG hHostWnd);
-	[id(104)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
+	[id(104)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetGrid);
 	[id(105)] HRESULT GetXml(BSTR bstrRootName, [out, retval] BSTR* bstrRet);
 };
 
@@ -483,12 +483,12 @@ interface IGalaxy : IDispatch {
 	uuid(19631222-1992-0612-1965-060119820017),
 	dual,
 	nonextensible,
-	helpstring("IGridCollection Interface"),
+	helpstring("IXobjCollection Interface"),
 	pointer_default(unique)
 ]
-interface IGridCollection : IDispatch {
+interface IXobjCollection : IDispatch {
 	[propget, id(1), helpstring("")] HRESULT GridCount([out, retval]long* pCount);
-	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Item([in]long iIndex, [out, retval]IGrid** ppTopWindow);
+	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Item([in]long iIndex, [out, retval]IXobj** ppTopWindow);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
 };
 
@@ -507,7 +507,7 @@ interface IGalaxyCluster : IDispatch {
 	[propput, id(2)] HRESULT xtml(BSTR strKey, [in] BSTR newVal);
 	[propget, id(3)] HRESULT Extender(BSTR bstrExtenderName, [out, retval] IDispatch** pVal);
 	[propput, id(3)] HRESULT Extender(BSTR bstrExtenderName, [in] IDispatch* newVal);
-	[propget, id(4)] HRESULT Grid(BSTR bstrNodeName, [out, retval] IGrid** pVal);
+	[propget, id(4)] HRESULT Grid(BSTR bstrNodeName, [out, retval] IXobj** pVal);
 	[propget, id(5)] HRESULT XObject(BSTR bstrName, [out, retval] IDispatch** pVal);
 	[propget, id(6)] HRESULT GalaxyName(LONGLONG hHwnd, [out, retval] BSTR* pVal);
 	[propget, id(7)] HRESULT Handle([out, retval] LONGLONG* pVal);
@@ -520,16 +520,16 @@ interface IGalaxyCluster : IDispatch {
 	[propget, id(13)] HRESULT GalaxyClusterXML([out, retval] BSTR* pVal);
 	[propput, id(14)] HRESULT ConfigName([in] BSTR newVal);
 	[propget, id(15)] HRESULT CurrentDesignGalaxyType([out, retval] GalaxyType* pVal);
-	[propget, id(16)] HRESULT CurrentDesignNode([out, retval] IGrid** pVal);
+	[propget, id(16)] HRESULT CurrentDesignNode([out, retval] IXobj** pVal);
 
 	[id(101)] HRESULT CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, [out, retval] IGalaxy** pRetGalaxy);
-	[id(102)] HRESULT Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
-	[id(103)] HRESULT ObserveCtrl(VARIANT Ctrl, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
-	[id(104)] HRESULT GetGrid(BSTR bstrGalaxyName, BSTR bstrNodeName, [out, retval] IGrid** pRetNode);
+	[id(102)] HRESULT Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetGrid);
+	[id(103)] HRESULT ObserveCtrl(VARIANT Ctrl, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetGrid);
+	[id(104)] HRESULT GetGrid(BSTR bstrGalaxyName, BSTR bstrNodeName, [out, retval] IXobj** pRetNode);
 	[id(105)] HRESULT GetCtrlInGrid(BSTR NodeName, BSTR CtrlName, [out, retval] IDispatch** ppCtrl);
 	[id(106)] HRESULT GetGalaxyFromCtrl(IDispatch* ctrl, [out, retval] IGalaxy** ppGalaxy);
 	[id(107)] HRESULT ConnectCosmosCtrl(ICosmosCtrl* eventSource);
-	[id(108)] HRESULT CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, [out, retval] IGrid** ppGrid);
+	[id(108)] HRESULT CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, [out, retval] IXobj** ppGrid);
 	[id(109)] HRESULT ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 };
 
@@ -551,9 +551,9 @@ interface IWorkBenchWindow : IDispatch {
 
 	[id(101)] HRESULT Active();
 	[id(102), hidden] HRESULT CloseTangramUI();
-	[id(103)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
-	[id(104)] HRESULT ObserveEx(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
-	[id(105)] HRESULT ObserveInView(int nIndex, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
+	[id(103)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppGrid);
+	[id(104)] HRESULT ObserveEx(BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppGrid);
+	[id(105)] HRESULT ObserveInView(int nIndex, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetGrid);
 };
 
 [
@@ -564,13 +564,13 @@ interface IWorkBenchWindow : IDispatch {
 	pointer_default(unique)
 ]
 interface IBrowser : IDispatch {
-	[propget, id(1)] HRESULT RemoteGrid([out, retval] IGrid** pVal);
-	[propput, id(1)] HRESULT RemoteGrid([in]IGrid* newVal);
+	[propget, id(1)] HRESULT RemoteGrid([out, retval] IXobj** pVal);
+	[propput, id(1)] HRESULT RemoteGrid([in]IXobj* newVal);
 
 	[id(101)] HRESULT OpenURL(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml);
 	[id(102)] HRESULT AddURLs(BSTR bstrURLs);
-	//[id(104)] HRESULT ExtendEx(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
-	//[id(105)] HRESULT ExtendInView(int nIndex, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppRetGrid);
+	//[id(104)] HRESULT ExtendEx(BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppGrid);
+	//[id(105)] HRESULT ExtendInView(int nIndex, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetGrid);
 };
 
 [
@@ -584,8 +584,8 @@ interface IWebPage : IDispatch {
 	[propget, id(1)] HRESULT HostWnd([out, retval] LONGLONG* pVal);
 	[propput, id(1)] HRESULT HostWnd([in] LONGLONG newVal);
 	[id(101)] HRESULT CreateForm(BSTR bstrKey, LONGLONG hParent, [out, retval]IDispatch** pRetForm);
-	[id(102)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval]IGrid** pRetGrid);
-	[id(103)] HRESULT SendXmlMessage(IGrid* sender, BSTR bstrXml);
+	[id(102)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval]IXobj** pRetGrid);
+	[id(103)] HRESULT SendXmlMessage(IXobj* sender, BSTR bstrXml);
 };
 
 [
@@ -597,7 +597,7 @@ interface IWebPage : IDispatch {
 ]
 interface IOfficeObject : IDispatch {
 	[id(1)] HRESULT Show(VARIANT_BOOL bShow);
-	[id(2)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
+	[id(2)] HRESULT Observe(BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppGrid);
 	[id(3)] HRESULT UnloadCosmos();
 };
 
@@ -640,12 +640,12 @@ interface IEclipseCtrl : ICosmosCtrl {
 	[propget, id(104)] HRESULT WorkBenchWindow([out, retval] IWorkBenchWindow** pVal);
 	[propget, id(105)] HRESULT TopGalaxyCluster([out, retval] IGalaxyCluster** pVal);
 	[propget, id(106)] HRESULT TopGalaxy([out, retval] IGalaxy** pVal);
-	[propget, id(107)] HRESULT ActiveTopGrid([out, retval] IGrid** pVal);
+	[propget, id(107)] HRESULT ActiveTopGrid([out, retval] IXobj** pVal);
 	[propget, id(108), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [out, retval] VARIANT* pVal);
 	[propput, id(108), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [in] VARIANT newVal);
 
-	[id(201)] HRESULT Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
-	[id(202)] HRESULT ObserveEx(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IGrid** ppGrid);
+	[id(201)] HRESULT Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppGrid);
+	[id(202)] HRESULT ObserveEx(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppGrid);
 	[id(203)] HRESULT InitCtrl(BSTR bstrXml);
 };
 
@@ -664,7 +664,7 @@ library World
 	{
 		properties:
 		methods:
-			[id(1), helpstring("method OpenComplete")] HRESULT OpenComplete(LONG hWnd, BSTR bstrUrl, IGrid * pRootGrid);
+			[id(1), helpstring("method OpenComplete")] HRESULT OpenComplete(LONG hWnd, BSTR bstrUrl, IXobj * pRootGrid);
 			[id(2)] HRESULT Close();
 			[id(3)] HRESULT CosmosEvent(ICosmosEventObj* NotifyObj);
 	};
@@ -682,9 +682,9 @@ library World
 
 	[
 		uuid(19631222-1992-0612-1965-060119821001),
-		helpstring("_IGridEvents Interface")
+		helpstring("_IXobjEvents Interface")
 	]
-	dispinterface _IGridEvents
+	dispinterface _IXobjEvents
 	{
 		properties:
 		methods:
@@ -693,7 +693,7 @@ library World
 			[id(3), helpstring("WndGrid Addin Object Created")] HRESULT GridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 			[id(4)] HRESULT GridAddInsCreated();
 			[id(5)] HRESULT NodeDocumentComplete(IDispatch* ExtenderDisp, BSTR bstrURL);
-			[id(6)] HRESULT ControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, long CtrlHandle, BSTR CtrlClassName);
+			[id(6)] HRESULT ControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, long CtrlHandle, BSTR CtrlClassName);
 			[id(7)] HRESULT TabChange(LONG ActivePage, LONG OldPage);
 			[id(8)] HRESULT IPCMessageReceived(BSTR bstrChannel, BSTR bstrData);
 	};
@@ -707,16 +707,16 @@ library World
 	properties:
 	methods:
 		[id(1)] HRESULT PageLoaded(IDispatch * sender, BSTR url);
-		[id(2)] HRESULT NodeCreated(IGrid* pGridCreated);
-		[id(3)] HRESULT AddInCreated(IGrid* pRootGrid, IDispatch* pAddIn, BSTR bstrID, BSTR bstrAddInXml);
+		[id(2)] HRESULT NodeCreated(IXobj* pGridCreated);
+		[id(3)] HRESULT AddInCreated(IXobj* pRootGrid, IDispatch* pAddIn, BSTR bstrID, BSTR bstrAddInXml);
 		[id(4)] HRESULT BeforeExtendXml(BSTR bstrXml, long hWnd);
-		[id(5)] HRESULT ExtendXmlComplete(BSTR bstrXml, long hWnd, IGrid* pRetRootNode);
+		[id(5)] HRESULT ExtendXmlComplete(BSTR bstrXml, long hWnd, IXobj* pRetRootNode);
 		[id(6)] HRESULT Destroy();
-		[id(7)] HRESULT NodeMouseActivate(IGrid* pActiveNode);
-		[id(8)] HRESULT ClrControlCreated(IGrid* Node, IDispatch* Ctrl, BSTR CtrlName, long CtrlHandle);
-		[id(9)] HRESULT TabChange(IGrid* sender, LONG ActivePage, LONG OldPage);
+		[id(7)] HRESULT NodeMouseActivate(IXobj* pActiveNode);
+		[id(8)] HRESULT ClrControlCreated(IXobj* Node, IDispatch* Ctrl, BSTR CtrlName, long CtrlHandle);
+		[id(9)] HRESULT TabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
 		[id(10)] HRESULT Event(IDispatch* sender, IDispatch* EventArg);
-		[id(11)] HRESULT ControlNotify(IGrid* sender, LONG NotifyCode, LONG CtrlID, long CtrlHandle, BSTR CtrlClassName);
+		[id(11)] HRESULT ControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, long CtrlHandle, BSTR CtrlClassName);
 		[id(12)] HRESULT CosmosEvent(ICosmosEventObj* NotifyObj);
 		[id(13)] HRESULT IPCMsg(IGalaxy* pSender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 	};

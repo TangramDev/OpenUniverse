@@ -109,16 +109,16 @@ using namespace std;
 using namespace concurrency;
 
 class CBKWnd;
-class CGrid;
+class CXobj;
 class CWPFView;
-class CGridHelper;
+class CXobjHelper;
 class CCosmos;
 class CGalaxy;
 class CHelperWnd;
 class CEclipseWnd;
 class CCosmosDoc;
 class CUniverse;
-class CGridEvents;
+class CXobjEvents;
 class CCosmosDocWnd;
 class CTangramTabCtrl;
 class CCosmosAppCtrl;
@@ -128,12 +128,12 @@ class CCosmosEvent;
 class CCosmosDocFrame;
 class CGalaxyCluster;
 class CUniverseMDIMain;
-class CGridCollection;
+class CXobjCollection;
 class CCommonCtrl;
 class CTangramHtmlTreeWnd;
 class CAFXHelperWnd;
 
-typedef vector<CGrid*> CGridVector;
+typedef vector<CXobj*> CGridVector;
 
 #include "vbe6ext.h"
 #include <afxcview.h>

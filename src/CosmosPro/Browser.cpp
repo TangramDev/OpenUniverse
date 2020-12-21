@@ -157,9 +157,9 @@ namespace DOMPlus
 		return (IntPtr)m_hWnd;
 	}
 	
-	Grid^ WebPage::ParentGrid::get()
+	Xobj^ WebPage::ParentGrid::get()
 	{
-		return theAppProxy._createObject<IGrid, Grid>(m_pProxy->GetParentGrid());
+		return theAppProxy._createObject<IXobj, Xobj>(m_pProxy->GetParentGrid());
 	}
 	
 	Galaxy^ WebPage::HostGalaxy::get()

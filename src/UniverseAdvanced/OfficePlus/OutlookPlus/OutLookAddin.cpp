@@ -1570,8 +1570,8 @@ namespace OfficePlus
 					{
 						CComBSTR bstrName(L"");
 						_pFolder->get_FolderPath(&bstrName);
-						IGrid* pGrid = nullptr;
-						pGalaxy->Observe(bstrName, strXml.AllocSysString(), &pGrid);
+						IXobj* pXobj = nullptr;
+						pGalaxy->Observe(bstrName, strXml.AllocSysString(), &pXobj);
 					}
 				}
 			}
@@ -2128,10 +2128,10 @@ namespace OfficePlus
 			{
 				CComBSTR bstrName(L"");
 				pFolder->get_FolderPath(&bstrName);
-				IGrid* pGrid = nullptr;
+				IXobj* pXobj = nullptr;
 				if(strXml==_T(""))
-					strXml  = _T("<Tangram><layout><grid name=\"Start\" /></layout></Tangram>");
-				pWnd->m_pGalaxy->Observe(bstrName, strXml.AllocSysString(), &pGrid);
+					strXml  = _T("<Tangram><layout><xobj name=\"Start\" /></layout></Tangram>");
+				pWnd->m_pGalaxy->Observe(bstrName, strXml.AllocSysString(), &pXobj);
 				CGalaxy* _pGalaxy = (CGalaxy*)pWnd->m_pGalaxy;
 				_pGalaxy->HostPosChanged();
 				_pGalaxy->m_bDesignerState = true;
@@ -2361,7 +2361,7 @@ namespace OfficePlus
 					CString strKey = _T("taskpaneui");
 					CString strXml = m_strUIScript;
 					if(strXml==_T(""))
-						strXml = _T("<taskpaneui><layout><grid name=\"Start\" /></layout></taskpaneui>");
+						strXml = _T("<taskpaneui><layout><xobj name=\"Start\" /></layout></taskpaneui>");
 					CTangramXmlParse m_Parse;
 					if (m_Parse.LoadXml(strXml))
 					{
@@ -2371,7 +2371,7 @@ namespace OfficePlus
 							strXml = pParse->xml();
 						}
 						else
-							strXml = _T("<taskpaneui><layout><grid name=\"Start\" /></layout></taskpaneui>");
+							strXml = _T("<taskpaneui><layout><xobj name=\"Start\" /></layout></taskpaneui>");
 						if (strXml != _T(""))
 						{
 							{
@@ -2414,8 +2414,8 @@ namespace OfficePlus
 											m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hWnd), CComBSTR(L"TaskPane"), &m_pTaskPaneGalaxy);
 											if (m_pTaskPaneGalaxy)
 											{
-												IGrid* pGrid = nullptr;
-												m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
+												IXobj* pXobj = nullptr;
+												m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pXobj);
 											}
 										}
 									}
@@ -2674,9 +2674,9 @@ namespace OfficePlus
 						{
 							strKeys += it.first;
 							strKeys += _T(",");
-							CGrid* pGrid = pGalaxy->m_pWorkGrid;
-							pAddin->UpdateGrid(pGrid);
-							strPageData += pGrid->m_pGridShareData->m_pCosmosParse->xml();
+							CXobj* pXobj = pGalaxy->m_pWorkGrid;
+							pAddin->UpdateGrid(pXobj);
+							strPageData += pXobj->m_pXobjShareData->m_pCosmosParse->xml();
 						}
 					}
 					strXml = pAddin->GetCosmosPropertyFromInspector(pInspector, _T("Tangram"));
@@ -2857,8 +2857,8 @@ namespace OfficePlus
 					}
 					if (m_pGalaxy)
 					{
-						IGrid* pGrid = nullptr;
-						m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pGrid);
+						IXobj* pXobj = nullptr;
+						m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pXobj);
 						((CGalaxy*)m_pGalaxy)->HostPosChanged();
 					}
 					::SysFreeString(bstrName);
@@ -2882,14 +2882,14 @@ namespace OfficePlus
 						{
 							m_pGalaxy->put_DesignerState(true);
 							g_pCosmos->CreateCommonDesignerToolBar();
-							IGrid* pGrid = nullptr;
+							IXobj* pXobj = nullptr;
 							if (m_strXml == _T(""))
 							{
 								CString strName = m_strName;
 								strName.Replace(_T(" "), _T("_"));
-								m_strXml.Format(_T("<%s><layout><grid name=\"Start\" /></layout></%s>"), strName, strName);
+								m_strXml.Format(_T("<%s><layout><xobj name=\"Start\" /></layout></%s>"), strName, strName);
 							}
-							m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pGrid);
+							m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pXobj);
 							g_pCosmos->m_pDesigningFrame = (CGalaxy*)m_pGalaxy;
 							g_pCosmos->m_pDesigningFrame->m_bDesignerState = true;
 							g_pCosmos->m_pDesigningFrame->UpdateDesignerTreeInfo();
@@ -2975,9 +2975,9 @@ namespace OfficePlus
 					m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hFrameWnd), CComBSTR(L"Default"), &m_pGalaxy);
 					if (m_pGalaxy)
 					{
-						IGrid* pGrid = nullptr;
+						IXobj* pXobj = nullptr;
 						CTangramXmlParse* pChild = m_Parse.GetChild(0);
-						m_pGalaxy->Observe(CComBSTR(L""), CComBSTR(pChild->xml()), &pGrid);
+						m_pGalaxy->Observe(CComBSTR(L""), CComBSTR(pChild->xml()), &pXobj);
 					}
 				}
 			}

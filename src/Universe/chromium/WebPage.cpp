@@ -102,47 +102,47 @@ namespace Browser {
 		break;
 		case 20200310:
 		{
-			CGrid* pGrid = (CGrid*)lParam;
-			if (pGrid && pGrid->m_pCosmosCloudSession == nullptr)
+			CXobj* pXobj = (CXobj*)lParam;
+			if (pXobj && pXobj->m_pCosmosCloudSession == nullptr)
 			{
-				pGrid->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
-				CWormhole* pSession = pGrid->m_pCosmosCloudSession;
+				pXobj->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+				CWormhole* pSession = pXobj->m_pCosmosCloudSession;
 				if (pSession)
 				{
 					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
 					pSession->InsertLong(_T("autodelete"), 0);
-					pSession->InsertLong(_T("gridtype"), pGrid->m_nViewType);
-					pSession->InsertLong(_T("rows"), pGrid->m_nRows);
-					pSession->InsertLong(_T("cols"), pGrid->m_nCols);
-					pSession->InsertLong(_T("row"), pGrid->m_nRow);
-					pSession->InsertLong(_T("col"), pGrid->m_nCol);
-					pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
-					if (pGrid->m_strCosmosXml != _T(""))
+					pSession->InsertLong(_T("gridtype"), pXobj->m_nViewType);
+					pSession->InsertLong(_T("rows"), pXobj->m_nRows);
+					pSession->InsertLong(_T("cols"), pXobj->m_nCols);
+					pSession->InsertLong(_T("row"), pXobj->m_nRow);
+					pSession->InsertLong(_T("col"), pXobj->m_nCol);
+					pSession->InsertString(_T("objtype"), pXobj->m_strObjTypeID);
+					if (pXobj->m_strCosmosXml != _T(""))
 					{
-						pSession->InsertString(_T("cosmosxml"), pGrid->m_strCosmosXml);
+						pSession->InsertString(_T("cosmosxml"), pXobj->m_strCosmosXml);
 					}
-					pSession->InsertString(_T("gridxml"), pGrid->m_pHostParse->xml());
-					pSession->InsertString(_T("name@page"), pGrid->m_strName);
-					pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
-					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
-					pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
-					pSession->InsertString(_T("cluster"), pGrid->m_pRootObj->m_strKey);
-					pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pCosmosCloudSession);
-					if (pGrid->m_pGridShareData->m_pHostClientView)
-						pSession->Insertint64(_T("nucleushandle"), (__int64)pGrid->m_pGridShareData->m_pHostClientView->m_hWnd);
+					pSession->InsertString(_T("gridxml"), pXobj->m_pHostParse->xml());
+					pSession->InsertString(_T("name@page"), pXobj->m_strName);
+					pSession->Insertint64(_T("gridhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("gridobj"), (__int64)(IXobj*)pXobj);
+					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
+					pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
+					pSession->Insertint64(_T("rootgridhandle"), (__int64)pXobj->m_pRootObj->m_pHostWnd->m_hWnd);
+					pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pCosmosCloudSession);
+					if (pXobj->m_pXobjShareData->m_pHostClientView)
+						pSession->Insertint64(_T("nucleushandle"), (__int64)pXobj->m_pXobjShareData->m_pHostClientView->m_hWnd);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
-					switch (pGrid->m_nViewType)
+					switch (pXobj->m_nViewType)
 					{
 					case Grid:
 					{
-						CGridWnd* pWnd = (CGridWnd*)pGrid->m_pHostWnd;
-						for (int i = 0; i < pGrid->m_nRows; i++)
+						CGridWnd* pWnd = (CGridWnd*)pXobj->m_pHostWnd;
+						for (int i = 0; i < pXobj->m_nRows; i++)
 						{
-							for (int j = 0; j < pGrid->m_nCols; j++)
+							for (int j = 0; j < pXobj->m_nCols; j++)
 							{
-								int nIndex = j + i * pGrid->m_nRows;
+								int nIndex = j + i * pXobj->m_nRows;
 								CString strIndex = _T("");
 								strIndex.Format(_T("%d"), nIndex);
 								pSession->Insertint64(strIndex, (__int64)::GetDlgItem(pWnd->m_hWnd, pWnd->IdFromRowCol(i, j)));
@@ -152,7 +152,7 @@ namespace Browser {
 					break;
 					case TabGrid:
 					{
-						for (auto it : pGrid->m_vChildNodes)
+						for (auto it : pXobj->m_vChildNodes)
 						{
 							CString strIndex = _T("");
 							strIndex.Format(_T("%d"), it->m_nCol);
@@ -163,20 +163,20 @@ namespace Browser {
 					default:
 						break;
 					}
-					if (pGrid->m_pParentObj)
+					if (pXobj->m_pParentObj)
 					{
-						pSession->Insertint64(_T("parentgridhandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
+						pSession->Insertint64(_T("parentgridhandle"), (__int64)pXobj->m_pParentObj->m_pHostWnd->m_hWnd);
 					}
-					if (pGrid->m_pParentWinFormWnd)
+					if (pXobj->m_pParentWinFormWnd)
 					{
-						pSession->Insertint64(_T("parentFormHandle"), (__int64)pGrid->m_pParentWinFormWnd->m_hWnd);
+						pSession->Insertint64(_T("parentFormHandle"), (__int64)pXobj->m_pParentWinFormWnd->m_hWnd);
 					}
-					if (pGrid->m_pDisp)
+					if (pXobj->m_pDisp)
 					{
-						pGrid->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
+						pXobj->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
 						if (g_pCosmos->m_pCLRProxy)
 						{
-							g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
+							g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pXobj, true);
 						}
 					}
 					m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
@@ -538,9 +538,9 @@ namespace Browser {
 			}
 			if (m_pGalaxy)
 			{
-				IGrid* pGrid = nullptr;
-				m_pGalaxy->Observe(CComBSTR(strName), CComBSTR(strXML), &pGrid);
-				if (pGrid)
+				IXobj* pXobj = nullptr;
+				m_pGalaxy->Observe(CComBSTR(strName), CComBSTR(strXML), &pXobj);
+				if (pXobj)
 				{
 					m_strCurKey = strName;
 					m_hWebHostWnd = NULL;
@@ -608,9 +608,9 @@ namespace Browser {
 	//		}
 	//		if (m_pGalaxy)
 	//		{
-	//			IGrid* pGrid = nullptr;
-	//			m_pGalaxy->Observe(CComBSTR(strName), CComBSTR(strXML), &pGrid);
-	//			if (pGrid)
+	//			IXobj* pXobj = nullptr;
+	//			m_pGalaxy->Observe(CComBSTR(strName), CComBSTR(strXML), &pXobj);
+	//			if (pXobj)
 	//			{
 	//				m_strCurKey = strName;
 	//				m_hWebHostWnd = NULL;
@@ -1040,11 +1040,11 @@ namespace Browser {
 	void CWebPage::OnCloudMsgReceived(CSession* pSession)
 	{
 		CString strMsgID = pSession->GetString(L"msgID");
-		IGrid* pGrid = (IGrid*)pSession->Getint64(_T("gridobj"));
-		if (pGrid)
+		IXobj* pXobj = (IXobj*)pSession->Getint64(_T("gridobj"));
+		if (pXobj)
 		{
-			if(((CGrid*)pGrid)->m_pCosmosCloudSession==nullptr) 
-				((CGrid*)pGrid)->m_pCosmosCloudSession = (CWormhole*)pSession;
+			if(((CXobj*)pXobj)->m_pCosmosCloudSession==nullptr) 
+				((CXobj*)pXobj)->m_pCosmosCloudSession = (CWormhole*)pSession;
 		}
 		if (strMsgID == _T("CREATE_WINFORM"))
 		{
@@ -1121,17 +1121,17 @@ namespace Browser {
 		{
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
-			//IGrid* pGrid = nullptr;
+			//IXobj* pXobj = nullptr;
 			HWND hWnd = (HWND)pSession->Getint64(_T("gridhandle"));
-			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
+			CXobj* pParent = (CXobj*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
-				IGrid* _pGrid = nullptr;
-				pParent->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pGrid);
-				if (_pGrid)
+				IXobj* _pXobj = nullptr;
+				pParent->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pXobj);
+				if (_pXobj)
 				{
 					__int64 nHandle = 0;
-					_pGrid->get_Handle(&nHandle);
+					_pXobj->get_Handle(&nHandle);
 					pSession->Insertint64(_T("openxmlreturnhandle"), nHandle);
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20200429, (LPARAM)pSession);
 				}
@@ -1143,17 +1143,17 @@ namespace Browser {
 			CString strXml = pSession->GetString(_T("openxml"));
 			int nCol = pSession->GetLong(_T("opencol"));
 			int nRow = pSession->GetLong(_T("openrow"));
-			IGrid* pSplitterNode = nullptr;
+			IXobj* pSplitterNode = nullptr;
 			HWND hWnd = (HWND)pSession->Getint64(_T("gridhandle"));
-			CGrid* pParent = (CGrid*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
+			CXobj* pParent = (CXobj*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 			if (pParent)
 			{
-				IGrid* pGrid = nullptr;
-				pParent->ObserveEx(nRow, nCol, CComBSTR(strKey), CComBSTR(strXml), &pGrid);
-				if (pGrid)
+				IXobj* pXobj = nullptr;
+				pParent->ObserveEx(nRow, nCol, CComBSTR(strKey), CComBSTR(strXml), &pXobj);
+				if (pXobj)
 				{
 					__int64 nHandle = 0;
-					pGrid->get_Handle(&nHandle);
+					pXobj->get_Handle(&nHandle);
 					pSession->Insertint64(_T("openxmlreturnhandle"), nHandle);
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20200429, (LPARAM)pSession);
 				}
@@ -1168,7 +1168,7 @@ namespace Browser {
 		else if (strMsgID == _T("SET_REFGRIDS_IPC_MSG"))
 		{
 			CString strXml = pSession->GetString(_T("RefInfo"));
-			((CGrid*)pGrid)->m_strXmlRefGridInfo = strXml;
+			((CXobj*)pXobj)->m_strXmlRefGridInfo = strXml;
 		}
 	}
 
@@ -1201,10 +1201,10 @@ namespace Browser {
 		return S_OK;
 	}
 
-	STDMETHODIMP CWebPage::SendXmlMessage(IGrid* sender, BSTR bstrXml)
+	STDMETHODIMP CWebPage::SendXmlMessage(IXobj* sender, BSTR bstrXml)
 	{
-		CGrid* pGrid = (CGrid*)sender;
-		if (pGrid)
+		CXobj* pXobj = (CXobj*)sender;
+		if (pXobj)
 		{
 			CTangramXmlParse m_Parse;
 			if (m_Parse.LoadXml(OLE2T(bstrXml)))
@@ -1219,45 +1219,45 @@ namespace Browser {
 						for (int i = 0; i < nCount; i++)
 						{
 							CString strName = pChild->GetChild(i)->name();
-							auto it = pGrid->m_pRootObj->m_mapChildGrid.find(strName);
-							if (it != pGrid->m_pRootObj->m_mapChildGrid.end())
+							auto it = pXobj->m_pRootObj->m_mapChildGrid.find(strName);
+							if (it != pXobj->m_pRootObj->m_mapChildGrid.end())
 							{
-								CGrid* pTarget = it->second;
+								CXobj* pTarget = it->second;
 								if (pTarget)
 								{
-									if (pGrid->m_pCosmosCloudSession == nullptr)
+									if (pXobj->m_pCosmosCloudSession == nullptr)
 									{
-										pGrid->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
-										CWormhole* pSession = pGrid->m_pCosmosCloudSession;
+										pXobj->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+										CWormhole* pSession = pXobj->m_pCosmosCloudSession;
 										if (pSession)
 										{
 											pSession->InsertString(_T("msgID"), strMsgID);
 											pSession->InsertLong(_T("autodelete"), 0);
-											pSession->InsertLong(_T("gridtype"), pGrid->m_nViewType);
-											pSession->InsertLong(_T("rows"), pGrid->m_nRows);
-											pSession->InsertLong(_T("cols"), pGrid->m_nCols);
-											pSession->InsertLong(_T("row"), pGrid->m_nRow);
-											pSession->InsertLong(_T("col"), pGrid->m_nCol);
-											pSession->InsertString(_T("objtype"), pGrid->m_strObjTypeID);
-											pSession->InsertString(_T("name@page"), pGrid->m_strName);
-											pSession->Insertint64(_T("gridhandle"), (__int64)pGrid->m_pHostWnd->m_hWnd);
-											pSession->Insertint64(_T("gridobj"), (__int64)(IGrid*)pGrid);
-											pSession->Insertint64(_T("Galaxyhandle"), (__int64)pGrid->m_pGridShareData->m_pGalaxy->m_hWnd);
-											pSession->InsertString(_T("galaxy"), pGrid->m_pGridShareData->m_pGalaxy->m_strGalaxyName);
-											pSession->InsertString(_T("cluster"), pGrid->m_pRootObj->m_strKey);
-											pSession->Insertint64(_T("rootgridhandle"), (__int64)pGrid->m_pRootObj->m_pHostWnd->m_hWnd);
-											pSession->Insertint64(_T("domhandle"), (__int64)pGrid->m_pCosmosCloudSession);
+											pSession->InsertLong(_T("gridtype"), pXobj->m_nViewType);
+											pSession->InsertLong(_T("rows"), pXobj->m_nRows);
+											pSession->InsertLong(_T("cols"), pXobj->m_nCols);
+											pSession->InsertLong(_T("row"), pXobj->m_nRow);
+											pSession->InsertLong(_T("col"), pXobj->m_nCol);
+											pSession->InsertString(_T("objtype"), pXobj->m_strObjTypeID);
+											pSession->InsertString(_T("name@page"), pXobj->m_strName);
+											pSession->Insertint64(_T("gridhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
+											pSession->Insertint64(_T("gridobj"), (__int64)(IXobj*)pXobj);
+											pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+											pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
+											pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
+											pSession->Insertint64(_T("rootgridhandle"), (__int64)pXobj->m_pRootObj->m_pHostWnd->m_hWnd);
+											pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pCosmosCloudSession);
 											pSession->InsertString(_T("objID"), _T("wndnode"));
-											switch (pGrid->m_nViewType)
+											switch (pXobj->m_nViewType)
 											{
 											case Grid:
 											{
-												CGridWnd* pWnd = (CGridWnd*)pGrid->m_pHostWnd;
-												for (int i = 0; i < pGrid->m_nRows; i++)
+												CGridWnd* pWnd = (CGridWnd*)pXobj->m_pHostWnd;
+												for (int i = 0; i < pXobj->m_nRows; i++)
 												{
-													for (int j = 0; j < pGrid->m_nCols; j++)
+													for (int j = 0; j < pXobj->m_nCols; j++)
 													{
-														int nIndex = j + i * pGrid->m_nRows;
+														int nIndex = j + i * pXobj->m_nRows;
 														CString strIndex = _T("");
 														strIndex.Format(_T("%d"), nIndex);
 														pSession->Insertint64(strIndex, (__int64)::GetDlgItem(pWnd->m_hWnd, pWnd->IdFromRowCol(i, j)));
@@ -1267,7 +1267,7 @@ namespace Browser {
 											break;
 											case TabGrid:
 											{
-												for (auto it : pGrid->m_vChildNodes)
+												for (auto it : pXobj->m_vChildNodes)
 												{
 													CString strIndex = _T("");
 													strIndex.Format(_T("%d"), it->m_nCol);
@@ -1278,31 +1278,31 @@ namespace Browser {
 											default:
 												break;
 											}
-											if (pGrid->m_pParentObj)
+											if (pXobj->m_pParentObj)
 											{
-												pSession->Insertint64(_T("parentgridhandle"), (__int64)pGrid->m_pParentObj->m_pHostWnd->m_hWnd);
+												pSession->Insertint64(_T("parentgridhandle"), (__int64)pXobj->m_pParentObj->m_pHostWnd->m_hWnd);
 											}
-											if (pGrid->m_pParentWinFormWnd)
+											if (pXobj->m_pParentWinFormWnd)
 											{
-												pSession->Insertint64(_T("parentFormHandle"), (__int64)pGrid->m_pParentWinFormWnd->m_hWnd);
+												pSession->Insertint64(_T("parentFormHandle"), (__int64)pXobj->m_pParentWinFormWnd->m_hWnd);
 											}
-											if (pGrid->m_pDisp)
+											if (pXobj->m_pDisp)
 											{
-												pGrid->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pGrid->m_pDisp);
+												pXobj->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
 												if (g_pCosmos->m_pCLRProxy)
 												{
-													g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pGrid, true);
+													g_pCosmos->m_pCLRProxy->ConnectGridToWebPage(pXobj, true);
 												}
 											}
-											pGrid->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+											pXobj->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
 											m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
 										}
 									}
 									else
 									{
-										pGrid->m_pCosmosCloudSession->InsertString(_T("msgID"), strMsgID);
-										pGrid->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
-										m_pChromeRenderFrameHost->SendCosmosMessage(pGrid->m_pCosmosCloudSession->m_pSession);
+										pXobj->m_pCosmosCloudSession->InsertString(_T("msgID"), strMsgID);
+										pXobj->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+										m_pChromeRenderFrameHost->SendCosmosMessage(pXobj->m_pCosmosCloudSession->m_pSession);
 									}
 								}
 							}
@@ -1326,7 +1326,7 @@ namespace Browser {
 		return S_FALSE;
 	}
 
-	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid)
+	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** pRetGrid)
 	{
 		if (m_pGalaxy == nullptr) {
 			CGalaxyCluster* pGalaxyCluster = nullptr;

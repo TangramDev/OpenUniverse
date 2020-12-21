@@ -45,7 +45,7 @@ struct CTangramXHtmlTreeNode;
 typedef map<CString,CTangramXHtmlTreeNode*> NodeMap;
 
 class CTangramXmlParse;
-class CGridHelper;
+class CXobjHelper;
 class CTangramHelper;
 //=============================================================================
 // Uncomment the following line if you want to use HTML in tree
@@ -175,7 +175,7 @@ struct CTangramXHtmlTreeNode
 	CTangramXmlParse*	m_pXmlParse;
 	ICosmosTreeNode*	m_pCosmosTreeNode;
 
-	map<CString, CGrid*> m_mapBindNode;
+	map<CString, CXobj*> m_mapBindNode;
 	HTREEITEM m_hItem;
 	HTREEITEM m_hWaitItemMsg;
 	CString	m_strName;
@@ -287,7 +287,7 @@ public:
 	NodeDictionary	m_mapGridDic;
 	NodeMap			m_mapSelectedNodeDic;
 	CComObject<CTangramTreeView>* m_pObj;
-	CGridHelper*	m_pHostWnd;
+	CXobjHelper*	m_pHostWnd;
 	CTangramHelper*	m_pCosmosHelper;
 	enum CheckedState { UNUSED1 = 0, 
 						UNCHECKED, CHECKED, TRISTATE, 
@@ -419,7 +419,7 @@ public:
 // Operations
 //=============================================================================
 public:
-	void		Init(CGrid* pGrid);
+	void		Init(CXobj* pXobj);
 	void		WriteData(CString strData);
 	CString		TangramGetData(CTangramXmlParse*, CTangramHelper*);
 	CString		GetSelectedNodeInfo(CString strPropertys);

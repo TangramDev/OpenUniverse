@@ -58,7 +58,7 @@ public:
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CGalaxy*>							m_mapGalaxy;
 	map<HWND, CGalaxy*>							m_mapNeedSaveGalaxy;
-	map<CString, CGrid*>						m_mapGrid;
+	map<CString, CXobj*>						m_mapGrid;
 	map<CString, IDispatch*>					m_mapExternalObj;
 	map<HWND, CEclipseCtrl*>					m_mapNotifyCtrl;
 	map<CString, CString>						m_mapXtml;
@@ -80,14 +80,14 @@ public:
 	void BeforeDestory();
 	void UpdateMapKey(CString);
 	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
-	HRESULT Fire_NodeCreated(IGrid * pGridCreated);
-	HRESULT Fire_AddInCreated(IGrid * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
+	HRESULT Fire_NodeCreated(IXobj * pGridCreated);
+	HRESULT Fire_AddInCreated(IXobj * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
 	HRESULT Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd);
-	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IGrid * pRetRootNode);
+	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj * pRetRootNode);
 	HRESULT Fire_Destroy();
-	HRESULT Fire_NodeMouseActivate(IGrid * pActiveNode);
-	HRESULT Fire_ClrControlCreated(IGrid * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
-	HRESULT Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPage);
+	HRESULT Fire_NodeMouseActivate(IXobj * pActiveNode);
+	HRESULT Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
+	HRESULT Fire_TabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
 	HRESULT Fire_CosmosEvent(ICosmosEventObj* pEventObj);
 	HRESULT Fire_IPCMsg(IGalaxy* pSender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
 
@@ -105,7 +105,7 @@ public:
 	STDMETHOD(get_Extender)(BSTR bstrExtenderName, IDispatch** pVal);
 	STDMETHOD(put_Extender)(BSTR bstrExtenderName, IDispatch* newVal);
 	STDMETHOD(get_GalaxyName)(LONGLONG hHwnd, BSTR* pVal);
-	STDMETHOD(get_Grid)(BSTR bstrNodeName, IGrid** pVal);
+	STDMETHOD(get_Grid)(BSTR bstrNodeName, IXobj** pVal);
 	STDMETHOD(get_GridNames)(BSTR* pVal);
 	STDMETHOD(get_XObject)(BSTR bstrName, IDispatch** pVal);
 	STDMETHOD(get_Parent)(IGalaxyCluster** pVal);
@@ -119,15 +119,15 @@ public:
 	STDMETHOD(put_ConfigName)(BSTR newVal);
 
 	STDMETHOD(CreateGalaxy)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame);
-	STDMETHOD(GetGrid)(BSTR bstrGalaxyName, BSTR bstrNodeName, IGrid** pRetNode);
+	STDMETHOD(GetGrid)(BSTR bstrGalaxyName, BSTR bstrNodeName, IXobj** pRetNode);
 	STDMETHOD(GetGalaxyFromCtrl)(IDispatch* ctrl, IGalaxy** ppGalaxy);
 	STDMETHOD(GetCtrlInGrid)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
-	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
-	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
+	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
+	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
 	STDMETHOD(ConnectCosmosCtrl)(ICosmosCtrl* eventSource);
-	STDMETHOD(CreateGalaxyWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IGrid** ppGrid);
+	STDMETHOD(CreateGalaxyWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IXobj** ppGrid);
 	STDMETHOD(ObserveGalaxys)(BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	STDMETHOD(get_CurrentDesignGalaxyType)(GalaxyType* pVal);
-	STDMETHOD(get_CurrentDesignNode)(IGrid** pVal);
+	STDMETHOD(get_CurrentDesignNode)(IXobj** pVal);
 };
 

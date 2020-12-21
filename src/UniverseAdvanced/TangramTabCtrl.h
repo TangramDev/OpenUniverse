@@ -51,7 +51,7 @@ public:
 	virtual ~CTangramTabCtrl();
 	int					m_nImageIndex;
 	CString				m_strFilter;
-	CGrid*			m_pGrid;
+	CXobj*			m_pXobj;
 	CGalaxy*		m_pGalaxy;
 	CTangramListView*	m_pCosmosListView;
 	CTangramListCtrl	m_ListCtrl;

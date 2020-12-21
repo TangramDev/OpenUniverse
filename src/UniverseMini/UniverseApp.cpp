@@ -259,10 +259,10 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		g_pCosmos->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
 		if (pGalaxy)
 		{
-			IGrid* pGrid = nullptr;
-			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pGrid);
+			IXobj* pXobj = nullptr;
+			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pXobj);
 			LONGLONG h = 0;
-			pGrid->get_Handle(&h);
+			pXobj->get_Handle(&h);
 			HWND hWnd = (HWND)h;
 			//::InvalidateRect(hWnd, nullptr, true);
 		}
@@ -499,7 +499,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CGridHelper* pWnd = nullptr;
+				CXobjHelper* pWnd = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -508,7 +508,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (g_pCosmos->m_pActiveGrid->m_nViewType != Grid)
 					{
-						pWnd = (CGridHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
+						pWnd = (CXobjHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveGrid = nullptr;

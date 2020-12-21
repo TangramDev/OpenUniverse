@@ -63,7 +63,7 @@ namespace blink {
 		return handle_;
 	}
 
-	CosmosNode* CosmosGalaxy::getGrid(const String& clusterName, const String& nodeName)
+	CosmosNode* CosmosGalaxy::getXobj(const String& clusterName, const String& nodeName)
 	{
 		if (nodeName == "undefined")
 		{
@@ -79,7 +79,7 @@ namespace blink {
 		return nullptr;
 	}
 
-	CosmosNode* CosmosGalaxy::getGrid(const long nodeHandle)
+	CosmosNode* CosmosGalaxy::getXobj(const long nodeHandle)
 	{
 		auto it = m_mapCosmosNode.find(nodeHandle);
 		if (it != m_mapCosmosNode.end())

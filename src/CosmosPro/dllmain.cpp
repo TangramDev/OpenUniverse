@@ -421,18 +421,18 @@ int CCosmos::CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5)
 	return 1;
 }
 
-CCosmosGridEvent::CCosmosGridEvent()
+CCosmosXobjEvent::CCosmosXobjEvent()
 {
-	m_pGrid			= nullptr;
-	m_pGridCLREvent = nullptr;
+	m_pXobj			= nullptr;
+	m_pXobjCLREvent = nullptr;
 }
 
-CCosmosGridEvent::~CCosmosGridEvent()
+CCosmosXobjEvent::~CCosmosXobjEvent()
 {
-	if (m_pGridCLREvent)
+	if (m_pXobjCLREvent)
 	{
-		//LONGLONG nValue = (LONGLONG)m_pGrid;
-		DispEventUnadvise(m_pGrid);
+		//LONGLONG nValue = (LONGLONG)m_pXobj;
+		DispEventUnadvise(m_pXobj);
 	}
 }
 

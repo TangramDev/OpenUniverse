@@ -24,9 +24,9 @@ typedef sequence<any> ObjectArray;
 
 	//CosmosNode API
 	CosmosXobj newVar([DefaultValue = Undefined] optional DOMString name);
-	CosmosNode getGrid(Element elem, [DefaultValue = Undefined] optional CosmosXobj grid);
-	CosmosNode getGrid(long long nodeHandle);
-	CosmosNode getGrid(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
+	CosmosNode getXobj(Element elem, [DefaultValue = Undefined] optional CosmosXobj grid);
+	CosmosNode getXobj(long long nodeHandle);
+	CosmosNode getXobj(DOMString galaxyName, [DefaultValue = Undefined] optional DOMString clusterName, [DefaultValue = Undefined] optional DOMString gridName);
 	CosmosGalaxy getGalaxy(DOMString wndName);
 	CosmosGalaxy getGalaxy(long long wndHandle);
 	void OnMessage(Element elem, DOMString eventName);
@@ -43,7 +43,7 @@ typedef sequence<any> ObjectArray;
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DOMString url;
 
 	// Event handler attributes
-	attribute EventHandler onGridCreated;
+	attribute EventHandler onXobjCreated;
 	attribute EventHandler onLoadWinForm;
 	attribute EventHandler onLoadMdiWinForm;
 	attribute EventHandler onGalaxyCreated;

@@ -149,8 +149,8 @@ public:
 	CString									m_strChildFormPath;
 	
 	CBKWnd*									m_pBKWnd;
-	CGrid*									m_pBindMDIGrid = nullptr;
-	CGrid*									m_pWebBindMDIGrid = nullptr;
+	CXobj*									m_pBindMDIXobj = nullptr;
+	CXobj*									m_pWebBindMDIXobj = nullptr;
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
@@ -218,7 +218,7 @@ public:
 	void OnFinalMessage(HWND hWnd);
 
 private:
-	void CtrlBarDocActiveNotify(ICosmosDoc* pDoc, IGrid* pGridInDoc, IGrid* pGridInCtrlBar, HWND hCtrlBar);
+	void CtrlBarDocActiveNotify(ICosmosDoc* pDoc, IXobj* pGridInDoc, IXobj* pGridInCtrlBar, HWND hCtrlBar);
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
@@ -260,23 +260,23 @@ public:
 	IPCMsg*											m_pCurrentIPCMsg;
 	CBKWnd*											m_pBKWnd;
 	CWebPage*										m_pWebPageWnd;
-	CGrid*											m_pHostWebBrowserNode = nullptr;
+	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster;
-	CGrid*											m_pParentGrid;
-	CGrid*											m_pWorkGrid;
-	CGrid*											m_pContainerNode;
-	CGrid*											m_pBindingGrid;
+	CXobj*											m_pParentGrid;
+	CXobj*											m_pWorkGrid;
+	CXobj*											m_pContainerNode;
+	CXobj*											m_pBindingGrid;
 	CGalaxy*										m_pSubGalaxy;
 	GalaxyInfo*										m_pGalaxyInfo;
 	CCosmosDoc*										m_pDoc;
-	map<CString, CGrid*>							m_mapGrid;
-	map<CString, CGrid*>							m_mapNeedSaveToConfigNode;
+	map<CString, CXobj*>							m_mapGrid;
+	map<CString, CXobj*>							m_mapNeedSaveToConfigNode;
 	map<CString, VARIANT>							m_mapVal;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;
-	map<CString, CGrid*>							m_mapGridScript;
-	CComObject<CGridCollection>*					m_pRootNodes;
+	map<CString, CXobj*>							m_mapGridScript;
+	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}
 	void Unlock(){}
@@ -287,11 +287,11 @@ public:
 	void UpdateVisualWPFMap(HWND, BOOL);
 	CTangramXmlParse* UpdateGrid();
 	BOOL CreateGalaxyCluster();
-	CGrid* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
+	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);
-	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
 	STDMETHOD(GetXml)(BSTR bstrRootName, BSTR* bstrRet);
 
 	BEGIN_COM_MAP(CGalaxy)
@@ -340,13 +340,13 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 
 	STDMETHOD(get_Count)(long* pCount);
-	STDMETHOD(get_Grid)(VARIANT vIndex, IGrid **ppGrid);
+	STDMETHOD(get_Grid)(VARIANT vIndex, IXobj **ppGrid);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_CurrentNavigateKey)(BSTR* pVal);
-	STDMETHOD(get_VisibleGrid)(IGrid** pVal);
-	STDMETHOD(get_RootGrids)(IGridCollection** pGridColletion);
+	STDMETHOD(get_VisibleGrid)(IXobj** pVal);
+	STDMETHOD(get_RootGrids)(IXobjCollection** pGridColletion);
 	STDMETHOD(get_GalaxyData)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);

@@ -374,8 +374,8 @@ namespace Browser {
 				CGalaxy* pGalaxy = m_pVisibleWebWnd->m_pGalaxy;
 				if (pGalaxy)
 				{
-					CGrid* pGrid = pGalaxy->m_pWorkGrid;
-					CGridHelper* pWnd = (CGridHelper*)(pGrid->m_pHostWnd);
+					CXobj* pXobj = pGalaxy->m_pWorkGrid;
+					CXobjHelper* pWnd = (CXobjHelper*)(pXobj->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}
 			}
@@ -534,7 +534,7 @@ namespace Browser {
 		delete this;
 	}
 
-	STDMETHODIMP CBrowser::get_RemoteGrid(IGrid** pVal)
+	STDMETHODIMP CBrowser::get_RemoteGrid(IXobj** pVal)
 	{
 		if (m_pRemoteGrid != nullptr)
 		{
@@ -543,21 +543,21 @@ namespace Browser {
 		return S_OK;
 	}
 
-	STDMETHODIMP CBrowser::put_RemoteGrid(IGrid* newVal)
+	STDMETHODIMP CBrowser::put_RemoteGrid(IXobj* newVal)
 	{
-		CComQIPtr<IGrid>pGrid(newVal);
-		if (pGrid)
-			m_pRemoteGrid = pGrid.Detach();
+		CComQIPtr<IXobj>pXobj(newVal);
+		if (pXobj)
+			m_pRemoteGrid = pXobj.Detach();
 		//if (m_pRemoteNode == nullptr)
 		//{
 		//	IStream* pStream = 0;
-		//	HRESULT hr = ::CoMarshalInterThreadInterfaceInStream(IID_IGrid, (IGrid*)newVal.pdispVal, &pStream);
+		//	HRESULT hr = ::CoMarshalInterThreadInterfaceInStream(IID_IXobj, (IXobj*)newVal.pdispVal, &pStream);
 		//	if (hr == S_OK)
 		//	{
 		//		IDispatch* pTarget = nullptr;
 		//		hr = ::CoGetInterfaceAndReleaseStream(pStream, IID_IDispatch, (LPVOID*)&pTarget);
 		//		if (hr == S_OK && pTarget)
-		//			hr = pTarget->QueryInterface(IID_IGrid, (void**)m_pRemoteNode);
+		//			hr = pTarget->QueryInterface(IID_IXobj, (void**)m_pRemoteNode);
 		//	}
 		//}
 		return S_OK;

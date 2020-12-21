@@ -159,7 +159,7 @@ public:
 	CString							m_strClientKey;
 	CString							m_strDocTemplatePath;
 	map<CString, CString>			m_mapXml;
-	map<HWND, CGrid*>				m_mapMainPageNode;
+	map<HWND, CXobj*>				m_mapMainPageNode;
 	map<HWND, CGalaxy*>				m_mapConnectedFrame;
 	map<HWND, CUniverseMDIChild*> m_mapCosmosMDIChildWnd;
 
@@ -255,10 +255,10 @@ public:
 	CUniverseMDIChild*						m_pActiveMDIChildWnd;
 	CosmosDocTemplateInfo*					m_pCosmosDocTemplateInfo;
 
-	CGrid*									m_pActiveGrid;
-	CGrid*									m_pDesignRootNode;
-	CGrid*									m_pDesignGrid;
-	CGrid*									m_pHostDesignUINode;
+	CXobj*									m_pActiveGrid;
+	CXobj*									m_pDesignRootNode;
+	CXobj*									m_pDesignGrid;
+	CXobj*									m_pHostDesignUINode;
 	CGalaxy*								m_pGalaxy;
 	CGalaxy*								m_pDesignerFrame;
 	CGalaxy*								m_pDesigningFrame;
@@ -286,9 +286,9 @@ public:
 	map<HWND, CAFXHelperWnd*>				m_mapCosmosAFXHelperWnd;
 	map<CString, CRuntimeClass*>			m_TabWndClassInfoDictionary;
 	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
-	map<__int64, CGridCollection*>			m_mapWndGridCollection;
+	map<__int64, CXobjCollection*>			m_mapWndGridCollection;
 	map<int, ICosmos*>						m_mapRemoteTangramApp;
-	map<CGrid*, CString>					m_mapGridForHtml;
+	map<CXobj*, CString>					m_mapGridForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
 
@@ -307,10 +307,10 @@ public:
 		IMPLEMENTED_CATEGORY(CATID_SafeForScripting)
 	END_CATEGORY_MAP()
 
-	STDMETHOD(get_RootNodes)(IGridCollection** pGridColletion);
-	STDMETHOD(get_CurrentActiveGrid)(IGrid** pVal);
-	STDMETHOD(get_CreatingGrid)(IGrid** pVal);
-	STDMETHOD(get_DesignNode)(IGrid** pVal);
+	STDMETHOD(get_RootNodes)(IXobjCollection** pGridColletion);
+	STDMETHOD(get_CurrentActiveGrid)(IXobj** pVal);
+	STDMETHOD(get_CreatingGrid)(IXobj** pVal);
+	STDMETHOD(get_DesignNode)(IXobj** pVal);
 	STDMETHOD(get_AppExtender)(BSTR bstrKey, IDispatch** pVal);
 	STDMETHOD(put_AppExtender)(BSTR bstrKey, IDispatch* newVal);
 	STDMETHOD(get_AppKeyValue)(BSTR bstrKey, VARIANT* pVal);
@@ -326,7 +326,7 @@ public:
 	STDMETHOD(get_ActiveChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 
-	STDMETHOD(NavigateNode)(IGrid* pGrid, BSTR bstrObjID, BSTR bstrXml, IGrid** pVal);
+	STDMETHOD(NavigateNode)(IXobj* pXobj, BSTR bstrObjID, BSTR bstrXml, IXobj** pVal);
 	STDMETHOD(ActiveCLRMethod)(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
@@ -339,20 +339,20 @@ public:
 	STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml) { return S_OK; };
 	STDMETHOD(FireCosmosEventObj)(ICosmosEventObj* pCosmosEventObj);
 	STDMETHOD(GetGalaxy)(LONGLONG hHostWnd, IGalaxy** ppGalaxy);
-	STDMETHOD(GetGridFromHandle)(LONGLONG hWnd, IGrid** ppRetGrid);
+	STDMETHOD(GetGridFromHandle)(LONGLONG hWnd, IXobj** ppRetGrid);
 	STDMETHOD(GetCtrlByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
 	STDMETHOD(GetDocTemplateXml)(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath);
-	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IGrid** ppGrid);
-	STDMETHOD(GetItemText)(IGrid* pGrid, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet);
+	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppGrid);
+	STDMETHOD(GetItemText)(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet);
 	STDMETHOD(GetCLRControl)(IDispatch* CtrlDisp, BSTR bstrNames, IDispatch** ppRetDisp);
 	STDMETHOD(MessageBox)(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, int* nRet);
 	STDMETHOD(NewGUID)(BSTR* retVal);
 	STDMETHOD(StartApplication)(BSTR bstrAppID, BSTR bstrXml);
 	STDMETHOD(SetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
-	STDMETHOD(SetItemText)(IGrid* pGrid, long nCtrlID, BSTR bstrRet);
+	STDMETHOD(SetItemText)(IXobj* pXobj, long nCtrlID, BSTR bstrRet);
 	STDMETHOD(SetHostFocus)(void);
-	STDMETHOD(UpdateGrid)(IGrid* pGrid);
+	STDMETHOD(UpdateGrid)(IXobj* pXobj);
 	STDMETHOD(CosmosCommand)(IDispatch* RibbonControl) { return S_OK; };
 	STDMETHOD(CosmosGetImage)(BSTR strValue, IPictureDisp ** ppDispImage) { return S_OK; };
 	STDMETHOD(CosmosGetVisible)(IDispatch* RibbonControl, VARIANT* varVisible) { return S_OK; };
@@ -399,7 +399,7 @@ public:
 	CString ComputeHash(CString source);
 	CString GetDesignerInfo(CString);
 	CString GetXmlData(CString strName, CString strXml);
-	CString GetDesignerData(CGrid* pGrid);
+	CString GetDesignerData(CXobj* pXobj);
 	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
 	CString GetPropertyFromObject(IDispatch* pObj, CString strPropertyName);
 	CString	BuildSipURICodeStr(CString strURI, CString strPrev, CString strFix, CString strData, int n1);
@@ -407,7 +407,7 @@ public:
 	CString tangram_for_eclipse(CString strKey, CString strData, CString strFeatures);
 	CString GetOfficePath();
 	LRESULT Close(void);
-	CGrid* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
+	CXobj* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
 	CommonThreadInfo* GetThreadInfo(DWORD dwInfo = 0);
 #ifndef _WIN64
 	void ConnectWebAgent();
@@ -462,20 +462,20 @@ private:
 	CString								m_strOfficeAppIDs;
 	CString								m_strExcludeAppExtenderIDs;
 	CWindow								m_HelperWnd;
-	CComObject<CGridCollection>*		m_pRootNodes;
+	CComObject<CXobjCollection>*		m_pRootNodes;
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
 
 	void CosmosLoad();
 	bool CheckUrl(CString&   url);
-	void AttachGrid(void* pGridEvents);
+	void AttachGrid(void* pXobjEvents);
 	CString Encode(CString strSRC, BOOL bEnCode);
-	CString GetNewLayoutNodeName(BSTR strObjTypeID, IGrid* pDesignNode);
+	CString GetNewLayoutNodeName(BSTR strObjTypeID, IXobj* pDesignNode);
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
-	IGrid* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
+	IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
-	bool IsMDIClientGalaxyNode(IGrid*);
+	bool IsMDIClientGalaxyNode(IXobj*);
 	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
-	void FireNodeEvent(int nIndex, CGrid* pGrid, CCosmosEvent* pObj);
+	void FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj);
 	void GetCosmosInfo(CString strFile, CosmosDocInfo*);
 
 	CString RemoveUTF8BOM(CString strUTF8);
@@ -494,7 +494,7 @@ private:
 	char* GetSchemeString(int nType, CString strKey);
 	long GetIPCMsgIndex(CString strMsgID);
 	CSession* CreateCloudSession(CWebPageImpl*);
-	CSession* GetCloudSession(IGrid*);
+	CSession* GetCloudSession(IXobj*);
 	void SetMainWnd(HWND hMain);
 	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
 	void CosmosNotify(CString strXml1, CString strXml2, LONGLONG wParam, LONGLONG lParam);

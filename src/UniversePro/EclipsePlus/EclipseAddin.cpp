@@ -290,7 +290,7 @@ STDMETHODIMP CEclipseWnd::get_Galaxy(IGalaxy** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CEclipseWnd::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid)
+STDMETHODIMP CEclipseWnd::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
 {
 	CString strKey = OLE2T(bstrKey);
 	strKey.Trim();
@@ -342,30 +342,30 @@ STDMETHODIMP CEclipseWnd::Observe(BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid)
 		hr = m_pGalaxy->Observe(bstrKey, bstrXml, ppGrid);
 		if (*ppGrid)
 		{
-			m_pCurGrid = (CGrid*)*ppGrid;
+			m_pCurGrid = (CXobj*)*ppGrid;
 		}
 	}
 	return hr;
 } 
 
-STDMETHODIMP CEclipseWnd::ObserveEx(BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid)
+STDMETHODIMP CEclipseWnd::ObserveEx(BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
 {
 	HRESULT hr = Observe(bstrKey, bstrXml, ppGrid);
 	if (*ppGrid)
 	{
-		m_pCurGrid = (CGrid*)*ppGrid;
+		m_pCurGrid = (CXobj*)*ppGrid;
 		m_pCurGrid->put_SaveToConfigFile(true);
 	}
 	return hr;
 } 
 
-STDMETHODIMP CEclipseWnd::ObserveInView(int nIndex, BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid)
+STDMETHODIMP CEclipseWnd::ObserveInView(int nIndex, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid)
 {
 	IEclipseCtrl* pCtrl = nullptr;
 	get_Ctrl(CComVariant((int)nIndex), &pCtrl);
 	if (pCtrl)
 	{
-		IGrid* pGrid = nullptr;
+		IXobj* pXobj = nullptr;
 		return pCtrl->Observe(CComBSTR(L"EclipseView"), bstrKey, bstrXml, ppRetGrid);
 	}
 
@@ -512,9 +512,9 @@ void CEclipseWnd::Show(CString strID)
 							m_strDocKey = g_pCosmos->m_strStartupURL;
 					}
 
-					IGrid* pGrid = nullptr;
-					pGalaxy->Observe(CComBSTR(strKey), CComBSTR(m_strDocKey), &pGrid);
-					if (pGrid == nullptr)
+					IXobj* pXobj = nullptr;
+					pGalaxy->Observe(CComBSTR(strKey), CComBSTR(m_strDocKey), &pXobj);
+					if (pXobj == nullptr)
 					{
 						delete m_pGalaxy;
 						m_pGalaxy = nullptr;
@@ -563,9 +563,9 @@ LRESULT CEclipseWnd::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		}
 		if (g_pCosmos->m_strCurrentEclipsePagePath == _T("")&& m_pGalaxy)
 		{
-			IGrid* pGrid = nullptr;
-			m_pGalaxy->Observe(CComBSTR(L"newdocument"), g_pCosmos->m_strNewDocXml.AllocSysString(), &pGrid);
-			if (pGrid)
+			IXobj* pXobj = nullptr;
+			m_pGalaxy->Observe(CComBSTR(L"newdocument"), g_pCosmos->m_strNewDocXml.AllocSysString(), &pXobj);
+			if (pXobj)
 				return 0;
 		}
 	}
@@ -682,7 +682,7 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 					CGalaxy* pGalaxy = it.second;
 					for (auto it2 : pGalaxy->m_mapGrid)
 					{
-						CGrid* pWndGrid = (CGrid*)it2.second;
+						CXobj* pWndGrid = (CXobj*)it2.second;
 						if (pWndGrid)
 						{
 							if (pWndGrid->m_pWindow)
@@ -713,12 +713,12 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 					auto it2 = pGalaxy->m_mapGrid.find(_T("default"));
 					if (it2 != pGalaxy->m_mapGrid.end())
 					{
-						CGrid* _pGrid = (CGrid*)it2->second;
+						CXobj* _pXobj = (CXobj*)it2->second;
 						if (pGalaxy->m_strGalaxyName.Find(_T("@")) == -1)
 						{
-							CString strXml = _pGrid->m_pGridShareData->m_pCosmosParse->xml();
+							CString strXml = _pXobj->m_pXobjShareData->m_pCosmosParse->xml();
 							strXml.Replace(_T("/><"), _T("/>\r\n<"));
-							strXml.Replace(_T("/>"), _T("></grid>"));
+							strXml.Replace(_T("/>"), _T("></xobj>"));
 							CString s = _T("");
 							s.Format(_T("<%s>%s</%s>"), pGalaxy->m_strGalaxyName, strXml, pGalaxy->m_strGalaxyName);
 							m_strXml += s;
@@ -888,7 +888,7 @@ HRESULT CEclipseCtrl::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_NodeCreated(IGrid * pGridCreated)
+HRESULT CEclipseCtrl::Fire_NodeCreated(IXobj * pGridCreated)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -916,7 +916,7 @@ HRESULT CEclipseCtrl::Fire_NodeCreated(IGrid * pGridCreated)
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_AddInCreated(IGrid * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
+HRESULT CEclipseCtrl::Fire_AddInCreated(IXobj * pRootGrid, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -979,7 +979,7 @@ HRESULT CEclipseCtrl::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IGrid * pRetRootNode)
+HRESULT CEclipseCtrl::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj * pRetRootNode)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1038,7 +1038,7 @@ HRESULT CEclipseCtrl::Fire_Destroy()
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_NodeMouseActivate(IGrid * pActiveNode)
+HRESULT CEclipseCtrl::Fire_NodeMouseActivate(IXobj * pActiveNode)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1067,7 +1067,7 @@ HRESULT CEclipseCtrl::Fire_NodeMouseActivate(IGrid * pActiveNode)
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_ClrControlCreated(IGrid * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle)
+HRESULT CEclipseCtrl::Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1102,7 +1102,7 @@ HRESULT CEclipseCtrl::Fire_ClrControlCreated(IGrid * Node, IDispatch * Ctrl, BST
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPage)
+HRESULT CEclipseCtrl::Fire_TabChange(IXobj* sender, LONG ActivePage, LONG OldPage)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1135,7 +1135,7 @@ HRESULT CEclipseCtrl::Fire_TabChange(IGrid* sender, LONG ActivePage, LONG OldPag
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_Event(IGrid* sender, IDispatch* EventArg)
+HRESULT CEclipseCtrl::Fire_Event(IXobj* sender, IDispatch* EventArg)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1164,7 +1164,7 @@ HRESULT CEclipseCtrl::Fire_Event(IGrid* sender, IDispatch* EventArg)
 	return hr;
 }
 
-HRESULT CEclipseCtrl::Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName)
+HRESULT CEclipseCtrl::Fire_ControlNotify(IXobj * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1274,7 +1274,7 @@ STDMETHODIMP CEclipseCtrl::put_Handle(BSTR bstrHandleName, LONGLONG newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid)
+STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
 {
 	CString strGalaxyName = OLE2T(bstrGalaxyName);
 	if (strGalaxyName == _T(""))
@@ -1291,7 +1291,7 @@ STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrX
 	if (strKey == _T(""))
 		strKey= _T("default");
 	CString strXml = OLE2T(bstrXml);
-	IGrid* pGrid = nullptr;
+	IXobj* pXobj = nullptr;
 	auto it2 = m_mapGalaxy.find(strGalaxyName);
 	if (it2 == m_mapGalaxy.end())
 	{
@@ -1327,7 +1327,7 @@ STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrX
 	return hr;
 }
 	
-STDMETHODIMP CEclipseCtrl::ObserveEx(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IGrid** ppGrid)
+STDMETHODIMP CEclipseCtrl::ObserveEx(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppGrid)
 {
 	HRESULT hr = Observe(bstrGalaxyName, bstrKey, bstrXml, ppGrid);
 	if (hr == S_OK&&*ppGrid != nullptr)
@@ -1435,7 +1435,7 @@ STDMETHODIMP CEclipseCtrl::get_TopGalaxy(IGalaxy** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CEclipseCtrl::get_ActiveTopGrid(IGrid** pVal)
+STDMETHODIMP CEclipseCtrl::get_ActiveTopGrid(IXobj** pVal)
 {
 	if (m_pEclipseWnd)
 	{

@@ -19,7 +19,7 @@
 *
 ********************************************************************************/
 
-// WndGrid.cpp : Implementation of CGrid
+// WndGrid.cpp : Implementation of CXobj
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -46,7 +46,7 @@
 #include "chromium/Browser.h"
 #include "chromium/WebPage.h"
 
-CGrid::CGrid()
+CXobj::CXobj()
 {
 	g_pCosmos->m_nTangramObj++;
 	m_nID = 0;
@@ -81,17 +81,17 @@ CGrid::CGrid()
 	m_pHostParse = nullptr;
 	m_pDocXmlParseNode = nullptr;
 	m_pWebBrowser = nullptr;
-	m_pGridShareData = nullptr;
+	m_pXobjShareData = nullptr;
 	g_pCosmos->m_pActiveGrid = this;
 }
 
 
-void CGrid::InitWndGrid()
+void CXobj::InitWndGrid()
 {
 	m_pParentWinFormWnd = nullptr;
 	m_pCosmosCloudSession = nullptr;
-	m_pGridShareData = m_pRootObj->m_pGridShareData;
-	ASSERT(m_pGridShareData != nullptr);
+	m_pXobjShareData = m_pRootObj->m_pXobjShareData;
+	ASSERT(m_pXobjShareData != nullptr);
 	m_nHeigh = m_pHostParse->attrInt(TGM_HEIGHT, 0);
 	m_nWidth = m_pHostParse->attrInt(TGM_WIDTH, 0);
 	m_strObjTypeID = m_pHostParse->attr(TGM_OBJ_ID, _T(""));
@@ -101,7 +101,7 @@ void CGrid::InitWndGrid()
 	m_nCols = m_pHostParse->attrInt(TGM_COLS, 0);
 	if (m_nRows * m_nCols > 1)
 	{
-		m_strID = _T("grid");
+		m_strID = _T("xobj");
 		m_nViewType = Grid;
 	}
 	else
@@ -121,10 +121,10 @@ void CGrid::InitWndGrid()
 				m_strID = _T("clrctrl");
 				m_nViewType = CLRCtrl;
 			}
-			else if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
+			else if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
 			{
-				auto it = m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.find(m_strObjTypeID);
-				if (it != m_pGridShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.end())
+				auto it = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.find(m_strObjTypeID);
+				if (it != m_pXobjShareData->m_pGalaxy->m_pWebPageWnd->m_mapFormsInfo.end())
 				{
 					m_strID = _T("clrctrl");
 					m_nViewType = CLRCtrl;
@@ -216,13 +216,13 @@ void CGrid::InitWndGrid()
 	m_pRootObj->m_mapChildGrid[m_strName] = this;
 	m_nActivePage = m_pHostParse->attrInt(TGM_ACTIVE_PAGE, 0);
 	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
-	if (m_pGridShareData->m_pGalaxy && m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)
+	if (m_pXobjShareData->m_pGalaxy && m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster)
 	{
-		m_strNodeName = m_strName + _T("@") + g_pCosmos->m_strCurrentKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName;
-		auto it2 = m_pGridShareData->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
-		if (it2 == m_pGridShareData->m_pGalaxyCluster->m_mapGrid.end())
+		m_strNodeName = m_strName + _T("@") + g_pCosmos->m_strCurrentKey + _T("@") + m_pXobjShareData->m_pGalaxy->m_strGalaxyName;
+		auto it2 = m_pXobjShareData->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
+		if (it2 == m_pXobjShareData->m_pGalaxyCluster->m_mapGrid.end())
 		{
-			m_pGridShareData->m_pGalaxyCluster->m_mapGrid[m_strNodeName] = this;
+			m_pXobjShareData->m_pGalaxyCluster->m_mapGrid[m_strNodeName] = this;
 		}
 	}
 
@@ -245,7 +245,7 @@ void CGrid::InitWndGrid()
 	if (it != g_pCosmos->m_TabWndClassInfoDictionary.end())
 		m_pObjClsInfo = it->second;
 	else
-		m_pObjClsInfo = RUNTIME_CLASS(CGridHelper);
+		m_pObjClsInfo = RUNTIME_CLASS(CXobjHelper);
 
 	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 	{
@@ -255,13 +255,13 @@ void CGrid::InitWndGrid()
 	}
 }
 
-CGrid::~CGrid()
+CXobj::~CXobj()
 {
 	if (g_pCosmos->m_pActiveGrid == this)
 		g_pCosmos->m_pActiveGrid = nullptr;
-	if (m_pGridShareData->m_pOldGalaxy)
-		m_pGridShareData->m_pGalaxy = m_pGridShareData->m_pOldGalaxy;
-	CGalaxy * pGalaxy = m_pGridShareData->m_pGalaxy;
+	if (m_pXobjShareData->m_pOldGalaxy)
+		m_pXobjShareData->m_pGalaxy = m_pXobjShareData->m_pOldGalaxy;
+	CGalaxy * pGalaxy = m_pXobjShareData->m_pGalaxy;
 	if (pGalaxy->m_pGalaxyCluster)
 	{
 		auto it = pGalaxy->m_pGalaxyCluster->m_mapGrid.find(m_strNodeName);
@@ -286,8 +286,8 @@ CGrid::~CGrid()
 				}
 				delete pGalaxy;
 			}
-			delete m_pGridShareData;
-			m_pGridShareData = nullptr;
+			delete m_pXobjShareData;
+			m_pXobjShareData = nullptr;
 		}
 	}
 
@@ -327,31 +327,31 @@ CGrid::~CGrid()
 			delete it.second;
 	}
 	m_mapWndGridProxy.clear();
-	ATLTRACE(_T("delete CGrid:%x\n"), this);
+	ATLTRACE(_T("delete CXobj:%x\n"), this);
 }
 
-CString CGrid::GetNames()
+CString CXobj::GetNames()
 {
 	CString strRet = _T("");
-	CGrid* pGrid = this;
-	if (pGrid)
+	CXobj* pXobj = this;
+	if (pXobj)
 	{
-		pGrid = pGrid->m_pRootObj;
-		strRet += pGrid->m_strName;
+		pXobj = pXobj->m_pRootObj;
+		strRet += pXobj->m_strName;
 		strRet += _T(",");
-		strRet += _GetNames(pGrid);
+		strRet += _GetNames(pXobj);
 	}
 	return strRet;
 }
 
-CString CGrid::_GetNames(CGrid * pGrid)
+CString CXobj::_GetNames(CXobj * pXobj)
 {
 	CString strRet = _T("");
-	if (pGrid)
+	if (pXobj)
 	{
-		for (auto it : pGrid->m_vChildNodes)
+		for (auto it : pXobj->m_vChildNodes)
 		{
-			CGrid* pChildNode = it;
+			CXobj* pChildNode = it;
 			strRet += pChildNode->m_strName;
 			strRet += _T(",");
 			strRet += _GetNames(pChildNode);
@@ -360,7 +360,7 @@ CString CGrid::_GetNames(CGrid * pGrid)
 	return strRet;
 }
 
-STDMETHODIMP CGrid::GetChildGridByName(BSTR bstrName, IGrid** ppGrid)
+STDMETHODIMP CXobj::GetChildGridByName(BSTR bstrName, IXobj** ppGrid)
 {
 	CString strName = OLE2T(bstrName);
 	auto it = m_pRootObj->m_mapChildGrid.find(strName);
@@ -372,11 +372,11 @@ STDMETHODIMP CGrid::GetChildGridByName(BSTR bstrName, IGrid** ppGrid)
 	return S_FALSE;
 }
 
-CWebPage* CGrid::GetHtmlWnd()
+CWebPage* CXobj::GetHtmlWnd()
 {
 	if (m_pRootObj)
 	{
-		HWND hPWnd = m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+		HWND hPWnd = m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 		HWND hWnd = (HWND)::GetWindowLongPtr(hPWnd, GWLP_USERDATA);
 		if (::IsWindow(hWnd))
 		{
@@ -390,7 +390,7 @@ CWebPage* CGrid::GetHtmlWnd()
 		{
 			if (m_pParentWinFormWnd == nullptr)
 			{
-				m_pGridShareData->m_pGalaxy->GetWinForm(hPWnd);
+				m_pXobjShareData->m_pGalaxy->GetWinForm(hPWnd);
 				if (m_pRootObj->m_pParentWinFormWnd)
 				{
 					m_pParentWinFormWnd = m_pRootObj->m_pParentWinFormWnd;
@@ -422,7 +422,7 @@ CWebPage* CGrid::GetHtmlWnd()
 	return nullptr;
 }
 
-BOOL CGrid::PreTranslateMessage(MSG * pMsg)
+BOOL CXobj::PreTranslateMessage(MSG * pMsg)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	if (m_pHostWnd && pMsg->message != WM_MOUSEMOVE)
@@ -437,11 +437,11 @@ BOOL CGrid::PreTranslateMessage(MSG * pMsg)
 	return true;
 }
 
-STDMETHODIMP CGrid::LoadXML(int nType, BSTR bstrXML)
+STDMETHODIMP CXobj::LoadXML(int nType, BSTR bstrXML)
 {
 	if (m_strID.CompareNoCase(_T("TreeView")) == 0)
 	{
-		CTangramHtmlTreeWnd* _pXHtmlTree = ((CGridHelper*)m_pHostWnd)->m_pXHtmlTree;
+		CTangramHtmlTreeWnd* _pXHtmlTree = ((CXobjHelper*)m_pHostWnd)->m_pXHtmlTree;
 		if (nType)
 		{
 			_pXHtmlTree->LoadXmlFromFile(OLE2T(bstrXML), CTangramHtmlTreeWnd::ConvertToUnicode);
@@ -455,27 +455,27 @@ STDMETHODIMP CGrid::LoadXML(int nType, BSTR bstrXML)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::ActiveTabPage(IGrid * _pGrid)
+STDMETHODIMP CXobj::ActiveTabPage(IXobj * _pXobj)
 {
 	g_pCosmos->m_pActiveGrid = this;
 	HWND hWnd = m_pHostWnd->m_hWnd;
 	if (m_pHostWnd && ::IsWindow(hWnd))
 	{
 		::SetFocus(hWnd);
-		m_pGridShareData->m_pGalaxy->HostPosChanged();
-		if (m_pGridShareData->m_pGalaxy->m_bDesignerState && g_pCosmos->m_pDesignGrid)
+		m_pXobjShareData->m_pGalaxy->HostPosChanged();
+		if (m_pXobjShareData->m_pGalaxy->m_bDesignerState && g_pCosmos->m_pDesignGrid)
 		{
 			g_pCosmos->UpdateGrid(g_pCosmos->m_pDesignGrid->m_pRootObj);
 			CComBSTR bstrXml(L"");
 			g_pCosmos->m_pDesignGrid->m_pRootObj->get_DocXml(&bstrXml);
 			g_pCosmos->m_mapValInfo[_T("tangramdesignerxml")] = CComVariant(bstrXml);
 		}
-		m_pGridShareData->m_pGalaxy->UpdateVisualWPFMap(::GetParent(hWnd), true);
+		m_pXobjShareData->m_pGalaxy->UpdateVisualWPFMap(::GetParent(hWnd), true);
 	}
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
+STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj * *ppRetGrid)
 {
 	switch (m_nViewType)
 	{
@@ -491,7 +491,7 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 				return hr;
 			}
 		}
-		if (m_pGridShareData->m_pGalaxyCluster)
+		if (m_pXobjShareData->m_pGalaxyCluster)
 		{
 			if (m_nViewType == BlankView && m_pParentObj && m_pParentObj->m_nViewType == Grid)
 			{
@@ -513,40 +513,40 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 					m_hHostWnd = ::GetWindow(m_pHostWnd->m_hWnd, GW_CHILD);
 				}
 				IGalaxy* pGalaxy = nullptr;
-				m_pGridShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)m_hHostWnd), strName.AllocSysString(), &pGalaxy);
+				m_pXobjShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)m_hHostWnd), strName.AllocSysString(), &pGalaxy);
 				if (pGalaxy)
 					m_pHostGalaxy = (CGalaxy*)pGalaxy;
 			}
 			if (m_pHostGalaxy && ::IsWindow(m_hHostWnd))
 			{
 				m_pHostGalaxy->m_pContainerNode = this;
-				if (m_pGridShareData->m_pGalaxy->m_pParentGrid)
+				if (m_pXobjShareData->m_pGalaxy->m_pParentGrid)
 				{
-					m_pHostGalaxy->m_pParentGrid = m_pGridShareData->m_pGalaxy->m_pParentGrid;
+					m_pHostGalaxy->m_pParentGrid = m_pXobjShareData->m_pGalaxy->m_pParentGrid;
 				}
 				HRESULT hr = m_pHostGalaxy->Observe(bstrKey, bstrXml, ppRetGrid);
 				if (m_pWebBrowser)
 				{
-					CGrid* pRetNode = (CGrid*)*ppRetGrid;
-					CComPtr<IGridCollection> pCosmosNodeCollection;
-					IGrid* _pGrid = nullptr;
+					CXobj* pRetNode = (CXobj*)*ppRetGrid;
+					CComPtr<IXobjCollection> pCosmosNodeCollection;
+					IXobj* _pXobj = nullptr;
 					long nCount = 0;
-					pRetNode->m_pRootObj->GetGrids(CComBSTR(m_strName), &_pGrid, &pCosmosNodeCollection, &nCount);
-					if (_pGrid)
+					pRetNode->m_pRootObj->GetGrids(CComBSTR(m_strName), &_pXobj, &pCosmosNodeCollection, &nCount);
+					if (_pXobj)
 					{
-						CGrid* pGrid2 = (CGrid*)_pGrid;
+						CXobj* pGrid2 = (CXobj*)_pXobj;
 						pGrid2->m_pWebBrowser = m_pWebBrowser;
-						CGrid* pOldParent = m_pWebBrowser->m_pParentGrid;
+						CXobj* pOldParent = m_pWebBrowser->m_pParentGrid;
 						m_pWebBrowser->m_pParentGrid = pGrid2;
 						m_pHostGalaxy->m_pHostWebBrowserNode = pGrid2;
 						m_pHostGalaxy->m_strHostWebBrowserNodeName = m_strName;
 						m_pHostGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 						HWND hWnd = m_pWebBrowser->m_hWnd;
 						HWND h = ::GetParent(hWnd);
-						CGridHelper* pGridWnd = (CGridHelper*)CWnd::FromHandlePermanent(h);
+						CXobjHelper* pGridWnd = (CXobjHelper*)CWnd::FromHandlePermanent(h);
 						pGridWnd->m_hFormWnd = nullptr;
-						::SetParent(hWnd, ((CGridHelper*)pGrid2->m_pHostWnd)->m_hWnd);
-						((CGridHelper*)pGrid2->m_pHostWnd)->m_hFormWnd = hWnd;
+						::SetParent(hWnd, ((CXobjHelper*)pGrid2->m_pHostWnd)->m_hWnd);
+						((CXobjHelper*)pGrid2->m_pHostWnd)->m_hFormWnd = hWnd;
 						if (pOldParent && pOldParent != pGrid2)
 							pOldParent->m_pWebBrowser = nullptr;
 						::PostMessage(pGrid2->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200128);
@@ -563,15 +563,15 @@ STDMETHODIMP CGrid::Observe(BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IGrid * *ppRetGrid)
+STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IXobj * *ppRetGrid)
 {
-	if (m_pGridShareData->m_pGalaxyCluster && m_nViewType == Grid)
+	if (m_pXobjShareData->m_pGalaxyCluster && m_nViewType == Grid)
 	{
-		IGrid* pGrid = nullptr;
-		GetGrid(nRow, nCol, &pGrid);
-		if (pGrid == nullptr)
+		IXobj* pXobj = nullptr;
+		GetGrid(nRow, nCol, &pXobj);
+		if (pXobj == nullptr)
 			return S_OK;
-		CGrid * pWndGrid = (CGrid*)pGrid;
+		CXobj * pWndGrid = (CXobj*)pXobj;
 		if (pWndGrid->m_pHostGalaxy == nullptr)
 		{
 			CString strName = pWndGrid->m_strNodeName;
@@ -579,21 +579,21 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 
 			::SetWindowLong(pWndGrid->m_pHostWnd->m_hWnd, GWL_ID, 1);
 			IGalaxy* pGalaxy = nullptr;
-			m_pGridShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pWndGrid->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pGalaxy);
+			m_pXobjShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pWndGrid->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pGalaxy);
 			pWndGrid->m_pHostGalaxy = (CGalaxy*)pGalaxy;
 			CGalaxy* _pGalaxy = pWndGrid->m_pHostGalaxy;
-			_pGalaxy->m_pWebPageWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
-			if (m_pGridShareData->m_pGalaxy->m_pParentGrid)
+			_pGalaxy->m_pWebPageWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
+			if (m_pXobjShareData->m_pGalaxy->m_pParentGrid)
 			{
-				_pGalaxy->m_pParentGrid = m_pGridShareData->m_pGalaxy->m_pParentGrid;
+				_pGalaxy->m_pParentGrid = m_pXobjShareData->m_pGalaxy->m_pParentGrid;
 			}
-			if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
+			if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
 			{
-				_pGalaxy->m_pWebPageWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+				_pGalaxy->m_pWebPageWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 				if (pWndGrid->m_strID == TGM_NUCLEUS)
-					m_pGridShareData->m_pGalaxy->m_pSubGalaxy = _pGalaxy;
+					m_pXobjShareData->m_pGalaxy->m_pSubGalaxy = _pGalaxy;
 			}
-			pWndGrid->m_pHostGalaxy->m_pDoc = m_pGridShareData->m_pGalaxy->m_pDoc;
+			pWndGrid->m_pHostGalaxy->m_pDoc = m_pXobjShareData->m_pGalaxy->m_pDoc;
 		}
 
 		if (pWndGrid->m_pHostGalaxy)
@@ -621,7 +621,7 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 				}
 				return S_OK;
 			}
-			CGrid* pRootGrid = (CGrid*)* ppRetGrid;
+			CXobj* pRootGrid = (CXobj*)* ppRetGrid;
 			CString strKey = OLE2T(bstrKey);
 			strKey.MakeLower();
 			m_mapExtendNode[pWndGrid] = strKey;
@@ -641,7 +641,7 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 			HWND h = ::GetParent(m_pHostWnd->m_hWnd);
 			if (m_nViewType==Grid)
 			{
-				CGalaxy* pGalaxy = m_pGridShareData->m_pGalaxy;
+				CGalaxy* pGalaxy = m_pXobjShareData->m_pGalaxy;
 				pGalaxy->HostPosChanged();
 			}
 			return hr;
@@ -650,7 +650,7 @@ STDMETHODIMP CGrid::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IG
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Tag(VARIANT * pVar)
+STDMETHODIMP CXobj::get_Tag(VARIANT * pVar)
 {
 	*pVar = m_varTag;
 
@@ -659,13 +659,13 @@ STDMETHODIMP CGrid::get_Tag(VARIANT * pVar)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Tag(VARIANT var)
+STDMETHODIMP CXobj::put_Tag(VARIANT var)
 {
 	m_varTag = var;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_XObject(VARIANT * pVar)
+STDMETHODIMP CXobj::get_XObject(VARIANT * pVar)
 {
 	pVar->vt = VT_EMPTY;
 	if (m_pDisp)
@@ -677,7 +677,7 @@ STDMETHODIMP CGrid::get_XObject(VARIANT * pVar)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_AxPlugIn(BSTR bstrPlugInName, IDispatch * *pVal)
+STDMETHODIMP CXobj::get_AxPlugIn(BSTR bstrPlugInName, IDispatch * *pVal)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -685,7 +685,7 @@ STDMETHODIMP CGrid::get_AxPlugIn(BSTR bstrPlugInName, IDispatch * *pVal)
 	strObjName.Trim();
 	strObjName.MakeLower();
 	IDispatch* pDisp = nullptr;
-	if (m_pGridShareData->m_PlugInDispDictionary.Lookup(LPCTSTR(strObjName), (void*&)pDisp))
+	if (m_pXobjShareData->m_PlugInDispDictionary.Lookup(LPCTSTR(strObjName), (void*&)pDisp))
 	{
 		*pVal = pDisp;
 		(*pVal)->AddRef();
@@ -695,13 +695,13 @@ STDMETHODIMP CGrid::get_AxPlugIn(BSTR bstrPlugInName, IDispatch * *pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Name(BSTR * pVal)
+STDMETHODIMP CXobj::get_Name(BSTR * pVal)
 {
 	*pVal = m_strName.AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Name(BSTR bstrNewName)
+STDMETHODIMP CXobj::put_Name(BSTR bstrNewName)
 {
 	CString strName = OLE2T(bstrNewName);
 	strName.Trim();
@@ -727,7 +727,7 @@ STDMETHODIMP CGrid::put_Name(BSTR bstrNewName)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Attribute(BSTR bstrKey, BSTR * pVal)
+STDMETHODIMP CXobj::get_Attribute(BSTR bstrKey, BSTR * pVal)
 {
 	if (m_pHostParse != nullptr)
 	{
@@ -737,7 +737,7 @@ STDMETHODIMP CGrid::get_Attribute(BSTR bstrKey, BSTR * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
+STDMETHODIMP CXobj::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 {
 	if (m_pHostParse != nullptr)
 	{
@@ -745,11 +745,11 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 		CString strVal = OLE2T(bstrVal);
 		if (strID.CompareNoCase(TGM_GRID_TYPE))
 			m_strID = strVal;
-		ATLTRACE(_T("Modify CGrid Attribute: ID: %s Value: %s\n"), strID, strVal);
+		ATLTRACE(_T("Modify CXobj Attribute: ID: %s Value: %s\n"), strID, strVal);
 		CGalaxy* pGalaxy = nullptr;
 		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pCosmos->m_pDesignGrid)
 		{
-			pGalaxy = g_pCosmos->m_pDesignGrid->m_pRootObj->m_pGridShareData->m_pGalaxy;
+			pGalaxy = g_pCosmos->m_pDesignGrid->m_pRootObj->m_pXobjShareData->m_pGalaxy;
 			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pActiveTemplate == nullptr && pGalaxy->m_hWnd == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
 			{
 				::MessageBox(nullptr, _T("Default UI Don't have a MDI Client!"), _T("Tangram"), MB_OK);
@@ -757,13 +757,13 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 			}
 			if (g_pCosmos->m_pDesignGrid && pGalaxy->m_pBindingGrid)
 			{
-				CGrid* pOldNode = pGalaxy->m_pBindingGrid;
-				if (pOldNode->m_pGridShareData->m_pOldGalaxy)
+				CXobj* pOldNode = pGalaxy->m_pBindingGrid;
+				if (pOldNode->m_pXobjShareData->m_pOldGalaxy)
 				{
-					pOldNode->m_pGridShareData->m_pGalaxy = pOldNode->m_pGridShareData->m_pOldGalaxy;
-					pOldNode->m_pGridShareData->m_pOldGalaxy = nullptr;
+					pOldNode->m_pXobjShareData->m_pGalaxy = pOldNode->m_pXobjShareData->m_pOldGalaxy;
+					pOldNode->m_pXobjShareData->m_pOldGalaxy = nullptr;
 				}
-				CGrid* pParent = pOldNode->m_pParentObj;
+				CXobj* pParent = pOldNode->m_pParentObj;
 				if (pParent && pParent->m_nViewType == Grid)
 				{
 					if (pOldNode != this)
@@ -782,36 +782,36 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 				pOldNode->m_strID = _T("");
 				if (pOldNode->m_pRootObj == g_pCosmos->m_pDesignGrid->m_pRootObj)
 					pOldNode->m_pHostParse->put_attr(TGM_GRID_TYPE, _T(""));
-				ATLTRACE(_T("Modify CGrid nucleus Attribute: ID:%s Value: %s\n"), strID, strVal);
+				ATLTRACE(_T("Modify CXobj nucleus Attribute: ID:%s Value: %s\n"), strID, strVal);
 				pOldNode->m_pHostWnd->Invalidate();
 				g_pCosmos->UpdateGrid(g_pCosmos->m_pDesignGrid->m_pRootObj);
-				g_pCosmos->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(g_pCosmos->m_pDesignGrid->m_pRootObj->m_pGridShareData->m_pCosmosParse->xml()));
+				g_pCosmos->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(g_pCosmos->m_pDesignGrid->m_pRootObj->m_pXobjShareData->m_pCosmosParse->xml()));
 			}
 
 			m_strID = TGM_NUCLEUS;
-			CGrid* pTopGrid = m_pRootObj;
-			pTopGrid->m_pGridShareData->m_pHostClientView = (CGridHelper*)m_pHostWnd;
+			CXobj* pTopGrid = m_pRootObj;
+			pTopGrid->m_pXobjShareData->m_pHostClientView = (CXobjHelper*)m_pHostWnd;
 			while (pTopGrid != pTopGrid->m_pRootObj)
 			{
-				pTopGrid->m_pGridShareData->m_pGalaxy->m_pBindingGrid = this;
-				pTopGrid->m_pGridShareData->m_pHostClientView = pTopGrid->m_pGridShareData->m_pHostClientView;
+				pTopGrid->m_pXobjShareData->m_pGalaxy->m_pBindingGrid = this;
+				pTopGrid->m_pXobjShareData->m_pHostClientView = pTopGrid->m_pXobjShareData->m_pHostClientView;
 				pTopGrid = pTopGrid->m_pRootObj;
 			}
 			m_pHostParse->put_attr(TGM_GRID_TYPE, TGM_NUCLEUS);
 			if (g_pCosmos->m_pDesignGrid)
 			{
 				pGalaxy->m_pBindingGrid = this;
-				g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pOldGalaxy = g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy;
-				g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pGalaxy = m_pRootObj->m_pGridShareData->m_pGalaxy;
-				g_pCosmos->m_pDesignGrid->m_pGridShareData->m_pHostClientView = m_pRootObj->m_pGridShareData->m_pHostClientView;
+				g_pCosmos->m_pDesignGrid->m_pXobjShareData->m_pOldGalaxy = g_pCosmos->m_pDesignGrid->m_pXobjShareData->m_pGalaxy;
+				g_pCosmos->m_pDesignGrid->m_pXobjShareData->m_pGalaxy = m_pRootObj->m_pXobjShareData->m_pGalaxy;
+				g_pCosmos->m_pDesignGrid->m_pXobjShareData->m_pHostClientView = m_pRootObj->m_pXobjShareData->m_pHostClientView;
 			}
 
 			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 				m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
-			m_pGridShareData->m_pGalaxy->HostPosChanged();
-			if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
+			m_pXobjShareData->m_pGalaxy->HostPosChanged();
+			if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
 			{
-				CWebPage* pWebWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+				CWebPage* pWebWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 				auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(pWebWnd->m_hWnd));
 				if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 					((CBrowser*)it->second)->m_pBrowser->LayoutBrowser();
@@ -824,13 +824,13 @@ STDMETHODIMP CGrid::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Caption(BSTR * pVal)
+STDMETHODIMP CXobj::get_Caption(BSTR * pVal)
 {
 	*pVal = m_strCaption.AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Caption(BSTR bstrCaption)
+STDMETHODIMP CXobj::put_Caption(BSTR bstrCaption)
 {
 	CString str(bstrCaption);
 
@@ -848,38 +848,38 @@ STDMETHODIMP CGrid::put_Caption(BSTR bstrCaption)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Handle(LONGLONG * pVal)
+STDMETHODIMP CXobj::get_Handle(LONGLONG * pVal)
 {
 	if (m_pHostWnd)
 		* pVal = (LONGLONG)m_pHostWnd->m_hWnd;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_OuterXml(BSTR * pVal)
+STDMETHODIMP CXobj::get_OuterXml(BSTR * pVal)
 {
-	*pVal = m_pGridShareData->m_pCosmosParse->xml().AllocSysString();
+	*pVal = m_pXobjShareData->m_pCosmosParse->xml().AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Key(BSTR * pVal)
+STDMETHODIMP CXobj::get_Key(BSTR * pVal)
 {
 	*pVal = m_pRootObj->m_strKey.AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_XML(BSTR * pVal)
+STDMETHODIMP CXobj::get_XML(BSTR * pVal)
 {
 	*pVal = m_pHostParse->xml().AllocSysString();
 	return S_OK;
 }
 
-BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID, CCreateContext * pContext)
+BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID, CCreateContext * pContext)
 {
 	BOOL bRet = false;
 
-	CWebPage* pHtmlWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+	CWebPage* pHtmlWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	HWND hWnd = 0;
-	CGridHelper* pCosmosDesignView = (CGridHelper*)m_pHostWnd;
+	CXobjHelper* pCosmosDesignView = (CXobjHelper*)m_pHostWnd;
 	int nCol = m_pHostParse->GetCount();
 	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_GRID))
 	{
@@ -1114,9 +1114,9 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 				m_pWebBrowser->BrowserLayout();
 				g_pCosmos->m_hParent = NULL;
-				m_pRootObj->m_pGridShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
-				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
-				m_pRootObj->m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
+				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
+				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
+				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = (hPWnd == g_pCosmos->m_hHostBrowserWnd) ? 12 : 0;
 				//::SetParent(m_pWebBrowser->m_hWnd,hWnd);
 				//::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
@@ -1164,7 +1164,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				if (g_pCosmos->m_pBrowserFactory)
 				{
 					HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, s);
-					((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+					((CXobjHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
 					g_pCosmos->m_hParent = NULL;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 					if (it != g_pCosmos->m_mapBrowserWnd.end())
@@ -1358,7 +1358,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	NodeCreated();
-	m_pGridShareData->m_mapLayoutNodes[m_strName] = this;
+	m_pXobjShareData->m_mapLayoutNodes[m_strName] = this;
 	if (m_strID.CompareNoCase(_T("treeview")))
 	{
 		m_nRows = 1;
@@ -1370,7 +1370,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			if (m_nActivePage<0 || m_nActivePage>nCol - 1)
 				m_nActivePage = 0;
 			CWnd * pView = nullptr;
-			CGrid * pObj = nullptr;
+			CXobj * pObj = nullptr;
 			int j = 0;
 			for (int i = 0; i < nCol; i++)
 			{
@@ -1382,7 +1382,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					strName.Trim();
 					strName.MakeLower();
 
-					pObj = new CComObject<CGrid>;
+					pObj = new CComObject<CXobj>;
 					pObj->m_pRootObj = m_pRootObj;
 					pObj->m_pHostParse = pChild;
 					AddChildNode(pObj);
@@ -1407,7 +1407,7 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			}
 			::SendMessage(m_pHostWnd->m_hWnd, WM_ACTIVETABPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
 			Fire_TabChange(m_nActivePage, -1);
-			m_pGridShareData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, -1);
+			m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, -1);
 		}
 	}
 
@@ -1417,17 +1417,17 @@ BOOL CGrid::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		if (m_pHostWnd)
 			m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
 	}
-	if (g_pCosmos->m_pActiveGrid && g_pCosmos->m_pActiveGrid->m_pGridShareData->m_pGalaxyCluster)
-		g_pCosmos->m_pActiveGrid->m_pGridShareData->m_pGalaxyCluster->Fire_NodeCreated(this);
+	if (g_pCosmos->m_pActiveGrid && g_pCosmos->m_pActiveGrid->m_pXobjShareData->m_pGalaxyCluster)
+		g_pCosmos->m_pActiveGrid->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeCreated(this);
 
 	return bRet;
 }
 
-void CGrid::NodeCreated()
+void CXobj::NodeCreated()
 {
 	m_pHostParse->put_attr(_T("name"), (__int64)m_pHostWnd->m_hWnd);
 	CWebPage* pHtmlWnd = GetHtmlWnd();
-	m_pGridShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
+	m_pXobjShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = g_pCosmos->m_pHostHtmlWnd;
 	if (pHtmlWnd && m_pCosmosCloudSession == nullptr)
@@ -1435,15 +1435,15 @@ void CGrid::NodeCreated()
 		::PostMessage(pHtmlWnd->m_hWnd, WM_COSMOSMSG, 20200310, (LPARAM)this);
 	}
 	CosmosInfo* pInfo = new CosmosInfo();
-	pInfo->m_pGrid = this;
-	pInfo->m_pGalaxy = this->m_pGridShareData->m_pGalaxy;
-	pInfo->m_pGalaxyCluster = this->m_pGridShareData->m_pGalaxyCluster;
+	pInfo->m_pXobj = this;
+	pInfo->m_pGalaxy = this->m_pXobjShareData->m_pGalaxy;
+	pInfo->m_pGalaxyCluster = this->m_pXobjShareData->m_pGalaxyCluster;
 	pInfo->m_strName = this->m_strName;
 	pInfo->m_strNodeName = this->m_strNodeName;
 	::SetProp(m_pHostWnd->m_hWnd, _T("CosmosInfo"), pInfo);
 }
 
-HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
+HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 {
 	BOOL bWebCtrl = false;
 	CString strURL = _T("");
@@ -1453,7 +1453,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	CString strName = OLE2T(bstr2);
 
 	CWebPage* pHtmlWnd = nullptr;
-	HWND _hWnd = m_pGridShareData->m_pGalaxy->m_hWnd;
+	HWND _hWnd = m_pXobjShareData->m_pGalaxy->m_hWnd;
 	{
 		::GetClassName(_hWnd, g_pCosmos->m_szBuffer, 256);
 		CString strName = CString(g_pCosmos->m_szBuffer);
@@ -1463,46 +1463,46 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	}
 	if (pHtmlWnd == nullptr)
 	{
-		pHtmlWnd = m_pGridShareData->m_pGalaxy->m_pWebPageWnd;
+		pHtmlWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	}
 
 	switch (m_nViewType)
 	{
 	case ActiveX:
 	{
-		auto it = m_pGridShareData->m_mapAxNodes.find(strName);
-		if (it == m_pGridShareData->m_mapAxNodes.end())
+		auto it = m_pXobjShareData->m_mapAxNodes.find(strName);
+		if (it == m_pXobjShareData->m_mapAxNodes.end())
 		{
-			m_pGridShareData->m_mapAxNodes[strName] = this;
+			m_pXobjShareData->m_mapAxNodes[strName] = this;
 		}
 		else
 		{
-			int nCount = m_pGridShareData->m_mapAxNodes.size();
+			int nCount = m_pXobjShareData->m_mapAxNodes.size();
 			CString str = _T("");
 			str.Format(_T("%s%d"), strName, nCount);
-			it = m_pGridShareData->m_mapAxNodes.find(str);
-			while (it != m_pGridShareData->m_mapAxNodes.end())
+			it = m_pXobjShareData->m_mapAxNodes.find(str);
+			while (it != m_pXobjShareData->m_mapAxNodes.end())
 			{
 				nCount++;
 				str.Format(_T("%s%d"), strName, nCount);
-				it = m_pGridShareData->m_mapAxNodes.find(str);
+				it = m_pXobjShareData->m_mapAxNodes.find(str);
 			}
-			m_pGridShareData->m_mapAxNodes[str] = this;
+			m_pXobjShareData->m_mapAxNodes[str] = this;
 			put_Attribute(CComBSTR("id"), str.AllocSysString());
 		}
 		strID.MakeLower();
 		auto nPos = strID.Find(_T("http:"));
 		if (nPos == -1)
 			nPos = strID.Find(_T("https:"));
-		if (m_pGridShareData->m_pGalaxy)
+		if (m_pXobjShareData->m_pGalaxy)
 		{
 			CComBSTR bstr;
 			get_Attribute(CComBSTR("initInfo"), &bstr);
 			CString str = _T("");
 			str += bstr;
-			if (str != _T("") && m_pGridShareData->m_pGalaxyCluster)
+			if (str != _T("") && m_pXobjShareData->m_pGalaxyCluster)
 			{
-				LRESULT hr = ::SendMessage(m_pGridShareData->m_pGalaxyCluster->m_hWnd, WM_GETNODEINFO, (WPARAM)OLE2T(bstr), (LPARAM)hParentWnd);
+				LRESULT hr = ::SendMessage(m_pXobjShareData->m_pGalaxyCluster->m_hWnd, WM_GETNODEINFO, (WPARAM)OLE2T(bstr), (LPARAM)hParentWnd);
 				if (hr)
 				{
 					CString strInfo = _T("");
@@ -1550,24 +1550,24 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	case CLRCtrl:
 	{
 		g_pCosmos->m_pActiveGrid = this;
-		auto it = m_pGridShareData->m_mapCLRNodes.find(strName);
-		if (it == m_pGridShareData->m_mapCLRNodes.end())
+		auto it = m_pXobjShareData->m_mapCLRNodes.find(strName);
+		if (it == m_pXobjShareData->m_mapCLRNodes.end())
 		{
-			m_pGridShareData->m_mapCLRNodes[strName] = this;
+			m_pXobjShareData->m_mapCLRNodes[strName] = this;
 		}
 		else
 		{
-			int nCount = m_pGridShareData->m_mapCLRNodes.size();
+			int nCount = m_pXobjShareData->m_mapCLRNodes.size();
 			CString str = _T("");
 			str.Format(_T("%s%d"), strName, nCount);
-			it = m_pGridShareData->m_mapCLRNodes.find(str);
-			while (it != m_pGridShareData->m_mapCLRNodes.end())
+			it = m_pXobjShareData->m_mapCLRNodes.find(str);
+			while (it != m_pXobjShareData->m_mapCLRNodes.end())
 			{
 				nCount++;
 				str.Format(_T("%s%d"), strName, nCount);
-				it = m_pGridShareData->m_mapCLRNodes.find(str);
+				it = m_pXobjShareData->m_mapCLRNodes.find(str);
 			}
-			m_pGridShareData->m_mapCLRNodes[str] = this;
+			m_pXobjShareData->m_mapCLRNodes[str] = this;
 			put_Attribute(CComBSTR("id"), str.AllocSysString());
 		}
 		
@@ -1591,15 +1591,15 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 				}
 			}
 
-			CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
+			CXobjHelper* pWnd = (CXobjHelper*)m_pHostWnd;
 			if (m_pDisp && pWnd->m_mapDockCtrl.size())
 			{
-				HWND hPage = m_pGridShareData->m_pGalaxyCluster->m_hWnd;
+				HWND hPage = m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
 				::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)m_pHostWnd, 1963);
 			}
 			if (m_pDisp == nullptr)
 			{
-				((CGridHelper*)m_pHostWnd)->m_bCreateExternal = false;
+				((CXobjHelper*)m_pHostWnd)->m_bCreateExternal = false;
 				m_nViewType = BlankView;
 			}
 			if (m_strID.CollateNoCase(_T("wpfctrl")) == 0)
@@ -1613,7 +1613,7 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	}
 	if (m_pDisp)
 	{
-		m_pGridShareData->m_mapLayoutNodes[m_strName] = this;
+		m_pXobjShareData->m_mapLayoutNodes[m_strName] = this;
 		if (m_nViewType == CLRCtrl)
 		{
 			if (g_pCosmos->m_hFormNodeWnd&&(::GetWindowLongPtr(g_pCosmos->m_hFormNodeWnd, GWL_STYLE) & WS_CHILD))
@@ -1636,14 +1636,14 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 		m_Wnd.AttachControl(m_pDisp, &pUnk);
 		if (m_nViewType == ActiveX)
 		{
-			((CGridHelper*)m_pHostWnd)->m_pGrid = this;
-			HWND hPage = m_pGridShareData->m_pGalaxyCluster->m_hWnd;
-			::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CGridHelper*)m_pHostWnd), 1963);
+			((CXobjHelper*)m_pHostWnd)->m_pXobj = this;
+			HWND hPage = m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
+			::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CXobjHelper*)m_pHostWnd), 1963);
 		}
 
 		CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pDisp);
 		if (pIOleInPlaceActiveObject)
-			((CGridHelper*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
+			((CXobjHelper*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
 		m_Wnd.Detach();
 		return hWnd;
 	}
@@ -1651,41 +1651,41 @@ HWND CGrid::CreateView(HWND hParentWnd, CString strTag)
 	return 0;
 }
 
-STDMETHODIMP CGrid::get_ChildNodes(IGridCollection * *pGridColletion)
+STDMETHODIMP CXobj::get_ChildNodes(IXobjCollection * *pGridColletion)
 {
 	if (m_pChildNodeCollection == nullptr)
 	{
-		CComObject<CGridCollection>::CreateInstance(&m_pChildNodeCollection);
+		CComObject<CXobjCollection>::CreateInstance(&m_pChildNodeCollection);
 		m_pChildNodeCollection->AddRef();
-		m_pChildNodeCollection->m_pGrids = &m_vChildNodes;
+		m_pChildNodeCollection->m_pXobjs = &m_vChildNodes;
 	}
-	return m_pChildNodeCollection->QueryInterface(IID_IGridCollection, (void**)pGridColletion);
+	return m_pChildNodeCollection->QueryInterface(IID_IXobjCollection, (void**)pGridColletion);
 }
 
-int CGrid::_getNodes(CGrid * pGrid, CString & strName, CGrid * *ppRetGrid, CGridCollection * pGrids)
+int CXobj::_getNodes(CXobj * pXobj, CString & strName, CXobj * *ppRetGrid, CXobjCollection * pGrids)
 {
 	int iCount = 0;
-	if (pGrid->m_strName.CompareNoCase(strName) == 0)
+	if (pXobj->m_strName.CompareNoCase(strName) == 0)
 	{
 		if (pGrids != nullptr)
-			pGrids->m_pGrids->push_back(pGrid);
+			pGrids->m_pXobjs->push_back(pXobj);
 
 		if (ppRetGrid != nullptr && (*ppRetGrid) == nullptr)
-			* ppRetGrid = pGrid;
+			* ppRetGrid = pXobj;
 		return 1;
 	}
 
-	for (auto it : pGrid->m_vChildNodes)
+	for (auto it : pXobj->m_vChildNodes)
 	{
 		iCount += _getNodes(it, strName, ppRetGrid, pGrids);
 	}
 	return iCount;
 }
 
-STDMETHODIMP CGrid::Show()
+STDMETHODIMP CXobj::Show()
 {
-	CGrid* pChild = this;
-	CGrid* pParent = pChild->m_pParentObj;
+	CXobj* pChild = this;
+	CXobj* pParent = pChild->m_pParentObj;
 
 	while (pParent != nullptr)
 	{
@@ -1697,14 +1697,14 @@ STDMETHODIMP CGrid::Show()
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_RootGrid(IGrid * *ppGrid)
+STDMETHODIMP CXobj::get_RootGrid(IXobj * *ppGrid)
 {
 	if (m_pRootObj != nullptr)
 		* ppGrid = m_pRootObj;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_ParentGrid(IGrid * *ppGrid)
+STDMETHODIMP CXobj::get_ParentGrid(IXobj * *ppGrid)
 {
 	*ppGrid = nullptr;
 	if (m_pParentObj != nullptr)
@@ -1713,70 +1713,70 @@ STDMETHODIMP CGrid::get_ParentGrid(IGrid * *ppGrid)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_GridType(GridType* nType)
+STDMETHODIMP CXobj::get_GridType(GridType* nType)
 {
 	*nType = m_nViewType;
 	return S_OK;
 }
 
-void CGrid::_get_Objects(CGrid * pGrid, UINT32 & nType, CGridCollection * pGridColletion)
+void CXobj::_get_Objects(CXobj * pXobj, UINT32 & nType, CXobjCollection * pGridColletion)
 {
-	if (pGrid->m_nViewType & nType)
+	if (pXobj->m_nViewType & nType)
 	{
-		pGridColletion->m_pGrids->push_back(pGrid);
+		pGridColletion->m_pXobjs->push_back(pXobj);
 	}
 
-	CGrid* pChildNode = nullptr;
-	for (auto it : pGrid->m_vChildNodes)
+	CXobj* pChildNode = nullptr;
+	for (auto it : pXobj->m_vChildNodes)
 	{
 		pChildNode = it;
 		_get_Objects(pChildNode, nType, pGridColletion);
 	}
 }
 
-STDMETHODIMP CGrid::get_Objects(long nType, IGridCollection * *ppGridColletion)
+STDMETHODIMP CXobj::get_Objects(long nType, IXobjCollection * *ppGridColletion)
 {
-	CComObject<CGridCollection>* pGrids = nullptr;
-	CComObject<CGridCollection>::CreateInstance(&pGrids);
+	CComObject<CXobjCollection>* pGrids = nullptr;
+	CComObject<CXobjCollection>::CreateInstance(&pGrids);
 
 	pGrids->AddRef();
 
 	UINT32 u = nType;
 	_get_Objects(this, u, pGrids);
-	HRESULT hr = pGrids->QueryInterface(IID_IGridCollection, (void**)ppGridColletion);
+	HRESULT hr = pGrids->QueryInterface(IID_IXobjCollection, (void**)ppGridColletion);
 
 	pGrids->Release();
 
 	return hr;
 }
 
-STDMETHODIMP CGrid::get_Rows(long* nRows)
+STDMETHODIMP CXobj::get_Rows(long* nRows)
 {
 	*nRows = m_nRows;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Cols(long* nCols)
+STDMETHODIMP CXobj::get_Cols(long* nCols)
 {
 	*nCols = m_nCols;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Row(long* nRow)
+STDMETHODIMP CXobj::get_Row(long* nRow)
 {
 	*nRow = m_nRow;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Col(long* nCol)
+STDMETHODIMP CXobj::get_Col(long* nCol)
 {
 	*nCol = m_nCol;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid** ppGrid)
+STDMETHODIMP CXobj::GetGrid(long nRow, long nCol, IXobj** ppGrid)
 {
-	CGrid* pRet = nullptr;
+	CXobj* pRet = nullptr;
 
 	*ppGrid = nullptr;
 	if (nRow < 0 || nCol < 0 || nRow >= m_nRows || nCol >= m_nCols) return E_INVALIDARG;
@@ -1787,8 +1787,8 @@ STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid** ppGrid)
 	//	LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
 	//	if (lRes)
 	//	{
-	//		pRet = (CGrid*)lRes;
-	//		pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
+	//		pRet = (CXobj*)lRes;
+	//		pRet->QueryInterface(IID_IXobj, (void**)ppGrid);
 	//		return S_OK;
 	//	}
 	//	return S_FALSE;
@@ -1806,31 +1806,31 @@ STDMETHODIMP CGrid::GetGrid(long nRow, long nCol, IGrid** ppGrid)
 	HRESULT hr = S_OK;
 	if (pRet)
 	{
-		hr = pRet->QueryInterface(IID_IGrid, (void**)ppGrid);
+		hr = pRet->QueryInterface(IID_IXobj, (void**)ppGrid);
 	}
 	return hr;
 }
 
-STDMETHODIMP CGrid::GetGridByName(BSTR bstrName, IGridCollection * *ppGrids)
+STDMETHODIMP CXobj::GetGridByName(BSTR bstrName, IXobjCollection * *ppGrids)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	CString strName(bstrName);
 
-	CGrid* pRetNode = nullptr;
+	CXobj* pRetNode = nullptr;
 
-	CComObject<CGridCollection>* pGrids = nullptr;
+	CComObject<CXobjCollection>* pGrids = nullptr;
 	if (ppGrids != nullptr)
 	{
 		*ppGrids = nullptr;
-		CComObject<CGridCollection>::CreateInstance(&pGrids);
+		CComObject<CXobjCollection>::CreateInstance(&pGrids);
 		pGrids->AddRef();
 	}
 
 	int iCount = _getNodes(this, strName, &pRetNode, pGrids);
 
 	if (ppGrids != nullptr)
-		pGrids->QueryInterface(IID_IGridCollection, (void**)ppGrids);
+		pGrids->QueryInterface(IID_IXobjCollection, (void**)ppGrids);
 
 	if (pGrids != nullptr)
 		pGrids->Release();
@@ -1838,22 +1838,22 @@ STDMETHODIMP CGrid::GetGridByName(BSTR bstrName, IGridCollection * *ppGrids)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::GetGrids(BSTR bstrName, IGrid * *ppGrid, IGridCollection * *ppGrids, long* pCount)
+STDMETHODIMP CXobj::GetGrids(BSTR bstrName, IXobj * *ppGrid, IXobjCollection * *ppGrids, long* pCount)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	CString strName(bstrName);
 
-	CGrid* pRetNode = nullptr;
+	CXobj* pRetNode = nullptr;
 
 	if (ppGrid != nullptr)
 		* ppGrid = nullptr;
 
-	CComObject<CGridCollection> * pGrids = nullptr;
+	CComObject<CXobjCollection> * pGrids = nullptr;
 	if (ppGrids != nullptr)
 	{
 		*ppGrids = nullptr;
-		CComObject<CGridCollection>::CreateInstance(&pGrids);
+		CComObject<CXobjCollection>::CreateInstance(&pGrids);
 		pGrids->AddRef();
 	}
 
@@ -1862,10 +1862,10 @@ STDMETHODIMP CGrid::GetGrids(BSTR bstrName, IGrid * *ppGrid, IGridCollection * *
 	*pCount = iCount;
 
 	if ((iCount > 0) && (ppGrid != nullptr))
-		pRetNode->QueryInterface(IID_IGrid, (void**)ppGrid);
+		pRetNode->QueryInterface(IID_IXobj, (void**)ppGrid);
 
 	if (ppGrids != nullptr)
-		pGrids->QueryInterface(IID_IGridCollection, (void**)ppGrids);
+		pGrids->QueryInterface(IID_IXobjCollection, (void**)ppGrids);
 
 	if (pGrids != nullptr)
 		pGrids->Release();
@@ -1873,17 +1873,17 @@ STDMETHODIMP CGrid::GetGrids(BSTR bstrName, IGrid * *ppGrid, IGridCollection * *
 	return S_OK;
 }
 
-BOOL CGrid::AddChildNode(CGrid * pGrid)
+BOOL CXobj::AddChildNode(CXobj * pXobj)
 {
-	m_vChildNodes.push_back(pGrid);
-	pGrid->m_pParentObj = this;
-	pGrid->m_pRootObj = m_pRootObj;
+	m_vChildNodes.push_back(pXobj);
+	pXobj->m_pParentObj = this;
+	pXobj->m_pRootObj = m_pRootObj;
 	return true;
 }
 
-BOOL CGrid::RemoveChildNode(CGrid * pGrid)
+BOOL CXobj::RemoveChildNode(CXobj * pXobj)
 {
-	auto it = find(m_vChildNodes.begin(), m_vChildNodes.end(), pGrid);
+	auto it = find(m_vChildNodes.begin(), m_vChildNodes.end(), pXobj);
 	if (it != m_vChildNodes.end())
 	{
 		m_vChildNodes.erase(it);
@@ -1892,15 +1892,15 @@ BOOL CGrid::RemoveChildNode(CGrid * pGrid)
 	return false;
 }
 
-STDMETHODIMP CGrid::get_Galaxy(IGalaxy * *pVal)
+STDMETHODIMP CXobj::get_Galaxy(IGalaxy * *pVal)
 {
-	if (m_pGridShareData->m_pGalaxy)
-		* pVal = m_pGridShareData->m_pGalaxy;
+	if (m_pXobjShareData->m_pGalaxy)
+		* pVal = m_pXobjShareData->m_pGalaxy;
 
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_HostGalaxy(IGalaxy * *pVal)
+STDMETHODIMP CXobj::get_HostGalaxy(IGalaxy * *pVal)
 {
 	if (m_pHostGalaxy)
 		* pVal = m_pHostGalaxy;
@@ -1908,7 +1908,7 @@ STDMETHODIMP CGrid::get_HostGalaxy(IGalaxy * *pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Height(LONG * pVal)
+STDMETHODIMP CXobj::get_Height(LONG * pVal)
 {
 	RECT rc;
 	::GetClientRect(m_pHostWnd->m_hWnd, &rc);
@@ -1916,7 +1916,7 @@ STDMETHODIMP CGrid::get_Height(LONG * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Width(LONG * pVal)
+STDMETHODIMP CXobj::get_Width(LONG * pVal)
 {
 	RECT rc;
 	::GetClientRect(m_pHostWnd->m_hWnd, &rc);
@@ -1925,17 +1925,17 @@ STDMETHODIMP CGrid::get_Width(LONG * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_OfficeObj(IDispatch * *pVal)
+STDMETHODIMP CXobj::get_OfficeObj(IDispatch * *pVal)
 {
-	if (m_pGridShareData->m_pOfficeObj)
+	if (m_pXobjShareData->m_pOfficeObj)
 	{
-		*pVal = m_pGridShareData->m_pOfficeObj;
+		*pVal = m_pXobjShareData->m_pOfficeObj;
 		(*pVal)->AddRef();
 	}
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Extender(IDispatch * *pVal)
+STDMETHODIMP CXobj::get_Extender(IDispatch * *pVal)
 {
 	if (m_pExtender)
 	{
@@ -1945,7 +1945,7 @@ STDMETHODIMP CGrid::get_Extender(IDispatch * *pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Extender(IDispatch * newVal)
+STDMETHODIMP CXobj::put_Extender(IDispatch * newVal)
 {
 	if (m_pExtender)
 		m_pExtender->Release();
@@ -1955,19 +1955,19 @@ STDMETHODIMP CGrid::put_Extender(IDispatch * newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_GalaxyCluster(IGalaxyCluster * *pVal)
+STDMETHODIMP CXobj::get_GalaxyCluster(IGalaxyCluster * *pVal)
 {
-	*pVal = (IGalaxyCluster*)m_pGridShareData->m_pGalaxy->m_pGalaxyCluster;
+	*pVal = (IGalaxyCluster*)m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster;
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_NameAtWindowPage(BSTR * pVal)
+STDMETHODIMP CXobj::get_NameAtWindowPage(BSTR * pVal)
 {
 	*pVal = m_strNodeName.AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch * *ppRetDisp)
+STDMETHODIMP CXobj::GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch * *ppRetDisp)
 {
 	if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
 		* ppRetDisp = g_pCosmos->m_pCLRProxy->GetCtrlByName(m_pDisp, bstrName, bFindInChild ? true : false);
@@ -1975,7 +1975,7 @@ STDMETHODIMP CGrid::GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, IDis
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR * bstrVal)
+STDMETHODIMP CXobj::GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR * bstrVal)
 {
 	if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
 	{
@@ -1984,7 +1984,7 @@ STDMETHODIMP CGrid::GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild,
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal)
+STDMETHODIMP CXobj::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal)
 {
 	if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
 	{
@@ -1993,13 +1993,13 @@ STDMETHODIMP CGrid::SetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild,
 	return S_OK;
 }
 
-CGridCollection::CGridCollection()
+CXobjCollection::CXobjCollection()
 {
-	m_pGrids = &m_vGrids;
+	m_pXobjs = &m_vGrids;
 	g_pCosmos->m_mapWndGridCollection[(__int64)this] = this;
 }
 
-CGridCollection::~CGridCollection()
+CXobjCollection::~CXobjCollection()
 {
 	auto it = g_pCosmos->m_mapWndGridCollection.find((__int64)this);
 	if (it != g_pCosmos->m_mapWndGridCollection.end())
@@ -2009,32 +2009,32 @@ CGridCollection::~CGridCollection()
 	m_vGrids.clear();
 }
 
-STDMETHODIMP CGridCollection::get_GridCount(long* pCount)
+STDMETHODIMP CXobjCollection::get_GridCount(long* pCount)
 {
-	*pCount = (int)m_pGrids->size();
+	*pCount = (int)m_pXobjs->size();
 	return S_OK;
 }
 
-STDMETHODIMP CGridCollection::get_Item(long iIndex, IGrid * *ppGrid)
+STDMETHODIMP CXobjCollection::get_Item(long iIndex, IXobj * *ppGrid)
 {
-	if (iIndex < 0 || iIndex >= (int)m_pGrids->size()) return E_INVALIDARG;
+	if (iIndex < 0 || iIndex >= (int)m_pXobjs->size()) return E_INVALIDARG;
 
-	CGrid * pGrid = m_pGrids->operator [](iIndex);
+	CXobj * pXobj = m_pXobjs->operator [](iIndex);
 
-	return pGrid->QueryInterface(IID_IGrid, (void**)ppGrid);
+	return pXobj->QueryInterface(IID_IXobj, (void**)ppGrid);
 }
 
-STDMETHODIMP CGridCollection::get__NewEnum(IUnknown * *ppVal)
+STDMETHODIMP CXobjCollection::get__NewEnum(IUnknown * *ppVal)
 {
 	*ppVal = nullptr;
 
 	struct _CopyVariantFromIUnkown
 	{
-		static HRESULT copy(VARIANT* p1, CGrid* const* p2)
+		static HRESULT copy(VARIANT* p1, CXobj* const* p2)
 		{
-			CGrid* pGrid = *p2;
+			CXobj* pXobj = *p2;
 			p1->vt = VT_UNKNOWN;
-			return pGrid->QueryInterface(IID_IUnknown, (void**) & (p1->punkVal));
+			return pXobj->QueryInterface(IID_IUnknown, (void**) & (p1->punkVal));
 		}
 
 		static void init(VARIANT* p) { VariantInit(p); }
@@ -2050,7 +2050,7 @@ STDMETHODIMP CGridCollection::get__NewEnum(IUnknown * *ppVal)
 	if (SUCCEEDED(hr))
 	{
 		hr = pe->AddRef();
-		hr = pe->Init(GetUnknown(), *m_pGrids);
+		hr = pe->Init(GetUnknown(), *m_pXobjs);
 
 		if (SUCCEEDED(hr))
 			hr = pe->QueryInterface(ppVal);
@@ -2061,19 +2061,19 @@ STDMETHODIMP CGridCollection::get__NewEnum(IUnknown * *ppVal)
 	return hr;
 }
 
-STDMETHODIMP CGrid::get_DocXml(BSTR * pVal)
+STDMETHODIMP CXobj::get_DocXml(BSTR * pVal)
 {
 	g_pCosmos->UpdateGrid(m_pRootObj);
-	CString strXml = m_pGridShareData->m_pCosmosParse->xml();
+	CString strXml = m_pXobjShareData->m_pCosmosParse->xml();
 	strXml.Replace(_T("/><"), _T("/>\r\n<"));
-	strXml.Replace(_T("/>"), _T("></grid>"));
+	strXml.Replace(_T("/>"), _T("></xobj>"));
 	*pVal = strXml.AllocSysString();
 	strXml.ReleaseBuffer();
 
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_rgbMiddle(OLE_COLOR * pVal)
+STDMETHODIMP CXobj::get_rgbMiddle(OLE_COLOR * pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2087,7 +2087,7 @@ STDMETHODIMP CGrid::get_rgbMiddle(OLE_COLOR * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_rgbMiddle(OLE_COLOR newVal)
+STDMETHODIMP CXobj::put_rgbMiddle(OLE_COLOR newVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2104,7 +2104,7 @@ STDMETHODIMP CGrid::put_rgbMiddle(OLE_COLOR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_rgbLeftTop(OLE_COLOR * pVal)
+STDMETHODIMP CXobj::get_rgbLeftTop(OLE_COLOR * pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2118,7 +2118,7 @@ STDMETHODIMP CGrid::get_rgbLeftTop(OLE_COLOR * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_rgbLeftTop(OLE_COLOR newVal)
+STDMETHODIMP CXobj::put_rgbLeftTop(OLE_COLOR newVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2132,7 +2132,7 @@ STDMETHODIMP CGrid::put_rgbLeftTop(OLE_COLOR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_rgbRightBottom(OLE_COLOR * pVal)
+STDMETHODIMP CXobj::get_rgbRightBottom(OLE_COLOR * pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2145,7 +2145,7 @@ STDMETHODIMP CGrid::get_rgbRightBottom(OLE_COLOR * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_rgbRightBottom(OLE_COLOR newVal)
+STDMETHODIMP CXobj::put_rgbRightBottom(OLE_COLOR newVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2162,7 +2162,7 @@ STDMETHODIMP CGrid::put_rgbRightBottom(OLE_COLOR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Hmin(int* pVal)
+STDMETHODIMP CXobj::get_Hmin(int* pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2172,7 +2172,7 @@ STDMETHODIMP CGrid::get_Hmin(int* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Hmin(int newVal)
+STDMETHODIMP CXobj::put_Hmin(int newVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2186,7 +2186,7 @@ STDMETHODIMP CGrid::put_Hmin(int newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Hmax(int* pVal)
+STDMETHODIMP CXobj::get_Hmax(int* pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2196,7 +2196,7 @@ STDMETHODIMP CGrid::get_Hmax(int* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Hmax(int newVal)
+STDMETHODIMP CXobj::put_Hmax(int newVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2210,7 +2210,7 @@ STDMETHODIMP CGrid::put_Hmax(int newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Vmin(int* pVal)
+STDMETHODIMP CXobj::get_Vmin(int* pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2221,7 +2221,7 @@ STDMETHODIMP CGrid::get_Vmin(int* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Vmin(int newVal)
+STDMETHODIMP CXobj::put_Vmin(int newVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2235,7 +2235,7 @@ STDMETHODIMP CGrid::put_Vmin(int newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_Vmax(int* pVal)
+STDMETHODIMP CXobj::get_Vmax(int* pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2246,7 +2246,7 @@ STDMETHODIMP CGrid::get_Vmax(int* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_Vmax(int newVal)
+STDMETHODIMP CXobj::put_Vmax(int newVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -2261,22 +2261,22 @@ STDMETHODIMP CGrid::put_Vmax(int newVal)
 }
 
 
-STDMETHODIMP CGrid::get_HostGrid(IGrid * *pVal)
+STDMETHODIMP CXobj::get_HostGrid(IXobj * *pVal)
 {
-	if (m_pGridShareData->m_pHostClientView)
-		* pVal = m_pGridShareData->m_pHostClientView->m_pGrid;
+	if (m_pXobjShareData->m_pHostClientView)
+		* pVal = m_pXobjShareData->m_pHostClientView->m_pXobj;
 
 	return S_OK;
 }
 
 
-STDMETHODIMP CGrid::put_HostGrid(IGrid * newVal)
+STDMETHODIMP CXobj::put_HostGrid(IXobj * newVal)
 {
 	return S_OK;
 }
 
 
-STDMETHODIMP CGrid::get_ActivePage(int* pVal)
+STDMETHODIMP CXobj::get_ActivePage(int* pVal)
 {
 	if (m_nViewType == GridType::TabGrid)
 	{
@@ -2287,7 +2287,7 @@ STDMETHODIMP CGrid::get_ActivePage(int* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_WebPage(IWebPage** pVal)
+STDMETHODIMP CXobj::get_WebPage(IWebPage** pVal)
 {
 	if (m_pWebPage == nullptr)
 	{
@@ -2300,7 +2300,7 @@ STDMETHODIMP CGrid::get_WebPage(IWebPage** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_ActivePage(int newVal)
+STDMETHODIMP CXobj::put_ActivePage(int newVal)
 {
 	if (this->m_nViewType == GridType::TabGrid && newVal < m_nCols)
 	{
@@ -2309,7 +2309,7 @@ STDMETHODIMP CGrid::put_ActivePage(int newVal)
 		get_ActivePage(&nOldPage);
 		if (nOldPage == newVal)
 			return S_OK;
-		IGrid * pOldNode = nullptr;
+		IXobj * pOldNode = nullptr;
 		GetGrid(0, newVal, &pOldNode);
 		if (pOldNode)
 		{
@@ -2322,39 +2322,39 @@ STDMETHODIMP CGrid::put_ActivePage(int newVal)
 			}
 		}
 		m_pHostWnd->SendMessage(WM_ACTIVETABPAGE, (WPARAM)newVal, (LPARAM)1);
-		IGrid* pGrid = nullptr;
-		this->GetGrid(0, newVal, &pGrid);
-		if (pGrid)
+		IXobj* pXobj = nullptr;
+		this->GetGrid(0, newVal, &pXobj);
+		if (pXobj)
 		{
 			::ShowWindow(hwnd, SW_HIDE);
-			ActiveTabPage(pGrid);
+			ActiveTabPage(pXobj);
 		}
 	}
 
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_MasterRow(int* pVal)
+STDMETHODIMP CXobj::get_MasterRow(int* pVal)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_MasterRow(int newVal)
+STDMETHODIMP CXobj::put_MasterRow(int newVal)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_MasterCol(int* pVal)
+STDMETHODIMP CXobj::get_MasterCol(int* pVal)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_MasterCol(int newVal)
+STDMETHODIMP CXobj::put_MasterCol(int newVal)
 {
 	return S_OK;
 }
 
-HRESULT CGrid::Fire_ObserveComplete()
+HRESULT CXobj::Fire_ObserveComplete()
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2385,7 +2385,7 @@ HRESULT CGrid::Fire_ObserveComplete()
 	return hr;
 }
 
-HRESULT CGrid::Fire_Destroy()
+HRESULT CXobj::Fire_Destroy()
 {
 	if (m_pWebBrowser)
 	{
@@ -2395,15 +2395,15 @@ HRESULT CGrid::Fire_Destroy()
 	}
 	if (m_pRootObj == this)
 	{
-		if (m_pGridShareData->m_pGalaxy->m_pGalaxyCluster)
+		if (m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster)
 		{
-			CString strKey = m_strKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName + _T("@") + m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_strConfigFileNodeName;
-			auto it = m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.find(m_strKey);
-			if (it != m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
+			CString strKey = m_strKey + _T("@") + m_pXobjShareData->m_pGalaxy->m_strGalaxyName + _T("@") + m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_strConfigFileNodeName;
+			auto it = m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.find(m_strKey);
+			if (it != m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
 			{
 				if (it->second == this)
 				{
-					CString strFile = m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_strPageFilePath;
+					CString strFile = m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_strPageFilePath;
 					CString strXml = _T("");
 					CTangramXmlParse m_Parse;
 					CTangramXmlParse xml;
@@ -2420,14 +2420,14 @@ HRESULT CGrid::Fire_Destroy()
 							}
 							if (m_pCosmosPageParse)
 							{
-								CTangramXmlParse* pCosmosPageParse = m_pCosmosPageParse->GetChild(m_pGridShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
+								CTangramXmlParse* pCosmosPageParse = m_pCosmosPageParse->GetChild(m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
 								if (pCosmosPageParse == nullptr)
 								{
-									pCosmosPageParse = m_pCosmosPageParse->AddNode(m_pGridShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
+									pCosmosPageParse = m_pCosmosPageParse->AddNode(m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
 								}
 								if (pCosmosPageParse)
 								{
-									CString strGalaxyName = m_pGridShareData->m_pGalaxy->m_strGalaxyName;
+									CString strGalaxyName = m_pXobjShareData->m_pGalaxy->m_strGalaxyName;
 
 									CTangramXmlParse* pCosmosFrameParse = pCosmosPageParse->GetChild(strGalaxyName);
 									if (pCosmosFrameParse == nullptr)
@@ -2457,8 +2457,8 @@ HRESULT CGrid::Fire_Destroy()
 										if (pParse)
 											pCosmosFrameParse->RemoveNode(m_strKey);
 
-										strXml = m_pGridShareData->m_pCosmosParse->xml();
-										CString _strName = m_pGridShareData->m_pCosmosParse->name();
+										strXml = m_pXobjShareData->m_pCosmosParse->xml();
+										CString _strName = m_pXobjShareData->m_pCosmosParse->name();
 										if (_strName != m_strKey)
 										{
 											CString strName = _T("<") + _strName;
@@ -2494,10 +2494,10 @@ HRESULT CGrid::Fire_Destroy()
 							}
 							if (m_pCosmosPageParse)
 							{
-								CTangramXmlParse* pPageParse = m_pCosmosPageParse->GetChild(m_pGridShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
+								CTangramXmlParse* pPageParse = m_pCosmosPageParse->GetChild(m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
 								if (pPageParse)
 								{
-									CString strGalaxyName = m_pGridShareData->m_pGalaxy->m_strGalaxyName;
+									CString strGalaxyName = m_pXobjShareData->m_pGalaxy->m_strGalaxyName;
 
 									CTangramXmlParse* pFrameParse = pPageParse->GetChild(strGalaxyName);
 									if (pFrameParse == nullptr)
@@ -2545,7 +2545,7 @@ HRESULT CGrid::Fire_Destroy()
 
 	if (g_pCosmos->m_pCLRProxy)
 	{
-		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGrid*)this);
+		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IXobj*)this);
 	}
 	//if (m_pCosmosCloudSession)
 	//	delete m_pCosmosCloudSession;
@@ -2553,7 +2553,7 @@ HRESULT CGrid::Fire_Destroy()
 	return hr;
 }
 
-HRESULT CGrid::Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
+HRESULT CXobj::Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2591,7 +2591,7 @@ HRESULT CGrid::Fire_GridAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, B
 	return hr;
 }
 
-HRESULT CGrid::Fire_GridAddInsCreated()
+HRESULT CXobj::Fire_GridAddInsCreated()
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2620,7 +2620,7 @@ HRESULT CGrid::Fire_GridAddInsCreated()
 	return hr;
 }
 
-HRESULT CGrid::Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
+HRESULT CXobj::Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2656,7 +2656,7 @@ HRESULT CGrid::Fire_GridDocumentComplete(IDispatch * ExtenderDisp, BSTR bstrURL)
 	return hr;
 }
 
-HRESULT CGrid::Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName)
+HRESULT CXobj::Fire_ControlNotify(IXobj * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2690,10 +2690,10 @@ HRESULT CGrid::Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, 
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse && m_pGridShareData->m_pGalaxyCluster && m_pGridShareData->m_pGalaxyCluster->m_mapNotifyCtrl.size())
+	if (g_pCosmos->m_bEclipse && m_pXobjShareData->m_pGalaxyCluster && m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl.size())
 	{
 		map<HWND, CEclipseCtrl*> m_mapTemp;
-		for (auto it : m_pGridShareData->m_pGalaxyCluster->m_mapNotifyCtrl)
+		for (auto it : m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl)
 		{
 			CEclipseCtrl* pCtrl = it.second;
 			if (::IsWindow(it.first))
@@ -2704,7 +2704,7 @@ HRESULT CGrid::Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, 
 		if (m_mapTemp.size())
 		{
 			for (auto it : m_mapTemp)
-				m_pGridShareData->m_pGalaxyCluster->m_mapNotifyCtrl.erase(m_pGridShareData->m_pGalaxyCluster->m_mapNotifyCtrl.find(it.first));
+				m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl.erase(m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl.find(it.first));
 			m_mapTemp.clear();
 		}
 	}
@@ -2715,7 +2715,7 @@ HRESULT CGrid::Fire_ControlNotify(IGrid * sender, LONG NotifyCode, LONG CtrlID, 
 	return hr;
 }
 
-HRESULT CGrid::Fire_TabChange(LONG ActivePage, LONG OldPage)
+HRESULT CXobj::Fire_TabChange(LONG ActivePage, LONG OldPage)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2748,7 +2748,7 @@ HRESULT CGrid::Fire_TabChange(LONG ActivePage, LONG OldPage)
 	return hr;
 }
 
-HRESULT CGrid::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
+HRESULT CXobj::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -2787,34 +2787,34 @@ HRESULT CGrid::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 	return hr;
 }
 
-STDMETHODIMP CGrid::put_SaveToConfigFile(VARIANT_BOOL newVal)
+STDMETHODIMP CXobj::put_SaveToConfigFile(VARIANT_BOOL newVal)
 {
 	if (m_pRootObj == this)
 	{
-		CString strKey = m_strKey + _T("@") + m_pGridShareData->m_pGalaxy->m_strGalaxyName + _T("@") + m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_strConfigFileNodeName;
-		auto it = m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.find(m_strKey);
+		CString strKey = m_strKey + _T("@") + m_pXobjShareData->m_pGalaxy->m_strGalaxyName + _T("@") + m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_strConfigFileNodeName;
+		auto it = m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.find(m_strKey);
 		if (newVal)
 		{
-			if (it == m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
+			if (it == m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
 			{
-				m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode[m_strKey] = this;
-				if (m_pGridShareData->m_pGalaxyCluster->m_strConfigFileNodeName == _T(""))
+				m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode[m_strKey] = this;
+				if (m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName == _T(""))
 				{
-					m_pGridShareData->m_pGalaxyCluster->put_ConfigName(CComBSTR(L""));
+					m_pXobjShareData->m_pGalaxyCluster->put_ConfigName(CComBSTR(L""));
 				}
-				auto it2 = m_pGridShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.find(m_pGridShareData->m_pGalaxy->m_hWnd);
-				if (it2 == m_pGridShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.end())
-					m_pGridShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy[m_pGridShareData->m_pGalaxy->m_hWnd] = m_pGridShareData->m_pGalaxy;
+				auto it2 = m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.find(m_pXobjShareData->m_pGalaxy->m_hWnd);
+				if (it2 == m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.end())
+					m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy[m_pXobjShareData->m_pGalaxy->m_hWnd] = m_pXobjShareData->m_pGalaxy;
 			}
 		}
-		else if (it != m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
+		else if (it != m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
 		{
-			m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.erase(it);
-			if (m_pGridShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.size() == 0)
+			m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.erase(it);
+			if (m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.size() == 0)
 			{
-				auto it2 = m_pGridShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.find(m_pGridShareData->m_pGalaxy->m_hWnd);
-				if (it2 != m_pGridShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.end())
-					m_pGridShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.erase(it2);
+				auto it2 = m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.find(m_pXobjShareData->m_pGalaxy->m_hWnd);
+				if (it2 != m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.end())
+					m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.erase(it2);
 			}
 		}
 	}
@@ -2822,12 +2822,12 @@ STDMETHODIMP CGrid::put_SaveToConfigFile(VARIANT_BOOL newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_DockObj(BSTR bstrName, LONGLONG * pVal)
+STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG * pVal)
 {
 	CString strName = OLE2T(bstrName);
 	if (m_nViewType == CLRCtrl)
 	{
-		CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
+		CXobjHelper* pWnd = (CXobjHelper*)m_pHostWnd;
 		auto it = pWnd->m_mapDockCtrl.find(strName);
 		if (it != pWnd->m_mapDockCtrl.end())
 		{
@@ -2837,12 +2837,12 @@ STDMETHODIMP CGrid::get_DockObj(BSTR bstrName, LONGLONG * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_DockObj(BSTR bstrName, LONGLONG newVal)
+STDMETHODIMP CXobj::put_DockObj(BSTR bstrName, LONGLONG newVal)
 {
 	CString strName = OLE2T(bstrName);
 	if (/*m_nViewType == CLRCtrl&&*/::IsWindow((HWND)newVal) && strName != _T(""))
 	{
-		CGridHelper* pWnd = (CGridHelper*)m_pHostWnd;
+		CXobjHelper* pWnd = (CXobjHelper*)m_pHostWnd;
 		auto it = pWnd->m_mapDockCtrl.find(strName);
 		if (it == pWnd->m_mapDockCtrl.end())
 		{
@@ -2852,7 +2852,7 @@ STDMETHODIMP CGrid::put_DockObj(BSTR bstrName, LONGLONG newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
+STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
 {
 	if (g_pCosmos->m_pBrowserFactory == nullptr)
 		return S_OK;
@@ -2880,14 +2880,14 @@ STDMETHODIMP CGrid::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
 			nPos = _strXml.Find(_T("|"));
 		}
 
-		HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(((CGridHelper*)m_pHostWnd)->m_hWnd, s);
-		((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+		HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(((CXobjHelper*)m_pHostWnd)->m_hWnd, s);
+		((CXobjHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
 		g_pCosmos->m_hParent = NULL;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pCosmos->m_mapBrowserWnd.end())
 		{
 			m_pWebBrowser = (CBrowser*)it->second;
-			//m_pWebBrowser->m_pGrid = this;
+			//m_pWebBrowser->m_pXobj = this;
 		}
 		//g_pCosmos->m_pCurWebNode = nullptr;
 		return S_OK;
@@ -2900,7 +2900,7 @@ STDMETHODIMP CGrid::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::get_URL(BSTR * pVal)
+STDMETHODIMP CXobj::get_URL(BSTR * pVal)
 {
 	if (m_pHostParse != nullptr)
 	{
@@ -2911,7 +2911,7 @@ STDMETHODIMP CGrid::get_URL(BSTR * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::put_URL(BSTR newVal)
+STDMETHODIMP CXobj::put_URL(BSTR newVal)
 {
 	if (m_pWebBrowser)
 	{
@@ -2943,7 +2943,7 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 		}
 
 		HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(m_pHostWnd->m_hWnd, s);
-		((CGridHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+		((CXobjHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
 		g_pCosmos->m_hParent = NULL;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pCosmos->m_mapBrowserWnd.end())
@@ -2957,25 +2957,25 @@ STDMETHODIMP CGrid::put_URL(BSTR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
+STDMETHODIMP CXobj::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
 {
 	*bstrVal = CComBSTR(m_pHostParse->xml());
 	return S_OK;
 }
 
-STDMETHODIMP CGrid::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet)
+STDMETHODIMP CXobj::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet)
 {
-	if (m_pGridShareData->m_pGalaxy->m_pWebPageWnd)
+	if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
 	{
-		m_pGridShareData->m_pGalaxy->m_pWebPageWnd->SendChromeIPCMessage(_T("I_DONT_KNOW"), OLE2T(bstrTo), OLE2T(bstrMsgId), OLE2T(bstrExtra), L"", L"");
+		m_pXobjShareData->m_pGalaxy->m_pWebPageWnd->SendChromeIPCMessage(_T("I_DONT_KNOW"), OLE2T(bstrTo), OLE2T(bstrMsgId), OLE2T(bstrExtra), L"", L"");
 	}
 	else
 	{
-		if (m_pGridShareData->m_pGalaxy->m_pHostWebBrowserNode)
+		if (m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserNode)
 		{
-			if (m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd)
+			if (m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd)
 			{
-				HWND hPWnd = m_pGridShareData->m_pGalaxy->m_pHostWebBrowserWnd->m_hWnd;
+				HWND hPWnd = m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd->m_hWnd;
 				for (auto it : g_pCosmos->m_mapHtmlWnd)
 				{
 					if (::IsChild(hPWnd,it.first))

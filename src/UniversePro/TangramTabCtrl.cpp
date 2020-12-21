@@ -80,21 +80,21 @@ void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	CString strText = GetItemText(pNMLV->iItem, 0);
 	CString strFile = m_strDir + m_strSubDir + _T("\\") + strText + _T(".html");
 	CString strPath = g_pCosmos->m_strAppCommonDocPath;
-	IGrid* pGrid = nullptr;
+	IXobj* pXobj = nullptr;
 	if (::PathFileExists(strFile))
 	{
 		strPath += _T("templatedetail.xml");
-		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pGrid);
+		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pXobj);
 	}
 	else if (strText.CompareNoCase(_T("new Template"))==0)
 	{
 		strPath += _T("newtemplate.xml");
-		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("newtemplate"), CComBSTR(strPath), &pGrid);
+		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("newtemplate"), CComBSTR(strPath), &pXobj);
 	}
 	else
 	{
-		CString strXml = _T("<tangram><layout><grid name=\"start\" objid=\"nucleus\" /></layout></tangram>"); 
-		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pGrid);
+		CString strXml = _T("<tangram><layout><xobj name=\"start\" objid=\"nucleus\" /></layout></tangram>"); 
+		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pXobj);
 	}
 
 	*pResult = 0;
@@ -190,9 +190,9 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 						}
 						else
 						{
-							IGrid* pGrid = nullptr;
-							CGalaxy* pGalaxy = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy;
-							pGalaxy->Observe(pGalaxy->m_strLastKey.AllocSysString(), CComBSTR(_T("")), &pGrid);
+							IXobj* pXobj = nullptr;
+							CGalaxy* pGalaxy = m_pCosmosTabCtrl->m_pXobj->m_pXobjShareData->m_pGalaxy;
+							pGalaxy->Observe(pGalaxy->m_strLastKey.AllocSysString(), CComBSTR(_T("")), &pXobj);
 							CosmosDocTemplateInfo* pCosmosDocTemplateInfo = it->second;
 							g_pCosmos->m_pCosmosDocTemplateInfo = pCosmosDocTemplateInfo;
 							g_pCosmos->m_strTemplatePath = strTemplateFile;
@@ -218,8 +218,8 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 		}
 		return;
 	}
-	IGrid* pGrid = nullptr;
-	CGalaxy* pGalaxy = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy;
+	IXobj* pXobj = nullptr;
+	CGalaxy* pGalaxy = m_pCosmosTabCtrl->m_pXobj->m_pXobjShareData->m_pGalaxy;
 	int nItem = pNMItemActivate->iItem;
 	if (nItem == -1)
 	{
@@ -232,11 +232,11 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 			{
 				strKey = _T("__default__key__for__chrome__");
 			}
-			pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pCosmos->m_strDefaultXml), &pGrid);
+			pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pCosmos->m_strDefaultXml), &pXobj);
 		}
 		else
 		{
-			pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(_T("")), &pGrid);
+			pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(_T("")), &pXobj);
 		}
 		return;
 	}
@@ -257,12 +257,12 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 				{
 					strKey = _T("__default__key__for__chrome__");
 				}
-				pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pCosmos->m_strDefaultXml), &pGrid);
+				pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(g_pCosmos->m_strDefaultXml), &pXobj);
 			}
 			else
 			{
 				if (g_pCosmos->m_strExeName.CompareNoCase(_T("excel")))
-					pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(_T("")), &pGrid);
+					pGalaxy->Observe(strKey.AllocSysString(), CComBSTR(_T("")), &pXobj);
 			}
 		}
 
@@ -386,7 +386,7 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 			HWND hParent = NULL;
 			if (m_pCosmosTabCtrl)
 			{
-				hParent = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+				hParent = m_pCosmosTabCtrl->m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 				if (hParent)
 				{
 					pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
@@ -503,7 +503,7 @@ CTangramTabCtrl::CTangramTabCtrl()
 	m_nImageIndex = 0;
 	m_strFilter = _T("*.xml");
 	m_pGalaxy = nullptr;
-	m_pGrid = nullptr;
+	m_pXobj = nullptr;
 	m_pCosmosListView = nullptr;
 }
 
@@ -522,10 +522,10 @@ END_MESSAGE_MAP()
 
 BOOL CTangramTabCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
-	m_pGrid = g_pCosmos->m_pActiveGrid;
-	m_pGrid->m_pHostWnd = this;
-	m_pGrid->m_nViewType = TabCtrl;
-	m_pGrid->m_nID = nID;
+	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj->m_pHostWnd = this;
+	m_pXobj->m_nViewType = TabCtrl;
+	m_pXobj->m_nID = nID;
 	BOOL bRet = CTabCtrl::Create(dwStyle| TCS_MULTILINE|WS_CLIPCHILDREN, rect, pParentWnd, nID);
 	m_ListCtrl.Create(WS_CHILD | WS_VISIBLE| LVS_AUTOARRANGE | LVS_SINGLESEL | LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS, CRect(0, 0, 0, 0), this, 0);
 	m_ListCtrl.m_pCosmosTabCtrl = this;
@@ -533,7 +533,7 @@ BOOL CTangramTabCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, 
 
 	int width=320, heigh=90, clines=3;
 	CComBSTR bstrVal("");
-	m_pGrid->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
 	if (!CString(bstrVal).IsEmpty())
 	{
 		_stscanf_s(CString(bstrVal), _T("SizeandcLines(%d,%d,%d)"), &width, &heigh, &clines);
@@ -568,7 +568,7 @@ BOOL CTangramTabCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, 
 LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 {
 	CComBSTR bstrKey(L"relationnode");
-	m_pGrid->get_Attribute(bstrKey, &bstrKey);
+	m_pXobj->get_Attribute(bstrKey, &bstrKey);
 	CString strKey = OLE2T(bstrKey);
 	if (strKey == _T("TangramList"))
 	{
@@ -579,16 +579,16 @@ LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 	if (strKey == _T("TangramListCLR"))
 	{
 	}
-	CComPtr<IGridCollection> pColl;
-	CGrid* pGrid = m_pGrid->m_pRootObj;
-	IGrid* _pGrid = nullptr;
+	CComPtr<IXobjCollection> pColl;
+	CXobj* pXobj = m_pXobj->m_pRootObj;
+	IXobj* _pXobj = nullptr;
 	long nCount = 0;
-	pGrid->GetGrids(bstrKey, &_pGrid, &pColl, &nCount);
-	if (_pGrid)
+	pXobj->GetGrids(bstrKey, &_pXobj, &pColl, &nCount);
+	if (_pXobj)
 	{
-		CGridCollection* pWndGridCollection = (CGridCollection*)pColl.p;
+		CXobjCollection* pWndGridCollection = (CXobjCollection*)pColl.p;
 
-		for (auto it : *pWndGridCollection->m_pGrids)
+		for (auto it : *pWndGridCollection->m_pXobjs)
 		{
 			CTangramListView* pWnd = (CTangramListView*)(it)->m_pHostWnd;
 			pWnd->m_pCosmosTabCtrl = this;
@@ -601,8 +601,8 @@ LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 
 void CTangramTabCtrl::PostNcDestroy()
 {
-	if (m_pGrid)
-		delete m_pGrid;
+	if (m_pXobj)
+		delete m_pXobj;
 
 	CTabCtrl::PostNcDestroy();
 	delete this;
@@ -616,7 +616,7 @@ int CTangramTabCtrl::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT mess
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pCosmos->m_pActiveGrid = m_pGrid;
+	g_pCosmos->m_pActiveGrid = m_pXobj;
 	g_pCosmos->m_bWinFormActived = false;
 	return MA_ACTIVATE;
 }
@@ -708,17 +708,17 @@ void CTangramTabCtrl::FillListCtrl()
 	CString strPath = g_pCosmos->m_strAppCommonDocPath + _T("templatedetail.xml");
 	if (::PathFileExists(strPath))
 	{
-		IGrid* pGrid = nullptr;
+		IXobj* pXobj = nullptr;
 		CString strTemplateFile = m_ListCtrl.m_strDir + m_ListCtrl.m_strSubDir + _T("\\") + m_ListCtrl.GetItemText(0, 0)+ _T(".html");
 		if (::PathFileExists(strTemplateFile))
 		{
-			m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pGrid);
+			m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pXobj);
 		}
 		else
 		{
 			strPath = g_pCosmos->m_strAppCommonDocPath + _T("default.xml");
 			if(m_pGalaxy)
-				m_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strPath), &pGrid);
+				m_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strPath), &pXobj);
 		}
 	}
 }

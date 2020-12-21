@@ -54,7 +54,7 @@ namespace blink {
 
 		DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForObject, kCloudmessageforobject)
 		DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kCosmos)
-		DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
+		DEFINE_ATTRIBUTE_EVENT_LISTENER(XobjCreated, kXobjcreated)
 
 		CosmosXobj();
 		CosmosXobj(const String& strNodeName);
@@ -114,7 +114,7 @@ namespace blink {
 		void sendMessage(CosmosXobj* msg, V8ApplicationCallback* callback);
 		void invokeCallback(wstring callbackid, CosmosXobj* callbackParam);
 		void ProcessNodeMessage(const String& msgID);
-		void DispatchGridEvent(Element* elem, const String& eventName);
+		void DispatchXobjEvent(Element* elem, const String& eventName);
 		// Message method
 		void BindCtrlValue(const String& strcontrols, V8ApplicationCallback* callback);
 

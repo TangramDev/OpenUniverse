@@ -41,12 +41,12 @@ class CORE_EXPORT CosmosGalaxy final : public CosmosXobj{
   String name();
   String getid();
 
-  CosmosNode* getGrid(const String& clusterName, const String& nodeName);
-  CosmosNode* getGrid(const long nodeHandle);
+  CosmosNode* getXobj(const String& clusterName, const String& nodeName);
+  CosmosNode* getXobj(const long nodeHandle);
 
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kCosmosgalaxy)
       DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
-      DEFINE_ATTRIBUTE_EVENT_LISTENER(GridCreated, kGridcreated)
+      DEFINE_ATTRIBUTE_EVENT_LISTENER(XobjCreated, kXobjcreated)
 
   CosmosGalaxy();
   CosmosGalaxy(const String& strWindowName);

@@ -31,7 +31,7 @@ namespace Browser {
 		public CComObjectRootEx<CComSingleThreadModel>,
 		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_World, 1, 0>
 	{
-		friend class CGrid;
+		friend class CXobj;
 	public:
 		CBrowser();
 		~CBrowser() override;
@@ -42,15 +42,15 @@ namespace Browser {
 		HWND		m_hDrawWnd;
 		HWND		m_hOldTab;
 		CString		m_strCurKey;
-		CGrid*		m_pParentGrid;
+		CXobj*		m_pParentGrid;
 		CWebPage*	m_pVisibleWebWnd;
-		IGrid*		m_pRemoteGrid;
+		IXobj*		m_pRemoteGrid;
 		LRESULT		BrowserLayout();
 
 		map<HWND, CWebPage*> m_mapNorifyPage;
 
-		STDMETHOD(get_RemoteGrid)(IGrid** pVal);
-		STDMETHOD(put_RemoteGrid)(IGrid* newVal);
+		STDMETHOD(get_RemoteGrid)(IXobj** pVal);
+		STDMETHOD(put_RemoteGrid)(IXobj* newVal);
 		STDMETHOD(AddURLs)(BSTR bstrURLs);
 		STDMETHOD(OpenURL)(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml);
 		BEGIN_MSG_MAP(CBrowser)

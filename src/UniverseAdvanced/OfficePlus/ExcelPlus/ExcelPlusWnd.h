@@ -49,7 +49,7 @@ namespace OfficePlus
 			_Workbook*					m_pWorkBook;
 			ExcelWorkBookWndMap			m_mapExcelWorkBookWnd;
 
-			CGrid*						m_pSheetNode;
+			CXobj*						m_pSheetNode;
 			map<CString, CString>		m_mapWorkSheetInfo;
 
 			void InitWorkBook();
@@ -70,7 +70,7 @@ namespace OfficePlus
 			CString m_strKey;
 			CString m_strSheetName;
 			_Worksheet* m_pSheet;
-			map<CString, CGrid*> m_mapGridMap;
+			map<CString, CXobj*> m_mapGridMap;
 		};
 	}
 }

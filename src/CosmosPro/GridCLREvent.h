@@ -29,17 +29,17 @@ using namespace System;
 using namespace System::Reflection;
 using namespace DOMPlus;
 
-class CGridCLREvent
+class CXobjCLREvent
 {
 public:
-	CGridCLREvent();
-	virtual ~CGridCLREvent();
+	CXobjCLREvent();
+	virtual ~CXobjCLREvent();
 
-	gcroot<DOMPlus::Grid^>	m_pGrid;
+	gcroot<DOMPlus::Xobj^>	m_pXobj;
 
 	void OnDestroy();
 	void OnGridAddInsCreated();
-	void OnObserverComplete(IGrid* pGrid);
+	void OnObserverComplete(IXobj* pXobj);
 	void OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl);
 	void OnGridAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
 	void OnTabChange(int nActivePage, int nOldPage);

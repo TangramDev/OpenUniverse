@@ -83,16 +83,16 @@ public:
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CWebPage*										m_pWebPageWnd;
-	CGrid*											m_pHostWebBrowserNode = nullptr;
+	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster;
-	CGrid*											m_pParentGrid;
-	CGrid*											m_pWorkGrid;
-	CGrid*											m_pContainerNode;
-	CGrid*											m_pBindingGrid;
+	CXobj*											m_pParentGrid;
+	CXobj*											m_pWorkGrid;
+	CXobj*											m_pContainerNode;
+	CXobj*											m_pBindingGrid;
 	GalaxyInfo*										m_pGalaxyInfo;
-	map<CString, CGrid*>							m_mapGrid;
-	CComObject<CGridCollection>*					m_pRootNodes;
+	map<CString, CXobj*>							m_mapGrid;
+	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}
 	void Unlock(){}
@@ -101,11 +101,11 @@ public:
 	HWND GetWinForm(HWND hWnd);
 
 	BOOL CreateGalaxyCluster();
-	CGrid* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
+	CXobj* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);
-	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** ppRetGrid);
+	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetGrid);
 	STDMETHOD(GetXml)(BSTR bstrRootName, BSTR* bstrRet);
 
 	BEGIN_COM_MAP(CGalaxy)
@@ -139,13 +139,13 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 
 	STDMETHOD(get_Count)(long* pCount);
-	STDMETHOD(get_Grid)(VARIANT vIndex, IGrid **ppGrid);
+	STDMETHOD(get_Grid)(VARIANT vIndex, IXobj **ppGrid);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
 	STDMETHOD(get_CurrentNavigateKey)(BSTR* pVal);
-	STDMETHOD(get_VisibleGrid)(IGrid** pVal);
-	STDMETHOD(get_RootGrids)(IGridCollection** pGridColletion);
+	STDMETHOD(get_VisibleGrid)(IXobj** pVal);
+	STDMETHOD(get_RootGrids)(IXobjCollection** pGridColletion);
 	STDMETHOD(get_GalaxyData)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);

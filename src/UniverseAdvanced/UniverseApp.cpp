@@ -201,8 +201,8 @@ LRESULT CGenericPaneWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 								pManager->CreateGalaxy(CComVariant((LONGLONG)m_hWnd), CComVariant((__int64)m_hChild), CComBSTR("default"), &pIGalaxy);
 								if (pIGalaxy)
 								{
-									IGrid* pGrid = nullptr;
-									pIGalaxy->Observe(CComBSTR("default"), CComBSTR(pVSParse->xml()), &pGrid);
+									IXobj* pXobj = nullptr;
+									pIGalaxy->Observe(CComBSTR("default"), CComBSTR(pVSParse->xml()), &pXobj);
 									CTangramXmlParse* pVSData = m_Parse.GetChild(_T("vstoolwindow"));
 									if (pVSData)
 									{
@@ -815,10 +815,10 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		g_pCosmos->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
 		if (pGalaxy)
 		{
-			IGrid* pGrid = nullptr;
-			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pGrid);
+			IXobj* pXobj = nullptr;
+			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pXobj);
 			LONGLONG h = 0;
-			pGrid->get_Handle(&h);
+			pXobj->get_Handle(&h);
 			HWND hWnd = (HWND)h;
 			::InvalidateRect(hWnd, nullptr, true);
 		}
@@ -894,10 +894,10 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 
 			if (g_pCosmos->m_pActiveEclipseWnd)
 			{
-				IGrid* pGrid = nullptr;
+				IXobj* pXobj = nullptr;
 				if (g_pCosmos->m_strStartView == _T("TopView"))
 				{
-					g_pCosmos->m_pActiveEclipseWnd->Observe(_T("Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pGrid);
+					g_pCosmos->m_pActiveEclipseWnd->Observe(_T("Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pXobj);
 				}
 				else if (g_pCosmos->m_strStartView == _T("EclipseView"))
 				{
@@ -905,7 +905,7 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 					g_pCosmos->m_pActiveEclipseWnd->get_Ctrl(CComVariant((long)0), &pCtrl);
 					if (pCtrl)
 					{
-						pCtrl->Observe(CComBSTR(L"EclipseView"), CComBSTR(L"Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pGrid);
+						pCtrl->Observe(CComBSTR(L"EclipseView"), CComBSTR(L"Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pXobj);
 					}
 				}
 			}
@@ -989,7 +989,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			IGalaxyCluster* pGalaxyCluster = nullptr;
 			g_pCosmos->CreateGalaxyCluster((__int64)g_pCosmos->m_pMDIMainWnd->m_hWnd, &pGalaxyCluster);
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = (CGalaxyCluster*)pGalaxyCluster;
-			IGrid* pGrid = nullptr;
+			IXobj* pXobj = nullptr;
 			g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->m_strKey = _T("default");
 			g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->m_strClientKey = _T("default");
 			g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->InitXmlData();
@@ -999,8 +999,8 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			{
 				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 				_pGalaxy->m_pCosmosDocTemplate = g_pCosmos->m_pMDIMainWnd->m_pDocTemplate;
-				pGalaxy->Observe(CComBSTR("mdiclient"), CComBSTR(""), &pGrid);
-				g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->m_mapMainPageNode[g_pCosmos->m_pMDIMainWnd->m_hMDIClient] = (CGrid*)pGrid;
+				pGalaxy->Observe(CComBSTR("mdiclient"), CComBSTR(""), &pXobj);
+				g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->m_mapMainPageNode[g_pCosmos->m_pMDIMainWnd->m_hMDIClient] = (CXobj*)pXobj;
 			}
 			for (auto it : g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd)
 			{
@@ -1056,7 +1056,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 					if (it == g_pCosmos->m_mapWindowPage.end())
 					{
 						HWND hPWnd = (HWND)lParam;
-						IGrid* pGrid = nullptr;
+						IXobj* pXobj = nullptr;
 						pGalaxyCluster = new CComObject<CGalaxyCluster>;
 						pGalaxyCluster->m_hWnd = hPWnd;
 						g_pCosmos->m_mapWindowPage[hPWnd] = pGalaxyCluster;
@@ -1088,17 +1088,17 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 							strCaption.Trim();
 						}
 						strCaption.Replace(_T(" "), _T("_"));
-						IGrid* pGrid = nullptr;
+						IXobj* pXobj = nullptr;
 						bool bSavetocfg = (pGalaxyCluster->m_pCosmosDocTemplate == nullptr);
-						pGalaxyCluster->CreateGalaxyWithDefaultNode((LONGLONG)hGalaxy, CComBSTR(strCaption), CComBSTR(L""), CComBSTR(L""), bSavetocfg, &pGrid);
-						if (pGrid)
+						pGalaxyCluster->CreateGalaxyWithDefaultNode((LONGLONG)hGalaxy, CComBSTR(strCaption), CComBSTR(L""), CComBSTR(L""), bSavetocfg, &pXobj);
+						if (pXobj)
 						{
 							if (pGalaxyCluster->m_pCosmosDocTemplate)
 							{
-								pGalaxyCluster->m_pCosmosDocTemplate->m_mapMainPageNode[hGalaxy] = (CGrid*)pGrid;
+								pGalaxyCluster->m_pCosmosDocTemplate->m_mapMainPageNode[hGalaxy] = (CXobj*)pXobj;
 							}
 							IGalaxy* pGalaxy = nullptr;
-							pGrid->get_Galaxy(&pGalaxy);
+							pXobj->get_Galaxy(&pGalaxy);
 							((CGalaxy*)pGalaxy)->m_nGalaxyType = CtrlBarGalaxy;
 							pGalaxyCluster->m_mapCtrlBarGalaxy[hGalaxy] = (CGalaxy*)pGalaxy;
 						}
@@ -1700,7 +1700,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CGridHelper* pWnd = nullptr;
+				CXobjHelper* pWnd = nullptr;
 				CWPFView* pView = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
@@ -1713,7 +1713,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_pCosmos->m_pActiveGrid->m_nViewType == TangramWPFCtrl)
 							pView = (CWPFView*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
 						else
-							pWnd = (CGridHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
+							pWnd = (CXobjHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveGrid = nullptr;
@@ -2004,7 +2004,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				//{
 				//	CWnd* pWnd = nullptr;
 				//	if (g_pCosmos->m_pActiveGrid)
-				//		pWnd = (CGridHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
+				//		pWnd = (CXobjHelper*)g_pCosmos->m_pActiveGrid->m_pHostWnd;
 				//	if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveGrid && pWnd && pWnd->PreTranslateMessage(lpMsg))
 				//	{
 				//		if (g_pCosmos->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
@@ -2324,10 +2324,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					CWebPage* pWnd = ((CBrowser*)it->second)->m_pVisibleWebWnd;
 					if (pWnd && ::IsWindow(pWnd->m_hWnd) && pWnd->m_pGalaxy)
 					{
-						IGrid* pGrid = nullptr;
+						IXobj* pXobj = nullptr;
 						if (g_bRecturnPressed == false)
 						{
-							pWnd->m_pGalaxy->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pCosmos->m_strDefaultXml : _T("")), &pGrid);
+							pWnd->m_pGalaxy->Observe(CComBSTR(lpMsg->lParam ? _T("__default__key__for__chrome__") : pWnd->m_strCurKey), CComBSTR(lpMsg->lParam ? g_pCosmos->m_strDefaultXml : _T("")), &pXobj);
 							::SendMessage(it->first, WM_BROWSERLAYOUT, 0, 4);
 						}
 						g_bRecturnPressed = false;

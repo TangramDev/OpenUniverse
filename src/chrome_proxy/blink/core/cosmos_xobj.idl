@@ -43,5 +43,5 @@
 
 	attribute EventHandler onCloudMessageForObject;
 	attribute EventHandler onMessageReceived;
-	attribute EventHandler onGridCreated;
+	attribute EventHandler onXobjCreated;
 };

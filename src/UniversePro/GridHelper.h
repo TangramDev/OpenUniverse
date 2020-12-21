@@ -20,9 +20,9 @@
 
 #pragma once
 
-class CGridHelper : public CWnd
+class CXobjHelper : public CWnd
 {
-	DECLARE_DYNCREATE(CGridHelper)
+	DECLARE_DYNCREATE(CXobjHelper)
 public:
 	BOOL					m_bNoMove;
 	BOOL					m_bBKWnd;
@@ -33,8 +33,8 @@ public:
 	CString					m_strKey;
 	CString					m_strXml;
 
-	CGrid*					m_pGrid;
-	CGrid*					m_pParentGrid;
+	CXobj*					m_pXobj;
+	CXobj*					m_pParentGrid;
 	CTangramHtmlTreeWnd*	m_pXHtmlTree;
 
 	map<CString, HWND>		m_mapDockCtrl;
@@ -48,8 +48,8 @@ public:
 #endif
 
 protected:
-	CGridHelper();           // protected constructor used by dynamic creation
-	virtual ~CGridHelper();
+	CXobjHelper();           // protected constructor used by dynamic creation
+	virtual ~CXobjHelper();
 	void PostNcDestroy();
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();
@@ -73,7 +73,7 @@ public:
 	CBKWnd(void);
 	HWND			m_hChild;
 	CString			m_strURL;
-	CGrid*			m_pGrid;
+	CXobj*			m_pXobj;
 	CGalaxy*		m_pGalaxy;
 	BEGIN_MSG_MAP(CBKWnd)
 		MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)

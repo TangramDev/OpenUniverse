@@ -63,7 +63,7 @@ CCosmos::CCosmos()
 	m_bCreatingDevTool = false;
 	m_bOMNIBOXPOPUPVISIBLE = false;
 	m_pActiveWinFormWnd = nullptr;
-	m_strDefaultXml = _T("<default><layout><grid name=\"tangram\" objid=\"nucleus\"/></layout></default>");
+	m_strDefaultXml = _T("<default><layout><xobj name=\"tangram\" objid=\"nucleus\"/></layout></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
@@ -122,8 +122,8 @@ CCosmos::CCosmos()
 	m_nOfficeDocsSheet = 0;
 	m_nTangramNodeCommonData = 0;
 #endif
-	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CGridHelper);
-	m_TabWndClassInfoDictionary[_T("grid")] = RUNTIME_CLASS(CGridWnd);
+	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
+	m_TabWndClassInfoDictionary[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
 }
 
 void CCosmos::Init()
@@ -247,7 +247,7 @@ CCosmos::~CCosmos()
 		m_pExtender->Close();
 
 	if (m_pRootNodes)
-		CCommonFunction::ClearObject<CGridCollection>(m_pRootNodes);
+		CCommonFunction::ClearObject<CXobjCollection>(m_pRootNodes);
 
 	if (m_pClrHost && m_nAppID == -1 && theUniverse.m_bHostCLR == false)
 	{
@@ -425,11 +425,11 @@ void CCosmos::ProcessMsg(LPMSG lpMsg)
 	}
 }
 
-void CCosmos::AttachGrid(void* pGridEvents)
+void CCosmos::AttachGrid(void* pXobjEvents)
 {
-	CGridEvents* m_pCLREventConnector = (CGridEvents*)pGridEvents;
-	CGrid* pGrid = (CGrid*)m_pCLREventConnector->m_pGrid;
-	pGrid->m_pCLREventConnector = m_pCLREventConnector;
+	CXobjEvents* m_pCLREventConnector = (CXobjEvents*)pXobjEvents;
+	CXobj* pXobj = (CXobj*)m_pCLREventConnector->m_pXobj;
+	pXobj->m_pCLREventConnector = m_pCLREventConnector;
 }
 
 long CCosmos::GetIPCMsgIndex(CString strMsgID)
@@ -442,7 +442,7 @@ CSession* CCosmos::CreateCloudSession(CWebPageImpl* pOwner)
 	return nullptr;
 }
 
-CSession* CCosmos::GetCloudSession(IGrid* _pGrid)
+CSession* CCosmos::GetCloudSession(IXobj* _pXobj)
 {
 	return nullptr;
 }
@@ -476,18 +476,18 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 		_pGalaxy->m_pGalaxyInfo = pInfo;
 		_pGalaxy->m_strCurrentXml = pInfo->m_strGridXml;
-		CComQIPtr<IGrid> pParentNode(pInfo->m_pParentDisp);
-		IGrid* pGrid = nullptr;
+		CComQIPtr<IXobj> pParentNode(pInfo->m_pParentDisp);
+		IXobj* pXobj = nullptr;
 		CString str = _T("");
 		m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
 
 		CString strKey = _T("default");
-		str.Format(_T("<%s><layout><grid name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
-		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
-		if(pGrid)
+		str.Format(_T("<%s><layout><xobj name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
+		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
+		if(pXobj)
 		{
-			CGrid* _pGrid = (CGrid*)pGrid;
-			HWND hWnd = _pGrid->m_pGridShareData->m_pGalaxyCluster->m_hWnd;
+			CXobj* _pXobj = (CXobj*)pXobj;
+			HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
 			
 			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (pWnd)
@@ -495,7 +495,7 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 				//if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
 					return pGalaxy;
 			}
-			pGrid->put_SaveToConfigFile(true);
+			pXobj->put_SaveToConfigFile(true);
 		}
 	}
 
@@ -545,12 +545,12 @@ void CCosmos::BrowserAppStart()
 	}
 }
 
-bool CCosmos::IsMDIClientGalaxyNode(IGrid* pGrid)
+bool CCosmos::IsMDIClientGalaxyNode(IXobj* pXobj)
 {
 	return false;
 }
 
-IGrid* CCosmos::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
+IXobj* CCosmos::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 {
 	return nullptr;
 };
@@ -567,10 +567,10 @@ IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
 			pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)hGalaxy), CComBSTR(strName), &pGalaxy);
 		else
 			pGalaxy = it2->second;
-		IGrid* pGrid = nullptr;
+		IXobj* pXobj = nullptr;
 		CString str = _T("");
-		str.Format(_T("<default><layout><grid name='%s' /></layout></default>"), strName);
-		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pGrid);
+		str.Format(_T("<default><layout><xobj name='%s' /></layout></default>"), strName);
+		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
 		return pGalaxyCluster;
 	}
 	return nullptr;
@@ -652,7 +652,7 @@ int CCosmos::LoadCLR()
 	return 0;
 }
 
-CGrid* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
+CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	CTangramXmlParse* m_pParse = new CTangramXmlParse();
@@ -673,8 +673,8 @@ CGrid* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 		return nullptr;
 	}
 
-	CTangramXmlParse* pGrid = pWndGrid->GetChild(TGM_GRID);
-	if (pGrid == nullptr)
+	CTangramXmlParse* pXobj = pWndGrid->GetChild(TGM_GRID);
+	if (pXobj == nullptr)
 	{
 		delete m_pParse;
 		return nullptr;
@@ -693,7 +693,7 @@ CGrid* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 			pWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 	}
 
-	CGrid* pRootGrid = nullptr;
+	CXobj* pRootGrid = nullptr;
 	pRootGrid = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
 	m_strCurrentKey = _T("");
 	return pRootGrid;
@@ -709,15 +709,15 @@ STDMETHODIMP CCosmos::get_HostChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_RootNodes(IGridCollection** pGridColletion)
+STDMETHODIMP CCosmos::get_RootNodes(IXobjCollection** pGridColletion)
 {
 	if (m_pRootNodes == nullptr)
 	{
-		CComObject<CGridCollection>::CreateInstance(&m_pRootNodes);
+		CComObject<CXobjCollection>::CreateInstance(&m_pRootNodes);
 		m_pRootNodes->AddRef();
 	}
 
-	m_pRootNodes->m_pGrids->clear();
+	m_pRootNodes->m_pXobjs->clear();
 
 	for (auto& it : m_mapWindowPage)
 	{
@@ -727,14 +727,14 @@ STDMETHODIMP CCosmos::get_RootNodes(IGridCollection** pGridColletion)
 			CGalaxy* pGalaxy = fit.second;
 			for (auto it : pGalaxy->m_mapGrid)
 			{
-				m_pRootNodes->m_pGrids->push_back(it.second);
+				m_pRootNodes->m_pXobjs->push_back(it.second);
 			}
 		}
 	}
-	return m_pRootNodes->QueryInterface(IID_IGridCollection, (void**)pGridColletion);
+	return m_pRootNodes->QueryInterface(IID_IXobjCollection, (void**)pGridColletion);
 }
 
-STDMETHODIMP CCosmos::get_CurrentActiveGrid(IGrid** pVal)
+STDMETHODIMP CCosmos::get_CurrentActiveGrid(IXobj** pVal)
 {
 	if (m_pActiveGrid)
 		*pVal = m_pActiveGrid;
@@ -768,7 +768,7 @@ STDMETHODIMP CCosmos::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_CreatingGrid(IGrid** pVal)
+STDMETHODIMP CCosmos::get_CreatingGrid(IXobj** pVal)
 {
 	if (m_pActiveGrid)
 		*pVal = m_pActiveGrid;
@@ -776,7 +776,7 @@ STDMETHODIMP CCosmos::get_CreatingGrid(IGrid** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_DesignNode(IGrid** pVal)
+STDMETHODIMP CCosmos::get_DesignNode(IXobj** pVal)
 {
 	return S_OK;
 }
@@ -825,7 +825,7 @@ STDMETHODIMP CCosmos::put_AppExtender(BSTR bstrKey, IDispatch* newVal)
 			m_mapObjDic[strName] = newVal;
 			newVal->AddRef();
 			void* pDisp = nullptr;
-			if (newVal->QueryInterface(IID_IGrid, (void**)&pDisp) == S_OK
+			if (newVal->QueryInterface(IID_IXobj, (void**)&pDisp) == S_OK
 				|| newVal->QueryInterface(IID_IGalaxy, (void**)&pDisp) == S_OK
 				|| newVal->QueryInterface(IID_IGalaxyCluster, (void**)&pDisp) == S_OK)
 			{
@@ -986,13 +986,13 @@ STDMETHODIMP CCosmos::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::NavigateNode(IGrid* _pGrid, BSTR bstrBrowserID, BSTR bstrXml, IGrid** pRet)
+STDMETHODIMP CCosmos::NavigateNode(IXobj* _pXobj, BSTR bstrBrowserID, BSTR bstrXml, IXobj** pRet)
 {
-	CGrid* pGrid = (CGrid*)_pGrid;
-	if (pGrid->m_nViewType == GridType::Grid)
+	CXobj* pXobj = (CXobj*)_pXobj;
+	if (pXobj->m_nViewType == GridType::Grid)
 	{
-		IGrid* pRet = nullptr;
-		pGrid->m_pParentObj->ObserveEx(pGrid->m_nRow, pGrid->m_nCol, bstrBrowserID, bstrXml, &pRet);
+		IXobj* pRet = nullptr;
+		pXobj->m_pParentObj->ObserveEx(pXobj->m_nRow, pXobj->m_nCol, bstrBrowserID, bstrXml, &pRet);
 		if (pRet)
 		{
 			return S_OK;
@@ -1132,12 +1132,12 @@ STDMETHODIMP CCosmos::GetGalaxy(LONGLONG hHostWnd, IGalaxy** ppGalaxy)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::GetItemText(IGrid* pGrid, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet)
+STDMETHODIMP CCosmos::GetItemText(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet)
 {
-	if (pGrid == nullptr)
+	if (pXobj == nullptr)
 		return S_OK;
 	LONGLONG h = 0;
-	pGrid->get_Handle(&h);
+	pXobj->get_Handle(&h);
 
 	HWND hWnd = (HWND)h;
 	if (::IsWindow(hWnd))
@@ -1161,12 +1161,12 @@ STDMETHODIMP CCosmos::GetItemText(IGrid* pGrid, long nCtrlID, LONG nMaxLengeh, B
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::SetItemText(IGrid* pGrid, long nCtrlID, BSTR bstrText)
+STDMETHODIMP CCosmos::SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText)
 {
-	if (pGrid == nullptr)
+	if (pXobj == nullptr)
 		return S_OK;
 	LONGLONG h = 0;
-	pGrid->get_Handle(&h);
+	pXobj->get_Handle(&h);
 
 	HWND hWnd = (HWND)h;
 	if (::IsWindow(hWnd))
@@ -1185,7 +1185,7 @@ STDMETHODIMP CCosmos::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR b
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::UpdateGrid(IGrid* pGrid)
+STDMETHODIMP CCosmos::UpdateGrid(IXobj* pXobj)
 {
 	return S_OK;
 }
@@ -1219,7 +1219,7 @@ HRESULT CCosmos::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** p
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::GetGridFromHandle(LONGLONG hWnd, IGrid** ppRetGrid)
+STDMETHODIMP CCosmos::GetGridFromHandle(LONGLONG hWnd, IXobj** ppRetGrid)
 {
 	HWND _hWnd = (HWND)hWnd;
 	CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
@@ -1231,7 +1231,7 @@ STDMETHODIMP CCosmos::GetGridFromHandle(LONGLONG hWnd, IGrid** ppRetGrid)
 		pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
 	}
 	if (pInfo)
-		*ppRetGrid = pInfo->m_pGrid;
+		*ppRetGrid = pInfo->m_pXobj;
 	else
 		return S_FALSE;
 	return S_OK;
@@ -1296,7 +1296,7 @@ STDMETHODIMP CCosmos::get_CosmosDoc(LONGLONG AppProxy, LONGLONG nDocID, ICosmosD
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IGrid** ppGrid)
+STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppGrid)
 {
 	return S_FALSE;
 }

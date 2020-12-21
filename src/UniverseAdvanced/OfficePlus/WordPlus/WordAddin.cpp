@@ -102,14 +102,14 @@ namespace OfficePlus
 					if (it != pWordDoc->m_mapDocUIInfo.end())
 						strXml = it->second;
 					else
-						strXml = _T("<Document><layout><grid name=\"Start\" gridtype=\"nucleus\"/></layout></Document>");
-					IGrid* pGrid = nullptr;
-					pWordDoc->m_pGalaxy->Observe(CComBSTR(L"Default"), strXml.AllocSysString(), &pGrid);
-					CGrid* _pGrid = (CGrid*)pGrid;
-					if (_pGrid->m_pGridShareData->m_pOfficeObj == nullptr)
+						strXml = _T("<Document><layout><xobj name=\"Start\" gridtype=\"nucleus\"/></layout></Document>");
+					IXobj* pXobj = nullptr;
+					pWordDoc->m_pGalaxy->Observe(CComBSTR(L"Default"), strXml.AllocSysString(), &pXobj);
+					CXobj* _pXobj = (CXobj*)pXobj;
+					if (_pXobj->m_pXobjShareData->m_pOfficeObj == nullptr)
 					{
-						_pGrid->m_pGridShareData->m_pOfficeObj = pWordDoc->m_pDoc;
-						_pGrid->m_pGridShareData->m_pOfficeObj->AddRef();
+						_pXobj->m_pXobjShareData->m_pOfficeObj = pWordDoc->m_pDoc;
+						_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();
 					}
 
 					CString strKey = _T("taskpaneui");
@@ -170,13 +170,13 @@ namespace OfficePlus
 										m_pDoc->m_pTaskPaneGalaxy = (CGalaxy*)pTaskPaneFrame;
 										if (m_pDoc->m_pTaskPaneGalaxy)
 										{
-											IGrid* pGrid = nullptr;
-											m_pDoc->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
-											CGrid* _pGrid = (CGrid*)pGrid;
-											if (_pGrid->m_pGridShareData->m_pOfficeObj == nullptr)
+											IXobj* pXobj = nullptr;
+											m_pDoc->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pXobj);
+											CXobj* _pXobj = (CXobj*)pXobj;
+											if (_pXobj->m_pXobjShareData->m_pOfficeObj == nullptr)
 											{
-												_pGrid->m_pGridShareData->m_pOfficeObj = pWordDoc->m_pDoc;
-												_pGrid->m_pGridShareData->m_pOfficeObj->AddRef();
+												_pXobj->m_pXobjShareData->m_pOfficeObj = pWordDoc->m_pDoc;
+												_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();
 											}
 										}
 									}
@@ -566,11 +566,11 @@ namespace OfficePlus
 						pGalaxy->m_bDesignerState = true;
 						pWnd->m_bDesignState = true;
 						CreateCommonDesignerToolBar();
-						CGrid* pGrid = pGalaxy->m_pWorkGrid;
-						if (pGrid->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
+						CXobj* pXobj = pGalaxy->m_pWorkGrid;
+						if (pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 						{
-							CString strXml = _T("<documentui><layout><grid name=\"Start\" /></layout></documentui>");
-							IGrid* pDesignNode = nullptr;
+							CString strXml = _T("<documentui><layout><xobj name=\"Start\" /></layout></documentui>");
+							IXobj* pDesignNode = nullptr;
 							pGalaxy->Observe(CComBSTR(L"default-inDesigning"), CComBSTR(strXml), &pDesignNode);
 						}
 
@@ -600,7 +600,7 @@ namespace OfficePlus
 					if (it != pWnd->m_pWordPlusDoc->m_mapDocUIInfo.end())
 						strXml = it->second;
 					else
-						strXml = _T("<taskpaneui><layout><grid name=\"Start\" /></layout></taskpaneui>");
+						strXml = _T("<taskpaneui><layout><xobj name=\"Start\" /></layout></taskpaneui>");
 					if (strXml != _T(""))
 					{
 						CTangramXmlParse m_Parse;
@@ -652,13 +652,13 @@ namespace OfficePlus
 										m_pDoc->m_pTaskPaneGalaxy = (CGalaxy*)pTaskPaneFrame;
 										if (m_pDoc->m_pTaskPaneGalaxy)
 										{
-											IGrid* pGrid = nullptr;
-											m_pDoc->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pGrid);
-											CGrid* _pGrid = (CGrid*)pGrid;
-											if (_pGrid->m_pGridShareData->m_pOfficeObj == nullptr)
+											IXobj* pXobj = nullptr;
+											m_pDoc->m_pTaskPaneGalaxy->Observe(CComBSTR("Default"), strXml.AllocSysString(), &pXobj);
+											CXobj* _pXobj = (CXobj*)pXobj;
+											if (_pXobj->m_pXobjShareData->m_pOfficeObj == nullptr)
 											{
-												_pGrid->m_pGridShareData->m_pOfficeObj = pWordDoc->m_pDoc;
-												_pGrid->m_pGridShareData->m_pOfficeObj->AddRef();
+												_pXobj->m_pXobjShareData->m_pOfficeObj = pWordDoc->m_pDoc;
+												_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();
 											}
 										}
 									}

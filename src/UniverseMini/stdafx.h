@@ -98,16 +98,16 @@ using namespace std;
 #include <ppltasks.h>
 using namespace concurrency;
 
-class CGrid;
-class CGridHelper;
+class CXobj;
+class CXobjHelper;
 class CCosmos;
 class CGalaxy;
 class CUniverse;
-class CGridEvents;
+class CXobjEvents;
 class CGalaxyCluster;
-class CGridCollection;
+class CXobjCollection;
 
-typedef vector<CGrid*> CGridVector;
+typedef vector<CXobj*> CGridVector;
 
 #include <afxcview.h>
 #include <afxdlgs.h>

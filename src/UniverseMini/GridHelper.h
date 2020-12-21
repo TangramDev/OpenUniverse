@@ -13,9 +13,9 @@
 
 #pragma once
 
-class CGridHelper : public CWnd
+class CXobjHelper : public CWnd
 {
-	DECLARE_DYNCREATE(CGridHelper)
+	DECLARE_DYNCREATE(CXobjHelper)
 public:
 	BOOL					m_bNoMove;
 	BOOL					m_bEraseBkgnd;
@@ -25,8 +25,8 @@ public:
 	CString					m_strKey;
 	CString					m_strXml;
 
-	CGrid*					m_pGrid;
-	CGrid*					m_pParentGrid;
+	CXobj*					m_pXobj;
+	CXobj*					m_pParentGrid;
 
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
 
@@ -38,8 +38,8 @@ public:
 #endif
 
 protected:
-	CGridHelper();           // protected constructor used by dynamic creation
-	virtual ~CGridHelper();
+	CXobjHelper();           // protected constructor used by dynamic creation
+	virtual ~CXobjHelper();
 	void PostNcDestroy();
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();

@@ -59,10 +59,10 @@ namespace blink {
   CosmosWinform* mdiParent();
   CosmosWinform* activeMDIChild();
   CosmosNode* mdiwebbindgrid();
-  CosmosNode* getGrid(Element* elem);
-  CosmosNode* getGrid(const String& galaxyName, const String& clusterName, const String& gridName);
+  CosmosNode* getXobj(Element* elem);
+  CosmosNode* getXobj(const String& galaxyName, const String& clusterName, const String& gridName);
   CosmosGalaxy* getGalaxy(const String& galaxyName);
-  void DispatchGridEvent(Element* elem, const String& eventName);
+  void DispatchXobjEvent(Element* elem, const String& eventName);
   void ProcessFormMessage(const String& msgID);
 
   void InitWinForm();

@@ -49,8 +49,8 @@ namespace Browser
 
 		CGalaxy*							m_pGalaxy;
 		CCosmosDoc*							m_pDoc;
-		CGrid*								m_pParentGrid;
-		CGrid*								m_pBindGrid;
+		CXobj*								m_pParentGrid;
+		CXobj*								m_pBindGrid;
 		CWinForm*							m_pBindWinForm;
 		IUniverseAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
@@ -83,8 +83,8 @@ namespace Browser
 		STDMETHOD(get_HostWnd)(LONGLONG* Val);
 		STDMETHOD(put_HostWnd)(LONGLONG newVal);
 		STDMETHOD(CreateForm)(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm);
-		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IGrid** pRetGrid);
-		STDMETHOD(SendXmlMessage)(IGrid* sender, BSTR bstrXml);
+		STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** pRetGrid);
+		STDMETHOD(SendXmlMessage)(IXobj* sender, BSTR bstrXml);
 
 		void SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		CChromeBrowserBase* GetChromeBrowserBase(HWND) override;
@@ -115,7 +115,7 @@ namespace Browser
 
 	private:
 		CString m_strDocXml;
-		IGrid* GetParentGrid() { return (IGrid*)m_pParentGrid; }
+		IXobj* GetParentGrid() { return (IXobj*)m_pParentGrid; }
 		IGalaxy* GetGalaxy() { return (IGalaxy*)m_pGalaxy; }
 		void Show(CString strID);
 		void OnFinalMessage(HWND hWnd) override;

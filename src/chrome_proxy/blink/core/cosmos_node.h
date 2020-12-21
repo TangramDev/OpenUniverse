@@ -73,7 +73,7 @@ class CORE_EXPORT CosmosNode final :
   CosmosNode* getChild(long nIndex);
   CosmosNode* getChild(long row, long col);
   CosmosNode* getChild(const String& strName);
-  CosmosNode* getGrid(const String& strName);
+  CosmosNode* getXobj(const String& strName);
   void Observe(const String& strKey, const String& xml, V8ApplicationCallback* callback);
   void ObserveEx(const String& strKey, const String& xml, long row, long col, V8ApplicationCallback* callback);
   void ObserveCtrl(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback);
@@ -81,7 +81,7 @@ class CORE_EXPORT CosmosNode final :
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(CosmosControlCreated, kCosmoscontrolcreated)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForGrid, kCloudmessageforgrid)
+  DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForXobj, kCloudmessageforxobj)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
 
   CosmosNode();

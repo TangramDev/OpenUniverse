@@ -39,7 +39,7 @@ extern _ATL_FUNC_INFO GridAddInsCreated;
 class CCosmosEvents : public IDispEventSimpleImpl</*nID =*/ 1, CCosmosEvents, &__uuidof(_ICosmos)>
 {
 public:
-	virtual void __stdcall OnObserverComplete(long hWnd, BSTR bstrUrl, IGrid* pRootGrid){}
+	virtual void __stdcall OnObserverComplete(long hWnd, BSTR bstrUrl, IXobj* pRootGrid){}
 	virtual void __stdcall OnClose(){}
 	virtual void __stdcall OnCosmosEvent(ICosmosEventObj* pRootGrid){}
 
@@ -50,13 +50,13 @@ public:
 	END_SINK_MAP()
 };
 
-class CGridEvents : public IDispEventSimpleImpl</*nID =*/ 1, CGridEvents, &__uuidof(_IGridEvents)>
+class CXobjEvents : public IDispEventSimpleImpl</*nID =*/ 1, CXobjEvents, &__uuidof(_IXobjEvents)>
 {
 public:
-	CGridEvents(){ m_pGrid = NULL; };
-	virtual ~CGridEvents(){};
+	CXobjEvents(){ m_pXobj = NULL; };
+	virtual ~CXobjEvents(){};
 
-	IGrid* m_pGrid;
+	IXobj* m_pXobj;
 
 	virtual void __stdcall  OnDestroy(){}
 	virtual void __stdcall  OnObserverComplete(){}
@@ -65,12 +65,12 @@ public:
 	virtual void __stdcall  OnTabChange(int nActivePage, int nOldPage){}
 	virtual void __stdcall  OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra) {};
 
-	BEGIN_SINK_MAP(CGridEvents)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000001, OnObserverComplete, &NodeOpenComplete)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000002, OnDestroy, &Destroy)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000003, OnGridAddInCreated, &GridAddInCreated)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000004, OnGridAddInsCreated, &GridAddInsCreated)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000007, OnTabChange, &TabChange2)
-		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IGridEvents), /*dispid =*/ 0x00000008, OnIPCMessageReceived, &MessageHandle)
+	BEGIN_SINK_MAP(CXobjEvents)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IXobjEvents), /*dispid =*/ 0x00000001, OnObserverComplete, &NodeOpenComplete)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IXobjEvents), /*dispid =*/ 0x00000002, OnDestroy, &Destroy)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IXobjEvents), /*dispid =*/ 0x00000003, OnGridAddInCreated, &GridAddInCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IXobjEvents), /*dispid =*/ 0x00000004, OnGridAddInsCreated, &GridAddInsCreated)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IXobjEvents), /*dispid =*/ 0x00000007, OnTabChange, &TabChange2)
+		SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(_IXobjEvents), /*dispid =*/ 0x00000008, OnIPCMessageReceived, &MessageHandle)
 	END_SINK_MAP()
 };

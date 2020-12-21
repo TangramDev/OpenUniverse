@@ -6,5 +6,5 @@
 
 	// Event handler attributes
 	attribute EventHandler onMessageReceived;
-	attribute EventHandler onGridCreated;
+	attribute EventHandler onXobjCreated;
 };

@@ -33,7 +33,7 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-	CGrid* m_pHostGrid;
+	CXobj* m_pHostGrid;
 	bool bInited;
 	int m_nHostWidth, m_nHostHeight;
 	int m_Vmin,m_Vmax,m_Hmin,m_Hmax;
@@ -47,7 +47,7 @@ protected:
 	virtual ~CGridWnd();
 
 	BOOL			m_bCreated;
-	CGrid*			m_pGrid;
+	CXobj*			m_pXobj;
 
 	BOOL PreCreateWindow(CREATESTRUCT& cs);
 	BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
@@ -60,7 +60,7 @@ protected:
 	void PostNcDestroy();
 	void DrawAllSplitBars(CDC* pDC, int cxInside, int cyInside);
 	CWnd* GetActivePane(int* pRow = NULL, int* pCol = NULL);
-	//void RefreshNode(IGrid*);
+	//void RefreshNode(IXobj*);
 
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -75,6 +75,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	void _RecalcLayout();
-	void _LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CGrid* pHostNode, bool bCol);
+	void _LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, int nSize, int nSizeSplitter, CXobj* pHostNode, bool bCol);
 	void _DeferClientPos(AFX_SIZEPARENTPARAMS* lpLayout, CWnd* pWnd, int x, int y, int cx, int cy, BOOL bScrollBar);
 };

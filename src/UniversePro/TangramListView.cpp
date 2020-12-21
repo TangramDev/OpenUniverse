@@ -42,14 +42,14 @@ CTangramListView::CTangramListView()
 	m_nStyle = 0;
 	m_nActiveIndex = 0;
 	m_pGalaxy = nullptr;
-	m_pGrid = nullptr;
+	m_pXobj = nullptr;
 	m_pCosmosTabCtrl = nullptr;
 }
 
 CTangramListView::~CTangramListView()
 {
-	if (m_pGrid)
-		delete m_pGrid;
+	if (m_pXobj)
+		delete m_pXobj;
 }
 
 BEGIN_MESSAGE_MAP(CTangramListView, CListView)
@@ -86,7 +86,7 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 {
 	m_pCosmosTabCtrl = pTabCtrl;
 	CComBSTR bstrStyle(L"");
-	m_pGrid->get_Attribute(CComBSTR(L"style"), &bstrStyle);
+	m_pXobj->get_Attribute(CComBSTR(L"style"), &bstrStyle);
 	m_nStyle = _wtoi(OLE2T(bstrStyle));
 	CImageList* pImageList = GetListCtrl().GetImageList(LVSIL_NORMAL);
 	if (pImageList)
@@ -106,7 +106,7 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 			CString strFormsInfoPath = g_pCosmos->m_strAppFormsInfoPath;
 			if (m_pCosmosTabCtrl)
 			{
-				HWND hWnd = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+				HWND hWnd = m_pCosmosTabCtrl->m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 				if (hWnd)
 				{
 					pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
@@ -282,15 +282,15 @@ void CTangramListView::InitTabCtrl(CTangramTabCtrl* pTabCtrl)
 				m_strDocTemplatePath += _T("*.*");
 
 				CString strCaption = _T("");
-				CGrid* pGrid = m_pCosmosTabCtrl->m_pGrid;
-				if (pGrid)
+				CXobj* pXobj = m_pCosmosTabCtrl->m_pXobj;
+				if (pXobj)
 				{
 					strCaption = _T("Current Selected Document Template: ");
 					strCaption += it->second->m_strDocTemplateKey;
-					pGrid->put_Caption(strCaption.AllocSysString());
+					pXobj->put_Caption(strCaption.AllocSysString());
 				}
 				strCaption = _T("Create New Tangram Document");
-				m_pGrid->put_Caption(strCaption.AllocSysString());
+				m_pXobj->put_Caption(strCaption.AllocSysString());
 				_wfinddata_t fd;
 				fd.attrib = FILE_ATTRIBUTE_DIRECTORY;
 				intptr_t pf = _wfindfirst(m_strDocTemplatePath, &fd);
@@ -373,12 +373,12 @@ void CTangramListView::ChangeTemplate(int nItem)
 					m_pCosmosTabCtrl->m_nImageIndex = it->second->m_nImageIndex;
 					CString strKey = it->second->m_strDocTemplateKey;
 					CString strCaption = _T("");
-					CGrid* pGrid = m_pCosmosTabCtrl->m_pGrid;
-					if (pGrid)
+					CXobj* pXobj = m_pCosmosTabCtrl->m_pXobj;
+					if (pXobj)
 					{
 						strCaption = _T("Current Selected Document Template: ");
 						strCaption += it->second->m_strDocTemplateKey;
-						pGrid->put_Caption(strCaption.AllocSysString());
+						pXobj->put_Caption(strCaption.AllocSysString());
 					}
 					strCaption = _T("Create New Tangram Document");
 					TCITEM tcItem;
@@ -466,7 +466,7 @@ void CTangramListView::ChangeTemplate(int nItem)
 				CWinForm* pWnd = nullptr;
 				if (m_pCosmosTabCtrl)
 				{
-					HWND hWnd = m_pCosmosTabCtrl->m_pGrid->m_pGridShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+					HWND hWnd = m_pCosmosTabCtrl->m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 					if (hWnd)
 					{
 						pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
@@ -500,12 +500,12 @@ void CTangramListView::ChangeTemplate(int nItem)
 						CString m_strDocTemplatePath = m_pCosmosTabCtrl->m_ListCtrl.m_strDir;
 						CString strKey = it2->second->m_strDocTemplateKey;
 						CString strCaption = _T("");
-						CGrid* pGrid = m_pCosmosTabCtrl->m_pGrid;
-						if (pGrid)
+						CXobj* pXobj = m_pCosmosTabCtrl->m_pXobj;
+						if (pXobj)
 						{
 							strCaption = _T("Current Selected Document Template: ");
 							strCaption += it2->second->m_strDocTemplateKey;
-							pGrid->put_Caption(strCaption.AllocSysString());
+							pXobj->put_Caption(strCaption.AllocSysString());
 						}
 						strCaption = _T("Create New Tangram Document");
 						tcItem.mask = TCIF_TEXT;
@@ -601,10 +601,10 @@ void CTangramListView::ChangeTemplate(int nItem)
 
 BOOL CTangramListView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	m_pGrid = g_pCosmos->m_pActiveGrid;
-	m_pGrid->m_pHostWnd = this;
-	m_pGrid->m_nViewType = TangramListView;
-	m_pGrid->m_nID = nID;
+	m_pXobj = g_pCosmos->m_pActiveGrid;
+	m_pXobj->m_pHostWnd = this;
+	m_pXobj->m_nViewType = TangramListView;
+	m_pXobj->m_nID = nID;
 	CString strURL = _T("");
 	BOOL bRet = CListView::Create(lpszClassName, lpszWindowName, dwStyle| LVS_ICON| LVS_AUTOARRANGE| LVS_SINGLESEL| LVS_SHAREIMAGELISTS| LVS_SHOWSELALWAYS, rect, pParentWnd, nID, pContext);
 	if (::FindResource(NULL, _T("TANGRAMBK.PNG"), _T("IMAGES")) == nullptr)
@@ -633,7 +633,7 @@ BOOL CTangramListView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWO
 
 	int width = 320, heigh = 90, clines = 3;
 	CComBSTR bstrVal("");
-	m_pGrid->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
+	m_pXobj->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
 	if (!CString(bstrVal).IsEmpty())
 	{
 		_stscanf_s(CString(bstrVal), _T("SizeandcLines(%d,%d,%d)"), &width, &heigh, &clines);
@@ -660,7 +660,7 @@ int CTangramListView::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT mes
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	g_pCosmos->m_pActiveGrid = m_pGrid;
+	g_pCosmos->m_pActiveGrid = m_pXobj;
 	g_pCosmos->m_bWinFormActived = false;
 	return MA_ACTIVATE;
 }
@@ -690,7 +690,7 @@ LRESULT CTangramListView::OnActiveTangramPage(WPARAM wParam, LPARAM lParam)
 			{
 				int width = 320, heigh = 90, clines = 3;
 				CComBSTR bstrVal("");
-				m_pCosmosTabCtrl->m_pGrid->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
+				m_pCosmosTabCtrl->m_pXobj->get_Attribute(CComBSTR("sizeandclines"), &bstrVal);
 				if (!CString(bstrVal).IsEmpty())
 				{
 					_stscanf_s(CString(bstrVal), _T("SizeandcLines(%d,%d,%d)"), &width, &heigh, &clines);
