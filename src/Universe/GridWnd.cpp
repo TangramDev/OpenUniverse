@@ -828,7 +828,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		for (int i = 0; i < nSize; i++)
 		{
 			CTangramXmlParse* _pChild = m_pXobj->m_pHostParse->GetChild(i);
-			if (_pChild->name().CompareNoCase(TGM_GRID) == 0)
+			if (_pChild->name().CompareNoCase(TGM_XOBJ) == 0)
 				vecParse.push_back(_pChild);
 		}
 		nSize = vecParse.size();

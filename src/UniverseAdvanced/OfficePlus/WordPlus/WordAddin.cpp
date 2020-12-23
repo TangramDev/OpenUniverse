@@ -102,7 +102,7 @@ namespace OfficePlus
 					if (it != pWordDoc->m_mapDocUIInfo.end())
 						strXml = it->second;
 					else
-						strXml = _T("<Document><layout><xobj name=\"Start\" gridtype=\"nucleus\"/></layout></Document>");
+						strXml = _T("<Document><cluster><xobj name=\"Start\" gridtype=\"nucleus\"/></cluster></Document>");
 					IXobj* pXobj = nullptr;
 					pWordDoc->m_pGalaxy->Observe(CComBSTR(L"Default"), strXml.AllocSysString(), &pXobj);
 					CXobj* _pXobj = (CXobj*)pXobj;
@@ -129,7 +129,7 @@ namespace OfficePlus
 							vWindow.pdispVal = nullptr;
 							Office::_CustomTaskPane* _pCustomTaskPane;
 							CString strCap = _T("");
-							CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_GRID);
+							CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_XOBJ);
 							strCap = pXobjParse->attr(_T("caption"), _T(""));
 							if (strCap == _T(""))
 								strCap = pXobjParse->attr(_T("id"), _T(""));;
@@ -569,7 +569,7 @@ namespace OfficePlus
 						CXobj* pXobj = pGalaxy->m_pWorkXobj;
 						if (pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 						{
-							CString strXml = _T("<documentui><layout><xobj name=\"Start\" /></layout></documentui>");
+							CString strXml = _T("<documentui><cluster><xobj name=\"Start\" /></cluster></documentui>");
 							IXobj* pDesignNode = nullptr;
 							pGalaxy->Observe(CComBSTR(L"default-inDesigning"), CComBSTR(strXml), &pDesignNode);
 						}
@@ -600,7 +600,7 @@ namespace OfficePlus
 					if (it != pWnd->m_pWordPlusDoc->m_mapDocUIInfo.end())
 						strXml = it->second;
 					else
-						strXml = _T("<taskpaneui><layout><xobj name=\"Start\" /></layout></taskpaneui>");
+						strXml = _T("<taskpaneui><cluster><xobj name=\"Start\" /></cluster></taskpaneui>");
 					if (strXml != _T(""))
 					{
 						CTangramXmlParse m_Parse;
@@ -611,7 +611,7 @@ namespace OfficePlus
 							vWindow.pdispVal = nullptr;
 							Office::_CustomTaskPane* _pCustomTaskPane;
 							CString strCap = _T("");
-							CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_GRID);
+							CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_XOBJ);
 							strCap = pXobjParse->attr(_T("caption"), _T(""));
 							if (strCap == _T(""))
 								strCap = pXobjParse->attr(_T("id"), _T(""));;

@@ -37,7 +37,7 @@
 #include <stdlib.h>
 #include <sstream>
 
-using namespace DOMPlus;
+using namespace Universe;
 using namespace System::Windows;
 #pragma managed(push, off)
 CCosmos theApp;
@@ -177,7 +177,7 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 		}
 	}
 
-	DOMPlus::Cosmos::GetCosmos();
+	Universe::Cosmos::GetCosmos();
 }
 
 CCosmosProxy::~CCosmosProxy()
@@ -241,7 +241,7 @@ bool CCosmos::DoIdleWork() {
 		}
 		theAppProxy.m_mapFormMenuStrip2.erase(it);
 	}
-	DOMPlus::Cosmos::GetCosmos()->Fire_OnCloudAppIdle();
+	Universe::Cosmos::GetCosmos()->Fire_OnCloudAppIdle();
 	return false;
 }
 
@@ -252,18 +252,18 @@ HWND CCosmos::InitCosmosApp()
 
 void CCosmos::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2)
 {
-	DOMPlus::Cosmos::Fire_OnCosmosMsg((IntPtr)hWnd, BSTR2STRING(strType), BSTR2STRING(strParam1), BSTR2STRING(strParam2));
+	Universe::Cosmos::Fire_OnCosmosMsg((IntPtr)hWnd, BSTR2STRING(strType), BSTR2STRING(strParam1), BSTR2STRING(strParam2));
 }
 
 void CCosmos::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
 {
-	DOMPlus::Cosmos::Fire_OnCustomizedDOMElement((IntPtr)hWnd, BSTR2STRING(strRuleName), BSTR2STRING(strHTML));
+	Universe::Cosmos::Fire_OnCustomizedDOMElement((IntPtr)hWnd, BSTR2STRING(strRuleName), BSTR2STRING(strHTML));
 }
 
 void CCosmos::ProcessMsg(MSG* msg) {
 	if (msg)
 	{
-		DOMPlus::Cosmos::Fire_OnAppMsgLoop((IntPtr)msg->hwnd, (IntPtr)(__int32)msg->message, (IntPtr)(__int32)msg->wParam, (IntPtr)msg->lParam);
+		Universe::Cosmos::Fire_OnAppMsgLoop((IntPtr)msg->hwnd, (IntPtr)(__int32)msg->message, (IntPtr)(__int32)msg->wParam, (IntPtr)msg->lParam);
 		if (msg->message == WM_CHAR)
 		{
 			ATLTRACE(_T("\n"));
@@ -482,7 +482,7 @@ IDispatch* CCosmosProxy::CreateWinForm(HWND hParent, BSTR strXML)
 	auto it = m_mapChromeWebPage.find(hParent);
 	if (it != m_mapChromeWebPage.end())
 	{
-		Form^ pForm = DOMPlus::Cosmos::CreateForm(it->second, BSTR2STRING(strXML));
+		Form^ pForm = Universe::Cosmos::CreateForm(it->second, BSTR2STRING(strXML));
 		if (pForm)
 		{
 			return (IDispatch*)Marshal::GetIUnknownForObject(pForm).ToPointer();
@@ -513,7 +513,7 @@ CWPFObj* CCosmosProxy::CreateWPFControl(IXobj* pXobj, HWND hPWnd, UINT nID)
 		CComBSTR bstrObjTypeID(L"");
 		pXobj->get_Attribute(CComBSTR(L"objid"), &bstrObjTypeID);
 
-		Type^ pType = DOMPlus::Cosmos::GetType(BSTR2STRING(bstrObjTypeID));
+		Type^ pType = Universe::Cosmos::GetType(BSTR2STRING(bstrObjTypeID));
 		::SysFreeString(bstrObjTypeID);
 
 		CTangramWPFObjWrapper* pWpfControlWrapper = nullptr;
@@ -522,8 +522,8 @@ CWPFObj* CCosmosProxy::CreateWPFControl(IXobj* pXobj, HWND hPWnd, UINT nID)
 			pWpfControlWrapper = new CTangramWPFObjWrapper();
 			if (pWpfControlWrapper->CreateControl(pType, hPWnd, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0))
 			{
-				DOMPlus::Xobj^ _pXobj = (DOMPlus::Xobj^)theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
-				DOMPlus::Cosmos::m_pFrameworkElementDic[pWpfControlWrapper->m_pUIElement] = _pXobj;
+				Universe::Xobj^ _pXobj = (Universe::Xobj^)theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
+				Universe::Cosmos::m_pFrameworkElementDic[pWpfControlWrapper->m_pUIElement] = _pXobj;
 				::SetWindowLongPtr(pWpfControlWrapper->m_hwndWPF, GWLP_ID, nID);
 				m_mapWpfControlWrapper[pWpfControlWrapper->m_hwndWPF] = pWpfControlWrapper;
 				try {
@@ -677,7 +677,7 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 			{
 				Type^ pType = pChild->GetType();
 				String^ strType = pType->FullName;
-				GalaxyCluster^ pGalaxyCluster = DOMPlus::Cosmos::CreateGalaxyCluster(pForm, nullptr);
+				GalaxyCluster^ pGalaxyCluster = Universe::Cosmos::CreateGalaxyCluster(pForm, nullptr);
 				String^ strType2 = strType->Replace(L"System.Windows.Forms.", L"");
 				if ((theAppProxy.m_strExtendableTypes->IndexOf(L"|" + strType2 + L"|") != -1 && pChild->Dock == DockStyle::None) || pChild->Dock == DockStyle::Fill)
 				{
@@ -740,7 +740,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
-	DOMPlus::Xobj^ pXobj = DOMPlus::Cosmos::GetXobjFromControl(m_pCurrentForm);
+	Universe::Xobj^ pXobj = Universe::Cosmos::GetXobjFromControl(m_pCurrentForm);
 	if (pXobj)
 	{
 		Galaxy^ pGalaxy = pXobj->Galaxy;
@@ -801,7 +801,7 @@ void CCosmosProxy::OnNodeMouseDoubleClick(Object^ sender, TreeNodeMouseClickEven
 
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
-	DOMPlus::Xobj^ pXobj = DOMPlus::Cosmos::GetXobjFromControl(m_pCurrentForm);
+	Universe::Xobj^ pXobj = Universe::Cosmos::GetXobjFromControl(m_pCurrentForm);
 	Galaxy^ pGalaxy = pXobj->Galaxy;
 	if (e->Node->Tag != nullptr)
 	{
@@ -858,7 +858,7 @@ void CCosmosProxy::OnAfterSelect(System::Object^ sender, TreeViewEventArgs^ e)
 
 		handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
 	}
-	DOMPlus::Xobj^ pXobj = DOMPlus::Cosmos::GetXobjFromControl(m_pCurrentForm);
+	Universe::Xobj^ pXobj = Universe::Cosmos::GetXobjFromControl(m_pCurrentForm);
 	if (pXobj == nullptr)
 		return;
 	Galaxy^ pGalaxy = pXobj->Galaxy;
@@ -911,7 +911,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 	{
 		return nullptr;
 	}
-	GalaxyCluster^ pGalaxyCluster = DOMPlus::Cosmos::CreateGalaxyCluster(pForm, nullptr);
+	GalaxyCluster^ pGalaxyCluster = Universe::Cosmos::CreateGalaxyCluster(pForm, nullptr);
 	if (pCtrl && pForm)
 	{
 		HWND hWnd = (HWND)pForm->Handle.ToPointer();
@@ -1164,7 +1164,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 	if (::IsChild(theApp.m_pCosmosImpl->m_hHostWnd, (HWND)pCtrl->Handle.ToInt64()))
 		return nullptr;
 	GalaxyCluster^ pGalaxyCluster = nullptr;
-	DOMPlus::Xobj^ pXobj = (DOMPlus::Xobj^)theAppProxy._createObject<IXobj, DOMPlus::Xobj>(_pXobj);
+	Universe::Xobj^ pXobj = (Universe::Xobj^)theAppProxy._createObject<IXobj, Universe::Xobj>(_pXobj);
 	if (pXobj)
 	{
 		pGalaxyCluster = pXobj->GalaxyCluster;
@@ -1489,7 +1489,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 	GalaxyCluster^ pGalaxyCluster = static_cast<GalaxyCluster^>(theAppProxy.InitControl(pForm, pForm, true, pParse));
 	if (pGalaxyCluster)
 		pGalaxyCluster->Fire_OnGalaxyClusterLoad(pGalaxyCluster);
-	Control^ ctrl = DOMPlus::Cosmos::GetMDIClient(pForm);
+	Control^ ctrl = Universe::Cosmos::GetMDIClient(pForm);
 	if (ctrl != nullptr)
 	{
 		Form^ pForm2 = pForm->ActiveMdiChild;
@@ -1562,7 +1562,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 					CString strID = m_Parse.attr(_T("objid"), _T(""));
 					if (strID != _T(""))
 					{
-						Type^ pType = DOMPlus::Cosmos::GetType(BSTR2STRING(strID));
+						Type^ pType = Universe::Cosmos::GetType(BSTR2STRING(strID));
 						System::Drawing::Icon^ pIcon = nullptr;
 						if (pType && pType->IsSubclassOf(Form::typeid))
 						{
@@ -1572,12 +1572,12 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 								pIcon = static_cast<System::Drawing::Icon^>(resources->GetObject("$this.Icon"));
 								if (pIcon == nullptr)
 								{
-									if (DOMPlus::Cosmos::m_pDefaultIcon == nullptr)
+									if (Universe::Cosmos::m_pDefaultIcon == nullptr)
 									{
 										Form^ _pForm = gcnew Form();
-										DOMPlus::Cosmos::m_pDefaultIcon = _pForm->Icon;
+										Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
 									}
-									pIcon = DOMPlus::Cosmos::m_pDefaultIcon;
+									pIcon = Universe::Cosmos::m_pDefaultIcon;
 								}
 								if (pIcon)
 								{
@@ -1634,7 +1634,7 @@ void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 		int nPos = strKey.Find(_T(","));
 		if (nPos != -1)
 		{
-			Object^ pObj = DOMPlus::Cosmos::CreateObject(BSTR2STRING(strKey));
+			Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(strKey));
 			if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
 			{
 				Form^ pForm = (Form^)pObj;
@@ -1652,7 +1652,7 @@ void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 			nPos = strKey.Find(_T(","));
 			if (nPos != -1)
 			{
-				Object^ pObj = DOMPlus::Cosmos::CreateObject(BSTR2STRING(strKey));
+				Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(strKey));
 				if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
 				{
 					Form^ pForm = (Form^)pObj;
@@ -1673,7 +1673,7 @@ HRESULT CCosmosProxy::ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstr
 	String^ strMethod = BSTR2STRING(bstrMethod);
 	String^ strData = BSTR2STRING(bstrData);
 	cli::array<Object^, 1>^ pObjs = { BSTR2STRING(bstrParam), BSTR2STRING(bstrData) };
-	DOMPlus::Cosmos::ActiveMethod(strObjID, strMethod, pObjs);
+	Universe::Cosmos::ActiveMethod(strObjID, strMethod, pObjs);
 	return S_OK;
 }
 
@@ -1683,7 +1683,7 @@ HRESULT CCosmosProxy::ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR 
 	String^ strMethod = BSTR2STRING(bstrMethod);
 	String^ strData = BSTR2STRING(bstrData);
 	cli::array<Object^, 1>^ pObjs = {};
-	DOMPlus::Cosmos::ActiveObjectMethod(obj, strMethod, pObjs);
+	Universe::Cosmos::ActiveObjectMethod(obj, strMethod, pObjs);
 	return S_OK;
 }
 
@@ -1701,7 +1701,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		{
 			CString strTagName = m_Parse.name();
 			CWebPageImpl* pProxyBase = nullptr;
-			DOMPlus::Wormhole^ pCloudSession = nullptr;
+			Universe::Wormhole^ pCloudSession = nullptr;
 			CSession* pCosmosSession = nullptr;
 			__int64 nHandle = m_Parse.attrInt64(_T("renderframehostproxy"), 0);
 			if (nHandle)
@@ -1726,7 +1726,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						pWebPage->Observe(CComBSTR(strTagName), CComBSTR(pChild->xml()), &pXobj);
 					}
 				}
-				Object^ pObj = DOMPlus::Cosmos::CreateObject(BSTR2STRING(strObjID));
+				Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(strObjID));
 
 				if (pObj != nullptr)
 				{
@@ -1757,12 +1757,12 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							thisForm->Text = BSTR2STRING(strCaption);
 						if (thisForm->IsMdiContainer)
 						{
-							Control^ mdiclient = DOMPlus::Cosmos::GetMDIClient(thisForm);
+							Control^ mdiclient = Universe::Cosmos::GetMDIClient(thisForm);
 							mdiclient->ControlRemoved += gcnew System::Windows::Forms::ControlEventHandler(&OnControlRemoved);
 							CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
 							if (strBKPage != _T(""))
 							{
-								DOMPlus::Cosmos::CreateBKPage(thisForm, BSTR2STRING(strBKPage));
+								Universe::Cosmos::CreateBKPage(thisForm, BSTR2STRING(strBKPage));
 							}
 						}
 						if (strTagName.CompareNoCase(_T("mainwindow")) == 0)
@@ -1775,11 +1775,11 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						if (nIpcSession)
 						{
 							pCosmosSession = (CSession*)nIpcSession;
-							bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
+							bool bExists = Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
 							if (bExists == false)
 							{
 								pCloudSession = gcnew Wormhole(pCosmosSession);
-								DOMPlus::Cosmos::Wormholes[pObj] = pCloudSession;
+								Universe::Cosmos::Wormholes[pObj] = pCloudSession;
 								pCloudSession->m_pHostObj = pObj;
 							}
 							theAppProxy.m_mapSession2Wormhole[pCosmosSession] = pCloudSession;
@@ -1842,7 +1842,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							pCosmosSession = theApp.m_pCosmosImpl->CreateCloudSession(pProxyBase);
 							pCloudSession = gcnew Wormhole(pCosmosSession);
-							DOMPlus::Cosmos::Wormholes[pObj] = pCloudSession;
+							Universe::Cosmos::Wormholes[pObj] = pCloudSession;
 							pCloudSession->m_pHostObj = pObj;
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
 							if (strFormName == _T(""))
@@ -1950,11 +1950,11 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 			}
 			else
 			{
-				if (DOMPlus::Cosmos::m_pMainForm)
+				if (Universe::Cosmos::m_pMainForm)
 				{
-					HWND hWnd = (HWND)DOMPlus::Cosmos::m_pMainForm->Handle.ToPointer();
+					HWND hWnd = (HWND)Universe::Cosmos::m_pMainForm->Handle.ToPointer();
 					theApp.m_pCosmosImpl->m_hMainWnd = hWnd;
-					Form^ mainForm = DOMPlus::Cosmos::MainForm;
+					Form^ mainForm = Universe::Cosmos::MainForm;
 					CString strCaption = m_Parse.attr(_T("caption"), _T(""));
 					if (strCaption != _T(""))
 						mainForm->Text = BSTR2STRING(strCaption);
@@ -1968,14 +1968,14 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					Control^ client = nullptr;
 					if (mainForm->IsMdiContainer)
 					{
-						Control^ mdiclient = DOMPlus::Cosmos::GetMDIClient(mainForm);
+						Control^ mdiclient = Universe::Cosmos::GetMDIClient(mainForm);
 						mdiclient->ControlRemoved += gcnew System::Windows::Forms::ControlEventHandler(&OnControlRemoved);
 						CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
 						if (strBKPage != _T(""))
 						{
-							DOMPlus::Cosmos::CreateBKPage(mainForm, BSTR2STRING(strBKPage));
+							Universe::Cosmos::CreateBKPage(mainForm, BSTR2STRING(strBKPage));
 						}
-						client = DOMPlus::Cosmos::GetMDIClient(mainForm);
+						client = Universe::Cosmos::GetMDIClient(mainForm);
 					}
 					else
 					{
@@ -2004,7 +2004,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					}
 					pCosmosSession = theApp.m_pCosmosImpl->CreateCloudSession(pProxyBase);
 					pCloudSession = gcnew Wormhole(pCosmosSession);
-					DOMPlus::Cosmos::Wormholes[mainForm] = pCloudSession;
+					Universe::Cosmos::Wormholes[mainForm] = pCloudSession;
 					pCloudSession->m_pHostObj = mainForm;
 					CString strFormName = mainForm->Name;
 					pCosmosSession->InsertLong(_T("autodelete"), 0);
@@ -2037,7 +2037,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		return nullptr;
 	}
 
-	Object^ pObj = DOMPlus::Cosmos::CreateObject(BSTR2STRING(bstrObjID));
+	Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(bstrObjID));
 
 	if (pObj != nullptr)
 	{
@@ -2208,7 +2208,7 @@ void CCosmosProxy::SelectXobj(IXobj* pXobj)
 	try
 	{
 		if (pXobj)
-			pObj = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
+			pObj = theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
 	}
 	catch (...)
 	{
@@ -2237,8 +2237,8 @@ void CCosmosProxy::SelectXobj(IXobj* pXobj)
 IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode)
 {
 	String^ strID = BSTR2STRING(bstrObjID);
-	Object^ _pObj = DOMPlus::Cosmos::CreateObject(strID);
-	DOMPlus::Xobj^ _pXobj = (DOMPlus::Xobj^)_createObject<IXobj, DOMPlus::Xobj>(pHostNode);
+	Object^ _pObj = Universe::Cosmos::CreateObject(strID);
+	Universe::Xobj^ _pXobj = (Universe::Xobj^)_createObject<IXobj, Universe::Xobj>(pHostNode);
 	if (_pObj == nullptr)
 	{
 		System::Windows::Forms::Label^ label = (gcnew System::Windows::Forms::Label());
@@ -2291,7 +2291,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 				theApp.m_pCosmosImpl->m_hFormNodeWnd = hWnd;
 				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD | WS_VISIBLE);
 				::SetWindowLongPtr(hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & ~(WS_EX_APPWINDOW/*|WS_EX_CLIENTEDGE*/));
-				DOMPlus::Cosmos::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pXobj);
+				Universe::Cosmos::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pXobj);
 
 				((Form^)pObj)->Show();
 				return pDisp;
@@ -2314,7 +2314,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 	{
 		if (_pObj->GetType()->IsSubclassOf(System::Windows::FrameworkElement::typeid))
 		{
-			DOMPlus::Cosmos::m_pFrameworkElementDic[_pObj] = _pXobj;
+			Universe::Cosmos::m_pFrameworkElementDic[_pObj] = _pXobj;
 			try
 			{
 				System::Windows::Forms::Integration::ElementHost^ pElementHost = gcnew System::Windows::Forms::Integration::ElementHost();
@@ -2452,13 +2452,13 @@ void CCosmosProxy::ReleaseCosmosObj(IDispatch* pDisp)
 {
 	LONGLONG nValue = (LONGLONG)pDisp;
 	Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)pDisp);
-	DOMPlus::Wormhole^ pCloudSession = nullptr;
-	bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
+	Universe::Wormhole^ pCloudSession = nullptr;
+	bool bExists = Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
 	if (bExists == true)
 	{
 		if (pCloudSession != nullptr)
 		{
-			DOMPlus::Cosmos::Wormholes->Remove(pObj);
+			Universe::Cosmos::Wormholes->Remove(pObj);
 		}
 	}
 	_removeObject(nValue);
@@ -2469,7 +2469,7 @@ HWND CCosmosProxy::GetMDIClientHandle(IDispatch* pMDICtrl)
 	Form^ pCtrl = (Form^)Marshal::GetObjectForIUnknown((IntPtr)pMDICtrl);
 	if (pCtrl != nullptr)
 	{
-		Control^ ctrl = DOMPlus::Cosmos::GetMDIClient(pCtrl);
+		Control^ ctrl = Universe::Cosmos::GetMDIClient(pCtrl);
 		if (ctrl != nullptr)
 			return (HWND)ctrl->Handle.ToInt64();
 	}
@@ -2580,14 +2580,14 @@ void CCosmosProxy::ConnectXobjToWebPage(IXobj* pXobj, bool bAdd)
 		Object^ pObj = Marshal::GetObjectForIUnknown((IntPtr)nDisp);
 		if (pObj != nullptr)
 		{
-			DOMPlus::Wormhole^ pCloudSession = nullptr;
-			bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
+			Universe::Wormhole^ pCloudSession = nullptr;
+			bool bExists = Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
 			if (bAdd)
 			{
 				if (bExists == false)
 				{
 					pCloudSession = gcnew Wormhole(pSession);
-					DOMPlus::Cosmos::Wormholes[pObj] = pCloudSession;
+					Universe::Cosmos::Wormholes[pObj] = pCloudSession;
 					pCloudSession->m_pHostObj = pObj;
 					theAppProxy.m_mapSession2Wormhole[pSession] = pCloudSession;
 				}
@@ -2596,7 +2596,7 @@ void CCosmosProxy::ConnectXobjToWebPage(IXobj* pXobj, bool bAdd)
 			{
 				if (pCloudSession != nullptr)
 				{
-					DOMPlus::Cosmos::Wormholes->Remove(pObj);
+					Universe::Cosmos::Wormholes->Remove(pObj);
 				}
 			}
 		}
@@ -2606,13 +2606,13 @@ void CCosmosProxy::ConnectXobjToWebPage(IXobj* pXobj, bool bAdd)
 void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 {
 	CString strMsgID = pSession->GetString(L"msgID");
-	DOMPlus::Wormhole^ pCloudSession = nullptr;
+	Universe::Wormhole^ pCloudSession = nullptr;
 	HWND hWnd = (HWND)pSession->Getint64(L"xobjhandle");
 	IXobj* pXobj = (IXobj*)pSession->Getint64(L"xobj");
-	DOMPlus::Xobj^ thisNode = nullptr;
+	Universe::Xobj^ thisNode = nullptr;
 	if (pXobj)
 	{
-		thisNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
+		thisNode = theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
 	}
 	if (strMsgID == _T("OPEN_XML_CTRL"))
 	{
@@ -2627,7 +2627,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 			if (pArray != nullptr && pArray->Length)
 			{
 				Control^ _ctrl = pArray[0];
-				DOMPlus::Cosmos::Observe(_ctrl, BSTR2STRING(strKey), BSTR2STRING(strXml));
+				Universe::Cosmos::Observe(_ctrl, BSTR2STRING(strKey), BSTR2STRING(strXml));
 			}
 		}
 	}
@@ -2640,10 +2640,10 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 			pObj = it->second->m_pHostObj;
 			if (pObj)
 			{
-				if (!DOMPlus::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession))
+				if (!Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession))
 				{
-					pCloudSession = gcnew DOMPlus::Wormhole(pSession);
-					DOMPlus::Cosmos::Wormholes[pObj] = pCloudSession;
+					pCloudSession = gcnew Universe::Wormhole(pSession);
+					Universe::Cosmos::Wormholes[pObj] = pCloudSession;
 				}
 				CString strEventName = pSession->GetString(L"Bindevent");
 				CString strObjName = pSession->GetString(L"BindObj");
@@ -2657,12 +2657,12 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 						if (pArray != nullptr && pArray->Length)
 						{
 							pSubCtrl = pArray[0];
-							DOMPlus::Wormhole^ pCloudSession2 = nullptr;
-							if (!DOMPlus::Cosmos::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
+							Universe::Wormhole^ pCloudSession2 = nullptr;
+							if (!Universe::Cosmos::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
 							{
-								DOMPlus::Cosmos::Wormholes[pSubCtrl] = pCloudSession;
+								Universe::Cosmos::Wormholes[pSubCtrl] = pCloudSession;
 							}
-							DOMPlus::Cosmos::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, BSTR2STRING(strEventName));
+							Universe::Cosmos::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, BSTR2STRING(strEventName));
 
 							return;
 						}
@@ -2690,7 +2690,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 						pRefXobj = pInfo->m_pXobj;
 					if (pRefXobj)
 					{
-						thisNode[BSTR2STRING(strName)] = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pRefXobj);
+						thisNode[BSTR2STRING(strName)] = theAppProxy._createObject<IXobj, Universe::Xobj>(pRefXobj);
 					}
 				}
 			}
@@ -2756,10 +2756,10 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 								if (pArray != nullptr && pArray->Length)
 								{
 									pSubCtrl = pArray[0];
-									DOMPlus::Wormhole^ pCloudSession2 = nullptr;
-									if (!DOMPlus::Cosmos::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
+									Universe::Wormhole^ pCloudSession2 = nullptr;
+									if (!Universe::Cosmos::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
 									{
-										DOMPlus::Cosmos::Wormholes[pSubCtrl] = pCloudSession;
+										Universe::Cosmos::Wormholes[pSubCtrl] = pCloudSession;
 									}
 									pSession->Insertint64(pSubCtrl->Name, pSubCtrl->Handle.ToInt64());
 									pSubCtrl->TextChanged += gcnew System::EventHandler(&OnTextChanged);
@@ -2794,12 +2794,12 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 							if (pArray != nullptr && pArray->Length)
 							{
 								pSubCtrl = pArray[0];
-								DOMPlus::Wormhole^ pCloudSession2 = nullptr;
-								if (!DOMPlus::Cosmos::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
+								Universe::Wormhole^ pCloudSession2 = nullptr;
+								if (!Universe::Cosmos::Wormholes->TryGetValue(pSubCtrl, pCloudSession2))
 								{
-									DOMPlus::Cosmos::Wormholes[pSubCtrl] = pCloudSession;
+									Universe::Cosmos::Wormholes[pSubCtrl] = pCloudSession;
 								}
-								DOMPlus::Cosmos::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, _strEventName);
+								Universe::Cosmos::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, _strEventName);
 
 								return;
 							}
@@ -2807,10 +2807,10 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 					}
 					else
 					{
-						Object^ subObj = DOMPlus::Cosmos::Fire_OnGetSubObjForWebPage(pObj, _strSubObjName);
+						Object^ subObj = Universe::Cosmos::Fire_OnGetSubObjForWebPage(pObj, _strSubObjName);
 						if (subObj != nullptr)
 						{
-							DOMPlus::Cosmos::Fire_OnBindCLRObjToWebPage(subObj, pCloudSession, _strEventName);
+							Universe::Cosmos::Fire_OnBindCLRObjToWebPage(subObj, pCloudSession, _strEventName);
 							return;
 						}
 					}
@@ -2819,7 +2819,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 				{
 					if (_strEventName != _T(""))
 					{
-						DOMPlus::Cosmos::Fire_OnBindCLRObjToWebPage(pObj, pCloudSession, _strEventName);
+						Universe::Cosmos::Fire_OnBindCLRObjToWebPage(pObj, pCloudSession, _strEventName);
 						return;
 					}
 				}
@@ -2833,7 +2833,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 		{
 			if (thisNode->m_pSession == nullptr)
 			{
-				pCloudSession = gcnew DOMPlus::Wormhole(pSession);
+				pCloudSession = gcnew Universe::Wormhole(pSession);
 				thisNode->m_pSession = pCloudSession;
 			}
 			else
@@ -2847,7 +2847,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	{
 		thisNode->Fire_OnCloudMessageReceived(pCloudSession);
 	}
-	DOMPlus::Cosmos::Fire_OnCosmosMsgReceived(pCloudSession);
+	Universe::Cosmos::Fire_OnCosmosMsgReceived(pCloudSession);
 }
 
 void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
@@ -2879,7 +2879,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 							case CheckState::Checked:
 							{
 								//Cosmos::Wormhole^ pCloudSession = nullptr;
-								//bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(form, pCloudSession);
+								//bool bExists = Universe::Cosmos::Wormholes->TryGetValue(form, pCloudSession);
 								//if (bExists)
 								//{
 								//	pCloudSession->InsertLong(L"MDIChildCount", 0);
@@ -2904,7 +2904,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 							}
 							break;
 							case CheckState::Unchecked:
-								DOMPlus::Cosmos::ExtendMDIClient(form, L"default", L"");
+								Universe::Cosmos::ExtendMDIClient(form, L"default", L"");
 								::SendMessage((HWND)form->Handle.ToInt64(), WM_COSMOSMSG, 0, 20200216);
 								break;
 							}
@@ -2938,7 +2938,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 							CString strID = m_Parse.attr(_T("objid"), _T(""));
 							if (strID != _T(""))
 							{
-								Type^ pType = DOMPlus::Cosmos::GetType(BSTR2STRING(strID));
+								Type^ pType = Universe::Cosmos::GetType(BSTR2STRING(strID));
 								System::Drawing::Icon^ pIcon = nullptr;
 								if (pType && pType->IsSubclassOf(Form::typeid))
 								{
@@ -2948,12 +2948,12 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 										pIcon = (System::Drawing::Icon^)(resources->GetObject("$this.Icon"));
 										if (pIcon == nullptr)
 										{
-											if (DOMPlus::Cosmos::m_pDefaultIcon == nullptr)
+											if (Universe::Cosmos::m_pDefaultIcon == nullptr)
 											{
 												Form^ _pForm = gcnew Form();
-												DOMPlus::Cosmos::m_pDefaultIcon = _pForm->Icon;
+												Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
 											}
-											pIcon = DOMPlus::Cosmos::m_pDefaultIcon;
+											pIcon = Universe::Cosmos::m_pDefaultIcon;
 										}
 										if (pIcon)
 										{
@@ -2985,14 +2985,14 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 	}
 	Form^ form = (Form^)Form::FromHandle((IntPtr)::GetActiveWindow());
 	if (form && form->IsMdiContainer)
-		DOMPlus::Cosmos::ExtendMDIClient(form, L"newdoc", L"");
+		Universe::Cosmos::ExtendMDIClient(form, L"newdoc", L"");
 }
 
 void CCosmosProxy::OnTextChanged(System::Object^ sender, System::EventArgs^ e)
 {
 	Control^ pTextCtrl = (Control^)sender;
-	DOMPlus::Wormhole^ pCloudSession = nullptr;
-	if (DOMPlus::Cosmos::Wormholes->TryGetValue(sender, pCloudSession))
+	Universe::Wormhole^ pCloudSession = nullptr;
+	if (Universe::Cosmos::Wormholes->TryGetValue(sender, pCloudSession))
 	{
 		pCloudSession->InsertString(pTextCtrl->Name, pTextCtrl->Text);
 		pCloudSession->InsertString("msgID", "FIRE_EVENT");
@@ -3059,17 +3059,17 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 			if (m_bInitApp == false)
 			{
 				m_bInitApp = true;
-				if (DOMPlus::Cosmos::Fire_OnAppInit() == false)
+				if (Universe::Cosmos::Fire_OnAppInit() == false)
 				{
 					PostQuitMessage(0);
 					return;
 				}
-				switch (DOMPlus::Cosmos::AppType)
+				switch (Universe::Cosmos::AppType)
 				{
 				case CosmosAppType::APPWIN32:
 				{
 					ATLTRACE(_T("CosmosAppType::APP_WIN32\n"));
-					if (DOMPlus::Cosmos::MainForm == nullptr || theApp.m_pCosmosImpl->m_hMainWnd == NULL)
+					if (Universe::Cosmos::MainForm == nullptr || theApp.m_pCosmosImpl->m_hMainWnd == NULL)
 					{
 						CTangramXmlParse m_Parse;
 						if (m_Parse.LoadFile(theApp.m_pCosmosImpl->m_strStartupURL))
@@ -3087,7 +3087,7 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 				case CosmosAppType::APPBROWSER_ECLIPSE:
 				{
 					theApp.m_pCosmosImpl->m_hMainWnd = NULL;
-					Form^ mainForm = DOMPlus::Cosmos::MainForm::get();
+					Form^ mainForm = Universe::Cosmos::MainForm::get();
 					if (mainForm)
 						theApp.m_pCosmosImpl->m_hMainWnd = (HWND)mainForm->Handle.ToPointer();
 					theApp.InitCosmosApp(theApp.m_pCosmosImpl->m_bIsSupportCrashReporting);
@@ -3111,9 +3111,9 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 		}
 		if (strXml.CompareNoCase(_T("setmainform")) == 0)
 		{
-			if (DOMPlus::Cosmos::m_pMainForm != nullptr)
+			if (Universe::Cosmos::m_pMainForm != nullptr)
 			{
-				theApp.m_pCosmosImpl->m_hMainWnd = (HWND)DOMPlus::Cosmos::m_pMainForm->Handle.ToPointer();
+				theApp.m_pCosmosImpl->m_hMainWnd = (HWND)Universe::Cosmos::m_pMainForm->Handle.ToPointer();
 			}
 			return;
 		}
@@ -3134,18 +3134,18 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 		}
 		if (strXml.CompareNoCase(_T("ExternAction:")) >= 0)
 		{
-			DOMPlus::Xobj^ pWndXobj = (DOMPlus::Xobj^)theAppProxy._createObject<IXobj, DOMPlus::Xobj>((IXobj*)pvoid);
+			Universe::Xobj^ pWndXobj = (Universe::Xobj^)theAppProxy._createObject<IXobj, Universe::Xobj>((IXobj*)pvoid);
 			if (pWndXobj != nullptr)
 			{
 				pWndXobj->ActionData = BSTR2STRING(bstrXml);
-				DOMPlus::Cosmos::Fire_OnCosmosActionDelegate(pWndXobj, L"");
+				Universe::Cosmos::Fire_OnCosmosActionDelegate(pWndXobj, L"");
 			}
 			return;
 		}
 		if (strXml.CompareNoCase(_T("Debug:")) >= 0)
 		{
 			strXml.Replace(_T("Debug:"), _T(""));
-			DOMPlus::Cosmos::Fire_OnCosmosDebugDelegate(BSTR2STRING(strXml));
+			Universe::Cosmos::Fire_OnCosmosDebugDelegate(BSTR2STRING(strXml));
 			return;
 		}
 
@@ -3157,7 +3157,7 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 			}
 			else
 			{
-				DOMPlus::Xobj^ pWndXobj = (DOMPlus::Xobj^)theAppProxy._createObject<IXobj, DOMPlus::Xobj>((IXobj*)pvoid);
+				Universe::Xobj^ pWndXobj = (Universe::Xobj^)theAppProxy._createObject<IXobj, Universe::Xobj>((IXobj*)pvoid);
 				if (pWndXobj)
 				{
 					int nType = m_Parse.attrInt(_T("Type"), 0);
@@ -3175,7 +3175,7 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 						if (strID != _T("") && strMethod != _T(""))
 						{
 							cli::array<Object^, 1>^ pObjs = { BSTR2STRING(strXml), pWndXobj };
-							DOMPlus::Cosmos::ActiveMethod(BSTR2STRING(strID), BSTR2STRING(strMethod), pObjs);
+							Universe::Cosmos::ActiveMethod(BSTR2STRING(strID), BSTR2STRING(strMethod), pObjs);
 						}
 					}
 					break;
@@ -3192,10 +3192,10 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 		//		int nPos = strXml.Find(strToken);
 		//		if (nPos != -1)
 		//		{
-		//			DOMPlus::Cosmos::Fire_OnCosmosIPCMessage(pWndXobj, BSTR2STRING(strXml));
+		//			Universe::Cosmos::Fire_OnCosmosIPCMessage(pWndXobj, BSTR2STRING(strXml));
 		//		}
 		//		else
-		//			DOMPlus::Cosmos::Fire_OnCosmosLoadDocument2Viewport(pWndXobj, BSTR2STRING(strXml));
+		//			Universe::Cosmos::Fire_OnCosmosLoadDocument2Viewport(pWndXobj, BSTR2STRING(strXml));
 		//	}
 		//}
 	}
@@ -3271,7 +3271,7 @@ void CCosmosXobjEvent::OnXobjAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInI
 
 bool CCosmos::EclipseAppInit()
 {
-	DOMPlus::Cosmos::GetCosmos()->Fire_OnEclipseAppInit();
+	Universe::Cosmos::GetCosmos()->Fire_OnEclipseAppInit();
 	return false;
 }
 
@@ -3678,7 +3678,7 @@ bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)
 void CCosmos::OnCosmosClose()
 {
 	AtlTrace(_T("*************Begin CCosmos::OnClose:  ****************\n"));
-	DOMPlus::Cosmos::GetCosmos()->Fire_OnClose();
+	Universe::Cosmos::GetCosmos()->Fire_OnClose();
 	FormCollection^ pCollection = Forms::Application::OpenForms;
 	int nCount = pCollection->Count;
 	while (pCollection->Count > 0) {
@@ -3706,8 +3706,8 @@ void CCosmos::OnCosmosClose()
 
 void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootXobj)
 {
-	DOMPlus::Cosmos^ pManager = DOMPlus::Cosmos::GetCosmos();
-	DOMPlus::Xobj^ _pRootNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pRootXobj);
+	Universe::Cosmos^ pManager = Universe::Cosmos::GetCosmos();
+	Universe::Xobj^ _pRootNode = theAppProxy._createObject<IXobj, Universe::Xobj>(pRootXobj);
 	IntPtr nHandle = (IntPtr)hWnd;
 	pManager->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
@@ -3732,22 +3732,22 @@ void __stdcall  CGalaxyClusterEvent::OnDestroy()
 void __stdcall  CGalaxyClusterEvent::OnTabChange(IXobj* sender, int nActivePage, int nOldPage)
 {
 	Object^ pObj = m_pGalaxyCluster;
-	DOMPlus::GalaxyCluster^ pGalaxyCluster = static_cast<DOMPlus::GalaxyCluster^>(pObj);
-	DOMPlus::Xobj^ pWndXobj = (DOMPlus::Xobj^)theAppProxy._createObject<IXobj, DOMPlus::Xobj>(sender);
+	Universe::GalaxyCluster^ pGalaxyCluster = static_cast<Universe::GalaxyCluster^>(pObj);
+	Universe::Xobj^ pWndXobj = (Universe::Xobj^)theAppProxy._createObject<IXobj, Universe::Xobj>(sender);
 	pGalaxyCluster->Fire_OnTabChange(pWndXobj, nActivePage, nOldPage);
 }
 
 void CGalaxyClusterEvent::OnInitialize(IDispatch* pHtmlWnd, BSTR bstrUrl)
 {
 	Object^ pObj = m_pGalaxyCluster;
-	DOMPlus::GalaxyCluster^ pGalaxyCluster = static_cast<DOMPlus::GalaxyCluster^>(pObj);
+	Universe::GalaxyCluster^ pGalaxyCluster = static_cast<Universe::GalaxyCluster^>(pObj);
 	pGalaxyCluster->Fire_OnDocumentComplete(pGalaxyCluster, Marshal::GetObjectForIUnknown((IntPtr)pHtmlWnd), BSTR2STRING(bstrUrl));
 }
 
 void CGalaxyClusterEvent::OnIPCMsg(IGalaxy* sender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature)
 {
 	Object^ pObj = m_pGalaxyCluster;
-	DOMPlus::GalaxyCluster^ pGalaxyCluster = static_cast<DOMPlus::GalaxyCluster^>(pObj);
+	Universe::GalaxyCluster^ pGalaxyCluster = static_cast<Universe::GalaxyCluster^>(pObj);
 	Galaxy^ pGalaxy = (Galaxy^)theAppProxy._createObject<IGalaxy, Galaxy>(sender);
 	pGalaxyCluster->Fire_OnIPCMsg(pGalaxy, BSTR2STRING(bstrType), BSTR2STRING(bstrContent), BSTR2STRING(bstrFeature));
 }
@@ -3763,10 +3763,10 @@ void CCosmosProxy::OnApplicationExit(System::Object^ sender, System::EventArgs^ 
 
 CTangramWPFObjWrapper::~CTangramWPFObjWrapper(void)
 {
-	DOMPlus::Xobj^ pXobj = nullptr;
-	if (DOMPlus::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pUIElement, pXobj))
+	Universe::Xobj^ pXobj = nullptr;
+	if (Universe::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pUIElement, pXobj))
 	{
-		DOMPlus::Cosmos::m_pFrameworkElementDic->Remove(m_pUIElement);
+		Universe::Cosmos::m_pFrameworkElementDic->Remove(m_pUIElement);
 	}
 }
 
@@ -4009,17 +4009,17 @@ void CCosmosProxy::OnWinFormActivate(HWND hForm, int nState)
 
 HICON CCosmosProxy::GetAppIcon(int nIndex)
 {
-	System::Drawing::Icon^ icon = DOMPlus::Cosmos::Fire_OnGetAppIcon(nIndex);
+	System::Drawing::Icon^ icon = Universe::Cosmos::Fire_OnGetAppIcon(nIndex);
 	if (icon != nullptr)
 		return (HICON)icon->Handle.ToPointer();
 	else
 	{
-		if (DOMPlus::Cosmos::m_pDefaultIcon == nullptr)
+		if (Universe::Cosmos::m_pDefaultIcon == nullptr)
 		{
 			Form^ _pForm = gcnew Form();
-			DOMPlus::Cosmos::m_pDefaultIcon = _pForm->Icon;
+			Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
 		}
-		return (HICON)DOMPlus::Cosmos::m_pDefaultIcon->Handle.ToPointer();
+		return (HICON)Universe::Cosmos::m_pDefaultIcon->Handle.ToPointer();
 	}
 }
 
@@ -4044,8 +4044,8 @@ void CCosmosProxy::OnControlRemoved(Object^ sender, ControlEventArgs^ e)
 		if (nCount == 0)
 		{
 			Form^ thisForm = (Form^)ctrl->Parent;
-			DOMPlus::Wormhole^ pCloudSession = nullptr;
-			bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(thisForm, pCloudSession);
+			Universe::Wormhole^ pCloudSession = nullptr;
+			bool bExists = Universe::Cosmos::Wormholes->TryGetValue(thisForm, pCloudSession);
 			if (bExists)
 			{
 				pCloudSession->InsertLong(L"MDIChildCount", 0);

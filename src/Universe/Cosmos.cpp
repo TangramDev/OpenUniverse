@@ -70,7 +70,7 @@ CCosmos::CCosmos()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><layout><xobj name=\"tangram\" objid=\"nucleus\"/></layout></default>");
+	m_strDefaultXml = _T("<default><cluster><xobj name=\"tangram\" objid=\"nucleus\"/></cluster></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
@@ -583,7 +583,7 @@ CSession* CCosmos::GetCloudSession(IXobj* _pXobj)
 	if (_pXobj)
 	{
 		CXobj* pXobj = (CXobj*)_pXobj;
-		return pXobj->m_pCosmosCloudSession;
+		return pXobj->m_pWormhole;
 	}
 	return nullptr;
 }
@@ -623,7 +623,7 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
 
 		CString strKey = _T("default");
-		str.Format(_T("<%s><layout><xobj name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
+		str.Format(_T("<%s><cluster><xobj name='%s' /></cluster></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
 		if(pXobj)
 		{
@@ -710,7 +710,7 @@ IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
 			pGalaxy = it2->second;
 		IXobj* pXobj = nullptr;
 		CString str = _T("");
-		str.Format(_T("<default><layout><xobj name='%s' /></layout></default>"), strName);
+		str.Format(_T("<default><cluster><xobj name='%s' /></cluster></default>"), strName);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
 		return pGalaxyCluster;
 	}
@@ -814,7 +814,7 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 		return nullptr;
 	}
 
-	CTangramXmlParse* pXobj = pWndXobj->GetChild(TGM_GRID);
+	CTangramXmlParse* pXobj = pWndXobj->GetChild(TGM_XOBJ);
 	if (pXobj == nullptr)
 	{
 		delete m_pParse;

@@ -33,7 +33,7 @@ class ATL_NO_VTABLE CCosmos :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CCosmos>,
 	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>,
-	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_World, 1, 0>
+	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_DOMPlus, 1, 0>
 {
 	friend class CGalaxy;
 	friend class CUniverse;

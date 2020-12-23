@@ -42,7 +42,7 @@ extern CCosmosProxy theAppProxy;
 class CXobjCLREvent;
 class CCosmosXobjEvent;
 
-namespace DOMPlus
+namespace Universe
 {
 	//[Guid("54499D5E-AC2F-4F8B-9782-C00A9BB2F4E2")]
 	//[ComVisibleAttribute(true)]
@@ -174,7 +174,7 @@ namespace DOMPlus
 		TreeView^ m_pBindTreeView = nullptr;
 		CCosmosXobjEvent* m_pXobjEvent;
 		CXobjCLREvent* m_pXobjCLREvent;
-		DOMPlus::Wormhole^ m_pSession = nullptr;
+		Universe::Wormhole^ m_pSession = nullptr;
 
 		void NavigateTreeInit();
 		//virtual void CloseForm(Object^ pForm){};
@@ -246,9 +246,9 @@ namespace DOMPlus
 			OnCloudMessageReceived(cloudSession);
 		}
 
-		delegate void BindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName);
+		delegate void BindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName);
 		event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
-		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName)
+		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName)
 		{
 			Control^ pCtrl = (Control^)SourceObj;
 			OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
@@ -267,7 +267,7 @@ namespace DOMPlus
 
 		property Wormhole^ Wormhole
 		{
-			DOMPlus::Wormhole^ get();
+			Universe::Wormhole^ get();
 		}
 
 		property TreeView^ BindTreeView
@@ -351,7 +351,7 @@ namespace DOMPlus
 		[BrowsableAttribute(false)]
 		property GalaxyCluster^ GalaxyCluster
 		{
-			DOMPlus::GalaxyCluster^ get();
+			Universe::GalaxyCluster^ get();
 		}
 
 		property String^ Name
@@ -540,19 +540,19 @@ namespace DOMPlus
 		[BrowsableAttribute(false)]
 		property Galaxy^ Galaxy
 		{
-			DOMPlus::Galaxy^ get();
+			Universe::Galaxy^ get();
 		}
 
 		[BrowsableAttribute(false)]
-		property DOMPlus::Galaxy^ HostGalaxy
+		property Universe::Galaxy^ HostGalaxy
 		{
-			DOMPlus::Galaxy^ get()
+			Universe::Galaxy^ get()
 			{
 				CComPtr<IGalaxy> pGalaxy;
 				m_pXobj->get_HostGalaxy(&pGalaxy);
 				if (pGalaxy)
 				{
-					return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
+					return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
 				}
 				return nullptr;
 			}
@@ -878,23 +878,23 @@ namespace DOMPlus
 
 		property Xobj^ VisibleXobj
 		{
-			DOMPlus::Xobj ^ get()
+			Universe::Xobj ^ get()
 			{
 				IXobj* pXobj = nullptr;
 				m_pGalaxy->get_VisibleXobj(&pXobj);
-				return theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
+				return theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
 			}
 		}
 
 		property Xobj^ Xobj[Object ^]
 		{
-			DOMPlus::Xobj ^ get(Object ^ index)
+			Universe::Xobj ^ get(Object ^ index)
 			{
 				VARIANT var;
 				Marshal::GetNativeVariantForObject(index,(System::IntPtr) & var);
 				IXobj* pXobj = nullptr;
 				m_pGalaxy->get_Xobj(var, &pXobj);
-				return theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
+				return theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
 			}
 		}
 
@@ -911,12 +911,12 @@ namespace DOMPlus
 
 		property GalaxyCluster^ GalaxyCluster
 		{
-			DOMPlus::GalaxyCluster^ get()
+			Universe::GalaxyCluster^ get()
 			{
 				CComPtr<IGalaxyCluster> pGalaxyCluster = NULL;
 				m_pGalaxy->get_GalaxyCluster(&pGalaxyCluster);
 
-				return theAppProxy._createObject<IGalaxyCluster, ::DOMPlus::GalaxyCluster>(pGalaxyCluster);
+				return theAppProxy._createObject<IGalaxyCluster, ::Universe::GalaxyCluster>(pGalaxyCluster);
 			}
 		}
 		private:
@@ -991,7 +991,7 @@ namespace DOMPlus
 		static Wormhole^ GetWormholeFromObj(Object^ obj);
 		static Xobj^ Observe(Control^ ctrl, String^ key, String^ strXobjXml);
 
-		DOMPlus::ICosmosApp^ m_pUniverseAppProxy;
+		Universe::ICosmosApp^ m_pUniverseAppProxy;
 
 		static void SetControlRelation(Control^ ctrl, String^ strTypes);
 
@@ -1141,9 +1141,9 @@ namespace DOMPlus
 			};
 		}
 
-		static property Dictionary<Object^, DOMPlus::Wormhole^>^ Wormholes
+		static property Dictionary<Object^, Universe::Wormhole^>^ Wormholes
 		{
-			Dictionary<Object^, DOMPlus::Wormhole^>^ get()
+			Dictionary<Object^, Universe::Wormhole^>^ get()
 			{
 				return m_pWormholes;
 			};
@@ -1208,8 +1208,8 @@ namespace DOMPlus
 		//{
 		//	Dictionary<String^, Type^>^ get()
 		//	{
-		//		if (DOMPlus::DOMPlus::m_pAppFormTypeDicEvent != nullptr)
-		//			DOMPlus::DOMPlus::m_pAppFormTypeDicEvent->WaitOne();
+		//		if (Universe::Universe::m_pAppFormTypeDicEvent != nullptr)
+		//			Universe::Universe::m_pAppFormTypeDicEvent->WaitOne();
 		//		return m_pAppFormTypeDic;
 		//	}
 		//}
@@ -1218,8 +1218,8 @@ namespace DOMPlus
 		//{
 		//	Dictionary<String^, Type^>^ get()
 		//	{
-		//		if (DOMPlus::DOMPlus::m_pAppFormTypeDicEvent != nullptr)
-		//			DOMPlus::DOMPlus::m_pAppFormTypeDicEvent->WaitOne();
+		//		if (Universe::Universe::m_pAppFormTypeDicEvent != nullptr)
+		//			Universe::Universe::m_pAppFormTypeDicEvent->WaitOne();
 		//		return m_pAppMDIFormTypeDic;
 		//	}
 		//}
@@ -1316,9 +1316,9 @@ namespace DOMPlus
 		static event GetSubObjForWebPage^ OnGetSubObjForWebPage;
 		static Object^ Fire_OnGetSubObjForWebPage(Object^ SourceObj, String^ subObjName);
 
-		delegate void BindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession ,String^ eventName);
+		delegate void BindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession ,String^ eventName);
 		static event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
-		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName);
+		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName);
 
 		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootXobj);
 		static event OpenComplete^ OnObserverComplete;
@@ -1348,9 +1348,9 @@ namespace DOMPlus
 			OnCosmosMsg(hWnd, strType, strParam1, strParam2);
 		}
 
-		delegate void CosmosMsgReceived(DOMPlus::Wormhole^ cloudSession);
+		delegate void CosmosMsgReceived(Universe::Wormhole^ cloudSession);
 		static event CosmosMsgReceived^ OnCosmosMsgReceived;
-		static void Fire_OnCosmosMsgReceived(DOMPlus::Wormhole^ cloudSession)
+		static void Fire_OnCosmosMsgReceived(Universe::Wormhole^ cloudSession)
 		{
 			OnCosmosMsgReceived(cloudSession);
 		}
@@ -1387,7 +1387,7 @@ namespace DOMPlus
 	/// <summary>
 	/// GalaxyCluster 
 	/// </summary>
-	//[ComSourceInterfacesAttribute(DOMPlus::IManagerExtender::typeid)]
+	//[ComSourceInterfacesAttribute(Universe::IManagerExtender::typeid)]
 	public ref class GalaxyCluster : public IWin32Window, public Dictionary<String^, Galaxy^>
 	{
 	public:

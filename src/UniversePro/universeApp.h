@@ -135,7 +135,7 @@ public:
 
 	static LRESULT CALLBACK ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam);
 
-	DECLARE_LIBID(LIBID_World)
+	DECLARE_LIBID(LIBID_DOMPlus)
 
 private:
 	int ExitInstance();
@@ -144,7 +144,7 @@ private:
 	static LRESULT CALLBACK GetMessageProc(int nCode, WPARAM wParam, LPARAM lParam);
 };
 
-//TANGRAM_OBJECT_ENTRY_AUTO(CLSID_World, CUniverse)
+//TANGRAM_OBJECT_ENTRY_AUTO(CLSID_Universe, CUniverse)
 
 extern CUniverse theApp;
 extern CCosmos* g_pCosmos;

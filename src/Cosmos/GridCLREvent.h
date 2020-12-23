@@ -19,7 +19,7 @@
 #include "TangramBase.h"       // main symbols
 using namespace System;
 using namespace System::Reflection;
-using namespace DOMPlus;
+using namespace Universe;
 
 class CXobjCLREvent
 {
@@ -27,7 +27,7 @@ public:
 	CXobjCLREvent();
 	virtual ~CXobjCLREvent();
 
-	gcroot<DOMPlus::Xobj^>	m_pXobj;
+	gcroot<Universe::Xobj^>	m_pXobj;
 
 	void OnDestroy();
 	void OnXobjAddInsCreated();

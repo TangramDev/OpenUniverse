@@ -221,7 +221,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if (pHtmlWnd)
 		{
-			CWormhole* pSession = m_pXobj->m_pCosmosCloudSession;
+			CWormhole* pSession = m_pXobj->m_pWormhole;
 			if (pSession)
 			{
 				pSession->InsertString(_T("msgID"), IPC_NODE_ONMOUSEACTIVATE_ID);
@@ -1109,7 +1109,7 @@ LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		IGalaxy* pGalaxy = nullptr;
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hChild), CComBSTR(L"ClientFrame"), &pGalaxy);
 		CString strXml = _T("");
-		strXml.Format(_T("<mdiclient><layout><xobj name=\"mdiclient\" objid=\"%s\" /></layout></mdiclient>"), m_strURL);
+		strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" objid=\"%s\" /></cluster></mdiclient>"), m_strURL);
 		IXobj* pXobj = nullptr;
 		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
 		m_pGalaxy = (CGalaxy*)pGalaxy;

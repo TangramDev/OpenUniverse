@@ -49,7 +49,7 @@ namespace OfficePlus
 			public IPersistStorageImpl<CVisioAppCtrl>,
 			public IPersistStreamInitImpl<CVisioAppCtrl>,
 			public CComCoClass<CVisioAppCtrl, &CLSID_CosmosCtrl>,
-			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_World, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			CVisioAppCtrl();

@@ -100,7 +100,7 @@ void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	else
 	{
-		CString strXml = _T("<tangram><layout><xobj name=\"start\" gridtype=\"nucleus\" /></layout></tangram>"); 
+		CString strXml = _T("<tangram><cluster><xobj name=\"start\" gridtype=\"nucleus\" /></cluster></tangram>"); 
 		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pXobj);
 	}
 

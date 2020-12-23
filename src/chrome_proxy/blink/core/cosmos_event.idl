@@ -11,6 +11,7 @@
   attribute long long handleTarget;
   attribute CosmosXobj xobj;
   readonly attribute DOMString name;
+  readonly attribute DOMString msgID;
   readonly attribute DOMString objtype;
   readonly attribute long long hwnd;
   readonly attribute CosmosNode grid;

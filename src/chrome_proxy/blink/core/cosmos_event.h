@@ -40,6 +40,7 @@ namespace blink {
       const int64_t handleTarget,
       const String& param5);
 
+    String msgID();
     String eventId();
     void setEventId(const String&);
     String param1();

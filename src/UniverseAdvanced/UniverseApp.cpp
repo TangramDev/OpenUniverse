@@ -428,7 +428,7 @@ BOOL CUniverse::InitInstance()
 		wndClass.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 		wndClass.hbrBackground = 0;
 		wndClass.lpszMenuName = NULL;
-		wndClass.lpszClassName = _T("DOMPlus GridWindow Class");
+		wndClass.lpszClassName = _T("Universe GridWindow Class");
 
 		RegisterClass(&wndClass);
 
@@ -924,28 +924,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 
 LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	//for (auto it : g_pCosmos->m_mapBrowserWnd)
-	//{
-	//	if (::IsWindowVisible(it.first))
-	//	{
-	//		CBrowser* pWnd = (CBrowser*)it.second;
-	//		if (pWnd && pWnd->m_pVisibleWebWnd)
-	//		{
-	//			HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-	//			if (pWnd->m_pVisibleWebWnd->m_hWnd != hWnd)
-	//			{
-	//				auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-	//				if (it != g_pCosmos->m_mapHtmlWnd.end())
-	//				{
-	//					pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
-	//				}
-	//			}
-	//			if (!::IsChild(it.first, hWnd) || ::IsChild(pWnd->m_pVisibleWebWnd->m_hExtendWnd, hWnd))
-	//				::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
-	//		}
-	//	}
-	//}
-
 	if (g_pCosmos->m_pCosmosDelegate)
 	{
 		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
@@ -1408,7 +1386,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				if (g_pCosmos->m_pMDIMainWnd)
 				{
 					CString strClsName = CString(pCreateWnd->lpcs->lpszClass);
-					if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("DOMPlus GridWindow Class")))
+					if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("Universe GridWindow Class")))
 						::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_CONTROLBARCREATED, (WPARAM)hPWnd, (LPARAM)hWnd);
 				}
 				else
@@ -1416,7 +1394,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 					if (g_pCosmos->m_pActiveMDIChildWnd && ::IsWindow(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd))
 					{
 						CString strClsName = CString(pCreateWnd->lpcs->lpszClass);
-						if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("DOMPlus GridWindow Class")))
+						if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("Universe GridWindow Class")))
 							::PostMessage(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd, WM_CONTROLBARCREATED, (WPARAM)hPWnd, (LPARAM)hWnd);
 					}
 				}

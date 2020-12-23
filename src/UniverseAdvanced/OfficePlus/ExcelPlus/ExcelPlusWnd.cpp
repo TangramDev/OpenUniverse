@@ -89,7 +89,7 @@ namespace OfficePlus
 				CoUninitialize();
 			}).then([pAddin,this]()
 			{
-				CString strKey = _T("<layout>");
+				CString strKey = _T("<cluster>");
 				CString strData = _T("");
 				CString strVal = _T("");
 
@@ -104,10 +104,10 @@ namespace OfficePlus
 					strData = strData.Left(nPos);
 					strData.Trim();
 					strVal = pAddin->GetXmlData(strData, _strXml);
-					strKey = _T("</layout>");
+					strKey = _T("</cluster>");
 					nPos = _strXml.Find(strKey);
 					_strXml = _strXml.Mid(nPos + 9);
-					nPos = _strXml.Find(_T("<layout>"));
+					nPos = _strXml.Find(_T("<cluster>"));
 					m_mapUserFormScript[strData] = strVal;
 				}
 
@@ -137,14 +137,14 @@ namespace OfficePlus
 		//		{
 		//			CString strXml = _T("");
 		//			if(strTaskPaneXml!=_T("")&& strSheetXml!=_T(""))
-		//				strXml.Format(_T("<sheet><default><sheet><layout>%s</layout></sheet><taskpane><layout>%s</layout></taskpane></default></sheet>"), strSheetXml, strTaskPaneXml);
+		//				strXml.Format(_T("<sheet><default><sheet><cluster>%s</cluster></sheet><taskpane><cluster>%s</cluster></taskpane></default></sheet>"), strSheetXml, strTaskPaneXml);
 		//			else
 		//			{
 		//				if(strTaskPaneXml == _T("") && strSheetXml != _T(""))
-		//					strXml.Format(_T("<sheet><default><sheet><layout>%s</layout></sheet></default></sheet>"), strSheetXml);
+		//					strXml.Format(_T("<sheet><default><sheet><cluster>%s</cluster></sheet></default></sheet>"), strSheetXml);
 		//				else
 		//				{
-		//					strXml.Format(_T("<sheet><default><sheet><layout><xobj name=\"Start\" objid=\"nucleus\" /></layout></sheet><taskpane><layout>%s</layout></taskpane></default></sheet>"), strTaskPaneXml);
+		//					strXml.Format(_T("<sheet><default><sheet><cluster><xobj name=\"Start\" objid=\"nucleus\" /></cluster></sheet><taskpane><cluster>%s</cluster></taskpane></default></sheet>"), strTaskPaneXml);
 		//				}
 		//			}
 		//			CComQIPtr<Excel::CustomProperties> pCustomProperties(result.pdispVal);
@@ -209,10 +209,10 @@ namespace OfficePlus
 				if (strTemplate == _T(""))
 				{
 					if(bDesignState)
-						strTemplate = _T("<sheet><layout><xobj name=\"start\" /></layout></sheet>");
+						strTemplate = _T("<sheet><cluster><xobj name=\"start\" /></cluster></sheet>");
 					else
 					{
-						strTemplate = _T("<sheet><layout><xobj name=\"start\" gridtype=\"nucleus\" /></layout></sheet>");
+						strTemplate = _T("<sheet><cluster><xobj name=\"start\" gridtype=\"nucleus\" /></cluster></sheet>");
 					}
 				}
 				CTangramXmlParse m_Parse;
@@ -239,10 +239,10 @@ namespace OfficePlus
 						if (strTemplate == _T(""))
 						{
 							if (bDesignState)
-								strTemplate = _T("<sheet><layout><xobj name=\"start\" /></layout></sheet>");
+								strTemplate = _T("<sheet><cluster><xobj name=\"start\" /></cluster></sheet>");
 							else
 							{
-								strTemplate = _T("<sheet><layout><xobj name=\"start\" objid=\"nucleus\" /></layout></sheet>");
+								strTemplate = _T("<sheet><cluster><xobj name=\"start\" objid=\"nucleus\" /></cluster></sheet>");
 							}
 						}
 						CTangramXmlParse m_Parse2;

@@ -33,8 +33,6 @@ public:
 	CWebPage*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
 
-	map<CString, CString>					m_mapKey;
-
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CWinForm)

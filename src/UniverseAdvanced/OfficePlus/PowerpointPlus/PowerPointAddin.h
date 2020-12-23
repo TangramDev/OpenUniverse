@@ -96,7 +96,7 @@ namespace OfficePlus
 			public IPersistStorageImpl<CPowerPntAppCtrl>,
 			public IPersistStreamInitImpl<CPowerPntAppCtrl>,
 			public CComCoClass<CPowerPntAppCtrl, &CLSID_CosmosCtrl>,
-			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_World, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			CPowerPntAppCtrl();

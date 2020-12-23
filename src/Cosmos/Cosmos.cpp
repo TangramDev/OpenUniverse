@@ -29,7 +29,7 @@ using namespace System::Diagnostics;
 using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 
-namespace DOMPlus
+namespace Universe
 {
     Xobj::Xobj(IXobj* pXobj)
     {
@@ -58,7 +58,7 @@ namespace DOMPlus
         CComPtr<IGalaxy> pGalaxy;
         m_pXobj->get_Galaxy(&pGalaxy);
 
-        return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
+        return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
     }
 
     String^ Xobj::Caption::get()
@@ -281,12 +281,12 @@ namespace DOMPlus
 
     //System::Drawing::Icon^ Cosmos::DefaultIcon::get()
     //{
-    //    if (DOMPlus::Cosmos::m_pDefaultIcon == nullptr)
+    //    if (Universe::Cosmos::m_pDefaultIcon == nullptr)
     //    {
     //        Form^ _pForm = gcnew Form();
-    //        DOMPlus::Cosmos::m_pDefaultIcon = _pForm->Icon;
+    //        Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
     //    }
-    //    return DOMPlus::Cosmos::m_pDefaultIcon;
+    //    return Universe::Cosmos::m_pDefaultIcon;
     //}
 
     bool Cosmos::WebRuntimeInit()
@@ -385,7 +385,7 @@ namespace DOMPlus
                 int nCount = pParse->GetCount();
                 if (nCount == 1)
                 {
-                    pParse = pParse->GetChild(TGM_GRID);
+                    pParse = pParse->GetChild(TGM_XOBJ);
                     if (pParse)
                     {
                         theApp.m_pCosmosImpl->m_strNtpXml = _strXml;
@@ -405,9 +405,9 @@ namespace DOMPlus
         return OnGetSubObjForWebPage(SourceObj, subObjName);
     }
 
-    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName)
+    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Wormhole^ eventSession, String^ eventName)
     {
-        if (eventSession->isBindCLRObjToWebPage(SourceObj))
+        if (eventSession->isBindCLRObjToWebPage(SourceObj, eventName))
             return;
         Control^ pCtrl = (Control^)SourceObj;
         intptr_t nNode = eventSession->m_pSession->Getint64(L"xobj");
@@ -867,8 +867,8 @@ namespace DOMPlus
 
     Wormhole^ Cosmos::GetWormholeFromObj(Object^ obj)
     {
-        DOMPlus::Wormhole^ pCloudSession = nullptr;
-        bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
+        Universe::Wormhole^ pCloudSession = nullptr;
+        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
         if (bExists)
         {
             return pCloudSession;
@@ -946,7 +946,7 @@ namespace DOMPlus
                 CSession* pSession = theApp.m_pCosmosImpl->GetCloudSession(m_pXobj);
                 if (pSession)
                 {
-                    m_pSession = gcnew DOMPlus::Wormhole(pSession);
+                    m_pSession = gcnew Universe::Wormhole(pSession);
                     theAppProxy.m_mapSession2Wormhole[pSession] = m_pSession;
                 }
             }
@@ -1095,15 +1095,15 @@ namespace DOMPlus
 
     Xobj^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        DOMPlus::Xobj^ pRetNode = nullptr;
+        Universe::Xobj^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IXobj> pXobj;
         m_pGalaxy->Observe(blayerName, blayerXML, &pXobj);
         if (pXobj)
         {
-            pRetNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
-            DOMPlus::Xobj^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
+            Universe::Xobj^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

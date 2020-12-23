@@ -287,6 +287,7 @@ namespace blink {
 				mapCosmosEventCallback_.insert(callbackid_, callback);
 			}
 			m_pRenderframeImpl->SendCosmosMessageEx(session_);
+			setStr(L"msgID", "");
 		}
 	}
 

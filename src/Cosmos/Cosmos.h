@@ -41,7 +41,7 @@ class CXobjCLREvent;
 class CCosmosXobjEvent;
 extern CCosmosProxy theAppProxy;
 
-namespace DOMPlus
+namespace Universe
 {
 	/// <summary>
 	/// Summary for Cosmos
@@ -71,7 +71,7 @@ namespace DOMPlus
 		Object^ m_pHostObj = nullptr;
 		CCosmosXobjEvent* m_pXobjEvent;
 		CXobjCLREvent* m_pXobjCLREvent;
-		DOMPlus::Wormhole^ m_pSession = nullptr;
+		Wormhole^ m_pSession = nullptr;
 
 		// A notification has been created for all nodes in the current layout.
 		delegate void RootXobjCreated(IntPtr nHandle, String^ strUrl, Xobj^ pRootXobj);
@@ -120,9 +120,9 @@ namespace DOMPlus
 			OnCloudMessageReceived(cloudSession);
 		}
 
-		delegate void BindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName);
+		delegate void BindCLRObjToWebPage(Object^ SourceObj, Wormhole^ eventSession, String^ eventName);
 		event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
-		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName)
+		void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Wormhole^ eventSession, String^ eventName)
 		{
 			Control^ pCtrl = (Control^)SourceObj;
 			OnBindCLRObjToWebPage(SourceObj, eventSession, eventName);
@@ -141,7 +141,7 @@ namespace DOMPlus
 
 		property Wormhole^ Wormhole
 		{
-			DOMPlus::Wormhole^ get();
+			Universe::Wormhole^ get();
 		}
 
 	public:
@@ -328,18 +328,18 @@ namespace DOMPlus
 
 		property Galaxy^ Galaxy
 		{
-			DOMPlus::Galaxy^ get();
+			Universe::Galaxy^ get();
 		}
 
-		property DOMPlus::Galaxy^ HostGalaxy
+		property Universe::Galaxy^ HostGalaxy
 		{
-			DOMPlus::Galaxy^ get()
+			Universe::Galaxy^ get()
 			{
 				CComPtr<IGalaxy> pGalaxy;
 				m_pXobj->get_HostGalaxy(&pGalaxy);
 				if (pGalaxy)
 				{
-					return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
+					return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
 				}
 				return nullptr;
 			}
@@ -567,11 +567,11 @@ namespace DOMPlus
 
 		property Xobj^ VisibleXobj
 		{
-			DOMPlus::Xobj^ get()
+			Xobj^ get()
 			{
 				IXobj* pXobj = nullptr;
 				m_pGalaxy->get_VisibleXobj(&pXobj);
-				return theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
+				return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 			}
 		}
 	private:

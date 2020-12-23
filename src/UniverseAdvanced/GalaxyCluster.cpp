@@ -1726,7 +1726,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hFrameWnd, BS
 	CString strXml = OLE2T(bstrXml);
 	strXml.Trim();
 	if (strXml == _T(""))
-		strXml = _T("<default><layout><xobj name=\"Start\" /></layout></default>");
+		strXml = _T("<default><cluster><xobj name=\"Start\" /></cluster></default>");
 	IGalaxy* pGalaxy = nullptr;
 	CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hFrameWnd), bstrGalaxyName, &pGalaxy);
 	if (pGalaxy)

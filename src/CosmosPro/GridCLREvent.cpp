@@ -53,10 +53,10 @@ void CXobjCLREvent::OnDestroy()
 	}
 	if (m_pXobj->m_pHostObj)
 	{
-		DOMPlus::Xobj^ pXobj = nullptr;
-		if (DOMPlus::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pXobj->m_pHostObj, pXobj))
+		Universe::Xobj^ pXobj = nullptr;
+		if (Universe::Cosmos::m_pFrameworkElementDic->TryGetValue(m_pXobj->m_pHostObj, pXobj))
 		{
-			DOMPlus::Cosmos::m_pFrameworkElementDic->Remove(m_pXobj->m_pHostObj);
+			Universe::Cosmos::m_pFrameworkElementDic->Remove(m_pXobj->m_pHostObj);
 		}
 	}
 	m_pXobj->Fire_OnDestroy(m_pXobj);
@@ -75,8 +75,8 @@ void CXobjCLREvent::OnXobjAddInsCreated()
 
 void CXobjCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	DOMPlus::Xobj^ pActiveXobj = m_pXobj->GetXobj(0, nActivePage);
-	DOMPlus::Xobj^ pOldXobj = m_pXobj->GetXobj(0, nOldPage);
+	Universe::Xobj^ pActiveXobj = m_pXobj->GetXobj(0, nActivePage);
+	Universe::Xobj^ pOldXobj = m_pXobj->GetXobj(0, nOldPage);
 	m_pXobj->Fire_OnTabChange(pActiveXobj, pOldXobj);
 }
 

@@ -155,11 +155,8 @@ public:
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
 
-	map<CString, CString>					m_mapKey;
 	void SendMessage();
 
-	//map<CString, CosmosDocTemplateInfo*>	m_mapCosmosFormsTemplateInfo;
-	//map<int, CosmosDocTemplateInfo*>		m_mapCosmosFormsTemplateInfo2;
 	BEGIN_MSG_MAP(CWinForm)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
@@ -232,7 +229,7 @@ private:
 class ATL_NO_VTABLE CGalaxy :
 	public CComObjectRootBase,	
 	public CWindowImpl<CGalaxy, CWindow>,
-	public IDispatchImpl<IGalaxy, &IID_IGalaxy, &LIBID_World, 1, 0>
+	public IDispatchImpl<IGalaxy, &IID_IGalaxy, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CGalaxy();           

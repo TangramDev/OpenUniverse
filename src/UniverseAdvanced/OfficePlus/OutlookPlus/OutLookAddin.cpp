@@ -2130,7 +2130,7 @@ namespace OfficePlus
 				pFolder->get_FolderPath(&bstrName);
 				IXobj* pXobj = nullptr;
 				if(strXml==_T(""))
-					strXml  = _T("<Tangram><layout><xobj name=\"Start\" /></layout></Tangram>");
+					strXml  = _T("<Tangram><cluster><xobj name=\"Start\" /></cluster></Tangram>");
 				pWnd->m_pGalaxy->Observe(bstrName, strXml.AllocSysString(), &pXobj);
 				CGalaxy* _pGalaxy = (CGalaxy*)pWnd->m_pGalaxy;
 				_pGalaxy->HostPosChanged();
@@ -2361,7 +2361,7 @@ namespace OfficePlus
 					CString strKey = _T("taskpaneui");
 					CString strXml = m_strUIScript;
 					if(strXml==_T(""))
-						strXml = _T("<taskpaneui><layout><xobj name=\"Start\" /></layout></taskpaneui>");
+						strXml = _T("<taskpaneui><cluster><xobj name=\"Start\" /></cluster></taskpaneui>");
 					CTangramXmlParse m_Parse;
 					if (m_Parse.LoadXml(strXml))
 					{
@@ -2371,7 +2371,7 @@ namespace OfficePlus
 							strXml = pParse->xml();
 						}
 						else
-							strXml = _T("<taskpaneui><layout><xobj name=\"Start\" /></layout></taskpaneui>");
+							strXml = _T("<taskpaneui><cluster><xobj name=\"Start\" /></cluster></taskpaneui>");
 						if (strXml != _T(""))
 						{
 							{
@@ -2382,7 +2382,7 @@ namespace OfficePlus
 								CString strCap = _T("");
 								if (pParse)
 								{
-									CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_GRID);
+									CTangramXmlParse* pXobjParse = m_Parse.FindItem(TGM_XOBJ);
 									if(pXobjParse)
 										strCap = pXobjParse->attr(_T("caption"), _T(""));
 								}
@@ -2686,7 +2686,7 @@ namespace OfficePlus
 					strData = _T("<OutLookPages>");
 					if (strPagesXml != _T(""))
 					{
-						CString strKey = _T("<layout>");
+						CString strKey = _T("<cluster>");
 						CString _strKey = _T("");
 						CString strName = _T("");
 						int nPos = strPagesXml.Find(strKey);
@@ -2703,10 +2703,10 @@ namespace OfficePlus
 							_strKey += _T(",");
 							if (strKeys.Find(_strKey) == -1)
 								strData += g_pCosmos->GetXmlData(strName, strPagesXml);
-							strKey = _T("</layout>");
+							strKey = _T("</cluster>");
 							nPos = strPagesXml.Find(strKey);
 							strPagesXml = strPagesXml.Mid(nPos + 9);
-							nPos = strPagesXml.Find(_T("<layout>"));
+							nPos = strPagesXml.Find(_T("<cluster>"));
 						}
 					}
 					strData += strPageData;
@@ -2887,7 +2887,7 @@ namespace OfficePlus
 							{
 								CString strName = m_strName;
 								strName.Replace(_T(" "), _T("_"));
-								m_strXml.Format(_T("<%s><layout><xobj name=\"Start\" /></layout></%s>"), strName, strName);
+								m_strXml.Format(_T("<%s><cluster><xobj name=\"Start\" /></cluster></%s>"), strName, strName);
 							}
 							m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pXobj);
 							g_pCosmos->m_pDesigningFrame = (CGalaxy*)m_pGalaxy;

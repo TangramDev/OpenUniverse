@@ -81,7 +81,7 @@ namespace OfficePlus
 			}).then([pAddin,this]()
 			{
 				CString _strXml = pAddin->GetXmlData(_T("documentui"), m_strDocXml);
-				CString strKey = _T("<layout>");
+				CString strKey = _T("<cluster>");
 				CString strData = _T("");
 				CString strVal = _T("");
 				int nPos = _strXml.Find(strKey);
@@ -94,14 +94,14 @@ namespace OfficePlus
 					strData = strData.Left(nPos);
 					strData.Trim();
 					strVal = g_pCosmos->GetXmlData(strData, _strXml);
-					strKey = _T("</layout>");
+					strKey = _T("</cluster>");
 					nPos = _strXml.Find(strKey);
 					_strXml = _strXml.Mid(nPos + 9);
-					nPos = _strXml.Find(_T("<layout>"));
+					nPos = _strXml.Find(_T("<cluster>"));
 					m_mapDocUIInfo[strData] = strVal;
 				}
 				_strXml = pAddin->GetXmlData(_T("taskpaneui"), m_strDocXml);
-				strKey = _T("<layout>");
+				strKey = _T("<cluster>");
 				strData = _T("");
 				strVal = _T("");
 				nPos = _strXml.Find(strKey);
@@ -114,15 +114,15 @@ namespace OfficePlus
 					strData = strData.Left(nPos);
 					strData.Trim();
 					strVal = g_pCosmos->GetXmlData(strData, _strXml);
-					strKey = _T("</layout>");
+					strKey = _T("</cluster>");
 					nPos = _strXml.Find(strKey);
 					_strXml = _strXml.Mid(nPos + 9);
-					nPos = _strXml.Find(_T("<layout>"));
+					nPos = _strXml.Find(_T("<cluster>"));
 					m_mapDocUIInfo[strData] = strVal;
 				}
 
 				_strXml = g_pCosmos->GetXmlData(_T("userforms"), m_strDocXml);
-				strKey = _T("<layout>");
+				strKey = _T("<cluster>");
 				nPos = _strXml.Find(strKey);
 				while (nPos != -1)
 				{
@@ -133,10 +133,10 @@ namespace OfficePlus
 					strData = strData.Left(nPos);
 					strData.Trim();
 					strVal = g_pCosmos->GetXmlData(strData, _strXml);
-					strKey = _T("</layout>");
+					strKey = _T("</cluster>");
 					nPos = _strXml.Find(strKey);
 					_strXml = _strXml.Mid(nPos + 9);
-					nPos = _strXml.Find(_T("<layout>"));
+					nPos = _strXml.Find(_T("<cluster>"));
 					m_mapUserFormScript[strData] = strVal;
 				}
 				::PostMessage(pAddin->m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)this, 0);

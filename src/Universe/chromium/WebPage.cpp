@@ -103,10 +103,10 @@ namespace Browser {
 		case 20200310:
 		{
 			CXobj* pXobj = (CXobj*)lParam;
-			if (pXobj && pXobj->m_pCosmosCloudSession == nullptr)
+			if (pXobj && pXobj->m_pWormhole == nullptr)
 			{
-				pXobj->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
-				CWormhole* pSession = pXobj->m_pCosmosCloudSession;
+				pXobj->m_pWormhole = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+				CWormhole* pSession = pXobj->m_pWormhole;
 				if (pSession)
 				{
 					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
@@ -129,7 +129,7 @@ namespace Browser {
 					pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
 					pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pXobj->m_pRootObj->m_pHostWnd->m_hWnd);
-					pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pCosmosCloudSession);
+					pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pWormhole);
 					if (pXobj->m_pXobjShareData->m_pHostClientView)
 						pSession->Insertint64(_T("nucleushandle"), (__int64)pXobj->m_pXobjShareData->m_pHostClientView->m_hWnd);
 					pSession->InsertString(_T("objID"), _T("wndnode"));
@@ -173,7 +173,7 @@ namespace Browser {
 					}
 					if (pXobj->m_pDisp)
 					{
-						pXobj->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
+						pXobj->m_pWormhole->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
 						if (g_pCosmos->m_pCLRProxy)
 						{
 							g_pCosmos->m_pCLRProxy->ConnectXobjToWebPage(pXobj, true);
@@ -186,10 +186,10 @@ namespace Browser {
 		break;
 		case 20200311:
 		{
-			if (m_pGalaxy&&m_pGalaxy->m_pWorkXobj->m_pCosmosCloudSession)
+			if (m_pGalaxy&&m_pGalaxy->m_pWorkXobj->m_pWormhole)
 			{
-				m_pGalaxy->m_pWorkXobj->m_pCosmosCloudSession->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
-				m_pGalaxy->m_pWorkXobj->m_pCosmosCloudSession->SendMessage();
+				m_pGalaxy->m_pWorkXobj->m_pWormhole->InsertString(_T("msgID"), _T("TANGRAMAPP_READY"));
+				m_pGalaxy->m_pWorkXobj->m_pWormhole->SendMessage();
 			}
 		}
 		break;
@@ -197,8 +197,8 @@ namespace Browser {
 		{
 			if (bChild && m_pChromeRenderFrameHost)
 			{
-				m_pChromeRenderFrameHost->ShowWebPage(true);
 				::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+				m_pChromeRenderFrameHost->ShowWebPage(true);
 			}
 		}
 		break;
@@ -1043,8 +1043,8 @@ namespace Browser {
 		IXobj* pXobj = (IXobj*)pSession->Getint64(_T("xobj"));
 		if (pXobj)
 		{
-			if(((CXobj*)pXobj)->m_pCosmosCloudSession==nullptr) 
-				((CXobj*)pXobj)->m_pCosmosCloudSession = (CWormhole*)pSession;
+			if(((CXobj*)pXobj)->m_pWormhole==nullptr) 
+				((CXobj*)pXobj)->m_pWormhole = (CWormhole*)pSession;
 		}
 		if (strMsgID == _T("CREATE_WINFORM"))
 		{
@@ -1225,10 +1225,10 @@ namespace Browser {
 								CXobj* pTarget = it->second;
 								if (pTarget)
 								{
-									if (pXobj->m_pCosmosCloudSession == nullptr)
+									if (pXobj->m_pWormhole == nullptr)
 									{
-										pXobj->m_pCosmosCloudSession = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
-										CWormhole* pSession = pXobj->m_pCosmosCloudSession;
+										pXobj->m_pWormhole = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+										CWormhole* pSession = pXobj->m_pWormhole;
 										if (pSession)
 										{
 											pSession->InsertString(_T("msgID"), strMsgID);
@@ -1246,7 +1246,7 @@ namespace Browser {
 											pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
 											pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
 											pSession->Insertint64(_T("rootgridhandle"), (__int64)pXobj->m_pRootObj->m_pHostWnd->m_hWnd);
-											pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pCosmosCloudSession);
+											pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pWormhole);
 											pSession->InsertString(_T("objID"), _T("wndnode"));
 											switch (pXobj->m_nViewType)
 											{
@@ -1288,21 +1288,21 @@ namespace Browser {
 											}
 											if (pXobj->m_pDisp)
 											{
-												pXobj->m_pCosmosCloudSession->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
+												pXobj->m_pWormhole->Insertint64(_T("objectdisp"), (__int64)pXobj->m_pDisp);
 												if (g_pCosmos->m_pCLRProxy)
 												{
 													g_pCosmos->m_pCLRProxy->ConnectXobjToWebPage(pXobj, true);
 												}
 											}
-											pXobj->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+											pXobj->m_pWormhole->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
 											m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
 										}
 									}
 									else
 									{
-										pXobj->m_pCosmosCloudSession->InsertString(_T("msgID"), strMsgID);
-										pXobj->m_pCosmosCloudSession->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
-										m_pChromeRenderFrameHost->SendCosmosMessage(pXobj->m_pCosmosCloudSession->m_pSession);
+										pXobj->m_pWormhole->InsertString(_T("msgID"), strMsgID);
+										pXobj->m_pWormhole->InsertString(_T("msgData"), pChild->GetChild(i)->xml());
+										m_pChromeRenderFrameHost->SendCosmosMessage(pXobj->m_pWormhole->m_pSession);
 									}
 								}
 							}

@@ -21,7 +21,7 @@ using namespace System::Diagnostics;
 using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 
-namespace DOMPlus
+namespace Universe
 {
     Xobj::Xobj(IXobj* pXobj)
     {
@@ -50,7 +50,7 @@ namespace DOMPlus
         CComPtr<IGalaxy> pGalaxy;
         m_pXobj->get_Galaxy(&pGalaxy);
 
-        return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
+        return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
     }
 
     String^ Xobj::Caption::get()
@@ -756,15 +756,15 @@ namespace DOMPlus
 
     Xobj^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        DOMPlus::Xobj^ pRetNode = nullptr;
+        Universe::Xobj^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IXobj> pXobj;
         m_pGalaxy->Observe(blayerName, blayerXML, &pXobj);
         if (pXobj)
         {
-            pRetNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
-            DOMPlus::Xobj^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
+            Universe::Xobj^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);

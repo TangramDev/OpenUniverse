@@ -63,7 +63,7 @@ CXobj::CXobj()
 void CXobj::InitWndXobj()
 {
 	m_pParentWinFormWnd = nullptr;
-	m_pCosmosCloudSession = nullptr;
+	m_pWormhole = nullptr;
 	m_pXobjShareData = m_pRootObj->m_pXobjShareData;
 	ASSERT(m_pXobjShareData != nullptr);
 	m_nHeigh = m_pHostParse->attrInt(TGM_HEIGHT, 0);
@@ -80,7 +80,7 @@ void CXobj::InitWndXobj()
 	}
 	else
 	{
-		if (m_pHostParse->GetChild(TGM_GRID))
+		if (m_pHostParse->GetChild(TGM_XOBJ))
 			m_nViewType = TabGrid;
 		if (m_strID != TGM_NUCLEUS)
 		{
@@ -779,7 +779,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	CWebPage* pHtmlWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	HWND hWnd = 0;
 	int nCol = m_pHostParse->GetCount();
-	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_GRID))
+	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_XOBJ))
 		m_strObjTypeID = _T("tabbedwnd");
 	CXobjHelper* pCosmosDesignView = (CXobjHelper*)m_pHostWnd;
 	BOOL isAppWnd = false;
@@ -1022,7 +1022,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		m_nRows = 1;
 		m_nCols = nCol;
 
-		if (nCol && m_pHostParse->GetChild(TGM_GRID))
+		if (nCol && m_pHostParse->GetChild(TGM_XOBJ))
 		{
 			m_nViewType = TabGrid;
 			if (m_nActivePage<0 || m_nActivePage>nCol - 1)
@@ -1035,7 +1035,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				CTangramXmlParse* pChild = m_pHostParse->GetChild(i);
 				CString _strName = pChild->name();
 				CString strName = pChild->attr(_T("id"), _T(""));
-				if (_strName.CompareNoCase(TGM_GRID) == 0)
+				if (_strName.CompareNoCase(TGM_XOBJ) == 0)
 				{
 					strName.Trim();
 					strName.MakeLower();
@@ -1080,7 +1080,7 @@ void CXobj::NodeCreated()
 	m_pXobjShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = g_pCosmos->m_pHostHtmlWnd;
-	if (pHtmlWnd&&m_pCosmosCloudSession == nullptr)
+	if (pHtmlWnd&&m_pWormhole == nullptr)
 	{
 		::PostMessage(pHtmlWnd->m_hWnd, WM_COSMOSMSG, 20200310, (LPARAM)this);
 	}

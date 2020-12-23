@@ -148,7 +148,7 @@ namespace OfficePlus
 
 	class ATL_NO_VTABLE COfficeExtender :
 		public CComObjectRootEx<CComSingleThreadModel>,
-		public IDispatchImpl<IOfficeExtender, &IID_IOfficeExtender, &LIBID_World, /*wMajor =*/ 1, /*wMinor =*/ 0>
+		public IDispatchImpl<IOfficeExtender, &IID_IOfficeExtender, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
 	{
 	public:
 		COfficeExtender(void);
@@ -171,7 +171,7 @@ namespace OfficePlus
 
 	class COfficeObject :
 		public CComObjectRootBase,
-		public IDispatchImpl<IOfficeObject, &IID_IOfficeObject, &LIBID_World, 1, 0>
+		public IDispatchImpl<IOfficeObject, &IID_IOfficeObject, &LIBID_DOMPlus, 1, 0>
 	{
 	public:
 		COfficeObject(void);

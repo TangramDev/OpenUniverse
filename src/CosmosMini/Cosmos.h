@@ -34,7 +34,7 @@ class CXobjCLREvent;
 class CCosmosXobjEvent;
 extern CCosmosProxy theAppProxy;
 
-namespace DOMPlus
+namespace Universe
 {
 	/// <summary>
 	/// Summary for Cosmos
@@ -274,18 +274,18 @@ namespace DOMPlus
 
 		property Galaxy^ Galaxy
 		{
-			DOMPlus::Galaxy^ get();
+			Universe::Galaxy^ get();
 		}
 
-		property DOMPlus::Galaxy^ HostGalaxy
+		property Universe::Galaxy^ HostGalaxy
 		{
-			DOMPlus::Galaxy^ get()
+			Universe::Galaxy^ get()
 			{
 				CComPtr<IGalaxy> pGalaxy;
 				m_pXobj->get_HostGalaxy(&pGalaxy);
 				if (pGalaxy)
 				{
-					return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(pGalaxy);
+					return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(pGalaxy);
 				}
 				return nullptr;
 			}
@@ -512,11 +512,11 @@ namespace DOMPlus
 
 		property Xobj^ VisibleXobj
 		{
-			DOMPlus::Xobj^ get()
+			Universe::Xobj^ get()
 			{
 				IXobj* pXobj = nullptr;
 				m_pGalaxy->get_VisibleXobj(&pXobj);
-				return theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
+				return theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
 			}
 		}
 	private:

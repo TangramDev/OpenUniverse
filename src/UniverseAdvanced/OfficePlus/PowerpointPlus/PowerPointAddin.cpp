@@ -314,7 +314,7 @@ namespace OfficePlus
 					CXobj* pXobj = pGalaxy->m_pWorkXobj;
 					if (pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 					{
-						CString strXml = _T("<documentui><layout><xobj name=\"Start\" /></layout></documentui>");
+						CString strXml = _T("<documentui><cluster><xobj name=\"Start\" /></cluster></documentui>");
 						IXobj* pDesignNode = nullptr;
 						pGalaxy->Observe(CComBSTR(L"default-inDesigning"), CComBSTR(strXml), &pDesignNode);
 					}

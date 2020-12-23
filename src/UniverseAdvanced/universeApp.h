@@ -141,7 +141,7 @@ public:
 
 	static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
 
-	DECLARE_LIBID(LIBID_World)
+	DECLARE_LIBID(LIBID_DOMPlus)
 
 private:
 	int ExitInstance();

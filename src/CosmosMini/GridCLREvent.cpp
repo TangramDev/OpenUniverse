@@ -50,8 +50,8 @@ void CXobjCLREvent::OnXobjAddInsCreated()
 
 void CXobjCLREvent::OnTabChange(int nActivePage, int nOldPage)
 {
-	DOMPlus::Xobj^ pActiveXobj = m_pXobj->GetXobj(0, nActivePage);
-	DOMPlus::Xobj^ pOldXobj = m_pXobj->GetXobj(0, nOldPage);
+	Universe::Xobj^ pActiveXobj = m_pXobj->GetXobj(0, nActivePage);
+	Universe::Xobj^ pOldXobj = m_pXobj->GetXobj(0, nOldPage);
 	m_pXobj->Fire_OnTabChange(pActiveXobj, pOldXobj);
 }
 

@@ -425,6 +425,9 @@ namespace blink {
 		{
 			if (msg == nullptr)
 				msg = this;
+			String strMsgID = msg->getStr(L"msgID");
+			if (strMsgID == "" || strMsgID.IsNull())
+				return;
 			msg->setStr(L"senderid", id_);
 			__int64 nHandle = getInt64(L"xobjhandle");
 			if(nHandle==0)
@@ -439,6 +442,7 @@ namespace blink {
 				m_pRenderframeImpl->m_mapCosmosSession[strID.Utf16()] = this;
 			}
 			m_pRenderframeImpl->SendCosmosMessageEx(msg->session_);
+			msg->setStr(L"msgID", "");
 		}
 	}
 

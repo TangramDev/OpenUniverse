@@ -181,7 +181,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	{
 		if (pHtmlWnd)
 		{
-			CWormhole* pSession = m_pXobj->m_pCosmosCloudSession;
+			CWormhole* pSession = m_pXobj->m_pWormhole;
 			if (pSession)
 			{
 				pSession->InsertString(_T("msgID"), IPC_NODE_ONMOUSEACTIVATE_ID);

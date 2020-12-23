@@ -138,7 +138,7 @@ CCosmos::CCosmos()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><layout><xobj name=\"tangram\" gridtype=\"nucleus\"/></layout></default>");
+	m_strDefaultXml = _T("<default><cluster><xobj name=\"tangram\" gridtype=\"nucleus\"/></cluster></default>");
 	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
@@ -1999,7 +1999,7 @@ CSession* CCosmos::GetCloudSession(IXobj* _pXobj)
 	if (_pXobj)
 	{
 		CXobj* pXobj = (CXobj*)_pXobj;
-		return pXobj->m_pCosmosCloudSession;
+		return pXobj->m_pWormhole;
 	}
 	return nullptr;
 }
@@ -2082,7 +2082,7 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 				pDocTemplate->m_strClientKey = _T("default");
 			strKey = pDocTemplate->m_strClientKey;
 		}
-		str.Format(_T("<%s><layout><xobj name='%s' /></layout></%s>"), strKey, _strGalaxyName, strKey);
+		str.Format(_T("<%s><cluster><xobj name='%s' /></cluster></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
 		if (pDocTemplate == nullptr && pXobj)
 		{
@@ -2190,7 +2190,7 @@ IXobj* CCosmos::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 		strPath += NodeTag + _T(".nodexml");
 		if (::PathFileExists(strPath) == false)
 		{
-			CString strXml = _T("<nodexml><layout><xobj name='StartNode' /></layout></nodexml>");
+			CString strXml = _T("<nodexml><cluster><xobj name='StartNode' /></cluster></nodexml>");
 			CTangramXmlParse m_Parse;
 			m_Parse.LoadXml(strXml);
 			m_Parse.SaveFile(strPath);
@@ -2219,7 +2219,7 @@ IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
 			pGalaxy = it2->second;
 		IXobj* pXobj = nullptr;
 		CString str = _T("");
-		str.Format(_T("<default><layout><xobj name='%s' /></layout></default>"), strName);
+		str.Format(_T("<default><cluster><xobj name='%s' /></cluster></default>"), strName);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
 		//VARIANT_BOOL bNewVersion;
 		//pGalaxyCluster->get_NewVersion(&bNewVersion);
@@ -2627,7 +2627,7 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 		return nullptr;
 	}
 
-	CTangramXmlParse* pXobj = pWndXobj->GetChild(TGM_GRID);
+	CTangramXmlParse* pXobj = pWndXobj->GetChild(TGM_XOBJ);
 	if (pXobj == nullptr)
 	{
 		delete m_pParse;
@@ -4738,7 +4738,7 @@ STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hWnd), CComBSTR(L"default"), &pGalaxy);
 		if (pGalaxy)
 		{
-			return pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L"<default><layout><xobj name=\"Start\" /></layout></default>"), ppXobj);
+			return pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L"<default><cluster><xobj name=\"Start\" /></cluster></default>"), ppXobj);
 		}
 	}
 	return S_FALSE;
@@ -4843,11 +4843,11 @@ void CCosmosDocTemplate::InitXmlData()
 				}
 				else
 				{
-					CString strXml = _T("<CosmosDocTemplate><mdiclient><layout><xobj name='mdiclient'/></layout></mdiclient></CosmosDocTemplate>");
+					CString strXml = _T("<CosmosDocTemplate><mdiclient><cluster><xobj name='mdiclient'/></cluster></mdiclient></CosmosDocTemplate>");
 					if (m_Parse.LoadXml(strXml))
 					{
 						m_Parse.SaveFile(strPath);
-						m_mapXml[_T("mdiclient")] = _T("<mdiclient><layout><xobj name='mdiclient'/></layout></mdiclient>");
+						m_mapXml[_T("mdiclient")] = _T("<mdiclient><cluster><xobj name='mdiclient'/></cluster></mdiclient>");
 					}
 				}
 			}
@@ -5392,22 +5392,6 @@ STDMETHODIMP CCosmos::ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrK
 							_strXml += s;
 						}
 					}
-				}
-			}
-			if (pWnd && pWnd->m_bMdiForm)
-			{
-				_strXml += _T("</");
-				_strXml += strKey;
-				_strXml += _T(">");
-				auto it = pWnd->m_mapKey.find(strKey);
-				if (it == pWnd->m_mapKey.end())
-				{
-					pWnd->m_mapKey[strKey] = _strXml;
-				}
-				else
-				{
-					pWnd->m_mapKey.erase(it);
-					pWnd->m_mapKey[strKey] = _strXml;
 				}
 			}
 		}

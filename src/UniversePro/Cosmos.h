@@ -53,7 +53,7 @@ struct RemoteDebugInfo
 
 class ATL_NO_VTABLE CCosmosEvent :
 	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosEventObj, &IID_ICosmosEventObj, &LIBID_World, 1, 0>
+	public IDispatchImpl<ICosmosEventObj, &IID_ICosmosEventObj, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CCosmosEvent();
@@ -101,7 +101,7 @@ public:
 
 class ATL_NO_VTABLE CCosmosDoc :
 	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosDoc, &IID_ICosmosDoc, &LIBID_World, 1, 0>
+	public IDispatchImpl<ICosmosDoc, &IID_ICosmosDoc, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CCosmosDoc();
@@ -145,7 +145,7 @@ private:
 class CUniverseMDIChild;
 class ATL_NO_VTABLE CCosmosDocTemplate :
 	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosDocTemplate, &IID_ICosmosDocTemplate, &LIBID_World, 1, 0>
+	public IDispatchImpl<ICosmosDocTemplate, &IID_ICosmosDocTemplate, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CCosmosDocTemplate();
@@ -202,7 +202,7 @@ class ATL_NO_VTABLE CCosmos :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CCosmos>,
 	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>,
-	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_World, 1, 0>
+	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_DOMPlus, 1, 0>
 {
 	friend class CGalaxy;
 	friend class CEclipseWnd;

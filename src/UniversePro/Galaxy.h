@@ -155,7 +155,6 @@ public:
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
 
-	map<CString, CString>					m_mapKey;
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CWinForm)
@@ -230,7 +229,7 @@ private:
 class ATL_NO_VTABLE CGalaxy :
 	public CComObjectRootBase,	
 	public CWindowImpl<CGalaxy, CWindow>,
-	public IDispatchImpl<IGalaxy, &IID_IGalaxy, &LIBID_World, 1, 0>
+	public IDispatchImpl<IGalaxy, &IID_IGalaxy, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CGalaxy();           

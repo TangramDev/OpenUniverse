@@ -25,7 +25,7 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
-namespace DOMPlus
+namespace Universe
 {
 	ref class Xobj;
 	ref class Galaxy;
@@ -47,19 +47,20 @@ namespace DOMPlus
 		void SendMessage();
 
 		String^ m_strEvents = L"";
-		property String^ EventBindInfo
-		{
-			String^ get()
-			{
-				return m_strEvents->ToLower();
-			};
-			void set(String^ strData)
-			{
-				m_strEvents = strData->ToLower();
-			};
-		}
+		//property String^ EventBindInfo
+		//{
+		//	String^ get()
+		//	{
+		//		return m_strEvents->ToLower();
+		//	};
+		//	void set(String^ strData)
+		//	{
+		//		m_strEvents = strData->ToLower();
+		//	};
+		//}
 
-		bool isBindCLRObjToWebPage(Object^ obj);
+		bool isBindCLRObjToWebPage(Object^ obj, String^ eventName);
+		void AddEventInfo(Object^ obj, String^ eventName);
 	};
 
 	public ref class Browser

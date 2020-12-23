@@ -40,7 +40,7 @@ using namespace System::Reflection;
 using namespace System::Runtime::InteropServices;
 using namespace System::IO::Compression;
 
-namespace DOMPlus
+namespace Universe
 {
     Xobj^ XobjCollection::default::get(int iIndex)
     {
@@ -98,7 +98,7 @@ namespace DOMPlus
 
         if (pGalaxyCluster)
         {
-            return theAppProxy._createObject<IGalaxyCluster, DOMPlus::GalaxyCluster>(pGalaxyCluster);
+            return theAppProxy._createObject<IGalaxyCluster, Universe::GalaxyCluster>(pGalaxyCluster);
         }
         return nullptr;
     }
@@ -107,7 +107,7 @@ namespace DOMPlus
     {
         CComPtr<IGalaxy> _pGalaxy;
         m_pXobj->get_Galaxy(&_pGalaxy);
-        return theAppProxy._createObject<IGalaxy, DOMPlus::Galaxy>(_pGalaxy);
+        return theAppProxy._createObject<IGalaxy, Universe::Galaxy>(_pGalaxy);
     }
 
     String^ Xobj::Caption::get()
@@ -367,7 +367,7 @@ namespace DOMPlus
 
     Cosmos::~Cosmos(void)
     {
-        for each (KeyValuePair<String^, Object^>^ dic in DOMPlus::Cosmos::m_pCosmosCLRObjDic)
+        for each (KeyValuePair<String^, Object^>^ dic in Universe::Cosmos::m_pCosmosCLRObjDic)
         {
             if (dic->Value != nullptr)
             {
@@ -560,12 +560,12 @@ namespace DOMPlus
 
     System::Drawing::Icon^ Cosmos::DefaultIcon::get()
     {
-        if (DOMPlus::Cosmos::m_pDefaultIcon == nullptr)
+        if (Universe::Cosmos::m_pDefaultIcon == nullptr)
         {
             Form^ _pForm = gcnew Form();
-            DOMPlus::Cosmos::m_pDefaultIcon = _pForm->Icon;
+            Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
         }
-        return DOMPlus::Cosmos::m_pDefaultIcon;
+        return Universe::Cosmos::m_pDefaultIcon;
     }
 
     bool Cosmos::WebRuntimeInit()
@@ -749,7 +749,7 @@ namespace DOMPlus
                 int nCount = pParse->GetCount();
                 if (nCount == 1)
                 {
-                    pParse = pParse->GetChild(TGM_GRID);
+                    pParse = pParse->GetChild(TGM_XOBJ);
                     if (pParse)
                     {
                         theApp.m_pCosmosImpl->m_strNtpXml = _strXml;
@@ -761,12 +761,12 @@ namespace DOMPlus
 
     String^ Cosmos::WizData::get()
     {
-        return DOMPlus::Cosmos::m_strWizData;
+        return Universe::Cosmos::m_strWizData;
     }
 
     void Cosmos::WizData::set(String^ strXml)
     {
-        DOMPlus::Cosmos::m_strWizData = strXml;
+        Universe::Cosmos::m_strWizData = strXml;
     }
 
     WorkBenchWindow^ Cosmos::ActiveWorkBenchWindow::get()
@@ -820,9 +820,9 @@ namespace DOMPlus
         return OnGetSubObjForWebPage(SourceObj, subObjName);
     }
 
-    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, DOMPlus::Wormhole^ eventSession, String^ eventName)
+    void Cosmos::Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Universe::Wormhole^ eventSession, String^ eventName)
     {
-        if (eventSession->isBindCLRObjToWebPage(SourceObj))
+        if (eventSession->isBindCLRObjToWebPage(SourceObj, eventName))
             return;
         Control^ pCtrl = (Control^)SourceObj;
         intptr_t nNode = eventSession->m_pCosmosSession->Getint64(L"xobj");
@@ -1297,8 +1297,8 @@ namespace DOMPlus
 
     Wormhole^ Cosmos::GetWormholeFromObj(Object^ obj)
     {
-        DOMPlus::Wormhole^ pCloudSession = nullptr;
-        bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
+        Universe::Wormhole^ pCloudSession = nullptr;
+        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(obj, pCloudSession);
         if (bExists)
         {
             return pCloudSession;
@@ -1330,9 +1330,9 @@ namespace DOMPlus
         {
             pProxy = it->second->m_pProxy;
         }
-        DOMPlus::Wormhole^ pCloudSession = nullptr;
+        Universe::Wormhole^ pCloudSession = nullptr;
         CSession* pSession = nullptr;
-        bool bExists = DOMPlus::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
+        bool bExists = Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
         if (bExists)
         {
             pSession = pCloudSession->m_pCosmosSession;
@@ -2070,7 +2070,7 @@ namespace DOMPlus
 
     Browser^ Cosmos::CreateBrowserRemote(IntPtr ParentHandle, String^ strUrls)
     {
-        DOMPlus::Cosmos::GetCosmos();
+        Universe::Cosmos::GetCosmos();
         HWND hPWnd = (HWND)ParentHandle.ToPointer();
         if (theApp.m_pCosmosVS == nullptr)
         {
@@ -2147,7 +2147,7 @@ namespace DOMPlus
         return nullptr;
     }
 
-    DOMPlus::Wormhole^ DOMPlus::Xobj::Wormhole::get()
+    Universe::Wormhole^ Universe::Xobj::Wormhole::get()
     {
         if (m_pXobj)
         {
@@ -2156,7 +2156,7 @@ namespace DOMPlus
                 CSession* pSession = theApp.m_pCosmosImpl->GetCloudSession(m_pXobj);
                 if (pSession)
                 {
-                    m_pSession = gcnew DOMPlus::Wormhole(pSession);
+                    m_pSession = gcnew Universe::Wormhole(pSession);
                     theAppProxy.m_mapSession2Wormhole[pSession] = m_pSession;
                 }
             }
@@ -2352,7 +2352,7 @@ namespace DOMPlus
                         name += m_pBindTreeView->Name;
                         name += L"." + BSTR2STRING(bstrName);
                         BSTR strName = STRING2BSTR(name->ToLower());
-                        DOMPlus::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
+                        Universe::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
                         pGalaxy->Observe(L"default", CComBSTR(_pParse->xml()), &_pXobj);
                         ::SysFreeString(strName);
                     }
@@ -2383,11 +2383,11 @@ namespace DOMPlus
     {
         if (m_pBindTreeView != nullptr)
         {
-            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &DOMPlus::Xobj::OnNodeMouseDoubleClick);
-            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &DOMPlus::Xobj::OnAfterSelect);
+            m_pBindTreeView->NodeMouseDoubleClick += gcnew System::Windows::Forms::TreeNodeMouseClickEventHandler(this, &Universe::Xobj::OnNodeMouseDoubleClick);
+            m_pBindTreeView->AfterSelect += gcnew System::Windows::Forms::TreeViewEventHandler(this, &Universe::Xobj::OnAfterSelect);
 
             if (String::IsNullOrEmpty(m_strTreeViewData) == true)
-                m_strTreeViewData = DOMPlus::Cosmos::m_strWizData;
+                m_strTreeViewData = Universe::Cosmos::m_strWizData;
             if (String::IsNullOrEmpty(m_strTreeViewData) == false)
             {
                 BSTR bstrXml = STRING2BSTR(m_strTreeViewData);
@@ -2449,7 +2449,7 @@ namespace DOMPlus
                                     pHostNode->Observe(BSTR2STRING(m_Parse.name()), BSTR2STRING(pChild->xml()));
                                 else if (strAction == _T("openurl"))
                                 {
-                                    DOMPlus::Cosmos::CreateBrowser(System::IntPtr::Zero, BSTR2STRING(pChild->attr(_T("url"), _T("")) + _T("|")));
+                                    Universe::Cosmos::CreateBrowser(System::IntPtr::Zero, BSTR2STRING(pChild->attr(_T("url"), _T("")) + _T("|")));
                                 }
                             }
 
@@ -2632,15 +2632,15 @@ namespace DOMPlus
 
     Xobj^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
-        DOMPlus::Xobj^ pRetNode = nullptr;
+        Universe::Xobj^ pRetNode = nullptr;
         BSTR blayerName = STRING2BSTR(layerName);
         BSTR blayerXML = STRING2BSTR(layerXML);
         CComPtr<IXobj> pXobj;
         m_pGalaxy->Observe(blayerName, blayerXML, &pXobj);
         if (pXobj)
         {
-            pRetNode = theAppProxy._createObject<IXobj, DOMPlus::Xobj>(pXobj);
-            DOMPlus::Xobj^ pRetNode2 = nullptr;
+            pRetNode = theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
+            Universe::Xobj^ pRetNode2 = nullptr;
             if (!TryGetValue(layerName, pRetNode2))
             {
                 Add(layerName, pRetNode);
@@ -2666,11 +2666,11 @@ namespace DOMPlus
     }
 }
 
-void DOMPlus::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
+void Universe::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
 {
     if (String::IsNullOrEmpty(strInfo) == false)
     {
         strInfo->Replace("ShowWebPage:", "");
-        DOMPlus::Cosmos::CreateBrowser(IntPtr::Zero, strInfo->Replace(L"ShowWebPage:", L""));
+        Universe::Cosmos::CreateBrowser(IntPtr::Zero, strInfo->Replace(L"ShowWebPage:", L""));
     }
 }

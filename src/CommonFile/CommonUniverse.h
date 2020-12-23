@@ -153,8 +153,8 @@
 #define TGM_STYLE				_T("style")
 #define TGM_ACTIVE_PAGE			_T("activepage")
 #define TGM_TAG					_T("tag")
-#define TGM_CLUSTER				_T("layout")
-#define TGM_GRID				_T("xobj")
+#define TGM_CLUSTER				_T("cluster")
+#define TGM_XOBJ				_T("xobj")
 #define TGM_NUCLEUS				_T("nucleus")
 
 #define TGM_ROWS				_T("rows")

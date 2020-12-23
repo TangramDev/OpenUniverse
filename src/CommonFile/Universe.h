@@ -6211,14 +6211,14 @@ EXTERN_C const IID IID_IEclipseCtrl;
 
 
 
-#ifndef __World_LIBRARY_DEFINED__
-#define __World_LIBRARY_DEFINED__
+#ifndef __DOMPlus_LIBRARY_DEFINED__
+#define __DOMPlus_LIBRARY_DEFINED__
 
-/* library World */
+/* library DOMPlus */
 /* [helpstring][version][uuid] */ 
 
 
-EXTERN_C const IID LIBID_World;
+EXTERN_C const IID LIBID_DOMPlus;
 
 #ifndef ___ICosmos_DISPINTERFACE_DEFINED__
 #define ___ICosmos_DISPINTERFACE_DEFINED__
@@ -6703,7 +6703,7 @@ EXTERN_C const CLSID CLSID_UniverseExtender;
 class DECLSPEC_UUID("19631222-1992-0612-1965-060100000000")
 UniverseExtender;
 #endif
-#endif /* __World_LIBRARY_DEFINED__ */
+#endif /* __DOMPlus_LIBRARY_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
 

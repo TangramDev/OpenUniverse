@@ -113,35 +113,6 @@ LRESULT CWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	CString strGalaxyName = (LPCTSTR)wParam;
 	CString currentKey = (LPCTSTR)lParam;
 	CString strIndex = strGalaxyName + L"_" + currentKey;
-	if (m_bMdiForm)
-	{
-		auto it = m_mapKey.find(currentKey);
-		if (it != m_mapKey.end())
-		{
-			CString strXml = it->second;
-			CTangramXmlParse parse;
-			if (parse.LoadXml(strXml))
-			{
-				CTangramXmlParse* pParse = parse.GetChild(strGalaxyName);
-				if (pParse)
-				{
-					CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
-					if (pParse2)
-					{
-						CString s = pParse2->xml();
-						//LRESULT res = (LRESULT)LPSTR(LPCTSTR(s));
-						auto it = g_pCosmos->m_mapValInfo.find(strIndex);
-						if (it != g_pCosmos->m_mapValInfo.end())
-						{
-							g_pCosmos->m_mapValInfo.erase(it);
-						}
-						g_pCosmos->m_mapValInfo[strIndex] = CComVariant(s);
-						return 1;
-					}
-				}
-			}
-		}
-	}
 	CTangramXmlParse parse;
 	if (parse.LoadXml(m_strXml) || parse.LoadFile(m_strXml))
 	{
@@ -349,7 +320,7 @@ CXobj* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CStr
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
 	pCommonData->m_pCosmosParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
-	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_GRID);
+	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_XOBJ);
 
 	CreateGalaxyCluster();
 	m_mapXobj[strKey] = m_pWorkXobj;

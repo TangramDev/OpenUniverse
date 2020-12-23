@@ -38,7 +38,7 @@ class ATL_NO_VTABLE CXobj :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CXobj>,
 	public IConnectionPointImpl<CXobj, &__uuidof(_IXobjEvents)>,
-	public IDispatchImpl<IXobj, &IID_IXobj, &LIBID_World, 1, 0>
+	public IDispatchImpl<IXobj, &IID_IXobj, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CXobj();
@@ -95,7 +95,7 @@ public:
 	IDispatch*						m_pExtender;
 	CXobjVector						m_vChildNodes;
 	CXobj*							m_pCurrentExNode;
-	CWormhole*						m_pCosmosCloudSession;
+	CWormhole*						m_pWormhole;
 	map<CXobj*, CString>			m_mapExtendNode;
 	map<CString, CXobj*>			m_mapChildXobj;
 	CComObject<CXobjCollection>*	m_pChildNodeCollection;
@@ -222,7 +222,7 @@ private:
 
 class ATL_NO_VTABLE CXobjCollection :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IXobjCollection, &IID_IXobjCollection, &LIBID_World, 1, 0>
+	public IDispatchImpl<IXobjCollection, &IID_IXobjCollection, &LIBID_DOMPlus, 1, 0>
 {
 public:
 	CXobjCollection();

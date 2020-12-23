@@ -4769,7 +4769,7 @@ HTREEITEM	CTangramHtmlTreeWnd::InsertXmlItem(CTangramXmlParse *pElement, HTREEIT
 			//{
 
 			//}
-			//else if(strNodeName ==TGM_GRID)
+			//else if(strNodeName ==TGM_XOBJ)
 			//{
 			//	xhtd.m_strTangramXML = pElement->xml();
 			//}

@@ -47,6 +47,10 @@ namespace blink {
       session_ = session;
   }
 
+  String CosmosEvent::msgID() {
+      return session_->getStr(L"msgID");
+  }
+
   String CosmosEvent::eventId() {
       return eventId_;
   }

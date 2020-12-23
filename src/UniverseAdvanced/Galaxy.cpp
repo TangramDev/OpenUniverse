@@ -289,7 +289,7 @@ void CUniverseMDIMain::OnCreateDoc(CString strDocData)
 			{
 				_strKey += _T("default");
 				_strClientKey += _T("default");
-				strXml = _T("<default><layout><xobj name=\"Start\" =\"nucleus\"/></layout></default>");
+				strXml = _T("<default><cluster><xobj name=\"Start\" =\"nucleus\"/></cluster></default>");
 			}
 		}
 		CUniverseMDIChild* pWnd = g_pCosmos->m_pActiveMDIChildWnd;
@@ -1175,59 +1175,59 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 		}
 	}
-	switch (m_nState)
-	{
-	case 0:
-	case 1:
-	case 3:
-	{
-		if (!::PathFileExists(m_strPath))
-		{
-			int nPos = m_strPath.ReverseFind('\\');
-			CString strPath = m_strPath.Left(nPos);
-			::SHCreateDirectory(nullptr, strPath);
-		}
-		CGalaxyCluster* pGalaxyCluster = nullptr;
-		auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
-		if (it != g_pCosmos->m_mapWindowPage.end())
-		{
-			pGalaxyCluster = (CGalaxyCluster*)it->second;
-			CString strData = _T("<winform>");
-			CString strIndex = _T("@");
-			for (auto it2 : pGalaxyCluster->m_mapGalaxy)
-			{
-				CComBSTR bstrXml(L"");
-				strIndex += it2.second->m_strGalaxyName;
-				strIndex += _T("@");
-				it2.second->get_GalaxyXML(&bstrXml);
-				strData += OLE2T(bstrXml);
-			}
-			DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-			if (dw & WS_EX_MDICHILD)
-			{
-				HWND h = ::GetParent(::GetParent(m_hWnd));
-				if (h)
-				{
-					CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_HUBBLE_DATA, 0, 20190214);
-					if (pParent)
-					{
-						auto it = pParent->m_mapKey.find(m_strKey);
-						if (it != pParent->m_mapKey.end())
-						{
-							strData += it->second;
-						}
-					}
-				}
-			}
-			strData += _T("</winform>");
-			CTangramXmlParse xml;
-			if (xml.LoadXml(strData))
-				xml.SaveFile(m_strPath);
-			// TODO Refresh ListCtrl
-		}
-	}
-	break;
-	}
+	//switch (m_nState)
+	//{
+	//case 0:
+	//case 1:
+	//case 3:
+	//{
+	//	//if (!::PathFileExists(m_strPath))
+	//	//{
+	//	//	int nPos = m_strPath.ReverseFind('\\');
+	//	//	CString strPath = m_strPath.Left(nPos);
+	//	//	::SHCreateDirectory(nullptr, strPath);
+	//	//}
+	//	//CGalaxyCluster* pGalaxyCluster = nullptr;
+	//	//auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
+	//	//if (it != g_pCosmos->m_mapWindowPage.end())
+	//	//{
+	//	//	pGalaxyCluster = (CGalaxyCluster*)it->second;
+	//	//	CString strData = _T("<winform>");
+	//	//	CString strIndex = _T("@");
+	//	//	for (auto it2 : pGalaxyCluster->m_mapGalaxy)
+	//	//	{
+	//	//		CComBSTR bstrXml(L"");
+	//	//		strIndex += it2.second->m_strGalaxyName;
+	//	//		strIndex += _T("@");
+	//	//		it2.second->get_GalaxyXML(&bstrXml);
+	//	//		strData += OLE2T(bstrXml);
+	//	//	}
+	//	//	DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
+	//	//	if (dw & WS_EX_MDICHILD)
+	//	//	{
+	//	//		HWND h = ::GetParent(::GetParent(m_hWnd));
+	//	//		if (h)
+	//	//		{
+	//	//			CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_HUBBLE_DATA, 0, 20190214);
+	//	//			if (pParent)
+	//	//			{
+	//	//				auto it = pParent->m_mapKey.find(m_strKey);
+	//	//				if (it != pParent->m_mapKey.end())
+	//	//				{
+	//	//					strData += it->second;
+	//	//				}
+	//	//			}
+	//	//		}
+	//	//	}
+	//	//	strData += _T("</winform>");
+	//	//	CTangramXmlParse xml;
+	//	//	if (xml.LoadXml(strData))
+	//	//		xml.SaveFile(m_strPath);
+	//	//	// TODO Refresh ListCtrl
+	//	//}
+	//}
+	//break;
+	//}
 	if (g_pCosmos->m_pActiveWinFormWnd == this)
 		g_pCosmos->m_pActiveWinFormWnd = nullptr;
 	auto it = g_pCosmos->m_mapNeedQueryOnClose.find(m_hWnd);
@@ -1570,32 +1570,32 @@ LRESULT CWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	CString strIndex = strGalaxyName + L"_" + currentKey;
 	if (m_bMdiForm)
 	{
-		auto it = m_mapKey.find(currentKey);
-		if (it != m_mapKey.end())
-		{
-			CString strXml = it->second;
-			CTangramXmlParse parse;
-			if (parse.LoadXml(strXml))
-			{
-				CTangramXmlParse* pParse = parse.GetChild(strGalaxyName);
-				if (pParse)
-				{
-					CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
-					if (pParse2)
-					{
-						CString s = pParse2->xml();
-						//LRESULT res = (LRESULT)LPSTR(LPCTSTR(s));
-						auto it = g_pCosmos->m_mapValInfo.find(strIndex);
-						if (it != g_pCosmos->m_mapValInfo.end())
-						{
-							g_pCosmos->m_mapValInfo.erase(it);
-						}
-						g_pCosmos->m_mapValInfo[strIndex] = CComVariant(s);
-						return 1;
-					}
-				}
-			}
-		}
+		//auto it = m_mapKey.find(currentKey);
+		//if (it != m_mapKey.end())
+		//{
+		//	CString strXml = it->second;
+		//	CTangramXmlParse parse;
+		//	if (parse.LoadXml(strXml))
+		//	{
+		//		CTangramXmlParse* pParse = parse.GetChild(strGalaxyName);
+		//		if (pParse)
+		//		{
+		//			CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
+		//			if (pParse2)
+		//			{
+		//				CString s = pParse2->xml();
+		//				//LRESULT res = (LRESULT)LPSTR(LPCTSTR(s));
+		//				auto it = g_pCosmos->m_mapValInfo.find(strIndex);
+		//				if (it != g_pCosmos->m_mapValInfo.end())
+		//				{
+		//					g_pCosmos->m_mapValInfo.erase(it);
+		//				}
+		//				g_pCosmos->m_mapValInfo[strIndex] = CComVariant(s);
+		//				return 1;
+		//			}
+		//		}
+		//	}
+		//}
 	}
 	CTangramXmlParse parse;
 	if (parse.LoadXml(m_strXml) || parse.LoadFile(m_strXml))
@@ -1685,11 +1685,11 @@ LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			CString strXml = _T("");
 			int nPos = m_strBKID.Find(_T(":"));
 			if (nPos == -1)
-				strXml.Format(_T("<mdiclient><layout><xobj name=\"mdiclient\" gridtype=\"clrctrl\" objid=\"%s\" /></layout></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" gridtype=\"clrctrl\" objid=\"%s\" /></cluster></mdiclient>"), m_strBKID);
 			else
 			{
 				m_strBKID = m_strBKID.Mid(nPos + 1);
-				strXml.Format(_T("<mdiclient><layout><xobj name='mdiclient' gridtype='' url='%s' /></layout></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><cluster><xobj name='mdiclient' gridtype='' url='%s' /></cluster></mdiclient>"), m_strBKID);
 			}
 			IXobj* pXobj = nullptr;
 			pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
@@ -2391,7 +2391,7 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey, C
 	pCommonData->m_pGalaxyCluster = m_pGalaxyCluster;
 	pCommonData->m_pCosmosParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
-	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_GRID);
+	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_XOBJ);
 
 	CreateGalaxyCluster();
 	m_mapXobj[strKey] = m_pWorkXobj;
@@ -2818,7 +2818,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						if (strXml == _T(""))
 							strXml = _strXml;
 						if (strXml == _T(""))
-							strXml = _T("<default><layout><xobj name=\"Start\" /></layout></default>");;
+							strXml = _T("<default><cluster><xobj name=\"Start\" /></cluster></default>");;
 					}
 					else
 						strXml = _strXml;
@@ -3227,7 +3227,7 @@ LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			CString strPath = it.first;
 			CString s = it.second->m_pHostParse->xml();
 			CString str = _T("");
-			str.Format(_T("<nodexml><layout>%s</layout></nodexml>"), s);
+			str.Format(_T("<nodexml><cluster>%s</cluster></nodexml>"), s);
 			CTangramXmlParse parse;
 			parse.LoadXml(str);
 			parse.SaveFile(it.first);
@@ -3627,7 +3627,7 @@ STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 	CString strRootName = OLE2T(bstrRootName);
 	if (strRootName == _T(""))
 		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><layout><xobj name=\"Start\"/></layout></Default>");
+	CString strXmlData = _T("<Default><cluster><xobj name=\"Start\"/></cluster></Default>");
 	CString strName = _T("");
 	CString strXml = _T("");
 

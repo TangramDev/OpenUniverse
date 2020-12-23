@@ -95,7 +95,7 @@ BOOL CUniverse::InitInstance()
 		wndClass.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 		wndClass.hbrBackground = 0;
 		wndClass.lpszMenuName = NULL;
-		wndClass.lpszClassName = _T("DOMPlus GridWindow Class");
+		wndClass.lpszClassName = _T("Universe GridWindow Class");
 
 		RegisterClass(&wndClass);
 

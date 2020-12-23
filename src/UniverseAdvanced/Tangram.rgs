@@ -1,20 +1,20 @@
 HKCR
 {
-	Universe.Hubble.1 = s 'Universe Class'
+	Domplus.Cosmos.1 = s 'Domplus Class'
 	{
 		CLSID = s '{19631222-1992-0612-1965-060119990606}'
 	}
-	Universe.Hubble = s 'Universe Class'
+	Domplus.Cosmos = s 'Domplus Class'
 	{
 		CLSID = s '{19631222-1992-0612-1965-060119990606}'
-		CurVer = s 'Universe.Hubble.1'
+		CurVer = s 'Domplus.Cosmos.1'
 	}
 	NoRemove CLSID
 	{
-		ForceRemove {19631222-1992-0612-1965-060119990606} = s 'Universe Class'
+		ForceRemove {19631222-1992-0612-1965-060119990606} = s 'Domplus Class'
 		{
-			ProgID = s 'Universe.Hubble.1'
-			VersionIndependentProgID = s 'Universe.Hubble'
+			ProgID = s 'Domplus.Cosmos.1'
+			VersionIndependentProgID = s 'Domplus.Cosmos'
 			ForceRemove 'Programmable'
 			InprocServer32 = s '%MODULE%'
 			{
@@ -40,7 +40,7 @@ HKLM
             {
                 Addins
                 {
-                    'Universe.Hubble'
+                    'Domplus.Cosmos'
                     {
                         val FriendlyName = s 'Visio Plus Addin'
                         val Description = s 'Tangram Visio Addin'
@@ -55,7 +55,7 @@ HKLM
                 {
                     Addins
                     {
-                        'Universe.Hubble'
+                        'Domplus.Cosmos'
                         {
                             val FriendlyName = s 'Project Plus Addin'
                             val Description = s 'Tangram Project Addin'
@@ -68,7 +68,7 @@ HKLM
                 {
                     Addins
                     {
-                        'Universe.Hubble'
+                        'Domplus.Cosmos'
                         {
                             val FriendlyName = s 'Access Plus Addin'
                             val Description = s 'Tangram Access Addin'
@@ -81,7 +81,7 @@ HKLM
                 {
                     Addins
                     {
-                        'Universe.Hubble'
+                        'Domplus.Cosmos'
                         {
                             val FriendlyName = s 'OneNote Plus Addin'
                             val Description = s 'Tangram OneNote Addin'
@@ -94,7 +94,7 @@ HKLM
                 {
                     Addins
                     {
-                        'Universe.Hubble'
+                        'Domplus.Cosmos'
                         {
                             val FriendlyName = s 'PowerPoint Plus Addin'
                             val Description = s 'Tangram PowerPoint Addin'
@@ -107,7 +107,7 @@ HKLM
                 {
                     Addins
                     {
-                        'Universe.Hubble'
+                        'Domplus.Cosmos'
                         {
                             val FriendlyName = s 'OutLook Plus Addin'
                             val Description = s 'Tangram OutLook Addin'
@@ -121,7 +121,7 @@ HKLM
                 {
                     Addins
                     {
-                        'Universe.Hubble'
+                        'Domplus.Cosmos'
                         {
                             val FriendlyName = s 'Word Plus Addin'
                             val Description = s 'Tangram Word Addin'
@@ -134,7 +134,7 @@ HKLM
                 {
                     Addins
                     {
-                        'Universe.Hubble'
+                        'Domplus.Cosmos'
                         {
                             val FriendlyName = s 'Excel Plus Addin'
                             val Description = s 'Tangram Excel Addin'

@@ -39,7 +39,7 @@ using namespace System::Runtime::InteropServices;
 
 using System::Runtime::InteropServices::Marshal;
 
-namespace DOMPlus
+namespace Universe
 {
 	Wormhole::Wormhole(CSession* pSession)
 	{
@@ -104,18 +104,33 @@ namespace DOMPlus
 			return m_pSession->SendMessage();
 	}
 
-	bool Wormhole::isBindCLRObjToWebPage(Object^ obj)
+	bool Wormhole::isBindCLRObjToWebPage(Object^ obj, String^ eventName)
 	{
 		if (obj->GetType()->IsSubclassOf(Control::typeid))
 		{
 			Control^ ctrl = (Control^)obj;
-			String^ strInfo = L"@" + ctrl->Name->ToLower() + L"@";
-			if (this->m_strEvents->IndexOf(strInfo) != -1)
+			String^ strInfo = L"@" + ctrl->Handle.ToString() + eventName->ToLower() + L"@";
+			//String^ strInfo = L"@" + ctrl->Name->ToLower() + L"@";
+			if (m_strEvents->IndexOf(strInfo) == -1)
 			{
 				return true;
 			}
 		}
 		return false;
+	}
+
+	void Wormhole::AddEventInfo(Object^ obj, String^ eventName)
+	{
+		if (obj->GetType()->IsSubclassOf(Control::typeid))
+		{
+			Control^ ctrl = (Control^)obj;
+			String^ strInfo = L"@" + ctrl->Handle.ToString() + eventName->ToLower() + L"@";
+			//String^ strInfo = L"@" + ctrl->Name->ToLower() + L"@";
+			if (m_strEvents->IndexOf(strInfo) != -1)
+			{
+				m_strEvents += strInfo;
+			}
+		}
 	}
 
 	Browser::Browser(IBrowser* pBrowser)
