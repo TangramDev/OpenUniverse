@@ -391,6 +391,8 @@ namespace blink {
 	void Cosmos::DispatchXobjEvent(CosmosXobj* xObj, const String& ctrlName, const String& eventName)
 	{
 		xObj->fireEvent(eventName + "@" + ctrlName, xObj);
+		bool bFormMsgProcessed = false;
+		bool bXobjMsgProcessed = false;
 		HTMLCollection* list2 = nullptr;
 		String ctrlName_ = ctrlName;
 		if (ctrlName.IsNull() || ctrlName == "")
@@ -455,6 +457,7 @@ namespace blink {
 									xObj->form()->element_ = elem;
 									xObj->form()->setMsgID(ctrlName_ + "_" + eventName);
 									xObj->form()->setSender(xObj);
+									bFormMsgProcessed = true;
 									xObj->form()->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforwinform, xObj));
 								}
 							}
@@ -464,6 +467,7 @@ namespace blink {
 						}
 						if (xobjfortarget)
 						{
+							bXobjMsgProcessed = true;
 							__int64 nHandle = xobjfortarget->handle();
 							wstring strHandle = std::to_wstring(nHandle);
 							elem->setAttribute("targetgrid", AtomicString(String(strHandle.c_str())));
@@ -481,6 +485,10 @@ namespace blink {
 				}
 			}
 		}
+		if(xObj->form()&&!bFormMsgProcessed)
+			xObj->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforwinform, xObj));
+		else if(xObj->grid()&&!bXobjMsgProcessed)
+			xObj->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xObj));
 	}
 
 	void Cosmos::ProcessMessage(CosmosXobj* xobj)

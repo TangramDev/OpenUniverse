@@ -112,9 +112,6 @@ namespace blink {
 		__int64 nHandle = getInt64(L"formhandle");
 		if (nHandle)
 			return (CosmosWinform*)this;
-		//auto it = cosmos_->m_mapWinForm.find(nHandle);
-		//if (it != cosmos_->m_mapWinForm.end())
-		//	return it->value.Get();
 		return nullptr;
 	}
 

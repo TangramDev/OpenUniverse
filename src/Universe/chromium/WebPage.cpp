@@ -1,15 +1,15 @@
 /********************************************************************************
-*					DOM Plus for Application - Version 1.1.6.35                 *
-*********************************************************************************
-* Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.				*
-*
-* This SOURCE CODE is governed by a BSD - style license that can be
-* found in the LICENSE file.
-*
-* CONTACT INFORMATION:
-* mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
-* https://www.tangram.dev
-********************************************************************************/
+ *					DOM Plus for Application - Version 1.1.7.40
+ ********************************************************************************
+ * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
+// Use of this source code is governed by a BSD-style license that
+// can be found in the LICENSE file.
+ *
+ * CONTACT INFORMATION:
+ * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
+ * https://www.tangram.dev
+ *
+ *******************************************************************************/
 
 #include "../stdafx.h"
 #include "../Cosmos.h"
@@ -1043,8 +1043,13 @@ namespace Browser {
 		IXobj* pXobj = (IXobj*)pSession->Getint64(_T("xobj"));
 		if (pXobj)
 		{
-			if(((CXobj*)pXobj)->m_pWormhole==nullptr) 
-				((CXobj*)pXobj)->m_pWormhole = (CWormhole*)pSession;
+			CXobj* pObj = (CXobj*)pXobj;
+			if (pObj->m_pWormhole == nullptr)
+				pObj->m_pWormhole = (CWormhole*)pSession;
+			if (pObj->m_pWebPage == nullptr)
+				pObj->m_pWebPage = this;
+			if (pObj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd == nullptr)
+				pObj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd = this;
 		}
 		if (strMsgID == _T("CREATE_WINFORM"))
 		{
@@ -1121,13 +1126,10 @@ namespace Browser {
 		{
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
-			//IXobj* pXobj = nullptr;
-			HWND hWnd = (HWND)pSession->Getint64(_T("xobjhandle"));
-			CXobj* pParent = (CXobj*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
-			if (pParent)
+			if (pXobj)
 			{
 				IXobj* _pXobj = nullptr;
-				pParent->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pXobj);
+				pXobj->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pXobj);
 				if (_pXobj)
 				{
 					__int64 nHandle = 0;
@@ -1143,17 +1145,15 @@ namespace Browser {
 			CString strXml = pSession->GetString(_T("openxml"));
 			int nCol = pSession->GetLong(_T("opencol"));
 			int nRow = pSession->GetLong(_T("openrow"));
-			IXobj* pSplitterNode = nullptr;
 			HWND hWnd = (HWND)pSession->Getint64(_T("xobjhandle"));
-			CXobj* pParent = (CXobj*)::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
-			if (pParent)
+			if (pXobj)
 			{
-				IXobj* pXobj = nullptr;
-				pParent->ObserveEx(nRow, nCol, CComBSTR(strKey), CComBSTR(strXml), &pXobj);
-				if (pXobj)
+				IXobj* _pXobj = nullptr;
+				pXobj->ObserveEx(nRow, nCol, CComBSTR(strKey), CComBSTR(strXml), &_pXobj);
+				if (_pXobj)
 				{
 					__int64 nHandle = 0;
-					pXobj->get_Handle(&nHandle);
+					_pXobj->get_Handle(&nHandle);
 					pSession->Insertint64(_T("openxmlreturnhandle"), nHandle);
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20200429, (LPARAM)pSession);
 				}

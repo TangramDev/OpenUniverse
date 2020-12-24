@@ -57,6 +57,7 @@ void CWormhole::SendMessage()
 	if (m_pOwner)
 	{
 		m_pOwner->m_pChromeRenderFrameHost->SendCosmosMessage(m_pSession);
+		m_pOwner->m_pChromeRenderFrameHost->InsertString(m_pSession, _T("msgID"), _T(""));
 	}
 }
 
