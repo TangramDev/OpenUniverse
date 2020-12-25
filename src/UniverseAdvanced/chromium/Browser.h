@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -22,7 +22,7 @@ namespace Browser {
 		public CBrowserImpl, 
 		public CWindowImpl<CBrowser, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
-		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_DOMPlus, 1, 0>
+		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_Universe, 1, 0>
 	{
 		friend class CXobj;
 	public:

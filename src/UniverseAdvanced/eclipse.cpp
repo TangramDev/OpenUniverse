@@ -13,7 +13,7 @@
  *	   Rapicorp, Inc - Bug 461728 - [Mac] Allow users to specify values in eclipse.ini outside of the installation
  *******************************************************************************/
  /********************************************************************************
-  *					DOM Plus for Application - Version 1.1.7.40
+  *             DOM Plus for Application - Version 1.1.8.202012250001
   ********************************************************************************
   * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  // Use of this source code is governed by a BSD-style license that

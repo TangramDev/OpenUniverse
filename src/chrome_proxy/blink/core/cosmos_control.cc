@@ -1,3 +1,16 @@
+/********************************************************************************
+ *            DOM Plus for Application - Version 1.1.8.202012250001
+ ********************************************************************************
+ * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
+// Use of this source code is governed by a BSD-style license that
+// can be found in the LICENSE file.
+ *
+ * CONTACT INFORMATION:
+ * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
+ * https://www.tangram.dev
+ *
+ *******************************************************************************/
+
 #include "cosmos.h"
 #include "cosmos_node.h"
 #include "cosmos_event.h"
@@ -71,7 +84,7 @@ namespace blink {
 		if (handle_)
 		{
 			if (m_pRenderframeImpl) {
-				m_pRenderframeImpl->m_mapCosmosControl[handle_] = (long)this;
+				//m_pRenderframeImpl->m_mapCosmosControl[handle_] = (long)this;
 				WebString webstr = strEvents;
 				std::wstring _strBindEvents = webstr.Utf16();
 				webstr = name_;

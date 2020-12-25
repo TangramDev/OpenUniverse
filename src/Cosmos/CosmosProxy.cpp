@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -2823,12 +2823,12 @@ HICON CCosmosProxy::GetAppIcon(int nIndex)
 		return (HICON)icon->Handle.ToPointer();
 	else
 	{
-		if (Cosmos::m_pDefaultIcon == nullptr)
+		if (Universe::Cosmos::m_pDefaultIcon == nullptr)
 		{
 			Form^ _pForm = gcnew Form();
-			Cosmos::m_pDefaultIcon = _pForm->Icon;
+			Universe::Cosmos::m_pDefaultIcon = _pForm->Icon;
 		}
-		return (HICON)Cosmos::m_pDefaultIcon->Handle.ToPointer();
+		return (HICON)Universe::Cosmos::m_pDefaultIcon->Handle.ToPointer();
 	}
 }
 

@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -134,7 +134,7 @@ public:
 
 	static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
 
-	DECLARE_LIBID(LIBID_DOMPlus)
+	DECLARE_LIBID(LIBID_Universe)
 
 private:
 	int ExitInstance();
@@ -143,7 +143,7 @@ private:
 	static LRESULT CALLBACK GetMessageProc(int nCode, WPARAM wParam, LPARAM lParam);
 };
 
-TANGRAM_OBJECT_ENTRY_AUTO(CLSID_World, CUniverse)
+TANGRAM_OBJECT_ENTRY_AUTO(CLSID_Cosmos, CUniverse)
 
 extern CUniverse theApp;
 extern CCosmos* g_pCosmos;

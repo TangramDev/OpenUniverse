@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -647,7 +647,7 @@ interface IEclipseCtrl : ICosmosCtrl {
 	version(1.0),
 	helpstring("DOMPlus 1.0 Type Library")
 ]
-library DOMPlus
+library Universe
 {
 	[
 		uuid(19631222-1992-0612-1965-060119821002),
@@ -665,9 +665,9 @@ library DOMPlus
 	[
 		uuid(19631222-1992-0612-1965-060119990606),
 		appobject,
-		helpstring("World Class")
+		helpstring("Cosmos Class")
 	]
-	coclass World
+	coclass Cosmos
 	{
 		[default] interface ICosmos;
 		[default, source] dispinterface _ICosmos;
@@ -739,7 +739,7 @@ library DOMPlus
 		hidden,
 		uuid(19631222-1992-0612-1965-060100000000)
 	]
-	coclass UniverseExtender
+	coclass CosmosExtender
 	{
 		interface IEclipseCtrl;
 		interface IEclipseExtender;

@@ -1,2 +1,3 @@
+
 callback CosmosCallback = void (object data);
 callback ApplicationCallback = void (CosmosXobj xobj);

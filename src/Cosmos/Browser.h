@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -40,17 +40,6 @@ namespace Universe
 		float GetFloat(String^ key);
 		__int64 GetInt64(String^ key);
 		void SendMessage();
-		//property String^ EventBindInfo
-		//{
-		//	String^ get()
-		//	{
-		//		return m_strEvents->ToLower();
-		//	};
-		//	void set(String^ strData)
-		//	{
-		//		m_strEvents = strData->ToLower();
-		//	};
-		//}
 		bool isBindCLRObjToWebPage(Object^ obj, String^ eventName);
 		void AddEventInfo(Object^ obj, String^ eventName);
 

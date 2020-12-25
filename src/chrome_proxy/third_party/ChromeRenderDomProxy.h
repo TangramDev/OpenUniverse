@@ -33,15 +33,7 @@ namespace CommonUniverse {
 
 		virtual ~CChromeWebFrameClient() {}
 
-		std::map<__int64, __int64> m_mapCosmosNode;
-		std::map<__int64, __int64> m_mapCosmosForm;
-		std::map<__int64, __int64> m_mapCosmosWindow;
-		std::map<__int64, __int64> m_mapCosmosControl;
 		std::map<std::wstring, void*> m_mapCosmosSession;
-		std::map<std::wstring, void*> m_mapCosmosNodeforCallback;
-		std::map<std::wstring, void*> m_mapCosmosWindowforCallback;
-		std::map<std::wstring, void*> m_mapCosmosFormforCallback;
-		std::map<std::wstring, void*> m_mapCosmosControlforCallback;
 
 		virtual void SendCosmosMessage(std::wstring strId,
 			std::wstring strParam1,

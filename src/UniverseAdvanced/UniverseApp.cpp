@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -623,6 +623,7 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		switch (wParam)
 		{
 		case PBT_APMRESUMEAUTOMATIC:
+		case PBT_APMPOWERSTATUSCHANGE:
 		{
 			for (auto it : g_pCosmos->m_mapThreadInfo)
 			{
@@ -639,10 +640,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 					}
 				}
 			}
-		}
-		break;
-		case PBT_APMPOWERSTATUSCHANGE:
-		{
 			for (auto it : g_pCosmos->m_mapBrowserWnd)
 			{
 				if (::IsWindowVisible(it.first))
@@ -651,12 +648,13 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 					if (pWnd && pWnd->m_pVisibleWebWnd)
 					{
 						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-						if (pWnd->m_pVisibleWebWnd->m_hWnd != hWnd)
+						if (hWnd)
 						{
 							auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
 							if (it != g_pCosmos->m_mapHtmlWnd.end())
 							{
 								pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
+								it->second->m_pChromeRenderFrameHost->ShowWebPage(true);
 							}
 						}
 						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);

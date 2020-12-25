@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -18,7 +18,6 @@
 #include "CosmosProxy.h"
 #include "NewChildForm.h"
 #include "GridCLREvent.h"
-#include "..\CosmosMini\CosmosProxy.h"
 
 #include <io.h>
 #include <stdio.h>
@@ -1926,6 +1925,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								thisForm->WindowState = FormWindowState::Normal;
 								::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 								thisForm->Focus();
+								::PostMessage((HWND)thisForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 20201225);
 								break;
 							}
 						}
@@ -1937,6 +1937,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							::SendMessage((HWND)thisForm->Handle.ToPointer(), WM_COSMOSMSG, (WPARAM)pChildForms, 20190601);
 						}
+						thisForm->Focus();
+						::PostMessage((HWND)thisForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 20201225);
 					}
 					return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 				}
@@ -2871,7 +2873,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 							{
 							case CheckState::Checked:
 							{
-								//Cosmos::Wormhole^ pCloudSession = nullptr;
+								//Wormhole^ pCloudSession = nullptr;
 								//bool bExists = Universe::Cosmos::Wormholes->TryGetValue(form, pCloudSession);
 								//if (bExists)
 								//{

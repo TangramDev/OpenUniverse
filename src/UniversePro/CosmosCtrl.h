@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -84,7 +84,7 @@ class ATL_NO_VTABLE CCosmosCtrl :
 	public CCosmosCtrlBase,
 	public IOleObjectImpl<CCosmosCtrl>,
 	public CComCoClass<CCosmosCtrl, &CLSID_CosmosCtrl>,
-	public IDispatchImpl<ICosmosCtrl, &IID_ICosmosCtrl, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<ICosmosCtrl, &IID_ICosmosCtrl, &LIBID_Universe, 1, 0>
 {
 public:
 	DECLARE_REGISTRY_RESOURCEID(IDR_TANGRAMCTRL)

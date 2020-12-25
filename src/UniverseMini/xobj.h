@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -36,7 +36,7 @@ class ATL_NO_VTABLE CXobj :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CXobj>,
 	public IConnectionPointImpl<CXobj, &__uuidof(_IXobjEvents)>,
-	public IDispatchImpl<IXobj, &IID_IXobj, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<IXobj, &IID_IXobj, &LIBID_Universe, 1, 0>
 {
 public:
 	CXobj();
@@ -208,7 +208,7 @@ private:
 
 class ATL_NO_VTABLE CXobjCollection :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public IDispatchImpl<IXobjCollection, &IID_IXobjCollection, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<IXobjCollection, &IID_IXobjCollection, &LIBID_Universe, 1, 0>
 {
 public:
 	CXobjCollection();

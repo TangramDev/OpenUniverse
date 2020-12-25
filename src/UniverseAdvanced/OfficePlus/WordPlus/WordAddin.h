@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -123,7 +123,7 @@ namespace OfficePlus
 			public IPersistStorageImpl<CWordAppCtrl>,
 			public IPersistStreamInitImpl<CWordAppCtrl>,
 			public CComCoClass<CWordAppCtrl, &CLSID_CosmosCtrl>,
-			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_DOMPlus, /*wMajor =*/ 1, /*wMinor =*/ 0>
+			public IDispatchImpl<ICosmosAppCtrl, &IID_ICosmosAppCtrl, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>
 		{
 		public:
 			CWordAppCtrl();

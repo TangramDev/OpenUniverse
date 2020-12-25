@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -699,9 +699,9 @@ namespace Universe
 		static event GetSubObjForWebPage^ OnGetSubObjForWebPage;
 		static Object^ Fire_OnGetSubObjForWebPage(Object^ SourceObj, String^ subObjName);
 
-		delegate void BindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName);
+		delegate void BindCLRObjToWebPage(Object^ SourceObj, Wormhole^ eventSession, String^ eventName);
 		static event BindCLRObjToWebPage^ OnBindCLRObjToWebPage;
-		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Cosmos::Wormhole^ eventSession, String^ eventName);
+		static void Fire_OnBindCLRObjToWebPage(Object^ SourceObj, Wormhole^ eventSession, String^ eventName);
 
 		delegate void OpenComplete(IntPtr hWnd, String^ bstrUrl, Xobj^ pRootXobj);
 		static event OpenComplete^ OnObserverComplete;
@@ -717,9 +717,9 @@ namespace Universe
 			OnCosmosMsg(hWnd, strType, strParam1, strParam2);
 		}
 
-		delegate void CosmosMsgReceived(Cosmos::Wormhole^ cloudSession);
+		delegate void CosmosMsgReceived(Wormhole^ cloudSession);
 		static event CosmosMsgReceived^ OnCosmosMsgReceived;
-		static void Fire_OnCosmosMsgReceived(Cosmos::Wormhole^ cloudSession)
+		static void Fire_OnCosmosMsgReceived(Wormhole^ cloudSession)
 		{
 			OnCosmosMsgReceived(cloudSession);
 		}

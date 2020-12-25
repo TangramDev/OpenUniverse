@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -33,7 +33,7 @@ class ATL_NO_VTABLE CCosmos :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CCosmos>,
 	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>,
-	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
 {
 	friend class CGalaxy;
 	friend class CUniverse;

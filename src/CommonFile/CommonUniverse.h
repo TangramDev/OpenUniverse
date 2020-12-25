@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -201,11 +201,13 @@ namespace CommonUniverse {
 	typedef struct CosmosInfo
 	{
 		HWND			m_hCtrlHandle = nullptr;
-		HWND			m_pParentForm;
-		HWND			m_pMDIParent;
-		CString			m_strName;
-		CString			m_strNodeName;
-		CString			m_strXobjXml;
+		HWND			m_pParentForm = nullptr;
+		HWND			m_pMDIParent = nullptr;
+		CString			m_strName = _T("");
+		CString			m_strNodeName = _T("");
+		CString			m_strXobjXml = _T("");
+		CString			m_strSessionID = _T("");
+		CString			m_strTag = _T("");
 		IXobj*			m_pXobj	= nullptr;
 		IGalaxy*		m_pGalaxy = nullptr;
 		IGalaxyCluster*	m_pGalaxyCluster = nullptr;

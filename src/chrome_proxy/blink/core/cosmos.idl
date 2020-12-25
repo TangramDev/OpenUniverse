@@ -1,3 +1,4 @@
+
 typedef sequence<any> ObjectArray;
 
 [

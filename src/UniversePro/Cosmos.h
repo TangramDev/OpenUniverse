@@ -1,5 +1,5 @@
 /********************************************************************************
- *					DOM Plus for Application - Version 1.1.7.40
+ *             DOM Plus for Application - Version 1.1.8.202012250001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
 // Use of this source code is governed by a BSD-style license that
@@ -46,7 +46,7 @@ struct RemoteDebugInfo
 
 class ATL_NO_VTABLE CCosmosEvent :
 	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosEventObj, &IID_ICosmosEventObj, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<ICosmosEventObj, &IID_ICosmosEventObj, &LIBID_Universe, 1, 0>
 {
 public:
 	CCosmosEvent();
@@ -94,7 +94,7 @@ public:
 
 class ATL_NO_VTABLE CCosmosDoc :
 	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosDoc, &IID_ICosmosDoc, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<ICosmosDoc, &IID_ICosmosDoc, &LIBID_Universe, 1, 0>
 {
 public:
 	CCosmosDoc();
@@ -138,7 +138,7 @@ private:
 class CUniverseMDIChild;
 class ATL_NO_VTABLE CCosmosDocTemplate :
 	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosDocTemplate, &IID_ICosmosDocTemplate, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<ICosmosDocTemplate, &IID_ICosmosDocTemplate, &LIBID_Universe, 1, 0>
 {
 public:
 	CCosmosDocTemplate();
@@ -195,7 +195,7 @@ class ATL_NO_VTABLE CCosmos :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CCosmos>,
 	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>,
-	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_DOMPlus, 1, 0>
+	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
 {
 	friend class CGalaxy;
 	friend class CEclipseWnd;
