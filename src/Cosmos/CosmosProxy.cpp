@@ -1865,7 +1865,11 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 		if (strMsgID == _T("MODIFY_CTRL_VALUE"))
 		{
 			CString strSubObj = pSession->GetString(L"currentsubobjformodify");
-			if (pObj->GetType()->IsSubclassOf(Control::typeid))
+			if (strSubObj == _T("caption"))
+			{
+				thisNode->Caption = BSTR2STRING(pSession->GetString(L"caption"));
+			}
+			else if (pObj->GetType()->IsSubclassOf(Control::typeid))
 			{
 				Control^ pCtrl = (Control^)pObj;
 				Control^ pSubCtrl = nullptr;

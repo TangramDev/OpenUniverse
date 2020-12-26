@@ -66,7 +66,7 @@
                                 var parentgrid = e.grid.parent;
                                 var type = e.grid.parent.xobj.getLong("gridtype");
                                 if (parentgrid != null&&type==4) {
-                                   parentgrid.ObserveEx(name, nativeElm.outerHTML, 0, 1);
+                                   parentgrid.Observe(0, 0, name, nativeElm.outerHTML, 0, 1);
                                 }
                             }
                         }

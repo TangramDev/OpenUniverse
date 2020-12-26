@@ -1,7 +1,7 @@
 
 [
 	Exposed = Window
-] interface CosmosCompositor : EventTarget {
+] interface CosmosCompositor : CosmosXobj {
 	readonly attribute DOMString name;
 
 	// Event handler attributes

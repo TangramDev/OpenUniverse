@@ -320,6 +320,27 @@ namespace blink {
 		return L"";
 	}
 
+	void CosmosXobj::setCaption(const String& value)
+	{
+		WebString str = "caption";
+		WebString val = value;
+		session_.m_mapString[str.Utf16()] = val.Utf16();
+		setStr(L"msgID", L"MODIFY_CTRL_VALUE");
+		setStr(L"currentsubobjformodify", "caption");
+		m_pRenderframeImpl->SendCosmosMessageEx(session_);
+	}
+
+	String CosmosXobj::caption()
+	{
+		WebString str = "caption";
+		auto it = session_.m_mapString.find(str.Utf16());
+		if (it != session_.m_mapString.end())
+		{
+			return String(it->second.c_str());
+		}
+		return L"";
+	}
+
 	void CosmosXobj::setVisibleElement(const String& strKey, Element* value)
 	{
 		auto it = mapVisibleElem.find(strKey);

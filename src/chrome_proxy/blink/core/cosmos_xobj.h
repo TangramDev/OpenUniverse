@@ -104,6 +104,9 @@ namespace blink {
 		String msgID();
 		void setMsgID(const String& value);
 
+		String caption();
+		void setCaption(const String& value);
+
 		CosmosXobj* sender();
 		void setSender(CosmosXobj* value);
 

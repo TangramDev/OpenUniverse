@@ -97,8 +97,8 @@ class CORE_EXPORT CosmosNode final :
   CosmosNode* getChild(const String& strName);
   CosmosNode* getXobj(const String& strName);
   void Observe(const String& strKey, const String& xml, V8ApplicationCallback* callback);
-  void ObserveEx(const String& strKey, const String& xml, long row, long col, V8ApplicationCallback* callback);
-  void ObserveCtrl(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback);
+  void Observe(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback);
+  void Observe(long row, long col, const String& strKey, const String& xml, V8ApplicationCallback* callback);
 
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(CosmosControlCreated, kCosmoscontrolcreated)

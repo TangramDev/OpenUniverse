@@ -15,6 +15,7 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute DocumentFragment docFragment;
 
 	attribute DOMString msgID;
+	attribute DOMString caption;
 	attribute CosmosXobj sender;
 	attribute Element workElement;
 

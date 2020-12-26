@@ -270,29 +270,7 @@ namespace blink {
 		}
 	}
 
-	void CosmosNode::ObserveEx(const String& strKey, const String& xml, long row, long col, V8ApplicationCallback* callback)
-	{
-		if (m_pRenderframeImpl)
-		{
-			setStr(L"senderid", id_);
-			setStr(L"msgID", L"OPEN_XML_SPLITTER");
-			setStr(L"openkey", strKey);
-			setStr(L"openxml", xml);
-			setLong(L"opencol", col);
-			setLong(L"openrow", row);
-			String callbackid_ = WTF::CreateCanonicalUUIDString();
-			setStr(L"opencallbackid", callbackid_);
-			WebString strID = callbackid_;
-			m_pRenderframeImpl->m_mapCosmosSession[strID.Utf16()] = this;
-			if (callback)
-			{
-				mapCosmosEventCallback_.insert(callbackid_, callback);
-			}
-			m_pRenderframeImpl->SendCosmosMessageEx(session_);
-		}
-	}
-
-	void CosmosNode::ObserveCtrl(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback)
+	void CosmosNode::Observe(const String& strCtrlName, const String& strKey, const String& xml, V8ApplicationCallback* callback)
 	{
 		if (m_pRenderframeImpl)
 		{
@@ -311,6 +289,28 @@ namespace blink {
 			}
 			m_pRenderframeImpl->SendCosmosMessageEx(session_);
 			setStr(L"msgID", "");
+		}
+	}
+
+	void CosmosNode::Observe(long row, long col, const String& strKey, const String& xml, V8ApplicationCallback* callback)
+	{
+		if (m_pRenderframeImpl)
+		{
+			setStr(L"senderid", id_);
+			setStr(L"msgID", L"OPEN_XML_SPLITTER");
+			setStr(L"openkey", strKey);
+			setStr(L"openxml", xml);
+			setLong(L"opencol", col);
+			setLong(L"openrow", row);
+			String callbackid_ = WTF::CreateCanonicalUUIDString();
+			setStr(L"opencallbackid", callbackid_);
+			WebString strID = callbackid_;
+			m_pRenderframeImpl->m_mapCosmosSession[strID.Utf16()] = this;
+			if (callback)
+			{
+				mapCosmosEventCallback_.insert(callbackid_, callback);
+			}
+			m_pRenderframeImpl->SendCosmosMessageEx(session_);
 		}
 	}
 

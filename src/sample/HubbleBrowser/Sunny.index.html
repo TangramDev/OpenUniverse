@@ -44,13 +44,13 @@
                         e.grid.addEventListener("button1", "OnClick", function (e) {
                             e.grid.Observe("key1", document.getElementById("mainwindow_1").outerHTML);
                             if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
-                                e.grid.parent.ObserveEx("key1", document.getElementById("mainwindow_2").outerHTML);
+                                e.grid.parent.Observe(0, 0, "key1", document.getElementById("mainwindow_2").outerHTML);
                             }
                         });
                         e.grid.addEventListener("button2", "OnClick", function (e) {
                             e.grid.Observe("key2", document.getElementById("mainwindow_2").outerHTML);
                             if (e.grid.parent != null && e.grid.parent.xobj.getLong("gridtype") == 4) {
-                                e.grid.parent.ObserveEx("key2", document.getElementById("mainwindow_1").outerHTML);
+                                e.grid.parent.Observe(0, 0, "key2", document.getElementById("mainwindow_1").outerHTML);
                             }
                         });
                     }

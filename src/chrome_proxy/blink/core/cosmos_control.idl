@@ -1,21 +1,14 @@
 
 [
 	Exposed = Window
-] interface CosmosControl : EventTarget {
-
-	// Message API
-	void sendMessage([DefaultValue = Undefined] optional CosmosXobj msg,
-		[DefaultValue = Undefined] optional ApplicationCallback callback);
+] interface CosmosControl : CosmosXobj {
 
 	// Control Events Binding:
 	void BindCtrlEvents(DOMString strEvents);
-	void addEventListener(DOMString eventName, ApplicationCallback callback);
-	void removeEventListener(DOMString eventName);
 
 	readonly attribute long long handle;
 	readonly attribute DOMString name;
 	readonly attribute DOMString type;
-	readonly attribute CosmosXobj xobj;
 	readonly attribute CosmosNode parent;
 	readonly attribute CosmosWinform parentForm;
 	readonly attribute CosmosControl parentControl;

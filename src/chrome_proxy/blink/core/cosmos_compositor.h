@@ -47,45 +47,24 @@ class ExceptionState;
 class WebLocalFrameClient;
 class SerializedScriptValue;
 
-class CORE_EXPORT CosmosCompositor final : public EventTargetWithInlineData,
-									  public DOMWindowClient {
+class CORE_EXPORT CosmosCompositor final : public CosmosXobj{
   DEFINE_WRAPPERTYPEINFO();
-  USING_GARBAGE_COLLECTED_MIXIN(CosmosCompositor);
 
  public:
-  static CosmosCompositor* Create(LocalFrame* frame) { return MakeGarbageCollected<CosmosCompositor>(frame); }
-  static CosmosCompositor* Create(LocalFrame* frame, const String& strHandle);
+  static CosmosCompositor* Create() { return MakeGarbageCollected<CosmosCompositor>(); }
+  static CosmosCompositor* Create(const String& strHandle);
 
   void Trace(blink::Visitor*) override;
-
-  // Called when an event listener has been successfully added.
-  void AddedEventListener(const AtomicString& event_type,
-                          RegisteredEventListener&) override;
-
-  String name();
-  String getid();
-
-  // Message method
-  void sendMessage(const String& id, const String& param1, const String& param2, const String& param3, const String& param4, const String& param5);
-  
 
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MessageReceived, kCosmoscompositor)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(XobjCreated, kXobjcreated)
 
-  // EventTarget overrides:
-  const AtomicString& InterfaceName() const override;
-  ExecutionContext* GetExecutionContext() const override;
-
-  CosmosCompositor(LocalFrame*);
-  CosmosCompositor(LocalFrame*, const String& strNodeXml);
+  CosmosCompositor();
+  CosmosCompositor(const String& strNodeXml);
 
   ~CosmosCompositor() override;
 
-  WebLocalFrameClient* m_pRenderframeImpl;
-  mutable Member<CosmosXobj> innerXobj_;
 private:
-  String id_;
-  String name_;
   String m_strXobjXml;
 };
 
