@@ -48,13 +48,17 @@
 namespace blink {
 
 	CosmosWinform::CosmosWinform():CosmosXobj(){
-		m_strFormXml = "";
 		m_pBindMdiNode = nullptr;
 		m_pWebBindMdiNode = nullptr;
 		m_pRenderframeImpl = nullptr;
 		m_pContentElement = nullptr;
 		m_pMDIParent = nullptr;
 		m_pActiveMDIChild = nullptr;
+	}
+
+	CosmosWinform::CosmosWinform(const String& strNodeName)
+	{
+		name_ = "";
 	}
 
 	CosmosWinform::~CosmosWinform() {
@@ -74,12 +78,6 @@ namespace blink {
 
 	CosmosWinform* CosmosWinform::Create(const String& strFormXml) {
 		return MakeGarbageCollected<CosmosWinform>(strFormXml);
-	}
-
-	CosmosWinform::CosmosWinform(const String& strNodeName) 
-	{
-		m_strFormXml = strNodeName;
-		name_ = strNodeName;
 	}
 
 	void CosmosWinform::Trace(blink::Visitor* visitor) {
@@ -139,11 +137,6 @@ namespace blink {
 
 		}
 		return m_pMDIParent.Get();
-	}
-
-	String CosmosWinform::getid()
-	{
-		return id_;
 	}
 
 	CosmosGalaxy* CosmosWinform::getGalaxy(const String& galaxyName)

@@ -73,7 +73,6 @@ namespace blink {
   void Trace(blink::Visitor*) override;
 
   int64_t handle();
-  String getid();
   bool isReady();
   long formType();
 
@@ -108,8 +107,6 @@ namespace blink {
 	  bool isReady_ = false;
 	  int64_t handle_ = 0;
 	  int64_t m_nMdiwebbindgridhandle = 0;
-	  String m_strFormXml;
-	  String name_;
 	  mutable Member<Element> m_pContentElement;
 	  mutable Member<CosmosNode> m_pBindMdiNode;
 	  mutable Member<CosmosNode> m_pWebBindMdiNode;

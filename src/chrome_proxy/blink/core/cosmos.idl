@@ -18,6 +18,7 @@ typedef sequence<any> ObjectArray;
 		[DefaultValue = Undefined] optional ApplicationCallback callback, 
 		[DefaultValue = Undefined] optional  boolean bwait);
 	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void Observe(DOMString key, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	// DOM API
 	void defineElement(DOMString tagName, DOMString html);
@@ -34,6 +35,9 @@ typedef sequence<any> ObjectArray;
 
 	//CosmosWinForm API
 	CosmosWinform createWinForm(DOMString strFormXml, 
+		long FormType, 
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	CosmosWinform createWinForm(Element elem, 
 		long FormType, 
 		[DefaultValue = Undefined] optional ApplicationCallback callback);
 

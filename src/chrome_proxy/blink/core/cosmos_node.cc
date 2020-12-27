@@ -314,6 +314,70 @@ namespace blink {
 		}
 	}
 
+	void CosmosNode::ObserveEx(const String& strKey, Element* elem, V8ApplicationCallback* callback)
+	{
+		if (m_pRenderframeImpl && elem)
+		{
+			setStr(L"senderid", id_);
+			String callbackid_ = WTF::CreateCanonicalUUIDString();
+			setStr(L"msgID", L"OPEN_XML");
+			setStr(L"open_callbackid", callbackid_);
+			setStr(L"openkey", strKey);
+			setStr("openxml", elem->OuterHTMLAsString());
+			WebString strID = callbackid_;
+			m_pRenderframeImpl->m_mapCosmosSession[strID.Utf16()] = this;
+			if (callback)
+			{
+				mapCosmosEventCallback_.insert(callbackid_, callback);
+			}
+			m_pRenderframeImpl->SendCosmosMessageEx(session_);
+		}
+	}
+
+	void CosmosNode::ObserveEx(const String& strCtrlName, const String& strKey, Element* elem, V8ApplicationCallback* callback)
+	{
+		if (m_pRenderframeImpl && elem)
+		{
+			setStr(L"senderid", id_);
+			setStr(L"msgID", L"OPEN_XML_CTRL");
+			setStr(L"ctrlName", strCtrlName);
+			setStr(L"openkey", strKey);
+			setStr("openxml", elem->OuterHTMLAsString());
+			String callbackid_ = WTF::CreateCanonicalUUIDString();
+			setStr(L"opencallbackid", callbackid_);
+			WebString strID = callbackid_;
+			m_pRenderframeImpl->m_mapCosmosSession[strID.Utf16()] = this;
+			if (callback)
+			{
+				mapCosmosEventCallback_.insert(callbackid_, callback);
+			}
+			m_pRenderframeImpl->SendCosmosMessageEx(session_);
+			setStr(L"msgID", "");
+		}
+	}
+
+	void CosmosNode::ObserveEx(long row, long col, const String& strKey, Element* elem, V8ApplicationCallback* callback)
+	{
+		if (m_pRenderframeImpl && elem)
+		{
+			setStr(L"senderid", id_);
+			setStr(L"msgID", L"OPEN_XML_SPLITTER");
+			setStr(L"openkey", strKey);
+			setStr(L"openxml", elem->OuterHTMLAsString());
+			setLong(L"opencol", col);
+			setLong(L"openrow", row);
+			String callbackid_ = WTF::CreateCanonicalUUIDString();
+			setStr(L"opencallbackid", callbackid_);
+			WebString strID = callbackid_;
+			m_pRenderframeImpl->m_mapCosmosSession[strID.Utf16()] = this;
+			if (callback)
+			{
+				mapCosmosEventCallback_.insert(callbackid_, callback);
+			}
+			m_pRenderframeImpl->SendCosmosMessageEx(session_);
+		}
+	}
+
 	void CosmosNode::sendMessageToXobj(CosmosXobj* msg)
 	{
 		if (msg)
@@ -340,32 +404,12 @@ namespace blink {
 
 	void CosmosNode::setControlVal(const String& CtrlID, int64_t CtrlHandle, const String& strVal)
 	{
-		int64_t nHandle = 0;
-		if (CtrlID != "")
-		{
-			Element* const tangramelement = cosmos_->DomWindow()->document()->getElementById(WTF::AtomicString(CtrlID));
-			if (tangramelement)
-			{
-				WTF::AtomicString handle = tangramelement->getAttribute("hwnd");
-				if (handle != "")
-				{
-					WebString webstr = handle;
-					std::wstring u16_handle = webstr.Utf16();
-					nHandle = _wtoi(u16_handle.c_str());
-				}
-			}
-		}
-		else
-			nHandle = handle_;
-		if (nHandle)
-		{
-			if (m_pRenderframeImpl) {
-				WebString webstr = strVal;
-				std::wstring _val = webstr.Utf16();
-				webstr = CtrlID;
-				std::wstring _strCtrlID = webstr.Utf16();
-				m_pRenderframeImpl->SendCosmosMessage(L"TANGRAM_CTRL_VALUE_MESSAGE", _strCtrlID, nHandle, 0, _val, L"");
-			}
+		if (m_pRenderframeImpl) {
+			WebString webstr = strVal;
+			std::wstring _val = webstr.Utf16();
+			webstr = CtrlID;
+			std::wstring _strCtrlID = webstr.Utf16();
+			m_pRenderframeImpl->SendCosmosMessage(L"TANGRAM_CTRL_VALUE_MESSAGE", _strCtrlID, CtrlHandle, 0, _val, L"");
 		}
 	}
 

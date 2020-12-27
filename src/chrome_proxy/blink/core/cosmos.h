@@ -130,12 +130,14 @@ namespace blink {
 	 void sendMessage(CosmosXobj* msg, V8ApplicationCallback* callback, bool bwait);
 	 void openUrl(const String& url, long nBrowserWndOpenDisposition, V8ApplicationCallback* callback, bool bwait);
 	 void Observe(const String& key, const String& strXml, V8ApplicationCallback* callback);
+	 void Observe(const String& key, Element* elem, V8ApplicationCallback* callback);
 
 	 // DOM method
 	 void defineElement(const String& tagName, const String& html);
 	 void renderElement(const String& tagName, const String& html);
 
 	 //WinForm API:
+	 CosmosWinform* createWinForm(Element* elem, const long FormType, V8ApplicationCallback* callback);
 	 CosmosWinform* createWinForm(const String& strFormXml, const long FormType, V8ApplicationCallback* callback);
 	 CosmosWinform* newWinForm(int64_t handle, CosmosXobj* obj);
 	 CosmosWinform* CreateForm(int64_t handle, CosmosXobj* obj);

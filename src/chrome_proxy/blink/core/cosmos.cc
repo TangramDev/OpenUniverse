@@ -181,9 +181,30 @@ namespace blink {
 		return var;
 	}
 
+	CosmosWinform* Cosmos::createWinForm(Element* elem, const long FormType, V8ApplicationCallback* callback)
+	{
+		CosmosWinform* form = CosmosWinform::Create("");
+		form->cosmos_ = this;
+		form->handle_ = (int64_t)form;
+		if (callback)
+			mapCallbackFunction_.insert(form->handle_, callback);
+		form->m_pRenderframeImpl = m_pRenderframeImpl;
+		m_mapWinForm.insert(form->handle_, form);
+
+		if (m_pRenderframeImpl) {
+			form->setStr(L"msgID", L"CREATE_WINFORM");
+			form->setStr(L"objID", L"WinForm");
+			form->setInt64(L"form", (int64_t)form);
+			form->setStr(L"formXml", elem->OuterHTMLAsString());
+			form->setLong(L"formType", FormType);
+			m_pRenderframeImpl->SendCosmosMessageEx(form->session_);
+		}
+		return form;
+	}
+
 	CosmosWinform* Cosmos::createWinForm(const String& strFormXml, const long FormType, V8ApplicationCallback* callback)
 	{
-		CosmosWinform* form = CosmosWinform::Create(strFormXml);
+		CosmosWinform* form = CosmosWinform::Create("");
 		form->cosmos_ = this;
 		form->handle_ = (int64_t)form;
 		if (callback)
@@ -1010,6 +1031,11 @@ namespace blink {
 	void Cosmos::Observe(const String& key, const String& strXml, V8ApplicationCallback* callback)
 	{
 		sendMessage("TANGRAM_UI_MESSAGE", key, L"", strXml, L"", L"");
+	}
+
+	void Cosmos::Observe(const String& key, Element* elem, V8ApplicationCallback* callback)
+	{
+		sendMessage("TANGRAM_UI_MESSAGE", key, L"", elem->OuterHTMLAsString(), L"", L"");
 	}
 
 	void Cosmos::invokeWinFormCreatedCallback(CosmosWinform* form)

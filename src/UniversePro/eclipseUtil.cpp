@@ -15,7 +15,8 @@
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
- * 1. Built-in Modern Web Browser;
+ * 1. Built-in Modern Web Browser: Independent Browser Window and Browser Window
+ *    as sub windows of other windows are supported in the application process;
  * 2. DOM Plus: DOMPlus is a natural extension of the standard DOM system.
  *    It allows the application system to support a kind of generalized web pages,
  *    which are composed of standard DOM elements and binary components supported
