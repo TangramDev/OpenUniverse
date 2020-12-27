@@ -1605,6 +1605,12 @@ void LocalDOMWindow::FinishedLoading(FrameLoader::NavigationFinishState state) {
     if (list->length()) {
       cosmosElem = list->item(0);
       if (cosmosElem) {
+        AtomicString enableConsoleInfo =
+            cosmosElem->getAttribute("consoleinfo");
+        if (enableConsoleInfo.IsNull() == false && enableConsoleInfo != "" &&
+            enableConsoleInfo.LowerASCII()=="true") {
+          cosmos()->enableConsoleInfo_ = true;
+        }
         cosmos()->DocumentFragment_ = document()->createDocumentFragment();
         if (cosmos()->DocumentFragment_) {
           cosmos()->DocumentFragment_->appendChild(cosmosElem);

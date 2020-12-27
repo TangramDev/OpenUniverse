@@ -7,7 +7,6 @@
 	void sendMessageToXobj(CosmosXobj msg);
 	void sendMessageToXobj(CosmosNode node);
 
-	void GetControlsNames(ApplicationCallback callback);
 	void ShowWebContent(DOMString strParentDivName, DOMString strDivName);
 	//Control Bind Api:
 	void setControlVal(DOMString CtrlID, long long CtrlHandle, DOMString strVal);
@@ -18,10 +17,10 @@
 	CosmosNode getChild(DOMString strName);
 	CosmosNode getXobj(DOMString strName);
 	void Observe(DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
-	void ObserveEx(DOMString strKey, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void Observe(DOMString strCtrlName, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
-	void ObserveEx(DOMString strCtrlName, DOMString strKey, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void Observe(long row, long col, DOMString strKey, DOMString xml, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void ObserveEx(DOMString strKey, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void ObserveEx(DOMString strCtrlName, DOMString strKey, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void ObserveEx(long row, long col, DOMString strKey, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 

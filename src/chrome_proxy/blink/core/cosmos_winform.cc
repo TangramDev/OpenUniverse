@@ -1,9 +1,10 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012250002
+ *           Web Runtime for Application - Version 1.0.0.202012280003           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
- * 1. Built-in Modern Web Browser;
+ * 1. Built-in Modern Web Browser: Independent Browser Window and Browser Window
+ *    as sub windows of other windows are supported in the application process;
  * 2. DOM Plus: DOMPlus is a natural extension of the standard DOM system.
  *    It allows the application system to support a kind of generalized web pages,
  *    which are composed of standard DOM elements and binary components supported
@@ -12,13 +13,12 @@
  *    become a built-in programmable language in the application system, so that
  *    the application system can be expanded and developed for the Internet based
  *    on modern javscript/Web technology.
-// Use of this source code is governed by a BSD-style license that
-// can be found in the LICENSE file.
+ * Use of this source code is governed by a BSD-style license that
+ * can be found in the LICENSE file.
  *
  * CONTACT INFORMATION:
  * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
  * https://www.tangram.dev
- *
  *******************************************************************************/
 
 #include "cosmos.h"
@@ -47,7 +47,7 @@
 
 namespace blink {
 
-	CosmosWinform::CosmosWinform():CosmosXobj(){
+	CosmosWinform::CosmosWinform() : CosmosXobj() {
 		m_pBindMdiNode = nullptr;
 		m_pWebBindMdiNode = nullptr;
 		m_pRenderframeImpl = nullptr;
@@ -124,7 +124,7 @@ namespace blink {
 		{
 			Cosmos* pCosmos = cosmos_.Get();
 			int64_t nHandle = getInt64("mdiformhandle");
-			if (nHandle&&pCosmos)
+			if (nHandle && pCosmos)
 			{
 				pCosmos->m_mapWinForm.find(nHandle);
 				auto it1 = pCosmos->m_mapWinForm.find(nHandle);
@@ -209,7 +209,7 @@ namespace blink {
 	long CosmosWinform::formType()
 	{
 		long nFormType = getLong(L"WinFormType");
-		
+
 		return nFormType;
 	}
 
@@ -364,7 +364,7 @@ namespace blink {
 
 	CosmosWinform* CosmosWinform::activeMDIChild()
 	{
-		if(m_pActiveMDIChild)
+		if (m_pActiveMDIChild)
 			return m_pActiveMDIChild.Get();
 		return nullptr;
 	}
@@ -380,7 +380,7 @@ namespace blink {
 				HTMLCollection* plist = list->item(i)->Children();
 				for (unsigned int i = 0; i < plist->length(); i++)
 				{
-					Element* elem = plist->item(i); 
+					Element* elem = plist->item(i);
 					AtomicString target = "";
 					target = elem->getAttribute("target");
 					if (target.IsNull() || target == "")
@@ -400,7 +400,7 @@ namespace blink {
 						}
 						if (xobjfortarget == nullptr) {
 							CosmosWinform* Parentform = mdiParent();
-							if(Parentform)
+							if (Parentform)
 								xobjfortarget = Parentform->getXobj(galaxy, cluster, target);
 						}
 						if (xobjfortarget == nullptr) {
@@ -408,7 +408,7 @@ namespace blink {
 							if (nFormType == 2)
 							{
 								CosmosWinform* childform = activeMDIChild();
-								if(childform)
+								if (childform)
 									xobjfortarget = childform->getXobj(galaxy, cluster, target);
 							}
 						}

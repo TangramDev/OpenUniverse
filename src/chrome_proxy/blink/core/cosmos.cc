@@ -1,9 +1,10 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012250002
+ *           Web Runtime for Application - Version 1.0.0.202012280003           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
- * 1. Built-in Modern Web Browser;
+ * 1. Built-in Modern Web Browser: Independent Browser Window and Browser Window
+ *    as sub windows of other windows are supported in the application process;
  * 2. DOM Plus: DOMPlus is a natural extension of the standard DOM system.
  *    It allows the application system to support a kind of generalized web pages,
  *    which are composed of standard DOM elements and binary components supported
@@ -12,13 +13,12 @@
  *    become a built-in programmable language in the application system, so that
  *    the application system can be expanded and developed for the Internet based
  *    on modern javscript/Web technology.
-// Use of this source code is governed by a BSD-style license that
-// can be found in the LICENSE file.
+ * Use of this source code is governed by a BSD-style license that
+ * can be found in the LICENSE file.
  *
  * CONTACT INFORMATION:
  * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
  * https://www.tangram.dev
- *
  *******************************************************************************/
 
 #include "cosmos.h"
@@ -175,8 +175,6 @@ namespace blink {
 	{
 		CosmosXobj* var = CosmosXobj::Create(strName);
 		var->m_pRenderframeImpl = m_pRenderframeImpl;
-		var->id_ = WTF::CreateCanonicalUUIDString();
-		var->session_.m_mapString[L"sessionid"] = WebString(var->id_).Utf16();
 		var->cosmos_ = this;
 		return var;
 	}
@@ -221,6 +219,42 @@ namespace blink {
 			m_pRenderframeImpl->SendCosmosMessageEx(form->session_);
 		}
 		return form;
+	}
+
+	CosmosXobj* Cosmos::createObject(Element* elem,V8ApplicationCallback* callback)
+	{
+		CosmosXobj* var = CosmosXobj::Create("");
+		var->m_pRenderframeImpl = m_pRenderframeImpl;
+		var->cosmos_ = this;
+		mapCloudSession_.insert(var->id_, var);
+		if (callback)
+			mapCallbackFunction_.insert((__int64)var, callback);
+		if (m_pRenderframeImpl) {
+			var->setStr(L"msgID", L"CREATE_CLROBJ");
+			var->setStr(L"objID", L"CLROBJ");
+			var->setInt64(L"objhandle", (int64_t)var);
+			var->setStr(L"objXml", elem->OuterHTMLAsString());
+			m_pRenderframeImpl->SendCosmosMessageEx(var->session_);
+		}
+		return var;
+	}
+
+	CosmosXobj* Cosmos::createObject(const String& strObjXml, V8ApplicationCallback* callback)
+	{
+		CosmosXobj* var = CosmosXobj::Create("");
+		var->m_pRenderframeImpl = m_pRenderframeImpl;
+		var->cosmos_ = this;
+		mapCloudSession_.insert(var->id_, var);
+		if (callback)
+			mapCallbackFunction_.insert((__int64)var, callback);
+		if (m_pRenderframeImpl) {
+			var->setStr(L"msgID", L"CREATE_CLROBJ");
+			var->setStr(L"objID", L"CLROBJ");
+			var->setInt64(L"objhandle", (int64_t)var);
+			var->setStr(L"objXml", strObjXml);
+			m_pRenderframeImpl->SendCosmosMessageEx(var->session_);
+		}
+		return var;
 	}
 
 	CosmosWinform* Cosmos::newWinForm(int64_t handle, CosmosXobj* obj)
@@ -709,6 +743,11 @@ namespace blink {
 			m_pRootNode->m_mapXobj[str.Utf16()] = node;
 
 			strMessageXml = xobj->getStr(L"cosmosxml");
+			if (enableConsoleInfo_)
+			{
+				GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo, "Create a New Xobj:\n", false);
+				GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo, strMessageXml, false);
+			}
 			if (node == m_pRootNode && strMessageXml.IsNull() == false && strMessageXml != "")
 			{
 				node->DocumentFragment_ = DomWindow()->document()->createDocumentFragment();
@@ -731,6 +770,11 @@ namespace blink {
 			if (list_->length())
 			{
 				node->hostElem_ = (Element*)list_->item(0);
+				if (enableConsoleInfo_)
+				{
+					GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo, "Xobj HTML Code:\n", false);
+					GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo, node->hostElem_->OuterHTMLAsString(), false);
+				}
 				for (unsigned int i = 0; i < node->hostElem_->Children()->length(); i++)
 				{
 					Element* e = node->hostElem_->Children()->item(i);
@@ -797,6 +841,8 @@ namespace blink {
 											node->setStr(L"Bindevent", eventname);
 											node->m_mapElement[key] = elemEvent;
 											m_pRenderframeImpl->SendCosmosMessageEx(node->session_);
+											if (enableConsoleInfo_)
+												GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo, elemEvent->OuterHTMLAsString(), true);
 										}
 									}
 								}
@@ -1068,6 +1114,9 @@ namespace blink {
 			}
 			m_pRenderframeImpl->SendCosmosMessageEx(msg->session_);
 		}
+		GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo,"test",true);
+		//((RenderFrame*)m_pRenderframeImpl)->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo,
+		//	"test");
 		//if (bwait)
 		//	run_loop_.Run();
 	}

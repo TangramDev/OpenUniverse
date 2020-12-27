@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012250002
+ *           Web Runtime for Application - Version 1.0.0.202012280003           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -13,13 +13,12 @@
  *    become a built-in programmable language in the application system, so that
  *    the application system can be expanded and developed for the Internet based
  *    on modern javscript/Web technology.
-// Use of this source code is governed by a BSD-style license that
-// can be found in the LICENSE file.
+ * Use of this source code is governed by a BSD-style license that
+ * can be found in the LICENSE file.
  *
  * CONTACT INFORMATION:
  * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
  * https://www.tangram.dev
- *
  *******************************************************************************/
 
 #include "msacc.h"

@@ -40,6 +40,11 @@ typedef sequence<any> ObjectArray;
 	CosmosWinform createWinForm(Element elem, 
 		long FormType, 
 		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	//Cosmos CLR API
+	CosmosXobj createObject(DOMString strObjXml, 
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
+	CosmosXobj createObject(Element elem,
+		[DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	[Affects = Nothing] getter CosmosXobj ? getNamedItem(DOMString name);
 	[RaisesException, CEReactions] CosmosXobj ? setNamedItem(CosmosXobj var);
