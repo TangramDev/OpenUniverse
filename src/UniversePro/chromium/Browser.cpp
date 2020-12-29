@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012280003
+ *           Web Runtime for Application - Version 1.0.0.202012290004
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -72,7 +72,6 @@ namespace Browser {
 			g_pCosmos->m_bWinFormActived = false;
 		}
 		m_pBrowser->LayoutBrowser();
-		//::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		return lRes;
 	}
 
@@ -307,7 +306,7 @@ namespace Browser {
 			}
 			if (hPWnd)
 			{
-				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;// g_pCosmos->m_pHtmlWndCreated;
+				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 				g_pCosmos->m_pGalaxy = nullptr;
 				g_pCosmos->m_bWinFormActived = false;
 				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
