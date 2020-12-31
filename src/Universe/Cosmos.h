@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012290004           *
+ *           Web Runtime for Application - Version 1.0.0.202101010001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -61,6 +61,70 @@
  * CONTACT INFORMATION:
  * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
  * https://www.tangram.dev
+ * 
+ * In the Internet era, because the web software model has broken through the 
+ * limitations of local computers, this makes the software system based on 
+ * Internet services popular and makes desktop software appear to be dwarfed. 
+ * With the development of Internet technology, software content service is a 
+ * key topic that many software infrastructures must face, this topic further 
+ * highlights the dilemma of the current desktop software structure: on the one 
+ * hand, a large number of software component assets have been formed, on the 
+ * other hand, Internet services clearly represent the trend of software development. 
+ * Therefore, how to properly adapt the desktop software to the development of 
+ * the contemporary Internet is a very urgent problem and a basic problem that 
+ * today's desktop software must face.
+ * We know that the presentation of web software needs a modern web browser, an 
+ * indisputable fact is that a desktop Internet web browser is also a desktop 
+ * software, but because its content relies on Web pages, it is almost recognized 
+ * as being out of the ranks of desktop software. In the age of the Internet, the 
+ * difference between the Desktop Software System supported by binary components and 
+ * the Browser Application Architecture supported by the content of Web pages has 
+ * become more and more prominent, and it can be said that the two are gradually 
+ * moving away. How Desktop Software finds its most suitable position has always been 
+ * an interesting topic, but there has been no proper solution. Although CEF and Electron 
+ * are very popular, they cannot fundamentally solve the key problem of desktop software 
+ * connecting to the Internet. Web Runtime tries to consider this issue from a new 
+ * perspective, due to the needs of Internet content security and rendering, Internet 
+ * giants have formed a unique Sandbox-Based Multi-Process Architecture for the basic 
+ * framework of the Web Browser, which makes the browser structure completely different 
+ * from other desktop software systems in most cases. The Sandbox-Based Multi-Process 
+ * Architecture indeed solves many problems caused by the Internet, and it also makes 
+ * the Browser series and traditional desktop software form an increasingly clear difference. 
+ * We believe that handling this difference is the key to solving the problem of Desktop 
+ * Software adapting to the Internet.
+ * If we take Web Browser as the smallest Desktop Software, for example, let's imagine 
+ * that we use the basic structure of the Web Browser as the initial structure of other 
+ * desktop software, what will happen? the problem will become clearer and clearer. We 
+ * know that in modern browser architecture, the tasks of rendering and displaying web 
+ * content are completed by the Render Process and GPU Process. The responsibility of 
+ * the Browser Process seems to be to provide a content "viewport" for Web Content and 
+ * "auxiliary facilities" around the web content, such as tab strip, toolbar, etc. The 
+ * key to the difference between Desktop Software and Internet Web Browsers seems to be 
+ * here. Since Chromium, Mozilla and other such types of projects only focus on the Browser 
+ * Architecture itself, the restrictions that must be formed around the Browser Architecture 
+ * also appear in Chromium, for example, because Chromium is a Browser Project, the 
+ * implementation of the Browser Process is strictly limited to the C++ language level 
+ * due to the project itself, from this we can see that the technical constraints on the 
+ * browser process are one of the key reason to the huge difference between desktop software 
+ * and browser software, if this constraint can be broken and developers are allowed to 
+ * reconstruct the Browser Process while retaining the responsibility of the Browser Process, 
+ * the situation will be completely different. According to this thinking principle, 
+ * the problem will be how to use the existing Desktop Software Development Technology 
+ * to reconstruct the Browser Process of Web Browser Multi-Process Architecture. This 
+ * consideration seems to be a blind spot in the software industry today, since the vast 
+ * majority of software teams believe that only the Browser Architecture requires the Process 
+ * Separation of Browser, Renderer, GPU and others, this has led to a clear difference between 
+ * the software structure of the browser team and the desktop software team. In order to 
+ * fundamentally solve the basic problem of desktop software adapting to the Modern Internet, 
+ * we should unify the core structure of the Browser Infrastructure and the Desktop Software 
+ * Infrastructure. Recognizing this, the problem will become concise. We just need to consider, 
+ * what conditions do developers need to build their own browser process?
+ * Thanks to Google’s open-source project Chromium, we can compile the Browser Process 
+ * Infrastructure of modern browsers into a set of dynamic link libraries, based on this, 
+ * today’s developers are provided with a concise use of their familiar technical framework 
+ * (such as .Net, Java) to construct their own Browser Process according to their own wishes, 
+ * therefore a new desktop software construction mode appears.
+ *
  *******************************************************************************/
 
 // Cosmos.h : Declaration of the CCosmos
@@ -82,8 +146,6 @@ struct CommonThreadInfo
 };
 
 // CCosmos
-/*Chubble is the key core object of the universe framework. From the perspective
-of cosmology, chubble is equivalent to the Cosmos telescope in the software universe*/
 class ATL_NO_VTABLE CCosmos :
 	public CCosmosImpl,
 	public CComObjectRootBase,

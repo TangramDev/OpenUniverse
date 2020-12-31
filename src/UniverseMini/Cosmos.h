@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012290004
+ *           Web Runtime for Application - Version 1.0.0.202101010001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -37,8 +37,6 @@ struct CommonThreadInfo
 };
 
 // CCosmos
-/*Chubble is the key core object of the universe framework. From the perspective
-of cosmology, chubble is equivalent to the Cosmos telescope in the software universe*/
 class ATL_NO_VTABLE CCosmos :
 	public CCosmosImpl,
 	public CComObjectRootBase,

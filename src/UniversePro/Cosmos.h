@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012290004           *
+ *           Web Runtime for Application - Version 1.0.0.202101010001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -346,11 +346,6 @@ public:
 	BEGIN_CONNECTION_POINT_MAP(CCosmos)
 		CONNECTION_POINT_ENTRY(__uuidof(_ICosmos))
 	END_CONNECTION_POINT_MAP()
-
-	BEGIN_CATEGORY_MAP(CCosmos)
-		IMPLEMENTED_CATEGORY(CATID_SafeForInitializing)
-		IMPLEMENTED_CATEGORY(CATID_SafeForScripting)
-	END_CATEGORY_MAP()
 
 	STDMETHOD(get_RootNodes)(IXobjCollection** pXobjColletion);
 	STDMETHOD(get_CurrentActiveXobj)(IXobj** pVal);

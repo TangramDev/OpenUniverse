@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202012290004           *
+ *           Web Runtime for Application - Version 1.0.0.202101010001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -108,11 +108,6 @@ public:
 		COM_INTERFACE_ENTRY(IOleInPlaceObject)
 		COM_INTERFACE_ENTRY(IOleInPlaceActiveObject)
 	END_COM_MAP()
-
-	BEGIN_CATEGORY_MAP(CCosmosCtrl)
-		IMPLEMENTED_CATEGORY(CATID_SafeForInitializing)
-		IMPLEMENTED_CATEGORY(CATID_SafeForScripting)
-	END_CATEGORY_MAP()
 
 public:
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
