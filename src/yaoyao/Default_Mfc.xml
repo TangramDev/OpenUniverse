@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ntp>
+  <window>
+    <node startype='grid' name='grid' rows='1' cols='2' height='250,' width='350,100,' borderwidth='0' splitterwidth='2' middlecolor='RGB(180,180,180)'>
+      <node startype="main_panel" cnnid="WebRuntimeForVS.host"></node>
+      <node startype="nucleus"></node>
+    </node>
+  </window>
+</ntp>

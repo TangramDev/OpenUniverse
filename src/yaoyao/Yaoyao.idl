@@ -1,0 +1,21 @@
+// CASWebAgent.idl : type library source for CASWebAgent.exe
+
+// This file will be processed by the MIDL compiler to produce the
+// type library (Yaoyao.tlb).
+
+import "..\CommonFile\Universe.idl";
+
+[ uuid(19631222-1992-0612-1965-0601f85236e7), version(1.0) ]
+library Yaoyao
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(19631222-1992-0612-1965-0601621f6be6)
+	]
+	coclass Yaoyao
+	{
+		[default] interface ICosmos;
+	};
+};

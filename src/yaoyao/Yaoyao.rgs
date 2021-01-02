@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'CASWebAgent'
+				'CASWebAgent.EXE'
+				{
+			val AppID = s '%APPID%'
+		}
+	}
+}
