@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -103,10 +103,15 @@ void CWinForm :: SendMessage()
 LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	g_pCosmos->m_pActiveWinFormWnd = this;
-	if (g_pCosmos->m_pCLRProxy)
+	if (LOWORD(wParam) != WA_INACTIVE) {
+		g_pCosmos->m_pActiveWinFormWnd = this;
+		if (g_pCosmos->m_pCLRProxy)
+		{
+			g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
+		}
+	}
+	else
 	{
-		g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
 	}
 	return lRes;
 }

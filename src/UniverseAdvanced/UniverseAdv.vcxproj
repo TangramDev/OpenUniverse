@@ -186,6 +186,8 @@ copy "$(TargetPath)" "$(DevEnvDir)PublicAssemblies\$(TargetName)$(TargetExt)"</C
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <RegisterOutput>false</RegisterOutput>
@@ -298,6 +300,8 @@ copy "$(TargetPath)" "$(DevEnvDir)PublicAssemblies\$(TargetName)$(TargetExt)"</C
       <PreprocessorDefinitions>_NO_ASYNCRTIMP;_ASYNCRT_EXPORT;_NO_PPLXIMP;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <RegisterOutput>false</RegisterOutput>

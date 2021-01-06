@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -409,7 +409,7 @@ void CCosmos::Init()
 	}
 
 	SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer);
-	m_strProgramFilePath = CString(m_szBuffer);
+	m_strProgramFilePath = m_szBuffer;
 
 	m_strAppCommonDocPath2 = m_strProgramFilePath + _T("\\Tangram\\CommonDocComponent\\");
 	m_strAppCommonFormsPath = m_strProgramFilePath + _T("\\Tangram\\CommonForms\\");
@@ -1434,7 +1434,7 @@ void CCosmos::CosmosLoad()
 	TCHAR szFile2[MAX_PATH] = { 0 };
 	::GetModuleFileName(NULL, m_szBuffer, MAX_PATH);
 
-	m_strConfigFile = CString(m_szBuffer);
+	m_strConfigFile = m_szBuffer;
 	m_strConfigFile.MakeLower();
 	m_strAppKey = ComputeHash(m_strConfigFile);
 	m_strConfigFile += _T(".tangram");
@@ -1443,7 +1443,8 @@ void CCosmos::CosmosLoad()
 	m_strAppPath += szDir;
 
 	HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
-	m_strAppDataPath = CString(m_szBuffer) + _T("\\");
+	m_strAppDataPath = m_szBuffer;
+	m_strAppDataPath += _T("\\");
 	m_strAppDataPath.Replace(_T("\\\\"), _T("\\"));
 
 	m_strAppDataPath += _T("TangramData\\");

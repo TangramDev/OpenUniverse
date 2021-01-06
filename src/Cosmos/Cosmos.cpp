@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -205,8 +205,11 @@ namespace Universe
                     theApp.m_pCosmosImpl = _pCosmosImplFunction(&theApp.m_pCosmos);
                     if (theApp.m_pCosmosImpl->m_nAppType == 0)
                         theApp.m_pCosmosImpl->m_nAppType = APP_BROWSERAPP;
-                    theApp.m_pCosmosImpl->m_pCosmosDelegate = (ICosmosDelegate*)&theApp;
-                    theApp.m_pCosmosImpl->m_pUniverseAppProxy = (IUniverseAppProxy*)&theApp;
+                    if (theApp.m_pCosmosImpl->m_pCosmosDelegate == nullptr)
+                    {
+                        theApp.m_pCosmosImpl->m_pCosmosDelegate = (ICosmosDelegate*)&theApp;
+                        theApp.m_pCosmosImpl->m_pUniverseAppProxy = (IUniverseAppProxy*)&theApp;
+                    }
                     theApp.m_pCosmosImpl->m_pCLRProxy = &theAppProxy;
                 }
             }

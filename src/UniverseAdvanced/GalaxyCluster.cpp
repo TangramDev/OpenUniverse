@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101060005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -333,7 +333,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				else if(bIsMDI)
 					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
 				::GetClassName(::GetParent(_hWnd), g_pCosmos->m_szBuffer, MAX_PATH);
-				CString strClassName = CString(g_pCosmos->m_szBuffer);
+				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
 					if (g_pCosmos->m_pMDIMainWnd)

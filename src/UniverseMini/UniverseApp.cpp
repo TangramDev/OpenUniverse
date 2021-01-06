@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101060005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -336,16 +336,16 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	return 1;
 	break;
 	case WM_HUBBLE_INIT:
-		if (lParam == 20002000)
-		{
-			g_pCosmos->CosmosInit();
-		}
-		break;
-		case WM_HUBBLE_APPQUIT:
-		{
-			::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
-		}
-		break;
+		//if (lParam == 20002000)
+		//{
+		//	g_pCosmos->CosmosInit();
+		//}
+		//break;
+	case WM_HUBBLE_APPQUIT:
+	{
+		::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
+	}
+	break;
 	}
 
 	return ::DefWindowProc(hWnd, msg, wParam, lParam);
@@ -366,9 +366,11 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		HWND hPWnd = pCreateWnd->lpcs->hwndParent;
 		DWORD dwID = (DWORD)pCreateWnd->lpcs->hMenu;
 		::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-		CString strClassName = CString(g_pCosmos->m_szBuffer);
+		CString strClassName = g_pCosmos->m_szBuffer;
+		memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
 		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-		CString strPClassName = CString(g_pCosmos->m_szBuffer);
+		CString strPClassName = g_pCosmos->m_szBuffer;
+		memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
 
 		if (HIWORD(pCreateWnd->lpcs->lpszClass))
 		{

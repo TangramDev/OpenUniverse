@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101060005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1117,10 +1117,18 @@ void CWinForm::SendMessage()
 LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	g_pCosmos->m_pActiveWinFormWnd = this;
 	if (g_pCosmos->m_pCLRProxy)
 	{
 		g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
+	}
+	if (LOWORD(wParam) != WA_INACTIVE) {
+		g_pCosmos->m_pActiveWinFormWnd = this;
+	}
+	else
+	{
+		HWND hMenuWnd = g_pCosmos->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
+		if (::IsWindow(hMenuWnd))
+			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
 	return lRes;
 }
@@ -1539,6 +1547,14 @@ LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	g_pCosmos->m_pActiveWinFormWnd = this;
 	::BringWindowToTop(m_hWnd);
+		
+	//if ((long)(g_pCosmos->m_pUniverseAppProxy) > 1)
+	//{
+	//	HWND hMenuWnd = g_pCosmos->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
+	//	if (::IsWindow(hMenuWnd))
+	//		::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
+	//}
+
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
 

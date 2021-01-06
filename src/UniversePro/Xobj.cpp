@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1743,6 +1743,10 @@ STDMETHODIMP CXobj::get_Rows(long* nRows)
 STDMETHODIMP CXobj::get_Cols(long* nCols)
 {
 	*nCols = m_nCols;
+	if (m_vChildNodes.size() && m_nRows * m_nCols == 0)
+	{
+		*nCols = m_vChildNodes.size();
+	}
 	return S_OK;
 }
 

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -169,9 +169,9 @@ namespace CommonUniverse
 		virtual void InitTangramInstance() {};
 
 		//ICosmosDelegate:
-		virtual BOOL OnAppIdle(BOOL& bIdle, LONG lCount);
+		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
 		virtual bool DoIdleWork();
-		virtual BOOL IsAppIdleMessage();
+		virtual bool IsAppIdleMessage();
 		virtual void ProcessMsg(MSG* msg);
 		virtual void ForegroundIdleProc();
 		virtual CString GetNTPXml();

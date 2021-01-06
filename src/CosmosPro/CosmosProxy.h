@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101060005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -50,11 +50,9 @@ public:
 	gcroot<ToolStripDropDownMenu^> m_pToolStripDropDownMenu = nullptr;
 	BEGIN_MSG_MAP(CHelperWnd)
 		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-		MESSAGE_HANDLER(WM_CHAR, OnSysKeyDown)
 	END_MSG_MAP()
 	void OnFinalMessage(HWND hWnd);
 	LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnSysKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
 class FormInfo
@@ -186,6 +184,10 @@ private:
 	static void OnClick(Object ^sender, EventArgs ^e);
 	static void OnNodeMouseDoubleClick(System::Object^ sender, System::Windows::Forms::TreeNodeMouseClickEventArgs^ e);
 	static void OnTextChanged(System::Object^ sender, System::EventArgs^ e);
+	static void OnMenuActivate(System::Object^ sender, System::EventArgs^ e);
+	static void OnMenuDeactivate(System::Object^ sender, System::EventArgs^ e);
+	static void OnLostFocus(System::Object^ sender, System::EventArgs^ e);
+	static void OnMenuComplete(System::Object^ sender, System::EventArgs^ e);
 };
 
 class CTangramWPFObjWrapper : public CWPFObj

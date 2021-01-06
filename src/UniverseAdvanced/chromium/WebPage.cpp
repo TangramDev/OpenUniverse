@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -357,7 +357,7 @@ namespace Browser {
 		if (g_pCosmos->m_bChromeNeedClosed == false && lParam) {
 			HWND hNewPWnd = (HWND)lParam;
 			::GetClassName(hNewPWnd, g_pCosmos->m_szBuffer, 256);
-			CString strName = CString(g_pCosmos->m_szBuffer);
+			CString strName = g_pCosmos->m_szBuffer;
 			if (strName.Find(_T("Chrome_WidgetWin_")) == 0)
 			{
 				if (m_hExtendWnd)
@@ -815,8 +815,9 @@ namespace Browser {
 			if (g_pCosmos->m_pHostHtmlWnd == nullptr && g_pCosmos->m_strAppXml != _T(""))
 			{
 				g_pCosmos->m_pHostHtmlWnd = this;
+				g_pCosmos->m_pCosmosDelegate->ProcessAppXml();
 				g_pCosmos->TangramInitFromeWeb();
-				if (g_pCosmos->m_strMainWndXml != _T(""))
+				if (g_pCosmos->m_strMainWndXml != _T("") && g_pCosmos->m_pCosmosDelegate->ProcessMainWndXml() == false)
 				{
 					CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
 				}
@@ -1070,41 +1071,123 @@ namespace Browser {
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
 		{
-			CTangramXmlParse* pMdiChildXmlParse = xmlParse.GetChild(_T("mdichild"));
-			if (pMdiChildXmlParse)
+			CString strObjID = xmlParse.attr(_T("objid"), _T(""));
+			if (strObjID != _T(""))
 			{
-				CTangramXmlParse* pMdiClientXmlParse = xmlParse.GetChild(_T("mdiclient"));
-				int nCount = pMdiChildXmlParse->GetCount();
-				if (nCount && pMdiClientXmlParse)
+				CTangramXmlParse* pMdiChildXmlParse = xmlParse.GetChild(_T("mdichild"));
+				if (pMdiChildXmlParse)
 				{
-					CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
-					g_pCosmos->m_pCurMDIChildFormInfo = pInfo;
-					for (int i = 0; i < nCount; i++)
+					CTangramXmlParse* pMdiClientXmlParse = xmlParse.GetChild(_T("mdiclient"));
+					int nCount = pMdiChildXmlParse->GetCount();
+					if (nCount && pMdiClientXmlParse)
 					{
-						CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
-						if (pMdiClientXmlParse->GetChild(strName))
+						CMDIChildFormInfo* pInfo = new CMDIChildFormInfo();
+						g_pCosmos->m_pCurMDIChildFormInfo = pInfo;
+						for (int i = 0; i < nCount; i++)
 						{
-							CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
-							pMdiChildXmlParse->GetChild(i)->put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
-							IWebPage* pChromeWebPage = (IWebPage*)this;
-							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
-							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
-							pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
+							CString strName = pMdiChildXmlParse->GetChild(i)->name().MakeLower();
+							if (pMdiClientXmlParse->GetChild(strName))
+							{
+								CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
+								IWebPage* pChromeWebPage = (IWebPage*)this;
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+								pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
+							}
 						}
 					}
 				}
+				if (g_pCosmos->m_pCLRProxy == nullptr)
+					g_pCosmos->LoadCLR();
+				if (g_pCosmos->m_pCLRProxy)
+				{
+					IWebPage* pChromeWebPage = (IWebPage*)this;
+					xmlParse.put_attr(_T("webpage"), (__int64)pChromeWebPage);
+					xmlParse.put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+					CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
+					xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
+					xmlParse.put_attr(_T("IsMainCosmosWnd"), (__int64)1);
+					IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
+				}
 			}
-			if (g_pCosmos->m_pCLRProxy == nullptr)
-				g_pCosmos->LoadCLR();
-			if (g_pCosmos->m_pCLRProxy)
+			HWND hMainWnd = g_pCosmos->m_pCosmosDelegate->GetMainWnd();
+			if (hMainWnd)
 			{
-				IWebPage* pChromeWebPage = (IWebPage*)this;
-				xmlParse.put_attr(_T("webpage"), (__int64)pChromeWebPage);
-				xmlParse.put_attr(_T("webpagehandle"), (__int64)m_hWnd);
-				CWebPageImpl* pChromeRenderFrameHostProxyBase = (CWebPageImpl*)this;
-				xmlParse.put_attr(_T("renderframehostproxy"), (__int64)pChromeRenderFrameHostProxyBase);
-				xmlParse.put_attr(_T("IsMainCosmosWnd"), (__int64)1);
-				IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
+				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+				HANDLE hHandle = ::GetProp(hMainWnd, _T("CosmosFrameWndInfo"));
+				if (hHandle)
+				{
+					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
+					CTangramXmlParse* pParse = xmlParse.GetChild(_T("mainframe"));
+					if (pParse)
+					{
+						CTangramXmlParse* pParseClient = pParse->GetChild(_T("client"));
+						if (pParseClient)
+						{
+							HWND hClient = pCosmosFrameWndInfo->m_hClient;
+							CString strXml = pParseClient->xml();
+							IGalaxyCluster* pCluster = nullptr;
+							if (pCluster == nullptr)
+							{
+								g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
+							}
+							if (pCluster)
+							{
+								IGalaxy* pGalaxy = nullptr;
+								CString strKey = _T("client");
+								pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+								if (pGalaxy)
+								{
+									IXobj* pXobj = nullptr;
+									pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
+								}
+							}
+						}
+						pParse = pParse->GetChild(_T("controlbars"));
+						if (pParse)
+						{
+							int nCount = pParse->GetCount();
+							for (int i = 0; i < nCount; i++)
+							{
+								CTangramXmlParse* pParse2 = pParse->GetChild(i);
+								CString strCaption = pParse2->attr(_T("caption"), _T(""));
+								if (strCaption != _T(""))
+								{
+									auto it = pCosmosFrameWndInfo->m_mapCtrlBar.find(strCaption);
+									if (it != pCosmosFrameWndInfo->m_mapCtrlBar.end())
+									{
+										HWND hWnd = it->second;
+										int nID = pParse2->attrInt(_T("clientid"), 0);
+										HWND hClient = ::GetDlgItem(hWnd, nID);
+										if (hClient)
+										{
+											CString strXml = pParse2->xml();
+											IGalaxyCluster* pCluster = nullptr;
+											if (pCluster == nullptr)
+											{
+												g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
+											}
+											if (pCluster)
+											{
+												IGalaxy* pGalaxy = nullptr;
+												CString strKey = strCaption;
+												strKey.Replace(_T(""), _T("_"));
+												pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+												if (pGalaxy)
+												{
+													IXobj* pXobj = nullptr;
+													pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

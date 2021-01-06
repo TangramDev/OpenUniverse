@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -279,9 +279,6 @@ public:
 	TCHAR									m_szBuffer[MAX_PATH];
 
 	LPCTSTR									m_lpszSplitterClass;
-	CString									m_strAppXml;
-	CString									m_strMainWndXml;
-	CString									m_strDefaultWorkBenchXml;
 	CImageList								m_DocImageList;
 	CImageList								m_DocTemplateImageList;
 
@@ -317,7 +314,6 @@ public:
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
 	vector<HWND>							m_vHtmlWnd;
-	//map<CString, int>						m_mapEventDic;
 	map<CString, long>						m_mapIPCMsgIndexDic;
 	map<CString, CCosmosDoc*>				m_mapOpenDoc;
 	map<HWND, CGalaxy*>						m_mapBKFrame;

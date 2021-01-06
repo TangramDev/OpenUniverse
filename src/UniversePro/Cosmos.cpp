@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1849,6 +1849,7 @@ void CCosmos::ProcessMsg(LPMSG lpMsg)
 	case WM_NCRBUTTONDOWN:
 	case WM_LBUTTONDOWN:
 	case WM_LBUTTONUP:
+	{
 		HWND hPWnd = ::GetAncestor(lpMsg->hwnd, GA_ROOT);
 		if (lpMsg->hwnd != hPWnd)
 		{
@@ -1888,6 +1889,7 @@ void CCosmos::ProcessMsg(LPMSG lpMsg)
 			return;
 		}
 		return;
+	}
 	}
 	if (m_bEclipse && m_pUniverseAppProxy)
 	{

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101060005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -56,13 +56,13 @@ public:
 	virtual bool DoIdleWork();
 	virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; };
 	virtual bool HookAppDocTemplateInfo() { return false; };
-	virtual BOOL OnAppIdle(BOOL& bIdle, LONG lCount) {
+	virtual bool OnAppIdle(BOOL& bIdle, LONG lCount) {
 		return false;
 	};
 
 	virtual HWND QueryCanClose(HWND hWnd) { return NULL; };
 
-	virtual BOOL IsAppIdleMessage() {
+	virtual bool IsAppIdleMessage() {
 		return false;
 	};
 

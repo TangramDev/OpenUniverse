@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101040004
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -244,6 +244,13 @@ namespace CommonUniverse {
 		CString strExt;
 		CString strfilterName;
 	} DocTemplateInfo;
+
+	typedef struct CosmosFrameWndInfo
+	{
+		HWND m_hClient = NULL;
+		CString m_strData = _T("");
+		map<CString,HWND> m_mapCtrlBar;
+	} CosmosFrameWndInfo;
 
 	typedef struct CosmosDocTemplateInfo
 	{
@@ -647,6 +654,9 @@ namespace CommonUniverse {
 		CString									m_strNewDocXml;
 		CString									m_strStartXml;
 		CString									m_strNtpXml;
+		CString									m_strAppXml;
+		CString									m_strMainWndXml;
+		CString									m_strDefaultWorkBenchXml;
 
 		CString 								m_strConfigFile;
 		CString									m_strDocFilters;
@@ -699,6 +709,7 @@ namespace CommonUniverse {
 		map<HWND, CWebPageImpl*>				m_mapHtmlWnd;
 		map<HWND, IXobj*>						m_mapXobj;
 		map<HWND, IWebPage*>					m_mapFormWebPage;
+		map<HWND, CosmosFrameWndInfo*>			m_mapCosmosFrameWndInfo;
 		map<HWND, IBrowser*>					m_mapBrowserWnd;
 		map<HWND, IWorkBenchWindow*>			m_mapWorkBenchWnd;
 		map<void*, IUnknown*>					m_mapObjects;
@@ -815,21 +826,24 @@ namespace CommonUniverse {
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
 
-		virtual void ProcessMsg(MSG* msg) {}
-		virtual void ForegroundIdleProc() {}
 		virtual bool DoIdleWork() { return false; }
-		virtual BOOL OnAppIdle(BOOL& bIdle, LONG lCount) { return false; }
-		virtual BOOL IsAppIdleMessage() { return false; }
+		virtual bool ProcessAppXml() { return false; }
+		virtual bool ProcessMainWndXml() { return false; }
+		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount) { return false; }
+		virtual bool IsAppIdleMessage() { return false; }
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) { return false; }
-		virtual CString GetNTPXml() { return _T(""); }
-		virtual HWND GetMainWnd() { return NULL; }
-		virtual HWND QueryCanClose(HWND hWnd) { return NULL; }
 		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; }
 		virtual bool HookAppDocTemplateInfo() { return false; }
 		virtual bool EclipseAppInit() { return false; }
+		virtual HWND GetMainWnd() { return NULL; }
+		virtual HWND QueryCanClose(HWND hWnd) { return NULL; }
+		virtual CString GetNTPXml() { return _T(""); }
+		virtual void ProcessMsg(MSG* msg) {}
+		virtual void ForegroundIdleProc() {}
 		virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2) {}
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
 		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
+		virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) {}
 	};
 
 	class CCosmosMainDllLoader {

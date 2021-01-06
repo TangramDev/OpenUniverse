@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -178,8 +178,6 @@ public:
 	TCHAR								m_szBuffer[MAX_PATH];
 
 	LPCTSTR								m_lpszSplitterClass;
-	CString								m_strAppXml;
-	CString								m_strMainWndXml;
 
 	//.NET Version 4: 
 	ICLRRuntimeHost*					m_pClrHost;

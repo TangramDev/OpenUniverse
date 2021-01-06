@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101060005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -196,7 +196,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 
 	if ((m_pXobj->m_nViewType == TabGrid || m_pXobj->m_nViewType == Grid))
 	{
-		if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy)
+		//if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy)
 			::SetFocus(m_hWnd);
 		g_pCosmos->m_pActiveXobj = m_pXobj;
 		g_pCosmos->m_bWinFormActived = false;

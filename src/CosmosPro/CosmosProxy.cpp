@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002
+ *           Web Runtime for Application - Version 1.0.0.202101060005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -109,18 +109,35 @@ void CMenuHelperWnd::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-LRESULT CMenuHelperWnd::OnSysKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
 LRESULT CMenuHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	if (wParam == 0)
 	{
 		//InputLanguage::CurrentInputLanguage = theAppProxy.m_pCurInputLanguage;
 		if (theAppProxy.m_pWorkingMenuHelperWnd == this)
+		{
+			//ToolStripItem^ pItem = theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu->OwnerItem;
+			//if (pItem != nullptr)
+			//{
+			//	ToolStrip^ pToolStrip = pItem->Owner;
+			//	pItem->PerformClick();
+			//	//if (pToolStrip->Tag != nullptr)
+			//	//{
+			//	//	ToolStripMenuItem^ pItem = (ToolStripMenuItem^)pToolStrip->Tag;
+			//	//	if (pItem)
+			//	//	{
+			//	//		pItem->Visible = true;
+			//	//		pItem->PerformClick();
+			//	//	}
+			//	//}
+			//	//pToolStrip->Focus();
+			//	//pItem->Select();
+			//	//pToolStrip->Items[0]->PerformClick();
+			//}
+			theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu->Items[0]->Select();
 			theAppProxy.m_pWorkingMenuHelperWnd = nullptr;
+		}
 		auto it = theAppProxy.m_mapVisibleMenuHelperWnd.find(m_hWnd);
 		if (it != theAppProxy.m_mapVisibleMenuHelperWnd.end())
 			theAppProxy.m_mapVisibleMenuHelperWnd.erase(it);
@@ -141,7 +158,7 @@ LRESULT CMenuHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		theAppProxy.m_mapVisibleMenuHelperWnd[m_hWnd] = this;
 		theAppProxy.m_pWorkingMenuHelperWnd = this;
 	}
-	return DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
 }
 
 CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
@@ -947,6 +964,12 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 		if (pCtrl->GetType() == MenuStrip::typeid)
 		{
 			Forms::MenuStrip^ pMenuStrip = (MenuStrip^)pCtrl;
+			Forms::ToolStripMenuItem^ item = gcnew Forms::ToolStripMenuItem();
+			item->Name = L"__helperbtn__";
+			pMenuStrip->Items->Add(item);
+			pMenuStrip->Tag = item;
+			item->Visible = false;
+			item->Click += gcnew System::EventHandler(&OnClick);
 			theAppProxy.m_mapFormMenuStrip[hWnd] = pMenuStrip;
 			theAppProxy.m_mapFormMenuStrip2[hWnd] = pMenuStrip;
 			Forms::ToolStripMenuItem^ fileMenu = (Forms::ToolStripMenuItem^)pMenuStrip->Items[L"fileMenu"];
@@ -2301,7 +2324,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 				((Form^)pObj)->Show();
 				return pDisp;
 			}
-			if (theApp.m_pCosmosImpl->IsMDIClientGalaxyNode(pHostNode) == false && bProperty == false)
+			//if (theApp.m_pCosmosImpl->IsMDIClientGalaxyNode(pHostNode) == false && bProperty == false)
 			{
 				BSTR bstrXml = ::SysAllocString(L"");
 				pHostNode->GetUIScript(L"", &bstrXml);
@@ -2867,6 +2890,11 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 		ToolStripItem^ button = (ToolStripItem^)sender;
 		if (button)
 		{
+			if (button->Name == L"__helperbtn__")
+			{
+				//button->Visible = false;
+				return;
+			}
 			Form^ form = (Form^)button->Owner->Parent;
 			if (form == nullptr)
 			{

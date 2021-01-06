@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020002           *
+ *           Web Runtime for Application - Version 1.0.0.202101040004           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -133,6 +133,7 @@
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
 #include "metahost.h"
 #include "CommonUniverse.h"
+#include "TangramXmlParse.h"
 #include <ppl.h>
 #include <ppltasks.h>
 #include <agents.h>
@@ -167,6 +168,45 @@ namespace CommonUniverse
 	protected:
 		void FireChangeActiveTab(int nNewTab);
 		BOOL FireChangingActiveTab(int nNewTab);
+		DECLARE_MESSAGE_MAP()
+	};
+
+	// CTangramTabCtrlWnd
+
+	class CTangramTabCtrlWnd :
+		public CMFCTabCtrl,
+		public ICosmosWindow
+	{
+		DECLARE_DYNAMIC(CTangramTabCtrlWnd)
+
+	public:
+		CTangramTabCtrlWnd();
+		virtual ~CTangramTabCtrlWnd();
+		virtual BOOL SetActiveTab(int iTab);
+
+		int m_nCurSelTab;
+	public:
+		IXobj* m_pWndNode;
+
+	protected:
+		DECLARE_MESSAGE_MAP()
+		afx_msg LRESULT OnCreatePage(WPARAM wParam, LPARAM lParam);
+		afx_msg LRESULT OnActivePage(WPARAM wParam, LPARAM lParam);
+		afx_msg LRESULT OnModifyPage(WPARAM wParam, LPARAM lParam);
+		afx_msg LRESULT OnTgmSetCaption(WPARAM wParam, LPARAM lParam);
+		afx_msg LRESULT OnActiveTangramObj(WPARAM wParam, LPARAM lParam);
+		virtual void Save();
+		virtual void PostNcDestroy();
+	};
+
+	class CTabPageWnd : public CWnd
+	{
+	public:
+		CTabPageWnd();
+		virtual ~CTabPageWnd();
+
+	protected:
+		virtual void PostNcDestroy();
 		DECLARE_MESSAGE_MAP()
 	};
 
@@ -223,9 +263,9 @@ namespace CommonUniverse
 		virtual void InitTangramInstance() {};
 
 		//ICosmosDelegate:
-		virtual BOOL OnAppIdle(BOOL& bIdle, LONG lCount);
+		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
 		virtual bool DoIdleWork();
-		virtual BOOL IsAppIdleMessage();
+		virtual bool IsAppIdleMessage();
 		virtual void ProcessMsg(MSG* msg);
 		virtual void ForegroundIdleProc();
 		virtual CString GetNTPXml();
@@ -312,12 +352,13 @@ namespace CommonUniverse
 		afx_msg void OnFileNew();
 
 		virtual int Run();
+		virtual bool InitApp();
 		virtual BOOL InitInstance();
 	private:
 		virtual BOOL InitApplication();
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc);
-		virtual HWND GetActivePopupMenu(HWND hWnd) { return nullptr; };
+		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 	};
 
 	class CTangramFrameWndEx :
