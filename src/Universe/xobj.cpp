@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1087,10 +1087,13 @@ void CXobj::NodeCreated()
 {
 	m_pHostParse->put_attr(_T("name"), (__int64)m_pHostWnd->m_hWnd);
 	CWebPage* pHtmlWnd = GetHtmlWnd();
-	m_pXobjShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
+	if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd == nullptr && pHtmlWnd)
+		m_pXobjShareData->m_pGalaxy->m_pWebPageWnd = pHtmlWnd;
+	if (pHtmlWnd == nullptr)
+		pHtmlWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	if (pHtmlWnd == nullptr)
 		pHtmlWnd = g_pCosmos->m_pHostHtmlWnd;
-	if (pHtmlWnd&&m_pWormhole == nullptr)
+	if (pHtmlWnd && m_pWormhole == nullptr)
 	{
 		::PostMessage(pHtmlWnd->m_hWnd, WM_COSMOSMSG, 20200310, (LPARAM)this);
 	}
@@ -1302,6 +1305,10 @@ STDMETHODIMP CXobj::get_Rows(long* nRows)
 STDMETHODIMP CXobj::get_Cols(long* nCols)
 {
 	*nCols = m_nCols;
+	if (m_vChildNodes.size() && m_nRows * m_nCols == 0)
+	{
+		*nCols = m_vChildNodes.size();
+	}
 	return S_OK;
 }
 

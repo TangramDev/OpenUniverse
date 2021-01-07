@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101040004           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -197,17 +197,6 @@ namespace CommonUniverse
 		afx_msg LRESULT OnActiveTangramObj(WPARAM wParam, LPARAM lParam);
 		virtual void Save();
 		virtual void PostNcDestroy();
-	};
-
-	class CTabPageWnd : public CWnd
-	{
-	public:
-		CTabPageWnd();
-		virtual ~CTabPageWnd();
-
-	protected:
-		virtual void PostNcDestroy();
-		DECLARE_MESSAGE_MAP()
 	};
 
 	class CTangramMFCToolBar : public CMFCToolBar

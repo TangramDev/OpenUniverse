@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -886,7 +886,7 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 			pWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 	}
 
-	CXobj* pRootXobj = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
+	CXobj* pRootXobj = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey);
 	m_strCurrentKey = _T("");
 	return pRootXobj;
 }

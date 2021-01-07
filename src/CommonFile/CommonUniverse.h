@@ -197,6 +197,15 @@ namespace CommonUniverse {
 
 	extern CCosmosImpl* g_pCosmosImpl;
 
+	typedef struct CosmosUIItemData
+	{
+		CString m_strKey;
+		CString m_strData;
+		CosmosUIItemData* m_pParent;
+		void* m_hParentItem;
+		//Add Other Members for this struct:
+	}CosmosUIItemData;
+
 	typedef struct IPCMsg {
 		CString m_strId = _T("");
 		CString m_strParam1 = _T("");
@@ -249,6 +258,7 @@ namespace CommonUniverse {
 	{
 		HWND m_hClient = NULL;
 		CString m_strData = _T("");
+		IWebPage* m_pWebPage = nullptr;
 		map<CString,HWND> m_mapCtrlBar;
 	} CosmosFrameWndInfo;
 
@@ -263,8 +273,14 @@ namespace CommonUniverse {
 		CString			m_strProxyID;
 		CString			m_strDocTemplateKey;
 		CString			m_strTemplatePath;
-		void* m_pDocTemplate;
+		void*			m_pDocTemplate;
 	}CosmosDocTemplateInfo;
+
+	typedef struct CosmosDocTemplateData
+	{
+		void*			m_pDocTemplate;
+		map<CString,CString>	m_mapDocInfo;
+	}CosmosDocTemplateData;
 
 	typedef struct TangramProjectInfo
 	{

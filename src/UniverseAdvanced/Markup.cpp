@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005
+ *           Web Runtime for Application - Version 1.0.0.202101070006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1618,7 +1618,7 @@ int CMarkup::x_ParseNode( CMarkup::TokenPos& token, CMarkup::NodePos& node )
 
 	int nR = token.nNext;
 	MCD_PCSZ pDoc = &token.szDoc[nR];
-	register unsigned int cD = (unsigned int)*pDoc;
+	unsigned int cD = (unsigned int)*pDoc;
 	if ( ! cD )
 	{
 		node.nLength = 0;

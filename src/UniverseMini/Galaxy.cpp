@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005
+ *           Web Runtime for Application - Version 1.0.0.202101070006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -321,7 +321,7 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 	return hForm;
 }
 
-CXobj* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CString strFile)
+CXobj* CGalaxy::OpenXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 {
 	m_pWorkXobj = new CComObject<CXobj>;
 	m_pWorkXobj->m_pRootObj = m_pWorkXobj;

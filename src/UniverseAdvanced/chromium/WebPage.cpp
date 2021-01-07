@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1119,6 +1119,7 @@ namespace Browser {
 				if (hHandle)
 				{
 					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+					pCosmosFrameWndInfo->m_pWebPage = this;
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
 					CTangramXmlParse* pParse = xmlParse.GetChild(_T("mainframe"));
 					if (pParse)
@@ -1140,8 +1141,10 @@ namespace Browser {
 								pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
 								if (pGalaxy)
 								{
+									CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+									_pGalaxy->m_pWebPageWnd = this;
 									IXobj* pXobj = nullptr;
-									pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
+									_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
 								}
 							}
 						}
@@ -1177,8 +1180,10 @@ namespace Browser {
 												pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
 												if (pGalaxy)
 												{
+													CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+													_pGalaxy->m_pWebPageWnd = this;
 													IXobj* pXobj = nullptr;
-													pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
+													_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
 												}
 											}
 										}

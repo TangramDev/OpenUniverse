@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005
+ *           Web Runtime for Application - Version 1.0.0.202101070006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -37,50 +37,483 @@
 #include "DocTemplateDlg.h"
 #include "Wormhole.h"
 
-CCommonCtrl::CCommonCtrl()
+class CTangramHelperWnd : public CWnd
 {
+public:
+	CTangramHelperWnd() {}
+	virtual ~CTangramHelperWnd() {}
+	void PostNcDestroy()
+	{
+		CWnd::PostNcDestroy();
+		delete this;
+	}
+	BEGIN_MSG_MAP(CTangramHelperWnd)
+	END_MSG_MAP()
+};
 
+/////////////////////////////////////////////////////////////////////////////
+// CCosmosTreeCtrl
+
+CCosmosTreeCtrl::CCosmosTreeCtrl() noexcept
+{
 }
 
-CCommonCtrl::~CCommonCtrl()
+CCosmosTreeCtrl::~CCosmosTreeCtrl()
 {
-
+	for (auto it : m_mapTreeItemData)
+	{
+		delete it.second;
+	}
+	m_mapTreeItemData.clear();
 }
 
-LRESULT CCommonCtrl::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+BEGIN_MESSAGE_MAP(CCosmosTreeCtrl, CTreeCtrl)
+	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_NOTIFY_REFLECT_EX(NM_RCLICK, &CCosmosTreeCtrl::OnNMRClick)
+	ON_NOTIFY_REFLECT_EX(TVN_SELCHANGED, &CCosmosTreeCtrl::OnTvnSelchanged)
+	ON_NOTIFY_REFLECT_EX(NM_CLICK, &CCosmosTreeCtrl::OnNMClick)
+	ON_NOTIFY_REFLECT_EX(NM_DBLCLK, &CCosmosTreeCtrl::OnNMDblclk)
+	ON_NOTIFY_REFLECT_EX(NM_RETURN, &CCosmosTreeCtrl::OnNMReturn)
+	ON_NOTIFY_REFLECT_EX(NM_TVSTATEIMAGECHANGING, &CCosmosTreeCtrl::OnNMTVStateImageChanging)
+	ON_NOTIFY_REFLECT_EX(TVN_BEGINDRAG, &CCosmosTreeCtrl::OnTvnBegindrag)
+	ON_NOTIFY_REFLECT_EX(TVN_DELETEITEM, &CCosmosTreeCtrl::OnTvnDeleteitem)
+	ON_NOTIFY_REFLECT_EX(TVN_ITEMCHANGED, &CCosmosTreeCtrl::OnTvnItemChanged)
+	ON_NOTIFY_REFLECT_EX(TVN_KEYDOWN, &CCosmosTreeCtrl::OnTvnKeydown)
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CCosmosTreeCtrl message handlers
+HTREEITEM CCosmosTreeCtrl::FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem)
 {
-	NMHDR* pNMHDR = (NMHDR*)lParam;
-	//ASSERT(pNMHDR != NULL);
-	//if (pNMHDR->code)
-	//{
-	//	switch (pNMHDR->code)
-	//	{
-	//		case NM_CLICK:
-	//		{
-	//			TRACE(_T("NM_CLICK\n"));
-	//		}
-	//		break;
-	//	case NM_DBLCLK:
-	//		{
-	//			TRACE(_T("NM_DBLCLK\n"));
-	//		}
-	//		break;
-	//	case TVN_SELCHANGED:
-	//		{
-	//			TRACE(_T("TVN_SELCHANGED \n"));
-	//		}
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//}
-	TRACE(_T("======== Notify=========hwndFrom:%x,idFrom:%x,code:%x\n"), pNMHDR->hwndFrom, pNMHDR->idFrom, pNMHDR->code);
-	return DefWindowProc(uMsg, wParam, lParam);
+	if (pParse)
+	{
+		CString name = pParse->name();
+		bool bItem = pParse->attrBool(_T("treeitem"), false);
+		if (bItem)
+		{
+			CosmosUIItemData* pTreeItemData = new CosmosUIItemData;
+			pTreeItemData->m_hParentItem = hParentItem;
+			pTreeItemData->m_strKey = pParse->attr(_T("uikey"), _T("default"));
+			//CTangramXmlParse* pParseTag = pParse->GetChild(name + _T("_tag"));
+			if (pParseTag)
+				pTreeItemData->m_strData = pParseTag->xml();
+			HTREEITEM hItem = InsertItem(TVIF_TEXT | TVIF_IMAGE | TVIF_STATE | TVIF_PARAM, pParse->attr(_T("text"), _T("tangram")), pParse->attrInt(_T("imageindex")), pParse->attrInt(_T("selectedimageindex")), 0, 0, (LPARAM)pTreeItemData, hParentItem, 0);
+			m_mapTreeItemData[hItem] = pTreeItemData;
+			int nCount = pParse->GetCount();
+			if (nCount)
+			{
+				for (int i = 0; i < nCount; i++)
+				{
+					CTangramXmlParse* _pChild = pParse->GetChild(i);
+					if (_pChild->attrBool(_T("treeitem"), false))
+					{
+						CString name = pParse->GetChild(i)->name() + _T("_tag");
+						FillTreeView(pParse->GetChild(i), pParse->GetChild(name), hItem);
+					}
+				}
+			}
+			int nExpand = pParse->attrInt(_T("expand"));
+			Expand(hItem, nExpand);
+		}
+		//return hItem;
+	}
+	return nullptr;
 }
 
-void CCommonCtrl::OnFinalMessage(HWND hWnd)
+BOOL CCosmosTreeCtrl::OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	CWindowImpl::OnFinalMessage(hWnd);
+	CWebPage* pPage = nullptr;
+	if (m_pGalaxy)
+	{
+		pPage = m_pGalaxy->m_pWebPageWnd;
+	}
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnNMClick(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnNMDblclk(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnNMTVStateImageChanging(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnTvnBegindrag(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnTvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnTvnItemChanged(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTVITEMCHANGE* pNMTVItemChange = reinterpret_cast<NMTVITEMCHANGE*>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnTvnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTVKEYDOWN pTVKeyDown = reinterpret_cast<LPNMTVKEYDOWN>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosTreeCtrl::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+	CString strText = _T("");
+	GetParent()->GetWindowText(strText);
+	CString strXml = _T("");
+	CString strKey = _T("default");
+	CosmosUIItemData* pTreeItemData = (CosmosUIItemData*)pNMTreeView->itemNew.lParam;
+	if (pTreeItemData && pTreeItemData->m_strKey != _T(""))
+		strKey = strText + _T("_") + pTreeItemData->m_strKey;
+	strKey.Replace(_T(" "), _T("_"));
+	CWebPage* pPage = nullptr;
+	if (m_pGalaxy)
+	{
+		pPage = m_pGalaxy->m_pWebPageWnd;
+	}
+	return false;
+}
+
+LRESULT CCosmosTreeCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
+	if (lParam == 10000)
+	{
+		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
+		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
+
+		if (m_pGalaxy == nullptr)
+		{
+			auto iter = pThreadInfo->m_mapGalaxy.find(m_hWnd);
+			if (iter != pThreadInfo->m_mapGalaxy.end())
+			{
+				m_pGalaxy = (CGalaxy*)iter->second;
+			}
+		}
+		HANDLE hData = ::GetProp(m_hWnd, _T("CosmosData"));
+		if (hData)
+		{
+			CTangramXmlParse* pParse = (CTangramXmlParse*)hData;
+			if (pParse)
+			{
+				int nID = pParse->attrInt(_T("clientid"), 0);
+				if (nID == ::GetDlgCtrlID(m_hWnd))
+				{
+					CString xml = pParse->xml();
+					bool b = pParse->attrBool(_T("usingwebdata"), false);
+					CTangramXmlParse* pUIData = pParse->GetChild(_T("uidata"));
+					CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
+					if (b && pUIData)
+					{
+						if (m_bWebTreeCtrl == false)
+						{
+							CTangramHelperWnd* pWnd = new CTangramHelperWnd();
+							pWnd->SubclassWindow(::GetParent(m_hWnd));
+							m_bWebTreeCtrl = true;
+						}
+						DeleteAllItems();
+						FillTreeView(pUIData, pUIDataTag, NULL);
+					}
+				}
+			}
+		}
+	}
+	return lRes;
+}
+
+void CCosmosTreeCtrl::PostNcDestroy()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CTreeCtrl::PostNcDestroy();
+	delete this;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CCosmosListCtrl
+
+CCosmosListCtrl::CCosmosListCtrl() noexcept
+{
+}
+
+CCosmosListCtrl::~CCosmosListCtrl()
+{
+	for (auto it : m_mapListItemData)
+	{
+		delete it.second;
+	}
+	m_mapListItemData.clear();
+}
+
+BEGIN_MESSAGE_MAP(CCosmosListCtrl, CListCtrl)
+	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_NOTIFY_REFLECT_EX(LVN_DELETEITEM, &CCosmosListCtrl::OnLvnDeleteitem)
+	ON_NOTIFY_REFLECT_EX(LVN_DELETEALLITEMS, &CCosmosListCtrl::OnLvnDeleteallitems)
+	ON_NOTIFY_REFLECT_EX(LVN_INSERTITEM, &CCosmosListCtrl::OnLvnInsertitem)
+	ON_NOTIFY_REFLECT_EX(LVN_ITEMCHANGED, &CCosmosListCtrl::OnLvnItemchanged)
+	ON_NOTIFY_REFLECT_EX(LVN_ITEMACTIVATE, &CCosmosListCtrl::OnLvnItemActivate)
+	ON_NOTIFY_REFLECT_EX(LVN_KEYDOWN, &CCosmosListCtrl::OnLvnKeydown)
+	ON_NOTIFY_REFLECT_EX(LVN_LINKCLICK, &CCosmosListCtrl::OnLvnLinkClicked)
+	ON_NOTIFY_REFLECT_EX(NM_CLICK, &CCosmosListCtrl::OnNMClick)
+	ON_NOTIFY_REFLECT_EX(NM_DBLCLK, &CCosmosListCtrl::OnNMDblclk)
+	ON_NOTIFY_REFLECT_EX(NM_HOVER, &CCosmosListCtrl::OnNMHover)
+	ON_NOTIFY_REFLECT_EX(NM_KILLFOCUS, &CCosmosListCtrl::OnNMKillfocus)
+	ON_NOTIFY_REFLECT_EX(NM_RCLICK, &CCosmosListCtrl::OnNMRClick)
+	ON_NOTIFY_REFLECT_EX(NM_RDBLCLK, &CCosmosListCtrl::OnNMRDblclk)
+	ON_NOTIFY_REFLECT_EX(NM_RETURN, &CCosmosListCtrl::OnNMReturn)
+END_MESSAGE_MAP()
+
+BOOL CCosmosListCtrl::OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnLvnDeleteallitems(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnLvnInsertitem(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnLvnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnLvnItemActivate(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMITEMACTIVATE pNMIA = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnLvnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnLvnLinkClicked(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnNMClick(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnNMDblclk(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnNMHover(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnNMKillfocus(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnNMRDblclk(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosListCtrl::OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+LRESULT CCosmosListCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
+	if (lParam == 10000)
+	{
+		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
+		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
+
+		if (m_pGalaxy == nullptr)
+		{
+			auto iter = pThreadInfo->m_mapGalaxy.find(m_hWnd);
+			if (iter != pThreadInfo->m_mapGalaxy.end())
+			{
+				m_pGalaxy = (CGalaxy*)iter->second;
+			}
+		}
+		HANDLE hData = ::GetProp(m_hWnd, _T("CosmosData"));
+		if (hData)
+		{
+			CTangramXmlParse* pParse = (CTangramXmlParse*)hData;
+			if (pParse)
+			{
+				int nID = pParse->attrInt(_T("clientid"), 0);
+				if (nID == ::GetDlgCtrlID(m_hWnd))
+				{
+					CString xml = pParse->xml();
+					bool b = pParse->attrBool(_T("usingwebdata"), false);
+					CTangramXmlParse* pUIData = pParse->GetChild(_T("uidata"));
+					CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
+					if (b && pUIData)
+					{
+						if (m_bWebListCtrl == false)
+						{
+							CTangramHelperWnd* pWnd = new CTangramHelperWnd();
+							pWnd->SubclassWindow(::GetParent(m_hWnd));
+							m_bWebListCtrl = true;
+						}
+						DeleteAllItems();
+						//FillTreeView(pUIData, pUIDataTag, NULL);
+					}
+				}
+			}
+		}
+	}
+	return lRes;
+}
+
+void CCosmosListCtrl::PostNcDestroy()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CListCtrl::PostNcDestroy();
+	delete this;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CCosmosTabCtrl
+
+CCosmosTabCtrl::CCosmosTabCtrl() noexcept
+{
+}
+
+CCosmosTabCtrl::~CCosmosTabCtrl()
+{
+	for (auto it : m_mapTabItemData)
+	{
+		delete it.second;
+	}
+	m_mapTabItemData.clear();
+}
+
+BEGIN_MESSAGE_MAP(CCosmosTabCtrl, CTabCtrl)
+	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_NOTIFY_REFLECT_EX(NM_CLICK, &CCosmosTabCtrl::OnNMClick)
+	ON_NOTIFY_REFLECT_EX(NM_RCLICK, &CCosmosTabCtrl::OnNMRClick)
+	ON_NOTIFY_REFLECT_EX(TCN_KEYDOWN, &CCosmosTabCtrl::OnTcnKeydown)
+	ON_NOTIFY_REFLECT_EX(TCN_SELCHANGE, &CCosmosTabCtrl::OnTcnSelchange)
+END_MESSAGE_MAP()
+
+BOOL CCosmosTabCtrl::OnNMClick(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosTabCtrl::OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+BOOL CCosmosTabCtrl::OnTcnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMTCKEYDOWN* pTCKeyDown = reinterpret_cast<NMTCKEYDOWN*>(pNMHDR);
+	return false;
+}
+
+BOOL CCosmosTabCtrl::OnTcnSelchange(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	return false;
+}
+
+LRESULT CCosmosTabCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
+	if (lParam == 10000)
+	{
+		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
+		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
+
+		if (m_pGalaxy == nullptr)
+		{
+			auto iter = pThreadInfo->m_mapGalaxy.find(m_hWnd);
+			if (iter != pThreadInfo->m_mapGalaxy.end())
+			{
+				m_pGalaxy = (CGalaxy*)iter->second;
+			}
+		}
+		HANDLE hData = ::GetProp(m_hWnd, _T("CosmosData"));
+		if (hData)
+		{
+			CTangramXmlParse* pParse = (CTangramXmlParse*)hData;
+			if (pParse)
+			{
+				int nID = pParse->attrInt(_T("clientid"), 0);
+				if (nID == ::GetDlgCtrlID(m_hWnd))
+				{
+					CString xml = pParse->xml();
+					bool b = pParse->attrBool(_T("usingwebdata"), false);
+					CTangramXmlParse* pUIData = pParse->GetChild(_T("uidata"));
+					CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
+					if (b && pUIData)
+					{
+						if (m_bWebTabCtrl == false)
+						{
+							CTangramHelperWnd* pWnd = new CTangramHelperWnd();
+							pWnd->SubclassWindow(::GetParent(m_hWnd));
+							m_bWebTabCtrl = true;
+						}
+						DeleteAllItems();
+						//FillTreeView(pUIData, pUIDataTag, NULL);
+					}
+				}
+			}
+		}
+	}
+	return lRes;
+}
+
+void CCosmosTabCtrl::PostNcDestroy()
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CTabCtrl::PostNcDestroy();
 	delete this;
 }
 
@@ -449,12 +882,6 @@ LRESULT CUniverseMDIChild::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	{
 		BOOL bNeedInit = false;
 		CGalaxyCluster* pGalaxyCluster = nullptr;
-		for (auto it : g_pCosmos->m_mapCosmosCommonCtrl)
-		{
-			//clear common control data:
-			if (::IsChild(m_hWnd, it.first))
-				::SendMessage(it.first, WM_COSMOSMSG, 19820911, 19820911);
-		}
 		if (g_pCosmos->m_mapWindowPage.size() > 0)
 		{
 			auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
@@ -566,15 +993,6 @@ LRESULT CUniverseMDIChild::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 				}
 			}
 		}
-		if (g_pCosmos->m_bNewFile)
-		{
-			for (auto it : g_pCosmos->m_mapCosmosCommonCtrl)
-			{
-				//fill common control data:
-				if (::IsChild(m_hWnd, it.first))
-					::PostMessage(it.first, WM_COSMOSMSG, 0, 19820911);
-			}
-		}
 		g_pCosmos->m_strTemplatePath = _T("");
 
 		return DefWindowProc(uMsg, wParam, lParam);
@@ -619,12 +1037,6 @@ LRESULT CUniverseMDIChild::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 					if (it != g_pCosmos->m_mapWindowPage.end())
 					{
 						pGalaxyCluster = (CGalaxyCluster*)it->second;
-						for (auto it : g_pCosmos->m_mapCosmosCommonCtrl)
-						{
-							//clear common control data:
-							if (::IsChild(m_hWnd, it.first))
-								::SendMessage(it.first, WM_COSMOSMSG, 19820911, 19820911);
-						}
 						auto it2 = pGalaxyCluster->m_mapGalaxy.begin();
 						while (it2 != pGalaxyCluster->m_mapGalaxy.end())
 						{
@@ -702,12 +1114,6 @@ LRESULT CUniverseMDIChild::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 							IXobj* pXobj = nullptr;
 							pGalaxyCluster->CreateGalaxyWithDefaultNode((__int64)it.first, CComBSTR(it.second), CComBSTR(_T("default")), CComBSTR(L""), false, &pXobj);
 						}
-					}
-					for (auto it : g_pCosmos->m_mapCosmosCommonCtrl)
-					{
-						//fill common control data:
-						if (::IsChild(m_hWnd, it.first))
-							::PostMessage(it.first, WM_COSMOSMSG, 0, 19820911);
 					}
 					return DefWindowProc(uMsg, wParam, lParam);
 				}
@@ -2280,7 +2686,7 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 	return hForm;
 }
 
-CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey, CString strFile)
+CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 {
 	m_pWorkXobj = new CComObject<CXobj>;
 	m_pWorkXobj->m_pRootObj = m_pWorkXobj;
@@ -2294,9 +2700,15 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey, C
 
 	CreateGalaxyCluster();
 	m_mapXobj[strKey] = m_pWorkXobj;
+	if (strKey.CompareNoCase(_T("default"))==0)
+	{
+		::SetProp(m_hWnd, _T("CosmosData"), _pParse);
+		::SendMessage(m_hWnd, WM_COSMOSMSG, 0, 10000);
+	}
 
+	m_pWorkXobj->m_strCosmosXml = _pParse->xml();
 	if (m_pGalaxyCluster)
-		m_pGalaxyCluster->Fire_OpenXmlComplete(strFile.AllocSysString(), (long)m_hHostWnd, m_pWorkXobj);
+		m_pGalaxyCluster->Fire_OpenXmlComplete(CComBSTR(m_pWorkXobj->m_strCosmosXml), (long)m_hHostWnd, m_pWorkXobj);
 	m_pWorkXobj->m_strKey = strKey;
 	m_pWorkXobj->Fire_ObserveComplete();
 	if (g_pCosmos->m_pCLRProxy)
@@ -2307,7 +2719,6 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey, C
 		if(hForm)
 			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 	}
-	m_pWorkXobj->m_strCosmosXml = _pParse->xml();
 	return m_pWorkXobj;
 }
 
@@ -3107,6 +3518,7 @@ LRESULT CGalaxy::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
+	::RemoveProp(m_hWnd, _T("CosmosData"));
 	if (g_pCosmos->m_pCLRProxy) {
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGalaxy*)this);
 	}
@@ -3757,4 +4169,3 @@ STDMETHODIMP CGalaxy::get_HostWebPage(IWebPage** ppChromeWebPage)
 	}
 	return S_FALSE;
 }
-

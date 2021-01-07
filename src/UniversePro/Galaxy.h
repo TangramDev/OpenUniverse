@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005
+ *           Web Runtime for Application - Version 1.0.0.202101070006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -28,18 +28,103 @@
 using namespace Browser;
 class CBKWnd;
 class CWormhole;
-#define WM_HUBBLE_NOTIFY WM_NOTIFY+WM_REFLECT_BASE
-class CCommonCtrl :
-	public CWindowImpl<CCommonCtrl, CWindow>
+
+// CCosmosTreeCtrl window
+class CCosmosTreeCtrl : public CTreeCtrl
 {
+	// Construction
 public:
-	CCommonCtrl(void);
-	virtual ~CCommonCtrl(void);
-	BEGIN_MSG_MAP(CCommonCtrl)
-		MESSAGE_HANDLER(WM_NOTIFY, OnNotify)
-	END_MSG_MAP()
-	virtual void OnFinalMessage(HWND hWnd);
-	LRESULT OnNotify(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	CCosmosTreeCtrl() noexcept;
+
+	// Overrides
+protected:
+
+	// Implementation
+public:
+	virtual ~CCosmosTreeCtrl();
+	HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
+	bool m_bWebTreeCtrl = false;
+	CGalaxy* m_pGalaxy = nullptr;
+	map<HTREEITEM, CosmosUIItemData*> m_mapTreeItemData;
+protected:
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg BOOL OnNMClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMDblclk(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMTVStateImageChanging(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnTvnBegindrag(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnTvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnTvnItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnTvnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
+	DECLARE_MESSAGE_MAP()
+	virtual void PostNcDestroy();
+};
+
+// CCosmosListCtrl window
+class CCosmosListCtrl : public CListCtrl
+{
+	// Construction
+public:
+	CCosmosListCtrl() noexcept;
+
+	// Overrides
+protected:
+
+	// Implementation
+public:
+	virtual ~CCosmosListCtrl();
+	//HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
+	bool m_bWebListCtrl = false;
+	CGalaxy* m_pGalaxy = nullptr;
+	map<LVITEM, CosmosUIItemData*> m_mapListItemData;
+protected:
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
+	DECLARE_MESSAGE_MAP()
+	virtual void PostNcDestroy();
+public:
+	afx_msg BOOL OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnLvnDeleteallitems(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnLvnInsertitem(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnLvnItemchanged(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnLvnItemActivate(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnLvnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnLvnLinkClicked(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMDblclk(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMHover(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMKillfocus(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMRDblclk(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult);
+};
+
+// CCosmosTabCtrl window
+class CCosmosTabCtrl : public CTabCtrl
+{
+	// Construction
+public:
+	CCosmosTabCtrl() noexcept;
+
+	// Overrides
+protected:
+
+	// Implementation
+public:
+	virtual ~CCosmosTabCtrl();
+	//HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
+	bool m_bWebTabCtrl = false;
+	CGalaxy* m_pGalaxy = nullptr;
+	map<TCITEM, CosmosUIItemData*> m_mapTabItemData;
+protected:
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg BOOL OnNMClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnTcnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg BOOL OnTcnSelchange(NMHDR* pNMHDR, LRESULT* pResult);
+	DECLARE_MESSAGE_MAP()
+	virtual void PostNcDestroy();
 };
 
 class CAFXHelperWnd :
@@ -290,7 +375,7 @@ public:
 	void UpdateVisualWPFMap(HWND, BOOL);
 	CTangramXmlParse* UpdateXobj();
 	BOOL CreateGalaxyCluster();
-	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
+	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);

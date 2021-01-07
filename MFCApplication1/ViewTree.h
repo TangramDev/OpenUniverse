@@ -17,7 +17,8 @@ protected:
 // Implementation
 public:
 	virtual ~CViewTree();
-
 protected:
+	afx_msg void OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 };

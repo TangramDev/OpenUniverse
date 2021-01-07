@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -109,7 +109,7 @@ public:
 	HWND GetWinForm(HWND hWnd);
 
 	BOOL CreateGalaxyCluster();
-	CXobj* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey, CString	strFile);
+	CXobj* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);

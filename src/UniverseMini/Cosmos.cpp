@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005
+ *           Web Runtime for Application - Version 1.0.0.202101070006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -705,7 +705,7 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 	}
 
 	CXobj* pRootXobj = nullptr;
-	pRootXobj = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey, strXml);
+	pRootXobj = _pGalaxy->OpenXtmlDocument(m_pParse, m_strCurrentKey);
 	m_strCurrentKey = _T("");
 	return pRootXobj;
 }

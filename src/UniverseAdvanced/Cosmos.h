@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -321,7 +321,6 @@ public:
 	map<HWND, CCosmosDocWnd*>				m_mapMDTFrame;
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
-	map<HWND, CCommonCtrl*>					m_mapCosmosCommonCtrl;
 	vector<HWND>							m_vecEclipseHideTopWnd;
 	map<HWND, CWinForm*>					m_mapMainForm;
 	map<HWND, CUniverseMDIChild*>			m_mapCosmosMDIChildWnd;

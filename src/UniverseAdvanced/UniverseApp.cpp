@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101060005           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1543,10 +1543,23 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName.Find(_T("SysTreeView32")) == 0 || strClassName.Find(_T("SysTabControl32")) == 0 || strClassName.Find(_T("SysListView32")) == 0)
 		{
-			g_pCosmos->m_mapCosmosCommonCtrl[hWnd] = nullptr;
-			::PostMessage(hWnd, WM_COSMOSMSG, 0, 19820911);
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(strClassName, hPWnd, hWnd);
+			if (strClassName.Find(_T("SysTreeView32")) == 0)
+			{
+				CCosmosTreeCtrl* pCtrl = new CCosmosTreeCtrl();
+				pCtrl->SubclassWindow(hWnd);
+			}
+			else if (strClassName.Find(_T("SysListView32")) == 0)
+			{
+				CCosmosListCtrl* pCtrl = new CCosmosListCtrl();
+				pCtrl->SubclassWindow(hWnd);
+			}
+			else if (strClassName.Find(_T("SysTabControl32")) == 0)
+			{
+				CCosmosTabCtrl* pCtrl = new CCosmosTabCtrl();
+				pCtrl->SubclassWindow(hWnd);
+			}
 		}
 		else if (strClassName.Find(_T("Afx:")) == 0 && (pCreateWnd->lpcs->style & WS_POPUP))
 		{
@@ -1636,9 +1649,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			g_pCosmos->m_mapCosmosAFXHelperWnd.erase(it2);
 		}
-		auto it3 = g_pCosmos->m_mapCosmosCommonCtrl.find(hWnd);
-		if (it3 != g_pCosmos->m_mapCosmosCommonCtrl.end())
-			g_pCosmos->m_mapCosmosCommonCtrl.erase(it3);
 		auto it4 = g_pCosmos->m_mapCosmosFrameWndInfo.find(hWnd);
 		if (it4 != g_pCosmos->m_mapCosmosFrameWndInfo.end())
 		{
@@ -2249,7 +2259,17 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							::GetWindowText(hWnd, szBuffer, 256);
 							CString strCaption = szBuffer;
 							if (strCaption != _T(""))
-								pInfo->m_mapCtrlBar[strCaption] = hWnd;
+							{
+								auto it = pInfo->m_mapCtrlBar.find(strCaption);
+								if (it != pInfo->m_mapCtrlBar.end())
+								{
+									HWND h = it->second;
+									if (::IsChild(hWnd, h) == false)
+										pInfo->m_mapCtrlBar[strCaption] = hWnd;
+								}
+								else
+									pInfo->m_mapCtrlBar[strCaption] = hWnd;
+							}
 						}
 					}
 				}

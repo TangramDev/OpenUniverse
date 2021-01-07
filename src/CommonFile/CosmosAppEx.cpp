@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101020004           *
+ *           Web Runtime for Application - Version 1.0.0.202101070006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -143,10 +143,9 @@ _InitApp FuncInitApp;
 _IsBrowserModel FuncIsBrowserModel;
 
 CWinApp* g_pAppBase = nullptr;
-//CCosmosApp* g_pApp = nullptr;
+ICosmos* g_pCosmos = nullptr;
 CCosmosAppEx* g_pAppEx = nullptr;
 IUniverseAppProxy* g_pAppProxy = nullptr;
-ICosmos* g_pCosmos = nullptr;
 
 namespace CommonUniverse
 {
@@ -200,37 +199,11 @@ namespace CommonUniverse
 		CMFCTabCtrl::FireChangeActiveTab(nNewTab);
 	}
 
-	// CTabPageWnd
-
-	CTabPageWnd::CTabPageWnd()
-	{
-		ATLTRACE(_T("TabPageCreate:%x\n"), this);
-	}
-
-	CTabPageWnd::~CTabPageWnd()
-	{
-		ATLTRACE(_T("TabPageClose:%x\n"), this);
-	}
-
-
-	BEGIN_MESSAGE_MAP(CTabPageWnd, CWnd)
-		//ON_WM_DESTROY()
-	END_MESSAGE_MAP()
-
-	// CTabPageWnd message handlers
-	void CTabPageWnd::PostNcDestroy()
-	{
-		// TODO: Add your specialized code here and/or call the base class
-
-		CWnd::PostNcDestroy();
-		delete this;
-	}
-
 	// CTangramTabCtrlWnd
 
 	IMPLEMENT_DYNAMIC(CTangramTabCtrlWnd, CMFCTabCtrl)
 
-		CTangramTabCtrlWnd::CTangramTabCtrlWnd()
+	CTangramTabCtrlWnd::CTangramTabCtrlWnd()
 	{
 		m_nCurSelTab = -1;
 	}
@@ -305,7 +278,7 @@ namespace CommonUniverse
 		CWnd* pWnd = FromHandlePermanent(hPageWnd);
 		if (pWnd == NULL)
 		{
-			pWnd = new CTabPageWnd();
+			pWnd = new CTangramHelperWnd();
 			pWnd->SubclassWindow(hPageWnd);
 		}
 		AddTab(pWnd, (LPCTSTR)lParam, (UINT)GetTabsNum() - 1);
@@ -848,8 +821,8 @@ namespace CommonUniverse
 
 			if (!afxContextIsDLL)
 			{
-				m_strProviderID = AfxGetApp()->m_pszAppName;
-				m_strProviderID += _T(".host");
+				//m_strProviderID = AfxGetApp()->m_pszAppName;
+				m_strProviderID += _T("host");
 				m_strProviderID.MakeLower();
 
 				m_pCosmosImpl->m_pCosmosDelegate = static_cast<ICosmosDelegate*>(this);
@@ -1299,7 +1272,6 @@ namespace CommonUniverse
 				pXobj->get_Attribute(L"style", &bstrStyle);
 				CString strStyle = OLE2T(bstrStyle);
 				strStyle.Trim();
-				//AFX_MANAGE_STATE(AfxGetStaticModuleState());
 				if (::IsWindow(hParentWnd))
 				{
 					BSTR bstrLocation = L"";
@@ -1316,7 +1288,7 @@ namespace CommonUniverse
 						pTangramTabCtrlWnd->EnableAutoColor();
 						pTangramTabCtrlWnd->EnableTabSwap(false);
 						pTangramTabCtrlWnd->SetLocation(loc);
-						if (!pTangramTabCtrlWnd->Create(nStyle, rectDummy, CWnd::FromHandle(hParentWnd), 1))
+						if (!pTangramTabCtrlWnd->Create(nStyle, rectDummy, CWnd::FromHandle(hParentWnd), 1, loc))
 						{
 							return NULL;
 						}
@@ -1412,11 +1384,6 @@ namespace CommonUniverse
 
 	BOOL CTangramFrameWndEx::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
-		//if (m_hClient == nullptr)
-		//{
-		//	AFXSetTopLevelFrame(this);
-		//}
-		//return CFrameWndEx::OnCommand(wParam, lParam);
 		HWND hWndCtrl = (HWND)lParam;
 		UINT nID = LOWORD(wParam);
 		//AFXSetTopLevelFrame(this);
