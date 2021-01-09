@@ -2207,17 +2207,6 @@ bool CCosmos::IsMDIClientGalaxyNode(IXobj* pXobj)
 	{
 		return false;
 	}
-	//CUniverseMDIChild* pWnd = (CUniverseMDIChild*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
-	//if (pWnd)
-	//{
-	//	return false;
-	//}
-	////if (::IsChild(m_pMDIMainWnd->m_hWnd, hWnd) == false)
-	////	return false;
-	//if (::IsChild(m_pMDIMainWnd->m_hMDIClient, hWnd))
-	//{
-	//	return false;
-	//}
 
 	return true;
 }

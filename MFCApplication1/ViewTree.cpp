@@ -21,7 +21,7 @@ CViewTree::~CViewTree()
 }
 
 BEGIN_MESSAGE_MAP(CViewTree, CTreeCtrl)
-	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_MESSAGE(WM_XOBJCREATED, OnCosmosMsg)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED, &CViewTree::OnTvnSelchanged)
 END_MESSAGE_MAP()
 
@@ -30,7 +30,6 @@ END_MESSAGE_MAP()
 
 LRESULT CViewTree::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
-	LRESULT lRes = CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	if (lParam == 10000)
 	{
 		HANDLE hData = ::GetProp(m_hWnd, _T("CosmosData"));
@@ -47,6 +46,7 @@ LRESULT CViewTree::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
+	LRESULT lRes = CWnd::DefWindowProc(WM_XOBJCREATED, wParam, lParam);
 	return lRes;
 }
 void CViewTree::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
@@ -57,11 +57,8 @@ void CViewTree::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 	CString strXml = _T("");
 	CString strKey = _T("default");
 	CosmosUIItemData* pTreeItemData = (CosmosUIItemData*)pNMTreeView->itemNew.lParam;
-	if (pNMTreeView->itemNew.hItem != GetRootItem())
-	{
-		if (pTreeItemData && pTreeItemData->m_strKey != _T(""))
-			strKey = strText + _T("_") + pTreeItemData->m_strKey;
-	}
+	if (pTreeItemData && pTreeItemData->m_strKey != _T(""))
+		strKey = strText + _T("_") + pTreeItemData->m_strKey;
 	strKey.Replace(_T(" "), _T("_"));
 	*pResult = 0;
 }

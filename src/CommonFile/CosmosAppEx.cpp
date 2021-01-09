@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version 1.0.0.202101060005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1445,6 +1445,7 @@ namespace CommonUniverse
 
 	BEGIN_MESSAGE_MAP(CTangramMDIFrameWndEx, CMDIFrameWndEx)
 		ON_MESSAGE(WM_QUERYAPPPROXY, OnQueryAppProxy)
+		ON_WM_NCACTIVATE()
 	END_MESSAGE_MAP()
 
 
@@ -1564,6 +1565,14 @@ namespace CommonUniverse
 			}
 		}
 		return 0;// (LRESULT)(IUniverseAppProxy*)&theApp;
+	}
+
+	BOOL CTangramMDIFrameWndEx::OnNcActivate(BOOL bActive)
+	{
+		CMFCRibbonBar* pBar = GetRibbonBar();
+		if (pBar && ::IsWindow(pBar->m_hWnd) == NULL)
+			return CMDIFrameWnd::OnNcActivate(bActive);
+		return CMDIFrameWndEx::OnNcActivate(bActive);
 	}
 
 	void CTangramMDIFrameWndEx::OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage)

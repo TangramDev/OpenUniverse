@@ -37,19 +37,60 @@
 #include "DocTemplateDlg.h"
 #include "Wormhole.h"
 
-class CTangramHelperWnd : public CWnd
+class CGalaxyHelperWnd : public CWnd
 {
+	DECLARE_DYNAMIC(CGalaxyHelperWnd)
 public:
-	CTangramHelperWnd() {}
-	virtual ~CTangramHelperWnd() {}
+	CGalaxyHelperWnd() {}
+	virtual ~CGalaxyHelperWnd() {}
+	CGalaxy* m_pGalaxy = nullptr;
+	HWND m_hClient = nullptr;
 	void PostNcDestroy()
 	{
 		CWnd::PostNcDestroy();
 		delete this;
 	}
-	BEGIN_MSG_MAP(CTangramHelperWnd)
-	END_MSG_MAP()
+	DECLARE_MESSAGE_MAP()
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
 };
+
+IMPLEMENT_DYNAMIC(CGalaxyHelperWnd, CWnd)
+
+BEGIN_MESSAGE_MAP(CGalaxyHelperWnd, CWnd)
+	ON_WM_SHOWWINDOW()
+	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+END_MESSAGE_MAP()
+
+void CGalaxyHelperWnd::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CWnd::OnShowWindow(bShow, nStatus);
+	if (bShow && ::IsWindow(m_hClient))
+	{
+		if (m_pGalaxy == nullptr)
+		{
+			DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
+			CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
+			auto iter = pThreadInfo->m_mapGalaxy.find(m_hClient);
+			if (iter != pThreadInfo->m_mapGalaxy.end())
+			{
+				m_pGalaxy = (CGalaxy*)iter->second;
+			}
+		}
+		//::ShowWindow(m_hClient, SW_SHOW);
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210107);
+	}
+}
+
+LRESULT CGalaxyHelperWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+{
+	if (lParam == 20210107)
+	{
+		if (m_pGalaxy)
+			m_pGalaxy->HostPosChanged();
+	}
+	return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CCosmosTreeCtrl
@@ -68,7 +109,8 @@ CCosmosTreeCtrl::~CCosmosTreeCtrl()
 }
 
 BEGIN_MESSAGE_MAP(CCosmosTreeCtrl, CTreeCtrl)
-	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_MESSAGE(WM_XOBJCREATED, OnXobjCreatedMsg)
+	ON_MESSAGE(WM_CLOUDMSGRECEIVED, OnCloudMsgReceived)
 	ON_NOTIFY_REFLECT_EX(NM_RCLICK, &CCosmosTreeCtrl::OnNMRClick)
 	ON_NOTIFY_REFLECT_EX(TVN_SELCHANGED, &CCosmosTreeCtrl::OnTvnSelchanged)
 	ON_NOTIFY_REFLECT_EX(NM_CLICK, &CCosmosTreeCtrl::OnNMClick)
@@ -83,6 +125,17 @@ END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CCosmosTreeCtrl message handlers
+
+LRESULT CCosmosTreeCtrl::OnCloudMsgReceived(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_CLOUDMSGRECEIVED, wParam, lParam);
+	CSession* pSession = (CSession*)lParam;
+	CWebPageImpl* m_pOwner = pSession->m_pOwner;
+	CChromeRenderFrameHost* m_pChromeRenderFrameHost = m_pOwner->m_pChromeRenderFrameHost;
+	CString strMsgID = pSession->GetString(L"msgID");
+	return lRes;
+}
+
 HTREEITEM CCosmosTreeCtrl::FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem)
 {
 	if (pParse)
@@ -93,7 +146,7 @@ HTREEITEM CCosmosTreeCtrl::FillTreeView(CTangramXmlParse* pParse, CTangramXmlPar
 		{
 			CosmosUIItemData* pTreeItemData = new CosmosUIItemData;
 			pTreeItemData->m_hParentItem = hParentItem;
-			pTreeItemData->m_strKey = pParse->attr(_T("uikey"), _T("default"));
+			pTreeItemData->m_strKey = pParse->attr(_T("id"), _T("default"));
 			//CTangramXmlParse* pParseTag = pParse->GetChild(name + _T("_tag"));
 			if (pParseTag)
 				pTreeItemData->m_strData = pParseTag->xml();
@@ -193,10 +246,12 @@ BOOL CCosmosTreeCtrl::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 	return false;
 }
 
-LRESULT CCosmosTreeCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CCosmosTreeCtrl::OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam)
 {
-	LRESULT lRes = CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
-	if (lParam == 10000)
+	LRESULT lRes = CWnd::DefWindowProc(WM_XOBJCREATED, wParam, lParam);
+	switch (lParam)
+	{
+	case 10000:
 	{
 		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
@@ -218,24 +273,63 @@ LRESULT CCosmosTreeCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				int nID = pParse->attrInt(_T("clientid"), 0);
 				if (nID == ::GetDlgCtrlID(m_hWnd))
 				{
-					CString xml = pParse->xml();
 					bool b = pParse->attrBool(_T("usingwebdata"), false);
 					CTangramXmlParse* pUIData = pParse->GetChild(_T("uidata"));
 					CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
 					if (b && pUIData)
 					{
-						if (m_bWebTreeCtrl == false)
-						{
-							CTangramHelperWnd* pWnd = new CTangramHelperWnd();
-							pWnd->SubclassWindow(::GetParent(m_hWnd));
-							m_bWebTreeCtrl = true;
-						}
 						DeleteAllItems();
 						FillTreeView(pUIData, pUIDataTag, NULL);
 					}
 				}
 			}
 		}
+	}
+	break;
+	case 20210108:
+	{
+		IXobj* pObj = nullptr;
+		g_pCosmos->GetXobjFromHandle((__int64)m_hWnd, &pObj);
+
+		HWND _hWnd = (HWND)m_hWnd;
+		CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+		while (pInfo == nullptr)
+		{
+			_hWnd = ::GetParent(_hWnd);
+			if (_hWnd == 0)
+				break;
+			pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+		}
+		if (pInfo)
+			m_pHostObj = (CXobj*)pInfo->m_pXobj;
+		if (m_pHostObj)
+		{
+			if (m_pHostObj->m_pHostParse)
+			{
+				if (m_pHostObj->m_pHostWnd->m_hWnd == m_hWnd)
+				{
+					CTangramXmlParse* pUIData = m_pHostObj->m_pHostParse->GetChild(_T("uidata"));
+					if (pUIData)
+					{
+						bool b = pUIData->attrBool(_T("usingwebdata"), false);
+						if (b)
+						{
+							DeleteAllItems();
+							CTangramXmlParse* pUIDataTag = m_pHostObj->m_pHostParse->GetChild(_T("uidata_tag"));
+							FillTreeView(pUIData, pUIDataTag, NULL);
+						}
+
+					}
+				}
+				else
+				{
+					int nID = ::GetDlgCtrlID(m_hWnd);
+				}
+			}
+		}
+		return S_OK;
+	}
+	break;
 	}
 	return lRes;
 }
@@ -265,7 +359,8 @@ CCosmosListCtrl::~CCosmosListCtrl()
 }
 
 BEGIN_MESSAGE_MAP(CCosmosListCtrl, CListCtrl)
-	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_MESSAGE(WM_XOBJCREATED, OnXobjCreatedMsg)
+	ON_MESSAGE(WM_CLOUDMSGRECEIVED, OnCloudMsgReceived)
 	ON_NOTIFY_REFLECT_EX(LVN_DELETEITEM, &CCosmosListCtrl::OnLvnDeleteitem)
 	ON_NOTIFY_REFLECT_EX(LVN_DELETEALLITEMS, &CCosmosListCtrl::OnLvnDeleteallitems)
 	ON_NOTIFY_REFLECT_EX(LVN_INSERTITEM, &CCosmosListCtrl::OnLvnInsertitem)
@@ -281,6 +376,16 @@ BEGIN_MESSAGE_MAP(CCosmosListCtrl, CListCtrl)
 	ON_NOTIFY_REFLECT_EX(NM_RDBLCLK, &CCosmosListCtrl::OnNMRDblclk)
 	ON_NOTIFY_REFLECT_EX(NM_RETURN, &CCosmosListCtrl::OnNMReturn)
 END_MESSAGE_MAP()
+
+LRESULT CCosmosListCtrl::OnCloudMsgReceived(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_CLOUDMSGRECEIVED, wParam, lParam);
+	CSession* pSession = (CSession*)lParam;
+	CWebPageImpl* m_pOwner = pSession->m_pOwner;
+	CChromeRenderFrameHost* m_pChromeRenderFrameHost = m_pOwner->m_pChromeRenderFrameHost;
+	CString strMsgID = pSession->GetString(L"msgID");
+	return lRes;
+}
 
 BOOL CCosmosListCtrl::OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -362,10 +467,12 @@ BOOL CCosmosListCtrl::OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult)
 	return false;
 }
 
-LRESULT CCosmosListCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CCosmosListCtrl::OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam)
 {
-	LRESULT lRes = CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
-	if (lParam == 10000)
+	LRESULT lRes = CWnd::DefWindowProc(WM_XOBJCREATED, wParam, lParam);
+	switch (lParam)
+	{
+	case 10000:
 	{
 		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
@@ -393,18 +500,51 @@ LRESULT CCosmosListCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
 					if (b && pUIData)
 					{
-						if (m_bWebListCtrl == false)
-						{
-							CTangramHelperWnd* pWnd = new CTangramHelperWnd();
-							pWnd->SubclassWindow(::GetParent(m_hWnd));
-							m_bWebListCtrl = true;
-						}
 						DeleteAllItems();
 						//FillTreeView(pUIData, pUIDataTag, NULL);
 					}
 				}
 			}
 		}
+	}
+	break;
+	case 20210108:
+	{
+		IXobj* pObj = nullptr;
+		g_pCosmos->GetXobjFromHandle((__int64)m_hWnd, &pObj);
+
+		HWND _hWnd = (HWND)m_hWnd;
+		CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+		while (pInfo == nullptr)
+		{
+			_hWnd = ::GetParent(_hWnd);
+			if (_hWnd == 0)
+				break;
+			pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+		}
+		if (pInfo)
+			m_pHostObj = (CXobj*)pInfo->m_pXobj;
+		if (m_pHostObj)
+		{
+			if (m_pHostObj->m_pHostParse)
+			{
+				if (m_pHostObj->m_pHostWnd->m_hWnd == m_hWnd)
+				{
+					CTangramXmlParse* pUIData = m_pHostObj->m_pHostParse->GetChild(_T("uidata"));
+					if (pUIData)
+					{
+
+					}
+				}
+				else
+				{
+					int nID = ::GetDlgCtrlID(m_hWnd);
+				}
+			}
+		}
+		return S_OK;
+	}
+	break;
 	}
 	return lRes;
 }
@@ -434,12 +574,23 @@ CCosmosTabCtrl::~CCosmosTabCtrl()
 }
 
 BEGIN_MESSAGE_MAP(CCosmosTabCtrl, CTabCtrl)
-	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
+	ON_MESSAGE(WM_XOBJCREATED, OnXobjCreatedMsg)
+	ON_MESSAGE(WM_CLOUDMSGRECEIVED, OnCloudMsgReceived)
 	ON_NOTIFY_REFLECT_EX(NM_CLICK, &CCosmosTabCtrl::OnNMClick)
 	ON_NOTIFY_REFLECT_EX(NM_RCLICK, &CCosmosTabCtrl::OnNMRClick)
 	ON_NOTIFY_REFLECT_EX(TCN_KEYDOWN, &CCosmosTabCtrl::OnTcnKeydown)
 	ON_NOTIFY_REFLECT_EX(TCN_SELCHANGE, &CCosmosTabCtrl::OnTcnSelchange)
 END_MESSAGE_MAP()
+
+LRESULT CCosmosTabCtrl::OnCloudMsgReceived(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_CLOUDMSGRECEIVED, wParam, lParam);
+	CSession* pSession = (CSession*)lParam;
+	CWebPageImpl* m_pOwner = pSession->m_pOwner;
+	CChromeRenderFrameHost* m_pChromeRenderFrameHost = m_pOwner->m_pChromeRenderFrameHost;
+	CString strMsgID = pSession->GetString(L"msgID");
+	return lRes;
+}
 
 BOOL CCosmosTabCtrl::OnNMClick(NMHDR* pNMHDR, LRESULT* pResult)
 {
@@ -462,10 +613,12 @@ BOOL CCosmosTabCtrl::OnTcnSelchange(NMHDR* pNMHDR, LRESULT* pResult)
 	return false;
 }
 
-LRESULT CCosmosTabCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CCosmosTabCtrl::OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam)
 {
-	LRESULT lRes = CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
-	if (lParam == 10000)
+	LRESULT lRes = CWnd::DefWindowProc(WM_XOBJCREATED, wParam, lParam);
+	switch (lParam)
+	{
+	case 10000:
 	{
 		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
@@ -493,18 +646,51 @@ LRESULT CCosmosTabCtrl::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
 					if (b && pUIData)
 					{
-						if (m_bWebTabCtrl == false)
-						{
-							CTangramHelperWnd* pWnd = new CTangramHelperWnd();
-							pWnd->SubclassWindow(::GetParent(m_hWnd));
-							m_bWebTabCtrl = true;
-						}
 						DeleteAllItems();
 						//FillTreeView(pUIData, pUIDataTag, NULL);
 					}
 				}
 			}
 		}
+	}
+	break;
+	case 20210108:
+	{
+		IXobj* pObj = nullptr;
+		g_pCosmos->GetXobjFromHandle((__int64)m_hWnd, &pObj);
+
+		HWND _hWnd = (HWND)m_hWnd;
+		CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+		while (pInfo == nullptr)
+		{
+			_hWnd = ::GetParent(_hWnd);
+			if (_hWnd == 0)
+				break;
+			pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+		}
+		if (pInfo)
+			m_pHostObj = (CXobj*)pInfo->m_pXobj;
+		if (m_pHostObj)
+		{
+			if (m_pHostObj->m_pHostParse)
+			{
+				if (m_pHostObj->m_pHostWnd->m_hWnd == m_hWnd)
+				{
+					CTangramXmlParse* pUIData = m_pHostObj->m_pHostParse->GetChild(_T("uidata"));
+					if (pUIData)
+					{
+
+					}
+				}
+				else
+				{
+					int nID = ::GetDlgCtrlID(m_hWnd);
+				}
+			}
+		}
+		return S_OK;
+	}
+	break;
 	}
 	return lRes;
 }
@@ -2700,10 +2886,10 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 
 	CreateGalaxyCluster();
 	m_mapXobj[strKey] = m_pWorkXobj;
-	if (strKey.CompareNoCase(_T("default"))==0)
+	if (strKey.CompareNoCase(_T("default")) == 0)
 	{
 		::SetProp(m_hWnd, _T("CosmosData"), _pParse);
-		::SendMessage(m_hWnd, WM_COSMOSMSG, 0, 10000);
+		::SendMessage(m_hWnd, WM_XOBJCREATED, 0, 10000);
 	}
 
 	m_pWorkXobj->m_strCosmosXml = _pParse->xml();
@@ -2726,7 +2912,22 @@ BOOL CGalaxy::CreateGalaxyCluster()
 {
 	if (::IsWindow(m_hWnd) == false)
 		SubclassWindow(m_hHostWnd);
-	HWND hPWnd = NULL;
+	HWND hPWnd = ::GetParent(m_hWnd);
+	CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
+	if (pWnd == nullptr)
+	{
+		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+		CString strClassName = g_pCosmos->m_szBuffer;
+		if ((strClassName.Find(_T("Afx:ControlBar")) == 0) ||
+			(strClassName.Find(_T("SysTreeView32")) == 0 ||
+				strClassName.Find(_T("SysTabControl32")) == 0 ||
+				strClassName.Find(_T("SysListView32")) == 0))
+		{
+			CGalaxyHelperWnd* _pWnd = new CGalaxyHelperWnd();
+			_pWnd->SubclassWindow(hPWnd);
+			_pWnd->m_hClient = m_hWnd;
+		}
+	}
 	if (m_hPWnd && ::IsWindow(m_hPWnd))
 		hPWnd = m_pGalaxyCluster->m_hWnd;
 	else

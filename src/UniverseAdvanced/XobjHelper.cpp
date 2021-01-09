@@ -564,8 +564,13 @@ void CXobjHelper::OnDestroy()
 			g_pCosmos->m_pCLRProxy->SelectXobj(NULL);
 		g_pCosmos->m_pDesignXobj = NULL;
 	}
-
 	m_pXobj->Fire_Destroy();
+	HANDLE hData = RemoveProp(m_hWnd, _T("CosmosInfo"));
+	if (hData)
+	{
+		CosmosInfo* pInfo = (CosmosInfo*)hData;
+		delete pInfo;
+	}
 	CWnd::OnDestroy();
 }
 
@@ -1011,13 +1016,39 @@ LRESULT CXobjHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case WM_COMMAND:
 		{
-			WNDPROC* lplpfn = GetSuperWndProcAddr();
-			LRESULT res = CallWindowProc(*lplpfn, m_hWnd, message, wParam, lParam);
+			//WNDPROC* lplpfn = GetSuperWndProcAddr();
+			LRESULT res = CWnd::WindowProc(message, wParam, lParam);// CallWindowProc(*lplpfn, m_hWnd, message, wParam, lParam);
 			HWND hWnd = (HWND)lParam;
 			if (::IsWindow(hWnd) && m_pXobj)
 			{
 				::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+				CString strName = g_pCosmos->m_szBuffer;
 				m_pXobj->Fire_ControlNotify(m_pXobj, HIWORD(wParam), LOWORD(wParam), lParam, CComBSTR(g_pCosmos->m_szBuffer));
+				if (m_pXobj->m_pWormhole)
+				{
+					HWND hCtrl = (HWND)lParam;
+					CString strVal = _T("");
+					if (strName == _T("Edit"))
+					{
+						CEdit edit;
+						edit.Attach(hCtrl);
+						edit.GetWindowText(strVal);
+						edit.Detach();
+					}
+					else
+					{
+						::GetWindowText((HWND)lParam, g_pCosmos->m_szBuffer, MAX_PATH);
+						strVal = g_pCosmos->m_szBuffer;
+					}
+					m_pXobj->m_pWormhole->InsertString(_T("msgID"), _T("WM_COMMAND"));
+					m_pXobj->m_pWormhole->InsertString(_T("CtrlClass"), strName);
+					m_pXobj->m_pWormhole->InsertString(_T("CtrlValue"), strVal);
+					m_pXobj->m_pWormhole->InsertLong(_T("NotifyCode"), HIWORD(wParam));
+					m_pXobj->m_pWormhole->InsertLong(_T("CtrlID"), LOWORD(wParam));
+					m_pXobj->m_pWormhole->Insertint64(_T("CtrlHandle"), lParam);
+					m_pXobj->m_pWormhole->SendMessage();
+					m_pXobj->m_pWormhole->InsertString(_T("msgID"), _T(""));
+				}
 			}
 
 			return res;
@@ -1148,6 +1179,10 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 			::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 		{
+			if (::IsWindowVisible(m_pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd) == false)
+			{
+				::ShowWindow(m_pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd, SW_SHOW);
+			}
 			m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 		}
 	}

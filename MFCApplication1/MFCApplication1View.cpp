@@ -1,4 +1,4 @@
-
+﻿
 // MFCApplication1View.cpp : implementation of the CMFCApplication1View class
 //
 
@@ -24,11 +24,14 @@ IMPLEMENT_DYNCREATE(CMFCApplication1View, CFormView)
 
 BEGIN_MESSAGE_MAP(CMFCApplication1View, CFormView)
 	// Standard printing commands
+	ON_MESSAGE(WM_XOBJCREATED, OnCosmosMsg)
+	ON_MESSAGE(WM_CLOUDMSGRECEIVED, OnCloudMsgReceived)
 	ON_COMMAND(ID_FILE_PRINT, &CFormView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CFormView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMFCApplication1View::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 // CMFCApplication1View construction/destruction
@@ -134,3 +137,91 @@ CMFCApplication1Doc* CMFCApplication1View::GetDocument() const // non-debug vers
 
 
 // CMFCApplication1View message handlers
+LRESULT CMFCApplication1View::OnCloudMsgReceived(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_CLOUDMSGRECEIVED, wParam, lParam);
+	CSession* pSession = (CSession*)lParam;
+	CWebPageImpl* m_pOwner= pSession->m_pOwner;
+	CChromeRenderFrameHost* m_pChromeRenderFrameHost = m_pOwner->m_pChromeRenderFrameHost;
+	CString strMsgID = pSession->GetString(L"msgID");
+	pSession->InsertString(_T("msgID"), _T("TEST_MFC_MSG"));
+	pSession->InsertString(_T("testinfo"), _T("您好，MFCMessage！"));
+	pSession->SendMessage();
+	return lRes;
+}
+
+LRESULT CMFCApplication1View::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRes = CWnd::DefWindowProc(WM_XOBJCREATED, wParam, lParam);
+	if (lParam == 10000)
+	{
+		IXobj* pObj = (IXobj*)wParam;
+		if (pObj)
+		{
+			CComBSTR bstrXml;
+			pObj->get_OuterXml(&bstrXml);
+			CString strXml = OLE2T(bstrXml);
+		}
+		//DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
+		//CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
+
+		//if (m_pGalaxy == nullptr)
+		//{
+		//	auto iter = pThreadInfo->m_mapGalaxy.find(m_hWnd);
+		//	if (iter != pThreadInfo->m_mapGalaxy.end())
+		//	{
+		//		m_pGalaxy = (CGalaxy*)iter->second;
+		//	}
+		//}
+		//HANDLE hData = ::GetProp(m_hWnd, _T("CosmosData"));
+		//if (hData)
+		//{
+		//	CTangramXmlParse* pParse = (CTangramXmlParse*)hData;
+		//	if (pParse)
+		//	{
+		//		int nID = pParse->attrInt(_T("clientid"), 0);
+		//		if (nID == ::GetDlgCtrlID(m_hWnd))
+		//		{
+		//			CString xml = pParse->xml();
+		//			bool b = pParse->attrBool(_T("usingwebdata"), false);
+		//			CTangramXmlParse* pUIData = pParse->GetChild(_T("uidata"));
+		//			CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
+		//			if (b && pUIData)
+		//			{
+		//				DeleteAllItems();
+		//				FillTreeView(pUIData, pUIDataTag, NULL);
+		//			}
+		//		}
+		//	}
+		//}
+	}
+	return lRes;
+}
+
+
+int CMFCApplication1View::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CFormView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  Add your specialized creation code here
+	IXobj* pObj = nullptr;
+	if (g_pCosmos)
+	{
+		g_pCosmos->get_CreatingXobj(&pObj);
+	}
+	if (pObj)
+	{
+		CComBSTR bstrXml("");
+		pObj->get_XML(&bstrXml);
+	}
+	return 0;
+}
+
+
+BOOL CMFCApplication1View::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	return CFormView::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+}

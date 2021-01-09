@@ -26,6 +26,7 @@ COutputWnd::~COutputWnd()
 BEGIN_MESSAGE_MAP(COutputWnd, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
+	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -197,4 +198,13 @@ void COutputList::OnViewOutput()
 		pMainFrame->RecalcLayout();
 
 	}
+}
+
+
+void COutputWnd::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDockablePane::OnShowWindow(bShow, nStatus);
+	if (bShow)
+		::ShowWindow(m_wndTabs.m_hWnd, SW_SHOW);
+	// TODO: Add your message handler code here
 }

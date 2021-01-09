@@ -253,7 +253,7 @@ void CGridWnd::TrackColumnSize(int x, int col)
 
 LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 {
-	if (lParam == 1992 || wParam == 0x01000 || wParam == 0)
+	if (lParam == 1992 || wParam == 0x01000 || wParam == 0 )
 	{
 		return 0;
 	}
@@ -1323,6 +1323,12 @@ void CGridWnd::OnSize(UINT nType, int cx, int cy)
 void CGridWnd::OnDestroy()
 {
 	m_pXobj->Fire_Destroy();
+	HANDLE hData = RemoveProp(m_hWnd, _T("CosmosInfo"));
+	if (hData)
+	{
+		CosmosInfo* pInfo = (CosmosInfo*)hData;
+		delete pInfo;
+	}
 	__super::OnDestroy();
 }
 

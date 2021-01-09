@@ -116,6 +116,10 @@ namespace Browser {
 			if (pXobj && pXobj->m_pWormhole == nullptr)
 			{
 				pXobj->m_pWormhole = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+				if (pXobj->m_pXobjShareData->m_pGalaxy->m_pWormhole == nullptr)
+				{
+					pXobj->m_pXobjShareData->m_pGalaxy->m_pWormhole = pXobj->m_pWormhole;
+				}
 				CWormhole* pSession = pXobj->m_pWormhole;
 				if (pSession)
 				{

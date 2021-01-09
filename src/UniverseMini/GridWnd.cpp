@@ -250,7 +250,7 @@ void CGridWnd::TrackColumnSize(int x, int col)
 
 LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 {
-	if (lParam == 1992 || wParam == 0x01000 || wParam == 0)
+	if (lParam == 1992 || wParam == 0x01000 || wParam == 0 )
 	{
 		return 0;
 	}

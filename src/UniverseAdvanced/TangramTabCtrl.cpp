@@ -361,22 +361,6 @@ void CTangramListCtrl::OnNMDblclk(NMHDR *pNMHDR, LRESULT *pResult)
 							pProxy->OpenDocument(it->second->m_pDocTemplate, _T(""), true);
 						}
 					}
-					//else
-					//{
-					//	CosmosDocTemplateInfo* pCosmosDocTemplateInfo = it->second;
-					//	g_pCosmos->m_pCosmosDocTemplateInfo = pCosmosDocTemplateInfo;
-					//	g_pCosmos->m_strTemplatePath = strTemplateFile;
-					//	CTangramXmlParse m_Parse;
-					//	if (m_Parse.LoadFile(g_pCosmos->m_strTemplatePath))
-					//	{
-					//		if (g_pCosmos->m_pMDIMainWnd)
-					//		{
-					//			::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)pCosmosDocTemplateInfo->m_pDocTemplate, TANGRAM_CONST_NEWDOC);
-					//			if (g_pCosmos->m_strDefaultTemplate2 == _T(""))
-					//				g_pCosmos->m_pMDIMainWnd->OnCreateDoc(_T(""));
-					//		}
-					//	}
-					//}
 				}
 				else
 				{

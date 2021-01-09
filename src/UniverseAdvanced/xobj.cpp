@@ -1058,6 +1058,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 						m_pWindow = g_pCosmos->m_pCreatingWindow;
 						g_pCosmos->m_pCreatingWindow = nullptr;
 					}
+					//::PostMessage(hWnd, WM_XOBJCREATED, (WPARAM)((IXobj*)this), 10000);
 					m_nID = ::GetWindowLong(hWnd, GWL_ID);
 				}
 			}

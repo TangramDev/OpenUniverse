@@ -131,6 +131,8 @@ namespace blink {
 	 void openUrl(const String& url, long nBrowserWndOpenDisposition, V8ApplicationCallback* callback, bool bwait);
 	 void Observe(const String& key, const String& strXml, V8ApplicationCallback* callback);
 	 void Observe(const String& key, Element* elem, V8ApplicationCallback* callback);
+	 void ObserveClient(const String& key, const String& strXml, V8ApplicationCallback* callback);
+	 void ObserveClient(const String& key, Element* elem, V8ApplicationCallback* callback);
 
 	 // DOM method
 	 void defineElement(const String& tagName, const String& html);

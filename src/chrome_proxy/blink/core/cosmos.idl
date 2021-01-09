@@ -19,6 +19,8 @@ typedef sequence<any> ObjectArray;
 		[DefaultValue = Undefined] optional  boolean bwait);
 	void Observe(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
 	void Observe(DOMString key, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void ObserveClient(DOMString key, DOMString strXml, [DefaultValue = Undefined] optional ApplicationCallback callback);
+	void ObserveClient(DOMString key, Element elem, [DefaultValue = Undefined] optional ApplicationCallback callback);
 
 	// DOM API
 	void defineElement(DOMString tagName, DOMString html);

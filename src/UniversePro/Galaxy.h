@@ -43,11 +43,12 @@ protected:
 public:
 	virtual ~CCosmosTreeCtrl();
 	HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
-	bool m_bWebTreeCtrl = false;
+	CXobj* m_pHostObj = nullptr;
 	CGalaxy* m_pGalaxy = nullptr;
 	map<HTREEITEM, CosmosUIItemData*> m_mapTreeItemData;
 protected:
-	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnNMClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMDblclk(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult);
@@ -76,14 +77,12 @@ protected:
 public:
 	virtual ~CCosmosListCtrl();
 	//HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
-	bool m_bWebListCtrl = false;
+	CXobj* m_pHostObj = nullptr;
 	CGalaxy* m_pGalaxy = nullptr;
 	map<LVITEM, CosmosUIItemData*> m_mapListItemData;
 protected:
-	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
-	virtual void PostNcDestroy();
-public:
+	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnLvnDeleteallitems(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnLvnInsertitem(NMHDR* pNMHDR, LRESULT* pResult);
@@ -98,6 +97,8 @@ public:
 	afx_msg BOOL OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMRDblclk(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult);
+	DECLARE_MESSAGE_MAP()
+	virtual void PostNcDestroy();
 };
 
 // CCosmosTabCtrl window
@@ -114,11 +115,12 @@ protected:
 public:
 	virtual ~CCosmosTabCtrl();
 	//HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
-	bool m_bWebTabCtrl = false;
 	CGalaxy* m_pGalaxy = nullptr;
+	CXobj* m_pHostObj = nullptr;
 	map<TCITEM, CosmosUIItemData*> m_mapTabItemData;
 protected:
-	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnNMClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnTcnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
@@ -357,6 +359,7 @@ public:
 	CXobj*											m_pBindingXobj;
 	CGalaxy*										m_pSubGalaxy;
 	GalaxyInfo*										m_pGalaxyInfo;
+	CWormhole*										m_pWormhole = nullptr;
 	CCosmosDoc*										m_pDoc;
 	map<CString, CXobj*>							m_mapXobj;
 	map<CString, CXobj*>							m_mapNeedSaveToConfigNode;

@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CFileView, CDockablePane)
 	ON_COMMAND(ID_EDIT_CLEAR, OnEditClear)
 	ON_WM_PAINT()
 	ON_WM_SETFOCUS()
+	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -166,7 +167,7 @@ void CFileView::AdjustLayout()
 	int cyTlb = m_wndToolBar.CalcFixedLayout(FALSE, TRUE).cy;
 
 	m_wndToolBar.SetWindowPos(nullptr, rectClient.left, rectClient.top, rectClient.Width(), cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
-	m_wndFileView.SetWindowPos(nullptr, rectClient.left + 1, rectClient.top + cyTlb + 1, rectClient.Width() - 2, rectClient.Height() - cyTlb - 2, SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndFileView.SetWindowPos(nullptr, rectClient.left, rectClient.top + cyTlb , rectClient.Width(), rectClient.Height() - cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
 void CFileView::OnProperties()
@@ -255,3 +256,12 @@ void CFileView::OnChangeVisualStyle()
 }
 
 
+
+
+void CFileView::OnShowWindow(BOOL bShow, UINT nStatus)
+{
+	CDockablePane::OnShowWindow(bShow, nStatus);
+	if(bShow)
+		::ShowWindow(m_wndFileView.m_hWnd, SW_SHOW);
+	// TODO: Add your message handler code here
+}

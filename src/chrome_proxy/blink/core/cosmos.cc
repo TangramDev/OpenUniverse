@@ -1084,6 +1084,16 @@ namespace blink {
 		sendMessage("TANGRAM_UI_MESSAGE", key, L"", elem->OuterHTMLAsString(), L"", L"");
 	}
 
+	void Cosmos::ObserveClient(const String& key, const String& strXml, V8ApplicationCallback* callback)
+	{
+		sendMessage("Client_UI_MESSAGE", key, L"", strXml, L"", L"");
+	}
+
+	void Cosmos::ObserveClient(const String& key, Element* elem, V8ApplicationCallback* callback)
+	{
+		sendMessage("Client_UI_MESSAGE", key, L"", elem->OuterHTMLAsString(), L"", L"");
+	}
+
 	void Cosmos::invokeWinFormCreatedCallback(CosmosWinform* form)
 	{
 		auto itcallback = mapCallbackFunction_.find((int64_t)form);

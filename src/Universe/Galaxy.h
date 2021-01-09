@@ -99,6 +99,7 @@ public:
 	CXobj*											m_pContainerNode;
 	CXobj*											m_pBindingXobj;
 	GalaxyInfo*										m_pGalaxyInfo;
+	CWormhole*										m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
 	CComObject<CXobjCollection>*					m_pRootNodes;
 

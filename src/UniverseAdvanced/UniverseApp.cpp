@@ -381,7 +381,7 @@ BOOL CUniverse::InitInstance()
 		return true;
 
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(2294);
+	//_CrtSetBreakAlloc(3888);
 
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCtrls.dwSize = sizeof(InitCtrls);
@@ -1543,6 +1543,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName.Find(_T("SysTreeView32")) == 0 || strClassName.Find(_T("SysTabControl32")) == 0 || strClassName.Find(_T("SysListView32")) == 0)
 		{
+			::PostMessage(hWnd, WM_XOBJCREATED, 0, 20210108);
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(strClassName, hPWnd, hWnd);
 			if (strClassName.Find(_T("SysTreeView32")) == 0)
@@ -1570,7 +1571,11 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				::SendMessage(hPWnd, WM_CONTROLBARCREATED, (WPARAM)hWnd, 0);
 			}
 		}
-
+		else if (strClassName.Find(_T("#32770")) == 0)
+		{
+			if (hPWnd&& (pCreateWnd->lpcs->style&WS_CHILD))
+				TRACE(L"\n");
+		}
 		if (strPClassName == _T("GenericPane"))
 		{
 			HWND hWnd = (HWND)wParam;
@@ -1623,6 +1628,12 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 	break;
 	case HCBT_DESTROYWND:
 	{
+		HANDLE hData = RemoveProp(hWnd, _T("CosmosInfo"));
+		if (hData)
+		{
+			CosmosInfo* pInfo = (CosmosInfo*)hData;
+			delete pInfo;
+		}
 		if (g_pCosmos && g_pCosmos->m_bOfficeApp)
 			g_pCosmos->WindowDestroy(hWnd);
 		else if (g_pCosmos->m_pCLRProxy)

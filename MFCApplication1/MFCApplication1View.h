@@ -46,10 +46,15 @@ protected:
 
 // Generated message map functions
 protected:
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 };
 
 #ifndef _DEBUG  // debug version in MFCApplication1View.cpp

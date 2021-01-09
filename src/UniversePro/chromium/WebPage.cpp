@@ -123,6 +123,10 @@ namespace Browser {
 			if (pXobj && pXobj->m_pWormhole == nullptr)
 			{
 				pXobj->m_pWormhole = (CWormhole*)((CCosmosImpl*)g_pCosmos)->CreateCloudSession(this);
+				if (pXobj->m_pXobjShareData->m_pGalaxy->m_pWormhole == nullptr)
+				{
+					pXobj->m_pXobjShareData->m_pGalaxy->m_pWormhole = pXobj->m_pWormhole;
+				}
 				CWormhole* pSession = pXobj->m_pWormhole;
 				if (pSession)
 				{
@@ -864,6 +868,96 @@ namespace Browser {
 			}
 			LoadDocument2Viewport(strParam1, strParam3);
 		}
+		else if (strId.CompareNoCase(_T("Client_UI_MESSAGE")) == 0)
+		{
+			HWND hMainWnd = g_pCosmos->m_pCosmosDelegate->GetMainWnd();
+			if (hMainWnd)
+			{
+				CTangramXmlParse xmlParse;
+				if (xmlParse.LoadFile(strParam3))
+				{
+					CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+					HANDLE hHandle = ::GetProp(hMainWnd, _T("CosmosFrameWndInfo"));
+					if (hHandle)
+					{
+						pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+						pCosmosFrameWndInfo->m_pWebPage = this;
+						pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
+						CTangramXmlParse* pParse = xmlParse.GetChild(_T("mainframe"));
+						if (pParse)
+						{
+							CTangramXmlParse* pParseClient = pParse->GetChild(_T("client"));
+							if (pParseClient)
+							{
+								HWND hClient = pCosmosFrameWndInfo->m_hClient;
+								CString strXml = pParseClient->xml();
+								IGalaxyCluster* pCluster = nullptr;
+								if (pCluster == nullptr)
+								{
+									g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
+								}
+								if (pCluster)
+								{
+									IGalaxy* pGalaxy = nullptr;
+									CString strKey = _T("client");
+									pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+									if (pGalaxy)
+									{
+										CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+										_pGalaxy->m_pWebPageWnd = this;
+										IXobj* pXobj = nullptr;
+										_pGalaxy->Observe(CComBSTR(strParam1), CComBSTR(strXml), &pXobj);
+									}
+								}
+							}
+							pParse = pParse->GetChild(_T("controlbars"));
+							if (pParse)
+							{
+								int nCount = pParse->GetCount();
+								for (int i = 0; i < nCount; i++)
+								{
+									CTangramXmlParse* pParse2 = pParse->GetChild(i);
+									CString strCaption = pParse2->attr(_T("caption"), _T(""));
+									if (strCaption != _T(""))
+									{
+										auto it = pCosmosFrameWndInfo->m_mapCtrlBar.find(strCaption);
+										if (it != pCosmosFrameWndInfo->m_mapCtrlBar.end())
+										{
+											HWND hWnd = it->second;
+											int nID = pParse2->attrInt(_T("clientid"), 0);
+											HWND hClient = ::GetDlgItem(hWnd, nID);
+											if (hClient)
+											{
+												CString strXml = pParse2->xml();
+												IGalaxyCluster* pCluster = nullptr;
+												if (pCluster == nullptr)
+												{
+													g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
+												}
+												if (pCluster)
+												{
+													IGalaxy* pGalaxy = nullptr;
+													CString strKey = strCaption;
+													strKey.Replace(_T(""), _T("_"));
+													pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+													if (pGalaxy)
+													{
+														CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+														_pGalaxy->m_pWebPageWnd = this;
+														IXobj* pXobj = nullptr;
+														_pGalaxy->Observe(CComBSTR(strParam1), CComBSTR(strXml), &pXobj);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		else if (strId.CompareNoCase(_T("TO_TOPFRAME")) == 0)
 		{
 			LoadDocument2Viewport(strParam1, strParam2);
@@ -1484,15 +1578,20 @@ namespace Browser {
 	{
 		CString strMsgID = pSession->GetString(L"msgID");
 		IXobj* pXobj = (IXobj*)pSession->Getint64(_T("xobj"));
+		CXobj* pObj = nullptr;
 		if (pXobj)
 		{
-			CXobj* pObj = (CXobj*)pXobj;
+			pObj = (CXobj*)pXobj;
 			if (pObj->m_pWormhole == nullptr)
 				pObj->m_pWormhole = (CWormhole*)pSession;
 			if (pObj->m_pWebPage == nullptr)
 				pObj->m_pWebPage = this;
 			if (pObj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd == nullptr)
 				pObj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd = this;
+		}
+		if (pObj)
+		{
+			::SendMessage(pObj->m_pHostWnd->m_hWnd, WM_CLOUDMSGRECEIVED, 0, (LPARAM)pSession);
 		}
 		if (strMsgID == _T("CREATE_WINFORM"))
 		{

@@ -63,7 +63,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// Cosmos.cpp : Implementation of CCosmos
+ // Cosmos.cpp : Implementation of CCosmos
 
 #include "stdafx.h"
 #include "Cosmos.h"
@@ -930,7 +930,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 	case 0:
 	{
 		XobjType type = pXobj->m_nViewType;
-		if (type == Grid || type== TabGrid)
+		if (type == Grid || type == TabGrid)
 		{
 			for (auto it : pXobj->m_vChildNodes)
 			{
@@ -2186,7 +2186,7 @@ void CCosmos::BrowserAppStart()
 			if (m_nAppType == APP_BROWSERAPP)
 				m_hMainWnd = m_hHostWnd;
 			::PostMessage(m_hHostWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
-			if(g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
+			if (g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
 				g_pCosmos->m_nAppType = APP_BROWSERAPP;
 			CString str = _T("<host popup='true'><url></url></host>");
 			CTangramXmlParse m_Parse;
@@ -2211,17 +2211,6 @@ bool CCosmos::IsMDIClientGalaxyNode(IXobj* pXobj)
 	{
 		return false;
 	}
-	//CUniverseMDIChild* pWnd = (CUniverseMDIChild*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
-	//if (pWnd)
-	//{
-	//	return false;
-	//}
-	////if (::IsChild(m_pMDIMainWnd->m_hWnd, hWnd) == false)
-	////	return false;
-	//if (::IsChild(m_pMDIMainWnd->m_hMDIClient, hWnd))
-	//{
-	//	return false;
-	//}
 
 	return true;
 }
