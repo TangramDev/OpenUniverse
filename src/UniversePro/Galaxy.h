@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -146,6 +146,28 @@ public:
 private:
 	void OnFinalMessage(HWND hWnd);
 	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosMg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+};
+
+class CMDIChildHelperWnd :
+	public CWindowImpl<CMDIChildHelperWnd, CWindow>
+{
+public:
+	CMDIChildHelperWnd(void);
+	virtual ~CMDIChildHelperWnd(void);
+	HWND m_hClient;
+	HWND m_hParent;
+	CString m_strKey;
+	BEGIN_MSG_MAP(CMDIChildHelperWnd)
+		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
+		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanging)
+	END_MSG_MAP()
+
+private:
+	void OnFinalMessage(HWND hWnd);
+	LRESULT OnMDIActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };

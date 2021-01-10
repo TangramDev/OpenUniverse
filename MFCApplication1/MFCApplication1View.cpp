@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CMFCApplication1View, CFormView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_WM_CREATE()
+	ON_BN_CLICKED(IDC_BUTTON1, &CMFCApplication1View::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 // CMFCApplication1View construction/destruction
@@ -224,4 +225,10 @@ BOOL CMFCApplication1View::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
 	// TODO: Add your specialized code here and/or call the base class
 
 	return CFormView::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+}
+
+
+void CMFCApplication1View::OnBnClickedButton1()
+{
+	// TODO: Add your control notification handler code here
 }

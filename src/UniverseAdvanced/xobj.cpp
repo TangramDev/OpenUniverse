@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1429,6 +1429,13 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 void CXobj::NodeCreated()
 {
+	CosmosInfo* pInfo = new CosmosInfo();
+	pInfo->m_pXobj = this;
+	pInfo->m_pGalaxy = m_pXobjShareData->m_pGalaxy;
+	pInfo->m_pGalaxyCluster = m_pXobjShareData->m_pGalaxyCluster;
+	pInfo->m_strName = m_strName;
+	pInfo->m_strNodeName = m_strNodeName;
+	::SetProp(m_pHostWnd->m_hWnd, _T("CosmosInfo"), pInfo);
 	m_pHostParse->put_attr(_T("name"), (__int64)m_pHostWnd->m_hWnd);
 	CWebPage* pHtmlWnd = GetHtmlWnd();
 	if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd == nullptr&& pHtmlWnd)
@@ -1441,13 +1448,6 @@ void CXobj::NodeCreated()
 	{
 		::PostMessage(pHtmlWnd->m_hWnd, WM_COSMOSMSG, 20200310, (LPARAM)this);
 	}
-	CosmosInfo* pInfo = new CosmosInfo();
-	pInfo->m_pXobj = this;
-	pInfo->m_pGalaxy = this->m_pXobjShareData->m_pGalaxy;
-	pInfo->m_pGalaxyCluster = this->m_pXobjShareData->m_pGalaxyCluster;
-	pInfo->m_strName = this->m_strName;
-	pInfo->m_strNodeName = this->m_strNodeName;
-	::SetProp(m_pHostWnd->m_hWnd, _T("CosmosInfo"), pInfo);
 }
 
 HWND CXobj::CreateView(HWND hParentWnd, CString strTag)

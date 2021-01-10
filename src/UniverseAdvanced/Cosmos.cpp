@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -580,17 +580,6 @@ CCosmos::~CCosmos()
 {
 	OutputDebugString(_T("------------------Begin Release CCosmos------------------------\n"));
 
-	for (auto it : m_mapCosmosDocTemplateInfo)
-	{
-		delete it.second;
-	}
-	m_mapCosmosDocTemplateInfo.clear();
-	for (auto it : m_mapCosmosFormsTemplateInfo)
-	{
-		delete it.second;
-	}
-	m_mapCosmosFormsTemplateInfo.clear();
-
 	if (m_mapWindowPage.size())
 	{
 		auto it = m_mapWindowPage.begin();
@@ -647,7 +636,7 @@ CCosmos::~CCosmos()
 
 	if (m_nAppID == 3)
 	{
-		for (auto it : m_mapThreadInfo)
+		for (auto &it : m_mapThreadInfo)
 		{
 			if (it.second->m_hGetMessageHook)
 			{
@@ -660,11 +649,11 @@ CCosmos::~CCosmos()
 
 		_clearObjects();
 
-		for (auto it : m_mapObjDic)
+		for (auto &it : m_mapObjDic)
 		{
 			it.second->Release();
 		}
-		for (auto it : m_mapValInfo)
+		for (auto &it : m_mapValInfo)
 		{
 			::VariantClear(&it.second);
 		}
@@ -1479,9 +1468,20 @@ void CCosmos::TangramInitFromeWeb()
 				::SysFreeString(bstrAppXML);
 			}
 		}
+
 		pParse = m_Parse.GetChild(_T("ntp"));
 		if (pParse)
 			m_strNtpXml = m_Parse[_T("ntp")].xml();
+		pParse = m_Parse.GetChild(_T("doctemplate"));
+		if (pParse)
+		{
+			int nCount = pParse->GetCount();
+			for (int i = 0; i < nCount; i++)
+			{
+				CTangramXmlParse* pChild = pParse->GetChild(i);
+				g_pCosmos->m_mapDocTemplateInfo[pChild->name().MakeLower()] = pChild->xml();
+			}
+		}
 		pParse = m_Parse.GetChild(_T("defaultworkbench"));
 		if (pParse)
 			m_strDefaultWorkBenchXml = m_Parse[_T("defaultworkbench")].xml();
@@ -3348,7 +3348,7 @@ STDMETHODIMP CCosmos::get_DocTemplate(BSTR bstrKey, LONGLONG* pVal)
 	strKey.MakeLower();
 	auto it = m_mapTemplateInfo.find(strKey);
 	if (it != m_mapTemplateInfo.end())
-		*pVal = (LONGLONG)it->second;
+		*pVal = it->second;
 	return S_OK;
 }
 
@@ -6471,515 +6471,10 @@ void SaveIconToFile(HICON hico, LPCTSTR szFileName, BOOL bAutoDelete = FALSE)
 
 void CCosmos::InitCosmosDocManager()
 {
-	CosmosDocTemplateInfo* pCosmosDocTemplateInfo = nullptr;
-	CString strPath = _T("");
-	TCHAR	szBuffer[MAX_PATH];
-	memset(m_szBuffer, 0, sizeof(szBuffer));
-	::GetModuleFileName(nullptr, szBuffer, MAX_PATH);
-	strPath = CString(szBuffer);
-	int nPos = strPath.ReverseFind('\\');
-	int i = 0;
-	CString str1 = _T("");
-	CString str2 = _T("");
-	CString str3 = _T("");
-	strPath = strPath.Left(nPos + 1);
-	HINSTANCE hInstResource = ::GetModuleHandle(NULL);
-	m_DocImageList.Create(48, 48, ILC_COLOR32, 0, 4);
-	if (m_DocTemplateImageList.m_hImageList == 0)
-		m_DocTemplateImageList.Create(32, 32, ILC_COLOR32, 0, 4);
-	m_strDocFilters = _T("");
-	if (m_strDefaultTemplate != _T(""))
-	{
-		CTangramXmlParse _Parse;
-		if (_Parse.LoadXml(m_strDefaultTemplate))
-		{
-			str2 = _Parse.xml();
-			if (m_bUsingDefaultAppDocTemplate)
-			{
-				nPos = str2.Find(_T("/"));
-				while (nPos != -1)
-				{
-					str1 = str2.Left(nPos - 2);
-					if (str1 == _T(""))
-						break;
-					str2 = str2.Mid(nPos + 1);
-					nPos = str1.ReverseFind('|');
-					if (nPos == -1)
-						break;
-					pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-					pCosmosDocTemplateInfo->m_hWnd = m_pMDIMainWnd ? m_pMDIMainWnd->m_hWnd : nullptr;
-					pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-					CString strLib = str1.Mid(nPos + 1);
-					str1 = str1.Left(nPos + 1);
-					nPos = str1.ReverseFind('>');
-					str3 = str1.Left(nPos - 1);
-					str1 = str1.Mid(nPos);
-					nPos = str1.Find(_T("|"));
-					pCosmosDocTemplateInfo->m_strDocTemplateKey = str1.Left(nPos).MakeLower().Mid(1);
-					CString strDir = m_pMDIMainWnd ? _T("MDI") : _T("SDI");
-					pCosmosDocTemplateInfo->m_strTemplatePath = m_strAppCommonDocPath + _T("CommonMFCAppTemplate\\") + strDir + _T("\\DocTemplate\\");
-					if (::PathIsDirectory(pCosmosDocTemplateInfo->m_strTemplatePath) == false)
-					{
-						::CreateDirectory(pCosmosDocTemplateInfo->m_strTemplatePath, nullptr);
-					}
-					CString str4 = str1.Mid(nPos + 1);
-					m_strDocFilters += str4;
-					nPos = str4.ReverseFind('.');
-					str4 = str4.Mid(nPos);
-					nPos = str4.ReverseFind('|');
-					pCosmosDocTemplateInfo->m_strExt = str4.Left(nPos);
-					g_pCosmos->m_mapCosmosDocTemplateInfo2[pCosmosDocTemplateInfo->m_strExt] = pCosmosDocTemplateInfo;
-					ATLTRACE(_T("pCosmosDocTemplateInfo:%x\n"), pCosmosDocTemplateInfo);
-					nPos = str3.ReverseFind('.');
-					str1 = str3.Mid(nPos + 1);
-					str3 = str3.Left(nPos);
-					nPos = str3.ReverseFind('<');
-					CString strProxyID = str3.Mid(nPos + 1);
-					ATLTRACE(_T("ProxyID:%s\n"), strProxyID);
-					pCosmosDocTemplateInfo->m_strProxyID = strProxyID;
-					nPos = str1.ReverseFind('\"');
-					str1 = str1.Mid(nPos + 1);
-					int nIndex = _wtoi(str1);
-					ATLTRACE(_T("ResID:%x\n"), nIndex);
-					HMODULE hHandle = nullptr;
-					if (strLib != _T("") && strProxyID != _T(""))
-					{
-						if (m_pMDIMainWnd || m_pActiveMDIChildWnd)
-						{
-							CString s = strProxyID;
-							s.Replace(_T("tangram"), _T(""));
-							__int64 nTemplate = _wtoi64(s);
-							pCosmosDocTemplateInfo->m_pDocTemplate = (void*)nTemplate;
-						}
-
-						CString strKey = pCosmosDocTemplateInfo->m_strDocTemplateKey;
-						strKey.Replace(_T("."), _T(" "));
-						int nImageIndex = -1;
-
-						HICON hIcon = ::LoadIcon(hInstResource, MAKEINTRESOURCE(nIndex));
-						if (hIcon)
-						{
-							nImageIndex = m_DocImageList.Add(hIcon);
-							m_DocTemplateImageList.Add(hIcon);
-							pCosmosDocTemplateInfo->m_strLib = _T("");
-						}
-						pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-						if (nImageIndex != -1)
-						{
-							g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-							i++;
-						}
-						else
-							delete pCosmosDocTemplateInfo;
-					}
-					nPos = str2.Find(_T("/"));
-				}
-			}
-			str2 = _Parse.xml();
-			OutputDebugString(str2);
-
-			nPos = str2.Find(_T("/"));
-			while (nPos != -1)
-			{
-				str1 = str2.Left(nPos - 2);
-				if (str1 == _T(""))
-					break;
-				str2 = str2.Mid(nPos + 1);
-				nPos = str1.ReverseFind('|');
-				if (nPos == -1)
-					break;
-				pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-				pCosmosDocTemplateInfo->m_hWnd = m_pMDIMainWnd ? m_pMDIMainWnd->m_hWnd : nullptr;
-				pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-				CString strLib = str1.Mid(nPos + 1);
-				str1 = str1.Left(nPos + 1);
-				nPos = str1.ReverseFind('>');
-				str3 = str1.Left(nPos - 1);
-				str1 = str1.Mid(nPos);
-				nPos = str1.Find(_T("|"));
-				pCosmosDocTemplateInfo->m_strDocTemplateKey = str1.Left(nPos).MakeLower().Mid(1);
-				pCosmosDocTemplateInfo->m_strTemplatePath = g_pCosmos->m_strAppDataPath + _T("DocTemplate\\");
-				CString str4 = str1.Mid(nPos + 1);
-				m_strDocFilters += str4;
-				nPos = str4.ReverseFind('.');
-				str4 = str4.Mid(nPos);
-				nPos = str4.ReverseFind('|');
-				pCosmosDocTemplateInfo->m_strExt = str4.Left(nPos);
-				g_pCosmos->m_mapCosmosDocTemplateInfo2[pCosmosDocTemplateInfo->m_strExt] = pCosmosDocTemplateInfo;
-				ATLTRACE(_T("pCosmosDocTemplateInfo:%x\n"), pCosmosDocTemplateInfo);
-				nPos = str3.ReverseFind('.');
-				str1 = str3.Mid(nPos + 1);
-				str3 = str3.Left(nPos);
-				nPos = str3.ReverseFind('<');
-				CString strProxyID = str3.Mid(nPos + 1);
-				ATLTRACE(_T("ProxyID:%s\n"), strProxyID);
-				pCosmosDocTemplateInfo->m_strProxyID = strProxyID;
-				nPos = str1.ReverseFind('\"');
-				str1 = str1.Mid(nPos + 1);
-				int nIndex = _wtoi(str1);
-				ATLTRACE(_T("ResID:%x\n"), nIndex);
-				HMODULE hHandle = nullptr;
-				if (strLib != _T("") && strProxyID != _T(""))
-				{
-					if (m_pMDIMainWnd || m_pActiveMDIChildWnd)
-					{
-						CString s = strProxyID;
-						s.Replace(_T("tangram"), _T(""));
-						__int64 nTemplate = _wtoi64(s);
-						pCosmosDocTemplateInfo->m_pDocTemplate = (void*)nTemplate;
-					}
-
-					CString strKey = pCosmosDocTemplateInfo->m_strDocTemplateKey;
-					strKey.Replace(_T("."), _T(" "));
-					CString strDir = pCosmosDocTemplateInfo->m_strTemplatePath + strKey + _T("\\");
-					if (::PathIsDirectory(strDir) == false)
-					{
-						if (::SHCreateDirectoryEx(NULL, strDir, NULL))
-						{
-							ATLTRACE(L"CreateDirectory failed (%d)\n", GetLastError());
-						}
-						else
-						{
-							CString strXml = _T("");
-							strXml.Format(_T("<%s mainframeid='defaultmainframe' apptitle='%s' />"), pCosmosDocTemplateInfo->m_strDocTemplateKey, strKey);
-							CTangramXmlParse m_Parse;
-							m_Parse.LoadXml(strXml);
-							m_Parse.SaveFile(strDir + _T("Startup.xml"));
-						}
-					}
-					int nImageIndex = -1;
-					HICON hIcon = ::LoadIcon(hInstResource, MAKEINTRESOURCE(nIndex));
-					if (hIcon)
-					{
-						nImageIndex = m_DocImageList.Add(hIcon);
-						m_DocTemplateImageList.Add(hIcon);
-						pCosmosDocTemplateInfo->m_strLib = _T("");
-					}
-					pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-					if (nImageIndex != -1)
-					{
-						g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-						i++;
-					}
-					else
-						delete pCosmosDocTemplateInfo;
-				}
-				nPos = str2.Find(_T("/"));
-			}
-		}
-	}
-	else if (m_strDefaultTemplate2 != _T(""))
-	{
-		CTangramXmlParse _Parse;
-		if (_Parse.LoadXml(m_strDefaultTemplate2))
-		{
-			str2 = _Parse.xml();
-			int nCount = _Parse.GetCount();
-			for (int i = 0; i < nCount; i++)
-			{
-				CTangramXmlParse* pParse = _Parse.GetChild(i);
-				if (pParse)
-				{
-					int nImageIndex = -1;
-					pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-					pCosmosDocTemplateInfo->m_hWnd = m_pMDIMainWnd ? m_pMDIMainWnd->m_hWnd : nullptr;
-					pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-					int nIndex = pParse->attr(_T("ResID"), 0);
-					if (nIndex == 0)
-					{
-						::GetModuleFileName(theApp.m_hInstance, m_szBuffer, MAX_PATH);
-						CString strPath = m_szBuffer;
-						int nPos = strPath.ReverseFind('\\');
-						strPath = strPath.Left(nPos + 1) + _T("CosmosInit.dll");
-						if (::PathFileExists(strPath))
-						{
-							HMODULE hHandle = ::LoadLibraryEx(strPath, nullptr, LOAD_LIBRARY_AS_DATAFILE);
-							HICON hIcon = ::LoadIcon(hHandle, MAKEINTRESOURCE(100));
-							if (hIcon)
-							{
-								nImageIndex = m_DocImageList.Add(hIcon);
-								m_DocTemplateImageList.Add(hIcon);
-							}
-						}
-					}
-					else
-					{
-						HICON hIcon = ::LoadIcon(hInstResource, MAKEINTRESOURCE(nIndex));
-						if (hIcon)
-						{
-							nImageIndex = m_DocImageList.Add(hIcon);
-							m_DocTemplateImageList.Add(hIcon);
-						}
-					}
-					if (nImageIndex != -1)
-						pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-					pCosmosDocTemplateInfo->m_strLib = _T("");
-					g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-					pCosmosDocTemplateInfo->m_strDocTemplateKey = pParse->attr(_T("name"), _T("default"));
-					pCosmosDocTemplateInfo->m_strTemplatePath = m_strAppDataPath + _T("DocTemplate\\");
-				}
-			}
-			i = nCount;
-		}
-	}
-	CTangramXmlParse _Parse;
-	if (_Parse.LoadFile(_T("Tangramdoctemplate.xml")))
-	{
-		str2 = _Parse.xml();
-		OutputDebugString(str2);
-
-		nPos = str2.Find(_T("/"));
-		while (nPos != -1)
-		{
-			str1 = str2.Left(nPos - 2);
-			if (str1 == _T(""))
-				break;
-			str2 = str2.Mid(nPos + 1);
-			nPos = str1.ReverseFind('|');
-			if (nPos == -1)
-				break;
-			pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-			pCosmosDocTemplateInfo->m_hWnd = nullptr;
-			pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-			CString strLib = str1.Mid(nPos + 1);
-			str1 = str1.Left(nPos + 1);
-			nPos = str1.ReverseFind('>');
-			str3 = str1.Left(nPos - 1);
-			str1 = str1.Mid(nPos);
-			nPos = str1.Find(_T("|"));
-			pCosmosDocTemplateInfo->m_strDocTemplateKey = str1.Left(nPos).MakeLower().Mid(1);
-			pCosmosDocTemplateInfo->m_strLib = strLib;
-			CString str4 = str1.Mid(nPos + 1);
-			m_strDocFilters += str4;
-			nPos = str4.ReverseFind('.');
-			str4 = str4.Mid(nPos);
-			nPos = str4.ReverseFind('|');
-			pCosmosDocTemplateInfo->m_strExt = str4.Left(nPos);
-			g_pCosmos->m_mapCosmosDocTemplateInfo2[pCosmosDocTemplateInfo->m_strExt] = pCosmosDocTemplateInfo;
-			ATLTRACE(_T("pCosmosDocTemplateInfo:%x\n"), pCosmosDocTemplateInfo);
-			nPos = str3.ReverseFind('.');
-			str1 = str3.Mid(nPos + 1);
-			str3 = str3.Left(nPos);
-			nPos = str3.ReverseFind('<');
-			CString strProxyID = str3.Mid(nPos + 1);
-			ATLTRACE(_T("ProxyID:%s\n"), strProxyID);
-			pCosmosDocTemplateInfo->m_strProxyID = strProxyID;
-			pCosmosDocTemplateInfo->m_strTemplatePath = m_strAppCommonDocPath + strProxyID + _T("\\");;
-			nPos = str1.ReverseFind('\"');
-			str1 = str1.Mid(nPos + 1);
-			int nIndex = _wtoi(str1);
-			ATLTRACE(_T("ResID:%x\n"), nIndex);
-			HMODULE hHandle = nullptr;
-			if (strLib != _T("") && strProxyID != _T(""))
-			{
-				int nImageIndex = -1;
-				HICON hIcon = ::LoadIcon(hInstResource, MAKEINTRESOURCE(nIndex));
-				if (hIcon)
-				{
-					nImageIndex = m_DocImageList.Add(hIcon);
-					m_DocTemplateImageList.Add(hIcon);
-					pCosmosDocTemplateInfo->m_strLib = _T("");
-				}
-				pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-				if (nImageIndex != -1)
-				{
-					g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-					i++;
-				}
-				else
-					delete pCosmosDocTemplateInfo;
-			}
-			nPos = str2.Find(_T("/"));
-		}
-	}
-	CTangramXmlParse m_Parse;
-	if (m_Parse.LoadFile(g_pCosmos->m_strAppCommonDocPath + _T("\\Tangramdoctemplate.xml")))
-	{
-		str2 = m_Parse.xml();
-		OutputDebugString(str2);
-
-		nPos = str2.Find(_T("/"));
-		while (nPos != -1)
-		{
-			str1 = str2.Left(nPos - 2);
-			if (str1 == _T(""))
-				break;
-			str2 = str2.Mid(nPos + 1);
-			nPos = str1.ReverseFind('|');
-			if (nPos == -1)
-				break;
-			pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-			pCosmosDocTemplateInfo->m_hWnd = nullptr;
-			pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-			CString strLib = str1.Mid(nPos + 1);
-			str1 = str1.Left(nPos + 1);
-			nPos = str1.ReverseFind('>');
-			str3 = str1.Left(nPos - 1);
-			str1 = str1.Mid(nPos);
-			nPos = str1.Find(_T("|"));
-			pCosmosDocTemplateInfo->m_strDocTemplateKey = str1.Left(nPos).MakeLower().Mid(1);
-			pCosmosDocTemplateInfo->m_strLib = strLib;
-			CString str4 = str1.Mid(nPos + 1);
-			m_strDocFilters += str4;
-			nPos = str4.ReverseFind('.');
-			str4 = str4.Mid(nPos);
-			nPos = str4.ReverseFind('|');
-			pCosmosDocTemplateInfo->m_strExt = str4.Left(nPos);
-			g_pCosmos->m_mapCosmosDocTemplateInfo2[pCosmosDocTemplateInfo->m_strExt] = pCosmosDocTemplateInfo;
-			ATLTRACE(_T("pCosmosDocTemplateInfo:%x\n"), pCosmosDocTemplateInfo);
-			nPos = str3.ReverseFind('.');
-			str1 = str3.Mid(nPos + 1);
-			str3 = str3.Left(nPos);
-			nPos = str3.ReverseFind('<');
-			CString strProxyID = str3.Mid(nPos + 1);
-			ATLTRACE(_T("ProxyID:%s\n"), strProxyID);
-			pCosmosDocTemplateInfo->m_strProxyID = strProxyID;
-			pCosmosDocTemplateInfo->m_strTemplatePath = m_strAppCommonDocPath + strProxyID + _T("\\");
-			nPos = str1.ReverseFind('\"');
-			str1 = str1.Mid(nPos + 1);
-			int nIndex = _wtoi(str1);
-			ATLTRACE(_T("ResID:%x\n"), nIndex);
-			HMODULE hHandle = nullptr;
-			if (strLib != _T("") && strProxyID != _T(""))
-			{
-				int nImageIndex = -1;
-				CString strdll = strPath + strProxyID + _T("\\") + strLib + _T(".dll");
-				if (::PathFileExists(strdll))
-				{
-					hHandle = ::LoadLibraryEx(strdll, nullptr, LOAD_LIBRARY_AS_DATAFILE);
-				}
-				if (hHandle == nullptr)
-				{
-					strdll = m_strAppCommonDocPath2 + strProxyID + _T("\\") + strLib + _T(".dll");
-					if (::PathFileExists(strdll))
-					{
-						hHandle = ::LoadLibraryEx(strdll, nullptr, LOAD_LIBRARY_AS_DATAFILE);
-					}
-				}
-				if (hHandle)
-				{
-					nImageIndex = m_DocImageList.Add(::LoadIcon(hHandle, MAKEINTRESOURCE(nIndex)));
-					m_DocTemplateImageList.Add(::LoadIcon(hHandle, MAKEINTRESOURCE(nIndex)));
-					pCosmosDocTemplateInfo->m_strLib = strdll;
-					::FreeLibrary(hHandle);
-				}
-				else
-				{
-					HICON hIcon = ::LoadIcon(hInstResource, MAKEINTRESOURCE(nIndex));
-					if (hIcon)
-					{
-						nImageIndex = m_DocImageList.Add(hIcon);
-						m_DocTemplateImageList.Add(hIcon);
-						pCosmosDocTemplateInfo->m_strLib = _T("");
-					}
-				}
-				pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-				if (nImageIndex != -1)
-				{
-					g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-					i++;
-				}
-				else
-					delete pCosmosDocTemplateInfo;
-			}
-			nPos = str2.Find(_T("/"));
-		}
-
-		pCosmosDocTemplateInfo = nullptr;
-		CString strOfficePath = g_pCosmos->GetOfficePath();
-		if (strOfficePath != _T(""))
-		{
-			SHFILEINFO sfi;
-			SHGetFileInfo(strOfficePath + _T("excel.exe"), 0, &sfi, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_SYSICONINDEX | SHGFI_LARGEICON);
-			int nImageIndex = m_DocImageList.Add(sfi.hIcon);
-			m_DocTemplateImageList.Add(sfi.hIcon);
-			pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-			pCosmosDocTemplateInfo->m_hWnd = nullptr;
-			pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-			pCosmosDocTemplateInfo->m_bCOMObj = true;
-			pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-			pCosmosDocTemplateInfo->m_strProxyID = _T("excel.application");
-			pCosmosDocTemplateInfo->m_strDocTemplateKey = _T("Excel WorkBook");
-			pCosmosDocTemplateInfo->m_strTemplatePath = m_strAppCommonDocPath + pCosmosDocTemplateInfo->m_strProxyID + _T("\\");;
-			g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-			i++;
-
-			SHGetFileInfo(strOfficePath + _T("winword.exe"), 0, &sfi, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_SYSICONINDEX | SHGFI_LARGEICON);
-			nImageIndex = m_DocImageList.Add(sfi.hIcon);
-			m_DocTemplateImageList.Add(sfi.hIcon);
-			pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-			pCosmosDocTemplateInfo->m_hWnd = nullptr;
-			pCosmosDocTemplateInfo->m_bCOMObj = true;
-			pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-			pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-			pCosmosDocTemplateInfo->m_strProxyID = _T("word.application");
-			pCosmosDocTemplateInfo->m_strTemplatePath = g_pCosmos->m_strAppCommonDocPath + pCosmosDocTemplateInfo->m_strProxyID + _T("\\");;
-			pCosmosDocTemplateInfo->m_strDocTemplateKey = _T("Word Document");
-			g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-			i++;
-
-			SHGetFileInfo(strOfficePath + _T("powerpnt.exe"), 0, &sfi, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_SYSICONINDEX | SHGFI_LARGEICON);
-			nImageIndex = m_DocImageList.Add(sfi.hIcon);
-			m_DocTemplateImageList.Add(sfi.hIcon);
-			pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-			g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-			pCosmosDocTemplateInfo->m_hWnd = nullptr;
-			pCosmosDocTemplateInfo->m_bCOMObj = true;
-			pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-			pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-			pCosmosDocTemplateInfo->m_strDocTemplateKey = _T("Powerpoint Presentation");
-			pCosmosDocTemplateInfo->m_strProxyID = _T("powerpoint.application");
-			pCosmosDocTemplateInfo->m_strTemplatePath = g_pCosmos->m_strAppCommonDocPath + pCosmosDocTemplateInfo->m_strProxyID + _T("\\");;
-			i++;
-
-			SHGetFileInfo(strOfficePath + _T("outlook.exe"), 0, &sfi, sizeof(SHFILEINFO), SHGFI_ICON | SHGFI_SYSICONINDEX | SHGFI_LARGEICON);
-			nImageIndex = m_DocImageList.Add(sfi.hIcon);
-			m_DocTemplateImageList.Add(sfi.hIcon);
-			pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-			pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-			pCosmosDocTemplateInfo->m_strFilter = _T("*.xml");
-			pCosmosDocTemplateInfo->m_hWnd = nullptr;
-			pCosmosDocTemplateInfo->m_bCOMObj = true;
-			g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-			pCosmosDocTemplateInfo->m_strDocTemplateKey = _T("OutLook Explorer");
-			pCosmosDocTemplateInfo->m_strProxyID = _T("outlook.application");
-			pCosmosDocTemplateInfo->m_strTemplatePath = g_pCosmos->m_strAppCommonDocPath + pCosmosDocTemplateInfo->m_strProxyID + _T("\\");;
-			i++;
-		}
-		if (m_bEclipse)
-		{
-			::GetModuleFileName(theApp.m_hInstance, m_szBuffer, MAX_PATH);
-			CString strPath = m_szBuffer;
-			int nPos = strPath.ReverseFind('\\');
-			strPath = strPath.Left(nPos + 1) + _T("CosmosInit.dll");
-			if (::PathFileExists(strPath))
-			{
-				HMODULE hHandle = ::LoadLibraryEx(strPath, nullptr, LOAD_LIBRARY_AS_DATAFILE);
-				int nImageIndex = m_DocImageList.Add(::LoadIcon(hHandle, MAKEINTRESOURCE(106)));
-				m_DocTemplateImageList.Add(::LoadIcon(hHandle, MAKEINTRESOURCE(106)));
-				pCosmosDocTemplateInfo = new CosmosDocTemplateInfo();
-				pCosmosDocTemplateInfo->m_hWnd = nullptr;
-				pCosmosDocTemplateInfo->m_nImageIndex = nImageIndex;
-				pCosmosDocTemplateInfo->m_strFilter = _T("*.*");
-				pCosmosDocTemplateInfo->m_bCOMObj = true;
-				g_pCosmos->m_mapCosmosDocTemplateInfo[i] = pCosmosDocTemplateInfo;
-				pCosmosDocTemplateInfo->m_strDocTemplateKey = _T("Eclipse WorkBench");
-				pCosmosDocTemplateInfo->m_strProxyID = _T("eclipse.application");
-				pCosmosDocTemplateInfo->m_strTemplatePath = m_strAppDataPath + _T("WorkBench\\");
-				//pCosmosDocTemplateInfo->m_strTemplatePath = m_strAppCommonDocPath + pCosmosDocTemplateInfo->m_strProxyID + _T("\\");;
-				i++;
-				::FreeLibrary(hHandle);
-			}
-		}
-
-		m_strDocFilters += _T("All Files (*.*)|*.*||");
-	}
 }
 
 STDMETHODIMP CCosmos::OpenTangramFile(ICosmosDoc** ppDoc)
 {
-	if (g_pCosmos->m_mapCosmosDocTemplateInfo.size() == 0)
-		InitCosmosDocManager();
 	LRESULT lRes = ::SendMessage(m_hCosmosWnd, WM_COSMOSMSG, 1, 0);
 	if (lRes)
 	{
@@ -7456,8 +6951,8 @@ STDMETHODIMP CCosmos::InitCLRApp(BSTR strInitXml, LONGLONG* llHandle)
 
 void CCosmos::ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate)
 {
-	g_pCosmos->m_mapTemplateInfo[strType] = (void*)pTemplate;
-	g_pCosmos->m_mapTemplateInfo[strExt] = (void*)pTemplate;
+	g_pCosmos->m_mapTemplateInfo[strType] = (__int64)pTemplate;
+	g_pCosmos->m_mapTemplateInfo[strExt] = (__int64)pTemplate;
 }
 
 ICosmosDoc* CCosmos::ConnectCosmosDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hGalaxy, LPCTSTR strDocType)

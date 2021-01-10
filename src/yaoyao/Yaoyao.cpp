@@ -99,7 +99,7 @@ BOOL CYaoyao::InitInstance()
 
 	//if (!ProcessShellCommand(cmdInfo))
 	//	return FALSE;
-	CCosmosAppEx::InitInstance();
+	CCosmosApp::InitInstance();
 	return TRUE;
 }
 

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -412,97 +412,6 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}
 
-		//CString strKey = m_pXobj->m_pRootObj->m_strKey;
-		//switch (pGalaxy->m_nGalaxyType)
-		//{
-		//case MDIClientGalaxy:
-		//{
-		//	CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		//	if (pGalaxyCluster)
-		//	{
-		//		LRESULT lRes = ::SendMessage(pGalaxyCluster->m_hWnd, WM_QUERYAPPPROXY, 0, 0);
-		//		if (lRes > 0)
-		//		{
-		//			IUniverseAppProxy* pProxy = (IUniverseAppProxy*)lRes;
-		//			auto it = g_pCosmos->m_mapTemplateInfo.find(strKey);
-		//			if (it != g_pCosmos->m_mapTemplateInfo.end())
-		//			{
-		//				CString strInfo = _T("");
-		//				strInfo.Format(_T("  MDIClientGalaxy for Document Template : %s"), strKey);
-		//				strText += _T("  ") + strInfo;
-		//			}
-		//		}
-		//	}
-		//}
-		//break;
-		//case MDIChildGalaxy:
-		//{
-		//	if (pGalaxy->m_pDoc)
-		//	{
-		//		CString strInfo = _T("");
-		//		strInfo.Format(_T("  MDIChildGalaxy for Document Template : %s"), pGalaxy->m_pDoc->m_strDocID);
-		//		strText += _T("  ") + strInfo;
-
-		//	}
-		//}
-		//break;
-		//case SDIGalaxy:
-		//{
-		//	strText += _T("\n  ") + strKey;
-		//}
-		//break;
-		//case CtrlBarGalaxy:
-		//{
-		//	CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		//	if (pGalaxyCluster)
-		//	{
-		//		LRESULT lRes = ::SendMessage(pGalaxyCluster->m_hWnd, WM_QUERYAPPPROXY, 0, 0);
-		//		if (lRes > 0)
-		//		{
-		//			IUniverseAppProxy* pProxy = (IUniverseAppProxy*)lRes;
-		//			auto it = g_pCosmos->m_mapTemplateInfo.find(strKey);
-		//			if (it != g_pCosmos->m_mapTemplateInfo.end())
-		//			{
-		//				CString strInfo = _T("");
-		//				strInfo.Format(_T("  Control Bar for Document Template: %s"), strKey);
-		//				strText += _T("\n  ") + strInfo;
-		//			}
-		//		}
-		//	}
-		//}
-		//break;
-		//case WinFormMDIClientGalaxy:
-		//{
-		//}
-		//break;
-		//case WinFormMDIChildGalaxy:
-		//{
-		//}
-		//break;
-		//case WinFormGalaxy:
-		//{
-		//}
-		//break;
-		//case EclipseWorkBenchGalaxy:
-		//{
-		//	strText += _T("\n  ") + strKey;
-		//}
-		//break;
-		//case EclipseViewGalaxy:
-		//{
-		//}
-		//break;
-		//case EclipseSWTGalaxy:
-		//{
-		//}
-		//break;
-		//case WinFormControlGalaxy:
-		//{
-		//}
-		//break;
-		//default:
-		//	break;
-		//}
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(strText, &rt, DT_LEFT);
 	}

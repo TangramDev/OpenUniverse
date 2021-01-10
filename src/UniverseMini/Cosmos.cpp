@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1471,12 +1471,6 @@ STDMETHODIMP CCosmos::InitCLRApp(BSTR strInitXml, LONGLONG* llHandle)
 
 	return S_OK;
 }
-//
-//void CCosmos::ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate)
-//{
-//	g_pCosmos->m_mapTemplateInfo[strType] = (void*)pTemplate;
-//	g_pCosmos->m_mapTemplateInfo[strExt] = (void*)pTemplate;
-//}
 
 __declspec(dllexport) ICosmos* __stdcall  GetCosmos()
 {

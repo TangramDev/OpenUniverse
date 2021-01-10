@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version 1.0.0.202101100007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -176,12 +176,10 @@ namespace CommonUniverse
 		virtual void ForegroundIdleProc();
 		virtual CString GetNTPXml();
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
-		virtual HWND GetMainWnd();
-		virtual HWND QueryCanClose(HWND hWnd);
+		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
 		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; };
-		virtual bool HookAppDocTemplateInfo();
 		virtual bool EclipseAppInit();
-		virtual void IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2);
+		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 
 		//IUniverseAppProxy:

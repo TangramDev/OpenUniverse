@@ -16,7 +16,7 @@
 //
 
 class CYaoyao :
-	public CCosmosAppEx,
+	public CCosmosApp,
 	public CComObjectRootBase,
 	public CComCoClass<CYaoyao>,
 	public CAtlMfcModule

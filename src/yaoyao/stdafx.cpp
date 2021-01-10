@@ -4,5 +4,5 @@
 // stdafx.obj will contain the pre-compiled type information
 
 #include "stdafx.h"
-#include "CosmosAppEx.cpp"
-//#include "CosmosApp.cpp"
+//#include "CosmosAppEx.cpp"
+#include "CosmosApp.cpp"

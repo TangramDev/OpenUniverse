@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -258,11 +258,6 @@ CCosmos::~CCosmos()
 		delete it.second;
 	}
 	m_mapCosmosDocTemplateInfo.clear();
-	for (auto it : m_mapCosmosFormsTemplateInfo)
-	{
-		delete it.second;
-	}
-	m_mapCosmosFormsTemplateInfo.clear();
 
 	if (m_mapWindowPage.size())
 	{
@@ -1673,12 +1668,6 @@ STDMETHODIMP CCosmos::InitCLRApp(BSTR strInitXml, LONGLONG* llHandle)
 
 	return S_OK;
 }
-//
-//void CCosmos::ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate)
-//{
-//	g_pCosmos->m_mapTemplateInfo[strType] = (void*)pTemplate;
-//	g_pCosmos->m_mapTemplateInfo[strExt] = (void*)pTemplate;
-//}
 
 __declspec(dllexport) ICosmos* __stdcall  GetCosmos()
 {

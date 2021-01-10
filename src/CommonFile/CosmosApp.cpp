@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version 1.0.0.202101100007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -235,7 +235,7 @@ namespace CommonUniverse
 		}
 	}
 
-	BOOL CCosmosDelegate::OnAppIdle(BOOL& bIdle, LONG lCount)
+	bool CCosmosDelegate::OnAppIdle(BOOL& bIdle, LONG lCount)
 	{
 		_AFX_THREAD_STATE* pState = AfxGetThreadState();
 		while (bIdle &&
@@ -282,61 +282,116 @@ namespace CommonUniverse
 		return pApp->PreTranslateMessage(pMsg);
 	}
 
-	HWND CCosmosDelegate::GetMainWnd()
+	HWND CCosmosDelegate::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
-		if (AfxGetApp()->m_pMainWnd)
-			return AfxGetApp()->m_pMainWnd->m_hWnd;
-		return nullptr;
-	}
-
-	bool CCosmosDelegate::HookAppDocTemplateInfo()
-	{
-		CString m_strDocTemplateScript = _T("<template>");
-		if (m_pCosmosImpl->m_strDefaultTemplate == _T(""))
+		switch (nType)
 		{
-			BOOL bCanHaveDocTemplateScript = true;
-			POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
-			while (nPos)
+		case MainWnd:
+			if (AfxGetApp()->m_pMainWnd)
+				return AfxGetApp()->m_pMainWnd->m_hWnd;
+			break;
+		case CanClose:
+		{
+			CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+			if (pWnd && pWnd == g_pAppBase->m_pMainWnd)
 			{
-				CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
-				CString strExt = _T("");
-				pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
-				strExt.MakeLower();
-				if (strExt == _T(""))
-					strExt = _T("tangramdefault");
-				if (strExt != _T(""))
+				POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
+				while (nPos)
 				{
-					CString strFileTypeID = _T("");
-					pTemplate->GetDocString(strFileTypeID, CDocTemplate::regFileTypeId);
-					strFileTypeID.MakeLower();
-					CString strfilterName = _T("");
-					pTemplate->GetDocString(strfilterName, CDocTemplate::filterName);
-					auto it = m_mapCosmosDocTemplateID.find(pTemplate);
-					if (it != m_mapCosmosDocTemplateID.end())
+					CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
+					POSITION pos = pTemplate->GetFirstDocPosition();
+					while (pos != NULL)
 					{
-						CString s = _T("");
-						s.Format(_T("<tangram%I64d%s ResID=\"%d\">%s|%s|*%s|%s|</tangram%I64d%s>"), (__int64)pTemplate, strExt, it->second, strFileTypeID, strfilterName, strExt, g_pAppBase->m_pszExeName, (__int64)pTemplate, strExt);
-						m_strDocTemplateScript += s;
+						CDocument* pDoc = pTemplate->GetNextDoc(pos);
+						POSITION pos2 = pDoc->GetFirstViewPosition();
+						while (pos2 != NULL)
+						{
+							CView* pView = pDoc->GetNextView(pos2);
+							ASSERT_VALID(pView);
+							CFrameWnd* pFrame = pView->GetParentFrame();
+							if (g_pAppBase->m_pMainWnd != pFrame)
+							{
+								g_pAppBase->m_pMainWnd = pFrame;
+								m_pCosmosImpl->m_hMainWnd = g_pAppBase->m_pMainWnd->m_hWnd;
+								return pFrame->m_hWnd;
+							}
+						}
 					}
 				}
-				else
+			}
+			return NULL;
+		}
+		break;
+		case DocView:
+		{
+			CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+			if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CView)))
+			{
+				CView* pView = static_cast<CView*>(pWnd);
+				CDocument* pDoc = pView->GetDocument();
+				if (pDoc)
 				{
-					bCanHaveDocTemplateScript = false;
-					break;
+					CFrameWnd* pFrame = pView->GetParentFrame();
+					if (pFrame)
+						return pFrame->m_hWnd;
 				}
 			}
-			if (bCanHaveDocTemplateScript)
-			{
-				m_strDocTemplateScript += _T("</template>");
-				m_pCosmosImpl->m_strDefaultTemplate = m_strDocTemplateScript;
-			}
-			else
-				m_strDocTemplateScript = _T("");
 		}
-		return (m_strDocTemplateScript == _T("")) ? false : true;
+		break;
+		default:
+			break;
+		}
+		return NULL;
 	}
 
-	BOOL CCosmosDelegate::IsAppIdleMessage()
+	//bool CCosmosDelegate::HookAppDocTemplateInfo()
+	//{
+	//	CString m_strDocTemplateScript = _T("<template>");
+	//	if (m_pCosmosImpl->m_strDefaultTemplate == _T(""))
+	//	{
+	//		BOOL bCanHaveDocTemplateScript = true;
+	//		POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
+	//		while (nPos)
+	//		{
+	//			CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
+	//			CString strExt = _T("");
+	//			pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
+	//			strExt.MakeLower();
+	//			if (strExt == _T(""))
+	//				strExt = _T("tangramdefault");
+	//			if (strExt != _T(""))
+	//			{
+	//				CString strFileTypeID = _T("");
+	//				pTemplate->GetDocString(strFileTypeID, CDocTemplate::regFileTypeId);
+	//				strFileTypeID.MakeLower();
+	//				CString strfilterName = _T("");
+	//				pTemplate->GetDocString(strfilterName, CDocTemplate::filterName);
+	//				auto it = m_mapCosmosDocTemplateID.find(pTemplate);
+	//				if (it != m_mapCosmosDocTemplateID.end())
+	//				{
+	//					CString s = _T("");
+	//					s.Format(_T("<tangram%I64d%s ResID=\"%d\">%s|%s|*%s|%s|</tangram%I64d%s>"), (__int64)pTemplate, strExt, it->second, strFileTypeID, strfilterName, strExt, g_pAppBase->m_pszExeName, (__int64)pTemplate, strExt);
+	//					m_strDocTemplateScript += s;
+	//				}
+	//			}
+	//			else
+	//			{
+	//				bCanHaveDocTemplateScript = false;
+	//				break;
+	//			}
+	//		}
+	//		if (bCanHaveDocTemplateScript)
+	//		{
+	//			m_strDocTemplateScript += _T("</template>");
+	//			m_pCosmosImpl->m_strDefaultTemplate = m_strDocTemplateScript;
+	//		}
+	//		else
+	//			m_strDocTemplateScript = _T("");
+	//	}
+	//	return (m_strDocTemplateScript == _T("")) ? false : true;
+	//}
+
+	bool CCosmosDelegate::IsAppIdleMessage()
 	{
 		_AFX_THREAD_STATE* pState = AfxGetThreadState();
 		if (AfxGetApp()->IsIdleMessage(&(pState->m_msgCur))) {
@@ -385,38 +440,6 @@ namespace CommonUniverse
 			::DispatchMessage(msg);
 		}
 	}
-
-	HWND CCosmosDelegate::QueryCanClose(HWND hWnd)
-	{
-		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
-		if (pWnd && pWnd == g_pAppBase->m_pMainWnd)
-		{
-			POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
-			while (nPos)
-			{
-				CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
-				POSITION pos = pTemplate->GetFirstDocPosition();
-				while (pos != NULL)
-				{
-					CDocument* pDoc = pTemplate->GetNextDoc(pos);
-					POSITION pos2 = pDoc->GetFirstViewPosition();
-					while (pos2 != NULL)
-					{
-						CView* pView = pDoc->GetNextView(pos2);
-						ASSERT_VALID(pView);
-						CFrameWnd* pFrame = pView->GetParentFrame();
-						if (g_pAppBase->m_pMainWnd != pFrame)
-						{
-							g_pAppBase->m_pMainWnd = pFrame;
-							m_pCosmosImpl->m_hMainWnd = g_pAppBase->m_pMainWnd->m_hWnd;
-							return pFrame->m_hWnd;
-						}
-					}
-				}
-			}
-		}
-		return NULL;
-	};
 
 	CString CCosmosDelegate::GetNTPXml()
 	{
@@ -608,9 +631,34 @@ namespace CommonUniverse
 		return false;
 	}
 
-	void CCosmosDelegate::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2)
+	void CCosmosDelegate::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
-
+		if (strType.CompareNoCase(_T("COSMOS_CREATE_DOC")) == 0)
+		{
+			POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
+			while (nPos)
+			{
+				CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
+				CString strExt = _T("");
+				pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
+				strExt.MakeLower();
+				if (strExt == _T(""))
+					strExt = _T("default");
+				if (strExt != _T("") && strExt.CompareNoCase(strParam1) == 0)
+				{
+					CString strKey = strParam2.MakeLower();
+					auto it = m_pCosmosImpl->m_mapDocTemplateInfo.find(strKey);
+					if (it != m_pCosmosImpl->m_mapDocTemplateInfo.end())
+					{
+						m_strCreatingDOCID = strKey;
+						pTemplate->CreateNewDocument();
+						//m_strCreatingDOCID = _T("");
+						return;
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	void CCosmosDelegate::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
@@ -988,7 +1036,7 @@ namespace CommonUniverse
 
 	void CTangramFrameWnd::OnClose()
 	{
-		g_pApp->QueryCanClose(m_hWnd);
+		g_pApp->QueryWndInfo(CanClose, m_hWnd);
 		CFrameWnd::OnClose();
 	}
 

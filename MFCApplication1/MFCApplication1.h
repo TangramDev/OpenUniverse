@@ -24,8 +24,6 @@ public:
 public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
-	virtual bool ProcessMainWndXml();
-	virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd);
 
 // Implementation
 	UINT  m_nAppLook;

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -682,12 +682,8 @@ namespace Browser {
 			if (g_pCosmos->m_pHostHtmlWnd == nullptr && g_pCosmos->m_strAppXml != _T(""))
 			{
 				g_pCosmos->m_pHostHtmlWnd = this;
-				g_pCosmos->m_pCosmosDelegate->ProcessAppXml();
 				g_pCosmos->CosmosInitFromeWeb();
-				if (g_pCosmos->m_strMainWndXml != _T("") && g_pCosmos->m_pCosmosDelegate->ProcessMainWndXml() == false)
-				{
-					CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
-				}
+				CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
 				auto t = create_task([this]()
 					{
 						SleepEx(200, true);
@@ -732,7 +728,7 @@ namespace Browser {
 		else
 		{
 			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->IPCMsg(m_hWnd, strId, strParam1, strParam2); // TODO: Missing parameters
+				g_pCosmos->m_pCosmosDelegate->OnIPCMsg((CWebPageImpl*)this, strId, strParam1, strParam2, strParam3, strParam4, strParam5); 
 		}
 	}
 
@@ -853,7 +849,7 @@ namespace Browser {
 					IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 				}
 			}
-			HWND hMainWnd = g_pCosmos->m_pCosmosDelegate->GetMainWnd();
+			HWND hMainWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(MainWnd, NULL);
 			if (hMainWnd)
 			{
 				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;

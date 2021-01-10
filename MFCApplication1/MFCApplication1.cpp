@@ -59,14 +59,6 @@ CMFCApp theApp;
 
 
 // CMFCApp initialization
-bool CMFCApp::ProcessMainWndXml() 
-{ 
-	return false;
-}
-
-void CMFCApp::AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) 
-{
-}
 
 BOOL CMFCApp::InitInstance()
 {
@@ -131,7 +123,7 @@ BOOL CMFCApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
-
+	
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
@@ -168,6 +160,8 @@ BOOL CMFCApp::InitInstance()
 
 int CMFCApp::ExitInstance()
 {
+	//while (g_pCosmosImpl->m_mapTemplateInfo.size())
+	//	g_pCosmosImpl->m_mapTemplateInfo.erase(g_pCosmosImpl->m_mapTemplateInfo.begin());
 	//TODO: handle additional resources you may have added
 	AfxOleTerm(FALSE);
 

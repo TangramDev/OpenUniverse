@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101070006           *
+ *           Web Runtime for Application - Version Version 1.0.0.202101100007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * 
@@ -415,17 +415,11 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	}
 	return 1;
 	break;
-	case WM_HUBBLE_INIT:
-		//if (lParam == 20002000)
-		//{
-		//	g_pCosmos->CosmosInit();
-		//}
-		//break;
-		case WM_HUBBLE_APPQUIT:
-		{
-			::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
-		}
-		break;
+	case WM_HUBBLE_APPQUIT:
+	{
+		::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
+	}
+	break;
 	}
 
 	return ::DefWindowProc(hWnd, msg, wParam, lParam);
@@ -1011,7 +1005,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				if (hModule) {
 					FuncInitApp = (_InitApp)GetProcAddress(hModule, "InitApp");
 					if (FuncInitApp != NULL) {
-						HWND hWnd = g_pCosmos->m_pCosmosDelegate->GetMainWnd();
+						HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(MainWnd, NULL);
 						if (::IsWindow(hWnd))
 						{
 							g_pCosmos->m_hMainWnd = hWnd;

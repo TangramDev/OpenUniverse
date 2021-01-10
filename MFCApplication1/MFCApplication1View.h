@@ -55,6 +55,7 @@ protected:
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+	afx_msg void OnBnClickedButton1();
 };
 
 #ifndef _DEBUG  // debug version in MFCApplication1View.cpp
