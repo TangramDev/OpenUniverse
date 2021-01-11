@@ -743,67 +743,13 @@ namespace CommonUniverse
 					strExt = _T("default");
 				if (strExt != _T("")&&strExt.CompareNoCase(strParam1)==0)
 				{
-					CString strKey = strParam2.MakeLower();
-					auto it = m_pCosmosImpl->m_mapDocTemplateInfo.find(strKey);
-					if (it != m_pCosmosImpl->m_mapDocTemplateInfo.end())
-					{
-						m_strCreatingDOCID = strKey;
-						pTemplate->CreateNewDocument();
-						//m_strCreatingDOCID = _T("");
-						return;
-					}
-					break;
+					m_strCreatingDOCID = strParam2;
+					pTemplate->CreateNewDocument();
+					return;
 				}
 			}
 		}
 	}
-
-	//bool CCosmosDelegate::HookAppDocTemplateInfo()
-	//{
-	//	CString m_strDocTemplateScript = _T("<template>");
-	//	if (m_pCosmosImpl->m_strDefaultTemplate == _T(""))
-	//	{
-	//		BOOL bCanHaveDocTemplateScript = true;
-	//		POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
-	//		while (nPos)
-	//		{
-	//			CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
-	//			CString strExt = _T("");
-	//			pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
-	//			strExt.MakeLower();
-	//			if (strExt == _T(""))
-	//				strExt = _T("tangramdefault");
-	//			if (strExt != _T(""))
-	//			{
-	//				CString strFileTypeID = _T("");
-	//				pTemplate->GetDocString(strFileTypeID, CDocTemplate::regFileTypeId);
-	//				strFileTypeID.MakeLower();
-	//				CString strfilterName = _T("");
-	//				pTemplate->GetDocString(strfilterName, CDocTemplate::filterName);
-	//				auto it = m_mapCosmosDocTemplateID.find(pTemplate);
-	//				if (it != m_mapCosmosDocTemplateID.end())
-	//				{
-	//					CString s = _T("");
-	//					s.Format(_T("<tangram%I64d%s ResID=\"%d\">%s|%s|*%s|%s|</tangram%I64d%s>"), (__int64)pTemplate, strExt, it->second, strFileTypeID, strfilterName, strExt, g_pAppBase->m_pszExeName, (__int64)pTemplate, strExt);
-	//					m_strDocTemplateScript += s;
-	//				}
-	//			}
-	//			else
-	//			{
-	//				bCanHaveDocTemplateScript = false;
-	//				break;
-	//			}
-	//		}
-	//		if (bCanHaveDocTemplateScript)
-	//		{
-	//			m_strDocTemplateScript += _T("</template>");
-	//			m_pCosmosImpl->m_strDefaultTemplate = m_strDocTemplateScript;
-	//		}
-	//		else
-	//			m_strDocTemplateScript = _T("");
-	//	}
-	//	return (m_strDocTemplateScript == _T("")) ? false : true;
-	//}
 
 	bool CCosmosDelegate::IsAppIdleMessage()
 	{
