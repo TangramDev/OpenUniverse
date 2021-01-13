@@ -295,7 +295,6 @@ public:
 	CWinForm*								m_pActiveWinFormWnd;
 	CCosmosDocTemplate*						m_pActiveTemplate;
 	CUniverseMDIChild*						m_pActiveMDIChildWnd;
-	CosmosDocTemplateInfo*					m_pCosmosDocTemplateInfo;
 
 	CXobj*									m_pActiveXobj;
 	CXobj*									m_pDesignRootNode;
@@ -323,7 +322,6 @@ public:
 	vector<HWND>							m_vecEclipseHideTopWnd;
 	map<HWND, CWinForm*>					m_mapMainForm;
 	map<HWND, CUniverseMDIChild*>			m_mapCosmosMDIChildWnd;
-	map<HWND, CAFXHelperWnd*>				m_mapCosmosAFXHelperWnd;
 	map<CString, CRuntimeClass*>			m_TabWndClassInfoDictionary;
 	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;

@@ -1034,101 +1034,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		return 0;
 	}
 	break;
-	case WM_CONTROLBARCREATED:
-	{
-		HWND hwnd = (HWND)wParam;
-		HWND hPWnd = (HWND)lParam;
-		HWND hTop = ::GetAncestor(hPWnd, GA_ROOT);
-		auto it = g_pCosmos->m_mapCosmosMDIChildWnd.find(hTop);
-		if (it != g_pCosmos->m_mapCosmosMDIChildWnd.end() || (g_pCosmos->m_nAppType == 1965 && g_pCosmos->m_pActiveMDIChildWnd))
-		{
-			return 1;
-		}
-
-		if (lParam && ::IsWindow(hwnd))
-		{
-			HWND hClient = nullptr;
-			auto it = g_pCosmos->m_mapWorkBenchWnd.find(hPWnd);
-			if (it != g_pCosmos->m_mapWorkBenchWnd.end())
-			{
-				hClient = ((CEclipseWnd*)it->second)->m_hClient;
-				hPWnd = ::GetParent(hClient);
-			}
-			else
-				hClient = ::GetDlgItem(hPWnd, AFX_IDW_PANE_FIRST);
-			BOOL bMDIClientGalaxy = FALSE;
-			if (::GetWindowLong(hClient, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
-			{
-				bMDIClientGalaxy = TRUE;
-			}
-			CAFXHelperWnd* pCtrlBar = new CAFXHelperWnd();
-			pCtrlBar->m_hParent = hPWnd;
-			pCtrlBar->SubclassWindow(hwnd);
-			g_pCosmos->m_mapCosmosAFXHelperWnd[hwnd] = pCtrlBar;
-			HWND hGalaxy = ::GetDlgItem(hwnd, AFX_IDW_PANE_FIRST);
-			if (::IsWindow(hGalaxy))
-			{
-				pCtrlBar->m_hFrame = hGalaxy;
-				if (::IsWindow(hPWnd))
-				{
-					CGalaxyCluster* pGalaxyCluster = nullptr;
-					auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
-					if (it == g_pCosmos->m_mapWindowPage.end())
-					{
-						HWND hPWnd = (HWND)lParam;
-						IXobj* pXobj = nullptr;
-						pGalaxyCluster = new CComObject<CGalaxyCluster>;
-						pGalaxyCluster->m_hWnd = hPWnd;
-						g_pCosmos->m_mapWindowPage[hPWnd] = pGalaxyCluster;
-						pGalaxyCluster->put_ConfigName(CComBSTR(L""));
-						for (auto it : g_pCosmos->m_mapCosmosAppProxy)
-						{
-							CGalaxyClusterProxy* pCosmosProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-							if (pCosmosProxy)
-								pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pCosmosProxy;
-						}
-					}
-					else
-					{
-						pGalaxyCluster = (CGalaxyCluster*)it->second;
-					}
-					if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pDocTemplate)
-						pGalaxyCluster->m_pCosmosDocTemplate = g_pCosmos->m_pMDIMainWnd->m_pDocTemplate;
-					auto it2 = pGalaxyCluster->m_mapCtrlBarGalaxy.find(hGalaxy);
-					if (it2 == pGalaxyCluster->m_mapCtrlBarGalaxy.end())
-					{
-						CString strCaption = _T("");
-						::GetWindowText(hGalaxy, g_pCosmos->m_szBuffer, MAX_PATH);
-						strCaption = CString(g_pCosmos->m_szBuffer);
-						strCaption.Trim();
-						if (strCaption == _T(""))
-						{
-							::GetWindowText(hwnd, g_pCosmos->m_szBuffer, MAX_PATH);
-							strCaption = CString(g_pCosmos->m_szBuffer);
-							strCaption.Trim();
-						}
-						strCaption.Replace(_T(" "), _T("_"));
-						IXobj* pXobj = nullptr;
-						bool bSavetocfg = (pGalaxyCluster->m_pCosmosDocTemplate == nullptr);
-						pGalaxyCluster->CreateGalaxyWithDefaultNode((LONGLONG)hGalaxy, CComBSTR(strCaption), CComBSTR(L""), CComBSTR(L""), bSavetocfg, &pXobj);
-						if (pXobj)
-						{
-							if (pGalaxyCluster->m_pCosmosDocTemplate)
-							{
-								pGalaxyCluster->m_pCosmosDocTemplate->m_mapMainPageNode[hGalaxy] = (CXobj*)pXobj;
-							}
-							IGalaxy* pGalaxy = nullptr;
-							pXobj->get_Galaxy(&pGalaxy);
-							((CGalaxy*)pGalaxy)->m_nGalaxyType = CtrlBarGalaxy;
-							pGalaxyCluster->m_mapCtrlBarGalaxy[hGalaxy] = (CGalaxy*)pGalaxy;
-						}
-					}
-				}
-			}
-		}
-		return 1;
-	}
-	break;
 	case WM_COSMOSMSG:
 	{
 		if (wParam)
@@ -1510,8 +1415,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName.Find(_T("Afx:RibbonBar:")) == 0)
 		{
-			CAFXHelperWnd* pRibbonBar = new CAFXHelperWnd();
-			pRibbonBar->SubclassWindow(hWnd);
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:RibbonBar"), hPWnd, hWnd);
 		}
@@ -1649,11 +1552,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (it1 != g_pCosmos->m_mapCtrlTag.end())
 			g_pCosmos->m_mapCtrlTag.erase(it1);
 
-		auto it2 = g_pCosmos->m_mapCosmosAFXHelperWnd.find(hWnd);
-		if (it2 != g_pCosmos->m_mapCosmosAFXHelperWnd.end())
-		{
-			g_pCosmos->m_mapCosmosAFXHelperWnd.erase(it2);
-		}
 		auto it4 = g_pCosmos->m_mapCosmosFrameWndInfo.find(hWnd);
 		if (it4 != g_pCosmos->m_mapCosmosFrameWndInfo.end())
 		{

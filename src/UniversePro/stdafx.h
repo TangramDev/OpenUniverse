@@ -174,7 +174,6 @@ class CGalaxyCluster;
 class CUniverseMDIMain;
 class CXobjCollection;
 class CTangramHtmlTreeWnd;
-class CAFXHelperWnd;
 
 typedef vector<CXobj*> CXobjVector;
 

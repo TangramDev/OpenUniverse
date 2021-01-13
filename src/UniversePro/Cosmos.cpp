@@ -205,7 +205,6 @@ CCosmos::CCosmos()
 	m_lpszSplitterClass = nullptr;
 	m_pGalaxyCluster = nullptr;
 	m_pActiveTemplate = nullptr;
-	m_pCosmosDocTemplateInfo = nullptr;
 	m_pActiveXobj = nullptr;
 	m_pGalaxy = nullptr;
 	m_pDesignXobj = nullptr;

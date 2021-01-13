@@ -716,88 +716,6 @@ void CCosmosTabCtrl::PostNcDestroy()
 	delete this;
 }
 
-CAFXHelperWnd::CAFXHelperWnd(void)
-{
-	m_hFrame = nullptr;
-	m_hParent = nullptr;
-}
-
-CAFXHelperWnd::~CAFXHelperWnd(void)
-{
-}
-
-LRESULT CAFXHelperWnd::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
-	if (m_hParent)
-	{
-		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-		if (g_pCosmos->m_pMDIMainWnd && hTop == g_pCosmos->m_pMDIMainWnd->m_hWnd)
-			::SetWindowPos(m_hParent, HWND_TOP, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE);
-		else
-		{
-			auto it = g_pCosmos->m_mapCosmosMDIChildWnd.find(hTop);
-			if (it != g_pCosmos->m_mapCosmosMDIChildWnd.end())
-				::SetWindowPos(m_hParent, HWND_TOP, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE);
-		}
-	}
-	return l;
-}
-
-LRESULT CAFXHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
-	if (wParam && ::IsWindow(m_hFrame))
-	{
-		CGalaxy* pGalaxy = (CGalaxy*)::SendMessage(m_hFrame, WM_HUBBLE_DATA, 0, 1992);
-		if (pGalaxy)
-		{
-			CXobj* pXobj = pGalaxy->m_pWorkXobj;
-			if (::IsWindowVisible(pXobj->m_pHostWnd->m_hWnd) == FALSE)
-			{
-				HWND hPWnd = ::GetParent(m_hWnd);
-				::PostMessage(m_hWnd, WM_QUERYAPPPROXY, (WPARAM)m_hWnd, 19650601);
-			}
-		}
-	}
-	return l;
-}
-
-LRESULT CAFXHelperWnd::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
-	if (wParam)
-	{
-		switch (lParam)
-		{
-		case 1965:
-		{
-			CGalaxy* pGalaxy = (CGalaxy*)wParam;
-			if (pGalaxy)
-			{
-				::ShowWindow(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, SW_SHOW);
-				pGalaxy->HostPosChanged();
-			}
-		}
-		break;
-		case 19650601:
-		{
-			::PostMessage(::GetWindow(m_hWnd, GW_CHILD), WM_QUERYAPPPROXY, (WPARAM)m_hWnd, 19650601);
-		}
-		break;
-		default:
-			break;
-		}
-	}
-	return l;
-}
-
-void CAFXHelperWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl::OnFinalMessage(hWnd);
-	delete this;
-}
-
 CMDIChildHelperWnd::CMDIChildHelperWnd(void)
 {
 	m_hClient = nullptr;
@@ -834,7 +752,7 @@ LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lPara
 		HWND hActivedWnd = (HWND)lParam;
 		HWND hMDIClient = ::GetParent(m_hWnd);
 		HWND hPWnd = ::GetParent(hMDIClient);
-		CString strKey = _T("maindefault");
+		CString strKey = _T("client");
 		if (hActivedWnd)
 		{
 			CMDIChildHelperWnd* _pWnd = (CMDIChildHelperWnd*)::SendMessage(hActivedWnd, WM_COSMOSMSG, 0, 19631222);
@@ -925,9 +843,6 @@ LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lPara
 												_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
 												IXobj* pXobj = nullptr;
 												_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
-												//::PostMessage(hWnd, WM_COSMOSMSG, 0, 20180115);
-												//::PostMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)hWnd, (LPARAM)19650601);
-												//::PostMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)hWnd, (LPARAM)19651965);
 											}
 										}
 									}
@@ -1091,14 +1006,7 @@ void CUniverseMDIMain::OnCreateDoc(CString strDocData)
 		}
 		else
 		{
-			CString strFile = _T("");
-			if (g_pCosmos->m_pCosmosDocTemplateInfo)
-			{
-				strFile = g_pCosmos->m_strTemplatePath;
-				g_pCosmos->m_pCosmosDocTemplateInfo = nullptr;
-			}
-			if (strFile == _T(""))
-				strFile = g_pCosmos->GetDocTemplateXml(_T("Please select New Doc Template:"), g_pCosmos->m_strAppDataPath + _T("Doctemplate\\"), _T(".appxml"));
+			CString strFile = g_pCosmos->GetDocTemplateXml(_T("Please select New Doc Template:"), g_pCosmos->m_strAppDataPath + _T("Doctemplate\\"), _T(".appxml"));
 			if (::PathFileExists(strFile) && m_Parse.LoadFile(strFile))
 			{
 				CString strKey = m_Parse.attr(_T("key"), _T("default"));

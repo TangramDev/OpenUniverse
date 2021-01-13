@@ -129,27 +129,6 @@ protected:
 	virtual void PostNcDestroy();
 };
 
-class CAFXHelperWnd :
-	public CWindowImpl<CAFXHelperWnd, CWindow>
-{
-public:
-	CAFXHelperWnd(void);
-	virtual ~CAFXHelperWnd(void);
-	HWND m_hFrame;
-	HWND m_hParent;
-	BEGIN_MSG_MAP(CAFXHelperWnd)
-		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
-		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanging)
-	END_MSG_MAP()
-
-private:
-	void OnFinalMessage(HWND hWnd);
-	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnCosmosMg(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-};
-
 class CMDIChildHelperWnd :
 	public CWindowImpl<CMDIChildHelperWnd, CWindow>
 {
