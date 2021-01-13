@@ -257,9 +257,13 @@ namespace CommonUniverse {
 
 	typedef struct CosmosFrameWndInfo
 	{
+		bool bControlBarProessed = false;
+		int m_nFrameType = 0;//0:SDI;1:MDT;2:MDI
 		HWND m_hClient = NULL;
 		CString m_strData = _T("");
 		IWebPage* m_pWebPage = nullptr;
+		void* m_pDoc = nullptr;
+		void* m_pDocTemplate = nullptr;
 		map<CString,HWND> m_mapCtrlBar;
 	} CosmosFrameWndInfo;
 
@@ -644,6 +648,7 @@ namespace CommonUniverse {
 
 		DWORD									m_dwThreadID;
 		DWORD									m_nAppType;
+		HWND									m_hFirstView = nullptr;
 		HWND									m_hTemplateWnd;
 		HWND									m_hTemplateChildWnd;
 		HWND									m_hActiveWnd;

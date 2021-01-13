@@ -105,7 +105,7 @@
     <OutDir>..\..\output32\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\output\</OutDir>
+    <OutDir>..\..\..\Sunny\output</OutDir>
     <TargetName>Universe</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

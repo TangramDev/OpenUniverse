@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version Version 1.0.0.202101100007           *
+ *           Web Runtime for Application - Version Version 1.0.0.202101130008           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -755,10 +755,16 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_bMDIChild = true;
 	}
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
+	if (m_strGalaxyName == _T("default"))
+	{
+		CString strName = m_pWorkXobj->m_pHostParse->attr(_T("galaxy"), _T(""));
+		if (strName != _T(""))
+			m_strGalaxyName = strName;
+	}
 
 	g_pCosmos->m_strCurrentKey = _T("");
 	*ppRetXobj = (IXobj*)m_pWorkXobj;
-	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+	for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
 	{
 		it.second->OnObserverComplete(m_hHostWnd, strXml, m_pWorkXobj);
 	}
