@@ -96,7 +96,7 @@
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>Commos.snk</LinkKeyFile>
     <TargetName>Cosmos</TargetName>
-    <OutDir>..\..\output\</OutDir>
+    <OutDir>..\..\..\Sunny\output</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
@@ -110,7 +110,7 @@
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>Commos.snk</LinkKeyFile>
     <TargetName>Cosmos</TargetName>
-    <OutDir>..\..\output\</OutDir>
+    <OutDir>..\..\..\Sunny\output</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>

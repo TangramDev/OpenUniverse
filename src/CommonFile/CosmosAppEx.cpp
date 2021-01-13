@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101100007           *
+ *           Web Runtime for Application - Version 1.0.0.202101130008           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -655,15 +655,29 @@ namespace CommonUniverse
 
 	HWND CCosmosDelegate::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
+		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
 		switch (nType)
 		{
 		case MainWnd:
 			if (AfxGetApp()->m_pMainWnd)
+			{
+				pWnd = AfxGetApp()->m_pMainWnd;
+				if (pWnd)
+				{
+					CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+					HANDLE hHandle = ::GetProp(pWnd->m_hWnd, _T("CosmosFrameWndInfo"));
+					if (hHandle)
+					{
+						pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+						if (pWnd->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+							pCosmosFrameWndInfo->m_nFrameType = 2;
+					}
+				}
 				return AfxGetApp()->m_pMainWnd->m_hWnd;
+			}
 			break;
 		case CanClose:
 		{
-			CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
 			if (pWnd && pWnd == g_pAppBase->m_pMainWnd)
 			{
 				POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
@@ -695,7 +709,6 @@ namespace CommonUniverse
 		break;
 		case DocView:
 		{
-			CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
 			if (pWnd&&pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 			{
 				CView* pView = static_cast<CView*>(pWnd); 
@@ -703,10 +716,36 @@ namespace CommonUniverse
 				if (pDoc)
 				{
 					HWND hRetFrame = NULL;
+					CDocTemplate* pTemplate = pDoc->GetDocTemplate();
 					CFrameWnd* pFrame = pView->GetParentFrame();
 					if (pFrame)
+					{
+						CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+						HANDLE hHandle = ::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
+						if (hHandle == 0)
+						{
+							pCosmosFrameWndInfo = new CosmosFrameWndInfo();
+							::SetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
+							g_pCosmosImpl->m_mapCosmosFrameWndInfo[pFrame->m_hWnd] = pCosmosFrameWndInfo;
+						}
+						else
+						{
+							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+						}
+						pCosmosFrameWndInfo->m_hClient = hWnd;
+						pCosmosFrameWndInfo->m_pDoc = pDoc;
+						pCosmosFrameWndInfo->m_pDocTemplate = pDoc->GetDocTemplate();
+						if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+							pCosmosFrameWndInfo->m_nFrameType = 2;
+						else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+							pCosmosFrameWndInfo->m_nFrameType = 3;
+						else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
+							pCosmosFrameWndInfo->m_nFrameType = 1;
+						if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
+							::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
+
 						hRetFrame = pFrame->m_hWnd;
-					CDocTemplate* pTemplate = pDoc->GetDocTemplate();
+					}
 					CString strExt = _T("");
 					pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
 					strExt.MakeLower();
@@ -744,7 +783,7 @@ namespace CommonUniverse
 				if (strExt != _T("")&&strExt.CompareNoCase(strParam1)==0)
 				{
 					m_strCreatingDOCID = strParam2;
-					pTemplate->CreateNewDocument();
+					pTemplate->OpenDocumentFile(nullptr);
 					return;
 				}
 			}

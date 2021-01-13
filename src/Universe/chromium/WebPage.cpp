@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version Version 1.0.0.202101100007           *
+ *           Web Runtime for Application - Version Version 1.0.0.202101130008           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -542,7 +542,7 @@ namespace Browser {
 				}
 				if (pGalaxyCluster) {
 					IGalaxy* pGalaxy = nullptr;
-					pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pGalaxy);
+					pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("webviewport"), &pGalaxy);
 					if (pGalaxy)
 					{
 						m_pGalaxy = (CGalaxy*)pGalaxy;
@@ -579,76 +579,6 @@ namespace Browser {
 			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		}
 	}
-
-	//void CWebPage::LoadDocument2Viewport(CString strName, CString strXML)
-	//{
-	//	HWND hPPWnd = ::GetParent(::GetParent(m_hWnd));
-	//	if (m_hExtendWnd == nullptr)
-	//	{
-	//		HWND hParent = NULL;
-	//		if (::IsWindowVisible(m_hWnd))
-	//			hParent = ::GetParent(m_hWnd);
-	//		else
-	//			hParent = m_hWnd;
-
-	//		m_hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParent, NULL, theUniverse.m_hInstance, NULL);
-	//		m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hExtendWnd, (HMENU)1, theUniverse.m_hInstance, NULL);
-
-	//		::SetWindowLongPtr(m_hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_hChildWnd);
-	//		::SetWindowLongPtr(m_hChildWnd, GWLP_USERDATA, (LONG_PTR)this);
-	//	}
-	//	if (m_hExtendWnd)
-	//	{
-	//		if (m_pGalaxy == nullptr) {
-	//			CGalaxyCluster* pGalaxyCluster = nullptr;
-	//			auto it = g_pCosmos->m_mapWindowPage.find(m_hExtendWnd);
-	//			if (it != g_pCosmos->m_mapWindowPage.end())
-	//				pGalaxyCluster = (CGalaxyCluster*)it->second;
-	//			else
-	//			{
-	//				pGalaxyCluster = new CComObject<CGalaxyCluster>();
-	//				pGalaxyCluster->m_hWnd = m_hExtendWnd;
-	//				g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
-	//			}
-	//			if (pGalaxyCluster) {
-	//				IGalaxy* pGalaxy = nullptr;
-	//				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)m_hChildWnd), CComBSTR("default"), &pGalaxy);
-	//				if (pGalaxy)
-	//				{
-	//					m_pGalaxy = (CGalaxy*)pGalaxy;
-	//					m_pGalaxy->m_pWebPageWnd = this;
-	//				}
-	//			}
-	//		}
-	//		if (m_pGalaxy)
-	//		{
-	//			IXobj* pXobj = nullptr;
-	//			m_pGalaxy->Observe(CComBSTR(strName), CComBSTR(strXML), &pXobj);
-	//			if (pXobj)
-	//			{
-	//				m_strCurKey = strName;
-	//				m_hWebHostWnd = NULL;
-	//				if (m_pGalaxy->m_pBindingXobj)
-	//				{
-	//					m_hWebHostWnd = m_pGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
-	//				}
-	//			}
-	//		}
-	//	}
-	//	CBrowser* pBrowserWnd = nullptr;
-	//	auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-	//	if (it != g_pCosmos->m_mapBrowserWnd.end())
-	//	{
-	//		pBrowserWnd = (CBrowser*)it->second;
-	//		if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
-	//			::ShowWindow(m_hWnd, SW_HIDE);
-	//	}
-	//	if (::IsWindowVisible(m_hWnd))
-	//	{
-	//		::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-	//		::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-	//	}
-	//}
 
 	void CWebPage::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
