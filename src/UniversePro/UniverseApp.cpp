@@ -2112,6 +2112,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									{
 										pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 										pCosmosFrameWndInfo->m_pWebPage = g_pCosmos->m_pHostHtmlWnd;
+
 										int nCount = pClient->GetCount();
 										for (int i = 0; i < nCount; i++)
 										{
@@ -2127,47 +2128,22 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													HWND hClient = ::GetDlgItem(hWnd, nID);
 													if (hClient)
 													{
-														CGalaxyCluster* pGalaxyCluster = nullptr;
 														pCosmosFrameWndInfo->bControlBarProessed = true;
 														CString strXml = pParse2->xml();
-														IGalaxyCluster* pCluster = nullptr;
-														if (pCluster == nullptr)
-														{
-															g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-														}
-														if (pCluster)
+														if (pGalaxyCluster)
 														{
 															IGalaxy* pGalaxy = nullptr;
-															CString strKey = strCaption;
-															strKey.Replace(_T(" "), _T("_"));
-															pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+															CString strName = strCaption;
+															strName.Replace(_T(" "), _T("_"));
+															pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
 															if (pGalaxy)
 															{
 																CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 																_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
 																IXobj* pXobj = nullptr;
-																_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
+																_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
 															}
 														}
-														//pCosmosFrameWndInfo->bControlBarProessed = true;
-														//CString strXml = pParse2->xml();
-														//IGalaxyCluster* pCluster = nullptr;
-														//if (pCluster == nullptr)
-														//{
-														//	g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-														//}
-														//if (pCluster)
-														//{
-														//	IGalaxy* pGalaxy = nullptr;
-														//	pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-														//	if (pGalaxy)
-														//	{
-														//		CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-														//		_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
-														//		IXobj* pXobj = nullptr;
-														//		_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
-														//	}
-														//}
 													}
 												}
 											}

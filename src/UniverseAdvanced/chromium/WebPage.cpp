@@ -910,7 +910,7 @@ namespace Browser {
 										if (pClient)
 										{
 											hPWnd = ::GetParent(::GetParent(hWnd));
-											CGalaxyCluster* pGalaxyCluster = nullptr;
+											//CGalaxyCluster* pGalaxyCluster = nullptr;
 											auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
 											if (it != g_pCosmos->m_mapWindowPage.end())
 												pGalaxyCluster = (CGalaxyCluster*)it->second;
@@ -970,22 +970,14 @@ namespace Browser {
 														{
 															pCosmosFrameWndInfo->bControlBarProessed = true;
 															CString strXml = pParse2->xml();
-															IGalaxyCluster* pCluster = nullptr;
-															if (pCluster == nullptr)
+															IGalaxy* pGalaxy = nullptr;
+															pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+															if (pGalaxy)
 															{
-																g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-															}
-															if (pCluster)
-															{
-																IGalaxy* pGalaxy = nullptr;
-																pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-																if (pGalaxy)
-																{
-																	CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-																	_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
-																	IXobj* pXobj = nullptr;
-																	_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
-																}
+																CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+																_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
+																IXobj* pXobj = nullptr;
+																_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
 															}
 														}
 													}
@@ -1421,11 +1413,6 @@ namespace Browser {
 									if (hClient)
 									{
 										CString strXml = pParse2->xml();
-										IGalaxyCluster* pCluster = nullptr;
-										if (pCluster == nullptr)
-										{
-											g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-										}
 										if (pCluster)
 										{
 											IGalaxy* pGalaxy = nullptr;

@@ -413,6 +413,7 @@ void CGalaxy::HostPosChanged()
 
 		HDWP dwh = BeginDeferWindowPos(1);
 		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
+		m_bObserve = !m_bDockPane;
 		if (m_bObserve)
 			flag |= SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
@@ -510,7 +511,8 @@ BOOL CGalaxy::CreateGalaxyCluster()
 	HWND hWnd = NULL;
 	if (m_pWorkXobj->m_pObjClsInfo) {
 		RECT rc;
-		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
+		CWnd* pParentWnd = CWnd::FromHandle(::GetParent(m_hWnd));
+		//CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
 		m_Context.m_pNewViewClass = m_pWorkXobj->m_pObjClsInfo;

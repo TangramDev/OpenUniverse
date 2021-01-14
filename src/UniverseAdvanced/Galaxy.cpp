@@ -773,7 +773,6 @@ LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lPara
 				CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
 				if (pClient)
 				{
-					CGalaxyCluster* pGalaxyCluster = nullptr;
 					auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
 					if (it != g_pCosmos->m_mapWindowPage.end())
 						pGalaxyCluster = (CGalaxyCluster*)it->second;
@@ -826,17 +825,12 @@ LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lPara
 									if (hClient)
 									{
 										CString strXml = pParse2->xml();
-										IGalaxyCluster* pCluster = nullptr;
-										if (pCluster == nullptr)
-										{
-											g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-										}
-										if (pCluster)
+										if (pGalaxyCluster)
 										{
 											IGalaxy* pGalaxy = nullptr;
 											CString strName = strCaption;
 											strName.Replace(_T(" "), _T("_"));
-											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
+											pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
 											if (pGalaxy)
 											{
 												CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
@@ -2964,8 +2958,11 @@ void CGalaxy::HostPosChanged()
 
 		HDWP dwh = BeginDeferWindowPos(1);
 		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
-		//if (m_bObserve)
-		//	flag |= SWP_NOREDRAW;
+		CWnd* _pWnd = CWnd::FromHandlePermanent(::GetParent(m_hWnd));
+
+		m_bObserve = !m_bDockPane;
+		if (m_bObserve)
+			flag |= SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
 			rt1.top,
@@ -3151,7 +3148,8 @@ BOOL CGalaxy::CreateGalaxyCluster()
 	HWND hWnd = NULL;
 	if (m_pWorkXobj->m_pObjClsInfo) {
 		RECT rc;
-		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
+		CWnd* pParentWnd = CWnd::FromHandle(::GetParent(m_hWnd));
+		//CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
 		m_Context.m_pNewViewClass = m_pWorkXobj->m_pObjClsInfo;
@@ -3352,7 +3350,7 @@ STDMETHODIMP CGalaxy::ModifyHost(LONGLONG hHostWnd)
 	m_Parent.Attach(hParent);
 	m_Parent.ScreenToClient(&rc);
 	m_Parent.Detach();
-	for (auto it : m_mapXobj)
+	for (auto &it : m_mapXobj)
 	{
 		if (it.second != m_pWorkXobj)
 		{
@@ -3391,6 +3389,12 @@ STDMETHODIMP CGalaxy::get_GalaxyCluster(IGalaxyCluster** pVal)
 
 STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
+	if (m_bDockPane == false)
+	{
+		CWnd* _pWnd = CWnd::FromHandlePermanent(::GetParent(m_hWnd));
+		if (_pWnd && _pWnd->IsKindOf(RUNTIME_CLASS(CGalaxyHelperWnd)))
+			m_bDockPane = true;
+	}
 	if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
 		m_nGalaxyType = GalaxyType::MDIClientGalaxy;
 	CString _strXml = OLE2T(bstrXml);

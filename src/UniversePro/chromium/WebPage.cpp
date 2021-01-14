@@ -145,6 +145,12 @@ namespace Browser {
 					pSession->Insertint64(_T("xobjhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("xobj"), (__int64)(IXobj*)pXobj);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					if(pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName==_T("default"))
+					{
+						CString strName = pXobj->m_pRootObj->m_pHostParse->attr(_T("galaxy"), _T(""));
+						if (strName != _T(""))
+							pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName = strName;
+					}
 					pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
 					pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pXobj->m_pRootObj->m_pHostWnd->m_hWnd);
@@ -904,7 +910,7 @@ namespace Browser {
 										if (pClient)
 										{
 											hPWnd = ::GetParent(::GetParent(hWnd));
-											CGalaxyCluster* pGalaxyCluster = nullptr;
+											//CGalaxyCluster* pGalaxyCluster = nullptr;
 											auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
 											if (it != g_pCosmos->m_mapWindowPage.end())
 												pGalaxyCluster = (CGalaxyCluster*)it->second;
@@ -964,22 +970,14 @@ namespace Browser {
 														{
 															pCosmosFrameWndInfo->bControlBarProessed = true;
 															CString strXml = pParse2->xml();
-															IGalaxyCluster* pCluster = nullptr;
-															if (pCluster == nullptr)
+															IGalaxy* pGalaxy = nullptr;
+															pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+															if (pGalaxy)
 															{
-																g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-															}
-															if (pCluster)
-															{
-																IGalaxy* pGalaxy = nullptr;
-																pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-																if (pGalaxy)
-																{
-																	CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-																	_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
-																	IXobj* pXobj = nullptr;
-																	_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
-																}
+																CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+																_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
+																IXobj* pXobj = nullptr;
+																_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
 															}
 														}
 													}
@@ -1415,11 +1413,6 @@ namespace Browser {
 									if (hClient)
 									{
 										CString strXml = pParse2->xml();
-										IGalaxyCluster* pCluster = nullptr;
-										if (pCluster == nullptr)
-										{
-											g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-										}
 										if (pCluster)
 										{
 											IGalaxy* pGalaxy = nullptr;

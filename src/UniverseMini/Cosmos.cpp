@@ -200,17 +200,6 @@ CCosmos::~CCosmos()
 {
 	OutputDebugString(_T("------------------Begin Release CCosmos------------------------\n"));
 
-	for (auto it : m_mapCosmosDocTemplateInfo)
-	{
-		delete it.second;
-	}
-	m_mapCosmosDocTemplateInfo.clear();
-	for (auto it : m_mapCosmosFormsTemplateInfo)
-	{
-		delete it.second;
-	}
-	m_mapCosmosFormsTemplateInfo.clear();
-
 	if (m_mapWindowPage.size())
 	{
 		auto it = m_mapWindowPage.begin();

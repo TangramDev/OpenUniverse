@@ -69,6 +69,7 @@ public:
 	CGalaxy();           
 	virtual ~CGalaxy();           
 	bool											m_bObserve = false;
+	bool											m_bDockPane = false;
 	BOOL											m_bDetached;
 	BOOL											m_bMDIChild;
 	BOOL											m_bDesignerState;
