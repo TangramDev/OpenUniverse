@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version Version 1.0.0.202101130008
+ *           Web Runtime for Application - Version 1.0.0.202101150010
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -138,6 +138,7 @@ public:
 	HWND m_hClient;
 	HWND m_hParent;
 	CString m_strKey;
+	CString m_strDocXml=_T("");
 	BEGIN_MSG_MAP(CMDIChildHelperWnd)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
@@ -161,7 +162,9 @@ public:
 	virtual ~CUniverseMDIMain(void);
 
 	HWND									m_hMDIClient;
-	CGalaxyCluster*							m_pGalaxyCluster;
+	CGalaxy*								m_pGalaxy = nullptr;
+	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
+	map<CString, CGalaxy*>					m_mapControlBarGalaxys;
 	CCosmosDocTemplate*						m_pDocTemplate;
 	map<HWND, CString>						m_mapDesignableWnd;
 	map<CString, CCosmosDocTemplate*>		m_mapCosmosDocTemplate;

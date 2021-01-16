@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101130008           *
+ *           Web Runtime for Application - Version 1.0.0.202101150010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -912,7 +912,7 @@ namespace CommonUniverse
 				m_pCosmosImpl->m_pCosmosDelegate = static_cast<ICosmosDelegate*>(this);
 				g_pCosmosImpl->InserttoDataMap(0, m_strProviderID, static_cast<IUniverseAppProxy*>(this));
 				g_pCosmosImpl->InserttoDataMap(1, m_strProviderID, static_cast<ICosmosWindowProvider*>(this));
-
+				//g_pCosmosImpl->InserttoDataMap(2, m_strProviderID, static_cast<ICosmosWindowProvider*>(this));
 				if (g_pCosmosImpl->m_nAppType != APP_BROWSER &&
 					g_pCosmosImpl->m_nAppType != APP_BROWSER_ECLIPSE)
 					::PostAppMessage(::GetCurrentThreadId(), WM_CHROMEAPPINIT, (WPARAM)m_pCosmosImpl->m_pCosmosDelegate, g_pCosmosImpl->m_nAppType);
@@ -937,7 +937,12 @@ namespace CommonUniverse
 			}
 			}
 		return true;
-		}
+	}
+	
+	void CCosmosDelegate::InsertTemplateData(CString strKey, CString strVal)
+	{
+		m_pCosmosImpl->InsertTemplateData(strKey, strVal);
+	}
 
 	bool CCosmosDelegate::ProcessAppType(bool bCrashReporting)
 	{

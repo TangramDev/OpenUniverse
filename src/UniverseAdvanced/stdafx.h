@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version Version 1.0.0.202101130008
+ *           Web Runtime for Application - Version 1.0.0.202101150010
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -47,10 +47,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <afxwin.h>         
+#include <afxpriv.h>
+#include <afxole.h>
 #include <Uxtheme.h>
 #include <vssym32.h>
 //#include <afxdisp.h>
-#include <afxpriv.h>
 #include <Shlobj.h>
 
 #ifndef _AFX_NO_AFXCMN_SUPPORT
@@ -81,11 +82,15 @@
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
 #include "inc.h"
-#include <atlwin.h>
 #include "CommonFunction.h"
 #include "msaddndr.h"
 
+#include <afxcview.h>
+#include <afxdlgs.h>
+#include <atlwin.h>
+#include "vbe6ext.h"
 using namespace ATL;
+using namespace Office;
 
 #include "tangrambase.h"
 #include "jni.h"
@@ -135,13 +140,6 @@ class CXobjCollection;
 class CTangramHtmlTreeWnd;
 
 typedef vector<CXobj*> CXobjVector;
-
-#include "vbe6ext.h"
-#include <afxcview.h>
-#include <afxdlgs.h>
-#include <afxwin.h>
-
-using namespace Office;
 
 #define FORCE_EXPLICIT_DTE_NAMESPACE
 #define FORCE_EXPLICIT_PRJ_NAMESPACE

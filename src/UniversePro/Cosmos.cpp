@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version Version 1.0.0.202101130008           *
+ *           Web Runtime for Application - Version 1.0.0.202101150010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1467,25 +1467,7 @@ void CCosmos::TangramInitFromeWeb()
 		pParse = m_Parse.GetChild(_T("doctemplate"));
 		if (pParse)
 		{
-			int nCount = pParse->GetCount();
-			for (int i = 0; i < nCount; i++)
-			{
-				CTangramXmlParse* pChild = pParse->GetChild(i);
-				g_pCosmos->m_mapDocTemplateInfo[pChild->name().MakeLower()] = pChild->xml();
-			}
-			if (nCount && m_pMDIMainWnd && m_hFirstView)
-			{
-				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-				HANDLE hHandle = ::GetProp(m_pMDIMainWnd->m_hWnd, _T("CosmosFrameWndInfo"));
-				if (hHandle)
-				{
-					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-					if (pCosmosFrameWndInfo->m_pDocTemplate)
-					{
-						::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hFirstView, 20210110);
-					}
-				}
-			}
+			m_strDefaultTemplate = pParse->xml();
 		}
 		pParse = m_Parse.GetChild(_T("defaultworkbench"));
 		if (pParse)

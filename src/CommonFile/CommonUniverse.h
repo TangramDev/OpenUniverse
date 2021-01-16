@@ -747,7 +747,6 @@ namespace CommonUniverse {
 		map<void*, IUnknown*>					m_mapObjects;
 		map<IDispatch*, CString>				m_mapObjEventDic;
 		map<CString, CString>					m_mapJavaNativeInfo;
-		map<CString, CString>					m_mapDocTemplateInfo;
 		map<CString, CString>					m_mapCreatingWorkBenchInfo;
 		map<HWND, HWND>							m_mapVSWebPage;
 		map<HWND, CString>						m_mapUIData;
@@ -780,6 +779,7 @@ namespace CommonUniverse {
 		virtual CSession* GetCloudSession(IXobj*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
 		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
+		virtual void InsertTemplateData(CString strKey, CString strVal) {}
 	};
 
 	class ICosmosWindowProvider
@@ -877,6 +877,7 @@ namespace CommonUniverse {
 		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 		virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) {}
 		virtual void* CreateDocument(CString strType, CString strDocKey) { return nullptr; }
+		virtual void InsertTemplateData(CString strKey, CString strVal) {}
 	};
 
 	class CCosmosMainDllLoader {

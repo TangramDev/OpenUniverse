@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version Version 1.0.0.202101130008           *
+ *           Web Runtime for Application - Version 1.0.0.202101150010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -632,7 +632,6 @@ CCosmos::~CCosmos()
 
 	if (m_pRootNodes)
 		CCommonFunction::ClearObject<CXobjCollection>(m_pRootNodes);
-
 	if (m_nAppID == 3)
 	{
 		for (auto &it : m_mapThreadInfo)
@@ -1474,12 +1473,7 @@ void CCosmos::TangramInitFromeWeb()
 		pParse = m_Parse.GetChild(_T("doctemplate"));
 		if (pParse)
 		{
-			int nCount = pParse->GetCount();
-			for (int i = 0; i < nCount; i++)
-			{
-				CTangramXmlParse* pChild = pParse->GetChild(i);
-				g_pCosmos->m_mapDocTemplateInfo[pChild->name().MakeLower()] = pChild->xml();
-			}
+			m_strDefaultTemplate = pParse->xml();
 		}
 		pParse = m_Parse.GetChild(_T("defaultworkbench"));
 		if (pParse)
@@ -7280,6 +7274,11 @@ char* CCosmos::GetSchemeString(int nType, CString strKey)
 		return "chrome";
 	}
 	return nullptr;
+}
+
+void CCosmos::InsertTemplateData(CString strKey, CString strVal) 
+{
+	m_mapValInfo[strKey] = CComVariant(strVal);
 }
 
 void CCosmos::InserttoDataMap(int nType, CString strKey, void* pData)
