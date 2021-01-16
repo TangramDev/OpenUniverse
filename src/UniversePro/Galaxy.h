@@ -138,10 +138,11 @@ public:
 	HWND m_hClient;
 	HWND m_hParent;
 	CString m_strKey;
+	CGalaxy* m_pGalaxy = nullptr;
 	CString m_strDocXml = _T("");
 	BEGIN_MSG_MAP(CMDIChildHelperWnd)
-		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
+		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanging)
 	END_MSG_MAP()
 

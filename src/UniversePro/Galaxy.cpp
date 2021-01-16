@@ -2777,6 +2777,8 @@ void CGalaxy::HostPosChanged()
 		m_bObserve = !m_bDockPane;
 		if (m_bObserve)
 			flag |= SWP_NOREDRAW;
+		if (m_bTabbedMDIClient)//&&m_nGalaxyType == GalaxyType::MDIClientGalaxy)
+			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
 			rt1.top,

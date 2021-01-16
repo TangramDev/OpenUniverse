@@ -2155,6 +2155,30 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
 					if(::IsWindow(hWnd))
 					{ 
+						HANDLE h = ::RemoveProp(hWnd, _T("CosmosFrameWndType"));
+						if (h)
+						{
+							int nType = (int)h;
+							if (nType)
+							{
+								CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+								HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+								if (hHandle == 0)
+								{
+									pCosmosFrameWndInfo = new CosmosFrameWndInfo();
+									::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
+									g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
+								}
+								else
+								{
+									pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+								}
+								pCosmosFrameWndInfo->m_hClient = hWnd;
+								pCosmosFrameWndInfo->m_nFrameType = nType;
+								if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
+									::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
+							}
+						}
 						if (g_pCosmos->m_strDefaultTemplate == _T(""))
 							g_pCosmos->m_hFirstView = hClient;
 						else
@@ -2172,6 +2196,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								if (pChild)
 								{
 									bool bMdiChild = ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD;
+									IGalaxy* pGalaxy = nullptr;
 									IXobj* _pXobj = nullptr;
 									CTangramXmlParse* pClient = pChild->GetChild(_T("client"));
 									if (pClient)
@@ -2194,7 +2219,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										}
 										if (pGalaxyCluster)
 										{
-											IGalaxy* pGalaxy = nullptr;
 											pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
 											if (pGalaxy)
 											{
@@ -2211,6 +2235,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											pWnd->SubclassWindow(hWnd);
 											g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 										}
+										if (pWnd->m_pGalaxy == nullptr)
+											pWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
 										pWnd->m_hClient = hClient;
 										pWnd->m_strKey = strKey;
 										pClient = pChild->GetChild(_T("mdiclient"));

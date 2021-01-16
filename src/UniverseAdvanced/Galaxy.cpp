@@ -730,18 +730,8 @@ CMDIChildHelperWnd::~CMDIChildHelperWnd(void)
 LRESULT CMDIChildHelperWnd::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
-	if (m_hParent)
-	{
-		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-		if (g_pCosmos->m_pMDIMainWnd && hTop == g_pCosmos->m_pMDIMainWnd->m_hWnd)
-			::SetWindowPos(m_hParent, HWND_TOP, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE);
-		else
-		{
-			auto it = g_pCosmos->m_mapCosmosMDIChildWnd.find(hTop);
-			if (it != g_pCosmos->m_mapCosmosMDIChildWnd.end())
-				::SetWindowPos(m_hParent, HWND_TOP, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE);
-		}
-	}
+	if (g_pCosmos->m_nAppType == 1992 && ::IsIconic(m_hWnd))
+		::SendMessage(::GetParent(m_hWnd), WM_MDIICONARRANGE, 0, 0);
 	return l;
 }
 
@@ -2893,6 +2883,8 @@ void CGalaxy::HostPosChanged()
 		m_bObserve = !m_bDockPane;
 		if (m_bObserve)
 			flag |= SWP_NOREDRAW;
+		if (m_bTabbedMDIClient)//&&m_nGalaxyType== GalaxyType::MDIClientGalaxy)
+			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
 			rt1.top,
@@ -4169,7 +4161,8 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				lpwndpos->cx = rect.right - rect.left;
 				lpwndpos->cy = rect.bottom - rect.top;
 			}
-			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE| SWP_FRAMECHANGED );// |SWP_NOREDRAW); 
+			UINT flag = lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED;
+			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, flag );// |SWP_NOREDRAW); 
 			CXobj* _pHostNode = m_pBindingXobj;
 			if (_pHostNode->m_pHostGalaxy)
 			{

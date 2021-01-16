@@ -2012,6 +2012,30 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
 					{
+						HANDLE h = ::RemoveProp(hWnd, _T("CosmosFrameWndType"));
+						if (h)
+						{
+							int nType = (int)h;
+							if (nType)
+							{
+								CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+								HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+								if (hHandle == 0)
+								{
+									pCosmosFrameWndInfo = new CosmosFrameWndInfo();
+									::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
+									g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
+								}
+								else
+								{
+									pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+								}
+								pCosmosFrameWndInfo->m_hClient = hWnd;
+								pCosmosFrameWndInfo->m_nFrameType = nType;
+								if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
+									::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
+							}
+						}
 						if (g_pCosmos->m_strDefaultTemplate == _T(""))
 							g_pCosmos->m_hFirstView = hClient;
 						else

@@ -288,7 +288,51 @@ namespace CommonUniverse
 		{
 		case MainWnd:
 			if (AfxGetApp()->m_pMainWnd)
+			{
+				pWnd = AfxGetApp()->m_pMainWnd;
+				if (pWnd)
+				{
+					CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+					HANDLE hHandle = ::GetProp(pWnd->m_hWnd, _T("CosmosFrameWndInfo"));
+					if (hHandle)
+					{
+						pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+						if (pWnd->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+							pCosmosFrameWndInfo->m_nFrameType = 2;
+						else
+						{
+							POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
+							while (nPos)
+							{
+								CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
+								POSITION pos = pTemplate->GetFirstDocPosition();
+								while (pos != NULL)
+								{
+									CDocument* pDoc = pTemplate->GetNextDoc(pos);
+									POSITION pos2 = pDoc->GetFirstViewPosition();
+									while (pos2 != NULL)
+									{
+										CView* pView = pDoc->GetNextView(pos2);
+										ASSERT_VALID(pView);
+										CFrameWnd* pFrame = pView->GetParentFrame();
+										if (g_pAppBase->m_pMainWnd == pFrame)
+										{
+											if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
+											{
+												if (!pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+													pCosmosFrameWndInfo->m_nFrameType = 1;
+												return pWnd->m_hWnd;
+											}
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 				return AfxGetApp()->m_pMainWnd->m_hWnd;
+			}
 			break;
 		case CanClose:
 		{
@@ -324,16 +368,68 @@ namespace CommonUniverse
 		break;
 		case DocView:
 		{
-			CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
 			if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 			{
 				CView* pView = static_cast<CView*>(pWnd);
 				CDocument* pDoc = pView->GetDocument();
 				if (pDoc)
 				{
+					HWND hRetFrame = NULL;
+					CDocTemplate* pTemplate = pDoc->GetDocTemplate();
 					CFrameWnd* pFrame = pView->GetParentFrame();
 					if (pFrame)
-						return pFrame->m_hWnd;
+					{
+						CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+						HANDLE hHandle = ::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
+						if (hHandle == 0)
+						{
+							int nType = 0;
+							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+								nType = 2;
+							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+								nType = 3;
+							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
+							{
+								nType = 1;
+							}
+							::SetProp(pFrame->m_hWnd, _T("CosmosFrameWndType"), (HANDLE)nType);
+						}
+						else
+						{
+							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+						}
+						if (pCosmosFrameWndInfo)
+						{
+							pCosmosFrameWndInfo->m_hClient = hWnd;
+							pCosmosFrameWndInfo->m_pDoc = pDoc;
+							pCosmosFrameWndInfo->m_pDocTemplate = pDoc->GetDocTemplate();
+							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+								pCosmosFrameWndInfo->m_nFrameType = 2;
+							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+								pCosmosFrameWndInfo->m_nFrameType = 3;
+							else if (pFrame->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+								pCosmosFrameWndInfo->m_nFrameType = 4;
+							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
+							{
+								pCosmosFrameWndInfo->m_nFrameType = 1;
+							}
+							if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
+								::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
+						}
+						hRetFrame = pFrame->m_hWnd;
+					}
+					CString strDocID = m_strCreatingDOCID;
+					CString strExt = _T("");
+					pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
+					strExt.MakeLower();
+					if (strExt == _T(""))
+						strExt = _T("default");
+					if (strExt != _T(""))
+					{
+						__int64 nTemplate = (__int64)pTemplate;
+						g_pCosmos->put_AppKeyValue(CComBSTR(strExt), CComVariant((__int64)nTemplate));
+					}
+					return hRetFrame;
 				}
 			}
 		}

@@ -754,28 +754,39 @@ namespace CommonUniverse
 						HANDLE hHandle = ::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
 						if (hHandle == 0)
 						{
-							pCosmosFrameWndInfo = new CosmosFrameWndInfo();
-							::SetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
-							g_pCosmosImpl->m_mapCosmosFrameWndInfo[pFrame->m_hWnd] = pCosmosFrameWndInfo;
+							int nType = 0;
+							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+								nType = 2;
+							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+								nType = 3;
+							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
+							{
+								nType = 1;
+							}
+							::SetProp(pFrame->m_hWnd, _T("CosmosFrameWndType"), (HANDLE)nType);
 						}
 						else
 						{
 							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 						}
-						pCosmosFrameWndInfo->m_hClient = hWnd;
-						pCosmosFrameWndInfo->m_pDoc = pDoc;
-						pCosmosFrameWndInfo->m_pDocTemplate = pDoc->GetDocTemplate();
-						if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
-							pCosmosFrameWndInfo->m_nFrameType = 2;
-						else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
-							pCosmosFrameWndInfo->m_nFrameType = 3;
-						else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
+						if (pCosmosFrameWndInfo)
 						{
-							pCosmosFrameWndInfo->m_nFrameType = 1;
+							pCosmosFrameWndInfo->m_hClient = hWnd;
+							pCosmosFrameWndInfo->m_pDoc = pDoc;
+							pCosmosFrameWndInfo->m_pDocTemplate = pDoc->GetDocTemplate();
+							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+								pCosmosFrameWndInfo->m_nFrameType = 2;
+							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+								pCosmosFrameWndInfo->m_nFrameType = 3;
+							else if (pFrame->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+								pCosmosFrameWndInfo->m_nFrameType = 4;
+							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
+							{
+								pCosmosFrameWndInfo->m_nFrameType = 1;
+							}
+							if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
+								::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 						}
-						if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
-							::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
-
 						hRetFrame = pFrame->m_hWnd;
 					}
 					CString strDocID = m_strCreatingDOCID;

@@ -8,7 +8,6 @@
 #include "afxdialogex.h"
 #include "MFCApplication1.h"
 #include "MainFrm.h"
-
 #include "ChildFrm.h"
 #include "MFCApplication1Doc.h"
 #include "MFCApplication1View.h"
