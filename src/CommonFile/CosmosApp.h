@@ -177,7 +177,6 @@ namespace CommonUniverse
 		virtual CString GetNTPXml();
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
-		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; };
 		virtual bool EclipseAppInit();
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);

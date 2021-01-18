@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010           *
+ *           Web Runtime for Application - Version 1.0.0.202101180012           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -656,6 +656,11 @@ namespace CommonUniverse
 	HWND CCosmosDelegate::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+		if (pWnd&&pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
+		{
+			BOOL bMDIClient = true;
+			return ::GetParent(hWnd);
+		}
 		switch (nType)
 		{
 		case MainWnd:
@@ -778,12 +783,12 @@ namespace CommonUniverse
 								pCosmosFrameWndInfo->m_nFrameType = 2;
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
 								pCosmosFrameWndInfo->m_nFrameType = 3;
-							else if (pFrame->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
-								pCosmosFrameWndInfo->m_nFrameType = 4;
 							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
 							{
 								pCosmosFrameWndInfo->m_nFrameType = 1;
 							}
+							else if (pFrame->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+								pCosmosFrameWndInfo->m_nFrameType = 4;
 							if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
 								::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 						}
@@ -805,6 +810,15 @@ namespace CommonUniverse
 			}
 		}
 			break;
+		case QueryDestroy:
+		{
+			if (AfxGetApp()->m_pMainWnd&& AfxGetApp()->m_pMainWnd!=pWnd)
+			{
+				g_pAppBase->m_pMainWnd = pWnd;
+				return pWnd->m_hWnd;
+			}
+		}
+		break;
 		default:
 			break;
 		}
@@ -948,11 +962,6 @@ namespace CommonUniverse
 			}
 			}
 		return true;
-	}
-	
-	void CCosmosDelegate::InsertTemplateData(CString strKey, CString strVal)
-	{
-		m_pCosmosImpl->InsertTemplateData(strKey, strVal);
 	}
 
 	bool CCosmosDelegate::ProcessAppType(bool bCrashReporting)
@@ -1430,16 +1439,6 @@ namespace CommonUniverse
 		return true;
 	}
 
-	bool CCosmosAppEx::GetClientAreaBounds(HWND hWnd, RECT& rc) {
-		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
-		if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CTangramMDIFrameWndEx)))
-		{
-			CTangramMDIFrameWndEx* pMDIFrameWndEx = static_cast<CTangramMDIFrameWndEx*>(pWnd);
-			rc = pMDIFrameWndEx->GetClientAreaBounds();
-		}
-		return false;
-	}
-
 	IMPLEMENT_DYNCREATE(CTangramFrameWndEx, CFrameWndEx)
 
 	BEGIN_MESSAGE_MAP(CTangramFrameWndEx, CFrameWndEx)
@@ -1552,21 +1551,6 @@ namespace CommonUniverse
 	{
 	}
 
-	BOOL CTangramMDIFrameWndEx::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParentWnd, CCreateContext* pContext)
-	{
-		if (!CMDIFrameWndEx::LoadFrame(nIDResource, dwDefaultStyle, pParentWnd, pContext))
-		{
-			return FALSE;
-		}
-		return TRUE;
-	}
-
-	BOOL CTangramMDIFrameWndEx::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, LPCTSTR lpszMenuName, DWORD dwExStyle, CCreateContext* pContext)
-	{
-		BOOL bCreate = CMDIFrameWndEx::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, lpszMenuName, dwExStyle, pContext);
-		return bCreate;
-	}
-
 	BOOL CTangramMDIFrameWndEx::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
 		//if (m_hClient == nullptr)
@@ -1590,11 +1574,6 @@ namespace CommonUniverse
 
 		// route as normal command
 		return CMDIFrameWndEx::OnCommand(wParam, lParam);
-	}
-
-	CRect CTangramMDIFrameWndEx::GetClientAreaBounds()
-	{
-		return m_dockManager.GetClientAreaBounds();
 	}
 
 	void CTangramMDIFrameWndEx::AdjustClientArea()

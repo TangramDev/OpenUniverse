@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010           *
+ *           Web Runtime for Application - Version 1.0.0.202101180012           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -57,6 +57,7 @@ namespace Browser
 		CWinForm*							m_pBindWinForm;
 		IUniverseAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
+		CosmosFrameWndInfo*					m_pCosmosFrameWndInfo = nullptr;
 
 		CWebPage*							m_pWebWnd;
 		CWebPage*							m_pDevToolWnd;

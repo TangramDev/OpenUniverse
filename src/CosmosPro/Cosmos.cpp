@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010
+ *           Web Runtime for Application - Version 1.0.0.202101180012
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1657,10 +1657,6 @@ namespace Universe
 
     void Cosmos::ExportAllCLRObjInfo()
     {
-        theAppProxy.ExportCLRObjInfo(_T(""));
-        theAppProxy.ExportAllCLRObjInfo(theApp.m_pCosmosImpl->m_strAppFormsPath);
-        theAppProxy.ExportAllCLRObjInfo(theApp.m_pCosmosImpl->m_strAppCommonFormsPath);
-        theApp.m_pCosmosImpl->ExportComponentInfo();
     }
 
     String^ Cosmos::AppDataPath::get()

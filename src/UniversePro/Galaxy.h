@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010
+ *           Web Runtime for Application - Version 1.0.0.202101180012
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -151,6 +151,23 @@ private:
 	LRESULT OnMDIActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+};
+
+class CMDTFrameHelperWnd :
+	public CWindowImpl<CMDTFrameHelperWnd, CWindow>
+{
+public:
+	CMDTFrameHelperWnd(void);
+	virtual ~CMDTFrameHelperWnd(void);
+	BEGIN_MSG_MAP(CMDTFrameHelperWnd)
+		MESSAGE_HANDLER(WM_CLOSE, OnClose)
+		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+	END_MSG_MAP()
+	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+
+private:
+	void OnFinalMessage(HWND hWnd);
 };
 
 class CCosmosDocTemplate;

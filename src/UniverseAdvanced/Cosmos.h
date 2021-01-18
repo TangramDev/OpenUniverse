@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010           *
+ *           Web Runtime for Application - Version 1.0.0.202101180012           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -77,9 +77,11 @@
 using namespace Browser;
 using namespace CommonUniverse;
 class CWinForm;
+class CMDTFrameHelperWnd;
+
 struct CommonThreadInfo
 {
-	HHOOK						 m_hGetMessageHook;
+	HHOOK				m_hGetMessageHook;
 	map<HWND, CGalaxy*> m_mapGalaxy;
 };
 
@@ -330,6 +332,7 @@ public:
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
+	map<HWND, CMDTFrameHelperWnd*>			m_mapMDTFrameHelperWnd;
 
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
@@ -418,7 +421,6 @@ public:
 	void InitCosmosDocManager();
 	void InitDesignerTreeCtrl(CString strXml);
 	void FireAppEvent(CCosmosEvent*);
-	void ExportComponentInfo();
 	void CreateEclipseApp(CString strKey, CString strXml);
 	int	 LoadCLR();
 	bool ImportCosmosDocTemplate(CString strFile);
@@ -455,8 +457,6 @@ public:
 	virtual void WindowDestroy(HWND hWnd) {};
 	virtual HRESULT COMObjCreated(REFCLSID rclsid, LPVOID pv) { return 0; };
 	virtual HRESULT RemoteObjCreated(CString strID, void** ppvObject) { return 0; };
-	virtual void ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate);
-	virtual ICosmosDoc* ConnectCosmosDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hGalaxy, LPCTSTR strDocType);
 	IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*);
 	IWebPage* GetWebPageFromForm(HWND);
 
@@ -525,7 +525,6 @@ private:
 	CChromeBrowserBase* GetChromeBrowserBase(HWND);
 	IBrowser* GetHostBrowser(HWND hNodeWnd);
 	void InserttoDataMap(int nType, CString strKey, void* pData);
-	void InsertTemplateData(CString strKey, CString strVal);
 	char* GetSchemeString(int nType, CString strKey);
 	long GetIPCMsgIndex(CString strMsgID);
 	CSession* CreateCloudSession(CWebPageImpl*);

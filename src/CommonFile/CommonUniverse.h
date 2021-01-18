@@ -204,7 +204,8 @@ namespace CommonUniverse {
 		MainWnd = 0x00000000,
 		CanClose = 0x00000001,
 		DocView = 0x00000002,
-		OtherType= 0x00000003
+		OtherType= 0x00000003,
+		QueryDestroy = 0x00000004
 	}QueryType;
 
 	typedef struct IPCMsg {
@@ -265,6 +266,7 @@ namespace CommonUniverse {
 		void* m_pDoc = nullptr;
 		void* m_pDocTemplate = nullptr;
 		map<CString,HWND> m_mapCtrlBar;
+		map<CString, IGalaxy*> m_mapControlBarGalaxys;
 	} CosmosFrameWndInfo;
 
 	typedef struct CosmosDocTemplateInfo
@@ -765,13 +767,10 @@ namespace CommonUniverse {
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) { return nullptr; }
 		virtual void AttachXobj(void* pXobjEvents) {}
 		virtual void CosmosInit() {}
-		virtual ICosmosDoc* ConnectCosmosDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hGalaxy, LPCTSTR strDocType) { return nullptr; }
 		virtual CString GetNewLayoutNodeName(BSTR strObjTypeID, IXobj* pDesignNode) { return _T(""); }
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
 		virtual IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
 		virtual bool IsMDIClientGalaxyNode(IXobj*) { return false; }
-		virtual void ExportComponentInfo() {}
-		virtual void ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate) {}
 		virtual void InserttoDataMap(int nType, CString strKey, void* pData) {}
 		virtual IWebPage* GetWebPageFromForm(HWND) { return nullptr; }
 		virtual long GetIPCMsgIndex(CString strMsgID) { return 0; }
@@ -779,7 +778,6 @@ namespace CommonUniverse {
 		virtual CSession* GetCloudSession(IXobj*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
 		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
-		virtual void InsertTemplateData(CString strKey, CString strVal) {}
 	};
 
 	class ICosmosWindowProvider
@@ -865,8 +863,6 @@ namespace CommonUniverse {
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount) { return false; }
 		virtual bool IsAppIdleMessage() { return false; }
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) { return false; }
-		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; }
-		//virtual bool HookAppDocTemplateInfo() { return false; }
 		virtual bool EclipseAppInit() { return false; }
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
 		virtual CString GetNTPXml() { return _T(""); }
@@ -877,7 +873,6 @@ namespace CommonUniverse {
 		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 		virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) {}
 		virtual void* CreateDocument(CString strType, CString strDocKey) { return nullptr; }
-		virtual void InsertTemplateData(CString strKey, CString strVal) {}
 	};
 
 	class CCosmosMainDllLoader {

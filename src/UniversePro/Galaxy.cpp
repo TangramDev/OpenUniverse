@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010
+ *           Web Runtime for Application - Version 1.0.0.202101180012
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -753,15 +753,17 @@ LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lPara
 		IXobj* _pXobj = nullptr;
 		CComBSTR bstrKey(strKey);
 		BSTR bstrXml = ::SysAllocString(L"");
-		if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+		CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+		HANDLE hHandle = ::GetProp(::GetParent(::GetParent(m_hWnd)), _T("CosmosFrameWndInfo"));;
+		if (hHandle)
 		{
-			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->Observe(bstrKey, bstrXml, &_pXobj);
-		}
-		for (auto& it : g_pCosmos->m_pMDIMainWnd->m_mapControlBarGalaxys)
-		{
-			CGalaxy* _pGalaxy = it.second;
-			IXobj* pXobj = nullptr;
-			_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
+			pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+			for (auto& it : pCosmosFrameWndInfo->m_mapControlBarGalaxys)
+			{
+				IGalaxy* _pGalaxy = it.second;
+				IXobj* pXobj = nullptr;
+				_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
+			}
 		}
 		::SysFreeString(bstrXml);
 	}
@@ -810,6 +812,63 @@ void CMDIChildHelperWnd::OnFinalMessage(HWND hWnd)
 	{
 
 	}
+	CWindowImpl::OnFinalMessage(hWnd);
+	delete this;
+}
+
+CMDTFrameHelperWnd::CMDTFrameHelperWnd(void)
+{
+}
+
+CMDTFrameHelperWnd::~CMDTFrameHelperWnd(void)
+{
+}
+
+LRESULT CMDTFrameHelperWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	CMDTFrameHelperWnd* pHelperWnd = nullptr;
+	auto it = g_pCosmos->m_mapMDTFrameHelperWnd.find(m_hWnd);
+	if (it != g_pCosmos->m_mapMDTFrameHelperWnd.end())
+	{
+		for (auto& itX : g_pCosmos->m_mapMDTFrameHelperWnd)
+		{
+			if (itX.second->m_hWnd != m_hWnd)
+			{
+				pHelperWnd = itX.second;
+				break;
+			}
+		}
+	}
+	if (pHelperWnd)
+	{
+		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryDestroy, pHelperWnd->m_hWnd);
+		g_pCosmos->m_hMainWnd = pHelperWnd->m_hWnd;
+	}
+	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	return l;
+}
+
+LRESULT CMDTFrameHelperWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	CMDTFrameHelperWnd* pHelperWnd = nullptr;
+	if (g_pCosmos->m_mapMDTFrameHelperWnd.size() == 1)
+	{
+		::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_DESTROY, 0, 0);
+	}
+	else
+	{
+		auto it = g_pCosmos->m_mapMDTFrameHelperWnd.find(m_hWnd);
+		if (it != g_pCosmos->m_mapMDTFrameHelperWnd.end())
+		{
+			g_pCosmos->m_mapMDTFrameHelperWnd.erase(it);
+		}
+	}
+	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	return l;
+}
+
+void CMDTFrameHelperWnd::OnFinalMessage(HWND hWnd)
+{
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
 }

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010           *
+ *           Web Runtime for Application - Version 1.0.0.202101180012           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -259,12 +259,9 @@ namespace CommonUniverse
 		virtual CString GetNTPXml();
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
-		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc) { return false; };
-		//virtual bool HookAppDocTemplateInfo();
 		virtual bool EclipseAppInit();
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
-		virtual void InsertTemplateData(CString strKey, CString strVal);
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
@@ -345,7 +342,6 @@ namespace CommonUniverse
 	private:
 		virtual BOOL InitApplication();
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
-		virtual bool GetClientAreaBounds(HWND hWnd, RECT& rc);
 		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 	};
 
@@ -386,22 +382,19 @@ namespace CommonUniverse
 		CTangramMDIFrameWndEx();
 		virtual ~CTangramMDIFrameWndEx();
 
-		CRect GetClientAreaBounds();
 		DECLARE_DYNCREATE(CTangramMDIFrameWndEx)
 
-		virtual void AdjustClientArea();
-
 		virtual BOOL OnShowPopupMenu(CMFCPopupMenu* /*pMenuPopup*/);
-		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle = WS_OVERLAPPEDWINDOW, const RECT& rect = rectDefault, CWnd* pParentWnd = NULL, LPCTSTR lpszMenuName = NULL, DWORD dwExStyle = 0, CCreateContext* pContext = NULL);
-		virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 		virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-		afx_msg BOOL OnNcActivate(BOOL bActive);
-		afx_msg LRESULT OnQueryAppProxy(WPARAM wp, LPARAM lp);
 
 	protected:
 		DECLARE_MESSAGE_MAP()
 
 	private:
+		afx_msg BOOL OnNcActivate(BOOL bActive);
+		afx_msg LRESULT OnQueryAppProxy(WPARAM wp, LPARAM lp);
+		
+		void AdjustClientArea();
 		void OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
 		void OnClrControlCreated(IXobj* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle);
 		void OnEvent(IDispatch* sender, IDispatch* EventArg);

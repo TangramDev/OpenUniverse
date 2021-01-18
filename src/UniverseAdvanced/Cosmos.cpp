@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010           *
+ *           Web Runtime for Application - Version 1.0.0.202101180012           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -681,117 +681,6 @@ CCosmos::~CCosmos()
 	g_pCosmos = nullptr;
 	OutputDebugString(_T("------------------End Release CCosmos------------------------\n"));
 }
-
-void CCosmos::ExportComponentInfo()
-{
-	CString strPath = m_strProgramFilePath + _T("\\tangram\\") + m_strExeName + _T("\\tangraminit.xml");
-	if (::PathFileExists(strPath))
-	{
-		CTangramXmlParse m_Parse;
-		if (m_Parse.LoadFile(strPath))
-		{
-			int nCount = m_Parse.GetCount();
-			for (int i = 0; i < nCount; i++)
-			{
-				CTangramXmlParse* pParse = m_Parse.GetChild(i);
-				CString strID = pParse->attr(TGM_GRID_TYPE, _T(""));
-				CString strXml = pParse->GetChild(0)->xml();
-				if (strID == _T("xmlRibbon"))
-				{
-					CString strPath = m_strAppCommonDocPath + _T("OfficeRibbon\\") + m_strExeName + _T("\\ribbon.xml");
-					CTangramXmlParse m_Parse2;
-					if (m_Parse2.LoadXml(strXml))
-						m_Parse2.SaveFile(strPath);
-				}
-				if (strID == _T("tangramdesigner"))
-					m_strDesignerXml = strXml;
-				else
-				{
-					strID.MakeLower();
-					if (strID == _T("newtangramdocument"))
-					{
-						m_strNewDocXml = strXml;
-					}
-					else
-					{
-						m_mapValInfo[strID] = CComVariant(strXml);
-					}
-				}
-			}
-		}
-	}
-	CString _strPath = m_strAppCommonDocPath + _T("Tangramdoctemplate.xml");
-	CString _strPathReg = m_strAppCommonDocPath + _T("TangramReg.xml");
-	BOOL bModifyed = false;
-	CTangramXmlParse m_Parse;
-	CTangramXmlParse m_ParseReg;
-	if (m_Parse.LoadFile(_strPath) == FALSE)
-	{
-		m_Parse.LoadXml(_T("<CosmosDocTemplate />"));
-	}
-	if (m_ParseReg.LoadFile(_strPathReg) == FALSE)
-	{
-		m_ParseReg.LoadXml(_T("<CosmosDocReg />"));
-		m_ParseReg.SaveFile(_strPathReg);
-	}
-
-	strPath = m_strProgramFilePath + _T("\\tangram\\CommonDocComponent\\*.*");
-
-	_wfinddata_t fd;
-	fd.attrib = FILE_ATTRIBUTE_DIRECTORY;
-	intptr_t pf = _wfindfirst(strPath, &fd);
-	if (pf != -1)
-	{
-		while (!_wfindnext(pf, &fd))
-		{
-			if (fd.attrib & FILE_ATTRIBUTE_DIRECTORY)
-			{
-				CString str = fd.name;
-				str.MakeLower();
-				if (str != _T(".."))
-				{
-					CString strXml = m_strProgramFilePath + _T("\\tangram\\CommonDocComponent\\") + str + _T("\\tangram.xml");
-					if (m_ParseReg.GetChild(str) == nullptr)
-					{
-						int nPos = str.Find(_T("."));
-						CString strLib = _T("");
-						if (nPos != -1)
-						{
-							strLib = str.Left(nPos);
-							strLib = m_strProgramFilePath + _T("\\tangram\\CommonDocComponent\\") + str + _T("\\") + strLib + _T(".dll");
-							if (::PathFileExists(strLib))
-							{
-								m_strLibs += strLib;
-								m_strLibs += _T("|");
-							}
-						}
-					}
-					if (::PathFileExists(strXml))
-					{
-						CTangramXmlParse m_Parse2;
-						if (m_Parse2.LoadFile(strXml))
-						{
-							int nCount = m_Parse2.GetCount();
-							for (int i = 0; i < nCount; i++)
-							{
-								CTangramXmlParse* pParse = m_Parse2.GetChild(i);
-								str = pParse->name().MakeLower();
-								if (m_Parse.GetChild(str) == nullptr)
-								{
-									bModifyed = true;
-									m_Parse.AddNode(pParse, str);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		_findclose(pf);
-	}
-	if (bModifyed)
-		m_Parse.SaveFile(_strPath);
-};
 
 CString CCosmos::GetOfficePath()
 {
@@ -6942,75 +6831,6 @@ STDMETHODIMP CCosmos::InitCLRApp(BSTR strInitXml, LONGLONG* llHandle)
 	return S_OK;
 }
 
-void CCosmos::ConnectDocTemplate(LPCTSTR strType, LPCTSTR strExt, void* pTemplate)
-{
-	g_pCosmos->m_mapTemplateInfo[strType] = (__int64)pTemplate;
-	g_pCosmos->m_mapTemplateInfo[strExt] = (__int64)pTemplate;
-}
-
-ICosmosDoc* CCosmos::ConnectCosmosDoc(IUniverseAppProxy* AppProxy, LONGLONG docID, HWND hView, HWND hGalaxy, LPCTSTR strDocType)
-{
-	CString strID = strDocType;
-	strID.Trim();
-	strID.MakeLower();
-	CCosmosDoc* pDoc = nullptr;
-	IUniverseAppProxy* pProxy = (IUniverseAppProxy*)AppProxy;
-	if (docID && strID != _T("") && ::IsWindow(hView))
-	{
-		CString s = _T(",");
-		s += strID;
-		s += _T(",");
-		if (g_pCosmos->m_strDocTemplateStrs.Find(s) == -1)
-			g_pCosmos->m_strDocTemplateStrs += s;
-		pDoc = new CComObject<CCosmosDoc>;
-		pDoc->m_pAppProxy = AppProxy;
-		pDoc->m_llDocID = docID;
-		pDoc->m_strDocID = strID;
-		pProxy->AddDoc(docID, pDoc);
-		pDoc->m_pDocProxy = pProxy->m_pCurDocProxy;
-		pDoc->m_pDocProxy->m_strDocID = strID;
-		if (AppProxy->m_strCreatingFrameTitle != _T(""))
-			pDoc->m_pDocProxy->m_strAppName = AppProxy->m_strCreatingFrameTitle;
-		else
-			pDoc->m_pDocProxy->m_strAppName = AppProxy->m_strProxyName;
-		AppProxy->m_strCreatingFrameTitle = _T("");
-		pDoc->m_pDocProxy->m_pDoc = pDoc;
-		LRESULT lRes = ::SendMessage(hGalaxy, WM_COSMOSMSG, 2016, 0);
-		if (lRes == 0)
-		{
-			CCosmosDocWnd* pWnd = new CCosmosDocWnd();
-			pWnd->SubclassWindow(hGalaxy);
-			pWnd->m_hView = hView;
-			CString strWndID = _T("default");
-			auto it = pDoc->m_mapGalaxy.find(strWndID);
-			if (it == pDoc->m_mapGalaxy.end())
-			{
-				pWnd->m_pDocFrame = new CCosmosDocFrame();
-				pWnd->m_pDocFrame->m_strWndID = strWndID;
-				pWnd->m_pDocFrame->m_pCosmosDoc = pDoc;
-				pDoc->m_mapGalaxy[pWnd->m_pDocFrame->m_strWndID] = pWnd->m_pDocFrame;
-			}
-			else
-			{
-				pWnd->m_pDocFrame = it->second;
-			}
-			pWnd->m_pDocFrame->m_mapWnd[hGalaxy] = pWnd;
-
-			HWND hPWnd = ::GetParent(hGalaxy);
-			if (::GetWindowLong(hGalaxy, GWL_EXSTYLE) & WS_EX_MDICHILD)
-			{
-				::PostMessage(hGalaxy, WM_COSMOSMSG, (WPARAM)hGalaxy, (LPARAM)::GetParent(hPWnd));
-			}
-			else
-			{
-				g_pCosmos->m_mapMDTFrame[hGalaxy] = pWnd;
-				::PostMessage(hGalaxy, WM_COSMOSMSG, (WPARAM)hGalaxy, 0);
-			}
-		}
-	}
-	return (ICosmosDoc*)pDoc;
-}
-
 __declspec(dllexport) ICosmos* __stdcall  GetCosmos()
 {
 	return static_cast<ICosmos*>(g_pCosmos);
@@ -7274,11 +7094,6 @@ char* CCosmos::GetSchemeString(int nType, CString strKey)
 		return "chrome";
 	}
 	return nullptr;
-}
-
-void CCosmos::InsertTemplateData(CString strKey, CString strVal) 
-{
-	m_mapValInfo[strKey] = CComVariant(strVal);
 }
 
 void CCosmos::InserttoDataMap(int nType, CString strKey, void* pData)

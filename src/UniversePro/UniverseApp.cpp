@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101150010           *
+ *           Web Runtime for Application - Version 1.0.0.202101180012           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2012,23 +2012,33 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
 					{
+						CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+						HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+						if (hHandle)
+						{
+							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+							if (pCosmosFrameWndInfo->m_nFrameType == 1)
+							{
+								auto it = g_pCosmos->m_mapMDTFrameHelperWnd.find(hWnd);
+								if (it == g_pCosmos->m_mapMDTFrameHelperWnd.end())
+								{
+									CMDTFrameHelperWnd* pFrameWnd = new CMDTFrameHelperWnd();
+									pFrameWnd->SubclassWindow(hWnd);
+									g_pCosmos->m_mapMDTFrameHelperWnd[hWnd] = pFrameWnd;
+								}
+							}
+						}
 						HANDLE h = ::RemoveProp(hWnd, _T("CosmosFrameWndType"));
 						if (h)
 						{
 							int nType = (int)h;
 							if (nType)
 							{
-								CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-								HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
 								if (hHandle == 0)
 								{
 									pCosmosFrameWndInfo = new CosmosFrameWndInfo();
 									::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
 									g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
-								}
-								else
-								{
-									pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 								}
 								pCosmosFrameWndInfo->m_hClient = hWnd;
 								pCosmosFrameWndInfo->m_nFrameType = nType;
@@ -2053,6 +2063,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								if (pChild)
 								{
 									bool bMdiChild = ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD;
+									IGalaxy* pGalaxy = nullptr;
 									IXobj* _pXobj = nullptr;
 									CTangramXmlParse* pClient = pChild->GetChild(_T("client"));
 									if (pClient)
@@ -2075,10 +2086,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										}
 										if (pGalaxyCluster)
 										{
-											IGalaxy* pGalaxy = nullptr;
 											pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
 											if (pGalaxy)
 											{
+												pCosmosFrameWndInfo->m_mapControlBarGalaxys[strKey] = pGalaxy;
 												pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 											}
 										}
@@ -2092,6 +2103,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											pWnd->SubclassWindow(hWnd);
 											g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 										}
+										if (pWnd->m_pGalaxy == nullptr)
+											pWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
 										pWnd->m_hClient = hClient;
 										pWnd->m_strKey = strKey;
 										pClient = pChild->GetChild(_T("mdiclient"));
@@ -2162,10 +2175,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													strName.Replace(_T(" "), _T("_"));
 													if (g_pCosmos->m_pMDIMainWnd)
 													{
-														auto itX = g_pCosmos->m_pMDIMainWnd->m_mapControlBarGalaxys.find(strName);
-														if (itX != g_pCosmos->m_pMDIMainWnd->m_mapControlBarGalaxys.end())
+														auto itX = pCosmosFrameWndInfo->m_mapControlBarGalaxys.find(strName);
+														if (itX != pCosmosFrameWndInfo->m_mapControlBarGalaxys.end())
 														{
-															CGalaxy* _pGalaxy = itX->second;
+															IGalaxy* _pGalaxy = itX->second;
 															IXobj* pXobj = nullptr;
 															_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pParse2->xml()), &pXobj);
 														}
