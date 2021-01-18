@@ -171,7 +171,6 @@ private:
 };
 
 class CCosmosDocTemplate;
-class CUniverseMDIChild;
 class CUniverseMDIMain :
 	public CWindowImpl<CUniverseMDIMain, CWindow>
 {
@@ -182,67 +181,15 @@ public:
 	HWND									m_hMDIClient;
 	CGalaxy*								m_pGalaxy = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
-	CCosmosDocTemplate*						m_pDocTemplate;
 	map<HWND, CString>						m_mapDesignableWnd;
 	map<CString, CCosmosDocTemplate*>		m_mapCosmosDocTemplate;
 	map<HWND, CMDIChildHelperWnd*>			m_mapMDIChildHelperWnd;
 	BEGIN_MSG_MAP(CUniverseMDIMain)
-		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
-		MESSAGE_HANDLER(WM_CONTROLBARCREATED, OnControlBarCreated)
-		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()
 	
 	void OnFinalMessage(HWND hWnd);
-
-	void OnCreateDoc(CString strDocData);
-	void NavigateKey(CString strKey);
-	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnControlBarCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-};
-
-class CUniverseMDIChild :
-	public CWindowImpl<CUniverseMDIChild, CWindow>
-{
-public:
-	CUniverseMDIChild(void);
-	virtual ~CUniverseMDIChild(void);
-	BOOL				m_bNoDocView;
-	HWND				m_hChild;
-
-	CString				m_strCaption;
-	CString				m_strTemplatePath;
-	CString				m_strXml;
-	CGalaxy*			m_pGalaxy;
-	map<HWND, CString>	m_mapDesignableWnd;
-
-	CCosmosDocTemplate* m_pDocTemplate;
-	BEGIN_MSG_MAP(CUniverseMDIChild)
-		MESSAGE_HANDLER(WM_CLOSE, OnClose)
-		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
-		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
-		MESSAGE_HANDLER(WM_DPICHANGED, OnDpiChanged)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
-		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
-		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanged)
-		MESSAGE_HANDLER(WM_CONTROLBARCREATED, OnControlBarCreated)
-	END_MSG_MAP()
-
-	void OnCreateDoc(CString strDocData);
-private:
-	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnMDIActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnWindowPosChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnControlBarCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	void OnFinalMessage(HWND hWnd);
 };
 
 class CWinForm :

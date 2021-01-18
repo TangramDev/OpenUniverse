@@ -569,20 +569,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			}
 			g_pCosmos->m_mapMDTFrame.clear();
 
-			if (g_pCosmos->m_mapCosmosMDIChildWnd.size())
-			{
-				auto it = g_pCosmos->m_mapCosmosMDIChildWnd.begin();
-				while (it != g_pCosmos->m_mapCosmosMDIChildWnd.end())
-				{
-					if (it->second)
-					{
-						it->second->DestroyWindow();
-					}
-					it = g_pCosmos->m_mapCosmosMDIChildWnd.begin();
-				}
-			}
-			g_pCosmos->m_mapCosmosMDIChildWnd.clear();
-
 			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
 			{
 				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
@@ -853,17 +839,12 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			g_pCosmos->CreateGalaxyCluster((__int64)g_pCosmos->m_pMDIMainWnd->m_hWnd, &pGalaxyCluster);
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = (CGalaxyCluster*)pGalaxyCluster;
 			IXobj* pXobj = nullptr;
-			g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->m_strKey = _T("default");
-			g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->m_strClientKey = _T("default");
-			g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->InitXmlData();
 			IGalaxy* pGalaxy = nullptr;
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)g_pCosmos->m_pMDIMainWnd->m_hMDIClient), CComBSTR("mdiclient"), &pGalaxy);
 			if (pGalaxy)
 			{
 				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-				_pGalaxy->m_pCosmosDocTemplate = g_pCosmos->m_pMDIMainWnd->m_pDocTemplate;
 				pGalaxy->Observe(CComBSTR("mdiclient"), CComBSTR(""), &pXobj);
-				g_pCosmos->m_pMDIMainWnd->m_pDocTemplate->m_mapMainPageNode[g_pCosmos->m_pMDIMainWnd->m_hMDIClient] = (CXobj*)pXobj;
 			}
 			for (auto it : g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd)
 			{
@@ -1135,11 +1116,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 					g_pCosmos->m_nAppType = lRes;
 				if (lRes == 1992 || g_pCosmos->m_nAppType == 1992)
 				{
-					CUniverseMDIChild* pMDIChildWnd = new CUniverseMDIChild();
-					pMDIChildWnd->m_hChild = hWnd;
-					pMDIChildWnd->SubclassWindow(hPWnd);
-					g_pCosmos->m_pActiveMDIChildWnd = pMDIChildWnd;
-					pMDIChildWnd->m_bNoDocView = (pCreateWnd->lpcs->lpCreateParams == 0);
 					::PostMessage(hPWnd, WM_COSMOSMSG, 0, 19922017);
 				}
 			}
@@ -1169,33 +1145,11 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			break;
 			case APP_MDI://for MDI Child
 			{
-				CUniverseMDIChild* pMDIChildWnd = new CUniverseMDIChild();
-				pMDIChildWnd->m_hChild = hWnd;
-				pMDIChildWnd->SubclassWindow(hPWnd);
-				g_pCosmos->m_pActiveMDIChildWnd = pMDIChildWnd;
-				pMDIChildWnd->m_bNoDocView = (pCreateWnd->lpcs->lpCreateParams == 0);
-				if (g_pCosmos->m_nAppType == 1963)
-					g_pCosmos->m_mapCosmosMDIChildWnd[hPWnd] = pMDIChildWnd;
 				::PostMessage(hPWnd, WM_COSMOSMSG, 0, 19922017);
 			}
 			break;
 			default:
 			{
-				if (g_pCosmos->m_pMDIMainWnd)
-				{
-					CString strClsName = CString(pCreateWnd->lpcs->lpszClass);
-					if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("Universe GridWindow Class")))
-						::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_CONTROLBARCREATED, (WPARAM)hPWnd, (LPARAM)hWnd);
-				}
-				else
-				{
-					if (g_pCosmos->m_pActiveMDIChildWnd && ::IsWindow(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd))
-					{
-						CString strClsName = CString(pCreateWnd->lpcs->lpszClass);
-						if (strClsName.CompareNoCase(_T("Cosmos Xobj Class")) && strClsName.CompareNoCase(_T("Universe GridWindow Class")))
-							::PostMessage(g_pCosmos->m_pActiveMDIChildWnd->m_hWnd, WM_CONTROLBARCREATED, (WPARAM)hPWnd, (LPARAM)hWnd);
-					}
-				}
 			}
 			break;
 			}

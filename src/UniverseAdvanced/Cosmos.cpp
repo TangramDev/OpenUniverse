@@ -195,7 +195,6 @@ CCosmos::CCosmos()
 	m_nAppType = 0;
 	m_hCreatingWnd = NULL;
 	m_pMDIMainWnd = nullptr;
-	m_pActiveMDIChildWnd = nullptr;
 	m_hCosmosWnd = NULL;
 	m_hHostBrowserWnd = NULL;
 	m_hHostWnd = NULL;
@@ -1961,28 +1960,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 	CString strGalaxyName = _strGalaxyName;
 
 	CCosmosDocTemplate* pDocTemplate = nullptr;
-	if (m_pMDIMainWnd)
-	{
-		if (m_pMDIMainWnd->m_pGalaxyCluster == pGalaxyCluster)
-		{
-			pDocTemplate = m_pMDIMainWnd->m_pDocTemplate;
-			strGalaxyName = m_pMDIMainWnd->m_pDocTemplate->m_strClientKey + _strGalaxyName;
-		}
-		else
-		{
-			HWND hWnd = pGalaxyCluster->m_hWnd;
-			if (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
-			{
-				CUniverseMDIChild* pWnd = (CUniverseMDIChild*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
-				if (pWnd && pWnd->m_pDocTemplate)
-				{
-					//strGalaxyName = _strGalaxyName;
-					pDocTemplate = pWnd->m_pDocTemplate;
-				}
-			}
-		}
-	}
-
 	IGalaxy* pGalaxy = nullptr;
 	pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)hGalaxy), strGalaxyName.AllocSysString(), &pGalaxy);
 	if (pGalaxy)
@@ -1997,16 +1974,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		{
 			m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
 		}
-		else
-		{
-			HWND hWnd = _pGalaxy->m_pGalaxyCluster->m_hWnd;
-			CUniverseMDIChild* pWnd = (CUniverseMDIChild*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
-			if (pWnd == nullptr)
-			{
-				_pGalaxy->m_pCosmosDocTemplate = pDocTemplate;
-				pDocTemplate->m_mapConnectedFrame[hGalaxy] = _pGalaxy;
-			}
-		}
 		CString strKey = _T("default");
 		if (pDocTemplate)
 		{
@@ -2020,11 +1987,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		{
 			CXobj* _pXobj = (CXobj*)pXobj;
 			HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-			auto it = m_mapCosmosMDIChildWnd.find(hWnd);
-			if (it == m_mapCosmosMDIChildWnd.end())
-			{
-				return pGalaxy;
-			}
 			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (pWnd)
 			{
@@ -3326,19 +3288,6 @@ STDMETHODIMP CCosmos::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 			m_strAppName = strData;
 			::VariantClear(&newVal);
 			return S_OK;
-		}
-		if (strKey == _T("currentdocdata"))
-		{
-			if (m_pMDIMainWnd)
-			{
-				m_pMDIMainWnd->OnCreateDoc(strData);
-				return S_OK;
-			}
-			else if (m_pActiveMDIChildWnd)
-			{
-				m_pActiveMDIChildWnd->OnCreateDoc(strData);
-				return S_OK;
-			}
 		}
 		if (strKey == _T("appdata") && ::GetModuleHandle(_T("msenv.dll")))
 		{
@@ -5015,8 +4964,6 @@ CCosmosDocTemplate::CCosmosDocTemplate()
 
 CCosmosDocTemplate::~CCosmosDocTemplate()
 {
-	if (g_pCosmos->m_pMDIMainWnd->m_pDocTemplate == this)
-		g_pCosmos->m_pMDIMainWnd->m_pDocTemplate = nullptr;
 }
 
 void CCosmosDocTemplate::InitXmlData()
@@ -5059,33 +5006,6 @@ void CCosmosDocTemplate::InitXmlData()
 					}
 				}
 			}
-			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pDocTemplate == this)
-			{
-				CTangramXmlParse m_Parse;
-				CString strPath = g_pCosmos->m_strAppDataPath + _T("default.doctemplate");
-				if (::PathFileExists(strPath))
-				{
-					if (m_Parse.LoadFile(strPath))
-					{
-						CTangramXmlParse* pChild = nullptr;
-						int nCount = m_Parse.GetCount();
-						for (int i = 0; i < nCount; i++)
-						{
-							pChild = m_Parse.GetChild(i);
-							m_mapXml[pChild->name()] = pChild->xml();
-						}
-					}
-				}
-				else
-				{
-					CString strXml = _T("<CosmosDocTemplate><mdiclient><cluster><xobj name='mdiclient'/></cluster></mdiclient></CosmosDocTemplate>");
-					if (m_Parse.LoadXml(strXml))
-					{
-						m_Parse.SaveFile(strPath);
-						m_mapXml[_T("mdiclient")] = _T("<mdiclient><cluster><xobj name='mdiclient'/></cluster></mdiclient>");
-					}
-				}
-			}
 		}
 	}
 }
@@ -5093,116 +5013,6 @@ void CCosmosDocTemplate::InitXmlData()
 bool CCosmosDocTemplate::SaveXmlData()
 {
 	bool bRet = false;
-	if (m_mapMainPageNode.size())
-	{
-		CString strKey = _T("");
-		CString strXml = _T("<CosmosDocTemplate>");
-		for (auto it : m_mapMainPageNode)
-		{
-			CString strName = _T("");
-			if (it.first == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
-			{
-				strName = _T("mdiclient");
-			}
-			else
-			{
-				::GetWindowText(::GetParent(it.first), g_pCosmos->m_szBuffer, MAX_PATH);
-				strName = CString(g_pCosmos->m_szBuffer);
-				strName.Replace(_T(" "), _T("_"));
-			}
-			if (strName != _T(""))
-			{
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)it.first, &pGalaxy);
-				if (pGalaxy)
-				{
-					((CGalaxy*)pGalaxy)->UpdateXobj();
-					CTangramXmlParse* pParse = it.second->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER);
-					CString s = _T("");
-					s.Format(_T("<%s>%s</%s>"), strName, pParse->xml(), strName);
-					strXml += s;
-				}
-				else
-					return false;
-			}
-		}
-		for (auto it : m_mapConnectedFrame)
-		{
-			CString strName = it.second->m_strGalaxyName;
-			strName.Replace(_T("@"), _T("_"));
-			CTangramXmlParse* pParse = it.second->UpdateXobj();
-			CComBSTR bstr("");
-			it.second->get_GalaxyXML(&bstr);
-			CString s = _T("");
-			s.Format(_T("<%s>%s</%s>"), strName, pParse->xml(), strName);
-			strXml += s;
-		}
-		strXml += _T("</CosmosDocTemplate>");
-		CTangramXmlParse m_Parse;
-		if (m_Parse.LoadXml(strXml))
-		{
-			strKey = m_strKey;
-			if (strKey != _T(""))
-			{
-				CString strPath = _T("");
-				int nPos = strKey.Find(_T("_"));
-				if (nPos != -1)
-				{
-					strKey = strKey.Mid(nPos + 1);
-					if (m_strDocTemplatePath == _T(""))
-					{
-						strPath = g_pCosmos->m_strAppDataPath + _T("DocTemplateData\\");
-					}
-					else
-					{
-						strPath = m_strDocTemplatePath + _T("DocTemplateData\\");
-					}
-
-					if (::PathIsDirectory(strPath) == false)
-						::CreateDirectory(strPath, nullptr);
-					strPath += strKey + _T(".doctemplate");
-					bRet = m_Parse.SaveFile(strPath);
-				}
-				else if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pDocTemplate == this)
-				{
-					strPath = g_pCosmos->m_strAppDataPath + _T("default.doctemplate");
-					bRet = m_Parse.SaveFile(strPath);
-				}
-			}
-		}
-		if (m_mapCosmosMDIChildWnd.size() == 0)
-		{
-			strKey = m_strClientKey;
-			strKey.MakeLower();
-			CGalaxy* pGalaxy = nullptr;
-			for (auto it : g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd)
-			{
-				IGalaxy* _pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)it.first, &_pGalaxy);
-				pGalaxy = (CGalaxy*)_pGalaxy;
-				if (pGalaxy)
-				{
-					auto it2 = pGalaxy->m_mapXobj.find(strKey);
-					if (it2 != pGalaxy->m_mapXobj.end())
-					{
-						::DestroyWindow(it2->second->m_pHostWnd->m_hWnd);
-					}
-				}
-			}
-			IGalaxy* _pGalaxy = nullptr;
-			g_pCosmos->GetGalaxy((__int64)g_pCosmos->m_pMDIMainWnd->m_hMDIClient, &_pGalaxy);
-			if (_pGalaxy)
-			{
-				pGalaxy = (CGalaxy*)_pGalaxy;
-				auto it2 = pGalaxy->m_mapXobj.find(strKey);
-				if (it2 != pGalaxy->m_mapXobj.end())
-				{
-					::DestroyWindow(it2->second->m_pHostWnd->m_hWnd);
-				}
-			}
-			delete this;
-		}
-	}
 
 	return bRet;
 }
@@ -5214,12 +5024,6 @@ STDMETHODIMP CCosmosDocTemplate::get_TemplateXml(BSTR* bstrDocData)
 
 STDMETHODIMP CCosmosDocTemplate::put_TemplateXml(BSTR newVal)
 {
-	if (g_pCosmos->m_pMDIMainWnd)
-	{
-		g_pCosmos->m_pMDIMainWnd->OnCreateDoc(OLE2T(newVal));
-		::SysFreeString(newVal);
-		return S_OK;
-	}
 	return S_OK;
 }
 
@@ -6487,111 +6291,6 @@ bool CCosmos::ImportCosmosDocTemplate(CString strFilePath)
 
 STDMETHODIMP CCosmos::OpenCosmosDocFile(BSTR bstrFilePath, ICosmosDoc** ppDoc)
 {
-	CString strFilePath = OLE2T(bstrFilePath);
-	if (::PathFileExists(strFilePath))
-	{
-		m_pActiveMDIChildWnd = nullptr;
-		strFilePath.MakeLower();
-
-		auto itDoc = m_mapOpenDoc.find(strFilePath);
-		if (itDoc != m_mapOpenDoc.end())
-		{
-			CCosmosDoc* pDoc = itDoc->second;
-			pDoc->m_strPath = strFilePath;
-			CCosmosDocWnd* pWnd = pDoc->m_pActiveWnd;
-			WINDOWPLACEMENT wndPlacement;
-			pWnd->GetWindowPlacement(&wndPlacement);
-			if (wndPlacement.showCmd == SW_MINIMIZE || wndPlacement.showCmd == SW_SHOWMINIMIZED)
-			{
-				pWnd->ShowWindow(SW_RESTORE);
-			};
-			pWnd->SetFocus();
-		}
-
-		CosmosDocInfo m_CosmosDocInfo;
-		m_CosmosDocInfo.m_strAppProxyID = m_CosmosDocInfo.m_strDocID = m_CosmosDocInfo.m_strMainFrameID = m_CosmosDocInfo.m_strCosmosData = m_CosmosDocInfo.m_strTangramID = _T("");
-		GetCosmosInfo(strFilePath, &m_CosmosDocInfo);
-		if (m_CosmosDocInfo.m_strTangramID == _T("19631222199206121965060119820911"))
-		{
-			IUniverseAppProxy* pProxy = nullptr;
-			auto it = g_pCosmos->m_mapCosmosAppProxy.find(m_CosmosDocInfo.m_strAppProxyID.MakeLower());
-			if (it != g_pCosmos->m_mapCosmosAppProxy.end())
-				pProxy = it->second;
-			else
-			{
-				CString strPath = m_strAppPath;
-				int nPos = m_CosmosDocInfo.m_strAppProxyID.Find(_T("."));
-				m_CosmosDocInfo.m_strAppName = m_CosmosDocInfo.m_strAppProxyID.Left(nPos);
-				HMODULE hHandle = nullptr;
-				CString strdll = strPath + m_CosmosDocInfo.m_strAppProxyID + _T("\\") + m_CosmosDocInfo.m_strAppName + _T(".dll");
-				m_strCurrentFrameID = m_CosmosDocInfo.m_strMainFrameID;
-				if (::PathFileExists(strdll))
-					hHandle = ::LoadLibrary(strdll);
-				if (hHandle == nullptr)
-				{
-					strdll = m_strAppCommonDocPath2 + m_CosmosDocInfo.m_strAppProxyID + _T("\\") + m_CosmosDocInfo.m_strAppName + _T(".dll");
-					if (::PathFileExists(strdll))
-						hHandle = ::LoadLibrary(strdll);
-				}
-				if (hHandle)
-				{
-					it = g_pCosmos->m_mapCosmosAppProxy.find(m_CosmosDocInfo.m_strAppProxyID.MakeLower());
-					if (it != g_pCosmos->m_mapCosmosAppProxy.end())
-					{
-						pProxy = it->second;
-					}
-				}
-				m_strCurrentFrameID = _T("");
-			}
-			if (pProxy)
-			{
-				HWND hMainWnd = pProxy->CreateNewFrame(m_CosmosDocInfo.m_strMainFrameID);
-				auto itDoc = m_mapOpenDoc.find(strFilePath);
-				if (itDoc == m_mapOpenDoc.end())
-				{
-					auto it2 = g_pCosmos->m_mapTemplateInfo.find(m_CosmosDocInfo.m_strDocID.MakeLower());
-					if (it2 != g_pCosmos->m_mapTemplateInfo.end())
-					{
-						*ppDoc = it->second->OpenDocument(it2->second, strFilePath, true);
-						CCosmosDoc* pDoc = (CCosmosDoc*)(*ppDoc);
-						pDoc->m_strPath = strFilePath;
-						m_mapOpenDoc[strFilePath] = pDoc;
-					}
-				}
-				else
-				{
-					CCosmosDoc* pDoc = itDoc->second;
-					pDoc->m_strPath = strFilePath;
-					CCosmosDocWnd* pWnd = pDoc->m_pActiveWnd;
-					if (pWnd)
-					{
-						WINDOWPLACEMENT wndPlacement;
-						pWnd->GetWindowPlacement(&wndPlacement);
-						if (wndPlacement.showCmd == SW_MINIMIZE || wndPlacement.showCmd == SW_SHOWMINIMIZED)
-						{
-							pWnd->ShowWindow(SW_RESTORE);
-						};
-						pWnd->SetFocus();
-					}
-				}
-			}
-		}
-		else
-		{
-			HWND hwnd = nullptr;
-			if (m_pMDIMainWnd)
-			{
-				hwnd = m_pMDIMainWnd->m_hWnd;
-				::SendMessage(hwnd, WM_QUERYAPPPROXY, (WPARAM)strFilePath.GetBuffer(), TANGRAM_CONST_OPENFILE);
-			}
-			else if (m_pActiveMDIChildWnd)
-			{
-				hwnd = m_pActiveMDIChildWnd->m_hWnd;
-				::SendMessage(hwnd, WM_COSMOSMSG, (WPARAM)strFilePath.GetBuffer(), TANGRAM_CONST_OPENFILE);
-			}
-		}
-	}
-
 	return S_OK;
 }
 

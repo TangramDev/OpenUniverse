@@ -86,7 +86,6 @@ CXobj::CXobj()
 	g_pCosmos->m_pActiveXobj = this;
 }
 
-
 void CXobj::InitWndXobj()
 {
 	m_pParentWinFormWnd = nullptr;
@@ -142,14 +141,14 @@ void CXobj::InitWndXobj()
 		{
 			if (this == m_pRootObj)
 			{
-				m_strName = _T("Grid");
+				m_strName = _T("Xobj");
 			}
 		}
 		break;
 		case TabGrid:
 			if (this == m_pRootObj)
 			{
-				if(m_pObjClsInfo)
+				if (m_pObjClsInfo)
 					m_strName = m_pObjClsInfo->m_lpszClassName;
 				else
 					m_strName = _T("Tabs");

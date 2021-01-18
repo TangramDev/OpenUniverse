@@ -189,7 +189,6 @@ private:
 	STDMETHOD(GetGalaxyWndXml)(BSTR bstrWndID, BSTR* bstrWndScriptVal);
 };
 
-class CUniverseMDIChild;
 class ATL_NO_VTABLE CCosmosDocTemplate :
 	public CComObjectRootBase,
 	public IDispatchImpl<ICosmosDocTemplate, &IID_ICosmosDocTemplate, &LIBID_Universe, 1, 0>
@@ -208,7 +207,6 @@ public:
 	map<CString, CString>			m_mapXml;
 	map<HWND, CXobj*>				m_mapMainPageNode;
 	map<HWND, CGalaxy*>				m_mapConnectedFrame;
-	map<HWND, CUniverseMDIChild*> m_mapCosmosMDIChildWnd;
 
 	void InitXmlData();
 	bool SaveXmlData();
@@ -296,7 +294,6 @@ public:
 	CUniverseMDIMain*						m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
 	CCosmosDocTemplate*						m_pActiveTemplate;
-	CUniverseMDIChild*						m_pActiveMDIChildWnd;
 
 	CXobj*									m_pActiveXobj;
 	CXobj*									m_pDesignRootNode;
@@ -324,7 +321,6 @@ public:
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;
 	map<HWND, CWinForm*>					m_mapMainForm;
-	map<HWND, CUniverseMDIChild*>			m_mapCosmosMDIChildWnd;
 	map<CString, CRuntimeClass*>			m_TabWndClassInfoDictionary;
 	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;

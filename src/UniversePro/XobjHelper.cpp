@@ -248,12 +248,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			}
 			::GetClassName(hwnd, g_pCosmos->m_szBuffer, MAX_PATH);
 			strName = CString(g_pCosmos->m_szBuffer);
-			CUniverseMDIChild* pWnd = (CUniverseMDIChild*)::SendMessage(::GetParent(pGalaxy->m_hWnd), WM_COSMOSMSG, 0, 19631222);
-			if (pWnd)
-			{
-				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show Host MFC View for MFC Document"));
-			}
-			else if (strName == _T("MDIClient"))
+			if (strName == _T("MDIClient"))
 			{
 				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show MDI Client"));
 			}
