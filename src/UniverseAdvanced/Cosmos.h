@@ -146,101 +146,6 @@ public:
 	STDMETHOD(put_Index)(int newVal);
 };
 
-class ATL_NO_VTABLE CCosmosDoc :
-	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosDoc, &IID_ICosmosDoc, &LIBID_Universe, 1, 0>
-{
-public:
-	CCosmosDoc();
-	virtual ~CCosmosDoc();
-	BEGIN_COM_MAP(CCosmosDoc)
-		COM_INTERFACE_ENTRY(ICosmosDoc)
-		COM_INTERFACE_ENTRY(IDispatch)
-	END_COM_MAP()
-
-	int								m_nState;
-
-	LONGLONG						m_llDocID;
-	CString							m_strDocID;
-	CString							m_strCurrentWndID;
-	CString							m_strTemplateXml;
-	CString							m_strMainFrameID;
-	CString							m_strPath;
-
-	IUniverseAppProxy*				m_pAppProxy;
-	CCosmosDocWnd*					m_pActiveWnd;
-	CCosmosDocProxy*				m_pDocProxy;
-	map<CString, CString>			m_mapWndScript;
-	map<CString, CCosmosDocFrame*> m_mapGalaxy;
-
-	void Lock() {}
-	void Unlock() {}
-
-protected:
-	ULONG InternalAddRef() { return 1; }
-	ULONG InternalRelease() { return 1; }
-
-private:
-	STDMETHOD(get_TemplateXml)(BSTR* bstrDocData);
-	STDMETHOD(put_TemplateXml)(BSTR newVal);
-	STDMETHOD(put_DocType)(BSTR newVal);
-	STDMETHOD(get_DocID)(LONGLONG* pVal);
-	STDMETHOD(put_DocID)(LONGLONG newVal);
-	STDMETHOD(GetGalaxyWndXml)(BSTR bstrWndID, BSTR* bstrWndScriptVal);
-};
-
-class ATL_NO_VTABLE CCosmosDocTemplate :
-	public CComObjectRootBase,
-	public IDispatchImpl<ICosmosDocTemplate, &IID_ICosmosDocTemplate, &LIBID_Universe, 1, 0>
-{
-public:
-	CCosmosDocTemplate();
-	virtual ~CCosmosDocTemplate();
-	BEGIN_COM_MAP(CCosmosDocTemplate)
-		COM_INTERFACE_ENTRY(ICosmosDocTemplate)
-		COM_INTERFACE_ENTRY(IDispatch)
-	END_COM_MAP()
-
-	CString							m_strKey;
-	CString							m_strClientKey;
-	CString							m_strDocTemplatePath;
-	map<CString, CString>			m_mapXml;
-	map<HWND, CXobj*>				m_mapMainPageNode;
-	map<HWND, CGalaxy*>				m_mapConnectedFrame;
-
-	void InitXmlData();
-	bool SaveXmlData();
-
-	void Lock() {}
-	void Unlock() {}
-
-protected:
-	ULONG InternalAddRef() { return 1; }
-	ULONG InternalRelease() { return 1; }
-
-private:
-	STDMETHOD(get_TemplateXml)(BSTR* bstrDocData);
-	STDMETHOD(put_TemplateXml)(BSTR newVal);
-	STDMETHOD(put_DocType)(BSTR newVal);
-	STDMETHOD(get_DocID)(LONGLONG* pVal);
-	STDMETHOD(put_DocID)(LONGLONG newVal);
-	STDMETHOD(GetGalaxyWndXml)(BSTR bstrWndID, BSTR* bstrWndScriptVal);
-};
-
-class CCosmosDocFrame
-{
-public:
-	CCosmosDocFrame();
-	~CCosmosDocFrame();
-
-	CString							m_strWndID;
-	CCosmosDoc*						m_pCosmosDoc;
-	CCosmosDocWnd*					m_pCurrentWnd;
-	CGalaxy*						m_pHostGalaxy;
-
-	map<HWND, CCosmosDocWnd*>		m_mapWnd;
-};
-
 // CCosmos
 class ATL_NO_VTABLE CCosmos :
 	public CCosmosImpl,
@@ -290,10 +195,8 @@ public:
 	CWebPage*								m_pActiveHtmlWnd;
 
 	CGalaxy*								m_pDocTemplateFrame;
-	CCosmosDocWnd*							m_pActiveDocWnd;
 	CUniverseMDIMain*						m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
-	CCosmosDocTemplate*						m_pActiveTemplate;
 
 	CXobj*									m_pActiveXobj;
 	CXobj*									m_pDesignRootNode;
@@ -312,11 +215,8 @@ public:
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
 	vector<HWND>							m_vHtmlWnd;
-	//map<CString, int>						m_mapEventDic;
 	map<CString, long>						m_mapIPCMsgIndexDic;
-	map<CString, CCosmosDoc*>				m_mapOpenDoc;
 	map<HWND, CGalaxy*>						m_mapBKFrame;
-	map<HWND, CCosmosDocWnd*>				m_mapMDTFrame;
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;

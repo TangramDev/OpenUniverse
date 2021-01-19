@@ -51,7 +51,6 @@ namespace Browser
 		CString								m_strAppProxyID;
 
 		CGalaxy*							m_pGalaxy;
-		CCosmosDoc*							m_pDoc;
 		CXobj*								m_pParentXobj;
 		CXobj*								m_pBindXobj;
 		CWinForm*							m_pBindWinForm;

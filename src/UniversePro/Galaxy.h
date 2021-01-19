@@ -181,9 +181,6 @@ public:
 	HWND									m_hMDIClient;
 	CGalaxy*								m_pGalaxy = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
-	map<CString, CGalaxy*>					m_mapControlBarGalaxys;
-	map<HWND, CString>						m_mapDesignableWnd;
-	map<CString, CCosmosDocTemplate*>		m_mapCosmosDocTemplate;
 	map<HWND, CMDIChildHelperWnd*>			m_mapMDIChildHelperWnd;
 	BEGIN_MSG_MAP(CUniverseMDIMain)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
@@ -251,42 +248,6 @@ public:
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
-class CCosmosDocWnd :
-	public CWindowImpl<CCosmosDocWnd, CWindow>
-{
-public:
-	CCosmosDocWnd(void);
-	virtual ~CCosmosDocWnd(void);
-
-	HWND m_hView;
-	CString	m_strKey;
-	CString m_strWndID;
-	CGalaxy* m_pGalaxy;
-	CGalaxyCluster* m_pParentPage;
-	CCosmosDocFrame* m_pDocFrame;
-
-	map<CString, HWND> m_mapCtrlBar;
-	BEGIN_MSG_MAP(CCosmosDocWnd)
-		MESSAGE_HANDLER(WM_CLOSE, OnClose)
-		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
-		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
-		MESSAGE_HANDLER(WM_HUBBLE_GETXML, OnCosmosGetXml)
-		MESSAGE_HANDLER(WM_CONTROLBARCREATED, OnCtrlBarCreated)
-	END_MSG_MAP()
-
-	void OnFinalMessage(HWND hWnd);
-
-private:
-	void CtrlBarDocActiveNotify(ICosmosDoc* pDoc, IXobj* pXobjInDoc, IXobj* pXobjInCtrlBar, HWND hCtrlBar);
-	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCtrlBarCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-};
-
 class ATL_NO_VTABLE CGalaxy :
 	public CComObjectRootBase,	
 	public CWindowImpl<CGalaxy, CWindow>,
@@ -331,7 +292,6 @@ public:
 	CGalaxy*										m_pSubGalaxy;
 	GalaxyInfo*										m_pGalaxyInfo;
 	CWormhole*										m_pWormhole = nullptr;
-	CCosmosDoc*										m_pDoc;
 	map<CString, CXobj*>							m_mapXobj;
 	map<CString, CXobj*>							m_mapNeedSaveToConfigNode;
 	map<CString, VARIANT>							m_mapVal;

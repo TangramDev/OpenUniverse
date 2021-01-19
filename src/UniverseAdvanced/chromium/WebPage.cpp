@@ -37,7 +37,6 @@ namespace Browser {
 	CWebPage::CWebPage() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
-		m_pDoc = nullptr;
 		m_pBindWinForm = nullptr;
 		m_pAppProxy = nullptr;
 		m_bDevToolWnd = false;
@@ -560,8 +559,6 @@ namespace Browser {
 
 	void CWebPage::Show(CString strID2)
 	{
-		if (m_pDoc)
-			return;
 		LONG_PTR data = 0;
 		if (::IsWindow(m_hChildWnd))
 			data = ::GetWindowLongPtr(m_hChildWnd, GWLP_USERDATA);
@@ -625,13 +622,6 @@ namespace Browser {
 						g_pCosmos->m_pActiveAppProxy = m_pAppProxy;
 						m_pAppProxy->m_hCreatingView = m_hChildWnd;
 						::SetWindowText(m_hChildWnd, g_pCosmos->m_strAppKey);
-						m_pDoc = (CCosmosDoc*)m_pAppProxy->NewDoc();
-						if (m_pDoc)
-						{
-							auto it = m_pGalaxyCluster->m_mapGalaxy.find(m_hChildWnd);
-							if (it != m_pGalaxyCluster->m_mapGalaxy.end())
-								m_pGalaxy = it->second;
-						}
 					}
 				}
 				else
@@ -750,7 +740,7 @@ namespace Browser {
 					pGalaxyCluster->m_hWnd = m_hExtendWnd;
 					g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 
-					for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+					for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
 					{
 						CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 						if (pProxy)
@@ -806,25 +796,17 @@ namespace Browser {
 					}
 					if (hFrameWnd)
 					{
-						m_pCosmosFrameWndInfo = nullptr;
-						HANDLE hHandle = ::GetProp(hFrameWnd, _T("CosmosFrameWndInfo"));
-						if (hHandle)
-						{
-							m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-						}
+						m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrameWnd, _T("CosmosFrameWndInfo"));
 						if (m_pCosmosFrameWndInfo)
 						{
 							CTangramXmlParse* pParse = m_pGalaxy->m_pWorkXobj->m_pXobjShareData->m_pCosmosParse;
-							CTangramXmlParse* pClient = pParse->GetChild(_T("client"));
+							CTangramXmlParse* pClient = pParse->GetChild(m_pCosmosFrameWndInfo->m_nFrameType == 2 ? _T("mdiclient") : _T("client"));
 							if (pParse && pClient)
 							{
 								HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
 								CString strXml = pClient->xml();
 								IGalaxyCluster* pCluster = nullptr;
-								if (pCluster == nullptr)
-								{
-									g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
-								}
+								g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
 								if (pCluster)
 								{
 									IGalaxy* pGalaxy = nullptr;
@@ -889,9 +871,7 @@ namespace Browser {
 					BSTR bstrXml = ::SysAllocString(L"");
 					for (auto& it : m_pCosmosFrameWndInfo->m_mapControlBarGalaxys)
 					{
-						IGalaxy* _pGalaxy = it.second;
-						IXobj* pXobj = nullptr;
-						_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
+						it.second->Observe(bstrKey, bstrXml, &_pXobj);
 					}
 					::SysFreeString(bstrXml);
 				}

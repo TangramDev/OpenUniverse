@@ -62,10 +62,8 @@ CGalaxyCluster::CGalaxyCluster()
 	m_strPageFilePath					= _T("");
 	m_strConfigFileNodeName				= _T("tangramdefaultpage");
 	m_pBKGalaxy							= nullptr;
-	m_pActiveDoc						= nullptr;
 	g_pCosmos->m_pGalaxyCluster					= this;
 	m_pUniverseAppProxy					= nullptr;
-	m_pCosmosDocTemplate				= nullptr;
 
 #ifdef _DEBUG
 	g_pCosmos->m_nTangram++;
@@ -336,14 +334,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
-					if (g_pCosmos->m_pMDIMainWnd)
-					{
-						auto it = g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd.find(_hWnd);
-						if (it == g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd.end())
-						{
-							g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd[_hWnd] = strName;
-						}
-					}
 					m_pExtenderGalaxy->m_nGalaxyType = CtrlBarGalaxy;
 				}
 				else if (strClassName.Find(_T("MDIClient")) == 0)
@@ -1389,7 +1379,7 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj * pActiveNode)
 			}
 		}
 	}
-	for (auto it : m_mapGalaxyClusterProxy)
+	for (auto &it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnNodeMouseActivate(pActiveNode);
 	}
@@ -1735,8 +1725,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hFrameWnd, BS
 	CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hFrameWnd), bstrGalaxyName, &pGalaxy);
 	if (pGalaxy)
 	{
-		if (m_pCosmosDocTemplate)
-			((CGalaxy*)pGalaxy)->m_pCosmosDocTemplate = m_pCosmosDocTemplate;
 		pGalaxy->Observe(bstrDefaultNodeKey, strXml.AllocSysString(), ppXobj);
 		if (*ppXobj&&bSaveToConfig)
 		{

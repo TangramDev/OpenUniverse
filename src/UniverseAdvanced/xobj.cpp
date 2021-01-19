@@ -596,7 +596,6 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				if (pWndXobj->m_strID == TGM_NUCLEUS)
 					m_pXobjShareData->m_pGalaxy->m_pSubGalaxy = _pGalaxy;
 			}
-			pWndXobj->m_pHostGalaxy->m_pDoc = m_pXobjShareData->m_pGalaxy->m_pDoc;
 		}
 
 		if (pWndXobj->m_pHostGalaxy)
@@ -753,7 +752,7 @@ STDMETHODIMP CXobj::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pCosmos->m_pDesignXobj)
 		{
 			pGalaxy = g_pCosmos->m_pDesignXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy;
-			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pActiveTemplate == nullptr && pGalaxy->m_hWnd == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
+			if (g_pCosmos->m_pMDIMainWnd && pGalaxy->m_hWnd == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
 			{
 				::MessageBox(nullptr, _T("Default UI Don't have a MDI Client!"), _T("Tangram"), MB_OK);
 				return S_FALSE;

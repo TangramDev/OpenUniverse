@@ -488,19 +488,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 		{
-			HANDLE hHandle = ::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
-			if (hHandle == 0)
-			{
-				pCosmosFrameWndInfo = new CosmosFrameWndInfo();
-				::SetProp(hPWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
-				g_pCosmos->m_mapCosmosFrameWndInfo[hPWnd] = pCosmosFrameWndInfo;
-			}
-			else
-			{
-				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-			}
-			::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
-			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210105);
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:ControlBar"), hPWnd, hWnd);
 		}
@@ -729,7 +716,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					{
 						break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (/*g_pCosmos->m_pGalaxy && */g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						lpMsg->hwnd = NULL;
 						lpMsg->lParam = 0;
@@ -1039,35 +1026,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
-				case 20210105:
-				{
-					HWND hWnd = (HWND)lpMsg->wParam;
-					if (::IsWindow(hWnd))
-					{
-						HANDLE nHandle = ::RemoveProp(hWnd, _T("CosmosFrameWndInfo"));
-						if (nHandle)
-						{
-							CosmosFrameWndInfo* pInfo = (CosmosFrameWndInfo*)nHandle;
-							TCHAR szBuffer[MAX_PATH];
-							memset(szBuffer, 0, sizeof(szBuffer));
-							::GetWindowText(hWnd, szBuffer, 256);
-							CString strCaption = szBuffer;
-							if (strCaption != _T(""))
-							{
-								auto it = pInfo->m_mapCtrlBar.find(strCaption);
-								if (it != pInfo->m_mapCtrlBar.end())
-								{
-									HWND h = it->second;
-									if (::IsChild(hWnd, h) == false)
-										pInfo->m_mapCtrlBar[strCaption] = hWnd;
-								}
-								else
-									pInfo->m_mapCtrlBar[strCaption] = hWnd;
-							}
-						}
-					}
-				}
-				break;
 				case 20201028:
 				{
 					if (g_pCosmos->m_hTempBrowserWnd)

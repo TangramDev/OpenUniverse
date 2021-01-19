@@ -308,7 +308,6 @@ LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 		pXobj->m_pXobjShareData->m_pGalaxy->m_bDesignerState = true;
-		pXobj->m_pXobjShareData->m_pGalaxy->m_pDoc = pGalaxy->m_pDoc;
 		((CXobj*)pXobj)->m_pXobjShareData->m_pOfficeObj = m_pXobj->m_pXobjShareData->m_pOfficeObj;
 		CXobjVector::iterator it;
 		it = find(m_pXobj->m_vChildNodes.begin(), m_pXobj->m_vChildNodes.end(), pOldNode);

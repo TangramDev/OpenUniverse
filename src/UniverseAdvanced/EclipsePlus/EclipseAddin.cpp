@@ -89,7 +89,6 @@ STDMETHODIMP CEclipseExtender::get_ActiveWorkBenchWindow(BSTR bstrID, IWorkBench
 
 CEclipseWnd::CEclipseWnd(void)
 {
-	m_pDoc = nullptr;
 	m_pGalaxy = nullptr;
 	m_pCurXobj = nullptr;
 	m_pHostXobj = nullptr;
@@ -396,8 +395,6 @@ STDMETHODIMP CEclipseWnd::get_CosmosCtrl(LONGLONG hWnd, IEclipseCtrl** pVal)
 
 void CEclipseWnd::Show(CString strID)
 {
-	if (m_pDoc)
-		return;
 	LONG_PTR data = 0;
 	if(::IsWindow(m_hClient))
 		data = ::GetWindowLongPtr(m_hClient, GWLP_USERDATA);
@@ -487,13 +484,6 @@ void CEclipseWnd::Show(CString strID)
 					m_pAppProxy->m_hCreatingView = m_hClient;
 					::SetWindowText(m_hClient, g_pCosmos->m_strAppKey);
 					::SetWindowLongPtr(m_hClient, GWLP_USERDATA, (LONG_PTR)1);
-					m_pDoc = (CCosmosDoc*)m_pAppProxy->NewDoc();
-					if (m_pDoc)
-					{
-						auto it = m_pGalaxyCluster->m_mapGalaxy.find(m_hClient);
-						if (it != m_pGalaxyCluster->m_mapGalaxy.end())
-							m_pGalaxy = it->second;
-					}
 				}
 			}
 			else if(strID !=_T(""))
@@ -532,24 +522,21 @@ void CEclipseWnd::Show(CString strID)
 
 LRESULT CEclipseWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 {
-	if (m_pDoc == nullptr)
+	if (g_pCosmos->m_strWorkBenchStrs != _T(""))
 	{
-		if (g_pCosmos->m_strWorkBenchStrs != _T(""))
-		{
-			int nPos = g_pCosmos->m_strWorkBenchStrs.Find(_T("|"));
-			m_strDocKey = g_pCosmos->m_strWorkBenchStrs.Left(nPos);
-			g_pCosmos->m_strWorkBenchStrs = g_pCosmos->m_strWorkBenchStrs.Mid(nPos + 1);
-		}
+		int nPos = g_pCosmos->m_strWorkBenchStrs.Find(_T("|"));
+		m_strDocKey = g_pCosmos->m_strWorkBenchStrs.Left(nPos);
+		g_pCosmos->m_strWorkBenchStrs = g_pCosmos->m_strWorkBenchStrs.Mid(nPos + 1);
+	}
 
-		if (g_pCosmos->m_strCurrentEclipsePagePath != _T(""))
-		{
-			m_strDocKey = g_pCosmos->m_strCurrentEclipsePagePath;
-			g_pCosmos->m_strCurrentEclipsePagePath = _T("");
-		}
-		if (::IsWindow(m_hClient)/*&& m_strDocKey!=_T("")*/)
-		{
-			Show(m_strDocKey);
-		}
+	if (g_pCosmos->m_strCurrentEclipsePagePath != _T(""))
+	{
+		m_strDocKey = g_pCosmos->m_strCurrentEclipsePagePath;
+		g_pCosmos->m_strCurrentEclipsePagePath = _T("");
+	}
+	if (::IsWindow(m_hClient)/*&& m_strDocKey!=_T("")*/)
+	{
+		Show(m_strDocKey);
 	}
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
@@ -635,28 +622,25 @@ LRESULT CEclipseWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 				}
 				else
 				{
-					if (m_pDoc == nullptr)
+					if (g_pCosmos->m_strWorkBenchStrs != _T(""))
 					{
-						if (g_pCosmos->m_strWorkBenchStrs != _T(""))
+						int nPos = g_pCosmos->m_strWorkBenchStrs.Find(_T("|"));
+						m_strDocKey = g_pCosmos->m_strWorkBenchStrs.Left(nPos);
+						g_pCosmos->m_strWorkBenchStrs = g_pCosmos->m_strWorkBenchStrs.Mid(nPos + 1);
+					}
+					if (g_pCosmos->m_strCurrentEclipsePagePath != _T(""))
+					{
+						m_strDocKey = g_pCosmos->m_strCurrentEclipsePagePath;
+						g_pCosmos->m_strCurrentEclipsePagePath = _T("");
+					}
+					LONG_PTR data = 0;
+					if (::IsWindow(m_hClient)/*&& m_strDocKey!=_T("")*/)
+					{
+						data = ::GetWindowLongPtr(m_hClient, GWLP_USERDATA);
+						if (data == 0)
 						{
-							int nPos = g_pCosmos->m_strWorkBenchStrs.Find(_T("|"));
-							m_strDocKey = g_pCosmos->m_strWorkBenchStrs.Left(nPos);
-							g_pCosmos->m_strWorkBenchStrs = g_pCosmos->m_strWorkBenchStrs.Mid(nPos + 1);
-						}
-						if (g_pCosmos->m_strCurrentEclipsePagePath != _T(""))
-						{
-							m_strDocKey = g_pCosmos->m_strCurrentEclipsePagePath;
-							g_pCosmos->m_strCurrentEclipsePagePath = _T("");
-						}
-						LONG_PTR data = 0;
-						if (::IsWindow(m_hClient)/*&& m_strDocKey!=_T("")*/)
-						{
-							data = ::GetWindowLongPtr(m_hClient, GWLP_USERDATA);
-							if (data == 0)
-							{
-								Show(m_strDocKey);
-								break;
-							}
+							Show(m_strDocKey);
+							break;
 						}
 					}
 				}

@@ -69,7 +69,6 @@ public:
 	CXobj*							m_pHostXobj;
 	CGalaxy*						m_pGalaxy;
 	map<HWND, CEclipseCtrl*>		m_mapCtrl;
-	CCosmosDoc*						m_pDoc;
 	IUniverseAppProxy*				m_pAppProxy;
 	void Show(CString strID);
 	BEGIN_COM_MAP(CEclipseWnd)

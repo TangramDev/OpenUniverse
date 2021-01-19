@@ -555,19 +555,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 				if (g_pCosmos->m_pCLRProxy)
 					g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
 			}
-			if (g_pCosmos->m_mapMDTFrame.size())
-			{
-				auto it = g_pCosmos->m_mapMDTFrame.begin();
-				while (it != g_pCosmos->m_mapMDTFrame.end())
-				{
-					if (it->second)
-					{
-						it->second->DestroyWindow();
-					}
-					it = g_pCosmos->m_mapMDTFrame.begin();
-				}
-			}
-			g_pCosmos->m_mapMDTFrame.clear();
 
 			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
 			{
@@ -831,33 +818,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		}
 	}
 	break;
-	case WM_MDICLIENTCREATED:
-	{
-		if (g_pCosmos->m_pMDIMainWnd)
-		{
-			IGalaxyCluster* pGalaxyCluster = nullptr;
-			g_pCosmos->CreateGalaxyCluster((__int64)g_pCosmos->m_pMDIMainWnd->m_hWnd, &pGalaxyCluster);
-			g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = (CGalaxyCluster*)pGalaxyCluster;
-			IXobj* pXobj = nullptr;
-			IGalaxy* pGalaxy = nullptr;
-			g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)g_pCosmos->m_pMDIMainWnd->m_hMDIClient), CComBSTR("mdiclient"), &pGalaxy);
-			if (pGalaxy)
-			{
-				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-				pGalaxy->Observe(CComBSTR("mdiclient"), CComBSTR(""), &pXobj);
-			}
-			for (auto it : g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd)
-			{
-				HWND h = ::GetParent(it.first);
-				::GetWindowText(h, g_pCosmos->m_szBuffer, MAX_PATH);
-				CString str = CString(g_pCosmos->m_szBuffer);
-				str.Replace(_T(" "), _T("_"));
-				g_pCosmos->m_pMDIMainWnd->m_mapDesignableWnd[it.first] = str;
-			}
-		}
-		return 0;
-	}
-	break;
 	case WM_CONTROLBARCREATED:
 	{
 		return 1;
@@ -949,20 +909,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			break;
 			default:
 			{
-				CString strFile = _T("");
-				CFileDialog openFileDlg(true, _T(""), _T(""), OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT, g_pCosmos->m_strDocFilters, NULL);
-				openFileDlg.m_ofn.nMaxCustFilter++;
-				if (openFileDlg.DoModal() == IDOK)
-				{
-					CString filePath = openFileDlg.GetPathName();
-					ICosmosDoc* pDoc = nullptr;
-					g_pCosmos->OpenCosmosDocFile(filePath.AllocSysString(), &pDoc);
-					if (pDoc != nullptr)
-					{
-						CCosmosDoc* _pDoc = (CCosmosDoc*)pDoc;
-						return (LRESULT)_pDoc;
-					}
-				}
 			}
 			break;
 			}
@@ -975,11 +921,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	{
 		if (g_pCosmos->m_nAppID != 9 && g_pCosmos->m_bEclipse == false)
 		{
-			int nCount = g_pCosmos->m_mapMDTFrame.size();
-			if (nCount == 0)
-			{
-				::PostMessage(g_pCosmos->m_hCosmosWnd, WM_HUBBLE_APPQUIT, 0, 0);
-			}
+			::PostMessage(g_pCosmos->m_hCosmosWnd, WM_HUBBLE_APPQUIT, 0, 0);
 		}
 	}
 	break;
@@ -998,7 +940,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	{
 		if (g_pCosmos->m_bEclipse == false)
 		{
-			if (g_pCosmos->m_pMDIMainWnd == NULL && g_pCosmos->m_mapMDTFrame.size() == 0)
+			if (g_pCosmos->m_pMDIMainWnd == NULL)
 			{
 				::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
 			}
@@ -1269,12 +1211,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName.Find(_T("Afx:")) == 0 && (pCreateWnd->lpcs->style & WS_POPUP))
 		{
-			auto it = g_pCosmos->m_mapMDTFrame.find(hPWnd);
-			if (it != g_pCosmos->m_mapMDTFrame.end())
-			{
-				ATLTRACE(_T("%x\n"), hWnd);
-				::SendMessage(hPWnd, WM_CONTROLBARCREATED, (WPARAM)hWnd, 0);
-			}
 		}
 		else if (strClassName.Find(_T("#32770")) == 0)
 		{
@@ -1410,19 +1346,11 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (lRes > 0)
 		{
 			g_pCosmos->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
-			auto it = g_pCosmos->m_mapMDTFrame.find(hWnd);
-			if (it != g_pCosmos->m_mapMDTFrame.end())
+			auto it = g_pCosmos->m_mapWorkBenchWnd.find(hWnd);
+			if (it != g_pCosmos->m_mapWorkBenchWnd.end())
 			{
-				g_pCosmos->m_pActiveAppProxy->OnActiveMainFrame(hWnd);
-			}
-			else
-			{
-				auto it = g_pCosmos->m_mapWorkBenchWnd.find(hWnd);
-				if (it != g_pCosmos->m_mapWorkBenchWnd.end())
-				{
-					CEclipseWnd* pWnd = (CEclipseWnd*)it->second;
-					g_pCosmos->m_pActiveAppProxy->OnActiveMainFrame(::GetParent(pWnd->m_hClient));
-				}
+				CEclipseWnd* pWnd = (CEclipseWnd*)it->second;
+				g_pCosmos->m_pActiveAppProxy->OnActiveMainFrame(::GetParent(pWnd->m_hClient));
 			}
 		}
 		else
@@ -1547,7 +1475,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					{
 						break;
 					}
-					if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
+					if (/*g_pCosmos->m_pGalaxy && */g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 					{
 						lpMsg->hwnd = NULL;
 						lpMsg->lParam = 0;
@@ -2340,7 +2268,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				TRACE(_T("======== WM_HUBBLE_APPQUIT=========\n"));
 				if (g_pCosmos->m_bEclipse == false)
 				{
-					if (g_pCosmos->m_pMDIMainWnd == NULL && g_pCosmos->m_mapMDTFrame.size() == 0)
+					if (g_pCosmos->m_pMDIMainWnd == NULL)
 					{
 						if (g_pCosmos->m_mapBrowserWnd.size())
 						{

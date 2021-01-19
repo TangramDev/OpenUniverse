@@ -310,15 +310,15 @@ namespace CommonUniverse
 			CRuntimeClass* pFrameClass, CRuntimeClass* pViewClass);
 	};
 
-	class CTangramComponentApp :
+	class CComponentApp :
 		public CWinApp,
 		public ICosmosWindowProvider
 	{
 	public:
-		CTangramComponentApp();
-		virtual ~CTangramComponentApp();
-		bool HubbleInit(CString strID);
-		ICosmos* m_pHubble = nullptr;
+		CComponentApp();
+		virtual ~CComponentApp();
+		bool CosmosInit(CString strID);
+		virtual BOOL InitInstance();
 		virtual int ExitInstance();
 	private:
 		virtual CString GetNames();

@@ -54,9 +54,7 @@ public:
 	CString										m_strXmlBottom;
 
 	CGalaxy*									m_pBKGalaxy;
-	CCosmosDoc*									m_pActiveDoc;
 	IUniverseAppProxy*							m_pUniverseAppProxy;
-	CCosmosDocTemplate*							m_pCosmosDocTemplate;
 	map<CString, CString>						m_strMapKey;
 	map<HWND, CGalaxy*>							m_mapCtrlBarGalaxy;
 	map<CString, HWND>							m_mapWnd;

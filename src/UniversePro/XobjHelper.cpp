@@ -843,7 +843,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		m_pXobj->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pXobj->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
 		IGalaxy* pGalaxy = nullptr;
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pOldNode->m_hChildHostWnd), CComBSTR(L"Design"), &pGalaxy);
-		((CGalaxy*)pGalaxy)->m_pDoc = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pDoc;
 		IXobj* pXobj = nullptr;
 		pGalaxy->Observe(CComBSTR(L""), str.AllocSysString(), &pXobj);
 		m_bEraseBkgnd = false;

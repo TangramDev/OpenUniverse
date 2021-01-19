@@ -1149,16 +1149,16 @@ namespace CommonUniverse
 		return strNameBase;
 	}
 
-	CTangramComponentApp::CTangramComponentApp()
+	CComponentApp::CComponentApp()
 	{
 		g_pAppBase = this;
 	}
 
-	CTangramComponentApp::~CTangramComponentApp()
+	CComponentApp::~CComponentApp()
 	{
 	}
 
-	bool CTangramComponentApp::HubbleInit(CString strID)
+	bool CComponentApp::CosmosInit(CString strID)
 	{
 		HMODULE hModule = ::GetModuleHandle(_T("universe.dll"));;
 		if (hModule)
@@ -1183,7 +1183,7 @@ namespace CommonUniverse
 			}
 			strID.Trim();
 			if (strID == _T(""))
-				strID = _T("ui");
+				strID = _T("views");
 			if (m_strProviderID == _T(""))
 			{
 				CString strName = g_pAppBase->m_pszAppName;
@@ -1198,7 +1198,7 @@ namespace CommonUniverse
 		return true;
 	}
 
-	CString CTangramComponentApp::GetNames()
+	CString CComponentApp::GetNames()
 	{
 		if (m_mapInnerObjInfo.size())
 		{
@@ -1213,7 +1213,7 @@ namespace CommonUniverse
 		return _T("");
 	}
 
-	CString CTangramComponentApp::GetTags(CString strName)
+	CString CComponentApp::GetTags(CString strName)
 	{
 		strName.Trim().MakeLower();
 		if (strName != _T(""))
@@ -1227,7 +1227,13 @@ namespace CommonUniverse
 		return _T("");
 	}
 
-	int CTangramComponentApp::ExitInstance()
+	BOOL CComponentApp::InitInstance()
+	{
+		CosmosInit(_T(""));
+		return CWinApp::InitInstance();
+	}
+
+	int CComponentApp::ExitInstance()
 	{
 		CMFCVisualManager* pVisualManager = CMFCVisualManager::GetInstance();
 		if (pVisualManager != NULL)
@@ -1237,7 +1243,7 @@ namespace CommonUniverse
 		return CWinApp::ExitInstance();
 	}
 
-	HWND CTangramComponentApp::Create(HWND hParentWnd, IXobj* pGrid)
+	HWND CComponentApp::Create(HWND hParentWnd, IXobj* pGrid)
 	{
 		CWnd* pParent = CWnd::FromHandlePermanent(hParentWnd);
 		if (pParent == nullptr)
@@ -1250,7 +1256,7 @@ namespace CommonUniverse
 			}
 		}
 		BSTR bstrTag = L"";
-		pGrid->get_Attribute(L"startype", &bstrTag);
+		pGrid->get_Attribute(L"xobjtype", &bstrTag);
 		USES_CONVERSION;
 		CString m_strTag = OLE2T(bstrTag);
 		::SysFreeString(bstrTag);
