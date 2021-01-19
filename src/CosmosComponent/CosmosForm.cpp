@@ -50,6 +50,7 @@ void CCosmosFormView::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CCosmosFormView, CFormView)
 	ON_BN_CLICKED(IDC_BTN_HOWTO, &CCosmosFormView::OnBnClickedBtnHowto)
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 
@@ -85,4 +86,19 @@ void CCosmosFormView::OnBnClickedBtnHowto()
 	//	theApp.m_pHubble->GetGridFromHandle((__int64)m_hWnd, &pNode);
 	//	g_pHubbleImpl->m_pCLRProxy->HubbleAction(_T("ExternAction:test"), pNode);
 	//}
+}
+
+
+int CCosmosFormView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CFormView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	if (g_pCosmos)
+	{
+		IXobj* pNode = nullptr;
+		g_pCosmos->get_CreatingXobj(&pNode);
+	}
+
+	return 0;
 }

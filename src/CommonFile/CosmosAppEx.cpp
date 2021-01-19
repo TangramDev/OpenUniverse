@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101180012           *
+ *           Web Runtime for Application - Version 1.0.0.202101190013           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -231,21 +231,32 @@ namespace CommonUniverse
 
 	BOOL CTangramTabCtrlWnd::SetActiveTab(int iTab)
 	{
-		//AFX_MANAGE_STATE(AfxGetStaticModuleState());
 		int nOldIndex = m_nCurSelTab;
 		m_nCurSelTab = iTab;
-		BOOL bRet = CMFCTabCtrl::SetActiveTab(iTab);
 		CWnd* pWnd = GetActiveWnd();
 		if (pWnd)
 		{
 			CRect rc;
-			pWnd->GetWindowRect(rc);
-			CWnd* pPWnd = pWnd->GetParent();
-			pPWnd->ScreenToClient(rc);
+			GetWndArea(rc);
 			::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.Width(), rc.Height(), SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOACTIVATE);
 			Invalidate();
 			::SendMessage(m_hWnd, WM_TABCHANGE, m_nCurSelTab, nOldIndex);
+			if (m_hPWnd == nullptr)
+			{
+				IGalaxy* pGalaxy = nullptr;
+				m_pWndNode->get_Galaxy(&pGalaxy);
+				if (pGalaxy)
+				{
+					__int64 nHandle = 0;
+					pGalaxy->get_HWND(&nHandle);
+					HWND hWnd = (HWND)nHandle;
+					m_hPWnd = ::GetParent(hWnd);
+				}
+			}
+			if(m_hPWnd)
+				::PostMessage(m_hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
 		}
+		BOOL bRet = CMFCTabCtrl::SetActiveTab(iTab);
 		return bRet;
 	}
 
@@ -925,19 +936,16 @@ namespace CommonUniverse
 			}
 			GetCosmosImpl _pCosmosImplFunction;
 			_pCosmosImplFunction = (GetCosmosImpl)GetProcAddress(hModule, "GetCosmosImpl");
-			g_pCosmosImpl = m_pCosmosImpl = _pCosmosImplFunction(&m_pCosmos);
-			g_pCosmos = m_pCosmos;
+			g_pCosmosImpl = m_pCosmosImpl = _pCosmosImplFunction(&g_pCosmos);
 
 			if (!afxContextIsDLL)
 			{
-				//m_strProviderID = AfxGetApp()->m_pszAppName;
 				m_strProviderID += _T("host");
 				m_strProviderID.MakeLower();
 
 				m_pCosmosImpl->m_pCosmosDelegate = static_cast<ICosmosDelegate*>(this);
 				g_pCosmosImpl->InserttoDataMap(0, m_strProviderID, static_cast<IUniverseAppProxy*>(this));
 				g_pCosmosImpl->InserttoDataMap(1, m_strProviderID, static_cast<ICosmosWindowProvider*>(this));
-				//g_pCosmosImpl->InserttoDataMap(2, m_strProviderID, static_cast<ICosmosWindowProvider*>(this));
 				if (g_pCosmosImpl->m_nAppType != APP_BROWSER &&
 					g_pCosmosImpl->m_nAppType != APP_BROWSER_ECLIPSE)
 					::PostAppMessage(::GetCurrentThreadId(), WM_CHROMEAPPINIT, (WPARAM)m_pCosmosImpl->m_pCosmosDelegate, g_pCosmosImpl->m_nAppType);
@@ -1002,9 +1010,9 @@ namespace CommonUniverse
 			}
 			break;
 			case APP_ECLIPSE:
-				if (m_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
+				if (g_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
 				{
-					m_pCosmos->InitEclipseApp();
+					g_pCosmos->InitEclipseApp();
 					return false;
 				}
 				break;
@@ -1120,9 +1128,9 @@ namespace CommonUniverse
 	CString CCosmosDelegate::GetNames()
 	{
 		CString strNames = _T("tabctrl,");
-		if (m_mapInnerObjInfo.size())
+		if (m_mapDOMObjInfo.size())
 		{
-			for (auto it = m_mapInnerObjInfo.begin(); it != m_mapInnerObjInfo.end(); it++)
+			for (auto it = m_mapDOMObjInfo.begin(); it != m_mapDOMObjInfo.end(); it++)
 			{
 				strNames += it->first;
 				strNames += _T(",");
@@ -1138,8 +1146,8 @@ namespace CommonUniverse
 		strName.Trim().MakeLower();
 		if (strName != _T(""))
 		{
-			auto it = m_mapInnerObjStyle.find(strName);
-			if (it != m_mapInnerObjStyle.end())
+			auto it = m_mapDOMObjStyle.find(strName);
+			if (it != m_mapDOMObjStyle.end())
 			{
 				strNameBase += it->second;
 				strNameBase += _T(",");
@@ -1170,8 +1178,7 @@ namespace CommonUniverse
 			}
 			GetCosmosImpl _pHubbleImplFunction;
 			_pHubbleImplFunction = (GetCosmosImpl)GetProcAddress(hModule, "GetCosmosImpl");
-			g_pCosmosImpl = _pHubbleImplFunction(&m_pCosmos);
-			g_pCosmos = m_pCosmos;
+			g_pCosmosImpl = _pHubbleImplFunction(&g_pCosmos);
 			if (g_pCosmosImpl->m_nAppType == APP_BROWSER_ECLIPSE)
 			{
 #ifdef _AFXDLL
@@ -1200,10 +1207,10 @@ namespace CommonUniverse
 
 	CString CComponentApp::GetNames()
 	{
-		if (m_mapInnerObjInfo.size())
+		if (m_mapDOMObjInfo.size())
 		{
 			CString strNames = _T("");
-			for (auto it = m_mapInnerObjInfo.begin(); it != m_mapInnerObjInfo.end(); it++)
+			for (auto it = m_mapDOMObjInfo.begin(); it != m_mapDOMObjInfo.end(); it++)
 			{
 				strNames += it->first;
 				strNames += _T(",");
@@ -1218,8 +1225,8 @@ namespace CommonUniverse
 		strName.Trim().MakeLower();
 		if (strName != _T(""))
 		{
-			auto it = m_mapInnerObjStyle.find(strName);
-			if (it != m_mapInnerObjStyle.end())
+			auto it = m_mapDOMObjStyle.find(strName);
+			if (it != m_mapDOMObjStyle.end())
 			{
 				return it->second;
 			}
@@ -1263,8 +1270,8 @@ namespace CommonUniverse
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
 		{
-			auto it = m_mapInnerObjInfo.find(m_strTag);
-			if (it != m_mapInnerObjInfo.end())
+			auto it = m_mapDOMObjInfo.find(m_strTag);
+			if (it != m_mapDOMObjInfo.end())
 			{
 				CRuntimeClass* pCls = (CRuntimeClass*)it->second;
 				CWnd* pWnd = (CWnd*)pCls->CreateObject();
@@ -1353,8 +1360,8 @@ namespace CommonUniverse
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
 		{
-			auto it = m_mapInnerObjInfo.find(m_strTag);
-			if (it != m_mapInnerObjInfo.end())
+			auto it = m_mapDOMObjInfo.find(m_strTag);
+			if (it != m_mapDOMObjInfo.end())
 			{
 				CRuntimeClass* pCls = (CRuntimeClass*)it->second;
 				CWnd* pWnd = (CWnd*)pCls->CreateObject();
@@ -1595,35 +1602,16 @@ namespace CommonUniverse
 		{
 			switch (lp)
 			{
-			case 1:
-				break;
 			case 19651965:
+				::InvalidateRect(m_hWnd, nullptr, true);
 				RecalcLayout();
-				break;
-			case 19631965:
-				return (LRESULT)this;
 				break;
 			case 19631992:
 				AfxGetApp()->m_pMainWnd = this;
 				break;
-			case 19650601:
-			{
-				CWnd* pWnd = CWnd::FromHandlePermanent((HWND)wp);
-				if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CDockablePane)))
-				{
-					CDockablePane* pDockablePane = (CDockablePane*)pWnd;
-					pDockablePane->RecalcLayout();
-				}
-			};
-			break;
 			case TANGRAM_CONST_NEWDOC://for new doc
 			{
 				((CCosmosAppEx*)AfxGetApp())->OnFileNew();
-			};
-			break;
-			case TANGRAM_CONST_PANE_FIRST://for mdiclient
-			{
-				return 1992;
 			};
 			break;
 			case TANGRAM_CONST_OPENFILE://open doc
@@ -1742,7 +1730,7 @@ namespace CommonUniverse
 				IGalaxy* _pContentLoader = nullptr;
 				if (pFrame->GetRuntimeClass()->IsDerivedFrom(RUNTIME_CLASS(CFrameWndEx)))
 				{
-					pCosmos = ((CCosmosAppEx*)AfxGetApp())->m_pCosmos;
+					pCosmos = g_pCosmos;
 				}
 				//else
 				//{

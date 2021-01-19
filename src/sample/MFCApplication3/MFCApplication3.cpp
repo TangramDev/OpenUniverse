@@ -64,7 +64,7 @@ BOOL CMFCApplication3App::InitInstance()
 {
 	if (!InitApp())
 		return false;
-	m_mapInnerObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication3View);
+	m_mapDOMObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication3View);
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable
 	// visual styles.  Otherwise, any window creation will fail.
@@ -144,6 +144,7 @@ BOOL CMFCApplication3App::InitInstance()
 	// The one and only window has been initialized, so show and update it
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
+	
 	// call DragAcceptFiles only if there's a suffix
 	//  In an SDI app, this should occur after ProcessShellCommand
 	// Enable drag/drop open

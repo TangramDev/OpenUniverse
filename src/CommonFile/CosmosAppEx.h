@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101180012           *
+ *           Web Runtime for Application - Version 1.0.0.202101190013           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -187,7 +187,7 @@ namespace CommonUniverse
 		int m_nCurSelTab;
 	public:
 		IXobj* m_pWndNode;
-
+		HWND m_hPWnd = nullptr;
 	protected:
 		DECLARE_MESSAGE_MAP()
 		afx_msg LRESULT OnCreatePage(WPARAM wParam, LPARAM lParam);

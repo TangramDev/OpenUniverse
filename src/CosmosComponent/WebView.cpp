@@ -57,10 +57,10 @@ int CWebView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CView::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	CComBSTR bstrUrl;
-	if (theApp.m_pCosmos)
+	if (g_pCosmos)
 	{
 		IXobj* pNode = nullptr;
-		theApp.m_pCosmos->get_CreatingXobj(&pNode);
+		g_pCosmos->get_CreatingXobj(&pNode);
 		pNode->get_Attribute(CComBSTR("url"), &bstrUrl);
 		//if (theApp.m_pTangramFromWebRuntime && bstrUrl.Length())
 		//{

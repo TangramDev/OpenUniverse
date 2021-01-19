@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101180012           *
+ *           Web Runtime for Application - Version 1.0.0.202101190013           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -564,8 +564,7 @@ namespace CommonUniverse
 			}
 			GetCosmosImpl _pHubbleImplFunction;
 			_pHubbleImplFunction = (GetCosmosImpl)GetProcAddress(hModule, "GetCosmosImpl");
-			g_pCosmosImpl = m_pCosmosImpl = _pHubbleImplFunction(&m_pCosmos);
-			g_pCosmos = m_pCosmos;
+			g_pCosmosImpl = m_pCosmosImpl = _pHubbleImplFunction(&g_pCosmos);
 
 			if (!afxContextIsDLL)
 			{
@@ -642,9 +641,9 @@ namespace CommonUniverse
 			}
 			break;
 			case APP_ECLIPSE:
-				if (m_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
+				if (g_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
 				{
-					m_pCosmos->InitEclipseApp();
+					g_pCosmos->InitEclipseApp();
 					return false;
 				}
 				break;
@@ -783,10 +782,10 @@ namespace CommonUniverse
 	//ICosmosWindowProvider:
 	CString CCosmosDelegate::GetNames()
 	{
-		if (m_mapInnerObjInfo.size())
+		if (m_mapDOMObjInfo.size())
 		{
 			CString strNames = _T("");
-			for (auto it = m_mapInnerObjInfo.begin(); it != m_mapInnerObjInfo.end(); it++)
+			for (auto it = m_mapDOMObjInfo.begin(); it != m_mapDOMObjInfo.end(); it++)
 			{
 				strNames += it->first;
 				strNames += _T(",");
@@ -801,8 +800,8 @@ namespace CommonUniverse
 		strName.Trim().MakeLower();
 		if (strName != _T(""))
 		{
-			auto it = m_mapInnerObjStyle.find(strName);
-			if (it != m_mapInnerObjStyle.end())
+			auto it = m_mapDOMObjStyle.find(strName);
+			if (it != m_mapDOMObjStyle.end())
 			{
 				return it->second;
 			}
@@ -831,8 +830,7 @@ namespace CommonUniverse
 			}
 			GetCosmosImpl _pHubbleImplFunction;
 			_pHubbleImplFunction = (GetCosmosImpl)GetProcAddress(hModule, "GetCosmosImpl");
-			g_pCosmosImpl = _pHubbleImplFunction(&m_pCosmos);
-			g_pCosmos = m_pCosmos;
+			g_pCosmosImpl = _pHubbleImplFunction(&g_pCosmos);
 			if (g_pCosmosImpl->m_nAppType == APP_BROWSER_ECLIPSE)
 			{
 #ifdef _AFXDLL
@@ -861,10 +859,10 @@ namespace CommonUniverse
 
 	CString CComponentApp::GetNames()
 	{
-		if (m_mapInnerObjInfo.size())
+		if (m_mapDOMObjInfo.size())
 		{
 			CString strNames = _T("");
-			for (auto it = m_mapInnerObjInfo.begin(); it != m_mapInnerObjInfo.end(); it++)
+			for (auto it = m_mapDOMObjInfo.begin(); it != m_mapDOMObjInfo.end(); it++)
 			{
 				strNames += it->first;
 				strNames += _T(",");
@@ -879,8 +877,8 @@ namespace CommonUniverse
 		strName.Trim().MakeLower();
 		if (strName != _T(""))
 		{
-			auto it = m_mapInnerObjStyle.find(strName);
-			if (it != m_mapInnerObjStyle.end())
+			auto it = m_mapDOMObjStyle.find(strName);
+			if (it != m_mapDOMObjStyle.end())
 			{
 				return it->second;
 			}
@@ -919,8 +917,8 @@ namespace CommonUniverse
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
 		{
-			auto it = m_mapInnerObjInfo.find(m_strTag);
-			if (it != m_mapInnerObjInfo.end())
+			auto it = m_mapDOMObjInfo.find(m_strTag);
+			if (it != m_mapDOMObjInfo.end())
 			{
 				CRuntimeClass* pCls = (CRuntimeClass*)it->second;
 				CWnd* pWnd = (CWnd*)pCls->CreateObject();
@@ -1003,15 +1001,15 @@ namespace CommonUniverse
 			}
 		}
 		BSTR bstrTag = L"";
-		pGrid->get_Attribute(L"startype", &bstrTag);
+		pGrid->get_Attribute(L"xobjtype", &bstrTag);
 		USES_CONVERSION;
 		CString m_strTag = OLE2T(bstrTag);
 		::SysFreeString(bstrTag);
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
 		{
-			auto it = m_mapInnerObjInfo.find(m_strTag);
-			if (it != m_mapInnerObjInfo.end())
+			auto it = m_mapDOMObjInfo.find(m_strTag);
+			if (it != m_mapDOMObjInfo.end())
 			{
 				CRuntimeClass* pCls = (CRuntimeClass*)it->second;
 				CWnd* pWnd = (CWnd*)pCls->CreateObject();
@@ -1318,7 +1316,7 @@ namespace CommonUniverse
 			if (pFrame)
 			{
 				IGalaxy* _pContentLoader = nullptr;
-				pHubble = ((CCosmosApp*)AfxGetApp())->m_pCosmos;
+				//pHubble = ((CCosmosApp*)AfxGetApp())->g_pCosmos;
 				break;
 			}
 		}

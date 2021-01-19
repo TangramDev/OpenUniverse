@@ -50,6 +50,7 @@ protected:
 public:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	afx_msg void OnBnClickedBtnHowto();
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 };
 
 

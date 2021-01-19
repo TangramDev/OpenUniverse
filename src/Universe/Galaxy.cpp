@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101180012           *
+ *           Web Runtime for Application - Version 1.0.0.202101190013           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -424,7 +424,7 @@ void CGalaxy::HostPosChanged()
 			flag
 		);
 		EndDeferWindowPos(dwh);
-		::SendMessage(hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
+		//::SendMessage(hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
 	}
 }
 

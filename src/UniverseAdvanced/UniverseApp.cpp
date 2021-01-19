@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101180012           *
+ *           Web Runtime for Application - Version 1.0.0.202101190013           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -665,7 +665,7 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 					}
 				}
 			}
-			for (auto it : g_pCosmos->m_mapBrowserWnd)
+			for (auto &it : g_pCosmos->m_mapBrowserWnd)
 			{
 				if (::IsWindowVisible(it.first))
 				{
@@ -675,11 +675,11 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
 						if (hWnd)
 						{
-							auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-							if (it != g_pCosmos->m_mapHtmlWnd.end())
+							auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+							if (it1 != g_pCosmos->m_mapHtmlWnd.end())
 							{
-								pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
-								it->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+								pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+								it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
 							}
 						}
 						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
@@ -1260,7 +1260,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
-			if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)pCreateWnd->lpcs->lpCreateParams, TANGRAM_CONST_PANE_FIRST) == 1992)
+			//if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)pCreateWnd->lpcs->lpCreateParams, TANGRAM_CONST_PANE_FIRST) == 1992)
 			{
 				if (g_pCosmos->m_pMDIMainWnd == nullptr)
 				{
@@ -1301,7 +1301,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
 		{
-			::PostMessage(hWnd, WM_QUERYAPPPROXY, (WPARAM)hWnd, (LPARAM)19650601);
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:MiniFrame"), hPWnd, hWnd);
 		}

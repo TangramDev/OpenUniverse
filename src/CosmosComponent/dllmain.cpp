@@ -21,8 +21,8 @@
 
 // dllmain.cpp : Implementation of DllMain.
 
-// CTangramVsComponentApp:
-// See TangramVsComponent.cpp for the implementation of this class
+// CTangramApp:
+// See dllmain.cpp for the implementation of this class
 //
 
 #include "pch.h"
@@ -38,7 +38,7 @@ CTangramApp theApp;
 
 BOOL CTangramApp::InitInstance()
 {
-	m_mapInnerObjInfo[_T("webview")] = RUNTIME_CLASS(CWebView);
-	m_mapInnerObjInfo[_T("cosmosformview")] = RUNTIME_CLASS(CCosmosFormView);
+	m_mapDOMObjInfo[_T("webview")] = RUNTIME_CLASS(CWebView);
+	m_mapDOMObjInfo[_T("cosmosformview")] = RUNTIME_CLASS(CCosmosFormView);
 	return __super::InitInstance();
 }

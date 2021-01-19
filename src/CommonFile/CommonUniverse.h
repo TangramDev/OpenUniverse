@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101040004
+ *           Web Runtime for Application - Version 1.0.0.202101190013
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -794,9 +794,8 @@ namespace CommonUniverse {
 
 		CString					m_strProviderID = _T("");
 		CString					m_strContainer = _T("");
-		ICosmos*				m_pCosmos = nullptr;
-		map<CString, CString>	m_mapInnerObjStyle;
-		map<CString, void*>		m_mapInnerObjInfo;
+		map<CString, CString>	m_mapDOMObjStyle;
+		map<CString, void*>		m_mapDOMObjInfo;
 
 		virtual bool CosmosInit(CString strID)
 		{
