@@ -871,7 +871,8 @@ namespace Browser {
 					BSTR bstrXml = ::SysAllocString(L"");
 					for (auto& it : m_pCosmosFrameWndInfo->m_mapControlBarGalaxys)
 					{
-						it.second->Observe(bstrKey, bstrXml, &_pXobj);
+						if(it.first!=_T("client"))
+							it.second->Observe(bstrKey, bstrXml, &_pXobj);
 					}
 					::SysFreeString(bstrXml);
 				}
@@ -1390,6 +1391,8 @@ namespace Browser {
 						}
 					}
 				}
+
+				::SendMessage(hMainWnd, WM_QUERYAPPPROXY, 0, 19651965);
 			}
 		}
 	}

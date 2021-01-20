@@ -200,6 +200,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Manifest Include="res\Yaoyao.manifest" />
+    <Manifest Include="res\MFCApplication2.manifest" />
   </ItemGroup>
 </Project>
