@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013           *
+ *           Web Runtime for Application - Version 1.0.0.202101200014           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -248,7 +248,6 @@ namespace CommonUniverse
 		bool m_bCrashReporting = false;
 		BOOL IsBrowserModel(bool bCrashReporting);
 		bool ProcessAppType(bool bCrashReporting);
-		virtual void InitTangramInstance() {};
 
 		//ICosmosDelegate:
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
@@ -262,6 +261,8 @@ namespace CommonUniverse
 		virtual bool EclipseAppInit();
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
+		virtual HICON GetAppIcon(int nIndex);
+		virtual void* GetDocument(HWND hView);
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
@@ -338,7 +339,6 @@ namespace CommonUniverse
 
 		virtual int Run();
 		virtual bool InitApp();
-		virtual BOOL InitInstance();
 	private:
 		virtual BOOL InitApplication();
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);

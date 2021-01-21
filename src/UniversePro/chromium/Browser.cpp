@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013           *
+ *           Web Runtime for Application - Version 1.0.0.202101200014           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -58,6 +58,27 @@ namespace Browser {
 			if (::IsWindow(hOldWnd))
 			{
 				m_hOldTab = hOldWnd;
+			}
+			if (m_pParentXobj)
+			{
+				HWND h = m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
+				if (it != g_pCosmos->m_mapHtmlWnd.end())
+				{
+					CWebPage* pPage = (CWebPage*)it->second;
+					if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
+					{
+						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
+						for (auto it : pPage->m_pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
+						{
+							if (it.second != pPage->m_pGalaxy)
+							{
+								IXobj* pObj = nullptr;
+								pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
+							}
+						}
+					}
+				}
 			}
 		}
 	}

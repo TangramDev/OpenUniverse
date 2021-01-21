@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013
+ *           Web Runtime for Application - Version 1.0.0.202101200014
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -56,7 +56,7 @@ public:
 	CGalaxy*									m_pBKGalaxy;
 	IUniverseAppProxy*							m_pUniverseAppProxy;
 	map<CString, CString>						m_strMapKey;
-	map<HWND, CGalaxy*>							m_mapCtrlBarGalaxy;
+	map<HWND, CGalaxy*>							m_mapAuxiliaryWndGalaxy;
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CGalaxy*>							m_mapGalaxy;
 	map<HWND, CGalaxy*>							m_mapNeedSaveGalaxy;

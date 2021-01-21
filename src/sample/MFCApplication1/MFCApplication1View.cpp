@@ -163,38 +163,6 @@ LRESULT CMFCApplication1View::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			pObj->get_OuterXml(&bstrXml);
 			CString strXml = OLE2T(bstrXml);
 		}
-		//DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
-		//CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
-
-		//if (m_pGalaxy == nullptr)
-		//{
-		//	auto iter = pThreadInfo->m_mapGalaxy.find(m_hWnd);
-		//	if (iter != pThreadInfo->m_mapGalaxy.end())
-		//	{
-		//		m_pGalaxy = (CGalaxy*)iter->second;
-		//	}
-		//}
-		//HANDLE hData = ::GetProp(m_hWnd, _T("CosmosData"));
-		//if (hData)
-		//{
-		//	CTangramXmlParse* pParse = (CTangramXmlParse*)hData;
-		//	if (pParse)
-		//	{
-		//		int nID = pParse->attrInt(_T("clientid"), 0);
-		//		if (nID == ::GetDlgCtrlID(m_hWnd))
-		//		{
-		//			CString xml = pParse->xml();
-		//			bool b = pParse->attrBool(_T("usingwebdata"), false);
-		//			CTangramXmlParse* pUIData = pParse->GetChild(_T("uidata"));
-		//			CTangramXmlParse* pUIDataTag = pParse->GetChild(_T("uidata_tag"));
-		//			if (b && pUIData)
-		//			{
-		//				DeleteAllItems();
-		//				FillTreeView(pUIData, pUIDataTag, NULL);
-		//			}
-		//		}
-		//	}
-		//}
 	}
 	return lRes;
 }

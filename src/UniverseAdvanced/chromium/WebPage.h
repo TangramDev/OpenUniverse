@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013           *
+ *           Web Runtime for Application - Version 1.0.0.202101200014           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -49,6 +49,7 @@ namespace Browser
 		CString								m_strCurKey;
 		CString								m_strCurXml;
 		CString								m_strAppProxyID;
+		CString								m_strPageName = _T("");
 
 		CGalaxy*							m_pGalaxy;
 		CXobj*								m_pParentXobj;

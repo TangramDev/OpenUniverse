@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013           *
+ *           Web Runtime for Application - Version 1.0.0.202101200014           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2109,7 +2109,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
 											if (pGalaxy)
 											{
-												pCosmosFrameWndInfo->m_mapControlBarGalaxys[strKey] = pGalaxy;
+												pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
 												pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 											}
 										}
@@ -2195,8 +2195,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													strName.Replace(_T(" "), _T("_"));
 													if (g_pCosmos->m_pMDIMainWnd)
 													{
-														auto itX = pCosmosFrameWndInfo->m_mapControlBarGalaxys.find(strName);
-														if (itX != pCosmosFrameWndInfo->m_mapControlBarGalaxys.end())
+														auto itX = pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.find(strName);
+														if (itX != pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.end())
 														{
 															IGalaxy* _pGalaxy = itX->second;
 															IXobj* pXobj = nullptr;
@@ -2205,8 +2205,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													}
 													else
 													{
-														auto it = pCosmosFrameWndInfo->m_mapCtrlBar.find(strCaption);
-														if (it != pCosmosFrameWndInfo->m_mapCtrlBar.end())
+														auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
+														if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
 														{
 															HWND hWnd = it->second;
 															int nID = pParse2->attrInt(_T("clientid"), 0);
@@ -2255,15 +2255,15 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							CString strCaption = szBuffer;
 							if (strCaption != _T(""))
 							{
-								auto it = pInfo->m_mapCtrlBar.find(strCaption);
-								if (it != pInfo->m_mapCtrlBar.end())
+								auto it = pInfo->m_mapAuxiliaryWnd.find(strCaption);
+								if (it != pInfo->m_mapAuxiliaryWnd.end())
 								{
 									HWND h = it->second;
 									if (::IsChild(hWnd, h) == false)
-										pInfo->m_mapCtrlBar[strCaption] = hWnd;
+										pInfo->m_mapAuxiliaryWnd[strCaption] = hWnd;
 								}
 								else
-									pInfo->m_mapCtrlBar[strCaption] = hWnd;
+									pInfo->m_mapAuxiliaryWnd[strCaption] = hWnd;
 							}
 						}
 					}

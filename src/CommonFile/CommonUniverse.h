@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013
+ *           Web Runtime for Application - Version 1.0.0.202101200014
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -205,7 +205,8 @@ namespace CommonUniverse {
 		CanClose = 0x00000001,
 		DocView = 0x00000002,
 		OtherType= 0x00000003,
-		QueryDestroy = 0x00000004
+		QueryDestroy = 0x00000004,
+		CanAddView = 0x00000005
 	}QueryType;
 
 	typedef struct IPCMsg {
@@ -265,8 +266,8 @@ namespace CommonUniverse {
 		IWebPage* m_pWebPage = nullptr;
 		void* m_pDoc = nullptr;
 		void* m_pDocTemplate = nullptr;
-		map<CString,HWND> m_mapCtrlBar;
-		map<CString, IGalaxy*> m_mapControlBarGalaxys;
+		map<CString,HWND> m_mapAuxiliaryWnd;
+		map<CString, IGalaxy*> m_mapAuxiliaryGalaxys;
 	} CosmosFrameWndInfo;
 
 	typedef struct CosmosDocTemplateInfo
@@ -872,6 +873,8 @@ namespace CommonUniverse {
 		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 		virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) {}
 		virtual void* CreateDocument(CString strType, CString strDocKey) { return nullptr; }
+		virtual HICON GetAppIcon(int nIndex) { return NULL; }
+		virtual void* GetDocument(HWND hView) { return NULL; }
 	};
 
 	class CCosmosMainDllLoader {

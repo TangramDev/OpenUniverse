@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013           *
+ *           Web Runtime for Application - Version 1.0.0.202101200014           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -758,19 +758,22 @@ namespace CommonUniverse
 			if (pWnd&&pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 			{
 				CView* pView = static_cast<CView*>(pWnd); 
+				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+				CFrameWnd* pFrame = pView->GetParentFrame();
+				if (pFrame)
+				{
+					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
+				}
 				CDocument* pDoc = pView->GetDocument();
 				if (pDoc)
 				{
 					HWND hRetFrame = NULL;
 					CDocTemplate* pTemplate = pDoc->GetDocTemplate();
-					CFrameWnd* pFrame = pView->GetParentFrame();
 					if (pFrame)
 					{
-						CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-						HANDLE hHandle = ::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
-						if (hHandle == 0)
+						if (pCosmosFrameWndInfo == nullptr)
 						{
-							int nType = 0;
+							__int64 nType = 0;
 							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
 								nType = 2;
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
@@ -781,15 +784,14 @@ namespace CommonUniverse
 							}
 							::SetProp(pFrame->m_hWnd, _T("CosmosFrameWndType"), (HANDLE)nType);
 						}
-						else
-						{
-							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-						}
 						if (pCosmosFrameWndInfo)
 						{
 							pCosmosFrameWndInfo->m_hClient = hWnd;
-							pCosmosFrameWndInfo->m_pDoc = pDoc;
-							pCosmosFrameWndInfo->m_pDocTemplate = pDoc->GetDocTemplate();
+							if (pCosmosFrameWndInfo->m_pDoc == nullptr&& pDoc)
+							{
+								pCosmosFrameWndInfo->m_pDoc = pDoc;
+								pCosmosFrameWndInfo->m_pDocTemplate = pDoc->GetDocTemplate();
+							}
 							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
 								pCosmosFrameWndInfo->m_nFrameType = 2;
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
@@ -830,8 +832,85 @@ namespace CommonUniverse
 			}
 		}
 		break;
+		case CanAddView:
+		{
+			if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CView)))
+			{
+				CView* pView = static_cast<CView*>(pWnd);
+				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+				CFrameWnd* pFrame = pView->GetParentFrame();
+				if (pFrame)
+				{
+					CDocument* _pDoc = pView->GetDocument();
+					if (!_pDoc)
+					{
+						pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
+						if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_pDoc)
+						{
+							CView* _pView = nullptr;
+							CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
+							POSITION pos = pDoc->GetFirstViewPosition();
+							while (pos != NULL)
+							{
+								CView* _pView = pDoc->GetNextView(pos);
+								ASSERT_VALID(_pView);
+								if (_pView == pView)
+								{
+									return pFrame->m_hWnd;
+								}
+							}
+							if (_pView == nullptr)
+							{
+								pDoc->AddView(pView);
+								return pFrame->m_hWnd;
+							}
+						}
+					}
+				}
+			}
+		}
+		break;
 		default:
 			break;
+		}
+		return NULL;
+	}
+	
+	void* CCosmosDelegate::GetDocument(HWND hView) 
+	{ 
+		CWnd* pWnd = CWnd::FromHandlePermanent(hView);
+		if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CView)))
+		{
+			CView* pView = static_cast<CView*>(pWnd);
+			CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+			CFrameWnd* pFrame = pView->GetParentFrame();
+			if (pFrame)
+			{
+				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
+				if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_pDoc)
+				{
+					CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
+					if (pView->GetDocument() == nullptr)
+					{
+						CView* _pView = nullptr;
+						POSITION pos2 = pDoc->GetFirstViewPosition();
+						while (pos2 != NULL)
+						{
+							CView* _pView = pDoc->GetNextView(pos2);
+							ASSERT_VALID(_pView);
+							if (_pView == pView)
+							{
+								break;
+							}
+						}
+						if (_pView == nullptr)
+						{
+							pDoc->AddView(pView);
+						}
+					}
+					return pDoc;
+				}
+			}
 		}
 		return NULL;
 	}
@@ -1047,6 +1126,22 @@ namespace CommonUniverse
 	bool CCosmosDelegate::EclipseAppInit()
 	{
 		return false;
+	}
+	
+	HICON CCosmosDelegate::GetAppIcon(int nIndex) 
+	{ 
+		switch (nIndex)
+		{
+		case 0:
+			return reinterpret_cast<HICON>(
+				GetClassLongPtr(g_pAppBase->m_pMainWnd->m_hWnd, GCLP_HICON));
+			break;
+		case 1:
+			return reinterpret_cast<HICON>(
+				GetClassLongPtr(g_pAppBase->m_pMainWnd->m_hWnd, GCLP_HICONSM));
+			break;
+		}
+		return NULL;
 	}
 
 	void CCosmosDelegate::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
@@ -1443,14 +1538,13 @@ namespace CommonUniverse
 		return true;
 	}
 
-	BOOL CCosmosAppEx::InitInstance()
-	{
-		InitTangramInstance();
-		CWinAppEx::InitInstance();
-		//if (ProcessAppType(m_bCrashReporting) == false)
-		//	return false;
-		return true;
-	}
+	//BOOL CCosmosAppEx::InitInstance()
+	//{
+	//	CWinAppEx::InitInstance();
+	//	//if (ProcessAppType(m_bCrashReporting) == false)
+	//	//	return false;
+	//	return true;
+	//}
 
 	IMPLEMENT_DYNCREATE(CTangramFrameWndEx, CFrameWndEx)
 

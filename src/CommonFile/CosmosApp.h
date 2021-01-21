@@ -166,8 +166,6 @@ namespace CommonUniverse
 		BOOL IsBrowserModel(bool bCrashReporting);
 		bool ProcessAppType(bool bCrashReporting);
 
-		virtual void InitTangramInstance() {};
-
 		//ICosmosDelegate:
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
 		virtual bool DoIdleWork();
@@ -180,6 +178,8 @@ namespace CommonUniverse
 		virtual bool EclipseAppInit();
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
+		virtual HICON GetAppIcon(int nIndex);
+		virtual void* GetDocument(HWND hView);
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
@@ -254,7 +254,7 @@ namespace CommonUniverse
 
 		afx_msg void OnFileNew();
 
-		virtual BOOL InitInstance();
+		//virtual BOOL InitInstance();
 		virtual int Run();
 	private:
 		virtual BOOL InitApplication();

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013           *
+ *           Web Runtime for Application - Version 1.0.0.202101200014           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -823,8 +823,8 @@ namespace Browser {
 								CString strCaption = pParse2->attr(_T("caption"), _T(""));
 								if (strCaption != _T(""))
 								{
-									auto it = pCosmosFrameWndInfo->m_mapCtrlBar.find(strCaption);
-									if (it != pCosmosFrameWndInfo->m_mapCtrlBar.end())
+									auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
+									if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
 									{
 										HWND hWnd = it->second;
 										int nID = pParse2->attrInt(_T("clientid"), 0);

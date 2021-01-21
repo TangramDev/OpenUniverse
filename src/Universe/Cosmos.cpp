@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101190013           *
+ *           Web Runtime for Application - Version 1.0.0.202101200014           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1592,6 +1592,15 @@ HICON CCosmos::GetAppIcon(int nIndex)
 	{
 		if (m_hLargeIcon == nullptr)
 		{
+			if (m_pCosmosDelegate)
+			{
+				HICON icon = m_pCosmosDelegate->GetAppIcon(nIndex);
+				if (icon)
+				{
+					m_hLargeIcon = icon;
+					return m_hLargeIcon;
+				}
+			}
 			if (g_pCosmos->m_pCLRProxy)
 				m_hLargeIcon = g_pCosmos->m_pCLRProxy->GetAppIcon(nIndex);
 		}
@@ -1602,6 +1611,15 @@ HICON CCosmos::GetAppIcon(int nIndex)
 	{
 		if (m_hSmallIcon == nullptr)
 		{
+			if (m_pCosmosDelegate)
+			{
+				HICON icon = m_pCosmosDelegate->GetAppIcon(nIndex);
+				if (icon)
+				{
+					m_hLargeIcon = icon;
+					return m_hLargeIcon;
+				}
+			}
 			if (g_pCosmos->m_pCLRProxy)
 				m_hSmallIcon = g_pCosmos->m_pCLRProxy->GetAppIcon(nIndex);
 		}
