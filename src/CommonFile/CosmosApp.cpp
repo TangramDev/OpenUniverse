@@ -475,7 +475,7 @@ namespace CommonUniverse
 							POSITION pos2 = pDoc->GetFirstViewPosition();
 							while (pos2 != NULL)
 							{
-								CView* _pView = pDoc->GetNextView(pos2);
+								_pView = pDoc->GetNextView(pos2);
 								ASSERT_VALID(_pView);
 								if (_pView == pView)
 								{
@@ -516,10 +516,10 @@ namespace CommonUniverse
 					if (pView->GetDocument() == nullptr)
 					{
 						CView* _pView = nullptr;
-						POSITION pos2 = pDoc->GetFirstViewPosition();
-						while (pos2 != NULL)
+						POSITION pos = pDoc->GetFirstViewPosition();
+						while (pos != NULL)
 						{
-							CView* _pView = pDoc->GetNextView(pos2);
+							_pView = pDoc->GetNextView(pos);
 							ASSERT_VALID(_pView);
 							if (_pView == pView)
 							{
@@ -1135,6 +1135,40 @@ namespace CommonUniverse
 						::SysFreeString(bstrTag);
 						int nActivePage = _wtoi(m_strTag);
 						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
+						if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
+						{
+							CView* pView = static_cast<CView*>(pWnd);
+							CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+							CFrameWnd* pFrame = pView->GetParentFrame();
+							if (pFrame)
+							{
+								CDocument* _pDoc = pView->GetDocument();
+								if (!_pDoc)
+								{
+									pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
+									if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_pDoc)
+									{
+										CView* _pView = nullptr;
+										CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
+										POSITION pos = pDoc->GetFirstViewPosition();
+										while (pos != NULL)
+										{
+											_pView = pDoc->GetNextView(pos);
+											ASSERT_VALID(_pView);
+											if (_pView == pView)
+											{
+												break;
+											}
+										}
+										if (_pView == nullptr)
+										{
+											pDoc->AddView(pView);
+											return pFrame->m_hWnd;
+										}
+									}
+								}
+							}
+						}
 						return pWnd->m_hWnd;
 					}
 				}

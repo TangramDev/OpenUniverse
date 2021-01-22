@@ -482,7 +482,8 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			{
 				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 			}
-			pCosmosFrameWndInfo->m_hClient = hWnd;
+			if (pCosmosFrameWndInfo->m_hClient == NULL)
+				pCosmosFrameWndInfo->m_hClient = hWnd;
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("MDIClient"),hPWnd, hWnd);
 		}

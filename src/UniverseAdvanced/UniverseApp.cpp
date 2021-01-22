@@ -1251,7 +1251,8 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			{
 				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 			}
-			pCosmosFrameWndInfo->m_hClient = hWnd;
+			if (pCosmosFrameWndInfo->m_hClient == NULL)
+				pCosmosFrameWndInfo->m_hClient = hWnd;
 			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
 			{
 				auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
@@ -1288,6 +1289,8 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			{
 				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 			}
+			if (pCosmosFrameWndInfo->m_hClient == NULL)
+				pCosmosFrameWndInfo->m_hClient = hWnd;
 
 			::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
 			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210105);
@@ -2060,7 +2063,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
 									g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
 								}
-								pCosmosFrameWndInfo->m_hClient = hWnd;
+								if (pCosmosFrameWndInfo->m_hClient == NULL)
+									pCosmosFrameWndInfo->m_hClient = hWnd;
 								pCosmosFrameWndInfo->m_nFrameType = nType;
 								if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
 									::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
