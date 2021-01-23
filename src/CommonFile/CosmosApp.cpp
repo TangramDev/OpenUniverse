@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -425,21 +425,8 @@ namespace CommonUniverse
 							}
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
 								pCosmosFrameWndInfo->m_nFrameType = 4;
-							if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
-								::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 						}
 						hRetFrame = pFrame->m_hWnd;
-					}
-					CString strDocID = m_strCreatingDOCID;
-					CString strExt = _T("");
-					pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
-					strExt.MakeLower();
-					if (strExt == _T(""))
-						strExt = _T("default");
-					if (strExt != _T(""))
-					{
-						__int64 nTemplate = (__int64)pTemplate;
-						g_pCosmos->put_AppKeyValue(CComBSTR(strExt), CComVariant((__int64)nTemplate));
 					}
 					return hRetFrame;
 				}
@@ -455,85 +442,8 @@ namespace CommonUniverse
 			}
 		}
 		break;
-		case CanAddView:
-		{
-			if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CView)))
-			{
-				CView* pView = static_cast<CView*>(pWnd);
-				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-				CFrameWnd* pFrame = pView->GetParentFrame();
-				if (pFrame)
-				{
-					CDocument* _pDoc = pView->GetDocument();
-					if (!_pDoc)
-					{
-						pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
-						if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_pDoc)
-						{
-							CView* _pView = nullptr;
-							CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
-							POSITION pos2 = pDoc->GetFirstViewPosition();
-							while (pos2 != NULL)
-							{
-								_pView = pDoc->GetNextView(pos2);
-								ASSERT_VALID(_pView);
-								if (_pView == pView)
-								{
-									break;
-								}
-							}
-							if (_pView == nullptr)
-							{
-								pDoc->AddView(pView);
-								return pFrame->m_hWnd;
-							}
-						}
-					}
-				}
-			}
-		}
-		break;
 		default:
 			break;
-		}
-		return NULL;
-	}
-
-	void* CCosmosDelegate::GetDocument(HWND hView)
-	{
-		CWnd* pWnd = CWnd::FromHandlePermanent(hView);
-		if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CView)))
-		{
-			CView* pView = static_cast<CView*>(pWnd);
-			CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-			CFrameWnd* pFrame = pView->GetParentFrame();
-			if (pFrame)
-			{
-				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
-				if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_pDoc)
-				{
-					CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
-					if (pView->GetDocument() == nullptr)
-					{
-						CView* _pView = nullptr;
-						POSITION pos = pDoc->GetFirstViewPosition();
-						while (pos != NULL)
-						{
-							_pView = pDoc->GetNextView(pos);
-							ASSERT_VALID(_pView);
-							if (_pView == pView)
-							{
-								break;
-							}
-						}
-						if (_pView == nullptr)
-						{
-							pDoc->AddView(pView);
-						}
-					}
-					return pDoc;
-				}
-			}
 		}
 		return NULL;
 	}
@@ -858,22 +768,6 @@ namespace CommonUniverse
 				pHubbleGalaxyClusterProxy->m_bAutoDelete = false;
 		}
 		return pHubbleGalaxyClusterProxy;
-	}
-
-	ICosmosDoc* CCosmosDelegate::OpenDocument(void* pDocTemplate, CString strFile, BOOL bNewFrame)
-	{
-		CDocTemplate* pTemplate = (CDocTemplate*)pDocTemplate;
-		if (pTemplate == nullptr)
-			return nullptr;
-		if (::PathFileExists(strFile))
-		{
-			pTemplate->OpenDocumentFile(strFile);
-		}
-		else
-		{
-			pTemplate->OpenDocumentFile(nullptr);
-		}
-		return nullptr;
 	}
 
 	//ICosmosWindowProvider:
@@ -1414,7 +1308,6 @@ namespace CommonUniverse
 	{
 		m_bDocLoaded = false;
 		m_strXmlData = _T("");
-		m_pCosmosTemplate = nullptr;
 	}
 
 	CTangramXDoc::~CTangramXDoc()
@@ -1545,11 +1438,6 @@ namespace CommonUniverse
 		{
 		case TANGRAM_CONST_OPENFILE:
 		{
-			ICosmosDocTemplate* pDisp = (ICosmosDocTemplate*)wp;
-			if (m_pDoc)
-			{
-				((CTangramXDoc*)m_pDoc)->m_pCosmosTemplate = pDisp;
-			}
 		}
 		break;
 		case TANGRAM_CONST_PANE_FIRST:

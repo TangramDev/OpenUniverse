@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -246,6 +246,9 @@ namespace CommonUniverse
 		virtual ~CCosmosDelegate();
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
+
+		map<CView*, CDocument*> m_mapViewDoc;
+
 		BOOL IsBrowserModel(bool bCrashReporting);
 		bool ProcessAppType(bool bCrashReporting);
 
@@ -262,7 +265,6 @@ namespace CommonUniverse
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 		virtual HICON GetAppIcon(int nIndex);
-		virtual void* GetDocument(HWND hView);
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
@@ -270,7 +272,6 @@ namespace CommonUniverse
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode);
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewFrame);
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager);
-		virtual ICosmosDoc* OpenDocument(void* pDocTemplate, CString strFile, BOOL bNewFrame);
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);
@@ -442,7 +443,6 @@ namespace CommonUniverse
 		bool	m_bDocLoaded;
 		CString m_strXmlData;
 		CMapStringToString m_mapDataMap;
-		ICosmosDocTemplate* m_pCosmosTemplate;
 
 		// Overrides
 	public:

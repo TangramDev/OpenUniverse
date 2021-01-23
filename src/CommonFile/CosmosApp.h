@@ -179,7 +179,6 @@ namespace CommonUniverse
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 		virtual HICON GetAppIcon(int nIndex);
-		virtual void* GetDocument(HWND hView);
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
@@ -187,7 +186,6 @@ namespace CommonUniverse
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode);
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalacticNucleus);
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxyCluster);
-		virtual ICosmosDoc* OpenDocument(void* pDocTemplate, CString strFile, BOOL bNewFrame);
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);
@@ -354,7 +352,6 @@ namespace CommonUniverse
 		bool	m_bDocLoaded;
 		CString m_strXmlData;
 		CMapStringToString m_mapDataMap;
-		ICosmosDocTemplate* m_pCosmosTemplate;
 
 		// Overrides
 	public:

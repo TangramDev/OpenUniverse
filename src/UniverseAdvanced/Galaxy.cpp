@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014
+ *           Web Runtime for Application - Version 1.0.0.202101230016
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -770,6 +770,12 @@ LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 		::SysFreeString(bstrXml);
 	}
+	return DefWindowProc(uMsg, wParam, lParam);
+}
+
+LRESULT CMDIChildHelperWnd::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	g_pCosmos->m_pCosmosDelegate->QueryWndInfo(ObserveComplete, 0);
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -1849,6 +1855,10 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 		hForm = GetWinForm(hForm);
 		if (hForm)
 			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+	}
+	if (g_pCosmos->m_pCosmosDelegate)
+	{
+		::PostMessage(::GetParent(m_hWnd), WM_COSMOSOBSERVED, 0, 0);
 	}
 
 	return m_pWorkXobj;
@@ -3370,11 +3380,6 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 	strXml += strName;
 	strXml += _T(">");
 	*pVal = strXml.AllocSysString();
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxy::get_CosmosDoc(ICosmosDoc** pVal)
-{
 	return S_OK;
 }
 

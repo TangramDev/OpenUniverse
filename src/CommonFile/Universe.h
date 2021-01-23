@@ -107,20 +107,6 @@ typedef interface IAppExtender IAppExtender;
 #endif 	/* __IAppExtender_FWD_DEFINED__ */
 
 
-#ifndef __ICosmosDoc_FWD_DEFINED__
-#define __ICosmosDoc_FWD_DEFINED__
-typedef interface ICosmosDoc ICosmosDoc;
-
-#endif 	/* __ICosmosDoc_FWD_DEFINED__ */
-
-
-#ifndef __ICosmosDocTemplate_FWD_DEFINED__
-#define __ICosmosDocTemplate_FWD_DEFINED__
-typedef interface ICosmosDocTemplate ICosmosDocTemplate;
-
-#endif 	/* __ICosmosDocTemplate_FWD_DEFINED__ */
-
-
 #ifndef __ICosmos_FWD_DEFINED__
 #define __ICosmos_FWD_DEFINED__
 typedef interface ICosmos ICosmos;
@@ -273,7 +259,6 @@ extern "C"{
 
 /* interface __MIDL_itf_Universe_0000_0000 */
 /* [local] */ 
-
 
 
 
@@ -2612,370 +2597,6 @@ EXTERN_C const IID IID_IAppExtender;
 #endif 	/* __IAppExtender_INTERFACE_DEFINED__ */
 
 
-#ifndef __ICosmosDoc_INTERFACE_DEFINED__
-#define __ICosmosDoc_INTERFACE_DEFINED__
-
-/* interface ICosmosDoc */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
-
-
-EXTERN_C const IID IID_ICosmosDoc;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("19631222-1992-0612-1965-060120161101")
-    ICosmosDoc : public IDispatch
-    {
-    public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TemplateXml( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TemplateXml( 
-            /* [in] */ BSTR newVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocType( 
-            /* [in] */ BSTR newVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocID( 
-            /* [retval][out] */ LONGLONG *pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocID( 
-            /* [in] */ LONGLONG newVal) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGalaxyWndXml( 
-            BSTR bstrWndID,
-            /* [retval][out] */ BSTR *bstrWndScriptVal) = 0;
-        
-    };
-    
-    
-#else 	/* C style interface */
-
-    typedef struct ICosmosDocVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            ICosmosDoc * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            ICosmosDoc * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            ICosmosDoc * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            ICosmosDoc * This,
-            /* [out] */ UINT *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            ICosmosDoc * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            ICosmosDoc * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [range][in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            ICosmosDoc * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TemplateXml )( 
-            ICosmosDoc * This,
-            /* [retval][out] */ BSTR *bstrVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TemplateXml )( 
-            ICosmosDoc * This,
-            /* [in] */ BSTR newVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocType )( 
-            ICosmosDoc * This,
-            /* [in] */ BSTR newVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocID )( 
-            ICosmosDoc * This,
-            /* [retval][out] */ LONGLONG *pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocID )( 
-            ICosmosDoc * This,
-            /* [in] */ LONGLONG newVal);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyWndXml )( 
-            ICosmosDoc * This,
-            BSTR bstrWndID,
-            /* [retval][out] */ BSTR *bstrWndScriptVal);
-        
-        END_INTERFACE
-    } ICosmosDocVtbl;
-
-    interface ICosmosDoc
-    {
-        CONST_VTBL struct ICosmosDocVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define ICosmosDoc_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
-
-#define ICosmosDoc_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
-
-#define ICosmosDoc_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
-
-
-#define ICosmosDoc_GetTypeInfoCount(This,pctinfo)	\
-    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
-
-#define ICosmosDoc_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
-
-#define ICosmosDoc_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
-
-#define ICosmosDoc_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
-
-
-#define ICosmosDoc_get_TemplateXml(This,bstrVal)	\
-    ( (This)->lpVtbl -> get_TemplateXml(This,bstrVal) ) 
-
-#define ICosmosDoc_put_TemplateXml(This,newVal)	\
-    ( (This)->lpVtbl -> put_TemplateXml(This,newVal) ) 
-
-#define ICosmosDoc_put_DocType(This,newVal)	\
-    ( (This)->lpVtbl -> put_DocType(This,newVal) ) 
-
-#define ICosmosDoc_get_DocID(This,pVal)	\
-    ( (This)->lpVtbl -> get_DocID(This,pVal) ) 
-
-#define ICosmosDoc_put_DocID(This,newVal)	\
-    ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
-
-#define ICosmosDoc_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
-    ( (This)->lpVtbl -> GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal) ) 
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __ICosmosDoc_INTERFACE_DEFINED__ */
-
-
-#ifndef __ICosmosDocTemplate_INTERFACE_DEFINED__
-#define __ICosmosDocTemplate_INTERFACE_DEFINED__
-
-/* interface ICosmosDocTemplate */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
-
-
-EXTERN_C const IID IID_ICosmosDocTemplate;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("19631222-1992-0612-1965-060120170707")
-    ICosmosDocTemplate : public IDispatch
-    {
-    public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TemplateXml( 
-            /* [retval][out] */ BSTR *bstrVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TemplateXml( 
-            /* [in] */ BSTR newVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocType( 
-            /* [in] */ BSTR newVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocID( 
-            /* [retval][out] */ LONGLONG *pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DocID( 
-            /* [in] */ LONGLONG newVal) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetGalaxyWndXml( 
-            BSTR bstrWndID,
-            /* [retval][out] */ BSTR *bstrWndScriptVal) = 0;
-        
-    };
-    
-    
-#else 	/* C style interface */
-
-    typedef struct ICosmosDocTemplateVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            ICosmosDocTemplate * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            _COM_Outptr_  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            ICosmosDocTemplate * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            ICosmosDocTemplate * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            ICosmosDocTemplate * This,
-            /* [out] */ UINT *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            ICosmosDocTemplate * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            ICosmosDocTemplate * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [range][in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            ICosmosDocTemplate * This,
-            /* [annotation][in] */ 
-            _In_  DISPID dispIdMember,
-            /* [annotation][in] */ 
-            _In_  REFIID riid,
-            /* [annotation][in] */ 
-            _In_  LCID lcid,
-            /* [annotation][in] */ 
-            _In_  WORD wFlags,
-            /* [annotation][out][in] */ 
-            _In_  DISPPARAMS *pDispParams,
-            /* [annotation][out] */ 
-            _Out_opt_  VARIANT *pVarResult,
-            /* [annotation][out] */ 
-            _Out_opt_  EXCEPINFO *pExcepInfo,
-            /* [annotation][out] */ 
-            _Out_opt_  UINT *puArgErr);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TemplateXml )( 
-            ICosmosDocTemplate * This,
-            /* [retval][out] */ BSTR *bstrVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TemplateXml )( 
-            ICosmosDocTemplate * This,
-            /* [in] */ BSTR newVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocType )( 
-            ICosmosDocTemplate * This,
-            /* [in] */ BSTR newVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocID )( 
-            ICosmosDocTemplate * This,
-            /* [retval][out] */ LONGLONG *pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DocID )( 
-            ICosmosDocTemplate * This,
-            /* [in] */ LONGLONG newVal);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetGalaxyWndXml )( 
-            ICosmosDocTemplate * This,
-            BSTR bstrWndID,
-            /* [retval][out] */ BSTR *bstrWndScriptVal);
-        
-        END_INTERFACE
-    } ICosmosDocTemplateVtbl;
-
-    interface ICosmosDocTemplate
-    {
-        CONST_VTBL struct ICosmosDocTemplateVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define ICosmosDocTemplate_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
-
-#define ICosmosDocTemplate_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
-
-#define ICosmosDocTemplate_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
-
-
-#define ICosmosDocTemplate_GetTypeInfoCount(This,pctinfo)	\
-    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
-
-#define ICosmosDocTemplate_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
-
-#define ICosmosDocTemplate_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
-
-#define ICosmosDocTemplate_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
-
-
-#define ICosmosDocTemplate_get_TemplateXml(This,bstrVal)	\
-    ( (This)->lpVtbl -> get_TemplateXml(This,bstrVal) ) 
-
-#define ICosmosDocTemplate_put_TemplateXml(This,newVal)	\
-    ( (This)->lpVtbl -> put_TemplateXml(This,newVal) ) 
-
-#define ICosmosDocTemplate_put_DocType(This,newVal)	\
-    ( (This)->lpVtbl -> put_DocType(This,newVal) ) 
-
-#define ICosmosDocTemplate_get_DocID(This,pVal)	\
-    ( (This)->lpVtbl -> get_DocID(This,pVal) ) 
-
-#define ICosmosDocTemplate_put_DocID(This,newVal)	\
-    ( (This)->lpVtbl -> put_DocID(This,newVal) ) 
-
-#define ICosmosDocTemplate_GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal)	\
-    ( (This)->lpVtbl -> GetGalaxyWndXml(This,bstrWndID,bstrWndScriptVal) ) 
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __ICosmosDocTemplate_INTERFACE_DEFINED__ */
-
-
 #ifndef __ICosmos_INTERFACE_DEFINED__
 #define __ICosmos_INTERFACE_DEFINED__
 
@@ -3040,11 +2661,6 @@ EXTERN_C const IID IID_ICosmos;
         
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
             /* [retval][out] */ IXobj **pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CosmosDoc( 
-            LONGLONG AppProxy,
-            LONGLONG nDocID,
-            /* [retval][out] */ ICosmosDoc **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocTemplate( 
             BSTR bstrID,
@@ -3158,9 +2774,6 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrFilter,
             /* [retval][out] */ BSTR *bstrTemplatePath) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenTangramFile( 
-            /* [retval][out] */ ICosmosDoc **ppDoc) = 0;
-        
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateCosmosEventObj( 
             /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj) = 0;
         
@@ -3180,10 +2793,6 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE LoadDocComponent( 
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OpenCosmosDocFile( 
-            BSTR bstrFilePath,
-            /* [retval][out] */ ICosmosDoc **ppDoc) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
             BSTR strInitXml,
@@ -3371,12 +2980,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             /* [retval][out] */ IXobj **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CosmosDoc )( 
-            ICosmos * This,
-            LONGLONG AppProxy,
-            LONGLONG nDocID,
-            /* [retval][out] */ ICosmosDoc **pVal);
-        
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocTemplate )( 
             ICosmos * This,
             BSTR bstrID,
@@ -3513,10 +3116,6 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrFilter,
             /* [retval][out] */ BSTR *bstrTemplatePath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenTangramFile )( 
-            ICosmos * This,
-            /* [retval][out] */ ICosmosDoc **ppDoc);
-        
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateCosmosEventObj )( 
             ICosmos * This,
             /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj);
@@ -3541,11 +3140,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenCosmosDocFile )( 
-            ICosmos * This,
-            BSTR bstrFilePath,
-            /* [retval][out] */ ICosmosDoc **ppDoc);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCLRApp )( 
             ICosmos * This,
@@ -3706,9 +3300,6 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_get_DesignNode(This,pVal)	\
     ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 
 
-#define ICosmos_get_CosmosDoc(This,AppProxy,nDocID,pVal)	\
-    ( (This)->lpVtbl -> get_CosmosDoc(This,AppProxy,nDocID,pVal) ) 
-
 #define ICosmos_get_DocTemplate(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_DocTemplate(This,bstrID,pVal) ) 
 
@@ -3781,9 +3372,6 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath)	\
     ( (This)->lpVtbl -> GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath) ) 
 
-#define ICosmos_OpenTangramFile(This,ppDoc)	\
-    ( (This)->lpVtbl -> OpenTangramFile(This,ppDoc) ) 
-
 #define ICosmos_CreateCosmosEventObj(This,ppCosmosEventObj)	\
     ( (This)->lpVtbl -> CreateCosmosEventObj(This,ppCosmosEventObj) ) 
 
@@ -3798,9 +3386,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_LoadDocComponent(This,bstrLib,llAppProxy)	\
     ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
-
-#define ICosmos_OpenCosmosDocFile(This,bstrFilePath,ppDoc)	\
-    ( (This)->lpVtbl -> OpenCosmosDocFile(This,bstrFilePath,ppDoc) ) 
 
 #define ICosmos_InitCLRApp(This,strInitXml,llHandle)	\
     ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
@@ -3914,9 +3499,6 @@ EXTERN_C const IID IID_IGalaxy;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CosmosDoc( 
-            /* [retval][out] */ ICosmosDoc **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyType( 
             /* [retval][out] */ GalaxyType *pVal) = 0;
@@ -4059,10 +3641,6 @@ EXTERN_C const IID IID_IGalaxy;
             IGalaxy * This,
             /* [retval][out] */ BSTR *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CosmosDoc )( 
-            IGalaxy * This,
-            /* [retval][out] */ ICosmosDoc **pVal);
-        
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyType )( 
             IGalaxy * This,
             /* [retval][out] */ GalaxyType *pVal);
@@ -4174,9 +3752,6 @@ EXTERN_C const IID IID_IGalaxy;
 
 #define IGalaxy_get_GalaxyXML(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyXML(This,pVal) ) 
-
-#define IGalaxy_get_CosmosDoc(This,pVal)	\
-    ( (This)->lpVtbl -> get_CosmosDoc(This,pVal) ) 
 
 #define IGalaxy_get_GalaxyType(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyType(This,pVal) ) 

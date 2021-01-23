@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1269,11 +1269,6 @@ STDMETHODIMP CGalaxy::get__NewEnum(IUnknown** ppVal)
 }
 
 STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxy::get_CosmosDoc(ICosmosDoc** pVal)
 {
 	return S_OK;
 }

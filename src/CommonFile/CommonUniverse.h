@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014
+ *           Web Runtime for Application - Version 1.0.0.202101230016
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -135,6 +135,7 @@
 #define WM_WINFORMCREATED				(WM_USER + 0x0000404a)
 #define WM_CHROMEIPCMSG					(WM_USER + 0x00004052)
 #define WM_CHROMEAPPINIT				(WM_USER + 0x00004053)
+#define WM_COSMOSOBSERVED				(WM_USER + 0x00004054)
 
 #define TANGRAM_OBJECT_ENTRY_AUTO(clsid, class) \
     __declspec(selectany) ATL::_ATL_OBJMAP_CACHE __objCache__##class = { NULL, 0 }; \
@@ -206,7 +207,8 @@ namespace CommonUniverse {
 		DocView = 0x00000002,
 		OtherType= 0x00000003,
 		QueryDestroy = 0x00000004,
-		CanAddView = 0x00000005
+		CanAddView = 0x00000005,
+		ObserveComplete = 0x00000006
 	}QueryType;
 
 	typedef struct IPCMsg {
@@ -452,7 +454,6 @@ namespace CommonUniverse {
 			m_bDocLoaded = false;
 			m_bCanDestroyFrame = true;
 			m_strCosmosData = _T("");
-			m_pDoc = nullptr;
 		}
 
 		BOOL		m_bDocLoaded;
@@ -464,8 +465,6 @@ namespace CommonUniverse {
 		CString		m_strDocID;
 		CString		m_strCosmosData;
 
-		ICosmosDoc* m_pDoc;
-		virtual void SaveDoc() {}
 		virtual void CosmosDocEvent(ICosmosEventObj* pEventObj) {}
 	};
 
@@ -484,7 +483,6 @@ namespace CommonUniverse {
 			m_strCreatingFrameTitle = _T("");
 
 			m_bCreatingNewFrame = FALSE;
-			m_mapCosmosDoc.clear();
 
 			m_nFrameIndex = 0;
 			m_strAppKey = _T("");
@@ -508,7 +506,6 @@ namespace CommonUniverse {
 		HWND								m_hClosingFrame;
 		CString								m_strAppKey;
 		map<CString, void*>					m_mapMainFrame;
-		map<LONGLONG, ICosmosDoc*>			m_mapCosmosDoc;
 		map<void*, LONG>					m_mapCosmosDocTemplateID;
 
 		virtual BOOL InitCosmos(void* pVoid) {
@@ -528,36 +525,13 @@ namespace CommonUniverse {
 		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
 		virtual void RegistWndClassToCosmos() {}
-		virtual void OnActiveDocument(ICosmosDoc* ActiveDoc, IXobj* pXobjInDoc, IXobj* pXobjInCtrlBar, HWND hCtrlBar) {}
 		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
-		virtual ICosmosDoc* CreateNewDocument(LPCTSTR lpszFrameID, LPCTSTR lpszAppTitle, void* pDocTemplate, BOOL bNewFrame) { return NULL; }
-		virtual ICosmosDoc* OpenDocument(__int64 pDocTemplate, CString strFile, BOOL bNewFrame) { return NULL; }
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode) { return nullptr; }
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalaxy) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
-		void RemoveDoc(LONGLONG llDocID)
-		{
-			auto it = m_mapCosmosDoc.find(llDocID);
-			if (it != m_mapCosmosDoc.end())
-				m_mapCosmosDoc.erase(it);
-		}
-
-		void AddDoc(LONGLONG llDocID, ICosmosDoc* pDoc)
-		{
-			m_mapCosmosDoc[llDocID] = pDoc;
-		}
-
-		ICosmosDoc* GetDoc(LONGLONG llDocID)
-		{
-			auto it = m_mapCosmosDoc.find(llDocID);
-			if (it != m_mapCosmosDoc.end())
-				return it->second;
-			return nullptr;
-		}
-		virtual ICosmosDoc* NewDoc() { return nullptr; }
 		virtual HWND InitCosmosApp() { return NULL; }
 	};
 
@@ -570,8 +544,6 @@ namespace CommonUniverse {
 
 		CString							m_strCurrentWinFormTemplate;
 
-		//virtual HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData) = 0;
-		//virtual HRESULT ActiveCLRMethod(IDispatch* obj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData) = 0;
 		virtual IDispatch* CreateCLRObj(CString bstrObjID) { return nullptr; }
 		virtual HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey) { return 0; }
 		virtual BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton) { return false; }
@@ -874,7 +846,6 @@ namespace CommonUniverse {
 		virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) {}
 		virtual void* CreateDocument(CString strType, CString strDocKey) { return nullptr; }
 		virtual HICON GetAppIcon(int nIndex) { return NULL; }
-		virtual void* GetDocument(HWND hView) { return NULL; }
 	};
 
 	class CCosmosMainDllLoader {

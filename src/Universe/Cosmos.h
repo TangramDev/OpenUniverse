@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -220,7 +220,6 @@ public:
 	STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_RemoteHelperHWND)(LONGLONG* pVal);
 	STDMETHOD(put_RemoteHelperHWND)(LONGLONG newVal) { m_hHostWnd = (HWND)newVal; return S_OK; };
-	STDMETHOD(get_CosmosDoc)(LONGLONG AppProxy, LONGLONG nDocID, ICosmosDoc** pVal);
 	STDMETHOD(get_HostWnd)(LONGLONG* pVal);
 	STDMETHOD(get_RemoteCosmos)(BSTR bstrID, ICosmos** pVal);
 	STDMETHOD(get_Extender)(ICosmosExtender** pVal);
@@ -264,8 +263,6 @@ public:
 	STDMETHOD(ObserveGalaxys)(LONGLONG hWnd, BSTR bstrDeleteGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSave);
 	STDMETHOD(DeletePage)(LONGLONG PageHandle);
 	STDMETHOD(LoadDocComponent)(BSTR bstrLib, LONGLONG* llAppProxy);
-	STDMETHOD(OpenTangramFile)(ICosmosDoc** ppDoc);
-	STDMETHOD(OpenCosmosDocFile)(BSTR bstrFilePath, ICosmosDoc** ppDoc);
 	STDMETHOD(NewWorkBench)(BSTR bstrCosmosDoc, IWorkBenchWindow** ppWorkBenchWindow);
 	STDMETHOD(CreateOutLookObj)(BSTR bstrObjType, int nType, BSTR bstrURL, IDispatch** ppRetDisp);
 	STDMETHOD(InitEclipseApp)();

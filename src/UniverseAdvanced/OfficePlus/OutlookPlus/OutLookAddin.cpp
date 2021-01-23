@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014
+ *           Web Runtime for Application - Version 1.0.0.202101230016
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -734,18 +734,6 @@ namespace OfficePlus
 				pIRibbonControl->get_Id(&bstrID);
 				pIRibbonControl->get_Tag(&bstrTag);
 				CString strTag = OLE2T(bstrTag);
-				if (strTag.CompareNoCase(_T("opentangramfile")) == 0)
-				{
-					CComPtr<ICosmosDoc> pDoc;
-					return this->OpenTangramFile(&pDoc);
-				}
-				int nPos = strTag.Find(_T("@"));
-				CString strPath = m_strAppCommonDocPath + strTag;
-				if (::PathFileExists(strPath))
-				{
-					CComPtr<ICosmosDoc> pDoc;
-					return this->OpenCosmosDocFile(strPath.AllocSysString(), &pDoc);
-				}
 			}
 
 			CString strTag = OLE2T(bstrTag);

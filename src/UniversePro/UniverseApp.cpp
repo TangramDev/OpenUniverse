@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1106,10 +1106,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				::SetProp(hPWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
 				g_pCosmos->m_mapCosmosFrameWndInfo[hPWnd] = pCosmosFrameWndInfo;
 			}
-			else
-			{
-				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-			}
 			if (pCosmosFrameWndInfo->m_hClient == NULL)
 				pCosmosFrameWndInfo->m_hClient = hWnd;
 			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
@@ -1925,14 +1921,14 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
 								}
 								if (pCosmosFrameWndInfo->m_hClient == NULL)
-									pCosmosFrameWndInfo->m_hClient = hWnd;
+									pCosmosFrameWndInfo->m_hClient = hClient;
 								pCosmosFrameWndInfo->m_nFrameType = nType;
-								if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
-									::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 							}
 						}
 						if (g_pCosmos->m_strDefaultTemplate == _T(""))
+						{
 							g_pCosmos->m_hFirstView = hClient;
+						}
 						else
 						{
 							CString strKey = g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID;

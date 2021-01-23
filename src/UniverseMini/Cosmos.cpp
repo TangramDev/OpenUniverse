@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014
+ *           Web Runtime for Application - Version 1.0.0.202101230016
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1291,11 +1291,6 @@ STDMETHODIMP CCosmos::CreateCosmosCtrl(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_CosmosDoc(LONGLONG AppProxy, LONGLONG nDocID, ICosmosDoc** pVal)
-{
-	return S_OK;
-}
-
 STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppXobj)
 {
 	return S_FALSE;
@@ -1377,11 +1372,6 @@ STDMETHODIMP CCosmos::DeletePage(LONGLONG GalaxyClusterHandle)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::OpenTangramFile(ICosmosDoc** ppDoc)
-{
-	return S_OK;
-}
-
 HICON CCosmos::GetAppIcon(int nIndex)
 {
 	switch (nIndex)
@@ -1409,11 +1399,6 @@ HICON CCosmos::GetAppIcon(int nIndex)
 	}
 
 	return nullptr;
-}
-
-STDMETHODIMP CCosmos::OpenCosmosDocFile(BSTR bstrFilePath, ICosmosDoc** ppDoc)
-{
-	return S_OK;
 }
 
 STDMETHODIMP CCosmos::CreateOfficeDocument(BSTR bstrXml)

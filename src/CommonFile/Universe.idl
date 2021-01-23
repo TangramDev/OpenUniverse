@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -80,7 +80,6 @@ interface ICosmosCtrl;
 interface IWorkBenchWindow;
 interface ICosmosTreeView;
 interface IEclipseCtrl;
-interface ICosmosDoc;
 interface IWebPage;
 interface IBrowser;
 interface IXobjCollection;
@@ -378,42 +377,6 @@ interface IAppExtender : IDispatch {
 
 [
 	object,
-	uuid(19631222-1992-0612-1965-060120161101),
-	dual,
-	nonextensible,
-	helpstring("ICosmosDoc Interface"),
-	pointer_default(unique)
-]
-interface ICosmosDoc : IDispatch {
-	[propget, id(1)] HRESULT TemplateXml([out, retval] BSTR* bstrVal);
-	[propput, id(1)] HRESULT TemplateXml([in] BSTR newVal);
-	[propput, id(2)] HRESULT DocType([in] BSTR newVal);
-	[propget, id(3)] HRESULT DocID([out, retval] LONGLONG* pVal);
-	[propput, id(3)] HRESULT DocID([in] LONGLONG newVal);
-
-	[id(101)] HRESULT GetGalaxyWndXml(BSTR bstrWndID, [out, retval] BSTR* bstrWndScriptVal);
-}
-
-[
-	object,
-	uuid(19631222-1992-0612-1965-060120170707),
-	dual,
-	nonextensible,
-	helpstring("ICosmosDocTemplate Interface"),
-	pointer_default(unique)
-]
-interface ICosmosDocTemplate : IDispatch {
-	[propget, id(1)] HRESULT TemplateXml([out, retval] BSTR* bstrVal);
-	[propput, id(1)] HRESULT TemplateXml([in] BSTR newVal);
-	[propput, id(2)] HRESULT DocType([in] BSTR newVal);
-	[propget, id(3)] HRESULT DocID([out, retval] LONGLONG* pVal);
-	[propput, id(3)] HRESULT DocID([in] LONGLONG newVal);
-
-	[id(101)] HRESULT GetGalaxyWndXml(BSTR bstrWndID, [out, retval] BSTR* bstrWndScriptVal);
-}
-
-[
-	object,
 	uuid(19631222-1992-0612-1965-060119820001),
 	dual,
 	nonextensible,
@@ -436,7 +399,6 @@ interface ICosmos : IDispatch {
 	[propget, id(10)] HRESULT RemoteHelperHWND([out, retval] LONGLONG* pVal);
 	[propput, id(10)] HRESULT RemoteHelperHWND([in]LONGLONG newVal);
 	[propget, id(11), hidden] HRESULT DesignNode([out, retval] IXobj** pVal);
-	[propget, id(13)] HRESULT CosmosDoc(LONGLONG AppProxy, LONGLONG nDocID, [out, retval] ICosmosDoc** pVal);
 	[propget, id(14)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
 	[propget, id(15)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 
@@ -463,13 +425,11 @@ interface ICosmos : IDispatch {
 	[id(0x00115), hidden] HRESULT CreateCosmosCtrl(BSTR bstrAppID, [out, retval] ICosmosCtrl** ppRetCtrl);
 	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IXobj** ppXobj);
 	[id(0x00119)] HRESULT GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, [out, retval] BSTR* bstrTemplatePath);
-	[id(0x0011a)] HRESULT OpenTangramFile([out, retval] ICosmosDoc** ppDoc);
 	[id(0x0011b)] HRESULT CreateCosmosEventObj([out, retval]ICosmosEventObj** ppCosmosEventObj);
 	[id(0x0011c)] HRESULT FireCosmosEventObj(ICosmosEventObj* pCosmosEventObj);
 	[id(0x0011d)] HRESULT ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	[id(0x0011e)] HRESULT DeletePage(LONGLONG PageHandle);
 	[id(0x0011f)] HRESULT LoadDocComponent(BSTR bstrLib, [out, retval] LONGLONG* llAppProxy);
-	[id(0x00120)] HRESULT OpenCosmosDocFile(BSTR bstrFilePath, [out, retval] ICosmosDoc** ppDoc);
 	[id(0x00121)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
 	[id(0x00122), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
 	[id(0x00123)] HRESULT NewWorkBench(BSTR bstrCosmosDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
@@ -510,7 +470,6 @@ interface IGalaxy : IDispatch {
 	[propget, id(7), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(8), helpstring("property RootXobjs")] HRESULT RootXobjs([out, retval]IXobjCollection** ppXobjColletion);
 	[propget, id(9)] HRESULT GalaxyXML([out, retval] BSTR* pVal);
-	[propget, id(10)] HRESULT CosmosDoc([out, retval] ICosmosDoc** pVal);
 	[propget, id(11)] HRESULT GalaxyType([out, retval] GalaxyType* pVal);
 	[propget, id(12)] HRESULT Name([out, retval] BSTR* pVal);
 	[propget, id(13)] HRESULT HostBrowser([out, retval] IBrowser** ppChromeWebBrowser);

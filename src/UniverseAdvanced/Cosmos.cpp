@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -4429,14 +4429,6 @@ STDMETHODIMP CCosmosEvent::put_eventSource(IDispatch* pSource)
 	return S_FALSE;
 }
 
-STDMETHODIMP CCosmos::get_CosmosDoc(LONGLONG AppProxy, LONGLONG nDocID, ICosmosDoc** pVal)
-{
-	IUniverseAppProxy* pProxy = (IUniverseAppProxy*)AppProxy;
-	*pVal = pProxy->GetDoc(nDocID);
-
-	return S_OK;
-}
-
 STDMETHODIMP CCosmos::AttachObjEvent(IDispatch* pDisp, int nEventIndex)
 {
 	if (pDisp)
@@ -5429,11 +5421,6 @@ void CCosmos::InitCosmosDocManager()
 {
 }
 
-STDMETHODIMP CCosmos::OpenTangramFile(ICosmosDoc** ppDoc)
-{
-	return S_OK;
-}
-
 CString CCosmos::ConfigJavaVMInfo(CString stroption)
 {
 	CString strRet = _T("");
@@ -5569,11 +5556,6 @@ bool CCosmos::ImportCosmosDocTemplate(CString strFilePath)
 		}
 	}
 	return false;
-}
-
-STDMETHODIMP CCosmos::OpenCosmosDocFile(BSTR bstrFilePath, ICosmosDoc** ppDoc)
-{
-	return S_OK;
 }
 
 void CCosmos::GetCosmosInfo(CString strFile, CosmosDocInfo* pCosmosDocInfo)

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101200014           *
+ *           Web Runtime for Application - Version 1.0.0.202101230016           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2064,10 +2064,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
 								}
 								if (pCosmosFrameWndInfo->m_hClient == NULL)
-									pCosmosFrameWndInfo->m_hClient = hWnd;
+									pCosmosFrameWndInfo->m_hClient = hClient;
 								pCosmosFrameWndInfo->m_nFrameType = nType;
-								if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
-									::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 							}
 						}
 						if (g_pCosmos->m_strDefaultTemplate == _T(""))
