@@ -225,35 +225,42 @@ void CGridWnd::TrackColumnSize(int x, int col)
 		if (GetStyle() & SPLS_DYNAMIC_SPLIT)
 			DeleteColumn(col + 1);
 	}
-	if (m_pHostXobj && col != m_nCols - 1)
+	if (m_pHostXobj)
 	{
-		ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
-
-		CRect rectInside;
-		GetInsideRect(rectInside);
-
-		int i;
-		int _nSize = rectInside.Width();
-		CSplitterWnd::CRowColInfo* pInfo;
-
-		if (_nSize < 0)
-			_nSize = 0;  // if really too small, layout as zero size
-
-		for (i = 0, pInfo = m_pColInfo; i < m_nCols - 1; i++, pInfo++)
+		if (col != m_nCols - 1)
 		{
-			if (pInfo->nIdealSize < pInfo->nMinSize)
-				pInfo->nIdealSize = 0;      // too small to see
-			_nSize -= pInfo->nIdealSize;
+			ASSERT(m_nRows > 0 && m_nCols > 0); // must have at least one pane
+
+			CRect rectInside;
+			GetInsideRect(rectInside);
+
+			int i;
+			int _nSize = rectInside.Width();
+			CSplitterWnd::CRowColInfo* pInfo;
+
+			if (_nSize < 0)
+				_nSize = 0;  // if really too small, layout as zero size
+
+			for (i = 0, pInfo = m_pColInfo; i < m_nCols - 1; i++, pInfo++)
+			{
+				if (pInfo->nIdealSize < pInfo->nMinSize)
+					pInfo->nIdealSize = 0;      // too small to see
+				_nSize -= pInfo->nIdealSize;
+			}
+			_nSize -= (m_nCols - 1) * m_cxSplitterGap;
+			pInfo->nCurSize = _nSize;
+			pInfo->nIdealSize = _nSize;
 		}
-		_nSize -= (m_nCols - 1) * m_cxSplitterGap;
-		pInfo->nCurSize = _nSize;
-		pInfo->nIdealSize = _nSize;
+		else
+		{
+			TRACE(L"");
+		}
 	}
 }
 
 LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
 {
-	if (lParam == 1992 || wParam == 0x01000 || wParam == 0)
+	if (lParam == 1992 || wParam == 0x01000 || wParam == 0 )
 	{
 		return 0;
 	}
@@ -370,7 +377,7 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 {
 	int _nWidth = 0;
 	SetColumnInfo(lParam, m_nHostWidth >= 0 ? m_nHostWidth : 0, _nWidth);
-	SetRowInfo(wParam, m_nHostHeight, _nWidth);
+	SetRowInfo(wParam, m_nHostHeight >= 0 ? m_nHostHeight:0, _nWidth);
 	//SetColumnInfo(lParam, (m_nHostWidth>=0)? m_nHostWidth:0, _nWidth);
 	//SetRowInfo(wParam, (m_nHostHeight>=0)? m_nHostHeight:0, _nWidth);
 	return 0;
@@ -541,7 +548,9 @@ void CGridWnd::_LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, in
 	if (pHostNode)
 	{
 		if (bCol)
+		{
 			_indexHost = pHostNode->m_nCol;
+		}
 		else
 			_indexHost = pHostNode->m_nRow;
 	}
@@ -558,6 +567,21 @@ void CGridWnd::_LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, in
 			if (_indexHost != i)
 			{
 				_nSize -= pInfo->nIdealSize;
+				if (pInfo->nIdealSize == 0)
+				{
+					if (bCol)
+					{
+						_nSize -= m_nLastWidth;
+						pInfo->nIdealSize = m_nLastWidth;
+						m_nLastWidth = 0;
+					}
+					else
+					{
+						_nSize -= m_nLastHeight;
+						pInfo->nIdealSize = m_nLastHeight;
+						m_nLastHeight = 0;
+					}
+				}
 			}
 		}
 		if (i == nMax - 1)
@@ -904,6 +928,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 			strH = strHeight.Left(nPos);
 			strHeight = strHeight.Mid(nPos + 1);
 			nHeight = _ttoi(strH);
+			m_nLastHeight = nHeight;
 
 			strWidth = strOldWidth;
 			for (int j = 0; j < m_pXobj->m_nCols; j++)
@@ -912,6 +937,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				strW = strWidth.Left(nPos);
 				strWidth = strWidth.Mid(nPos + 1);
 				nWidth = _ttoi(strW);
+				m_nLastWidth = nWidth;
 				CXobj* pObj = new CComObject<CXobj>;
 				pObj->m_pRootObj = m_pXobj->m_pRootObj;
 				pObj->m_pHostParse = pSubItem;
@@ -922,6 +948,11 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				pObj->m_nCol = j;
 				pObj->InitWndXobj();
 
+				if (m_nMasterRow == i && m_nMasterCol == j)
+				{
+					m_pHostXobj = pObj;
+				}
+
 				if (pObj->m_pObjClsInfo)
 				{
 					pObj->m_nWidth = nWidth;
@@ -929,10 +960,6 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 					if (pContext->m_pNewViewClass == nullptr)
 						pContext->m_pNewViewClass = RUNTIME_CLASS(CXobjHelper);
 					CreateView(pObj->m_nRow, pObj->m_nCol, pObj->m_pObjClsInfo, CSize(max(pObj->m_nWidth, m_Hmin), max(pObj->m_nHeigh, m_Vmin)), pContext);
-				}
-				if (m_nMasterRow == i && m_nMasterCol == j)
-				{
-					m_pHostXobj = pObj;
 				}
 				nIndex++;
 				if (nIndex < nSize)
@@ -974,7 +1001,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				}
 			}
 		}
-		if (pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
+		if (m_pHostXobj == nullptr && pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 			m_pHostXobj = pHostNode;
 		_RecalcLayout();
 

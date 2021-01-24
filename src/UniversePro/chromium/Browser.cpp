@@ -66,7 +66,7 @@ namespace Browser {
 				if (it != g_pCosmos->m_mapHtmlWnd.end())
 				{
 					CWebPage* pPage = (CWebPage*)it->second;
-					if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
+					if (pPage->m_pGalaxy&&pPage->m_pCosmosFrameWndInfo)
 					{
 						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
 						for (auto it : pPage->m_pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
@@ -117,7 +117,13 @@ namespace Browser {
 			{
 				m_pVisibleWebWnd = (CWebPage*)it->second;
 				if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+				{
 					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd)// && g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+					{
+						g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+					}
+				}
 				if (m_bTabChange)
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
 				return;
@@ -237,7 +243,6 @@ namespace Browser {
 		::DeleteObject(hWebPage);
 		::DeleteObject(hWebExtendWndRgn);
 		::SetWindowRgn(m_hDrawWnd, hGPUWndRgn, false);
-
 		return 0;
 	}
 
@@ -503,6 +508,7 @@ namespace Browser {
 		}
 		else if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 			::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+
 		return lRes;
 	}
 

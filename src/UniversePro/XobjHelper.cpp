@@ -545,7 +545,17 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
 		if (pGalaxy->m_pWebPageWnd)
 		{
-			::SendMessage(::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
+			if (hWnd)
+			{
+				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 4);
+				if (g_pCosmos->m_pMDIMainWnd &&
+					g_pCosmos->m_pMDIMainWnd->m_pGalaxy &&
+					m_pXobj->m_pWebPage->m_pGalaxy == m_pXobj->m_pXobjShareData->m_pGalaxy)
+				{
+					g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+				}
+			}
 		}
 	}
 
@@ -1069,6 +1079,16 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
+	if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pClientXobj == m_pXobj)
+	{
+		g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+		return;
+	}
+	if (m_pXobj->m_pWebBrowser)
+	{
+		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
+		return;
+	}
 	if ( m_pXobj->m_nViewType == CLRCtrl && m_pXobj->m_hHostWnd)
 	{
 		if (m_bNoMove)
@@ -1099,19 +1119,11 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 				::SetWindowPos(m_pXobj->m_hChildHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
 	}
-
-	if (m_pXobj->m_pWebBrowser)
+	if (m_hFormWnd)
+		::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
+	else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
-		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE| SWP_NOREDRAW);
-		return;
-	}
-	else {
-		if (m_hFormWnd)
-			::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
-		else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
-		{
-			m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
-		}
+		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 	}
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pXobj->m_pDisp == NULL) && m_pXobj != m_pXobj->m_pRootObj)
 	{

@@ -1584,6 +1584,13 @@ void CGalaxy::HostPosChanged()
 		}
 	if (::IsWindow(hwnd) == false)
 		return;
+	if (g_pCosmos->m_pMDIMainWnd &&
+		m_hWnd == g_pCosmos->m_pMDIMainWnd->m_hMDIClient &&
+		g_pCosmos->m_pMDIMainWnd->m_pClientXobj &&
+		m_pBindingXobj != g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
+	{
+		m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
+	}
 	HWND hPWnd = ::GetParent(m_hWnd);
 	if (::IsWindow(_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd))
 	{
@@ -2176,6 +2183,14 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_bMDIChild = true;
 	}
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
+	if (g_pCosmos->m_pMDIMainWnd)
+	{
+		auto itClient = m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
+		if (itClient != m_pWorkXobj->m_mapChildXobj.end())
+		{
+			g_pCosmos->m_pMDIMainWnd->m_pClientXobj = itClient->second;
+		}
+	}
 	if (m_strGalaxyName == _T("default"))
 	{
 		CString strName = m_pWorkXobj->m_pHostParse->attr(_T("galaxy"), _T(""));

@@ -1692,8 +1692,6 @@ void CGalaxy::HostPosChanged()
 		g_pCosmos->m_pMDIMainWnd->m_pClientXobj &&
 		m_pBindingXobj != g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
 	{
-		if(g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
-			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj = nullptr;
 		m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
 	}
 
@@ -2790,10 +2788,6 @@ LRESULT CGalaxy::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	else
 	{
-		//if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pRootObj == m_pWorkXobj)
-		//{
-		//	::ShowWindow(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, SW_SHOW);
-		//}
 		if (wParam && g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == m_hWnd)
 		{
 			TRACE(_T("\n"));

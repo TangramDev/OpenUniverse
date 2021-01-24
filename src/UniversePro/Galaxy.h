@@ -182,6 +182,7 @@ public:
 
 	HWND									m_hMDIClient;
 	CGalaxy*								m_pGalaxy = nullptr;
+	CXobj*									m_pClientXobj = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
 	map<HWND, CMDIChildHelperWnd*>			m_mapMDIChildHelperWnd;
 	BEGIN_MSG_MAP(CUniverseMDIMain)

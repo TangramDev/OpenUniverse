@@ -719,16 +719,11 @@ namespace Browser {
 		if (pInfo)
 		{
 			pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
-			CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
-			if (pInfo)
+			HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+			hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
+			if (hPWnd)
 			{
-				pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
-				HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-				hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
-				if (hPWnd)
-				{
-					m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
-				}
+				m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
 			}
 		}
 
