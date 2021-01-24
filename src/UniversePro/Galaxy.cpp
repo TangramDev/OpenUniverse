@@ -22,8 +22,8 @@
  *
  *******************************************************************************/
 
-// Galaxy.cpp : implementation file of CGalaxy
-//
+ // Galaxy.cpp : implementation file of CGalaxy
+ //
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -241,7 +241,7 @@ BOOL CCosmosTreeCtrl::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 			m_pGalaxy = (CGalaxy*)iter->second;
 		}
 	}
-	if (pTreeItemData&&m_pGalaxy)
+	if (pTreeItemData && m_pGalaxy)
 	{
 		pPage = m_pGalaxy->m_pWebPageWnd;
 		if (m_pGalaxy->m_pWormhole)
@@ -1194,7 +1194,7 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 	case 20201114:
 	{
-		if(m_bReady)
+		if (m_bReady)
 			return DefWindowProc(uMsg, wParam, lParam);
 		m_bReady = true;
 		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
@@ -1401,7 +1401,7 @@ LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	g_pCosmos->m_pActiveWinFormWnd = this;
 	::BringWindowToTop(m_hWnd);
-		
+
 	//if ((long)(g_pCosmos->m_pUniverseAppProxy) > 1)
 	//{
 	//	HWND hMenuWnd = g_pCosmos->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
@@ -1505,7 +1505,7 @@ CGalaxy::CGalaxy()
 	m_pSubGalaxy = nullptr;
 	m_pWorkBenchFrame = nullptr;
 	m_bTabbedMDIClient = false;
-	m_bDesignerState = true; 
+	m_bDesignerState = true;
 	m_hPWnd = nullptr;
 	m_pBKWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
@@ -1589,7 +1589,8 @@ void CGalaxy::HostPosChanged()
 		g_pCosmos->m_pMDIMainWnd->m_pClientXobj &&
 		m_pBindingXobj != g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
 	{
-		m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
+		if (m_pBindingXobj && g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pHostWnd->IsWindowVisible())
+			m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
 	}
 	HWND hPWnd = ::GetParent(m_hWnd);
 	if (::IsWindow(_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd))
@@ -1755,7 +1756,7 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 		CGalaxyCluster* pGalaxyCluster = m_pGalaxyCluster;
 		HWND hForm = pGalaxyCluster->m_hWnd;
 		hForm = GetWinForm(hForm);
-		if(hForm)
+		if (hForm)
 			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 	}
 	if (g_pCosmos->m_pCosmosDelegate)
@@ -2200,7 +2201,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 
 	g_pCosmos->m_strCurrentKey = _T("");
 	*ppRetXobj = (IXobj*)m_pWorkXobj;
-	for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
+	for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 	{
 		it.second->OnObserverComplete(m_hHostWnd, strXml, m_pWorkXobj);
 	}
@@ -2290,7 +2291,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 					break;
 			}
 		}
-		if (_pHostNode&&m_pWebPageWnd)
+		if (_pHostNode && m_pWebPageWnd)
 		{
 			CXobj* pXobj = _pHostNode->m_pRootObj;
 			if (pXobj->m_strLastIPCMsgID != _T(""))
@@ -2336,7 +2337,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 					_pGalaxy = _pXobj->m_pHostGalaxy;
 					while (_pGalaxy)
 					{
-						if(_pGalaxy->m_pHostWebBrowserNode)
+						if (_pGalaxy->m_pHostWebBrowserNode)
 							_pXobj = _pGalaxy->m_pHostWebBrowserNode;
 						if (_pXobj && _pXobj->m_pHostGalaxy)
 						{
@@ -2365,11 +2366,11 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		::SendMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 		::PostMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 	}
-	
+
 	CGalaxy* pGalaxy = nullptr;
 	CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 	HWND hFrameWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, m_hWnd);
-	if (hFrameWnd==NULL)
+	if (hFrameWnd == NULL)
 	{
 		if (m_pWebPageWnd)
 		{
@@ -2974,7 +2975,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				lpwndpos->cx = rect.right - rect.left;
 				lpwndpos->cy = rect.bottom - rect.top;
 			}
-			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE| SWP_FRAMECHANGED );// |SWP_NOREDRAW); 
+			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED);// |SWP_NOREDRAW); 
 			CXobj* _pHostNode = m_pBindingXobj;
 			if (_pHostNode->m_pHostGalaxy)
 			{

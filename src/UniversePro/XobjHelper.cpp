@@ -546,7 +546,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		if (pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
-			if (hWnd)
+			if (::IsWindow(hWnd))
 			{
 				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 4);
 				if (g_pCosmos->m_pMDIMainWnd &&
@@ -1123,7 +1123,12 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 	else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
+		if (g_pCosmos->m_pMDIMainWnd&&m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+		{
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj = m_pXobj;
+		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
+		return;
 	}
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pXobj->m_pDisp == NULL) && m_pXobj != m_pXobj->m_pRootObj)
 	{

@@ -1692,7 +1692,8 @@ void CGalaxy::HostPosChanged()
 		g_pCosmos->m_pMDIMainWnd->m_pClientXobj &&
 		m_pBindingXobj != g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
 	{
-		m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
+		if (m_pBindingXobj && g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pHostWnd->IsWindowVisible())
+			m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
 	}
 
 	HWND hPWnd = ::GetParent(m_hWnd);
