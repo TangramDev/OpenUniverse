@@ -180,6 +180,7 @@ public:
 	virtual ~CUniverseMDIMain(void);
 
 	HWND									m_hMDIClient;
+	CXobj*									m_pClientXobj = nullptr;
 	CGalaxy*								m_pGalaxy = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
 	map<HWND, CMDIChildHelperWnd*>			m_mapMDIChildHelperWnd;

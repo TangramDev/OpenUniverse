@@ -1687,6 +1687,16 @@ void CGalaxy::HostPosChanged()
 		}
 	if (::IsWindow(hwnd) == false)
 		return;
+	if (g_pCosmos->m_pMDIMainWnd &&
+		m_hWnd == g_pCosmos->m_pMDIMainWnd->m_hMDIClient &&
+		g_pCosmos->m_pMDIMainWnd->m_pClientXobj &&
+		m_pBindingXobj != g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
+	{
+		if(g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj = nullptr;
+		m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
+	}
+
 	HWND hPWnd = ::GetParent(m_hWnd);
 	if (::IsWindow(_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd))
 	{
@@ -1703,7 +1713,7 @@ void CGalaxy::HostPosChanged()
 		m_bObserve = !m_bDockPane;
 		if (m_bObserve)
 			flag |= SWP_NOREDRAW;
-		if (m_bTabbedMDIClient)//&&m_nGalaxyType== GalaxyType::MDIClientGalaxy)
+		if (m_bTabbedMDIClient)
 			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
@@ -2281,6 +2291,14 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_bMDIChild = true;
 	}
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
+	if (g_pCosmos->m_pMDIMainWnd)
+	{
+		auto itClient = m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
+		if (itClient != m_pWorkXobj->m_mapChildXobj.end())
+		{
+			g_pCosmos->m_pMDIMainWnd->m_pClientXobj = itClient->second;
+		}
+	}
 	if (m_strGalaxyName == _T("default"))
 	{
 		CString strName = m_pWorkXobj->m_pHostParse->attr(_T("galaxy"), _T(""));
@@ -2734,6 +2752,10 @@ LRESULT CGalaxy::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	if (wParam == 0 && m_pWorkBenchFrame && ::GetWindow(m_hWnd, GW_CHILD) == nullptr)
 	{
+		if(g_pCosmos->m_pMDIMainWnd&&g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pRootObj==m_pWorkXobj)
+		{ 
+			::ShowWindow(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, SW_HIDE);
+		}
 		HWND hFirst = ::GetWindow(m_hWnd, GW_HWNDFIRST);
 		if (hFirst && hFirst != m_hWnd)
 		{
@@ -2768,6 +2790,10 @@ LRESULT CGalaxy::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	else
 	{
+		//if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pRootObj == m_pWorkXobj)
+		//{
+		//	::ShowWindow(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, SW_SHOW);
+		//}
 		if (wParam && g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == m_hWnd)
 		{
 			TRACE(_T("\n"));

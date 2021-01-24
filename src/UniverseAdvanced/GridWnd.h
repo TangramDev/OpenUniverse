@@ -42,6 +42,8 @@ public:
 	int m_Vmin,m_Vmax,m_Hmin,m_Hmax;
 	int m_nMasterRow;
 	int m_nMasterCol;
+	int m_nLastWidth = 0;
+	int m_nLastHeight = 0;
 	COLORREF		rgbLeftTop;
 	COLORREF		rgbMiddle;
 	COLORREF		rgbRightBottom;

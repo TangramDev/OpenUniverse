@@ -92,6 +92,10 @@ namespace Browser {
 			g_pCosmos->m_bWinFormActived = false;
 		}
 		m_pBrowser->LayoutBrowser();
+		if (g_pCosmos->m_pMDIMainWnd&& g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+		{
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+		}
 		return lRes;
 	}
 
@@ -528,6 +532,15 @@ namespace Browser {
 			{
 				if (lParam == 4)
 				{
+					//if (m_pParentXobj)
+					//{
+					//	HWND h = m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+					//	if (m_pVisibleWebWnd&&g_pCosmos->m_pMDIMainWnd&& m_pVisibleWebWnd->m_pGalaxy && m_pVisibleWebWnd->m_pCosmosFrameWndInfo)
+					//	{
+					//		bool bShow = g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pRootObj != m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
+					//		::ShowWindow(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, bShow ? SW_SHOW : SW_HIDE);
+					//	}
+					//}
 					if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 					{
 						BrowserLayout();

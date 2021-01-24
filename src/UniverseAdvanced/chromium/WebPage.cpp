@@ -994,8 +994,6 @@ namespace Browser {
 					m_pParentXobj = m_pGalaxy->m_pBindingXobj->m_pParentObj;
 					if (m_pParentXobj && m_pParentXobj->m_nViewType == TabGrid)
 					{
-						//IXobj* _pXobj = nullptr;
-						//m_pGalaxy->m_pBindingXobj->Observe(CComBSTR(strParam2), CComBSTR(strParam1), &_pXobj);
 						return;
 					}
 				}
