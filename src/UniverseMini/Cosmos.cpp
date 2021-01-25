@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017
+ *           Web Runtime for Application - Version 1.0.0.202101250018
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1260,11 +1260,6 @@ STDMETHODIMP CCosmos::CreateCosmosCtrl(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl)
 STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppXobj)
 {
 	return S_FALSE;
-}
-
-STDMETHODIMP CCosmos::GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath)
-{
-	return S_OK;
 }
 
 STDMETHODIMP CCosmos::CreateCosmosEventObj(ICosmosEventObj** ppCosmosEventObj)

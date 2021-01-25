@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -61,12 +61,11 @@ namespace Browser {
 			}
 			if (m_pParentXobj)
 			{
-				HWND h = m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
 				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
 				if (it != g_pCosmos->m_mapHtmlWnd.end())
 				{
 					CWebPage* pPage = (CWebPage*)it->second;
-					if (pPage->m_pGalaxy&&pPage->m_pCosmosFrameWndInfo)
+					if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
 					{
 						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
 						for (auto it : pPage->m_pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
@@ -79,6 +78,8 @@ namespace Browser {
 						}
 					}
 				}
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 20210125, 0);
+				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
 	}
@@ -347,6 +348,12 @@ namespace Browser {
 				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 				::InvalidateRect(m_hWnd, nullptr, true);
 			}
+		}
+		break;
+		case 20210125:
+		{
+			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 		}
 		break;
 		case 20201101:

@@ -2730,6 +2730,13 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewGUID( 
             /* [retval][out] */ BSTR *retVal) = 0;
         
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEclipseApp( void) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SelectVSObj( 
+            BSTR bstrData,
+            IDispatch *pVSObj,
+            LONGLONG nHandle) = 0;
+        
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE DownLoadFile( 
             BSTR strFileURL,
             BSTR bstrTargetFile,
@@ -2761,6 +2768,15 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrAppID,
             /* [retval][out] */ ICosmosCtrl **ppRetCtrl) = 0;
         
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CosmosNotify( 
+            BSTR strXml1,
+            BSTR strXml2,
+            LONGLONG wParam,
+            LONGLONG lParam) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteGalaxy( 
+            IGalaxy *pGalaxy) = 0;
+        
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetWindowClientDefaultNode( 
             IDispatch *pAddDisp,
             LONGLONG hParent,
@@ -2768,11 +2784,14 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrGalaxyClusterName,
             /* [retval][out] */ IXobj **ppXobj) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDocTemplateXml( 
-            BSTR bstrCaption,
-            BSTR bstrPath,
-            BSTR bstrFilter,
-            /* [retval][out] */ BSTR *bstrTemplatePath) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateBrowser( 
+            ULONGLONG hParentWnd,
+            BSTR strUrls,
+            /* [retval][out] */ IBrowser **ppRet) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NewWorkBench( 
+            BSTR bstrCosmosDoc,
+            /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateCosmosEventObj( 
             /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj) = 0;
@@ -2803,31 +2822,6 @@ EXTERN_C const IID IID_ICosmos;
             int nType,
             BSTR bstrURL,
             /* [retval][out] */ IDispatch **ppRetDisp) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE NewWorkBench( 
-            BSTR bstrCosmosDoc,
-            /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateBrowser( 
-            ULONGLONG hParentWnd,
-            BSTR strUrls,
-            /* [retval][out] */ IBrowser **ppRet) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CosmosNotify( 
-            BSTR strXml1,
-            BSTR strXml2,
-            LONGLONG wParam,
-            LONGLONG lParam) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteGalaxy( 
-            IGalaxy *pGalaxy) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEclipseApp( void) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SelectVSObj( 
-            BSTR bstrData,
-            IDispatch *pVSObj,
-            LONGLONG nHandle) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
@@ -3064,6 +3058,15 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             /* [retval][out] */ BSTR *retVal);
         
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
+            ICosmos * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SelectVSObj )( 
+            ICosmos * This,
+            BSTR bstrData,
+            IDispatch *pVSObj,
+            LONGLONG nHandle);
+        
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownLoadFile )( 
             ICosmos * This,
             BSTR strFileURL,
@@ -3101,6 +3104,17 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrAppID,
             /* [retval][out] */ ICosmosCtrl **ppRetCtrl);
         
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CosmosNotify )( 
+            ICosmos * This,
+            BSTR strXml1,
+            BSTR strXml2,
+            LONGLONG wParam,
+            LONGLONG lParam);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteGalaxy )( 
+            ICosmos * This,
+            IGalaxy *pGalaxy);
+        
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetWindowClientDefaultNode )( 
             ICosmos * This,
             IDispatch *pAddDisp,
@@ -3109,12 +3123,16 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrGalaxyClusterName,
             /* [retval][out] */ IXobj **ppXobj);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDocTemplateXml )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateBrowser )( 
             ICosmos * This,
-            BSTR bstrCaption,
-            BSTR bstrPath,
-            BSTR bstrFilter,
-            /* [retval][out] */ BSTR *bstrTemplatePath);
+            ULONGLONG hParentWnd,
+            BSTR strUrls,
+            /* [retval][out] */ IBrowser **ppRet);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NewWorkBench )( 
+            ICosmos * This,
+            BSTR bstrCosmosDoc,
+            /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateCosmosEventObj )( 
             ICosmos * This,
@@ -3152,37 +3170,6 @@ EXTERN_C const IID IID_ICosmos;
             int nType,
             BSTR bstrURL,
             /* [retval][out] */ IDispatch **ppRetDisp);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NewWorkBench )( 
-            ICosmos * This,
-            BSTR bstrCosmosDoc,
-            /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateBrowser )( 
-            ICosmos * This,
-            ULONGLONG hParentWnd,
-            BSTR strUrls,
-            /* [retval][out] */ IBrowser **ppRet);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CosmosNotify )( 
-            ICosmos * This,
-            BSTR strXml1,
-            BSTR strXml2,
-            LONGLONG wParam,
-            LONGLONG lParam);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteGalaxy )( 
-            ICosmos * This,
-            IGalaxy *pGalaxy);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
-            ICosmos * This);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SelectVSObj )( 
-            ICosmos * This,
-            BSTR bstrData,
-            IDispatch *pVSObj,
-            LONGLONG nHandle);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
             ICosmos * This,
@@ -3348,6 +3335,12 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_NewGUID(This,retVal)	\
     ( (This)->lpVtbl -> NewGUID(This,retVal) ) 
 
+#define ICosmos_InitEclipseApp(This)	\
+    ( (This)->lpVtbl -> InitEclipseApp(This) ) 
+
+#define ICosmos_SelectVSObj(This,bstrData,pVSObj,nHandle)	\
+    ( (This)->lpVtbl -> SelectVSObj(This,bstrData,pVSObj,nHandle) ) 
+
 #define ICosmos_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
     ( (This)->lpVtbl -> DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml) ) 
 
@@ -3366,11 +3359,20 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_CreateCosmosCtrl(This,bstrAppID,ppRetCtrl)	\
     ( (This)->lpVtbl -> CreateCosmosCtrl(This,bstrAppID,ppRetCtrl) ) 
 
+#define ICosmos_CosmosNotify(This,strXml1,strXml2,wParam,lParam)	\
+    ( (This)->lpVtbl -> CosmosNotify(This,strXml1,strXml2,wParam,lParam) ) 
+
+#define ICosmos_DeleteGalaxy(This,pGalaxy)	\
+    ( (This)->lpVtbl -> DeleteGalaxy(This,pGalaxy) ) 
+
 #define ICosmos_GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppXobj)	\
     ( (This)->lpVtbl -> GetWindowClientDefaultNode(This,pAddDisp,hParent,bstrWndClaName,bstrGalaxyClusterName,ppXobj) ) 
 
-#define ICosmos_GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath)	\
-    ( (This)->lpVtbl -> GetDocTemplateXml(This,bstrCaption,bstrPath,bstrFilter,bstrTemplatePath) ) 
+#define ICosmos_CreateBrowser(This,hParentWnd,strUrls,ppRet)	\
+    ( (This)->lpVtbl -> CreateBrowser(This,hParentWnd,strUrls,ppRet) ) 
+
+#define ICosmos_NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow)	\
+    ( (This)->lpVtbl -> NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow) ) 
 
 #define ICosmos_CreateCosmosEventObj(This,ppCosmosEventObj)	\
     ( (This)->lpVtbl -> CreateCosmosEventObj(This,ppCosmosEventObj) ) 
@@ -3392,24 +3394,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
     ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
-
-#define ICosmos_NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow)	\
-    ( (This)->lpVtbl -> NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow) ) 
-
-#define ICosmos_CreateBrowser(This,hParentWnd,strUrls,ppRet)	\
-    ( (This)->lpVtbl -> CreateBrowser(This,hParentWnd,strUrls,ppRet) ) 
-
-#define ICosmos_CosmosNotify(This,strXml1,strXml2,wParam,lParam)	\
-    ( (This)->lpVtbl -> CosmosNotify(This,strXml1,strXml2,wParam,lParam) ) 
-
-#define ICosmos_DeleteGalaxy(This,pGalaxy)	\
-    ( (This)->lpVtbl -> DeleteGalaxy(This,pGalaxy) ) 
-
-#define ICosmos_InitEclipseApp(This)	\
-    ( (This)->lpVtbl -> InitEclipseApp(This) ) 
-
-#define ICosmos_SelectVSObj(This,bstrData,pVSObj,nHandle)	\
-    ( (This)->lpVtbl -> SelectVSObj(This,bstrData,pVSObj,nHandle) ) 
 
 #define ICosmos_CosmosCommand(This,RibbonControl)	\
     ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 

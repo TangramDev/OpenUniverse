@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017
+ *           Web Runtime for Application - Version 1.0.0.202101250018
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -550,7 +550,6 @@ LRESULT CEclipseWnd::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		if (g_pCosmos->m_strCurrentEclipsePagePath == _T(""))
 		{
 			CComBSTR bstrTemplate(L"");
-			g_pCosmos->GetDocTemplateXml(CComBSTR("Please select New Eclipse Window Bench Template:"), CComBSTR(g_pCosmos->m_strAppDataPath+_T("workbench\\")), _T(".eclipse"), &bstrTemplate);
 			g_pCosmos->m_strCurrentEclipsePagePath = OLE2T(bstrTemplate);
 		}
 		if (g_pCosmos->m_strCurrentEclipsePagePath == _T("")&& m_pGalaxy)

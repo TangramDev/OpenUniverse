@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -416,28 +416,26 @@ interface ICosmos : IDispatch {
 	[id(0x0010b), helpstring("method SetHostFocus")] HRESULT SetHostFocus(void);
 	[id(0x0010c)] HRESULT UpdateXobj(IXobj* pXobj);
 	[id(0x0010d), helpstring("method NewGUID")] HRESULT NewGUID([out, retval] BSTR* retVal);
-	//[id(0x0010e)] HRESULT ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
+	[id(0x0010e)] HRESULT InitEclipseApp();
+	[id(0x0010f)] HRESULT SelectVSObj(BSTR bstrData, IDispatch* pVSObj, LONGLONG nHandle);
 	[id(0x00110)] HRESULT DownLoadFile(BSTR strFileURL, BSTR bstrTargetFile, BSTR bstrActionXml);
 	[id(0x00111)] HRESULT GetCtrlByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
 	[id(0x00112)] HRESULT GetXobjFromHandle(LONGLONG hWnd, [out, retval] IXobj** ppRetXobj);
 	[id(0x00113)] HRESULT GetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
 	[id(0x00114)] HRESULT SetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	[id(0x00115), hidden] HRESULT CreateCosmosCtrl(BSTR bstrAppID, [out, retval] ICosmosCtrl** ppRetCtrl);
+	[id(0x00116)] HRESULT CosmosNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
+	[id(0x00117)] HRESULT DeleteGalaxy(IGalaxy* pGalaxy);
 	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IXobj** ppXobj);
-	[id(0x00119)] HRESULT GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, [out, retval] BSTR* bstrTemplatePath);
+	[id(0x00119), helpstring("method Create ChromeWebBrowser")] HRESULT CreateBrowser(ULONGLONG hParentWnd, BSTR strUrls, [out, retval]IBrowser** ppRet);
+	[id(0x0011a)] HRESULT NewWorkBench(BSTR bstrCosmosDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
 	[id(0x0011b)] HRESULT CreateCosmosEventObj([out, retval]ICosmosEventObj** ppCosmosEventObj);
 	[id(0x0011c)] HRESULT FireCosmosEventObj(ICosmosEventObj* pCosmosEventObj);
 	[id(0x0011d)] HRESULT ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	[id(0x0011e)] HRESULT DeletePage(LONGLONG PageHandle);
 	[id(0x0011f)] HRESULT LoadDocComponent(BSTR bstrLib, [out, retval] LONGLONG* llAppProxy);
-	[id(0x00121)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
-	[id(0x00122), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
-	[id(0x00123)] HRESULT NewWorkBench(BSTR bstrCosmosDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
-	[id(0x00124), helpstring("method Create ChromeWebBrowser")] HRESULT CreateBrowser(ULONGLONG hParentWnd, BSTR strUrls, [out, retval]IBrowser** ppRet);
-	[id(0x00125)] HRESULT CosmosNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
-	[id(0x00126)] HRESULT DeleteGalaxy(IGalaxy* pGalaxy);
-	[id(0x00127)] HRESULT InitEclipseApp();
-	[id(0x00128)] HRESULT SelectVSObj(BSTR bstrData, IDispatch* pVSObj, LONGLONG nHandle);
+	[id(0x00120)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
+	[id(0x00121), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
 
 	[id(0x001000), helpstring("method CosmosCommand")] HRESULT CosmosCommand(IDispatch* RibbonControl);
 	[id(0x001001), helpstring("method CosmosGetImage")] HRESULT CosmosGetImage(BSTR strValue, [out, retval] IPictureDisp** ppdispImage);

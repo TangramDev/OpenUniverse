@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -4615,15 +4615,6 @@ STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG h
 		}
 	}
 	return S_FALSE;
-}
-
-STDMETHODIMP CCosmos::GetDocTemplateXml(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath)
-{
-	CString strTemplate = GetDocTemplateXml(OLE2T(bstrCaption), OLE2T(bstrPath), OLE2T(bstrFilter));
-	if (strTemplate == _T(""))
-		return S_FALSE;
-	*bstrTemplatePath = strTemplate.AllocSysString();
-	return S_OK;
 }
 
 STDMETHODIMP CCosmos::CreateCosmosEventObj(ICosmosEventObj** ppCosmosEventObj)

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1118,7 +1118,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			}
 			if (g_pCosmos->m_pMDIMainWnd == nullptr)
 			{
-				g_pCosmos->m_pMDIMainWnd = new CMDIMainWnd();
+				g_pCosmos->m_pMDIMainWnd = new CMDIMainWindow();
 				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
 				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
 			}
@@ -1893,12 +1893,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 							if (pCosmosFrameWndInfo->m_nFrameType == 1)
 							{
-								auto it = g_pCosmos->m_mapMDTFrameHelperWnd.find(hWnd);
-								if (it == g_pCosmos->m_mapMDTFrameHelperWnd.end())
+								auto it = g_pCosmos->m_mapMDTWindow.find(hWnd);
+								if (it == g_pCosmos->m_mapMDTWindow.end())
 								{
-									CMDTWnd* pFrameWnd = new CMDTWnd();
+									CMDTWindow* pFrameWnd = new CMDTWindow();
 									pFrameWnd->SubclassWindow(hWnd);
-									g_pCosmos->m_mapMDTFrameHelperWnd[hWnd] = pFrameWnd;
+									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
 								}
 							}
 						}
@@ -1971,10 +1971,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									}
 									if (bMdiChild)
 									{
-										CMDIChild* pWnd = (CMDIChild*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
+										CMDIChildWindow* pWnd = (CMDIChildWindow*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
 										if (pWnd == nullptr)
 										{
-											pWnd = new CMDIChild();
+											pWnd = new CMDIChildWindow();
 											pWnd->SubclassWindow(hWnd);
 											g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 										}
@@ -2077,6 +2077,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 																	if (pGalaxy)
 																	{
 																		CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+																		pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strName] = _pGalaxy;
 																		_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
 																		IXobj* pXobj = nullptr;
 																		_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -675,9 +675,9 @@ namespace CommonUniverse
 		switch (nType)
 		{
 		case MainWnd:
-			if (AfxGetApp()->m_pMainWnd)
+			if (g_pAppBase->m_pMainWnd)
 			{
-				pWnd = AfxGetApp()->m_pMainWnd;
+				pWnd = g_pAppBase->m_pMainWnd;
 				if (pWnd)
 				{
 					CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
@@ -719,7 +719,7 @@ namespace CommonUniverse
 						}
 					}
 				}
-				return AfxGetApp()->m_pMainWnd->m_hWnd;
+				return g_pAppBase->m_pMainWnd->m_hWnd;
 			}
 			break;
 		case CanClose:

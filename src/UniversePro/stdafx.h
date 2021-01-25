@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -167,7 +167,7 @@ class CCosmosAppCtrl;
 class CTangramListView;
 class CCosmosEvent;
 class CGalaxyCluster;
-class CMDIMainWnd;
+class CMDIMainWindow;
 class CXobjCollection;
 class CTangramHtmlTreeWnd;
 

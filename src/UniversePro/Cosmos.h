@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101240017           *
+ *           Web Runtime for Application - Version 1.0.0.202101250018           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -77,7 +77,7 @@
 using namespace Browser;
 using namespace CommonUniverse;
 class CWinForm;
-class CMDTWnd;
+class CMDTWindow;
 
 struct CommonThreadInfo
 {
@@ -195,7 +195,7 @@ public:
 	CWebPage*								m_pActiveHtmlWnd;
 
 	CGalaxy*								m_pDocTemplateFrame;
-	CMDIMainWnd*						m_pMDIMainWnd;
+	CMDIMainWindow*							m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
 
 	CXobj*									m_pActiveXobj;
@@ -228,7 +228,7 @@ public:
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
-	map<HWND, CMDTWnd*>						m_mapMDTFrameHelperWnd;
+	map<HWND, CMDTWindow*>					m_mapMDTWindow;
 
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
@@ -274,7 +274,6 @@ public:
 	STDMETHOD(GetXobjFromHandle)(LONGLONG hWnd, IXobj** ppRetXobj);
 	STDMETHOD(GetCtrlByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp);
 	STDMETHOD(GetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
-	STDMETHOD(GetDocTemplateXml)(BSTR bstrCaption, BSTR bstrPath, BSTR bstrFilter, BSTR* bstrTemplatePath);
 	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppXobj);
 	STDMETHOD(GetItemText)(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet);
 	STDMETHOD(GetCLRControl)(IDispatch* CtrlDisp, BSTR bstrNames, IDispatch** ppRetDisp);
