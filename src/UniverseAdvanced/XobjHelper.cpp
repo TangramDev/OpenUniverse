@@ -583,7 +583,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	{
 		switch (lParam)
 		{
-		case 19920612:
 		case 20200609:
 		case 20200606:
 		case 20200531:

@@ -1064,10 +1064,6 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 		Control^ pObj = static_cast<Control^>(_pObj);
 		if (pObj != nullptr && pHostNode)
 		{
-			__int64 h = 0;
-			pHostNode->get_Handle(&h);
-			if (h)
-				::SendMessage((HWND)h, WM_COSMOSMSG, 0, 19920612);
 			IXobj* pRootXobj = NULL;
 			pHostNode->get_RootXobj(&pRootXobj);
 			CComBSTR bstrName(L"");

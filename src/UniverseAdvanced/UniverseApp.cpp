@@ -1261,20 +1261,14 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
-			//if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)pCreateWnd->lpcs->lpCreateParams, TANGRAM_CONST_PANE_FIRST) == 1992)
+			if (g_pCosmos->m_pMDIMainWnd == nullptr)
 			{
-				if (g_pCosmos->m_pMDIMainWnd == nullptr)
-				{
-					g_pCosmos->m_pMDIMainWnd = new CUniverseMDIMain();
-					g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
-					g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
-					//if (g_pCosmos->m_pCosmosDelegate)
-					//	g_pCosmos->m_pCosmosDelegate->HookAppDocTemplateInfo();
-				}
+				g_pCosmos->m_pMDIMainWnd = new CUniverseMDIMain();
+				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
+				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
 			}
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("MDIClient"), hPWnd, hWnd);
-			//::PostMessage(g_pCosmos->m_hCosmosWnd, WM_MDICLIENTCREATED, (WPARAM)hWnd, (LPARAM)hPWnd);
 		}
 		else if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 		{

@@ -1249,14 +1249,6 @@ namespace CommonUniverse
 				return 1992;
 			};
 			break;
-			case TANGRAM_CONST_OPENFILE://open doc
-			{
-				if (wp)
-				{
-					AfxGetApp()->OpenDocumentFile((LPCTSTR)wp);
-				}
-			};
-			break;
 			}
 		}
 		return  0;
@@ -1436,10 +1428,6 @@ namespace CommonUniverse
 	{
 		switch (lp)
 		{
-		case TANGRAM_CONST_OPENFILE:
-		{
-		}
-		break;
 		case TANGRAM_CONST_PANE_FIRST:
 		{
 			if (m_pDoc == nullptr)

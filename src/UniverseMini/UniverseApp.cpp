@@ -246,12 +246,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	case WM_COSMOSMSG:
 		switch (lParam)
 		{
-		case TANGRAM_CHROME_APP_INIT:
-		{
-			if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
-				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
-		}
-		break;
 		case 20200120:
 		{
 			HWND h = (HWND)wParam;

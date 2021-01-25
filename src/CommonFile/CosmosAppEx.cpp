@@ -1674,14 +1674,6 @@ namespace CommonUniverse
 				((CCosmosAppEx*)AfxGetApp())->OnFileNew();
 			};
 			break;
-			case TANGRAM_CONST_OPENFILE://open doc
-			{
-				if (wp)
-				{
-					AfxGetApp()->OpenDocumentFile((LPCTSTR)wp);
-				}
-			};
-			break;
 			case 19921989:
 				if (wp)
 				{
@@ -1891,10 +1883,6 @@ namespace CommonUniverse
 	{
 		switch (lp)
 		{
-		case TANGRAM_CONST_OPENFILE:
-		{
-		}
-		break;
 		case TANGRAM_CONST_PANE_FIRST:
 		{
 			if (m_pDoc == nullptr)

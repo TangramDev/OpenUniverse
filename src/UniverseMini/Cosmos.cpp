@@ -509,40 +509,6 @@ void CCosmos::BrowserAppStart()
 	if (g_bInit == true)
 		return;
 	g_bInit = true;
-	auto it = m_mapValInfo.find(_T("startupurl"));
-	if(it!=m_mapValInfo.end())
-		m_strStartupURL = OLE2T(it->second.bstrVal);
-	else
-	{
-		CTangramXmlParse parse;
-		CString strUrl = _T("");
-		if (parse.LoadFile(m_strConfigFile))
-		{
-			CString _strUrl = parse.attr(_T("url"), _T(""));
-			if (_strUrl != _T(""))
-			{
-				strUrl = _strUrl;
-				m_strStartupURL = strUrl;
-			}
-		}
-	}
-	if (m_strStartupURL!=_T(""))
-	{
-		if ((m_nAppType != APP_BROWSER) && m_pBrowserFactory && ::IsWindow(m_hChildHostWnd)) {
-			if (m_nAppType == APP_BROWSERAPP)
-				m_hMainWnd = m_hHostWnd;
-			::PostMessage(m_hHostWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
-			m_nAppType = APP_BROWSERAPP;
-			CString str = _T("<host popup='true'><url></url></host>");
-			CTangramXmlParse m_Parse;
-			if (m_Parse.LoadXml(str)) {
-				CTangramXmlParse* pParse = nullptr;
-				m_Parse[_T("url")].put_text(m_strStartupURL);
-			}
-			m_hHostBrowserWnd = m_pBrowserFactory->CreateBrowser((HWND)m_hChildHostWnd, m_Parse.xml());
-		}
-		::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 2019111701);
-	}
 }
 
 bool CCosmos::IsMDIClientGalaxyNode(IXobj* pXobj)
