@@ -4020,40 +4020,40 @@ CString CCosmos::GetDocTemplateXml(CString strCaption, CString _strPath, CString
 {
 	CString strTemplate = _T("");
 
-	Lock();
-	auto it = m_mapValInfo.find(_T("doctemplate"));
-	if (it != m_mapValInfo.end())
-	{
-		strTemplate = OLE2T(it->second.bstrVal);
-		::VariantClear(&it->second);
-		m_mapValInfo.erase(it);
-	}
-	if (strTemplate == _T(""))
-	{
-		CString str = _strPath;
-		CString strPath = _T("DocTemplate\\");
-		if (::PathIsDirectory(str) == false)
-		{
-			if (_strPath != _T(""))
-			{
-				strPath += _strPath;
-				strPath += _T("\\");
-			}
-			strPath = g_pCosmos->m_strAppPath + strPath;
-		}
-		else
-			strPath = str;
-		if (::PathFileExists(strPath) == false)
-			return _T("");
-		CDocTemplateDlg dlg;
-		if (strFilter != _T(""))
-			dlg.m_strFilter = strFilter;
-		dlg.m_strDir = strPath;
-		dlg.m_strCaption = strCaption;
-		if (dlg.DoModal() == IDOK)
-			strTemplate = dlg.m_strDocTemplatePath;
-	}
-	Unlock();
+	//Lock();
+	//auto it = m_mapValInfo.find(_T("doctemplate"));
+	//if (it != m_mapValInfo.end())
+	//{
+	//	strTemplate = OLE2T(it->second.bstrVal);
+	//	::VariantClear(&it->second);
+	//	m_mapValInfo.erase(it);
+	//}
+	//if (strTemplate == _T(""))
+	//{
+	//	CString str = _strPath;
+	//	CString strPath = _T("DocTemplate\\");
+	//	if (::PathIsDirectory(str) == false)
+	//	{
+	//		if (_strPath != _T(""))
+	//		{
+	//			strPath += _strPath;
+	//			strPath += _T("\\");
+	//		}
+	//		strPath = g_pCosmos->m_strAppPath + strPath;
+	//	}
+	//	else
+	//		strPath = str;
+	//	if (::PathFileExists(strPath) == false)
+	//		return _T("");
+	//	CDocTemplateDlg dlg;
+	//	if (strFilter != _T(""))
+	//		dlg.m_strFilter = strFilter;
+	//	dlg.m_strDir = strPath;
+	//	dlg.m_strCaption = strCaption;
+	//	if (dlg.DoModal() == IDOK)
+	//		strTemplate = dlg.m_strDocTemplatePath;
+	//}
+	//Unlock();
 	return strTemplate;
 }
 
