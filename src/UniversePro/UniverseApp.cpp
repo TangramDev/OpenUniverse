@@ -1118,7 +1118,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			}
 			if (g_pCosmos->m_pMDIMainWnd == nullptr)
 			{
-				g_pCosmos->m_pMDIMainWnd = new CUniverseMDIMain();
+				g_pCosmos->m_pMDIMainWnd = new CMDIMainWnd();
 				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
 				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
 			}
@@ -1896,7 +1896,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								auto it = g_pCosmos->m_mapMDTFrameHelperWnd.find(hWnd);
 								if (it == g_pCosmos->m_mapMDTFrameHelperWnd.end())
 								{
-									CMDTFrameHelperWnd* pFrameWnd = new CMDTFrameHelperWnd();
+									CMDTWnd* pFrameWnd = new CMDTWnd();
 									pFrameWnd->SubclassWindow(hWnd);
 									g_pCosmos->m_mapMDTFrameHelperWnd[hWnd] = pFrameWnd;
 								}
@@ -1971,10 +1971,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									}
 									if (bMdiChild)
 									{
-										CMDIChildHelperWnd* pWnd = (CMDIChildHelperWnd*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
+										CMDIChild* pWnd = (CMDIChild*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
 										if (pWnd == nullptr)
 										{
-											pWnd = new CMDIChildHelperWnd();
+											pWnd = new CMDIChild();
 											pWnd->SubclassWindow(hWnd);
 											g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 										}

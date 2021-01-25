@@ -129,18 +129,18 @@ protected:
 	virtual void PostNcDestroy();
 };
 
-class CMDIChildHelperWnd :
-	public CWindowImpl<CMDIChildHelperWnd, CWindow>
+class CMDIChild :
+	public CWindowImpl<CMDIChild, CWindow>
 {
 public:
-	CMDIChildHelperWnd(void);
-	virtual ~CMDIChildHelperWnd(void);
+	CMDIChild(void);
+	virtual ~CMDIChild(void);
 	HWND m_hClient;
 	HWND m_hParent;
 	CString m_strKey;
 	CGalaxy* m_pGalaxy = nullptr;
 	CString m_strDocXml=_T("");
-	BEGIN_MSG_MAP(CMDIChildHelperWnd)
+	BEGIN_MSG_MAP(CMDIChild)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_COSMOSOBSERVED, OnCosmosDocObserved)
@@ -155,13 +155,13 @@ private:
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
-class CMDTFrameHelperWnd :
-	public CWindowImpl<CMDTFrameHelperWnd, CWindow>
+class CMDTWnd :
+	public CWindowImpl<CMDTWnd, CWindow>
 {
 public:
-	CMDTFrameHelperWnd(void);
-	virtual ~CMDTFrameHelperWnd(void);
-	BEGIN_MSG_MAP(CMDTFrameHelperWnd)
+	CMDTWnd(void);
+	virtual ~CMDTWnd(void);
+	BEGIN_MSG_MAP(CMDTWnd)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 	END_MSG_MAP()
@@ -172,19 +172,19 @@ private:
 	void OnFinalMessage(HWND hWnd);
 };
 
-class CUniverseMDIMain :
-	public CWindowImpl<CUniverseMDIMain, CWindow>
+class CMDIMainWnd :
+	public CWindowImpl<CMDIMainWnd, CWindow>
 {
 public:
-	CUniverseMDIMain(void);
-	virtual ~CUniverseMDIMain(void);
+	CMDIMainWnd(void);
+	virtual ~CMDIMainWnd(void);
 
 	HWND									m_hMDIClient;
 	CXobj*									m_pClientXobj = nullptr;
 	CGalaxy*								m_pGalaxy = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
-	map<HWND, CMDIChildHelperWnd*>			m_mapMDIChildHelperWnd;
-	BEGIN_MSG_MAP(CUniverseMDIMain)
+	map<HWND, CMDIChild*>			m_mapMDIChildHelperWnd;
+	BEGIN_MSG_MAP(CMDIMainWnd)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 	END_MSG_MAP()
 	

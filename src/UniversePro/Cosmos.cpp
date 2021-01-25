@@ -1664,7 +1664,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		return nullptr;
 	CString strGalaxyName = _strGalaxyName;
 
-	CCosmosDocTemplate* pDocTemplate = nullptr;
 	IGalaxy* pGalaxy = nullptr;
 	pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)hGalaxy), strGalaxyName.AllocSysString(), &pGalaxy);
 	if (pGalaxy)
@@ -1675,30 +1674,19 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		CComQIPtr<IXobj> pParentNode(pInfo->m_pParentDisp);
 		IXobj* pXobj = nullptr;
 		CString str = _T("");
-		if (pDocTemplate == nullptr)
-		{
-			m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
-		}
-		else
-		{
-			HWND hWnd = _pGalaxy->m_pGalaxyCluster->m_hWnd;
-			_pGalaxy->m_pCosmosDocTemplate = pDocTemplate;
-		}
+		m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
 		CString strKey = _T("default");
 		str.Format(_T("<%s><cluster><xobj name='%s' /></cluster></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
-		if (pDocTemplate == nullptr && pXobj)
+		CXobj* _pXobj = (CXobj*)pXobj;
+		HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
+		CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
+		if (pWnd)
 		{
-			CXobj* _pXobj = (CXobj*)pXobj;
-			HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
-			if (pWnd)
-			{
-				if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
-					return pGalaxy;
-			}
-			pXobj->put_SaveToConfigFile(true);
+			if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
+				return pGalaxy;
 		}
+		pXobj->put_SaveToConfigFile(true);
 	}
 
 	return pGalaxy;

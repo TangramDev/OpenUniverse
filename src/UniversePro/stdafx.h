@@ -166,9 +166,8 @@ class CTangramTabCtrl;
 class CCosmosAppCtrl;
 class CTangramListView;
 class CCosmosEvent;
-class CCosmosDocFrame;
 class CGalaxyCluster;
-class CUniverseMDIMain;
+class CMDIMainWnd;
 class CXobjCollection;
 class CTangramHtmlTreeWnd;
 

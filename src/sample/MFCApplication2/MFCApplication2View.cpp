@@ -70,9 +70,7 @@ BOOL CMFCApplication2View::PreCreateWindow(CREATESTRUCT& cs)
 void CMFCApplication2View::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
-	HWND hPWnd = ::GetParent(m_hWnd);
-	CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
-	if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+	if (GetParentFrame())
 		ResizeParentToFit();
 }
 

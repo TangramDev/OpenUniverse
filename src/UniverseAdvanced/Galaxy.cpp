@@ -716,18 +716,18 @@ void CCosmosTabCtrl::PostNcDestroy()
 	delete this;
 }
 
-CMDIChildHelperWnd::CMDIChildHelperWnd(void)
+CMDIChild::CMDIChild(void)
 {
 	m_hClient = nullptr;
 	m_hParent = nullptr;
 	m_strKey = _T("");
 }
 
-CMDIChildHelperWnd::~CMDIChildHelperWnd(void)
+CMDIChild::~CMDIChild(void)
 {
 }
 
-LRESULT CMDIChildHelperWnd::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDIChild::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (g_pCosmos->m_nAppType == 1992 && ::IsIconic(m_hWnd))
@@ -735,16 +735,16 @@ LRESULT CMDIChildHelperWnd::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM
 	return l;
 }
 
-LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDIChild::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (lParam != wParam)
 	{
 		HWND hActivedWnd = (HWND)lParam;
-		CMDIChildHelperWnd* _pWnd = nullptr;
+		CMDIChild* _pWnd = nullptr;
 		CString strKey = _T("");
 		if (hActivedWnd)
 		{
-			_pWnd = (CMDIChildHelperWnd*)::SendMessage(hActivedWnd, WM_COSMOSMSG, 0, 19631222);
+			_pWnd = (CMDIChild*)::SendMessage(hActivedWnd, WM_COSMOSMSG, 0, 19631222);
 			if (_pWnd)
 			{
 				strKey = _pWnd->m_strKey;
@@ -773,13 +773,13 @@ LRESULT CMDIChildHelperWnd::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lPara
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CMDIChildHelperWnd::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDIChild::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pCosmos->m_pCosmosDelegate->QueryWndInfo(ObserveComplete, 0);
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CMDIChildHelperWnd::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDIChild::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (lParam == 19631222&&wParam == 0)
 	{
@@ -807,7 +807,7 @@ LRESULT CMDIChildHelperWnd::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	return l;
 }
 
-void CMDIChildHelperWnd::OnFinalMessage(HWND hWnd)
+void CMDIChild::OnFinalMessage(HWND hWnd)
 {
 	auto it = g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.find(hWnd);
 	if (it != g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.end())
@@ -820,17 +820,17 @@ void CMDIChildHelperWnd::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-CMDTFrameHelperWnd::CMDTFrameHelperWnd(void)
+CMDTWnd::CMDTWnd(void)
 {
 }
 
-CMDTFrameHelperWnd::~CMDTFrameHelperWnd(void)
+CMDTWnd::~CMDTWnd(void)
 {
 }
 
-LRESULT CMDTFrameHelperWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CMDTFrameHelperWnd* pHelperWnd = nullptr;
+	CMDTWnd* pHelperWnd = nullptr;
 	auto it = g_pCosmos->m_mapMDTFrameHelperWnd.find(m_hWnd);
 	if (it != g_pCosmos->m_mapMDTFrameHelperWnd.end())
 	{
@@ -852,9 +852,9 @@ LRESULT CMDTFrameHelperWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	return l;
 }
 
-LRESULT CMDTFrameHelperWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDTWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CMDTFrameHelperWnd* pHelperWnd = nullptr;
+	CMDTWnd* pHelperWnd = nullptr;
 	if (g_pCosmos->m_mapMDTFrameHelperWnd.size() == 1)
 	{
 		::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_DESTROY, 0, 0);
@@ -871,29 +871,29 @@ LRESULT CMDTFrameHelperWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	return l;
 }
 
-void CMDTFrameHelperWnd::OnFinalMessage(HWND hWnd)
+void CMDTWnd::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
 }
 
-CUniverseMDIMain::CUniverseMDIMain(void)
+CMDIMainWnd::CMDIMainWnd(void)
 {
 	m_pGalaxyCluster = nullptr;
 	m_hMDIClient = nullptr;
 }
 
-CUniverseMDIMain::~CUniverseMDIMain(void)
+CMDIMainWnd::~CMDIMainWnd(void)
 {
 }
 
-void CUniverseMDIMain::OnFinalMessage(HWND hWnd)
+void CMDIMainWnd::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
 }
 
-LRESULT CUniverseMDIMain::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDIMainWnd::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (g_pCosmos->m_strDefaultTemplate == _T("") && g_pCosmos->m_strDefaultTemplate2 == _T(""))
 		return DefWindowProc(uMsg, wParam, lParam);

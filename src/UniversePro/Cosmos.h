@@ -77,7 +77,7 @@
 using namespace Browser;
 using namespace CommonUniverse;
 class CWinForm;
-class CMDTFrameHelperWnd;
+class CMDTWnd;
 
 struct CommonThreadInfo
 {
@@ -195,7 +195,7 @@ public:
 	CWebPage*								m_pActiveHtmlWnd;
 
 	CGalaxy*								m_pDocTemplateFrame;
-	CUniverseMDIMain*						m_pMDIMainWnd;
+	CMDIMainWnd*						m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
 
 	CXobj*									m_pActiveXobj;
@@ -228,7 +228,7 @@ public:
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
-	map<HWND, CMDTFrameHelperWnd*>			m_mapMDTFrameHelperWnd;
+	map<HWND, CMDTWnd*>						m_mapMDTFrameHelperWnd;
 
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)

@@ -158,8 +158,6 @@ BOOL CMFCApp::InitInstance()
 
 int CMFCApp::ExitInstance()
 {
-	//while (g_pCosmosImpl->m_mapTemplateInfo.size())
-	//	g_pCosmosImpl->m_mapTemplateInfo.erase(g_pCosmosImpl->m_mapTemplateInfo.begin());
 	//TODO: handle additional resources you may have added
 	AfxOleTerm(FALSE);
 
