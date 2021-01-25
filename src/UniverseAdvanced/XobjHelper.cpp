@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101230016           *
+ *           Web Runtime for Application - Version 1.0.0.202101240017           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -119,7 +119,7 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 				RECT rc = { 0,0,0,0 };
 				if (::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)&rc, 19921989) == 19921989)
 				{
-					::SetWindowPos(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,  /*SWP_NOSENDCHANGING| SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
+					//::SetWindowPos(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,  /*SWP_NOSENDCHANGING| SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
 				}
 			}
 		}
@@ -493,10 +493,11 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (pXobj)
 	{
+		CXobj* _pXobj = (CXobj*)pXobj;
+		::PostMessage(_pXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210125);
 		CString str = _T("");
 		str.Format(_T("%d"), wParam);
 		m_pXobj->put_Attribute(CComBSTR(L"activepage"), str.AllocSysString());
-		CXobj* _pXobj = (CXobj*)pXobj;
 		if (_pXobj->m_nViewType == Grid)
 		{
 			((CSplitterWnd*)_pXobj->m_pHostWnd)->RecalcLayout();
@@ -553,6 +554,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 					m_pXobj->m_pWebPage->m_pGalaxy == m_pXobj->m_pXobjShareData->m_pGalaxy)
 				{
 					g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+					//pGalaxy->m_pWebPageWnd->m_pGalaxy->HostPosChanged();
 				}
 			}
 		}
@@ -591,6 +593,12 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 19820911:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
+		case 20210125:
+		{
+			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+		}
+		break;
 		case 20190602:
 		{
 			CWinForm* pCosmosWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 20190214);
@@ -1092,13 +1100,15 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (m_hFormWnd)
 		::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
-	else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
+	else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
 		if (g_pCosmos->m_pMDIMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 		{
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj = m_pXobj;
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
+		return;
 	}
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pXobj->m_pDisp == NULL) && m_pXobj != m_pXobj->m_pRootObj)
 	{
