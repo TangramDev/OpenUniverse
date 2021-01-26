@@ -2759,6 +2759,10 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20180115:
 	{
 		HostPosChanged();
+		if (g_pCosmos->m_pMDIMainWnd && 
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy&&
+			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd,m_hWnd))
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 	}
 	break;
 	case 20200601:

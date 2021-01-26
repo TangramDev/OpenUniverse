@@ -929,9 +929,13 @@ namespace CommonUniverse
 					{
 						::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pGrid, 20191031);
 						pGrid->get_Attribute(L"activepage", &bstrTag);
+						long nCount = 0;
+						pGrid->get_Cols(&nCount);
 						CString m_strTag = OLE2T(bstrTag);
 						::SysFreeString(bstrTag);
 						int nActivePage = _wtoi(m_strTag);
+						if (nCount)
+							nActivePage = nActivePage % nCount;
 						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
 						return pWnd->m_hWnd;
 					}
@@ -1020,9 +1024,13 @@ namespace CommonUniverse
 					{
 						::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pGrid, 20191031);
 						pGrid->get_Attribute(L"activepage", &bstrTag);
+						long nCount = 0;
+						pGrid->get_Cols(&nCount);
 						CString m_strTag = OLE2T(bstrTag);
 						::SysFreeString(bstrTag);
 						int nActivePage = _wtoi(m_strTag);
+						if (nCount)
+							nActivePage = nActivePage % nCount;
 						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
 						if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 						{

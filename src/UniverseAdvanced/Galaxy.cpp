@@ -1692,7 +1692,9 @@ void CGalaxy::HostPosChanged()
 		m_pBindingXobj != g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
 	{
 		if (m_pBindingXobj && g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pHostWnd->IsWindowVisible())
+		{
 			m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
+		}
 	}
 
 	HWND hPWnd = ::GetParent(m_hWnd);
@@ -2871,12 +2873,10 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20180115:
 	{
 		HostPosChanged();
-		//if (m_pHostWebBrowserWnd)
-		//{
-		//	m_pHostWebBrowserWnd->m_pBrowser->LayoutBrowser();
-		//	//m_pHostWebBrowserWnd->BrowserLayout();
-		//	::PostMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
-		//}
+		if (g_pCosmos->m_pMDIMainWnd &&
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy &&
+			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd))
+			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 	}
 	break;
 	case 20200601:
@@ -3056,7 +3056,7 @@ LRESULT CGalaxy::OnQueryAppProxy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		LPRECT lpRECT = (LPRECT)wParam;
 		if (lpRECT && m_pWorkXobj && ::IsWindowVisible(m_pWorkXobj->m_pHostWnd->m_hWnd))
 		{
-			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpRECT->left, lpRECT->top, lpRECT->right - lpRECT->left, lpRECT->bottom - lpRECT->top, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_FRAMECHANGED);/*SWP_FRAMECHANGED| SWP_HIDEWINDOW| SWP_NOZORDER | SWP_NOREDRAW */
+			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpRECT->left, lpRECT->top, lpRECT->right - lpRECT->left, lpRECT->bottom - lpRECT->top, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOZORDER);/*SWP_FRAMECHANGED| SWP_HIDEWINDOW | SWP_NOREDRAW */
 			if (m_pBindingXobj && ::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
 			{
 				m_pBindingXobj->m_pHostWnd->GetWindowRect(lpRECT);

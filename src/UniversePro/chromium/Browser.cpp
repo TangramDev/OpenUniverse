@@ -78,8 +78,6 @@ namespace Browser {
 						}
 					}
 				}
-				::PostMessage(m_hWnd, WM_COSMOSMSG, 20210125, 0);
-				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
 	}
@@ -348,12 +346,6 @@ namespace Browser {
 				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 				::InvalidateRect(m_hWnd, nullptr, true);
 			}
-		}
-		break;
-		case 20210125:
-		{
-			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
-				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 		}
 		break;
 		case 20201101:

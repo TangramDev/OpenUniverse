@@ -441,7 +441,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 20200531:
 		case 19631222:
 		case 20180115:
-		case 20210125:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
 		case 20200128:

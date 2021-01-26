@@ -494,7 +494,6 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	if (pXobj)
 	{
 		CXobj* _pXobj = (CXobj*)pXobj;
-		::PostMessage(_pXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210125);
 		CString str = _T("");
 		str.Format(_T("%d"), wParam);
 		m_pXobj->put_Attribute(CComBSTR(L"activepage"), str.AllocSysString());
@@ -546,20 +545,9 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		if (pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
-			if (::IsWindow(hWnd))
-			{
-				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 4);
-				if (g_pCosmos->m_pMDIMainWnd &&
-					g_pCosmos->m_pMDIMainWnd->m_pGalaxy &&
-					m_pXobj->m_pWebPage->m_pGalaxy == m_pXobj->m_pXobjShareData->m_pGalaxy)
-				{
-					g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
-					//pGalaxy->m_pWebPageWnd->m_pGalaxy->HostPosChanged();
-				}
-			}
 		}
 	}
-
+	::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	return lRes;
 }
@@ -592,12 +580,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 19820911:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
-		case 20210125:
-		{
-			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
-				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
-		}
-		break;
 		case 20190602:
 		{
 			CWinForm* pCosmosWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 20190214);

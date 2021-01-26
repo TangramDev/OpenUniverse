@@ -234,6 +234,13 @@ namespace CommonUniverse
 	{
 		if (lParam == 1965)
 		{
+			if (m_pWndNode)
+			{
+				long nCount = 0;
+				m_pWndNode->get_Cols(&nCount);
+				if (nCount)
+					wParam = wParam % nCount;
+			}
 			::PostMessage(m_hWnd, WM_TGM_SETACTIVEPAGE, wParam, 0);
 		}
 		else
@@ -1056,9 +1063,13 @@ namespace CommonUniverse
 					{
 						::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pGrid, 20191031);
 						pGrid->get_Attribute(L"activepage", &bstrTag);
+						long nCount = 0;
+						pGrid->get_Cols(&nCount);
 						CString m_strTag = OLE2T(bstrTag);
 						::SysFreeString(bstrTag);
 						int nActivePage = _wtoi(m_strTag);
+						if (nCount)
+							nActivePage = nActivePage%nCount;
 						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
 						if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 						{
@@ -1142,14 +1153,8 @@ namespace CommonUniverse
 		USES_CONVERSION;
 		BSTR bstrTag = L"";
 
-		pXobj->get_Attribute(L"activepage", &bstrTag);
-		CString m_strTag = OLE2T(bstrTag);
-		int nActivePage = _wtoi(m_strTag);
-		::SysFreeString(bstrTag);
-		long nTabCount = 0;
-		pXobj->get_Cols(&nTabCount);
 		pXobj->get_Attribute(L"xobjtype", &bstrTag);
-		m_strTag = OLE2T(bstrTag);
+		CString m_strTag = OLE2T(bstrTag);
 		::SysFreeString(bstrTag);
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
@@ -1168,11 +1173,6 @@ namespace CommonUniverse
 					if (pWnd->Create(nullptr, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), pParent, 0, nullptr))
 					{
 						::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pXobj, 20191031);
-						pXobj->get_Attribute(L"activepage", &bstrTag);
-						CString m_strTag = OLE2T(bstrTag);
-						::SysFreeString(bstrTag);
-						int nActivePage = _wtoi(m_strTag);
-						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
 						if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 						{
 							CView* pView = static_cast<CView*>(pWnd);
@@ -1230,6 +1230,10 @@ namespace CommonUniverse
 						{
 							return NULL;
 						}
+						pXobj->get_Attribute(L"activepage", &bstrTag);
+						CString m_strTag = OLE2T(bstrTag);
+						::SysFreeString(bstrTag);
+						int nActivePage = _wtoi(m_strTag);
 						::PostMessage(pTangramTabCtrlWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, nActivePage, 1965);
 					}
 
