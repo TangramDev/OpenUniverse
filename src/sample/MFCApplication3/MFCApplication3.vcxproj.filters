@@ -176,6 +176,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Manifest Include="res\MFCApplication1.manifest" />
+    <Manifest Include="res\MFCApplication3.manifest" />
   </ItemGroup>
 </Project>

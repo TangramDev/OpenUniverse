@@ -71,7 +71,6 @@
 #include "atlenc.h"
 #include "ProgressFX.h"
 #include "HourglassFX.h"
-#include "DocTemplateDlg.h"
 #include "TangramTreeView.h"
 #include "TangramListView.h"
 #include "TangramTabCtrl.h"
@@ -370,43 +369,12 @@ void CCosmos::Init()
 		{
 			::SHCreateDirectory(nullptr, m_strAppDataPath);
 		}
-		m_strAppFormsPath = m_strAppPath + _T("CommonForms\\");
-		if (::PathIsDirectory(m_strAppFormsPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppFormsPath);
-		}
-		m_strAppFormsInfoPath = m_strAppDataPath + _T("TangramFormsInfo\\");
-		if (::PathIsDirectory(m_strAppFormsInfoPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppFormsInfoPath);
-		}
-		m_strAppWPFObjsInfoPath = m_strAppDataPath + _T("TangramWPFsInfo\\");
-		if (::PathIsDirectory(m_strAppWPFObjsInfoPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppWPFObjsInfoPath);
-		}
-
-		m_strAppControlsInfoPath = m_strAppDataPath + _T("TangramControlsInfo\\");
-		if (::PathIsDirectory(m_strAppControlsInfoPath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppControlsInfoPath);
-		}
-		m_strAppFormsTemplatePath = m_strAppDataPath + _T("TangramFormsTemplate\\");
-		if (::PathIsDirectory(m_strAppFormsTemplatePath) == false)
-		{
-			::SHCreateDirectory(nullptr, m_strAppFormsTemplatePath);
-		}
 	}
 
 	SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer);
 	m_strProgramFilePath = CString(m_szBuffer);
 
 	m_strAppCommonDocPath2 = m_strProgramFilePath + _T("\\Tangram\\CommonDocComponent\\");
-	m_strAppCommonFormsPath = m_strProgramFilePath + _T("\\Tangram\\CommonForms\\");
-	if (::PathIsDirectory(m_strAppCommonFormsPath) == false)
-	{
-		::SHCreateDirectory(nullptr, m_strAppCommonFormsPath);
-	}
 	m_mapValInfo[_T("apppath")] = CComVariant(m_strAppPath);
 	m_mapValInfo[_T("appdatapath")] = CComVariant(m_strAppDataPath);
 	m_mapValInfo[_T("appdatafile")] = CComVariant(m_strConfigDataFile);
@@ -3803,41 +3771,6 @@ STDMETHODIMP CCosmos::GetXobjFromHandle(LONGLONG hWnd, IXobj** ppRetXobj)
 CString CCosmos::GetDocTemplateXml(CString strCaption, CString _strPath, CString strFilter)
 {
 	CString strTemplate = _T("");
-
-	Lock();
-	auto it = m_mapValInfo.find(_T("doctemplate"));
-	if (it != m_mapValInfo.end())
-	{
-		strTemplate = OLE2T(it->second.bstrVal);
-		::VariantClear(&it->second);
-		m_mapValInfo.erase(it);
-	}
-	if (strTemplate == _T(""))
-	{
-		CString str = _strPath;
-		CString strPath = _T("DocTemplate\\");
-		if (::PathIsDirectory(str) == false)
-		{
-			if (_strPath != _T(""))
-			{
-				strPath += _strPath;
-				strPath += _T("\\");
-			}
-			strPath = g_pCosmos->m_strAppPath + strPath;
-		}
-		else
-			strPath = str;
-		if (::PathFileExists(strPath) == false)
-			return _T("");
-		CDocTemplateDlg dlg;
-		if (strFilter != _T(""))
-			dlg.m_strFilter = strFilter;
-		dlg.m_strDir = strPath;
-		dlg.m_strCaption = strCaption;
-		if (dlg.DoModal() == IDOK)
-			strTemplate = dlg.m_strDocTemplatePath;
-	}
-	Unlock();
 	return strTemplate;
 }
 

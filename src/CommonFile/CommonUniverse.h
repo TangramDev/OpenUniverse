@@ -649,12 +649,6 @@ namespace CommonUniverse {
 		CString									m_strProgramFilePath;
 		CString									m_strAppCommonDocPath;
 		CString									m_strAppCommonDocPath2;
-		CString									m_strAppCommonFormsPath;
-		CString									m_strAppFormsPath;
-		CString									m_strAppFormsInfoPath;
-		CString									m_strAppWPFObjsInfoPath;
-		CString									m_strAppControlsInfoPath;
-		CString									m_strAppFormsTemplatePath;
 		CString									m_strAppCurrentFormTemplatePath;
 		CString									m_strXobjSelectedText;
 		CString									m_strDesignerTip1;

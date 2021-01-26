@@ -183,7 +183,7 @@ public:
 	CXobj*									m_pClientXobj = nullptr;
 	CGalaxy*								m_pGalaxy = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
-	map<HWND, CMDIChildWindow*>			m_mapMDIChildHelperWnd;
+	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;
 	BEGIN_MSG_MAP(CMDIMainWindow)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 	END_MSG_MAP()

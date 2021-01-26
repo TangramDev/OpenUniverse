@@ -1669,18 +1669,12 @@ namespace Universe
 
     String^ Cosmos::AppCommonFormsPath::get()
     {
-        BSTR bstrAppCommonFormsPath = theApp.m_pCosmosImpl->m_strAppCommonFormsPath.AllocSysString();
-        String^ strResult = BSTR2STRING(bstrAppCommonFormsPath);
-        ::SysFreeString(bstrAppCommonFormsPath);
-        return strResult;
+        return L"";
     }
 
     String^ Cosmos::AppFormsPath::get()
     {
-        BSTR bstrAppFormsPath = theApp.m_pCosmosImpl->m_strAppFormsPath.AllocSysString();
-        String^ strResult = BSTR2STRING(bstrAppFormsPath);
-        ::SysFreeString(bstrAppFormsPath);
-        return strResult;
+        return L"";
     }
 
     void Cosmos::SetControlRelation(Control^ ctrl, String^ strTypes)

@@ -1286,13 +1286,13 @@ namespace Browser {
 										if (pCluster)
 										{
 											IGalaxy* pGalaxy = nullptr;
-											CString strKey = strCaption;
-											strKey.Replace(_T(" "), _T("_"));
-											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+											CString strName = strCaption;
+											strName.Replace(_T(" "), _T("_"));
+											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
 											if (pGalaxy)
 											{
 												CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-												pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = _pGalaxy;
+												pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strName] = _pGalaxy;
 												_pGalaxy->m_pWebPageWnd = this;
 												IXobj* pXobj = nullptr;
 												_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);

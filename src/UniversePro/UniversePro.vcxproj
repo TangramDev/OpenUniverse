@@ -331,7 +331,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     </ClCompile>
     <ClCompile Include="Wormhole.cpp" />
     <ClCompile Include="Markup.cpp" />
-    <ClCompile Include="DocTemplateDlg.cpp" />
     <ClCompile Include="eclipse.cpp" />
     <ClCompile Include="eclipseCommon.cpp" />
     <ClCompile Include="eclipseConfig.cpp" />
@@ -432,7 +431,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="chromium\Browser.h" />
     <ClInclude Include="Wormhole.h" />
     <ClInclude Include="Markup.h" />
-    <ClInclude Include="DocTemplateDlg.h" />
     <ClInclude Include="eclipseCommon.h" />
     <ClInclude Include="eclipseConfig.h" />
     <ClInclude Include="eclipseJNI.h" />

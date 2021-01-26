@@ -34,7 +34,6 @@
 #include "Galaxy.h"
 #include "TangramHtmlTreeWnd.h"
 #include "EclipsePlus\EclipseAddin.h"
-#include "DocTemplateDlg.h"
 #include "Wormhole.h"
 
 class CDockPaneWnd : public CWnd
@@ -77,7 +76,6 @@ void CDockPaneWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 				m_pGalaxy = (CGalaxy*)iter->second;
 			}
 		}
-		//::ShowWindow(m_hClient, SW_SHOW);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210107);
 	}
 }

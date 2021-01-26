@@ -35,7 +35,6 @@
 #include "TangramHtmlTreeWnd.h"
 #include "OfficePlus\WordPlus\WordAddin.h"
 #include "EclipsePlus\EclipseAddin.h"
-#include "DocTemplateDlg.h"
 #include "Wormhole.h"
 
 using namespace OfficePlus::WordPlus;

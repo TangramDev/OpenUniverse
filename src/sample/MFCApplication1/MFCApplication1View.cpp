@@ -64,7 +64,7 @@ BOOL CMFCApplication1View::PreCreateWindow(CREATESTRUCT& cs)
 void CMFCApplication1View::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
-	if (GetParentFrame())
+	if(GetParentFrame())
 		ResizeParentToFit();
 }
 

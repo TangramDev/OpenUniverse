@@ -250,14 +250,6 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 				}//FindNextFile
 				else
 				{
-					if (theApp.m_pCosmosImpl)
-					{
-						strPath = theApp.m_pCosmosImpl->m_strAppCommonFormsPath + strLib + _T(".dll");
-						if (::PathFileExists(strPath))
-						{
-							return strObjName + _T("|") + strLib + _T("|") + strPath;
-						}
-					}
 					if (GetLastError() == ERROR_NO_MORE_FILES) // no more files there
 						bSearch = false;
 					else {
