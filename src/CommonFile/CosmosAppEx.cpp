@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018           *
+ *           Web Runtime for Application - Version 1.0.0.202101270019           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -167,12 +167,12 @@ namespace CommonUniverse
 	};
 
 	// CTangramTabCtrlWnd
-
 	IMPLEMENT_DYNAMIC(CTangramTabCtrlWnd, CMFCTabCtrl)
 
-		CTangramTabCtrlWnd::CTangramTabCtrlWnd()
+	CTangramTabCtrlWnd::CTangramTabCtrlWnd()
 	{
 		m_nCurSelTab = -1;
+		m_pWndNode = nullptr;
 	}
 
 	CTangramTabCtrlWnd::~CTangramTabCtrlWnd()
@@ -184,7 +184,7 @@ namespace CommonUniverse
 	{
 		CString str = _T("");
 		str.Format(_T("%d"), GetActiveTab());
-		m_pWndNode->put_Attribute(L"activepage", CComBSTR(str));
+		m_pWndNode->put_Attribute(CComBSTR("activepage"), CComBSTR(str));
 	}
 
 	BEGIN_MESSAGE_MAP(CTangramTabCtrlWnd, CMFCTabCtrl)
@@ -228,8 +228,6 @@ namespace CommonUniverse
 	}
 
 	// CTangramTabCtrlWnd Message Handler
-
-
 	LRESULT CTangramTabCtrlWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	{
 		if (lParam == 1965)
@@ -279,7 +277,6 @@ namespace CommonUniverse
 		IXobj* pActiveNode = NULL;
 		if (m_pWndNode)
 		{
-			//this->SetActiveTab(iIndex);
 			CComPtr<IXobjCollection> pCol;
 			m_pWndNode->get_ChildNodes(&pCol);
 			CComPtr<IXobj> pNode;
@@ -289,7 +286,7 @@ namespace CommonUniverse
 				m_nCurSelTab = iIndex;
 				CString str = _T("");
 				str.Format(_T("%d"), iIndex);
-				m_pWndNode->put_Attribute(CComBSTR(L"activepage"), str.AllocSysString());
+				m_pWndNode->put_Attribute(CComBSTR("activepage"), str.AllocSysString());
 				pNode->ActiveTabPage(pNode);
 			}
 		}
@@ -1062,7 +1059,7 @@ namespace CommonUniverse
 					if (pWnd->Create(nullptr, strStyle, WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), pParent, 0, nullptr))
 					{
 						::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pGrid, 20191031);
-						pGrid->get_Attribute(L"activepage", &bstrTag);
+						pGrid->get_Attribute(CComBSTR("activepage"), &bstrTag);
 						long nCount = 0;
 						pGrid->get_Cols(&nCount);
 						CString m_strTag = OLE2T(bstrTag);
@@ -1230,7 +1227,7 @@ namespace CommonUniverse
 						{
 							return NULL;
 						}
-						pXobj->get_Attribute(L"activepage", &bstrTag);
+						pXobj->get_Attribute(CComBSTR("activepage"), &bstrTag);
 						CString m_strTag = OLE2T(bstrTag);
 						::SysFreeString(bstrTag);
 						int nActivePage = _wtoi(m_strTag);

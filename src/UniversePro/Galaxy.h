@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018
+ *           Web Runtime for Application - Version 1.0.0.202101270019
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -183,13 +183,16 @@ public:
 	CGalaxy*								m_pGalaxy = nullptr;
 	CXobj*									m_pClientXobj = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
+	CMDIChildWindow*						m_pActiveMDIChild = nullptr;
 	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;
 	BEGIN_MSG_MAP(CMDIMainWindow)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 	END_MSG_MAP()
 	
 	void OnFinalMessage(HWND hWnd);
 	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 };
 
 class CWinForm :

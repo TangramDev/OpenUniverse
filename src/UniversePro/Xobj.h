@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018           *
+ *           Web Runtime for Application - Version 1.0.0.202101270019           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -174,7 +174,7 @@ public:
 	CString GetNames();
 	CWebPage* GetHtmlWnd();
 	void NodeCreated();
-
+	CXobj* GetMdiclientObj();
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
 	HRESULT Fire_XobjAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);

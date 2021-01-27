@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018           *
+ *           Web Runtime for Application - Version 1.0.0.202101270019           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1108,21 +1108,22 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		}
 		if (::IsWindow(hPWnd) && (::GetWindowLongPtr(hPWnd, GWL_STYLE) & WS_CHILD)) {
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())// && hPWnd == g_pCosmos->m_hHostBrowserWnd)
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				//::SetWindowPos(hPWnd, HWND_BOTTOM, 0, -10, 10, 10, /*|SWP_SHOWWINDOW|SWP_NOSENDCHANGING*/SWP_NOREDRAW | SWP_NOACTIVATE);
 				m_pWebBrowser = (CBrowser*)it->second;
-				::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd,hPWnd);
-				::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
-				m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+				if (m_pWebBrowser->m_pVisibleWebWnd)
+				{
+					::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, hPWnd);
+					::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
+					if (m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+						m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+				}
 				m_pWebBrowser->BrowserLayout();
 				g_pCosmos->m_hParent = NULL;
 				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
 				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				m_pWebBrowser->m_heightfix = (hPWnd == g_pCosmos->m_hHostBrowserWnd) ? 12 : 0;
-				//::SetParent(m_pWebBrowser->m_hWnd,hWnd);
-				//::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
 			}
 		}
 	}
@@ -1424,6 +1425,29 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		g_pCosmos->m_pActiveXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeCreated(this);
 
 	return bRet;
+}
+
+CXobj* CXobj::GetMdiclientObj()
+{
+	if (m_pHostGalaxy)
+	{
+		auto it = m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
+		if (it != m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.end())
+		{
+			CXobj* pObj = it->second->GetMdiclientObj();
+			if (pObj == nullptr)
+				return it->second;
+			while (pObj)
+			{
+				pObj = it->second->GetMdiclientObj();
+				if (pObj == nullptr)
+					return it->second;
+			}
+		}
+		return nullptr;
+	}
+	else
+		return nullptr;
 }
 
 void CXobj::NodeCreated()

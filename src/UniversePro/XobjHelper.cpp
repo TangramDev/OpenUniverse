@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018
+ *           Web Runtime for Application - Version 1.0.0.202101270019
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -492,6 +492,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	m_pXobj->GetXobj(0, wParam, &pXobj);
 
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
+	::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	if (pXobj)
 	{
 		CXobj* _pXobj = (CXobj* )pXobj;
@@ -552,7 +553,6 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-	::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	return lRes;
 }

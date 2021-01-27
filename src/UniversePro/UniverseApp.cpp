@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018           *
+ *           Web Runtime for Application - Version 1.0.0.202101270019           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1920,9 +1920,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							}
 						}
 						if (g_pCosmos->m_strDefaultTemplate == _T(""))
-						{
 							g_pCosmos->m_hFirstView = hClient;
-						}
 						else
 						{
 							CString strKey = g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID;
@@ -2022,6 +2020,26 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												}
 											}
 										}
+									}
+									pClient = pChild->GetChild(_T("hostpage"));
+									if (pClient && g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
+									{
+										if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
+										{
+											CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pWebPage;
+											HWND hWnd = pPage->m_hWnd;
+											HWND hPWnd = ::GetParent(hWnd);
+											CBrowser* pBrowser = nullptr;
+											auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
+											if (it != g_pCosmos->m_mapBrowserWnd.end())
+											{
+												pBrowser = (CBrowser*)it->second;
+												pPage = pBrowser->m_pVisibleWebWnd;
+												pPage->LoadDocument2Viewport(pPage->m_strCurKey, pClient->xml());
+											}
+										}
+										else
+											g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
 									}
 									pClient = pChild->GetChild(_T("controlbars"));
 									if (pClient)

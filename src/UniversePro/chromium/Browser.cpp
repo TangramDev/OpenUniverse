@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018           *
+ *           Web Runtime for Application - Version 1.0.0.202101270019           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -65,7 +65,7 @@ namespace Browser {
 				if (it != g_pCosmos->m_mapHtmlWnd.end())
 				{
 					CWebPage* pPage = (CWebPage*)it->second;
-					if (pPage->m_pGalaxy&&pPage->m_pCosmosFrameWndInfo)
+					if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
 					{
 						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
 						for (auto it : pPage->m_pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)

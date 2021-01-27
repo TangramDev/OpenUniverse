@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101250018           *
+ *           Web Runtime for Application - Version 1.0.0.202101270019           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -810,47 +810,6 @@ namespace Browser {
 								{
 									IXobj* pXobj = nullptr;
 									pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
-								}
-							}
-						}
-						pParse = pParse->GetChild(_T("controlbars"));
-						if (pParse)
-						{
-							int nCount = pParse->GetCount();
-							for (int i = 0; i < nCount; i++)
-							{
-								CTangramXmlParse* pParse2 = pParse->GetChild(i);
-								CString strCaption = pParse2->attr(_T("caption"), _T(""));
-								if (strCaption != _T(""))
-								{
-									auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
-									if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
-									{
-										HWND hWnd = it->second;
-										int nID = pParse2->attrInt(_T("clientid"), 0);
-										HWND hClient = ::GetDlgItem(hWnd, nID);
-										if (hClient)
-										{
-											CString strXml = pParse2->xml();
-											IGalaxyCluster* pCluster = nullptr;
-											if (pCluster == nullptr)
-											{
-												g_pCosmos->CreateGalaxyCluster((__int64)hWnd, &pCluster);
-											}
-											if (pCluster)
-											{
-												IGalaxy* pGalaxy = nullptr;
-												CString strKey = strCaption;
-												strKey.Replace(_T(""), _T("_"));
-												pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-												if (pGalaxy)
-												{
-													IXobj* pXobj = nullptr;
-													pGalaxy->Observe(CComBSTR("default"), CComBSTR(strXml), &pXobj);
-												}
-											}
-										}
-									}
 								}
 							}
 						}
