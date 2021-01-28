@@ -463,12 +463,6 @@ void CEclipseWnd::Show(CString strID)
 					CString strdll = strPath + m_strAppProxyID + _T("\\") + strAppName + _T(".dll");
 					if (::PathFileExists(strdll))
 						hHandle = ::LoadLibrary(strdll);
-					if (hHandle == nullptr)
-					{
-						strdll = g_pCosmos->m_strAppCommonDocPath2 + m_strAppProxyID + _T("\\") + strAppName + _T(".dll");
-						if (::PathFileExists(strdll))
-							hHandle = ::LoadLibrary(strdll);
-					}
 					if (hHandle)
 					{
 						it = g_pCosmos->m_mapCosmosAppProxy.find(m_strAppProxyID.MakeLower());

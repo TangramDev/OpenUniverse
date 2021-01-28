@@ -387,8 +387,8 @@ interface ICosmos : IDispatch {
 	[propget, id(1)] HRESULT HostChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 	[propget, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [out, retval] VARIANT* pVal);
 	[propput, id(2), helpstring("property AppKeyValue")] HRESULT AppKeyValue(BSTR bstrKey, [in] VARIANT newVal);
-	[propget, id(3), helpstring("property AppExtender")] HRESULT AppExtender(BSTR bstrKey, [out, retval] IDispatch** pVal);
-	[propput, id(3), helpstring("property AppExtender")] HRESULT AppExtender(BSTR bstrKey, [in] IDispatch* newVal);
+	[propget, id(3)] HRESULT RemoteHelperHWND([out, retval] LONGLONG* pVal);
+	[propput, id(3)] HRESULT RemoteHelperHWND([in]LONGLONG newVal);
 	[propget, id(4), helpstring("property RootNodes")] HRESULT RootNodes([out, retval]IXobjCollection** ppXobjColletion);
 	[propget, id(5)] HRESULT HostWnd([out, retval] LONGLONG* pVal);
 	[propget, id(6), helpstring("property CurrentActiveNode")] HRESULT CurrentActiveXobj([out, retval] IXobj** pVal);
@@ -396,11 +396,9 @@ interface ICosmos : IDispatch {
 	[propget, id(8)] HRESULT RemoteCosmos(BSTR bstrID, [out, retval] ICosmos** pVal);
 	[propget, id(9)] HRESULT Extender([out, retval] ICosmosExtender** pVal);
 	[propput, id(9)] HRESULT Extender([in] ICosmosExtender* newVal);
-	[propget, id(10)] HRESULT RemoteHelperHWND([out, retval] LONGLONG* pVal);
-	[propput, id(10)] HRESULT RemoteHelperHWND([in]LONGLONG newVal);
-	[propget, id(11), hidden] HRESULT DesignNode([out, retval] IXobj** pVal);
-	[propget, id(14)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
-	[propget, id(15)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
+	[propget, id(10), hidden] HRESULT DesignNode([out, retval] IXobj** pVal);
+	[propget, id(11)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
+	[propget, id(12)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
 
 	[id(0x00100)] HRESULT NavigateNode(IXobj* pXobj, BSTR bstrBrowserID, BSTR bstrXml, [out, retval] IXobj** pVal);
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);

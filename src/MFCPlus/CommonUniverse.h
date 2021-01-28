@@ -600,7 +600,6 @@ namespace CommonUniverse {
 			m_pUniverseAppProxy = nullptr;
 			m_pCurMDIChildFormInfo = nullptr;
 			m_strNtpXml = _T("");
-			m_strAppCurrentFormTemplatePath = _T("");
 		}
 
 		virtual ~CCosmosImpl() {}
@@ -616,7 +615,6 @@ namespace CommonUniverse {
 		bool									m_bEnableProcessFormTabKey;
 		bool									m_bDeleteGalaxyCluster;
 		bool									m_bNewFile;
-		bool									m_bUsingDefaultAppDocTemplate;
 		bool									m_bCLRObjTemplateInit;
 		bool									m_bIsSupportCrashReporting = false;
 		bool									m_bIsEclipseInit = false;
@@ -649,7 +647,6 @@ namespace CommonUniverse {
 		CString									m_strProgramFilePath;
 		CString									m_strAppCommonDocPath;
 		CString									m_strAppCommonDocPath2;
-		CString									m_strAppCurrentFormTemplatePath;
 		CString									m_strXobjSelectedText;
 		CString									m_strDesignerTip1;
 		CString									m_strDesignerTip2;
@@ -664,14 +661,10 @@ namespace CommonUniverse {
 		CString									m_strDefaultWorkBenchXml;
 
 		CString 								m_strConfigFile;
-		CString									m_strDocFilters;
 
 		CString									m_strTemplatePath;
 		CString									m_strCurrentFrameID;
-		CString									m_strDocTemplateStrs;
 		CString									m_strDefaultTemplate;
-		CString									m_strDefaultTemplate2;
-		CString									m_strCurrentDocTemplateXml;
 		CString									m_strCurrentKey;
 		CString									m_strWorkBenchStrs;
 		CString									m_strStartupURL = _T("");

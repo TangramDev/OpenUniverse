@@ -607,12 +607,6 @@ namespace Browser {
 						CString strdll = strPath + m_strAppProxyID + _T("\\") + strAppName + _T(".dll");
 						if (::PathFileExists(strdll))
 							hHandle = ::LoadLibrary(strdll);
-						if (hHandle == nullptr)
-						{
-							strdll = g_pCosmos->m_strAppCommonDocPath2 + m_strAppProxyID + _T("\\") + strAppName + _T(".dll");
-							if (::PathFileExists(strdll))
-								hHandle = ::LoadLibrary(strdll);
-						}
 						if (hHandle)
 						{
 							it = g_pCosmos->m_mapCosmosAppProxy.find(m_strAppProxyID.MakeLower());
@@ -805,23 +799,7 @@ namespace Browser {
 
 	void CWebPage::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
-		if (strId.CompareNoCase(_T("__Browser_Layout__")) == 0)
-		{
-			CBrowser* pBrowserWnd = nullptr;
-			auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-			if (it != g_pCosmos->m_mapBrowserWnd.end())
-			{
-				pBrowserWnd = (CBrowser*)it->second;
-				if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
-					::ShowWindow(m_hWnd, SW_HIDE);
-			}
-			if (::IsWindowVisible(m_hWnd))
-			{
-				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-				::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			}
-		}
-		else if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
+		if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
 		{
 			CustomizedDOMElement(strParam1, strParam2);
 		}
@@ -969,90 +947,6 @@ namespace Browser {
 							}
 						}
 					}
-				}
-			}
-		}
-		else if (strId.CompareNoCase(_T("TO_TOPFRAME")) == 0)
-		{
-			LoadDocument2Viewport(strParam1, strParam2);
-			return;
-		}
-		else if (strId.CompareNoCase(_T("TO_PARENTNODE")) == 0)
-		{
-			if (m_pParentXobj == nullptr)
-			{
-				HWND hWnd = ::GetParent(::GetParent(m_hWnd));
-				if (::IsWindow(hWnd))
-				{
-					LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
-					HWND _hWnd = (HWND)hWnd;
-					if (lRes)
-						m_pParentXobj = (CXobj*)lRes;
-				}
-				else
-				{
-					m_pParentXobj = m_pGalaxy->m_pBindingXobj->m_pParentObj;
-					if (m_pParentXobj && m_pParentXobj->m_nViewType == TabGrid)
-					{
-						return;
-					}
-				}
-			}
-			if (m_pParentXobj)
-			{
-				IXobj* _pXobj = nullptr;
-				m_pParentXobj->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pXobj);
-			}
-			return;
-		}
-		else if (strId.CompareNoCase(_T("TO_BINDNODE")) == 0)
-		{
-			HWND hWnd = ::GetParent(::GetParent(m_hWnd));
-			if (::IsWindow(hWnd))
-			{
-				if (m_pBindXobj == nullptr)
-				{
-					CXobj* pXobj = nullptr;
-					LRESULT lRes = ::SendMessage(hWnd, WM_HUBBLE_GETNODE, 0, 0);
-					HWND _hWnd = (HWND)hWnd;
-					if (lRes)
-						pXobj = (CXobj*)lRes;
-					if (pXobj)
-					{
-						CComBSTR bstrName("");
-						pXobj->get_Attribute(CComBSTR("bindnode"), &bstrName);
-						CString strName = OLE2T(bstrName);
-						if (strName != _T(""))
-						{
-							CComPtr<IXobjCollection> pCosmosNodeCollection;
-							IXobj* _pXobj = nullptr;
-							long nCount = 0;
-							pXobj->m_pRootObj->GetXobjs(bstrName, &_pXobj, &pCosmosNodeCollection, &nCount);
-							if (_pXobj)
-							{
-								m_pBindXobj = (CXobj*)_pXobj;
-							}
-						}
-					}
-				}
-				if (m_pBindXobj)
-				{
-					IXobj* _pXobj = nullptr;
-					m_pBindXobj->Observe(CComBSTR(strParam1), CComBSTR(strParam2), &_pXobj);
-				}
-			}
-			return;
-		}
-		else if (strId.CompareNoCase(_T("TO_PARENTFORM")) == 0)
-		{
-			HWND hWnd = ::GetAncestor(m_hWnd, GA_ROOT);
-			if (::IsWindow(hWnd))
-			{
-				m_pBindWinForm = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
-				if (m_pBindWinForm)
-				{
-					//IXobj* _pXobj = nullptr;
-					//m_pBindXobj->Observe(CComBSTR(strMsgId), CComBSTR(strParam1), &_pXobj);
 				}
 			}
 		}

@@ -811,11 +811,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 			::SendMessage(hWnd, WM_HUBBLE_DATA, (WPARAM)m_strCurrentWinFormTemplate.GetBuffer(), 3);
 			m_strCurrentWinFormTemplate = _T("");
 		}
-		else if (theApp.m_pCosmosImpl->m_strAppCurrentFormTemplatePath != _T(""))
-		{
-			::SendMessage(hWnd, WM_HUBBLE_DATA, (WPARAM)theApp.m_pCosmosImpl->m_strAppCurrentFormTemplatePath.GetBuffer(), 3);
-		}
-		theApp.m_pCosmosImpl->m_strAppCurrentFormTemplatePath = _T("");
 		Control^ pActiveCtrl = nullptr;
 		String^ strTypeName = pCtrl->GetType()->FullName;
 		if (strTypeName == L"System.Windows.Forms.TabControl" || pCtrl->GetType()->IsSubclassOf(Forms::TabControl::typeid))

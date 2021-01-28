@@ -2623,13 +2623,11 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrKey,
             /* [in] */ VARIANT newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AppExtender( 
-            BSTR bstrKey,
-            /* [retval][out] */ IDispatch **pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHelperHWND( 
+            /* [retval][out] */ LONGLONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AppExtender( 
-            BSTR bstrKey,
-            /* [in] */ IDispatch *newVal) = 0;
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteHelperHWND( 
+            /* [in] */ LONGLONG newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootNodes( 
             /* [retval][out] */ IXobjCollection **ppXobjColletion) = 0;
@@ -2652,12 +2650,6 @@ EXTERN_C const IID IID_ICosmos;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
             /* [in] */ ICosmosExtender *newVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteHelperHWND( 
-            /* [retval][out] */ LONGLONG *pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteHelperHWND( 
-            /* [in] */ LONGLONG newVal) = 0;
         
         virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
             /* [retval][out] */ IXobj **pVal) = 0;
@@ -2923,15 +2915,13 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrKey,
             /* [in] */ VARIANT newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppExtender )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHelperHWND )( 
             ICosmos * This,
-            BSTR bstrKey,
-            /* [retval][out] */ IDispatch **pVal);
+            /* [retval][out] */ LONGLONG *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AppExtender )( 
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteHelperHWND )( 
             ICosmos * This,
-            BSTR bstrKey,
-            /* [in] */ IDispatch *newVal);
+            /* [in] */ LONGLONG newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootNodes )( 
             ICosmos * This,
@@ -2961,14 +2951,6 @@ EXTERN_C const IID IID_ICosmos;
         /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
             ICosmos * This,
             /* [in] */ ICosmosExtender *newVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteHelperHWND )( 
-            ICosmos * This,
-            /* [retval][out] */ LONGLONG *pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteHelperHWND )( 
-            ICosmos * This,
-            /* [in] */ LONGLONG newVal);
         
         /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
             ICosmos * This,
@@ -3251,11 +3233,11 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_put_AppKeyValue(This,bstrKey,newVal)	\
     ( (This)->lpVtbl -> put_AppKeyValue(This,bstrKey,newVal) ) 
 
-#define ICosmos_get_AppExtender(This,bstrKey,pVal)	\
-    ( (This)->lpVtbl -> get_AppExtender(This,bstrKey,pVal) ) 
+#define ICosmos_get_RemoteHelperHWND(This,pVal)	\
+    ( (This)->lpVtbl -> get_RemoteHelperHWND(This,pVal) ) 
 
-#define ICosmos_put_AppExtender(This,bstrKey,newVal)	\
-    ( (This)->lpVtbl -> put_AppExtender(This,bstrKey,newVal) ) 
+#define ICosmos_put_RemoteHelperHWND(This,newVal)	\
+    ( (This)->lpVtbl -> put_RemoteHelperHWND(This,newVal) ) 
 
 #define ICosmos_get_RootNodes(This,ppXobjColletion)	\
     ( (This)->lpVtbl -> get_RootNodes(This,ppXobjColletion) ) 
@@ -3277,12 +3259,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_put_Extender(This,newVal)	\
     ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
-
-#define ICosmos_get_RemoteHelperHWND(This,pVal)	\
-    ( (This)->lpVtbl -> get_RemoteHelperHWND(This,pVal) ) 
-
-#define ICosmos_put_RemoteHelperHWND(This,newVal)	\
-    ( (This)->lpVtbl -> put_RemoteHelperHWND(This,newVal) ) 
 
 #define ICosmos_get_DesignNode(This,pVal)	\
     ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 

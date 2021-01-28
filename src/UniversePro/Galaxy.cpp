@@ -927,7 +927,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT CMDIMainWindow::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (g_pCosmos->m_strDefaultTemplate == _T("") && g_pCosmos->m_strDefaultTemplate2 == _T(""))
+	if (g_pCosmos->m_strDefaultTemplate == _T(""))
 		return DefWindowProc(uMsg, wParam, lParam);
 
 	switch (wParam)

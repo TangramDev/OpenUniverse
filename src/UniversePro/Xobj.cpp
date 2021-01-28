@@ -934,12 +934,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					CString strdll = strPath + strKey + _T("\\") + strAppName + _T(".dll");
 					if (::PathFileExists(strdll))
 						hHandle = ::LoadLibrary(strdll);
-					if (hHandle == nullptr)
-					{
-						strdll = g_pCosmos->m_strAppCommonDocPath2 + strKey + _T("\\") + strAppName + _T(".dll");
-						if (::PathFileExists(strdll))
-							hHandle = ::LoadLibrary(strdll);
-					}
 					if (hHandle)
 					{
 						it = g_pCosmos->m_mapCosmosAppProxy.find(strKey.MakeLower());

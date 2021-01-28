@@ -108,8 +108,6 @@ CCosmos::CCosmos()
 	m_pCurrentIPCMsg = nullptr;
 	m_pClrHost = nullptr;
 	g_pCosmos = this;
-	m_bCLRObjTemplateInit = false;
-	m_bUsingDefaultAppDocTemplate = false;
 	m_bWinFormActived = false;
 	m_bCanClose = false;
 	m_bDeleteGalaxyCluster = false;
@@ -161,15 +159,10 @@ CCosmos::CCosmos()
 	m_strDesignerTip2 = _T("");
 	m_strDesignerXml = _T("");
 	m_strNewDocXml = _T("");
-	m_strExcludeAppExtenderIDs = _T("");
-	m_strCurrentDocTemplateXml = _T("");
 	m_strCurrentFrameID = _T("");
-	m_strDocFilters = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
-	m_strDocTemplateStrs = _T("");
 	m_strDefaultTemplate = _T("");
-	m_strDefaultTemplate2 = _T("");
 	m_strCurrentEclipsePagePath = _T("");
 	m_strDesignerToolBarCaption = _T("Cosmos Designer");
 	m_nTangramObj = 0;
@@ -492,13 +485,7 @@ void CCosmos::ExitInstance()
 
 	for (auto it : m_mapObjDic)
 	{
-		CString strKey = _T(",");
-		strKey += it.first;
-		strKey += _T(",");
-		if (m_strExcludeAppExtenderIDs.Find(strKey) == -1)
-			it.second->Release();
-		else
-			m_strExcludeAppExtenderIDs.Replace(strKey, _T(""));
+		it.second->Release();
 	}
 
 	m_mapObjDic.erase(m_mapObjDic.begin(), m_mapObjDic.end());
@@ -980,59 +967,6 @@ STDMETHODIMP CCosmos::Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_AppExtender(BSTR bstrKey, IDispatch** pVal)
-{
-	CString strName = OLE2T(bstrKey);
-	strName.MakeLower();
-	if (strName != _T(""))
-	{
-		auto it = m_mapObjDic.find(strName);
-		if (it == m_mapObjDic.end())
-			return S_OK;
-		else {
-			*pVal = it->second;
-			(*pVal)->AddRef();
-		}
-	}
-
-	return S_OK;
-}
-
-STDMETHODIMP CCosmos::put_AppExtender(BSTR bstrKey, IDispatch* newVal)
-{
-	CString strName = OLE2T(bstrKey);
-	strName.Trim();
-	strName.MakeLower();
-	CString strKey = _T(",");
-	strKey += strName;
-	strKey += _T(",");
-	if (strName != _T(""))
-	{
-		auto it = m_mapObjDic.find(strName);
-		if (it != m_mapObjDic.end())
-		{
-			m_mapObjDic.erase(it);
-			m_strExcludeAppExtenderIDs.Replace(strKey, _T(""));
-		}
-		if (newVal != nullptr)
-		{
-			m_mapObjDic[strName] = newVal;
-			newVal->AddRef();
-			void* pDisp = nullptr;
-			if (newVal->QueryInterface(IID_IXobj, (void**)&pDisp) == S_OK
-				|| newVal->QueryInterface(IID_IGalaxy, (void**)&pDisp) == S_OK
-				|| newVal->QueryInterface(IID_IGalaxyCluster, (void**)&pDisp) == S_OK)
-			{
-				if (m_strExcludeAppExtenderIDs.Find(strKey) == -1)
-				{
-					m_strExcludeAppExtenderIDs += strKey;
-				}
-			}
-		}
-	}
-	return S_OK;
-}
-
 STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
 {
 	//if (::IsWindow(m_hHostWnd) == false)
@@ -1226,47 +1160,6 @@ STDMETHODIMP CCosmos::NewGUID(BSTR* retVal)
 
 STDMETHODIMP CCosmos::LoadDocComponent(BSTR bstrLib, LONGLONG* llAppProxy)
 {
-	//CString strLib = OLE2T(bstrLib);
-	//strLib.Trim();
-	//strLib.MakeLower();
-	//BOOL bOK = FALSE;
-	//if (strLib == _T("") || strLib.CompareNoCase(_T("default")) == 0)
-	//{
-	//	*llAppProxy = (LONGLONG)m_pUniverseAppProxy;
-	//	return S_OK;
-	//}
-	//auto it = m_mapValInfo.find(strLib);
-	//if (it == m_mapValInfo.end())
-	//{
-	//	CString strPath = m_strAppCommonDocPath + strLib + _T(".xml");
-	//	CString strPath2 = m_strAppCommonDocPath2 + strLib + _T("\\");
-	//	CTangramXmlParse m_Parse;
-	//	if (m_Parse.LoadFile(strPath))
-	//	{
-	//		strPath2 += m_Parse.attr(_T("LibName"), _T(""));
-	//		strPath2 += _T(".dll");
-	//		if (::PathFileExists(strPath2) && ::LoadLibrary(strPath2))
-	//			bOK = TRUE;
-	//	}
-	//	if (bOK)
-	//	{
-	//		if (m_hForegroundIdleHook == NULL)
-	//			m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
-	//		auto it = m_mapValInfo.find(strLib);
-	//		if (it != m_mapValInfo.end())
-	//		{
-	//			LONGLONG llProxy = it->second.llVal;
-	//			*llAppProxy = llProxy;
-	//			m_mapCosmosAppProxy[strLib] = (IUniverseAppProxy*)llProxy;
-	//		}
-	//		return S_OK;
-	//	}
-	//}
-	//else
-	//{
-	//	if (it->second.vt == VT_I8)
-	//		*llAppProxy = it->second.llVal;
-	//}
 	return S_OK;
 }
 

@@ -214,8 +214,6 @@ public:
 	STDMETHOD(get_CurrentActiveXobj)(IXobj** pVal);
 	STDMETHOD(get_CreatingXobj)(IXobj** pVal);
 	STDMETHOD(get_DesignNode)(IXobj** pVal);
-	STDMETHOD(get_AppExtender)(BSTR bstrKey, IDispatch** pVal);
-	STDMETHOD(put_AppExtender)(BSTR bstrKey, IDispatch* newVal);
 	STDMETHOD(get_AppKeyValue)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_RemoteHelperHWND)(LONGLONG* pVal);
@@ -318,7 +316,6 @@ protected:
 	ULONG InternalRelease();
 
 private:
-	CString								m_strExcludeAppExtenderIDs;
 	CWindow								m_HelperWnd;
 	CComObject<CXobjCollection>*		m_pRootNodes;
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
