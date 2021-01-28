@@ -752,11 +752,9 @@ LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 		IXobj* _pXobj = nullptr;
 		CComBSTR bstrKey(strKey);
 		BSTR bstrXml = ::SysAllocString(L"");
-		CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-		HANDLE hHandle = ::GetProp(::GetParent(::GetParent(m_hWnd)), _T("CosmosFrameWndInfo"));;
-		if (hHandle)
+		CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(g_pCosmos->m_pMDIMainWnd->m_hWnd, _T("CosmosFrameWndInfo"));
+		if (pCosmosFrameWndInfo)
 		{
-			pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 			for (auto& it : pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
 			{
 				IGalaxy* _pGalaxy = it.second;
@@ -764,20 +762,10 @@ LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 				_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
 			}
 		}
-		CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pWebPage;
-		HWND hWnd = pPage->m_hWnd;
-		HWND hPWnd = ::GetParent(hWnd);
-		CBrowser* pBrowser = nullptr;
-		auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-		if (it != g_pCosmos->m_mapBrowserWnd.end())
-		{
-			pBrowser = (CBrowser*)it->second;
-			pPage = pBrowser->m_pVisibleWebWnd;
-		}
-		if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
+		CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd;
+		if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy && pPage)
 		{
 			pPage->LoadDocument2Viewport(pPage->m_strCurKey, _T(""));
-			//g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, _T(""));
 		}
 		::SysFreeString(bstrXml);
 	}
@@ -2230,7 +2218,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_bMDIChild = true;
 	}
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
-	if (g_pCosmos->m_pMDIMainWnd)
+	if (g_pCosmos->m_pMDIMainWnd && (::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) || ::IsChild(g_pCosmos->m_hHostBrowserWnd, m_hWnd)))
 	{
 		auto itClient = m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
 		if (itClient != m_pWorkXobj->m_mapChildXobj.end())
@@ -2239,12 +2227,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			if (g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
 			{
 				HWND h = g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-				CXobj* pWorkXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
-				pWorkXobj = pWorkXobj->GetMdiclientObj();
-				if (pWorkXobj)
-				{
-					TRACE(_T(""));
-				}
 				if (::IsChild(itClient->second->m_pHostWnd->m_hWnd, h) || itClient->second->m_pHostWnd->m_hWnd == h)
 				{
 					bReplace = false;
@@ -2254,9 +2236,13 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			{
 				CXobj* pObj = itClient->second->GetMdiclientObj();
 				if (pObj == nullptr)
+				{
 					g_pCosmos->m_pMDIMainWnd->m_pClientXobj = itClient->second;
+				}
 				else
+				{
 					g_pCosmos->m_pMDIMainWnd->m_pClientXobj = pObj;
+				}
 			}
 		}
 	}

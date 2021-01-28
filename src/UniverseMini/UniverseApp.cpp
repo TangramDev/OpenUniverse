@@ -207,11 +207,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
 			}
 
-			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
-			{
-				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
-			}
-
 			if (g_pCosmos->m_hForegroundIdleHook)
 				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
 		}

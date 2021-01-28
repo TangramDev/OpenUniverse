@@ -80,7 +80,6 @@ CCosmos::CCosmos()
 	m_nAppID = -1;
 	m_nAppType = 0;
 	m_hCosmosWnd = NULL;
-	m_hHostBrowserWnd = NULL;
 	m_hHostWnd = NULL;
 	m_hEclipseHideWnd = NULL;
 	m_hActiveWnd = NULL;

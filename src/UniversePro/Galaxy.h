@@ -180,8 +180,9 @@ public:
 	virtual ~CMDIMainWindow(void);
 
 	HWND									m_hMDIClient;
-	CGalaxy*								m_pGalaxy = nullptr;
 	CXobj*									m_pClientXobj = nullptr;
+	CGalaxy*								m_pGalaxy = nullptr;
+	CBrowser*								m_pHostBrowser = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
 	CMDIChildWindow*						m_pActiveMDIChild = nullptr;
 	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;

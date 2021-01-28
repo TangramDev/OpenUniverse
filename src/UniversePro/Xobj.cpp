@@ -1416,12 +1416,17 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 CXobj* CXobj::GetMdiclientObj()
 {
+	if (g_pCosmos->m_pMDIMainWnd == nullptr)
+		return nullptr;
+	HWND hWnd = m_pHostWnd->m_hWnd;
+	if (::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd) == false)
+		return nullptr;
 	if (m_pHostGalaxy)
 	{
 		auto it = m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
 		if (it != m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.end())
 		{
-			CXobj* pObj= it->second->GetMdiclientObj();
+			CXobj* pObj = it->second->GetMdiclientObj();
 			if (pObj == nullptr)
 				return it->second;
 			while (pObj)

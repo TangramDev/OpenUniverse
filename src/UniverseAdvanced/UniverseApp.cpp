@@ -2027,8 +2027,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					HWND hClient = (HWND)lpMsg->wParam;
 					CGalaxyCluster* pGalaxyCluster = nullptr;
 					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
-					if(::IsWindow(hWnd))
-					{ 
+					if (::IsWindow(hWnd))
+					{
 						CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 						HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
 						if (hHandle)
@@ -2072,7 +2072,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								strKey = _T("default");
 
 							CTangramXmlParse m_Parse;
-							if(m_Parse.LoadXml(g_pCosmos->m_strDefaultTemplate))
+							if (m_Parse.LoadXml(g_pCosmos->m_strDefaultTemplate))
 							{
 								HWND hPWnd = NULL;
 								CTangramXmlParse* pChild = m_Parse.GetChild(strKey);
@@ -2154,6 +2154,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												IGalaxy* pGalaxy = nullptr;
 												if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy == nullptr)
 												{
+													auto it = g_pCosmos->m_mapBrowserWnd.find(g_pCosmos->m_hHostBrowserWnd);
+													if (it != g_pCosmos->m_mapBrowserWnd.end())
+													{
+														g_pCosmos->m_pMDIMainWnd->m_pHostBrowser = (CBrowser*)it->second;
+													}
 													pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hPWnd), CComVariant((__int64)::GetParent(hWnd)), CComBSTR(""), &pGalaxy);
 													g_pCosmos->m_pMDIMainWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
 												}
@@ -2165,24 +2170,18 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										}
 									}
 									pClient = pChild->GetChild(_T("hostpage"));
-									CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd;
-									if (pClient && g_pCosmos->m_pMDIMainWnd->m_pGalaxy && pPage)
+									if (pClient && g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
 									{
 										if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
 										{
-											HWND hWnd = pPage->m_hWnd;
-											HWND hPWnd = ::GetParent(hWnd);
-											CBrowser* pBrowser = nullptr;
-											auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-											if (it != g_pCosmos->m_mapBrowserWnd.end())
+											CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd;
+											if (pPage)
 											{
-												pBrowser = (CBrowser*)it->second;
-												pPage = pBrowser->m_pVisibleWebWnd;
 												pPage->LoadDocument2Viewport(pPage->m_strCurKey, pClient->xml());
 											}
 										}
 										else
-											pPage->LoadDocument2Viewport(strKey, pClient->xml());
+											g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
 									}
 									pClient = pChild->GetChild(_T("controlbars"));
 									if (pClient)

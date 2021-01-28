@@ -2011,6 +2011,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												IGalaxy* pGalaxy = nullptr;
 												if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy == nullptr)
 												{
+													auto it = g_pCosmos->m_mapBrowserWnd.find(g_pCosmos->m_hHostBrowserWnd);
+													if (it != g_pCosmos->m_mapBrowserWnd.end())
+													{
+														g_pCosmos->m_pMDIMainWnd->m_pHostBrowser = (CBrowser*)it->second;
+													}
 													pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hPWnd), CComVariant((__int64)::GetParent(hWnd)), CComBSTR(""), &pGalaxy);
 													g_pCosmos->m_pMDIMainWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
 												}
@@ -2026,15 +2031,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									{
 										if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
 										{
-											CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pWebPage;
-											HWND hWnd = pPage->m_hWnd;
-											HWND hPWnd = ::GetParent(hWnd);
-											CBrowser* pBrowser = nullptr;
-											auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-											if (it != g_pCosmos->m_mapBrowserWnd.end())
+											CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd;
+											if (pPage)
 											{
-												pBrowser = (CBrowser*)it->second;
-												pPage = pBrowser->m_pVisibleWebWnd;
 												pPage->LoadDocument2Viewport(pPage->m_strCurKey, pClient->xml());
 											}
 										}
