@@ -104,13 +104,11 @@ CCosmos::CCosmos()
 	m_strConfigFile = _T("");
 	m_strAppCommonDocPath = _T("");
 	m_strXobjSelectedText = _T("");
-	m_strTemplatePath = _T("");
 	m_strDesignerTip1 = _T("");
 	m_strDesignerTip2 = _T("");
 	m_strDesignerXml = _T("");
 	m_strNewDocXml = _T("");
 	m_strExcludeAppExtenderIDs = _T("");
-	m_strCurrentFrameID = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
 	m_strDefaultTemplate = _T("");

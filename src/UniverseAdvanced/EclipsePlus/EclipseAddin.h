@@ -23,7 +23,6 @@
  *******************************************************************************/
 
 #pragma once
-#include <jni.h>
 #include "../Cosmos.h"
 #include "../CosmosCtrl.h"
 #include "tangrambase.h"

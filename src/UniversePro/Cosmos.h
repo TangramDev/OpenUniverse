@@ -313,7 +313,6 @@ public:
 	void FireAppEvent(CCosmosEvent*);
 	void CreateEclipseApp(CString strKey, CString strXml);
 	int	 LoadCLR();
-	bool ImportCosmosDocTemplate(CString strFile);
 	BOOL CopyFolder(CString strSrcPath, CString strDesPath);
 	BOOL IsUserAdministrator();
 	BOOL LoadImageFromResource(ATL::CImage *pImage, HMODULE hMod, CString strResID, LPCTSTR lpTyp);
@@ -400,7 +399,6 @@ private:
 	bool IsMDIClientGalaxyNode(IXobj*);
 	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
 	void FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj);
-	void GetCosmosInfo(CString strFile, CosmosDocInfo*);
 
 	CString RemoveUTF8BOM(CString strUTF8);
 

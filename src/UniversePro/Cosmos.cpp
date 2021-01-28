@@ -229,12 +229,10 @@ CCosmos::CCosmos()
 	m_strConfigDataFile = _T("");
 	m_strAppCommonDocPath = _T("");
 	m_strXobjSelectedText = _T("");
-	m_strTemplatePath = _T("");
 	m_strDesignerTip1 = _T("");
 	m_strDesignerTip2 = _T("");
 	m_strDesignerXml = _T("");
 	m_strNewDocXml = _T("");
-	m_strCurrentFrameID = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
 	m_strDefaultTemplate = _T("");
@@ -4974,90 +4972,6 @@ HICON CCosmos::GetAppIcon(int nIndex)
 	return nullptr;
 }
 
-bool CCosmos::ImportCosmosDocTemplate(CString strFilePath)
-{
-	CosmosDocInfo m_CosmosDocInfo;
-	m_CosmosDocInfo.m_strAppProxyID = m_CosmosDocInfo.m_strDocID = m_CosmosDocInfo.m_strMainFrameID = m_CosmosDocInfo.m_strCosmosData = m_CosmosDocInfo.m_strTangramID = _T("");
-	GetCosmosInfo(strFilePath, &m_CosmosDocInfo);
-	::DeleteFile(strFilePath);
-	if (m_CosmosDocInfo.m_strTangramID == _T("19631222199206121965060119820911"))
-	{
-		CTangramXmlParse m_Parse;
-		if (m_Parse.LoadXml(m_CosmosDocInfo.m_strCosmosData))
-		{
-			CString strCommonDocPath = m_strAppCommonDocPath + m_CosmosDocInfo.m_strAppProxyID + _T("\\");
-			CString strCategory = _T("");
-			int nPos = strFilePath.ReverseFind('/');
-			if (nPos == -1)
-			{
-				nPos = strFilePath.Find(_T("\\"));
-			}
-			if (nPos != -1)
-			{
-				CString strPath = strFilePath.Left(nPos);
-				int nPos2 = strPath.ReverseFind('\\');
-				CString strPath2 = strPath.Left(nPos2);
-				strCategory = strPath.Mid(nPos2 + 1);
-				strCommonDocPath += strCategory;
-				strCommonDocPath += _T("\\");
-				if (::PathIsDirectory(strCommonDocPath) == false)
-					if (::SHCreateDirectoryEx(NULL, strCommonDocPath, NULL))
-						return false;
-
-				CString strName = strFilePath.Mid(nPos + 1);
-				nPos = strName.ReverseFind('.');
-				strName = strName.Left(nPos) + _T(".xml");
-				strCommonDocPath += strName;
-			}
-			m_Parse.put_attr(_T("apptitle"), strCategory);
-			return m_Parse.SaveFile(strCommonDocPath);
-		}
-	}
-	return false;
-}
-
-void CCosmos::GetCosmosInfo(CString strFile, CosmosDocInfo* pCosmosDocInfo)
-{
-	if (pCosmosDocInfo == nullptr)
-		return;
-#define DELETE_EXCEPTION(e) do { if(e) { e->Delete(); } } while (0)
-	CMirrorFile* pFile = new CMirrorFile;
-	if (!pFile->Open(strFile, CFile::modeRead, nullptr))
-	{
-		delete pFile;
-		pFile = NULL;
-		return;
-	}
-	CArchive loadArchive(pFile, CArchive::load);
-	TRY
-	{
-		if (pFile->GetLength() != 0)
-		{
-			loadArchive >> pCosmosDocInfo->m_strTangramID;
-			if (pCosmosDocInfo->m_strTangramID == _T("19631222199206121965060119820911"))
-			{
-				loadArchive >> pCosmosDocInfo->m_strAppProxyID;
-				loadArchive >> pCosmosDocInfo->m_strAppName;
-				loadArchive >> pCosmosDocInfo->m_strMainFrameID;
-				loadArchive >> pCosmosDocInfo->m_strDocID;
-				loadArchive >> pCosmosDocInfo->m_strCosmosData;
-			}
-		}
-		loadArchive.Close();
-		ASSERT_KINDOF(CFile, pFile);
-		pFile->Close();
-		delete pFile;
-	}
-		CATCH_ALL(e)
-	{
-		pFile->Abort();
-		delete pFile;
-		DELETE_EXCEPTION(e);
-		return;
-	}
-	END_CATCH_ALL
-}
-
 STDMETHODIMP CCosmos::CreateOfficeDocument(BSTR bstrXml)
 {
 	CComPtr<IWorkBenchWindow> pWorkBenchWindow;
@@ -5067,39 +4981,6 @@ STDMETHODIMP CCosmos::CreateOfficeDocument(BSTR bstrXml)
 
 STDMETHODIMP CCosmos::NewWorkBench(BSTR bstrCosmosDoc, IWorkBenchWindow** ppWorkBenchWindow)
 {
-	BOOL bCosmosDoc = FALSE;
-	CString strDoc = OLE2T(bstrCosmosDoc);
-	CosmosDocInfo m_CosmosDocInfo;
-	m_CosmosDocInfo.m_strAppProxyID = m_CosmosDocInfo.m_strDocID = m_CosmosDocInfo.m_strMainFrameID = m_CosmosDocInfo.m_strCosmosData = m_CosmosDocInfo.m_strTangramID = _T("");
-	GetCosmosInfo(strDoc, &m_CosmosDocInfo);
-	if (m_CosmosDocInfo.m_strTangramID == _T("19631222199206121965060119820911"))
-		bCosmosDoc = TRUE;
-	if (bCosmosDoc)
-	{
-		if (::IsWindow(m_hEclipseHideWnd) && g_pCosmos->m_mapWorkBenchWnd.size())
-		{
-			CEclipseWnd* pWnd = (CEclipseWnd*)g_pCosmos->m_mapWorkBenchWnd.begin()->second;
-			if (pWnd)
-			{
-				m_strCurrentEclipsePagePath = strDoc;
-				::SendMessage(pWnd->m_hWnd, WM_COMMAND, pWnd->m_nNewWinCmdID, 0);
-				*ppWorkBenchWindow = m_pActiveEclipseWnd;
-			}
-		}
-		else
-		{
-			CString strAppID = _T("eclipse.application.1");
-			auto it = g_pCosmos->m_mapRemoteCosmos.find(strAppID);
-			if (it == g_pCosmos->m_mapRemoteCosmos.end())
-				StartApplication(CComBSTR(L"eclipse.application.1"), bstrCosmosDoc);
-			else
-			{
-				CComPtr<IWorkBenchWindow> pIWorkBenchWindow;
-				it->second->NewWorkBench(bstrCosmosDoc, &pIWorkBenchWindow);
-			}
-		}
-	}
-
 	return S_OK;
 }
 

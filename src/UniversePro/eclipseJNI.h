@@ -36,7 +36,7 @@
 #define ECLIPSE_JNI_H
 
 #include "eclipseUnicode.h"
-#include <jni.h>
+#include "jniforchrome.h"
 
 typedef struct {
 	int launchResult;

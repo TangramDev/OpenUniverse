@@ -93,7 +93,6 @@ using namespace ATL;
 using namespace Office;
 
 #include "tangrambase.h"
-#include "jni.h"
 
 #pragma warning (disable : 4786)
 #pragma warning (disable : 4312)

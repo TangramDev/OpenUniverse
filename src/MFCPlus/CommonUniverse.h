@@ -272,48 +272,6 @@ namespace CommonUniverse {
 		map<CString, IGalaxy*> m_mapAuxiliaryGalaxys;
 	} CosmosFrameWndInfo;
 
-	typedef struct CosmosDocTemplateInfo
-	{
-		BOOL			m_bCOMObj;
-		int				m_nImageIndex;
-		HWND			m_hWnd;
-		CString			m_strLib;
-		CString			m_strExt;
-		CString			m_strFilter;
-		CString			m_strProxyID;
-		CString			m_strDocTemplateKey;
-		CString			m_strTemplatePath;
-		void*			m_pDocTemplate;
-	}CosmosDocTemplateInfo;
-
-	typedef struct CosmosDocTemplateData
-	{
-		void*			m_pDocTemplate;
-		map<CString,CString>	m_mapDocInfo;
-	}CosmosDocTemplateData;
-
-	typedef struct TangramProjectInfo
-	{
-		BOOL			m_bTangramSupport;
-		int				m_nPrjType;
-		int				m_nImageIndex;
-		int				m_nIndex;
-		CString			m_strPrjFullPath;
-		CString			m_strExt;
-		CString			m_strFilter;
-		IDispatch* m_pPrjDisp;
-	}TangramProjectInfo;
-
-	typedef struct CosmosDocInfo
-	{
-		CString		m_strTangramID;
-		CString		m_strAppProxyID;
-		CString		m_strAppName;
-		CString		m_strMainFrameID;
-		CString		m_strDocID;
-		CString		m_strCosmosData;
-	}CosmosDocInfo;
-
 	typedef struct CtrlInfo
 	{
 		HWND					m_hWnd;
@@ -615,7 +573,6 @@ namespace CommonUniverse {
 		bool									m_bEnableProcessFormTabKey;
 		bool									m_bDeleteGalaxyCluster;
 		bool									m_bNewFile;
-		bool									m_bCLRObjTemplateInit;
 		bool									m_bIsSupportCrashReporting = false;
 		bool									m_bIsEclipseInit = false;
 
@@ -646,7 +603,6 @@ namespace CommonUniverse {
 		CString									m_strCurrentAppID;
 		CString									m_strProgramFilePath;
 		CString									m_strAppCommonDocPath;
-		CString									m_strAppCommonDocPath2;
 		CString									m_strXobjSelectedText;
 		CString									m_strDesignerTip1;
 		CString									m_strDesignerTip2;
@@ -662,8 +618,6 @@ namespace CommonUniverse {
 
 		CString 								m_strConfigFile;
 
-		CString									m_strTemplatePath;
-		CString									m_strCurrentFrameID;
 		CString									m_strDefaultTemplate;
 		CString									m_strCurrentKey;
 		CString									m_strWorkBenchStrs;

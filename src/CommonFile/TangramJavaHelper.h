@@ -1,5 +1,5 @@
 #pragma once
-#include "jni.h"
+#include "jniforchrome.h"
 
 /**
 * Convert a wide string to a narrow one

@@ -536,37 +536,6 @@ void CGalaxyCluster::UpdateMapKey(CString strXml)
 				m_strMapKey[_strKey] = _pChild->xml();
 			}
 		}
-
-		if (m_bPageDataLoaded == false)
-		{
-			m_bPageDataLoaded = true;
-			CTangramXmlParse* pParse = (CTangramXmlParse*)m_Parse.GetChild(_T("pagedata"));
-			if (pParse&&::PathFileExists(g_pCosmos->m_strTemplatePath) == TRUE)
-			{
-				int nCount = pParse->GetCount();
-				if (nCount)
-				{
-					for (int i = 0; i < nCount; i++)
-					{
-						CString strPath = g_pCosmos->m_strTemplatePath;
-						CTangramXmlParse* pChild = pParse->GetChild(i);
-						CString strName = pChild->name();
-						m_mapXtml[strName] = pChild->xml();
-						int nPos = strPath.ReverseFind('\\');
-						CString strFileName = strPath.Mid(nPos + 1);
-						int nPos1 = strFileName.ReverseFind('.');
-						strFileName = strFileName.Left(nPos1);
-						strPath = strPath.Left(nPos + 1) + strFileName + _T("_") + strName + _T(".bmp");
-						if (::PathFileExists(strPath))
-						{
-							m_mapXtml[strName + _T("_imagePath")] = strPath;
-							CString strData = g_pCosmos->EncodeFileToBase64(strPath);
-							m_mapXtml[strName + _T("_image")] = strData;
-						}
-					}
-				}
-			}
-		}
 	}
 }
 

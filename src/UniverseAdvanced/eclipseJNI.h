@@ -35,7 +35,6 @@
 #define ECLIPSE_JNI_H
 
 #include "eclipseUnicode.h"
-#include <jni.h>
 
 typedef struct {
 	int launchResult;

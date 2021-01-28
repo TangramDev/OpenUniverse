@@ -310,50 +310,6 @@ namespace Utilities
 		return false;
 	}
 
-	//BOOL CComponentInstaller::UnMultiZip3(CString strZip, CString strPath)
-	//{
-	//	if (::PathIsDirectory(strPath) == false)
-	//	{
-	//		if (::SHCreateDirectoryEx(NULL, strPath, NULL))
-	//			return false;
-	//	}
-
-	//	ZIPENTRYW ze;
-	//	memset(&ze, 0, sizeof(ze));
-	//	CString strFilePath = _T("");
-	//	HZIP hz = OpenZip(strZip.GetBuffer(), 0, ZIP_FILENAME);
-	//	if (hz)
-	//	{
-	//		ZRESULT zr = GetZipItem(hz, -1, &ze);
-	//		if (zr == ZR_OK)
-	//		{
-	//			int numitems = ze.index;
-	//			for (int i = 0; i < numitems; i++)
-	//			{
-	//				GetZipItem(hz, i, &ze);
-	//				CString strName = ze.name;
-	//				int nPos = strName.Find(_T("/"));
-	//				if (nPos == -1)
-	//				{
-	//					nPos = strName.Find(_T("\\"));
-	//				}
-	//				if (nPos != -1)
-	//					strName = strName.Mid(nPos + 1);
-	//				strFilePath = strPath + strName;
-	//				VerifyZip(hz, ze.name, strFilePath);
-	//				SetFileAttributes(strFilePath, FILE_ATTRIBUTE_NORMAL);
-	//				if (::PathFileExists(strFilePath))
-	//				{
-	//					g_pCosmos->ImportCosmosDocTemplate(strFilePath);
-	//				}
-	//			}
-	//			CloseZip(hz);
-	//			return true;
-	//		}
-	//	}
-	//	return false;
-	//}
-
 	BOOL CComponentInstaller::Zip(LPCTSTR lpszZipArchive, LPCTSTR lpszSrcFile)
 	{
 		BOOL bResult = true;
