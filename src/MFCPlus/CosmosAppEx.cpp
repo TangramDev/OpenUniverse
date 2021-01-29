@@ -167,12 +167,12 @@ namespace CommonUniverse
 	};
 
 	// CTangramTabCtrlWnd
-
 	IMPLEMENT_DYNAMIC(CTangramTabCtrlWnd, CMFCTabCtrl)
 
-		CTangramTabCtrlWnd::CTangramTabCtrlWnd()
+	CTangramTabCtrlWnd::CTangramTabCtrlWnd()
 	{
 		m_nCurSelTab = -1;
+		m_pWndNode = nullptr;
 	}
 
 	CTangramTabCtrlWnd::~CTangramTabCtrlWnd()
@@ -184,7 +184,7 @@ namespace CommonUniverse
 	{
 		CString str = _T("");
 		str.Format(_T("%d"), GetActiveTab());
-		m_pWndNode->put_Attribute(L"activepage", CComBSTR(str));
+		m_pWndNode->put_Attribute(CComBSTR("activepage"), CComBSTR(str));
 	}
 
 	BEGIN_MESSAGE_MAP(CTangramTabCtrlWnd, CMFCTabCtrl)
@@ -228,12 +228,17 @@ namespace CommonUniverse
 	}
 
 	// CTangramTabCtrlWnd Message Handler
-
-
 	LRESULT CTangramTabCtrlWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	{
 		if (lParam == 1965)
 		{
+			if (m_pWndNode)
+			{
+				long nCount = 0;
+				m_pWndNode->get_Cols(&nCount);
+				if (nCount)
+					wParam = wParam % nCount;
+			}
 			::PostMessage(m_hWnd, WM_TGM_SETACTIVEPAGE, wParam, 0);
 		}
 		else
@@ -272,7 +277,6 @@ namespace CommonUniverse
 		IXobj* pActiveNode = NULL;
 		if (m_pWndNode)
 		{
-			//this->SetActiveTab(iIndex);
 			CComPtr<IXobjCollection> pCol;
 			m_pWndNode->get_ChildNodes(&pCol);
 			CComPtr<IXobj> pNode;
@@ -282,7 +286,7 @@ namespace CommonUniverse
 				m_nCurSelTab = iIndex;
 				CString str = _T("");
 				str.Format(_T("%d"), iIndex);
-				m_pWndNode->put_Attribute(CComBSTR(L"activepage"), str.AllocSysString());
+				m_pWndNode->put_Attribute(CComBSTR("activepage"), str.AllocSysString());
 				pNode->ActiveTabPage(pNode);
 			}
 		}
@@ -814,8 +818,8 @@ namespace CommonUniverse
 		return false;
 	}
 	
-	HICON CCosmosDelegate::GetAppIcon(int nIndex)
-	{
+	HICON CCosmosDelegate::GetAppIcon(int nIndex) 
+	{ 
 		if (g_pAppBase->m_pMainWnd)
 		{
 			switch (nIndex)
@@ -1055,10 +1059,14 @@ namespace CommonUniverse
 					if (pWnd->Create(nullptr, strStyle, WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), pParent, 0, nullptr))
 					{
 						::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pGrid, 20191031);
-						pGrid->get_Attribute(L"activepage", &bstrTag);
+						pGrid->get_Attribute(CComBSTR("activepage"), &bstrTag);
+						long nCount = 0;
+						pGrid->get_Cols(&nCount);
 						CString m_strTag = OLE2T(bstrTag);
 						::SysFreeString(bstrTag);
 						int nActivePage = _wtoi(m_strTag);
+						if (nCount)
+							nActivePage = nActivePage%nCount;
 						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
 						if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 						{
@@ -1142,14 +1150,8 @@ namespace CommonUniverse
 		USES_CONVERSION;
 		BSTR bstrTag = L"";
 
-		pXobj->get_Attribute(L"activepage", &bstrTag);
-		CString m_strTag = OLE2T(bstrTag);
-		int nActivePage = _wtoi(m_strTag);
-		::SysFreeString(bstrTag);
-		long nTabCount = 0;
-		pXobj->get_Cols(&nTabCount);
 		pXobj->get_Attribute(L"xobjtype", &bstrTag);
-		m_strTag = OLE2T(bstrTag);
+		CString m_strTag = OLE2T(bstrTag);
 		::SysFreeString(bstrTag);
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
@@ -1168,11 +1170,6 @@ namespace CommonUniverse
 					if (pWnd->Create(nullptr, _T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), pParent, 0, nullptr))
 					{
 						::PostMessage(pWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pXobj, 20191031);
-						pXobj->get_Attribute(L"activepage", &bstrTag);
-						CString m_strTag = OLE2T(bstrTag);
-						::SysFreeString(bstrTag);
-						int nActivePage = _wtoi(m_strTag);
-						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
 						if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 						{
 							CView* pView = static_cast<CView*>(pWnd);
@@ -1230,6 +1227,10 @@ namespace CommonUniverse
 						{
 							return NULL;
 						}
+						pXobj->get_Attribute(CComBSTR("activepage"), &bstrTag);
+						CString m_strTag = OLE2T(bstrTag);
+						::SysFreeString(bstrTag);
+						int nActivePage = _wtoi(m_strTag);
 						::PostMessage(pTangramTabCtrlWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, nActivePage, 1965);
 					}
 

@@ -149,9 +149,7 @@ using namespace concurrency;
 namespace CommonUniverse
 {
 	class CCosmosImpl;
-	class CTangramXDoc;
 	class IUniverseAppProxy;
-	class CTangramTabbedPane;
 
 	class CCosmosDelegate :
 		public ICosmosDelegate,
@@ -193,39 +191,6 @@ namespace CommonUniverse
 		virtual CString GetTags(CString strName);
 	};
 
-	// MDI support (zero or more documents)
-	class CTangramMultiDocTemplate : public CMultiDocTemplate
-	{
-		DECLARE_DYNAMIC(CTangramMultiDocTemplate)
-
-		// Constructors
-	public:
-		CTangramMultiDocTemplate(UINT nIDResource, CRuntimeClass* pDocClass,
-			CRuntimeClass* pFrameClass, CRuntimeClass* pViewClass);
-	};
-
-	// MDT support (zero or more documents)
-	class CTangramMDTDocTemplate : public CMultiDocTemplate
-	{
-		DECLARE_DYNAMIC(CTangramMDTDocTemplate)
-
-		// Constructors
-	public:
-		CTangramMDTDocTemplate(UINT nIDResource, CRuntimeClass* pDocClass,
-			CRuntimeClass* pFrameClass, CRuntimeClass* pViewClass);
-	};
-
-	// SDI support 
-	class CCosmosDocTemplate : public CSingleDocTemplate
-	{
-		DECLARE_DYNAMIC(CCosmosDocTemplate)
-
-		// Constructors
-	public:
-		CCosmosDocTemplate(UINT nIDResource, CRuntimeClass* pDocClass,
-			CRuntimeClass* pFrameClass, CRuntimeClass* pViewClass);
-	};
-
 	class CComponentApp :
 		public CWinApp,
 		public ICosmosWindowProvider
@@ -258,117 +223,6 @@ namespace CommonUniverse
 		virtual BOOL InitApplication();
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 		virtual HWND GetActivePopupMenu(HWND hWnd) { return nullptr; };
-	};
-
-	class CTangramFrameWnd :
-		public CFrameWnd,
-		public CGalaxyClusterProxy
-	{
-	public:
-		CTangramFrameWnd();
-		virtual ~CTangramFrameWnd();
-
-		DECLARE_DYNCREATE(CTangramFrameWnd)
-
-		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle = WS_OVERLAPPEDWINDOW, const RECT& rect = rectDefault, CWnd* pParentWnd = NULL, LPCTSTR lpszMenuName = NULL, DWORD dwExStyle = 0, CCreateContext* pContext = NULL);
-		virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
-		virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-
-	protected:
-		afx_msg void OnClose();
-		DECLARE_MESSAGE_MAP()
-
-	private:
-		void OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
-		void OnClrControlCreated(IXobj* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle);
-		void OnEvent(IDispatch* sender, IDispatch* EventArg);
-		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName);
-		void OnHubbleEvent(ICosmosEventObj* NotifyObj);
-	};
-
-	class CTangramMDIFrameWnd :
-		public CMDIFrameWnd,
-		public CGalaxyClusterProxy
-	{
-	public:
-		CTangramMDIFrameWnd();
-		virtual ~CTangramMDIFrameWnd();
-
-		DECLARE_DYNCREATE(CTangramMDIFrameWnd)
-
-		virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
-	protected:
-		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle = WS_OVERLAPPEDWINDOW, const RECT& rect = rectDefault, CWnd* pParentWnd = NULL, LPCTSTR lpszMenuName = NULL, DWORD dwExStyle = 0, CCreateContext* pContext = NULL);
-		virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-		afx_msg LRESULT OnQueryAppProxy(WPARAM wp, LPARAM lp);
-
-		DECLARE_MESSAGE_MAP()
-
-	private:
-		void OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
-		void OnClrControlCreated(IXobj* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle);
-		void OnEvent(IDispatch* sender, IDispatch* EventArg);
-		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName);
-		void OnHubbleEvent(ICosmosEventObj* NotifyObj);
-	};
-
-	class CTangramMDIChildWnd :
-		public CMDIChildWnd,
-		public CGalaxyClusterProxy
-	{
-		DECLARE_DYNCREATE(CTangramMDIChildWnd)
-	public:
-		CTangramMDIChildWnd();
-
-		// Attributes
-		CTangramXDoc* m_pDoc;
-		// Implementation
-	public:
-		virtual ~CTangramMDIChildWnd();
-
-		// Generated message map functions
-	protected:
-		afx_msg LRESULT OnCosmosMsg(WPARAM wp, LPARAM lp);
-		DECLARE_MESSAGE_MAP()
-
-	private:
-		void OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
-		void OnClrControlCreated(IXobj* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle);
-		void OnEvent(IDispatch* sender, IDispatch* EventArg);
-		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName);
-		void OnHubbleEvent(ICosmosEventObj* NotifyObj);
-
-		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_OVERLAPPEDWINDOW, const RECT& rect = rectDefault, CMDIFrameWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
-	};
-
-	class CTangramXDoc : public CDocument
-	{
-	protected: // create from serialization only
-		CTangramXDoc();
-		DECLARE_DYNCREATE(CTangramXDoc)
-
-		// Attributes
-	public:
-		bool	m_bDocLoaded;
-		CString m_strXmlData;
-		CMapStringToString m_mapDataMap;
-
-		// Overrides
-	public:
-		virtual BOOL OnNewDocument();
-		virtual void Serialize(CArchive& ar);
-#ifdef SHARED_HANDLERS
-		virtual void InitializeSearchContent();
-		virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
-#endif // SHARED_HANDLERS
-
-		// Implementation
-	public:
-		virtual ~CTangramXDoc();
-
-		// Generated message map functions
-	protected:
-		DECLARE_MESSAGE_MAP()
 	};
 };
 
