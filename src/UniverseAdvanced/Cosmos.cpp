@@ -222,7 +222,6 @@ CCosmos::CCosmos()
 	m_pActiveAppProxy = nullptr;
 	m_pCLRProxy = nullptr;
 	m_pActiveEclipseWnd = nullptr;
-	m_strStartupCLRObj = _T("");
 	m_strWorkBenchStrs = _T("");
 	m_strExeName = _T("");
 	m_strAppName = _T("Tangram System");
@@ -241,7 +240,6 @@ CCosmos::CCosmos()
 	m_strNewDocXml = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
-	m_strDefaultTemplate = _T("");
 	m_strCurrentEclipsePagePath = _T("");
 	m_strDesignerToolBarCaption = _T("Tangram Designer");
 	m_strOfficeAppIDs = _T("word.application,excel.application,outlook.application,onenote.application,infopath.application,project.application,visio.application,access.application,powerpoint.application,lync.ucofficeintegration.1,");
@@ -1026,7 +1024,12 @@ void CCosmos::TangramInitFromeWeb()
 		pParse = m_Parse.GetChild(_T("doctemplate"));
 		if (pParse)
 		{
-			m_strDefaultTemplate = pParse->xml();
+			int nCount = pParse->GetCount();
+			for (int i = 0; i < nCount; i++)
+			{
+				CTangramXmlParse* pChild = pParse->GetChild(i);
+				m_mapDocTemplate[pChild->name()] = pChild->xml();
+			}
 		}
 		pParse = m_Parse.GetChild(_T("defaultworkbench"));
 		if (pParse)
@@ -1198,7 +1201,6 @@ void CCosmos::CosmosInit()
 	if (bLoad) {
 		m_nJVMVersion = _m_Parse.attrInt(_T("jvmver"), JNI_VERSION_10);
 		m_strAppName = _m_Parse.attr(_T("appname"), _T("Tangram System"));
-		m_strStartupCLRObj = _m_Parse.attr(_T("startupclrobj"), _T(""));
 	}
 
 	if (m_bEclipse) {
@@ -1334,12 +1336,15 @@ void CCosmos::ExitInstance()
 	}
 	m_mapWindowPage.clear();
 
-	for (auto it : m_mapObjDic)
+	if (m_mapObjDic.size())
 	{
-		it.second->Release();
+		for (auto it : m_mapObjDic)
+		{
+			it.second->Release();
+		}
+		m_mapObjDic.erase(m_mapObjDic.begin(), m_mapObjDic.end());
 	}
 
-	m_mapObjDic.erase(m_mapObjDic.begin(), m_mapObjDic.end());
 
 	for (auto it : m_mapValInfo)
 	{
@@ -2879,11 +2884,6 @@ STDMETHODIMP CCosmos::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 		{
 			m_mapValInfo[strKey] = newVal;
 			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_COSMOSMSG, 0, 20200628);
-			return S_OK;
-		}
-		if (strKey == _T("defaulttemplate") && strData != _T(""))
-		{
-			m_strDefaultTemplate = strData;
 			return S_OK;
 		}
 		if (strKey == _T("designertoolcaption") && strData != _T("") && ::IsWindow(m_hHostWnd))

@@ -373,16 +373,16 @@ namespace Browser {
 		{
 			auto t = create_task([this]()
 				{
-					m_heightfix = 0;
-					SleepEx(500, true);
+					SleepEx(900, true);
 					try
 					{
 						if (m_pVisibleWebWnd)
 						{
+							m_heightfix = 0;
 							::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 							BrowserLayout();
-							::SetFocus(m_pVisibleWebWnd->m_hWnd);
-							::SetForegroundWindow(m_pVisibleWebWnd->m_hWnd);
+							//::SetFocus(m_pVisibleWebWnd->m_hWnd);
+							//::SetForegroundWindow(m_pVisibleWebWnd->m_hWnd);
 						}
 					}
 					catch (...)

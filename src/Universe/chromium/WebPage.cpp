@@ -598,20 +598,7 @@ namespace Browser {
 				g_pCosmos->m_pHostHtmlWnd = this;
 				g_pCosmos->CosmosInitFromeWeb();
 				CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
-				auto t = create_task([this]()
-					{
-						SleepEx(200, true);
-						try
-						{
-							::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20200214, 0);
-						}
-						catch (...)
-						{
-							ATLASSERT(false);
-							return 0;
-						}
-						return 1;
-					});
+				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20200214, 0);
 			}
 		}
 		else if (strId.CompareNoCase(_T("NEW_TAB_PAGE_LOADED")) == 0)

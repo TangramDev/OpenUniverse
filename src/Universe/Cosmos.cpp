@@ -160,7 +160,6 @@ CCosmos::CCosmos()
 	m_strNewDocXml = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
-	m_strDefaultTemplate = _T("");
 	m_strCurrentEclipsePagePath = _T("");
 	m_strDesignerToolBarCaption = _T("Cosmos Designer");
 	m_nTangramObj = 0;

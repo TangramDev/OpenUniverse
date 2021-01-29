@@ -925,37 +925,6 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CMDIMainWindow::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	if (g_pCosmos->m_strDefaultTemplate == _T(""))
-		return DefWindowProc(uMsg, wParam, lParam);
-
-	switch (wParam)
-	{
-	case ID_FILE_NEW:
-	{
-		IXobj* pXobj = nullptr;
-		CGalaxy* pGalaxy = (CGalaxy*)::SendMessage(m_hMDIClient, WM_HUBBLE_DATA, 0, 1992);
-		if (pGalaxy && g_pCosmos->m_strNewDocXml != _T(""))
-		{
-			pGalaxy->Observe(CComBSTR(L"newdocument"), g_pCosmos->m_strNewDocXml.AllocSysString(), &pXobj);
-			g_pCosmos->m_bNewFile = TRUE;
-			return 0;
-		}
-	}
-	break;
-	//case ID_FILE_OPEN:
-	//{
-	//	g_pCosmos->m_pActiveMDIChildWnd = nullptr;
-	//	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	//	LRESULT hr = ::SendMessage(g_pCosmos->m_hCosmosWnd, WM_COSMOSMSG, (WPARAM)m_hWnd, 0);
-	//	return hr;
-	//}
-	//break;
-	}
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
 CWinForm::CWinForm(void)
 {
 	m_nState = -1;

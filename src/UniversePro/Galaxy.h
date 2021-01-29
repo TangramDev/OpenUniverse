@@ -161,6 +161,7 @@ class CMDTWindow :
 public:
 	CMDTWindow(void);
 	virtual ~CMDTWindow(void);
+	CString m_strDocTemplateKey = _T("");
 	BEGIN_MSG_MAP(CMDTWindow)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -187,12 +188,10 @@ public:
 	CMDIChildWindow*						m_pActiveMDIChild = nullptr;
 	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;
 	BEGIN_MSG_MAP(CMDIMainWindow)
-		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 	END_MSG_MAP()
 	
 	void OnFinalMessage(HWND hWnd);
-	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 };
 

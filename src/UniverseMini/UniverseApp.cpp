@@ -719,19 +719,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			case WM_SETWNDFOCUSE:
 			{
 				g_pCosmos->ProcessMsg(lpMsg);
-				//::DispatchMessage(lpMsg);
-				//for m_strStartupCLRObj support
-				//if (g_pCosmos->m_pActiveWinFormWnd && g_pCosmos->m_bEnableProcessFormTabKey && g_pCosmos->m_pCLRProxy->ProcessFormMsg(g_pCosmos->m_pActiveWinFormWnd->m_hWnd, lpMsg, 0))
-				//{
-				//	TranslateMessage(lpMsg);
-				//	::DispatchMessage(lpMsg);
-				//	//lpMsg->hwnd = NULL;
-				//	//lpMsg->lParam = 0;
-				//	//lpMsg->wParam = 0;
-				//	//lpMsg->message = 0;
-				//	return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
-				//	break;
-				//}
 				if (lpMsg->message == WM_LBUTTONDOWN || lpMsg->message == WM_LBUTTONUP)
 				{
 					if (g_pCosmos->m_pActiveWinFormWnd)

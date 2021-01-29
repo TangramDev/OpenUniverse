@@ -618,11 +618,9 @@ namespace CommonUniverse {
 
 		CString 								m_strConfigFile;
 
-		CString									m_strDefaultTemplate;
 		CString									m_strCurrentKey;
 		CString									m_strWorkBenchStrs;
 		CString									m_strStartupURL = _T("");
-		CString									m_strStartupCLRObj;
 		CString									m_strCurrentEclipsePagePath;
 		CString									m_strDefaultXml;
 		CString									m_strLibs;
