@@ -870,6 +870,18 @@ LRESULT CMDTWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
+LRESULT CMDTWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	switch (lParam)
+	{
+	case 20210129:
+		::InvalidateRect(m_hWnd, nullptr, true);
+		break;
+	}
+	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	return l;
+}
+
 void CMDTWindow::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
@@ -1576,6 +1588,8 @@ void CGalaxy::HostPosChanged()
 	if (::IsWindow(m_hWnd) == false)
 		return;
 	HWND hwnd = m_hWnd;
+	if (!::IsWindowVisible(m_hWnd) && m_pBindingXobj)
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210129);
 	CXobj* pTopXobj = m_pWorkXobj;
 	CGalaxy* _pGalaxy = this;
 	if (!_pGalaxy->m_bDesignerState)
@@ -2776,6 +2790,18 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 20210129:
+	{
+		if (::IsWindowVisible(m_hWnd) == false)
+		{
+			if (::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
+			{
+				HostPosChanged();
+				::InvalidateRect(::GetAncestor(m_hWnd, GA_ROOT), nullptr, true);
+			}
+		}
+	}
+	break;
 	case 2048:
 	{
 		if (m_hWnd != g_pCosmos->m_hChildHostWnd)
@@ -3098,7 +3124,10 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	if (m_bMDIChild)
 		lpwndpos->flags |= SWP_NOZORDER;
 
+	
 	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
+	if (::IsWindowVisible(m_hWnd))
+		::InvalidateRect(m_hWnd, nullptr, true);
 	return hr;
 }
 

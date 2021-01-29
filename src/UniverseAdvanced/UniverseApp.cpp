@@ -2249,6 +2249,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											}
 										}
 									}
+									if (pFrameWnd)
+									{
+										::PostMessage(pFrameWnd->m_hWnd, WM_COSMOSMSG, 0, 20210129);
+									}
 								}
 							}
 						}
