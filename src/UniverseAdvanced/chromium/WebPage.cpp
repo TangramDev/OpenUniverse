@@ -493,16 +493,25 @@ namespace Browser {
 				m_pWebWnd->m_pDevToolWnd = nullptr;
 			}
 		}
-		for (auto it : m_mapSubWinForm)
+		if (m_mapSubWinForm.size())
 		{
-			::DestroyWindow(it.first);
+			for (auto it : m_mapSubWinForm)
+			{
+				::DestroyWindow(it.first);
+			}
+			m_mapSubWinForm.erase(m_mapSubWinForm.begin(), m_mapSubWinForm.end());
 		}
-		m_mapSubWinForm.erase(m_mapSubWinForm.begin(), m_mapSubWinForm.end());
-		for (auto &it : m_mapWinForm)
+		if (m_mapWinForm.size())
 		{
-			::DestroyWindow(it.first);
+			for (auto &it : m_mapWinForm)
+			{
+				if (it.second->m_bMainForm == false)
+					::DestroyWindow(it.first);
+				else
+					it.second->m_pOwnerHtmlWnd = nullptr;
+			}
+			m_mapWinForm.erase(m_mapWinForm.begin(), m_mapWinForm.end());
 		}
-		m_mapWinForm.erase(m_mapWinForm.begin(), m_mapWinForm.end());
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}

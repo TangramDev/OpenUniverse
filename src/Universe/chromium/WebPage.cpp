@@ -365,9 +365,24 @@ namespace Browser {
 		{
 			::DestroyWindow(m_hExtendWnd);
 		}
-		for (auto it : m_mapSubWinForm)
+		if (m_mapSubWinForm.size())
 		{
-			::DestroyWindow(it.second->m_hWnd);
+			for (auto &it : m_mapSubWinForm)
+			{
+				::DestroyWindow(it.first);
+			}
+			m_mapSubWinForm.erase(m_mapSubWinForm.begin(), m_mapSubWinForm.end());
+		}
+		if (m_mapWinForm.size())
+		{
+			for (auto& it : m_mapWinForm)
+			{
+				if (it.second->m_bMainForm == false)
+					::DestroyWindow(it.first);
+				else
+					it.second->m_pOwnerHtmlWnd = nullptr;
+			}
+			m_mapWinForm.erase(m_mapWinForm.begin(), m_mapWinForm.end());
 		}
 		if (g_pCosmos->m_pCLRProxy)
 			g_pCosmos->m_pCLRProxy->OnWebPageCreated(m_hWnd, (CWebPageImpl*)this, (IWebPage*)this, 1);
@@ -379,11 +394,6 @@ namespace Browser {
 				m_pWebWnd->m_pDevToolWnd = nullptr;
 			}
 		}
-		for (auto it : m_mapSubWinForm)
-		{
-			::DestroyWindow(it.first);
-		}
-		m_mapSubWinForm.erase(m_mapSubWinForm.begin(), m_mapSubWinForm.end());
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}

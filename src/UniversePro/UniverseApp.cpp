@@ -818,6 +818,8 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
 				}
 			}
+			if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 		}
 		break;
 		}
