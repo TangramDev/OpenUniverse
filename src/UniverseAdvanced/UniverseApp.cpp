@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101270019           *
+ *           Web Runtime for Application - Version 1.0.0.202101290020           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -643,55 +643,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		break;
 	}
 	break;
-	case WM_POWERBROADCAST:
-	{
-		switch (wParam)
-		{
-		case PBT_APMRESUMEAUTOMATIC:
-		case PBT_APMPOWERSTATUSCHANGE:
-		{
-			for (auto it : g_pCosmos->m_mapThreadInfo)
-			{
-				if (it.second)
-				{
-					for (auto it2 : it.second->m_mapGalaxy)
-					{
-						it2.second->HostPosChanged();
-						for (auto it3 : it2.second->m_mapWPFView)
-						{
-							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						}
-					}
-				}
-			}
-			for (auto &it : g_pCosmos->m_mapBrowserWnd)
-			{
-				if (::IsWindowVisible(it.first))
-				{
-					CBrowser* pWnd = (CBrowser*)it.second;
-					if (pWnd && pWnd->m_pVisibleWebWnd)
-					{
-						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-						if (hWnd)
-						{
-							auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-							if (it1 != g_pCosmos->m_mapHtmlWnd.end())
-							{
-								pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
-								it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-							}
-						}
-						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
-					}
-					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
-				}
-			}
-		}
-		break;
-		}
-	}
-	break;
 	case WM_WINDOWPOSCHANGED:
 		if (hWnd == g_pCosmos->m_hHostWnd)
 		{
@@ -975,6 +926,55 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		}
 	}
 	break;
+	case WM_POWERBROADCAST:
+	{
+		switch (wParam)
+		{
+		case PBT_APMRESUMEAUTOMATIC:
+		case PBT_APMPOWERSTATUSCHANGE:
+		{
+			for (auto it : g_pCosmos->m_mapThreadInfo)
+			{
+				if (it.second)
+				{
+					for (auto it2 : it.second->m_mapGalaxy)
+					{
+						it2.second->HostPosChanged();
+						for (auto it3 : it2.second->m_mapWPFView)
+						{
+							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
+							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+						}
+					}
+				}
+			}
+			for (auto& it : g_pCosmos->m_mapBrowserWnd)
+			{
+				if (::IsWindowVisible(it.first))
+				{
+					CBrowser* pWnd = (CBrowser*)it.second;
+					if (pWnd)
+					{
+						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+						if (hWnd)
+						{
+							auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+							if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+							{
+								pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+								it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+							}
+						}
+						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+					}
+					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
+				}
+			}
+		}
+		break;
+		}
+	}
+	break;
 	case WM_COSMOSMSG:
 	{
 		if (wParam)
@@ -1130,7 +1130,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			}
 		}
 	}
-
 	break;
 	}
 
@@ -1195,16 +1194,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		LPCTSTR lpszName = pCreateWnd->lpcs->lpszName;
 		HWND hPWnd = pCreateWnd->lpcs->hwndParent;
 		DWORD dwID = (DWORD)pCreateWnd->lpcs->hMenu;
-		if (::GetWindowLongPtr(hPWnd, GWL_EXSTYLE) & WS_EX_MDICHILD && ::SendMessage(hPWnd, WM_COSMOSMSG, 0, 19631222) == 0)
-		{
-			if (g_pCosmos->m_nAppType == 0 || g_pCosmos->m_nAppType == 1992)
-			{
-				LRESULT lRes = ::SendMessage(hPWnd, WM_COSMOSMSG, (WPARAM)pCreateWnd->lpcs->lpCreateParams, TANGRAM_CONST_PANE_FIRST);
-				if (g_pCosmos->m_nAppType == 0)
-					g_pCosmos->m_nAppType = lRes;
-			}
-		}
-
 		::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = g_pCosmos->m_szBuffer;
 		memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
@@ -1216,30 +1205,15 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (dwID == AFX_IDW_PANE_FIRST)
 		{
 			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
-			int lRes = (int)::SendMessage(hPWnd, WM_COSMOSMSG, (WPARAM)pCreateWnd->lpcs->lpCreateParams, TANGRAM_CONST_PANE_FIRST);
-
-			switch (lRes)
-			{
-			case APP_SDI://for SDI Child
-			case APP_MDT://for MDT Child
-			{
-				//if (g_pCosmos->m_pCosmosDelegate)
-				//	g_pCosmos->m_pCosmosDelegate->HookAppDocTemplateInfo();
-			}
-			break;
-			case APP_MDI://for MDI Child
-			{
-				::PostMessage(hPWnd, WM_COSMOSMSG, 0, 19922017);
-			}
-			break;
-			default:
-			{
-			}
-			break;
-			}
 		}
 		if (strClassName == _T("MDIClient"))
 		{
+			if (g_pCosmos->m_pMDIMainWnd == nullptr)
+			{
+				g_pCosmos->m_pMDIMainWnd = new CMDIMainWindow();
+				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
+				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
+			}
 			HANDLE hHandle = ::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
 			if (hHandle == 0)
 			{
@@ -1258,14 +1232,9 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
 				if (it != g_pCosmos->m_mapValInfo.end())
 					g_pCosmos->m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+				//g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
-			}
-			if (g_pCosmos->m_pMDIMainWnd == nullptr)
-			{
-				g_pCosmos->m_pMDIMainWnd = new CMDIMainWindow();
-				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
-				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
 			}
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("MDIClient"), hPWnd, hWnd);
@@ -1296,16 +1265,16 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			if (g_pCosmos->m_pCosmosDelegate)
 				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:ControlBar"), hPWnd, hWnd);
 		}
-		else if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
-		{
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:MiniFrame"), hPWnd, hWnd);
-		}
-		else if (strClassName.Find(_T("Afx:RibbonBar:")) == 0)
-		{
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:RibbonBar"), hPWnd, hWnd);
-		}
+		//else if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
+		//{
+		//	if (g_pCosmos->m_pCosmosDelegate)
+		//		g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:MiniFrame"), hPWnd, hWnd);
+		//}
+		//else if (strClassName.Find(_T("Afx:RibbonBar:")) == 0)
+		//{
+		//	if (g_pCosmos->m_pCosmosDelegate)
+		//		g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:RibbonBar"), hPWnd, hWnd);
+		//}
 		else if (strClassName == _T("Chrome_RenderWidgetHostHWND"))
 		{
 			if ((::GetWindowLong(hPWnd, GWL_STYLE) & WS_POPUP) == 0)
@@ -1870,23 +1839,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			}
 			break;
 			case WM_MOUSEMOVE:
-				//if (g_pCosmos->m_bEclipse)
 			{
-				//if (MK_LBUTTON == lpMsg->wParam)
-				//{
-				//	CWnd* pWnd = nullptr;
-				//	if (g_pCosmos->m_pActiveXobj)
-				//		pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
-				//	if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
-				//	{
-				//		if (g_pCosmos->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))
-				//		{
-				//			TranslateMessage(lpMsg);
-				//			::DispatchMessage(lpMsg);
-				//		}
-				//		return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
-				//	}
-				//}
 				if (lpMsg->hwnd == topWindow || ::IsChild(topWindow, lpMsg->hwnd))
 				{
 					static CPoint PrePoint = CPoint(0, 0);
@@ -2361,52 +2314,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						}
 						g_pCosmos->m_mapXobjForHtml.erase(g_pCosmos->m_mapXobjForHtml.begin(), g_pCosmos->m_mapXobjForHtml.end());
 					}
-					//CString strHelper = g_pCosmos->m_strAppPath + _T("tangramhelper.xml");
-					//if (::PathFileExists(strHelper))
-					//{
-					//	CTangramXmlParse m_Parse;
-					//	if (m_Parse.LoadFile(strHelper))
-					//	{
-					//		switch (g_pCosmos->m_nAppType)
-					//		{
-					//		case APP_BROWSER:
-					//		case APP_BROWSERAPP:
-					//		case APP_BROWSER_ECLIPSE:
-					//		{
-					//			CTangramXmlParse* pChild = nullptr;
-					//			if (g_pCosmos->m_nAppType == APP_BROWSERAPP)
-					//				pChild = m_Parse.GetChild(_T("browser_app"));
-					//			else if (g_pCosmos->m_nAppType == APP_BROWSER)
-					//				pChild = m_Parse.GetChild(_T("browser"));
-					//			else
-					//				pChild = m_Parse.GetChild(_T("browser_eclipse"));
-					//			if (pChild)
-					//			{
-					//				int nCount = pChild->GetCount();
-					//				CString strUrls = _T("");
-					//				for (int i = 0; i < nCount; i++)
-					//				{
-					//					CString strUrl = pChild->GetChild(i)->text();
-					//					int nPos2 = strUrl.Find(_T(":"));
-					//					if (nPos2 != -1)
-					//					{
-					//						CString strURLHeader = strUrl.Left(nPos2);
-					//						if (strURLHeader.CompareNoCase(_T("host")) == 0)
-					//						{
-					//							strUrl = g_pCosmos->m_strAppPath + strUrl.Mid(nPos2 + 1);
-					//						}
-					//					}
-					//					strUrls += strUrl;
-					//					strUrls += _T("|");
-					//				}
-					//				if (nCount)
-					//					g_pCosmos->m_pBrowserFactory->CreateBrowser(NULL, strUrls);
-					//			}
-					//		}
-					//		break;
-					//		}
-					//	}
-					//}
 				}
 				break;
 				case 20191022:

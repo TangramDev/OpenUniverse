@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101270019           *
+ *           Web Runtime for Application - Version 1.0.0.202101290020           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * 
@@ -266,55 +266,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		break;
 	}
 	break;
-	case WM_POWERBROADCAST:
-	{
-		switch (wParam)
-		{
-		case PBT_APMRESUMEAUTOMATIC:
-		case PBT_APMPOWERSTATUSCHANGE:
-		{
-			for (auto it : g_pCosmos->m_mapThreadInfo)
-			{
-				if (it.second)
-				{
-					for (auto it2 : it.second->m_mapGalaxy)
-					{
-						it2.second->HostPosChanged();
-						//for (auto it3 : it2.second->m_mapWPFView)
-						//{
-						//	ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-						//	::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						//}
-					}
-				}
-			}
-			for (auto it : g_pCosmos->m_mapBrowserWnd)
-			{
-				if (::IsWindowVisible(it.first))
-				{
-					CBrowser* pWnd = (CBrowser*)it.second;
-					if (pWnd && pWnd->m_pVisibleWebWnd)
-					{
-						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-						if (hWnd)
-						{
-							auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-							if (it != g_pCosmos->m_mapHtmlWnd.end())
-							{
-								pWnd->m_pVisibleWebWnd = (CWebPage*)it->second;
-								it->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-							}
-						}
-						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
-					}
-					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
-				}
-			}
-		}
-		break;
-		}
-	}
-	break;
 	case WM_WINDOWPOSCHANGED:
 		if (hWnd == g_pCosmos->m_hHostWnd)
 		{
@@ -407,13 +358,54 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		}
 	}
 	break;
-	switch (lParam)
+	case WM_POWERBROADCAST:
 	{
-	break;
-	default:
+		switch (wParam)
+		{
+		case PBT_APMRESUMEAUTOMATIC:
+		case PBT_APMPOWERSTATUSCHANGE:
+		{
+			for (auto it : g_pCosmos->m_mapThreadInfo)
+			{
+				if (it.second)
+				{
+					for (auto it2 : it.second->m_mapGalaxy)
+					{
+						it2.second->HostPosChanged();
+						for (auto it3 : it2.second->m_mapWPFView)
+						{
+							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
+							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+						}
+					}
+				}
+			}
+			for (auto& it : g_pCosmos->m_mapBrowserWnd)
+			{
+				if (::IsWindowVisible(it.first))
+				{
+					CBrowser* pWnd = (CBrowser*)it.second;
+					if (pWnd)
+					{
+						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+						if (hWnd)
+						{
+							auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+							if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+							{
+								pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+								it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+							}
+						}
+						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+					}
+					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
+				}
+			}
+		}
 		break;
+		}
 	}
-	return 1;
 	break;
 	case WM_HUBBLE_APPQUIT:
 	{

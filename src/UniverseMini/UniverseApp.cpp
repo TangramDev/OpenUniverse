@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101270019
+ *           Web Runtime for Application - Version 1.0.0.202101290020
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -316,12 +316,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		}
 	}
 	break;
-	switch (lParam)
-	{
-	break;
-	default:
-		break;
-	}
 	return 1;
 	break;
 	case WM_HUBBLE_APPQUIT:

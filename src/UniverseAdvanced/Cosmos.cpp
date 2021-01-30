@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101270019           *
+ *           Web Runtime for Application - Version 1.0.0.202101290020           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1689,7 +1689,10 @@ void CCosmos::BrowserAppStart()
 				CTangramXmlParse* pParse = nullptr;
 				m_Parse[_T("url")].put_text(m_strStartupURL);
 			}
-			m_hHostBrowserWnd = m_pBrowserFactory->CreateBrowser((HWND)m_hChildHostWnd, m_Parse.xml());
+			HWND hPWnd = m_hChildHostWnd;
+			//if (g_pCosmos->m_pMDIMainWnd)
+			//	hPWnd = g_pCosmos->m_pMDIMainWnd->m_hMDIClient;
+			m_hHostBrowserWnd = m_pBrowserFactory->CreateBrowser((HWND)hPWnd, m_Parse.xml());
 		}
 		::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 2019111701);
 	}
