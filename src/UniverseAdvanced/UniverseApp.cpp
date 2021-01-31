@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101290020           *
+ *           Web Runtime for Application - Version 1.0.0.202101310021           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -63,7 +63,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// TangramApp.cpp : Implementation of DLL Exports.
+ // TangramApp.cpp : Implementation of DLL Exports.
 
 #include "stdafx.h"
 #include "UniverseApp.h" 
@@ -750,7 +750,7 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		break;
 		case TANGRAM_CHROME_APP_INIT:
 		{
-			if (g_pCosmos->m_nAppType == APP_BROWSER_ECLIPSE||g_pCosmos->m_bEclipse)
+			if (g_pCosmos->m_nAppType == APP_BROWSER_ECLIPSE || g_pCosmos->m_bEclipse)
 			{
 				ICosmosCLRImpl* pProxy = g_pCosmos->m_pCLRProxy;
 				g_pCosmos->InitEclipseApp();
@@ -1145,7 +1145,7 @@ LRESULT CALLBACK CUniverse::CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 	case WM_WINDOWPOSCHANGED:
 	{
 		HWND m_hChildWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-		if (::IsWindow(m_hChildWnd)&&::IsWindowVisible(hWnd)) {
+		if (::IsWindow(m_hChildWnd) && ::IsWindowVisible(hWnd)) {
 			RECT rc;
 			::GetClientRect(m_hChildWnd, &rc);
 			WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
@@ -1323,7 +1323,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName.Find(_T("#32770")) == 0)
 		{
-			if (hPWnd&& (pCreateWnd->lpcs->style&WS_CHILD))
+			if (hPWnd && (pCreateWnd->lpcs->style & WS_CHILD))
 				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 		}
 		if (strPClassName == _T("GenericPane"))
@@ -2123,18 +2123,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											}
 										}
 										pClient = m_Parse.GetChild(_T("hostpage"));
-										if (pClient && g_pCosmos->m_pMDIMainWnd&&g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
+										if (pClient && g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
 										{
-											if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
-											{
-												CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd;
-												if (pPage)
-												{
-													pPage->LoadDocument2Viewport(pPage->m_strCurKey, pClient->xml());
-												}
-											}
-											else
-												g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
+											g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
 										}
 										pClient = m_Parse.GetChild(_T("controlbars"));
 										if (pClient)
@@ -2203,6 +2194,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												}
 											}
 										}
+										if (g_pCosmos->m_pMDIMainWnd)
+											::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 									}
 									if (pFrameWnd)
 									{

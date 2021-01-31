@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101290020
+ *           Web Runtime for Application - Version 1.0.0.202101310021
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -769,8 +769,9 @@ LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 		CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd;
 		if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy && pPage)
 		{
-			pPage->LoadDocument2Viewport(pPage->m_strCurKey, _T(""));
+			pPage->LoadDocument2Viewport(strKey, _T(""));
 		}
+		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 		::SysFreeString(bstrXml);
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
@@ -1736,8 +1737,6 @@ void CGalaxy::HostPosChanged()
 		{
 			::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
-		if (m_bTabbedMDIClient)
-			::SendMessage(hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
 	}
 }
 

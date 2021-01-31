@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101290020           *
+ *           Web Runtime for Application - Version 1.0.0.202101310021           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * 
@@ -372,11 +372,11 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 					for (auto it2 : it.second->m_mapGalaxy)
 					{
 						it2.second->HostPosChanged();
-						for (auto it3 : it2.second->m_mapWPFView)
-						{
-							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						}
+						//for (auto it3 : it2.second->m_mapWPFView)
+						//{
+						//	ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
+						//	::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+						//}
 					}
 				}
 			}

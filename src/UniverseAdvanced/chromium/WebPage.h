@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101290020           *
+ *           Web Runtime for Application - Version 1.0.0.202101310021           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -62,8 +62,6 @@ namespace Browser
 		CWebPage*							m_pWebWnd;
 		CWebPage*							m_pDevToolWnd;
 		map<CString, CString>				m_mapFormsInfo;
-		map<CString, CString>				m_mapAtlMFCsInfo;
-		map<CString, CString>				m_mapStartupsInfo;
 		map<CString, CString>				m_mapeclipsesInfo;
 		map<CString, CString>				m_mapWorkBenchInfo;
 		map<HWND, CWinForm*>				m_mapWinForm;

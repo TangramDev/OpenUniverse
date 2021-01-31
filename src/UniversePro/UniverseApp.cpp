@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202101290020           *
+ *           Web Runtime for Application - Version 1.0.0.202101310021           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1989,16 +1989,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										pClient = m_Parse.GetChild(_T("hostpage"));
 										if (pClient && g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
 										{
-											if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
-											{
-												CWebPage* pPage = g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd;
-												if (pPage)
-												{
-													pPage->LoadDocument2Viewport(pPage->m_strCurKey, pClient->xml());
-												}
-											}
-											else
-												g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
+											g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
 										}
 										pClient = m_Parse.GetChild(_T("controlbars"));
 										if (pClient)
@@ -2067,6 +2058,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												}
 											}
 										}
+										if (g_pCosmos->m_pMDIMainWnd)
+											::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+									}
+									if (pFrameWnd)
+									{
+										::PostMessage(pFrameWnd->m_hWnd, WM_COSMOSMSG, 0, 20210129);
 									}
 								}
 							}
