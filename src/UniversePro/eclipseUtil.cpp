@@ -11,7 +11,7 @@
  *	   Martin Oberhuber (Wind River) - [149994] Add --launcher.appendVmargs
  *******************************************************************************/
  /********************************************************************************
-  *           Web Runtime for Application - Version 1.0.0.202101310021           *
+  *           Web Runtime for Application - Version 1.0.0.202102050024           *
   ********************************************************************************
   * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
   * There are Three Key Features of Webruntime:
