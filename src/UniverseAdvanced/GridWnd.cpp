@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050025
+ *           Web Runtime for Application - Version 1.0.0.202102050026
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -260,16 +260,12 @@ void CGridWnd::TrackColumnSize(int x, int col)
 
 LRESULT CGridWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
-	if (lParam == 1992 || wParam == 0x01000 || wParam == 0 )
+	switch (lParam)
 	{
+	case 1992:
 		return 0;
-	}
-	//if (lParam == 20200601)
-	//{
-	//	RecalcLayout();
-	//	return 0;
-	//}
-	if (lParam == 1993)
+		break;
+	case 1993:
 	{
 		//fix bug for .net Control or Window Form
 		switch (wParam)
@@ -296,6 +292,33 @@ LRESULT CGridWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
+	break;
+	case 20210202:
+	{
+		HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
+		if (::IsWindow(hWnd))
+		{
+			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+			if (pCosmosFrameWndInfo)
+			{
+				HWND hClient = pCosmosFrameWndInfo->m_hClient;
+				IGalaxy* pGalaxy = nullptr;
+				g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
+				if (pGalaxy)
+				{
+					CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+					_pGalaxy->HostPosChanged();
+				}
+			}
+		}
+		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
+		return 0;
+	}
+	break;
+	}
+	if (wParam == 0 || wParam == 0x01000)
+		return 0;
+
 	IXobj* _pXobj = nullptr;
 	CString str = (LPCTSTR)lParam;
 	CXobj* pOldNode = (CXobj*)g_pCosmos->m_pDesignXobj;

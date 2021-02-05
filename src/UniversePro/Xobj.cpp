@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050025           *
+ *           Web Runtime for Application - Version 1.0.0.202102050026           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -548,6 +548,8 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj * *ppRetXobj)
 	case Grid:
 		break;
 	}
+	m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+	::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 	return S_OK;
 }
 
@@ -631,6 +633,8 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				CGalaxy* pGalaxy = m_pXobjShareData->m_pGalaxy;
 				pGalaxy->HostPosChanged();
 			}
+			m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+			::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 			return hr;
 		}
 	}

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050025           *
+ *           Web Runtime for Application - Version 1.0.0.202102050026           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -551,8 +551,10 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
-		if (g_pCosmos->m_pMDIMainWnd && ::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd))
-			::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+		//if (g_pCosmos->m_pMDIMainWnd && ::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd))
+		//	::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 	}
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	return lRes;
@@ -587,6 +589,40 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 19820911:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
+		case 20210202:
+		{
+			HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_hWnd);
+			if (::IsWindow(hWnd))
+			{
+				CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+				if (pCosmosFrameWndInfo)
+				{
+					HWND hClient = pCosmosFrameWndInfo->m_hClient;
+					IGalaxy* pGalaxy = nullptr;
+					g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
+					if (pGalaxy)
+					{
+						CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+						_pGalaxy->HostPosChanged();
+					}
+				}
+			}
+			int nPage = -1;
+			m_pXobj->get_ActivePage(&nPage);
+			IXobj* pObj = nullptr;
+			m_pXobj->GetXobj(0, nPage, &pObj);
+			if (pObj)
+			{
+				CXobj* _pObj = (CXobj*)pObj;
+				if (_pObj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
+					m_pXobj->m_pXobjShareData->m_pGalaxy->SetFocus();
+				else
+					_pObj->m_pHostWnd->SetFocus();
+			}
+			m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
+			return 0;
+		}
+		break;
 		case 20190602:
 		{
 			CWinForm* pCosmosWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 20190214);
