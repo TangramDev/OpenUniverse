@@ -2228,6 +2228,11 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 	}
+	if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == m_hWnd)
+	{
+		if (g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
+			m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
+	}
 	if (m_strGalaxyName == _T("default"))
 	{
 		CString strName = m_pWorkXobj->m_pHostParse->attr(_T("galaxy"), _T(""));

@@ -120,7 +120,7 @@ BEGIN_MESSAGE_MAP(CGridWnd, CSplitterWnd)
 	ON_WM_MOUSEACTIVATE()
 	ON_MESSAGE(WM_TABCHANGE, OnActivePage)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
-	ON_MESSAGE(WM_COSMOSMSG, OnSplitterNodeAdd)
+	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 	ON_MESSAGE(WM_HOSTNODEFORSPLITTERCREATED, OnSplitterCreated)
 END_MESSAGE_MAP()
@@ -249,7 +249,7 @@ void CGridWnd::TrackColumnSize(int x, int col)
 	}
 }
 
-LRESULT CGridWnd::OnSplitterNodeAdd(WPARAM wParam, LPARAM lParam)
+LRESULT CGridWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (lParam == 1992 || wParam == 0x01000 || wParam == 0)
 	{
