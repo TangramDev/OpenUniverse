@@ -1130,7 +1130,17 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	{
 		hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		if (::IsWindow(m_pHostWnd->m_hWnd) == false)
+		{
 			bRet = m_pHostWnd->SubclassWindow(hWnd);
+			if (m_nViewType == BlankView &&
+				m_strID.CompareNoCase(_T("mdiclient")) == 0 &&
+				g_pCosmos->m_pMDIMainWnd &&
+				::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd)
+				&& !::IsChild(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, hWnd))
+			{
+				g_pCosmos->m_pMDIMainWnd->m_vMdiClientXobjs.push_back(this);
+			}
+		}
 	}
 
 	if (m_nViewType == BlankView && m_pHostParse != nullptr)

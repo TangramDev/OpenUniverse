@@ -1933,6 +1933,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											if (pWnd == nullptr)
 											{
 												pWnd = new CMDIChildWindow();
+												g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild = pWnd;
 												pWnd->SubclassWindow(hWnd);
 												g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 											}

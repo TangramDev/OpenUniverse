@@ -139,6 +139,7 @@ public:
 	HWND m_hParent;
 	CString m_strKey;
 	CGalaxy* m_pGalaxy = nullptr;
+	CXobj* m_pClientBindingObj = nullptr;
 	CString m_strDocXml=_T("");
 	BEGIN_MSG_MAP(CMDIChildWindow)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
@@ -186,7 +187,10 @@ public:
 	CBrowser*								m_pHostBrowser = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
 	CMDIChildWindow*						m_pActiveMDIChild = nullptr;
+
+	CXobjVector								m_vMdiClientXobjs;
 	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;
+
 	BEGIN_MSG_MAP(CMDIMainWindow)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 	END_MSG_MAP()

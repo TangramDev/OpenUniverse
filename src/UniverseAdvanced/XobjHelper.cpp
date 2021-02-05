@@ -21,8 +21,8 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// XobjHelper.cpp : implementation file
-//
+ // XobjHelper.cpp : implementation file
+ //
 
 #include "stdafx.h"
 #include "Xobj.h"
@@ -97,7 +97,6 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_nID = nID;
 	m_pXobj->m_pHostWnd = this;
-
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
@@ -107,6 +106,13 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
 		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
+		if (g_pCosmos->m_pMDIMainWnd &&
+			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd) &&
+			m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy &&
+			!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, hWnd))
+		{
+			g_pCosmos->m_pMDIMainWnd->m_vMdiClientXobjs.push_back(m_pXobj);
+		}
 		if (m_pXobj->m_pParentObj)
 		{
 			if (m_pXobj->m_pParentObj->m_nViewType == Grid)
@@ -119,7 +125,7 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 				RECT rc = { 0,0,0,0 };
 				if (::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, (WPARAM)&rc, 19921989) == 19921989)
 				{
-					//::SetWindowPos(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,  /*SWP_NOSENDCHANGING| SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
+					::SetWindowPos(pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,  /*SWP_NOSENDCHANGING| SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
 				}
 			}
 		}
@@ -194,7 +200,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	if (m_pXobj && m_pXobj->m_pXobjShareData->m_pGalaxyCluster)
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeMouseActivate(m_pXobj);
 
-	if ((m_pXobj->m_nViewType== TabGrid || m_pXobj->m_nViewType == Grid))
+	if ((m_pXobj->m_nViewType == TabGrid || m_pXobj->m_nViewType == Grid))
 	{
 		if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy)
 			::SetFocus(m_hWnd);
@@ -514,7 +520,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 			::PostMessage(pGalaxy->m_hWnd, WM_HUBBLE_ACTIVEPAGE, wParam, lParam);
 			::SendMessage(_pXobj->m_pHostWnd->m_hWnd, WM_HUBBLE_ACTIVEPAGE, wParam, lParam);
 		}
-		if (m_pXobj->m_nViewType== TabGrid)
+		if (m_pXobj->m_nViewType == TabGrid)
 		{
 			for (auto it : m_pXobj->m_vChildNodes)
 			{
@@ -839,7 +845,7 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
-	if (lParam == 20191031 || lParam == 20200130|| lParam == 20200609|| lParam == 20200606)
+	if (lParam == 20191031 || lParam == 20200130 || lParam == 20200609 || lParam == 20200606)
 		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	if (lParam == 20200208)
 		return 0;
@@ -1129,6 +1135,8 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (g_pCosmos->m_pMDIMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 		{
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj = m_pXobj;
+			if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
+				g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
@@ -1164,7 +1172,7 @@ void CXobjHelper::OnSize(UINT nType, int cx, int cy)
 void CXobjHelper::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CWnd::OnShowWindow(bShow, nStatus);
-	if (bShow&&m_pXobj->m_pWebBrowser)
+	if (bShow && m_pXobj->m_pWebBrowser)
 	{
 		::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 	}

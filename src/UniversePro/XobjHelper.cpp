@@ -102,11 +102,17 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 		pGalaxy->m_pBindingXobj = m_pXobj;
-
 		m_pXobj->m_pXobjShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
 		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
+		if (g_pCosmos->m_pMDIMainWnd &&
+			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd) &&
+			m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy &&
+			!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, hWnd))
+		{
+			g_pCosmos->m_pMDIMainWnd->m_vMdiClientXobjs.push_back(m_pXobj);
+		}
 		if (m_pXobj->m_pParentObj)
 		{
 			if (m_pXobj->m_pParentObj->m_nViewType == Grid)
@@ -495,7 +501,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	if (pXobj)
 	{
-		CXobj* _pXobj = (CXobj* )pXobj;
+		CXobj* _pXobj = (CXobj*)pXobj;
 		CString str = _T("");
 		str.Format(_T("%d"), wParam);
 		m_pXobj->put_Attribute(CComBSTR(L"activepage"), str.AllocSysString());
@@ -1129,6 +1135,8 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (g_pCosmos->m_pMDIMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 		{
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj = m_pXobj;
+			if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
+				g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 		return;
