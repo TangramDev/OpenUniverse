@@ -2118,7 +2118,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													}
 													if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 													{
-														g_pCosmos->m_pMDIMainWnd->m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
+														if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_strCurrentKey != strKey)
+															g_pCosmos->m_pMDIMainWnd->m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 													}
 												}
 											}
