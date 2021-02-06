@@ -1088,10 +1088,25 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
-	if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pClientXobj == m_pXobj)
+	CMDIMainWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+	if (pMainWnd)
 	{
-		g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
-		return;
+		if (pMainWnd->m_pClientXobj == m_pXobj)
+		{
+			pMainWnd->m_pGalaxy->HostPosChanged();
+			if(pMainWnd->m_pActiveMDIChild)
+				::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+			return;
+		}
+		if (pMainWnd->m_pClientXobj &&
+			pMainWnd->m_pGalaxy &&
+			pMainWnd->m_pGalaxy->m_pBindingXobj == m_pXobj &&
+			pMainWnd->m_pActiveMDIChild)
+		{
+			pMainWnd->m_pGalaxy->HostPosChanged();
+			::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+			return;
+		}
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
@@ -1132,12 +1147,12 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 	else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
-		if (g_pCosmos->m_pMDIMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pMainWnd->m_pGalaxy)
 		{
-			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj = m_pXobj;
-			if (g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild)
-				g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
-			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+			pMainWnd->m_pGalaxy->m_pBindingXobj = m_pXobj;
+			if (pMainWnd->m_pActiveMDIChild)
+				pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
+			pMainWnd->m_pGalaxy->HostPosChanged();
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 		return;

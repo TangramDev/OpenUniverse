@@ -67,15 +67,9 @@ namespace Browser {
 					CWebPage* pPage = (CWebPage*)it->second;
 					if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
 					{
+						IXobj* pObj = nullptr;
 						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
-						for (auto &it : pPage->m_pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
-						{
-							if (it.second != pPage->m_pGalaxy)
-							{
-								IXobj* pObj = nullptr;
-								pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
-							}
-						}
+						pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
 					}
 				}
 			}

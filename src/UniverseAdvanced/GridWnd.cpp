@@ -532,14 +532,16 @@ void CGridWnd::StopTracking(BOOL bAccept)
 				}
 			}
 		}
-		this->RecalcLayout();
+		RecalcLayout();
 		if (pWebWnd)
 		{
 			::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 			::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		}
-		if (g_pCosmos->m_pMDIMainWnd&&::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd,m_hWnd))
-			::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+		//if (g_pCosmos->m_pMDIMainWnd&&
+		//	::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd,m_hWnd)&&
+		//	!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hMDIClient,m_hWnd))
+		//	::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 	}
 }
 

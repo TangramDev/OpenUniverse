@@ -2597,9 +2597,13 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						{
 							CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 							_pGalaxy->m_pWebPageWnd = m_pWebPageWnd;
-							IXobj* pXobj = nullptr;
-							CComBSTR _bstrKey(m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey);
-							_pGalaxy->Observe(_bstrKey, CComBSTR(strXml), &pXobj);
+							CString _strKey = m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey;
+							if (_strKey != _pGalaxy->m_strCurrentKey)
+							{
+								IXobj* pXobj = nullptr;
+								CComBSTR _bstrKey(_strKey);
+								_pGalaxy->Observe(_bstrKey, CComBSTR(strXml), &pXobj);
+							}
 						}
 					}
 				}
