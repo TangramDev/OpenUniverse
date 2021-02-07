@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050026           *
+ *           Web Runtime for Application - Version 1.0.0.202102070027           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2069,9 +2069,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											if (pWnd == nullptr)
 											{
 												pWnd = new CMDIChildWindow();
-												g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild = pWnd;
+												g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild = nullptr;
 												pWnd->SubclassWindow(hWnd);
 												g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
+												::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 											}
 											if (pWnd->m_pGalaxy == nullptr)
 												pWnd->m_pGalaxy = (CGalaxy*)pGalaxy;

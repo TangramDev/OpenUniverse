@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050026           *
+ *           Web Runtime for Application - Version 1.0.0.202102070027           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -94,6 +94,9 @@ namespace Browser {
 		if (m_bDestroy || hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE) {
 			return;
 		}
+		if (::IsWindowVisible(hWnd) == false && 
+			(g_pCosmos->m_pMDIMainWnd==nullptr||!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd,m_hWnd)||g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild == nullptr))
+			return;
 		if (m_hOldTab)
 		{
 			RECT rc;

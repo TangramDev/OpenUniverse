@@ -2,10 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by Universe.rc
 //
-#define IDR_TANGRAMLIB                  101
 #define IDD_TANGRAMLITETABBEDFORMVIEW   101
-#define IDR_TANGRAMCTRL                 108
-#define IDR_TANGRAM                     157
 #define IDR_TANGRAM1                    158
 #define IDR_TANGRAM64                   158
 #define IDB_TANGRAMCTRLEX               199
@@ -25,7 +22,6 @@
 #define IDB_BITMAP_MDI                  226
 #define IDB_BITMAP_DESIGNER             227
 #define IDD_DOCTEMPLATE                 229
-#define IDR_WIN_DEFAULT_APP_CONFIG      233
 #define IDC_TemplateTAB                 1000
 #define IDC_TemplateLIST                1001
 

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050026           *
+ *           Web Runtime for Application - Version 1.0.0.202102070027           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -97,7 +97,7 @@ class ATL_NO_VTABLE CCosmosCtrl :
 	public IDispatchImpl<ICosmosCtrl, &IID_ICosmosCtrl, &LIBID_Universe, 1, 0>
 {
 public:
-	DECLARE_REGISTRY_RESOURCEID(IDR_TANGRAMCTRL)
+	//DECLARE_REGISTRY_RESOURCEID(IDR_TANGRAMCTRL)
 
 	BEGIN_COM_MAP(CCosmosCtrl)
 		COM_INTERFACE_ENTRY(ICosmosCtrl)
@@ -118,4 +118,4 @@ public:
 	static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
 };
 
-OBJECT_ENTRY_AUTO_EX(__uuidof(CosmosCtrl), CCosmosCtrl)
+//OBJECT_ENTRY_AUTO_EX(__uuidof(CosmosCtrl), CCosmosCtrl)

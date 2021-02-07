@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050026           *
+ *           Web Runtime for Application - Version 1.0.0.202102070027           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1321,7 +1321,7 @@ namespace CommonUniverse
 			{
 			case 19651965:
 				RecalcLayout();
-				::InvalidateRect(m_hWnd, nullptr, true);
+				//::InvalidateRect(m_hWnd, nullptr, true);
 				break;
 			case 19631992:
 				AfxGetApp()->m_pMainWnd = this;

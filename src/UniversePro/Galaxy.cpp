@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050026
+ *           Web Runtime for Application - Version 1.0.0.202102070027
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -732,40 +732,24 @@ LRESULT CMDIChildWindow::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lP
 
 LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (lParam != wParam)
+	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	if (m_hWnd == (HWND)lParam)
 	{
-		HWND hActivedWnd = (HWND)lParam;
-		CMDIChildWindow* _pWnd = nullptr;
-		CString strKey = _T("");
-		if (hActivedWnd)
+		if (m_pClientBindingObj == nullptr)
 		{
-			_pWnd = (CMDIChildWindow*)::SendMessage(hActivedWnd, WM_COSMOSMSG, 0, 19631222);
-			if (_pWnd == nullptr)
-				_pWnd = g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild;
-			if (_pWnd)
-			{
-				if (_pWnd->m_pClientBindingObj == nullptr)
-				{
-					_pWnd->m_pClientBindingObj = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj;
-				}
-				g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild = _pWnd;
-				strKey = _pWnd->m_strKey;
-			}
+			m_pClientBindingObj = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj;
 		}
-		if (_pWnd == nullptr)
-			return DefWindowProc(uMsg, wParam, lParam);
-
-		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 	}
-	return DefWindowProc(uMsg, wParam, lParam);
+	::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)this, 20210202);
+	return l;
 }
 
 LRESULT CMDIChildWindow::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (lParam == 19631222 && wParam == 0)
-	{
-		return (LRESULT)this;
-	}
+	//if (lParam == 19631222 && wParam == 0)
+	//{
+	//	return (LRESULT)this;
+	//}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (wParam)
 	{
@@ -920,8 +904,14 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	break;
 	case 20210202:
 	{
-		if (m_pActiveMDIChild)
+		if (wParam)
 		{
+			m_pActiveMDIChild = (CMDIChildWindow*)wParam;
+			if (!::IsWindow(m_pActiveMDIChild->m_hWnd))
+			{
+				m_pActiveMDIChild = nullptr;
+				break;
+			}
 			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
 			if (pCosmosFrameWndInfo)
 			{
@@ -953,6 +943,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 						if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
 						{
 							m_pGalaxy->m_pBindingXobj = pObj;
+							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 19651965);
 							break;
 						}
 					}

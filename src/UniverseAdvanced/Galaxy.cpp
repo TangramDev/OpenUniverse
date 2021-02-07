@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102050026
+ *           Web Runtime for Application - Version 1.0.0.202102070027
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -22,8 +22,8 @@
  *
  *******************************************************************************/
 
-// Galaxy.cpp : implementation file of CGalaxy
-//
+ // Galaxy.cpp : implementation file of CGalaxy
+ //
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -161,8 +161,8 @@ HTREEITEM CCosmosTreeCtrl::FillTreeView(CTangramXmlParse* pParse, CTangramXmlPar
 					CTangramXmlParse* _pChild = pParse->GetChild(i);
 					if (_pChild->attrBool(_T("treeitem"), false))
 					{
-						CString name = pParse->GetChild(i)->name()+_T("_tag");
-						FillTreeView(pParse->GetChild(i),pParse->GetChild(name), hItem);
+						CString name = pParse->GetChild(i)->name() + _T("_tag");
+						FillTreeView(pParse->GetChild(i), pParse->GetChild(name), hItem);
 					}
 				}
 			}
@@ -341,7 +341,7 @@ LRESULT CCosmosTreeCtrl::OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return S_OK;
 	}
-		break;
+	break;
 	}
 	return lRes;
 }
@@ -519,7 +519,7 @@ LRESULT CCosmosListCtrl::OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-		break;
+	break;
 	case 20210108:
 	{
 		IXobj* pObj = nullptr;
@@ -665,7 +665,7 @@ LRESULT CCosmosTabCtrl::OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-		break;
+	break;
 	case 20210108:
 	{
 		IXobj* pObj = nullptr;
@@ -736,32 +736,16 @@ LRESULT CMDIChildWindow::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lP
 
 LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (lParam != wParam)
+	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	if (m_hWnd == (HWND)lParam)
 	{
-		HWND hActivedWnd = (HWND)lParam;
-		CMDIChildWindow* _pWnd = nullptr;
-		CString strKey = _T("");
-		if (hActivedWnd)
+		if (m_pClientBindingObj == nullptr)
 		{
-			_pWnd = (CMDIChildWindow*)::SendMessage(hActivedWnd, WM_COSMOSMSG, 0, 19631222);
-			if (_pWnd == nullptr)
-				_pWnd = g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild;
-			if (_pWnd)
-			{
-				if (_pWnd->m_pClientBindingObj == nullptr)
-				{
-					_pWnd->m_pClientBindingObj = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj;
-				}
-				g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild = _pWnd;
-				strKey = _pWnd->m_strKey;
-			}
+			m_pClientBindingObj = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj;
 		}
-		if (_pWnd == nullptr)
-			return DefWindowProc(uMsg, wParam, lParam);
-
-		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 	}
-	return DefWindowProc(uMsg, wParam, lParam);
+	::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)this, 20210202);
+	return l;
 }
 
 LRESULT CMDIChildWindow::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
@@ -772,10 +756,10 @@ LRESULT CMDIChildWindow::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lP
 
 LRESULT CMDIChildWindow::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (lParam == 19631222&&wParam == 0)
-	{
-		return (LRESULT)this;
-	}
+	//if (lParam == 19631222 && wParam == 0)
+	//{
+	//	return (LRESULT)this;
+	//}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (wParam)
 	{
@@ -825,7 +809,7 @@ LRESULT CMDTWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	auto it = g_pCosmos->m_mapMDTWindow.find(m_hWnd);
 	if (it != g_pCosmos->m_mapMDTWindow.end())
 	{
-		for (auto &itX : g_pCosmos->m_mapMDTWindow)
+		for (auto& itX : g_pCosmos->m_mapMDTWindow)
 		{
 			if (itX.second->m_hWnd != m_hWnd)
 			{
@@ -912,8 +896,14 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	break;
 	case 20210202:
 	{
-		if (m_pActiveMDIChild)
+		if (wParam)
 		{
+			m_pActiveMDIChild = (CMDIChildWindow*)wParam;
+			if (!::IsWindow(m_pActiveMDIChild->m_hWnd))
+			{
+				m_pActiveMDIChild = nullptr;
+				break;
+			}
 			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
 			if (pCosmosFrameWndInfo)
 			{
@@ -931,7 +921,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 				{
 					IGalaxy* _pGalaxy = it.second;
 					IXobj* pXobj = nullptr;
-					if (_pGalaxy != m_pGalaxy|| bNewKey)
+					if (_pGalaxy != m_pGalaxy || bNewKey)
 					{
 						_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
 					}
@@ -945,6 +935,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 						if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
 						{
 							m_pGalaxy->m_pBindingXobj = pObj;
+							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 19651965);
 							break;
 						}
 					}
@@ -1645,7 +1636,7 @@ CGalaxy::CGalaxy()
 	m_pSubGalaxy = nullptr;
 	m_pWorkBenchFrame = nullptr;
 	m_bTabbedMDIClient = false;
-	m_bDesignerState = true; 
+	m_bDesignerState = true;
 	m_hPWnd = nullptr;
 	m_pBKWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
@@ -1680,8 +1671,8 @@ CGalaxy::~CGalaxy()
 				it.second->m_mapGalaxy.erase(it2);
 				break;
 			}
-		}
 	}
+}
 	if (m_pRootNodes)
 		CCommonFunction::ClearObject<CXobjCollection>(m_pRootNodes);
 	if (m_mapVal.size()) {
@@ -1884,7 +1875,7 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 
 	CreateGalaxyCluster();
 	m_mapXobj[strKey] = m_pWorkXobj;
-	if (strKey.CompareNoCase(_T("default"))==0)
+	if (strKey.CompareNoCase(_T("default")) == 0)
 	{
 		::SetProp(m_hWnd, _T("CosmosData"), _pParse);
 		::SendMessage(m_hWnd, WM_XOBJCREATED, 0, 10000);
@@ -1922,9 +1913,9 @@ BOOL CGalaxy::CreateGalaxyCluster()
 	{
 		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = g_pCosmos->m_szBuffer;
-		if ((strClassName.Find(_T("Afx:ControlBar")) == 0)||
-			(strClassName.Find(_T("SysTreeView32")) == 0 || 
-				strClassName.Find(_T("SysTabControl32")) == 0 || 
+		if ((strClassName.Find(_T("Afx:ControlBar")) == 0) ||
+			(strClassName.Find(_T("SysTreeView32")) == 0 ||
+				strClassName.Find(_T("SysTabControl32")) == 0 ||
 				strClassName.Find(_T("SysListView32")) == 0))
 		{
 			CDockPaneWnd* _pWnd = new CDockPaneWnd();
@@ -2143,7 +2134,7 @@ STDMETHODIMP CGalaxy::ModifyHost(LONGLONG hHostWnd)
 	m_Parent.Attach(hParent);
 	m_Parent.ScreenToClient(&rc);
 	m_Parent.Detach();
-	for (auto &it : m_mapXobj)
+	for (auto& it : m_mapXobj)
 	{
 		if (it.second != m_pWorkXobj)
 		{
@@ -3172,7 +3163,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				lpwndpos->cy = rect.bottom - rect.top;
 			}
 			UINT flag = lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED;
-			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, flag );// |SWP_NOREDRAW); 
+			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, flag);// |SWP_NOREDRAW); 
 			CXobj* _pHostNode = m_pBindingXobj;
 			if (_pHostNode->m_pHostGalaxy)
 			{
@@ -3262,7 +3253,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		lpwndpos->flags |= SWP_NOZORDER;
 
 	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
-	if(::IsWindowVisible(m_hWnd))
+	if (::IsWindowVisible(m_hWnd))
 		::InvalidateRect(m_hWnd, nullptr, true);
 	return hr;
 }

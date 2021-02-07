@@ -269,40 +269,12 @@ IDB_BITMAP_DESIGNER     BITMAP                  "bitmap_g.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// REGISTRY
-//
-
-IDR_TANGRAMCTRL         REGISTRY                "TangramCtrl.rgs"
-
-IDR_TANGRAMLIB          REGISTRY                "TangramApp.rgs"
-
-IDR_TANGRAM             REGISTRY                "Tangram.rgs"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Cursor
 //
 
 AFX_IDC_VSPLITBAR       CURSOR                  "splitv.cur"
 
 AFX_IDC_HSPLITBAR       CURSOR                  "splith.cur"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// TYPELIB
-//
-
-1                       TYPELIB                 "Universe.tlb"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXT
-//
-
-IDR_WIN_DEFAULT_APP_CONFIG TEXT                    "default.exe.config"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
