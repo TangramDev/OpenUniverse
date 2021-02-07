@@ -97,8 +97,6 @@ class ATL_NO_VTABLE CCosmosCtrl :
 	public IDispatchImpl<ICosmosCtrl, &IID_ICosmosCtrl, &LIBID_Universe, 1, 0>
 {
 public:
-	//DECLARE_REGISTRY_RESOURCEID(IDR_TANGRAMCTRL)
-
 	BEGIN_COM_MAP(CCosmosCtrl)
 		COM_INTERFACE_ENTRY(ICosmosCtrl)
 		COM_INTERFACE_ENTRY(IDispatch)
@@ -117,5 +115,3 @@ public:
 
 	static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
 };
-
-//OBJECT_ENTRY_AUTO_EX(__uuidof(CosmosCtrl), CCosmosCtrl)

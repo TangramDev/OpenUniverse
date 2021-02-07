@@ -739,8 +739,8 @@ LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 		{
 			m_pClientBindingObj = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj;
 		}
+		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)this, 20210202);
 	}
-	::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)this, 20210202);
 	return l;
 }
 

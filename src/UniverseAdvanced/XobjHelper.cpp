@@ -1087,24 +1087,30 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
 	CMDIMainWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+	CGalaxy* pGalaxy = nullptr;
 	if (pMainWnd)
 	{
-		if (pMainWnd->m_pClientXobj == m_pXobj)
+		pGalaxy = pMainWnd->m_pGalaxy;
+		if (pGalaxy && (pMainWnd->m_pClientXobj == m_pXobj || pGalaxy->m_pBindingXobj == m_pXobj))
 		{
-			pMainWnd->m_pGalaxy->HostPosChanged();
-			if(pMainWnd->m_pActiveMDIChild)
+			pGalaxy->HostPosChanged();
+			if (pMainWnd->m_pActiveMDIChild)
 				::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 			return;
 		}
-		if (pMainWnd->m_pClientXobj &&
-			pMainWnd->m_pGalaxy &&
-			pMainWnd->m_pGalaxy->m_pBindingXobj == m_pXobj &&
-			pMainWnd->m_pActiveMDIChild)
+	}
+	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
+	{
+		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
 		{
-			pMainWnd->m_pGalaxy->HostPosChanged();
-			::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
-			return;
+			pGalaxy->m_pBindingXobj = m_pXobj;
+			if (pMainWnd->m_pActiveMDIChild)
+				pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
+			pGalaxy->HostPosChanged();
 		}
+		else
+			m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
+		return;
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
@@ -1143,18 +1149,6 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (m_hFormWnd)
 		::SetWindowPos(m_hFormWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
-	else if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
-	{
-		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pMainWnd->m_pGalaxy)
-		{
-			pMainWnd->m_pGalaxy->m_pBindingXobj = m_pXobj;
-			if (pMainWnd->m_pActiveMDIChild)
-				pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
-			pMainWnd->m_pGalaxy->HostPosChanged();
-		}
-		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
-		return;
-	}
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pXobj->m_pDisp == NULL) && m_pXobj != m_pXobj->m_pRootObj)
 	{
 		return;
