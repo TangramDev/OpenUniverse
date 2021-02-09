@@ -1346,7 +1346,7 @@ namespace CommonUniverse
 			{
 			case 19651965:
 				RecalcLayout();
-				::InvalidateRect(m_hWnd, nullptr, true);
+				//::InvalidateRect(m_hWnd, nullptr, true);
 				break;
 			case 19631992:
 				AfxGetApp()->m_pMainWnd = this;

@@ -59,27 +59,23 @@ namespace Browser {
 			{
 				m_hOldTab = hOldWnd;
 			}
-			if (m_pParentXobj)
+			if (m_pClientGalaxy)
 			{
-				if (m_pClientGalaxy == nullptr)
-				{
-					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pParentXobj->m_pHostWnd->m_hWnd);
-					m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
-					HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
-					IGalaxy* pGalaxy = nullptr;
-					g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
-					if (pGalaxy)
-					{
-						m_pClientGalaxy = (CGalaxy*)pGalaxy;
-					}
-				}
-				if (m_pClientGalaxy)
-				{
-					m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
-					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
-					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
-				}
+				m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+				g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
+				m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 			}
+			//auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
+			//if (it != g_pCosmos->m_mapHtmlWnd.end())
+			//{
+			//	CWebPage* pPage = (CWebPage*)it->second;
+			//	if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
+			//	{
+			//		IXobj* pObj = nullptr;
+			//		CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
+			//		pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
+			//	}
+			//}
 		}
 	}
 
@@ -91,8 +87,8 @@ namespace Browser {
 			g_pCosmos->m_pGalaxy = nullptr;
 			g_pCosmos->m_bWinFormActived = false;
 		}
-		m_pBrowser->LayoutBrowser();
-		
+		if (!m_pClientGalaxy)
+			m_pBrowser->LayoutBrowser();
 		return lRes;
 	}
 

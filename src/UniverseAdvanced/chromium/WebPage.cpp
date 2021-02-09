@@ -145,7 +145,7 @@ namespace Browser {
 					pSession->Insertint64(_T("xobjhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("xobj"), (__int64)(IXobj*)pXobj);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
-					if(pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName==_T("default"))
+					if (pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName == _T("default"))
 					{
 						CString strName = pXobj->m_pRootObj->m_pHostParse->attr(_T("galaxy"), _T(""));
 						if (strName != _T(""))
@@ -503,7 +503,7 @@ namespace Browser {
 		}
 		if (m_mapWinForm.size())
 		{
-			for (auto &it : m_mapWinForm)
+			for (auto& it : m_mapWinForm)
 			{
 				if (it.second->m_bMainForm == false)
 					::DestroyWindow(it.first);
@@ -709,24 +709,44 @@ namespace Browser {
 	void CWebPage::LoadDocument2Viewport(CString strName, CString strXML)
 	{
 		HWND hBrowser = ::GetParent(m_hWnd);
-		CBrowser* pBrowserWnd = nullptr;
-		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-		if (it != g_pCosmos->m_mapBrowserWnd.end())
-		{
-			pBrowserWnd = (CBrowser*)it->second;
-			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
-				::ShowWindow(m_hWnd, SW_HIDE);
-		}
 		HWND hPPWnd = ::GetParent(hBrowser);
-		CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
-		if (pInfo)
+		if (m_pCosmosFrameWndInfo == nullptr)
 		{
-			pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
-			HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-			hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
-			if (hPWnd)
+			CBrowser* pBrowserWnd = nullptr;
+			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
+				pBrowserWnd = (CBrowser*)it->second;
+				if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
+					::ShowWindow(m_hWnd, SW_HIDE);
+				if (pBrowserWnd->m_pCosmosFrameWndInfo == nullptr)
+				{
+					CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
+					if (pInfo)
+					{
+						pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
+						HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+						hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
+						if (hPWnd)
+						{
+							m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
+							pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
+							if (pBrowserWnd->m_pClientGalaxy == nullptr)
+							{
+								if (m_pCosmosFrameWndInfo)
+								{
+									HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
+									IGalaxy* pGalaxy = nullptr;
+									g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
+									if (pGalaxy)
+									{
+										pBrowserWnd->m_pClientGalaxy = (CGalaxy*)pGalaxy;
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -766,7 +786,7 @@ namespace Browser {
 					pGalaxyCluster->m_hWnd = m_hExtendWnd;
 					g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 
-					for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
+					for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 					{
 						CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 						if (pProxy)
@@ -1125,6 +1145,15 @@ namespace Browser {
 					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
+
+					HWND hBrowser = ::GetParent(m_hWnd);
+					CBrowser* pBrowserWnd = nullptr;
+					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+					if (it != g_pCosmos->m_mapBrowserWnd.end())
+					{
+						pBrowserWnd = (CBrowser*)it->second;
+						pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
+					}
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
 					CTangramXmlParse* pParseClient = nullptr;
 					if (pCosmosFrameWndInfo->m_nFrameType == 2)
@@ -1195,6 +1224,19 @@ namespace Browser {
 										}
 									}
 								}
+							}
+						}
+					}
+					if (pBrowserWnd->m_pClientGalaxy == nullptr)
+					{
+						if (m_pCosmosFrameWndInfo)
+						{
+							HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
+							IGalaxy* pGalaxy = nullptr;
+							g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
+							if (pGalaxy)
+							{
+								pBrowserWnd->m_pClientGalaxy = (CGalaxy*)pGalaxy;
 							}
 						}
 					}
