@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027           *
+ *           Web Runtime for Application - Version 1.0.0.202102090028           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1995,7 +1995,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											bProcessWebPage = true;
 										if (pClient && g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
 										{
-											if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)
+											if (g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd != g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd) {
+												bProcessWebPage = false;
+											}
+											else if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)
 											{
 												g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
 												bProcessWebPage = true;

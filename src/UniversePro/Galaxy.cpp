@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027
+ *           Web Runtime for Application - Version 1.0.0.202102090028
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2201,7 +2201,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						if (strXml == _T(""))
 							strXml = _strXml;
 						if (strXml == _T(""))
-							strXml = _T("<default><cluster><xobj name=\"Start\" /></cluster></default>");;
+							strXml = _T("<default><cluster><xobj  objid='nucleus' id='' /></cluster></default>");;
 					}
 					else
 						strXml = _strXml;
@@ -2821,7 +2821,7 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (::IsWindowVisible(m_hWnd) == false)
 		{
-			if (::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
+			if (m_pBindingXobj && m_pBindingXobj->m_pHostWnd && ::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
 			{
 				HostPosChanged();
 				::InvalidateRect(::GetAncestor(m_hWnd, GA_ROOT), nullptr, true);

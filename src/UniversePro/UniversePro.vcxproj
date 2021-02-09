@@ -418,12 +418,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <None Include="default.exe.config" />
     <None Include="splith.cur" />
     <None Include="splitv.cur" />
-    <None Include="Tangram.rgs" />
-    <None Include="TangramApp.rgs" />
     <None Include="Universe.def" />
-    <None Include="TangramBot.rgs" />
-    <None Include="TangramCtrl.rgs" />
-    <None Include="Universe.tlb" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CeXDib.h" />

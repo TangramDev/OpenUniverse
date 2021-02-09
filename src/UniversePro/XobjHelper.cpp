@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027
+ *           Web Runtime for Application - Version 1.0.0.202102090028
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -660,10 +660,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		break;
 		default:
 		{
-			if (lParam == 20022017)
-			{
-				break;
-			}
 			CString strObjTypeID = (LPCTSTR)lParam;
 			if (strObjTypeID.Find(_T(",")) != -1 && g_pCosmos->m_pCLRProxy)
 			{
@@ -1089,16 +1085,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	CMDIMainWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
 	CGalaxy* pGalaxy = nullptr;
 	if (pMainWnd)
-	{
 		pGalaxy = pMainWnd->m_pGalaxy;
-		if (pGalaxy && (pMainWnd->m_pClientXobj == m_pXobj || pGalaxy->m_pBindingXobj == m_pXobj))
-		{
-			pGalaxy->HostPosChanged();
-			if (pMainWnd->m_pActiveMDIChild)
-				::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
-			return;
-		}
-	}
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
 		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
@@ -1111,6 +1098,16 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		else
 			m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 		return;
+	}
+	if (pMainWnd)
+	{
+		if (pGalaxy && (pMainWnd->m_pClientXobj == m_pXobj || pGalaxy->m_pBindingXobj == m_pXobj))
+		{
+			pGalaxy->HostPosChanged();
+			if (pMainWnd->m_pActiveMDIChild)
+				::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+			return;
+		}
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
@@ -1174,7 +1171,6 @@ void CXobjHelper::OnSize(UINT nType, int cx, int cy)
 		::SetWindowPos(m_pXHtmlTree->m_hWnd, NULL, 0, 0, cx, cy,/*SWP_NOREDRAW|*/SWP_NOACTIVATE);
 	}
 }
-
 
 void CXobjHelper::OnShowWindow(BOOL bShow, UINT nStatus)
 {

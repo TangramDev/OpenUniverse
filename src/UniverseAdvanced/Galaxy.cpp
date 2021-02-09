@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027
+ *           Web Runtime for Application - Version 1.0.0.202102090028
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -919,7 +919,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 				bool bNewKey = m_pGalaxy->m_strCurrentKey != strKey;
 				for (auto& it : pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
 				{
-					IGalaxy* _pGalaxy = it.second;
+					CGalaxy* _pGalaxy = (CGalaxy*)it.second;
 					IXobj* pXobj = nullptr;
 					if (_pGalaxy != m_pGalaxy || bNewKey)
 					{
@@ -935,7 +935,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 						if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
 						{
 							m_pGalaxy->m_pBindingXobj = pObj;
-							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 19651965);
+							::SendMessage(m_hWnd, WM_COSMOSMSG, 0, 19651965);
 							break;
 						}
 					}
@@ -2299,7 +2299,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						if (strXml == _T(""))
 							strXml = _strXml;
 						if (strXml == _T(""))
-							strXml = _T("<default><cluster><xobj name=\"Start\" /></cluster></default>");;
+							strXml = _T("<default><cluster><xobj  objid='nucleus' /></cluster></default>");;
 					}
 					else
 						strXml = _strXml;
@@ -2921,7 +2921,7 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (::IsWindowVisible(m_hWnd) == false)
 		{
-			if (::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
+			if (m_pBindingXobj&&m_pBindingXobj->m_pHostWnd&&::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
 			{
 				HostPosChanged();
 				::InvalidateRect(::GetAncestor(m_hWnd, GA_ROOT), nullptr, true);

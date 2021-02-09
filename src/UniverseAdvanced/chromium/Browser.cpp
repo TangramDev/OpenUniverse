@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027           *
+ *           Web Runtime for Application - Version 1.0.0.202102090028           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -61,18 +61,45 @@ namespace Browser {
 			}
 			if (m_pParentXobj)
 			{
-				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
-				if (it != g_pCosmos->m_mapHtmlWnd.end())
+				if (m_pClientGalaxy == nullptr)
 				{
-					CWebPage* pPage = (CWebPage*)it->second;
-					if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
+					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pParentXobj->m_pHostWnd->m_hWnd);
+					if (hWnd)
 					{
-						IXobj* pObj = nullptr;
-						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
-						pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
+						m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+						if (m_pCosmosFrameWndInfo)
+						{
+							HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
+							IGalaxy* pGalaxy = nullptr;
+							g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
+							if (pGalaxy)
+							{
+								m_pClientGalaxy = (CGalaxy*)pGalaxy;
+							}
+						}
 					}
 				}
+				if (m_pClientGalaxy)
+				{
+					m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
+					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
+				}
 			}
+			//if (m_pParentXobj)
+			//{
+			//	auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
+			//	if (it != g_pCosmos->m_mapHtmlWnd.end())
+			//	{
+			//		CWebPage* pPage = (CWebPage*)it->second;
+			//		if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
+			//		{
+			//			IXobj* pObj = nullptr;
+			//			CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
+			//			pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
+			//		}
+			//	}
+			//}
 		}
 	}
 
@@ -85,8 +112,6 @@ namespace Browser {
 			g_pCosmos->m_bWinFormActived = false;
 		}
 		m_pBrowser->LayoutBrowser();
-		if (g_pCosmos->m_pMDIMainWnd && ::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd))
-			::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 		return lRes;
 	}
 
@@ -94,8 +119,8 @@ namespace Browser {
 		if (m_bDestroy || hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE) {
 			return;
 		}
-		if (::IsWindowVisible(hWnd) == false && 
-			(g_pCosmos->m_pMDIMainWnd==nullptr||!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd,m_hWnd)||g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild == nullptr))
+		if (::IsWindowVisible(hWnd) == false &&
+			(g_pCosmos->m_pMDIMainWnd == nullptr || !::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) || g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild == nullptr))
 			return;
 		if (m_hOldTab)
 		{
@@ -105,7 +130,6 @@ namespace Browser {
 			::SetWindowPos(m_hOldTab, HWND_BOTTOM, rc.left, rc.top, 1, 1, SWP_NOREDRAW | SWP_NOACTIVATE);
 			m_hOldTab = NULL;
 		}
-
 		if (m_pVisibleWebWnd&&m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
 		{
 			m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
@@ -133,15 +157,15 @@ namespace Browser {
 		BrowserLayout();
 		if (m_pVisibleWebWnd)
 		{
-			if (m_pVisibleWebWnd->m_hExtendWnd == nullptr)
+			HWND hExtendWnd = m_pVisibleWebWnd->m_hExtendWnd;
+			if (hExtendWnd == nullptr)
 			{
-				m_pVisibleWebWnd->m_hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hWnd, NULL, theApp.m_hInstance, NULL);
-				m_pVisibleWebWnd->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_pVisibleWebWnd->m_hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
-
-				::SetWindowLongPtr(m_pVisibleWebWnd->m_hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd->m_hChildWnd);
+				hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hWnd, NULL, theApp.m_hInstance, NULL);
+				m_pVisibleWebWnd->m_hExtendWnd = hExtendWnd;
+				m_pVisibleWebWnd->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
+				::SetWindowLongPtr(hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd->m_hChildWnd);
 				::SetWindowLongPtr(m_pVisibleWebWnd->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd);
 			}
-			HWND hExtendWnd = m_pVisibleWebWnd->m_hExtendWnd;
 			if (::IsChild(hWnd, hExtendWnd))
 				::SetParent(hExtendWnd, m_hWnd);
 
@@ -258,9 +282,6 @@ namespace Browser {
 			if (m_pBrowser) {
 				g_pCosmos->m_pActiveBrowser = m_pBrowser;
 				g_pCosmos->m_pActiveBrowser->m_pProxy = this;
-				//m_pBrowser->LayoutBrowser();
-				//BrowserLayout();
-				//::InvalidateRect(m_hWnd, nullptr, true);
 			}
 		}
 		else

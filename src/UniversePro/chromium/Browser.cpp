@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027           *
+ *           Web Runtime for Application - Version 1.0.0.202102090028           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -61,18 +61,45 @@ namespace Browser {
 			}
 			if (m_pParentXobj)
 			{
-				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
-				if (it != g_pCosmos->m_mapHtmlWnd.end())
+				if (m_pClientGalaxy == nullptr)
 				{
-					CWebPage* pPage = (CWebPage*)it->second;
-					if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
+					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pParentXobj->m_pHostWnd->m_hWnd);
+					if (hWnd)
 					{
-						IXobj* pObj = nullptr;
-						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
-						pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
+						m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+						if (m_pCosmosFrameWndInfo)
+						{
+							HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
+							IGalaxy* pGalaxy = nullptr;
+							g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
+							if (pGalaxy)
+							{
+								m_pClientGalaxy = (CGalaxy*)pGalaxy;
+							}
+						}
 					}
 				}
+				if (m_pClientGalaxy)
+				{
+					m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
+					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
+				}
 			}
+			//if (m_pParentXobj)
+			//{
+			//	auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
+			//	if (it != g_pCosmos->m_mapHtmlWnd.end())
+			//	{
+			//		CWebPage* pPage = (CWebPage*)it->second;
+			//		if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
+			//		{
+			//			IXobj* pObj = nullptr;
+			//			CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
+			//			pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
+			//		}
+			//	}
+			//}
 		}
 	}
 
@@ -85,8 +112,6 @@ namespace Browser {
 			g_pCosmos->m_bWinFormActived = false;
 		}
 		m_pBrowser->LayoutBrowser();
-		if (g_pCosmos->m_pMDIMainWnd && ::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd))
-			::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 		return lRes;
 	}
 

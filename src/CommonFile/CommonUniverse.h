@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027
+ *           Web Runtime for Application - Version 1.0.0.202102090028
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -32,7 +32,6 @@
 
 #define TANGRAM_CONST_OPENFILE			19920612
 #define TANGRAM_CONST_NEWDOC			19631222
-#define TANGRAM_CONST_PANE_FIRST		20022017
 #define TANGRAM_CHROME_APP_INIT			20190501
 
 #define IPC_CLR_CONTROL_CREARED							20200220

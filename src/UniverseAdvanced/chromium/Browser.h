@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102070027           *
+ *           Web Runtime for Application - Version 1.0.0.202102090028           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -39,16 +39,19 @@ namespace Browser {
 		CBrowser();
 		~CBrowser() override;
 
-		bool		m_bDestroy = false;
-		bool		m_bTabChange;
-		int			m_heightfix;
-		float		m_fdevice_scale_factor;
-		HWND		m_hDrawWnd;
-		HWND		m_hOldTab;
-		CString		m_strCurKey;
-		CXobj*		m_pParentXobj;
-		CWebPage*	m_pVisibleWebWnd;
-		IXobj*		m_pRemoteXobj;
+		bool				m_bDestroy = false;
+		bool				m_bTabChange;
+		int					m_heightfix;
+		float				m_fdevice_scale_factor;
+		HWND				m_hDrawWnd;
+		HWND				m_hOldTab;
+		CString				m_strCurKey;
+		CWebPage*			m_pVisibleWebWnd;
+		IXobj*				m_pRemoteXobj;
+		CXobj*				m_pParentXobj;
+		CGalaxy*			m_pClientGalaxy = nullptr;
+		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
+
 		LRESULT		BrowserLayout();
 
 		map<HWND, CWebPage*> m_mapNorifyPage;
