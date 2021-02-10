@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102090028           *
+ *           Web Runtime for Application - Version 1.0.0.202102100029           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -540,7 +540,7 @@ namespace Browser {
 				}
 				else if (m_pBrowser)
 				{
-					if(!::IsWindowVisible(m_hWnd))
+					if (!::IsWindowVisible(m_hWnd))
 						::ShowWindow(m_hWnd, SW_SHOW);
 					if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 					{
@@ -548,6 +548,15 @@ namespace Browser {
 						m_pBrowser->LayoutBrowser();
 					}
 					m_bTabChange = false;
+				}
+			}
+			break;
+			case 5:
+			{
+				if (m_pBrowser)
+				{
+					m_bTabChange = false;
+					m_pBrowser->LayoutBrowser();
 				}
 			}
 			break;

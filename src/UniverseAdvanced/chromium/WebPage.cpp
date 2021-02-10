@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102090028           *
+ *           Web Runtime for Application - Version 1.0.0.202102100029           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -145,7 +145,7 @@ namespace Browser {
 					pSession->Insertint64(_T("xobjhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("xobj"), (__int64)(IXobj*)pXobj);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
-					if (pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName == _T("default"))
+					if(pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName==_T("default"))
 					{
 						CString strName = pXobj->m_pRootObj->m_pHostParse->attr(_T("galaxy"), _T(""));
 						if (strName != _T(""))
@@ -495,7 +495,7 @@ namespace Browser {
 		}
 		if (m_mapSubWinForm.size())
 		{
-			for (auto it : m_mapSubWinForm)
+			for (auto &it : m_mapSubWinForm)
 			{
 				::DestroyWindow(it.first);
 			}
@@ -710,6 +710,7 @@ namespace Browser {
 	{
 		HWND hBrowser = ::GetParent(m_hWnd);
 		HWND hPPWnd = ::GetParent(hBrowser);
+
 		if (m_pCosmosFrameWndInfo == nullptr)
 		{
 			CBrowser* pBrowserWnd = nullptr;
@@ -731,19 +732,6 @@ namespace Browser {
 						{
 							m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
 							pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
-							if (pBrowserWnd->m_pClientGalaxy == nullptr)
-							{
-								if (m_pCosmosFrameWndInfo)
-								{
-									HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
-									IGalaxy* pGalaxy = nullptr;
-									g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
-									if (pGalaxy)
-									{
-										pBrowserWnd->m_pClientGalaxy = (CGalaxy*)pGalaxy;
-									}
-								}
-							}
 						}
 					}
 				}
@@ -786,7 +774,7 @@ namespace Browser {
 					pGalaxyCluster->m_hWnd = m_hExtendWnd;
 					g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 
-					for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
+					for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
 					{
 						CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 						if (pProxy)
@@ -1145,7 +1133,6 @@ namespace Browser {
 					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-
 					HWND hBrowser = ::GetParent(m_hWnd);
 					CBrowser* pBrowserWnd = nullptr;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);

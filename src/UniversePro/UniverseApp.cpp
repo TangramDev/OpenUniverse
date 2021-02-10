@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102090028           *
+ *           Web Runtime for Application - Version 1.0.0.202102100029           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -999,7 +999,7 @@ LRESULT CALLBACK CUniverse::CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 			::GetClientRect(m_hChildWnd, &rc);
 			WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 			if (rc.right != lpwndpos->cx || rc.bottom != lpwndpos->cy)
-				::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_FRAMECHANGED | SWP_NOREDRAW | SWP_NOACTIVATE);
+				::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, /*SWP_FRAMECHANGED | */SWP_NOREDRAW | SWP_NOACTIVATE);
 		}
 	}
 	break;

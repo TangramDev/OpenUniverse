@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102090028           *
+ *           Web Runtime for Application - Version 1.0.0.202102100029           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -499,6 +499,7 @@ namespace Browser {
 			lpwndpos->y = -6 - m_heightfix;
 			lpwndpos->cx = rc.right + 24;
 			lpwndpos->cy = rc.bottom + 18 + 3 + m_heightfix;
+			lpwndpos->flags |= SWP_NOREDRAW | SWP_NOACTIVATE;
 		}
 		else if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 			::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
@@ -543,6 +544,15 @@ namespace Browser {
 						m_pBrowser->LayoutBrowser();
 					}
 					m_bTabChange = false;
+				}
+			}
+			break;
+			case 5:
+			{
+				if (m_pBrowser)
+				{
+					m_bTabChange = false;
+					m_pBrowser->LayoutBrowser();
 				}
 			}
 			break;

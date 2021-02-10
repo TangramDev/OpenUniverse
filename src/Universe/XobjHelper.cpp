@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102090028           *
+ *           Web Runtime for Application - Version 1.0.0.202102100029           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -336,7 +336,7 @@ void CXobjHelper::OnShowWindow(BOOL bShow, UINT nStatus)
 	CWnd::OnShowWindow(bShow, nStatus);
 	if (bShow && m_pXobj->m_pWebBrowser)
 	{
-		::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+		::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 	}
 }
 
@@ -415,7 +415,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		if (pGalaxy->m_pWebPageWnd)
 		{
-			::SendMessage(::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+			::SendMessage(::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 5);
 		}
 	}
 

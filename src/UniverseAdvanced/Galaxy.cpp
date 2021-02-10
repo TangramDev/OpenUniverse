@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102090028
+ *           Web Runtime for Application - Version 1.0.0.202102100029
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1602,6 +1602,7 @@ LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	{
 		g_pCosmos->m_pCLRProxy->PreWindowPosChanging(m_hWnd, (WINDOWPOS*)lParam, 1);
 	}
+	WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -3162,8 +3163,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				lpwndpos->cx = rect.right - rect.left;
 				lpwndpos->cy = rect.bottom - rect.top;
 			}
-			UINT flag = lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED;
-			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, flag);// |SWP_NOREDRAW); 
+			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED);// |SWP_NOREDRAW); 
 			CXobj* _pHostNode = m_pBindingXobj;
 			if (_pHostNode->m_pHostGalaxy)
 			{
