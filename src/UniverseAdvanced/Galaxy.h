@@ -181,6 +181,7 @@ public:
 	CMDIMainWindow(void);
 	virtual ~CMDIMainWindow(void);
 
+	BOOL									m_bDestroy = false;
 	HWND									m_hMDIClient;
 	CXobj*									m_pClientXobj = nullptr;
 	CGalaxy*								m_pGalaxy = nullptr;
@@ -192,12 +193,14 @@ public:
 	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;
 
 	BEGIN_MSG_MAP(CMDIMainWindow)
+		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
+	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);

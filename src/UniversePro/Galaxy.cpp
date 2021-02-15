@@ -733,6 +733,8 @@ LRESULT CMDIChildWindow::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lP
 LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	if (g_pCosmos->m_pMDIMainWnd->m_bDestroy)
+		return l;
 	if (m_hWnd == (HWND)lParam)
 	{
 		if (m_pClientBindingObj == nullptr)
@@ -890,12 +892,20 @@ LRESULT CMDIMainWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return lRes;
 }
 
+LRESULT CMDIMainWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	m_bDestroy = true;
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
 LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
 	case 20210213:
 	{
+		if (m_bDestroy)
+			break;
 		switch (wParam)
 		{
 		case 0:
@@ -919,6 +929,8 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	break;
 	case 20210126:
 	{
+		if (m_bDestroy)
+			break;
 		CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
 		if (pCosmosFrameWndInfo)
 		{
@@ -941,6 +953,8 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	break;
 	case 20210202:
 	{
+		if (m_bDestroy)
+			break;
 		if (wParam)
 		{
 			m_pActiveMDIChild = (CMDIChildWindow*)wParam;
