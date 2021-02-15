@@ -55,6 +55,9 @@ namespace Browser {
 		m_bTabChange = true;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
+			g_pCosmos->m_bSZMode = true;
+			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 			if (::IsWindow(hOldWnd))
 			{
 				m_hOldTab = hOldWnd;
@@ -160,14 +163,6 @@ namespace Browser {
 				m_pVisibleWebWnd->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
 				CExtendWnd* pExtendWnd = new CExtendWnd();
 				pExtendWnd->SubclassWindow(m_pVisibleWebWnd->m_hChildWnd);
-
-				//CComPtr<IWebBrowser2> pWebBrowser;
-				//pWebBrowser.CoCreateInstance(CComBSTR("shell.explorer.2"));
-				//CAxWindow m_Wnd;
-				//m_Wnd.Attach(m_pVisibleWebWnd->m_hChildWnd);
-				//CComPtr<IUnknown> pUnk;
-				//m_Wnd.AttachControl(pWebBrowser.Detach(), &pUnk);
-				//m_Wnd.Detach();
 				::SetWindowLongPtr(hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd->m_hChildWnd);
 				::SetWindowLongPtr(m_pVisibleWebWnd->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd);
 			}
@@ -210,7 +205,7 @@ namespace Browser {
 					::ScreenToClient(hExtendWnd, ((LPPOINT)&rc2) + 1);
 					RECT rect;
 					::GetClientRect(hExtendWnd, &rect);
-					if (g_pCosmos->m_pCosmosDelegate->m_bSZMode)
+					if (g_pCosmos->m_bSZMode)
 					{
 						rc2 = { rc2.left, rc2.top, rc2.left + 1, rc2.top + 1 };
 						m_pVisibleWebWnd->m_bWebContentVisible = true;
@@ -295,7 +290,7 @@ namespace Browser {
 		HRGN hWebExtendWndRgn = ::CreateRectRgn(rcExtendWnd.left, rcExtendWnd.top, rcExtendWnd.right, rcExtendWnd.bottom);
 		//浏览器页面窗口区域：
 		HRGN hWebPage = NULL;
-		if (g_pCosmos->m_pCosmosDelegate->m_bSZMode == false)
+		if (g_pCosmos->m_bSZMode == false)
 			hWebPage = ::CreateRectRgn(rcWebPage.left, rcWebPage.top, rcWebPage.right, rcWebPage.bottom);
 		if (hWebPage)
 			::CombineRgn(hWebExtendWndRgn, hWebExtendWndRgn, hWebPage, RGN_DIFF);
@@ -553,7 +548,7 @@ namespace Browser {
 			g_pCosmos->m_pCLRProxy->PreWindowPosChanging(m_hWnd, lpwndpos, 0);
 		}
 		HWND hPWnd = ::GetParent(m_hWnd);
-		if (g_pCosmos->m_pCosmosDelegate->m_bSZMode)
+		if (g_pCosmos->m_bSZMode)
 		{
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 		}
@@ -575,13 +570,21 @@ namespace Browser {
 	}
 
 	LRESULT CBrowser::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		m_bSZMode = false;
+		g_pCosmos->m_bSZMode = false;
+		for (auto& it : g_pCosmos->m_mapSizingBrowser)
+		{
+			if (::IsWindow(it.first))
+			{
+				it.second->m_pBrowser->LayoutBrowser();
+			}
+		}
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}
 
 	LRESULT CBrowser::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		m_bSZMode = true;
+		g_pCosmos->m_bSZMode = true;
+		g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}
@@ -641,6 +644,22 @@ namespace Browser {
 				if (m_pBrowser)
 				{
 					BrowserLayout();
+				}
+			}
+			break;
+			case 7:
+			{
+				g_pCosmos->m_bSZMode = false;
+				for (auto& it : g_pCosmos->m_mapSizingBrowser)
+				{
+					if (::IsWindow(it.first))
+					{
+						it.second->m_pBrowser->LayoutBrowser();
+					}
+				}
+				if (m_pParentXobj)
+				{
+					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);;
 				}
 			}
 			break;

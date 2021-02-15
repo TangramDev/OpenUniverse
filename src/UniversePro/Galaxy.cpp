@@ -741,6 +741,7 @@ LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 		{
 			m_pClientBindingObj = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj;
 		}
+		g_pCosmos->m_bSZMode = true;
 		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)this, 20210202);
 	}
 	return l;
@@ -825,6 +826,26 @@ LRESULT CMDTWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
+LRESULT CMDTWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_bSZMode = false;
+	for (auto& it : g_pCosmos->m_mapSizingBrowser)
+	{
+		if (::IsWindow(it.first))
+		{
+			it.second->m_pBrowser->LayoutBrowser();
+		}
+	}
+	g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
+LRESULT CMDTWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_bSZMode = true;
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
 LRESULT CMDTWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	CMDTWindow* pHelperWnd = nullptr;
@@ -879,14 +900,14 @@ void CMDIMainWindow::OnFinalMessage(HWND hWnd)
 }
 
 LRESULT CMDIMainWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-	g_pCosmos->m_pCosmosDelegate->m_bSZMode = false;
+	g_pCosmos->m_bSZMode = false;
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
 
 LRESULT CMDIMainWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-	g_pCosmos->m_pCosmosDelegate->m_bSZMode = true;
+	g_pCosmos->m_bSZMode = true;
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210213);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
@@ -963,6 +984,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 				m_pActiveMDIChild = nullptr;
 				break;
 			}
+			g_pCosmos->m_bSZMode = false;
 			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
 			if (pCosmosFrameWndInfo)
 			{
@@ -1248,6 +1270,26 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
+}
+
+LRESULT CWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_bSZMode = false;
+	for (auto& it : g_pCosmos->m_mapSizingBrowser)
+	{
+		if (::IsWindow(it.first))
+		{
+			it.second->m_pBrowser->LayoutBrowser();
+		}
+	}
+	g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
+LRESULT CWinForm::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_bSZMode = true;
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
 }
 
 LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)

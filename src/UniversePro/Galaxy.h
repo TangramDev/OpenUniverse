@@ -167,12 +167,16 @@ public:
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
+		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
+		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 	END_MSG_MAP()
+private:
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 
-private:
 	void OnFinalMessage(HWND hWnd);
 };
 
@@ -223,13 +227,13 @@ public:
 	CString									m_strPath;
 	CString									m_strBKID;
 	CString									m_strChildFormPath;
-	
-	CBKWnd*									m_pBKWnd;
-	CXobj*									m_pBindMDIXobj = nullptr;
-	CXobj*									m_pWebBindMDIXobj = nullptr;
-	CWebPage*								m_pOwnerHtmlWnd;
-	CWormhole*								m_pWormhole;
-	CMDIChildFormInfo*						m_pChildFormsInfo;
+
+	CBKWnd* m_pBKWnd;
+	CXobj* m_pBindMDIXobj = nullptr;
+	CXobj* m_pWebBindMDIXobj = nullptr;
+	CWebPage* m_pOwnerHtmlWnd;
+	CWormhole* m_pWormhole;
+	CMDIChildFormInfo* m_pChildFormsInfo;
 
 	void SendMessage();
 
@@ -245,6 +249,8 @@ public:
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
+		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
+		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 	END_MSG_MAP()
 
@@ -252,9 +258,9 @@ public:
 
 private:
 	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
@@ -262,18 +268,19 @@ private:
 	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-public:
+	LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
 class ATL_NO_VTABLE CGalaxy :
-	public CComObjectRootBase,	
+	public CComObjectRootBase,
 	public CWindowImpl<CGalaxy, CWindow>,
 	public IDispatchImpl<IGalaxy, &IID_IGalaxy, &LIBID_Universe, 1, 0>
 {
 public:
-	CGalaxy();           
-	virtual ~CGalaxy();  
+	CGalaxy();
+	virtual ~CGalaxy();
 
 	bool											m_bObserve = false;
 	bool											m_bDockPane = false;
@@ -293,32 +300,32 @@ public:
 	CString											m_strCurrentKey;
 	CString											m_strCurrentXml;
 	CString											m_strHostWebBrowserNodeName = _T("");
-	CEclipseWnd*									m_pWorkBenchFrame;
+	CEclipseWnd* m_pWorkBenchFrame;
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
-	IPCMsg*											m_pCurrentIPCMsg;
-	CBKWnd*											m_pBKWnd;
-	CWebPage*										m_pWebPageWnd;
-	CXobj*											m_pHostWebBrowserNode = nullptr;
-	CBrowser*										m_pHostWebBrowserWnd = nullptr;
-	CGalaxyCluster*									m_pGalaxyCluster;
-	CXobj*											m_pParentXobj;
-	CXobj*											m_pWorkXobj;
-	CXobj*											m_pContainerNode;
-	CXobj*											m_pBindingXobj;
-	CGalaxy*										m_pSubGalaxy;
-	GalaxyInfo*										m_pGalaxyInfo;
-	CWormhole*										m_pWormhole = nullptr;
+	IPCMsg* m_pCurrentIPCMsg;
+	CBKWnd* m_pBKWnd;
+	CWebPage* m_pWebPageWnd;
+	CXobj* m_pHostWebBrowserNode = nullptr;
+	CBrowser* m_pHostWebBrowserWnd = nullptr;
+	CGalaxyCluster* m_pGalaxyCluster;
+	CXobj* m_pParentXobj;
+	CXobj* m_pWorkXobj;
+	CXobj* m_pContainerNode;
+	CXobj* m_pBindingXobj;
+	CGalaxy* m_pSubGalaxy;
+	GalaxyInfo* m_pGalaxyInfo;
+	CWormhole* m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
 	map<CString, CXobj*>							m_mapNeedSaveToConfigNode;
 	map<CString, VARIANT>							m_mapVal;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;
 	map<CString, CXobj*>							m_mapXobjScript;
-	CComObject<CXobjCollection>*					m_pRootNodes;
+	CComObject<CXobjCollection>* m_pRootNodes;
 
-	void Lock(){}
-	void Unlock(){}
+	void Lock() {}
+	void Unlock() {}
 	void Destroy();
 	void HostPosChanged();
 	HWND GetWinForm(HWND hForm);
@@ -358,8 +365,8 @@ public:
 	END_MSG_MAP()
 
 protected:
-	ULONG InternalAddRef(){ return 1; }
-	ULONG InternalRelease(){ return 1; }
+	ULONG InternalAddRef() { return 1; }
+	ULONG InternalRelease() { return 1; }
 
 private:
 	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
@@ -379,7 +386,7 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 
 	STDMETHOD(get_Count)(long* pCount);
-	STDMETHOD(get_Xobj)(VARIANT vIndex, IXobj **ppXobj);
+	STDMETHOD(get_Xobj)(VARIANT vIndex, IXobj** ppXobj);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);

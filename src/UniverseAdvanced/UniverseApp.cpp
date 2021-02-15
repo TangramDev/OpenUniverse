@@ -2073,6 +2073,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild = nullptr;
 												pWnd->SubclassWindow(hWnd);
 												g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
+												g_pCosmos->m_bSZMode = true;
 												::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 											}
 											if (pWnd->m_pGalaxy == nullptr)

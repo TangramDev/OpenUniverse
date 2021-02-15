@@ -1074,7 +1074,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		pGalaxy = pMainWnd->m_pGalaxy;
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
-		if (g_pCosmos->m_pCosmosDelegate->m_bSZMode)
+		if (g_pCosmos->m_bSZMode)
 			return;
 		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
 		{
