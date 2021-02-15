@@ -28,6 +28,20 @@
 class CWinForm;
 namespace Browser
 {
+	class CExtendWnd : public CWindowImpl<CExtendWnd, CWindow>
+	{
+	public:
+		CExtendWnd(void);
+		BEGIN_MSG_MAP(CExtendWnd)
+			MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
+		END_MSG_MAP()
+
+	private:
+		void OnFinalMessage(HWND hWnd);
+	public:
+		LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	};
+
 	class ATL_NO_VTABLE CWebPage :
 		public CWebPageImpl,
 		public CWindowImpl<CWebPage, CWindow>,

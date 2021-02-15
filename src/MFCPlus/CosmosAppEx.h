@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029           *
+ *           Web Runtime for Application - Version 1.0.0.202102150030           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -274,9 +274,10 @@ namespace CommonUniverse
 		DECLARE_MESSAGE_MAP()
 
 	private:
+		bool bAdjustClient = false;
 		afx_msg BOOL OnNcActivate(BOOL bActive);
 		afx_msg LRESULT OnQueryAppProxy(WPARAM wp, LPARAM lp);
-		
+
 		void AdjustClientArea();
 		void OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
 		void OnClrControlCreated(IXobj* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle);

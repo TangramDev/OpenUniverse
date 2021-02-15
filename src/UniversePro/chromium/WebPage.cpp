@@ -34,6 +34,25 @@
 #include "Browser.h"
 
 namespace Browser {
+	CExtendWnd::CExtendWnd(void)
+	{
+	}
+
+	void CExtendWnd::OnFinalMessage(HWND hWnd)
+	{
+		CWindowImpl<CExtendWnd, CWindow>::OnFinalMessage(hWnd);
+		delete this;
+	}
+
+	LRESULT CExtendWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	{
+		CDC* dc = CDC::FromHandle((HDC)wParam);
+		RECT rc;
+		::GetClientRect(m_hWnd, &rc);
+		dc->FillSolidRect(0, 0, rc.right, rc.bottom, RGB(255, 255, 255));
+		return true;
+	}
+
 	CWebPage::CWebPage() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
@@ -759,13 +778,15 @@ namespace Browser {
 
 			m_hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParent, NULL, theApp.m_hInstance, NULL);
 			m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hExtendWnd, (HMENU)1, theApp.m_hInstance, NULL);
-			CComPtr<IWebBrowser2> pWebBrowser;
-			pWebBrowser.CoCreateInstance(CComBSTR("shell.explorer.2"));
-			CAxWindow m_Wnd;
-			m_Wnd.Attach(m_hChildWnd);
-			CComPtr<IUnknown> pUnk;
-			m_Wnd.AttachControl(pWebBrowser.Detach(), &pUnk);
-			m_Wnd.Detach();
+			CExtendWnd* pExtendWnd = new CExtendWnd();
+			pExtendWnd->SubclassWindow(m_hChildWnd);
+			//CComPtr<IWebBrowser2> pWebBrowser;
+			//pWebBrowser.CoCreateInstance(CComBSTR("shell.explorer.2"));
+			//CAxWindow m_Wnd;
+			//m_Wnd.Attach(m_hChildWnd);
+			//CComPtr<IUnknown> pUnk;
+			//m_Wnd.AttachControl(pWebBrowser.Detach(), &pUnk);
+			//m_Wnd.Detach();
 			::SetWindowLongPtr(m_hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_hChildWnd);
 			::SetWindowLongPtr(m_hChildWnd, GWLP_USERDATA, (LONG_PTR)this);
 		}

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029           *
+ *           Web Runtime for Application - Version 1.0.0.202102150030           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -169,7 +169,7 @@ namespace CommonUniverse
 	// CTangramTabCtrlWnd
 	IMPLEMENT_DYNAMIC(CTangramTabCtrlWnd, CMFCTabCtrl)
 
-	CTangramTabCtrlWnd::CTangramTabCtrlWnd()
+		CTangramTabCtrlWnd::CTangramTabCtrlWnd()
 	{
 		m_nCurSelTab = -1;
 		m_pWndNode = nullptr;
@@ -220,7 +220,7 @@ namespace CommonUniverse
 					m_hPWnd = ::GetParent(hWnd);
 				}
 			}
-			if(m_hPWnd)
+			if (m_hPWnd)
 				::PostMessage(m_hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
 		}
 		BOOL bRet = CMFCTabCtrl::SetActiveTab(iTab);
@@ -436,9 +436,17 @@ namespace CommonUniverse
 	HWND CCosmosDelegate::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
-		if (pWnd&&pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
+		if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
 		{
 			BOOL bMDIClient = true;
+			if (nType == RecalcLayout)
+			{
+				CFrameWnd* pFrame = pWnd->GetParentFrame();
+				if (pFrame)
+				{
+					pFrame->RecalcLayout();
+				}
+			}
 			return ::GetParent(hWnd);
 		}
 		switch (nType)
@@ -476,7 +484,7 @@ namespace CommonUniverse
 										{
 											if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
 											{
-												if(!pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+												if (!pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
 													pCosmosFrameWndInfo->m_nFrameType = 1;
 												return pWnd->m_hWnd;
 											}
@@ -524,9 +532,9 @@ namespace CommonUniverse
 		break;
 		case DocView:
 		{
-			if (pWnd&&pWnd->IsKindOf(RUNTIME_CLASS(CView)))
+			if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 			{
-				CView* pView = static_cast<CView*>(pWnd); 
+				CView* pView = static_cast<CView*>(pWnd);
 				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 				CFrameWnd* pFrame = pView->GetParentFrame();
 				if (pFrame)
@@ -556,7 +564,7 @@ namespace CommonUniverse
 						if (pCosmosFrameWndInfo)
 						{
 							pCosmosFrameWndInfo->m_hClient = hWnd;
-							if (pCosmosFrameWndInfo->m_pDoc == nullptr&& pDoc)
+							if (pCosmosFrameWndInfo->m_pDoc == nullptr && pDoc)
 							{
 								pCosmosFrameWndInfo->m_pDoc = pDoc;
 								pCosmosFrameWndInfo->m_pDocTemplate = pDoc->GetDocTemplate();
@@ -580,7 +588,7 @@ namespace CommonUniverse
 				}
 			}
 		}
-			break;
+		break;
 		case QueryDestroy:
 		{
 			if (::GetParent(hWnd) == NULL && AfxGetApp()->m_pMainWnd && AfxGetApp()->m_pMainWnd != pWnd)
@@ -592,20 +600,36 @@ namespace CommonUniverse
 		break;
 		case ObserveComplete:
 		{
-			for (auto &it : m_mapViewDoc)
+			for (auto& it : m_mapViewDoc)
 			{
 				it.second->AddView(it.first);
 			}
 			m_mapViewDoc.erase(m_mapViewDoc.begin(), m_mapViewDoc.end());
 		}
-			break;
+		break;
+		case RecalcLayout:
+		{
+			CWnd* pWnd = CWnd::FromHandle(hWnd);
+			CFrameWnd* pFrame = pWnd->GetParentFrame();
+			if (pFrame)
+			{
+				pFrame->RecalcLayout();
+				return pFrame->m_hWnd;
+			}
+		}
+		break;
 		default:
+			if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
+			{
+				BOOL bMDIClient = true;
+				return ::GetParent(hWnd);
+			}
 			break;
 		}
 		return NULL;
 	}
 
-	void CCosmosDelegate::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) 
+	void CCosmosDelegate::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (strType.CompareNoCase(_T("COSMOS_CREATE_DOC")) == 0)
 		{
@@ -618,7 +642,7 @@ namespace CommonUniverse
 				strExt.MakeLower();
 				if (strExt == _T(""))
 					strExt = _T("default");
-				if (strExt != _T("")&&strExt.CompareNoCase(strParam1)==0)
+				if (strExt != _T("") && strExt.CompareNoCase(strParam1) == 0)
 				{
 					m_strCreatingDOCID = strParam2;
 					pTemplate->OpenDocumentFile(nullptr);
@@ -737,7 +761,7 @@ namespace CommonUniverse
 					g_pCosmosImpl->InserttoDataMap(1, m_strProviderID, static_cast<ICosmosWindowProvider*>(this));
 				}
 			}
-			}
+		}
 		return true;
 	}
 
@@ -817,9 +841,9 @@ namespace CommonUniverse
 	{
 		return false;
 	}
-	
-	HICON CCosmosDelegate::GetAppIcon(int nIndex) 
-	{ 
+
+	HICON CCosmosDelegate::GetAppIcon(int nIndex)
+	{
 		if (g_pAppBase->m_pMainWnd)
 		{
 			switch (nIndex)
@@ -917,7 +941,7 @@ namespace CommonUniverse
 				strNameBase += _T(",");
 				return strNameBase;
 			}
-	}
+		}
 		return strNameBase;
 	}
 
@@ -1066,7 +1090,7 @@ namespace CommonUniverse
 						::SysFreeString(bstrTag);
 						int nActivePage = _wtoi(m_strTag);
 						if (nCount)
-							nActivePage = nActivePage%nCount;
+							nActivePage = nActivePage % nCount;
 						::PostMessage(pWnd->m_hWnd, WM_TABCHANGE, nActivePage, 0);
 						if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 						{
@@ -1308,9 +1332,12 @@ namespace CommonUniverse
 
 	void CTangramMDIFrameWndEx::AdjustClientArea()
 	{
-		CRect rc = m_dockManager.GetClientAreaBounds();
-		::SendMessage(m_hWndMDIClient, WM_QUERYAPPPROXY, (WPARAM)(LPRECT)rc, 19651965);
-		m_wndClientArea.CalcWindowRectForMDITabbedGroups(rc, 0);
+		CMDIFrameWndEx::AdjustClientArea();
+		if (bAdjustClient == false)
+		{
+			bAdjustClient = true;
+			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210214);
+		}
 	}
 
 	LRESULT CTangramMDIFrameWndEx::OnQueryAppProxy(WPARAM wp, LPARAM lp)
@@ -1319,9 +1346,27 @@ namespace CommonUniverse
 		{
 			switch (lp)
 			{
+			case 20210214:
+			{
+				if (bAdjustClient)
+				{
+					bAdjustClient = false;
+					CRect rc = m_dockManager.GetClientAreaBounds();
+					::SendMessage(m_hWndMDIClient, WM_QUERYAPPPROXY, (WPARAM)(LPRECT)rc, 19651965);
+					m_wndClientArea.CalcWindowRectForMDITabbedGroups(rc, 0);
+				}
+			}
+			break;
+			case 20210215:
+			{
+				bAdjustClient = false;
+				CRect rc = m_dockManager.GetClientAreaBounds();
+				::SendMessage(m_hWndMDIClient, WM_QUERYAPPPROXY, (WPARAM)(LPRECT)rc, 19651965);
+				m_wndClientArea.CalcWindowRectForMDITabbedGroups(rc, 0);
+			}
+			break;
 			case 19651965:
 				RecalcLayout();
-				//::InvalidateRect(m_hWnd, nullptr, true);
 				break;
 			case 19631992:
 				AfxGetApp()->m_pMainWnd = this;

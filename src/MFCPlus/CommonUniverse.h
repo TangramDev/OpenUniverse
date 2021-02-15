@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029
+ *           Web Runtime for Application - Version 1.0.0.202102150030
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -207,7 +207,8 @@ namespace CommonUniverse {
 		OtherType= 0x00000003,
 		QueryDestroy = 0x00000004,
 		CanAddView = 0x00000005,
-		ObserveComplete = 0x00000006
+		ObserveComplete = 0x00000006,
+		RecalcLayout = 0x00000007
 	}QueryType;
 
 	typedef struct IPCMsg {
@@ -761,6 +762,7 @@ namespace CommonUniverse {
 
 		virtual ~ICosmosDelegate() {}
 
+		bool				m_bSZMode = false;
 		BOOL				m_bBrowserWndCreated;
 		JavaVM*				m_pJVM;
 		JNIEnv*				m_pJVMenv;

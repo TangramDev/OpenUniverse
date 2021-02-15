@@ -158,13 +158,8 @@ namespace Browser {
 				hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hWnd, NULL, theApp.m_hInstance, NULL);
 				m_pVisibleWebWnd->m_hExtendWnd = hExtendWnd;
 				m_pVisibleWebWnd->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
-				CComPtr<IWebBrowser2> pWebBrowser;
-				pWebBrowser.CoCreateInstance(CComBSTR("shell.explorer.2"));
-				CAxWindow m_Wnd;
-				m_Wnd.Attach(m_pVisibleWebWnd->m_hChildWnd);
-				CComPtr<IUnknown> pUnk;
-				m_Wnd.AttachControl(pWebBrowser.Detach(), &pUnk);
-				m_Wnd.Detach();
+				CExtendWnd* pExtendWnd = new CExtendWnd();
+				pExtendWnd->SubclassWindow(m_pVisibleWebWnd->m_hChildWnd);
 				::SetWindowLongPtr(hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd->m_hChildWnd);
 				::SetWindowLongPtr(m_pVisibleWebWnd->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd);
 			}
