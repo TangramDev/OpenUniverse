@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029           *
+ *           Web Runtime for Application - Version 1.0.0.202102150030           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -230,7 +230,7 @@ public:
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
 	map<HWND, CMDTWindow*>					m_mapMDTWindow;
 	map<CString, CString>					m_mapDocTemplate;
-
+	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
 		COM_INTERFACE_ENTRY(IDispatch)

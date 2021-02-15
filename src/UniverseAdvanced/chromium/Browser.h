@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029           *
+ *           Web Runtime for Application - Version 1.0.0.202102150030           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -41,6 +41,8 @@ namespace Browser {
 
 		bool				m_bDestroy = false;
 		bool				m_bTabChange;
+		bool				m_bSZMode = false;
+
 		int					m_heightfix;
 		float				m_fdevice_scale_factor;
 		HWND				m_hDrawWnd;
@@ -64,6 +66,8 @@ namespace Browser {
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 			MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 			MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
+			MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
+			MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 			MESSAGE_HANDLER(WM_TABCHANGE, OnChromeTabChange)
 			MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 			MESSAGE_HANDLER(WM_BROWSERLAYOUT, OnBrowserLayout)
@@ -83,6 +87,8 @@ namespace Browser {
 		void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
 
 		void OnFinalMessage(HWND hWnd) override;
+		LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+		LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 		LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 		LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 		LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029           *
+ *           Web Runtime for Application - Version 1.0.0.202102150030           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -726,7 +726,7 @@ namespace CommonUniverse
 			{
 				m_strContainer = _T(",") + m_strContainer + _T(",");
 				m_strContainer.Replace(_T(",,"), _T(","));
-	}
+			}
 			GetCosmosImpl _pCosmosImplFunction;
 			_pCosmosImplFunction = (GetCosmosImpl)GetProcAddress(hModule, "GetCosmosImpl");
 			g_pCosmosImpl = m_pCosmosImpl = _pCosmosImplFunction(&g_pCosmos);
@@ -761,7 +761,7 @@ namespace CommonUniverse
 					g_pCosmosImpl->InserttoDataMap(1, m_strProviderID, static_cast<ICosmosWindowProvider*>(this));
 				}
 			}
-}
+		}
 		return true;
 	}
 
@@ -1333,9 +1333,11 @@ namespace CommonUniverse
 	void CTangramMDIFrameWndEx::AdjustClientArea()
 	{
 		CMDIFrameWndEx::AdjustClientArea();
-		CRect rc = m_dockManager.GetClientAreaBounds();
-		::SendMessage(m_hWndMDIClient, WM_QUERYAPPPROXY, (WPARAM)(LPRECT)rc, 19651965);
-		m_wndClientArea.CalcWindowRectForMDITabbedGroups(rc, 0);
+		if (bAdjustClient == false)
+		{
+			bAdjustClient = true;
+			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210214);
+		}
 	}
 
 	LRESULT CTangramMDIFrameWndEx::OnQueryAppProxy(WPARAM wp, LPARAM lp)
@@ -1344,9 +1346,27 @@ namespace CommonUniverse
 		{
 			switch (lp)
 			{
+			case 20210214:
+			{
+				if (bAdjustClient)
+				{
+					bAdjustClient = false;
+					CRect rc = m_dockManager.GetClientAreaBounds();
+					::SendMessage(m_hWndMDIClient, WM_QUERYAPPPROXY, (WPARAM)(LPRECT)rc, 19651965);
+					m_wndClientArea.CalcWindowRectForMDITabbedGroups(rc, 0);
+				}
+			}
+			break;
+			case 20210215:
+			{
+				bAdjustClient = false;
+				CRect rc = m_dockManager.GetClientAreaBounds();
+				::SendMessage(m_hWndMDIClient, WM_QUERYAPPPROXY, (WPARAM)(LPRECT)rc, 19651965);
+				m_wndClientArea.CalcWindowRectForMDITabbedGroups(rc, 0);
+			}
+			break;
 			case 19651965:
 				RecalcLayout();
-				//::InvalidateRect(m_hWnd, nullptr, true);
 				break;
 			case 19631992:
 				AfxGetApp()->m_pMainWnd = this;

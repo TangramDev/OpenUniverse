@@ -10,7 +10,7 @@
  *	   Martin Oberhuber (Wind River) - [316975] memory leak on failure reading .ini file
  *******************************************************************************/
  /********************************************************************************
-  *           Web Runtime for Application - Version 1.0.0.202102100029           *
+  *           Web Runtime for Application - Version 1.0.0.202102150030           *
   ********************************************************************************
   * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
   * There are Three Key Features of Webruntime:

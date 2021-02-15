@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029
+ *           Web Runtime for Application - Version 1.0.0.202102150030
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -193,10 +193,14 @@ public:
 
 	BEGIN_MSG_MAP(CMDIMainWindow)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
+		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
+		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
 	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
 class CWinForm :

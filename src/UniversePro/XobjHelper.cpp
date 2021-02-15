@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029
+ *           Web Runtime for Application - Version 1.0.0.202102150030
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1088,6 +1088,8 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		pGalaxy = pMainWnd->m_pGalaxy;
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
+		if (g_pCosmos->m_pCosmosDelegate->m_bSZMode)
+			return;
 		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
 		{
 			pGalaxy->m_pBindingXobj = m_pXobj;

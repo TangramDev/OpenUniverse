@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029           *
+ *           Web Runtime for Application - Version 1.0.0.202102150030           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -100,6 +100,8 @@ namespace Browser {
 				{
 					::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
 					::ShowWindow(m_hExtendWnd, SW_SHOW);
+					if (m_pChromeRenderFrameHost)
+						m_pChromeRenderFrameHost->ShowWebPage(true);
 				}
 			}
 			else
@@ -757,7 +759,13 @@ namespace Browser {
 
 			m_hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParent, NULL, theApp.m_hInstance, NULL);
 			m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hExtendWnd, (HMENU)1, theApp.m_hInstance, NULL);
-
+			CComPtr<IWebBrowser2> pWebBrowser;
+			pWebBrowser.CoCreateInstance(CComBSTR("shell.explorer.2"));
+			CAxWindow m_Wnd;
+			m_Wnd.Attach(m_hChildWnd);
+			CComPtr<IUnknown> pUnk;
+			m_Wnd.AttachControl(pWebBrowser.Detach(), &pUnk);
+			m_Wnd.Detach();
 			::SetWindowLongPtr(m_hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_hChildWnd);
 			::SetWindowLongPtr(m_hChildWnd, GWLP_USERDATA, (LONG_PTR)this);
 		}

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029
+ *           Web Runtime for Application - Version 1.0.0.202102150030
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -868,10 +868,47 @@ void CMDIMainWindow::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
+LRESULT CMDIMainWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_pCosmosDelegate->m_bSZMode = false;
+	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
+LRESULT CMDIMainWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_pCosmosDelegate->m_bSZMode = true;
+	::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210213);
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
 LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 20210213:
+	{
+		switch (wParam)
+		{
+		case 0:
+		{
+			for (auto& it : g_pCosmos->m_mapSizingBrowser)
+			{
+				if (::IsWindow(it.first))
+				{
+					it.second->m_pBrowser->LayoutBrowser();
+				}
+			}
+			::SendMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
+			g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
+		}
+		break;
+		case 1:
+			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
+			break;
+		}
+	}
+	break;
 	case 20210126:
 	{
 		CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
@@ -935,7 +972,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 						if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
 						{
 							m_pGalaxy->m_pBindingXobj = pObj;
-							::SendMessage(m_hWnd, WM_COSMOSMSG, 0, 19651965);
+							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 19651965);
 							break;
 						}
 					}
@@ -1672,8 +1709,8 @@ CGalaxy::~CGalaxy()
 				it.second->m_mapGalaxy.erase(it2);
 				break;
 			}
+		}
 	}
-}
 	if (m_pRootNodes)
 		CCommonFunction::ClearObject<CXobjCollection>(m_pRootNodes);
 	if (m_mapVal.size()) {
@@ -2922,7 +2959,7 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (::IsWindowVisible(m_hWnd) == false)
 		{
-			if (m_pBindingXobj&&m_pBindingXobj->m_pHostWnd&&::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
+			if (m_pBindingXobj && m_pBindingXobj->m_pHostWnd && ::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
 			{
 				HostPosChanged();
 				::InvalidateRect(::GetAncestor(m_hWnd, GA_ROOT), nullptr, true);
@@ -3164,6 +3201,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				lpwndpos->cy = rect.bottom - rect.top;
 			}
 			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED);// |SWP_NOREDRAW); 
+
 			CXobj* _pHostNode = m_pBindingXobj;
 			if (_pHostNode->m_pHostGalaxy)
 			{

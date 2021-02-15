@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102100029           *
+ *           Web Runtime for Application - Version 1.0.0.202102150030           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -104,7 +104,7 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 
 		m_pXobj->m_pXobjShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		if (g_pCosmos->m_pMDIMainWnd &&
 			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd) &&
@@ -329,13 +329,17 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 {
 	if (m_pXobj->m_nViewType != BlankView)
 		return true;
-	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-	BOOL bInDesignState = pGalaxy->m_bDesignerState;
 	CBitmap bit;
 	RECT rt;
 	GetClientRect(&rt);
+	bit.LoadBitmap(IDB_BITMAP_DESIGNER);
+	CBrush br(&bit);
+	pDC->FillRect(&rt, &br);
+	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
+	BOOL bInDesignState = pGalaxy->m_bDesignerState;
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
+		return true;
 		HWND hWnd = pGalaxy->m_hWnd;
 		if (::IsWindow(hWnd) && !::IsWindowVisible(hWnd))
 		{
@@ -343,28 +347,10 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 			return false;
 		}
 	}
-	//else if ((m_pXobj->m_nViewType == ActiveX || m_pXobj->m_nViewType == CLRCtrl) && m_pXobj->m_pDisp == nullptr)
-	//{
-	//	bit.LoadBitmap(IDB_BITMAP_DESIGNER);
-	//	CBrush br(&bit);
-	//	pDC->FillRect(&rt, &br);
-	//	pDC->SetBkMode(TRANSPARENT);
-	//	CComBSTR bstrCaption(L"");
-	//	m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
-	//	CString strInfo = _T("");
-	//	strInfo = strInfo +
-	//		_T("\n  ----.NET Assembly don't exists or AxtiveX Control not Support!----");
-
-	//	pDC->SetTextColor(RGB(255, 0, 255));
-	//	pDC->DrawText(strInfo, &rt, DT_LEFT);
-	//}
 
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pXobj->m_pDisp == NULL) && m_bEraseBkgnd)
 	{
 		CString strText = _T("");
-		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
-		CBrush br(&bit);
-		pDC->FillRect(&rt, &br);
 		if (bInDesignState && g_pCosmos->m_pDesignXobj == m_pXobj)
 		{
 			pDC->SetTextColor(RGB(255, 0, 255));
@@ -1088,6 +1074,8 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		pGalaxy = pMainWnd->m_pGalaxy;
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
+		if (g_pCosmos->m_pCosmosDelegate->m_bSZMode)
+			return;
 		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
 		{
 			pGalaxy->m_pBindingXobj = m_pXobj;
@@ -1139,7 +1127,8 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		}
 		else if (m_pXobj->m_nViewType == BlankView)
 		{
-			::SetWindowPos(m_pXobj->m_hHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
+			::SetWindowPos(m_pXobj->m_hHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_FRAMECHANGED|SWP_NOACTIVATE);
+			//::InvalidateRect(m_hWnd, nullptr, true);
 			if (m_pXobj->m_hChildHostWnd)
 				::SetWindowPos(m_pXobj->m_hChildHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
