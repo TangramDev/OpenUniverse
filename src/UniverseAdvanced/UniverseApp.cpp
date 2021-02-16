@@ -928,6 +928,8 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	break;
 	case WM_POWERBROADCAST:
 	{
+		if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_bDestroy)
+			break;
 		switch (wParam)
 		{
 		case PBT_APMRESUMEAUTOMATIC:
@@ -1480,7 +1482,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 	LPMSG lpMsg = (LPMSG)lParam;
 	DWORD dwID = ::GetCurrentThreadId();
 	CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
-	if (lpMsg->message == WM_TIMER)
+	if (lpMsg->message == WM_TIMER)//|| (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_bDestroy))
 		return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 	if (nCode >= 0)
 	{

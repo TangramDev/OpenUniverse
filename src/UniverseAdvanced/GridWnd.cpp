@@ -22,7 +22,7 @@
  *
  *******************************************************************************/
 
-// Xobj.cpp : implementation file
+ // Xobj.cpp : implementation file
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -400,7 +400,7 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 {
 	int _nWidth = 0;
 	SetColumnInfo(lParam, m_nHostWidth >= 0 ? m_nHostWidth : 0, _nWidth);
-	SetRowInfo(wParam, m_nHostHeight >= 0 ? m_nHostHeight:0, _nWidth);
+	SetRowInfo(wParam, m_nHostHeight >= 0 ? m_nHostHeight : 0, _nWidth);
 	//SetColumnInfo(lParam, (m_nHostWidth>=0)? m_nHostWidth:0, _nWidth);
 	//SetRowInfo(wParam, (m_nHostHeight>=0)? m_nHostHeight:0, _nWidth);
 	return 0;
@@ -509,7 +509,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			g_pCosmos->m_pDesignXobj->m_pRootObj->get_DocXml(&bstrXml);
 			g_pCosmos->put_AppKeyValue(CComBSTR(L"TangramDesignerXml"), CComVariant(bstrXml));
 		}
-		
+
 		CWebPage* pWebWnd = nullptr;
 		if (pGalaxy->m_pWebPageWnd)
 		{
@@ -538,6 +538,14 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			HWND hPWnd = ::GetParent(pWebWnd->m_hWnd);
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
+		}
+		CMDIMainWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+		if (pMainWnd)
+		{
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy == pMainWnd->m_pGalaxy)
+			{
+				::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
+			}
 		}
 	}
 }

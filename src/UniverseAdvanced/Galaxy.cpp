@@ -810,6 +810,7 @@ void CMDIChildWindow::OnFinalMessage(HWND hWnd)
 		g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.erase(it);
 	if (g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.size() == 0)
 	{
+		g_pCosmos->m_bSZMode = true;
 		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210126);
 	}
 	CWindowImpl::OnFinalMessage(hWnd);
@@ -931,6 +932,7 @@ void CMDIMainWindow::OnFinalMessage(HWND hWnd)
 LRESULT CMDIMainWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	g_pCosmos->m_bSZMode = false;
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
+
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -945,6 +947,8 @@ LRESULT CMDIMainWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 LRESULT CMDIMainWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bDestroy = true;
 	g_pCosmos->m_pMDIMainWnd = nullptr;
+	m_pHostBrowser->m_bDestroy = true;
+	::SetParent(m_pHostBrowser->m_hWnd, g_pCosmos->m_hCosmosWnd);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -968,8 +972,8 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 					it.second->m_pBrowser->LayoutBrowser();
 				}
 			}
-			::SendMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 			g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
+			::SendMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 		}
 		break;
 		case 1:
@@ -995,11 +999,14 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 			}
 			::SysFreeString(bstrXml);
 		}
+
 		if (m_pGalaxy && m_pGalaxy->m_pWebPageWnd)
 		{
 			m_pActiveMDIChild = nullptr;
 			m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(_T("client"), _T(""));
 		}
+		g_pCosmos->m_bSZMode = false;
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
 	}
 	break;
 	case 20210202:
@@ -1017,6 +1024,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
 			if (pCosmosFrameWndInfo)
 			{
+				g_pCosmos->m_bSZMode = false;
 				BSTR bstrXml = ::SysAllocString(L"");
 				CString strKey = m_pActiveMDIChild->m_strKey;
 				CWebPage* pVisiblePage = m_pHostBrowser->m_pVisibleWebWnd;
@@ -1045,15 +1053,15 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 						if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
 						{
 							m_pGalaxy->m_pBindingXobj = pObj;
-							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 19651965);
 							break;
 						}
 					}
 				}
 				::SysFreeString(bstrXml);
+				if (m_pHostBrowser)
+					m_pHostBrowser->m_pBrowser->LayoutBrowser();
 			}
 		}
-		g_pCosmos->m_bSZMode = false;
 	}
 	break;
 	default:
