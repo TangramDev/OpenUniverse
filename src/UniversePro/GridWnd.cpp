@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102160031
+ *           Web Runtime for Application - Version 1.0.0.202102170032
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -538,6 +538,14 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			HWND hPWnd = ::GetParent(pWebWnd->m_hWnd);
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
+		}
+		CMDIMainWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+		if (pMainWnd)
+		{
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy == pMainWnd->m_pGalaxy)
+			{
+				::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
+			}
 		}
 	}
 }

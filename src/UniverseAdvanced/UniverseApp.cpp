@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102160031           *
+ *           Web Runtime for Application - Version 1.0.0.202102170032           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2116,7 +2116,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 														auto it = g_pCosmos->m_mapBrowserWnd.find(g_pCosmos->m_hHostBrowserWnd);
 														if (it != g_pCosmos->m_mapBrowserWnd.end())
 														{
-															g_pCosmos->m_pMDIMainWnd->m_pHostBrowser = (CBrowser*)it->second;
+															g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
 														}
 														pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hPWnd), CComVariant((__int64)::GetParent(hWnd)), CComBSTR(""), &pGalaxy);
 														g_pCosmos->m_pMDIMainWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
@@ -2135,7 +2135,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											bProcessWebPage = true;
 										if (pClient && g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pGalaxy && g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd)
 										{
-											if (g_pCosmos->m_pMDIMainWnd->m_pHostBrowser->m_pVisibleWebWnd != g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd) {
+											if (g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd != g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd) {
 												bProcessWebPage = false;
 											}
 											else if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102160031
+ *           Web Runtime for Application - Version 1.0.0.202102170032
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -54,8 +54,8 @@ public:
 	}
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
+	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
 };
 
 IMPLEMENT_DYNAMIC(CDockPaneWnd, CWnd)
@@ -947,8 +947,8 @@ LRESULT CMDIMainWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 LRESULT CMDIMainWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bDestroy = true;
 	g_pCosmos->m_pMDIMainWnd = nullptr;
-	m_pHostBrowser->m_bDestroy = true;
-	::SetParent(m_pHostBrowser->m_hWnd, g_pCosmos->m_hCosmosWnd);
+	g_pCosmos->m_pHostBrowser->m_bDestroy = true;
+	::SetParent(g_pCosmos->m_hHostBrowserWnd, g_pCosmos->m_hCosmosWnd);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -1027,7 +1027,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 				g_pCosmos->m_bSZMode = false;
 				BSTR bstrXml = ::SysAllocString(L"");
 				CString strKey = m_pActiveMDIChild->m_strKey;
-				CWebPage* pVisiblePage = m_pHostBrowser->m_pVisibleWebWnd;
+				CWebPage* pVisiblePage = g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd;
 				if (pVisiblePage != m_pGalaxy->m_pWebPageWnd && pVisiblePage->m_pGalaxy)
 				{
 					strKey = pVisiblePage->m_pGalaxy->m_strCurrentKey;
@@ -1058,8 +1058,8 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 					}
 				}
 				::SysFreeString(bstrXml);
-				if (m_pHostBrowser)
-					m_pHostBrowser->m_pBrowser->LayoutBrowser();
+				if (g_pCosmos->m_pHostBrowser)
+					g_pCosmos->m_pHostBrowser->m_pBrowser->LayoutBrowser();
 			}
 		}
 	}

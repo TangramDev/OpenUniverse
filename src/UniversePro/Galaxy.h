@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102160031
+ *           Web Runtime for Application - Version 1.0.0.202102170032
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -191,7 +191,6 @@ public:
 	HWND									m_hMDIClient;
 	CXobj* m_pClientXobj = nullptr;
 	CGalaxy* m_pGalaxy = nullptr;
-	CBrowser* m_pHostBrowser = nullptr;
 	CGalaxyCluster* m_pGalaxyCluster = nullptr;
 	CMDIChildWindow* m_pActiveMDIChild = nullptr;
 

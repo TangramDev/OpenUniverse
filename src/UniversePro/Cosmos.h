@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102160031           *
+ *           Web Runtime for Application - Version 1.0.0.202102170032           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -197,6 +197,7 @@ public:
 	CGalaxy*								m_pDocTemplateFrame;
 	CMDIMainWindow*							m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
+	CBrowser*								m_pHostBrowser = nullptr;
 
 	CXobj*									m_pActiveXobj;
 	CXobj*									m_pDesignRootNode;
