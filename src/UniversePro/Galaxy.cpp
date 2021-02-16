@@ -735,13 +735,13 @@ LRESULT CMDIChildWindow::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (g_pCosmos->m_pMDIMainWnd->m_bDestroy)
 		return l;
+	g_pCosmos->m_bSZMode = true;
 	if (m_hWnd == (HWND)lParam)
 	{
 		if (m_pClientBindingObj == nullptr)
 		{
 			m_pClientBindingObj = g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pBindingXobj;
 		}
-		g_pCosmos->m_bSZMode = true;
 		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)this, 20210202);
 	}
 	return l;
@@ -836,6 +836,13 @@ LRESULT CMDTWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		}
 	}
 	g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
+
+	CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
+	if (pCosmosFrameWndInfo)
+	{
+		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryDestroy, pCosmosFrameWndInfo->m_hClient);
+	}
+
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -915,6 +922,7 @@ LRESULT CMDIMainWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 LRESULT CMDIMainWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bDestroy = true;
+	g_pCosmos->m_pMDIMainWnd = nullptr;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -984,7 +992,6 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 				m_pActiveMDIChild = nullptr;
 				break;
 			}
-			g_pCosmos->m_bSZMode = false;
 			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
 			if (pCosmosFrameWndInfo)
 			{
@@ -1024,6 +1031,7 @@ LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 				::SysFreeString(bstrXml);
 			}
 		}
+		g_pCosmos->m_bSZMode = false;
 	}
 	break;
 	default:

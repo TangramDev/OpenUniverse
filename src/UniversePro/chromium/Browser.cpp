@@ -52,6 +52,8 @@ namespace Browser {
 
 	void CBrowser::ActiveChromeTab(HWND hActive, HWND hOldWnd)
 	{
+		if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_bDestroy)
+			return;
 		m_bTabChange = true;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
@@ -90,6 +92,8 @@ namespace Browser {
 
 	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		if (m_bDestroy)
+			return lRes;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
 			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
@@ -232,7 +236,7 @@ namespace Browser {
 	};
 
 	LRESULT CBrowser::BrowserLayout() {
-		if (m_pVisibleWebWnd == nullptr || m_bTabChange ||
+		if (m_bDestroy || m_pVisibleWebWnd == nullptr || m_bTabChange ||
 			!::IsWindowVisible(m_hWnd) ||
 			g_pCosmos->m_bChromeNeedClosed == TRUE)
 			return 0;
@@ -305,6 +309,8 @@ namespace Browser {
 
 	LRESULT CBrowser::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		if (m_bDestroy)
+			return lRes;
 		if (LOWORD(wParam) != WA_INACTIVE) {
 			if (m_pBrowser) {
 				g_pCosmos->m_pActiveBrowser = m_pBrowser;
@@ -344,6 +350,8 @@ namespace Browser {
 
 	LRESULT CBrowser::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		if (m_bDestroy)
+			return lRes;
 		HWND hWnd = (HWND)lParam;
 		switch (wParam) {
 		case 0: {
@@ -543,6 +551,8 @@ namespace Browser {
 
 	LRESULT CBrowser::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
+		if (m_bDestroy)
+			return DefWindowProc(uMsg, wParam, lParam);
 		if (g_pCosmos->m_pCLRProxy)
 		{
 			g_pCosmos->m_pCLRProxy->PreWindowPosChanging(m_hWnd, lpwndpos, 0);
@@ -578,6 +588,7 @@ namespace Browser {
 				it.second->m_pBrowser->LayoutBrowser();
 			}
 		}
+		g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
 	}
@@ -591,7 +602,9 @@ namespace Browser {
 
 	LRESULT CBrowser::OnBrowserLayout(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
-		DefWindowProc(uMsg, wParam, lParam);
+		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		if (m_bDestroy)
+			return lRes;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pVisibleWebWnd)
 		{
 			switch (lParam)
@@ -665,7 +678,7 @@ namespace Browser {
 			break;
 			}
 		}
-		return 0;
+		return lRes;
 	}
 
 	void CBrowser::OnFinalMessage(HWND hWnd) {
