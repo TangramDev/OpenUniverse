@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102150030
+ *           Web Runtime for Application - Version 1.0.0.202102160031
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -153,7 +153,7 @@ private:
 	LRESULT OnMDIActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosDocObserved(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CMDTWindow :
@@ -173,8 +173,8 @@ public:
 private:
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 
 	void OnFinalMessage(HWND hWnd);
@@ -208,8 +208,8 @@ public:
 	void OnFinalMessage(HWND hWnd);
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CWinForm :
@@ -265,12 +265,12 @@ private:
 	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
 	LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnExitSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnEnterSZ(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class ATL_NO_VTABLE CGalaxy :

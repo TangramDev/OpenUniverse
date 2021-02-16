@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102150030           *
+ *           Web Runtime for Application - Version 1.0.0.202102160031           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -39,7 +39,7 @@ namespace Browser
 	private:
 		void OnFinalMessage(HWND hWnd);
 	public:
-		LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+		LRESULT OnEraseBkgnd(UINT, WPARAM, LPARAM, BOOL&);
 	};
 
 	class ATL_NO_VTABLE CWebPage :

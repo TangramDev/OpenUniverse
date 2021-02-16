@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102150030           *
+ *           Web Runtime for Application - Version 1.0.0.202102160031           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -50,8 +50,8 @@ public:
 		MESSAGE_HANDLER(WM_CHAR, OnSysKeyDown)
 	END_MSG_MAP()
 	void OnFinalMessage(HWND hWnd);
-	LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnSysKeyDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnSysKeyDown(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class FormInfo

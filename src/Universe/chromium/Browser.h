@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102150030           *
+ *           Web Runtime for Application - Version 1.0.0.202102160031           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -117,13 +117,13 @@ namespace Browser {
 		void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
 
 		void OnFinalMessage(HWND hWnd) override;
-		LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnBrowserLayout(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnChromeTabChange(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnMouseActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-		LRESULT OnDeviceScaleFactorChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+		LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnBrowserLayout(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnChromeTabChange(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnDeviceScaleFactorChanged(UINT, WPARAM, LPARAM, BOOL&);
 	};
 };

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102150030           *
+ *           Web Runtime for Application - Version 1.0.0.202102160031           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -112,8 +112,8 @@ public:
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()
 	void OnFinalMessage(HWND hWnd);
-	LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CTBToolboxPaneWnd :
@@ -130,7 +130,7 @@ public:
 		MESSAGE_HANDLER(WM_LBUTTONDOWN, OnLButtonDown)
 	END_MSG_MAP()
 	void OnFinalMessage(HWND hWnd);
-	LRESULT OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnLButtonDown(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CGenericPaneWnd :
@@ -153,10 +153,10 @@ public:
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanging)
 	END_MSG_MAP()
 	void OnFinalMessage(HWND hWnd);
-	LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnCosmosData(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosData(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CUniverse :
