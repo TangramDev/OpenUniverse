@@ -53,6 +53,7 @@ namespace Browser {
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
 		LRESULT		BrowserLayout();
 
+		map<HWND, CWebPage*> m_mapChildPage;
 		map<HWND, CWebPage*> m_mapNorifyPage;
 
 		STDMETHOD(get_RemoteXobj)(IXobj** pVal);

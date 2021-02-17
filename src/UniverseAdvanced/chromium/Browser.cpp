@@ -96,6 +96,25 @@ namespace Browser {
 			return lRes;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
+			if (::GetParent(m_hWnd))
+			{
+				HWND hActive = m_pBrowser->GetActiveWebContentWnd();
+				for (auto& it : m_mapChildPage)
+				{
+					if (::IsWindow(it.first))
+					{
+						if (it.first != hActive)
+						{
+							it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
+						}
+						else
+						{
+							it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
+							m_pVisibleWebWnd = it.second;
+						}
+					}
+				}
+			}
 			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 			if (m_pVisibleWebWnd && g_pCosmos->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
 			{
@@ -396,6 +415,7 @@ namespace Browser {
 				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 				g_pCosmos->m_pGalaxy = nullptr;
 				g_pCosmos->m_bWinFormActived = false;
+				m_mapChildPage[hWnd] = g_pCosmos->m_pHtmlWndCreated;
 				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
 			}
 		} break;
@@ -673,6 +693,12 @@ namespace Browser {
 				if (m_pParentXobj)
 				{
 					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);;
+				}
+				HWND hWnd = this->m_pBrowser->GetActiveWebContentWnd();
+				auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+				if (it != g_pCosmos->m_mapHtmlWnd.end())
+				{
+					it->second->m_pChromeRenderFrameHost->ShowWebPage(true);
 				}
 			}
 			break;

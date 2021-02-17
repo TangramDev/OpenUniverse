@@ -57,6 +57,7 @@ namespace Browser {
 		LRESULT		BrowserLayout();
 
 		map<HWND, CWebPage*> m_mapNorifyPage;
+		map<HWND, CWebPage*> m_mapChildPage;
 
 		STDMETHOD(get_RemoteXobj)(IXobj** pVal);
 		STDMETHOD(put_RemoteXobj)(IXobj* newVal);

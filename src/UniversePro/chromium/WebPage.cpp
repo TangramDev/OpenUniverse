@@ -580,6 +580,11 @@ namespace Browser {
 			pPWnd = (CBrowser*)it2->second;
 			if (pPWnd->m_pVisibleWebWnd == this)
 				pPWnd->m_pVisibleWebWnd = nullptr;
+			auto it3 = pPWnd->m_mapChildPage.find(hWnd);
+			if (it3 != pPWnd->m_mapChildPage.end())
+			{
+				pPWnd->m_mapChildPage.erase(it3);
+			}
 		}
 		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
 		if (it != g_pCosmos->m_mapHtmlWnd.end())

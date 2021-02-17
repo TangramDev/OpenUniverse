@@ -80,14 +80,16 @@ namespace Browser {
 		CBrowser();
 		~CBrowser() override;
 
-		bool		m_bTabChange;
-		int			m_heightfix;
-		float		m_fdevice_scale_factor;
-		HWND		m_hDrawWnd;
-		HWND		m_hOldTab;
-		CString		m_strCurKey;
-		CXobj*		m_pParentXobj;
-		CWebPage*	m_pVisibleWebWnd;
+		bool					m_bTabChange;
+		int						m_heightfix;
+		float					m_fdevice_scale_factor;
+		HWND					m_hDrawWnd;
+		HWND					m_hOldTab;
+		CString					m_strCurKey;
+		CXobj*					m_pParentXobj;
+		CWebPage*				m_pVisibleWebWnd;
+		map<HWND, CWebPage*>	m_mapChildPage;
+
 		LRESULT		BrowserLayout();
 
 		STDMETHOD(get_RemoteXobj)(IXobj** pVal);
