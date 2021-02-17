@@ -2070,6 +2070,18 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												pWnd->SubclassWindow(hWnd);
 												g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 												g_pCosmos->m_bSZMode = true;
+
+												HWND hActive = g_pCosmos->m_pHostHtmlWnd->m_hWnd;
+												if (g_pCosmos->m_pHostBrowser == nullptr)
+												{
+													HWND hBrowser = ::GetParent(hActive);
+													auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+													if (it != g_pCosmos->m_mapBrowserWnd.end())
+														g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
+												}
+												g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+												if(g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+													g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
 												::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 											}
 											if (pWnd->m_pGalaxy == nullptr)
@@ -2134,6 +2146,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											}
 											else if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)
 											{
+												//g_pCosmos->m_pHostHtmlWnd->LoadDocument2Viewport(strKey, pClient->xml());
 												g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
 												bProcessWebPage = true;
 											}

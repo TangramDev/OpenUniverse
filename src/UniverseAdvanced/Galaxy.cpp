@@ -1009,6 +1009,13 @@ LRESULT CMDIWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
 	}
 	break;
+	//case 20210217:
+	//{
+	//	g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+	//	if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+	//		g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
+	//}
+	//break;
 	case 20210202:
 	{
 		if (m_bDestroy)
@@ -1031,6 +1038,17 @@ LRESULT CMDIWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				if (pVisiblePage != m_pGalaxy->m_pWebPageWnd && pVisiblePage->m_pGalaxy)
 				{
 					strKey = pVisiblePage->m_pGalaxy->m_strCurrentKey;
+					pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
+					for (auto& it : pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
+					{
+						CGalaxy* _pGalaxy = (CGalaxy*)it.second;
+						IXobj* pXobj = nullptr;
+						if (_pGalaxy != m_pGalaxy)
+						{
+							_pGalaxy->Observe(CComBSTR(m_pActiveMDIChild->m_strKey), bstrXml, &pXobj);
+						}
+					}
+					break;
 				}
 				pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
 				CComBSTR bstrKey(strKey);

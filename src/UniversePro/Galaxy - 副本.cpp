@@ -1035,17 +1035,6 @@ LRESULT CMDIWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				if (pVisiblePage != m_pGalaxy->m_pWebPageWnd && pVisiblePage->m_pGalaxy)
 				{
 					strKey = pVisiblePage->m_pGalaxy->m_strCurrentKey;
-					pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
-					for (auto& it : pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
-					{
-						CGalaxy* _pGalaxy = (CGalaxy*)it.second;
-						IXobj* pXobj = nullptr;
-						if (_pGalaxy != m_pGalaxy)
-						{
-							_pGalaxy->Observe(CComBSTR(m_pActiveMDIChild->m_strKey), bstrXml, &pXobj);
-						}
-					}
-					break;
 				}
 				pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
 				CComBSTR bstrKey(strKey);
