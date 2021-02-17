@@ -76,8 +76,6 @@
 
 #include "OfficePlus\WordPlus\WordAddin.h"
 #include "OfficePlus\ExcelPlus\ExcelAddin.h"
-#include "OfficePlus\VisioPlus\VisioAddin.h"
-#include "OfficePlus\AccessPlus\AccessAddin.h"
 #include "OfficePlus\OutLookPlus\OutLookAddin.h"
 #include "OfficePlus\ProjectPlus\ProjectAddin.h"
 #include "OfficePlus\PowerPointPlus\PowerPointAddin.h"
@@ -420,7 +418,6 @@ BOOL CUniverse::InitInstance()
 				new CComObject < OutLookPlus::COutLookAddin >;
 				break;
 			case 4:
-				new CComObject < AccessPlus::CAccessAddin >;
 				break;
 			case 6:
 				new CComObject < ProjectPlus::CProjectAddin >;
@@ -432,7 +429,6 @@ BOOL CUniverse::InitInstance()
 				new CComObject < OfficePlus::COfficeAddin >;
 				break;
 			case 8:
-				new CComObject < VisioPlus::CVisioAddin >;
 				break;
 			}
 			g_pCosmos->m_nAppID = nAppID;

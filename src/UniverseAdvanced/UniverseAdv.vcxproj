@@ -347,18 +347,10 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="eclipseUtil.cpp" />
     <ClCompile Include="eclipseWin.cpp" />
     <ClCompile Include="eclipseWinCommon.cpp" />
-    <ClCompile Include="OfficePlus\AccessPlus\AccessEvents.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../stdafx.h</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="CosmosCtrl.cpp" />
     <ClCompile Include="TangramListView.cpp" />
     <ClCompile Include="TangramTabCtrl.cpp" />
     <ClCompile Include="CreateCheckboxImageList.cpp" />
-    <ClCompile Include="OfficePlus\AccessPlus\AccessAddin.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../stdafx.h</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="OfficePlus\ExcelPlus\ExcelPlusWnd.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../stdafx.h</PrecompiledHeaderFile>
@@ -388,10 +380,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="OfficePlus\OfficeAddin.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="OfficePlus\VisioPlus\VisioAddin.cpp">
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="OfficePlus\WordPlus\WordAddin.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../../stdafx.h</PrecompiledHeaderFile>
@@ -493,12 +481,10 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="eclipseShm.h" />
     <ClInclude Include="eclipseunicode.h" />
     <ClInclude Include="eclipseUtil.h" />
-    <ClInclude Include="OfficePlus\AccessPlus\AccessEvents.h" />
     <ClInclude Include="OfficePlus\ProjectPlus\ProjectPlusEvents.h" />
     <ClInclude Include="CosmosCtrl.h" />
     <ClInclude Include="TangramListView.h" />
     <ClInclude Include="TangramTabCtrl.h" />
-    <ClInclude Include="OfficePlus\AccessPlus\AccessAddin.h" />
     <ClInclude Include="OfficePlus\ExcelPlus\ExcelPlusEvents.h" />
     <ClInclude Include="OfficePlus\ExcelPlus\ExcelPlusWnd.h" />
     <ClInclude Include="OfficePlus\ExcelPlus\ExcelAddin.h" />
@@ -527,7 +513,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="CloudUtilities\XUnzip.h" />
     <ClInclude Include="CloudUtilities\XZip.h" />
     <ClInclude Include="XobjHelper.h" />
-    <ClInclude Include="OfficePlus\VisioPlus\VisioAddin.h" />
     <ClInclude Include="OfficePlus\WordPlus\WordAddin.h" />
     <ClInclude Include="OfficePlus\WordPlus\WordPlusDoc.h" />
     <ClInclude Include="WPFView.h" />
