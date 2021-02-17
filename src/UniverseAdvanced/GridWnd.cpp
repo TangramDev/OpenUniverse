@@ -539,7 +539,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
-		CMDIMainWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+		CMDIWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
 		if (pMainWnd)
 		{
 			if (m_pXobj->m_pXobjShareData->m_pGalaxy == pMainWnd->m_pGalaxy)

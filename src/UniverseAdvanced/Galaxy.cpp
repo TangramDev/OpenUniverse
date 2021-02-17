@@ -913,23 +913,23 @@ void CMDTWindow::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-CMDIMainWindow::CMDIMainWindow(void)
+CMDIWindow::CMDIWindow(void)
 {
 	m_pGalaxyCluster = nullptr;
 	m_hMDIClient = nullptr;
 }
 
-CMDIMainWindow::~CMDIMainWindow(void)
+CMDIWindow::~CMDIWindow(void)
 {
 }
 
-void CMDIMainWindow::OnFinalMessage(HWND hWnd)
+void CMDIWindow::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
 }
 
-LRESULT CMDIMainWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CMDIWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	g_pCosmos->m_bSZMode = false;
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
 
@@ -937,14 +937,14 @@ LRESULT CMDIMainWindow::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return lRes;
 }
 
-LRESULT CMDIMainWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CMDIWindow::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	g_pCosmos->m_bSZMode = true;
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210213);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
 
-LRESULT CMDIMainWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CMDIWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bDestroy = true;
 	g_pCosmos->m_pMDIMainWnd = nullptr;
 	g_pCosmos->m_pHostBrowser->m_bDestroy = true;
@@ -953,7 +953,7 @@ LRESULT CMDIMainWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return lRes;
 }
 
-LRESULT CMDIMainWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDIWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{

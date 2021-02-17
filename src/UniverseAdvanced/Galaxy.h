@@ -180,12 +180,12 @@ private:
 	void OnFinalMessage(HWND hWnd);
 };
 
-class CMDIMainWindow :
-	public CWindowImpl<CMDIMainWindow, CWindow>
+class CMDIWindow :
+	public CWindowImpl<CMDIWindow, CWindow>
 {
 public:
-	CMDIMainWindow(void);
-	virtual ~CMDIMainWindow(void);
+	CMDIWindow(void);
+	virtual ~CMDIWindow(void);
 
 	BOOL									m_bDestroy = false;
 	HWND									m_hMDIClient;
@@ -197,7 +197,7 @@ public:
 	CXobjVector								m_vMdiClientXobjs;
 	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;
 
-	BEGIN_MSG_MAP(CMDIMainWindow)
+	BEGIN_MSG_MAP(CMDIWindow)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)

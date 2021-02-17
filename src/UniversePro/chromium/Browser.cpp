@@ -185,6 +185,7 @@ namespace Browser {
 				m_pVisibleWebWnd->m_hExtendWnd = hExtendWnd;
 				m_pVisibleWebWnd->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
 				CExtendWnd* pExtendWnd = new CExtendWnd();
+				pExtendWnd->m_pHostPage = m_pVisibleWebWnd;
 				pExtendWnd->SubclassWindow(m_pVisibleWebWnd->m_hChildWnd);
 				::SetWindowLongPtr(hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd->m_hChildWnd);
 				::SetWindowLongPtr(m_pVisibleWebWnd->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd);

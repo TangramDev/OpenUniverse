@@ -1082,7 +1082,7 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
-	CMDIMainWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+	CMDIWindow* pMainWnd = g_pCosmos->m_pMDIMainWnd;
 	CGalaxy* pGalaxy = nullptr;
 	if (pMainWnd)
 		pGalaxy = pMainWnd->m_pGalaxy;

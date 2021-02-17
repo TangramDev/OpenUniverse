@@ -928,8 +928,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	break;
 	case WM_POWERBROADCAST:
 	{
-		if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_bDestroy)
-			break;
 		switch (wParam)
 		{
 		case PBT_APMRESUMEAUTOMATIC:
@@ -1215,7 +1213,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			if (g_pCosmos->m_pMDIMainWnd == nullptr)
 			{
-				g_pCosmos->m_pMDIMainWnd = new CMDIMainWindow();
+				g_pCosmos->m_pMDIMainWnd = new CMDIWindow();
 				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
 				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
 			}

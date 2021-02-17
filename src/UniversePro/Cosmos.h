@@ -195,7 +195,7 @@ public:
 	CWebPage*								m_pActiveHtmlWnd;
 
 	CGalaxy*								m_pDocTemplateFrame;
-	CMDIMainWindow*							m_pMDIMainWnd;
+	CMDIWindow*							m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
 	CBrowser*								m_pHostBrowser = nullptr;
 

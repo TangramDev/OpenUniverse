@@ -50,6 +50,57 @@ namespace Browser {
 		RECT rc;
 		::GetClientRect(m_hWnd, &rc);
 		dc->FillSolidRect(0, 0, rc.right, rc.bottom, RGB(255, 255, 255));
+
+		//HDC hDC = ::GetDC(m_pHostPage->m_hWnd);
+		//CDC* pDC = CDC::FromHandle(hDC);
+
+		//RECT rc;
+		//::GetClientRect(m_pHostPage->m_hWnd, &rc);
+
+		////CDC memDC;
+		////CBitmap bitmap;
+		////memDC.CreateCompatibleDC(pDC);
+		////bitmap.CreateCompatibleBitmap(pDC, rc.right, rc.bottom);
+		////dc->SelectObject(&bitmap);
+		////CDC dcMemory;
+		////dcMemory.CreateCompatibleDC(pDC);
+
+		////// Select the bitmap into the in-memory DC
+		////CBitmap* pOldBitmap = dcMemory.SelectObject(&bmp);
+		//dc->BitBlt(0, 0, rc.right, rc.bottom, pDC, 0, 0, SRCCOPY);
+
+		//CBrush br(&bitmap);
+		//RECT rt;
+		//GetClientRect(&rt);
+		//dc->FillRect(&rt, &br);
+
+		//memDC.DeleteDC();
+		//bitmap.DeleteObject();
+
+		//::ReleaseDC(m_pHostPage->m_hWnd, hDC);
+
+		//HDC hDC = ::GetDC(m_pHostPage->m_hWnd);
+		//CDC* pDC = CDC::FromHandle(hDC);
+		//RECT rc;
+		//::GetClientRect(m_pHostPage->m_hWnd, &rc);
+		//CDC memDC;
+		//CBitmap bitmap;
+		//memDC.CreateCompatibleDC(pDC);
+		//bitmap.CreateCompatibleBitmap(pDC, rc.right, rc.bottom);
+		//memDC.SelectObject(&bitmap);
+		//memDC.BitBlt(0, 0, rc.right, rc.bottom, pDC, 0, 0, SRCCOPY);
+
+		//CBrush br(&bitmap);
+		//RECT rt;
+		//GetClientRect(&rt);
+		//dc->FillRect(&rt, &br);
+
+		//memDC.DeleteDC();
+		//bitmap.DeleteObject();
+
+		//RECT rc;
+		//::GetClientRect(m_hWnd, &rc);
+		//dc->FillSolidRect(0, 0, rc.right, rc.bottom, RGB(255, 255, 255));
 		return true;
 	}
 
@@ -784,6 +835,7 @@ namespace Browser {
 			m_hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParent, NULL, theApp.m_hInstance, NULL);
 			m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hExtendWnd, (HMENU)1, theApp.m_hInstance, NULL);
 			CExtendWnd* pExtendWnd = new CExtendWnd();
+			pExtendWnd->m_pHostPage = this;
 			pExtendWnd->SubclassWindow(m_hChildWnd);
 			::SetWindowLongPtr(m_hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_hChildWnd);
 			::SetWindowLongPtr(m_hChildWnd, GWLP_USERDATA, (LONG_PTR)this);

@@ -35,6 +35,7 @@ namespace Browser
 		BEGIN_MSG_MAP(CExtendWnd)
 			MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
 		END_MSG_MAP()
+		CWebPage* m_pHostPage = nullptr;
 
 	private:
 		void OnFinalMessage(HWND hWnd);
