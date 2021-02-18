@@ -99,7 +99,7 @@ namespace Browser {
 			if (::GetParent(m_hWnd))
 			{
 				HWND hActive = m_pBrowser->GetActiveWebContentWnd();
-				for (auto &it : m_mapChildPage)
+				for (auto& it : m_mapChildPage)
 				{
 					if (::IsWindow(it.first))
 					{
@@ -589,7 +589,7 @@ namespace Browser {
 			RECT rc;
 			::GetClientRect(hPWnd, &rc);
 			lpwndpos->x = -12;
-			lpwndpos->y = -6 - m_heightfix;
+			lpwndpos->y = -6;/// -m_heightfix;
 			lpwndpos->cx = rc.right + 24;
 			lpwndpos->cy = rc.bottom + 18 + 3 + m_heightfix;
 			lpwndpos->flags |= SWP_NOREDRAW | SWP_NOACTIVATE;

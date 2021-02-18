@@ -1875,7 +1875,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							g_pCosmos->m_hFirstView = hClient;
 						else
 						{
-							if (pCosmosFrameWndInfo->bControlBarProessed == false)
+							if (pCosmosFrameWndInfo->bControlBarProessed == false && pCosmosFrameWndInfo->m_nFrameType != 2)
 							{
 								CString strKey = g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID;
 								g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID = _T("");
@@ -1934,13 +1934,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 											g_pCosmos->m_bSZMode = true;
 
-											if (g_pCosmos->m_pHostBrowser == nullptr)
-											{
-												HWND hBrowser = ::GetParent(g_pCosmos->m_pHostHtmlWnd->m_hWnd);
-												auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-												if (it != g_pCosmos->m_mapBrowserWnd.end())
-													g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
-											}
 											g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
 											if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 												g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;

@@ -589,7 +589,7 @@ namespace Browser {
 			RECT rc;
 			::GetClientRect(hPWnd, &rc);
 			lpwndpos->x = -12;
-			lpwndpos->y = -6 - m_heightfix;
+			lpwndpos->y = -6;/// -m_heightfix;
 			lpwndpos->cx = rc.right + 24;
 			lpwndpos->cy = rc.bottom + 18 + 3 + m_heightfix;
 			lpwndpos->flags |= SWP_NOREDRAW | SWP_NOACTIVATE;

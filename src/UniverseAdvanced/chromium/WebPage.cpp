@@ -909,6 +909,14 @@ namespace Browser {
 			if (g_pCosmos->m_pHostHtmlWnd == nullptr && g_pCosmos->m_strAppXml != _T(""))
 			{
 				g_pCosmos->m_pHostHtmlWnd = this;
+				if (g_pCosmos->m_pHostBrowser == nullptr)
+				{
+					HWND hBrowser = ::GetParent(g_pCosmos->m_pHostHtmlWnd->m_hWnd);
+					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+					if (it != g_pCosmos->m_mapBrowserWnd.end())
+						g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
+				}
+
 				g_pCosmos->TangramInitFromeWeb();
 				CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
 				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20200214, 0);
@@ -1221,6 +1229,11 @@ namespace Browser {
 						pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
 					}
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
+					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
+					if (pParse)
+					{
+						this->LoadDocument2Viewport(_T("client"), pParse->xml());
+					}
 					CTangramXmlParse* pParseClient = nullptr;
 					if (pCosmosFrameWndInfo->m_nFrameType == 2)
 						pParseClient = xmlParse.GetChild(_T("mdiclient"));
@@ -1244,15 +1257,17 @@ namespace Browser {
 								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 								pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = _pGalaxy;
 								_pGalaxy->m_pWebPageWnd = this;
-								IXobj* pXobj = nullptr;
-								_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
+								if (g_pCosmos->m_pMDIMainWnd)
+								{
+									g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = (CGalaxyCluster*)pCluster;
+									g_pCosmos->m_pMDIMainWnd->m_pGalaxy = _pGalaxy;
+									_pGalaxy->m_strCurrentXml = strXml;
+									::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210218);
+								}
+								//IXobj* pXobj = nullptr;
+								//_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 							}
 						}
-					}
-					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
-					if (pParse)
-					{
-						this->LoadDocument2Viewport(_T("client"), pParse->xml());
 					}
 					pParse = xmlParse.GetChild(_T("controlbars"));
 					if (pParse)
