@@ -55,9 +55,7 @@ namespace Browser {
 
 		map<HWND, CWebPage*> m_mapChildPage;
 
-		STDMETHOD(get_RemoteXobj)(IXobj** pVal);
-		STDMETHOD(put_RemoteXobj)(IXobj* newVal);
-		STDMETHOD(AddURLs)(BSTR bstrURLs);
+		LRESULT	BrowserLayout();
 		STDMETHOD(OpenURL)(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml);
 		BEGIN_MSG_MAP(CBrowser)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -82,6 +80,9 @@ namespace Browser {
 	private:
 		void UpdateContentRect(HWND hContentWnd, RECT& rc, int nTopFix) override;
 		void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
+		STDMETHOD(get_RemoteXobj)(IXobj** pVal);
+		STDMETHOD(put_RemoteXobj)(IXobj* newVal);
+		STDMETHOD(AddURLs)(BSTR bstrURLs);
 
 		void OnFinalMessage(HWND hWnd) override;
 		LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
