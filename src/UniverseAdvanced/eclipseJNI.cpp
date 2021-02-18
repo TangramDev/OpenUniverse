@@ -10,7 +10,7 @@
  * 	   Andrew Niefer
  *******************************************************************************/
  /********************************************************************************
-  *           Web Runtime for Application - Version 1.0.0.202102170032           *
+  *           Web Runtime for Application - Version 1.0.0.202102180033           *
   ********************************************************************************
   * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
   * There are Three Key Features of Webruntime:

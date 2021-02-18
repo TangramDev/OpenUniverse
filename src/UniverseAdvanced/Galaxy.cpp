@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102170032
+ *           Web Runtime for Application - Version 1.0.0.202102180033
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -777,10 +777,6 @@ LRESULT CMDIChildWindow::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lP
 
 LRESULT CMDIChildWindow::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	//if (lParam == 19631222 && wParam == 0)
-	//{
-	//	return (LRESULT)this;
-	//}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (wParam)
 	{
@@ -921,6 +917,7 @@ CMDIWindow::CMDIWindow(void)
 
 CMDIWindow::~CMDIWindow(void)
 {
+	OutputDebugString(_T("------------------Release CMDIWindow------------------------\n"));
 }
 
 void CMDIWindow::OnFinalMessage(HWND hWnd)
@@ -1006,6 +1003,7 @@ LRESULT CMDIWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(_T("client"), _T(""));
 		}
 		g_pCosmos->m_bSZMode = false;
+		g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
 	}
 	break;

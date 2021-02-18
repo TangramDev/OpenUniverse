@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102170032           *
+ *           Web Runtime for Application - Version 1.0.0.202102180033           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2062,28 +2062,22 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										}
 										if (bMdiChild)
 										{
-											CMDIChildWindow* pWnd = (CMDIChildWindow*)::SendMessage(hWnd, WM_COSMOSMSG, 0, 19631222);
-											if (pWnd == nullptr)
-											{
-												pWnd = new CMDIChildWindow();
-												g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild = nullptr;
-												pWnd->SubclassWindow(hWnd);
-												g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
-												g_pCosmos->m_bSZMode = true;
+											CMDIChildWindow* pWnd = new CMDIChildWindow();
+											pWnd->SubclassWindow(hWnd);
+											g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
+											g_pCosmos->m_bSZMode = true;
 
-												HWND hActive = g_pCosmos->m_pHostHtmlWnd->m_hWnd;
-												if (g_pCosmos->m_pHostBrowser == nullptr)
-												{
-													HWND hBrowser = ::GetParent(hActive);
-													auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-													if (it != g_pCosmos->m_mapBrowserWnd.end())
-														g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
-												}
-												g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
-												if(g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
-													g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
-												::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
+											if (g_pCosmos->m_pHostBrowser == nullptr)
+											{
+												HWND hBrowser = ::GetParent(g_pCosmos->m_pHostHtmlWnd->m_hWnd);
+												auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+												if (it != g_pCosmos->m_mapBrowserWnd.end())
+													g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
 											}
+											g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+											if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+												g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
+											::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 											if (pWnd->m_pGalaxy == nullptr)
 												pWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
 											pWnd->m_hClient = hClient;
