@@ -1101,7 +1101,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
 				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
 				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
-				m_pWebBrowser->m_heightfix = (hPWnd == g_pCosmos->m_hHostBrowserWnd) ? 12 : 0;
 			}
 		}
 	}

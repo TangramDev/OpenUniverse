@@ -39,23 +39,21 @@ namespace Browser {
 		CBrowser();
 		~CBrowser() override;
 
-		bool		m_bDestroy = false;
-		bool		m_bTabChange;
-		int			m_heightfix;
-		float		m_fdevice_scale_factor;
-		HWND		m_hDrawWnd;
-		HWND		m_hOldTab;
-		CString		m_strCurKey;
-		CXobj*		m_pParentXobj;
-		CWebPage*	m_pVisibleWebWnd;
-		IXobj*		m_pRemoteXobj;
-		CGalaxy*	m_pClientGalaxy = nullptr;
+		bool				m_bDestroy = false;
+		bool				m_bTabChange;
+		float				m_fdevice_scale_factor;
+		HWND				m_hDrawWnd;
+		HWND				m_hOldTab;
+		CString				m_strCurKey;
+		CXobj*				m_pParentXobj;
+		CWebPage*			m_pVisibleWebWnd;
+		IXobj*				m_pRemoteXobj;
+		CGalaxy*			m_pClientGalaxy = nullptr;
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
-		LRESULT		BrowserLayout();
 
 		map<HWND, CWebPage*> m_mapChildPage;
-		map<HWND, CWebPage*> m_mapNorifyPage;
 
+		LRESULT	BrowserLayout();
 		STDMETHOD(get_RemoteXobj)(IXobj** pVal);
 		STDMETHOD(put_RemoteXobj)(IXobj* newVal);
 		STDMETHOD(AddURLs)(BSTR bstrURLs);

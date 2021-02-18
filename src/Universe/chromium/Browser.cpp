@@ -76,7 +76,6 @@
 namespace Browser {
 	CBrowser::CBrowser() {
 		m_hDrawWnd = 0;
-		m_heightfix = 0;
 		m_hOldTab = NULL;
 		m_bTabChange = false;
 		m_pBrowser = nullptr;
@@ -395,7 +394,6 @@ namespace Browser {
 		{
 			auto t = create_task([this]()
 				{
-					m_heightfix = 0;
 					SleepEx(500, true);
 					try
 					{
@@ -521,9 +519,9 @@ namespace Browser {
 			RECT rc;
 			::GetClientRect(hPWnd, &rc);
 			lpwndpos->x = -12;
-			lpwndpos->y = -6 - m_heightfix;
+			lpwndpos->y = -6;
 			lpwndpos->cx = rc.right + 24;
-			lpwndpos->cy = rc.bottom + 18 + m_heightfix;
+			lpwndpos->cy = rc.bottom + 18;
 		}
 		else if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 			::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);

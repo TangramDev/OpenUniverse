@@ -43,7 +43,6 @@ namespace Browser {
 		bool				m_bTabChange;
 		bool				m_bSZMode = false;
 
-		int					m_heightfix;
 		float				m_fdevice_scale_factor;
 		HWND				m_hDrawWnd;
 		HWND				m_hOldTab;
@@ -54,11 +53,9 @@ namespace Browser {
 		CGalaxy*			m_pClientGalaxy = nullptr;
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
 
-		LRESULT		BrowserLayout();
-
-		map<HWND, CWebPage*> m_mapNorifyPage;
 		map<HWND, CWebPage*> m_mapChildPage;
 
+		LRESULT	BrowserLayout();
 		STDMETHOD(get_RemoteXobj)(IXobj** pVal);
 		STDMETHOD(put_RemoteXobj)(IXobj* newVal);
 		STDMETHOD(AddURLs)(BSTR bstrURLs);

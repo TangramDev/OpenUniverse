@@ -32,7 +32,6 @@
 namespace Browser {
 	CBrowser::CBrowser() {
 		m_hDrawWnd = 0;
-		m_heightfix = 0;
 		m_hOldTab = NULL;
 		m_bTabChange = false;
 		m_pRemoteXobj = nullptr;
@@ -394,7 +393,6 @@ namespace Browser {
 					{
 						if (m_pVisibleWebWnd)
 						{
-							m_heightfix = 0;
 							::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 							BrowserLayout();
 						}
@@ -517,9 +515,9 @@ namespace Browser {
 			RECT rc;
 			::GetClientRect(hPWnd, &rc);
 			lpwndpos->x = -12;
-			lpwndpos->y = -6 - m_heightfix;
+			lpwndpos->y = -6;
 			lpwndpos->cx = rc.right + 24;
-			lpwndpos->cy = rc.bottom + 18 + 3 + m_heightfix;
+			lpwndpos->cy = rc.bottom + 18;
 			lpwndpos->flags |= SWP_NOREDRAW | SWP_NOACTIVATE;
 		}
 		else if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
