@@ -195,7 +195,6 @@ public:
 	CWebPage*								m_pActiveHtmlWnd;
 	CBrowser*								m_pHostBrowser = nullptr;
 
-	CGalaxy*								m_pDocTemplateFrame;
 	CMDIWindow*								m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
 
@@ -215,7 +214,6 @@ public:
 	CTangramHtmlTreeWnd*					m_pDocDOMTree;
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
-	vector<HWND>							m_vHtmlWnd;
 	map<CString, long>						m_mapIPCMsgIndexDic;
 	map<HWND, CGalaxy*>						m_mapBKFrame;
 
@@ -301,7 +299,6 @@ public:
 	STDMETHOD(InitCLRApp)(BSTR strInitXml, LONGLONG* llHandle);
 	STDMETHOD(CreateBrowser)(ULONGLONG hParentWnd, BSTR strUrls, IBrowser** ppRet);
 	STDMETHOD(CosmosNotify)(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
-	STDMETHOD(SelectVSObj)(BSTR strData, IDispatch* pVSObj, LONGLONG nHandle);
 
 	void Init();
 	void Lock() {}

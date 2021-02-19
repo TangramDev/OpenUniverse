@@ -415,7 +415,7 @@ interface ICosmos : IDispatch {
 	[id(0x0010c)] HRESULT UpdateXobj(IXobj* pXobj);
 	[id(0x0010d), helpstring("method NewGUID")] HRESULT NewGUID([out, retval] BSTR* retVal);
 	[id(0x0010e)] HRESULT InitEclipseApp();
-	[id(0x0010f)] HRESULT SelectVSObj(BSTR bstrData, IDispatch* pVSObj, LONGLONG nHandle);
+	[id(0x0010f), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
 	[id(0x00110)] HRESULT DownLoadFile(BSTR strFileURL, BSTR bstrTargetFile, BSTR bstrActionXml);
 	[id(0x00111)] HRESULT GetCtrlByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
 	[id(0x00112)] HRESULT GetXobjFromHandle(LONGLONG hWnd, [out, retval] IXobj** ppRetXobj);
@@ -433,7 +433,6 @@ interface ICosmos : IDispatch {
 	[id(0x0011e)] HRESULT DeletePage(LONGLONG PageHandle);
 	[id(0x0011f)] HRESULT LoadDocComponent(BSTR bstrLib, [out, retval] LONGLONG* llAppProxy);
 	[id(0x00120)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
-	[id(0x00121), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
 
 	[id(0x001000), helpstring("method CosmosCommand")] HRESULT CosmosCommand(IDispatch* RibbonControl);
 	[id(0x001001), helpstring("method CosmosGetImage")] HRESULT CosmosGetImage(BSTR strValue, [out, retval] IPictureDisp** ppdispImage);

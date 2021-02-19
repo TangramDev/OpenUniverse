@@ -1068,12 +1068,6 @@ namespace Browser {
 		else
 		{
 			g_pCosmos->m_pCosmosDelegate->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
-			HWND hPPWnd = ::GetParent(::GetParent(m_hWnd));
-			if (m_pRemoteCosmos)
-			{
-				m_pRemoteCosmos->CosmosNotify(CComBSTR(_T("vsevent:") + strRuleName), CComBSTR(strHTML), (__int64)hPPWnd, (__int64)m_hWnd);
-				g_pCosmos->m_vHtmlWnd.push_back(m_hWnd);
-			}
 		}
 	}
 

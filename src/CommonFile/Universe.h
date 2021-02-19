@@ -2724,10 +2724,11 @@ EXTERN_C const IID IID_ICosmos;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEclipseApp( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SelectVSObj( 
-            BSTR bstrData,
-            IDispatch *pVSObj,
-            LONGLONG nHandle) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateOutLookObj( 
+            BSTR bstrObjType,
+            int nType,
+            BSTR bstrURL,
+            /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE DownLoadFile( 
             BSTR strFileURL,
@@ -2808,12 +2809,6 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
             BSTR strInitXml,
             /* [retval][out] */ LONGLONG *llHandle) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateOutLookObj( 
-            BSTR bstrObjType,
-            int nType,
-            BSTR bstrURL,
-            /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
@@ -3043,11 +3038,12 @@ EXTERN_C const IID IID_ICosmos;
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
             ICosmos * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SelectVSObj )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateOutLookObj )( 
             ICosmos * This,
-            BSTR bstrData,
-            IDispatch *pVSObj,
-            LONGLONG nHandle);
+            BSTR bstrObjType,
+            int nType,
+            BSTR bstrURL,
+            /* [retval][out] */ IDispatch **ppRetDisp);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownLoadFile )( 
             ICosmos * This,
@@ -3145,13 +3141,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             BSTR strInitXml,
             /* [retval][out] */ LONGLONG *llHandle);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateOutLookObj )( 
-            ICosmos * This,
-            BSTR bstrObjType,
-            int nType,
-            BSTR bstrURL,
-            /* [retval][out] */ IDispatch **ppRetDisp);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
             ICosmos * This,
@@ -3314,8 +3303,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_InitEclipseApp(This)	\
     ( (This)->lpVtbl -> InitEclipseApp(This) ) 
 
-#define ICosmos_SelectVSObj(This,bstrData,pVSObj,nHandle)	\
-    ( (This)->lpVtbl -> SelectVSObj(This,bstrData,pVSObj,nHandle) ) 
+#define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
+    ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
 #define ICosmos_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
     ( (This)->lpVtbl -> DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml) ) 
@@ -3367,9 +3356,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_InitCLRApp(This,strInitXml,llHandle)	\
     ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
-
-#define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
-    ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
 #define ICosmos_CosmosCommand(This,RibbonControl)	\
     ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 

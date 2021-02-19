@@ -1274,11 +1274,6 @@ STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 	return S_OK;
 }
 
-HRESULT CCosmos::SelectVSObj(BSTR strData, IDispatch* pVSObj, LONGLONG nHandle)
-{
-	return S_OK;
-}
-
 HRESULT CCosmos::CosmosNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam)
 {
 	return S_OK;

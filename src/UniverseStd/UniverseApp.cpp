@@ -829,28 +829,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		{
 			switch (lParam)
 			{
-			case 20200718:
-			{
-				RemoteDebugInfo* pRemoteDebugInfo = (RemoteDebugInfo*)wParam;
-				int nHandle = pRemoteDebugInfo->nHandle;
-				auto it = g_pCosmos->m_mapRemoteTangramApp.find(nHandle);
-				if (it != g_pCosmos->m_mapRemoteTangramApp.end())
-				{
-					it->second->SelectVSObj(CComBSTR(pRemoteDebugInfo->m_strKey), nullptr, nHandle);
-				}
-				delete pRemoteDebugInfo;
-			}
-			break;
-			case 20200625:
-			{
-				RemoteDebugInfo* pRemoteDebugInfo = (RemoteDebugInfo*)wParam;
-				if (g_pCosmos->m_pCLRProxy)
-				{
-					g_pCosmos->m_pCLRProxy->CosmosAction(CComBSTR(pRemoteDebugInfo->m_strKey), nullptr);
-					delete pRemoteDebugInfo;
-				}
-			}
-			break;
 			case 19631963:
 			{
 				DocTemplateInfo* pDocTemplateInfo = (DocTemplateInfo*)wParam;

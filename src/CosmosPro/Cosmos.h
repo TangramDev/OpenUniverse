@@ -1108,27 +1108,6 @@ namespace Universe
 
 		static void BindToCtrl(Control^ source, Control^ target, String^ strXmlData);
 		static void BindToCtrl(String^ ctrlID, String^ AssemblyQualifiedName, Control^ target, int nAnchor, String^ strXmlData);
-#ifndef _WIN64
-		static property Dictionary<String^, String^>^ WizDic
-		{
-			Dictionary<String^, String^>^ get()
-			{
-				return replacementsDictionary;
-			};
-			void set(Dictionary<String^, String^>^ Dic)
-			{
-				replacementsDictionary = Dic;
-			};
-		}
-
-		static void SelectObject(String^ strData, Object^ ObjSelected, IntPtr nHandle);
-		static void SolutionEvent(String^ strSolutionName, String^ PrjName, String^ PrjType, IntPtr eventID);
-
-		static Galaxy^ CreateVSToolWnd(String^ strXm);
-		static IntPtr GetChild(IntPtr nHandle);
-		static void ShowVSToolBox(IntPtr nHandle);
-		static bool ReplaceHTML(Object^ doc, String^ originHTML, String^ newHTML);
-#endif
 		delegate void CosmosActionDelegate(Xobj^ SourceObj, String^ strInfo);
 		static event CosmosActionDelegate^ OnCosmosActionDelegate;
 		static void Fire_OnCosmosActionDelegate(Xobj^ SourceObj, String^ strInfo)
