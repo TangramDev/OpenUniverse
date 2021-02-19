@@ -1476,7 +1476,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 	LPMSG lpMsg = (LPMSG)lParam;
 	DWORD dwID = ::GetCurrentThreadId();
 	CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
-	if (lpMsg->message == WM_TIMER)//|| (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_bDestroy))
+	if (lpMsg->message == WM_TIMER)
 		return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 	if (nCode >= 0)
 	{
