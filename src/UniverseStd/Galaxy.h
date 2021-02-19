@@ -129,14 +129,14 @@ protected:
 	virtual void PostNcDestroy();
 };
 
-class CMDTWindow :
-	public CWindowImpl<CMDTWindow, CWindow>
+class CMDTWnd :
+	public CWindowImpl<CMDTWnd, CWindow>
 {
 public:
-	CMDTWindow(void);
-	virtual ~CMDTWindow(void);
+	CMDTWnd(void);
+	virtual ~CMDTWnd(void);
 	CString m_strDocTemplateKey = _T("");
-	BEGIN_MSG_MAP(CMDTWindow)
+	BEGIN_MSG_MAP(CMDTWnd)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)

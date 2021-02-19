@@ -77,7 +77,7 @@
 using namespace Browser;
 using namespace CommonUniverse;
 class CWinForm;
-class CMDTWindow;
+class CMDTWnd;
 
 struct CommonThreadInfo
 {
@@ -184,7 +184,6 @@ public:
 	TCHAR									m_szBuffer[MAX_PATH];
 
 	LPCTSTR									m_lpszSplitterClass;
-	CImageList								m_DocImageList;
 	CImageList								m_DocTemplateImageList;
 
 	//.NET Version 4: 
@@ -194,7 +193,7 @@ public:
 	CWebPage*								m_pHtmlWndCreated;
 	CWebPage*								m_pActiveHtmlWnd;
 
-	CMDIWindow*								m_pMDIMainWnd;
+	CMDIParent*								m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
 	CBrowser*								m_pHostBrowser = nullptr;
 
@@ -227,7 +226,7 @@ public:
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
-	map<HWND, CMDTWindow*>					m_mapMDTWindow;
+	map<HWND, CMDTWnd*>					m_mapMDTWindow;
 	map<CString, CString>					m_mapDocTemplate;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	BEGIN_COM_MAP(CCosmos)

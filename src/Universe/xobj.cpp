@@ -21,7 +21,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// Grid.cpp : Implementation of CXobj
+ // Grid.cpp : Implementation of CXobj
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -230,7 +230,7 @@ CXobj::~CXobj()
 		g_pCosmos->m_pActiveXobj = nullptr;
 	if (m_pXobjShareData->m_pOldGalaxy)
 		m_pXobjShareData->m_pGalaxy = m_pXobjShareData->m_pOldGalaxy;
-	CGalaxy * pGalaxy = m_pXobjShareData->m_pGalaxy;
+	CGalaxy* pGalaxy = m_pXobjShareData->m_pGalaxy;
 	if (pGalaxy->m_pGalaxyCluster)
 	{
 		auto it = pGalaxy->m_pGalaxyCluster->m_mapXobj.find(m_strNodeName);
@@ -366,7 +366,7 @@ CWebPage* CXobj::GetHtmlWnd()
 	return nullptr;
 }
 
-BOOL CXobj::PreTranslateMessage(MSG * pMsg)
+BOOL CXobj::PreTranslateMessage(MSG* pMsg)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	if (m_pHostWnd && pMsg->message != WM_MOUSEMOVE)
@@ -399,7 +399,7 @@ STDMETHODIMP CXobj::LoadXML(int nType, BSTR bstrXML)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::ActiveTabPage(IXobj * _pXobj)
+STDMETHODIMP CXobj::ActiveTabPage(IXobj* _pXobj)
 {
 	g_pCosmos->m_pActiveXobj = this;
 	HWND hWnd = m_pHostWnd->m_hWnd;
@@ -411,7 +411,7 @@ STDMETHODIMP CXobj::ActiveTabPage(IXobj * _pXobj)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj * *ppRetXobj)
+STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
 	switch (m_nViewType)
 	{
@@ -422,7 +422,7 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj * *ppRetXobj)
 		{
 			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
 			{
-				HRESULT hr =  m_pParentObj->ObserveEx(m_nRow, m_nCol, bstrKey, bstrXml, ppRetXobj);
+				HRESULT hr = m_pParentObj->ObserveEx(m_nRow, m_nCol, bstrKey, bstrXml, ppRetXobj);
 				return hr;
 			}
 		}
@@ -498,7 +498,7 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj * *ppRetXobj)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IXobj * *ppRetXobj)
+STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
 	if (m_pXobjShareData->m_pGalaxyCluster && m_nViewType == Grid)
 	{
@@ -506,7 +506,7 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 		GetXobj(nRow, nCol, &pXobj);
 		if (pXobj == nullptr)
 			return S_OK;
-		CXobj * pWndXobj = (CXobj*)pXobj;
+		CXobj* pWndXobj = (CXobj*)pXobj;
 		if (pWndXobj->m_pHostGalaxy == nullptr)
 		{
 			CString strName = pWndXobj->m_strNodeName;
@@ -551,7 +551,7 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				}
 				return S_OK;
 			}
-			CXobj* pRootXobj = (CXobj*)* ppRetXobj;
+			CXobj* pRootXobj = (CXobj*)*ppRetXobj;
 			CString strKey = OLE2T(bstrKey);
 			strKey.MakeLower();
 			m_mapExtendNode[pWndXobj] = strKey;
@@ -568,7 +568,7 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 			}
 			HWND h = ::GetParent(m_pHostWnd->m_hWnd);
-			if (m_nViewType==Grid)
+			if (m_nViewType == Grid)
 			{
 				CGalaxy* pGalaxy = m_pXobjShareData->m_pGalaxy;
 				pGalaxy->HostPosChanged();
@@ -579,7 +579,7 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Tag(VARIANT * pVar)
+STDMETHODIMP CXobj::get_Tag(VARIANT* pVar)
 {
 	*pVar = m_varTag;
 
@@ -594,7 +594,7 @@ STDMETHODIMP CXobj::put_Tag(VARIANT var)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_XObject(VARIANT * pVar)
+STDMETHODIMP CXobj::get_XObject(VARIANT* pVar)
 {
 	pVar->vt = VT_EMPTY;
 	if (m_pDisp)
@@ -606,12 +606,12 @@ STDMETHODIMP CXobj::get_XObject(VARIANT * pVar)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_AxPlugIn(BSTR bstrPlugInName, IDispatch * *pVal)
+STDMETHODIMP CXobj::get_AxPlugIn(BSTR bstrPlugInName, IDispatch** pVal)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Name(BSTR * pVal)
+STDMETHODIMP CXobj::get_Name(BSTR* pVal)
 {
 	*pVal = m_strName.AllocSysString();
 	return S_OK;
@@ -643,7 +643,7 @@ STDMETHODIMP CXobj::put_Name(BSTR bstrNewName)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Attribute(BSTR bstrKey, BSTR * pVal)
+STDMETHODIMP CXobj::get_Attribute(BSTR bstrKey, BSTR* pVal)
 {
 	if (m_pHostParse != nullptr)
 	{
@@ -733,7 +733,7 @@ STDMETHODIMP CXobj::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Caption(BSTR * pVal)
+STDMETHODIMP CXobj::get_Caption(BSTR* pVal)
 {
 	*pVal = m_strCaption.AllocSysString();
 	return S_OK;
@@ -757,32 +757,32 @@ STDMETHODIMP CXobj::put_Caption(BSTR bstrCaption)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Handle(LONGLONG * pVal)
+STDMETHODIMP CXobj::get_Handle(LONGLONG* pVal)
 {
 	if (m_pHostWnd)
-		* pVal = (LONGLONG)m_pHostWnd->m_hWnd;
+		*pVal = (LONGLONG)m_pHostWnd->m_hWnd;
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_OuterXml(BSTR * pVal)
+STDMETHODIMP CXobj::get_OuterXml(BSTR* pVal)
 {
 	*pVal = m_pXobjShareData->m_pCosmosParse->xml().AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Key(BSTR * pVal)
+STDMETHODIMP CXobj::get_Key(BSTR* pVal)
 {
 	*pVal = m_pRootObj->m_strKey.AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_XML(BSTR * pVal)
+STDMETHODIMP CXobj::get_XML(BSTR* pVal)
 {
 	*pVal = m_pHostParse->xml().AllocSysString();
 	return S_OK;
 }
 
-BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID, CCreateContext * pContext)
+BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
 	BOOL bRet = false;
 
@@ -793,7 +793,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		m_strObjTypeID = _T("tabbedwnd");
 	CXobjHelper* pCosmosDesignView = (CXobjHelper*)m_pHostWnd;
 	BOOL isAppWnd = false;
-	if ( m_strID == _T("clrctrl"))
+	if (m_strID == _T("clrctrl"))
 	{
 		g_pCosmos->LoadCLR();
 		m_nViewType = CLRCtrl;
@@ -835,7 +835,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				}
 			}
 
-			if (m_nViewType!=CLRCtrl&&::IsWindow(hWnd) == false&&m_strObjTypeID != _T(""))
+			if (m_nViewType != CLRCtrl && ::IsWindow(hWnd) == false && m_strObjTypeID != _T(""))
 			{
 				ICosmosWindowProvider* pViewFactoryDisp = nullptr;
 				auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
@@ -871,7 +871,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 										strLib = g_pCosmos->m_strAppPath + _T("wincomponent\\") + m_Parse.attr(_T("lib"), _T(""));
 									}
 								}
-								if (::PathFileExists(strLib)&&::LoadLibrary(strLib))
+								if (::PathFileExists(strLib) && ::LoadLibrary(strLib))
 								{
 									auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
 									if (it != g_pCosmos->m_mapWindowProvider.end())
@@ -888,7 +888,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				{
 					hWnd = pViewFactoryDisp->Create(pParentWnd ? pParentWnd->m_hWnd : 0, this);
 					m_nID = ::GetWindowLong(hWnd, GWL_ID);
-					//::PostMessage(hWnd, WM_XOBJCREATED, (WPARAM)((IXobj*)this), 10000);
 				}
 			}
 		}
@@ -897,7 +896,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	if (!::IsWindow(m_pHostWnd->m_hWnd) && hWnd && pCosmosDesignView->SubclassWindow(hWnd))
 	{
 		if (isAppWnd == false)
-			::SetWindowLong(hWnd, GWL_STYLE, dwStyle | WS_CHILD | /*WS_VISIBLE | */WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+			::SetWindowLong(hWnd, GWL_STYLE, dwStyle | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
 		else
 		{
 			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
@@ -906,7 +905,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		::SetWindowLong(hWnd, GWL_ID, nID);
 
 		pCosmosDesignView->m_bCreateExternal = true;
-		if(m_nViewType==BlankView)
+		if (m_nViewType == BlankView)
 			m_nViewType = TabGrid;
 		bRet = true;
 	}
@@ -923,7 +922,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			::SetWindowLongPtr(hWnd, GWLP_ID, nID);
 			::SetParent(hWnd, pParentWnd->m_hWnd);
 			::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD | WS_VISIBLE);
-			//::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hPWnd, GWL_STYLE)& WS_CHILD);
 			g_pCosmos->m_hTempBrowserWnd = NULL;
 			if (::IsWindow(m_pHostWnd->m_hWnd) == false)
 				bRet = m_pHostWnd->SubclassWindow(hWnd);
@@ -938,9 +936,8 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 		}
 		if (::IsWindow(hPWnd) && (::GetWindowLongPtr(hPWnd, GWL_STYLE) & WS_CHILD)) {
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())// && hPWnd == g_pCosmos->m_hHostBrowserWnd)
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				//::SetWindowPos(hPWnd, HWND_BOTTOM, 0, -10, 10, 10, /*|SWP_SHOWWINDOW|SWP_NOSENDCHANGING*/SWP_NOREDRAW | SWP_NOACTIVATE);
 				m_pWebBrowser = (CBrowser*)it->second;
 				::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, hPWnd);
 				::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
@@ -964,10 +961,10 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	if (m_nViewType == BlankView && m_pHostParse != nullptr)
 	{
 		CString _strURL = m_pHostParse->attr(_T("url"), _T(""));
-		HWND hPWnd = g_pCosmos->m_hHostBrowserWnd; 
+		HWND hPWnd = g_pCosmos->m_hHostBrowserWnd;
 
-		if(_strURL ==_T("host"))
-		{ 
+		if (_strURL == _T("host"))
+		{
 			::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
 		}
 		else
@@ -1031,8 +1028,8 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 			m_nViewType = TabGrid;
 			if (m_nActivePage<0 || m_nActivePage>nCol - 1)
 				m_nActivePage = 0;
-			CWnd * pView = nullptr;
-			CXobj * pObj = nullptr;
+			CWnd* pView = nullptr;
+			CXobj* pObj = nullptr;
 			int j = 0;
 			for (int i = 0; i < nCol; i++)
 			{
@@ -1128,7 +1125,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	case CLRCtrl:
 	{
 		g_pCosmos->m_pActiveXobj = this;
-		
+
 		if (g_pCosmos->m_pCLRProxy)
 		{
 			if (pHtmlWnd)
@@ -1139,7 +1136,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 			if (g_pCosmos->m_hFormNodeWnd)
 			{
 				LRESULT l = ::SendMessage((HWND)g_pCosmos->m_hFormNodeWnd, WM_HUBBLE_DATA, 0, 20190214);
-				if (l&& pHtmlWnd)
+				if (l && pHtmlWnd)
 				{
 					auto it = pHtmlWnd->m_mapWinForm.find(g_pCosmos->m_hFormNodeWnd);
 					if (it == pHtmlWnd->m_mapWinForm.end())
@@ -1191,7 +1188,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	return 0;
 }
 
-STDMETHODIMP CXobj::get_ChildNodes(IXobjCollection * *pXobjColletion)
+STDMETHODIMP CXobj::get_ChildNodes(IXobjCollection** pXobjColletion)
 {
 	if (m_pChildNodeCollection == nullptr)
 	{
@@ -1202,7 +1199,7 @@ STDMETHODIMP CXobj::get_ChildNodes(IXobjCollection * *pXobjColletion)
 	return m_pChildNodeCollection->QueryInterface(IID_IXobjCollection, (void**)pXobjColletion);
 }
 
-int CXobj::_getNodes(CXobj * pXobj, CString & strName, CXobj * *ppRetXobj, CXobjCollection * pXobjs)
+int CXobj::_getNodes(CXobj* pXobj, CString& strName, CXobj** ppRetXobj, CXobjCollection* pXobjs)
 {
 	int iCount = 0;
 	if (pXobj->m_strName.CompareNoCase(strName) == 0)
@@ -1211,7 +1208,7 @@ int CXobj::_getNodes(CXobj * pXobj, CString & strName, CXobj * *ppRetXobj, CXobj
 			pXobjs->m_pXobjs->push_back(pXobj);
 
 		if (ppRetXobj != nullptr && (*ppRetXobj) == nullptr)
-			* ppRetXobj = pXobj;
+			*ppRetXobj = pXobj;
 		return 1;
 	}
 
@@ -1237,18 +1234,18 @@ STDMETHODIMP CXobj::Show()
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_RootXobj(IXobj * *ppXobj)
+STDMETHODIMP CXobj::get_RootXobj(IXobj** ppXobj)
 {
 	if (m_pRootObj != nullptr)
-		* ppXobj = m_pRootObj;
+		*ppXobj = m_pRootObj;
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_ParentXobj(IXobj * *ppXobj)
+STDMETHODIMP CXobj::get_ParentXobj(IXobj** ppXobj)
 {
 	*ppXobj = nullptr;
 	if (m_pParentObj != nullptr)
-		* ppXobj = m_pParentObj;
+		*ppXobj = m_pParentObj;
 
 	return S_OK;
 }
@@ -1274,7 +1271,7 @@ STDMETHODIMP CXobj::get_XobjType(XobjType* nType)
 //	}
 //}
 
-STDMETHODIMP CXobj::get_Objects(long nType, IXobjCollection * *ppXobjColletion)
+STDMETHODIMP CXobj::get_Objects(long nType, IXobjCollection** ppXobjColletion)
 {
 	//CComObject<CXobjCollection>* pXobjs = nullptr;
 	//CComObject<CXobjCollection>::CreateInstance(&pXobjs);
@@ -1318,7 +1315,7 @@ STDMETHODIMP CXobj::get_Col(long* nCol)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::GetXobj(long nRow, long nCol, IXobj * *ppXobj)
+STDMETHODIMP CXobj::GetXobj(long nRow, long nCol, IXobj** ppXobj)
 {
 	CXobj* pRet = nullptr;
 
@@ -1355,7 +1352,7 @@ STDMETHODIMP CXobj::GetXobj(long nRow, long nCol, IXobj * *ppXobj)
 	return hr;
 }
 
-STDMETHODIMP CXobj::GetXobjByName(BSTR bstrName, IXobjCollection * *ppXobjs)
+STDMETHODIMP CXobj::GetXobjByName(BSTR bstrName, IXobjCollection** ppXobjs)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -1382,7 +1379,7 @@ STDMETHODIMP CXobj::GetXobjByName(BSTR bstrName, IXobjCollection * *ppXobjs)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::GetXobjs(BSTR bstrName, IXobj * *ppXobj, IXobjCollection * *ppXobjs, long* pCount)
+STDMETHODIMP CXobj::GetXobjs(BSTR bstrName, IXobj** ppXobj, IXobjCollection** ppXobjs, long* pCount)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -1391,9 +1388,9 @@ STDMETHODIMP CXobj::GetXobjs(BSTR bstrName, IXobj * *ppXobj, IXobjCollection * *
 	CXobj* pRetNode = nullptr;
 
 	if (ppXobj != nullptr)
-		* ppXobj = nullptr;
+		*ppXobj = nullptr;
 
-	CComObject<CXobjCollection> * pXobjs = nullptr;
+	CComObject<CXobjCollection>* pXobjs = nullptr;
 	if (ppXobjs != nullptr)
 	{
 		*ppXobjs = nullptr;
@@ -1417,7 +1414,7 @@ STDMETHODIMP CXobj::GetXobjs(BSTR bstrName, IXobj * *ppXobj, IXobjCollection * *
 	return S_OK;
 }
 
-BOOL CXobj::AddChildNode(CXobj * pXobj)
+BOOL CXobj::AddChildNode(CXobj* pXobj)
 {
 	m_vChildNodes.push_back(pXobj);
 	pXobj->m_pParentObj = this;
@@ -1425,7 +1422,7 @@ BOOL CXobj::AddChildNode(CXobj * pXobj)
 	return true;
 }
 
-BOOL CXobj::RemoveChildNode(CXobj * pXobj)
+BOOL CXobj::RemoveChildNode(CXobj* pXobj)
 {
 	auto it = find(m_vChildNodes.begin(), m_vChildNodes.end(), pXobj);
 	if (it != m_vChildNodes.end())
@@ -1436,23 +1433,23 @@ BOOL CXobj::RemoveChildNode(CXobj * pXobj)
 	return false;
 }
 
-STDMETHODIMP CXobj::get_Galaxy(IGalaxy * *pVal)
+STDMETHODIMP CXobj::get_Galaxy(IGalaxy** pVal)
 {
 	if (m_pXobjShareData->m_pGalaxy)
-		* pVal = m_pXobjShareData->m_pGalaxy;
+		*pVal = m_pXobjShareData->m_pGalaxy;
 
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_HostGalaxy(IGalaxy * *pVal)
+STDMETHODIMP CXobj::get_HostGalaxy(IGalaxy** pVal)
 {
 	if (m_pHostGalaxy)
-		* pVal = m_pHostGalaxy;
+		*pVal = m_pHostGalaxy;
 
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Height(LONG * pVal)
+STDMETHODIMP CXobj::get_Height(LONG* pVal)
 {
 	RECT rc;
 	::GetClientRect(m_pHostWnd->m_hWnd, &rc);
@@ -1460,7 +1457,7 @@ STDMETHODIMP CXobj::get_Height(LONG * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Width(LONG * pVal)
+STDMETHODIMP CXobj::get_Width(LONG* pVal)
 {
 	RECT rc;
 	::GetClientRect(m_pHostWnd->m_hWnd, &rc);
@@ -1469,12 +1466,12 @@ STDMETHODIMP CXobj::get_Width(LONG * pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_OfficeObj(IDispatch * *pVal)
+STDMETHODIMP CXobj::get_OfficeObj(IDispatch** pVal)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_Extender(IDispatch * *pVal)
+STDMETHODIMP CXobj::get_Extender(IDispatch** pVal)
 {
 	if (m_pExtender)
 	{
@@ -1484,7 +1481,7 @@ STDMETHODIMP CXobj::get_Extender(IDispatch * *pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::put_Extender(IDispatch * newVal)
+STDMETHODIMP CXobj::put_Extender(IDispatch* newVal)
 {
 	if (m_pExtender)
 		m_pExtender->Release();
@@ -1494,27 +1491,27 @@ STDMETHODIMP CXobj::put_Extender(IDispatch * newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_GalaxyCluster(IGalaxyCluster * *pVal)
+STDMETHODIMP CXobj::get_GalaxyCluster(IGalaxyCluster** pVal)
 {
 	*pVal = (IGalaxyCluster*)m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster;
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_NameAtWindowPage(BSTR * pVal)
+STDMETHODIMP CXobj::get_NameAtWindowPage(BSTR* pVal)
 {
 	*pVal = m_strNodeName.AllocSysString();
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch * *ppRetDisp)
+STDMETHODIMP CXobj::GetCtrlByName(BSTR bstrName, VARIANT_BOOL bFindInChild, IDispatch** ppRetDisp)
 {
 	if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
-		* ppRetDisp = g_pCosmos->m_pCLRProxy->GetCtrlByName(m_pDisp, bstrName, bFindInChild ? true : false);
+		*ppRetDisp = g_pCosmos->m_pCLRProxy->GetCtrlByName(m_pDisp, bstrName, bFindInChild ? true : false);
 
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR * bstrVal)
+STDMETHODIMP CXobj::GetCtrlValueByName(BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal)
 {
 	//if (g_pCosmos->m_pCLRProxy && m_nViewType == CLRCtrl && m_pDisp)
 	//{
@@ -1554,16 +1551,16 @@ STDMETHODIMP CXobjCollection::get_XobjCount(long* pCount)
 	return S_OK;
 }
 
-STDMETHODIMP CXobjCollection::get_Item(long iIndex, IXobj * *ppXobj)
+STDMETHODIMP CXobjCollection::get_Item(long iIndex, IXobj** ppXobj)
 {
 	if (iIndex < 0 || iIndex >= (int)m_pXobjs->size()) return E_INVALIDARG;
 
-	CXobj * pXobj = m_pXobjs->operator [](iIndex);
+	CXobj* pXobj = m_pXobjs->operator [](iIndex);
 
 	return pXobj->QueryInterface(IID_IXobj, (void**)ppXobj);
 }
 
-STDMETHODIMP CXobjCollection::get__NewEnum(IUnknown * *ppVal)
+STDMETHODIMP CXobjCollection::get__NewEnum(IUnknown** ppVal)
 {
 	*ppVal = nullptr;
 
@@ -1573,14 +1570,14 @@ STDMETHODIMP CXobjCollection::get__NewEnum(IUnknown * *ppVal)
 		{
 			CXobj* pXobj = *p2;
 			p1->vt = VT_UNKNOWN;
-			return pXobj->QueryInterface(IID_IUnknown, (void**) & (p1->punkVal));
+			return pXobj->QueryInterface(IID_IUnknown, (void**)&(p1->punkVal));
 		}
 
 		static void init(VARIANT* p) { VariantInit(p); }
 		static void destroy(VARIANT* p) { VariantClear(p); }
 	};
 
-	typedef CComEnumOnSTL<IEnumVARIANT, & IID_IEnumVARIANT, VARIANT, _CopyVariantFromIUnkown, CXobjVector>
+	typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyVariantFromIUnkown, CXobjVector>
 		CComEnumVariantOnVector;
 
 	CComObject<CComEnumVariantOnVector>* pe = 0;
@@ -1600,12 +1597,12 @@ STDMETHODIMP CXobjCollection::get__NewEnum(IUnknown * *ppVal)
 	return hr;
 }
 
-STDMETHODIMP CXobj::get_DocXml(BSTR * pVal)
+STDMETHODIMP CXobj::get_DocXml(BSTR* pVal)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_rgbMiddle(OLE_COLOR * pVal)
+STDMETHODIMP CXobj::get_rgbMiddle(OLE_COLOR* pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -1636,7 +1633,7 @@ STDMETHODIMP CXobj::put_rgbMiddle(OLE_COLOR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_rgbLeftTop(OLE_COLOR * pVal)
+STDMETHODIMP CXobj::get_rgbLeftTop(OLE_COLOR* pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -1664,7 +1661,7 @@ STDMETHODIMP CXobj::put_rgbLeftTop(OLE_COLOR newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_rgbRightBottom(OLE_COLOR * pVal)
+STDMETHODIMP CXobj::get_rgbRightBottom(OLE_COLOR* pVal)
 {
 	if (m_nViewType == Grid)
 	{
@@ -1793,16 +1790,16 @@ STDMETHODIMP CXobj::put_Vmax(int newVal)
 }
 
 
-STDMETHODIMP CXobj::get_HostXobj(IXobj * *pVal)
+STDMETHODIMP CXobj::get_HostXobj(IXobj** pVal)
 {
 	if (m_pXobjShareData->m_pHostClientView)
-		* pVal = m_pXobjShareData->m_pHostClientView->m_pXobj;
+		*pVal = m_pXobjShareData->m_pHostClientView->m_pXobj;
 
 	return S_OK;
 }
 
 
-STDMETHODIMP CXobj::put_HostXobj(IXobj * newVal)
+STDMETHODIMP CXobj::put_HostXobj(IXobj* newVal)
 {
 	return S_OK;
 }
@@ -1829,7 +1826,7 @@ STDMETHODIMP CXobj::put_ActivePage(int newVal)
 		get_ActivePage(&nOldPage);
 		if (nOldPage == newVal)
 			return S_OK;
-		IXobj * pOldNode = nullptr;
+		IXobj* pOldNode = nullptr;
 		GetXobj(0, newVal, &pOldNode);
 		if (pOldNode)
 		{
@@ -1909,7 +1906,7 @@ HRESULT CXobj::Fire_Destroy()
 {
 	if (m_pWebBrowser)
 	{
-		if(::IsChild(m_pHostWnd->m_hWnd,m_pWebBrowser->m_hWnd))
+		if (::IsChild(m_pHostWnd->m_hWnd, m_pWebBrowser->m_hWnd))
 			m_pWebBrowser->DestroyWindow();
 		m_pWebBrowser = nullptr;
 	}
@@ -2019,7 +2016,7 @@ STDMETHODIMP CXobj::put_SaveToConfigFile(VARIANT_BOOL newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG * pVal)
+STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG* pVal)
 {
 	return S_OK;
 }
@@ -2029,7 +2026,7 @@ STDMETHODIMP CXobj::put_DockObj(BSTR bstrName, LONGLONG newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
+STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript)
 {
 	if (g_pCosmos->m_pBrowserFactory == nullptr)
 		return S_OK;
@@ -2077,7 +2074,7 @@ STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch * dispObjforScript)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_URL(BSTR * pVal)
+STDMETHODIMP CXobj::get_URL(BSTR* pVal)
 {
 	if (m_pHostParse != nullptr)
 	{
@@ -2172,7 +2169,7 @@ STDMETHODIMP CXobj::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra
 				HWND hPWnd = m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd->m_hWnd;
 				for (auto it : g_pCosmos->m_mapHtmlWnd)
 				{
-					if (::IsChild(hPWnd,it.first))
+					if (::IsChild(hPWnd, it.first))
 					{
 						CWebPage* pWnd = (CWebPage*)it.second;
 						pWnd->SendChromeIPCMessage(_T("bstrMsgId"), OLE2T(bstrTo), OLE2T(bstrMsgId), OLE2T(bstrExtra), OLE2T(bstrMsgId), _T(""));

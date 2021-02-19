@@ -711,17 +711,17 @@ void CCosmosTabCtrl::PostNcDestroy()
 	delete this;
 }
 
-CMDTWindow::CMDTWindow(void)
+CMDTWnd::CMDTWnd(void)
 {
 }
 
-CMDTWindow::~CMDTWindow(void)
+CMDTWnd::~CMDTWnd(void)
 {
 }
 
-LRESULT CMDTWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CMDTWindow* pHelperWnd = nullptr;
+	CMDTWnd* pHelperWnd = nullptr;
 	auto it = g_pCosmos->m_mapMDTWindow.find(m_hWnd);
 	if (it != g_pCosmos->m_mapMDTWindow.end())
 	{
@@ -743,9 +743,9 @@ LRESULT CMDTWindow::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-LRESULT CMDTWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDTWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CMDTWindow* pHelperWnd = nullptr;
+	CMDTWnd* pHelperWnd = nullptr;
 	if (g_pCosmos->m_mapMDTWindow.size() == 1)
 	{
 		::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_DESTROY, 0, 0);
@@ -762,7 +762,7 @@ LRESULT CMDTWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-LRESULT CMDTWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
@@ -774,7 +774,7 @@ LRESULT CMDTWindow::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-void CMDTWindow::OnFinalMessage(HWND hWnd)
+void CMDTWnd::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;

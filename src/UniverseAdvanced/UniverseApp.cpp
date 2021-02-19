@@ -1187,7 +1187,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			if (g_pCosmos->m_pMDIMainWnd == nullptr)
 			{
-				g_pCosmos->m_pMDIMainWnd = new CMDIWindow();
+				g_pCosmos->m_pMDIMainWnd = new CMDIParent();
 				g_pCosmos->m_pMDIMainWnd->m_hMDIClient = hWnd;
 				g_pCosmos->m_pMDIMainWnd->SubclassWindow(hPWnd);
 			}
@@ -1942,7 +1942,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20210110:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
-					CMDTWindow* pFrameWnd = nullptr;
+					CMDTWnd* pFrameWnd = nullptr;
 					CGalaxyCluster* pGalaxyCluster = nullptr;
 					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
@@ -1957,7 +1957,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								auto it = g_pCosmos->m_mapMDTWindow.find(hWnd);
 								if (it == g_pCosmos->m_mapMDTWindow.end())
 								{
-									pFrameWnd = new CMDTWindow();
+									pFrameWnd = new CMDTWnd();
 									pFrameWnd->SubclassWindow(hWnd);
 									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
 								}
@@ -2042,7 +2042,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											}
 											if (bMdiChild)
 											{
-												CMDIChildWindow* pWnd = new CMDIChildWindow();
+												CMDIChild* pWnd = new CMDIChild();
 												pWnd->SubclassWindow(hWnd);
 												g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
 												g_pCosmos->m_bSZMode = true;

@@ -129,19 +129,19 @@ protected:
 	virtual void PostNcDestroy();
 };
 
-class CMDIChildWindow :
-	public CWindowImpl<CMDIChildWindow, CWindow>
+class CMDIChild :
+	public CWindowImpl<CMDIChild, CWindow>
 {
 public:
-	CMDIChildWindow(void);
-	virtual ~CMDIChildWindow(void);
+	CMDIChild(void);
+	virtual ~CMDIChild(void);
 	HWND m_hClient;
 	HWND m_hParent;
 	CString m_strKey;
 	CGalaxy* m_pGalaxy = nullptr;
 	CXobj* m_pClientBindingObj = nullptr;
 	CString m_strDocXml=_T("");
-	BEGIN_MSG_MAP(CMDIChildWindow)
+	BEGIN_MSG_MAP(CMDIChild)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_COSMOSOBSERVED, OnCosmosDocObserved)
@@ -156,14 +156,14 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 };
 
-class CMDTWindow :
-	public CWindowImpl<CMDTWindow, CWindow>
+class CMDTWnd :
+	public CWindowImpl<CMDTWnd, CWindow>
 {
 public:
-	CMDTWindow(void);
-	virtual ~CMDTWindow(void);
+	CMDTWnd(void);
+	virtual ~CMDTWnd(void);
 	CString m_strDocTemplateKey = _T("");
-	BEGIN_MSG_MAP(CMDTWindow)
+	BEGIN_MSG_MAP(CMDTWnd)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
@@ -180,24 +180,24 @@ private:
 	void OnFinalMessage(HWND hWnd);
 };
 
-class CMDIWindow :
-	public CWindowImpl<CMDIWindow, CWindow>
+class CMDIParent :
+	public CWindowImpl<CMDIParent, CWindow>
 {
 public:
-	CMDIWindow(void);
-	virtual ~CMDIWindow(void);
+	CMDIParent(void);
+	virtual ~CMDIParent(void);
 
 	BOOL									m_bDestroy = false;
 	HWND									m_hMDIClient;
 	CXobj*									m_pClientXobj = nullptr;
 	CGalaxy*								m_pGalaxy = nullptr;
 	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
-	CMDIChildWindow*						m_pActiveMDIChild = nullptr;
+	CMDIChild*						m_pActiveMDIChild = nullptr;
 
 	CXobjVector								m_vMdiClientXobjs;
-	map<HWND, CMDIChildWindow*>				m_mapMDIChildHelperWnd;
+	map<HWND, CMDIChild*>				m_mapMDIChildHelperWnd;
 
-	BEGIN_MSG_MAP(CMDIWindow)
+	BEGIN_MSG_MAP(CMDIParent)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
