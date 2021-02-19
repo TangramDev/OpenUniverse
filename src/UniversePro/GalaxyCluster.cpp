@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102180033           *
+ *           Web Runtime for Application - Version 1.0.0.202102190034           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -211,7 +211,7 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 
 STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame)
 {
-	HWND h = 0; 
+	HWND h = 0;
 	CString strGalaxyName = OLE2T(bstrGalaxyName);
 	//auto it = m_mapWnd.find(strGalaxyName);
 	//if (it != m_mapWnd.end())
@@ -231,7 +231,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 	//	strGalaxyName = s;
 	//}
 	BSTR bstrName = strGalaxyName.MakeLower().AllocSysString();
-	if (ParentObj.vt == VT_DISPATCH&&HostWnd.vt == VT_BSTR)
+	if (ParentObj.vt == VT_DISPATCH && HostWnd.vt == VT_BSTR)
 	{
 		if (g_pCosmos->m_pCLRProxy)
 		{
@@ -266,7 +266,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					strName = OLE2T(bstrGalaxyName);
 					if (strName == _T(""))
 						bstrGalaxyName = CComBSTR(L"Default");
-					
+
 					strGalaxyName = OLE2T(bstrGalaxyName);
 					auto it = m_mapWnd.find(strGalaxyName);
 					if (it != m_mapWnd.end())
@@ -295,13 +295,13 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			}
 		}
 	}
-	else if (HostWnd.vt == VT_I2||HostWnd.vt == VT_I4 || HostWnd.vt == VT_I8)
+	else if (HostWnd.vt == VT_I2 || HostWnd.vt == VT_I4 || HostWnd.vt == VT_I8)
 	{
 		BOOL bIsMDI = FALSE;
 		HWND _hWnd = NULL;
-		if(HostWnd.vt == VT_I4)
+		if (HostWnd.vt == VT_I4)
 			_hWnd = (HWND)HostWnd.lVal;
-		if(HostWnd.vt == VT_I8)
+		if (HostWnd.vt == VT_I8)
 			_hWnd = (HWND)HostWnd.llVal;
 		if (_hWnd == 0)
 		{
@@ -311,7 +311,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			else
 				bIsMDI = TRUE;
 		}
-		if (_hWnd&&::IsWindow(_hWnd))
+		if (_hWnd && ::IsWindow(_hWnd))
 		{
 			auto it = m_mapGalaxy.find(_hWnd);
 			if (it == m_mapGalaxy.end())
@@ -319,59 +319,63 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				DWORD dwID = ::GetWindowThreadProcessId(_hWnd, NULL);
 				CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 
-				CGalaxy* m_pExtenderGalaxy = new CComObject<CGalaxy>();
+				CGalaxy* _pGalaxy = new CComObject<CGalaxy>();
 				CString strName = strGalaxyName;
 				if (strName == _T(""))
 					strName = _T("default");
 				strName.MakeLower();
-				m_pExtenderGalaxy->m_strGalaxyName = strName;
+				_pGalaxy->m_strGalaxyName = strName;
 				if (strName.CompareNoCase(_T("System.Windows.Forms.MdiClient")) == 0)
-					m_pExtenderGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
-				else if(bIsMDI)
-					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
+					_pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
+				else if (bIsMDI)
+					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 				::GetClassName(::GetParent(_hWnd), g_pCosmos->m_szBuffer, MAX_PATH);
-				CString strClassName = CString(g_pCosmos->m_szBuffer);
+				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
-					m_pExtenderGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+					_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
 				}
 				else if (strClassName.Find(_T("MDIClient")) == 0)
 				{
-					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
+					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 				}
-				m_pExtenderGalaxy->m_pGalaxyCluster = this;
-				m_pExtenderGalaxy->m_hHostWnd = _hWnd;
+				if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == _hWnd)
+				{
+					g_pCosmos->m_pMDIMainWnd->m_pGalaxy = _pGalaxy;
+					g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = this;
+				}
+				_pGalaxy->m_pGalaxyCluster = this;
+				_pGalaxy->m_hHostWnd = _hWnd;
 				if (ParentObj.vt == VT_I8 || ParentObj.vt == VT_I4)
 				{
 					HWND hPWnd = (HWND)ParentObj.llVal;
 					if (::IsWindow(hPWnd))
 					{
-						m_pExtenderGalaxy->m_hPWnd = hPWnd;
+						_pGalaxy->m_hPWnd = hPWnd;
 					}
 				}
-				pThreadInfo->m_mapGalaxy[_hWnd] = m_pExtenderGalaxy;
-				m_mapGalaxy[_hWnd] = m_pExtenderGalaxy;
+				pThreadInfo->m_mapGalaxy[_hWnd] = _pGalaxy;
+				m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapWnd[strName] = _hWnd;
 
 				for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 				{
-					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(m_pExtenderGalaxy);
+					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(_pGalaxy);
 					if (pGalaxyProxy)
 					{
-						m_pExtenderGalaxy->m_mapGalaxyProxy[it.second] = pGalaxyProxy;
+						_pGalaxy->m_mapGalaxyProxy[it.second] = pGalaxyProxy;
 					}
 				}
 
-				*pRetFrame = m_pExtenderGalaxy;
+				*pRetFrame = _pGalaxy;
 			}
 			else
 				*pRetFrame = it->second;
 		}
 	}
-		
+
 	return S_OK;
 }
-
 
 STDMETHODIMP CGalaxyCluster::GetGalaxyFromCtrl(IDispatch* CtrlObj, IGalaxy** ppGalaxy)
 {

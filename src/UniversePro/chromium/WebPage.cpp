@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102180033           *
+ *           Web Runtime for Application - Version 1.0.0.202102190034           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1259,8 +1259,6 @@ namespace Browser {
 								_pGalaxy->m_pWebPageWnd = this;
 								if (g_pCosmos->m_pMDIMainWnd)
 								{
-									g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = (CGalaxyCluster*)pCluster;
-									g_pCosmos->m_pMDIMainWnd->m_pGalaxy = _pGalaxy;
 									_pGalaxy->m_strCurrentXml = strXml;
 									::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210218);
 								}

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102180033
+ *           Web Runtime for Application - Version 1.0.0.202102190034
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -320,50 +320,55 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				DWORD dwID = ::GetWindowThreadProcessId(_hWnd, NULL);
 				CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 
-				CGalaxy* m_pExtenderGalaxy = new CComObject<CGalaxy>();
+				CGalaxy* _pGalaxy = new CComObject<CGalaxy>();
 				CString strName = strGalaxyName;
 				if (strName == _T(""))
 					strName = _T("default");
 				strName.MakeLower();
-				m_pExtenderGalaxy->m_strGalaxyName = strName;
+				_pGalaxy->m_strGalaxyName = strName;
 				if (strName.CompareNoCase(_T("System.Windows.Forms.MdiClient")) == 0)
-					m_pExtenderGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
+					_pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
 				else if(bIsMDI)
-					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
+					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 				::GetClassName(::GetParent(_hWnd), g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
-					m_pExtenderGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+					_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
 				}
 				else if (strClassName.Find(_T("MDIClient")) == 0)
 				{
-					m_pExtenderGalaxy->m_nGalaxyType = MDIClientGalaxy;
+					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 				}
-				m_pExtenderGalaxy->m_pGalaxyCluster = this;
-				m_pExtenderGalaxy->m_hHostWnd = _hWnd;
+				if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == _hWnd)
+				{
+					g_pCosmos->m_pMDIMainWnd->m_pGalaxy = _pGalaxy;
+					g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = this;
+				}
+				_pGalaxy->m_pGalaxyCluster = this;
+				_pGalaxy->m_hHostWnd = _hWnd;
 				if (ParentObj.vt == VT_I8 || ParentObj.vt == VT_I4)
 				{
 					HWND hPWnd = (HWND)ParentObj.llVal;
 					if (::IsWindow(hPWnd))
 					{
-						m_pExtenderGalaxy->m_hPWnd = hPWnd;
+						_pGalaxy->m_hPWnd = hPWnd;
 					}
 				}
-				pThreadInfo->m_mapGalaxy[_hWnd] = m_pExtenderGalaxy;
-				m_mapGalaxy[_hWnd] = m_pExtenderGalaxy;
+				pThreadInfo->m_mapGalaxy[_hWnd] = _pGalaxy;
+				m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapWnd[strName] = _hWnd;
 
 				for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 				{
-					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(m_pExtenderGalaxy);
+					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(_pGalaxy);
 					if (pGalaxyProxy)
 					{
-						m_pExtenderGalaxy->m_mapGalaxyProxy[it.second] = pGalaxyProxy;
+						_pGalaxy->m_mapGalaxyProxy[it.second] = pGalaxyProxy;
 					}
 				}
 
-				*pRetFrame = m_pExtenderGalaxy;
+				*pRetFrame = _pGalaxy;
 			}
 			else
 				*pRetFrame = it->second;

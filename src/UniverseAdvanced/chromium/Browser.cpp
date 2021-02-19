@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102180033           *
+ *           Web Runtime for Application - Version 1.0.0.202102190034           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -81,8 +81,7 @@ namespace Browser {
 					if (pPage->m_pGalaxy)
 					{
 						IXobj* pObj = nullptr;
-						CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
-						pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
+						pPage->Observe(CComBSTR(pPage->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
 					}
 				}
 			}
