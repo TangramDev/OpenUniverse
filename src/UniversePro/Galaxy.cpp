@@ -2611,8 +2611,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrameWnd, _T("CosmosFrameWndInfo"));
 			if (pCosmosFrameWndInfo)
 			{
-				CGalaxy* _pGalaxy = nullptr;
-				CString strKey = _T("client");
 				CTangramXmlParse* pParse = m_pWorkXobj->m_pXobjShareData->m_pCosmosParse;
 				CTangramXmlParse* pClient = pParse->GetChild(pCosmosFrameWndInfo->m_nFrameType == 2 ? _T("mdiclient") : _T("client"));
 				if (pParse && pClient)
@@ -2623,6 +2621,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 					g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
 					if (pCluster)
 					{
+						CString strKey = _T("client");
 						IGalaxy* pGalaxy = nullptr;
 						auto it = pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.find(strKey);
 						if (it != pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.end())
@@ -2637,11 +2636,15 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						}
 						if (pGalaxy)
 						{
-							_pGalaxy = (CGalaxy*)pGalaxy;
+							CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 							_pGalaxy->m_pWebPageWnd = m_pWebPageWnd;
-							IXobj* pXobj = nullptr;
-							CComBSTR _bstrKey(m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey);
-							_pGalaxy->Observe(_bstrKey, CComBSTR(strXml), &pXobj);
+							CString _strKey = m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey;
+							if (_strKey != _pGalaxy->m_strCurrentKey)
+							{
+								IXobj* pXobj = nullptr;
+								CComBSTR _bstrKey(_strKey);
+								_pGalaxy->Observe(_bstrKey, CComBSTR(strXml), &pXobj);
+							}
 						}
 					}
 				}
@@ -2650,7 +2653,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				{
 					g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey, pClient->xml());
 				}
-
 				pClient = pParse->GetChild(_T("controlbars"));
 				if (pParse && pClient)
 				{
@@ -2702,6 +2704,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 							}
 						}
 					}
+					pCosmosFrameWndInfo->bControlBarProessed = true;
 				}
 			}
 		}

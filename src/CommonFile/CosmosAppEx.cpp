@@ -580,7 +580,9 @@ namespace CommonUniverse
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
 								pCosmosFrameWndInfo->m_nFrameType = 4;
 							if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
+							{
 								::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
+							}
 						}
 						hRetFrame = pFrame->m_hWnd;
 					}

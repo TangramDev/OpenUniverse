@@ -1964,6 +1964,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								else
 									pFrameWnd = it->second;
 							}
+							if (pCosmosFrameWndInfo->bControlBarProessed)
+								break;
 						}
 						HANDLE h = ::RemoveProp(hWnd, _T("CosmosFrameWndType"));
 						if (h)

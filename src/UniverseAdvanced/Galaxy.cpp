@@ -2812,6 +2812,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 							}
 						}
 					}
+					pCosmosFrameWndInfo->bControlBarProessed = true;
 				}
 			}
 		}
