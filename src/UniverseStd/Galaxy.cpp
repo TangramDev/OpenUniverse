@@ -769,6 +769,9 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20210129:
 		::InvalidateRect(m_hWnd, nullptr, true);
 		break;
+	case 10000:
+		return (LRESULT)LPCTSTR(m_strDocTemplateKey);
+		break;
 	}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	return l;

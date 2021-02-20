@@ -49,19 +49,18 @@ BOOL CMFCApplication3Doc::OnNewDocument()
 	return TRUE;
 }
 
-
-
-
 // CMFCApplication3Doc serialization
 
 void CMFCApplication3Doc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
+		ar << theApp.GetDocTemplateID(this);
 		// TODO: add storing code here
 	}
 	else
 	{
+		ar >> theApp.m_strCreatingDOCID;
 		// TODO: add loading code here
 	}
 }

@@ -1253,11 +1253,9 @@ namespace Browser {
 								_pGalaxy->m_pWebPageWnd = this;
 								if (g_pCosmos->m_pMDIMainWnd)
 								{
-									_pGalaxy->m_strCurrentXml = strXml;
-									::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210218);
+									IXobj* pXobj = nullptr;
+									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 								}
-								//IXobj* pXobj = nullptr;
-								//_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 							}
 						}
 					}

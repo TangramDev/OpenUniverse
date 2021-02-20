@@ -141,6 +141,7 @@ public:
 	CGalaxy* m_pGalaxy = nullptr;
 	CXobj* m_pClientBindingObj = nullptr;
 	CString m_strDocXml=_T("");
+	CString m_strDocTemplateKey = _T("");
 	BEGIN_MSG_MAP(CMDIChild)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)

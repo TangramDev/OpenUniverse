@@ -195,7 +195,7 @@ namespace CommonUniverse
 
 		BOOL IsBrowserModel(bool bCrashReporting);
 		bool ProcessAppType(bool bCrashReporting);
-
+		CString GetDocTemplateID(CDocument* pDoc);
 		//ICosmosDelegate:
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
 		virtual bool DoIdleWork();

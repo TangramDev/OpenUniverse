@@ -1018,10 +1018,14 @@ void CCosmos::TangramInitFromeWeb()
 		if (pParse)
 		{
 			int nCount = pParse->GetCount();
-			for (int i = 0; i < nCount; i++)
+			if (nCount)
 			{
-				CTangramXmlParse* pChild = pParse->GetChild(i);
-				m_mapDocTemplate[pChild->name()] = pChild->xml();
+				for (int i = 0; i < nCount; i++)
+				{
+					CTangramXmlParse* pChild = pParse->GetChild(i);
+					m_mapDocTemplate[pChild->name()] = pChild->xml();
+				}
+				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)g_pCosmos->m_hFirstView, 20210110);
 			}
 		}
 		pParse = m_Parse.GetChild(_T("defaultworkbench"));
@@ -3263,54 +3267,6 @@ STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 
 HRESULT CCosmos::CosmosNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam)
 {
-	if (wParam == 10000)
-	{
-		Utilities::CComponentInstaller m_ComponentInstaller;
-		CString strSRC = OLE2T(strXml1);
-		CString strTarget = OLE2T(strXml2);
-		if (::PathFileExists(strSRC) == false)
-			return S_FALSE;
-		if (lParam == 1 && ::PathIsDirectory(strTarget))
-			DelTree(strTarget);
-		m_ComponentInstaller.UnMultiZip2(strSRC, strTarget);
-		return S_OK;
-	}
-	CString strInfo = OLE2T(strXml2);
-	if (strInfo == _T("checkinternetconnect"))
-	{
-		//auto t = create_task([this]()
-		//	{
-		//		while (1)
-		//		{
-		//			Sleep(2000);
-		//			DWORD Description = 0; 
-		//			if (InternetGetConnectedState(&Description, 0))
-		//			{
-		//				::PostAppMessage(g_pCosmos->m_dwThreadID, WM_COSMOSMSG, 0, 20200628);
-		//				break;
-		//			}
-		//		}
-		//		return 1;
-		//	});
-		return S_OK;
-	}
-	if (strInfo == _T("VSSolutionEvent"))
-	{
-		CString strInfo2 = OLE2T(strXml1);
-		HWND hWnd = (HWND)wParam;
-		::SendMessage(hWnd, WM_COSMOSMSG, 20200607, (LPARAM)strInfo2.GetBuffer());
-		strInfo2.ReleaseBuffer();
-		return S_OK;
-	}
-	if (m_pCosmosDelegate != nullptr)
-		m_pCosmosDelegate->CosmosNotify(OLE2T(strXml1), OLE2T(strXml2), wParam, lParam);
-	CString str = OLE2T(strXml1);
-	if (str.Find(_T("vsevent:")) == 0)
-	{
-		HWND hWebView = (HWND)wParam;
-		::SendMessage(hWebView, WM_COSMOSMSG, lParam, 20200609);
-		m_mapVSWebPage[hWebView] = (HWND)lParam;
-	}
 	return S_OK;
 }
 

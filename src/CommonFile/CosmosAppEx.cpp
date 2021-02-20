@@ -433,6 +433,23 @@ namespace CommonUniverse
 		return pApp->PreTranslateMessage(pMsg);
 	}
 
+	CString CCosmosDelegate::GetDocTemplateID(CDocument* pDoc)
+	{
+		if (pDoc)
+		{
+			POSITION nPos = pDoc->GetFirstViewPosition();
+			if (nPos != NULL)
+			{
+				CView* pView = pDoc->GetNextView(nPos);
+				ASSERT_VALID(pView);
+				CFrameWnd* pFrame = pView->GetParentFrame();
+				CString s = (LPCTSTR)::SendMessage(pFrame->m_hWnd, WM_COSMOSMSG, 0, 10000);
+				return s;
+			}
+		}
+		return _T("");
+	}
+
 	HWND CCosmosDelegate::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
@@ -581,7 +598,9 @@ namespace CommonUniverse
 								pCosmosFrameWndInfo->m_nFrameType = 4;
 							if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
 							{
-								::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
+								g_pCosmosImpl->m_hFirstView = hWnd;
+								//if(g_pCosmosImpl->m_hFirstView!=hWnd)
+								//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 							}
 						}
 						hRetFrame = pFrame->m_hWnd;

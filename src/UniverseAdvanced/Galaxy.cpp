@@ -792,6 +792,9 @@ LRESULT CMDIChild::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 		}
 		break;
+		case 10000:
+			return (LRESULT)LPCTSTR(m_strDocTemplateKey);
+			break;
 		default:
 			break;
 		}
@@ -895,6 +898,9 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 10000:
+		return (LRESULT)LPCTSTR(m_strDocTemplateKey);
+		break;
 	case 20210129:
 		::InvalidateRect(m_hWnd, nullptr, true);
 		break;
@@ -979,15 +985,15 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		}
 	}
 	break;
-	case 20210218:
-	{
-		if (m_pGalaxy)
-		{
-			IXobj* pXobj = nullptr;
-			m_pGalaxy->Observe(CComBSTR("client"), CComBSTR(m_pGalaxy->m_strCurrentXml), &pXobj);
-		}
-	}
-		break;
+	//case 20210218:
+	//{
+	//	if (m_pGalaxy)
+	//	{
+	//		IXobj* pXobj = nullptr;
+	//		m_pGalaxy->Observe(CComBSTR("client"), CComBSTR(m_pGalaxy->m_strCurrentXml), &pXobj);
+	//	}
+	//}
+	//	break;
 	case 20210126:
 	{
 		if (m_bDestroy)
