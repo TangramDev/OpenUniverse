@@ -743,6 +743,18 @@ LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
+LRESULT CMDTWnd::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_bSZMode = false;
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
+LRESULT CMDTWnd::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	g_pCosmos->m_bSZMode = true;
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
 LRESULT CMDTWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	CMDTWnd* pHelperWnd = nullptr;
@@ -1462,7 +1474,7 @@ void CGalaxy::HostPosChanged()
 		m_bObserve = !m_bDockPane;
 		if (m_bObserve)
 			flag |= SWP_NOREDRAW;
-		if (m_bTabbedMDIClient)//&&m_nGalaxyType == GalaxyType::MDIClientGalaxy)
+		if (m_bTabbedMDIClient)
 			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,

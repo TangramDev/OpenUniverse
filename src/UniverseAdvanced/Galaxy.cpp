@@ -1921,6 +1921,8 @@ void CGalaxy::HostPosChanged()
 			::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
 	}
+	if(!g_pCosmos->m_bSZMode)
+		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 }
 
 CTangramXmlParse* CGalaxy::UpdateXobj()
