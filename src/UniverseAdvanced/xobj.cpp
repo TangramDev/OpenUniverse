@@ -64,7 +64,6 @@ CXobj::CXobj()
 	m_bNodeDocComplete = false;
 	m_varTag.vt = VT_EMPTY;
 	m_strKey = _T("");
-	m_strXmlFileFromVS = _T("");
 	m_strURL = _T("");
 	m_strNodeName = _T("");
 	m_strExtenderID = _T("");
@@ -226,21 +225,6 @@ void CXobj::InitWndXobj()
 		if (it2 == m_pXobjShareData->m_pGalaxyCluster->m_mapXobj.end())
 		{
 			m_pXobjShareData->m_pGalaxyCluster->m_mapXobj[m_strNodeName] = this;
-		}
-	}
-
-	if (m_strID == _T("") && m_strObjTypeID == _T("") && m_strXmlFileFromVS != _T(""))
-	{
-		CString strLocalurl = m_pHostParse->attr(_T("localurl"), _T(""));
-		if (strLocalurl != _T("") && ::PathFileExists(m_strXmlFileFromVS))
-		{
-			int nPos = m_strXmlFileFromVS.ReverseFind('\\');
-			CString strPath = m_strXmlFileFromVS.Left(nPos + 1) + strLocalurl;
-			if (::PathFileExists(strPath))
-			{
-				m_strID = _T("activex");
-				m_strObjTypeID = strPath;
-			}
 		}
 	}
 
@@ -595,8 +579,6 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 			if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
 			{
 				_pGalaxy->m_pWebPageWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
-				if (pWndXobj->m_strID == TGM_NUCLEUS)
-					m_pXobjShareData->m_pGalaxy->m_pSubGalaxy = _pGalaxy;
 			}
 		}
 

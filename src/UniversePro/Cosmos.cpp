@@ -1725,9 +1725,6 @@ IXobj* CCosmos::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 		}
 		IXobj* pXobj = nullptr;
 		pGalaxy->Observe(NodeTag.AllocSysString(), strPath.AllocSysString(), &pXobj);
-		CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-		_pGalaxy->m_mapXobjScript[strPath] = (CXobj*)pXobj;
-		//m_mapTreeCtrlScript[(HWND)handle] = NodeTag;
 		return pXobj;
 	}
 	return nullptr;

@@ -83,7 +83,6 @@ public:
 	CString 						m_strObjTypeID;
 	CString 						m_strCaption;
 	CString 						m_strCosmosXml = _T("");
-	CString 						m_strXmlFileFromVS;
 	CString 						m_strXmlRefXobjInfo = _T("");
 
 	CString							m_strLastIPCMsgID = _T("");

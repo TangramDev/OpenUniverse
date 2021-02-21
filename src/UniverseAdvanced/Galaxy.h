@@ -294,9 +294,7 @@ public:
 
 	HWND											m_hPWnd;
 	HWND											m_hHostWnd;
-	RECT											m_OldRect;
 	CString											m_strLastKey;
-	CString											m_strAsynKeys;
 	CString											m_strGalaxyName;
 	CString											m_strCurrentKey;
 	CString											m_strCurrentXml;
@@ -314,14 +312,11 @@ public:
 	CXobj*											m_pWorkXobj;
 	CXobj*											m_pContainerNode;
 	CXobj*											m_pBindingXobj;
-	CGalaxy*										m_pSubGalaxy;
 	GalaxyInfo*										m_pGalaxyInfo;
 	CWormhole*										m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
-	map<CString, VARIANT>							m_mapVal;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;
-	map<CString, CXobj*>							m_mapXobjScript;
 	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}

@@ -1367,8 +1367,6 @@ void CWinForm::OnFinalMessage(HWND hWnd)
 CGalaxy::CGalaxy()
 {
 	m_pCurrentIPCMsg = nullptr;
-	m_OldRect = { 0,0,0,0 };
-	m_strAsynKeys = _T("");
 	m_strLastKey = _T("");
 	m_strCurrentKey = _T("");
 	m_strCurrentXml = _T("");
@@ -1376,7 +1374,6 @@ CGalaxy::CGalaxy()
 	m_bMDIChild = false;
 	m_bDetached = false;
 	m_pWebPageWnd = nullptr;
-	m_pSubGalaxy = nullptr;
 	m_pWorkBenchFrame = nullptr;
 	m_bTabbedMDIClient = false;
 	m_bDesignerState = true;
@@ -1418,12 +1415,12 @@ CGalaxy::~CGalaxy()
 	}
 	if (m_pRootNodes)
 		CCommonFunction::ClearObject<CXobjCollection>(m_pRootNodes);
-	if (m_mapVal.size()) {
-		for (auto it : m_mapVal) {
-			::VariantClear(&it.second);
-		}
-		m_mapVal.clear();
-	}
+	//if (m_mapVal.size()) {
+	//	for (auto it : m_mapVal) {
+	//		::VariantClear(&it.second);
+	//	}
+	//	m_mapVal.clear();
+	//}
 	if (m_pGalaxyCluster) {
 		auto it = m_pGalaxyCluster->m_mapGalaxy.find(m_hHostWnd);
 		if (it != m_pGalaxyCluster->m_mapGalaxy.end()) {
@@ -1752,29 +1749,11 @@ STDMETHODIMP CGalaxy::get_RootXobjs(IXobjCollection** pXobjColletion)
 
 STDMETHODIMP CGalaxy::get_GalaxyData(BSTR bstrKey, VARIANT* pVal)
 {
-	CString strKey = OLE2T(bstrKey);
-
-	if (strKey != _T("")) {
-		::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)strKey.GetBuffer(), 0);
-		strKey.Trim();
-		strKey.MakeLower();
-		auto it = m_mapVal.find(strKey);
-		if (it != m_mapVal.end())
-			*pVal = it->second;
-		strKey.ReleaseBuffer();
-	}
 	return S_OK;
 }
 
 STDMETHODIMP CGalaxy::put_GalaxyData(BSTR bstrKey, VARIANT newVal)
 {
-	CString strKey = OLE2T(bstrKey);
-
-	if (strKey == _T(""))
-		return S_OK;
-	strKey.Trim();
-	strKey.MakeLower();
-	m_mapVal[strKey] = newVal;
 	return S_OK;
 }
 
@@ -2550,20 +2529,6 @@ LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	if (g_pCosmos->m_pCLRProxy) {
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGalaxy*)this);
 	}
-	if (m_mapXobjScript.size())
-	{
-		this->UpdateXobj();
-		for (auto it : m_mapXobjScript)
-		{
-			CString strPath = it.first;
-			CString s = it.second->m_pHostParse->xml();
-			CString str = _T("");
-			str.Format(_T("<nodexml><cluster>%s</cluster></nodexml>"), s);
-			CTangramXmlParse parse;
-			parse.LoadXml(str);
-			parse.SaveFile(it.first);
-		}
-	}
 	if (m_pBKWnd)
 		m_pBKWnd->DestroyWindow();
 	if (g_pCosmos->m_pDesigningFrame && g_pCosmos->m_pDesigningFrame == this)
@@ -2677,25 +2642,6 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			it.second->UpdateVisualWPFMap((HWND)wParam, false);
 		}
-	}
-	break;
-	case 20170929:
-	{
-		TangramFrameInfo* pCosmosFrameInfo = (TangramFrameInfo*)wParam;
-		CString _strKey = _T(",");
-		_strKey += pCosmosFrameInfo->m_strKey;
-		_strKey += _T(",");
-		if (m_strAsynKeys.Find(_strKey) != -1)
-		{
-			m_strAsynKeys.Replace(_strKey, _T(""));
-		}
-
-		IXobj* pXobj = nullptr;
-		int nPos = pCosmosFrameInfo->m_strXml.ReverseFind('>');
-		CString strXml = pCosmosFrameInfo->m_strXml;
-		this->Observe(pCosmosFrameInfo->m_strKey.AllocSysString(), CComBSTR(strXml), &pXobj);
-		delete pCosmosFrameInfo;
-		return 0;
 	}
 	break;
 	}

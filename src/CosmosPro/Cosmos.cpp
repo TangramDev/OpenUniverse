@@ -2418,21 +2418,6 @@ namespace Universe
         return pRetNode;
     }
 
-    Object^ Galaxy::FrameData::get(String^ iIndex)
-    {
-        CComVariant bstrVal(::SysAllocString(L""));
-        m_pGalaxy->get_GalaxyData(STRING2BSTR(iIndex), &bstrVal);
-        return Marshal::GetObjectForNativeVariant((IntPtr)&bstrVal);
-    }
-
-    void Galaxy::FrameData::set(String^ iIndex, Object^ newVal)
-    {
-        IntPtr nPtr = (IntPtr)0;
-        Marshal::GetNativeVariantForObject(newVal, nPtr);
-        m_pGalaxy->put_GalaxyData(STRING2BSTR(iIndex), *(VARIANT*)nPtr.ToInt64());
-    }
-}
-
 void Universe::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
 {
     if (String::IsNullOrEmpty(strInfo) == false)

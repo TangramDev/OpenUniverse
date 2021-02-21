@@ -295,35 +295,30 @@ public:
 
 	HWND											m_hPWnd;
 	HWND											m_hHostWnd;
-	RECT											m_OldRect;
 	CString											m_strLastKey;
-	CString											m_strAsynKeys;
 	CString											m_strGalaxyName;
 	CString											m_strCurrentKey;
 	CString											m_strCurrentXml;
 	CString											m_strHostWebBrowserNodeName = _T("");
-	CEclipseWnd* m_pWorkBenchFrame;
+	CEclipseWnd*									m_pWorkBenchFrame;
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
-	IPCMsg* m_pCurrentIPCMsg;
-	CBKWnd* m_pBKWnd;
-	CWebPage* m_pWebPageWnd;
-	CXobj* m_pHostWebBrowserNode = nullptr;
-	CBrowser* m_pHostWebBrowserWnd = nullptr;
-	CGalaxyCluster* m_pGalaxyCluster;
-	CXobj* m_pParentXobj;
-	CXobj* m_pWorkXobj;
-	CXobj* m_pContainerNode;
-	CXobj* m_pBindingXobj;
-	CGalaxy* m_pSubGalaxy;
-	GalaxyInfo* m_pGalaxyInfo;
-	CWormhole* m_pWormhole = nullptr;
+	IPCMsg*											m_pCurrentIPCMsg;
+	CBKWnd*											m_pBKWnd;
+	CWebPage*										m_pWebPageWnd;
+	CXobj*											m_pHostWebBrowserNode = nullptr;
+	CBrowser*										m_pHostWebBrowserWnd = nullptr;
+	CGalaxyCluster*									m_pGalaxyCluster;
+	CXobj*											m_pParentXobj;
+	CXobj*											m_pWorkXobj;
+	CXobj*											m_pContainerNode;
+	CXobj*											m_pBindingXobj;
+	GalaxyInfo*										m_pGalaxyInfo;
+	CWormhole*										m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
-	map<CString, VARIANT>							m_mapVal;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;
-	map<CString, CXobj*>							m_mapXobjScript;
-	CComObject<CXobjCollection>* m_pRootNodes;
+	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock() {}
 	void Unlock() {}
