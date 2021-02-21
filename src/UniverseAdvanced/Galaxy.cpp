@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034
+ *           Web Runtime for Application - Version 1.0.0.202102210035
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -802,10 +802,10 @@ LRESULT CMDIChild::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 void CMDIChild::OnFinalMessage(HWND hWnd)
 {
-	auto it = g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.find(hWnd);
-	if (it != g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.end())
-		g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.erase(it);
-	if (g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd.size() == 0)
+	auto it = g_pCosmos->m_pMDIMainWnd->m_mapMDIChild.find(hWnd);
+	if (it != g_pCosmos->m_pMDIMainWnd->m_mapMDIChild.end())
+		g_pCosmos->m_pMDIMainWnd->m_mapMDIChild.erase(it);
+	if (g_pCosmos->m_pMDIMainWnd->m_mapMDIChild.size() == 0)
 	{
 		g_pCosmos->m_bSZMode = true;
 		::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210126);

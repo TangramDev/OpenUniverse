@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -890,7 +890,7 @@ namespace Browser {
 		if (::IsWindowVisible(m_hWnd))
 		{
 			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 5);
 		}
 	}
 

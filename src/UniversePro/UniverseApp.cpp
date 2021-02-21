@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1896,7 +1896,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 														if (pWnd->m_strDocTemplateKey == _T(""))
 															pWnd->m_strDocTemplateKey = strKey;
 														pWnd->SubclassWindow(hWnd);
-														g_pCosmos->m_pMDIMainWnd->m_mapMDIChildHelperWnd[hWnd] = pWnd;
+														g_pCosmos->m_pMDIMainWnd->m_mapMDIChild[hWnd] = pWnd;
 														g_pCosmos->m_bSZMode = true;
 
 														g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));

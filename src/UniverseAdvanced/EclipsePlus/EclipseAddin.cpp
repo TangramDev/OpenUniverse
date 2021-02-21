@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -357,7 +357,6 @@ STDMETHODIMP CEclipseWnd::ObserveEx(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj)
 	if (*ppXobj)
 	{
 		m_pCurXobj = (CXobj*)*ppXobj;
-		m_pCurXobj->put_SaveToConfigFile(true);
 	}
 	return hr;
 } 
@@ -1301,21 +1300,16 @@ STDMETHODIMP CEclipseCtrl::Observe(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrX
 			}
 			else
 				((CGalaxy*)pGalaxy)->m_nGalaxyType = EclipseSWTGalaxy;
-			(*ppXobj)->put_SaveToConfigFile(true);
 		}
 		return hr;
 	}
 	HRESULT hr = it2->second->Observe(bstrKey, bstrXml, ppXobj);
-	if(hr==S_OK&&strGalaxyName.CompareNoCase(_T("EclipseView")) == 0)
-		(*ppXobj)->put_SaveToConfigFile(true);
 	return hr;
 }
 	
 STDMETHODIMP CEclipseCtrl::ObserveEx(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj)
 {
 	HRESULT hr = Observe(bstrGalaxyName, bstrKey, bstrXml, ppXobj);
-	if (hr == S_OK&&*ppXobj != nullptr)
-		(*ppXobj)->put_SaveToConfigFile(true);
 	return S_OK;
 }
 

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2009,11 +2009,6 @@ HRESULT CXobj::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 		}
 	}
 	return hr;
-}
-
-STDMETHODIMP CXobj::put_SaveToConfigFile(VARIANT_BOOL newVal)
-{
-	return S_OK;
 }
 
 STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG* pVal)

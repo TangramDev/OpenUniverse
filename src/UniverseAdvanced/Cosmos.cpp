@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1647,7 +1647,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 				if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
 					return pGalaxy;
 			}
-			pXobj->put_SaveToConfigFile(true);
 		}
 	}
 
@@ -1759,12 +1758,6 @@ IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
 		CString str = _T("");
 		str.Format(_T("<default><cluster><xobj name='%s' /></cluster></default>"), strName);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
-		//VARIANT_BOOL bNewVersion;
-		//pGalaxyCluster->get_NewVersion(&bNewVersion);
-		//if (pXobj&&!bNewVersion)
-		//{
-		//	pXobj->put_SaveToConfigFile(true);
-		//}
 		return pGalaxyCluster;
 	}
 	return nullptr;
@@ -4142,8 +4135,6 @@ STDMETHODIMP CCosmos::ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrK
 					else
 					{
 						it1.second->Observe(bstrKey, bstrXml, &pXobj);
-						if (pXobj && bSave)
-							pXobj->put_SaveToConfigFile(true);
 						if (pWnd && pWnd->m_bMdiForm)
 						{
 							CXobj* _pXobj = (CXobj*)pXobj;
@@ -4184,8 +4175,6 @@ STDMETHODIMP CCosmos::ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrK
 				{
 					IXobj* pXobj = nullptr;
 					it1.second->Observe(bstrKey, bstrXml, &pXobj);
-					if (pXobj && bSave)
-						pXobj->put_SaveToConfigFile(true);
 				}
 			}
 		}

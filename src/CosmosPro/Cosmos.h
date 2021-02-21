@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034
+ *           Web Runtime for Application - Version 1.0.0.202102210035
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -340,14 +340,6 @@ namespace Universe
 			void set(String^ strCaption)
 			{
 				m_pXobj->put_Caption(STRING2BSTR(strCaption));
-			}
-		}
-
-		property bool SaveToConfigFile
-		{
-			void set(bool value)
-			{
-				m_pXobj->put_SaveToConfigFile(value);
 			}
 		}
 

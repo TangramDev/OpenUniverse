@@ -1731,9 +1731,6 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OfficeObj( 
             /* [retval][out] */ IDispatch **pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SaveToConfigFile( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
-        
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_WebPage( 
             /* [retval][out] */ IWebPage **pVal) = 0;
         
@@ -2105,10 +2102,6 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             /* [retval][out] */ IDispatch **pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SaveToConfigFile )( 
-            IXobj * This,
-            /* [in] */ VARIANT_BOOL newVal);
-        
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WebPage )( 
             IXobj * This,
             /* [retval][out] */ IWebPage **pVal);
@@ -2407,9 +2400,6 @@ EXTERN_C const IID IID_IXobj;
 
 #define IXobj_get_OfficeObj(This,pVal)	\
     ( (This)->lpVtbl -> get_OfficeObj(This,pVal) ) 
-
-#define IXobj_put_SaveToConfigFile(This,newVal)	\
-    ( (This)->lpVtbl -> put_SaveToConfigFile(This,newVal) ) 
 
 #define IXobj_get_WebPage(This,pVal)	\
     ( (This)->lpVtbl -> get_WebPage(This,pVal) ) 

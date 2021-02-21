@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034
+ *           Web Runtime for Application - Version 1.0.0.202102210035
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -76,7 +76,6 @@ protected:
 	// Implementation
 public:
 	virtual ~CCosmosListCtrl();
-	//HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
 	CXobj* m_pHostObj = nullptr;
 	CGalaxy* m_pGalaxy = nullptr;
 	map<LVITEM, CosmosUIItemData*> m_mapListItemData;
@@ -114,7 +113,6 @@ protected:
 	// Implementation
 public:
 	virtual ~CCosmosTabCtrl();
-	//HTREEITEM FillTreeView(CTangramXmlParse* pParse, CTangramXmlParse* pParseTag, HTREEITEM hParentItem);
 	CGalaxy* m_pGalaxy = nullptr;
 	CXobj* m_pHostObj = nullptr;
 	map<TCITEM, CosmosUIItemData*> m_mapTabItemData;
@@ -200,7 +198,7 @@ public:
 	CMDIChild*				m_pActiveMDIChild = nullptr;
 
 	CXobjVector				m_vMdiClientXobjs;
-	map<HWND, CMDIChild*>	m_mapMDIChildHelperWnd;
+	map<HWND, CMDIChild*>	m_mapMDIChild;
 
 	BEGIN_MSG_MAP(CMDIParent)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -321,7 +319,6 @@ public:
 	GalaxyInfo* m_pGalaxyInfo;
 	CWormhole* m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
-	map<CString, CXobj*>							m_mapNeedSaveToConfigNode;
 	map<CString, VARIANT>							m_mapVal;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;

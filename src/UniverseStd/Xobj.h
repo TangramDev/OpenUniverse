@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -248,7 +248,6 @@ public:
 	STDMETHOD(put_MasterRow)(int newVal);
 	STDMETHOD(get_MasterCol)(int* pVal);
 	STDMETHOD(put_MasterCol)(int newVal);
-	STDMETHOD(put_SaveToConfigFile)(VARIANT_BOOL newVal);
 	STDMETHOD(get_URL)(BSTR* pVal);
 	STDMETHOD(put_URL)(BSTR newVal);
 

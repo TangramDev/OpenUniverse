@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2439,131 +2439,6 @@ HRESULT CXobj::Fire_Destroy()
 			m_pWebBrowser->DestroyWindow();
 		m_pWebBrowser = nullptr;
 	}
-	if (m_pRootObj == this)
-	{
-		if (m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster)
-		{
-			CString strKey = m_strKey + _T("@") + m_pXobjShareData->m_pGalaxy->m_strGalaxyName + _T("@") + m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_strConfigFileNodeName;
-			auto it = m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.find(m_strKey);
-			if (it != m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
-			{
-				if (it->second == this)
-				{
-					CString strFile = m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_strPageFilePath;
-					CString strXml = _T("");
-					CTangramXmlParse m_Parse;
-					CTangramXmlParse xml;
-					CTangramXmlParse* m_pCosmosPageParse = nullptr;
-					if (::PathFileExists(strFile))
-					{
-						if (m_Parse.LoadFile(strFile))
-						{
-							m_pCosmosPageParse = m_Parse.GetChild(_T("hubblepage"));
-							if (m_pCosmosPageParse == nullptr)
-							{
-								m_Parse.AddNode(_T("hubblepage"));
-								m_pCosmosPageParse = m_Parse.GetChild(_T("hubblepage"));
-							}
-							if (m_pCosmosPageParse)
-							{
-								CTangramXmlParse* pCosmosPageParse = m_pCosmosPageParse->GetChild(m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
-								if (pCosmosPageParse == nullptr)
-								{
-									pCosmosPageParse = m_pCosmosPageParse->AddNode(m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
-								}
-								if (pCosmosPageParse)
-								{
-									CString strGalaxyName = m_pXobjShareData->m_pGalaxy->m_strGalaxyName;
-
-									CTangramXmlParse* pCosmosFrameParse = pCosmosPageParse->GetChild(strGalaxyName);
-									if (pCosmosFrameParse == nullptr)
-										pCosmosFrameParse = pCosmosPageParse->AddNode(strGalaxyName);
-									if (pCosmosFrameParse)
-									{
-										if (m_pWindow)
-										{
-											if (m_nActivePage > 0)
-											{
-												CString strVal = _T("");
-												strVal.Format(_T("%d"), m_nActivePage);
-												m_pHostParse->put_attr(_T("activepage"), strVal);
-											}
-											m_pWindow->Save();
-										}
-										if (m_nViewType == Grid)
-										{
-											((CGridWnd*)m_pHostWnd)->Save();
-										}
-
-										for (auto it2 : m_vChildNodes)
-										{
-											g_pCosmos->UpdateXobj(it2);
-										}
-										CTangramXmlParse* pParse = pCosmosFrameParse->GetChild(m_strKey);
-										if (pParse)
-											pCosmosFrameParse->RemoveNode(m_strKey);
-
-										strXml = m_pXobjShareData->m_pCosmosParse->xml();
-										CString _strName = m_pXobjShareData->m_pCosmosParse->name();
-										if (_strName != m_strKey)
-										{
-											CString strName = _T("<") + _strName;
-											int nPos = strXml.ReverseFind('<');
-											CString str = strXml.Left(nPos);
-											nPos = str.Find(strName);
-											str = str.Mid(nPos + strName.GetLength());
-											strXml = _T("<");
-											strXml += m_strKey;
-											strXml += str;
-											strXml += _T("</");
-											strXml += m_strKey;
-											strXml += _T(">");
-										}
-										xml.LoadXml(strXml);
-										if (pCosmosFrameParse->AddNode(&xml, _T("")))
-											m_Parse.SaveFile(strFile);
-									}
-								}
-							}
-						}
-					}
-					if (strXml != _T(""))
-					{
-						CTangramXmlParse m_Parse;
-						if (m_Parse.LoadFile(strFile))
-						{
-							m_pCosmosPageParse = m_Parse.GetChild(_T("hubblepage"));
-							if (m_pCosmosPageParse == nullptr)
-							{
-								m_Parse.AddNode(_T("hubblepage"));
-								m_pCosmosPageParse = m_Parse.GetChild(_T("hubblepage"));
-							}
-							if (m_pCosmosPageParse)
-							{
-								CTangramXmlParse* pPageParse = m_pCosmosPageParse->GetChild(m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName);
-								if (pPageParse)
-								{
-									CString strGalaxyName = m_pXobjShareData->m_pGalaxy->m_strGalaxyName;
-
-									CTangramXmlParse* pFrameParse = pPageParse->GetChild(strGalaxyName);
-									if (pFrameParse == nullptr)
-										pFrameParse = pPageParse->AddNode(strGalaxyName);
-									if (pFrameParse)
-									{
-										CTangramXmlParse* pParse = pFrameParse->GetChild(m_strKey);
-										if (pParse)
-											pFrameParse->RemoveNode(m_strKey);
-										if (pFrameParse->AddNode(&xml, _T("")))
-											m_Parse.SaveFile(strFile);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
@@ -2831,41 +2706,6 @@ HRESULT CXobj::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 	//	it.second->OnTabChange(ActivePage, OldPage);
 	//}
 	return hr;
-}
-
-STDMETHODIMP CXobj::put_SaveToConfigFile(VARIANT_BOOL newVal)
-{
-	if (m_pRootObj == this)
-	{
-		CString strKey = m_strKey + _T("@") + m_pXobjShareData->m_pGalaxy->m_strGalaxyName + _T("@") + m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_strConfigFileNodeName;
-		auto it = m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.find(m_strKey);
-		if (newVal)
-		{
-			if (it == m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
-			{
-				m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode[m_strKey] = this;
-				if (m_pXobjShareData->m_pGalaxyCluster->m_strConfigFileNodeName == _T(""))
-				{
-					m_pXobjShareData->m_pGalaxyCluster->put_ConfigName(CComBSTR(L""));
-				}
-				auto it2 = m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.find(m_pXobjShareData->m_pGalaxy->m_hWnd);
-				if (it2 == m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.end())
-					m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy[m_pXobjShareData->m_pGalaxy->m_hWnd] = m_pXobjShareData->m_pGalaxy;
-			}
-		}
-		else if (it != m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.end())
-		{
-			m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.erase(it);
-			if (m_pXobjShareData->m_pGalaxy->m_mapNeedSaveToConfigNode.size() == 0)
-			{
-				auto it2 = m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.find(m_pXobjShareData->m_pGalaxy->m_hWnd);
-				if (it2 != m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.end())
-					m_pXobjShareData->m_pGalaxyCluster->m_mapNeedSaveGalaxy.erase(it2);
-			}
-		}
-	}
-
-	return S_OK;
 }
 
 STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG * pVal)

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102190034           *
+ *           Web Runtime for Application - Version 1.0.0.202102210035           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1698,16 +1698,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hFrameWnd, BS
 	if (pGalaxy)
 	{
 		pGalaxy->Observe(bstrDefaultNodeKey, strXml.AllocSysString(), ppXobj);
-		if (*ppXobj&&bSaveToConfig)
-		{
-			(*ppXobj)->put_SaveToConfigFile(true);
-			//CGalaxy* pFrame2 = (CGalaxy*)::SendMessage(((CGalaxy*)pGalaxy)->m_hWnd, WM_HUBBLE_DATA, 0, 1992);
-			//if (pGalaxy)
-			//{
-			//	pFrame2->m_nGalaxyType = EclipseWorkBenchGalaxy;
-			//	//pGalaxy->m_pWorkBenchFrame = this;
-			//}
-		}
 	}
 
 	return S_OK;
@@ -1726,8 +1716,6 @@ STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR
 			{
 				IXobj* pXobj = nullptr;
 				it.second->Observe(bstrKey, bstrXml, &pXobj);
-				if (pXobj&&bSaveToConfigFile)
-					pXobj->put_SaveToConfigFile(true);
 			}
 		}
 	}
@@ -1741,8 +1729,6 @@ STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR
 			{
 				IXobj* pXobj = nullptr;
 				it.second->Observe(bstrKey, bstrXml, &pXobj);
-				if (pXobj&&bSaveToConfigFile)
-					pXobj->put_SaveToConfigFile(true);
 			}
 		}
 	}
