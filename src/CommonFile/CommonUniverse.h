@@ -690,7 +690,6 @@ namespace CommonUniverse {
 		virtual CSession* CreateCloudSession(CWebPageImpl*) { return nullptr; }
 		virtual CSession* GetCloudSession(IXobj*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
-		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 	};
 
 	class ICosmosWindowProvider
@@ -782,9 +781,6 @@ namespace CommonUniverse {
 		virtual void ForegroundIdleProc() {}
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
-		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
-		virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) {}
-		virtual void* CreateDocument(CString strType, CString strDocKey) { return nullptr; }
 		virtual HICON GetAppIcon(int nIndex) { return NULL; }
 	};
 

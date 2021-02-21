@@ -1422,7 +1422,6 @@ namespace Universe
     {
         BSTR bstrSRC = STRING2BSTR(strSRC);
         BSTR bstrTarget = STRING2BSTR(strTarget);
-        theApp.m_pCosmos->CosmosNotify(bstrSRC, bstrTarget, 10000, 0);
         ::SysFreeString(bstrSRC);
         ::SysFreeString(bstrTarget);
     }

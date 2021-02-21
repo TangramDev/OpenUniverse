@@ -874,6 +874,7 @@ namespace Browser {
 			{
 				IXobj* pXobj = nullptr;
 				CComBSTR bstrKey(strName);
+				m_pGalaxy->m_pWebPageWnd = this;
 				m_pGalaxy->Observe(bstrKey, CComBSTR(strXML), &pXobj);
 				if (pXobj)
 				{

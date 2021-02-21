@@ -192,14 +192,14 @@ public:
 	void OnFinalMessage(HWND hWnd);
 
 private:
-	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnFormCreated(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosGetXml(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnGetDPIScaledSize(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnMdiClientCreated(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
@@ -303,10 +303,10 @@ protected:
 	ULONG InternalRelease(){ return 1; }
 
 private:
-	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnBeforeParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnAfterParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnGetDPIScaledSize(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnBeforeParentDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnAfterParentDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnHScroll(UINT, WPARAM, LPARAM, BOOL&);

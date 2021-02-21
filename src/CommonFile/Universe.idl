@@ -422,7 +422,7 @@ interface ICosmos : IDispatch {
 	[id(0x00113)] HRESULT GetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
 	[id(0x00114)] HRESULT SetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	[id(0x00115), hidden] HRESULT CreateCosmosCtrl(BSTR bstrAppID, [out, retval] ICosmosCtrl** ppRetCtrl);
-	[id(0x00116)] HRESULT CosmosNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
+	[id(0x00116)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
 	[id(0x00117)] HRESULT DeleteGalaxy(IGalaxy* pGalaxy);
 	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IXobj** ppXobj);
 	[id(0x00119), helpstring("method Create ChromeWebBrowser")] HRESULT CreateBrowser(ULONGLONG hParentWnd, BSTR strUrls, [out, retval]IBrowser** ppRet);
@@ -432,7 +432,6 @@ interface ICosmos : IDispatch {
 	[id(0x0011d)] HRESULT ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	[id(0x0011e)] HRESULT DeletePage(LONGLONG PageHandle);
 	[id(0x0011f)] HRESULT LoadDocComponent(BSTR bstrLib, [out, retval] LONGLONG* llAppProxy);
-	[id(0x00120)] HRESULT InitCLRApp(BSTR strInitXml, [out, retval] LONGLONG* llHandle);
 
 	[id(0x001000), helpstring("method CosmosCommand")] HRESULT CosmosCommand(IDispatch* RibbonControl);
 	[id(0x001001), helpstring("method CosmosGetImage")] HRESULT CosmosGetImage(BSTR strValue, [out, retval] IPictureDisp** ppdispImage);

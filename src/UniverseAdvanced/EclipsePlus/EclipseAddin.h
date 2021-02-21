@@ -90,14 +90,14 @@ protected:
 	ULONG InternalAddRef() { return 1; }
 	ULONG InternalRelease() { return 1; }
 
-	LRESULT OnCommand(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCommand(UINT, WPARAM, LPARAM, BOOL& );
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnQueryAppProxy(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnCosmosGetXml(UINT, WPARAM, LPARAM, BOOL& );
 
 	void OnFinalMessage(HWND hWnd);
 
@@ -200,7 +200,7 @@ public:
 	STDMETHOD(InitCtrl)(BSTR bstrXml);
 
 private:
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+	LRESULT OnCreate(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL& );
 };
 

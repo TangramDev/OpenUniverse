@@ -2761,11 +2761,9 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrAppID,
             /* [retval][out] */ ICosmosCtrl **ppRetCtrl) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CosmosNotify( 
-            BSTR strXml1,
-            BSTR strXml2,
-            LONGLONG wParam,
-            LONGLONG lParam) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
+            BSTR strInitXml,
+            /* [retval][out] */ LONGLONG *llHandle) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteGalaxy( 
             IGalaxy *pGalaxy) = 0;
@@ -2805,10 +2803,6 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE LoadDocComponent( 
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
-            BSTR strInitXml,
-            /* [retval][out] */ LONGLONG *llHandle) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
@@ -3082,12 +3076,10 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrAppID,
             /* [retval][out] */ ICosmosCtrl **ppRetCtrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CosmosNotify )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCLRApp )( 
             ICosmos * This,
-            BSTR strXml1,
-            BSTR strXml2,
-            LONGLONG wParam,
-            LONGLONG lParam);
+            BSTR strInitXml,
+            /* [retval][out] */ LONGLONG *llHandle);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteGalaxy )( 
             ICosmos * This,
@@ -3136,11 +3128,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCLRApp )( 
-            ICosmos * This,
-            BSTR strInitXml,
-            /* [retval][out] */ LONGLONG *llHandle);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
             ICosmos * This,
@@ -3324,8 +3311,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_CreateCosmosCtrl(This,bstrAppID,ppRetCtrl)	\
     ( (This)->lpVtbl -> CreateCosmosCtrl(This,bstrAppID,ppRetCtrl) ) 
 
-#define ICosmos_CosmosNotify(This,strXml1,strXml2,wParam,lParam)	\
-    ( (This)->lpVtbl -> CosmosNotify(This,strXml1,strXml2,wParam,lParam) ) 
+#define ICosmos_InitCLRApp(This,strInitXml,llHandle)	\
+    ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
 
 #define ICosmos_DeleteGalaxy(This,pGalaxy)	\
     ( (This)->lpVtbl -> DeleteGalaxy(This,pGalaxy) ) 
@@ -3353,9 +3340,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_LoadDocComponent(This,bstrLib,llAppProxy)	\
     ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
-
-#define ICosmos_InitCLRApp(This,strInitXml,llHandle)	\
-    ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
 
 #define ICosmos_CosmosCommand(This,RibbonControl)	\
     ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 

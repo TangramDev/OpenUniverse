@@ -24,8 +24,6 @@
 
 #pragma once
 
-#define WM_HUBBLE_NOTIFY WM_NOTIFY+WM_REFLECT_BASE
-
 class CWinForm :
 	public CWindowImpl<CWinForm, CWindow>
 {
@@ -51,10 +49,10 @@ public:
 	void OnFinalMessage(HWND hWnd);
 
 private:
-	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnFormCreated(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnCosmosGetXml(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);

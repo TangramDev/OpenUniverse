@@ -189,7 +189,7 @@ namespace OfficePlus
 			BEGIN_MSG_MAP(OfficePlus::ExcelPlus::CExcelAppCtrl)
 				MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
 			END_MSG_MAP()
-			LRESULT OnShowWindow(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
+			LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL& );
 		};
 
 		class CExcelObject :

@@ -135,13 +135,15 @@ class CMDIChild :
 public:
 	CMDIChild(void);
 	virtual ~CMDIChild(void);
-	HWND m_hClient;
-	HWND m_hParent;
-	CString m_strKey;
-	CGalaxy* m_pGalaxy = nullptr;
-	CXobj* m_pClientBindingObj = nullptr;
-	CString m_strDocXml=_T("");
-	CString m_strDocTemplateKey = _T("");
+
+	HWND		m_hClient;
+
+	CString		m_strKey;
+	CString		m_strDocXml=_T("");
+	CString		m_strDocTemplateKey = _T("");
+
+	CGalaxy*	m_pGalaxy = nullptr;
+	CXobj*		m_pClientBindingObj = nullptr;
 	BEGIN_MSG_MAP(CMDIChild)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
@@ -188,15 +190,17 @@ public:
 	CMDIParent(void);
 	virtual ~CMDIParent(void);
 
-	BOOL									m_bDestroy = false;
-	HWND									m_hMDIClient;
-	CXobj*									m_pClientXobj = nullptr;
-	CGalaxy*								m_pGalaxy = nullptr;
-	CGalaxyCluster*							m_pGalaxyCluster = nullptr;
-	CMDIChild*						m_pActiveMDIChild = nullptr;
+	BOOL					m_bDestroy = false;
+	HWND					m_hMDIClient = nullptr;
 
-	CXobjVector								m_vMdiClientXobjs;
-	map<HWND, CMDIChild*>				m_mapMDIChildHelperWnd;
+	CXobj*					m_pClientXobj = nullptr;
+	CGalaxy*				m_pGalaxy = nullptr;
+	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
+
+	CMDIChild*				m_pActiveMDIChild = nullptr;
+
+	CXobjVector				m_vMdiClientXobjs;
+	map<HWND, CMDIChild*>	m_mapMDIChildHelperWnd;
 
 	BEGIN_MSG_MAP(CMDIParent)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -206,8 +210,8 @@ public:
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 };
@@ -257,14 +261,14 @@ public:
 	void OnFinalMessage(HWND hWnd);
 
 private:
-	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnGetMe(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnFormCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& );
-	LRESULT OnCosmosMsg(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnCosmosGetXml(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnMdiClientCreated(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnFormCreated(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnCosmosGetXml(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnGetDPIScaledSize(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnMdiClientCreated(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
@@ -369,10 +373,10 @@ protected:
 	ULONG InternalRelease(){ return 1; }
 
 private:
-	LRESULT OnDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnGetDPIScaledSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnBeforeParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
-	LRESULT OnAfterParentDpiChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&);
+	LRESULT OnDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnGetDPIScaledSize(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnBeforeParentDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnAfterParentDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnHScroll(UINT, WPARAM, LPARAM, BOOL&);

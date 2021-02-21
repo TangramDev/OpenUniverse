@@ -169,7 +169,7 @@ namespace CommonUniverse
 	// CTangramTabCtrlWnd
 	IMPLEMENT_DYNAMIC(CTangramTabCtrlWnd, CMFCTabCtrl)
 
-		CTangramTabCtrlWnd::CTangramTabCtrlWnd()
+	CTangramTabCtrlWnd::CTangramTabCtrlWnd()
 	{
 		m_nCurSelTab = -1;
 		m_pWndNode = nullptr;
@@ -1265,6 +1265,10 @@ namespace CommonUniverse
 						CRect rectDummy;
 						rectDummy.SetRectEmpty();
 						CMFCTabCtrl::Style nStyle = (CMFCTabCtrl::Style)(_ttoi(OLE2T(bstrStyle)) % 8);
+						if (nStyle == CMFCTabCtrl::Style::STYLE_FLAT_SHARED_HORZ_SCROLL)
+						{
+							nStyle = CMFCTabCtrl::Style::STYLE_FLAT;
+						}
 						pTangramTabCtrlWnd->EnableAutoColor();
 						pTangramTabCtrlWnd->EnableTabSwap(false);
 						pTangramTabCtrlWnd->SetLocation(loc);

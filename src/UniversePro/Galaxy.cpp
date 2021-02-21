@@ -78,7 +78,6 @@ void CDockPaneWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 				m_pGalaxy = (CGalaxy*)iter->second;
 			}
 		}
-		//::ShowWindow(m_hClient, SW_SHOW);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210107);
 	}
 }
@@ -733,7 +732,6 @@ void CCosmosTabCtrl::PostNcDestroy()
 CMDIChild::CMDIChild(void)
 {
 	m_hClient = nullptr;
-	m_hParent = nullptr;
 	m_strKey = _T("");
 }
 
@@ -774,10 +772,6 @@ LRESULT CMDIChild::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 
 LRESULT CMDIChild::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	//if (lParam == 19631222 && wParam == 0)
-	//{
-	//	return (LRESULT)this;
-	//}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (wParam)
 	{

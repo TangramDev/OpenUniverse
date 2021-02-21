@@ -476,23 +476,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			}
 			if (pCosmosFrameWndInfo->m_hClient == NULL)
 				pCosmosFrameWndInfo->m_hClient = hWnd;
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("MDIClient"),hPWnd, hWnd);
-		}
-		else if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
-		{
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:ControlBar"), hPWnd, hWnd);
-		}
-		else if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
-		{
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:MiniFrame"), hPWnd, hWnd);
-		}
-		else if (strClassName.Find(_T("Afx:RibbonBar:")) == 0)
-		{
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:RibbonBar"), hPWnd, hWnd);
 		}
 		else if (strClassName == _T("Chrome_RenderWidgetHostHWND"))
 		{
@@ -511,14 +494,10 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				}
 				::PostMessage(hPWnd, WM_COSMOSMSG, 0, (LPARAM)hWnd);
 			}
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Chrome_RenderWidgetHostHWND"), hPWnd, hWnd);
 		}
 		else if (strClassName.Find(_T("SysTreeView32")) == 0 || strClassName.Find(_T("SysTabControl32")) == 0 || strClassName.Find(_T("SysListView32")) == 0)
 		{
 			::PostMessage(hWnd, WM_XOBJCREATED, 0, 20210108);
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(strClassName, hPWnd, hWnd);
 		}
 
 		if (HIWORD(pCreateWnd->lpcs->lpszClass))

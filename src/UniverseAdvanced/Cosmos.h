@@ -297,7 +297,6 @@ public:
 	STDMETHOD(DeleteGalaxy)(IGalaxy* pGalaxy);
 	STDMETHOD(InitCLRApp)(BSTR strInitXml, LONGLONG* llHandle);
 	STDMETHOD(CreateBrowser)(ULONGLONG hParentWnd, BSTR strUrls, IBrowser** ppRet);
-	STDMETHOD(CosmosNotify)(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam);
 
 	void Init();
 	void Lock() {}
@@ -417,5 +416,4 @@ private:
 	CSession* GetCloudSession(IXobj*);
 	void SetMainWnd(HWND hMain);
 	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
-	void CosmosNotify(CString strXml1, CString strXml2, LONGLONG wParam, LONGLONG lParam);
 };

@@ -107,7 +107,7 @@ namespace Browser {
 						}
 						else
 						{
-							it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
+							//it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 							m_pVisibleWebWnd = it.second;
 						}
 					}
@@ -667,6 +667,22 @@ namespace Browser {
 				{
 					m_bTabChange = false;
 					m_pBrowser->LayoutBrowser();
+					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
+					for (auto& it : m_mapChildPage)
+					{
+						if (::IsWindow(it.first))
+						{
+							if (it.first != hWnd)
+							{
+								if(it.second->m_pChromeRenderFrameHost)
+									it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
+							}
+							else
+							{
+								m_pVisibleWebWnd = it.second;
+							}
+						}
+					}
 				}
 			}
 			break;
@@ -692,11 +708,21 @@ namespace Browser {
 				{
 					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);;
 				}
-				HWND hWnd = this->m_pBrowser->GetActiveWebContentWnd();
-				auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-				if (it != g_pCosmos->m_mapHtmlWnd.end())
+				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
+				for (auto& it : m_mapChildPage)
 				{
-					it->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (::IsWindow(it.first))
+					{
+						if (it.first != hWnd)
+						{
+							if (it.second->m_pChromeRenderFrameHost)
+								it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
+						}
+						else
+						{
+							m_pVisibleWebWnd = it.second;
+						}
+					}
 				}
 			}
 			break;

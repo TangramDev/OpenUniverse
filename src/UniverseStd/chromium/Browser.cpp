@@ -64,17 +64,6 @@ namespace Browser {
 				g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
 				m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 			}
-			//auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
-			//if (it != g_pCosmos->m_mapHtmlWnd.end())
-			//{
-			//	CWebPage* pPage = (CWebPage*)it->second;
-			//	if (pPage->m_pGalaxy && pPage->m_pCosmosFrameWndInfo)
-			//	{
-			//		IXobj* pObj = nullptr;
-			//		CString strKey = pPage->m_pGalaxy->m_strCurrentKey;
-			//		pPage->Observe(CComBSTR(strKey), CComBSTR(""), &pObj);
-			//	}
-			//}
 		}
 	}
 
@@ -93,7 +82,6 @@ namespace Browser {
 					}
 					else
 					{
-						it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						m_pVisibleWebWnd = it.second;
 					}
 				}
@@ -572,6 +560,22 @@ namespace Browser {
 				{
 					m_bTabChange = false;
 					m_pBrowser->LayoutBrowser();
+					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
+					for (auto& it : m_mapChildPage)
+					{
+						if (::IsWindow(it.first))
+						{
+							if (it.first != hWnd)
+							{
+								if (it.second->m_pChromeRenderFrameHost)
+									it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
+							}
+							else
+							{
+								m_pVisibleWebWnd = it.second;
+							}
+						}
+					}
 				}
 			}
 			break;

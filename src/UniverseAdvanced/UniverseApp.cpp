@@ -1213,8 +1213,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("MDIClient"), hPWnd, hWnd);
 		}
 		else if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 		{
@@ -1239,19 +1237,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			{
 				::PostMessage(g_pCosmos->m_hCosmosWnd, WM_CONTROLBARCREATED, (WPARAM)hWnd, (LPARAM)h);
 			}
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:ControlBar"), hPWnd, hWnd);
 		}
-		//else if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
-		//{
-		//	if (g_pCosmos->m_pCosmosDelegate)
-		//		g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:MiniFrame"), hPWnd, hWnd);
-		//}
-		//else if (strClassName.Find(_T("Afx:RibbonBar:")) == 0)
-		//{
-		//	if (g_pCosmos->m_pCosmosDelegate)
-		//		g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Afx:RibbonBar"), hPWnd, hWnd);
-		//}
 		else if (strClassName == _T("Chrome_RenderWidgetHostHWND"))
 		{
 			if ((::GetWindowLong(hPWnd, GWL_STYLE) & WS_POPUP) == 0)
@@ -1269,14 +1255,10 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				}
 				::PostMessage(hPWnd, WM_COSMOSMSG, 0, (LPARAM)hWnd);
 			}
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(_T("Chrome_RenderWidgetHostHWND"), hPWnd, hWnd);
 		}
 		else if (strClassName.Find(_T("SysTreeView32")) == 0 || strClassName.Find(_T("SysTabControl32")) == 0 || strClassName.Find(_T("SysListView32")) == 0)
 		{
 			::PostMessage(hWnd, WM_XOBJCREATED, 0, 20210108);
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->AppWindowCreated(strClassName, hPWnd, hWnd);
 			if (strClassName.Find(_T("SysTreeView32")) == 0)
 			{
 				CCosmosTreeCtrl* pCtrl = new CCosmosTreeCtrl();

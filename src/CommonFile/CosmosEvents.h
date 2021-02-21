@@ -26,7 +26,6 @@
 #include "universe.h"
 
 extern _ATL_FUNC_INFO OpenComplete;
-extern _ATL_FUNC_INFO CosmosNotify;
 extern _ATL_FUNC_INFO DocumentComplete;
 extern _ATL_FUNC_INFO NodeOpenComplete;
 extern _ATL_FUNC_INFO Destroy;

@@ -3481,15 +3481,6 @@ STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 	return S_OK;
 }
 
-HRESULT CCosmos::CosmosNotify(BSTR strXml1, BSTR strXml2, LONGLONG wParam, LONGLONG lParam)
-{
-	return S_OK;
-}
-
-void CCosmos::CosmosNotify(CString strXml1, CString strXml2, LONGLONG wParam, LONGLONG lParam)
-{
-}
-
 HRESULT CCosmos::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** ppRet)
 {
 	HWND hPWnd = (HWND)hParentWnd;
