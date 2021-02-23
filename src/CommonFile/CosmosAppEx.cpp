@@ -553,18 +553,16 @@ namespace CommonUniverse
 			{
 				CView* pView = static_cast<CView*>(pWnd);
 				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-				CFrameWnd* pFrame = pView->GetParentFrame();
-				if (pFrame)
-				{
-					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
-				}
 				CDocument* pDoc = pView->GetDocument();
 				if (pDoc)
 				{
 					HWND hRetFrame = NULL;
 					CDocTemplate* pTemplate = pDoc->GetDocTemplate();
+					CFrameWnd* pFrame = pView->GetParentFrame();
 					if (pFrame)
 					{
+						hRetFrame = pFrame->m_hWnd;
+						pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hRetFrame, _T("CosmosFrameWndInfo"));
 						if (pCosmosFrameWndInfo == nullptr)
 						{
 							__int64 nType = 0;
@@ -573,12 +571,10 @@ namespace CommonUniverse
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
 								nType = 3;
 							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
-							{
 								nType = 1;
-							}
-							::SetProp(pFrame->m_hWnd, _T("CosmosFrameWndType"), (HANDLE)nType);
+							::SetProp(hRetFrame, _T("CosmosFrameWndType"), (HANDLE)nType);
 						}
-						if (pCosmosFrameWndInfo)
+						else
 						{
 							pCosmosFrameWndInfo->m_hClient = hWnd;
 							if (pCosmosFrameWndInfo->m_pDoc == nullptr && pDoc)
@@ -596,14 +592,7 @@ namespace CommonUniverse
 							}
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
 								pCosmosFrameWndInfo->m_nFrameType = 4;
-							if (pCosmosFrameWndInfo->m_nFrameType != 3 && pCosmosFrameWndInfo->bControlBarProessed == false)
-							{
-								g_pCosmosImpl->m_hFirstView = hWnd;
-								//if(g_pCosmosImpl->m_hFirstView!=hWnd)
-								//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
-							}
 						}
-						hRetFrame = pFrame->m_hWnd;
 					}
 					return hRetFrame;
 				}

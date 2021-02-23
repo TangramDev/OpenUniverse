@@ -915,7 +915,7 @@ namespace Browser {
 				g_pCosmos->m_pHostHtmlWnd = this;
 				if (g_pCosmos->m_pHostBrowser == nullptr)
 				{
-					HWND hBrowser = ::GetParent(g_pCosmos->m_pHostHtmlWnd->m_hWnd);
+					HWND hBrowser = ::GetParent(m_hWnd);
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 					if (it != g_pCosmos->m_mapBrowserWnd.end())
 						g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
@@ -923,11 +923,6 @@ namespace Browser {
 
 				g_pCosmos->TangramInitFromeWeb();
 				CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
-				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20200214, 0);
-				if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_hFirstView)
-				{
-					::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)g_pCosmos->m_hFirstView, 20210110);
-				}
 			}
 		}
 		else if (strId.CompareNoCase(_T("NEW_TAB_PAGE_LOADED")) == 0)

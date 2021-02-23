@@ -835,7 +835,6 @@ namespace Browser {
 				g_pCosmos->m_pHostHtmlWnd = this;
 				g_pCosmos->TangramInitFromeWeb();
 				CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
-				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20200214, 0);
 			}
 		}
 		else if (strId.CompareNoCase(_T("NEW_TAB_PAGE_LOADED")) == 0)

@@ -606,6 +606,11 @@ CCosmos::~CCosmos()
 		m_TabWndClassInfoDictionary.clear();
 	}
 
+	m_mapXobj.clear();
+	m_mapMDTWindow.clear();
+	m_mapHtmlWnd.clear();
+	m_mapFormWebPage.clear();
+	m_mapUIData.clear();
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
 	{
 		OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
@@ -626,89 +631,6 @@ CCosmos::~CCosmos()
 	}
 	g_pCosmos = nullptr;
 	OutputDebugString(_T("------------------End Release CCosmos------------------------\n"));
-}
-
-CString CCosmos::GetOfficePath()
-{
-	CString strOfficePath = _T("");
-	CString strPath = m_strAppCommonDocPath + _T("officeappinfo.xml");
-	if (::PathFileExists(strPath))
-	{
-		CTangramXmlParse m_Parse;
-		if (m_Parse.LoadFile(strPath))
-		{
-			strOfficePath = m_Parse.attr(_T("path"), _T(""));
-			if (strOfficePath != _T("") && ::PathIsDirectory(strOfficePath))
-				return strOfficePath;
-		}
-	}
-	//Install Office Component:
-	BOOL m_b32bitOffice = false;
-	BOOL m_b64bitSystem = false;
-
-	SYSTEM_INFO si;
-	GetNativeSystemInfo(&si);
-
-	if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 ||
-		si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
-		m_b64bitSystem = true;
-
-	wchar_t buf[_MAX_PATH];
-	strPath = _T("SOFTWARE\\Microsoft\\Office\\ClickToRun\\Configuration\\");
-	swprintf_s(buf, strPath);
-	DWORD size = _MAX_PATH;
-	HKEY hKey = NULL;
-	REGSAM hREGSAM = KEY_READ | KEY_QUERY_VALUE;
-	if (m_b64bitSystem)
-		hREGSAM |= KEY_WOW64_64KEY;
-	if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, buf, 0, NULL, REG_OPTION_NON_VOLATILE, hREGSAM, NULL, &hKey, NULL) == ERROR_SUCCESS)
-	{
-		wchar_t szPlatForm[_MAX_PATH];
-		if (RegQueryValueEx(hKey, L"Platform", 0, NULL, (BYTE*)&szPlatForm, &size) == ERROR_SUCCESS)
-		{
-			CString strVal = szPlatForm;
-			if (strVal.CompareNoCase(_T("x86")) == 0)
-				m_b32bitOffice = true;
-		}
-		RegCloseKey(hKey);
-	}
-	else
-		return _T("");
-	strPath = _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\");
-	strPath += _T("winword.exe");
-	swprintf_s(buf, strPath);
-	hKey = NULL;
-	if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, buf, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_QUERY_VALUE | KEY_WOW64_32KEY, NULL, &hKey, NULL) == ERROR_SUCCESS)
-	{
-		wchar_t path[_MAX_PATH];
-		if (RegQueryValueEx(hKey, L"Path", 0, NULL, (BYTE*)&path, &size) == ERROR_SUCCESS)
-		{
-			strOfficePath = path;
-		}
-		RegCloseKey(hKey);
-	}
-	if (strOfficePath == _T("") && RegCreateKeyEx(HKEY_LOCAL_MACHINE, buf, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_QUERY_VALUE | KEY_WOW64_64KEY, NULL, &hKey, NULL) == ERROR_SUCCESS)
-	{
-		wchar_t path[_MAX_PATH];
-		if (RegQueryValueEx(hKey, L"Path", 0, NULL, (BYTE*)&path, &size) == ERROR_SUCCESS)
-		{
-			strOfficePath = path;
-		}
-		RegCloseKey(hKey);
-	}
-	if (strOfficePath != _T(""))
-	{
-		CTangramXmlParse m_Parse;
-		if (m_Parse.LoadXml(_T("<officeappinfo />")))
-		{
-			m_Parse.put_attr(_T("path"), strOfficePath);
-			m_Parse.put_attr(_T("officeapp"), _T("excel;winword;powerpnt;outlook"));
-			CString strPath = m_strAppCommonDocPath + _T("officeappinfo.xml");
-			m_Parse.SaveFile(strPath);
-		}
-		return strOfficePath;
-	}
-	return _T("");
 }
 
 LRESULT CCosmos::Close(void)
@@ -761,7 +683,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 		}
 		else
 		{
-			for (auto it : pXobj->m_mapWndXobjProxy)
+			for (auto &it : pXobj->m_mapWndXobjProxy)
 			{
 				it.second->OnCosmosDocEvent(pObj);
 			}
@@ -770,7 +692,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 	break;
 	case 1:
 	{
-		for (auto it : pXobj->m_mapWndXobjProxy)
+		for (auto &it : pXobj->m_mapWndXobjProxy)
 		{
 			it.second->OnCosmosDocEvent(pObj);
 		}
@@ -778,7 +700,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 	break;
 	case 2:
 	{
-		for (auto it : pXobj->m_mapWndXobjProxy)
+		for (auto &it : pXobj->m_mapWndXobjProxy)
 		{
 			it.second->OnCosmosDocEvent(pObj);
 		}
@@ -1032,56 +954,47 @@ void CCosmos::TangramInitFromeWeb()
 		if (pParse)
 			m_strDefaultWorkBenchXml = m_Parse[_T("defaultworkbench")].xml();
 
-		auto it = m_mapBrowserWnd.find(m_hHostBrowserWnd);
-		if (it != m_mapBrowserWnd.end())
-		{
-			CBrowser* pWnd = (CBrowser*)it->second;
-			if (pWnd->m_pVisibleWebWnd)
-			{
-				m_pMainWebPageImpl = pWnd->m_pVisibleWebWnd;
+		m_pMainWebPageImpl = m_pHostHtmlWnd;
 
-				pParse = m_Parse.GetChild(_T("urls"));
-				if (pParse)
+		pParse = m_Parse.GetChild(_T("urls"));
+		if (pParse)
+		{
+			CString strUrls = _T("");
+			int nCount = pParse->GetCount();
+			for (int i = 0; i < nCount; i++)
+			{
+				CString strURL = pParse->GetChild(i)->attr(_T("url"), _T(""));
+				int nPos2 = strURL.Find(_T(":"));
+				if (nPos2 != -1)
 				{
-					CString strUrls = _T("");
-					int nCount = pParse->GetCount();
-					for (int i = 0; i < nCount; i++)
+					CString strURLHeader = strURL.Left(nPos2);
+					if (strURLHeader.CompareNoCase(_T("host")) == 0)
 					{
-						CString strURL = pParse->GetChild(i)->attr(_T("url"), _T(""));
-						int nPos2 = strURL.Find(_T(":"));
-						if (nPos2 != -1)
-						{
-							CString strURLHeader = strURL.Left(nPos2);
-							if (strURLHeader.CompareNoCase(_T("host")) == 0)
-							{
-								strURL = g_pCosmos->m_strAppPath + strURL.Mid(nPos2 + 1);
-							}
-						}
-						if (strURL != _T(""))
-						{
-							strUrls += strURL;
-							if (i < nCount - 1)
-								strUrls += _T("|");
-						}
+						strURL = g_pCosmos->m_strAppPath + strURL.Mid(nPos2 + 1);
 					}
-					if (strUrls != _T(""))
-					{
-						CString strDisposition = _T("");
-						strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
-						if (pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
-						{
-							IPCMsg msg;
-							msg.m_strId = L"ADD_URL";
-							msg.m_strParam1 = strUrls;
-							msg.m_strParam2 = strDisposition;
-							pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
-						}
-					}
-					::SetFocus(::GetAncestor(pWnd->m_hWnd,GA_PARENT));
+				}
+				if (strURL != _T(""))
+				{
+					strUrls += strURL;
+					if (i < nCount - 1)
+						strUrls += _T("|");
 				}
 			}
+			if (strUrls != _T(""))
+			{
+				CString strDisposition = _T("");
+				strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
+				if (m_pHostHtmlWnd->m_pChromeRenderFrameHost)
+				{
+					IPCMsg msg;
+					msg.m_strId = L"ADD_URL";
+					msg.m_strParam1 = strUrls;
+					msg.m_strParam2 = strDisposition;
+					m_pHostHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
+				}
+			}
+			::SetFocus(::GetAncestor(m_pHostHtmlWnd->m_hWnd, GA_PARENT));
 		}
-
 	}
 }
 

@@ -193,10 +193,10 @@ namespace Browser {
 
 			if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd && ::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd))
 			{
-				if (g_pCosmos->m_pMDIMainWnd->m_bInit == false)
-				{
-					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 8);
-				}
+				//if (g_pCosmos->m_pMDIMainWnd->m_bInit == false)
+				//{
+				//	::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 8);
+				//}
 				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 			}
 			if (m_pVisibleWebWnd->m_strCurKey == _T(""))
@@ -591,29 +591,6 @@ namespace Browser {
 			{
 				m_bTabChange = false;
 			}
-		}
-		return 1;
-		break;
-		case 20200214:
-		{
-			auto t = create_task([this]()
-				{
-					SleepEx(700, true);
-					try
-					{
-						if (m_pVisibleWebWnd)
-						{
-							::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
-							BrowserLayout();
-						}
-					}
-					catch (...)
-					{
-						ATLASSERT(false);
-						return 0;
-					}
-					return 1;
-				});
 		}
 		return 1;
 		break;

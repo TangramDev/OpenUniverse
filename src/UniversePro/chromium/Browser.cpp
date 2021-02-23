@@ -456,29 +456,6 @@ namespace Browser {
 		}
 		return 1;
 		break;
-		case 20200214:
-		{
-			auto t = create_task([this]()
-				{
-					SleepEx(700, true);
-					try
-					{
-						if (m_pVisibleWebWnd)
-						{
-							::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
-							BrowserLayout();
-						}
-					}
-					catch (...)
-					{
-						ATLASSERT(false);
-						return 0;
-					}
-					return 1;
-				});
-		}
-		return 1;
-		break;
 		case 20200128:
 		{
 			if (m_pVisibleWebWnd)

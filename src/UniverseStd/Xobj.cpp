@@ -293,9 +293,6 @@ CXobj::~CXobj()
 		m_pExtender = nullptr;
 	}
 
-	if (m_nViewType != TangramTreeView && m_nViewType != Grid && m_pDisp)
-		CCommonFunction::ClearObject<IUnknown>(m_pDisp);
-
 	m_vChildNodes.clear();
 
 	if (m_pChildNodeCollection != nullptr)
@@ -2384,7 +2381,7 @@ HRESULT CXobj::Fire_Destroy()
 {
 	if (m_pWebBrowser)
 	{
-		if(::IsChild(m_pHostWnd->m_hWnd,m_pWebBrowser->m_hWnd))
+		if (::IsChild(m_pHostWnd->m_hWnd, m_pWebBrowser->m_hWnd))
 			m_pWebBrowser->DestroyWindow();
 		m_pWebBrowser = nullptr;
 	}
@@ -2417,9 +2414,14 @@ HRESULT CXobj::Fire_Destroy()
 	{
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IXobj*)this);
 	}
-	//if (m_pWormhole)
-	//	delete m_pWormhole;
-	//m_pWormhole = nullptr;
+
+	if (m_nViewType != TangramTreeView && m_nViewType != Grid && m_pDisp)
+	{
+		if (m_nViewType == CLRCtrl)
+			g_pCosmos->m_pCLRProxy->ReleaseCosmosObj(m_pDisp);
+		else
+			CCommonFunction::ClearObject<IUnknown>(m_pDisp);
+	}
 	return hr;
 }
 

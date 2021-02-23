@@ -998,6 +998,9 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 20210223:
 	{
+		if (m_bInit)
+			break;
+		m_bInit = true;
 		::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 	}
 	break;

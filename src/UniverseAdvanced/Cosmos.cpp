@@ -585,7 +585,7 @@ CCosmos::~CCosmos()
 		CCommonFunction::ClearObject<CXobjCollection>(m_pRootNodes);
 	if (m_nAppID == 3)
 	{
-		for (auto &it : m_mapThreadInfo)
+		for (auto& it : m_mapThreadInfo)
 		{
 			if (it.second->m_hGetMessageHook)
 			{
@@ -598,11 +598,11 @@ CCosmos::~CCosmos()
 
 		_clearObjects();
 
-		for (auto &it : m_mapObjDic)
+		for (auto& it : m_mapObjDic)
 		{
 			it.second->Release();
 		}
-		for (auto &it : m_mapValInfo)
+		for (auto& it : m_mapValInfo)
 		{
 			::VariantClear(&it.second);
 		}
@@ -611,24 +611,10 @@ CCosmos::~CCosmos()
 		m_TabWndClassInfoDictionary.clear();
 	}
 
-	if (m_mapXobj.size())
-	{
-		while (m_mapXobj.size())
-		{
-			m_mapXobj.erase(m_mapXobj.begin());
-		}
-	}
 	m_mapXobj.clear();
 	m_mapMDTWindow.clear();
 	m_mapHtmlWnd.clear();
 	m_mapFormWebPage.clear();
-	if (m_mapUIData.size())
-	{
-		while (m_mapUIData.size())
-		{
-			m_mapUIData.erase(m_mapUIData.begin());
-		}
-	}
 	m_mapUIData.clear();
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
 	{
@@ -1015,6 +1001,7 @@ void CCosmos::TangramInitFromeWeb()
 	CTangramXmlParse m_Parse;
 	if (m_Parse.LoadXml(m_strAppXml))
 	{
+		m_pHostHtmlWnd->m_strPageName = m_Parse.attr(_T("pagename"), _T("default"));
 		CTangramXmlParse* pParse = nullptr;
 		pParse = m_Parse.GetChild(_T("appdata"));
 		if (pParse)
@@ -1057,55 +1044,46 @@ void CCosmos::TangramInitFromeWeb()
 		if (pParse)
 			m_strDefaultWorkBenchXml = m_Parse[_T("defaultworkbench")].xml();
 
-		auto it = m_mapBrowserWnd.find(m_hHostBrowserWnd);
-		if (it != m_mapBrowserWnd.end())
-		{
-			CBrowser* pWnd = (CBrowser*)it->second;
-			if (pWnd->m_pVisibleWebWnd)
-			{
-				m_pMainWebPageImpl = pWnd->m_pVisibleWebWnd;
+		m_pMainWebPageImpl = m_pHostHtmlWnd;
 
-				pParse = m_Parse.GetChild(_T("urls"));
-				if (pParse)
+		pParse = m_Parse.GetChild(_T("urls"));
+		if (pParse)
+		{
+			CString strUrls = _T("");
+			int nCount = pParse->GetCount();
+			for (int i = 0; i < nCount; i++)
+			{
+				CString strURL = pParse->GetChild(i)->attr(_T("url"), _T(""));
+				int nPos2 = strURL.Find(_T(":"));
+				if (nPos2 != -1)
 				{
-					CString strUrls = _T("");
-					int nCount = pParse->GetCount();
-					for (int i = 0; i < nCount; i++)
+					CString strURLHeader = strURL.Left(nPos2);
+					if (strURLHeader.CompareNoCase(_T("host")) == 0)
 					{
-						CString strURL = pParse->GetChild(i)->attr(_T("url"), _T(""));
-						int nPos2 = strURL.Find(_T(":"));
-						if (nPos2 != -1)
-						{
-							CString strURLHeader = strURL.Left(nPos2);
-							if (strURLHeader.CompareNoCase(_T("host")) == 0)
-							{
-								strURL = g_pCosmos->m_strAppPath + strURL.Mid(nPos2 + 1);
-							}
-						}
-						if (strURL != _T(""))
-						{
-							strUrls += strURL;
-							if (i < nCount - 1)
-								strUrls += _T("|");
-						}
+						strURL = m_strAppPath + strURL.Mid(nPos2 + 1);
 					}
-					if (strUrls != _T(""))
-					{
-						CString strDisposition = _T("");
-						strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
-						if (pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
-						{
-							IPCMsg msg;
-							msg.m_strId = L"ADD_URL";
-							msg.m_strParam1 = strUrls;
-							msg.m_strParam2 = strDisposition;
-							pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
-						}
-					}
+				}
+				if (strURL != _T(""))
+				{
+					strUrls += strURL;
+					if (i < nCount - 1)
+						strUrls += _T("|");
+				}
+			}
+			if (strUrls != _T(""))
+			{
+				CString strDisposition = _T("");
+				strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
+				if (m_pHostHtmlWnd ->m_pChromeRenderFrameHost)
+				{
+					IPCMsg msg;
+					msg.m_strId = L"ADD_URL";
+					msg.m_strParam1 = strUrls;
+					msg.m_strParam2 = strDisposition;
+					m_pHostHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
 				}
 			}
 		}
-
 	}
 }
 

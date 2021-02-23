@@ -1081,7 +1081,9 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		{
 			pGalaxy->m_pBindingXobj = m_pXobj;
 			if (pMainWnd->m_pActiveMDIChild)
+			{
 				pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
+			}
 			pGalaxy->HostPosChanged();
 		}
 		else
@@ -1128,7 +1130,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		}
 		else if (m_pXobj->m_nViewType == BlankView)
 		{
-			::SetWindowPos(m_pXobj->m_hHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_FRAMECHANGED|SWP_NOACTIVATE);
+			::SetWindowPos(m_pXobj->m_hHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_FRAMECHANGED | SWP_NOACTIVATE);
 			//::InvalidateRect(m_hWnd, nullptr, true);
 			if (m_pXobj->m_hChildHostWnd)
 				::SetWindowPos(m_pXobj->m_hChildHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);

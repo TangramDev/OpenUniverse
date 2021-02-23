@@ -2361,7 +2361,7 @@ void CCosmosProxy::ReleaseCosmosObj(IDispatch* pDisp)
 			theApp.m_pCosmosImpl->m_mapXobj.erase(it);
 
 		int dw = Marshal::Release((IntPtr)nValue);
-		while(dw>1)
+		while(dw>0)
 			dw = Marshal::Release((IntPtr)nValue);
 		//delete pCtrl;
 	}

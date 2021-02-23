@@ -1777,121 +1777,150 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20210110:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
-					CMDTWnd* pFrameWnd = nullptr;
-					CGalaxyCluster* pGalaxyCluster = nullptr;
 					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
 					{
+						CMDTWnd* pFrameWnd = nullptr;
+						CGalaxyCluster* pGalaxyCluster = nullptr;
 						CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
-						if (pCosmosFrameWndInfo&&pCosmosFrameWndInfo->m_nFrameType == 1)
+						if (pCosmosFrameWndInfo)
 						{
-							auto it = g_pCosmos->m_mapMDTWindow.find(hWnd);
-							if (it == g_pCosmos->m_mapMDTWindow.end())
+							if (pCosmosFrameWndInfo->m_nFrameType == 1)
 							{
-								pFrameWnd = new CMDTWnd();
-								pFrameWnd->SubclassWindow(hWnd);
-								g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
+								auto it = g_pCosmos->m_mapMDTWindow.find(hWnd);
+								if (it == g_pCosmos->m_mapMDTWindow.end())
+								{
+									pFrameWnd = new CMDTWnd();
+									pFrameWnd->SubclassWindow(hWnd);
+									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
+								}
+								else
+									pFrameWnd = it->second;
+							}
+							if (pCosmosFrameWndInfo->bControlBarProessed)
+								break;
+						}
+						else
+						{
+							int nType = (int)::RemoveProp(hWnd, _T("CosmosFrameWndType"));
+							if (nType)
+							{
+								pCosmosFrameWndInfo = new CosmosFrameWndInfo();
+								::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
+								g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
+								pCosmosFrameWndInfo->m_hClient = hClient;
+								pCosmosFrameWndInfo->m_nFrameType = nType;
+							}
+						}
+
+						if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_nFrameType != 2)
+						{
+							if (g_pCosmos->m_mapDocTemplate.size() == 0)
+							{
+								g_pCosmos->m_hFirstView = hClient;
 							}
 							else
-								pFrameWnd = it->second;
-							if (pCosmosFrameWndInfo->bControlBarProessed == false)
 							{
-								CString strKey = g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID;
-								g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID = _T("");
-								if (strKey == _T(""))
-									strKey = _T("default");
-								if (pFrameWnd)
+								if (pCosmosFrameWndInfo->bControlBarProessed == false)
 								{
-									if (pFrameWnd->m_strDocTemplateKey == _T(""))
-										pFrameWnd->m_strDocTemplateKey = strKey;
-									else
-										strKey = pFrameWnd->m_strDocTemplateKey;
-								}
-								auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
-								if (it != g_pCosmos->m_mapDocTemplate.end())
-								{
-									CTangramXmlParse m_Parse;
-									if (m_Parse.LoadXml(it->second))
+									CString strKey = g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID;
+									g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID = _T("");
+									if (strKey == _T(""))
+										strKey = _T("default");
+									if (pFrameWnd)
 									{
-										IGalaxy* pGalaxy = nullptr;
-										IXobj* _pXobj = nullptr;
-										CTangramXmlParse* pClient = m_Parse.GetChild(_T("client"));
-										if (pClient)
+										if (pFrameWnd->m_strDocTemplateKey == _T(""))
+											pFrameWnd->m_strDocTemplateKey = strKey;
+										else
+											strKey = pFrameWnd->m_strDocTemplateKey;
+									}
+									auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
+									if (it != g_pCosmos->m_mapDocTemplate.end())
+									{
+										CTangramXmlParse m_Parse;
+										if (m_Parse.LoadXml(it->second))
 										{
-											auto itGalaxy = pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.find(strKey);
-											if (itGalaxy == pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.end())
+											bool bMdiChild = ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD;
+											IGalaxy* pGalaxy = nullptr;
+											IXobj* _pXobj = nullptr;
+											CTangramXmlParse* pClient = m_Parse.GetChild(_T("client"));
+											if (pClient)
 											{
-												auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
-												if (it != g_pCosmos->m_mapWindowPage.end())
-													pGalaxyCluster = (CGalaxyCluster*)it->second;
-												else
+												auto itGalaxy = pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.find(strKey);
+												if (itGalaxy == pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.end())
 												{
-													pGalaxyCluster = new CComObject<CGalaxyCluster>();
-													pGalaxyCluster->m_hWnd = hWnd;
-													g_pCosmos->m_mapWindowPage[hWnd] = pGalaxyCluster;
+													auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
+													if (it != g_pCosmos->m_mapWindowPage.end())
+														pGalaxyCluster = (CGalaxyCluster*)it->second;
+													else
+													{
+														pGalaxyCluster = new CComObject<CGalaxyCluster>();
+														pGalaxyCluster->m_hWnd = hWnd;
+														g_pCosmos->m_mapWindowPage[hWnd] = pGalaxyCluster;
 
-													for (auto& it2 : g_pCosmos->m_mapCosmosAppProxy)
-													{
-														CGalaxyClusterProxy* pCosmosProxy = it2.second->OnGalaxyClusterCreated(pGalaxyCluster);
-														if (pCosmosProxy)
-															pGalaxyCluster->m_mapGalaxyClusterProxy[it2.second] = pCosmosProxy;
-													}
-												}
-												if (pGalaxyCluster)
-												{
-													pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
-													if (pGalaxy)
-													{
-														pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
-														pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-													}
-												}
-												pClient = m_Parse.GetChild(_T("hostpage"));
-												bool bProcessWebPage = false;
-												if (pClient == nullptr)
-													bProcessWebPage = true;
-												if (bProcessWebPage)
-												{
-													pClient = m_Parse.GetChild(_T("controlbars"));
-													if (pClient)
-													{
-														CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-														HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
-														if (hHandle)
+														for (auto& it2 : g_pCosmos->m_mapCosmosAppProxy)
 														{
-															pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-															pCosmosFrameWndInfo->m_pWebPage = g_pCosmos->m_pHostHtmlWnd;
-
-															int nCount = pClient->GetCount();
-															for (int i = 0; i < nCount; i++)
+															CGalaxyClusterProxy* pCosmosProxy = it2.second->OnGalaxyClusterCreated(pGalaxyCluster);
+															if (pCosmosProxy)
+																pGalaxyCluster->m_mapGalaxyClusterProxy[it2.second] = pCosmosProxy;
+														}
+													}
+													if (pGalaxyCluster)
+													{
+														pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
+														if (pGalaxy)
+														{
+															pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
+															pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
+														}
+													}
+													pClient = m_Parse.GetChild(_T("hostpage"));
+													bool bProcessWebPage = false;
+													if (pClient == nullptr)
+														bProcessWebPage = true;
+													if (bProcessWebPage)
+													{
+														pClient = m_Parse.GetChild(_T("controlbars"));
+														if (pClient)
+														{
+															CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
+															HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+															if (hHandle)
 															{
-																CTangramXmlParse* pParse2 = pClient->GetChild(i);
-																CString strCaption = pParse2->attr(_T("caption"), _T(""));
-																if (strCaption != _T(""))
+																pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+																pCosmosFrameWndInfo->m_pWebPage = g_pCosmos->m_pHostHtmlWnd;
+
+																int nCount = pClient->GetCount();
+																for (int i = 0; i < nCount; i++)
 																{
-																	CString strName = strCaption;
-																	strName.Replace(_T(" "), _T("_"));
-																	auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
-																	if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
+																	CTangramXmlParse* pParse2 = pClient->GetChild(i);
+																	CString strCaption = pParse2->attr(_T("caption"), _T(""));
+																	if (strCaption != _T(""))
 																	{
-																		HWND hWnd = it->second;
-																		int nID = pParse2->attrInt(_T("clientid"), 0);
-																		HWND hClient = ::GetDlgItem(hWnd, nID);
-																		if (hClient)
+																		CString strName = strCaption;
+																		strName.Replace(_T(" "), _T("_"));
+																		auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
+																		if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
 																		{
-																			pCosmosFrameWndInfo->bControlBarProessed = true;
-																			CString strXml = pParse2->xml();
-																			if (pGalaxyCluster)
+																			HWND hWnd = it->second;
+																			int nID = pParse2->attrInt(_T("clientid"), 0);
+																			HWND hClient = ::GetDlgItem(hWnd, nID);
+																			if (hClient)
 																			{
-																				IGalaxy* pGalaxy = nullptr;
-																				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
-																				if (pGalaxy)
+																				pCosmosFrameWndInfo->bControlBarProessed = true;
+																				CString strXml = pParse2->xml();
+																				if (pGalaxyCluster)
 																				{
-																					CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-																					pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strName] = _pGalaxy;
-																					_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
-																					IXobj* pXobj = nullptr;
-																					_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
+																					IGalaxy* pGalaxy = nullptr;
+																					pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
+																					if (pGalaxy)
+																					{
+																						CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+																						pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strName] = _pGalaxy;
+																						_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
+																						IXobj* pXobj = nullptr;
+																						_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
+																					}
 																				}
 																			}
 																		}
@@ -1903,10 +1932,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												}
 											}
 										}
-									}
-									if (pFrameWnd)
-									{
-										::PostMessage(pFrameWnd->m_hWnd, WM_COSMOSMSG, 0, 20210129);
+										if (pFrameWnd)
+										{
+											::PostMessage(pFrameWnd->m_hWnd, WM_COSMOSMSG, 0, 20210129);
+										}
 									}
 								}
 							}

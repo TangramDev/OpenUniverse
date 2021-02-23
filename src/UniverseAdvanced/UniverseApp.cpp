@@ -1924,16 +1924,14 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20210110:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
-					CMDTWnd* pFrameWnd = nullptr;
-					CGalaxyCluster* pGalaxyCluster = nullptr;
 					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
 					{
-						CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-						HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
-						if (hHandle)
+						CMDTWnd* pFrameWnd = nullptr;
+						CGalaxyCluster* pGalaxyCluster = nullptr;
+						CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+						if (pCosmosFrameWndInfo)
 						{
-							pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 							if (pCosmosFrameWndInfo->m_nFrameType == 1)
 							{
 								auto it = g_pCosmos->m_mapMDTWindow.find(hWnd);
@@ -1949,28 +1947,25 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							if (pCosmosFrameWndInfo->bControlBarProessed)
 								break;
 						}
-						HANDLE h = ::RemoveProp(hWnd, _T("CosmosFrameWndType"));
-						if (h)
+						else
 						{
-							int nType = (int)h;
+							int nType = (int)::RemoveProp(hWnd, _T("CosmosFrameWndType"));
 							if (nType)
 							{
-								if (hHandle == 0)
-								{
-									pCosmosFrameWndInfo = new CosmosFrameWndInfo();
-									::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
-									g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
-								}
-								if (pCosmosFrameWndInfo->m_hClient == NULL)
-									pCosmosFrameWndInfo->m_hClient = hClient;
+								pCosmosFrameWndInfo = new CosmosFrameWndInfo();
+								::SetProp(hWnd, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
+								g_pCosmos->m_mapCosmosFrameWndInfo[hWnd] = pCosmosFrameWndInfo;
+								pCosmosFrameWndInfo->m_hClient = hClient;
 								pCosmosFrameWndInfo->m_nFrameType = nType;
 							}
 						}
 
-						if (pCosmosFrameWndInfo&&pCosmosFrameWndInfo->m_nFrameType != 2)
+						if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_nFrameType != 2)
 						{
 							if (g_pCosmos->m_mapDocTemplate.size() == 0)
+							{
 								g_pCosmos->m_hFirstView = hClient;
+							}
 							else
 							{
 								if (pCosmosFrameWndInfo->bControlBarProessed == false)
@@ -2143,7 +2138,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 														}
 													}
 													if (g_pCosmos->m_pMDIMainWnd)
-														::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+													{
+														if (bMdiChild && g_pCosmos->m_pMDIMainWnd->m_bInit == false)
+															::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_COSMOSMSG, 0, 20210223);
+														else
+															::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+													}
 												}
 											}
 										}

@@ -113,7 +113,7 @@ namespace Browser {
 			::SetWindowPos(m_hOldTab, HWND_BOTTOM, rc.left, rc.top, 1, 1, SWP_NOREDRAW | SWP_NOACTIVATE);
 			m_hOldTab = NULL;
 		}
-		if (m_pVisibleWebWnd&&m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
+		if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
 		{
 			m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 		}
@@ -178,12 +178,11 @@ namespace Browser {
 						rc.right = rc.left + 1;
 						rc.bottom = rc.top + 1;
 					}
-					else if (g_pCosmos->m_bChromeNeedClosed == false && m_bDestroy == false && m_pCosmosFrameWndInfo && m_pParentXobj)
+					else if (m_pParentXobj && (m_OldRect.left != rc.left || m_OldRect.top != rc.top || m_OldRect.right != rc.right || m_OldRect.bottom != rc.bottom))
 					{
-						if (m_OldRect.left != rc.left || m_OldRect.top != rc.top || m_OldRect.right != rc.right || m_OldRect.bottom != rc.bottom)
-							::PostMessage(::GetParent(m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd), WM_COSMOSMSG, (WPARAM)m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd, 20210222);
+						::PostMessage(::GetParent(m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd), WM_COSMOSMSG, (WPARAM)m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd, 20210222);
+						m_OldRect = rc;
 					}
-					m_OldRect = rc;
 				}
 			}
 		}
@@ -307,7 +306,7 @@ namespace Browser {
 			{
 				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
 				g_pCosmos->m_mapHtmlWnd[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-				if (m_pBrowser&&hWnd == m_pBrowser->GetActiveWebContentWnd())
+				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
 					m_pVisibleWebWnd = g_pCosmos->m_pHtmlWndCreated;
 #ifdef WIN32	
 				if (::IsWindow(hPWnd))
@@ -372,29 +371,6 @@ namespace Browser {
 			{
 				m_bTabChange = false;
 			}
-		}
-		return 1;
-		break;
-		case 20200214:
-		{
-			auto t = create_task([this]()
-				{
-					SleepEx(700, true);
-					try
-					{
-						if (m_pVisibleWebWnd)
-						{
-							::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
-							BrowserLayout();
-						}
-					}
-					catch (...)
-					{
-						ATLASSERT(false);
-						return 0;
-					}
-					return 1;
-				});
 		}
 		return 1;
 		break;

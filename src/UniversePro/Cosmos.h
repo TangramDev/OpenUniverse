@@ -327,7 +327,6 @@ public:
 	CString	BuildSipURICodeStr(CString strURI, CString strPrev, CString strFix, CString strData, int n1);
 	CString	GetDataFromStr(CString strCoded, CString& strTime, CString strPrev, CString strFix, int n1);
 	CString tangram_for_eclipse(CString strKey, CString strData, CString strFeatures);
-	CString GetOfficePath();
 	LRESULT Close(void);
 	CXobj* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
 	CommonThreadInfo* GetThreadInfo(DWORD dwInfo = 0);

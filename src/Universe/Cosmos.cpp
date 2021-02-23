@@ -389,7 +389,7 @@ void CCosmos::CosmosInitFromeWeb()
 			CBrowser* pWnd = (CBrowser*)it->second;
 			if (pWnd->m_pVisibleWebWnd)
 			{
-				m_pMainWebPageImpl = pWnd->m_pVisibleWebWnd;
+				m_pMainWebPageImpl = m_pHostHtmlWnd;
 
 				pParse = m_Parse.GetChild(_T("urls"));
 				if (pParse)
