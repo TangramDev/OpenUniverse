@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102210035
+ *           Web Runtime for Application - Version 1.0.0.202102310036
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -845,12 +845,6 @@ namespace Universe
 			}
 		}
 
-		property Object^ FrameData[String ^]
-		{
-			Object ^ get(String ^ iIndex);
-			void set(String^ iIndex, Object^ newVal);
-		}
-
 		property String^ Name
 		{
 			String^ get()
@@ -1355,7 +1349,6 @@ namespace Universe
 			String ^ get(String ^ iIndex);
 			void set(String^ iIndex, String^ newVal);
 		}
-		static void OnCosmos_DebugDelegate(System::String^ strInfo);
 };
 
 	/// <summary>

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102210035           *
+ *           Web Runtime for Application - Version 1.0.0.202102310036           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -110,7 +110,6 @@ namespace Browser {
 		m_pBindWinForm = nullptr;
 		m_pAppProxy = nullptr;
 		m_bDevToolWnd = false;
-		m_bWebContentVisible = true;
 		m_strCurKey = _T("");
 		m_strCurXml = _T("");
 		m_strDocXml = _T("");
@@ -610,8 +609,11 @@ namespace Browser {
 				if (pBrowserWnd)
 				{
 					m_pChromeRenderFrameHost->ShowWebPage(true);
-					pBrowserWnd->BrowserLayout();
-					::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 2);
+					if (::GetParent(hPWnd) == nullptr)
+					{
+						pBrowserWnd->BrowserLayout();
+						::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 2);
+					}
 				}
 			}
 			else
@@ -788,31 +790,31 @@ namespace Browser {
 		HWND hBrowser = ::GetParent(m_hWnd);
 		HWND hPPWnd = ::GetParent(hBrowser);
 
-		if (m_pCosmosFrameWndInfo == nullptr)
+		CBrowser* pBrowserWnd = nullptr;
+		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+		if (it != g_pCosmos->m_mapBrowserWnd.end())
 		{
-			CBrowser* pBrowserWnd = nullptr;
-			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())
+			pBrowserWnd = (CBrowser*)it->second;
+			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
+				::ShowWindow(m_hWnd, SW_HIDE);
+			if (pBrowserWnd->m_pCosmosFrameWndInfo == nullptr)
 			{
-				pBrowserWnd = (CBrowser*)it->second;
-				if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
-					::ShowWindow(m_hWnd, SW_HIDE);
-				if (pBrowserWnd->m_pCosmosFrameWndInfo == nullptr)
+				CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
+				if (pInfo)
 				{
-					CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
-					if (pInfo)
+					pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
+					HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+					hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
+					if (hPWnd)
 					{
-						pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
-						HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-						hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
-						if (hPWnd)
-						{
-							m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
-							pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
-						}
+						pBrowserWnd->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));;
 					}
 				}
 			}
+		}
+		if (m_pCosmosFrameWndInfo == nullptr)
+		{
+			m_pCosmosFrameWndInfo = pBrowserWnd->m_pCosmosFrameWndInfo;
 		}
 
 		if (m_pRemoteCosmos)
@@ -887,11 +889,12 @@ namespace Browser {
 				}
 			}
 		}
-		if (::IsWindowVisible(m_hWnd))
-		{
-			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 5);
-		}
+		
+		g_pCosmos->m_mapSizingBrowser[hBrowser] = pBrowserWnd;
+		if(hPPWnd==nullptr)
+			pBrowserWnd->BrowserLayout();
+		//::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
+		::PostMessage(hBrowser, WM_BROWSERLAYOUT, 0, 7);
 	}
 
 	void CWebPage::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
@@ -1313,6 +1316,7 @@ namespace Browser {
 						}
 					}
 				}
+				::PostMessage(hMainWnd, WM_COSMOSMSG, 0, 20210129);
 			}
 		}
 	}

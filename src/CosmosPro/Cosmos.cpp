@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102210035
+ *           Web Runtime for Application - Version 1.0.0.202102310036
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -590,11 +590,6 @@ namespace Universe
                 IsWebRuntimeInit = FuncIsChromeRunning(false);
                 if (theAppProxy.m_bInitApp == false)
                 {
-                    //if (System::Diagnostics::Debugger::IsAttached)
-                    //{
-                    //    StartApplication(L"caswebagent.server.1", L"fordebug");
-                    //    OnCosmosDebugDelegate += gcnew TangramDebugDelegate(&OnCosmos_DebugDelegate);
-                    //}
                     ::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20191022);
                 }
             }
@@ -2416,13 +2411,5 @@ namespace Universe
         ::SysFreeString(blayerName);
         ::SysFreeString(blayerXML);
         return pRetNode;
-    }
-
-void Universe::Cosmos::OnCosmos_DebugDelegate(System::String^ strInfo)
-{
-    if (String::IsNullOrEmpty(strInfo) == false)
-    {
-        strInfo->Replace("ShowWebPage:", "");
-        Universe::Cosmos::CreateBrowser(IntPtr::Zero, strInfo->Replace(L"ShowWebPage:", L""));
     }
 }

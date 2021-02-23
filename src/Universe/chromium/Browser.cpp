@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102210035           *
+ *           Web Runtime for Application - Version 1.0.0.202102310036           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -189,7 +189,6 @@ namespace Browser {
 			if (hWebHostWnd == NULL)
 				hWebHostWnd = m_pVisibleWebWnd->m_hChildWnd;
 			if (::IsWindowVisible(hWebHostWnd) == false) {
-				m_pVisibleWebWnd->m_bWebContentVisible = false;
 				rc.right = rc.left + 1;
 				rc.bottom = rc.top + 1;
 			}
@@ -206,9 +205,7 @@ namespace Browser {
 					rc.right -= (rect.right - rc2.right) / m_fdevice_scale_factor;
 					rc.top += (rc2.top - rect.top) / m_fdevice_scale_factor;
 					rc.bottom -= (rect.bottom - rc2.bottom) / m_fdevice_scale_factor;
-					m_pVisibleWebWnd->m_bWebContentVisible = true;
 					if (rc.right <= rc.left || rc.bottom <= rc.top) {
-						m_pVisibleWebWnd->m_bWebContentVisible = false;
 						rc.right = rc.left + 1;
 						rc.bottom = rc.top + 1;
 					}

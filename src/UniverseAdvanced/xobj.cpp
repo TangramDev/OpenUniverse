@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102210035           *
+ *           Web Runtime for Application - Version 1.0.0.202102310036           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -297,7 +297,9 @@ CXobj::~CXobj()
 	}
 
 	if (m_nViewType != TangramTreeView && m_nViewType != Grid && m_pDisp)
+	{
 		CCommonFunction::ClearObject<IUnknown>(m_pDisp);
+	}
 
 	m_vChildNodes.clear();
 
@@ -2450,9 +2452,6 @@ HRESULT CXobj::Fire_Destroy()
 	{
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IXobj*)this);
 	}
-	//if (m_pWormhole)
-	//	delete m_pWormhole;
-	//m_pWormhole = nullptr;
 	return hr;
 }
 

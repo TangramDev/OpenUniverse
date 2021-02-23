@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102210035
+ *           Web Runtime for Application - Version 1.0.0.202102310036
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -48,7 +48,7 @@ CCosmos::CCosmos()
 CCosmos::~CCosmos()
 {
 	ATLTRACE(_T("Release CCosmos :%p\n"), this);
-	BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
+	//BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
 }
 
 void CCosmos::InitCosmosApp(bool bCrashReporting)
