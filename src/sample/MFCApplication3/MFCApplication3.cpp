@@ -62,8 +62,8 @@ CMFCApplication3App theApp;
 
 BOOL CMFCApplication3App::InitInstance()
 {
-	m_mapDOMObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication3View);
-	if (!InitApp())
+	theDelegate.m_mapDOMObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication3View);
+	if (!theDelegate.InitApp())
 		return false;
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable

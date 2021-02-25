@@ -239,6 +239,10 @@ CCosmos::~CCosmos()
 	if (m_pRootNodes)
 		CCommonFunction::ClearObject<CXobjCollection>(m_pRootNodes);
 
+	m_mapXobj.clear();
+	m_mapHtmlWnd.clear();
+	m_mapFormWebPage.clear();
+	m_mapUIData.clear();
 	if (m_pClrHost && m_nAppID == -1 && theUniverse.m_bHostCLR == false)
 	{
 		OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));

@@ -929,7 +929,7 @@ CMDIParent::~CMDIParent(void)
 void CMDIParent::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
-	//delete this;
+	delete this;
 }
 
 LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
@@ -949,9 +949,9 @@ LRESULT CMDIParent::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 
 LRESULT CMDIParent::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bDestroy = true;
-	//g_pCosmos->m_pMDIMainWnd = nullptr;
-	g_pCosmos->m_pHostBrowser->m_bDestroy = true;
-	::SetParent(g_pCosmos->m_hHostBrowserWnd, g_pCosmos->m_hCosmosWnd);
+	g_pCosmos->m_pMDIMainWnd = nullptr;
+	if (g_pCosmos->m_pHostBrowser)
+		g_pCosmos->m_pHostBrowser->m_bDestroy = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -982,6 +982,18 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		case 1:
 			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 			break;
+		}
+	}
+	break;
+	case 20210223:
+	{
+		if (m_bInit)
+			break;
+		m_bInit = true;
+		::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+		if (g_pCosmos->m_pHostBrowser)
+		{
+			::PostMessage(g_pCosmos->m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 	}
 	break;
@@ -2375,6 +2387,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 					{
 						g_pCosmos->m_pMDIMainWnd->m_pClientXobj = pObj;
 					}
+					::PostMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 				}
 			}
 		}

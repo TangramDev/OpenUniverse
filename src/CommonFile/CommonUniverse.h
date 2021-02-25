@@ -446,7 +446,8 @@ namespace CommonUniverse {
 			m_strAppKey = _T("");
 		}
 
-		virtual ~IUniverseAppProxy() {}
+		virtual ~IUniverseAppProxy() {
+		}
 
 		BOOL								m_bAutoDelete;
 		HWND								m_hMainWnd;
@@ -560,7 +561,8 @@ namespace CommonUniverse {
 			m_strNtpXml = _T("");
 		}
 
-		virtual ~CCosmosImpl() {}
+		virtual ~CCosmosImpl() {
+		}
 
 		bool									m_bSZMode = false;
 		bool									m_bChromeNeedClosed;
@@ -760,7 +762,8 @@ namespace CommonUniverse {
 			m_strCreatingDOCID = _T("");
 		}
 
-		virtual ~ICosmosDelegate() {}
+		virtual ~ICosmosDelegate() { 
+		}
 
 		BOOL				m_bBrowserWndCreated;
 		JavaVM*				m_pJVM;

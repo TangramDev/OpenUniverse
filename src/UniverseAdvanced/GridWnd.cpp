@@ -630,7 +630,7 @@ void CGridWnd::_LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, in
 					pInfoHost->nCurSize = _nSize;
 				}
 				else
-					pInfoHost->nCurSize = INT_MAX;  // last row/column takes the rest
+					pInfoHost->nCurSize = INT_MAX;// ; _nSize // last row/column takes the rest
 				if (bCol)
 					m_nHostWidth = _nSize;
 				else
@@ -1017,26 +1017,29 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 
 		SetWindowText(m_pXobj->m_strNodeName);
 		m_bCreated = true;
-		CXobj* pHostNode = nullptr;
-		CXobj* pParent = nullptr;
-		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-		bool bHasHostView = false;
-		if (pGalaxy->m_pBindingXobj)
+		if (m_pHostXobj == nullptr)
 		{
-			pHostNode = pGalaxy->m_pBindingXobj;
-			if (::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
+			CXobj* pHostNode = nullptr;
+			CXobj* pParent = nullptr;
+			CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
+			bool bHasHostView = false;
+			if (pGalaxy->m_pBindingXobj)
 			{
-				bHasHostView = true;
-				pParent = pHostNode->m_pParentObj;
-				while (pParent != m_pXobj)
+				pHostNode = pGalaxy->m_pBindingXobj;
+				if (::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 				{
-					pHostNode = pParent;
+					bHasHostView = true;
 					pParent = pHostNode->m_pParentObj;
+					while (pParent != m_pXobj)
+					{
+						pHostNode = pParent;
+						pParent = pHostNode->m_pParentObj;
+					}
 				}
 			}
+			if (pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
+				m_pHostXobj = pHostNode;
 		}
-		if (m_pHostXobj == nullptr && pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
-			m_pHostXobj = pHostNode;
 		_RecalcLayout();
 
 		return true;

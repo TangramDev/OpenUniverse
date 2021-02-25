@@ -46,7 +46,7 @@ CCosmos::CCosmos()
 CCosmos::~CCosmos()
 {
 	ATLTRACE(_T("Release CCosmos :%p\n"), this);
-	BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
+	//BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
 }
 
 void CCosmos::InitCosmosApp(bool bCrashReporting)

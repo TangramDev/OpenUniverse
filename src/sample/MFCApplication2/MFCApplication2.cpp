@@ -72,11 +72,9 @@ CMFCApp theApp;
 
 BOOL CMFCApp::InitInstance()
 {
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(392);
-	if (!InitApp())
+	theDelegate.m_mapDOMObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication2View);
+	if (!theDelegate.InitApp())
 		return false;
-	m_mapDOMObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication2View);
 
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable

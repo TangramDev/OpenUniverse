@@ -3596,10 +3596,10 @@ void CCosmos::OnCosmosClose()
 		Form^ pForm = pCollection[0];
 		pForm->Close();
 	}
-	if (theApp.m_pCosmos && theApp.m_pCosmosImpl->m_pCLRProxy) {
-		//theApp.m_pCosmos->put_AppKeyValue(CComBSTR(L"CLRProxy"), CComVariant((LONGLONG)0));
-		//theApp.m_pCosmos = nullptr;
-	}
+	//if (theApp.m_pCosmos && theApp.m_pCosmosImpl->m_pCLRProxy) {
+	//	//theApp.m_pCosmos->put_AppKeyValue(CComBSTR(L"CLRProxy"), CComVariant((LONGLONG)0));
+	//	//theApp.m_pCosmos = nullptr;
+	//}
 	if (theAppProxy.m_pCosmosWpfApp)
 	{
 		WindowCollection^ pWnds = theAppProxy.m_pCosmosWpfApp->Windows;

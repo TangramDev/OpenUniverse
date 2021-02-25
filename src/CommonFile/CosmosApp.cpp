@@ -145,7 +145,6 @@ _IsBrowserModel FuncIsBrowserModel;
 
 CWinApp* g_pAppBase = nullptr;
 CCosmosApp* g_pApp = nullptr;
-IUniverseAppProxy* g_pAppProxy = nullptr;
 ICosmos* g_pCosmos = nullptr;
 
 
@@ -189,7 +188,6 @@ namespace CommonUniverse
 	CCosmosDelegate::CCosmosDelegate()
 	{
 		m_strProviderID = _T("");
-		g_pAppProxy = this;
 	}
 
 	CCosmosDelegate::~CCosmosDelegate()

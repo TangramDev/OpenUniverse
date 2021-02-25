@@ -595,6 +595,11 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 19820911:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
+		case 20210225:
+		{
+			m_pXobj->put_Attribute(CComBSTR("objid"), TGM_NUCLEUS);
+		}
+		break;
 		case 20210202:
 		{
 			HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_hWnd);

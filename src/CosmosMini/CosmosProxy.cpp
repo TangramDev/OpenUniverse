@@ -758,6 +758,7 @@ void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyClu
 		}
 		break;
 		}
+		theApp.m_pCosmosImpl->m_mapUIData.erase(it);
 	}
 }
 
@@ -1238,6 +1239,20 @@ BSTR CCosmosProxy::GetCtrlName(IDispatch* _pCtrl)
 void CCosmosProxy::ReleaseCosmosObj(IDispatch* pDisp)
 {
 	LONGLONG nValue = (LONGLONG)pDisp;
+	Object^ pObj = Marshal::GetObjectForIUnknown((IntPtr)pDisp);
+	if (pObj->GetType()->IsSubclassOf(Control::typeid))
+	{
+		Control^ pCtrl = (Control^)pObj;
+		HWND hWnd = (HWND)pCtrl->Handle.ToPointer();
+		auto it = theApp.m_pCosmosImpl->m_mapXobj.find(hWnd);
+		if (it != theApp.m_pCosmosImpl->m_mapXobj.end())
+			theApp.m_pCosmosImpl->m_mapXobj.erase(it);
+
+		int dw = Marshal::Release((IntPtr)nValue);
+		while (dw > 0)
+			dw = Marshal::Release((IntPtr)nValue);
+		//delete pCtrl;
+	}
 	_removeObject(nValue);
 }
 
@@ -1599,10 +1614,10 @@ void CCosmos::OnCosmosClose()
 		Form^ pForm = pCollection[0];
 		pForm->Close();
 	}
-	if (theApp.m_pCosmos && theApp.m_pCosmosImpl->m_pCLRProxy) {
-		theApp.m_pCosmos->put_AppKeyValue(CComBSTR(L"CLRProxy"), CComVariant((LONGLONG)0));
-		theApp.m_pCosmos = nullptr;
-	}
+	//if (theApp.m_pCosmos && theApp.m_pCosmosImpl->m_pCLRProxy) {
+	//	theApp.m_pCosmos->put_AppKeyValue(CComBSTR(L"CLRProxy"), CComVariant((LONGLONG)0));
+	//	theApp.m_pCosmos = nullptr;
+	//}
 	AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
 }
 

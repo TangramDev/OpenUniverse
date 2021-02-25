@@ -607,27 +607,10 @@ CCosmos::~CCosmos()
 		m_TabWndClassInfoDictionary.clear();
 	}
 
-	if (m_pMDIMainWnd)
-		delete m_pMDIMainWnd;
-	m_pMDIMainWnd = nullptr;
-	if (m_mapXobj.size())
-	{
-		while (m_mapXobj.size())
-		{
-			m_mapXobj.erase(m_mapXobj.begin());
-		}
-	}
 	m_mapXobj.clear();
 	m_mapMDTWindow.clear();
 	m_mapHtmlWnd.clear();
 	m_mapFormWebPage.clear();
-	if (m_mapUIData.size())
-	{
-		while (m_mapUIData.size())
-		{
-			m_mapUIData.erase(m_mapUIData.begin());
-		}
-	}
 	m_mapUIData.clear();
 
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)

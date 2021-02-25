@@ -696,6 +696,8 @@ namespace Browser {
 						else
 						{
 							m_pVisibleWebWnd = it.second;
+							if (it.second->m_pChromeRenderFrameHost)
+								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						}
 					}
 				}
@@ -707,7 +709,7 @@ namespace Browser {
 					}
 				}
 				g_pCosmos->m_bSZMode = false;
-				if(::GetParent(m_hWnd)==nullptr)
+				if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
 			}
 			break;

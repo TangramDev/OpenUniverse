@@ -196,7 +196,9 @@ namespace CommonUniverse
 		BOOL IsBrowserModel(bool bCrashReporting);
 		bool ProcessAppType(bool bCrashReporting);
 		CString GetDocTemplateID(CDocument* pDoc);
+		virtual bool InitApp();
 		//ICosmosDelegate:
+		virtual void ExitJVM();
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
 		virtual bool DoIdleWork();
 		virtual bool IsAppIdleMessage();
@@ -221,6 +223,7 @@ namespace CommonUniverse
 		virtual bool CosmosInit(CString strID);
 		virtual CString GetNames();
 		virtual CString GetTags(CString strName);
+		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 	};
 
 	class CComponentApp :
@@ -240,20 +243,16 @@ namespace CommonUniverse
 	};
 
 	class CCosmosAppEx :
-		public CWinAppEx,
-		public CCosmosDelegate
+		public CWinAppEx
 	{
 	public:
 		CCosmosAppEx();
 		virtual ~CCosmosAppEx();
 
-		afx_msg void OnFileNew();
-
-		virtual int Run();
-		virtual bool InitApp();
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {};
 	private:
+		virtual int Run();
 		virtual BOOL InitApplication();
-		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 	};
 
@@ -285,6 +284,8 @@ namespace CommonUniverse
 		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName);
 		void OnHubbleEvent(ICosmosEventObj* NotifyObj);
 	};
+
+	extern CCosmosDelegate theDelegate;
 };
 
 using namespace CommonUniverse;

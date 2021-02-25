@@ -134,9 +134,11 @@ public:
 	CMDIChild(void);
 	virtual ~CMDIChild(void);
 
+	BOOL		m_bInit = false;
 	HWND		m_hClient;
 
 	CString		m_strKey;
+	CString		m_strXml=_T("");
 	CString		m_strDocXml=_T("");
 	CString		m_strDocTemplateKey = _T("");
 
