@@ -2176,15 +2176,16 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 
 			if (pObj->GetType()->IsSubclassOf(Form::typeid))
 			{
-				::SetParent(hWnd, (HWND)hParent);
+				Form^ form = static_cast<Form^>(pObj);
 				auto it = m_mapForm.find(hWnd);
 				if (it != m_mapForm.end())
 					m_mapForm.erase(it);
 				theApp.m_pCosmosImpl->m_hFormNodeWnd = hWnd;
 				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD );// | WS_VISIBLE);
 				::SetWindowLongPtr(hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & ~(WS_EX_APPWINDOW/*|WS_EX_CLIENTEDGE*/));
+				::SetParent(hWnd, (HWND)hParent);
 				Universe::Cosmos::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pXobj);
-				((Form^)pObj)->Show();
+				form->Show(_pXobj);
 				return pDisp;
 			}
 			//if (theApp.m_pCosmosImpl->IsMDIClientGalaxyNode(pHostNode) == false && bProperty == false)

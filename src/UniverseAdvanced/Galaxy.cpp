@@ -1047,9 +1047,10 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				BSTR bstrXml = ::SysAllocString(L"");
 				CString strKey = m_pActiveMDIChild->m_strKey;
 				CWebPage* pVisiblePage = g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd;
-				if (pVisiblePage != m_pGalaxy->m_pWebPageWnd && pVisiblePage->m_pGalaxy)
+				if (pVisiblePage != m_pGalaxy->m_pWebPageWnd)
 				{
 					strKey = pVisiblePage->m_pGalaxy->m_strCurrentKey;
+					CComBSTR bstrKey(strKey);
 					pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
 					for (auto& it : m_pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys)
 					{
@@ -1057,9 +1058,10 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						IXobj* pXobj = nullptr;
 						if (_pGalaxy != m_pGalaxy)
 						{
-							_pGalaxy->Observe(CComBSTR(m_pActiveMDIChild->m_strKey), bstrXml, &pXobj);
+							_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
 						}
 					}
+					::SysFreeString(bstrXml);
 					break;
 				}
 				pVisiblePage->LoadDocument2Viewport(strKey, _T(""));

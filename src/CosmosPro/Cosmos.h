@@ -165,7 +165,7 @@ namespace Universe
 		}
 	};
 
-	public ref class Xobj : public Dictionary<String^, Xobj^>
+	public ref class Xobj : public Dictionary<String^, Xobj^> , public IWin32Window
 	{
 	public:
 		Xobj(IXobj* pXobj);
@@ -182,7 +182,6 @@ namespace Universe
 		void NavigateTreeInit();
 		//virtual void CloseForm(Object^ pForm){};
 		//virtual void OnCloseForm(long long hFormWnd){};
-
 		delegate void XobjAddInCreated(Xobj^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml);
 		event XobjAddInCreated^ OnXobjAddInCreated;
 		void Fire_XobjAddInCreated(Xobj^ sender, Object^ pAddIndisp, String^ bstrAddInID, String^ bstrAddInXml)
@@ -266,6 +265,19 @@ namespace Universe
 				return BSTR2STRING(bstrRet);
 			}
 			return "";
+		}
+
+		property IntPtr Handle
+		{
+			virtual IntPtr get()
+			{
+				if (m_hWnd)
+					return (IntPtr)m_hWnd;
+				__int64 h = 0;
+				m_pXobj->get_Handle(&h);
+				m_hWnd = (HWND)h;
+				return (IntPtr)h;
+			}
 		}
 
 		property Wormhole^ Wormhole
@@ -718,19 +730,6 @@ namespace Universe
 				::XobjType type;
 				m_pXobj->get_XobjType(&type);
 				return type;
-			}
-		}
-
-		property __int64 Handle
-		{
-			__int64 get()
-			{
-				if (m_hWnd)
-					return (__int64)m_hWnd;
-				__int64 h = 0;
-				m_pXobj->get_Handle(&h);
-				m_hWnd = (HWND)h;
-				return h;
 			}
 		}
 

@@ -64,7 +64,7 @@ namespace Universe
 		APPOTHER = 0
 	};
 
-	public ref class Xobj : public Dictionary<String^, Xobj^>
+	public ref class Xobj : public Dictionary<String^, Xobj^>, public IWin32Window
 	{
 	public:
 		Xobj(IXobj* pXobj);
@@ -488,16 +488,16 @@ namespace Universe
 			}
 		}
 
-		property __int64 Handle
+		property IntPtr Handle
 		{
-			__int64 get()
+			virtual IntPtr get()
 			{
 				if (m_hWnd)
-					return (__int64)m_hWnd;
+					return (IntPtr)m_hWnd;
 				__int64 h = 0;
 				m_pXobj->get_Handle(&h);
 				m_hWnd = (HWND)h;
-				return h;
+				return (IntPtr)h;
 			}
 		}
 
