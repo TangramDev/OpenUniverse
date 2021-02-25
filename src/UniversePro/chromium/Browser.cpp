@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102310036           *
+ *           Web Runtime for Application - Version 1.0.0.202102250037           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -96,21 +96,9 @@ namespace Browser {
 			HWND hActive = m_pBrowser->GetActiveWebContentWnd();
 			if (::GetParent(m_hWnd) && m_pVisibleWebWnd->m_hWnd != hActive)
 			{
-				for (auto& it : m_mapChildPage)
-				{
-					if (::IsWindow(it.first))
-					{
-						if (it.first != hActive)
-						{
-							it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
-						}
-						else
-						{
-							it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
-							m_pVisibleWebWnd = it.second;
-						}
-					}
-				}
+				auto it = m_mapChildPage.find(hActive);
+				if(it!=m_mapChildPage.end())
+					m_pVisibleWebWnd = it->second;
 			}
 			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 			if (m_pVisibleWebWnd && g_pCosmos->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
@@ -120,17 +108,17 @@ namespace Browser {
 			}
 			if (!m_pClientGalaxy)
 				m_pBrowser->LayoutBrowser();
-			if (g_pCosmos->m_pMDIMainWnd && m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_hClient == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
-			{
-				::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
-			}
+			//if (g_pCosmos->m_pMDIMainWnd && m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_hClient == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
+			//{
+			//	::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+			//}
 			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		return lRes;
 	}
 
 	void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
-		if (m_bDestroy || /*g_pCosmos->m_bSZMode ||*/ hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
+		if (m_bDestroy || hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 		{
 			return;
 		}
@@ -163,11 +151,17 @@ namespace Browser {
 				if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
 				{
 					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd)
+					{
+						g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+					}
 				}
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
+				return;
 			}
 		}
 
-		//BrowserLayout();
+		BrowserLayout();
 		if (m_pVisibleWebWnd)
 		{
 			HWND hExtendWnd = m_pVisibleWebWnd->m_hExtendWnd;
@@ -183,16 +177,7 @@ namespace Browser {
 				::SetWindowLongPtr(m_pVisibleWebWnd->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd);
 			}
 			if (::IsChild(hWnd, hExtendWnd))
-			{
-				if (m_pParentXobj)
-				{
-					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-					::SetParent(hExtendWnd, m_hWnd);
-					::PostMessage(::GetParent(m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd), WM_COSMOSMSG, (WPARAM)m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd, 20210222);
-					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-				}
-				return;
-			}
+				::SetParent(hExtendWnd, m_hWnd);
 
 			if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd && ::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd))
 			{
@@ -203,10 +188,9 @@ namespace Browser {
 				::SetWindowPos(hExtendWnd, m_hDrawWnd,
 					rc.left,
 					nTopFix * m_fdevice_scale_factor,
-					rc.right * m_fdevice_scale_factor,
-					(rc.bottom - rc.top) * m_fdevice_scale_factor,
+					0,
+					0,
 					SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOACTIVATE);
-				BrowserLayout();
 				return;
 			}
 			::SetWindowPos(hExtendWnd, m_hDrawWnd,
@@ -215,7 +199,6 @@ namespace Browser {
 				rc.right * m_fdevice_scale_factor,
 				(rc.bottom - rc.top) * m_fdevice_scale_factor,
 				SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOACTIVATE);
-			BrowserLayout();
 			HWND hWebHostWnd = m_pVisibleWebWnd->m_hWebHostWnd;
 			if (hWebHostWnd == NULL)
 				hWebHostWnd = m_pVisibleWebWnd->m_hChildWnd;
@@ -224,39 +207,49 @@ namespace Browser {
 				rc.bottom = rc.top + 1;
 			}
 			else {
-				if (g_pCosmos->m_bSZMode)
+				RECT rc2;
+				::GetWindowRect(hWebHostWnd, &rc2);
+				if (::ScreenToClient(hExtendWnd, (LPPOINT)&rc2))
 				{
-					rc.right = rc.left + 1;
-					rc.bottom = rc.top + 1;
-				}
-				else
-				{
-					RECT rc2;
-					::GetWindowRect(hWebHostWnd, &rc2);
-					if (::ScreenToClient(hExtendWnd, (LPPOINT)&rc2))
+					::ScreenToClient(hExtendWnd, ((LPPOINT)&rc2) + 1);
+					RECT rect;
+					::GetClientRect(hExtendWnd, &rect);
+					if (g_pCosmos->m_bSZMode)
 					{
-						::ScreenToClient(hExtendWnd, ((LPPOINT)&rc2) + 1);
-						RECT rect;
-						::GetClientRect(hExtendWnd, &rect);
+						rc.right = rc.left + 1;
+						rc.bottom = rc.top + 1;
+					}
+					else
+					{
+						rc.left += rc2.left / m_fdevice_scale_factor;
+						rc.right -= (rect.right - rc2.right) / m_fdevice_scale_factor;
+						rc.top += (rc2.top - rect.top) / m_fdevice_scale_factor;
+						rc.bottom -= (rect.bottom - rc2.bottom) / m_fdevice_scale_factor;
+						if (rc.right <= rc.left || rc.bottom <= rc.top)
 						{
-							rc.left += rc2.left / m_fdevice_scale_factor;
-							rc.right -= (rect.right - rc2.right) / m_fdevice_scale_factor;
-							rc.top += (rc2.top - rect.top) / m_fdevice_scale_factor;
-							rc.bottom -= (rect.bottom - rc2.bottom) / m_fdevice_scale_factor;
-							if (rc.right <= rc.left || rc.bottom <= rc.top)
+							rc.right = rc.left + 1;
+							rc.bottom = rc.top + 1;
+						}
+						if (m_pParentXobj && g_pCosmos->m_bChromeNeedClosed == false && m_bDestroy == false)
+						{
+							HWND hPWnd = m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+							if (m_pCosmosFrameWndInfo == nullptr)
 							{
-								rc.right = rc.left + 1;
-								rc.bottom = rc.top + 1;
+								HWND _hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
+								if (_hPWnd)
+								{
+									m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(_hPWnd, _T("CosmosFrameWndInfo"));;
+								}
 							}
-							else if (g_pCosmos->m_bChromeNeedClosed == false && m_bDestroy == false && m_pCosmosFrameWndInfo && m_pParentXobj)
+							if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 1)
 							{
 								if (m_OldRect.left != rc.left || m_OldRect.top != rc.top || m_OldRect.right != rc.right || m_OldRect.bottom != rc.bottom)
 								{
-									::PostMessage(::GetParent(m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd), WM_COSMOSMSG, (WPARAM)m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd, 20210222);
+									::PostMessage(::GetParent(hPWnd), WM_COSMOSMSG, (WPARAM)hPWnd, 20210222);
 								}
 							}
-							m_OldRect = rc;
 						}
+						m_OldRect = rc;
 					}
 				}
 			}
@@ -669,20 +662,8 @@ namespace Browser {
 				}
 			}
 			break;
-			case 6:
-			{
-				if (m_pBrowser)
-				{
-					BrowserLayout();
-				}
-			}
-			break;
 			case 7:
 			{
-				if (m_pParentXobj)
-				{
-					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);;
-				}
 				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
 				for (auto& it : m_mapChildPage)
 				{
@@ -696,8 +677,6 @@ namespace Browser {
 						else
 						{
 							m_pVisibleWebWnd = it.second;
-							if (it.second->m_pChromeRenderFrameHost)
-								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						}
 					}
 				}
@@ -711,6 +690,10 @@ namespace Browser {
 				g_pCosmos->m_bSZMode = false;
 				if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
+				if (m_pParentXobj)
+				{
+					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+				}
 			}
 			break;
 			}

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102310036           *
+ *           Web Runtime for Application - Version 1.0.0.202102250037           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1931,10 +1931,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													}
 												}
 											}
-										}
-										if (pFrameWnd)
-										{
-											::PostMessage(pFrameWnd->m_hWnd, WM_COSMOSMSG, 0, 20210129);
 										}
 									}
 								}

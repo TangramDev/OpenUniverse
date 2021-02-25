@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102310036           *
+ *           Web Runtime for Application - Version 1.0.0.202102250037           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -886,6 +886,7 @@ namespace Browser {
 					{
 						m_hWebHostWnd = m_pGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 					}
+					::PostMessage(m_hExtendWnd,WM_BROWSERLAYOUT, (WPARAM)m_hChildWnd, 0);
 				}
 			}
 		}
@@ -893,7 +894,6 @@ namespace Browser {
 		g_pCosmos->m_mapSizingBrowser[hBrowser] = pBrowserWnd;
 		if(hPPWnd==nullptr)
 			pBrowserWnd->BrowserLayout();
-		//::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
 		::PostMessage(hBrowser, WM_BROWSERLAYOUT, 0, 7);
 	}
 
@@ -915,7 +915,7 @@ namespace Browser {
 				g_pCosmos->m_pHostHtmlWnd = this;
 				if (g_pCosmos->m_pHostBrowser == nullptr)
 				{
-					HWND hBrowser = ::GetParent(g_pCosmos->m_pHostHtmlWnd->m_hWnd);
+					HWND hBrowser = ::GetParent(m_hWnd);
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 					if (it != g_pCosmos->m_mapBrowserWnd.end())
 						g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
@@ -1311,7 +1311,6 @@ namespace Browser {
 						}
 					}
 				}
-				::PostMessage(hMainWnd, WM_COSMOSMSG, 0, 20210129);
 			}
 		}
 	}

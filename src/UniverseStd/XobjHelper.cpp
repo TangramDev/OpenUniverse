@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102310036
+ *           Web Runtime for Application - Version 1.0.0.202102250037
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -570,7 +570,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		switch (lParam)
 		{
 		case 20201028:
-		case 20210129:
 		case 20200609:
 		case 20200606:
 		case 20200531:

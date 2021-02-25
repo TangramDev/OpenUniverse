@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102310036           *
+ *           Web Runtime for Application - Version 1.0.0.202102250037           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -570,7 +570,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		switch (lParam)
 		{
 		case 20201028:
-		case 20210129:
 		case 20200609:
 		case 20200606:
 		case 20200531:
@@ -638,11 +637,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		{
 			for (auto it : m_pXobj->m_vChildNodes)
 			{
-				//if (it->m_nViewType == Grid)
-				//{
-				//	CGridWnd* pWnd = (CGridWnd*)it->m_pHostWnd;
-				//	pWnd->RecalcLayout();
-				//}
 				::PostMessage(it->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200601);//for webruntimeVS Dockabe ToolWindow
 			}
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);

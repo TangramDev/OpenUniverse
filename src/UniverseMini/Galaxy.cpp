@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102310036
+ *           Web Runtime for Application - Version 1.0.0.202102250037
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -247,8 +247,6 @@ void CGalaxy::HostPosChanged()
 	if (::IsWindow(m_hWnd) == false)
 		return;
 	HWND hwnd = m_hWnd;
-	if (!::IsWindowVisible(m_hWnd) && m_pBindingXobj)
-		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210129);
 	CXobj* pTopXobj = m_pWorkXobj;
 	CGalaxy* _pGalaxy = this;
 	if (!_pGalaxy->m_bDesignerState)
@@ -792,18 +790,6 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
-		case 20210129:
-		{
-			if (::IsWindowVisible(m_hWnd) == false)
-			{
-				if (m_pBindingXobj && m_pBindingXobj->m_pHostWnd && ::IsWindowVisible(m_pBindingXobj->m_pHostWnd->m_hWnd))
-				{
-					HostPosChanged();
-					::InvalidateRect(::GetAncestor(m_hWnd, GA_ROOT), nullptr, true);
-				}
-			}
-		}
-		break;
 		case 20180115:
 		{
 			HostPosChanged();

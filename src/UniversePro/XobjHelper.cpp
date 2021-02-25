@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102310036
+ *           Web Runtime for Application - Version 1.0.0.202102250037
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -576,8 +576,8 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	{
 		RECT rect;
 		::GetClientRect(m_hWnd, &rect);
-		m_pXobj->m_pWebBrowser = (CBrowser*)wParam;
-		::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
+		CBrowser* pWnd = (CBrowser*)wParam;
+		::SetParent(pWnd->m_hWnd, m_hWnd);
 		return -1;
 	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
@@ -585,7 +585,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		switch (lParam)
 		{
 		case 20201028:
-		case 20210129:
 		case 20200609:
 		case 20200606:
 		case 20200531:
@@ -641,7 +640,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				return (LRESULT)pCosmosWinFormWnd->m_pChildFormsInfo;
 			return 0;
 		}
-		break;
 		case 20200128:
 		{
 			if (m_pXobj && m_pXobj->m_pWebBrowser)
@@ -654,11 +652,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		{
 			for (auto it : m_pXobj->m_vChildNodes)
 			{
-				//if (it->m_nViewType == Grid)
-				//{
-				//	CGridWnd* pWnd = (CGridWnd*)it->m_pHostWnd;
-				//	pWnd->RecalcLayout();
-				//}
 				::PostMessage(it->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200601);//for webruntimeVS Dockabe ToolWindow
 			}
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
