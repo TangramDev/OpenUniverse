@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -114,7 +114,6 @@ namespace OfficePlus
 			m_pCTPFactory.Detach();
 		OnDisconnection(RemoveMode);
 
-		g_pCosmos->m_pDesignerGalaxyCluster = nullptr;
 		if (::IsWindow(m_hHostWnd))
 			::DestroyWindow(m_hHostWnd);
 		if (::IsWindow(m_hCosmosWnd))
@@ -423,64 +422,6 @@ namespace OfficePlus
 		if (::IsWindow(m_hHostWnd))
 			*pVal = (LONGLONG)m_hHostWnd;
 		return S_OK;
-	}
-
-	void COfficeAddin::CreateCommonDesignerToolBar()
-	{
-		CString strName = this->m_strExeName;
-		if (::IsWindow(m_hHostWnd) == false)
-		{
-			auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
-			if (it != g_pCosmos->m_mapValInfo.end())
-				m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-			m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
-		}
-		if (m_hHostWnd&&m_pDesignerGalaxyCluster == nullptr)
-		{
-			HWND hwnd = ::GetActiveWindow();
-			RECT rc;
-			::GetWindowRect(hwnd, &rc);
-			::SetWindowPos(m_hHostWnd, NULL, rc.left + 40, rc.top + 40, 300, 700, SWP_NOACTIVATE | SWP_NOREDRAW);
-
-			if (m_pDesignerGalaxyCluster == nullptr)
-			{
-				auto it = g_pCosmos->m_mapWindowPage.find(m_hHostWnd);
-				if (it != g_pCosmos->m_mapWindowPage.end())
-					m_pDesignerGalaxyCluster = (CGalaxyCluster*)it->second;
-				else
-				{
-					m_pDesignerGalaxyCluster = new CComObject<CGalaxyCluster>();
-					m_pDesignerGalaxyCluster->m_hWnd = m_hHostWnd;
-					g_pCosmos->m_mapWindowPage[m_hHostWnd] = m_pDesignerGalaxyCluster;
-				}
-
-				CString strPath = m_strExeName + _T(".designer");
-				CTangramXmlParse m_Parse;
-				if (m_Parse.LoadFile(strPath))
-				{
-					m_strDesignerXml = m_Parse.xml();
-					if (m_strDesignerXml != _T(""))
-					{
-						auto it = m_pDesignerGalaxyCluster->m_mapGalaxy.find(m_hChildHostWnd);
-						if (it == m_pDesignerGalaxyCluster->m_mapGalaxy.end())
-						{
-							IGalaxy* pGalaxy = nullptr;
-							HRESULT hr = m_pDesignerGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)m_hChildHostWnd), CComBSTR(L"DeignerTool"), &pGalaxy);
-							if (pGalaxy)
-							{
-								IXobj* pXobj = nullptr;
-								pGalaxy->Observe(CComBSTR(L"DeignerToolBox"), CComBSTR(m_strDesignerXml), &pXobj);
-								m_pDesignerFrame = (CGalaxy*)pGalaxy;
-								m_pDesignerFrame->m_bDesignerState = false;
-							}
-						}
-					}
-				}
-			}
-		}
-		::ShowWindow(m_hHostWnd, SW_SHOW);
-		::UpdateWindow(m_hHostWnd);
 	}
 
 	COfficeExtender::COfficeExtender(void)

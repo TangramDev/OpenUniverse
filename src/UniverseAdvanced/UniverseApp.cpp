@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -632,9 +632,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			}
 			if (g_pCosmos->m_hForegroundIdleHook)
 				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
-
-			g_pCosmos->m_pDesignerFrame = nullptr;
-			g_pCosmos->m_pDesignerGalaxyCluster = nullptr;
 		}
 		break;
 	}

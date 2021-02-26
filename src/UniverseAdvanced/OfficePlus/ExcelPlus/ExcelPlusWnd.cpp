@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -356,7 +356,6 @@ namespace OfficePlus
 
 		void CExcelWorkBook::OnSheetActivate(IDispatch* Sh)
 		{
-			g_pCosmos->m_pDesignXobj = nullptr;
 			if (m_pGalaxy == nullptr)
 				return;
 

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -562,9 +562,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			}
 			if (g_pCosmos->m_hForegroundIdleHook)
 				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
-
-			g_pCosmos->m_pDesignerFrame = nullptr;
-			g_pCosmos->m_pDesignerGalaxyCluster = nullptr;
 		}
 		break;
 	}
@@ -897,16 +894,16 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	}
 	switch (lParam)
 	{
-		case 10001000:
+	case 10001000:
+	{
+		if (g_pCosmos->m_nAppID != 9 && g_pCosmos->m_bEclipse == false)
 		{
-			if (g_pCosmos->m_nAppID != 9 && g_pCosmos->m_bEclipse == false)
-			{
-				::PostMessage(g_pCosmos->m_hCosmosWnd, WM_HUBBLE_APPQUIT, 0, 0);
-			}
+			::PostMessage(g_pCosmos->m_hCosmosWnd, WM_HUBBLE_APPQUIT, 0, 0);
 		}
+	}
+	break;
+	default:
 		break;
-		default:
-			break;
 	}
 	return 1;
 	break;

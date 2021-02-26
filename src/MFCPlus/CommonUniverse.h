@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -572,7 +572,6 @@ namespace CommonUniverse {
 		bool									m_bWinFormActived;
 		bool									m_bEnableProcessFormTabKey;
 		bool									m_bDeleteGalaxyCluster;
-		bool									m_bNewFile;
 		bool									m_bIsSupportCrashReporting = false;
 		bool									m_bIsEclipseInit = false;
 
@@ -623,7 +622,6 @@ namespace CommonUniverse {
 		CString									m_strStartupURL = _T("");
 		CString									m_strCurrentEclipsePagePath;
 		CString									m_strDefaultXml;
-		CString									m_strLibs;
 
 		CStringA								m_strBridgeJavaClass;
 		CString									m_strStartJarPath;

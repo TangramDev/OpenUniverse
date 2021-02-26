@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -121,7 +121,6 @@ CCosmos::CCosmos()
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
 	m_strDefaultXml = _T("<default><cluster><xobj name=\"tangram\" objid=\"nucleus\"/></cluster></default>");
-	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
 	m_nAppType = 0;
@@ -139,7 +138,6 @@ CCosmos::CCosmos()
 	m_lpszSplitterClass = nullptr;
 	m_pActiveXobj = nullptr;
 	m_pGalaxy = nullptr;
-	m_pDesignXobj = nullptr;
 	m_pRootNodes = nullptr;
 	m_pUniverseAppProxy = nullptr;
 	m_pCosmosAppProxy = nullptr;

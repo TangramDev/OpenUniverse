@@ -226,6 +226,22 @@ namespace CommonUniverse
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 	};
 
+	class CComponentApp :
+		public CWinApp,
+		public ICosmosWindowProvider
+	{
+	public:
+		CComponentApp();
+		virtual ~CComponentApp();
+		bool CosmosInit(CString strID);
+		virtual BOOL InitInstance();
+		virtual int ExitInstance();
+	private:
+		virtual CString GetNames();
+		virtual CString GetTags(CString strName);
+		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
+	};
+
 	class CCosmosAppEx :
 		public CWinAppEx
 	{

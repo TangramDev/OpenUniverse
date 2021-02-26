@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -201,22 +201,6 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		return MA_NOACTIVATE;
 	}
 
-	if (b && m_bCreateExternal == false 
-		&& m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS)
-		&&m_pXobj->m_pDisp == NULL)
-	{
-		if (g_pCosmos->m_pDesignXobj && g_pCosmos->m_pDesignXobj != m_pXobj)
-		{
-			CXobjHelper* pWnd = ((CXobjHelper*)g_pCosmos->m_pDesignXobj->m_pHostWnd);
-			if (pWnd && ::IsWindow(pWnd->m_hWnd))
-			{
-				pWnd->Invalidate(true);
-			}
-		}
-		g_pCosmos->m_pDesignXobj = m_pXobj;
-		Invalidate(true);
-	}
-
 	if (m_bCreateExternal == false)
 	{
 		if (pHtmlWnd)
@@ -266,25 +250,16 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
 		CBrush br(&bit);
 		pDC->FillRect(&rt, &br);
-		if (bInDesignState && g_pCosmos->m_pDesignXobj == m_pXobj)
+		CComBSTR bstrCaption(L"");
+		m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
+		CString strInfo = _T("\n\n  ");
+		if (bInDesignState)
 		{
-			pDC->SetTextColor(RGB(255, 0, 255));
-			strText = _T("\n\n  ") + g_pCosmos->m_strXobjSelectedText;
+			strInfo = strInfo + g_pCosmos->m_strDesignerTip1;
 		}
-		else
-		{
-			CComBSTR bstrCaption(L"");
-			m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
-			CString strInfo = _T("\n\n  ");
-			if (bInDesignState)
-			{
-				strInfo = strInfo + g_pCosmos->m_strDesignerTip1;
-			}
-			strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
-			strText.Format(strInfo, m_pXobj->m_strName, CString(OLE2T(bstrCaption)));
-			pDC->SetTextColor(RGB(255, 255, 255));
-		}
-
+		strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
+		strText.Format(strInfo, m_pXobj->m_strName, CString(OLE2T(bstrCaption)));
+		pDC->SetTextColor(RGB(255, 255, 255));
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(strText, &rt, DT_LEFT);
 	}
@@ -342,11 +317,6 @@ void CXobjHelper::OnShowWindow(BOOL bShow, UINT nStatus)
 
 void CXobjHelper::OnDestroy()
 {
-	if (g_pCosmos->m_pDesignXobj == m_pXobj)
-	{
-		g_pCosmos->m_pDesignXobj = NULL;
-	}
-
 	m_pXobj->Fire_Destroy();
 	CWnd::OnDestroy();
 }

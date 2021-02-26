@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -282,48 +282,6 @@ LRESULT CGridWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
-	IXobj* _pXobj = nullptr;
-	CString str = (LPCTSTR)lParam;
-	CXobj* pOldNode = (CXobj*)g_pCosmos->m_pDesignXobj;
-	CTangramXmlParse* pOld = pOldNode->m_pHostParse;
-
-	long	m_nRow;
-	g_pCosmos->m_pDesignXobj->get_Row(&m_nRow);
-	long	m_nCol;
-	g_pCosmos->m_pDesignXobj->get_Col(&m_nCol);
-	IXobj* _pOldNode = nullptr;
-	m_pXobj->GetXobj(m_nRow, m_nCol, &_pOldNode);
-	CXobj* _pOldNode2 = (CXobj*)_pOldNode;
-	CTangramXmlParse* _pOldParse = _pOldNode2->m_pHostParse;
-	m_pXobj->ObserveEx(m_nRow, m_nCol, CComBSTR(L""), str.AllocSysString(), &_pXobj);
-	CXobj* pXobj = (CXobj*)_pXobj;
-	if (pXobj && pOldNode)
-	{
-		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-		pXobj->m_pXobjShareData->m_pGalaxy->m_bDesignerState = true;
-		CXobjVector::iterator it;
-		it = find(m_pXobj->m_vChildNodes.begin(), m_pXobj->m_vChildNodes.end(), pOldNode);
-
-		if (it != m_pXobj->m_vChildNodes.end())
-		{
-			pXobj->m_pRootObj = m_pXobj->m_pRootObj;
-			pXobj->m_pParentObj = m_pXobj;
-			CXobjVector vec = pXobj->m_vChildNodes;
-			CXobj* pChildNode = nullptr;
-			for (auto it2 : pXobj->m_vChildNodes)
-			{
-				pChildNode = it2;
-				pChildNode->m_pRootObj = m_pXobj->m_pRootObj;
-			}
-			CTangramXmlParse* pNew = pXobj->m_pHostParse;
-			CTangramXmlParse* pRet = m_pXobj->m_pHostParse->ReplaceNode(pOld, pNew, _T(""));
-			m_pXobj->m_vChildNodes.erase(it);
-			m_pXobj->m_vChildNodes.push_back(pXobj);
-			pOldNode->m_pHostWnd->DestroyWindow();
-			g_pCosmos->m_pDesignXobj = nullptr;
-			RecalcLayout();
-		}
-	}
 	return -1;
 }
 
@@ -438,8 +396,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;
 		}
-		else if (g_pCosmos->m_pDesignXobj && g_pCosmos->m_pDesignXobj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
-			pWebWnd = g_pCosmos->m_pDesignXobj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
+
 		pGalaxy->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)

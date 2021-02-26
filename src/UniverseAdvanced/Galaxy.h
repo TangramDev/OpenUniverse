@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -134,11 +134,9 @@ public:
 	CMDIChild(void);
 	virtual ~CMDIChild(void);
 
-	BOOL		m_bInit = false;
 	HWND		m_hClient;
 
 	CString		m_strKey;
-	CString		m_strXml=_T("");
 	CString		m_strDocXml=_T("");
 	CString		m_strDocTemplateKey = _T("");
 
@@ -327,7 +325,6 @@ public:
 	void Destroy();
 	void HostPosChanged();
 	HWND GetWinForm(HWND hWnd);
-	void UpdateDesignerTreeInfo();
 	void UpdateVisualWPFMap(HWND, BOOL);
 
 	CTangramXmlParse* UpdateXobj();

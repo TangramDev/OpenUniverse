@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -562,9 +562,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			}
 			if (g_pCosmos->m_hForegroundIdleHook)
 				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
-
-			g_pCosmos->m_pDesignerFrame = nullptr;
-			g_pCosmos->m_pDesignerGalaxyCluster = nullptr;
 		}
 		break;
 	}
@@ -964,6 +961,24 @@ LRESULT CALLBACK CUniverse::CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 {
 	switch (msg)
 	{
+	case WM_BROWSERLAYOUT:
+	{
+		if (lParam == 0)
+		{
+			HWND m_hChildWnd = (HWND)wParam;
+			if (::IsWindow(m_hChildWnd))
+			{
+				RECT rc;
+				::GetClientRect(m_hChildWnd, &rc);
+				if (rc.right * rc.bottom == 0)
+				{
+					::GetClientRect(hWnd, &rc);
+					::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, /**/SWP_FRAMECHANGED | SWP_NOREDRAW | SWP_NOACTIVATE);
+				}
+			}
+		}
+	}
+	break;
 	case WM_WINDOWPOSCHANGED:
 	{
 		HWND m_hChildWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -75,7 +75,6 @@ public:
 	CWinForm*							m_pActiveWinFormWnd;
 
 	CXobj*								m_pActiveXobj;
-	CXobj*								m_pDesignXobj;
 	CGalaxy*							m_pGalaxy;
 
 	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;

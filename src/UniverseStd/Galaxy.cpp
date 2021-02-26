@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1039,20 +1039,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	auto it = g_pCosmos->m_mapMainForm.find(m_hWnd);
-	if (it != g_pCosmos->m_mapMainForm.end())
-	{
-		g_pCosmos->m_mapMainForm.erase(it);
-		if (m_hWnd == g_pCosmos->m_hMainWnd)
-		{
-			if (g_pCosmos->m_mapMainForm.size())
-			{
-				it = g_pCosmos->m_mapMainForm.begin();
-				if (it != g_pCosmos->m_mapMainForm.end())
-					g_pCosmos->m_hMainWnd = it->first;
-			}
-		}
-	}
 	if (m_pOwnerHtmlWnd)
 	{
 		auto it = m_pOwnerHtmlWnd->m_mapWinForm.find(m_hWnd);
@@ -1200,13 +1186,6 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			m_pBKWnd->m_pGalaxy->HostPosChanged();
 		}
-	}
-	break;
-	case 20200419:
-	{
-		auto it = g_pCosmos->m_mapMainForm.find(m_hWnd);
-		if (it == g_pCosmos->m_mapMainForm.end())
-			g_pCosmos->m_mapMainForm[m_hWnd] = this;
 	}
 	break;
 	}
@@ -1520,35 +1499,6 @@ CTangramXmlParse* CGalaxy::UpdateXobj()
 	if (m_mapXobj.size())
 		return m_mapXobj.begin()->second->m_pXobjShareData->m_pCosmosParse;
 	return nullptr;
-}
-
-void CGalaxy::UpdateDesignerTreeInfo()
-{
-	if (m_bDesignerState && g_pCosmos->m_hChildHostWnd) {
-		g_pCosmos->m_pDesigningFrame = this;
-		if (g_pCosmos->m_pDocDOMTree && ::IsWindow(g_pCosmos->m_pDocDOMTree->m_hWnd)) {
-			g_pCosmos->m_pDocDOMTree->DeleteItem(g_pCosmos->m_pDocDOMTree->m_hFirstRoot);
-			if (g_pCosmos->m_pDocDOMTree->m_pHostXmlParse) {
-				delete g_pCosmos->m_pDocDOMTree->m_pHostXmlParse;
-				g_pCosmos->m_pDocDOMTree->m_pHostXmlParse = nullptr;
-			}
-			CXobj* pXobj = g_pCosmos->m_pDesigningFrame->m_pWorkXobj;
-			if (pXobj == nullptr) {
-				return;
-			}
-
-			CString _strName = pXobj->m_strName;
-			_strName += _T("-indesigning");
-			_strName.MakeLower();
-			CTangramXmlParse* pParse = nullptr;
-			auto it = m_mapXobj.find(_strName);
-			if (it != m_mapXobj.end())
-				pParse = it->second->m_pXobjShareData->m_pCosmosParse;
-			else
-				pParse = pXobj->m_pXobjShareData->m_pCosmosParse;
-			g_pCosmos->InitDesignerTreeCtrl(pParse->xml());
-		}
-	}
 }
 
 HWND CGalaxy::GetWinForm(HWND hForm)
@@ -2531,8 +2481,6 @@ LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	if (m_pBKWnd)
 		m_pBKWnd->DestroyWindow();
-	if (g_pCosmos->m_pDesigningFrame && g_pCosmos->m_pDesigningFrame == this)
-		g_pCosmos->m_pDesigningFrame = nullptr;
 	m_pGalaxyCluster->BeforeDestory();
 	m_pGalaxyCluster->m_strConfigFileNodeName.MakeLower();//20190116
 	//auto it = g_pCosmos->m_mapWindowPage.find(m_pGalaxyCluster->m_hWnd);

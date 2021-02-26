@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -725,8 +725,6 @@ void CTangramHtmlTreeWnd::UpdateData(CString strData)
 			delete m_pHostXmlParse;
 		}
 		m_pHostXmlParse = _pHostXmlParse;
-		if(g_pCosmos->m_pHostDesignUINode)
-			g_pCosmos->m_pHostDesignUINode->m_pDocXmlParseNode = m_pHostXmlParse;
 		m_hFirstRoot = LoadXmlFromXmlParse(m_pHostXmlParse);// , CTangramHtmlTreeWnd::ConvertToUnicode);
 		ExpandAll();
 		return;
@@ -4123,26 +4121,7 @@ BOOL CTangramHtmlTreeWnd::OnClick(NMHDR* /*pNMHDR*/, LRESULT* pResult)
 		if (pXTCD->m_bEnabled)
 		{
 			CString _strXml = _T("");
-			if (g_pCosmos->m_pDocDOMTree == this)
-			{
-				CTangramXmlParse* pParse = pXTCD->m_pXmlParse;
-				CString strNodeName = pParse->attr(_T("id"),_T(""));
-				IXobj* _pXobj = NULL;
-				if (g_pCosmos->m_pDesignXobj)
-				{
-					CXobj* pRootXobj = g_pCosmos->m_pDesignXobj->m_pRootObj;
-					IXobj* _pXobj = NULL;
-					long nCount = 0;
-					CComPtr<IXobjCollection> pCol;
-					pRootXobj->GetXobjs(strNodeName.AllocSysString(), &_pXobj, &pCol, &nCount);
-					if (_pXobj)
-					{
-						if (g_pCosmos->m_pCLRProxy)
-							g_pCosmos->m_pCLRProxy->SelectXobj(_pXobj);
-					}
-				}
-			}
-			
+		
 			IXobj* pRootXobj = NULL;
 			if (m_pHostWnd)
 			{

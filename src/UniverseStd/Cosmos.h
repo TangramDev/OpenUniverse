@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -196,14 +196,8 @@ public:
 	CWinForm*								m_pActiveWinFormWnd;
 
 	CXobj*									m_pActiveXobj;
-	CXobj*									m_pDesignRootNode;
-	CXobj*									m_pDesignXobj;
-	CXobj*									m_pHostDesignUINode;
 	CGalaxy*								m_pGalaxy;
-	CGalaxy*								m_pDesignerFrame;
-	CGalaxy*								m_pDesigningFrame;
 	CGalaxyCluster*							m_pGalaxyCluster;
-	CGalaxyCluster*							m_pDesignerGalaxyCluster;
 
 	CCosmosAppCtrl*							m_pCosmosAppCtrl;
 	ICosmos*								m_pCosmosVS = nullptr;
@@ -216,7 +210,6 @@ public:
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;
-	map<HWND, CWinForm*>					m_mapMainForm;
 	map<CString, CRuntimeClass*>			m_TabWndClassInfoDictionary;
 	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;
@@ -316,7 +309,6 @@ public:
 	CString EncodeFileToBase64(CString strSRC);
 	CString InitEclipse(_TCHAR* jarFile);
 	CString ComputeHash(CString source);
-	CString GetDesignerInfo(CString);
 	CString GetXmlData(CString strName, CString strXml);
 	CString GetDesignerData(CXobj* pXobj);
 	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
@@ -331,7 +323,6 @@ public:
 	void ConnectWebAgent();
 #endif
 
-	virtual void CreateCommonDesignerToolBar();
 	virtual void ProcessMsg(LPMSG lpMsg);
 	virtual void OnOpenDoc(WPARAM) {};
 	virtual void UpdateOfficeObj(IDispatch* pObj, CString strXml, CString strName) {};

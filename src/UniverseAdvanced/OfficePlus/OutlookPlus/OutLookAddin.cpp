@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1410,33 +1410,6 @@ namespace OfficePlus
 			{
 			case 100:
 			{
-				pAddin->CreateCommonDesignerToolBar();
-				CComPtr<MAPIFolder> pFolder;
-				m_pExplorer->get_CurrentFolder(&pFolder);
-				if (pFolder)
-				{
-					CComPtr<MAPIFolder> _pFolder;
-					CComBSTR bstrEntryID(L"");
-					CComBSTR bstrStoreID(L"");
-					pFolder->get_EntryID(&bstrEntryID);
-					pAddin->m_strDesignExplorerEntryID = OLE2T(bstrEntryID);
-					pFolder->get_StoreID(&bstrStoreID);
-					pAddin->m_strDesignExplorerStoreID = OLE2T(bstrStoreID);
-					CComPtr<_NameSpace> pSession;
-					HRESULT hr = pAddin->m_pApplication->get_Session(&pSession);
-					pSession->GetFolderFromID(bstrEntryID, CComVariant(bstrStoreID), &_pFolder);
-					CComPtr<_Explorer> pExplorer;
-					hr = pAddin->m_pExplorers->Add(CComVariant(_pFolder), OlFolderDisplayMode::olFolderDisplayNoNavigation, &pExplorer);
-					if (hr == S_OK)
-					{
-						pExplorer->Display();
-						CString strKey = pAddin->m_strDesignExplorerEntryID;
-						strKey += _T(",");
-						strKey += pAddin->m_strDesignExplorerStoreID;
-						pAddin->m_mapDesignExplorer[strKey] = pExplorer;
-						::PostMessage(pAddin->m_hHostWnd, WM_COSMOSMSG, 1963, 1222);
-					}
-				}
 			}
 			break;
 			case 101:
@@ -2038,97 +2011,6 @@ namespace OfficePlus
 
 		void COutLookExplorer::SetDesignState()
 		{
-			COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
-			HWND hWnd = ::GetActiveWindow();
-			HWND _hwnd = NULL;
-			CInspectorContainerWnd* pWnd = nullptr;
-			CComVariant varView;
-			m_pExplorer->get_CurrentView(&varView);
-			CComPtr<MAPIFolder> pFolder;
-			m_pExplorer->get_CurrentFolder(&pFolder);
-			CString strXml = pAddin->GetFolderPropertyFromStore(pFolder, _T("Tangram"), _T("TangramProperties"));
-
-			if (varView.vt == VT_DISPATCH)
-			{
-				CComQIPtr<OutLook::View> pView(varView.pdispVal);
-				if (pView)
-				{
-					OlViewType viewType;
-					pView->get_ViewType(&viewType);
-					switch (viewType)
-					{
-					case OlViewType::olBusinessCardView:
-						break;
-					case OlViewType::olCalendarView:
-						break;
-					case OlViewType::olCardView:
-						break;
-					case OlViewType::olDailyTaskListView:
-						break;
-					case OlViewType::olIconView:
-						break;
-					case OlViewType::olPeopleView:
-					case OlViewType::olTableView:
-					{
-						_hwnd = ::FindWindowEx(hWnd, NULL, _T("rctrl_renwnd32"), NULL);
-						if (m_pInspectorContainerWnd == NULL)
-						{
-							if (_hwnd)
-							{
-								_hwnd = ::FindWindowEx(_hwnd, NULL, _T("AfxWndW"), NULL);
-								if (_hwnd)
-								{
-									m_pInspectorContainerWnd = new CInspectorContainerWnd();
-									m_pInspectorContainerWnd->SubclassWindow(_hwnd);
-								}
-							}
-						}
-						pWnd = m_pInspectorContainerWnd;
-					}
-					break;
-					case OlViewType::olTimelineView:
-					{
-						CComQIPtr<_TimelineView> _pTimelineView(pView);
-						if (_pTimelineView)
-						{
-						}
-					}
-					break;
-					}
-				}
-			}
-			else
-			{
-				m_hOutLookToday = ::FindWindowEx(m_hWnd, NULL, _T("Shell Embedding"), NULL);
-				if (m_hOutLookToday)
-				{
-					_hwnd = ::FindWindowEx(m_hOutLookToday, NULL, _T("Shell DocObject View"), NULL);
-					pWnd = new CInspectorContainerWnd();
-					pWnd->SubclassWindow(_hwnd);
-				}
-			}
-			pWnd->m_pOutLookExplorer = this;
-			IGalaxy* pGalaxy = nullptr;
-			g_pCosmos->GetGalaxy((LONGLONG)pWnd->m_hWnd, &pWnd->m_pGalaxy);
-			if (pWnd->m_pGalaxy == nullptr)
-			{
-				g_pCosmos->CreateGalaxyCluster((LONGLONG)::GetParent(pWnd->m_hWnd), &pWnd->m_pGalaxyCluster);
-				if (pWnd->m_pGalaxyCluster)
-					pWnd->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pWnd->m_hWnd), CComBSTR(L""), &pWnd->m_pGalaxy);
-			}
-			if (pWnd->m_pGalaxy)
-			{
-				CComBSTR bstrName(L"");
-				pFolder->get_FolderPath(&bstrName);
-				IXobj* pXobj = nullptr;
-				if(strXml==_T(""))
-					strXml  = _T("<Tangram><cluster><xobj name=\"Start\" /></cluster></Tangram>");
-				pWnd->m_pGalaxy->Observe(bstrName, strXml.AllocSysString(), &pXobj);
-				CGalaxy* _pGalaxy = (CGalaxy*)pWnd->m_pGalaxy;
-				_pGalaxy->HostPosChanged();
-				_pGalaxy->m_bDesignerState = true;
-				pAddin->CreateCommonDesignerToolBar();
-			}
 		}
 
 		CInspectorItem::CInspectorItem(void)
@@ -2488,16 +2370,6 @@ namespace OfficePlus
 			if (it2 != m_mapOutLookPage.end())
 			{
 				m_pActiveOutLookPage = it2->second;
-				if (m_pActiveOutLookPage->m_bDesignState)
-				{
-					pAddin->CreateCommonDesignerToolBar();
-					CGalaxy* pGalaxy = (CGalaxy*)m_pActiveOutLookPage->m_pGalaxy;
-					if (pAddin->m_pDesigningFrame != pGalaxy)
-					{
-						pAddin->m_pDesigningFrame = pGalaxy;
-						pGalaxy->UpdateDesignerTreeInfo();
-					}
-				}
 			}
 			else
 			{
@@ -2860,36 +2732,6 @@ namespace OfficePlus
 
 		void COutLookPageWnd::DesignPage()
 		{
-			if (m_bDesignState == false)
-			{
-				m_bDesignState = true;
-				if (m_pGalaxyCluster == nullptr)
-				{
-					g_pCosmos->CreateGalaxyCluster((LONGLONG)m_hWnd, &m_pGalaxyCluster);
-					if (m_pGalaxyCluster)
-					{
-						BSTR bstrName = m_strName.AllocSysString();
-						m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hFrameWnd), bstrName, &m_pGalaxy);
-						if (m_pGalaxy)
-						{
-							m_pGalaxy->put_DesignerState(true);
-							g_pCosmos->CreateCommonDesignerToolBar();
-							IXobj* pXobj = nullptr;
-							if (m_strXml == _T(""))
-							{
-								CString strName = m_strName;
-								strName.Replace(_T(" "), _T("_"));
-								m_strXml.Format(_T("<%s><cluster><xobj name=\"Start\" /></cluster></%s>"), strName, strName);
-							}
-							m_pGalaxy->Observe(bstrName, m_strXml.AllocSysString(), &pXobj);
-							g_pCosmos->m_pDesigningFrame = (CGalaxy*)m_pGalaxy;
-							g_pCosmos->m_pDesigningFrame->m_bDesignerState = true;
-							g_pCosmos->m_pDesigningFrame->UpdateDesignerTreeInfo();
-						}
-						::SysFreeString(bstrName);
-					}
-				}
-			}
 		}
 
 		LRESULT COutLookPageWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -550,31 +550,6 @@ namespace OfficePlus
 			{
 				if (pWnd)
 				{
-					CGalaxy* pGalaxy = pWnd->m_pWordPlusDoc->m_pGalaxy;
-					if (pGalaxy == nullptr)
-						break;
-					if (pWnd->m_bDesignState == false)
-					{
-						pGalaxy->m_bDesignerState = true;
-						pWnd->m_bDesignState = true;
-						CreateCommonDesignerToolBar();
-						CXobj* pXobj = pGalaxy->m_pWorkXobj;
-						if (pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
-						{
-							CString strXml = _T("<documentui><cluster><xobj name=\"Start\" /></cluster></documentui>");
-							IXobj* pDesignNode = nullptr;
-							pGalaxy->Observe(CComBSTR(L"default-inDesigning"), CComBSTR(strXml), &pDesignNode);
-						}
-
-						m_pDesigningFrame = pGalaxy;
-						m_pDesigningFrame->UpdateDesignerTreeInfo();
-						break;
-					}
-					else
-					{
-						pGalaxy->m_bDesignerState = false;
-						pWnd->m_bDesignState = false;
-					}
 				}
 			}
 			break;
@@ -663,26 +638,6 @@ namespace OfficePlus
 				}
 				if (nCmdIndex == 102 && pWnd)
 				{
-					CreateCommonDesignerToolBar();
-					CGalaxy* pGalaxy = pWnd->m_pWordPlusDoc->m_pTaskPaneGalaxy;
-					if (pWnd->m_bDesignTaskPane == false)
-					{
-						pGalaxy->m_bDesignerState = true;
-						if (m_pDesigningFrame != pGalaxy)
-						{
-							m_pDesigningFrame = pGalaxy;
-							pGalaxy->UpdateDesignerTreeInfo();
-						}
-					}
-					else
-					{
-						pGalaxy->m_bDesignerState = false;
-						if (m_pDesigningFrame == pGalaxy)
-						{
-							m_pDesigningFrame = nullptr;
-							pGalaxy->UpdateDesignerTreeInfo();
-						}
-					}
 				}
 			}
 			break;
@@ -958,10 +913,6 @@ namespace OfficePlus
 		{
 			if (m_pActiveWordObject)
 			{
-				if (m_pActiveWordObject->m_bDesignState)
-				{
-					CreateCommonDesignerToolBar();
-				}
 				CWordDocument* pWordPlusDoc = m_pActiveWordObject->m_pWordPlusDoc;
 				if (pWordPlusDoc)
 				{

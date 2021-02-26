@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -186,7 +186,6 @@ CCosmos::CCosmos()
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
 	m_strDefaultXml = _T("<default><cluster><xobj name=\"tangram\" gridtype=\"nucleus\"/></cluster></default>");
-	m_bNewFile = FALSE;
 	m_nRef = 4;
 	m_nAppID = -1;
 	m_nAppType = 0;
@@ -207,12 +206,6 @@ CCosmos::CCosmos()
 	m_pGalaxyCluster = nullptr;
 	m_pActiveXobj = nullptr;
 	m_pGalaxy = nullptr;
-	m_pDesignXobj = nullptr;
-	m_pDesigningFrame = nullptr;
-	m_pHostDesignUINode = nullptr;
-	m_pDesignRootNode = nullptr;
-	m_pDesignerFrame = nullptr;
-	m_pDesignerGalaxyCluster = nullptr;
 	m_pRootNodes = nullptr;
 	m_pDocDOMTree = nullptr;
 	m_pCosmosAppCtrl = nullptr;
@@ -1492,74 +1485,6 @@ void CCosmos::ProcessMsg(LPMSG lpMsg)
 	}
 }
 
-void CCosmos::CreateCommonDesignerToolBar()
-{
-	CString strName = this->m_strExeName;
-	if (::IsWindow(m_hHostWnd) == false)
-	{
-		auto it = m_mapValInfo.find(_T("c"));
-		if (it != m_mapValInfo.end())
-			m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
-	}
-	CString strDesignerDll = m_strAppPath + _T("tangramdesigner.dll");
-	if (::PathFileExists(strDesignerDll) == false)
-		return;
-	if (m_pCLRProxy && m_pCLRProxy->IsSupportDesigner() == false)
-		return;
-	HWND hwnd = ::GetActiveWindow();
-	if (m_hHostWnd && m_pDesignerGalaxyCluster == nullptr)
-	{
-		RECT rc;
-		::GetWindowRect(hwnd, &rc);
-		::SetWindowPos(m_hHostWnd, NULL, rc.left + 40, rc.top + 40, 400, 600, SWP_NOACTIVATE | SWP_NOREDRAW);
-		if (m_pDesignerGalaxyCluster == nullptr)
-		{
-			auto it = m_mapWindowPage.find(m_hHostWnd);
-			if (it != m_mapWindowPage.end())
-				m_pDesignerGalaxyCluster = (CGalaxyCluster*)it->second;
-			else
-			{
-				m_pDesignerGalaxyCluster = new CComObject<CGalaxyCluster>();
-				m_pDesignerGalaxyCluster->m_hWnd = m_hHostWnd;
-				m_mapWindowPage[m_hHostWnd] = m_pDesignerGalaxyCluster;
-			}
-			CString strPath = m_strExeName + _T(".designer");
-			CTangramXmlParse m_Parse;
-			bool bSupportDesigner = m_Parse.LoadFile(strPath);
-			if (bSupportDesigner == false)
-			{
-				strPath = m_strProgramFilePath + _T("\\Tangram\\TangramDesigner.designer");
-				bSupportDesigner = m_Parse.LoadFile(strPath);
-			}
-			if (bSupportDesigner)
-			{
-				m_strDesignerXml = m_Parse.xml();
-				if (m_strDesignerXml != _T(""))
-				{
-					auto it = m_pDesignerGalaxyCluster->m_mapGalaxy.find(m_hChildHostWnd);
-					if (it == m_pDesignerGalaxyCluster->m_mapGalaxy.end())
-					{
-						IGalaxy* pGalaxy = nullptr;
-						HRESULT hr = m_pDesignerGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)m_hChildHostWnd), CComBSTR(L"DeignerTool"), &pGalaxy);
-						if (pGalaxy)
-						{
-							IXobj* pXobj = nullptr;
-							pGalaxy->Observe(CComBSTR(L"DeignerToolBox"), CComBSTR(m_strDesignerXml), &pXobj);
-							m_pDesignerFrame = (CGalaxy*)pGalaxy;
-							m_pDesignerFrame->m_bDesignerState = false;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	::ShowWindow(m_hHostWnd, SW_SHOW);
-	::UpdateWindow(m_hHostWnd);
-}
-
 void CCosmos::AttachXobj(void* pXobjEvents)
 {
 	CXobjEvents* m_pCLREventConnector = (CXobjEvents*)pXobjEvents;
@@ -1781,17 +1706,6 @@ CString CCosmos::GetNewLayoutNodeName(BSTR bstrObjTypeID, IXobj* pDesignNode)
 			return strNewName;
 		}
 		nIndex++;
-	}
-	return _T("");
-};
-
-CString CCosmos::GetDesignerInfo(CString strIndex)
-{
-	if (m_pDesignerGalaxyCluster)
-	{
-		auto it = m_pDesignerGalaxyCluster->m_mapXtml.find(strIndex);
-		if (it != m_pDesignerGalaxyCluster->m_mapXtml.end())
-			return it->second;
 	}
 	return _T("");
 };
@@ -2491,8 +2405,6 @@ STDMETHODIMP CCosmos::get_CreatingXobj(IXobj** pVal)
 
 STDMETHODIMP CCosmos::get_DesignNode(IXobj** pVal)
 {
-	if (m_pDesignXobj)
-		(*pVal) = (IXobj*)m_pDesignXobj;
 	return S_OK;
 }
 

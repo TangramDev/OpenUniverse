@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -551,63 +551,6 @@ STDMETHODIMP CXobj::put_Attribute(BSTR bstrKey, BSTR bstrVal)
 		if (strID.CompareNoCase(TGM_GRID_TYPE))
 			m_strID = strVal;
 		ATLTRACE(_T("Modify CXobj Attribute: ID: %s Value: %s\n"), strID, strVal);
-		CGalaxy* pGalaxy = nullptr;
-		if (strVal.CompareNoCase(TGM_NUCLEUS) == 0 && g_pCosmos->m_pDesignXobj)
-		{
-			pGalaxy = g_pCosmos->m_pDesignXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy;
-			if (g_pCosmos->m_pDesignXobj && pGalaxy->m_pBindingXobj)
-			{
-				CXobj* pOldNode = pGalaxy->m_pBindingXobj;
-				if (pOldNode->m_pXobjShareData->m_pOldGalaxy)
-				{
-					pOldNode->m_pXobjShareData->m_pGalaxy = pOldNode->m_pXobjShareData->m_pOldGalaxy;
-					pOldNode->m_pXobjShareData->m_pOldGalaxy = nullptr;
-				}
-				CXobj* pParent = pOldNode->m_pParentObj;
-				if (pParent && pParent->m_nViewType == Grid)
-				{
-					if (pOldNode != this)
-					{
-						CGridWnd* pWnd = (CGridWnd*)pParent->m_pHostWnd;
-						pWnd->m_pHostXobj = nullptr;
-						if (m_pParentObj == pParent)
-							pWnd->m_pHostXobj = this;
-					}
-				}
-				if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
-				{
-					CGridWnd* pWnd = (CGridWnd*)m_pParentObj->m_pHostWnd;
-					pWnd->m_pHostXobj = this;
-				}
-				pOldNode->m_strID = _T("");
-				if (pOldNode->m_pRootObj == g_pCosmos->m_pDesignXobj->m_pRootObj)
-					pOldNode->m_pHostParse->put_attr(TGM_GRID_TYPE, _T(""));
-				ATLTRACE(_T("Modify CXobj HostView Attribute: ID:%s Value: %s\n"), strID, strVal);
-				pOldNode->m_pHostWnd->Invalidate();
-			}
-
-			m_strID = TGM_NUCLEUS;
-			CXobj* pTopXobj = m_pRootObj;
-			pTopXobj->m_pXobjShareData->m_pHostClientView = (CXobjHelper*)m_pHostWnd;
-			while (pTopXobj != pTopXobj->m_pRootObj)
-			{
-				pTopXobj->m_pXobjShareData->m_pGalaxy->m_pBindingXobj = this;
-				pTopXobj->m_pXobjShareData->m_pHostClientView = pTopXobj->m_pXobjShareData->m_pHostClientView;
-				pTopXobj = pTopXobj->m_pRootObj;
-			}
-			m_pHostParse->put_attr(TGM_GRID_TYPE, TGM_NUCLEUS);
-			if (g_pCosmos->m_pDesignXobj)
-			{
-				pGalaxy->m_pBindingXobj = this;
-				g_pCosmos->m_pDesignXobj->m_pXobjShareData->m_pOldGalaxy = g_pCosmos->m_pDesignXobj->m_pXobjShareData->m_pGalaxy;
-				g_pCosmos->m_pDesignXobj->m_pXobjShareData->m_pGalaxy = m_pRootObj->m_pXobjShareData->m_pGalaxy;
-				g_pCosmos->m_pDesignXobj->m_pXobjShareData->m_pHostClientView = m_pRootObj->m_pXobjShareData->m_pHostClientView;
-			}
-
-			if (m_pParentObj && m_pParentObj->m_nViewType == Grid)
-				m_pHostWnd->ModifyStyleEx(WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE, 0);
-			m_pXobjShareData->m_pGalaxy->HostPosChanged();
-		}
 		m_pHostParse->put_attr(strID, strVal);
 	}
 	return S_OK;

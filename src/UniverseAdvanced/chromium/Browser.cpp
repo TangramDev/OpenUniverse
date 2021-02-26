@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037           *
+ *           Web Runtime for Application - Version 1.0.0.202102260038           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -97,7 +97,7 @@ namespace Browser {
 			if (::GetParent(m_hWnd) && m_pVisibleWebWnd->m_hWnd != hActive)
 			{
 				auto it = m_mapChildPage.find(hActive);
-				if(it!=m_mapChildPage.end())
+				if (it != m_mapChildPage.end())
 					m_pVisibleWebWnd = it->second;
 			}
 			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
@@ -257,7 +257,7 @@ namespace Browser {
 	};
 
 	LRESULT CBrowser::BrowserLayout() {
-		if (m_bDestroy/*|| g_pCosmos->m_bSZMode|| m_bTabChange*/ || m_pVisibleWebWnd == nullptr ||
+		if (m_bDestroy || m_pVisibleWebWnd == nullptr ||
 			!::IsWindowVisible(m_hWnd) ||
 			g_pCosmos->m_bChromeNeedClosed == TRUE)
 			return 0;
@@ -677,6 +677,8 @@ namespace Browser {
 						else
 						{
 							m_pVisibleWebWnd = it.second;
+							if (wParam == 1 && it.second->m_pChromeRenderFrameHost)
+								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						}
 					}
 				}
@@ -688,7 +690,7 @@ namespace Browser {
 					}
 				}
 				g_pCosmos->m_bSZMode = false;
-				if (::GetParent(m_hWnd) == nullptr)
+				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
 				if (m_pParentXobj)
 				{

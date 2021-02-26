@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1661,7 +1661,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						if (strTagName.CompareNoCase(_T("mainwindow")) == 0)
 						{
 							theApp.m_pCosmosImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
-							::PostMessage(theApp.m_pCosmosImpl->m_hMainWnd, WM_COSMOSMSG, 0, 20200419);
 						}
 						thisForm->Tag = BSTR2STRING(m_Parse.name());
 						__int64 nIpcSession = m_Parse.attrInt64(_T("ipcsession"), 0);

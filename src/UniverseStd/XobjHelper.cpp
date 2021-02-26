@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102250037
+ *           Web Runtime for Application - Version 1.0.0.202102260038
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -163,25 +163,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	BOOL b = pGalaxy->m_bDesignerState;
-	if (g_pCosmos->m_pDesignerGalaxyCluster)
-		if (pGalaxy->m_pGalaxyCluster == g_pCosmos->m_pDesignerGalaxyCluster || m_pXobj->m_strObjTypeID != _T(""))
-			b = false;
-	if (m_pXobj->m_nViewType == BlankView && m_pXobj->m_strObjTypeID == _T(""))
-		b = true;
-	if (g_pCosmos->m_pDocDOMTree && g_pCosmos->m_pCLRProxy)
-	{
-		if (b)
-		{
-			if (g_pCosmos->m_hVSToolBoxWnd)
-			{
-				if (::IsChild(g_pCosmos->m_hVSToolBoxWnd, m_hWnd) == false)
-					g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
-			}
-			else if (::IsChild(g_pCosmos->m_hHostWnd, m_hWnd) == false)
-				g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
-		}
-	}
+
 	if (m_pXobj && m_pXobj->m_pXobjShareData->m_pGalaxyCluster)
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeMouseActivate(m_pXobj);
 
@@ -223,66 +205,6 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			}
 		}
 		return MA_NOACTIVATE;
-	}
-
-	if (b && m_bCreateExternal == false && m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS))
-	{
-		g_pCosmos->CreateCommonDesignerToolBar();
-		if (g_pCosmos->m_pHostViewDesignerNode)
-		{
-			HWND hwnd = pGalaxy->m_hWnd;
-			::GetClassName(::GetParent(hwnd), g_pCosmos->m_szBuffer, MAX_PATH);
-			CString strName = CString(g_pCosmos->m_szBuffer);
-			if (strName.Find(_T("Afx:ControlBar:")) != -1)
-			{
-				pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
-			}
-			::GetClassName(hwnd, g_pCosmos->m_szBuffer, MAX_PATH);
-			strName = CString(g_pCosmos->m_szBuffer);
-			if (strName == _T("MDIClient"))
-			{
-				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show MDI Client"));
-			}
-			else if (pGalaxy->m_pGalaxyInfo)
-			{
-				CString s = _T("");
-				s.Format(_T("Show .NET Ctrl \"%s\" at Control '%s'"), pGalaxy->m_pGalaxyInfo->m_strCtrlName, pGalaxy->m_pGalaxyInfo->m_strParentCtrlName);
-				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(s));
-			}
-			else if (pGalaxy->m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
-			{
-				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Show Control Bar Host Object"));
-			}
-			else
-			{
-				g_pCosmos->m_pHostViewDesignerNode->put_Caption(CComBSTR(L"Create Host Node"));
-			}
-		}
-		if (m_pXobj->m_pDisp == NULL)
-		{
-			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
-			{
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", _T("Tangram Designer Helper Window"), WS_OVERLAPPED | WS_CAPTION, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-				g_pCosmos->m_mapValInfo[_T("hostwindow")] = CComVariant((LONGLONG)g_pCosmos->m_hHostWnd);
-			}
-			if (g_pCosmos->m_pDesignXobj && g_pCosmos->m_pDesignXobj != m_pXobj)
-			{
-				CXobjHelper* pWnd = ((CXobjHelper*)g_pCosmos->m_pDesignXobj->m_pHostWnd);
-				if (pWnd && ::IsWindow(pWnd->m_hWnd))
-				{
-					pWnd->Invalidate(true);
-				}
-			}
-			g_pCosmos->m_pDesignXobj = m_pXobj;
-			Invalidate(true);
-		}
-
-		if (g_pCosmos->m_pDesigningFrame != pGalaxy)
-		{
-			g_pCosmos->m_pHostDesignUINode = m_pXobj->m_pRootObj;
-			g_pCosmos->m_pDesigningFrame = pGalaxy;
-			pGalaxy->UpdateDesignerTreeInfo();
-		}
 	}
 
 	if (m_bCreateExternal == false)
@@ -349,51 +271,24 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
 		CBrush br(&bit);
 		pDC->FillRect(&rt, &br);
-		if (bInDesignState && g_pCosmos->m_pDesignXobj == m_pXobj)
-		{
-			pDC->SetTextColor(RGB(255, 0, 255));
-			CString str = g_pCosmos->GetDesignerInfo(_T("SelectedText"));
-			if (str == _T(""))
-				strText = _T("\n\n  ") + g_pCosmos->m_strXobjSelectedText;
-			else
-				strText = _T("\n\n  ") + str;
-		}
-		else
+
 		{
 			CComBSTR bstrCaption(L"");
 			m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
 			CString strInfo = _T("\n\n  ");
 			if (bInDesignState)
 			{
-				CString str = g_pCosmos->GetDesignerInfo(_T("DesignerTip1"));
+				CString str = _T("");
 				if (str == _T(""))
 					strInfo = strInfo + g_pCosmos->m_strDesignerTip1;
 				else
 					strInfo = strInfo + str;
 			}
-			CString str = g_pCosmos->GetDesignerInfo(_T("DesignerTip2"));
+			CString str = _T("");
 			if (str == _T(""))
 				strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
 			else
 				strInfo = strInfo + _T("\n  ") + str;
-			if (pGalaxy->m_pParentXobj)
-			{
-				CString strTip = _T("");
-				if (pGalaxy->m_pParentXobj->m_nViewType == CLRCtrl)
-				{
-					strTip.Format(_T("Sub Frame for .NET CLRCtrl: %s"), pGalaxy->m_pParentXobj->m_strName);
-					strInfo = strInfo + _T("\n  ") + strTip;
-					strTip.Format(_T("CLRCtrl Type: %s"), pGalaxy->m_pParentXobj->m_strObjTypeID);
-					strInfo = strInfo + _T("\n  ") + strTip;
-				}
-				else if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentXobj->m_nViewType == ActiveX)
-				{
-					strTip.Format(_T("Sub Frame for ActiveX Control: %s"), pGalaxy->m_pParentXobj->m_strName);
-					strInfo = strInfo + _T("\n  ") + strTip;
-					strTip.Format(_T("ActiveX ID: %s"), pGalaxy->m_pParentXobj->m_strObjTypeID);
-					strInfo = strInfo + _T("\n  ") + strTip;
-				}
-			}
 			strText.Format(strInfo, m_pXobj->m_strName, CString(OLE2T(bstrCaption)));
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}
@@ -451,13 +346,6 @@ BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
 
 void CXobjHelper::OnDestroy()
 {
-	if (g_pCosmos->m_pDesignXobj == m_pXobj)
-	{
-		if (g_pCosmos->m_pCLRProxy)
-			g_pCosmos->m_pCLRProxy->SelectXobj(NULL);
-		g_pCosmos->m_pDesignXobj = NULL;
-	}
-
 	m_pXobj->Fire_Destroy();
 	HANDLE hData = RemoveProp(m_hWnd, _T("CosmosInfo"));
 	if (hData)
@@ -883,26 +771,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			m_pXobj->m_vChildNodes.push_back(((CXobj*)pXobj));
 		}
 
-		strXml = m_pXobj->m_pXobjShareData->m_pCosmosParse->xml();
-		g_pCosmos->m_pDesignXobj = m_pXobj;
-		g_pCosmos->m_pHostDesignUINode = m_pXobj->m_pRootObj;
-		if (g_pCosmos->m_pHostDesignUINode)
-		{
-			CTangramHtmlTreeWnd* pTreeCtrl = g_pCosmos->m_pDocDOMTree;
-			if (pTreeCtrl)
-			{
-				pTreeCtrl->DeleteItem(g_pCosmos->m_pDocDOMTree->m_hFirstRoot);
-
-				if (pTreeCtrl->m_pHostXmlParse)
-				{
-					delete pTreeCtrl->m_pHostXmlParse;
-				}
-				pTreeCtrl->m_pHostXmlParse = new CTangramXmlParse();
-				pTreeCtrl->m_pHostXmlParse->LoadXml(strXml);
-				pTreeCtrl->m_hFirstRoot = pTreeCtrl->LoadXmlFromXmlParse(pTreeCtrl->m_pHostXmlParse);
-				pTreeCtrl->ExpandAll();
-			}
-		}
 		auto it = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_mapGalaxy.find(pOldNode->m_hChildHostWnd);
 		if (it != m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_mapGalaxy.end())
 			m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_mapGalaxy.erase(it);
