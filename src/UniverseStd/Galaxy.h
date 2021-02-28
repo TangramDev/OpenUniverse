@@ -224,7 +224,6 @@ public:
 	BOOL											m_bMDIChild;
 	GalaxyType										m_nGalaxyType;
 
-	HWND											m_hPWnd;
 	HWND											m_hHostWnd;
 	CString											m_strLastKey;
 	CString											m_strGalaxyName;
@@ -258,7 +257,7 @@ public:
 	HWND GetWinForm(HWND hForm);
 	void UpdateVisualWPFMap(HWND, BOOL);
 	CTangramXmlParse* UpdateXobj();
-	BOOL CreateGalaxyCluster();
+	BOOL Create();
 	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);

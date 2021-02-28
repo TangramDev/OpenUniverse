@@ -336,14 +336,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				}
 				_pGalaxy->m_pGalaxyCluster = this;
 				_pGalaxy->m_hHostWnd = _hWnd;
-				if (ParentObj.vt == VT_I8 || ParentObj.vt == VT_I4)
-				{
-					HWND hPWnd = (HWND)ParentObj.llVal;
-					if (::IsWindow(hPWnd))
-					{
-						_pGalaxy->m_hPWnd = hPWnd;
-					}
-				}
 				pThreadInfo->m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapWnd[strName] = _hWnd;

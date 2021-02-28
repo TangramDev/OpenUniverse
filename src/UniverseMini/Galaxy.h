@@ -72,8 +72,6 @@ public:
 	BOOL											m_bMDIChild;
 	BOOL											m_bDesignerState;
 	GalaxyType										m_nGalaxyType;
-
-	HWND											m_hPWnd;
 	HWND											m_hHostWnd;
 	CString											m_strLastKey;
 	CString											m_strGalaxyName;
@@ -94,7 +92,7 @@ public:
 	void Destroy();
 	void HostPosChanged();
 
-	BOOL CreateGalaxyCluster();
+	BOOL Create();
 	CXobj* OpenXtmlDocument(CTangramXmlParse* pParse, CString strKey);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);

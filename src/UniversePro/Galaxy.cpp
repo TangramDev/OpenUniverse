@@ -36,15 +36,14 @@
 #include "EclipsePlus\EclipseAddin.h"
 #include "Wormhole.h"
 
-class CDockPaneWnd : public CWindowImpl<CMDTWnd, CWindow>
+class CDockPaneWnd : public CWindowImpl<CDockPaneWnd, CWindow>
 {
 public:
 	CDockPaneWnd() {}
 	virtual ~CDockPaneWnd() {}
-	CGalaxy* m_pGalaxy = nullptr;
+	HWND m_hClient = nullptr;
 	BEGIN_MSG_MAP(CDockPaneWnd)
 		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 	END_MSG_MAP()
 	void OnFinalMessage(HWND hWnd)
 	{
@@ -57,20 +56,9 @@ public:
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (wParam)
 		{
-			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210107);
+			::PostMessage(m_hClient, WM_COSMOSMSG, 0, 20180115);
 		}
 		return lRes;
-	}
-
-	LRESULT OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-	{
-		switch (lParam)
-		{
-		case 20210107:
-			m_pGalaxy->HostPosChanged();
-			break;
-		}
-		return DefWindowProc(uMsg, wParam, lParam);
 	}
 };
 
@@ -1645,7 +1633,6 @@ CGalaxy::CGalaxy()
 	m_pWorkBenchFrame = nullptr;
 	m_bTabbedMDIClient = false;
 	m_bDesignerState = true;
-	m_hPWnd = nullptr;
 	m_pBKWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
 	m_pWorkXobj = nullptr;
@@ -1861,7 +1848,7 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
 	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_XOBJ);
 
-	CreateGalaxyCluster();
+	Create();
 	m_mapXobj[strKey] = m_pWorkXobj;
 	if (strKey.CompareNoCase(_T("default")) == 0)
 	{
@@ -1889,12 +1876,15 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 	return m_pWorkXobj;
 }
 
-BOOL CGalaxy::CreateGalaxyCluster()
+BOOL CGalaxy::Create()
 {
 	if (::IsWindow(m_hWnd) == false)
+	{
 		SubclassWindow(m_hHostWnd);
+	}
+
 	HWND hPWnd = ::GetParent(m_hWnd);
-	if (m_hPWnd)
+	if (m_bDockPane == false)
 	{
 		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = g_pCosmos->m_szBuffer;
@@ -1902,17 +1892,16 @@ BOOL CGalaxy::CreateGalaxyCluster()
 		if (m_bDockPane)
 		{
 			CDockPaneWnd* _pWnd = new CDockPaneWnd();
-			_pWnd->SubclassWindow(hPWnd);
-			_pWnd->m_pGalaxy = this;
+			_pWnd->SubclassWindow(::GetParent(m_hWnd));
+			_pWnd->m_hClient = m_hWnd;
 		}
-		hPWnd = m_pGalaxyCluster->m_hWnd;
 	}
 
 	m_pWorkXobj->InitWndXobj();
 	HWND hWnd = NULL;
 	if (m_pWorkXobj->m_pObjClsInfo) {
 		RECT rc;
-		CWnd* pParentWnd = CWnd::FromHandle(::GetParent(m_hWnd));
+		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
 		m_Context.m_pNewViewClass = m_pWorkXobj->m_pObjClsInfo;
@@ -2266,7 +2255,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		m_pGalaxyCluster->Fire_BeforeOpenXml(CComBSTR(strXml), (long)m_hHostWnd);
 
 		m_bObserve = true;
-
+		m_bNoRedrawState = false;
 		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkXobj == nullptr)
 			return S_FALSE;
