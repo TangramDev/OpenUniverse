@@ -2014,30 +2014,21 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									CTangramXmlParse* pClient = m_Parse.GetChild(_T("client"));
 									if (pClient)
 									{
-										auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
-										if (it != g_pCosmos->m_mapWindowPage.end())
-											pGalaxyCluster = (CGalaxyCluster*)it->second;
-										else
-										{
-											pGalaxyCluster = new CComObject<CGalaxyCluster>();
-											pGalaxyCluster->m_hWnd = hWnd;
-											g_pCosmos->m_mapWindowPage[hWnd] = pGalaxyCluster;
+										pGalaxyCluster = new CComObject<CGalaxyCluster>();
+										pGalaxyCluster->m_hWnd = hWnd;
+										g_pCosmos->m_mapWindowPage[hWnd] = pGalaxyCluster;
 
-											for (auto& it2 : g_pCosmos->m_mapCosmosAppProxy)
-											{
-												CGalaxyClusterProxy* pCosmosProxy = it2.second->OnGalaxyClusterCreated(pGalaxyCluster);
-												if (pCosmosProxy)
-													pGalaxyCluster->m_mapGalaxyClusterProxy[it2.second] = pCosmosProxy;
-											}
-										}
-										if (pGalaxyCluster)
+										for (auto& it2 : g_pCosmos->m_mapCosmosAppProxy)
 										{
-											pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
-											if (pGalaxy)
-											{
-												pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
-												pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-											}
+											CGalaxyClusterProxy* pCosmosProxy = it2.second->OnGalaxyClusterCreated(pGalaxyCluster);
+											if (pCosmosProxy)
+												pGalaxyCluster->m_mapGalaxyClusterProxy[it2.second] = pCosmosProxy;
+										}
+										pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
+										if (pGalaxy)
+										{
+											pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
+											pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 										}
 										if (pCosmosFrameWndInfo->m_nFrameType == 3)
 										{

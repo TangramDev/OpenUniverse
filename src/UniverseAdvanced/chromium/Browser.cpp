@@ -84,6 +84,7 @@ namespace Browser {
 					}
 				}
 			}
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
 		}
 	}
 

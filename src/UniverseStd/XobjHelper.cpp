@@ -992,8 +992,6 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		Invalidate(true);
 	}
-	//if (!g_pCosmos->m_bSZMode && m_pXobj->m_bTopObj)
-	//	g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 }
 
 void CXobjHelper::OnSize(UINT nType, int cx, int cy)

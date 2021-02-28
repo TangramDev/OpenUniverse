@@ -399,7 +399,7 @@ namespace Browser {
 								if (bNewParent)
 								{
 									//pChromeBrowserWnd->BrowserLayout();
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 4);
+									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 								}
 							}
 						}
@@ -433,7 +433,7 @@ namespace Browser {
 							{
 								g_pCosmos->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
 								pChromeBrowserWnd->BrowserLayout();
-								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
+								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 							}
 						}
 					}
@@ -461,7 +461,7 @@ namespace Browser {
 								if (bNewParent)
 								{
 									pChromeBrowserWnd->BrowserLayout();
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
+									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 								}
 							}
 						}

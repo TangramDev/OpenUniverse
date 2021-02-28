@@ -36,77 +36,43 @@
 #include "EclipsePlus\EclipseAddin.h"
 #include "Wormhole.h"
 
-class CDockPaneWnd : public CWnd
+class CDockPaneWnd : public CWindowImpl<CMDTWnd, CWindow>
 {
-	DECLARE_DYNAMIC(CDockPaneWnd)
 public:
 	CDockPaneWnd() {}
 	virtual ~CDockPaneWnd() {}
 	CGalaxy* m_pGalaxy = nullptr;
-	HWND m_hClient = nullptr;
-	void PostNcDestroy()
+	BEGIN_MSG_MAP(CDockPaneWnd)
+		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
+		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
+	END_MSG_MAP()
+	void OnFinalMessage(HWND hWnd)
 	{
-		CWnd::PostNcDestroy();
+		CWindowImpl::OnFinalMessage(hWnd);
 		delete this;
 	}
-	DECLARE_MESSAGE_MAP()
-	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
-	afx_msg LRESULT OnCosmosMsg(WPARAM wParam, LPARAM lParam);
-};
 
-IMPLEMENT_DYNAMIC(CDockPaneWnd, CWnd)
-
-BEGIN_MESSAGE_MAP(CDockPaneWnd, CWnd)
-	ON_WM_SHOWWINDOW()
-	ON_WM_WINDOWPOSCHANGING()
-	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
-END_MESSAGE_MAP()
-
-void CDockPaneWnd::OnShowWindow(BOOL bShow, UINT nStatus)
-{
-	CWnd::OnShowWindow(bShow, nStatus);
-	if (bShow && ::IsWindow(m_hClient))
+	LRESULT OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
-		if (m_pGalaxy == nullptr)
+		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		if (wParam)
 		{
-			DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
-			CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
-			auto iter = pThreadInfo->m_mapGalaxy.find(m_hClient);
-			if (iter != pThreadInfo->m_mapGalaxy.end())
-			{
-				m_pGalaxy = (CGalaxy*)iter->second;
-			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210107);
 		}
-		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210107);
+		return lRes;
 	}
-}
 
-void CDockPaneWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
-{
-	CWnd::OnWindowPosChanging(lpwndpos);
-	if (g_pCosmos->m_bSZMode == false)
+	LRESULT OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
-		g_pCosmos->m_bSZMode = true;
-		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210216);
-	}
-}
-
-LRESULT CDockPaneWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
-{
-	switch (lParam)
-	{
-	case 20210107:
-		if (m_pGalaxy)
+		switch (lParam)
+		{
+		case 20210107:
 			m_pGalaxy->HostPosChanged();
-		break;
-	case 20210216:
-		g_pCosmos->m_bSZMode = false;
-		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
-		break;
+			break;
+		}
+		return DefWindowProc(uMsg, wParam, lParam);
 	}
-	return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////
 // CCosmosTreeCtrl
@@ -929,6 +895,19 @@ void CMDIParent::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
+void CMDIParent::ShowMdiClientXobj() {
+	int nCount = m_vMdiClientXobjs.size();
+	for (int i = nCount - 1; i >= 0; i--)
+	{
+		CXobj* pObj = m_vMdiClientXobjs[i];
+		if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
+		{
+			m_pGalaxy->m_pBindingXobj = pObj;
+			break;
+		}
+	}
+}
+
 LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	g_pCosmos->m_bSZMode = false;
 	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210213);
@@ -1072,16 +1051,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				}
 				if (bNewKey)
 				{
-					int nCount = m_vMdiClientXobjs.size();
-					for (int i = nCount - 1; i >= 0; i--)
-					{
-						CXobj* pObj = m_vMdiClientXobjs[i];
-						if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
-						{
-							m_pGalaxy->m_pBindingXobj = pObj;
-							break;
-						}
-					}
+					ShowMdiClientXobj();
 				}
 				::SysFreeString(bstrXml);
 			}
@@ -1753,8 +1723,11 @@ void CGalaxy::HostPosChanged()
 		m_pBindingXobj != g_pCosmos->m_pMDIMainWnd->m_pClientXobj)
 	{
 		if (m_pBindingXobj && g_pCosmos->m_pMDIMainWnd->m_pClientXobj->m_pHostWnd->IsWindowVisible())
+		{
 			m_pBindingXobj = g_pCosmos->m_pMDIMainWnd->m_pClientXobj;
+		}
 	}
+
 	HWND hPWnd = ::GetParent(m_hWnd);
 	if (::IsWindow(_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd))
 	{
@@ -1766,9 +1739,27 @@ void CGalaxy::HostPosChanged()
 
 		HDWP dwh = BeginDeferWindowPos(1);
 		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
+		CWnd* _pWnd = CWnd::FromHandlePermanent(::GetParent(m_hWnd));
+
 		m_bObserve = !m_bDockPane;
-		if (m_bObserve)
-			flag |= SWP_NOREDRAW;
+		if (m_bObserve == false)
+		{
+			HWND hRoot = ::GetAncestor(m_hWnd, GA_ROOT);
+			if (m_bNoRedrawState == false)
+			{
+				::GetClassName(hRoot, g_pCosmos->m_szBuffer, MAX_PATH);
+				CString strClassName = g_pCosmos->m_szBuffer;
+				if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
+					::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210228);
+				else
+				{
+					m_bNoRedrawState = true;
+					flag |= SWP_NOREDRAW;
+				}
+			}
+			else
+				flag |= SWP_NOREDRAW;
+		}
 		if (m_bTabbedMDIClient)
 			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
@@ -1903,34 +1894,25 @@ BOOL CGalaxy::CreateGalaxyCluster()
 	if (::IsWindow(m_hWnd) == false)
 		SubclassWindow(m_hHostWnd);
 	HWND hPWnd = ::GetParent(m_hWnd);
-	CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
-	if (pWnd == nullptr)
+	if (m_hPWnd)
 	{
 		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = g_pCosmos->m_szBuffer;
-		if ((strClassName.Find(_T("Afx:ControlBar")) == 0) ||
-			(strClassName.Find(_T("SysTreeView32")) == 0 ||
-				strClassName.Find(_T("SysTabControl32")) == 0 ||
-				strClassName.Find(_T("SysListView32")) == 0))
+		m_bDockPane = (strClassName.Find(_T("Afx:ControlBar")) == 0);
+		if (m_bDockPane)
 		{
 			CDockPaneWnd* _pWnd = new CDockPaneWnd();
 			_pWnd->SubclassWindow(hPWnd);
-			_pWnd->m_hClient = m_hWnd;
+			_pWnd->m_pGalaxy = this;
 		}
-	}
-	if (m_hPWnd && ::IsWindow(m_hPWnd))
 		hPWnd = m_pGalaxyCluster->m_hWnd;
-	else
-		hPWnd = ::GetParent(m_hWnd);
+	}
 
-	//m_pWorkXobj->m_strName.Trim();
-	//m_pWorkXobj->m_strName.MakeLower();
 	m_pWorkXobj->InitWndXobj();
 	HWND hWnd = NULL;
 	if (m_pWorkXobj->m_pObjClsInfo) {
 		RECT rc;
 		CWnd* pParentWnd = CWnd::FromHandle(::GetParent(m_hWnd));
-		//CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
 		m_Context.m_pNewViewClass = m_pWorkXobj->m_pObjClsInfo;
@@ -2152,12 +2134,6 @@ STDMETHODIMP CGalaxy::get_GalaxyCluster(IGalaxyCluster** pVal)
 
 STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
-	if (m_bDockPane == false)
-	{
-		CWnd* _pWnd = CWnd::FromHandlePermanent(::GetParent(m_hWnd));
-		if (_pWnd && _pWnd->IsKindOf(RUNTIME_CLASS(CDockPaneWnd)))
-			m_bDockPane = true;
-	}
 	if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
 		m_nGalaxyType = GalaxyType::MDIClientGalaxy;
 	CString _strXml = OLE2T(bstrXml);
@@ -2889,6 +2865,11 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				pGalaxyCluster->Fire_ClrControlCreated(pCtrlInfo->m_pXobj, pCtrlInfo->m_pCtrlDisp, pCtrlInfo->m_strName.AllocSysString(), (long)pCtrlInfo->m_hWnd);
 			}
 		}
+	}
+	break;
+	case 20210228:
+	{
+		m_bNoRedrawState = true;
 	}
 	break;
 	case 20180115:

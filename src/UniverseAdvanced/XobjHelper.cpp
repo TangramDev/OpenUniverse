@@ -436,6 +436,11 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
+		CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+		if (pMainWnd&&pGalaxy == pMainWnd->m_pGalaxy)
+		{
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
+		}
 	}
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	return lRes;
@@ -469,6 +474,17 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 20180115:
 		case 19820911:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
+			break;
+		case 20210226:
+		{
+			if(g_pCosmos->m_pMDIMainWnd)
+			{
+				if (m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+				{
+					g_pCosmos->m_pMDIMainWnd->ShowMdiClientXobj();
+				}
+			}
+		}
 			break;
 		case 20210225:
 		{

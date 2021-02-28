@@ -64,6 +64,7 @@ namespace Browser {
 				g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
 				m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 			}
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
 		}
 	}
 
@@ -96,6 +97,7 @@ namespace Browser {
 		}
 		if (!m_pClientGalaxy)
 			m_pBrowser->LayoutBrowser();
+		::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		return lRes;
 	}
 

@@ -1009,6 +1009,7 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		case 20180115:
 		{
 			HostPosChanged();
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210216);
 		}
 		break;
 		case WM_BROWSERLAYOUT:

@@ -202,6 +202,7 @@ public:
 	CXobjVector				m_vMdiClientXobjs;
 	map<HWND, CMDIChild*>	m_mapMDIChild;
 
+	void ShowMdiClientXobj();
 	BEGIN_MSG_MAP(CMDIParent)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
@@ -289,6 +290,7 @@ public:
 	bool											m_bObserve = false;
 	bool											m_bDockPane = false;
 
+	BOOL											m_bNoRedrawState = false;
 	BOOL											m_bTabbedMDIClient;
 	BOOL											m_bDetached;
 	BOOL											m_bDesignerState;

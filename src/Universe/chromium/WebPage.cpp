@@ -250,39 +250,40 @@ namespace Browser {
 		if (g_pCosmos->m_bChromeNeedClosed == false && lParam) {
 			HWND hNewPWnd = (HWND)lParam;
 			::GetClassName(hNewPWnd, g_pCosmos->m_szBuffer, 256);
-			CString strName = CString(g_pCosmos->m_szBuffer);
-			if (strName.Find(_T("Chrome_WidgetWin_"))==0)
+			CString strName = g_pCosmos->m_szBuffer;
+			if (strName.Find(_T("Chrome_WidgetWin_")) == 0)
 			{
 				if (m_hExtendWnd)
 				{
-					::SetParent(m_hExtendWnd, hNewPWnd);
+					::SetParent(m_hExtendWnd, m_hWnd);
 					::ShowWindow(m_hExtendWnd, SW_HIDE);
 				}
 				HWND hNewPWnd2 = ::GetParent(m_hWnd);
-				bool bNewParent = true;
+				bool bNewParent = false;
 				if (hNewPWnd != hNewPWnd2)
 				{
 					hNewPWnd = hNewPWnd2;
 					bNewParent = true;
 				}
-				CBrowser* pBrowserWnd = nullptr;
+				CBrowser* pChromeBrowserWnd = nullptr;
 				auto it = g_pCosmos->m_mapBrowserWnd.find(hNewPWnd);
 				if (it == g_pCosmos->m_mapBrowserWnd.end())
 				{
 					if (::IsWindowVisible(hNewPWnd)) {
-						pBrowserWnd = new CComObject<CBrowser>();
-						pBrowserWnd->SubclassWindow(hNewPWnd);
-						g_pCosmos->m_mapBrowserWnd[hNewPWnd] = pBrowserWnd;
-						pBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
-						if (pBrowserWnd->m_pBrowser)
-							pBrowserWnd->m_pBrowser->m_pProxy = pBrowserWnd;
-						if (pBrowserWnd && m_hExtendWnd) {
+						pChromeBrowserWnd = new CComObject<CBrowser>();
+						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
+						g_pCosmos->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
+						pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
+						if (pChromeBrowserWnd->m_pBrowser)
+							pChromeBrowserWnd->m_pBrowser->m_pProxy = pChromeBrowserWnd;
+						if (pChromeBrowserWnd && m_hExtendWnd) {
 							::SetParent(m_hExtendWnd, hNewPWnd);
 							if (::IsWindowVisible(m_hWnd)) {
-								pBrowserWnd->m_pVisibleWebWnd = this;
+								pChromeBrowserWnd->m_pVisibleWebWnd = this;
 								if (bNewParent)
 								{
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 4);
+									//pChromeBrowserWnd->BrowserLayout();
+									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 								}
 							}
 						}
@@ -316,7 +317,7 @@ namespace Browser {
 							{
 								g_pCosmos->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
 								pChromeBrowserWnd->BrowserLayout();
-								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
+								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 							}
 						}
 					}
@@ -344,7 +345,7 @@ namespace Browser {
 								if (bNewParent)
 								{
 									pChromeBrowserWnd->BrowserLayout();
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 2);
+									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 								}
 							}
 						}

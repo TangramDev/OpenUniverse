@@ -138,8 +138,6 @@ public:
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
-		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
-		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 	END_MSG_MAP()
 
 private:
@@ -147,8 +145,6 @@ private:
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CWinForm :
@@ -223,6 +219,7 @@ public:
 
 	BOOL											m_bTabbedMDIClient;
 	BOOL											m_bDetached;
+	BOOL											m_bNoRedrawState = false;
 	BOOL											m_bDesignerState;
 	BOOL											m_bMDIChild;
 	GalaxyType										m_nGalaxyType;

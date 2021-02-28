@@ -201,6 +201,8 @@ public:
 	CXobjVector				m_vMdiClientXobjs;
 	map<HWND, CMDIChild*>	m_mapMDIChild;
 
+	void ShowMdiClientXobj();
+
 	BEGIN_MSG_MAP(CMDIParent)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
@@ -289,6 +291,7 @@ public:
 	bool											m_bDockPane = false;
 	BOOL											m_bTabbedMDIClient;
 	BOOL											m_bDetached;
+	BOOL											m_bNoRedrawState = false;
 	BOOL											m_bDesignerState;
 	BOOL											m_bMDIChild;
 	GalaxyType										m_nGalaxyType;
@@ -304,16 +307,17 @@ public:
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
-	CBKWnd*											m_pBKWnd;
-	CWebPage*										m_pWebPageWnd;
+	CBKWnd*											m_pBKWnd = nullptr;
+	CWebPage*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
-	CGalaxyCluster*									m_pGalaxyCluster;
-	CXobj*											m_pParentXobj;
-	CXobj*											m_pWorkXobj;
-	CXobj*											m_pContainerNode;
-	CXobj*											m_pBindingXobj;
-	GalaxyInfo*										m_pGalaxyInfo;
+	CGalaxyCluster*									m_pGalaxyCluster = nullptr;
+	CXobj*											m_pParentXobj = nullptr;
+	CXobj*											m_pWorkXobj = nullptr;
+	CXobj*											m_pContainerNode = nullptr;
+	CXobj*											m_pBindingXobj = nullptr;
+	GalaxyInfo*										m_pGalaxyInfo = nullptr;
+	CosmosFrameWndInfo*								m_pCosmosFrameWndInfo = nullptr;
 	CWormhole*										m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
 	map<HWND, CWPFView*>							m_mapWPFView;
