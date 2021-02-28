@@ -2751,13 +2751,52 @@ LRESULT CGalaxy::OnParentNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-STDMETHODIMP CGalaxy::get_DesignerState(VARIANT_BOOL* pVal)
+STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 {
-	if (m_bDesignerState)
-		*pVal = true;
-	else
-		*pVal = false;
+	CString strRootName = OLE2T(bstrRootName);
+	if (strRootName == _T(""))
+		strRootName = _T("DocumentUI");
+	CString strXmlData = _T("<Default><cluster><xobj name=\"Start\"/></cluster></Default>");
+	CString strName = _T("");
+	CString strXml = _T("");
 
+	map<CString, CString> m_mapTemp;
+	map<CString, CString>::iterator it2;
+	for (auto it : m_mapXobj)
+	{
+		g_pCosmos->UpdateXobj(it.second);
+		strName = it.first;
+		int nPos = strName.Find(_T("-"));
+		CString str = strName.Mid(nPos + 1);
+		if (str.CompareNoCase(_T("inDesigning")) == 0)
+		{
+			strName = strName.Left(nPos);
+			m_mapTemp[strName] = it.second->m_pXobjShareData->m_pCosmosParse->xml();
+		}
+	}
+
+	for (auto it : m_mapXobj)
+	{
+		strName = it.first;
+		if (strName.Find(_T("-indesigning")) == -1)
+		{
+			it2 = m_mapTemp.find(strName);
+			if (it2 != m_mapTemp.end())
+				strXml = it2->second;
+			else
+				strXml = it.second->m_pXobjShareData->m_pCosmosParse->xml();
+			strXmlData += strXml;
+		}
+	}
+
+	strXml = _T("<");
+	strXml += strRootName;
+	strXml += _T(">");
+	strXml += strXmlData;
+	strXml += _T("</");
+	strXml += strRootName;
+	strXml += _T(">");
+	*bstrRet = strXml.AllocSysString();
 	return S_OK;
 }
 
