@@ -3397,19 +3397,11 @@ EXTERN_C const IID IID_IGalaxy;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
             /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyData( 
-            BSTR bstrKey,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWebPage( 
+            /* [retval][out] */ IWebPage **ppChromeWebPage) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GalaxyData( 
-            BSTR bstrKey,
-            /* [in] */ VARIANT newVal) = 0;
-        
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignerState( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
-        
-        virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_DesignerState( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostBrowser( 
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
             /* [retval][out] */ long *pCount) = 0;
@@ -3425,12 +3417,6 @@ EXTERN_C const IID IID_IGalaxy;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
             /* [retval][out] */ BSTR *pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostBrowser( 
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWebPage( 
-            /* [retval][out] */ IWebPage **ppChromeWebPage) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Detach( void) = 0;
         
@@ -3531,23 +3517,13 @@ EXTERN_C const IID IID_IGalaxy;
             IGalaxy * This,
             /* [retval][out] */ IGalaxyCluster **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyData )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWebPage )( 
             IGalaxy * This,
-            BSTR bstrKey,
-            /* [retval][out] */ VARIANT *pVal);
+            /* [retval][out] */ IWebPage **ppChromeWebPage);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GalaxyData )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostBrowser )( 
             IGalaxy * This,
-            BSTR bstrKey,
-            /* [in] */ VARIANT newVal);
-        
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignerState )( 
-            IGalaxy * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
-        
-        /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignerState )( 
-            IGalaxy * This,
-            /* [in] */ VARIANT_BOOL newVal);
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGalaxy * This,
@@ -3568,14 +3544,6 @@ EXTERN_C const IID IID_IGalaxy;
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IGalaxy * This,
             /* [retval][out] */ BSTR *pVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostBrowser )( 
-            IGalaxy * This,
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWebPage )( 
-            IGalaxy * This,
-            /* [retval][out] */ IWebPage **ppChromeWebPage);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Detach )( 
             IGalaxy * This);
@@ -3652,17 +3620,11 @@ EXTERN_C const IID IID_IGalaxy;
 #define IGalaxy_get_GalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
 
-#define IGalaxy_get_GalaxyData(This,bstrKey,pVal)	\
-    ( (This)->lpVtbl -> get_GalaxyData(This,bstrKey,pVal) ) 
+#define IGalaxy_get_HostWebPage(This,ppChromeWebPage)	\
+    ( (This)->lpVtbl -> get_HostWebPage(This,ppChromeWebPage) ) 
 
-#define IGalaxy_put_GalaxyData(This,bstrKey,newVal)	\
-    ( (This)->lpVtbl -> put_GalaxyData(This,bstrKey,newVal) ) 
-
-#define IGalaxy_get_DesignerState(This,pVal)	\
-    ( (This)->lpVtbl -> get_DesignerState(This,pVal) ) 
-
-#define IGalaxy_put_DesignerState(This,newVal)	\
-    ( (This)->lpVtbl -> put_DesignerState(This,newVal) ) 
+#define IGalaxy_get_HostBrowser(This,ppChromeWebBrowser)	\
+    ( (This)->lpVtbl -> get_HostBrowser(This,ppChromeWebBrowser) ) 
 
 #define IGalaxy_get_Count(This,pCount)	\
     ( (This)->lpVtbl -> get_Count(This,pCount) ) 
@@ -3678,12 +3640,6 @@ EXTERN_C const IID IID_IGalaxy;
 
 #define IGalaxy_get_Name(This,pVal)	\
     ( (This)->lpVtbl -> get_Name(This,pVal) ) 
-
-#define IGalaxy_get_HostBrowser(This,ppChromeWebBrowser)	\
-    ( (This)->lpVtbl -> get_HostBrowser(This,ppChromeWebBrowser) ) 
-
-#define IGalaxy_get_HostWebPage(This,ppChromeWebPage)	\
-    ( (This)->lpVtbl -> get_HostWebPage(This,ppChromeWebPage) ) 
 
 #define IGalaxy_Detach(This)	\
     ( (This)->lpVtbl -> Detach(This) ) 

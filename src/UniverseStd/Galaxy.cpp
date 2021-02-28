@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102260038
+ *           Web Runtime for Application - Version 1.0.0.202103010039
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1406,25 +1406,21 @@ void CGalaxy::HostPosChanged()
 
 		HDWP dwh = BeginDeferWindowPos(1);
 		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
-		m_bObserve = !m_bDockPane;
-		if (m_bObserve == false)
+		if (m_bNoRedrawState == false)
 		{
 			HWND hRoot = ::GetAncestor(m_hWnd, GA_ROOT);
-			if (m_bNoRedrawState == false)
-			{
-				::GetClassName(hRoot, g_pCosmos->m_szBuffer, MAX_PATH);
-				CString strClassName = g_pCosmos->m_szBuffer;
-				if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
-					::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210228);
-				else
-				{
-					m_bNoRedrawState = true;
-					flag |= SWP_NOREDRAW;
-				}
-			}
+			::GetClassName(hRoot, g_pCosmos->m_szBuffer, MAX_PATH);
+			CString strClassName = g_pCosmos->m_szBuffer;
+			if (strClassName.Find(_T("Afx:MiniFrame:")) == 0)
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210228);
 			else
+			{
+				m_bNoRedrawState = true;
 				flag |= SWP_NOREDRAW;
+			}
 		}
+		else
+			flag |= SWP_NOREDRAW;
 		if (m_bTabbedMDIClient)
 			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
@@ -1561,35 +1557,33 @@ BOOL CGalaxy::Create()
 		SubclassWindow(m_hHostWnd);
 	}
 
-	HWND hPWnd = ::GetParent(m_hWnd);
-	if (m_bDockPane == false)
-	{
-		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-		CString strClassName = g_pCosmos->m_szBuffer;
-		m_bDockPane = (strClassName.Find(_T("Afx:ControlBar")) == 0);
-		if (m_bDockPane)
-		{
-			CDockPaneWnd* _pWnd = new CDockPaneWnd();
-			_pWnd->SubclassWindow(::GetParent(m_hWnd));
-			_pWnd->m_hClient = m_hWnd;
-		}
-	}
-
 	m_pWorkXobj->InitWndXobj();
-	HWND hWnd = NULL;
 	if (m_pWorkXobj->m_pObjClsInfo) {
-		RECT rc;
+		HWND hPWnd = ::GetParent(m_hWnd);
 		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
+		if (m_bDockPane == false)
+		{
+			::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+			CString strClassName = g_pCosmos->m_szBuffer;
+			m_bDockPane = (strClassName.Find(_T("Afx:ControlBar:")) == 0);
+			if (m_bDockPane)
+			{
+				CDockPaneWnd* _pWnd = new CDockPaneWnd();
+				_pWnd->SubclassWindow(hPWnd);
+				_pWnd->m_hClient = m_hWnd;
+			}
+		}
+
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
 		m_Context.m_pNewViewClass = m_pWorkXobj->m_pObjClsInfo;
 		CWnd* pWnd = (CWnd*)m_pWorkXobj->m_pObjClsInfo->CreateObject();
+		RECT rc;
 		GetWindowRect(&rc);
 		if (pParentWnd)
 			pParentWnd->ScreenToClient(&rc);
 
 		pWnd->Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, rc, pParentWnd, 0, &m_Context);
-		hWnd = pWnd->m_hWnd;
 		pWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOACTIVATE);//|SWP_NOREDRAWSWP_NOZORDER);
 	}
@@ -1657,23 +1651,15 @@ STDMETHODIMP CGalaxy::get_RootXobjs(IXobjCollection** pXobjColletion)
 		CComObject<CXobjCollection>::CreateInstance(&m_pRootNodes);
 		m_pRootNodes->AddRef();
 	}
-
-	m_pRootNodes->m_pXobjs->clear();
-	for (auto it : m_mapXobj) {
-		m_pRootNodes->m_pXobjs->push_back(it.second);
+	if (m_pRootNodes)
+	{
+		m_pRootNodes->m_pXobjs->clear();
+		for (auto& it : m_mapXobj) {
+			m_pRootNodes->m_pXobjs->push_back(it.second);
+		}
 	}
 
 	return m_pRootNodes->QueryInterface(IID_IXobjCollection, (void**)pXobjColletion);
-}
-
-STDMETHODIMP CGalaxy::get_GalaxyData(BSTR bstrKey, VARIANT* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxy::put_GalaxyData(BSTR bstrKey, VARIANT newVal)
-{
-	return S_OK;
 }
 
 STDMETHODIMP CGalaxy::Detach(void)
@@ -1932,8 +1918,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 
 		Unlock();
 		m_pGalaxyCluster->Fire_BeforeOpenXml(CComBSTR(strXml), (long)m_hHostWnd);
-
-		m_bObserve = true;
 		m_bNoRedrawState = false;
 		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkXobj == nullptr)
@@ -2021,8 +2005,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_pBKWnd->m_pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L""), &pXobj);
 		}
 	}
-
-	m_bObserve = false;
 
 	HostPosChanged();
 	//Add 20200218
@@ -2707,6 +2689,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				lpwndpos->cy = rect.bottom - rect.top;
 				lpwndpos->flags &= ~SWP_HIDEWINDOW;
 				lpwndpos->flags |= SWP_SHOWWINDOW | SWP_NOZORDER;
+
 				//begin fix bug for .net Control or Window Form
 				CXobj* _pParentNode = m_pBindingXobj->m_pParentObj;
 				if (_pParentNode)
@@ -2775,61 +2758,6 @@ STDMETHODIMP CGalaxy::get_DesignerState(VARIANT_BOOL* pVal)
 	else
 		*pVal = false;
 
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxy::put_DesignerState(VARIANT_BOOL newVal)
-{
-	m_bDesignerState = newVal;
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
-{
-	CString strRootName = OLE2T(bstrRootName);
-	if (strRootName == _T(""))
-		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><cluster><xobj name=\"Start\"/></cluster></Default>");
-	CString strName = _T("");
-	CString strXml = _T("");
-
-	map<CString, CString> m_mapTemp;
-	map<CString, CString>::iterator it2;
-	for (auto it : m_mapXobj)
-	{
-		g_pCosmos->UpdateXobj(it.second);
-		strName = it.first;
-		int nPos = strName.Find(_T("-"));
-		CString str = strName.Mid(nPos + 1);
-		if (str.CompareNoCase(_T("inDesigning")) == 0)
-		{
-			strName = strName.Left(nPos);
-			m_mapTemp[strName] = it.second->m_pXobjShareData->m_pCosmosParse->xml();
-		}
-	}
-
-	for (auto it : m_mapXobj)
-	{
-		strName = it.first;
-		if (strName.Find(_T("-indesigning")) == -1)
-		{
-			it2 = m_mapTemp.find(strName);
-			if (it2 != m_mapTemp.end())
-				strXml = it2->second;
-			else
-				strXml = it.second->m_pXobjShareData->m_pCosmosParse->xml();
-			strXmlData += strXml;
-		}
-	}
-
-	strXml = _T("<");
-	strXml += strRootName;
-	strXml += _T(">");
-	strXml += strXmlData;
-	strXml += _T("</");
-	strXml += strRootName;
-	strXml += _T(">");
-	*bstrRet = strXml.AllocSysString();
 	return S_OK;
 }
 

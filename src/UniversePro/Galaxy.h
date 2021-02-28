@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102260038
+ *           Web Runtime for Application - Version 1.0.0.202103010039
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -287,7 +287,6 @@ public:
 	CGalaxy();
 	virtual ~CGalaxy();
 
-	bool											m_bObserve = false;
 	bool											m_bDockPane = false;
 
 	BOOL											m_bNoRedrawState = false;
@@ -391,10 +390,6 @@ private:
 	STDMETHOD(get_CurrentNavigateKey)(BSTR* pVal);
 	STDMETHOD(get_VisibleXobj)(IXobj** pVal);
 	STDMETHOD(get_RootXobjs)(IXobjCollection** pXobjColletion);
-	STDMETHOD(get_GalaxyData)(BSTR bstrKey, VARIANT* pVal);
-	STDMETHOD(put_GalaxyData)(BSTR bstrKey, VARIANT newVal);
-	STDMETHOD(get_DesignerState)(VARIANT_BOOL* pVal);
-	STDMETHOD(put_DesignerState)(VARIANT_BOOL newVal);
 	STDMETHOD(get_GalaxyType)(GalaxyType* pVal);
 	STDMETHOD(get_Name)(BSTR* pVal);
 	STDMETHOD(get_HostBrowser)(IBrowser** ppChromeWebBrowser);

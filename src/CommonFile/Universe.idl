@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102260038           *
+ *           Web Runtime for Application - Version 1.0.0.202103010039           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -456,17 +456,13 @@ interface IGalaxy : IDispatch {
 	[propget, id(2), helpstring("property VisibleXobj")] HRESULT VisibleXobj([out, retval] IXobj** pVal);
 	[propget, id(3)] HRESULT CurrentNavigateKey([out, retval] BSTR* pVal);
 	[propget, id(4)] HRESULT GalaxyCluster([out, retval] IGalaxyCluster** pVal);
-	[propget, id(5)] HRESULT GalaxyData(BSTR bstrKey, [out, retval] VARIANT* pVal);
-	[propput, id(5)] HRESULT GalaxyData(BSTR bstrKey, [in] VARIANT newVal);
-	[propget, id(6), hidden] HRESULT DesignerState([out, retval] VARIANT_BOOL* pVal);
-	[propput, id(6), hidden] HRESULT DesignerState([in] VARIANT_BOOL newVal);
+	[propget, id(5)] HRESULT HostWebPage([out, retval] IWebPage** ppChromeWebPage);
+	[propget, id(6)] HRESULT HostBrowser([out, retval] IBrowser** ppChromeWebBrowser);
 	[propget, id(7), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(8), helpstring("property RootXobjs")] HRESULT RootXobjs([out, retval]IXobjCollection** ppXobjColletion);
 	[propget, id(9)] HRESULT GalaxyXML([out, retval] BSTR* pVal);
-	[propget, id(11)] HRESULT GalaxyType([out, retval] GalaxyType* pVal);
-	[propget, id(12)] HRESULT Name([out, retval] BSTR* pVal);
-	[propget, id(13)] HRESULT HostBrowser([out, retval] IBrowser** ppChromeWebBrowser);
-	[propget, id(14)] HRESULT HostWebPage([out, retval] IWebPage** ppChromeWebPage);
+	[propget, id(10)] HRESULT GalaxyType([out, retval] GalaxyType* pVal);
+	[propget, id(11)] HRESULT Name([out, retval] BSTR* pVal);
 
 	[id(101), helpstring("method Detach")] HRESULT Detach(void);
 	[id(102), helpstring("method Attach")] HRESULT Attach(void);

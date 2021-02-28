@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102260038           *
+ *           Web Runtime for Application - Version 1.0.0.202103010039           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -902,7 +902,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		if (g_pCosmos->m_hCosmosWnd == NULL)
 		{
 			g_pCosmos->m_hCosmosWnd = hWnd;
-			g_pCosmos->CosmosInit();
+			//g_pCosmos->CosmosInit();
 		}
 	}
 	break;

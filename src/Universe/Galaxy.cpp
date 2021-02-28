@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202102260038           *
+ *           Web Runtime for Application - Version 1.0.0.202103010039           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -535,16 +535,6 @@ STDMETHODIMP CGalaxy::get_RootXobjs(IXobjCollection** pXobjColletion)
 	}
 
 	return m_pRootNodes->QueryInterface(IID_IXobjCollection, (void**)pXobjColletion);
-}
-
-STDMETHODIMP CGalaxy::get_GalaxyData(BSTR bstrKey, VARIANT* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxy::put_GalaxyData(BSTR bstrKey, VARIANT newVal)
-{
-	return S_OK;
 }
 
 STDMETHODIMP CGalaxy::Detach(void)
@@ -1160,22 +1150,6 @@ LRESULT CGalaxy::OnParentNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pCosmos->m_pGalaxy = nullptr;
 	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-STDMETHODIMP CGalaxy::get_DesignerState(VARIANT_BOOL* pVal)
-{
-	if (m_bDesignerState)
-		*pVal = true;
-	else
-		*pVal = false;
-
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxy::put_DesignerState(VARIANT_BOOL newVal)
-{
-	m_bDesignerState = newVal;
-	return S_OK;
 }
 
 STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
