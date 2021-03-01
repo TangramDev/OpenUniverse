@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -61,7 +61,7 @@ namespace Browser {
 			if (m_pClientGalaxy)
 			{
 				m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
-				g_pCosmos->m_pCosmosDelegate->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
+				g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
 				m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 			}
 			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
@@ -588,7 +588,7 @@ namespace Browser {
 					BrowserLayout();
 				if (m_pParentXobj)
 				{
-					g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 				}
 			}
 			break;

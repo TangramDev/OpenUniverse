@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -144,7 +144,7 @@ _IsBrowserModel FuncIsBrowserModel;
 
 CWinApp* g_pAppBase = nullptr;
 ICosmos* g_pCosmos = nullptr;
-CWebRuntime* g_pAppEx = nullptr;
+CWebRuntimeApp* g_pAppEx = nullptr;
 IUniverseAppProxy* g_pAppProxy = nullptr;
 
 namespace CommonUniverse
@@ -1134,21 +1134,21 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	CWebRuntime::CWebRuntime()
+	CWebRuntimeApp::CWebRuntimeApp()
 	{
 		g_pAppBase = g_pAppEx = this;
 	}
 
-	CWebRuntime::~CWebRuntime()
+	CWebRuntimeApp::~CWebRuntimeApp()
 	{
 	}
 
-	BOOL CWebRuntime::InitApplication()
+	BOOL CWebRuntimeApp::InitApplication()
 	{
 		return CosmosInit(_T("")) ? CWinAppEx::InitApplication() : false;
 	}
 
-	HWND CWebRuntime::GetActivePopupMenu(HWND hWnd)
+	HWND CWebRuntimeApp::GetActivePopupMenu(HWND hWnd)
 	{
 		CMFCPopupMenu* pActivePopupMenu = CMFCPopupMenu::GetSafeActivePopupMenu();
 		if (pActivePopupMenu)
@@ -1159,7 +1159,7 @@ namespace CommonUniverse
 		return nullptr;
 	}
 
-	HWND CWebRuntime::Create(HWND hParentWnd, IXobj* pXobj)
+	HWND CWebRuntimeApp::Create(HWND hParentWnd, IXobj* pXobj)
 	{
 		CWnd* pParent = CWnd::FromHandlePermanent(hParentWnd);
 		if (pParent == nullptr)
@@ -1265,13 +1265,13 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	void CWebRuntime::OnFileNew()
+	void CWebRuntimeApp::OnFileNew()
 	{
 		CWinAppEx::OnFileNew();
 	}
 
 	// Main running routine until application exits
-	int CWebRuntime::Run()
+	int CWebRuntimeApp::Run()
 	{
 		if (m_bBuiltInBrowser == false)
 		{
@@ -1280,7 +1280,7 @@ namespace CommonUniverse
 		return CWinThread::Run();
 	}
 
-	bool CWebRuntime::InitApp()
+	bool CWebRuntimeApp::InitApp()
 	{
 		if (m_bBuiltInBrowser)
 			return false;
@@ -1373,7 +1373,7 @@ namespace CommonUniverse
 				break;
 			case TANGRAM_CONST_NEWDOC://for new doc
 			{
-				((CWebRuntime*)AfxGetApp())->OnFileNew();
+				((CWebRuntimeApp*)AfxGetApp())->OnFileNew();
 			};
 			break;
 			case 19921989:

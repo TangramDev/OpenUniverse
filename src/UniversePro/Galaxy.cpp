@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039
+ *           Web Runtime for Application - Version 1.0.0.202103020040
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -720,7 +720,7 @@ LRESULT CMDIChild::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CMDIChild::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	g_pCosmos->m_pCosmosDelegate->QueryWndInfo(ObserveComplete, 0);
+	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(ObserveComplete, 0);
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -790,7 +790,7 @@ LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	}
 	if (pHelperWnd)
 	{
-		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryDestroy, pHelperWnd->m_hWnd);
+		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryDestroy, pHelperWnd->m_hWnd);
 		g_pCosmos->m_hMainWnd = pHelperWnd->m_hWnd;
 	}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
@@ -811,7 +811,7 @@ LRESULT CMDTWnd::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
 	if (pCosmosFrameWndInfo)
 	{
-		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryDestroy, pCosmosFrameWndInfo->m_hClient);
+		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryDestroy, pCosmosFrameWndInfo->m_hClient);
 	}
 
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
@@ -849,7 +849,7 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 	case 20210222:
 	{
-		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
+		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
 	}
 	break;
 	case 10000:
@@ -953,7 +953,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_bDestroy)
 			break;
-		g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
+		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
 	}
 	break;
 	case 20210223:
@@ -2447,7 +2447,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 
 	CGalaxy* pGalaxy = nullptr;
 	CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
-	HWND hFrameWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, m_hWnd);
+	HWND hFrameWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, m_hWnd);
 	if (hFrameWnd == NULL)
 	{
 		if (m_pWebPageWnd)
@@ -2459,7 +2459,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			{
 				CXobj* pXobj = (CXobj*)pInfo->m_pXobj;
 				pGalaxy = pXobj->m_pXobjShareData->m_pGalaxy;
-				hFrameWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, pGalaxy->m_hWnd);
+				hFrameWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, pGalaxy->m_hWnd);
 			}
 			else
 			{
@@ -2470,7 +2470,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				{
 					pGalaxy = (CGalaxy*)iter->second;
 				}
-				hFrameWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPPWnd);
+				hFrameWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hPPWnd);
 			}
 		}
 		if (hFrameWnd)

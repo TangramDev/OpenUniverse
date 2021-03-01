@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039
+ *           Web Runtime for Application - Version 1.0.0.202103020040
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -485,7 +485,6 @@ namespace CommonUniverse {
 		virtual void OnCosmosClose() {}
 		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
-		virtual void RegistWndClassToCosmos() {}
 		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
@@ -496,6 +495,8 @@ namespace CommonUniverse {
 		virtual HWND InitCosmosApp() { return NULL; }
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
+		virtual bool EclipseAppInit() { return false; }
+		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
 	};
 
 	class ICosmosCLRImpl
@@ -749,7 +750,6 @@ namespace CommonUniverse {
 	class ICosmosDelegate {
 	public:
 		ICosmosDelegate() {
-			m_bBrowserWndCreated = false;
 			m_pJVM = nullptr;
 			m_pJVMenv = nullptr;
 			systemClass = nullptr;
@@ -760,7 +760,6 @@ namespace CommonUniverse {
 		virtual ~ICosmosDelegate() { 
 		}
 
-		BOOL				m_bBrowserWndCreated;
 		JavaVM*				m_pJVM;
 		JNIEnv*				m_pJVMenv;
 		jclass				systemClass;
@@ -771,12 +770,9 @@ namespace CommonUniverse {
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount) { return false; }
 		virtual bool IsAppIdleMessage() { return false; }
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) { return false; }
-		virtual bool EclipseAppInit() { return false; }
-		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
 		virtual void ProcessMsg(MSG* msg) {}
 		virtual void ForegroundIdleProc() {}
 		virtual HICON GetAppIcon(int nIndex) { return NULL; }
-		virtual CString GetNTPXml() { return _T(""); }
 	};
 
 	class CCosmosMainDllLoader {

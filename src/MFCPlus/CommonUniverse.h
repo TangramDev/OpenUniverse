@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039
+ *           Web Runtime for Application - Version 1.0.0.202103020040
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -444,9 +444,11 @@ namespace CommonUniverse {
 
 			m_nFrameIndex = 0;
 			m_strAppKey = _T("");
+			m_strCreatingDOCID = _T("");
 		}
 
-		virtual ~IUniverseAppProxy() {}
+		virtual ~IUniverseAppProxy() {
+		}
 
 		BOOL								m_bAutoDelete;
 		HWND								m_hMainWnd;
@@ -455,14 +457,15 @@ namespace CommonUniverse {
 		LPCTSTR								m_strProxyID;
 		LPCTSTR								m_strCreatingFrameTitle;
 		LPCTSTR								m_strClosingFrameID;
-		void* m_pvoid;
-		CCosmosDocProxy* m_pCurDocProxy;
-		CCosmosImpl* m_pCosmosImpl;
+		void*								m_pvoid;
+		CCosmosDocProxy*					m_pCurDocProxy;
+		CCosmosImpl*						m_pCosmosImpl;
 
 		BOOL								m_bCreatingNewFrame;
 		int									m_nFrameIndex;
 		HWND								m_hClosingFrame;
 		CString								m_strAppKey;
+		CString								m_strCreatingDOCID = _T("");
 		map<CString, void*>					m_mapMainFrame;
 		map<void*, LONG>					m_mapCosmosDocTemplateID;
 
@@ -482,7 +485,6 @@ namespace CommonUniverse {
 		virtual void OnCosmosClose() {}
 		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
-		virtual void RegistWndClassToCosmos() {}
 		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
@@ -491,6 +493,10 @@ namespace CommonUniverse {
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
 		virtual HWND InitCosmosApp() { return NULL; }
+		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
+		virtual bool EclipseAppInit() { return false; }
+		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
 	};
 
 	class ICosmosCLRImpl
@@ -560,8 +566,10 @@ namespace CommonUniverse {
 			m_strNtpXml = _T("");
 		}
 
-		virtual ~CCosmosImpl() {}
+		virtual ~CCosmosImpl() {
+		}
 
+		bool									m_bSZMode = false;
 		bool									m_bChromeNeedClosed;
 		bool									m_bCreatingDevTool;
 		bool									m_bOMNIBOXPOPUPVISIBLE;
@@ -602,11 +610,6 @@ namespace CommonUniverse {
 		CString									m_strCurrentAppID;
 		CString									m_strProgramFilePath;
 		CString									m_strAppCommonDocPath;
-		CString									m_strXobjSelectedText;
-		CString									m_strDesignerTip1;
-		CString									m_strDesignerTip2;
-		CString									m_strDesignerXml;
-		CString									m_strDesignerToolBarCaption;
 		CString									m_strStartView;
 		CString									m_strNewDocXml;
 		CString									m_strStartXml;
@@ -660,7 +663,6 @@ namespace CommonUniverse {
 		map<IDispatch*, CString>				m_mapObjEventDic;
 		map<CString, CString>					m_mapJavaNativeInfo;
 		map<CString, CString>					m_mapCreatingWorkBenchInfo;
-		map<HWND, HWND>							m_mapVSWebPage;
 		map<HWND, CString>						m_mapUIData;
 		map<HWND, CString>						m_mapCtrlTag;
 
@@ -687,7 +689,6 @@ namespace CommonUniverse {
 		virtual CSession* CreateCloudSession(CWebPageImpl*) { return nullptr; }
 		virtual CSession* GetCloudSession(IXobj*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
-		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
 	};
 
 	class ICosmosWindowProvider
@@ -749,40 +750,28 @@ namespace CommonUniverse {
 	class ICosmosDelegate {
 	public:
 		ICosmosDelegate() {
-			m_bBrowserWndCreated = false;
 			m_pJVM = nullptr;
 			m_pJVMenv = nullptr;
 			systemClass = nullptr;
 			exitMethod = nullptr;
 			loadMethod = nullptr;
-			m_strCreatingDOCID = _T("");
 		}
 
-		virtual ~ICosmosDelegate() {}
+		virtual ~ICosmosDelegate() { 
+		}
 
-		bool				m_bSZMode = false;
-		BOOL				m_bBrowserWndCreated;
 		JavaVM*				m_pJVM;
 		JNIEnv*				m_pJVMenv;
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
-		CString				m_strCreatingDOCID = _T("");
 
 		virtual bool DoIdleWork() { return false; }
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount) { return false; }
 		virtual bool IsAppIdleMessage() { return false; }
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) { return false; }
-		virtual bool EclipseAppInit() { return false; }
-		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
-		virtual CString GetNTPXml() { return _T(""); }
 		virtual void ProcessMsg(MSG* msg) {}
 		virtual void ForegroundIdleProc() {}
-		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
-		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
-		virtual void CosmosNotify(CString strPara1, CString strPara2, WPARAM, LPARAM) {}
-		virtual void AppWindowCreated(CString strType, HWND hPWnd, HWND hWnd) {}
-		virtual void* CreateDocument(CString strType, CString strDocKey) { return nullptr; }
 		virtual HICON GetAppIcon(int nIndex) { return NULL; }
 	};
 

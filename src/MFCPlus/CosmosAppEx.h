@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -239,13 +239,13 @@ namespace CommonUniverse
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 	};
 
-	class CWebRuntime :
+	class CWebRuntimeApp :
 		public CWinAppEx,
 		public CWebRuntimeProxy
 	{
 	public:
-		CWebRuntime();
-		virtual ~CWebRuntime();
+		CWebRuntimeApp();
+		virtual ~CWebRuntimeApp();
 
 		afx_msg void OnFileNew();
 

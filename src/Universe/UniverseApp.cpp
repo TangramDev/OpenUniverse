@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * 
@@ -502,8 +502,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 					pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
 					if (pChromeBrowserWnd->m_pBrowser)
 						pChromeBrowserWnd->m_pBrowser->m_pProxy = pChromeBrowserWnd;
-					if (g_pCosmos->m_pCosmosDelegate)
-						g_pCosmos->m_pCosmosDelegate->m_bBrowserWndCreated = true;
 				}
 				::PostMessage(hPWnd, WM_COSMOSMSG, 0, (LPARAM)hWnd);
 			}
@@ -964,7 +962,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				if (hModule) {
 					FuncInitApp = (_InitApp)GetProcAddress(hModule, "InitApp");
 					if (FuncInitApp != NULL) {
-						HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(MainWnd, NULL);
+						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(MainWnd, NULL);
 						if (::IsWindow(hWnd))
 						{
 							g_pCosmos->m_hMainWnd = hWnd;

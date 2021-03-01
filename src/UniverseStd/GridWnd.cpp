@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039
+ *           Web Runtime for Application - Version 1.0.0.202103020040
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -292,7 +292,7 @@ LRESULT CGridWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	break;
 	case 20210202:
 	{
-		HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
+		HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 		if (::IsWindow(hWnd))
 		{
 			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));

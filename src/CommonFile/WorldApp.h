@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -187,32 +187,28 @@ namespace CommonUniverse
 		CWebRuntimeProxy();
 		virtual ~CWebRuntimeProxy();
 
-		map<CView*, CDocument*> m_mapViewDoc;
-
 		//ICosmosDelegate:
-		virtual void ExitJVM();
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
 		virtual bool DoIdleWork();
 		virtual bool IsAppIdleMessage();
 		virtual void ProcessMsg(MSG* msg);
 		virtual void ForegroundIdleProc();
-		virtual CString GetNTPXml();
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
-		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
-		virtual bool EclipseAppInit();
 		virtual HICON GetAppIcon(int nIndex);
 	};
 
-	class CWebRuntime :
+	class CWebRuntimeApp :
 		public CWinAppEx,
 		public IUniverseAppProxy,
 		public ICosmosWindowProvider {
 	public:
-		CWebRuntime();
-		virtual ~CWebRuntime();
+		CWebRuntimeApp();
+		virtual ~CWebRuntimeApp();
 
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
+		map<CView*, CDocument*> m_mapViewDoc;
+
 		BOOL IsBrowserModel(bool bCrashReporting);
 		bool ProcessAppType(bool bCrashReporting);
 		CString GetDocTemplateID(CDocument* pDoc);
@@ -230,6 +226,8 @@ namespace CommonUniverse
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager);
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
+		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
+		virtual bool EclipseAppInit();
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);

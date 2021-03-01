@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1000,8 +1000,8 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 					pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
 					if (pChromeBrowserWnd->m_pBrowser)
 						pChromeBrowserWnd->m_pBrowser->m_pProxy = pChromeBrowserWnd;
-					if (g_pCosmos->m_pCosmosDelegate)
-						g_pCosmos->m_pCosmosDelegate->m_bBrowserWndCreated = true;
+					//if (g_pCosmos->m_pCosmosDelegate)
+					//	g_pCosmos->m_pCosmosDelegate->m_bBrowserWndCreated = true;
 				}
 				::PostMessage(hPWnd, WM_COSMOSMSG, 0, (LPARAM)hWnd);
 			}
@@ -1611,7 +1611,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				if (hModule) {
 					FuncInitApp = (_InitApp)GetProcAddress(hModule, "InitApp");
 					if (FuncInitApp != NULL) {
-						HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(MainWnd, NULL);
+						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(MainWnd, NULL);
 						if (::IsWindow(hWnd))
 						{
 							g_pCosmos->m_hMainWnd = hWnd;
@@ -1653,7 +1653,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20210110:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
-					HWND hWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hClient);
+					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
 					{
 						if (g_pCosmos->m_mapDocTemplate.size() == 0)
@@ -1941,8 +1941,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				break;
 				case 20191117:
 				{
-					if (g_pCosmos->m_pCosmosDelegate)
-						g_pCosmos->m_pCosmosDelegate->EclipseAppInit();
+					if (g_pCosmos->m_pUniverseAppProxy)
+						g_pCosmos->m_pUniverseAppProxy->EclipseAppInit();
 				}
 				break;
 				case 2019111701:

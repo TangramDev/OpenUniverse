@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -170,7 +170,6 @@ namespace CommonUniverse
 		virtual bool IsAppIdleMessage();
 		virtual void ProcessMsg(MSG* msg);
 		virtual void ForegroundIdleProc();
-		virtual CString GetNTPXml();
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
 		virtual bool EclipseAppInit();

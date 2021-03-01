@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -455,11 +455,6 @@ namespace CommonUniverse
 			::TranslateMessage(msg);
 			::DispatchMessage(msg);
 		}
-	}
-
-	CString CWebRuntimeProxy::GetNTPXml()
-	{
-		return _T("");
 	}
 
 	bool CWebRuntimeProxy::CosmosInit(CString strID)

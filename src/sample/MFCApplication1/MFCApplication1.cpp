@@ -22,7 +22,7 @@
 BEGIN_MESSAGE_MAP(CMFCApp, CWinAppEx)
 	ON_COMMAND(ID_APP_ABOUT, &CMFCApp::OnAppAbout)
 	// Standard file based document commands
-	ON_COMMAND(ID_FILE_NEW, &CWebRuntime::OnFileNew)
+	ON_COMMAND(ID_FILE_NEW, &CWebRuntimeApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CWinAppEx::OnFileOpen)
 	// Standard print setup command
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
@@ -162,11 +162,6 @@ int CMFCApp::ExitInstance()
 	AfxOleTerm(FALSE);
 
 	return CWinAppEx::ExitInstance();
-}
-
-CString CMFCApp::GetNTPXml()
-{
-	return _T("Default_Mfc.xml");
 }
 
 // CMFCApp message handlers

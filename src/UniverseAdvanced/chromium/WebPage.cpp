@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -804,7 +804,7 @@ namespace Browser {
 				{
 					pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
 					HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-					hPWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(DocView, hPWnd);
+					hPWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hPWnd);
 					if (hPWnd)
 					{
 						pBrowserWnd->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));;
@@ -952,7 +952,7 @@ namespace Browser {
 		}
 		else if (strId.CompareNoCase(_T("Client_UI_MESSAGE")) == 0)
 		{
-			HWND hMainWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(MainWnd, NULL);
+			HWND hMainWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(MainWnd, NULL);
 			if (hMainWnd)
 			{
 				CTangramXmlParse xmlParse;
@@ -1202,7 +1202,7 @@ namespace Browser {
 					IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 				}
 			}
-			HWND hMainWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(MainWnd, NULL);
+			HWND hMainWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(MainWnd, NULL);
 			if (hMainWnd)
 			{
 				IGalaxyCluster* pCluster = nullptr;

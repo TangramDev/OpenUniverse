@@ -14,7 +14,7 @@
 // See MFCApplication1.cpp for the implementation of this class
 //
 
-class CMFCApp : public CWebRuntime
+class CMFCApp : public CWebRuntimeApp
 {
 public:
 	CMFCApp() noexcept;
@@ -29,7 +29,6 @@ public:
 	UINT  m_nAppLook;
 	BOOL  m_bHiColorIcons;
 
-	virtual CString GetNTPXml();
 	virtual void PreLoadState();
 	virtual void LoadCustomState();
 	virtual void SaveCustomState();

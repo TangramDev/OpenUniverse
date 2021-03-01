@@ -14,7 +14,7 @@
 // See MFCApplication3.cpp for the implementation of this class
 //
 
-class CMFCApplication3App : public CWebRuntime
+class CMFCApplication3App : public CWebRuntimeApp
 {
 public:
 	CMFCApplication3App() noexcept;

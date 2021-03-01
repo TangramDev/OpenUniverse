@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103010039           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -642,8 +642,8 @@ namespace Browser {
 		}
 		else
 		{
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->OnIPCMsg((CWebPageImpl*)this, strId, strParam1, strParam2, strParam3, strParam4, strParam5); 
+			if (g_pCosmos->m_pUniverseAppProxy)
+				g_pCosmos->m_pUniverseAppProxy->OnIPCMsg((CWebPageImpl*)this, strId, strParam1, strParam2, strParam3, strParam4, strParam5);
 		}
 	}
 
@@ -739,7 +739,7 @@ namespace Browser {
 		}
 		else
 		{
-			g_pCosmos->m_pCosmosDelegate->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
+			g_pCosmos->m_pUniverseAppProxy->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
 		}
 	}
 
@@ -764,7 +764,7 @@ namespace Browser {
 					IDispatch* pDisp = g_pCosmos->m_pCLRProxy->CreateCLRObj(xmlParse.xml());
 				}
 			}
-			HWND hMainWnd = g_pCosmos->m_pCosmosDelegate->QueryWndInfo(MainWnd, NULL);
+			HWND hMainWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(MainWnd, NULL);
 			if (hMainWnd)
 			{
 				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
