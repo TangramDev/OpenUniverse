@@ -336,7 +336,6 @@ CGalaxy::CGalaxy()
 	m_bMDIChild = false;
 	m_bDetached = false;
 	m_pWebPageWnd = nullptr;
-	m_bDesignerState = true;
 	m_pGalaxyCluster = nullptr;
 	m_pWorkXobj = nullptr;
 	m_pRootNodes = nullptr;
@@ -392,13 +391,6 @@ void CGalaxy::HostPosChanged()
 	HWND hwnd = m_hWnd;
 	CXobj* pTopXobj = m_pWorkXobj;
 	CGalaxy* _pGalaxy = this;
-	if (!_pGalaxy->m_bDesignerState)
-		while (pTopXobj && pTopXobj->m_pRootObj != pTopXobj)
-		{
-			_pGalaxy = pTopXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy;
-			hwnd = _pGalaxy->m_hWnd;
-			pTopXobj = _pGalaxy->m_pWorkXobj;
-		}
 	if (::IsWindow(hwnd) == false)
 		return;
 	HWND hPWnd = ::GetParent(m_hWnd);

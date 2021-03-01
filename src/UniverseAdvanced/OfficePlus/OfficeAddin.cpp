@@ -537,7 +537,6 @@ namespace OfficePlus
 							::SetWindowLong(hWnd, GWL_STYLE, ::GetWindowLong(hWnd, GWL_STYLE) | WS_SIZEBOX | WS_BORDER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);//::SetWindowLong(hWnd, GWL_STYLE, ::GetWindowLong(hWnd, GWL_STYLE)|nStyle);
 							if (nStyle == 10)
 							{
-								_pGalaxy->m_bDesignerState = true;
 								CXobj* _pXobj = (CXobj*)pXobj;
 								_pXobj->m_pXobjShareData->m_pOfficeObj = pFormDisp;
 								_pXobj->m_pXobjShareData->m_pOfficeObj->AddRef();

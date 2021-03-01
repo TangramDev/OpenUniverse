@@ -207,7 +207,6 @@ CCosmos::CCosmos()
 	m_pActiveXobj = nullptr;
 	m_pGalaxy = nullptr;
 	m_pRootNodes = nullptr;
-	m_pDocDOMTree = nullptr;
 	m_pCosmosAppCtrl = nullptr;
 	m_pUniverseAppProxy = nullptr;
 	m_pCosmosAppProxy = nullptr;
@@ -2688,17 +2687,6 @@ STDMETHODIMP CCosmos::get_DocTemplate(BSTR bstrKey, LONGLONG* pVal)
 	if (it != m_mapTemplateInfo.end())
 		*pVal = it->second;
 	return S_OK;
-}
-
-void CCosmos::InitDesignerTreeCtrl(CString strXml)
-{
-	if (strXml != _T("") && m_pDocDOMTree)
-	{
-		m_pDocDOMTree->m_pHostXmlParse = new CTangramXmlParse();
-		m_pDocDOMTree->m_pHostXmlParse->LoadXml(strXml);
-		m_pDocDOMTree->m_hFirstRoot = m_pDocDOMTree->LoadXmlFromXmlParse(m_pDocDOMTree->m_pHostXmlParse);
-		m_pDocDOMTree->ExpandAll();
-	}
 }
 
 STDMETHODIMP CCosmos::get_AppKeyValue(BSTR bstrKey, VARIANT* pVal)

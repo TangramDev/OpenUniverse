@@ -70,7 +70,6 @@ public:
 	bool											m_bDockPane = false;
 	BOOL											m_bDetached;
 	BOOL											m_bMDIChild;
-	BOOL											m_bDesignerState;
 	GalaxyType										m_nGalaxyType;
 	HWND											m_hHostWnd;
 	CString											m_strLastKey;

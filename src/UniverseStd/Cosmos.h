@@ -202,7 +202,6 @@ public:
 	CCosmosAppCtrl*							m_pCosmosAppCtrl;
 	ICosmos*								m_pCosmosVS = nullptr;
 
-	CTangramHtmlTreeWnd*					m_pDocDOMTree;
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
@@ -296,7 +295,6 @@ public:
 	void EclipseInit();
 	void ExitInstance();
 	void InitCosmosDocManager();
-	void InitDesignerTreeCtrl(CString strXml);
 	void FireAppEvent(CCosmosEvent*);
 	void CreateEclipseApp(CString strKey, CString strXml);
 	int	 LoadCLR();

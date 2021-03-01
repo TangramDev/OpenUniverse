@@ -236,7 +236,6 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 	if (m_pXobj->m_nViewType != BlankView)
 		return true;
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-	BOOL bInDesignState = pGalaxy->m_bDesignerState;
 	CBitmap bit;
 	RECT rt;
 	GetClientRect(&rt);
@@ -276,7 +275,6 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 			CComBSTR bstrCaption(L"");
 			m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
 			CString strInfo = _T("\n\n  ");
-			if (bInDesignState)
 			{
 				CString str = _T("");
 				if (str == _T(""))
@@ -737,7 +735,6 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		((CXobj*)pXobj)->m_pParentObj = m_pXobj->m_pParentObj;
 		((CXobj*)pXobj)->m_pXobjShareData->m_pOfficeObj = m_pXobj->m_pXobjShareData->m_pOfficeObj;
 		m_pXobj->m_pXobjShareData->m_mapLayoutNodes[((CXobj*)pXobj)->m_strName] = (CXobj*)pXobj;
-		((CGalaxy*)pGalaxy)->m_bDesignerState = m_pXobj->m_pXobjShareData->m_pGalaxy->m_bDesignerState;
 		CString strXml = ((CXobj*)pXobj)->m_pHostParse->xml();
 		CTangramXmlParse* pNew = ((CXobj*)pXobj)->m_pHostParse;
 		CTangramXmlParse* pOld = pOldNode->m_pHostParse;

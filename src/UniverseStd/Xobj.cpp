@@ -1224,9 +1224,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 						};
 
 						pCosmosDesignView->m_pXHtmlTree->m_Links.SetAppCommands(AppCommands, sizeof(AppCommands) / sizeof(AppCommands[0]));
-
-						if (g_pCosmos->m_pDocDOMTree == nullptr)
-							g_pCosmos->m_pDocDOMTree = pCosmosDesignView->m_pXHtmlTree;
 					}
 					else
 					{

@@ -72,7 +72,6 @@ protected:
 	afx_msg void OnDestroy();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
-	afx_msg LRESULT OnActivePage(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnCosmosMsg(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnGetCosmosObj(WPARAM wParam,LPARAM lParam);

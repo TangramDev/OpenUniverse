@@ -120,7 +120,6 @@ BEGIN_MESSAGE_MAP(CGridWnd, CSplitterWnd)
 	ON_WM_DESTROY()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEACTIVATE()
-	ON_MESSAGE(WM_TABCHANGE, OnActivePage)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
@@ -338,17 +337,6 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 	//SetColumnInfo(lParam, (m_nHostWidth>=0)? m_nHostWidth:0, _nWidth);
 	//SetRowInfo(wParam, (m_nHostHeight>=0)? m_nHostHeight:0, _nWidth);
 	return 0;
-}
-
-LRESULT CGridWnd::OnActivePage(WPARAM wParam, LPARAM lParam)
-{
-	if (g_pCosmos->m_pDocDOMTree && g_pCosmos->m_pCLRProxy)
-	{
-		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-		if (pGalaxy->m_bDesignerState)
-			g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
-	}
-	return CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);;
 }
 
 void CGridWnd::StartTracking(int ht)
@@ -1168,17 +1156,6 @@ int CGridWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	}
 
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-
-	if (g_pCosmos->m_pDocDOMTree)
-	{
-		if (g_pCosmos->m_hVSToolBoxWnd)
-		{
-			if (::IsChild(g_pCosmos->m_hVSToolBoxWnd, m_hWnd) == false)
-				g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
-		}
-		else if (g_pCosmos->m_pCLRProxy && ::IsChild(g_pCosmos->m_hHostWnd, m_hWnd) == false)
-			g_pCosmos->m_pCLRProxy->SelectXobj(m_pXobj);
-	}
 
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{

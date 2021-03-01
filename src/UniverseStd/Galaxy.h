@@ -219,7 +219,6 @@ public:
 	BOOL											m_bTabbedMDIClient;
 	BOOL											m_bDetached;
 	BOOL											m_bNoRedrawState = false;
-	BOOL											m_bDesignerState;
 	BOOL											m_bMDIChild;
 	GalaxyType										m_nGalaxyType;
 

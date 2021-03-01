@@ -117,7 +117,6 @@ BEGIN_MESSAGE_MAP(CGridWnd, CSplitterWnd)
 	ON_WM_DESTROY()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEACTIVATE()
-	ON_MESSAGE(WM_TABCHANGE, OnActivePage)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
@@ -300,11 +299,6 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 	//SetColumnInfo(lParam, (m_nHostWidth>=0)? m_nHostWidth:0, _nWidth);
 	//SetRowInfo(wParam, (m_nHostHeight>=0)? m_nHostHeight:0, _nWidth);
 	return 0;
-}
-
-LRESULT CGridWnd::OnActivePage(WPARAM wParam, LPARAM lParam)
-{
-	return CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);;
 }
 
 void CGridWnd::StartTracking(int ht)

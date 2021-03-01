@@ -1740,7 +1740,6 @@ CGalaxy::CGalaxy()
 	m_pWebPageWnd = nullptr;
 	m_pWorkBenchFrame = nullptr;
 	m_bTabbedMDIClient = false;
-	m_bDesignerState = true;
 	m_pBKWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
 	m_pWorkXobj = nullptr;
@@ -1802,13 +1801,6 @@ void CGalaxy::HostPosChanged()
 	HWND hwnd = m_hWnd;
 	CXobj* pTopXobj = m_pWorkXobj;
 	CGalaxy* _pGalaxy = this;
-	if (!_pGalaxy->m_bDesignerState)
-		while (pTopXobj && pTopXobj->m_pRootObj != pTopXobj)
-		{
-			_pGalaxy = pTopXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy;
-			hwnd = _pGalaxy->m_hWnd;
-			pTopXobj = _pGalaxy->m_pWorkXobj;
-		}
 	if (::IsWindow(hwnd) == false)
 		return;
 	if (g_pCosmos->m_pMDIMainWnd &&
