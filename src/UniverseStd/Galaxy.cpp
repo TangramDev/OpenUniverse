@@ -32,7 +32,6 @@
 #include "XobjHelper.h"
 #include "Xobj.h"
 #include "Galaxy.h"
-#include "TangramHtmlTreeWnd.h"
 #include "EclipsePlus\EclipseAddin.h"
 #include "Wormhole.h"
 
@@ -2230,44 +2229,6 @@ STDMETHODIMP CGalaxy::get_CurrentNavigateKey(BSTR* pVal)
 
 void CGalaxy::UpdateVisualWPFMap(HWND hParent, BOOL bSized)
 {
-	for (auto it : m_mapWPFView)
-	{
-		HWND hWnd = it.first;
-		if (::IsChild(hParent, hWnd))
-		{
-			auto it2 = m_mapVisibleWPFView.find(hWnd);
-			if (::IsWindowVisible(hWnd) == TRUE)
-			{
-				if (it2 == m_mapVisibleWPFView.end())
-				{
-					m_mapVisibleWPFView[hWnd] = it.second;
-				}
-				it.second->m_pCosmosWPFObj->ShowVisual(false);
-				it.second->m_pCosmosWPFObj->ShowVisual(true);
-				it.second->m_pCosmosWPFObj->InvalidateVisual();
-				long nIndex = (long)::GetWindowLongPtr(it.second->m_hWnd, GWLP_USERDATA);
-				if (bSized || nIndex == 1963)
-				{
-					::SetWindowLongPtr(it.second->m_hWnd, GWLP_USERDATA, 0);
-
-					RECT rc;
-					::GetWindowRect(it.second->m_hWnd, &rc);
-					CWnd* pParent = it.second->GetParent();
-					pParent->ScreenToClient(&rc);
-					::SetWindowPos(it.second->m_hWnd, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + 1, SWP_DRAWFRAME);
-					::SetWindowPos(it.second->m_hWnd, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE | SWP_NOREDRAW);
-				}
-			}
-			else
-			{
-				if (it2 != m_mapVisibleWPFView.end())
-				{
-					it.second->m_pCosmosWPFObj->ShowVisual(false);
-					m_mapVisibleWPFView.erase(it2);
-				}
-			}
-		}
-	}
 }
 
 void CGalaxy::Destroy()

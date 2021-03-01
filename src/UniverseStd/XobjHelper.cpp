@@ -32,7 +32,6 @@
 #include "Galaxy.h"
 #include "GridWnd.h"
 #include "Wormhole.h"
-#include "TangramHtmlTreeWnd.h"
 
 #include "chromium/WebPage.h"
 
@@ -48,7 +47,6 @@ CXobjHelper::CXobjHelper()
 	m_bCreateExternal = false;
 	m_bEraseBkgnd = true;
 	m_pXobj = nullptr;
-	m_pXHtmlTree = nullptr;
 	m_pParentXobj = nullptr;
 	m_pOleInPlaceActiveObject = nullptr;
 	m_strKey = m_strXml = _T("");
@@ -275,18 +273,6 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 			CComBSTR bstrCaption(L"");
 			m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
 			CString strInfo = _T("\n\n  ");
-			{
-				CString str = _T("");
-				if (str == _T(""))
-					strInfo = strInfo + g_pCosmos->m_strDesignerTip1;
-				else
-					strInfo = strInfo + str;
-			}
-			CString str = _T("");
-			if (str == _T(""))
-				strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
-			else
-				strInfo = strInfo + _T("\n  ") + str;
 			strText.Format(strInfo, m_pXobj->m_strName, CString(OLE2T(bstrCaption)));
 			pDC->SetTextColor(RGB(255, 255, 255));
 		}
@@ -299,11 +285,6 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 
 BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
 {
-	if (m_pXHtmlTree)
-	{
-		return m_pXHtmlTree->PreTranslateMessage(pMsg);
-	}
-
 	if (m_pOleInPlaceActiveObject)
 	{
 		LRESULT hr = m_pOleInPlaceActiveObject->TranslateAccelerator((LPMSG)pMsg);
@@ -979,11 +960,6 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		return;
 	}
-	if (m_pXobj->m_nViewType == TangramTreeView)
-	{
-		lpwndpos->flags &= ~SWP_NOREDRAW;
-		::SetWindowPos(m_pXHtmlTree->m_hWnd, NULL, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE);
-	}
 
 	if (m_bCreateExternal)
 	{
@@ -994,11 +970,6 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 void CXobjHelper::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
-
-	if (m_pXobj->m_nViewType == TangramTreeView && m_pXobj->m_pParentObj == NULL)
-	{
-		::SetWindowPos(m_pXHtmlTree->m_hWnd, NULL, 0, 0, cx, cy,/*SWP_NOREDRAW|*/SWP_NOACTIVATE);
-	}
 }
 
 void CXobjHelper::OnShowWindow(BOOL bShow, UINT nStatus)

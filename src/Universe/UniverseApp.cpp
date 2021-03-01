@@ -372,11 +372,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 					for (auto it2 : it.second->m_mapGalaxy)
 					{
 						it2.second->HostPosChanged();
-						//for (auto it3 : it2.second->m_mapWPFView)
-						//{
-						//	ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-						//	::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						//}
 					}
 				}
 			}

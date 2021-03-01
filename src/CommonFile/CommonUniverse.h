@@ -605,11 +605,6 @@ namespace CommonUniverse {
 		CString									m_strCurrentAppID;
 		CString									m_strProgramFilePath;
 		CString									m_strAppCommonDocPath;
-		CString									m_strXobjSelectedText;
-		CString									m_strDesignerTip1;
-		CString									m_strDesignerTip2;
-		CString									m_strDesignerXml;
-		CString									m_strDesignerToolBarCaption;
 		CString									m_strStartView;
 		CString									m_strNewDocXml;
 		CString									m_strStartXml;
@@ -663,7 +658,6 @@ namespace CommonUniverse {
 		map<IDispatch*, CString>				m_mapObjEventDic;
 		map<CString, CString>					m_mapJavaNativeInfo;
 		map<CString, CString>					m_mapCreatingWorkBenchInfo;
-		map<HWND, HWND>							m_mapVSWebPage;
 		map<HWND, CString>						m_mapUIData;
 		map<HWND, CString>						m_mapCtrlTag;
 

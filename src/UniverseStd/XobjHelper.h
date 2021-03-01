@@ -80,7 +80,6 @@ public:
 
 	CXobj*					m_pXobj;
 	CXobj*					m_pParentXobj;
-	CTangramHtmlTreeWnd*	m_pXHtmlTree;
 
 	map<CString, HWND>		m_mapDockCtrl;
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;

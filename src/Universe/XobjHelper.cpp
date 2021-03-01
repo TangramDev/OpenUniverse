@@ -249,8 +249,6 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 		CComBSTR bstrCaption(L"");
 		m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
 		CString strInfo = _T("\n\n  ");
-		strInfo = strInfo + g_pCosmos->m_strDesignerTip1;
-		strInfo = strInfo + _T("\n  ") + g_pCosmos->m_strDesignerTip2;
 		strText.Format(strInfo, m_pXobj->m_strName, CString(OLE2T(bstrCaption)));
 		pDC->SetTextColor(RGB(255, 255, 255));
 		pDC->SetBkMode(TRANSPARENT);

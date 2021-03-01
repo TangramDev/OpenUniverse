@@ -670,65 +670,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	case WM_COSMOSMSG:
 		switch (lParam)
 		{
-		case 20200611:
-		{
-			if (wParam)
-			{
-				HWND _hWnd = (HWND)wParam;
-				if (::IsWindow(hWnd))
-				{
-					HWND hWndChild = ::GetWindow(_hWnd, GW_CHILD);
-					TCHAR	szBuffer[MAX_PATH];
-					::GetClassName(_hWnd, szBuffer, MAX_PATH);
-					CString strClassName = CString(szBuffer);
-					if (strClassName == _T("GenericPane"))
-					{
-						HWND hDlg = ::GetDlgItem(_hWnd, 0);
-						HWND m_hClassWnd = ::GetDlgItem(hDlg, 0x00100);
-						HWND m_hClassDetailWnd = ::GetDlgItem(hDlg, 0x00200);
-						::GetClassName(m_hClassWnd, szBuffer, MAX_PATH);
-						strClassName = CString(szBuffer);
-						if (strClassName == _T("LiteTreeView32"))
-						{
-							CGenericPaneWnd* pWnd = new CGenericPaneWnd();
-							pWnd->m_strToolType = strClassName;
-							pWnd->SubclassWindow(_hWnd);
-							::PostMessage(_hWnd, WM_COSMOSMSG, 0, 20200516);
-						}
-					}
-				}
-			}
-		}
-		break;
-		case 20200519:
-		{
-			if (wParam)
-			{
-				HWND _hWnd = (HWND)wParam;
-				if (::IsWindow(hWnd))
-				{
-					HWND hWndChild = ::GetWindow(_hWnd, GW_CHILD);
-					TCHAR	szBuffer[MAX_PATH];
-					::GetClassName(_hWnd, szBuffer, MAX_PATH);
-					CString strClassName = CString(szBuffer);
-					if (strClassName == _T("GenericPane"))
-					{
-						::GetClassName(hWndChild, szBuffer, MAX_PATH);
-						strClassName = CString(szBuffer);
-						if (strClassName == _T("TBToolboxPane"))
-						{
-							CTBToolboxPaneWnd* pPaneWnd = new CTBToolboxPaneWnd();
-							pPaneWnd->SubclassWindow(hWndChild);
-							CGenericPaneWnd* pWnd = new CGenericPaneWnd();
-							pWnd->m_strToolType = strClassName;
-							pWnd->SubclassWindow(_hWnd);
-							::PostMessage(_hWnd, WM_COSMOSMSG, 0, 20200516);
-						}
-					}
-				}
-			}
-		}
-		break;
 		case 1222:
 		{
 			if (wParam == 1963)
@@ -1221,11 +1162,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				pCosmosFrameWndInfo->m_hClient = hWnd;
 			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
 			{
-				auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
-				if (it != g_pCosmos->m_mapValInfo.end())
-					g_pCosmos->m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-				//g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
+				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
 		}
@@ -1297,27 +1234,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			if (hPWnd && (pCreateWnd->lpcs->style & WS_CHILD))
 				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
-		}
-		if (strPClassName == _T("GenericPane"))
-		{
-			HWND hWnd = (HWND)wParam;
-			if (::IsWindow(hWnd))
-			{
-				if (::SendMessageW(hPWnd, WM_HUBBLE_DATA, 0, 0) == 0)
-				{
-					CGenericPaneWnd* pWnd = new CGenericPaneWnd();
-					pWnd->SubclassWindow(hPWnd);
-					pWnd->m_hChild = hWnd;
-					::GetWindowText(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-					pWnd->m_strToolType = CString(g_pCosmos->m_szBuffer);
-					if (pWnd->m_strToolType == _T("WebRuntimeToolBox"))
-					{
-						g_pCosmos->m_mapValInfo[_T("WebRuntimeToolBox")] = CComVariant((__int64)hWnd);
-					}
-				}
-			}
-
-			break;
 		}
 		if (strClassName == _T("SWT_Window0"))
 		{

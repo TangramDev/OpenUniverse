@@ -218,15 +218,10 @@ CCosmos::CCosmos()
 	m_strConfigFile = _T("");
 	m_strConfigDataFile = _T("");
 	m_strAppCommonDocPath = _T("");
-	m_strXobjSelectedText = _T("");
-	m_strDesignerTip1 = _T("");
-	m_strDesignerTip2 = _T("");
-	m_strDesignerXml = _T("");
 	m_strNewDocXml = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
 	m_strCurrentEclipsePagePath = _T("");
-	m_strDesignerToolBarCaption = _T("Tangram Designer");
 	m_strOfficeAppIDs = _T("word.application,excel.application,outlook.application,onenote.application,infopath.application,project.application,visio.application,access.application,powerpoint.application,lync.ucofficeintegration.1,");
 	m_nTangramObj = 0;
 	launchMode = -1;
@@ -394,39 +389,7 @@ void CCosmos::Init()
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadFile(m_strConfigFile))
 		{
-			CTangramXmlParse* _pXmlParse = m_Parse.GetChild(_T("designerscript"));
-			if (_pXmlParse)
-			{
-				CTangramXmlParse* pXmlParse = _pXmlParse->GetChild(_T("selected"));
-				if (pXmlParse)
-					m_strXobjSelectedText = pXmlParse->text();
-				pXmlParse = _pXmlParse->GetChild(_T("infotip1"));
-				if (pXmlParse)
-					m_strDesignerTip1 = pXmlParse->text();
-				pXmlParse = _pXmlParse->GetChild(_T("infotip2"));
-				if (pXmlParse)
-					m_strDesignerTip2 = pXmlParse->text();
-				pXmlParse = _pXmlParse->GetChild(_T("designertoolcaption"));
-				if (pXmlParse)
-				{
-					m_strDesignerToolBarCaption = pXmlParse->text();
-				}
-				pXmlParse = _pXmlParse->GetChild(_T("designertoolxml"));
-				if (pXmlParse && pXmlParse->GetChild(TGM_CLUSTER))
-				{
-					CString strCaption = m_strDesignerToolBarCaption = pXmlParse->attr(_T("caption"), _T("Tangram Designer"));
-					strCaption.Trim();
-					if (strCaption != _T(""))
-						m_strDesignerToolBarCaption = strCaption;
-					m_strDesignerXml = pXmlParse->xml();
-				}
-			}
-			_pXmlParse = m_Parse.GetChild(_T("ntp"));
-			if (_pXmlParse)
-			{
-				g_pCosmos->m_strNtpXml = _pXmlParse->xml();
-			}
-			_pXmlParse = m_Parse.GetChild(_T("defaultworkbench"));
+			CTangramXmlParse* _pXmlParse = m_Parse.GetChild(_T("defaultworkbench"));
 			if (_pXmlParse)
 			{
 				g_pCosmos->m_strDefaultWorkBenchXml = _pXmlParse->xml();
@@ -476,39 +439,10 @@ void CCosmos::Init()
 			}
 		}
 	}
-	if (m_strXobjSelectedText == _T(""))
-	{
-		m_strXobjSelectedText = m_strXobjSelectedText + _T("  ----Please Select an Object Type From Designer ToolBox for this Tangram View----") +
-			_T("\n  you can use Tangram XML to various applications such as ") +
-			_T("\n  .net framework application, MFC Application, Eclipcse RCP, ") +
-			_T("\n  Office Application etc.") +
-			_T("\n  ") +
-			_T("\n  ") +
-			_T("\n  Creating a \"nucleus\" in this place,if you want to show application") +
-			_T("\n  Component come from original application, ") +
-			_T("\n  Creating an Object Type other than \"nucleus\" in this place, if you want to show dynamic") +
-			_T("\n  Component come from some Components... ");
-	}
-	if (m_strDesignerTip1 == _T(""))
-		m_strDesignerTip1 = _T("  ----Click me to Design This Tangram Object----\n  ");
-	if (m_strDesignerTip2 == _T(""))
-	{
-		m_strDesignerTip2 = m_strDesignerTip2 +
-			_T("  ----Tangram Object Information----") +
-			_T("\n  ") +
-			_T("\n   Object Name:   %s") +
-			_T("\n   Object Caption:%s\n\n");
-	}
 
 	if (m_nAppID != 9 && m_bOfficeApp == false && ::IsWindow(m_hHostWnd) == false)
 	{
-		auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
-		if (it != g_pCosmos->m_mapValInfo.end())
-			m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-		CString strExeName = m_strExeName;
-		strExeName.MakeLower();
-		m_strDesignerToolBarCaption = strExeName + _T(" - ") + m_strDesignerToolBarCaption;
-		m_hHostWnd = ::CreateWindowEx(WS_EX_PALETTEWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+		m_hHostWnd = ::CreateWindowEx(WS_EX_PALETTEWINDOW, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
 		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
 	}
 }
@@ -1132,38 +1066,6 @@ void CCosmos::CosmosInit()
 		else
 			m_bEclipse = false;
 	}
-	else
-	{
-		CString strPath = m_strProgramFilePath + _T("\\tangram\\") + m_strExeName + _T("\\tangraminit.xml");
-		if (::PathFileExists(strPath)) {
-			CTangramXmlParse m_Parse;
-			if (m_Parse.LoadFile(strPath)) {
-				int nCount = m_Parse.GetCount();
-				for (int i = 0; i < nCount; i++) {
-					CTangramXmlParse* pParse = m_Parse.GetChild(i);
-					CString strID = pParse->attr(TGM_GRID_TYPE, _T(""));
-					CString strXml = pParse->GetChild(0)->xml();
-					if (strID == _T("xmlRibbon")) {
-						CString strPath = m_strAppCommonDocPath + _T("OfficeRibbon\\") + m_strExeName + _T("\\ribbon.xml");
-						CTangramXmlParse m_Parse2;
-						if (m_Parse2.LoadXml(strXml))
-							m_Parse2.SaveFile(strPath);
-					}
-					if (strID == _T("tangramdesigner"))
-						m_strDesignerXml = strXml;
-					else {
-						strID.MakeLower();
-						if (strID == _T("newtangramdocument")) {
-							m_strNewDocXml = strXml;
-						}
-						else {
-							m_mapValInfo[strID] = CComVariant(strXml);
-						}
-					}
-				}
-			}
-		}
-	}
 }
 
 DWORD CCosmos::ExecCmd(const CString cmd, const BOOL setCurrentDirectory)
@@ -1630,12 +1532,10 @@ CString CCosmos::InitEclipse(_TCHAR* jarFile)
 {
 	if (m_hForegroundIdleHook == NULL)
 		m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
-	//if (m_hCBTHook == NULL)
-	//	m_hCBTHook = SetWindowsHookEx(WH_CBT, CUniverse::CBTProc, NULL, ::GetCurrentThreadId());
 	m_bEnableProcessFormTabKey = true;
 	if (m_hHostWnd == NULL)
 	{
-		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
+		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
 		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, theApp.m_hInstance, NULL);
 	}
 
@@ -2482,7 +2382,7 @@ STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
 {
 	if (::IsWindow(m_hHostWnd) == false)
 	{
-		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
+		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
 		if (::IsWindow(m_hHostWnd))
 			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theApp.m_hInstance, NULL);
 	}
@@ -2537,12 +2437,6 @@ STDMETHODIMP CCosmos::get_AppKeyValue(BSTR bstrKey, VARIANT* pVal)
 			return S_OK;
 		}
 
-		if (strKey == _T("toolboxxml"))
-		{
-			(*pVal).vt = VT_BSTR;
-			pVal->bstrVal = CComBSTR(m_strDesignerXml);
-			return S_OK;
-		}
 		auto it = m_mapValInfo.find(strKey);
 		if (it != m_mapValInfo.end())
 		{

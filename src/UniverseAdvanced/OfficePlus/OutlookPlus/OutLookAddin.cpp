@@ -51,7 +51,6 @@ namespace OfficePlus
 			m_pCosmosInspectorItems = nullptr;
 			m_pOutLookAppObjEvents = nullptr;
 			m_pOutLookAppObjEvents2 = nullptr;
-			m_strDesignerToolBarCaption = _T("OutLook Designer");
 		}
 
 		COutLookAddin::~COutLookAddin()

@@ -120,7 +120,6 @@ namespace OfficePlus
 		{
 			m_pActivePowerPntObject = nullptr;
 			m_pCurrentSavingPresentation = nullptr;
-			m_strDesignerToolBarCaption = _T("PowerPoint Designer");
 		}
 
 		void CPowerPntAddin::AddDocXml(IDispatch* pDocdisp, BSTR bstrXml, BSTR bstrKey)

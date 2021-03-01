@@ -153,7 +153,6 @@ using namespace concurrency;
 
 class CBKWnd;
 class CXobj;
-class CWPFView;
 class CXobjHelper;
 class CCosmos;
 class CGalaxy;
@@ -161,13 +160,9 @@ class CHelperWnd;
 class CEclipseWnd;
 class CUniverse;
 class CXobjEvents;
-class CTangramTabCtrl;
-class CCosmosAppCtrl;
-class CTangramListView;
 class CCosmosEvent;
 class CGalaxyCluster;
 class CXobjCollection;
-class CTangramHtmlTreeWnd;
 
 typedef vector<CXobj*> CXobjVector;
 

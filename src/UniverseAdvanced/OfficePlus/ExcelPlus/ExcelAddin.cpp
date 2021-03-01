@@ -49,7 +49,6 @@ namespace OfficePlus
 			int nVer = _wtoi(strVer);
 			if (nVer < 15)
 				m_bOldVer = true;
-			m_strDesignerToolBarCaption = _T("Excel WorkBook Designer");
 		}
 
 		CExcelAddin::~CExcelAddin()

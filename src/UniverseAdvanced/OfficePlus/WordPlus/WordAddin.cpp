@@ -41,7 +41,6 @@ namespace OfficePlus
 			m_pActiveWordObject = nullptr;
 			m_pWordAppObjEvents = nullptr;
 			m_pWordAppObjEvents2 = nullptr;
-			m_strDesignerToolBarCaption = _T("Word Document Designer");
 		}
 
 		CWordAddin::~CWordAddin()

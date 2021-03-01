@@ -24,11 +24,9 @@
 #pragma once
 //#include <jni.h>
 #include "../Cosmos.h"
-#include "../CosmosCtrl.h"
 #include "tangrambase.h"
 
 class CEclipseWnd;
-class CEclipseCtrl;
 
 class ATL_NO_VTABLE CEclipseExtender :
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -68,7 +66,6 @@ public:
 	CXobj*							m_pCurXobj;
 	CXobj*							m_pHostXobj;
 	CGalaxy*						m_pGalaxy;
-	map<HWND, CEclipseCtrl*>		m_mapCtrl;
 	IUniverseAppProxy*				m_pAppProxy;
 	void Show(CString strID);
 	BEGIN_COM_MAP(CEclipseWnd)
@@ -117,90 +114,3 @@ public:
 	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
 	void CreatePage(BOOL bSaveToConfigFile);
 };
-
-// CEclipseCtrl
-class ATL_NO_VTABLE CEclipseCtrl :
-	public CCosmosCtrlBase,
-	public IOleObjectImpl<CEclipseCtrl>,
-	public IPersistStorageImpl<CEclipseCtrl>,
-	public IPersistStreamInitImpl<CEclipseCtrl>,
-	public IConnectionPointContainerImpl<CEclipseCtrl>,
-	public CComCoClass<CEclipseCtrl, &CLSID_CosmosCtrl>,
-	public IConnectionPointImpl<CEclipseCtrl, &DIID__ICosmosObjEvents>,
-	public IDispatchImpl<IEclipseCtrl, &IID_IEclipseCtrl, &LIBID_Universe, 1, 0>
-{
-public:
-	HWND						m_hEclipseViewWnd;
-	VARIANT						m_varTag;
-	CXobj*						m_pCurXobj;
-	map<CString, CString>		m_mapCosmosInfo;
-	map<CString, HWND>			m_mapCosmosHandle;
-	map<CString, CGalaxy*>		m_mapGalaxy;
-
-	CEclipseWnd*				m_pEclipseWnd;
-	CGalaxyClusterProxy*		m_pGalaxyClusterProxy;
-
-	CEclipseCtrl();
-
-	BEGIN_COM_MAP(CEclipseCtrl)
-		COM_INTERFACE_ENTRY(IEclipseCtrl)
-		COM_INTERFACE_ENTRY(IDispatch)
-		COM_INTERFACE_ENTRY(IOleObject)
-		COM_INTERFACE_ENTRY(IViewObject)
-		COM_INTERFACE_ENTRY(IViewObject2)
-		COM_INTERFACE_ENTRY(IOleInPlaceObject)
-		COM_INTERFACE_ENTRY(IPersistStorage)
-		COM_INTERFACE_ENTRY(IPersistStreamInit)
-		COM_INTERFACE_ENTRY(IConnectionPointContainer)
-	END_COM_MAP()
-
-	BEGIN_CONNECTION_POINT_MAP(CEclipseCtrl)
-		CONNECTION_POINT_ENTRY(DIID__ICosmosObjEvents)
-	END_CONNECTION_POINT_MAP()
-
-	HRESULT FinalConstruct();
-	void OnFinalMessage(HWND hWnd);
-
-public:
-	BEGIN_MSG_MAP(CEclipseCtrl)
-		MESSAGE_HANDLER(WM_CREATE, OnCreate)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
-	END_MSG_MAP()
-
-	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
-	HRESULT Fire_NodeCreated(IXobj * pXobjCreated);
-	HRESULT Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
-	HRESULT Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd);
-	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj * pRetRootNode);
-	HRESULT Fire_Destroy();
-	HRESULT Fire_NodeMouseActivate(IXobj * pActiveNode);
-	HRESULT Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
-	HRESULT Fire_TabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
-	HRESULT Fire_Event(IXobj* sender, IDispatch* EventArg);
-	HRESULT Fire_ControlNotify(IXobj * sender, LONG NotifyCode, LONG CtrlID, LONGLONG CtrlHandle, BSTR CtrlClassName);
-	HRESULT Fire_CosmosEvent(ICosmosEventObj* pEventObj);
-
-	// IEclipseCtrl
-	STDMETHOD(get_tag)(VARIANT* pVal);
-	STDMETHOD(put_tag)(VARIANT newVal);
-	STDMETHOD(get_HWND)(LONGLONG* pVal);
-	STDMETHOD(put_Handle)(BSTR bstrHandleName, LONGLONG newVal);
-	STDMETHOD(get_Cosmos)(ICosmos** pVal);
-	STDMETHOD(get_EclipseViewHandle)(LONGLONG* pVal);
-	STDMETHOD(get_GalaxyCluster)(IGalaxyCluster** pVal);
-	STDMETHOD(get_WorkBenchWindow)(IWorkBenchWindow** pVal);
-	STDMETHOD(get_TopGalaxy)(IGalaxy** pVal);
-	STDMETHOD(get_TopGalaxyCluster)(IGalaxyCluster** pVal);
-	STDMETHOD(get_ActiveTopXobj)(IXobj** pVal);
-	STDMETHOD(get_AppKeyValue)(BSTR bstrKey, VARIANT* pVal);
-	STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
-
-	STDMETHOD(Observe)(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
-	STDMETHOD(ObserveEx)(BSTR bstrGalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
-	STDMETHOD(InitCtrl)(BSTR bstrXml);
-
-private:
-	LRESULT OnCreate(UINT, WPARAM, LPARAM, BOOL& );
-	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL& );
-};
-

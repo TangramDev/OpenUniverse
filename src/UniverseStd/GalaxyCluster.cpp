@@ -26,7 +26,6 @@
 #include "stdafx.h"
 #include "Xobj.h"
 #include "Galaxy.h"
-#include "CosmosCtrl.h"
 #include "UniverseApp.h"
 #include "Cosmos.h"
 
@@ -863,14 +862,6 @@ STDMETHODIMP CGalaxyCluster::ConnectCosmosCtrl(ICosmosCtrl* eventSource)
 {
 	if (g_pCosmos->m_bEclipse)
 	{
-		if (eventSource != nullptr)
-		{
-			CEclipseCtrl* pCtrl = (CEclipseCtrl*)eventSource;
-			HWND hCtrl = pCtrl->m_hWnd;
-			auto it = m_mapNotifyCtrl.find(hCtrl);
-			if (it == m_mapNotifyCtrl.end())
-				m_mapNotifyCtrl[hCtrl] = pCtrl;
-		}
 	}
 	return S_OK;
 }
@@ -903,38 +894,6 @@ HRESULT CGalaxyCluster::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_GalaxyClusterLoaded(sender, url);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnGalaxyClusterLoaded(sender, OLE2T(url));
@@ -967,38 +926,6 @@ HRESULT CGalaxyCluster::Fire_NodeCreated(IXobj * pXobjCreated)
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_NodeCreated(pXobjCreated);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnXobjCreated(pXobjCreated);
@@ -1037,38 +964,6 @@ HRESULT CGalaxyCluster::Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn,
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_AddInCreated(pRootXobj, pAddIn, bstrID, bstrAddInXml);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnAddInCreated(pRootXobj, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
@@ -1099,38 +994,6 @@ HRESULT CGalaxyCluster::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
 			{
 				CComVariant varResult;
 				hr = pConnection->Invoke(4, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_BeforeOpenXml(bstrXml, hWnd);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
 			}
 		}
 	}
@@ -1171,38 +1034,6 @@ HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj 
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_OpenXmlComplete(bstrXml, hWnd, pRetRootNode);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnOpenXmlComplete(OLE2T(bstrXml), (HWND)hWnd, pRetRootNode);
@@ -1231,38 +1062,6 @@ HRESULT CGalaxyCluster::Fire_Destroy()
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_Destroy();
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnDestroy();
@@ -1296,38 +1095,6 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj * pActiveNode)
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			map<HWND, CEclipseCtrl*>::iterator it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_NodeMouseActivate(pActiveNode);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnNodeMouseActivate(pActiveNode);
@@ -1367,38 +1134,6 @@ HRESULT CGalaxyCluster::Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, B
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_ClrControlCreated(Node, Ctrl, CtrlName, CtrlHandle);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnClrControlCreated(Node, Ctrl, OLE2T(CtrlName), (HWND)CtrlHandle);
@@ -1469,38 +1204,6 @@ HRESULT CGalaxyCluster::Fire_TabChange(IXobj* sender, LONG ActivePage, LONG OldP
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse)
-	{
-		int nSize = m_mapNotifyCtrl.size();
-		if (nSize)
-		{
-			auto it = m_mapNotifyCtrl.begin();
-			map<HWND, CEclipseCtrl*> m_mapTemp;
-			for (it = m_mapNotifyCtrl.begin(); it != m_mapNotifyCtrl.end(); it++)
-			{
-				CEclipseCtrl* pCtrl = it->second;
-				if (::IsWindow(it->first))
-				{
-					it->second->Fire_TabChange(sender, ActivePage, OldPage);
-				}
-				else
-				{
-					m_mapTemp[it->first] = it->second;
-				}
-			}
-			nSize = m_mapTemp.size();
-			if (nSize)
-			{
-				for (it = m_mapTemp.begin(); it != m_mapTemp.end(); it++)
-				{
-					auto it2 = m_mapNotifyCtrl.find(it->first);
-					if (it2 != m_mapNotifyCtrl.end())
-						m_mapNotifyCtrl.erase(it2);
-				}
-				m_mapTemp.clear();
-			}
-		}
-	}
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnTabChange(sender, ActivePage, OldPage);

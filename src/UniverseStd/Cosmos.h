@@ -67,7 +67,6 @@
 
 #include "universe.h"
 #include "ObjSafe.h"
-#include "wpfview.h"
 
 #include "chromium\Browser.h"
 
@@ -184,7 +183,6 @@ public:
 	TCHAR									m_szBuffer[MAX_PATH];
 
 	LPCTSTR									m_lpszSplitterClass;
-	CImageList								m_DocTemplateImageList;
 
 	//.NET Version 4: 
 	ICLRRuntimeHost*						m_pClrHost;
@@ -198,9 +196,6 @@ public:
 	CXobj*									m_pActiveXobj;
 	CGalaxy*								m_pGalaxy;
 	CGalaxyCluster*							m_pGalaxyCluster;
-
-	CCosmosAppCtrl*							m_pCosmosAppCtrl;
-	ICosmos*								m_pCosmosVS = nullptr;
 
 	CEclipseWnd*							m_pActiveEclipseWnd;
 

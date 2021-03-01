@@ -70,18 +70,15 @@
 #include <VersionHelpers.h> 
 #include <shellscalingapi.h>
 
-#include "CloudUtilities\DownLoad.h"
 #include "EclipsePlus\EclipseAddin.h"
 
 #include "XobjHelper.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "Galaxy.h"
-#include "WPFView.h"
 #include <io.h>
 #include <stdio.h>
 
-#include "TangramListView.h"
 #include "Psapi.h"
 
 #include "chromium\Browser.h"
@@ -104,30 +101,6 @@ void CHelperWnd::OnFinalMessage(HWND hWnd)
 	}
 
 	delete this;
-}
-
-void CTBToolboxPaneWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl::OnFinalMessage(hWnd);
-	delete this;
-}
-
-LRESULT CTBToolboxPaneWnd::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-	CString strLib = CString(g_pCosmos->m_szBuffer);
-	CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-	CString strFunctionName = _T("CosmosInit");
-	DWORD dwRetCode = 0;
-	CString strData = _T("VSToolBoxSelected");
-	g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-		strLib,
-		strObjName,
-		strFunctionName,
-		strData,
-		&dwRetCode);
-	return lRes;
 }
 
 void CWebHelperWnd::OnFinalMessage(HWND hWnd)
@@ -158,184 +131,6 @@ LRESULT CWebHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	}
 	else
 	{
-	}
-	return lRes;
-}
-
-void CGenericPaneWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl::OnFinalMessage(hWnd);
-	delete this;
-}
-
-LRESULT CGenericPaneWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	switch (lParam)
-	{
-	case 20200516:
-	{
-		//if (g_pCosmos->m_pCosmosVS == nullptr && m_hChild == NULL)
-		//{
-		//	m_hChild = (HWND)wParam;
-		//	::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-		//	CString strLib = CString(g_pCosmos->m_szBuffer);
-		//	CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-		//	CString strFunctionName = _T("CosmosInit");
-		//	DWORD dwRetCode = 0;
-		//	g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-		//		strLib,
-		//		strObjName,
-		//		strFunctionName,
-		//		L"visualstudioneedadmin",
-		//		&dwRetCode);
-		//	return lRes;
-		//}
-		if (g_pCosmos->m_pCosmosVS)
-		{
-			if (m_strToolType == _T("TBToolboxPane"))
-			{
-				HWND hWnd = (HWND)wParam;
-				if (m_hChild == NULL && ::IsWindow(hWnd))
-					m_hChild = hWnd;
-				CComVariant var;
-				g_pCosmos->m_pCosmosVS->get_AppKeyValue(CComBSTR("appdata"), &var);
-				CString strXml = OLE2T(var.bstrVal);
-				if (strXml != _T(""))
-				{
-					CTangramXmlParse m_Parse;
-					if (m_Parse.LoadXml(strXml))
-					{
-						CTangramXmlParse* pVSParse = m_Parse.GetChild(_T("editor"));
-						if (pVSParse)
-						{
-							::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-							CString strLib = CString(g_pCosmos->m_szBuffer);
-							CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-							CString strFunctionName = _T("CosmosInit");
-							DWORD dwRetCode = 0;
-							CString strData = _T("initeditordata:") + pVSParse->xml();
-							g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-								strLib,
-								strObjName,
-								strFunctionName,
-								strData,
-								&dwRetCode);
-						}
-						pVSParse = m_Parse.GetChild(_T("vstoolbox"));
-						if (pVSParse)
-						{
-							IGalaxyCluster* pManager = nullptr;
-							g_pCosmos->CreateGalaxyCluster((LONGLONG)m_hWnd, &pManager);
-							if (pManager)
-							{
-								IGalaxy* pIGalaxy = nullptr;
-								pManager->CreateGalaxy(CComVariant((LONGLONG)m_hWnd), CComVariant((__int64)m_hChild), CComBSTR("default"), &pIGalaxy);
-								if (pIGalaxy)
-								{
-									IXobj* pXobj = nullptr;
-									pIGalaxy->Observe(CComBSTR("default"), CComBSTR(pVSParse->xml()), &pXobj);
-									CTangramXmlParse* pVSData = m_Parse.GetChild(_T("vstoolwindow"));
-									if (pVSData)
-									{
-										::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-										CString strLib = CString(g_pCosmos->m_szBuffer);
-										CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-										CString strFunctionName = _T("CosmosInit");
-										DWORD dwRetCode = 0;
-										g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-											strLib,
-											strObjName,
-											strFunctionName,
-											pVSData->xml(),
-											&dwRetCode);
-									}
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					auto t = create_task([this]()
-						{
-							SleepEx(1000, true);
-							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200516);
-							return 1;
-						});
-				}
-			}
-		}
-	}
-	break;
-	case 20200531:
-		m_hChild = (HWND)wParam;
-		break;
-	}
-	return lRes;
-}
-
-LRESULT CGenericPaneWnd::OnCosmosData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	if (wParam == 0 && lParam == 0)
-		return (LRESULT)this;
-	return lRes;
-}
-
-LRESULT CGenericPaneWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	if (wParam) {
-		if (::IsWindow(m_hChild))
-		{
-			if (m_pGalaxy == nullptr)
-			{
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)m_hChild, &pGalaxy);
-				if (pGalaxy)
-				{
-					m_pGalaxy = (CGalaxy*)pGalaxy;
-				}
-			}
-			if (m_pGalaxy)
-			{
-				RECT rc;
-				::GetClientRect(m_hChild, &rc);
-				if (rc.right * rc.bottom == 0)
-					m_pGalaxy->HostPosChanged();
-			}
-			::PostMessage(m_hChild, WM_COSMOSMSG, 0, 20180115);
-		}
-	}
-	else
-	{
-	}
-	return lRes;
-}
-
-LRESULT CGenericPaneWnd::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	if (m_hChild == NULL)
-	{
-		m_hChild = ::GetWindow(m_hWnd, GW_CHILD);
-	}
-	if (m_pGalaxy == nullptr)
-	{
-		IGalaxy* pGalaxy = nullptr;
-		g_pCosmos->GetGalaxy((__int64)m_hChild, &pGalaxy);
-		if (pGalaxy)
-		{
-			m_pGalaxy = (CGalaxy*)pGalaxy;
-		}
-	}
-	if (m_pGalaxy)
-	{
-		RECT rc;
-		::GetClientRect(m_hChild, &rc);
-		if (rc.right * rc.bottom == 0)
-			m_pGalaxy->HostPosChanged();
 	}
 	return lRes;
 }
@@ -588,65 +383,7 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	case WM_COSMOSMSG:
 		switch (lParam)
 		{
-		case 20200611:
-		{
-			if (wParam)
-			{
-				HWND _hWnd = (HWND)wParam;
-				if (::IsWindow(hWnd))
-				{
-					HWND hWndChild = ::GetWindow(_hWnd, GW_CHILD);
-					TCHAR	szBuffer[MAX_PATH];
-					::GetClassName(_hWnd, szBuffer, MAX_PATH);
-					CString strClassName = CString(szBuffer);
-					if (strClassName == _T("GenericPane"))
-					{
-						HWND hDlg = ::GetDlgItem(_hWnd, 0);
-						HWND m_hClassWnd = ::GetDlgItem(hDlg, 0x00100);
-						HWND m_hClassDetailWnd = ::GetDlgItem(hDlg, 0x00200);
-						::GetClassName(m_hClassWnd, szBuffer, MAX_PATH);
-						strClassName = CString(szBuffer);
-						if (strClassName == _T("LiteTreeView32"))
-						{
-							CGenericPaneWnd* pWnd = new CGenericPaneWnd();
-							pWnd->m_strToolType = strClassName;
-							pWnd->SubclassWindow(_hWnd);
-							::PostMessage(_hWnd, WM_COSMOSMSG, 0, 20200516);
-						}
-					}
-				}
-			}
-		}
-		break;
-		case 20200519:
-		{
-			if (wParam)
-			{
-				HWND _hWnd = (HWND)wParam;
-				if (::IsWindow(hWnd))
-				{
-					HWND hWndChild = ::GetWindow(_hWnd, GW_CHILD);
-					TCHAR	szBuffer[MAX_PATH];
-					::GetClassName(_hWnd, szBuffer, MAX_PATH);
-					CString strClassName = CString(szBuffer);
-					if (strClassName == _T("GenericPane"))
-					{
-						::GetClassName(hWndChild, szBuffer, MAX_PATH);
-						strClassName = CString(szBuffer);
-						if (strClassName == _T("TBToolboxPane"))
-						{
-							CTBToolboxPaneWnd* pPaneWnd = new CTBToolboxPaneWnd();
-							pPaneWnd->SubclassWindow(hWndChild);
-							CGenericPaneWnd* pWnd = new CGenericPaneWnd();
-							pWnd->m_strToolType = strClassName;
-							pWnd->SubclassWindow(_hWnd);
-							::PostMessage(_hWnd, WM_COSMOSMSG, 0, 20200516);
-						}
-					}
-				}
-			}
-		}
-		break;
+			break;
 		case TANGRAM_CHROME_APP_INIT:
 		{
 			if (g_pCosmos->m_nAppType == APP_BROWSER_ECLIPSE || g_pCosmos->m_bEclipse)
@@ -785,11 +522,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 					for (auto it2 : it.second->m_mapGalaxy)
 					{
 						it2.second->HostPosChanged();
-						for (auto it3 : it2.second->m_mapWPFView)
-						{
-							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						}
 					}
 				}
 			}
@@ -822,76 +554,8 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	break;
 	case WM_COSMOSMSG:
 	{
-		if (wParam)
+		switch (lParam)
 		{
-			switch (lParam)
-			{
-			case 19631963:
-			{
-				DocTemplateInfo* pDocTemplateInfo = (DocTemplateInfo*)wParam;
-				CString strPath = g_pCosmos->m_strAppCommonDocPath + _T("Tangramdoctemplate.xml");
-				if (::PathFileExists(strPath))
-				{
-					CTangramXmlParse m_Parse;
-					m_Parse.LoadFile(strPath);
-					CString _strKey = pDocTemplateInfo->strProxyID + pDocTemplateInfo->strExt;
-					if (m_Parse.GetChild(_strKey) == nullptr)
-					{
-						CTangramXmlParse* pParse = m_Parse.AddNode(_strKey);
-						CString strVal = _T("");
-						strVal += pDocTemplateInfo->strFileTypeID;
-						strVal += _T("|");
-						strVal += pDocTemplateInfo->strfilterName;
-						strVal += _T("|");
-						strVal += _T("*") + pDocTemplateInfo->strExt;
-						strVal += _T("|");
-						strVal += pDocTemplateInfo->strProxyName;
-						strVal += _T("|");
-						if (pDocTemplateInfo->nResID != -1)
-						{
-							CString strID = _T("");
-							strID.Format(_T("%d"), pDocTemplateInfo->nResID);
-							pParse->put_attr(_T("ResID"), strID);
-						}
-						pParse->put_text(strVal);
-						m_Parse.SaveFile(strPath);
-						if (pDocTemplateInfo->bDll)
-						{
-							TCHAR	m_szBuffer[MAX_PATH];
-							HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
-							CString strPath = CString(m_szBuffer);
-							strPath += _T("\\TangramCommonDocTemplate\\TangramReg.xml");
-							CTangramXmlParse m_Parse2;
-							if (::PathFileExists(strPath) == FALSE)
-							{
-								m_Parse2.LoadXml(_T("<CosmosDocReg />"));
-								m_Parse2.SaveFile(strPath);
-							}
-							else
-							{
-								m_Parse2.LoadFile(strPath);
-							}
-							if (m_Parse2.GetChild(pDocTemplateInfo->strProxyID) == false)
-							{
-								m_Parse2.AddNode(pDocTemplateInfo->strProxyID);
-								m_Parse2.SaveFile(strPath);
-							}
-						}
-					}
-				}
-				//delete pDocTemplateInfo;
-			}
-			break;
-			default:
-			{
-			}
-			break;
-			}
-			return 0;
-		}
-	}
-	switch (lParam)
-	{
 		case 10001000:
 		{
 			if (g_pCosmos->m_nAppID != 9 && g_pCosmos->m_bEclipse == false)
@@ -902,6 +566,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		break;
 		default:
 			break;
+		}
 	}
 	return 1;
 	break;
@@ -1059,11 +724,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				pCosmosFrameWndInfo->m_hClient = hWnd;
 			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
 			{
-				auto it = g_pCosmos->m_mapValInfo.find(_T("designertoolcaption"));
-				if (it != g_pCosmos->m_mapValInfo.end())
-					g_pCosmos->m_strDesignerToolBarCaption = OLE2T(it->second.bstrVal);
-				//g_pCosmos->m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), g_pCosmos->m_strDesignerToolBarCaption, WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
+				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
 		}
@@ -1131,28 +792,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			if (hPWnd && (pCreateWnd->lpcs->style & WS_CHILD))
 				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
-		}
-
-		if (strPClassName == _T("GenericPane"))
-		{
-			HWND hWnd = (HWND)wParam;
-			if (::IsWindow(hWnd))
-			{
-				if (::SendMessageW(hPWnd, WM_HUBBLE_DATA, 0, 0) == 0)
-				{
-					CGenericPaneWnd* pWnd = new CGenericPaneWnd();
-					pWnd->SubclassWindow(hPWnd);
-					pWnd->m_hChild = hWnd;
-					::GetWindowText(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-					pWnd->m_strToolType = CString(g_pCosmos->m_szBuffer);
-					if (pWnd->m_strToolType == _T("WebRuntimeToolBox"))
-					{
-						g_pCosmos->m_mapValInfo[_T("WebRuntimeToolBox")] = CComVariant((__int64)hWnd);
-					}
-				}
-			}
-
-			break;
 		}
 		if (strClassName == _T("SWT_Window0"))
 		{
@@ -1328,7 +967,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			case WM_KEYDOWN:
 			{
 				CXobjHelper* pWnd = nullptr;
-				CWPFView* pView = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -1343,10 +981,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					//else
 					if (g_pCosmos->m_pActiveXobj->m_nViewType != Grid)
 					{
-						if (g_pCosmos->m_pActiveXobj->m_nViewType == TangramWPFCtrl)
-							pView = (CWPFView*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
-						else
-							pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
+						pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveXobj = nullptr;
@@ -1357,17 +992,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								if (pWnd->m_bBKWnd)
 								{
 									if (pWnd->PreTranslateMessage(lpMsg))
-									{
-										lpMsg->hwnd = NULL;
-										lpMsg->lParam = 0;
-										lpMsg->wParam = 0;
-										lpMsg->message = 0;
-										break;
-									}
-								}
-								else if (pView)
-								{
-									if (pView->PreTranslateMessage(lpMsg))
 									{
 										lpMsg->hwnd = NULL;
 										lpMsg->lParam = 0;
@@ -1400,16 +1024,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					else
 					{
 						HWND hwnd = lpMsg->hwnd;
-						if ((pView && pView->PreTranslateMessage(lpMsg))/*|| IsDialogMessage(lpMsg->hwnd, lpMsg)*/)
-						{
-							::DispatchMessage(lpMsg);
-							TranslateMessage(lpMsg);
-							lpMsg->hwnd = NULL;
-							lpMsg->lParam = 0;
-							lpMsg->wParam = 0;
-							lpMsg->message = 0;
-						}
-						else
 						{
 							if (::GetModuleHandle(_T("chrome.dll")))
 							{
@@ -1507,15 +1121,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						lpMsg->message = 0;
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 					}
-					if (pView)
-					{
-						TranslateMessage(lpMsg);
-						::DispatchMessage(lpMsg);
-						lpMsg->hwnd = NULL;
-						lpMsg->lParam = 0;
-						lpMsg->wParam = 0;
-						lpMsg->message = 0;
-					}
 					if (g_pCosmos->m_pCosmosDelegate)
 					{
 						if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
@@ -1591,8 +1196,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
-							else if (pView)
-								hWnd = pView->m_hWnd;
+
 							if ((g_pCosmos->m_pActiveXobj->m_nViewType == ActiveX || g_pCosmos->m_pActiveXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
 							{
 								if (pWnd)
@@ -1601,16 +1205,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								lpMsg->wParam = 0;
 								break;
 							}
-							if (pView)
-							{
-								TranslateMessage(lpMsg);
-								::DispatchMessage(lpMsg);
-								lpMsg->hwnd = NULL;
-								lpMsg->lParam = 0;
-								lpMsg->wParam = 0;
-								lpMsg->message = 0;
-								break;
-							}
+
 							if (g_pCosmos->m_pActiveHtmlWnd)
 							{
 								HWND hwnd = lpMsg->hwnd;
@@ -1763,9 +1358,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_DOWNLOAD_MSG:
 			{
-				Utilities::CDownLoadObj* pObj = (Utilities::CDownLoadObj*)lpMsg->wParam;
-				if (pObj)
-					delete pObj;
 			}
 			break;
 			case WM_CHROMEDEVTOOLMSG:

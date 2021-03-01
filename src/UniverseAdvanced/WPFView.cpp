@@ -145,9 +145,9 @@ void CWPFView::OnDestroy()
 	auto it = pGalaxy->m_mapWPFView.find(m_hWnd);
 	if (it != pGalaxy->m_mapWPFView.end())
 		pGalaxy->m_mapWPFView.erase(it);
-	it = pGalaxy->m_mapVisibleWPFView.find(m_hWnd);
-	if (it != pGalaxy->m_mapVisibleWPFView.end())
-		pGalaxy->m_mapVisibleWPFView.erase(it);
+	//it = pGalaxy->m_mapVisibleWPFView.find(m_hWnd);
+	//if (it != pGalaxy->m_mapVisibleWPFView.end())
+	//	pGalaxy->m_mapVisibleWPFView.erase(it);
 
 	g_pCosmos->m_pCLRProxy->WindowDestroy(m_hWnd);
 	CView::OnDestroy();
