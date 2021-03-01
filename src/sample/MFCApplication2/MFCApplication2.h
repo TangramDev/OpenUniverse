@@ -24,7 +24,7 @@
 // See MFCApplication2.cpp for the implementation of this class
 //
 
-class CMFCApp : public CCosmosAppEx
+class CMFCApp : public CWorldApp
 {
 public:
 	CMFCApp() noexcept;

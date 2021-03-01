@@ -9,6 +9,6 @@
 
 // add headers that you want to pre-compile here
 #include "framework.h"
-#include "CosmosAppEx.h"
+#include "WorldApp.h"
 
 #endif //PCH_H

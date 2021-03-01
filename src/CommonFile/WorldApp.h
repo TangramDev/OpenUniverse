@@ -226,12 +226,12 @@ namespace CommonUniverse
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 	};
 
-	class CCosmosAppEx :
+	class CWorldApp :
 		public CWinAppEx
 	{
 	public:
-		CCosmosAppEx();
-		virtual ~CCosmosAppEx();
+		CWorldApp();
+		virtual ~CWorldApp();
 
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {};
 	private:

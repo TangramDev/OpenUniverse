@@ -127,7 +127,7 @@
  *
  *******************************************************************************/
 
-#include "CosmosAppEx.h"
+#include "WorldApp.h"
 #include "TangramXmlParse.cpp"
 
 #ifdef _AFXDLL
@@ -144,7 +144,7 @@ _IsBrowserModel FuncIsBrowserModel;
 
 ICosmos* g_pCosmos = nullptr;
 CWinApp* g_pAppBase = nullptr;
-CCosmosAppEx* g_pAppEx = nullptr;
+CWorldApp* g_pAppEx = nullptr;
 
 namespace CommonUniverse
 {
@@ -1108,22 +1108,22 @@ namespace CommonUniverse
 		return strNameBase;
 	}
 
-	CCosmosAppEx::CCosmosAppEx()
+	CWorldApp::CWorldApp()
 	{
 		g_pAppEx = this;
 		g_pAppBase = this;
 	}
 
-	CCosmosAppEx::~CCosmosAppEx()
+	CWorldApp::~CWorldApp()
 	{
 	}
 
-	BOOL CCosmosAppEx::InitApplication()
+	BOOL CWorldApp::InitApplication()
 	{
 		return theDelegate.CosmosInit(_T("")) ? CWinAppEx::InitApplication() : false;
 	}
 
-	HWND CCosmosAppEx::GetActivePopupMenu(HWND hWnd)
+	HWND CWorldApp::GetActivePopupMenu(HWND hWnd)
 	{
 		CMFCPopupMenu* pActivePopupMenu = CMFCPopupMenu::GetSafeActivePopupMenu();
 		if (pActivePopupMenu)
@@ -1135,7 +1135,7 @@ namespace CommonUniverse
 	}
 
 	// Main running routine until application exits
-	int CCosmosAppEx::Run()
+	int CWorldApp::Run()
 	{
 		if (theDelegate.m_bBuiltInBrowser == false)
 		{

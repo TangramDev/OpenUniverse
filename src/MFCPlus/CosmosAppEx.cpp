@@ -127,7 +127,7 @@
  *
  *******************************************************************************/
 
-#include "CosmosAppEx.h"
+#include "WorldApp.h"
 #include "TangramXmlParse.cpp"
 
 #ifdef _AFXDLL
@@ -144,7 +144,7 @@ _IsBrowserModel FuncIsBrowserModel;
 
 CWinApp* g_pAppBase = nullptr;
 ICosmos* g_pCosmos = nullptr;
-CCosmosAppEx* g_pAppEx = nullptr;
+CWorldApp* g_pAppEx = nullptr;
 IUniverseAppProxy* g_pAppProxy = nullptr;
 
 namespace CommonUniverse
@@ -1134,21 +1134,21 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	CCosmosAppEx::CCosmosAppEx()
+	CWorldApp::CWorldApp()
 	{
 		g_pAppBase = g_pAppEx = this;
 	}
 
-	CCosmosAppEx::~CCosmosAppEx()
+	CWorldApp::~CWorldApp()
 	{
 	}
 
-	BOOL CCosmosAppEx::InitApplication()
+	BOOL CWorldApp::InitApplication()
 	{
 		return CosmosInit(_T("")) ? CWinAppEx::InitApplication() : false;
 	}
 
-	HWND CCosmosAppEx::GetActivePopupMenu(HWND hWnd)
+	HWND CWorldApp::GetActivePopupMenu(HWND hWnd)
 	{
 		CMFCPopupMenu* pActivePopupMenu = CMFCPopupMenu::GetSafeActivePopupMenu();
 		if (pActivePopupMenu)
@@ -1159,7 +1159,7 @@ namespace CommonUniverse
 		return nullptr;
 	}
 
-	HWND CCosmosAppEx::Create(HWND hParentWnd, IXobj* pXobj)
+	HWND CWorldApp::Create(HWND hParentWnd, IXobj* pXobj)
 	{
 		CWnd* pParent = CWnd::FromHandlePermanent(hParentWnd);
 		if (pParent == nullptr)
@@ -1265,13 +1265,13 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	void CCosmosAppEx::OnFileNew()
+	void CWorldApp::OnFileNew()
 	{
 		CWinAppEx::OnFileNew();
 	}
 
 	// Main running routine until application exits
-	int CCosmosAppEx::Run()
+	int CWorldApp::Run()
 	{
 		if (m_bBuiltInBrowser == false)
 		{
@@ -1280,7 +1280,7 @@ namespace CommonUniverse
 		return CWinThread::Run();
 	}
 
-	bool CCosmosAppEx::InitApp()
+	bool CWorldApp::InitApp()
 	{
 		if (m_bBuiltInBrowser)
 			return false;
@@ -1373,7 +1373,7 @@ namespace CommonUniverse
 				break;
 			case TANGRAM_CONST_NEWDOC://for new doc
 			{
-				((CCosmosAppEx*)AfxGetApp())->OnFileNew();
+				((CWorldApp*)AfxGetApp())->OnFileNew();
 			};
 			break;
 			case 19921989:

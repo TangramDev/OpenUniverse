@@ -239,13 +239,13 @@ namespace CommonUniverse
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 	};
 
-	class CCosmosAppEx :
+	class CWorldApp :
 		public CWinAppEx,
 		public CCosmosDelegate
 	{
 	public:
-		CCosmosAppEx();
-		virtual ~CCosmosAppEx();
+		CWorldApp();
+		virtual ~CWorldApp();
 
 		afx_msg void OnFileNew();
 
