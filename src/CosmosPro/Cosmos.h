@@ -1154,11 +1154,6 @@ namespace Universe
 			String^ get();
 		}
 
-		static property String^ AppData
-		{
-			String^ get();
-		}
-
 		static property Xobj^ CreatingXobj
 		{
 			Xobj^ get();
@@ -1170,7 +1165,6 @@ namespace Universe
 		}
 
 		static Browser^ CreateBrowser(IntPtr ParentHandle, String^ strUrls);
-		static Browser^ CreateBrowserRemote(IntPtr ParentHandle, String^ strUrls);
 		//static property Dictionary<String^, Type^>^ FormTypeDictionary
 		//{
 		//	Dictionary<String^, Type^>^ get()

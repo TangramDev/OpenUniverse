@@ -22,7 +22,7 @@
 BEGIN_MESSAGE_MAP(CMFCApp, CWinAppEx)
 	ON_COMMAND(ID_APP_ABOUT, &CMFCApp::OnAppAbout)
 	// Standard file based document commands
-	ON_COMMAND(ID_FILE_NEW, &CWorldApp::OnFileNew)
+	ON_COMMAND(ID_FILE_NEW, &CWebRuntime::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CWinAppEx::OnFileOpen)
 	// Standard print setup command
 	ON_COMMAND(ID_FILE_PRINT_SETUP, &CWinAppEx::OnFilePrintSetup)
@@ -61,8 +61,8 @@ CMFCApp theApp;
 
 BOOL CMFCApp::InitInstance()
 {
-	theDelegate.m_mapDOMObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication1View);
-	if (!theDelegate.InitApp())
+	m_mapDOMObj[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication1View);
+	if (!InitApp())
 		return false;
 
 	// InitCommonControlsEx() is required on Windows XP if an application

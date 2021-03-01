@@ -106,30 +106,6 @@ void CHelperWnd::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-void CTBToolboxPaneWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl::OnFinalMessage(hWnd);
-	delete this;
-}
-
-LRESULT CTBToolboxPaneWnd::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-	CString strLib = CString(g_pCosmos->m_szBuffer);
-	CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-	CString strFunctionName = _T("CosmosInit");
-	DWORD dwRetCode = 0;
-	CString strData = _T("VSToolBoxSelected");
-	g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-		strLib,
-		strObjName,
-		strFunctionName,
-		strData,
-		&dwRetCode);
-	return lRes;
-}
-
 void CWebHelperWnd::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
@@ -158,184 +134,6 @@ LRESULT CWebHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	}
 	else
 	{
-	}
-	return lRes;
-}
-
-void CGenericPaneWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl::OnFinalMessage(hWnd);
-	delete this;
-}
-
-LRESULT CGenericPaneWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	switch (lParam)
-	{
-	case 20200516:
-	{
-		//if (g_pCosmos->m_pCosmosVS == nullptr && m_hChild == NULL)
-		//{
-		//	m_hChild = (HWND)wParam;
-		//	::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-		//	CString strLib = CString(g_pCosmos->m_szBuffer);
-		//	CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-		//	CString strFunctionName = _T("CosmosInit");
-		//	DWORD dwRetCode = 0;
-		//	g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-		//		strLib,
-		//		strObjName,
-		//		strFunctionName,
-		//		L"visualstudioneedadmin",
-		//		&dwRetCode);
-		//	return lRes;
-		//}
-		if (g_pCosmos->m_pCosmosVS)
-		{
-			if (m_strToolType == _T("TBToolboxPane"))
-			{
-				HWND hWnd = (HWND)wParam;
-				if (m_hChild == NULL && ::IsWindow(hWnd))
-					m_hChild = hWnd;
-				CComVariant var;
-				g_pCosmos->m_pCosmosVS->get_AppKeyValue(CComBSTR("appdata"), &var);
-				CString strXml = OLE2T(var.bstrVal);
-				if (strXml != _T(""))
-				{
-					CTangramXmlParse m_Parse;
-					if (m_Parse.LoadXml(strXml))
-					{
-						CTangramXmlParse* pVSParse = m_Parse.GetChild(_T("editor"));
-						if (pVSParse)
-						{
-							::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-							CString strLib = CString(g_pCosmos->m_szBuffer);
-							CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-							CString strFunctionName = _T("CosmosInit");
-							DWORD dwRetCode = 0;
-							CString strData = _T("initeditordata:") + pVSParse->xml();
-							g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-								strLib,
-								strObjName,
-								strFunctionName,
-								strData,
-								&dwRetCode);
-						}
-						pVSParse = m_Parse.GetChild(_T("vstoolbox"));
-						if (pVSParse)
-						{
-							IGalaxyCluster* pManager = nullptr;
-							g_pCosmos->CreateGalaxyCluster((LONGLONG)m_hWnd, &pManager);
-							if (pManager)
-							{
-								IGalaxy* pIGalaxy = nullptr;
-								pManager->CreateGalaxy(CComVariant((LONGLONG)m_hWnd), CComVariant((__int64)m_hChild), CComBSTR("default"), &pIGalaxy);
-								if (pIGalaxy)
-								{
-									IXobj* pXobj = nullptr;
-									pIGalaxy->Observe(CComBSTR("default"), CComBSTR(pVSParse->xml()), &pXobj);
-									CTangramXmlParse* pVSData = m_Parse.GetChild(_T("vstoolwindow"));
-									if (pVSData)
-									{
-										::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-										CString strLib = CString(g_pCosmos->m_szBuffer);
-										CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-										CString strFunctionName = _T("CosmosInit");
-										DWORD dwRetCode = 0;
-										g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-											strLib,
-											strObjName,
-											strFunctionName,
-											pVSData->xml(),
-											&dwRetCode);
-									}
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					auto t = create_task([this]()
-						{
-							SleepEx(1000, true);
-							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200516);
-							return 1;
-						});
-				}
-			}
-		}
-	}
-	break;
-	case 20200531:
-		m_hChild = (HWND)wParam;
-		break;
-	}
-	return lRes;
-}
-
-LRESULT CGenericPaneWnd::OnCosmosData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	if (wParam == 0 && lParam == 0)
-		return (LRESULT)this;
-	return lRes;
-}
-
-LRESULT CGenericPaneWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	if (wParam) {
-		if (::IsWindow(m_hChild))
-		{
-			if (m_pGalaxy == nullptr)
-			{
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)m_hChild, &pGalaxy);
-				if (pGalaxy)
-				{
-					m_pGalaxy = (CGalaxy*)pGalaxy;
-				}
-			}
-			if (m_pGalaxy)
-			{
-				RECT rc;
-				::GetClientRect(m_hChild, &rc);
-				if (rc.right * rc.bottom == 0)
-					m_pGalaxy->HostPosChanged();
-			}
-			::PostMessage(m_hChild, WM_COSMOSMSG, 0, 20180115);
-		}
-	}
-	else
-	{
-	}
-	return lRes;
-}
-
-LRESULT CGenericPaneWnd::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	if (m_hChild == NULL)
-	{
-		m_hChild = ::GetWindow(m_hWnd, GW_CHILD);
-	}
-	if (m_pGalaxy == nullptr)
-	{
-		IGalaxy* pGalaxy = nullptr;
-		g_pCosmos->GetGalaxy((__int64)m_hChild, &pGalaxy);
-		if (pGalaxy)
-		{
-			m_pGalaxy = (CGalaxy*)pGalaxy;
-		}
-	}
-	if (m_pGalaxy)
-	{
-		RECT rc;
-		::GetClientRect(m_hChild, &rc);
-		if (rc.right * rc.bottom == 0)
-			m_pGalaxy->HostPosChanged();
 	}
 	return lRes;
 }
@@ -1772,8 +1570,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 
 						if (pCosmosFrameWndInfo && pCosmosFrameWndInfo->m_nFrameType != 2)
 						{
-							CString strKey = g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID;
-							g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID = _T("");
+							CString strKey = g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID;
+							g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID = _T("");
 							if (strKey == _T(""))
 								strKey = _T("default");
 							if (pFrameWnd)

@@ -705,7 +705,7 @@ namespace CommonUniverse {
 		CString					m_strProviderID = _T("");
 		CString					m_strContainer = _T("");
 		map<CString, CString>	m_mapDOMObjStyle;
-		map<CString, void*>		m_mapDOMObjInfo;
+		map<CString, void*>		m_mapDOMObj;
 
 		virtual bool CosmosInit(CString strID)
 		{

@@ -444,6 +444,7 @@ namespace CommonUniverse {
 
 			m_nFrameIndex = 0;
 			m_strAppKey = _T("");
+			m_strCreatingDOCID = _T("");
 		}
 
 		virtual ~IUniverseAppProxy() {
@@ -456,14 +457,15 @@ namespace CommonUniverse {
 		LPCTSTR								m_strProxyID;
 		LPCTSTR								m_strCreatingFrameTitle;
 		LPCTSTR								m_strClosingFrameID;
-		void* m_pvoid;
-		CCosmosDocProxy* m_pCurDocProxy;
-		CCosmosImpl* m_pCosmosImpl;
+		void*								m_pvoid;
+		CCosmosDocProxy*					m_pCurDocProxy;
+		CCosmosImpl*						m_pCosmosImpl;
 
 		BOOL								m_bCreatingNewFrame;
 		int									m_nFrameIndex;
 		HWND								m_hClosingFrame;
 		CString								m_strAppKey;
+		CString								m_strCreatingDOCID = _T("");
 		map<CString, void*>					m_mapMainFrame;
 		map<void*, LONG>					m_mapCosmosDocTemplateID;
 
@@ -492,6 +494,8 @@ namespace CommonUniverse {
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual void MouseMoveProxy(HWND hWnd) {}
 		virtual HWND InitCosmosApp() { return NULL; }
+		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
 	};
 
 	class ICosmosCLRImpl
@@ -701,7 +705,7 @@ namespace CommonUniverse {
 		CString					m_strProviderID = _T("");
 		CString					m_strContainer = _T("");
 		map<CString, CString>	m_mapDOMObjStyle;
-		map<CString, void*>		m_mapDOMObjInfo;
+		map<CString, void*>		m_mapDOMObj;
 
 		virtual bool CosmosInit(CString strID)
 		{
@@ -751,7 +755,6 @@ namespace CommonUniverse {
 			systemClass = nullptr;
 			exitMethod = nullptr;
 			loadMethod = nullptr;
-			m_strCreatingDOCID = _T("");
 		}
 
 		virtual ~ICosmosDelegate() { 
@@ -763,7 +766,6 @@ namespace CommonUniverse {
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
-		CString				m_strCreatingDOCID = _T("");
 
 		virtual bool DoIdleWork() { return false; }
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount) { return false; }
@@ -771,12 +773,10 @@ namespace CommonUniverse {
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg) { return false; }
 		virtual bool EclipseAppInit() { return false; }
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
-		virtual CString GetNTPXml() { return _T(""); }
 		virtual void ProcessMsg(MSG* msg) {}
 		virtual void ForegroundIdleProc() {}
-		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
-		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
 		virtual HICON GetAppIcon(int nIndex) { return NULL; }
+		virtual CString GetNTPXml() { return _T(""); }
 	};
 
 	class CCosmosMainDllLoader {

@@ -651,31 +651,6 @@ namespace Universe
         return nullptr;
     }
 
-    String^ Cosmos::AppData::get()
-    {
-        if (theApp.m_pCosmosVS == nullptr)
-        {
-            CComVariant var;
-            theApp.m_pCosmos->get_AppKeyValue(CComBSTR("vstangramhandle"), &var);
-            __int64 nHandle = var.llVal;
-            if (nHandle)
-            {
-                theApp.m_pCosmosVS = (ICosmos*)nHandle;
-            }
-        }
-        if (String::IsNullOrEmpty(m_strAppData) && theApp.m_pCosmosVS)
-        {
-            CComVariant var;
-            theApp.m_pCosmosVS->get_AppKeyValue(CComBSTR("appdata"), &var);
-            CString strXml = OLE2T(var.bstrVal);
-            if (strXml != _T(""))
-            {
-                m_strAppData = BSTR2STRING(strXml);
-            }
-        }
-        return m_strAppData;
-    }
-
     Xobj^ Cosmos::CreatingXobj::get()
     {
         Object^ pRetObject = nullptr;
@@ -1821,33 +1796,6 @@ namespace Universe
 
             HWND hWnd = theApp.m_pCosmosImpl->m_pBrowserFactory->CreateBrowser(hPWnd, strUrls);
             IBrowser* pBrowser = (IBrowser*)::SendMessage(hWnd, WM_COSMOSMSG, 20190527, 0);
-            auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
-            if (it != theAppProxy.m_mapWebBrowser.end())
-                return it->second;
-            else
-                return gcnew Browser(pBrowser);
-        }
-        return nullptr;
-    }
-
-    Browser^ Cosmos::CreateBrowserRemote(IntPtr ParentHandle, String^ strUrls)
-    {
-        Universe::Cosmos::GetCosmos();
-        HWND hPWnd = (HWND)ParentHandle.ToPointer();
-        if (theApp.m_pCosmosVS == nullptr)
-        {
-            CComVariant var;
-            theApp.m_pCosmos->get_AppKeyValue(CComBSTR("vstangramhandle"), &var);
-            __int64 nHandle = var.llVal;
-            if (nHandle)
-            {
-                theApp.m_pCosmosVS = (ICosmos*)nHandle;
-            }
-        }
-        if (theApp.m_pCosmosVS)
-        {
-            CComPtr< IBrowser> pBrowser;
-            theApp.m_pCosmosVS->CreateBrowser((__int64)ParentHandle.ToPointer(), STRING2BSTR(strUrls), &pBrowser);
             auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
             if (it != theAppProxy.m_mapWebBrowser.end())
                 return it->second;

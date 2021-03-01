@@ -72,8 +72,8 @@ CMFCApp theApp;
 
 BOOL CMFCApp::InitInstance()
 {
-	theDelegate.m_mapDOMObjInfo[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication2View);
-	if (!theDelegate.InitApp())
+	m_mapDOMObj[_T("main_panel")] = RUNTIME_CLASS(CMFCApplication2View);
+	if (!InitApp())
 		return false;
 
 	// InitCommonControlsEx() is required on Windows XP if an application

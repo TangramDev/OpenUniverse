@@ -202,8 +202,6 @@ public:
 	CGalaxyCluster*							m_pGalaxyCluster;
 
 	CCosmosAppCtrl*							m_pCosmosAppCtrl;
-	ICosmos*								m_pCosmosVS = nullptr;
-
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
@@ -211,7 +209,7 @@ public:
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;
-	map<CString, CRuntimeClass*>			m_TabWndClassInfoDictionary;
+	map<CString, CRuntimeClass*>			m_mapClassInfo;
 	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;
 	map<int, ICosmos*>						m_mapRemoteTangramApp;

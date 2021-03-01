@@ -180,14 +180,14 @@ namespace CommonUniverse
 		virtual void PostNcDestroy();
 	};
 
-	class CCosmosDelegate :
+	class CWebRuntimeProxy :
 		public ICosmosDelegate,
 		public IUniverseAppProxy,
 		public ICosmosWindowProvider
 	{
 	public:
-		CCosmosDelegate();
-		virtual ~CCosmosDelegate();
+		CWebRuntimeProxy();
+		virtual ~CWebRuntimeProxy();
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
 
@@ -239,13 +239,13 @@ namespace CommonUniverse
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
 	};
 
-	class CWorldApp :
+	class CWebRuntime :
 		public CWinAppEx,
-		public CCosmosDelegate
+		public CWebRuntimeProxy
 	{
 	public:
-		CWorldApp();
-		virtual ~CWorldApp();
+		CWebRuntime();
+		virtual ~CWebRuntime();
 
 		afx_msg void OnFileNew();
 
@@ -257,15 +257,15 @@ namespace CommonUniverse
 		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 	};
 
-	class CTangramMDIFrameWndEx :
+	class CWebMDIFrameWnd :
 		public CMDIFrameWndEx,
 		public CGalaxyClusterProxy
 	{
 	public:
-		CTangramMDIFrameWndEx();
-		virtual ~CTangramMDIFrameWndEx();
+		CWebMDIFrameWnd();
+		virtual ~CWebMDIFrameWnd();
 
-		DECLARE_DYNCREATE(CTangramMDIFrameWndEx)
+		DECLARE_DYNCREATE(CWebMDIFrameWnd)
 
 		virtual BOOL OnShowPopupMenu(CMFCPopupMenu* /*pMenuPopup*/);
 		virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);

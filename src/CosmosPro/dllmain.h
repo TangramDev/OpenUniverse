@@ -44,8 +44,6 @@ public:
 	DWORD									m_dwThreadID;
 	HWND									m_hHostWnd;
 	ICosmos*								m_pCosmos;
-	ICosmos*								m_pCosmosVS = nullptr;
-	//IVSExtender*							m_pVSExtender;
 
 	CString									m_strAppPath;
 

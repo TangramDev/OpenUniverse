@@ -116,49 +116,6 @@ public:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 };
 
-class CTBToolboxPaneWnd :
-	public CWindowImpl<CTBToolboxPaneWnd, CWindow>
-{
-public:
-	CTBToolboxPaneWnd(void)
-	{
-	};
-
-	~CTBToolboxPaneWnd(void) {};
-
-	BEGIN_MSG_MAP(CTBToolboxPaneWnd)
-		MESSAGE_HANDLER(WM_LBUTTONDOWN, OnLButtonDown)
-	END_MSG_MAP()
-	void OnFinalMessage(HWND hWnd);
-	LRESULT OnLButtonDown(UINT, WPARAM, LPARAM, BOOL&);
-};
-
-class CGenericPaneWnd :
-	public CWindowImpl<CGenericPaneWnd, CWindow>
-{
-public:
-	CGenericPaneWnd(void)
-	{
-		m_hChild = NULL;
-	};
-
-	~CGenericPaneWnd(void) {};
-	HWND m_hChild;
-	CGalaxy* m_pGalaxy = nullptr;
-	CString m_strToolType = _T("");
-	BEGIN_MSG_MAP(CGenericPaneWnd)
-		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
-		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnCosmosData)
-		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanging)
-	END_MSG_MAP()
-	void OnFinalMessage(HWND hWnd);
-	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnCosmosData(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
-};
-
 class CUniverse :
 	public CWinApp,
 	public CComObjectRootBase,

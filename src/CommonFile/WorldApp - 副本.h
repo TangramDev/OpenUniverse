@@ -181,14 +181,22 @@ namespace CommonUniverse
 	};
 
 	class CWebRuntimeProxy :
-		public ICosmosDelegate
+		public ICosmosDelegate,
+		public IUniverseAppProxy,
+		public ICosmosWindowProvider
 	{
 	public:
 		CWebRuntimeProxy();
 		virtual ~CWebRuntimeProxy();
+		bool m_bBuiltInBrowser = false;
+		bool m_bCrashReporting = false;
 
 		map<CView*, CDocument*> m_mapViewDoc;
 
+		BOOL IsBrowserModel(bool bCrashReporting);
+		bool ProcessAppType(bool bCrashReporting);
+		CString GetDocTemplateID(CDocument* pDoc);
+		virtual bool InitApp();
 		//ICosmosDelegate:
 		virtual void ExitJVM();
 		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
@@ -200,27 +208,9 @@ namespace CommonUniverse
 		virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
 		virtual bool EclipseAppInit();
+		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 		virtual HICON GetAppIcon(int nIndex);
-	};
-
-	class CWebRuntime :
-		public CWinAppEx,
-		public IUniverseAppProxy,
-		public ICosmosWindowProvider {
-	public:
-		CWebRuntime();
-		virtual ~CWebRuntime();
-
-		bool m_bBuiltInBrowser = false;
-		bool m_bCrashReporting = false;
-		BOOL IsBrowserModel(bool bCrashReporting);
-		bool ProcessAppType(bool bCrashReporting);
-		CString GetDocTemplateID(CDocument* pDoc);
-		virtual bool InitApp();
-	private:
-		virtual int Run();
-		virtual BOOL InitApplication();
-		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
@@ -228,14 +218,26 @@ namespace CommonUniverse
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode);
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewFrame);
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager);
-		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
-		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);
 		virtual CString GetNames();
 		virtual CString GetTags(CString strName);
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
+	};
+
+	class CWebRuntime :
+		public CWinAppEx
+	{
+	public:
+		CWebRuntime();
+		virtual ~CWebRuntime();
+
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {};
+	private:
+		virtual int Run();
+		virtual BOOL InitApplication();
+		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 	};
 
 	class CWebMDIFrameWnd :

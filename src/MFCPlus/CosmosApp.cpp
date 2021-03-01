@@ -186,13 +186,13 @@ namespace CommonUniverse
 		END_MSG_MAP()
 	};
 
-	CCosmosDelegate::CCosmosDelegate()
+	CWebRuntimeProxy::CWebRuntimeProxy()
 	{
 		m_strProviderID = _T("");
 		g_pAppProxy = this;
 	}
 
-	CCosmosDelegate::~CCosmosDelegate()
+	CWebRuntimeProxy::~CWebRuntimeProxy()
 	{
 		if (m_pCosmosImpl)
 		{
@@ -201,7 +201,7 @@ namespace CommonUniverse
 		}
 	}
 
-	bool CCosmosDelegate::OnAppIdle(BOOL& bIdle, LONG lCount)
+	bool CWebRuntimeProxy::OnAppIdle(BOOL& bIdle, LONG lCount)
 	{
 		_AFX_THREAD_STATE* pState = AfxGetThreadState();
 		while (bIdle &&
@@ -212,7 +212,7 @@ namespace CommonUniverse
 		return true;
 	}
 
-	void CCosmosDelegate::ForegroundIdleProc()
+	void CWebRuntimeProxy::ForegroundIdleProc()
 	{
 		// send WM_IDLEUPDATECMDUI to the main window
 		CWnd* pMainWnd = AfxGetApp()->m_pMainWnd;
@@ -225,7 +225,7 @@ namespace CommonUniverse
 		}
 	}
 
-	bool CCosmosDelegate::OnUniversePreTranslateMessage(MSG* pMsg)
+	bool CWebRuntimeProxy::OnUniversePreTranslateMessage(MSG* pMsg)
 	{
 		if (pMsg->message == WM_CHAR || pMsg->hwnd == nullptr)
 			return TRUE;
@@ -248,12 +248,12 @@ namespace CommonUniverse
 		return pApp->PreTranslateMessage(pMsg);
 	}
 	
-	HICON CCosmosDelegate::GetAppIcon(int nIndex)
+	HICON CWebRuntimeProxy::GetAppIcon(int nIndex)
 	{
 		return NULL;
 	}
 
-	HWND CCosmosDelegate::QueryWndInfo(QueryType nType, HWND hWnd)
+	HWND CWebRuntimeProxy::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
 		switch (nType)
@@ -409,7 +409,7 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	bool CCosmosDelegate::IsAppIdleMessage()
+	bool CWebRuntimeProxy::IsAppIdleMessage()
 	{
 		_AFX_THREAD_STATE* pState = AfxGetThreadState();
 		if (AfxGetApp()->IsIdleMessage(&(pState->m_msgCur))) {
@@ -418,7 +418,7 @@ namespace CommonUniverse
 		return false;
 	}
 
-	void CCosmosDelegate::ProcessMsg(MSG* msg)
+	void CWebRuntimeProxy::ProcessMsg(MSG* msg)
 	{
 		if (msg->message != WM_KICKIDLE) {
 
@@ -459,12 +459,12 @@ namespace CommonUniverse
 		}
 	}
 
-	CString CCosmosDelegate::GetNTPXml()
+	CString CWebRuntimeProxy::GetNTPXml()
 	{
 		return _T("");
 	}
 
-	bool CCosmosDelegate::CosmosInit(CString strID)
+	bool CWebRuntimeProxy::CosmosInit(CString strID)
 	{
 		if (!afxContextIsDLL)
 		{
@@ -570,7 +570,7 @@ namespace CommonUniverse
 		return true;
 	}
 
-	bool CCosmosDelegate::ProcessAppType(bool bCrashReporting)
+	bool CWebRuntimeProxy::ProcessAppType(bool bCrashReporting)
 	{
 		if (m_pCosmosImpl)
 		{
@@ -620,14 +620,14 @@ namespace CommonUniverse
 		return true;
 	}
 
-	bool CCosmosDelegate::DoIdleWork()
+	bool CWebRuntimeProxy::DoIdleWork()
 	{
 		if (m_pCosmosImpl->m_hMainWnd && ::IsWindow(m_pCosmosImpl->m_hMainWnd) == false)
 			m_pCosmosImpl->m_hMainWnd = NULL;
 		return false;
 	}
 
-	BOOL CCosmosDelegate::IsBrowserModel(bool bCrashReporting)
+	BOOL CWebRuntimeProxy::IsBrowserModel(bool bCrashReporting)
 	{
 		HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
 		if (hModule == nullptr)
@@ -643,12 +643,12 @@ namespace CommonUniverse
 		return false;
 	};
 
-	bool CCosmosDelegate::EclipseAppInit()
+	bool CWebRuntimeProxy::EclipseAppInit()
 	{
 		return false;
 	}
 
-	void CCosmosDelegate::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
+	void CWebRuntimeProxy::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (strType.CompareNoCase(_T("COSMOS_CREATE_DOC")) == 0)
 		{
@@ -671,20 +671,20 @@ namespace CommonUniverse
 		}
 	}
 
-	void CCosmosDelegate::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
+	void CWebRuntimeProxy::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
 	{
 
 	}
 
-	void CCosmosDelegate::OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode)
+	void CWebRuntimeProxy::OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode)
 	{
 	}
 
-	void CCosmosDelegate::OnCosmosEvent(ICosmosEventObj* NotifyObj)
+	void CWebRuntimeProxy::OnCosmosEvent(ICosmosEventObj* NotifyObj)
 	{
 	}
 
-	CXobjProxy* CCosmosDelegate::OnXobjInit(IXobj* pNewNode)
+	CXobjProxy* CWebRuntimeProxy::OnXobjInit(IXobj* pNewNode)
 	{
 		CComBSTR bstrName("");
 		pNewNode->get_Name(&bstrName);
@@ -693,7 +693,7 @@ namespace CommonUniverse
 		return nullptr;
 	}
 
-	CGalaxyProxy* CCosmosDelegate::OnGalaxyCreated(IGalaxy* pNewFrame)
+	CGalaxyProxy* CWebRuntimeProxy::OnGalaxyCreated(IGalaxy* pNewFrame)
 	{
 		__int64 h = 0;
 		pNewFrame->get_HWND(&h);
@@ -702,7 +702,7 @@ namespace CommonUniverse
 		return nullptr;
 	}
 
-	CGalaxyClusterProxy* CCosmosDelegate::OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxyCluster)
+	CGalaxyClusterProxy* CWebRuntimeProxy::OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxyCluster)
 	{
 		CGalaxyClusterProxy* pHubbleGalaxyClusterProxy = nullptr;
 		__int64 h = 0;
@@ -728,12 +728,12 @@ namespace CommonUniverse
 	}
 
 	//ICosmosWindowProvider:
-	CString CCosmosDelegate::GetNames()
+	CString CWebRuntimeProxy::GetNames()
 	{
-		if (m_mapDOMObjInfo.size())
+		if (m_mapDOMObj.size())
 		{
 			CString strNames = _T("");
-			for (auto it = m_mapDOMObjInfo.begin(); it != m_mapDOMObjInfo.end(); it++)
+			for (auto it = m_mapDOMObj.begin(); it != m_mapDOMObj.end(); it++)
 			{
 				strNames += it->first;
 				strNames += _T(",");
@@ -743,7 +743,7 @@ namespace CommonUniverse
 		return _T("");
 	}
 
-	CString CCosmosDelegate::GetTags(CString strName)
+	CString CWebRuntimeProxy::GetTags(CString strName)
 	{
 		strName.Trim().MakeLower();
 		if (strName != _T(""))
@@ -807,10 +807,10 @@ namespace CommonUniverse
 
 	CString CComponentApp::GetNames()
 	{
-		if (m_mapDOMObjInfo.size())
+		if (m_mapDOMObj.size())
 		{
 			CString strNames = _T("");
-			for (auto it = m_mapDOMObjInfo.begin(); it != m_mapDOMObjInfo.end(); it++)
+			for (auto it = m_mapDOMObj.begin(); it != m_mapDOMObj.end(); it++)
 			{
 				strNames += it->first;
 				strNames += _T(",");
@@ -865,8 +865,8 @@ namespace CommonUniverse
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
 		{
-			auto it = m_mapDOMObjInfo.find(m_strTag);
-			if (it != m_mapDOMObjInfo.end())
+			auto it = m_mapDOMObj.find(m_strTag);
+			if (it != m_mapDOMObj.end())
 			{
 				CRuntimeClass* pCls = (CRuntimeClass*)it->second;
 				CWnd* pWnd = (CWnd*)pCls->CreateObject();
@@ -959,8 +959,8 @@ namespace CommonUniverse
 		m_strTag.Trim().MakeLower();
 		if (m_strTag != _T(""))
 		{
-			auto it = m_mapDOMObjInfo.find(m_strTag);
-			if (it != m_mapDOMObjInfo.end())
+			auto it = m_mapDOMObj.find(m_strTag);
+			if (it != m_mapDOMObj.end())
 			{
 				CRuntimeClass* pCls = (CRuntimeClass*)it->second;
 				CWnd* pWnd = (CWnd*)pCls->CreateObject();

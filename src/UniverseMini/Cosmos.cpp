@@ -116,8 +116,8 @@ CCosmos::CCosmos()
 	m_nOfficeDocsSheet = 0;
 	m_nTangramNodeCommonData = 0;
 #endif
-	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
-	m_TabWndClassInfoDictionary[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
+	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
+	m_mapClassInfo[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
 }
 
 void CCosmos::Init()

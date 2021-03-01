@@ -18,7 +18,7 @@
 #include "OutputWnd.h"
 #include "PropertiesWnd.h"
 
-class CMainFrame : public CTangramMDIFrameWndEx
+class CMainFrame : public CWebMDIFrameWnd
 {
 	DECLARE_DYNAMIC(CMainFrame)
 public:

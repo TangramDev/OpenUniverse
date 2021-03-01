@@ -202,7 +202,6 @@ public:
 	CGalaxyCluster*							m_pGalaxyCluster;
 
 	CCosmosAppCtrl*							m_pCosmosAppCtrl;
-	ICosmos*								m_pCosmosVS = nullptr;
 
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
@@ -211,14 +210,14 @@ public:
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;
-	map<CString, CRuntimeClass*>			m_TabWndClassInfoDictionary;
+	map<CString, CRuntimeClass*>			m_mapClassInfo;
 	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;
 	map<int, ICosmos*>						m_mapRemoteTangramApp;
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
-	map<HWND, CMDTWnd*>					m_mapMDTWindow;
+	map<HWND, CMDTWnd*>						m_mapMDTWindow;
 	map<CString, CString>					m_mapDocTemplate;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	BEGIN_COM_MAP(CCosmos)

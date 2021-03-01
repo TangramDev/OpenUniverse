@@ -38,7 +38,7 @@ CTangramApp theApp;
 
 BOOL CTangramApp::InitInstance()
 {
-	m_mapDOMObjInfo[_T("webview")] = RUNTIME_CLASS(CWebView);
-	m_mapDOMObjInfo[_T("cosmosformview")] = RUNTIME_CLASS(CCosmosFormView);
+	m_mapDOMObj[_T("webview")] = RUNTIME_CLASS(CWebView);
+	m_mapDOMObj[_T("cosmosformview")] = RUNTIME_CLASS(CCosmosFormView);
 	return __super::InitInstance();
 }

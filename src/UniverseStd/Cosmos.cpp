@@ -225,8 +225,8 @@ CCosmos::CCosmos()
 #endif
 	//g_pCosmos = m_pCosmosImplData;
 	m_mapValInfo[_T("currenteclipeworkBenchid")] = CComVariant(_T(""));
-	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
-	m_TabWndClassInfoDictionary[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
+	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
+	m_mapClassInfo[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
 
 	m_mapIPCMsgIndexDic[IPC_NODE_CREARED_ID] = IPC_NODE_CREARED;
 	m_mapIPCMsgIndexDic[IPC_NODE_ONMOUSEACTIVATE_ID] = IPC_NODE_ONMOUSEACTIVATE;
@@ -516,7 +516,7 @@ CCosmos::~CCosmos()
 		}
 		g_pCosmos->m_mapValInfo.clear();
 
-		m_TabWndClassInfoDictionary.clear();
+		m_mapClassInfo.clear();
 	}
 
 	m_mapXobj.clear();

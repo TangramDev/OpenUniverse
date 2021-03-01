@@ -236,11 +236,11 @@ CCosmos::CCosmos()
 #endif
 	//g_pCosmos = m_pCosmosImplData;
 	m_mapValInfo[_T("currenteclipeworkBenchid")] = CComVariant(_T(""));
-	m_TabWndClassInfoDictionary[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
-	m_TabWndClassInfoDictionary[_T("tangramlistview")] = RUNTIME_CLASS(CTangramListView);
-	m_TabWndClassInfoDictionary[_T("wpfctrl")] = RUNTIME_CLASS(CWPFView);
-	m_TabWndClassInfoDictionary[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
-	m_TabWndClassInfoDictionary[_T("tabctrl")] = RUNTIME_CLASS(CTangramTabCtrl);
+	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
+	m_mapClassInfo[_T("tangramlistview")] = RUNTIME_CLASS(CTangramListView);
+	m_mapClassInfo[_T("wpfctrl")] = RUNTIME_CLASS(CWPFView);
+	m_mapClassInfo[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
+	m_mapClassInfo[_T("tabctrl")] = RUNTIME_CLASS(CTangramTabCtrl);
 
 	m_mapIPCMsgIndexDic[IPC_NODE_CREARED_ID] = IPC_NODE_CREARED;
 	m_mapIPCMsgIndexDic[IPC_NODE_ONMOUSEACTIVATE_ID] = IPC_NODE_ONMOUSEACTIVATE;
@@ -530,7 +530,7 @@ CCosmos::~CCosmos()
 		}
 		g_pCosmos->m_mapValInfo.clear();
 
-		m_TabWndClassInfoDictionary.clear();
+		m_mapClassInfo.clear();
 	}
 
 	m_mapXobj.clear();

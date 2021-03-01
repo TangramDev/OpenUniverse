@@ -77,7 +77,7 @@ public:
 	CXobj*								m_pActiveXobj;
 	CGalaxy*							m_pGalaxy;
 
-	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
+	map<CString, CRuntimeClass*>		m_mapClassInfo;
 	map<__int64, CXobjCollection*>		m_mapWndXobjCollection;
 
 	BEGIN_COM_MAP(CCosmos)

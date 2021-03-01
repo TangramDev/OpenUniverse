@@ -198,8 +198,8 @@ void CXobj::InitWndXobj()
 		}
 	}
 
-	auto it = g_pCosmos->m_TabWndClassInfoDictionary.find(m_strID);
-	if (it != g_pCosmos->m_TabWndClassInfoDictionary.end())
+	auto it = g_pCosmos->m_mapClassInfo.find(m_strID);
+	if (it != g_pCosmos->m_mapClassInfo.end())
 		m_pObjClsInfo = it->second;
 	else
 		m_pObjClsInfo = RUNTIME_CLASS(CXobjHelper);

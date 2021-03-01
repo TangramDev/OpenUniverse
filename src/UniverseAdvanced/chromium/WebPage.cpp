@@ -1042,8 +1042,8 @@ namespace Browser {
 		}
 		else
 		{
-			if (g_pCosmos->m_pCosmosDelegate)
-				g_pCosmos->m_pCosmosDelegate->OnIPCMsg((CWebPageImpl*)this, strId, strParam1, strParam2, strParam3, strParam4, strParam5); // TODO: Missing parameters
+			if (g_pCosmos->m_pUniverseAppProxy)
+				g_pCosmos->m_pUniverseAppProxy->OnIPCMsg((CWebPageImpl*)this, strId, strParam1, strParam2, strParam3, strParam4, strParam5); // TODO: Missing parameters
 			HWND hPPWnd = ::GetParent(::GetParent(m_hWnd));
 			if (m_pRemoteCosmos)
 			{
@@ -1153,7 +1153,7 @@ namespace Browser {
 		}
 		else
 		{
-			g_pCosmos->m_pCosmosDelegate->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
+			g_pCosmos->m_pUniverseAppProxy->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
 		}
 	}
 

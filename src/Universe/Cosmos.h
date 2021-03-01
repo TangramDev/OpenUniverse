@@ -193,7 +193,7 @@ public:
 
 	map<CString, long>					m_mapIPCMsgIndexDic;
 
-	map<CString, CRuntimeClass*>		m_TabWndClassInfoDictionary;
+	map<CString, CRuntimeClass*>		m_mapClassInfo;
 	map<__int64, CXobjCollection*>		m_mapWndXobjCollection;
 	map<CXobj*, CString>				m_mapXobjForHtml;
 	map<CString, HWND>					m_mapSingleWndApp;

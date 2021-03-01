@@ -151,14 +151,14 @@ namespace CommonUniverse
 	class CCosmosImpl;
 	class IUniverseAppProxy;
 
-	class CCosmosDelegate :
+	class CWebRuntimeProxy :
 		public ICosmosDelegate,
 		public IUniverseAppProxy,
 		public ICosmosWindowProvider
 	{
 	public:
-		CCosmosDelegate();
-		virtual ~CCosmosDelegate();
+		CWebRuntimeProxy();
+		virtual ~CWebRuntimeProxy();
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
 		BOOL IsBrowserModel(bool bCrashReporting);
@@ -209,7 +209,7 @@ namespace CommonUniverse
 
 	class CCosmosApp :
 		public CWinApp,
-		public CCosmosDelegate
+		public CWebRuntimeProxy
 	{
 	public:
 		CCosmosApp();

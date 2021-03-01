@@ -1430,8 +1430,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							{
 								if (pCosmosFrameWndInfo->bControlBarProessed == false)
 								{
-									CString strKey = g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID;
-									g_pCosmos->m_pCosmosDelegate->m_strCreatingDOCID = _T("");
+									CString strKey = g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID;
+									g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID = _T("");
 									if (strKey == _T(""))
 										strKey = _T("default");
 									if (pFrameWnd)

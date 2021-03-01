@@ -55,12 +55,12 @@ void CMFCApplication3Doc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		ar << theDelegate.GetDocTemplateID(this);
+		ar << theApp.GetDocTemplateID(this);
 		// TODO: add storing code here
 	}
 	else
 	{
-		ar >> theDelegate.m_strCreatingDOCID;
+		ar >> theApp.m_strCreatingDOCID;
 		// TODO: add loading code here
 	}
 }
