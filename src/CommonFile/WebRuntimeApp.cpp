@@ -127,30 +127,20 @@
  *
  *******************************************************************************/
 
-#include "WorldApp.h"
+#include "WebRuntimeApp.h"
 #include "TangramXmlParse.cpp"
 
-#ifdef _AFXDLL
-extern CFrameWnd* g_pTopLevelFrame = nullptr;
-#endif
-
-typedef ICosmos* (__stdcall* GetCosmos)();
-typedef CCosmosImpl* (__stdcall* GetCosmosImpl)(ICosmos**);
-
-typedef int(__stdcall* _InitApp)(bool bSupportCrashReporting, void*);
-typedef bool(__stdcall* _IsBrowserModel)(bool bSupportCrashReporting, void*);
-_InitApp FuncInitApp;
-_IsBrowserModel FuncIsBrowserModel;
-
 ICosmos* g_pCosmos = nullptr;
-CWinApp* g_pAppBase = nullptr;
 
 namespace CommonUniverse
 {
-	CWebRuntimeApp* g_pAppEx = nullptr;
+	typedef ICosmos* (__stdcall* GetCosmos)();
+	typedef CCosmosImpl* (__stdcall* GetCosmosImpl)(ICosmos**);
+	typedef bool(__stdcall* _IsBrowserModel)(bool bSupportCrashReporting, void*);
+	_IsBrowserModel FuncIsBrowserModel;
+	CWinApp* g_pAppBase = nullptr;
 	CCosmosImpl* g_pCosmosImpl = nullptr;
 	CCosmosBrowserFactory* g_pBrowserFactory = nullptr;
-	CWebRuntimeProxy theAppProxy;
 	class CTangramHelperWnd : public CWnd
 	{
 	public:
@@ -165,26 +155,156 @@ namespace CommonUniverse
 		END_MSG_MAP()
 	};
 
-	// CTangramTabCtrlWnd
+	class CTangramTabCtrlWnd :
+		public CMFCTabCtrl,
+		public ICosmosWindow
+	{
+		DECLARE_DYNAMIC(CTangramTabCtrlWnd)
+	public:
+		CTangramTabCtrlWnd() {
+			m_nCurSelTab = -1;
+			m_pWndNode = nullptr;
+		}
+		virtual ~CTangramTabCtrlWnd() {
+			ATLTRACE(_T("delete CTangramTabCtrlWnd:%x\n"), this);
+		}
+		virtual BOOL SetActiveTab(int iTab)
+		{
+			int nOldIndex = m_nCurSelTab;
+			m_nCurSelTab = iTab;
+			CWnd* pWnd = GetActiveWnd();
+			if (pWnd)
+			{
+				CRect rc;
+				GetWndArea(rc);
+				::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.Width(), rc.Height(), SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOACTIVATE);
+				Invalidate();
+				::SendMessage(m_hWnd, WM_TABCHANGE, m_nCurSelTab, nOldIndex);
+				if (m_hPWnd == nullptr)
+				{
+					IGalaxy* pGalaxy = nullptr;
+					m_pWndNode->get_Galaxy(&pGalaxy);
+					if (pGalaxy)
+					{
+						__int64 nHandle = 0;
+						pGalaxy->get_HWND(&nHandle);
+						HWND hWnd = (HWND)nHandle;
+						m_hPWnd = ::GetParent(hWnd);
+					}
+				}
+				if (m_hPWnd)
+					::PostMessage(m_hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
+			}
+			BOOL bRet = CMFCTabCtrl::SetActiveTab(iTab);
+			return bRet;
+		}
+
+		int m_nCurSelTab;
+	public:
+		IXobj* m_pWndNode;
+		HWND m_hPWnd = nullptr;
+	protected:
+		DECLARE_MESSAGE_MAP()
+		afx_msg LRESULT OnCreatePage(WPARAM wParam, LPARAM lParam)
+		{
+			HWND hPageWnd = (HWND)wParam;
+			CWnd* pWnd = FromHandlePermanent(hPageWnd);
+			if (pWnd == NULL)
+			{
+				pWnd = new CTangramHelperWnd();
+				pWnd->SubclassWindow(hPageWnd);
+			}
+			AddTab(pWnd, (LPCTSTR)lParam, (UINT)GetTabsNum() - 1);
+
+			InvalidateRect(NULL);
+			return 0;
+		}
+		afx_msg LRESULT OnActivePage(WPARAM wParam, LPARAM lParam) {
+			int nOldIndex = m_nCurSelTab;
+			int iIndex = (int)wParam;
+			IXobj* pActiveNode = NULL;
+			if (m_pWndNode)
+			{
+				CComPtr<IXobjCollection> pCol;
+				m_pWndNode->get_ChildNodes(&pCol);
+				CComPtr<IXobj> pNode;
+				pCol->get_Item(iIndex, &pNode);
+				if (pNode)
+				{
+					m_nCurSelTab = iIndex;
+					CString str = _T("");
+					str.Format(_T("%d"), iIndex);
+					m_pWndNode->put_Attribute(CComBSTR("activepage"), str.AllocSysString());
+					pNode->ActiveTabPage(pNode);
+				}
+			}
+			return 0;//CWnd::DefWindowProc(WM_TABCHANGE,wParam,lParam);;
+		}
+		afx_msg LRESULT OnModifyPage(WPARAM wParam, LPARAM lParam)
+		{
+			////AFX_MANAGE_STATE(AfxGetStaticModuleState());
+			//HWND hPageWnd = (HWND)wParam;
+			//int nViewID = (int)lParam;
+			//CWnd* pOldWnd = CWnd::FromHandlePermanent(hPageWnd);
+			//if (pOldWnd || true)
+			//{
+			//	///////////////////////Begin Dont Delete!////////////////////
+			//	CXTPTabManagerItem* pItem = GetItem(nViewID);
+			//	CString strCap = pItem->GetCaption();
+			//	pItem->Remove();
+			//	pItem = InsertItem(nViewID, (LPCTSTR)strCap, hPageWnd, 0);
+			//	///////////////////////End Dont Delete!//////////////////////
+			//}
+			//else
+			//{
+
+			//	CWnd* pWnd = CWnd::FromHandle(GetItem(nViewID)->GetHandle());
+			//	//CWnd* pWnd = GetPage(nViewID);
+			//	pWnd->UnsubclassWindow();
+			//	pWnd->SubclassWindow(hPageWnd);
+			//	GetItem(nViewID)->SetHandle(hPageWnd);
+			//}
+			//SendMessage(WM_TGM_SETACTIVEPAGE);
+			return 0;
+		}
+		afx_msg LRESULT OnTgmSetCaption(WPARAM wParam, LPARAM lParam)
+		{
+			int iIndex = (int)wParam;
+			int iCount = GetTabsNum();
+			CString strCaption = (LPCTSTR)lParam;
+			this->SetTabLabel(iIndex, strCaption);
+			return 0;
+		}
+		afx_msg LRESULT OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
+		{
+			if (lParam == 1965)
+			{
+				if (m_pWndNode)
+				{
+					long nCount = 0;
+					m_pWndNode->get_Cols(&nCount);
+					if (nCount)
+						wParam = wParam % nCount;
+				}
+				::PostMessage(m_hWnd, WM_TGM_SETACTIVEPAGE, wParam, 0);
+			}
+			else
+				SetActiveTab((int)wParam);
+			return 0;
+		}
+		virtual void Save() {
+			CString str = _T("");
+			str.Format(_T("%d"), GetActiveTab());
+			m_pWndNode->put_Attribute(CComBSTR("activepage"), CComBSTR(str));
+		}
+		virtual void PostNcDestroy()
+		{
+			CMFCTabCtrl::PostNcDestroy();
+			delete this;
+		}
+	};
+
 	IMPLEMENT_DYNAMIC(CTangramTabCtrlWnd, CMFCTabCtrl)
-
-		CTangramTabCtrlWnd::CTangramTabCtrlWnd()
-	{
-		m_nCurSelTab = -1;
-		m_pWndNode = nullptr;
-	}
-
-	CTangramTabCtrlWnd::~CTangramTabCtrlWnd()
-	{
-		ATLTRACE(_T("delete CTangramTabCtrlWnd:%x\n"), this);
-	}
-
-	void CTangramTabCtrlWnd::Save()
-	{
-		CString str = _T("");
-		str.Format(_T("%d"), GetActiveTab());
-		m_pWndNode->put_Attribute(CComBSTR("activepage"), CComBSTR(str));
-	}
 
 	BEGIN_MESSAGE_MAP(CTangramTabCtrlWnd, CMFCTabCtrl)
 		ON_MESSAGE(WM_CREATETABPAGE, OnCreatePage)
@@ -194,313 +314,185 @@ namespace CommonUniverse
 		ON_MESSAGE(WM_TGM_SET_CAPTION, OnTgmSetCaption)
 	END_MESSAGE_MAP()
 
-
-	BOOL CTangramTabCtrlWnd::SetActiveTab(int iTab)
+	class CWebRuntimeProxy :
+		public ICosmosDelegate
 	{
-		int nOldIndex = m_nCurSelTab;
-		m_nCurSelTab = iTab;
-		CWnd* pWnd = GetActiveWnd();
-		if (pWnd)
+	public:
+		CWebRuntimeProxy() {};
+		virtual ~CWebRuntimeProxy()
 		{
-			CRect rc;
-			GetWndArea(rc);
-			::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.Width(), rc.Height(), SWP_FRAMECHANGED | SWP_SHOWWINDOW | SWP_NOACTIVATE);
-			Invalidate();
-			::SendMessage(m_hWnd, WM_TABCHANGE, m_nCurSelTab, nOldIndex);
-			if (m_hPWnd == nullptr)
+			if (m_pJVMenv)
 			{
-				IGalaxy* pGalaxy = nullptr;
-				m_pWndNode->get_Galaxy(&pGalaxy);
-				if (pGalaxy)
+				try
 				{
-					__int64 nHandle = 0;
-					pGalaxy->get_HWND(&nHandle);
-					HWND hWnd = (HWND)nHandle;
-					m_hPWnd = ::GetParent(hWnd);
+					OutputDebugString(
+						_T("\n\n***************For MFC Developer***************\n")
+						_T("***************Exit Eclipse JVM from MFC***************\n\n")
+					);
+					m_pJVMenv->CallStaticVoidMethod(systemClass, exitMethod, 0);
+					OutputDebugString(
+						_T("\n\n***************For MFC Developer***************\n")
+						_T("***************end Exit Eclipse JVM from CLR***************\n\n")
+					);
+				}
+				catch (...)
+				{
+					OutputDebugString(
+						_T("\n\n***************For MFC Developer catch***************\n")
+						_T("***************end Exit Eclipse JVM from MFC***************\n\n")
+					);
+				}
+				if (m_pJVMenv->ExceptionOccurred()) {
+					OutputDebugString(
+						_T("\n\n***************For MFC Developer ExceptionOccurred***************\n")
+						_T("***************end Exit Eclipse JVM from MFC***************\n\n")
+					);
+					m_pJVMenv->ExceptionDescribe();
+					m_pJVMenv->ExceptionClear();
 				}
 			}
-			if (m_hPWnd)
-				::PostMessage(m_hPWnd, WM_QUERYAPPPROXY, 0, 19651965);
 		}
-		BOOL bRet = CMFCTabCtrl::SetActiveTab(iTab);
-		return bRet;
-	}
 
-	// CTangramTabCtrlWnd Message Handler
-	LRESULT CTangramTabCtrlWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
-	{
-		if (lParam == 1965)
+		//ICosmosDelegate:
+		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount)
 		{
-			if (m_pWndNode)
-			{
-				long nCount = 0;
-				m_pWndNode->get_Cols(&nCount);
-				if (nCount)
-					wParam = wParam % nCount;
+			_AFX_THREAD_STATE* pState = AfxGetThreadState();
+			while (bIdle &&
+				!::PeekMessage(&(pState->m_msgCur), NULL, NULL, NULL, PM_NOREMOVE)) {
+				if (!AfxGetApp()->OnIdle(lCount++))
+					bIdle = FALSE;  // assume "no idle" state
 			}
-			::PostMessage(m_hWnd, WM_TGM_SETACTIVEPAGE, wParam, 0);
-		}
-		else
-			SetActiveTab((int)wParam);
-		return 0;
-	}
-
-	LRESULT CTangramTabCtrlWnd::OnTgmSetCaption(WPARAM wParam, LPARAM lParam)
-	{
-		int iIndex = (int)wParam;
-		int iCount = GetTabsNum();
-		CString strCaption = (LPCTSTR)lParam;
-		this->SetTabLabel(iIndex, strCaption);
-		return 0;
-	}
-
-	LRESULT CTangramTabCtrlWnd::OnCreatePage(WPARAM wParam, LPARAM lParam)
-	{
-		HWND hPageWnd = (HWND)wParam;
-		CWnd* pWnd = FromHandlePermanent(hPageWnd);
-		if (pWnd == NULL)
-		{
-			pWnd = new CTangramHelperWnd();
-			pWnd->SubclassWindow(hPageWnd);
-		}
-		AddTab(pWnd, (LPCTSTR)lParam, (UINT)GetTabsNum() - 1);
-
-		InvalidateRect(NULL);
-		return 0;
-	}
-
-	LRESULT CTangramTabCtrlWnd::OnActivePage(WPARAM wParam, LPARAM lParam)
-	{
-		int nOldIndex = m_nCurSelTab;
-		int iIndex = (int)wParam;
-		IXobj* pActiveNode = NULL;
-		if (m_pWndNode)
-		{
-			CComPtr<IXobjCollection> pCol;
-			m_pWndNode->get_ChildNodes(&pCol);
-			CComPtr<IXobj> pNode;
-			pCol->get_Item(iIndex, &pNode);
-			if (pNode)
-			{
-				m_nCurSelTab = iIndex;
-				CString str = _T("");
-				str.Format(_T("%d"), iIndex);
-				m_pWndNode->put_Attribute(CComBSTR("activepage"), str.AllocSysString());
-				pNode->ActiveTabPage(pNode);
-			}
-		}
-		return 0;//CWnd::DefWindowProc(WM_TABCHANGE,wParam,lParam);;
-	}
-
-	LRESULT CTangramTabCtrlWnd::OnModifyPage(WPARAM wParam, LPARAM lParam)
-	{
-		////AFX_MANAGE_STATE(AfxGetStaticModuleState());
-		//HWND hPageWnd = (HWND)wParam;
-		//int nViewID = (int)lParam;
-		//CWnd* pOldWnd = CWnd::FromHandlePermanent(hPageWnd);
-		//if (pOldWnd || true)
-		//{
-		//	///////////////////////Begin Dont Delete!////////////////////
-		//	CXTPTabManagerItem* pItem = GetItem(nViewID);
-		//	CString strCap = pItem->GetCaption();
-		//	pItem->Remove();
-		//	pItem = InsertItem(nViewID, (LPCTSTR)strCap, hPageWnd, 0);
-		//	///////////////////////End Dont Delete!//////////////////////
-		//}
-		//else
-		//{
-
-		//	CWnd* pWnd = CWnd::FromHandle(GetItem(nViewID)->GetHandle());
-		//	//CWnd* pWnd = GetPage(nViewID);
-		//	pWnd->UnsubclassWindow();
-		//	pWnd->SubclassWindow(hPageWnd);
-		//	GetItem(nViewID)->SetHandle(hPageWnd);
-		//}
-		//SendMessage(WM_TGM_SETACTIVEPAGE);
-		return 0;
-	}
-
-	void CTangramTabCtrlWnd::PostNcDestroy()
-	{
-		CMFCTabCtrl::PostNcDestroy();
-		delete this;
-	}
-
-	CWebRuntimeProxy::CWebRuntimeProxy()
-	{
-	}
-
-	CWebRuntimeProxy::~CWebRuntimeProxy()
-	{
-		if (m_pJVMenv)
-		{
-			try
-			{
-				OutputDebugString(
-					_T("\n\n***************For MFC Developer***************\n")
-					_T("***************Exit Eclipse JVM from MFC***************\n\n")
-				);
-				m_pJVMenv->CallStaticVoidMethod(systemClass, exitMethod, 0);
-				OutputDebugString(
-					_T("\n\n***************For MFC Developer***************\n")
-					_T("***************end Exit Eclipse JVM from CLR***************\n\n")
-				);
-			}
-			catch (...)
-			{
-				OutputDebugString(
-					_T("\n\n***************For MFC Developer catch***************\n")
-					_T("***************end Exit Eclipse JVM from MFC***************\n\n")
-				);
-			}
-			if (m_pJVMenv->ExceptionOccurred()) {
-				OutputDebugString(
-					_T("\n\n***************For MFC Developer ExceptionOccurred***************\n")
-					_T("***************end Exit Eclipse JVM from MFC***************\n\n")
-				);
-				m_pJVMenv->ExceptionDescribe();
-				m_pJVMenv->ExceptionClear();
-			}
-		}
-	}
-
-	bool CWebRuntimeProxy::OnAppIdle(BOOL& bIdle, LONG lCount)
-	{
-		_AFX_THREAD_STATE* pState = AfxGetThreadState();
-		while (bIdle &&
-			!::PeekMessage(&(pState->m_msgCur), NULL, NULL, NULL, PM_NOREMOVE)) {
-			if (!AfxGetApp()->OnIdle(lCount++))
-				bIdle = FALSE;  // assume "no idle" state
-		}
-		return true;
-	}
-
-	void CWebRuntimeProxy::ForegroundIdleProc()
-	{
-		// send WM_IDLEUPDATECMDUI to the main window
-		CWnd* pMainWnd = AfxGetApp()->m_pMainWnd;
-		if (pMainWnd != NULL && pMainWnd->m_hWnd != NULL &&
-			pMainWnd->IsWindowVisible())
-		{
-			AfxCallWndProc(pMainWnd, pMainWnd->m_hWnd, WM_IDLEUPDATECMDUI, (WPARAM)TRUE, 0);
-			pMainWnd->SendMessageToDescendants(WM_IDLEUPDATECMDUI,
-				(WPARAM)TRUE, 0, TRUE, TRUE);
-		}
-	}
-
-	bool CWebRuntimeProxy::OnUniversePreTranslateMessage(MSG* pMsg)
-	{
-		//if (pMsg->message == WM_CHAR || pMsg->hwnd == nullptr)
-		//	return TRUE;
-		HWND hwnd = pMsg->hwnd;
-		CWinApp* pApp = AfxGetApp();
-		CWnd* pWnd = CWnd::FromHandlePermanent(hwnd);
-		if (pWnd)
-		{
-			if (CMFCPopupMenu::GetActiveMenu() && !::IsWindow(CMFCPopupMenu::GetActiveMenu()->m_hWnd))
-			{
-				return true;
-			}
-			//if (::GetAncestor(hwnd, GA_ROOTOWNER) == ::GetAncestor(pApp->m_pMainWnd->m_hWnd, GA_ROOTOWNER))
-			//	AFXSetTopLevelFrame((CFrameWnd*)pApp->m_pMainWnd);
-			if (pMsg->message == WM_LBUTTONDOWN)
-			{
-				if (pApp->m_pMainWnd)
-					pApp->m_pMainWnd->PreTranslateMessage(pMsg);
-				return true;
-			}
-			//if (pMsg->wParam==VK_TAB&&IsDialogMessage(pMsg->hwnd, pMsg))
-			//{
-			//	::DispatchMessage(pMsg);
-			//	TranslateMessage(pMsg);
-			//}
-			return pWnd->PreTranslateMessage(pMsg);
-		}
-		else
-		{
-			switch (pMsg->message)
-			{
-			case WM_NCLBUTTONDOWN:
-			case WM_NCRBUTTONDOWN:
-			case WM_LBUTTONDOWN:
-			case WM_RBUTTONDOWN:
-			case WM_LBUTTONUP:
-				//case WM_POINTERDOWN:
-				//case WM_POINTERUP:
-			case WM_SETWNDFOCUSE:
-				if (pApp->m_pMainWnd)
-				{
-					pApp->m_pMainWnd->PreTranslateMessage(pMsg);
-					return true;
-				}
-				break;
-			case WM_KEYDOWN:
-			{
-				if (pApp->m_pMainWnd)
-				{
-					if (pMsg->wParam == VK_TAB && IsDialogMessage(pMsg->hwnd, pMsg))
-					{
-						CWnd* pWnd = CWnd::FromHandlePermanent(::GetParent(pMsg->hwnd));
-						if (pWnd)
-							return pWnd->PreTranslateMessage(pMsg);
-					}
-					pApp->m_pMainWnd->PreTranslateMessage(pMsg);
-					return true;
-				}
-			}
-			break;
-			}
-			return TRUE;
-		}
-		return pApp->PreTranslateMessage(pMsg);
-	}
-
-	bool CWebRuntimeProxy::IsAppIdleMessage()
-	{
-		_AFX_THREAD_STATE* pState = AfxGetThreadState();
-		if (AfxGetApp()->IsIdleMessage(&(pState->m_msgCur))) {
 			return true;
 		}
-		return false;
-	}
 
-	void CWebRuntimeProxy::ProcessMsg(MSG* msg)
-	{
-		if (msg->message != WM_KICKIDLE) {
-			::TranslateMessage(msg);
-			::DispatchMessage(msg);
-		}
-	}
-
-	bool CWebRuntimeProxy::DoIdleWork()
-	{
-		if (g_pCosmosImpl && g_pCosmosImpl->m_hMainWnd && ::IsWindow(g_pCosmosImpl->m_hMainWnd) == false)
-			g_pCosmosImpl->m_hMainWnd = NULL;
-		return false;
-	}
-
-	HICON CWebRuntimeProxy::GetAppIcon(int nIndex)
-	{
-		if (g_pAppBase->m_pMainWnd)
+		virtual bool DoIdleWork()
 		{
-			switch (nIndex)
-			{
-			case 0:
-				return reinterpret_cast<HICON>(
-					GetClassLongPtr(g_pAppBase->m_pMainWnd->m_hWnd, GCLP_HICON));
-				break;
-			case 1:
-				return reinterpret_cast<HICON>(
-					GetClassLongPtr(g_pAppBase->m_pMainWnd->m_hWnd, GCLP_HICONSM));
-				break;
+			if (g_pCosmosImpl && g_pCosmosImpl->m_hMainWnd && ::IsWindow(g_pCosmosImpl->m_hMainWnd) == false)
+				g_pCosmosImpl->m_hMainWnd = NULL;
+			return false;
+		}
+
+		virtual bool IsAppIdleMessage()
+		{
+			_AFX_THREAD_STATE* pState = AfxGetThreadState();
+			if (AfxGetApp()->IsIdleMessage(&(pState->m_msgCur))) {
+				return true;
+			}
+			return false;
+		}
+
+		virtual void ProcessMsg(MSG* msg)
+		{
+			if (msg->message != WM_KICKIDLE) {
+				::TranslateMessage(msg);
+				::DispatchMessage(msg);
 			}
 		}
-		return NULL;
-	}
+
+		virtual void ForegroundIdleProc()
+		{
+			// send WM_IDLEUPDATECMDUI to the main window
+			CWnd* pMainWnd = AfxGetApp()->m_pMainWnd;
+			if (pMainWnd != NULL && pMainWnd->m_hWnd != NULL &&
+				pMainWnd->IsWindowVisible())
+			{
+				AfxCallWndProc(pMainWnd, pMainWnd->m_hWnd, WM_IDLEUPDATECMDUI, (WPARAM)TRUE, 0);
+				pMainWnd->SendMessageToDescendants(WM_IDLEUPDATECMDUI,
+					(WPARAM)TRUE, 0, TRUE, TRUE);
+			}
+		}
+
+		virtual bool OnUniversePreTranslateMessage(MSG* pMsg)
+		{
+			//if (pMsg->message == WM_CHAR || pMsg->hwnd == nullptr)
+			//	return TRUE;
+			HWND hwnd = pMsg->hwnd;
+			CWinApp* pApp = AfxGetApp();
+			CWnd* pWnd = CWnd::FromHandlePermanent(hwnd);
+			if (pWnd)
+			{
+				if (CMFCPopupMenu::GetActiveMenu() && !::IsWindow(CMFCPopupMenu::GetActiveMenu()->m_hWnd))
+				{
+					return true;
+				}
+				//if (::GetAncestor(hwnd, GA_ROOTOWNER) == ::GetAncestor(pApp->m_pMainWnd->m_hWnd, GA_ROOTOWNER))
+				//	AFXSetTopLevelFrame((CFrameWnd*)pApp->m_pMainWnd);
+				if (pMsg->message == WM_LBUTTONDOWN)
+				{
+					if (pApp->m_pMainWnd)
+						pApp->m_pMainWnd->PreTranslateMessage(pMsg);
+					return true;
+				}
+				//if (pMsg->wParam==VK_TAB&&IsDialogMessage(pMsg->hwnd, pMsg))
+				//{
+				//	::DispatchMessage(pMsg);
+				//	TranslateMessage(pMsg);
+				//}
+				return pWnd->PreTranslateMessage(pMsg);
+			}
+			else
+			{
+				switch (pMsg->message)
+				{
+				case WM_NCLBUTTONDOWN:
+				case WM_NCRBUTTONDOWN:
+				case WM_LBUTTONDOWN:
+				case WM_RBUTTONDOWN:
+				case WM_LBUTTONUP:
+					//case WM_POINTERDOWN:
+					//case WM_POINTERUP:
+				case WM_SETWNDFOCUSE:
+					if (pApp->m_pMainWnd)
+					{
+						pApp->m_pMainWnd->PreTranslateMessage(pMsg);
+						return true;
+					}
+					break;
+				case WM_KEYDOWN:
+				{
+					if (pApp->m_pMainWnd)
+					{
+						if (pMsg->wParam == VK_TAB && IsDialogMessage(pMsg->hwnd, pMsg))
+						{
+							CWnd* pWnd = CWnd::FromHandlePermanent(::GetParent(pMsg->hwnd));
+							if (pWnd)
+								return pWnd->PreTranslateMessage(pMsg);
+						}
+						pApp->m_pMainWnd->PreTranslateMessage(pMsg);
+						return true;
+					}
+				}
+				break;
+				}
+				return TRUE;
+			}
+			return pApp->PreTranslateMessage(pMsg);
+		}
+
+		virtual HICON GetAppIcon(int nIndex)
+		{
+			if (g_pAppBase->m_pMainWnd)
+			{
+				switch (nIndex)
+				{
+				case 0:
+					return reinterpret_cast<HICON>(
+						GetClassLongPtr(g_pAppBase->m_pMainWnd->m_hWnd, GCLP_HICON));
+					break;
+				case 1:
+					return reinterpret_cast<HICON>(
+						GetClassLongPtr(g_pAppBase->m_pMainWnd->m_hWnd, GCLP_HICONSM));
+					break;
+				}
+			}
+			return NULL;
+		}
+	};
+
+	CWebRuntimeProxy theAppProxy;
 
 	CWebRuntimeApp::CWebRuntimeApp()
 	{
-		g_pAppEx = this;
 		g_pAppBase = this;
 		m_strProviderID = _T("");
 	}
@@ -530,17 +522,11 @@ namespace CommonUniverse
 		return nullptr;
 	}
 
-	// Main running routine until application exits
 	int CWebRuntimeApp::Run()
 	{
-		if (m_bBuiltInBrowser == false)
-		{
-			//AfxPostQuitMessage(0);
-		}
 		return CWinThread::Run();
 	}
 
-	//ICosmosWindowProvider:
 	CString CWebRuntimeApp::GetNames()
 	{
 		CString strNames = _T("tabctrl,");
@@ -706,29 +692,16 @@ namespace CommonUniverse
 			}
 		}
 		TCHAR m_szBuffer[MAX_PATH];
-		HMODULE hModule = ::GetModuleHandle(_T("universe.dll"));
-		if (hModule == nullptr)
-		{
-			TCHAR szDriver[MAX_PATH] = { 0 };
-			TCHAR szDir[MAX_PATH] = { 0 };
-			TCHAR szExt[MAX_PATH] = { 0 };
-			TCHAR szFile2[MAX_PATH] = { 0 };
-			::GetModuleFileName(NULL, m_szBuffer, MAX_PATH);
-			_tsplitpath_s(m_szBuffer, szDriver, szDir, szFile2, szExt);
-			CString strTangramDll = szDriver;
-			strTangramDll += szDir;
-			strTangramDll += _T("universe.dll");
-			hModule = ::LoadLibrary(strTangramDll);
-		}
-		if (hModule == nullptr && SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer) == S_OK)
-		{
-			CString m_strProgramFilePath = CString(m_szBuffer);
-			m_strProgramFilePath += _T("\\Tangram\\universe.dll");
-			if (::PathFileExists(m_strProgramFilePath)) {
-				hModule = ::LoadLibrary(m_strProgramFilePath);
-			}
-		}
-
+		TCHAR szDriver[MAX_PATH] = { 0 };
+		TCHAR szDir[MAX_PATH] = { 0 };
+		TCHAR szExt[MAX_PATH] = { 0 };
+		TCHAR szFile2[MAX_PATH] = { 0 };
+		::GetModuleFileName(NULL, m_szBuffer, MAX_PATH);
+		_tsplitpath_s(m_szBuffer, szDriver, szDir, szFile2, szExt);
+		CString strTangramDll = szDriver;
+		strTangramDll += szDir;
+		strTangramDll += _T("universe.dll");
+		HMODULE hModule = ::LoadLibrary(strTangramDll);
 		if (hModule)
 		{
 			if (m_strContainer != _T(""))
@@ -774,8 +747,6 @@ namespace CommonUniverse
 		return true;
 	}
 
-	//IUniverseAppProxy:
-
 	HWND CWebRuntimeApp::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
@@ -795,9 +766,9 @@ namespace CommonUniverse
 		switch (nType)
 		{
 		case MainWnd:
-			if (g_pAppBase->m_pMainWnd)
+			if (m_pMainWnd)
 			{
-				pWnd = g_pAppBase->m_pMainWnd;
+				pWnd = m_pMainWnd;
 				if (pWnd)
 				{
 					CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
@@ -809,10 +780,10 @@ namespace CommonUniverse
 							pCosmosFrameWndInfo->m_nFrameType = 2;
 						else
 						{
-							POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
+							POSITION nPos = GetFirstDocTemplatePosition();
 							while (nPos)
 							{
-								CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
+								CDocTemplate* pTemplate = GetNextDocTemplate(nPos);
 								POSITION pos = pTemplate->GetFirstDocPosition();
 								while (pos != NULL)
 								{
@@ -823,7 +794,7 @@ namespace CommonUniverse
 										CView* pView = pDoc->GetNextView(pos2);
 										ASSERT_VALID(pView);
 										CFrameWnd* pFrame = pView->GetParentFrame();
-										if (g_pAppBase->m_pMainWnd == pFrame)
+										if (m_pMainWnd == pFrame)
 										{
 											if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
 											{
@@ -839,17 +810,17 @@ namespace CommonUniverse
 						}
 					}
 				}
-				return g_pAppBase->m_pMainWnd->m_hWnd;
+				return m_pMainWnd->m_hWnd;
 			}
 			break;
 		case CanClose:
 		{
-			if (pWnd && pWnd == g_pAppBase->m_pMainWnd)
+			if (pWnd && pWnd == m_pMainWnd)
 			{
-				POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
+				POSITION nPos = GetFirstDocTemplatePosition();
 				while (nPos)
 				{
-					CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
+					CDocTemplate* pTemplate = GetNextDocTemplate(nPos);
 					POSITION pos = pTemplate->GetFirstDocPosition();
 					while (pos != NULL)
 					{
@@ -860,10 +831,10 @@ namespace CommonUniverse
 							CView* pView = pDoc->GetNextView(pos2);
 							ASSERT_VALID(pView);
 							CFrameWnd* pFrame = pView->GetParentFrame();
-							if (g_pAppBase->m_pMainWnd != pFrame)
+							if (m_pMainWnd != pFrame)
 							{
-								g_pAppBase->m_pMainWnd = pFrame;
-								g_pCosmosImpl->m_hMainWnd = g_pAppBase->m_pMainWnd->m_hWnd;
+								m_pMainWnd = pFrame;
+								g_pCosmosImpl->m_hMainWnd = m_pMainWnd->m_hWnd;
 								return pFrame->m_hWnd;
 							}
 						}
@@ -927,9 +898,9 @@ namespace CommonUniverse
 		break;
 		case QueryDestroy:
 		{
-			if (::GetParent(hWnd) == NULL && AfxGetApp()->m_pMainWnd && AfxGetApp()->m_pMainWnd != pWnd)
+			if (::GetParent(hWnd) == NULL && m_pMainWnd && m_pMainWnd != pWnd)
 			{
-				g_pAppBase->m_pMainWnd = pWnd;
+				m_pMainWnd = pWnd;
 				return pWnd->m_hWnd;
 			}
 		}
@@ -982,10 +953,10 @@ namespace CommonUniverse
 	{
 		if (strType.CompareNoCase(_T("COSMOS_CREATE_DOC")) == 0)
 		{
-			POSITION nPos = g_pAppBase->GetFirstDocTemplatePosition();
+			POSITION nPos = GetFirstDocTemplatePosition();
 			while (nPos)
 			{
-				CDocTemplate* pTemplate = g_pAppBase->GetNextDocTemplate(nPos);
+				CDocTemplate* pTemplate = GetNextDocTemplate(nPos);
 				CString strExt = _T("");
 				pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
 				strExt.MakeLower();

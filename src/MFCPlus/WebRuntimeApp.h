@@ -149,66 +149,24 @@ using namespace concurrency;
 
 namespace CommonUniverse
 {
-	class CCosmosImpl;
-	class IUniverseAppProxy;
-
-	// CTangramTabCtrlWnd
-
-	class CTangramTabCtrlWnd :
-		public CMFCTabCtrl,
-		public ICosmosWindow
-	{
-		DECLARE_DYNAMIC(CTangramTabCtrlWnd)
-
-	public:
-		CTangramTabCtrlWnd();
-		virtual ~CTangramTabCtrlWnd();
-		virtual BOOL SetActiveTab(int iTab);
-
-		int m_nCurSelTab;
-	public:
-		IXobj* m_pWndNode;
-		HWND m_hPWnd = nullptr;
-	protected:
-		DECLARE_MESSAGE_MAP()
-		afx_msg LRESULT OnCreatePage(WPARAM wParam, LPARAM lParam);
-		afx_msg LRESULT OnActivePage(WPARAM wParam, LPARAM lParam);
-		afx_msg LRESULT OnModifyPage(WPARAM wParam, LPARAM lParam);
-		afx_msg LRESULT OnTgmSetCaption(WPARAM wParam, LPARAM lParam);
-		afx_msg LRESULT OnActiveTangramObj(WPARAM wParam, LPARAM lParam);
-		virtual void Save();
-		virtual void PostNcDestroy();
-	};
-
-	class CWebRuntimeProxy :
-		public ICosmosDelegate,
+	class CWebRuntimeApp :
+		public CWinAppEx,
 		public IUniverseAppProxy,
-		public ICosmosWindowProvider
-	{
+		public ICosmosWindowProvider {
 	public:
-		CWebRuntimeProxy();
-		virtual ~CWebRuntimeProxy();
+		CWebRuntimeApp();
+		virtual ~CWebRuntimeApp();
+		CString GetDocTemplateID(CDocument* pDoc);
+		virtual bool InitApp();
+	private:
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
-
 		map<CView*, CDocument*> m_mapViewDoc;
-
 		BOOL IsBrowserModel(bool bCrashReporting);
 		bool ProcessAppType(bool bCrashReporting);
-
-		//ICosmosDelegate:
-		virtual bool OnAppIdle(BOOL& bIdle, LONG lCount);
-		virtual bool DoIdleWork();
-		virtual bool IsAppIdleMessage();
-		virtual void ProcessMsg(MSG* msg);
-		virtual void ForegroundIdleProc();
-		virtual CString GetNTPXml();
-		virtual bool OnUniversePreTranslateMessage(MSG* pMsg);
-		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
-		virtual bool EclipseAppInit();
-		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
-		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
-		virtual HICON GetAppIcon(int nIndex);
+		virtual int Run();
+		virtual BOOL InitApplication();
+		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
@@ -216,45 +174,16 @@ namespace CommonUniverse
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode);
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewFrame);
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager);
+		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
+		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
+		virtual bool EclipseAppInit();
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);
 		virtual CString GetNames();
 		virtual CString GetTags(CString strName);
-	};
-
-	class CComponentApp :
-		public CWinApp,
-		public ICosmosWindowProvider
-	{
-	public:
-		CComponentApp();
-		virtual ~CComponentApp();
-		bool CosmosInit(CString strID);
-		virtual BOOL InitInstance();
-		virtual int ExitInstance();
-	private:
-		virtual CString GetNames();
-		virtual CString GetTags(CString strName);
 		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
-	};
-
-	class CWebRuntimeApp :
-		public CWinAppEx,
-		public CWebRuntimeProxy
-	{
-	public:
-		CWebRuntimeApp();
-		virtual ~CWebRuntimeApp();
-
-		afx_msg void OnFileNew();
-
-		virtual int Run();
-		virtual bool InitApp();
-	private:
-		virtual BOOL InitApplication();
-		virtual HWND Create(HWND hParentWnd, IXobj* pGrid);
-		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 	};
 
 	class CWebMDIFrameWnd :

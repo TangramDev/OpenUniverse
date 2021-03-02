@@ -1731,9 +1731,6 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OfficeObj( 
             /* [retval][out] */ IDispatch **pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SaveToConfigFile( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
-        
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_WebPage( 
             /* [retval][out] */ IWebPage **pVal) = 0;
         
@@ -2105,10 +2102,6 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             /* [retval][out] */ IDispatch **pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SaveToConfigFile )( 
-            IXobj * This,
-            /* [in] */ VARIANT_BOOL newVal);
-        
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WebPage )( 
             IXobj * This,
             /* [retval][out] */ IWebPage **pVal);
@@ -2407,9 +2400,6 @@ EXTERN_C const IID IID_IXobj;
 
 #define IXobj_get_OfficeObj(This,pVal)	\
     ( (This)->lpVtbl -> get_OfficeObj(This,pVal) ) 
-
-#define IXobj_put_SaveToConfigFile(This,newVal)	\
-    ( (This)->lpVtbl -> put_SaveToConfigFile(This,newVal) ) 
 
 #define IXobj_get_WebPage(This,pVal)	\
     ( (This)->lpVtbl -> get_WebPage(This,pVal) ) 
@@ -2724,10 +2714,11 @@ EXTERN_C const IID IID_ICosmos;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEclipseApp( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SelectVSObj( 
-            BSTR bstrData,
-            IDispatch *pVSObj,
-            LONGLONG nHandle) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateOutLookObj( 
+            BSTR bstrObjType,
+            int nType,
+            BSTR bstrURL,
+            /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE DownLoadFile( 
             BSTR strFileURL,
@@ -2760,11 +2751,9 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrAppID,
             /* [retval][out] */ ICosmosCtrl **ppRetCtrl) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CosmosNotify( 
-            BSTR strXml1,
-            BSTR strXml2,
-            LONGLONG wParam,
-            LONGLONG lParam) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
+            BSTR strInitXml,
+            /* [retval][out] */ LONGLONG *llHandle) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeleteGalaxy( 
             IGalaxy *pGalaxy) = 0;
@@ -2804,16 +2793,6 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE LoadDocComponent( 
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitCLRApp( 
-            BSTR strInitXml,
-            /* [retval][out] */ LONGLONG *llHandle) = 0;
-        
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateOutLookObj( 
-            BSTR bstrObjType,
-            int nType,
-            BSTR bstrURL,
-            /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
@@ -3043,11 +3022,12 @@ EXTERN_C const IID IID_ICosmos;
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
             ICosmos * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SelectVSObj )( 
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateOutLookObj )( 
             ICosmos * This,
-            BSTR bstrData,
-            IDispatch *pVSObj,
-            LONGLONG nHandle);
+            BSTR bstrObjType,
+            int nType,
+            BSTR bstrURL,
+            /* [retval][out] */ IDispatch **ppRetDisp);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownLoadFile )( 
             ICosmos * This,
@@ -3086,12 +3066,10 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrAppID,
             /* [retval][out] */ ICosmosCtrl **ppRetCtrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CosmosNotify )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCLRApp )( 
             ICosmos * This,
-            BSTR strXml1,
-            BSTR strXml2,
-            LONGLONG wParam,
-            LONGLONG lParam);
+            BSTR strInitXml,
+            /* [retval][out] */ LONGLONG *llHandle);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteGalaxy )( 
             ICosmos * This,
@@ -3140,18 +3118,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             BSTR bstrLib,
             /* [retval][out] */ LONGLONG *llAppProxy);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitCLRApp )( 
-            ICosmos * This,
-            BSTR strInitXml,
-            /* [retval][out] */ LONGLONG *llHandle);
-        
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateOutLookObj )( 
-            ICosmos * This,
-            BSTR bstrObjType,
-            int nType,
-            BSTR bstrURL,
-            /* [retval][out] */ IDispatch **ppRetDisp);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
             ICosmos * This,
@@ -3314,8 +3280,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_InitEclipseApp(This)	\
     ( (This)->lpVtbl -> InitEclipseApp(This) ) 
 
-#define ICosmos_SelectVSObj(This,bstrData,pVSObj,nHandle)	\
-    ( (This)->lpVtbl -> SelectVSObj(This,bstrData,pVSObj,nHandle) ) 
+#define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
+    ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
 #define ICosmos_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
     ( (This)->lpVtbl -> DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml) ) 
@@ -3335,8 +3301,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_CreateCosmosCtrl(This,bstrAppID,ppRetCtrl)	\
     ( (This)->lpVtbl -> CreateCosmosCtrl(This,bstrAppID,ppRetCtrl) ) 
 
-#define ICosmos_CosmosNotify(This,strXml1,strXml2,wParam,lParam)	\
-    ( (This)->lpVtbl -> CosmosNotify(This,strXml1,strXml2,wParam,lParam) ) 
+#define ICosmos_InitCLRApp(This,strInitXml,llHandle)	\
+    ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
 
 #define ICosmos_DeleteGalaxy(This,pGalaxy)	\
     ( (This)->lpVtbl -> DeleteGalaxy(This,pGalaxy) ) 
@@ -3364,12 +3330,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_LoadDocComponent(This,bstrLib,llAppProxy)	\
     ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
-
-#define ICosmos_InitCLRApp(This,strInitXml,llHandle)	\
-    ( (This)->lpVtbl -> InitCLRApp(This,strInitXml,llHandle) ) 
-
-#define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
-    ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
 #define ICosmos_CosmosCommand(This,RibbonControl)	\
     ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 
@@ -3437,19 +3397,11 @@ EXTERN_C const IID IID_IGalaxy;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyCluster( 
             /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyData( 
-            BSTR bstrKey,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWebPage( 
+            /* [retval][out] */ IWebPage **ppChromeWebPage) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GalaxyData( 
-            BSTR bstrKey,
-            /* [in] */ VARIANT newVal) = 0;
-        
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignerState( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
-        
-        virtual /* [hidden][id][propput] */ HRESULT STDMETHODCALLTYPE put_DesignerState( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostBrowser( 
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
             /* [retval][out] */ long *pCount) = 0;
@@ -3465,12 +3417,6 @@ EXTERN_C const IID IID_IGalaxy;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
             /* [retval][out] */ BSTR *pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostBrowser( 
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWebPage( 
-            /* [retval][out] */ IWebPage **ppChromeWebPage) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Detach( void) = 0;
         
@@ -3571,23 +3517,13 @@ EXTERN_C const IID IID_IGalaxy;
             IGalaxy * This,
             /* [retval][out] */ IGalaxyCluster **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GalaxyData )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWebPage )( 
             IGalaxy * This,
-            BSTR bstrKey,
-            /* [retval][out] */ VARIANT *pVal);
+            /* [retval][out] */ IWebPage **ppChromeWebPage);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GalaxyData )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostBrowser )( 
             IGalaxy * This,
-            BSTR bstrKey,
-            /* [in] */ VARIANT newVal);
-        
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignerState )( 
-            IGalaxy * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
-        
-        /* [hidden][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DesignerState )( 
-            IGalaxy * This,
-            /* [in] */ VARIANT_BOOL newVal);
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IGalaxy * This,
@@ -3608,14 +3544,6 @@ EXTERN_C const IID IID_IGalaxy;
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IGalaxy * This,
             /* [retval][out] */ BSTR *pVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostBrowser )( 
-            IGalaxy * This,
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWebPage )( 
-            IGalaxy * This,
-            /* [retval][out] */ IWebPage **ppChromeWebPage);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Detach )( 
             IGalaxy * This);
@@ -3692,17 +3620,11 @@ EXTERN_C const IID IID_IGalaxy;
 #define IGalaxy_get_GalaxyCluster(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyCluster(This,pVal) ) 
 
-#define IGalaxy_get_GalaxyData(This,bstrKey,pVal)	\
-    ( (This)->lpVtbl -> get_GalaxyData(This,bstrKey,pVal) ) 
+#define IGalaxy_get_HostWebPage(This,ppChromeWebPage)	\
+    ( (This)->lpVtbl -> get_HostWebPage(This,ppChromeWebPage) ) 
 
-#define IGalaxy_put_GalaxyData(This,bstrKey,newVal)	\
-    ( (This)->lpVtbl -> put_GalaxyData(This,bstrKey,newVal) ) 
-
-#define IGalaxy_get_DesignerState(This,pVal)	\
-    ( (This)->lpVtbl -> get_DesignerState(This,pVal) ) 
-
-#define IGalaxy_put_DesignerState(This,newVal)	\
-    ( (This)->lpVtbl -> put_DesignerState(This,newVal) ) 
+#define IGalaxy_get_HostBrowser(This,ppChromeWebBrowser)	\
+    ( (This)->lpVtbl -> get_HostBrowser(This,ppChromeWebBrowser) ) 
 
 #define IGalaxy_get_Count(This,pCount)	\
     ( (This)->lpVtbl -> get_Count(This,pCount) ) 
@@ -3718,12 +3640,6 @@ EXTERN_C const IID IID_IGalaxy;
 
 #define IGalaxy_get_Name(This,pVal)	\
     ( (This)->lpVtbl -> get_Name(This,pVal) ) 
-
-#define IGalaxy_get_HostBrowser(This,ppChromeWebBrowser)	\
-    ( (This)->lpVtbl -> get_HostBrowser(This,ppChromeWebBrowser) ) 
-
-#define IGalaxy_get_HostWebPage(This,ppChromeWebPage)	\
-    ( (This)->lpVtbl -> get_HostWebPage(This,ppChromeWebPage) ) 
 
 #define IGalaxy_Detach(This)	\
     ( (This)->lpVtbl -> Detach(This) ) 
