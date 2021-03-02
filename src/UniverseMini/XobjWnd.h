@@ -24,9 +24,9 @@
 
 #pragma once
 
-class CXobjHelper : public CWnd
+class CXobjWnd : public CWnd
 {
-	DECLARE_DYNCREATE(CXobjHelper)
+	DECLARE_DYNCREATE(CXobjWnd)
 public:
 	BOOL					m_bNoMove;
 	BOOL					m_bEraseBkgnd;
@@ -49,8 +49,8 @@ public:
 #endif
 
 protected:
-	CXobjHelper();           // protected constructor used by dynamic creation
-	virtual ~CXobjHelper();
+	CXobjWnd();           // protected constructor used by dynamic creation
+	virtual ~CXobjWnd();
 	void PostNcDestroy();
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();

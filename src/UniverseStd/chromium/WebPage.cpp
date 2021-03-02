@@ -27,7 +27,7 @@
 #include "../Xobj.h"
 #include "../Wormhole.h"
 #include "../Galaxy.h"
-#include "../XobjHelper.h"
+#include "../XobjWnd.h"
 #include "../GridWnd.h"
 #include "../Markup.h" 
 #include "WebPage.h"

@@ -197,4 +197,6 @@ BOOL CMFCApplication1View::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName,
 void CMFCApplication1View::OnBnClickedButton1()
 {
 	// TODO: Add your control notification handler code here
+	g_pCosmosImpl->InsertMsgData(m_hWnd, _T("1"), _T("2xxx"));
+	CString s = g_pCosmosImpl->GetMsgStringData(m_hWnd, _T("1"));
 }

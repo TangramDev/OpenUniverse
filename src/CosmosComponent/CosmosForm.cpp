@@ -80,6 +80,7 @@ BOOL CCosmosFormView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWOR
 
 void CCosmosFormView::OnBnClickedBtnHowto()
 {
+	g_pCosmosImpl->InsertMsgData(m_hWnd, _T("xx"), _T("yy"));
 	//if (g_pCosmosImpl&& g_pHubbleImpl->m_pCLRProxy)
 	//{
 	//	IGrid* pNode = nullptr;

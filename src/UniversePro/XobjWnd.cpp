@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103020040           *
+ *           Web Runtime for Application - Version 1.0.0.202103020040
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -13,35 +13,34 @@
  *    become a built-in programmable language in the application system, so that
  *    the application system can be expanded and developed for the Internet based
  *    on modern javscript/Web technology.
- * Use of this source code is governed by a BSD-style license that
- * can be found in the LICENSE file.
+// Use of this source code is governed by a BSD-style license that
+// can be found in the LICENSE file.
  *
  * CONTACT INFORMATION:
  * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
  * https://www.tangram.dev
+ *
  *******************************************************************************/
 
  // XobjHelper.cpp : implementation file
  //
 
 #include "stdafx.h"
+#include "UniverseApp.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
 #include "Wormhole.h"
-#include "XobjHelper.h"
-#include "UniverseApp.h"
 #include "TangramHtmlTreeWnd.h"
-#include "OfficePlus\ExcelPlus\ExcelAddin.h"
-#include "OfficePlus\ExcelPlus\ExcelPlusWnd.h"
 
 #include "chromium/WebPage.h"
 
-// CXobjHelper
+// CXobjWnd
 
-IMPLEMENT_DYNCREATE(CXobjHelper, CWnd)
+IMPLEMENT_DYNCREATE(CXobjWnd, CWnd)
 
-CXobjHelper::CXobjHelper()
+CXobjWnd::CXobjWnd()
 {
 	m_hFormWnd = NULL;
 	m_bNoMove = false;
@@ -55,16 +54,17 @@ CXobjHelper::CXobjHelper()
 	m_strKey = m_strXml = _T("");
 }
 
-CXobjHelper::~CXobjHelper()
+CXobjWnd::~CXobjWnd()
 {
 }
 
-BEGIN_MESSAGE_MAP(CXobjHelper, CWnd)
+BEGIN_MESSAGE_MAP(CXobjWnd, CWnd)
 	ON_WM_SIZE()
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEACTIVATE()
 	ON_WM_WINDOWPOSCHANGED()
+	ON_WM_WINDOWPOSCHANGING()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
 	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
 	ON_MESSAGE(WM_HUBBLE_DATA, OnCosmosData)
@@ -75,36 +75,36 @@ BEGIN_MESSAGE_MAP(CXobjHelper, CWnd)
 	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
-// CXobjHelper diagnostics
+// CXobjWnd diagnostics
 
 #ifdef _DEBUG
-void CXobjHelper::AssertValid() const
+void CXobjWnd::AssertValid() const
 {
 	///CView::AssertValid();
 }
 
 #ifndef _WIN32_WCE
-void CXobjHelper::Dump(CDumpContext& dc) const
+void CXobjWnd::Dump(CDumpContext& dc) const
 {
 	CWnd::Dump(dc);
 }
 #endif
 #endif //_DEBUG
 
-//CXobjHelper message handlers
-BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
+//CXobjWnd message handlers
+BOOL CXobjWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
 	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_nID = nID;
 	m_pXobj->m_pHostWnd = this;
+
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
 		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 		pGalaxy->m_pBindingXobj = m_pXobj;
-
 		m_pXobj->m_pXobjShareData->m_pHostClientView = this;
 		CGalaxyCluster* pGalaxyCluster = pGalaxy->m_pGalaxyCluster;
-		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
+		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		if (g_pCosmos->m_pMDIMainWnd &&
 			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd) &&
@@ -135,7 +135,7 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 	return m_pXobj->Create(dwStyle, rect, pParentWnd, nID, pContext);
 }
 
-LRESULT CXobjHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 {
 	switch (m_pXobj->m_nViewType)
 	{
@@ -152,7 +152,7 @@ LRESULT CXobjHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_SPLITTERREPOSITION, wParam, lParam);
 }
 
-int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
+int CXobjWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
 	if (g_pCosmos->m_pCLRProxy)
 		g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
@@ -161,11 +161,11 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		::PostMessage(g_pCosmos->m_pActiveHtmlWnd->m_hWnd, WM_COSMOSMSG, 20190331, 0);
 		g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	}
-	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
-	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
-		::BringWindowToTop(hWnd);
 
 	CGalaxy* pGalaxy = m_pXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy;
+	HWND hWnd = pGalaxy->m_pGalaxyCluster->m_hWnd;
+	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
+		::BringWindowToTop(hWnd);
 	if (pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy)
 	{
 		HWND hMenuWnd = pGalaxy->m_pGalaxyCluster->m_pUniverseAppProxy->GetActivePopupMenu(nullptr);
@@ -178,13 +178,14 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
+
 	if (m_pXobj && m_pXobj->m_pXobjShareData->m_pGalaxyCluster)
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeMouseActivate(m_pXobj);
 
 	if ((m_pXobj->m_nViewType == TabGrid || m_pXobj->m_nViewType == Grid))
 	{
-		if (g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy)
-			::SetFocus(m_hWnd);
+		//if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pGalaxy != m_pXobj->m_pXobjShareData->m_pGalaxy)
+		::SetFocus(m_hWnd);
 		g_pCosmos->m_pActiveXobj = m_pXobj;
 		g_pCosmos->m_bWinFormActived = false;
 		return MA_ACTIVATE;
@@ -218,8 +219,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 				pHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(pSession->m_pSession);
 			}
 		}
-		//return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message);
-		return MA_ACTIVATE;// MA_NOACTIVATE;
+		return MA_NOACTIVATE;
 	}
 
 	if (m_bCreateExternal == false)
@@ -246,20 +246,16 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message);
 }
 
-BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
+BOOL CXobjWnd::OnEraseBkgnd(CDC* pDC)
 {
 	if (m_pXobj->m_nViewType != BlankView)
 		return true;
+	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	CBitmap bit;
 	RECT rt;
 	GetClientRect(&rt);
-	bit.LoadBitmap(IDB_BITMAP_DESIGNER);
-	CBrush br(&bit);
-	pDC->FillRect(&rt, &br);
-	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0)
 	{
-		return true;
 		HWND hWnd = pGalaxy->m_hWnd;
 		if (::IsWindow(hWnd) && !::IsWindowVisible(hWnd))
 		{
@@ -267,23 +263,41 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 			return false;
 		}
 	}
+	//else if ((m_pXobj->m_nViewType == ActiveX || m_pXobj->m_nViewType == CLRCtrl) && m_pXobj->m_pDisp == nullptr)
+	//{
+	//	bit.LoadBitmap(IDB_BITMAP_DESIGNER);
+	//	CBrush br(&bit);
+	//	pDC->FillRect(&rt, &br);
+	//	pDC->SetBkMode(TRANSPARENT);
+	//	CComBSTR bstrCaption(L"");
+	//	m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
+	//	CString strInfo = _T("");
+	//	strInfo = strInfo +
+	//		_T("\n  ----.NET Assembly don't exists or AxtiveX Control not Support!----");
+
+	//	pDC->SetTextColor(RGB(255, 0, 255));
+	//	pDC->DrawText(strInfo, &rt, DT_LEFT);
+	//}
 
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) && (m_bCreateExternal == false && m_pXobj->m_pDisp == NULL) && m_bEraseBkgnd)
 	{
 		CString strText = _T("");
+		bit.LoadBitmap(IDB_BITMAP_DESIGNER);
+		CBrush br(&bit);
+		pDC->FillRect(&rt, &br);
 		CComBSTR bstrCaption(L"");
 		m_pXobj->get_Attribute(CComBSTR(L"caption"), &bstrCaption);
 		CString strInfo = _T("\n\n  ");
-		CString str = _T("");
 		strText.Format(strInfo, m_pXobj->m_strName, CString(OLE2T(bstrCaption)));
 		pDC->SetTextColor(RGB(255, 255, 255));
+
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(strText, &rt, DT_LEFT);
 	}
 	return true;
 }
 
-BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
+BOOL CXobjWnd::PreTranslateMessage(MSG* pMsg)
 {
 	if (m_pXHtmlTree)
 	{
@@ -328,7 +342,7 @@ BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
 	return CWnd::PreTranslateMessage(pMsg);
 }
 
-void CXobjHelper::OnDestroy()
+void CXobjWnd::OnDestroy()
 {
 	m_pXobj->Fire_Destroy();
 	HANDLE hData = RemoveProp(m_hWnd, _T("CosmosInfo"));
@@ -340,14 +354,14 @@ void CXobjHelper::OnDestroy()
 	CWnd::OnDestroy();
 }
 
-void CXobjHelper::PostNcDestroy()
+void CXobjWnd::PostNcDestroy()
 {
 	delete m_pXobj;
 	CWnd::PostNcDestroy();
 	delete this;
 }
 
-LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 {
 	int nOldPage = m_pXobj->m_nActivePage;
 	m_pXobj->m_nActivePage = (int)wParam;
@@ -424,7 +438,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 		CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
-		if (pMainWnd&&pGalaxy == pMainWnd->m_pGalaxy)
+		if (pMainWnd && pGalaxy == pMainWnd->m_pGalaxy)
 		{
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
 		}
@@ -433,12 +447,12 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	return lRes;
 }
 
-LRESULT CXobjHelper::OnCosmosData(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnCosmosData(WPARAM wParam, LPARAM lParam)
 {
 	return CWnd::DefWindowProc(WM_HUBBLE_DATA, wParam, lParam);
 }
 
-LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam && lParam == 20201028)
 	{
@@ -462,9 +476,14 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 19820911:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
+		case 20210225:
+		{
+			m_pXobj->put_Attribute(CComBSTR("objid"), TGM_NUCLEUS);
+		}
+		break;
 		case 20210226:
 		{
-			if(g_pCosmos->m_pMDIMainWnd)
+			if (g_pCosmos->m_pMDIMainWnd)
 			{
 				if (m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 				{
@@ -472,12 +491,7 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				}
 			}
 		}
-			break;
-		case 20210225:
-		{
-			m_pXobj->put_Attribute(CComBSTR("objid"), TGM_NUCLEUS);
-		}
-			break;
+		break;
 		case 20210202:
 		{
 			HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_hWnd);
@@ -714,9 +728,9 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					m_Wnd.Attach(m_hWnd);
 					CComPtr<IUnknown> pUnk;
 					m_Wnd.AttachControl(m_pXobj->m_pDisp, &pUnk);
-					((CXobjHelper*)m_pXobj->m_pHostWnd)->m_pXobj = m_pXobj;
+					((CXobjWnd*)m_pXobj->m_pHostWnd)->m_pXobj = m_pXobj;
 					HWND hPage = m_pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-					::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CXobjHelper*)m_pXobj->m_pHostWnd), 1963);
+					::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CXobjWnd*)m_pXobj->m_pHostWnd), 1963);
 					CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pXobj->m_pDisp);
 					if (pIOleInPlaceActiveObject)
 						m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
@@ -791,7 +805,7 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	return -1;
 }
 
-LRESULT CXobjHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pXobj->m_nViewType == CLRCtrl)
 		::SetWindowLong(m_hWnd, GWL_STYLE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
@@ -801,7 +815,7 @@ LRESULT CXobjHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
 
-LRESULT CXobjHelper::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pXobj)
 	{
@@ -819,7 +833,7 @@ LRESULT CXobjHelper::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_HUBBLE_GETNODE, wParam, lParam);;
 }
 
-LRESULT CXobjHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (m_bCreateExternal)
 	{
@@ -827,7 +841,6 @@ LRESULT CXobjHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case WM_COMMAND:
 		{
-			//WNDPROC* lplpfn = GetSuperWndProcAddr();
 			LRESULT res = CWnd::WindowProc(message, wParam, lParam);// CallWindowProc(*lplpfn, m_hWnd, message, wParam, lParam);
 			HWND hWnd = (HWND)lParam;
 			if (::IsWindow(hWnd) && m_pXobj)
@@ -861,7 +874,6 @@ LRESULT CXobjHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 					m_pXobj->m_pWormhole->InsertString(_T("msgID"), _T(""));
 				}
 			}
-
 			return res;
 		}
 		case WM_ACTIVATE:
@@ -920,7 +932,7 @@ LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		IGalaxy* pGalaxy = nullptr;
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hChild), CComBSTR(L"ClientFrame"), &pGalaxy);
 		CString strXml = _T("");
-		strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" gridtype=\"activex\" objid=\"%s\" /></cluster></mdiclient>"), m_strURL);
+		strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" objid=\"%s\" /></cluster></mdiclient>"), m_strURL);
 		IXobj* pXobj = nullptr;
 		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
 		m_pGalaxy = (CGalaxy*)pGalaxy;
@@ -947,7 +959,7 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
+void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
 	CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
@@ -962,9 +974,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		{
 			pGalaxy->m_pBindingXobj = m_pXobj;
 			if (pMainWnd->m_pActiveMDIChild)
-			{
 				pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
-			}
 			pGalaxy->HostPosChanged();
 		}
 		else
@@ -991,7 +1001,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (m_bNoMove)
 		{
 			lpwndpos->flags |= SWP_NOMOVE;
-			CXobjHelper* pXobjWnd = (CXobjHelper*)m_pXobj->m_pHostWnd;
+			CXobjWnd* pXobjWnd = (CXobjWnd*)m_pXobj->m_pHostWnd;
 			if (m_pXobj->m_pParentObj->m_nViewType == Grid)
 			{
 				CGridWnd* pWnd = (CGridWnd*)m_pXobj->m_pParentObj->m_pHostWnd;
@@ -1033,9 +1043,11 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		Invalidate(true);
 	}
+	//if (g_pCosmos->m_pMDIMainWnd == nullptr && !g_pCosmos->m_bSZMode && m_pXobj->m_bTopObj)
+	//	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 }
 
-void CXobjHelper::OnSize(UINT nType, int cx, int cy)
+void CXobjWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 
@@ -1045,7 +1057,7 @@ void CXobjHelper::OnSize(UINT nType, int cx, int cy)
 	}
 }
 
-void CXobjHelper::OnShowWindow(BOOL bShow, UINT nStatus)
+void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CWnd::OnShowWindow(bShow, nStatus);
 	if (bShow && m_pXobj->m_pWebBrowser)

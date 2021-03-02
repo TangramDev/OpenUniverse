@@ -30,7 +30,7 @@
 #include <VersionHelpers.h> 
 #include <shellscalingapi.h>
 
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include <io.h>
@@ -489,7 +489,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CXobjHelper* pWnd = nullptr;
+				CXobjWnd* pWnd = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -498,7 +498,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (g_pCosmos->m_pActiveXobj->m_nViewType != Grid)
 					{
-						pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
+						pWnd = (CXobjWnd*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveXobj = nullptr;

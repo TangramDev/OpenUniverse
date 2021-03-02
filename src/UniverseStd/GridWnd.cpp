@@ -28,7 +28,7 @@
 #include "UniverseApp.h"
 #include "Xobj.h"
 #include "Galaxy.h"
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "GridWnd.h"
 #include "chromium/Browser.h"
 #include "chromium/WebPage.h"
@@ -895,7 +895,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 					pObj->m_nWidth = nWidth;
 					pObj->m_nHeigh = nHeight;
 					if (pContext->m_pNewViewClass == nullptr)
-						pContext->m_pNewViewClass = RUNTIME_CLASS(CXobjHelper);
+						pContext->m_pNewViewClass = RUNTIME_CLASS(CXobjWnd);
 					CreateView(pObj->m_nRow, pObj->m_nCol, pObj->m_pObjClsInfo, CSize(max(pObj->m_nWidth, m_Hmin), max(pObj->m_nHeigh, m_Vmin)), pContext);
 				}
 				nIndex++;

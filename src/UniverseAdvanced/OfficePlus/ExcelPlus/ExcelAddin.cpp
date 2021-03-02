@@ -24,7 +24,7 @@
 
 #include "../../stdafx.h"
 #include "../../UniverseApp.h"
-#include "../../XobjHelper.h"
+#include "../../XobjWnd.h"
 #include "../../Xobj.h"
 #include "../../Galaxy.h"
 #include "../../TangramHtmlTreeWnd.h"

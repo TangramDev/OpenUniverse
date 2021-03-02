@@ -323,7 +323,7 @@
     <ClCompile Include="xobj.cpp" />
     <ClCompile Include="GalaxyCluster.cpp" />
     <ClCompile Include="GridWnd.cpp" />
-    <ClCompile Include="XobjHelper.cpp" />
+    <ClCompile Include="XobjWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="splith.cur" />
@@ -340,7 +340,7 @@
     <ClInclude Include="xobj.h" />
     <ClInclude Include="GalaxyCluster.h" />
     <ClInclude Include="GridWnd.h" />
-    <ClInclude Include="XobjHelper.h" />
+    <ClInclude Include="XobjWnd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bitmap_g.bmp" />

@@ -372,7 +372,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="XobjHelper.cpp" />
+    <ClCompile Include="XobjWnd.cpp" />
     <ClCompile Include="VisualStylesXP.cpp" />
     <ClCompile Include="XString.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -411,7 +411,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="CloudUtilities\ComponentInstaller.h" />
     <ClInclude Include="CloudUtilities\XUnzip.h" />
     <ClInclude Include="CloudUtilities\XZip.h" />
-    <ClInclude Include="XobjHelper.h" />
+    <ClInclude Include="XobjWnd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bitmap_g.bmp" />

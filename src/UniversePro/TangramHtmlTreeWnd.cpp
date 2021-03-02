@@ -32,7 +32,7 @@
 #include "XHtmlDraw.h"
 #include "CreateCheckboxImageList.h"
 #include "tangramtreeview.h"
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "TangramBase.h"

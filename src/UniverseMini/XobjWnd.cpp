@@ -28,16 +28,16 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Cosmos.h"
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
 
-// CXobjHelper
+// CXobjWnd
 
-IMPLEMENT_DYNCREATE(CXobjHelper, CWnd)
+IMPLEMENT_DYNCREATE(CXobjWnd, CWnd)
 
-CXobjHelper::CXobjHelper()
+CXobjWnd::CXobjWnd()
 {
 	m_hFormWnd = NULL;
 	m_bNoMove = false;
@@ -49,11 +49,11 @@ CXobjHelper::CXobjHelper()
 	m_strKey = m_strXml = _T("");
 }
 
-CXobjHelper::~CXobjHelper()
+CXobjWnd::~CXobjWnd()
 {
 }
 
-BEGIN_MESSAGE_MAP(CXobjHelper, CWnd)
+BEGIN_MESSAGE_MAP(CXobjWnd, CWnd)
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEACTIVATE()
@@ -65,24 +65,24 @@ BEGIN_MESSAGE_MAP(CXobjHelper, CWnd)
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
 END_MESSAGE_MAP()
 
-// CXobjHelper diagnostics
+// CXobjWnd diagnostics
 
 #ifdef _DEBUG
-void CXobjHelper::AssertValid() const
+void CXobjWnd::AssertValid() const
 {
 	///CView::AssertValid();
 }
 
 #ifndef _WIN32_WCE
-void CXobjHelper::Dump(CDumpContext& dc) const
+void CXobjWnd::Dump(CDumpContext& dc) const
 {
 	CWnd::Dump(dc);
 }
 #endif
 #endif //_DEBUG
 
-//CXobjHelper message handlers
-BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
+//CXobjWnd message handlers
+BOOL CXobjWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
 	m_pXobj = g_pCosmos->m_pActiveXobj;
 	m_pXobj->m_nID = nID;
@@ -110,7 +110,7 @@ BOOL CXobjHelper::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 	return m_pXobj->Create(dwStyle, rect, pParentWnd, nID, pContext);
 }
 
-LRESULT CXobjHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 {
 	switch (m_pXobj->m_nViewType)
 	{
@@ -126,7 +126,7 @@ LRESULT CXobjHelper::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_SPLITTERREPOSITION, wParam, lParam);
 }
 
-int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
+int CXobjWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
 	if (g_pCosmos->m_pCLRProxy)
 		g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
@@ -184,7 +184,7 @@ int CXobjHelper::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		return CWnd::OnMouseActivate(pDesktopWnd, nHitTest, message);
 }
 
-BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
+BOOL CXobjWnd::OnEraseBkgnd(CDC* pDC)
 {
 	if (m_pXobj->m_nViewType != BlankView)
 		return true;
@@ -222,7 +222,7 @@ BOOL CXobjHelper::OnEraseBkgnd(CDC* pDC)
 	return true;
 }
 
-BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
+BOOL CXobjWnd::PreTranslateMessage(MSG* pMsg)
 {
 	if (m_pOleInPlaceActiveObject)
 	{
@@ -262,20 +262,20 @@ BOOL CXobjHelper::PreTranslateMessage(MSG* pMsg)
 	return CWnd::PreTranslateMessage(pMsg);
 }
 
-void CXobjHelper::OnDestroy()
+void CXobjWnd::OnDestroy()
 {
 	m_pXobj->Fire_Destroy();
 	CWnd::OnDestroy();
 }
 
-void CXobjHelper::PostNcDestroy()
+void CXobjWnd::PostNcDestroy()
 {
 	delete m_pXobj;
 	CWnd::PostNcDestroy();
 	delete this;
 }
 
-LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 {
 	int nOldPage = m_pXobj->m_nActivePage;
 	m_pXobj->m_nActivePage = (int)wParam;
@@ -333,7 +333,7 @@ LRESULT CXobjHelper::OnTabChange(WPARAM wParam, LPARAM lParam)
 	return lRes;
 }
 
-LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
@@ -356,7 +356,7 @@ LRESULT CXobjHelper::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	return -1;
 }
 
-LRESULT CXobjHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pXobj->m_nViewType == CLRCtrl)
 		::SetWindowLong(m_hWnd, GWL_STYLE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
@@ -366,7 +366,7 @@ LRESULT CXobjHelper::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_TGM_SETACTIVEPAGE, wParam, lParam);
 }
 
-LRESULT CXobjHelper::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pXobj)
 	{
@@ -375,7 +375,7 @@ LRESULT CXobjHelper::OnGetCosmosObj(WPARAM wParam, LPARAM lParam)
 	return CWnd::DefWindowProc(WM_HUBBLE_GETNODE, wParam, lParam);;
 }
 
-LRESULT CXobjHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (m_bCreateExternal)
 	{
@@ -401,7 +401,7 @@ LRESULT CXobjHelper::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 	return CWnd::WindowProc(message, wParam, lParam);
 }
 
-void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
+void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
 	if (m_pXobj && m_pXobj->m_nViewType == CLRCtrl && m_pXobj->m_hHostWnd)
@@ -409,7 +409,7 @@ void CXobjHelper::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (m_bNoMove)
 		{
 			lpwndpos->flags |= SWP_NOMOVE;
-			CXobjHelper* pXobjWnd = (CXobjHelper*)m_pXobj->m_pHostWnd;
+			CXobjWnd* pXobjWnd = (CXobjWnd*)m_pXobj->m_pHostWnd;
 			if (m_pXobj->m_pParentObj->m_nViewType == Grid)
 			{
 				CGridWnd* pWnd = (CGridWnd*)m_pXobj->m_pParentObj->m_pHostWnd;

@@ -936,19 +936,6 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	bool CWebRuntimeApp::EclipseAppInit()
-	{
-		return false;
-	}
-
-	void CWebRuntimeApp::OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode)
-	{
-	}
-
-	void CWebRuntimeApp::OnCosmosEvent(ICosmosEventObj* NotifyObj)
-	{
-	}
-
 	void CWebRuntimeApp::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (strType.CompareNoCase(_T("COSMOS_CREATE_DOC")) == 0)
@@ -972,10 +959,6 @@ namespace CommonUniverse
 		}
 	}
 
-	void CWebRuntimeApp::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
-	{
-	}
-
 	CXobjProxy* CWebRuntimeApp::OnXobjInit(IXobj* pNewNode)
 	{
 		CComBSTR bstrName("");
@@ -994,11 +977,11 @@ namespace CommonUniverse
 		return nullptr;
 	}
 
-	CGalaxyClusterProxy* CWebRuntimeApp::OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager)
+	CGalaxyClusterProxy* CWebRuntimeApp::OnGalaxyClusterCreated(IGalaxyCluster* pGalaxyCluster)
 	{
 		CGalaxyClusterProxy* pGalaxyClusterProxy = nullptr;
 		__int64 h = 0;
-		pNewContentLoaderManager->get_Handle(&h);
+		pGalaxyCluster->get_Handle(&h);
 		if (h)
 		{
 			CWnd* pWnd = CWnd::FromHandlePermanent((HWND)h);
@@ -1104,7 +1087,6 @@ namespace CommonUniverse
 		return false;
 	};
 
-
 	IMPLEMENT_DYNCREATE(CWebMDIFrameWnd, CMDIFrameWndEx)
 
 	BEGIN_MESSAGE_MAP(CWebMDIFrameWnd, CMDIFrameWndEx)
@@ -1112,25 +1094,10 @@ namespace CommonUniverse
 		ON_WM_NCACTIVATE()
 	END_MESSAGE_MAP()
 
-
-	CWebMDIFrameWnd::CWebMDIFrameWnd()
-	{
-	}
-
-	CWebMDIFrameWnd::~CWebMDIFrameWnd()
-	{
-	}
-
 	BOOL CWebMDIFrameWnd::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
-		//if (m_hClient == nullptr)
-		//{
-		//	AFXSetTopLevelFrame(this);
-		//}
-		//return CFrameWndEx::OnCommand(wParam, lParam);
 		HWND hWndCtrl = (HWND)lParam;
 		UINT nID = LOWORD(wParam);
-		//AFXSetTopLevelFrame(this);
 		CFrameWnd* pFrameWnd = this;
 		ENSURE_VALID(pFrameWnd);
 		if (pFrameWnd->m_bHelpMode && hWndCtrl == NULL &&
@@ -1197,7 +1164,7 @@ namespace CommonUniverse
 				break;
 			}
 		}
-		return 0;// (LRESULT)(IUniverseAppProxy*)&theApp;
+		return 0;
 	}
 
 	BOOL CWebMDIFrameWnd::OnNcActivate(BOOL bActive)
@@ -1226,18 +1193,6 @@ namespace CommonUniverse
 		Node->get_Name(&bstrName);
 		CComBSTR bstrName2("");
 		Node->get_NameAtWindowPage(&bstrName2);
-	}
-
-	void CWebMDIFrameWnd::OnEvent(IDispatch* sender, IDispatch* EventArg)
-	{
-	}
-
-	void CWebMDIFrameWnd::OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName)
-	{
-	}
-
-	void CWebMDIFrameWnd::OnHubbleEvent(ICosmosEventObj* NotifyObj)
-	{
 	}
 
 	BOOL CWebMDIFrameWnd::OnShowPopupMenu(CMFCPopupMenu* pMenuPopup)

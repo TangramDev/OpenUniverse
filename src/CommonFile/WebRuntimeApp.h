@@ -169,15 +169,15 @@ namespace CommonUniverse
 		virtual HWND GetActivePopupMenu(HWND hWnd) ;
 
 		//IUniverseAppProxy:
-		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
-		virtual void OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode);
+		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {};
+		virtual void OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode) {};
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode);
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewFrame);
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager);
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
-		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {};
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
-		virtual bool EclipseAppInit();
+		virtual bool EclipseAppInit() { return false; };
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);
@@ -191,8 +191,8 @@ namespace CommonUniverse
 		public CGalaxyClusterProxy
 	{
 	public:
-		CWebMDIFrameWnd();
-		virtual ~CWebMDIFrameWnd();
+		CWebMDIFrameWnd() {};
+		virtual ~CWebMDIFrameWnd() {};
 
 		DECLARE_DYNCREATE(CWebMDIFrameWnd)
 
@@ -210,9 +210,9 @@ namespace CommonUniverse
 		void AdjustClientArea();
 		void OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
 		void OnClrControlCreated(IXobj* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle);
-		void OnEvent(IDispatch* sender, IDispatch* EventArg);
-		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName);
-		void OnHubbleEvent(ICosmosEventObj* NotifyObj);
+		void OnEvent(IDispatch* sender, IDispatch* EventArg) {};
+		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {};
+		void OnHubbleEvent(ICosmosEventObj* NotifyObj) {};
 	};
 };
 

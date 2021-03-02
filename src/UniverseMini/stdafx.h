@@ -151,7 +151,7 @@ using namespace std;
 using namespace concurrency;
 
 class CXobj;
-class CXobjHelper;
+class CXobjWnd;
 class CCosmos;
 class CGalaxy;
 class CUniverse;

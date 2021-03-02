@@ -689,6 +689,16 @@ namespace CommonUniverse {
 		virtual CSession* CreateCloudSession(CWebPageImpl*) { return nullptr; }
 		virtual CSession* GetCloudSession(IXobj*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
+
+		virtual void SendIPCMsg(HWND hXobj, CString strMsgID) {}
+		virtual void InsertMsgData(HWND hXobj, CString strKey, CString strVal) {}
+		virtual void InsertMsgData(HWND hXobj, CString strKey, __int64 llVal) {}
+		virtual void InsertMsgData(HWND hXobj, CString strKey, long lVal) {}
+		virtual void InsertMsgData(HWND hXobj, CString strKey, float fVal) {}
+		virtual CString GetMsgStringData(HWND hXobj, CString strKey) { return _T(""); }
+		virtual __int64 GetMsgInt64(HWND hXobj, CString strKey) { return 0; }
+		virtual long GetMsgLong(HWND hXobj, CString strKey) { return 0; }
+		virtual float GetMsgFloat(HWND hXobj, CString strKey) { return 0.0f; }
 	};
 
 	class ICosmosWindowProvider

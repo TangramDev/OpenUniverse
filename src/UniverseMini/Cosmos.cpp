@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <sstream>
 
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "GridWnd.h"
@@ -116,7 +116,7 @@ CCosmos::CCosmos()
 	m_nOfficeDocsSheet = 0;
 	m_nTangramNodeCommonData = 0;
 #endif
-	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjHelper);
+	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjWnd);
 	m_mapClassInfo[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
 }
 

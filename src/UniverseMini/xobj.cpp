@@ -27,7 +27,7 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Cosmos.h"
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "GridWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
@@ -202,7 +202,7 @@ void CXobj::InitWndXobj()
 	if (it != g_pCosmos->m_mapClassInfo.end())
 		m_pObjClsInfo = it->second;
 	else
-		m_pObjClsInfo = RUNTIME_CLASS(CXobjHelper);
+		m_pObjClsInfo = RUNTIME_CLASS(CXobjWnd);
 
 	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 	{
@@ -613,7 +613,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 	int nCol = m_pHostParse->GetCount();
 	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_XOBJ))
 		m_strObjTypeID = _T("tabbedwnd");
-	CXobjHelper* pCosmosDesignView = (CXobjHelper*)m_pHostWnd;
+	CXobjWnd* pCosmosDesignView = (CXobjWnd*)m_pHostWnd;
 	BOOL isAppWnd = false;
 	if ( m_strID == _T("clrctrl"))
 	{
@@ -829,7 +829,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 			m_pDisp = g_pCosmos->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
 			if (m_pDisp == nullptr)
 			{
-				((CXobjHelper*)m_pHostWnd)->m_bCreateExternal = false;
+				((CXobjWnd*)m_pHostWnd)->m_bCreateExternal = false;
 				m_nViewType = BlankView;
 			}
 		}
@@ -861,7 +861,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 
 		CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pDisp);
 		if (pIOleInPlaceActiveObject)
-			((CXobjHelper*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
+			((CXobjWnd*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
 		m_Wnd.Detach();
 		return hWnd;
 	}

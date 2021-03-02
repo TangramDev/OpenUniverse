@@ -80,7 +80,7 @@
 #include "OfficePlus\ProjectPlus\ProjectAddin.h"
 #include "OfficePlus\PowerPointPlus\PowerPointAddin.h"
 
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "WPFView.h"
@@ -1209,7 +1209,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CXobjHelper* pWnd = nullptr;
+				CXobjWnd* pWnd = nullptr;
 				CWPFView* pView = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
@@ -1222,7 +1222,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_pCosmos->m_pActiveXobj->m_nViewType == TangramWPFCtrl)
 							pView = (CWPFView*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						else
-							pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
+							pWnd = (CXobjWnd*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveXobj = nullptr;

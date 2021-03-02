@@ -72,7 +72,7 @@
 
 #include "EclipsePlus\EclipseAddin.h"
 
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "Galaxy.h"
@@ -964,7 +964,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_KEYDOWN:
 			{
-				CXobjHelper* pWnd = nullptr;
+				CXobjWnd* pWnd = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -979,7 +979,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					//else
 					if (g_pCosmos->m_pActiveXobj->m_nViewType != Grid)
 					{
-						pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
+						pWnd = (CXobjWnd*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveXobj = nullptr;
@@ -1249,7 +1249,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				//{
 				//	CWnd* pWnd = nullptr;
 				//	if (g_pCosmos->m_pActiveXobj)
-				//		pWnd = (CXobjHelper*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
+				//		pWnd = (CXobjWnd*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 				//	if (g_pCosmos->m_pGalaxy && g_pCosmos->m_pActiveXobj && pWnd && pWnd->PreTranslateMessage(lpMsg))
 				//	{
 				//		if (g_pCosmos->m_pCLRProxy->IsWinForm(pWnd->m_hWnd))

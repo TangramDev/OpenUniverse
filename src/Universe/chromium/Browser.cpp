@@ -67,7 +67,7 @@
 #include "../UniverseApp.h"
 #include "../Cosmos.h"
 #include "../Xobj.h"
-#include "../XobjHelper.h"
+#include "../XobjWnd.h"
 #include "../Galaxy.h"
 #include "../GridWnd.h"
 #include "Browser.h"
@@ -395,7 +395,7 @@ namespace Browser {
 				if (pGalaxy)
 				{
 					CXobj* pXobj = pGalaxy->m_pWorkXobj;
-					CXobjHelper* pWnd = (CXobjHelper*)(pXobj->m_pHostWnd);
+					CXobjWnd* pWnd = (CXobjWnd*)(pXobj->m_pHostWnd);
 					return (LRESULT)(pWnd->m_hWnd);
 				}
 			}

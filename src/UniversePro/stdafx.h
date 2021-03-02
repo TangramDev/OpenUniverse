@@ -154,7 +154,7 @@ using namespace concurrency;
 class CBKWnd;
 class CXobj;
 class CWPFView;
-class CXobjHelper;
+class CXobjWnd;
 class CCosmos;
 class CGalaxy;
 class CHelperWnd;

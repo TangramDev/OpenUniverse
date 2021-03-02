@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Cosmos.h"
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "GridWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
@@ -216,14 +216,14 @@ void CXobj::InitWndXobj()
 		}
 	}
 	if (m_strID == _T(""))
-		m_pObjClsInfo = RUNTIME_CLASS(CXobjHelper);
+		m_pObjClsInfo = RUNTIME_CLASS(CXobjWnd);
 	else
 	{
 		auto it = g_pCosmos->m_mapClassInfo.find(m_strID);
 		if (it != g_pCosmos->m_mapClassInfo.end())
 			m_pObjClsInfo = it->second;
 		else
-			m_pObjClsInfo = RUNTIME_CLASS(CXobjHelper);
+			m_pObjClsInfo = RUNTIME_CLASS(CXobjWnd);
 	}
 
 	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
@@ -487,10 +487,10 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						m_pHostGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 						HWND hWnd = m_pWebBrowser->m_hWnd;
 						HWND h = ::GetParent(hWnd);
-						CXobjHelper* pXobjWnd = (CXobjHelper*)CWnd::FromHandlePermanent(h);
+						CXobjWnd* pXobjWnd = (CXobjWnd*)CWnd::FromHandlePermanent(h);
 						pXobjWnd->m_hFormWnd = nullptr;
-						::SetParent(hWnd, ((CXobjHelper*)pXobj2->m_pHostWnd)->m_hWnd);
-						((CXobjHelper*)pXobj2->m_pHostWnd)->m_hFormWnd = hWnd;
+						::SetParent(hWnd, ((CXobjWnd*)pXobj2->m_pHostWnd)->m_hWnd);
+						((CXobjWnd*)pXobj2->m_pHostWnd)->m_hFormWnd = hWnd;
 						if (pOldParent && pOldParent != pXobj2)
 							pOldParent->m_pWebBrowser = nullptr;
 						::PostMessage(pXobj2->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200128);
@@ -751,7 +751,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 
 	CWebPage* pHtmlWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	HWND hWnd = 0;
-	CXobjHelper* pCosmosDesignView = (CXobjHelper*)m_pHostWnd;
+	CXobjWnd* pCosmosDesignView = (CXobjWnd*)m_pHostWnd;
 	int nCol = m_pHostParse->GetCount();
 	if (nCol && m_strID == _T("") && m_strObjTypeID == _T("") && m_pHostParse->GetChild(TGM_XOBJ))
 	{
@@ -1035,7 +1035,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				if (g_pCosmos->m_pBrowserFactory)
 				{
 					HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, s);
-					((CXobjHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+					((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 					g_pCosmos->m_hParent = NULL;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 					if (it != g_pCosmos->m_mapBrowserWnd.end())
@@ -1291,7 +1291,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 				}
 			}
 
-			CXobjHelper* pWnd = (CXobjHelper*)m_pHostWnd;
+			CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
 			if (m_pDisp && pWnd->m_mapDockCtrl.size())
 			{
 				HWND hPage = m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
@@ -1299,7 +1299,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 			}
 			if (m_pDisp == nullptr)
 			{
-				((CXobjHelper*)m_pHostWnd)->m_bCreateExternal = false;
+				((CXobjWnd*)m_pHostWnd)->m_bCreateExternal = false;
 				m_nViewType = BlankView;
 			}
 			if (m_strID.CollateNoCase(_T("wpfctrl")) == 0)
@@ -1336,14 +1336,14 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 		m_Wnd.AttachControl(m_pDisp, &pUnk);
 		if (m_nViewType == ActiveX)
 		{
-			((CXobjHelper*)m_pHostWnd)->m_pXobj = this;
+			((CXobjWnd*)m_pHostWnd)->m_pXobj = this;
 			HWND hPage = m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-			::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CXobjHelper*)m_pHostWnd), 1963);
+			::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CXobjWnd*)m_pHostWnd), 1963);
 		}
 
 		CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pDisp);
 		if (pIOleInPlaceActiveObject)
-			((CXobjHelper*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
+			((CXobjWnd*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
 		m_Wnd.Detach();
 		return hWnd;
 	}
@@ -2377,7 +2377,7 @@ STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG* pVal)
 	CString strName = OLE2T(bstrName);
 	if (m_nViewType == CLRCtrl)
 	{
-		CXobjHelper* pWnd = (CXobjHelper*)m_pHostWnd;
+		CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
 		auto it = pWnd->m_mapDockCtrl.find(strName);
 		if (it != pWnd->m_mapDockCtrl.end())
 		{
@@ -2392,7 +2392,7 @@ STDMETHODIMP CXobj::put_DockObj(BSTR bstrName, LONGLONG newVal)
 	CString strName = OLE2T(bstrName);
 	if (/*m_nViewType == CLRCtrl&&*/::IsWindow((HWND)newVal) && strName != _T(""))
 	{
-		CXobjHelper* pWnd = (CXobjHelper*)m_pHostWnd;
+		CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
 		auto it = pWnd->m_mapDockCtrl.find(strName);
 		if (it == pWnd->m_mapDockCtrl.end())
 		{
@@ -2430,8 +2430,8 @@ STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript)
 			nPos = _strXml.Find(_T("|"));
 		}
 
-		HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(((CXobjHelper*)m_pHostWnd)->m_hWnd, s);
-		((CXobjHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+		HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(((CXobjWnd*)m_pHostWnd)->m_hWnd, s);
+		((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 		g_pCosmos->m_hParent = NULL;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pCosmos->m_mapBrowserWnd.end())
@@ -2493,7 +2493,7 @@ STDMETHODIMP CXobj::put_URL(BSTR newVal)
 		}
 
 		HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(m_pHostWnd->m_hWnd, s);
-		((CXobjHelper*)m_pHostWnd)->m_hFormWnd = hBrowser;
+		((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 		g_pCosmos->m_hParent = NULL;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pCosmos->m_mapBrowserWnd.end())

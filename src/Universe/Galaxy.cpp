@@ -70,7 +70,7 @@
 #include "UniverseApp.h"
 #include "Cosmos.h"
 #include "GridWnd.h"
-#include "XobjHelper.h"
+#include "XobjWnd.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "Wormhole.h"
@@ -1102,7 +1102,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				break;
 				case TabGrid:
 				{
-					CXobjHelper* pWnd = (CXobjHelper*)_pParentNode->m_pHostWnd;
+					CXobjWnd* pWnd = (CXobjWnd*)_pParentNode->m_pHostWnd;
 				}
 				break;
 				}
@@ -1111,7 +1111,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			{
 				if (m_pContainerNode->m_nViewType == CLRCtrl)
 				{
-					CXobjHelper* pXobjWnd = (CXobjHelper*)m_pContainerNode->m_pHostWnd;
+					CXobjWnd* pXobjWnd = (CXobjWnd*)m_pContainerNode->m_pHostWnd;
 					pXobjWnd->m_bNoMove = true;
 				}
 			}

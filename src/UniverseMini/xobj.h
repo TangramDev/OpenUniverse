@@ -37,7 +37,7 @@ public:
 
 	CGalaxy*					m_pGalaxy;
 	CGalaxy*					m_pOldGalaxy;
-	CXobjHelper*				m_pHostClientView;
+	CXobjWnd*				m_pHostClientView;
 	CTangramXmlParse*			m_pCosmosParse;
 	CGalaxyCluster*				m_pGalaxyCluster;
 };

@@ -403,4 +403,14 @@ private:
 	CSession* GetCloudSession(IXobj*);
 	void SetMainWnd(HWND hMain);
 	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
+
+	void SendIPCMsg(HWND hXobj, CString strMsgID);
+	void InsertMsgData(HWND hXobj, CString strKey, CString strVal);
+	void InsertMsgData(HWND hXobj, CString strKey, __int64 llVal);
+	void InsertMsgData(HWND hXobj, CString strKey, long lVal);
+	void InsertMsgData(HWND hXobj, CString strKey, float fVal);
+	CString GetMsgStringData(HWND hXobj, CString strKey);
+	__int64 GetMsgInt64(HWND hXobj, CString strKey);
+	long GetMsgLong(HWND hXobj, CString strKey);
+	float GetMsgFloat(HWND hXobj, CString strKey);
 };

@@ -48,7 +48,7 @@ struct CTangramXHtmlTreeNode;
 typedef map<CString,CTangramXHtmlTreeNode*> NodeMap;
 
 class CTangramXmlParse;
-class CXobjHelper;
+class CXobjWnd;
 class CTangramHelper;
 //=============================================================================
 // Uncomment the following line if you want to use HTML in tree
@@ -290,7 +290,7 @@ public:
 	NodeDictionary	m_mapXobjDic;
 	NodeMap			m_mapSelectedNodeDic;
 	CComObject<CTangramTreeView>* m_pObj;
-	CXobjHelper*	m_pHostWnd;
+	CXobjWnd*	m_pHostWnd;
 	CTangramHelper*	m_pCosmosHelper;
 	enum CheckedState { UNUSED1 = 0, 
 						UNCHECKED, CHECKED, TRISTATE, 
