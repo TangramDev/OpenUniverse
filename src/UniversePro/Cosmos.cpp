@@ -4579,3 +4579,112 @@ float CCosmos::GetMsgFloat(HWND hXobj, CString strKey)
 	}
 	return 0.0f;
 }
+
+IXobj* CCosmos::GetXobj(HWND hWnd)
+{
+	HWND _hWnd = (HWND)hWnd;
+	CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+	while (pInfo == nullptr)
+	{
+		_hWnd = ::GetParent(_hWnd);
+		if (_hWnd == 0)
+			break;
+		pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
+	}
+	if (pInfo)
+	{
+		CXobj* _pObj = (CXobj*)pInfo->m_pXobj;
+		return (IXobj*)_pObj;
+	}
+	return nullptr;
+}
+
+IGalaxy* CCosmos::GetGalaxy(HWND hWnd)
+{
+	DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
+	CommonThreadInfo* pThreadInfo = GetThreadInfo(dwID);
+
+	CGalaxy* m_pGalaxy = nullptr;
+	auto iter = pThreadInfo->m_mapGalaxy.find(hWnd);
+	if (iter != pThreadInfo->m_mapGalaxy.end())
+	{
+		m_pGalaxy = (CGalaxy*)iter->second;
+		return m_pGalaxy;
+	}
+	return nullptr;
+}
+
+IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
+{
+	DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
+	CommonThreadInfo* pThreadInfo = GetThreadInfo(dwID);
+
+	CGalaxy* m_pGalaxy = nullptr;
+	auto iter = pThreadInfo->m_mapGalaxy.find(hWnd);
+	if (iter != pThreadInfo->m_mapGalaxy.end())
+	{
+		m_pGalaxy = (CGalaxy*)iter->second;
+		IXobj* pXObj = nullptr;
+		m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXObj);
+		return pXObj;
+	}
+	else
+	{
+		HWND hPWnd = ::GetParent(hWnd);
+		while (hPWnd)
+		{
+			bool bMDIChild = ::GetWindowLong(hPWnd, GWL_EXSTYLE) & WS_EX_MDICHILD;
+			if (bMDIChild)
+				break;
+			HWND _hPWnd = ::GetParent(hPWnd);
+			if (_hPWnd == nullptr)
+			{
+				break;
+			}
+			hPWnd = _hPWnd;
+		}
+		CGalaxyCluster* pGalaxyCluster = nullptr;
+		auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
+		if (it != g_pCosmos->m_mapWindowPage.end())
+			pGalaxyCluster = (CGalaxyCluster*)it->second;
+		else
+		{
+			pGalaxyCluster = new CComObject<CGalaxyCluster>();
+			pGalaxyCluster->m_hWnd = hPWnd;
+			g_pCosmos->m_mapWindowPage[hPWnd] = pGalaxyCluster;
+		}
+
+		m_pGalaxy = new CComObject<CGalaxy>();
+		CString strName = _T("default");
+		m_pGalaxy->m_strGalaxyName = strName;
+		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+		CString strClassName = CString(g_pCosmos->m_szBuffer);
+		if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
+		{
+			m_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+		}
+		else if (strClassName.Find(_T("MDIClient")) == 0)
+		{
+			m_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
+		}
+
+		m_pGalaxy->m_hHostWnd = hWnd;
+		pThreadInfo->m_mapGalaxy[hWnd] = m_pGalaxy;
+		pGalaxyCluster->m_mapGalaxy[hWnd] = m_pGalaxy;
+		pGalaxyCluster->m_mapWnd[strName] = hWnd;
+
+		for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+		{
+			CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(m_pGalaxy);
+			if (pGalaxyProxy)
+			{
+				m_pGalaxy->m_mapGalaxyProxy[it.second] = pGalaxyProxy;
+			}
+		}
+		IXobj* pXObj = nullptr;
+		m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXObj);
+		return pXObj;
+	}
+	return nullptr;
+}
+

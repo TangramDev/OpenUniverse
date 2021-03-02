@@ -406,4 +406,8 @@ private:
 	__int64 GetMsgInt64(HWND hXobj, CString strKey);
 	long GetMsgLong(HWND hXobj, CString strKey);
 	float GetMsgFloat(HWND hXobj, CString strKey);
+
+	IXobj* GetXobj(HWND hWnd);
+	IGalaxy* GetGalaxy(HWND hWnd);
+	IXobj* ObserveXml(HWND hWnd, CString strKey, CString strXml);
 };

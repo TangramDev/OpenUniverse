@@ -76,19 +76,10 @@ BOOL CCosmosFormView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWOR
 }
 
 // CCosmosFormView message handlers
-
-
 void CCosmosFormView::OnBnClickedBtnHowto()
 {
 	g_pCosmosImpl->InsertMsgData(m_hWnd, _T("xx"), _T("yy"));
-	//if (g_pCosmosImpl&& g_pHubbleImpl->m_pCLRProxy)
-	//{
-	//	IGrid* pNode = nullptr;
-	//	theApp.m_pHubble->GetGridFromHandle((__int64)m_hWnd, &pNode);
-	//	g_pHubbleImpl->m_pCLRProxy->HubbleAction(_T("ExternAction:test"), pNode);
-	//}
 }
-
 
 int CCosmosFormView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {

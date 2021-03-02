@@ -204,7 +204,7 @@ namespace CommonUniverse {
 		MainWnd = 0x00000000,
 		CanClose = 0x00000001,
 		DocView = 0x00000002,
-		OtherType= 0x00000003,
+		OtherType = 0x00000003,
 		QueryDestroy = 0x00000004,
 		CanAddView = 0x00000005,
 		ObserveComplete = 0x00000006,
@@ -232,16 +232,16 @@ namespace CommonUniverse {
 		CString			m_strXobjXml = _T("");
 		CString			m_strSessionID = _T("");
 		CString			m_strTag = _T("");
-		IXobj*			m_pXobj	= nullptr;
-		IGalaxy*		m_pGalaxy = nullptr;
-		IGalaxyCluster*	m_pGalaxyCluster = nullptr;
+		IXobj* m_pXobj = nullptr;
+		IGalaxy* m_pGalaxy = nullptr;
+		IGalaxyCluster* m_pGalaxyCluster = nullptr;
 	}CosmosInfo;
 
 	typedef struct GalaxyInfo
 	{
 		HWND			m_hCtrlHandle;
-		IDispatch*		m_pDisp;
-		IDispatch*		m_pParentDisp;
+		IDispatch* m_pDisp;
+		IDispatch* m_pParentDisp;
 		CString			m_strCtrlName;
 		CString			m_strGalaxyName;
 		CString			m_strXobjXml;
@@ -268,7 +268,7 @@ namespace CommonUniverse {
 		IWebPage* m_pWebPage = nullptr;
 		void* m_pDoc = nullptr;
 		void* m_pDocTemplate = nullptr;
-		map<CString,HWND> m_mapAuxiliaryWnd;
+		map<CString, HWND> m_mapAuxiliaryWnd;
 		map<CString, IGalaxy*> m_mapAuxiliaryGalaxys;
 	} CosmosFrameWndInfo;
 
@@ -276,9 +276,9 @@ namespace CommonUniverse {
 	{
 		HWND					m_hWnd;
 		CString					m_strName;
-		IGalaxyCluster*			m_pGalaxyCluster;
-		IXobj*					m_pXobj;
-		IDispatch*				m_pCtrlDisp;
+		IGalaxyCluster* m_pGalaxyCluster;
+		IXobj* m_pXobj;
+		IDispatch* m_pCtrlDisp;
 	}CtrlInfo;
 
 	typedef struct IPCSession
@@ -457,9 +457,9 @@ namespace CommonUniverse {
 		LPCTSTR								m_strProxyID;
 		LPCTSTR								m_strCreatingFrameTitle;
 		LPCTSTR								m_strClosingFrameID;
-		void*								m_pvoid;
-		CCosmosDocProxy*					m_pCurDocProxy;
-		CCosmosImpl*						m_pCosmosImpl;
+		void* m_pvoid;
+		CCosmosDocProxy* m_pCurDocProxy;
+		CCosmosImpl* m_pCosmosImpl;
 
 		BOOL								m_bCreatingNewFrame;
 		int									m_nFrameIndex;
@@ -629,21 +629,21 @@ namespace CommonUniverse {
 		CStringA								m_strBridgeJavaClass;
 		CString									m_strStartJarPath;
 
-		IPCMsg*									m_pCurrentIPCMsg;
-		ICosmosCLRImpl*							m_pCLRProxy;
-		IUniverseAppProxy*						m_pActiveAppProxy;
-		IUniverseAppProxy*						m_pUniverseAppProxy;
-		IUniverseAppProxy*						m_pCosmosAppProxy;
-		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
-		IXobj*									m_pHostViewDesignerNode = nullptr;
-		ICosmosExtender*						m_pExtender = nullptr;
-		ICosmosDelegate*						m_pCosmosDelegate = nullptr;
-		CChromeBrowserBase*						m_pActiveBrowser = nullptr;
-		CCosmosBrowserFactory*					m_pBrowserFactory = nullptr;
-		ICosmosWindow*							m_pCreatingWindow = nullptr;
-		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
-		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
+		IPCMsg* m_pCurrentIPCMsg;
+		ICosmosCLRImpl* m_pCLRProxy;
+		IUniverseAppProxy* m_pActiveAppProxy;
+		IUniverseAppProxy* m_pUniverseAppProxy;
+		IUniverseAppProxy* m_pCosmosAppProxy;
+		CMDIChildFormInfo* m_pCurMDIChildFormInfo;
+		IXobj* m_pHostViewDesignerNode = nullptr;
+		ICosmosExtender* m_pExtender = nullptr;
+		ICosmosDelegate* m_pCosmosDelegate = nullptr;
+		CChromeBrowserBase* m_pActiveBrowser = nullptr;
+		CCosmosBrowserFactory* m_pBrowserFactory = nullptr;
+		ICosmosWindow* m_pCreatingWindow = nullptr;
+		OmniboxViewViewsProxy* m_pCreatingOmniboxViewViews = nullptr;
+		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
+		CWebPageImpl* m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapGalaxy2GalaxyCluster;
@@ -689,7 +689,9 @@ namespace CommonUniverse {
 		virtual CSession* CreateCloudSession(CWebPageImpl*) { return nullptr; }
 		virtual CSession* GetCloudSession(IXobj*) { return nullptr; }
 		virtual void SetMainWnd(HWND hMain) {}
-
+		virtual IXobj* GetXobj(HWND hWnd) { return nullptr; }
+		virtual IGalaxy* GetGalaxy(HWND hWnd) { return nullptr; }
+		virtual IXobj* ObserveXml(HWND hWnd, CString strKey, CString strXml) { return nullptr; }
 		virtual void SendIPCMsg(HWND hXobj, CString strMsgID) {}
 		virtual void InsertMsgData(HWND hXobj, CString strKey, CString strVal) {}
 		virtual void InsertMsgData(HWND hXobj, CString strKey, __int64 llVal) {}
@@ -747,7 +749,7 @@ namespace CommonUniverse {
 	class ICosmosWindow
 	{
 	public:
-		ICosmosWindow(){
+		ICosmosWindow() {
 			if (g_pCosmosImpl)
 				g_pCosmosImpl->m_pCreatingWindow = this;
 		}
@@ -767,11 +769,11 @@ namespace CommonUniverse {
 			loadMethod = nullptr;
 		}
 
-		virtual ~ICosmosDelegate() { 
+		virtual ~ICosmosDelegate() {
 		}
 
-		JavaVM*				m_pJVM;
-		JNIEnv*				m_pJVMenv;
+		JavaVM* m_pJVM;
+		JNIEnv* m_pJVMenv;
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
