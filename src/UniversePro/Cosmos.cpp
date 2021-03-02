@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103020040           *
+ *           Web Runtime for Application - Version 1.0.0.202103030041           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -159,6 +159,10 @@ _TCHAR* getIniFile(_TCHAR* program, int consoleLauncher);
 typedef jint(JNICALL* JNI_GetCreatedJavaVMs_)(JavaVM**, jsize, jsize*);
 
 // CCosmos
+namespace CommonUniverse
+{
+	CCosmosImpl* g_pCosmosImpl = nullptr;
+}
 
 CCosmos::CCosmos()
 {
@@ -234,7 +238,7 @@ CCosmos::CCosmos()
 	m_nOfficeDocsSheet = 0;
 	m_nTangramNodeCommonData = 0;
 #endif
-	//g_pCosmos = m_pCosmosImplData;
+	g_pCosmosImpl = this;
 	m_mapValInfo[_T("currenteclipeworkBenchid")] = CComVariant(_T(""));
 	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjWnd);
 	m_mapClassInfo[_T("tangramlistview")] = RUNTIME_CLASS(CTangramListView);

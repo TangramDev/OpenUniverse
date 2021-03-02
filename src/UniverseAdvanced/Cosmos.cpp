@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103020040           *
+ *           Web Runtime for Application - Version 1.0.0.202103030041           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -165,6 +165,10 @@ _TCHAR* getIniFile(_TCHAR* program, int consoleLauncher);
 typedef jint(JNICALL* JNI_GetCreatedJavaVMs_)(JavaVM**, jsize, jsize*);
 
 // CCosmos
+namespace CommonUniverse
+{
+	CCosmosImpl* g_pCosmosImpl = nullptr;
+}
 
 CCosmos::CCosmos()
 {
@@ -240,7 +244,7 @@ CCosmos::CCosmos()
 	m_nOfficeDocsSheet = 0;
 	m_nTangramNodeCommonData = 0;
 #endif
-	//g_pCosmos = m_pCosmosImplData;
+	g_pCosmosImpl = this;
 	m_mapValInfo[_T("currenteclipeworkBenchid")] = CComVariant(_T(""));
 	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjWnd);
 	m_mapClassInfo[_T("tangramlistview")] = RUNTIME_CLASS(CTangramListView);
@@ -565,7 +569,7 @@ CCosmos::~CCosmos()
 	g_pCosmos = nullptr;
 	OutputDebugString(_T("------------------End Release CCosmos------------------------\n"));
 	//BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("cosmos.dll")));
-	}
+}
 
 CString CCosmos::GetOfficePath()
 {
@@ -1142,10 +1146,10 @@ void CCosmos::CosmosInit()
 			m_strBridgeJavaClass = T2A(_strBridgeJavaClass);
 			jarFile = findStartupJar();
 			m_bEclipse = (jarFile != nullptr);
-	}
+		}
 		else
 			m_bEclipse = false;
-}
+	}
 	else
 	{
 		CString strPath = m_strProgramFilePath + _T("\\tangram\\") + m_strExeName + _T("\\tangraminit.xml");
@@ -1970,9 +1974,9 @@ CString CCosmos::RemoveUTF8BOM(CString strUTF8)
 		}
 
 		free(cstr);
-		}
-	return strUTF8;
 	}
+	return strUTF8;
+}
 
 CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 {
@@ -4885,92 +4889,6 @@ void CCosmos::InserttoDataMap(int nType, CString strKey, void* pData)
 	}
 }
 
-//void CCosmos::SendIPCMsg(IXobj* pObj, CString strMsgID)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		_pObj->m_pWormhole->InsertString(_T("msgID"), strMsgID);
-//		_pObj->m_pWormhole->SendMessage();
-//	}
-//}
-//
-//void CCosmos::InsertMsgData(IXobj* pObj, CString strKey, CString strVal)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		_pObj->m_pWormhole->InsertString(strKey, strVal);
-//	}
-//}
-//
-//void CCosmos::InsertMsgData(IXobj* pObj, CString strKey, __int64 llVal)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		_pObj->m_pWormhole->Insertint64(strKey, llVal);
-//	}
-//}
-//
-//void CCosmos::InsertMsgData(IXobj* pObj, CString strKey, long lVal)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		_pObj->m_pWormhole->InsertLong(strKey, lVal);
-//	}
-//}
-//
-//void CCosmos::InsertMsgData(IXobj* pObj, CString strKey, float fVal)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		_pObj->m_pWormhole->InsertFloat(strKey, fVal);
-//	}
-//}
-//
-//CString CCosmos::GetMsgStringData(IXobj* pObj, CString strKey)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		return _pObj->m_pWormhole->GetString(strKey);
-//	}
-//	return _T("");
-//}
-//
-//__int64 CCosmos::GetMsgInt64(IXobj* pObj, CString strKey)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		return _pObj->m_pWormhole->Getint64(strKey);
-//	}
-//	return 0;
-//}
-//
-//long CCosmos::GetMsgLong(IXobj* pObj, CString strKey)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		return _pObj->m_pWormhole->GetLong(strKey);
-//	}
-//	return 0;
-//}
-//
-//float CCosmos::GetMsgFloat(IXobj* pObj, CString strKey)
-//{
-//	CXobj* _pObj = (CXobj*)pObj;
-//	if (_pObj->m_pWormhole)
-//	{
-//		return _pObj->m_pWormhole->GetFloat(strKey);
-//	}
-//	return 0.0f;
-//}
-
 void CCosmos::SendIPCMsg(HWND hXobj, CString strMsgID)
 {
 	HWND _hWnd = (HWND)hXobj;
@@ -5166,7 +5084,7 @@ float CCosmos::GetMsgFloat(HWND hXobj, CString strKey)
 }
 
 IXobj* CCosmos::GetXobj(HWND hWnd)
-{ 
+{
 	HWND _hWnd = (HWND)hWnd;
 	CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)_hWnd, _T("CosmosInfo"));
 	while (pInfo == nullptr)
@@ -5185,7 +5103,7 @@ IXobj* CCosmos::GetXobj(HWND hWnd)
 }
 
 IGalaxy* CCosmos::GetGalaxy(HWND hWnd)
-{ 
+{
 	DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
 	CommonThreadInfo* pThreadInfo = GetThreadInfo(dwID);
 
@@ -5199,8 +5117,8 @@ IGalaxy* CCosmos::GetGalaxy(HWND hWnd)
 	return nullptr;
 }
 
-IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml) 
-{ 
+IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
+{
 	DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
 	CommonThreadInfo* pThreadInfo = GetThreadInfo(dwID);
 

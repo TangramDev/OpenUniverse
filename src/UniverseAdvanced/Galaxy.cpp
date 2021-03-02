@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103020040
+ *           Web Runtime for Application - Version 1.0.0.202103030041
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -38,30 +38,39 @@
 #include "Wormhole.h"
 
 using namespace OfficePlus::WordPlus;
+class CTangramHelperWnd : public CWnd
+{
+public:
+	CTangramHelperWnd() {}
+	virtual ~CTangramHelperWnd() {}
+	void PostNcDestroy()
+	{
+		CWnd::PostNcDestroy();
+		delete this;
+	}
+	BEGIN_MSG_MAP(CTangramHelperWnd)
+	END_MSG_MAP()
+};
 
-class CDockPaneWnd : public CWindowImpl<CDockPaneWnd, CWindow>
+class CDockPaneWnd : public CWnd
 {
 public:
 	CDockPaneWnd() {}
 	virtual ~CDockPaneWnd() {}
 	HWND m_hClient = nullptr;
-	BEGIN_MSG_MAP(CDockPaneWnd)
-		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-	END_MSG_MAP()
-	void OnFinalMessage(HWND hWnd)
+protected:
+	void PostNcDestroy()
 	{
-		CWindowImpl::OnFinalMessage(hWnd);
+		CWnd::PostNcDestroy();
 		delete this;
 	}
-
-	LRESULT OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-		if (wParam)
+		if (message == WM_SHOWWINDOW && m_hClient)
 		{
 			::PostMessage(m_hClient, WM_COSMOSMSG, 0, 20180115);
 		}
-		return lRes;
+		return CWnd::WindowProc(message, wParam, lParam);
 	}
 };
 
@@ -203,7 +212,6 @@ BOOL CCosmosTreeCtrl::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 	CosmosUIItemData* pTreeItemData = (CosmosUIItemData*)pNMTreeView->itemNew.lParam;
-	CWebPage* pPage = nullptr;
 	if (m_pGalaxy == nullptr)
 	{
 		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
@@ -214,16 +222,22 @@ BOOL CCosmosTreeCtrl::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 			m_pGalaxy = (CGalaxy*)iter->second;
 		}
 	}
-	if (pTreeItemData && m_pGalaxy)
+	if (pTreeItemData)
 	{
-		pPage = m_pGalaxy->m_pWebPageWnd;
-		if (m_pGalaxy->m_pWormhole)
+		CXobj* _pSender = nullptr;
+		if (m_pHostObj)
+			_pSender = m_pHostObj;
+		else if (m_pGalaxy)
 		{
-			m_pGalaxy->m_pWormhole->InsertString(_T("msgID"), _T("TREECTRL_TvnSelchanged"));
-			m_pGalaxy->m_pWormhole->InsertString(_T("treenodekey"), pTreeItemData->m_strKey);
-			m_pGalaxy->m_pWormhole->InsertString(_T("treenodetag"), pTreeItemData->m_strData);
-			m_pGalaxy->m_pWormhole->SendMessage();
-			m_pGalaxy->m_pWormhole->InsertString(_T("msgID"), _T(""));
+			_pSender = m_pGalaxy->m_pWorkXobj;
+		}
+		if (_pSender && _pSender->m_pWormhole)
+		{
+			_pSender->m_pWormhole->InsertString(_T("msgID"), _T("TREECTRL_TvnSelchanged"));
+			_pSender->m_pWormhole->InsertString(_T("treenodekey"), pTreeItemData->m_strKey);
+			_pSender->m_pWormhole->InsertString(_T("treenodetag"), pTreeItemData->m_strData);
+			_pSender->m_pWormhole->SendMessage();
+			_pSender->m_pWormhole->InsertString(_T("msgID"), _T(""));
 		}
 	}
 	return false;
@@ -236,6 +250,10 @@ LRESULT CCosmosTreeCtrl::OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam)
 	{
 	case 10000:
 	{
+		if (m_pHostObj == nullptr)
+		{
+			m_pHostObj = (CXobj*)g_pCosmosImpl->GetXobj(m_hWnd);
+		}
 		DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 
@@ -3503,6 +3521,3 @@ STDMETHODIMP CGalaxy::get_HostWebPage(IWebPage** ppChromeWebPage)
 	}
 	return S_FALSE;
 }
-
-
-
