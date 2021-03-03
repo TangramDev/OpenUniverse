@@ -35,28 +35,6 @@
 #include "EclipsePlus\EclipseAddin.h"
 #include "Wormhole.h"
 
-class CDockPaneWnd : public CWnd
-{
-public:
-	CDockPaneWnd() {}
-	virtual ~CDockPaneWnd() {}
-	HWND m_hClient = nullptr;
-protected:
-	void PostNcDestroy()
-	{
-		CWnd::PostNcDestroy();
-		delete this;
-	}
-	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
-	{
-		if (message == WM_SHOWWINDOW&& m_hClient)
-		{
-			::PostMessage(m_hClient, WM_COSMOSMSG, 0, 20180115);
-		}
-		return CWnd::WindowProc(message, wParam, lParam);
-	}
-};
-
 /////////////////////////////////////////////////////////////////////////////
 // CCosmosTreeCtrl
 
@@ -1562,12 +1540,6 @@ BOOL CGalaxy::Create()
 			::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 			CString strClassName = g_pCosmos->m_szBuffer;
 			m_bDockPane = (strClassName.Find(_T("Afx:ControlBar:")) == 0);
-			if (m_bDockPane)
-			{
-				CDockPaneWnd* _pWnd = new CDockPaneWnd();
-				_pWnd->SubclassWindow(hPWnd);
-				_pWnd->m_hClient = m_hWnd;
-			}
 		}
 
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;

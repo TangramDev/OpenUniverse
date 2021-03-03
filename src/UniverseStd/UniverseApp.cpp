@@ -770,6 +770,13 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		else if (strClassName.Find(_T("SysTreeView32")) == 0 || strClassName.Find(_T("SysTabControl32")) == 0 || strClassName.Find(_T("SysListView32")) == 0)
 		{
 			::PostMessage(hWnd, WM_XOBJCREATED, 0, 20210108);
+			CCosmosHelperWnd* _pWnd = (CCosmosHelperWnd*)CWnd::FromHandlePermanent(hPWnd);
+			if (_pWnd == nullptr)
+			{
+				_pWnd = new CCosmosHelperWnd();
+				_pWnd->SubclassWindow(hPWnd);
+				_pWnd->m_hClient = hWnd;
+			}
 			if (strClassName.Find(_T("SysTreeView32")) == 0)
 			{
 				CCosmosTreeCtrl* pCtrl = new CCosmosTreeCtrl();
