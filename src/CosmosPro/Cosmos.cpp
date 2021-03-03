@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103030041
+ *           Web Runtime for Application - Version 1.0.0.202103040042
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -881,10 +881,6 @@ namespace Universe
             Galaxy^ frame = page->CreateGalaxy(mdiclient, L"default");
             if (frame)
             {
-                if (strKey == L"newdoc")
-                {
-                    return frame->Observe(strKey, BSTR2STRING(theApp.m_pCosmosImpl->m_strNewDocXml));
-                }
                 return frame->Observe(strKey, strXml);
             }
         }

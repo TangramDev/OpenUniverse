@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103030041           *
+ *           Web Runtime for Application - Version 1.0.0.202103040042           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -417,4 +417,6 @@ private:
 	IXobj* GetXobj(HWND hWnd);
 	IGalaxy* GetGalaxy(HWND hWnd);
 	IXobj* ObserveXml(HWND hWnd, CString strKey, CString strXml);
+	CWebPageImpl* GetWebPageImpl(HWND hWnd);
+	CBrowserImpl* GetBrowserImpl(HWND hWnd);
 };

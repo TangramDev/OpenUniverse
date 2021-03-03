@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103030041           *
+ *           Web Runtime for Application - Version 1.0.0.202103040042           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -546,10 +546,6 @@ LRESULT CEclipseWnd::OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		}
 		if (g_pCosmos->m_strCurrentEclipsePagePath == _T("")&& m_pGalaxy)
 		{
-			IXobj* pXobj = nullptr;
-			m_pGalaxy->Observe(CComBSTR(L"newdocument"), g_pCosmos->m_strNewDocXml.AllocSysString(), &pXobj);
-			if (pXobj)
-				return 0;
 		}
 	}
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103030041           *
+ *           Web Runtime for Application - Version 1.0.0.202103040042           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -211,7 +211,6 @@ CCosmos::CCosmos()
 	m_strConfigFile = _T("");
 	m_strConfigDataFile = _T("");
 	m_strAppCommonDocPath = _T("");
-	m_strNewDocXml = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
 	m_strCurrentEclipsePagePath = _T("");
@@ -4580,3 +4579,31 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 	return nullptr;
 }
 
+CWebPageImpl* CCosmos::GetWebPageImpl(HWND hWnd)
+{
+	CGalaxy* pGalaxy = (CGalaxy*)GetGalaxy(hWnd);
+	if (pGalaxy)
+	{
+		return pGalaxy->m_pWebPageWnd;
+	}
+	else
+	{
+		CXobj* pObj = (CXobj*)GetXobj(hWnd);
+		if (pObj)
+			return pObj->m_pWebPage;
+	}
+	return nullptr;
+}
+
+CBrowserImpl* CCosmos::GetBrowserImpl(HWND hWnd)
+{
+	CWebPageImpl* pPageImpl = GetWebPageImpl(hWnd);
+	if (pPageImpl)
+	{
+		HWND hBrowser = pPageImpl->m_pChromeRenderFrameHost->GetHostBrowserWnd();
+		auto it = m_mapBrowserWnd.find(hBrowser);
+		if (it != m_mapBrowserWnd.end())
+			return (CBrowser*)it->second;
+	}
+	return nullptr;
+}

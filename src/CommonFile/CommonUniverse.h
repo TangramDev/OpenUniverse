@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103030041
+ *           Web Runtime for Application - Version 1.0.0.202103040042
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -612,7 +612,6 @@ namespace CommonUniverse {
 		CString									m_strProgramFilePath;
 		CString									m_strAppCommonDocPath;
 		CString									m_strStartView;
-		CString									m_strNewDocXml;
 		CString									m_strStartXml;
 		CString									m_strNtpXml;
 		CString									m_strAppXml;
@@ -692,6 +691,8 @@ namespace CommonUniverse {
 		virtual void SetMainWnd(HWND hMain) {}
 		virtual IXobj* GetXobj(HWND hWnd) { return nullptr; }
 		virtual IGalaxy* GetGalaxy(HWND hWnd) { return nullptr; }
+		virtual CWebPageImpl* GetWebPageImpl(HWND hWnd) { return nullptr; }
+		virtual CBrowserImpl* GetBrowserImpl(HWND hWnd) { return nullptr; }
 		virtual IXobj* ObserveXml(HWND hWnd, CString strKey, CString strXml) { return nullptr; }
 		virtual void SendIPCMsg(HWND hXobj, CString strMsgID) {}
 		virtual void InsertMsgData(HWND hXobj, CString strKey, CString strVal) {}

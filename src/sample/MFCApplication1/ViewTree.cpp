@@ -51,9 +51,34 @@ LRESULT CViewTree::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 }
 void CViewTree::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 {
+	IGalaxy* pGalaxy = g_pCosmosImpl->GetGalaxy(m_hWnd);
+	if (pGalaxy)
+	{
+		IXobj* pObj = nullptr;
+		pGalaxy->get_VisibleXobj(&pObj);
+		if (pObj)
+		{
+			IWebPage* pPage = nullptr;
+			pObj->get_WebPage(&pPage);
+		}
+	}
+	CWebPageImpl* pImpl = g_pCosmosImpl->GetWebPageImpl(m_hWnd);
+	CBrowserImpl* pBrowser = g_pCosmosImpl->GetBrowserImpl(m_hWnd);
+	HWND hBrowser = nullptr;
+	if (pImpl)
+	{
+		CChromeRenderFrameHost* pChromeRenderFrameHost = pImpl->m_pChromeRenderFrameHost;
+		hBrowser = pChromeRenderFrameHost->GetHostBrowserWnd();
+	}
+	if (pBrowser)
+	{
+		//pBrowser->m_pBrowser->IsActiveWebContentWnd(pImpl->)
+	}
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 	CString strText = _T("");
-	GetParent()->GetWindowText(strText);
+	TVITEM pItem = pNMTreeView->itemNew;
+	//GetParent()->GetWindowText(strText);
+	strText = this->GetItemText(pItem.hItem);
 	CString strXml = _T("");
 	CString strKey = _T("default");
 	CosmosUIItemData* pTreeItemData = (CosmosUIItemData*)pNMTreeView->itemNew.lParam;

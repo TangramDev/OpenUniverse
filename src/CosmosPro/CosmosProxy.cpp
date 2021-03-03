@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103030041
+ *           Web Runtime for Application - Version 1.0.0.202103040042
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2984,14 +2984,6 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 					ATLTRACE(_T("CosmosAppType::APP_WIN32\n"));
 					if (Universe::Cosmos::MainForm == nullptr || theApp.m_pCosmosImpl->m_hMainWnd == NULL)
 					{
-						CTangramXmlParse m_Parse;
-						if (m_Parse.LoadFile(theApp.m_pCosmosImpl->m_strStartupURL))
-						{
-
-						}
-						else
-						{
-						}
 					}
 				}
 				break;
