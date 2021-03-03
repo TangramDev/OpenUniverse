@@ -84,7 +84,7 @@ void COutputWnd::OnSize(UINT nType, int cx, int cy)
 	CDockablePane::OnSize(nType, cx, cy);
 
 	// Tab control should cover the whole client area:
-	m_wndTabs.SetWindowPos (nullptr, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndTabs.SetWindowPos (nullptr, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE |SWP_NOREDRAW| SWP_NOZORDER);
 }
 
 void COutputWnd::AdjustHorzScroll(CListBox& wndListBox)
@@ -150,7 +150,7 @@ BEGIN_MESSAGE_MAP(COutputList, CListBox)
 	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
 	ON_COMMAND(ID_EDIT_CLEAR, OnEditClear)
 	ON_COMMAND(ID_VIEW_OUTPUTWND, OnViewOutput)
-	ON_WM_WINDOWPOSCHANGING()
+	//ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // COutputList message handlers

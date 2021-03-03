@@ -318,11 +318,19 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
 				else if (bIsMDI)
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
-				::GetClassName(::GetParent(_hWnd), g_pCosmos->m_szBuffer, MAX_PATH);
+				HWND hPWnd = ::GetParent(_hWnd);
+				::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
 					_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+					CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
+					if (pWnd == nullptr)
+					{
+						CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
+						_pWnd->SubclassWindow(hPWnd);
+						_pWnd->m_hClient = _hWnd;
+					}
 				}
 				else if (strClassName.Find(_T("MDIClient")) == 0)
 				{

@@ -1353,7 +1353,7 @@ CXobj* CXobj::GetMdiclientObj()
 	HWND hWnd = m_pHostWnd->m_hWnd;
 	if (::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd,hWnd) == false)
 		return nullptr;
-	if (m_pHostGalaxy)
+	if (m_pHostGalaxy&& m_pHostGalaxy->m_nGalaxyType != CtrlBarGalaxy)
 	{
 		auto it = m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
 		if (it != m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.end())

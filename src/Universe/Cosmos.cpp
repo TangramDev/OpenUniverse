@@ -328,12 +328,6 @@ void CCosmos::CosmosInitFromeWeb()
 	if (m_Parse.LoadXml(m_strAppXml))
 	{
 		CTangramXmlParse* pParse = nullptr;
-		pParse = m_Parse.GetChild(_T("appdata"));
-		if (pParse)
-		{
-			m_mapValInfo[_T("appdata")] = CComVariant(pParse->xml());
-			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_COSMOSMSG, 0, 20200603);
-		}
 		pParse = m_Parse.GetChild(_T("modules"));
 		if (pParse)
 		{

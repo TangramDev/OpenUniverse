@@ -1858,13 +1858,6 @@ BOOL CGalaxy::Create()
 	m_pWorkXobj->InitWndXobj();
 	if (m_pWorkXobj->m_pObjClsInfo) {
 		HWND hPWnd = ::GetParent(m_hWnd);
-		if (m_bDockPane == false)
-		{
-			::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-			CString strClassName = g_pCosmos->m_szBuffer;
-			m_bDockPane = (strClassName.Find(_T("Afx:ControlBar:")) == 0);
-		}
-
 		RECT rc;
 		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
@@ -2218,7 +2211,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_bMDIChild = true;
 	}
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
-	if (g_pCosmos->m_pMDIMainWnd)
+	if (g_pCosmos->m_pMDIMainWnd && m_nGalaxyType != CtrlBarGalaxy)
 	{
 		if (::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) || ::IsChild(g_pCosmos->m_hHostBrowserWnd, m_hWnd))
 		{

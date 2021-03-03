@@ -1249,47 +1249,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 2:
 	{
-		if (m_strKey == _T(""))
-		{
-			//CString strPath = m_strPath;
-			//strPath.MakeLower();
-			//int nPos = strPath.ReverseFind('.');
-			//strPath = strPath.Left(nPos);
-			//CString strForms = g_pCosmos->m_strAppFormsTemplatePath;
-			//strForms.MakeLower();
-			//strPath.Replace(strForms, _T(""));
-			//nPos = strPath.Find(_T("\\"));
-			//strPath = strPath.Mid(nPos + 1);
-			//nPos = strPath.Find(_T("\\"));
-			//strPath = strPath.Mid(nPos + 1);
-			//strPath.Replace(_T("\\"), _T("_"));
-			//strPath.Replace(_T(" "), _T("_"));
-			//m_strKey = strPath;
-			//DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-			//if (dw & WS_EX_MDICHILD)
-			//{
-			//	HWND h = ::GetParent(::GetParent(m_hWnd));
-			//	if (h)
-			//	{
-			//		CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_HUBBLE_DATA, 0, 20190214);
-			//		if (pParent)
-			//		{
-			//			auto it = pParent->m_mapKey.find(m_strKey);
-			//			if (it == pParent->m_mapKey.end())
-			//			{
-			//				CTangramXmlParse m_Parse;
-			//				if (m_Parse.LoadFile(m_strPath))
-			//				{
-			//					CTangramXmlParse* pChild = m_Parse.GetChild(m_strKey);
-			//					if (pChild)
-			//						pParent->m_mapKey[m_strKey] = pChild->xml();
-			//				}
-			//			}
-			//		}
-			//	}
-			//}
-		}
-		else
+		if (m_strKey != _T(""))
 		{
 			if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
 			{
@@ -1980,12 +1940,6 @@ BOOL CGalaxy::Create()
 	if (m_pWorkXobj->m_pObjClsInfo) {
 		RECT rc;
 		HWND hPWnd = ::GetParent(m_hWnd);
-		if (m_bDockPane == false)
-		{
-			::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-			CString strClassName = g_pCosmos->m_szBuffer;
-			m_bDockPane = (strClassName.Find(_T("Afx:ControlBar:")) == 0);
-		}
 		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
@@ -2333,7 +2287,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		Unlock();
 		m_pGalaxyCluster->Fire_BeforeOpenXml(CComBSTR(strXml), (long)m_hHostWnd);
 
-		//m_bObserve = true;
 		m_bNoRedrawState = false;
 		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkXobj == nullptr)
@@ -2344,7 +2297,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_bMDIChild = true;
 	}
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
-	if (g_pCosmos->m_pMDIMainWnd)
+	if (g_pCosmos->m_pMDIMainWnd&& m_nGalaxyType != CtrlBarGalaxy)
 	{
 		if (::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) || ::IsChild(g_pCosmos->m_hHostBrowserWnd, m_hWnd))
 		{
@@ -2454,8 +2407,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_pBKWnd->m_pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L""), &pXobj);
 		}
 	}
-
-	//m_bObserve = false;
 
 	HostPosChanged();
 	//Add 20200218
@@ -2681,7 +2632,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 									m_pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = _pGalaxy;
 									_pGalaxy->m_pWebPageWnd = m_pWebPageWnd;
 									IXobj* pXobj = nullptr;
-									//CComBSTR _bstrKey(m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey);
 									_pGalaxy->Observe(_bstrKey, CComBSTR(strXml), &pXobj);
 								}
 							}

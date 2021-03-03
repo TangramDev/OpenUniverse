@@ -63,8 +63,8 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// Galaxy.cpp : implementation file of CGalaxy
-//
+ // Galaxy.cpp : implementation file of CGalaxy
+ //
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -81,14 +81,14 @@ CWinForm::CWinForm(void)
 	m_bMdiForm = false;
 	m_pWormhole = nullptr;
 	m_pOwnerHtmlWnd = nullptr;
-	m_strXml = m_strKey =  _T("");
+	m_strXml = m_strKey = _T("");
 }
 
 CWinForm::~CWinForm(void)
 {
 }
 
-void CWinForm :: SendMessage()
+void CWinForm::SendMessage()
 {
 	if (m_pWormhole == nullptr)
 	{
@@ -195,28 +195,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 2:
 	{
-		if (m_strKey == _T(""))
-		{
-			//CString strPath = m_strPath;
-			//strPath.MakeLower();
-			//int nPos = strPath.ReverseFind('.');
-			//strPath = strPath.Left(nPos);
-			//CString strForms = g_pCosmos->m_strAppFormsTemplatePath;
-			//strForms.MakeLower();
-			//strPath.Replace(strForms, _T(""));
-			//nPos = strPath.Find(_T("\\"));
-			//strPath = strPath.Mid(nPos + 1);
-			//nPos = strPath.Find(_T("\\"));
-			//strPath = strPath.Mid(nPos + 1);
-			//strPath.Replace(_T("\\"), _T("_"));
-			//strPath.Replace(_T(" "), _T("_"));
-			//m_strKey = strPath;
-			//DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-			//if (dw & WS_EX_MDICHILD)
-			//{
-			//	//Don't Support MDI
-			//}
-		}
 		return (LRESULT)m_strKey.GetBuffer();
 	}
 	break;
@@ -248,14 +226,14 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		break;
 	case 20201029:
 	{
-		if(wParam==0)
+		if (wParam == 0)
 			m_bMainForm = true;
 		else
 		{
 			g_pCosmos->m_mapNeedQueryOnClose[m_hWnd] = this;
 		}
 	}
-		break;
+	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
@@ -403,10 +381,7 @@ void CGalaxy::HostPosChanged()
 		::ScreenToClient(hPWnd, ((LPPOINT)&rt1) + 1);
 
 		HDWP dwh = BeginDeferWindowPos(1);
-		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
-		m_bObserve = !m_bDockPane;
-		if (m_bObserve)
-			flag |= SWP_NOREDRAW;
+		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
 			rt1.top,
@@ -722,7 +697,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		}
 
 		Unlock();
-		m_bObserve = true;
 		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkXobj == nullptr)
 			return S_FALSE;
@@ -739,7 +713,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 
 	g_pCosmos->m_strCurrentKey = _T("");
 	*ppRetXobj = (IXobj*)m_pWorkXobj;
-	for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
+	for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 	{
 		it.second->OnObserverComplete(m_hHostWnd, strXml, m_pWorkXobj);
 	}
@@ -800,8 +774,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 	}
-
-	m_bObserve = false;
 
 	HostPosChanged();
 	//Add 20200218
@@ -980,18 +952,18 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
-		case 20180115:
-		{
-			HostPosChanged();
-			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210216);
-		}
-		break;
-		case WM_BROWSERLAYOUT:
-		{
-			CWebPage* pWebWnd = (CWebPage*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
-			::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
-		}
-		break;
+	case 20180115:
+	{
+		HostPosChanged();
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210216);
+	}
+	break;
+	case WM_BROWSERLAYOUT:
+	{
+		CWebPage* pWebWnd = (CWebPage*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
+	}
+	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }

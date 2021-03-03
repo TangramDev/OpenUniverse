@@ -748,6 +748,20 @@ namespace CommonUniverse
 		}
 		return true;
 	}
+	
+	CString CWebRuntimeApp::QueryWndClassName(HWND hWnd)
+	{ 
+		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+		if (pWnd)
+		{
+			CRuntimeClass* pClassInfo = pWnd->GetRuntimeClass();
+			if (pClassInfo)
+			{
+				return CString(pClassInfo->m_lpszClassName);
+			}
+		}
+		return _T(""); 
+	}
 
 	HWND CWebRuntimeApp::QueryWndInfo(QueryType nType, HWND hWnd)
 	{

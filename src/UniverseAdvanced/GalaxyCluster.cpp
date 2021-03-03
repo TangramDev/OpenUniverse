@@ -203,23 +203,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 {
 	HWND h = 0; 
 	CString strGalaxyName = OLE2T(bstrGalaxyName);
-	//auto it = m_mapWnd.find(strGalaxyName);
-	//if (it != m_mapWnd.end())
-	//{
-	//	int i = 0;
-	//	CString s = _T("");
-	//	s.Format(_T("%s%d"), strGalaxyName,i);
-	//	auto it = m_mapWnd.find(s);
-	//	while (it != m_mapWnd.end())
-	//	{
-	//		i++;
-	//		s.Format(_T("%s%d"), strGalaxyName, i);
-	//		it = m_mapWnd.find(s);
-	//		if (it == m_mapWnd.end())
-	//			break;
-	//	}
-	//	strGalaxyName = s;
-	//}
 	BSTR bstrName = strGalaxyName.MakeLower().AllocSysString();
 	if (ParentObj.vt == VT_DISPATCH&&HostWnd.vt == VT_BSTR)
 	{
@@ -319,11 +302,20 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
 				else if(bIsMDI)
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
-				::GetClassName(::GetParent(_hWnd), g_pCosmos->m_szBuffer, MAX_PATH);
+				HWND hPWnd = ::GetParent(_hWnd);
+				::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
 					_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+					CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
+					if (pWnd == nullptr)
+					{
+						CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
+						_pWnd->SubclassWindow(hPWnd);
+						//_pWnd->ModifyStyle(0, WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
+						_pWnd->m_hClient = _hWnd;
+					}
 				}
 				else if (strClassName.Find(_T("MDIClient")) == 0)
 				{

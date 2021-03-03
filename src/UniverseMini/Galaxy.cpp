@@ -22,8 +22,8 @@
  *
  *******************************************************************************/
 
-// Galaxy.cpp : implementation file of CGalaxy
-//
+ // Galaxy.cpp : implementation file of CGalaxy
+ //
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -37,7 +37,7 @@ CWinForm::CWinForm(void)
 {
 	m_nState = -1;
 	m_bMdiForm = false;
-	m_strXml = m_strKey =  _T("");
+	m_strXml = m_strKey = _T("");
 }
 
 CWinForm::~CWinForm(void)
@@ -259,10 +259,7 @@ void CGalaxy::HostPosChanged()
 		::ScreenToClient(hPWnd, ((LPPOINT)&rt1) + 1);
 
 		HDWP dwh = BeginDeferWindowPos(1);
-		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
-		m_bObserve = !m_bDockPane;
-		if (m_bObserve)
-			flag |= SWP_NOREDRAW;
+		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
 			rt1.top,
@@ -578,7 +575,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		}
 
 		Unlock();
-		m_bObserve = true;
 		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkXobj == nullptr)
 			return S_FALSE;
@@ -650,8 +646,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 	}
-
-	m_bObserve = false;
 
 	HostPosChanged();
 	//Add 20200218
@@ -764,11 +758,11 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
-		case 20180115:
-		{
-			HostPosChanged();
-		}
-		break;
+	case 20180115:
+	{
+		HostPosChanged();
+	}
+	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }

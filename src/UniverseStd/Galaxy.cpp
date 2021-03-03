@@ -1535,13 +1535,6 @@ BOOL CGalaxy::Create()
 	if (m_pWorkXobj->m_pObjClsInfo) {
 		HWND hPWnd = ::GetParent(m_hWnd);
 		CWnd* pParentWnd = CWnd::FromHandle(hPWnd);
-		if (m_bDockPane == false)
-		{
-			::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-			CString strClassName = g_pCosmos->m_szBuffer;
-			m_bDockPane = (strClassName.Find(_T("Afx:ControlBar:")) == 0);
-		}
-
 		m_pWorkXobj->m_pRootObj = m_pWorkXobj;
 		CCreateContext	m_Context;
 		m_Context.m_pNewViewClass = m_pWorkXobj->m_pObjClsInfo;

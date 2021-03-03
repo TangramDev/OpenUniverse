@@ -701,9 +701,9 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = g_pCosmos->m_szBuffer;
 		memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
-		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-		CString strPClassName = g_pCosmos->m_szBuffer;
-		memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
+		//::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+		//CString strPClassName = g_pCosmos->m_szBuffer;
+		//memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
 
 		CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 		if (dwID == AFX_IDW_PANE_FIRST)
@@ -1507,18 +1507,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								else
 									pInfo->m_mapAuxiliaryWnd[strCaption] = hWnd;
 							}
-						}
-					}
-				}
-				break;
-				case 20200603:
-				{
-					auto it = g_pCosmos->m_mapValInfo.find(_T("appdata"));
-					if (it != g_pCosmos->m_mapValInfo.end())
-					{
-						for (auto it2 : g_pCosmos->m_mapRemoteTangramApp)
-						{
-							it2.second->put_AppKeyValue(CComBSTR("appdata"), it->second);
 						}
 					}
 				}

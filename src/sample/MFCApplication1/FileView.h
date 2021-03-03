@@ -15,7 +15,8 @@ class CFileViewToolBar : public CMFCToolBar
 
 class CFileView : public CDockablePane//CCosmosDockablePane
 {
-// Construction
+	DECLARE_DYNAMIC(CFileView)
+	// Construction
 public:
 	CFileView() noexcept;
 

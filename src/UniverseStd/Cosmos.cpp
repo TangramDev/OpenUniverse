@@ -811,12 +811,6 @@ void CCosmos::TangramInitFromeWeb()
 	{
 		m_pHostHtmlWnd->m_strPageName = m_Parse.attr(_T("pagename"), _T("default"));
 		CTangramXmlParse* pParse = nullptr;
-		pParse = m_Parse.GetChild(_T("appdata"));
-		if (pParse)
-		{
-			m_mapValInfo[_T("appdata")] = CComVariant(pParse->xml());
-			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_COSMOSMSG, 0, 20200603);
-		}
 		pParse = m_Parse.GetChild(_T("modules"));
 		if (pParse)
 		{
@@ -2429,21 +2423,6 @@ STDMETHODIMP CCosmos::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 			::VariantClear(&newVal);
 			return S_OK;
 		}
-		if (strKey == _T("appdata") && ::GetModuleHandle(_T("msenv.dll")))
-		{
-			m_mapValInfo[strKey] = newVal;
-			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_COSMOSMSG, 0, 20200628);
-			return S_OK;
-		}
-		if (strKey == _T("designertoolcaption") && strData != _T("") && ::IsWindow(m_hHostWnd))
-		{
-			::SetWindowText(m_hHostWnd, strData);
-		}
-		if (strKey == _T("newtangramdocument"))
-		{
-			m_strNewDocXml = strData;
-			return S_OK;
-		}
 	}
 
 	if (strKey.CompareNoCase(_T("CLRProxy")) == 0)
@@ -2513,41 +2492,8 @@ STDMETHODIMP CCosmos::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 		}
 		return S_OK;
 	}
-	else if (strKey.Find(_T("loaddocument2viewport:")) == 0 || strKey.Find(_T("handlechromeipcmessage:")) == 0)
-	{
-		::GetModuleFileName(::GetModuleHandle(_T("tangramdesigner.dll")), g_pCosmos->m_szBuffer, MAX_PATH);
-		CString strLib = CString(g_pCosmos->m_szBuffer);
-		CString strObjName = _T("TangramDesigner.WebRuntimeHelper");
-		CString strFunctionName = _T("CosmosInit");
-		DWORD dwRetCode = 0;
-		CString strData = strKey + _T("@") + OLE2T(newVal.bstrVal);
-		g_pCosmos->m_pClrHost->ExecuteInDefaultAppDomain(
-			strLib,
-			strObjName,
-			strFunctionName,
-			strData,
-			&dwRetCode);
-		return S_OK;
-	}
-	if (strKey.Find(_T("tangramprocess:")) == 0)
-	{
-		IDispatch* pDisp = newVal.pdispVal;
-		CComQIPtr<ICosmos>p(pDisp);
-		if (p)
-		{
-			strKey.Replace(_T("tangramprocess:"), _T(""));
-			if (strKey.Find(_T("fordebug:")) == 0)
-			{
-				strKey.Replace(_T("fordebug:"), _T(""));
-			}
-			int nIndex = _wtoi64(strKey);
-			ICosmos* pDisp = p.Detach();
-			pDisp->AddRef();
-			m_mapRemoteTangramApp[nIndex] = pDisp;
-		}
-	}
-	else
-		m_mapValInfo[strKey] = newVal;
+
+	m_mapValInfo[strKey] = newVal;
 	if (strKey.CompareNoCase(_T("EnableProcessFormTabKey")) == 0)
 	{
 		m_bEnableProcessFormTabKey = (newVal.vt == VT_I4 && newVal.lVal == 0) ? false : true;
@@ -4569,6 +4515,7 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 	else
 	{
 		HWND hPWnd = ::GetParent(hWnd);
+		HWND _hPWnd = hPWnd;
 		while (hPWnd)
 		{
 			bool bMDIChild = ::GetWindowLong(hPWnd, GWL_EXSTYLE) & WS_EX_MDICHILD;
@@ -4595,11 +4542,18 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 		m_pGalaxy = new CComObject<CGalaxy>();
 		CString strName = _T("default");
 		m_pGalaxy->m_strGalaxyName = strName;
-		::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
+		::GetClassName(_hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = CString(g_pCosmos->m_szBuffer);
 		if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 		{
 			m_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+			CWnd* pWnd = CWnd::FromHandlePermanent(_hPWnd);
+			if (pWnd == nullptr)
+			{
+				CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
+				_pWnd->SubclassWindow(_hPWnd);
+				_pWnd->m_hClient = hWnd;
+			}
 		}
 		else if (strClassName.Find(_T("MDIClient")) == 0)
 		{

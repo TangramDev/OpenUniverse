@@ -309,8 +309,6 @@ public:
 	CGalaxy();
 	virtual ~CGalaxy();
 
-	bool											m_bDockPane = false;
-
 	BOOL											m_bNoRedrawState = false;
 	BOOL											m_bTabbedMDIClient;
 	BOOL											m_bDetached;

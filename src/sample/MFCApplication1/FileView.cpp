@@ -14,6 +14,7 @@ static char THIS_FILE[]=__FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // CFileView
+IMPLEMENT_DYNAMIC(CFileView, CDockablePane)
 
 CFileView::CFileView() noexcept
 {

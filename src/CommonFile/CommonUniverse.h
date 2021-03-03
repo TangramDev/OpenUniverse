@@ -497,6 +497,7 @@ namespace CommonUniverse {
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
 		virtual bool EclipseAppInit() { return false; }
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
+		virtual CString QueryWndClassName(HWND hWnd) { return _T(""); }
 	};
 
 	class ICosmosCLRImpl
