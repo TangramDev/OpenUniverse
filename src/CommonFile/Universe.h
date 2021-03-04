@@ -302,7 +302,8 @@ enum GalaxyType
         EclipseSWTGalaxy	= 0x9,
         WinFormControlGalaxy	= 0xa,
         TabbedMDIClientGalaxy	= 0xb,
-        NOGalaxy	= 0x10a
+        ControlBar	= 0xc,
+        NOGalaxy	= 0xd
     } 	GalaxyType;
 
 typedef /* [helpstring] */ 

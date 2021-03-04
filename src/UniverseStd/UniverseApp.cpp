@@ -1470,7 +1470,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
 												if (pGalaxy)
 												{
-													pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
+													pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strKey] = pGalaxy;
 													pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 												}
 											}
@@ -1497,15 +1497,15 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							CString strCaption = szBuffer;
 							if (strCaption != _T(""))
 							{
-								auto it = pInfo->m_mapAuxiliaryWnd.find(strCaption);
-								if (it != pInfo->m_mapAuxiliaryWnd.end())
+								auto it = pInfo->m_mapCtrlBarWnd.find(strCaption);
+								if (it != pInfo->m_mapCtrlBarWnd.end())
 								{
 									HWND h = it->second;
 									if (::IsChild(hWnd, h) == false)
-										pInfo->m_mapAuxiliaryWnd[strCaption] = hWnd;
+										pInfo->m_mapCtrlBarWnd[strCaption] = hWnd;
 								}
 								else
-									pInfo->m_mapAuxiliaryWnd[strCaption] = hWnd;
+									pInfo->m_mapCtrlBarWnd[strCaption] = hWnd;
 							}
 						}
 					}

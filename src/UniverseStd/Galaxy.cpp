@@ -2105,15 +2105,15 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 					{
 						CString strKey = _T("client");
 						IGalaxy* pGalaxy = nullptr;
-						auto it = pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.find(strKey);
-						if (it != pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.end())
+						auto it = pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(strKey);
+						if (it != pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
 						{
 							pGalaxy = it->second;
 						}
 						else
 						{
 							pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-							pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
+							pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strKey] = pGalaxy;
 							strXml = pClient->xml();
 						}
 						if (pGalaxy)
@@ -2140,8 +2140,8 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						CString strCaption = pParse2->attr(_T("caption"), _T(""));
 						if (strCaption != _T(""))
 						{
-							auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
-							if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
+							auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(strCaption);
+							if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 							{
 								HWND hWnd = it->second;
 								int nID = pParse2->attrInt(_T("clientid"), 0);
@@ -2156,21 +2156,21 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 										CString strKey = strCaption;
 										strKey.Replace(_T(" "), _T("_"));
 
-										auto it = pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.find(strKey);
-										if (it != pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys.end())
+										auto it = pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(strKey);
+										if (it != pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
 										{
 											pGalaxy = it->second;
 										}
 										else
 										{
 											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-											pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = pGalaxy;
+											pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strKey] = pGalaxy;
 											strXml = pParse2->xml();
 										}
 										if (pGalaxy)
 										{
 											CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-											pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = _pGalaxy;
+											pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strKey] = _pGalaxy;
 											_pGalaxy->m_pWebPageWnd = m_pWebPageWnd;
 											IXobj* pXobj = nullptr;
 											CComBSTR _bstrKey(m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey);

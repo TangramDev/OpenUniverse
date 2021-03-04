@@ -247,6 +247,7 @@ public:
 	CString											m_strGalaxyName;
 	CString											m_strCurrentKey;
 	CString											m_strCurrentXml;
+	CString											m_strDocTemplateID = _T("");
 	CString											m_strHostWebBrowserNodeName = _T("");
 	CEclipseWnd*									m_pWorkBenchFrame;
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;

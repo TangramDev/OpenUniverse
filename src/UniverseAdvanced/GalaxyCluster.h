@@ -56,7 +56,7 @@ public:
 	CGalaxy*									m_pBKGalaxy;
 	IUniverseAppProxy*							m_pUniverseAppProxy;
 	map<CString, CString>						m_strMapKey;
-	map<HWND, CGalaxy*>							m_mapAuxiliaryWndGalaxy;
+	map<HWND, CGalaxy*>							m_mapCtrlBarWndGalaxy;
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CGalaxy*>							m_mapGalaxy;
 	map<HWND, CGalaxy*>							m_mapNeedSaveGalaxy;

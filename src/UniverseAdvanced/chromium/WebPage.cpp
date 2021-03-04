@@ -200,6 +200,14 @@ namespace Browser {
 				if (pSession)
 				{
 					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
+					CString strDocType = pXobj->m_pXobjShareData->m_pGalaxy->m_strDocTemplateID;
+					if (strDocType == _T(""))
+					{
+						strDocType = g_pCosmos->m_pUniverseAppProxy->QueryDocType(pXobj->m_pHostWnd->m_hWnd);
+						pXobj->m_pXobjShareData->m_pGalaxy->m_strDocTemplateID = strDocType;
+					}
+					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
+					pSession->InsertString(_T("DocTypeID"), strDocType);
 					pSession->InsertLong(_T("autodelete"), 0);
 					pSession->InsertLong(_T("gridtype"), pXobj->m_nViewType);
 					pSession->InsertLong(_T("rows"), pXobj->m_nRows);
@@ -1002,8 +1010,8 @@ namespace Browser {
 									CString strCaption = pParse2->attr(_T("caption"), _T(""));
 									if (strCaption != _T(""))
 									{
-										auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
-										if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
+										auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(strCaption);
+										if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 										{
 											HWND hWnd = it->second;
 											int nID = pParse2->attrInt(_T("clientid"), 0);
@@ -1248,7 +1256,7 @@ namespace Browser {
 							if (pGalaxy)
 							{
 								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-								pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strKey] = _pGalaxy;
+								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strKey] = _pGalaxy;
 								_pGalaxy->m_pWebPageWnd = this;
 								if (g_pCosmos->m_pMDIMainWnd)
 								{
@@ -1268,8 +1276,8 @@ namespace Browser {
 							CString strCaption = pParse2->attr(_T("caption"), _T(""));
 							if (strCaption != _T(""))
 							{
-								auto it = pCosmosFrameWndInfo->m_mapAuxiliaryWnd.find(strCaption);
-								if (it != pCosmosFrameWndInfo->m_mapAuxiliaryWnd.end())
+								auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(strCaption);
+								if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 								{
 									HWND hWnd = it->second;
 									int nID = pParse2->attrInt(_T("clientid"), 0);
@@ -1286,7 +1294,7 @@ namespace Browser {
 											if (pGalaxy)
 											{
 												CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-												pCosmosFrameWndInfo->m_mapAuxiliaryGalaxys[strName] = _pGalaxy;
+												pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strName] = _pGalaxy;
 												_pGalaxy->m_pWebPageWnd = this;
 												IXobj* pXobj = nullptr;
 												_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);

@@ -748,9 +748,29 @@ namespace CommonUniverse
 		}
 		return true;
 	}
-	
+
+	CString CWebRuntimeApp::QueryDocType(HWND hWnd)
+	{
+		CWnd* pWnd = CWnd::FromHandle(hWnd);
+		CFrameWnd* pFrame = pWnd->GetParentFrame();
+		if (pFrame)
+		{
+			CString strType = (LPCTSTR)::SendMessage(pFrame->m_hWnd, WM_COSMOSMSG, 0, 10000);
+			if (strType == _T("") && pFrame == m_pMainWnd && pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+			{
+				strType = _T("mdiframe");
+			}
+			if (strType == _T("") && pFrame == m_pMainWnd && pFrame->IsKindOf(RUNTIME_CLASS(CMiniFrameWnd)))
+			{
+				strType = _T("miniframe");
+			}
+			return strType;
+		}
+		return _T("");
+	}
+
 	CString CWebRuntimeApp::QueryWndClassName(HWND hWnd)
-	{ 
+	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
 		if (pWnd)
 		{
@@ -760,24 +780,27 @@ namespace CommonUniverse
 				return CString(pClassInfo->m_lpszClassName);
 			}
 		}
-		return _T(""); 
+		return _T("");
 	}
 
 	HWND CWebRuntimeApp::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
-		if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
+		if (pWnd)
 		{
-			BOOL bMDIClient = true;
-			if (nType == RecalcLayout)
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
 			{
-				CFrameWnd* pFrame = pWnd->GetParentFrame();
-				if (pFrame)
+				BOOL bMDIClient = true;
+				if (nType == RecalcLayout)
 				{
-					pFrame->RecalcLayout();
+					CFrameWnd* pFrame = pWnd->GetParentFrame();
+					if (pFrame)
+					{
+						pFrame->RecalcLayout();
+					}
 				}
+				return ::GetParent(hWnd);
 			}
-			return ::GetParent(hWnd);
 		}
 		switch (nType)
 		{

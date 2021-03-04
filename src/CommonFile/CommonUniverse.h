@@ -232,16 +232,16 @@ namespace CommonUniverse {
 		CString			m_strXobjXml = _T("");
 		CString			m_strSessionID = _T("");
 		CString			m_strTag = _T("");
-		IXobj* m_pXobj = nullptr;
-		IGalaxy* m_pGalaxy = nullptr;
+		IXobj*			m_pXobj = nullptr;
+		IGalaxy*		m_pGalaxy = nullptr;
 		IGalaxyCluster* m_pGalaxyCluster = nullptr;
 	}CosmosInfo;
 
 	typedef struct GalaxyInfo
 	{
 		HWND			m_hCtrlHandle;
-		IDispatch* m_pDisp;
-		IDispatch* m_pParentDisp;
+		IDispatch*		m_pDisp;
+		IDispatch*		m_pParentDisp;
 		CString			m_strCtrlName;
 		CString			m_strGalaxyName;
 		CString			m_strXobjXml;
@@ -262,14 +262,16 @@ namespace CommonUniverse {
 	typedef struct CosmosFrameWndInfo
 	{
 		bool bControlBarProessed = false;
-		int m_nFrameType = 0;//0:SDI;1:MDT;2:MDI
+		int m_nFrameType = 0;//0:SDI;1:MDT;2:MDI;3:MDIChild
 		HWND m_hClient = NULL;
 		CString m_strData = _T("");
+		CString m_strDocTemplateID = _T("");
 		IWebPage* m_pWebPage = nullptr;
 		void* m_pDoc = nullptr;
+		void* m_pHostWnd = nullptr;
 		void* m_pDocTemplate = nullptr;
-		map<CString, HWND> m_mapAuxiliaryWnd;
-		map<CString, IGalaxy*> m_mapAuxiliaryGalaxys;
+		map<CString, HWND>     m_mapCtrlBarWnd;
+		map<CString, IGalaxy*> m_mapCtrlBarGalaxys;
 	} CosmosFrameWndInfo;
 
 	typedef struct CtrlInfo
@@ -497,6 +499,7 @@ namespace CommonUniverse {
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
 		virtual bool EclipseAppInit() { return false; }
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
+		virtual CString QueryDocType(HWND hWnd) { return _T(""); }
 		virtual CString QueryWndClassName(HWND hWnd) { return _T(""); }
 	};
 

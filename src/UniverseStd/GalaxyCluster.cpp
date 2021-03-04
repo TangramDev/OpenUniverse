@@ -307,50 +307,54 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				DWORD dwID = ::GetWindowThreadProcessId(_hWnd, NULL);
 				CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 
-				CGalaxy* pGalaxy = new CComObject<CGalaxy>();
+				CGalaxy* _pGalaxy = new CComObject<CGalaxy>();
 				CString strName = strGalaxyName;
 				if (strName == _T(""))
 					strName = _T("default");
 				strName.MakeLower();
-				pGalaxy->m_strGalaxyName = strName;
+				_pGalaxy->m_strGalaxyName = strName;
 				if (strName.CompareNoCase(_T("System.Windows.Forms.MdiClient")) == 0)
-					pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
-				else if(bIsMDI)
-					pGalaxy->m_nGalaxyType = MDIClientGalaxy;
+				{
+					_pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
+					_pGalaxy->m_strDocTemplateID = _T("System.Windows.Forms.MdiClient");
+				}
+				else if (bIsMDI)
+				{
+					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
+					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
+				}
 				HWND hPWnd = ::GetParent(_hWnd);
 				::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-				CString strClassName = CString(g_pCosmos->m_szBuffer);
+				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
-					pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+					_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+					_pGalaxy->m_strDocTemplateID = _T("ControlBar");
 					CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
 					if (pWnd == nullptr)
 					{
 						CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
 						_pWnd->SubclassWindow(hPWnd);
+						//_pWnd->ModifyStyle(0, WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
 						_pWnd->m_hClient = _hWnd;
 					}
 				}
-				else if (strClassName.Find(_T("MDIClient")) == 0)
-				{
-					pGalaxy->m_nGalaxyType = MDIClientGalaxy;
-				}
-				pGalaxy->m_pGalaxyCluster = this;
-				pGalaxy->m_hHostWnd = _hWnd;
-				pThreadInfo->m_mapGalaxy[_hWnd] = pGalaxy;
-				m_mapGalaxy[_hWnd] = pGalaxy;
+				_pGalaxy->m_pGalaxyCluster = this;
+				_pGalaxy->m_hHostWnd = _hWnd;
+				pThreadInfo->m_mapGalaxy[_hWnd] = _pGalaxy;
+				m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapWnd[strName] = _hWnd;
 
-				for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+				for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
 				{
-					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(pGalaxy);
+					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(_pGalaxy);
 					if (pGalaxyProxy)
 					{
-						pGalaxy->m_mapGalaxyProxy[it.second] = pGalaxyProxy;
+						_pGalaxy->m_mapGalaxyProxy[it.second] = pGalaxyProxy;
 					}
 				}
 
-				*pRetFrame = pGalaxy;
+				*pRetFrame = _pGalaxy;
 			}
 			else
 				*pRetFrame = it->second;

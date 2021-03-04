@@ -114,9 +114,10 @@ namespace blink {
 	  mutable Member<CosmosWinform> m_pActiveMDIChild;
 
 	  map<wstring, CosmosGalaxy*> m_mapCosmosGalaxy;
+	  map<wstring, CosmosWinform*> m_mapControlBars;
 
 	  map<int64_t, Member<CosmosControl>> m_mapChildControl;
-	  map<std::wstring, Member<CosmosControl>> m_mapChildControl2;
+	  map<wstring, Member<CosmosControl>> m_mapChildControl2;
 	};
 
 }  // namespace blink

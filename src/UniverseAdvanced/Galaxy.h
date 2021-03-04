@@ -164,6 +164,7 @@ public:
 
 	CGalaxy*	m_pGalaxy = nullptr;
 	CXobj*		m_pClientBindingObj = nullptr;
+	CMDIParent* m_pParent = nullptr;
 	BEGIN_MSG_MAP(CMDIChild)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
@@ -320,6 +321,7 @@ public:
 	CString											m_strGalaxyName;
 	CString											m_strCurrentKey;
 	CString											m_strCurrentXml;
+	CString											m_strDocTemplateID = _T("");
 	CString											m_strHostWebBrowserNodeName = _T("");
 	CEclipseWnd*									m_pWorkBenchFrame;
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;

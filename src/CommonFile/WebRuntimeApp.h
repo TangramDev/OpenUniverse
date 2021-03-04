@@ -178,6 +178,7 @@ namespace CommonUniverse
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {};
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
 		virtual CString QueryWndClassName(HWND hWnd);
+		virtual CString QueryDocType(HWND hWnd);
 		virtual bool EclipseAppInit() { return false; };
 
 		//ICosmosWindowProvider:

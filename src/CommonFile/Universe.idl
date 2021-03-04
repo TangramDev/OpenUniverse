@@ -128,7 +128,8 @@ enum GalaxyType
 	EclipseSWTGalaxy = 0x00000009,
 	WinFormControlGalaxy = 0x0000000a,
 	TabbedMDIClientGalaxy = 0x0000000b,
-	NOGalaxy = 0x0000010a
+	ControlBar = 0x0000000c,
+	NOGalaxy = 0x0000000d
 }GalaxyType;
 
 typedef

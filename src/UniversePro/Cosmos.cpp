@@ -4627,6 +4627,7 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 		if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 		{
 			m_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+			m_pGalaxy->m_strDocTemplateID = _T("ControlBar");
 			CWnd* pWnd = CWnd::FromHandlePermanent(_hPWnd);
 			if (pWnd == nullptr)
 			{
@@ -4638,6 +4639,7 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 		else if (strClassName.Find(_T("MDIClient")) == 0)
 		{
 			m_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
+			m_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 		}
 
 		m_pGalaxy->m_hHostWnd = hWnd;

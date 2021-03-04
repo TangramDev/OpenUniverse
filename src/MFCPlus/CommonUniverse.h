@@ -268,8 +268,8 @@ namespace CommonUniverse {
 		IWebPage* m_pWebPage = nullptr;
 		void* m_pDoc = nullptr;
 		void* m_pDocTemplate = nullptr;
-		map<CString,HWND> m_mapAuxiliaryWnd;
-		map<CString, IGalaxy*> m_mapAuxiliaryGalaxys;
+		map<CString,HWND> m_mapCtrlBarWnd;
+		map<CString, IGalaxy*> m_mapCtrlBarGalaxys;
 	} CosmosFrameWndInfo;
 
 	typedef struct CtrlInfo

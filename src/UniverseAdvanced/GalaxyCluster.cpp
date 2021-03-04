@@ -299,15 +299,22 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				strName.MakeLower();
 				_pGalaxy->m_strGalaxyName = strName;
 				if (strName.CompareNoCase(_T("System.Windows.Forms.MdiClient")) == 0)
+				{
 					_pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
-				else if(bIsMDI)
+					_pGalaxy->m_strDocTemplateID = _T("System.Windows.Forms.MdiClient");
+				}
+				else if (bIsMDI)
+				{
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
+					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
+				}
 				HWND hPWnd = ::GetParent(_hWnd);
 				::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 				{
 					_pGalaxy->m_nGalaxyType = CtrlBarGalaxy;
+					_pGalaxy->m_strDocTemplateID = _T("ControlBar");
 					CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
 					if (pWnd == nullptr)
 					{
@@ -320,6 +327,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				else if (strClassName.Find(_T("MDIClient")) == 0)
 				{
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
+					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 				}
 				if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == _hWnd)
 				{

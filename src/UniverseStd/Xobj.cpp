@@ -463,6 +463,7 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 			if (m_pHostGalaxy && ::IsWindow(m_hHostWnd))
 			{
+				m_pHostGalaxy->m_strDocTemplateID = m_pXobjShareData->m_pGalaxy->m_strDocTemplateID;
 				m_pHostGalaxy->m_pContainerNode = this;
 				if (m_pXobjShareData->m_pGalaxy->m_pParentXobj)
 				{
@@ -528,6 +529,7 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 			m_pXobjShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pWndXobj->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pGalaxy);
 			pWndXobj->m_pHostGalaxy = (CGalaxy*)pGalaxy;
 			CGalaxy* _pGalaxy = pWndXobj->m_pHostGalaxy;
+			_pGalaxy->m_strDocTemplateID = m_pXobjShareData->m_pGalaxy->m_strDocTemplateID;
 			_pGalaxy->m_pWebPageWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 			if (m_pXobjShareData->m_pGalaxy->m_pParentXobj)
 			{
