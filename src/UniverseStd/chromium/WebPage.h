@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103040042           *
+ *           Web Runtime for Application - Version 1.0.0.202103050043           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -28,6 +28,20 @@
 class CWinForm;
 namespace Browser
 {
+	class CExtendWnd : public CWindowImpl<CExtendWnd, CWindow>
+	{
+	public:
+		CExtendWnd(void);
+		BEGIN_MSG_MAP(CExtendWnd)
+			MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
+		END_MSG_MAP()
+		CWebPage* m_pHostPage = nullptr;
+	private:
+		void OnFinalMessage(HWND hWnd);
+	public:
+		LRESULT OnEraseBkgnd(UINT, WPARAM, LPARAM, BOOL&);
+	};
+
 	class ATL_NO_VTABLE CWebPage :
 		public CWebPageImpl,
 		public CWindowImpl<CWebPage, CWindow>,

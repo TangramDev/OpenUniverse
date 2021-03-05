@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103040042           *
+ *           Web Runtime for Application - Version 1.0.0.202103050043           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -206,6 +206,7 @@ namespace Browser {
 						strDocType = g_pCosmos->m_pUniverseAppProxy->QueryDocType(pXobj->m_pHostWnd->m_hWnd);
 						pXobj->m_pXobjShareData->m_pGalaxy->m_strDocTemplateID = strDocType;
 					}
+					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
 					pSession->InsertString(_T("DocTypeID"), strDocType);
 					pSession->InsertLong(_T("autodelete"), 0);
 					pSession->InsertLong(_T("gridtype"), pXobj->m_nViewType);
@@ -1006,10 +1007,10 @@ namespace Browser {
 								for (int i = 0; i < nCount; i++)
 								{
 									CTangramXmlParse* pParse2 = pParse->GetChild(i);
-									CString strCaption = pParse2->attr(_T("caption"), _T(""));
-									if (strCaption != _T(""))
+									int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
+									if (nBarID)
 									{
-										auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(strCaption);
+										auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
 										if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 										{
 											HWND hWnd = it->second;
@@ -1026,8 +1027,8 @@ namespace Browser {
 												if (pCluster)
 												{
 													IGalaxy* pGalaxy = nullptr;
-													CString strKey = strCaption;
-													strKey.Replace(_T(""), _T("_"));
+													CString strKey = _T("");
+													strKey.Format(_T("ControlBar_%d"), nBarID);
 													pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
 													if (pGalaxy)
 													{
@@ -1036,6 +1037,9 @@ namespace Browser {
 														IXobj* pXobj = nullptr;
 														_pGalaxy->Observe(CComBSTR(strParam1), CComBSTR(strXml), &pXobj);
 													}
+													CString strCaption = pParse2->attr(_T("caption"), _T(""));
+													if (strCaption != _T(""))
+														::SetWindowText(::GetParent(hClient), strCaption);
 												}
 											}
 										}
@@ -1255,7 +1259,7 @@ namespace Browser {
 							if (pGalaxy)
 							{
 								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strKey] = _pGalaxy;
+								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
 								_pGalaxy->m_pWebPageWnd = this;
 								if (g_pCosmos->m_pMDIMainWnd)
 								{
@@ -1272,10 +1276,10 @@ namespace Browser {
 						for (int i = 0; i < nCount; i++)
 						{
 							CTangramXmlParse* pParse2 = pParse->GetChild(i);
-							CString strCaption = pParse2->attr(_T("caption"), _T(""));
-							if (strCaption != _T(""))
+							int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
+							if (nBarID)
 							{
-								auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(strCaption);
+								auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
 								if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 								{
 									HWND hWnd = it->second;
@@ -1287,16 +1291,19 @@ namespace Browser {
 										if (pCluster)
 										{
 											IGalaxy* pGalaxy = nullptr;
-											CString strName = strCaption;
-											strName.Replace(_T(" "), _T("_"));
-											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
+											CString strKey = _T("");
+											strKey.Format(_T("ControlBar_%d"), nBarID);
+											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
 											if (pGalaxy)
 											{
 												CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-												pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strName] = _pGalaxy;
+												pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
 												_pGalaxy->m_pWebPageWnd = this;
 												IXobj* pXobj = nullptr;
 												_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
+												CString strCaption = pParse2->attr(_T("caption"), _T(""));
+												if (strCaption != _T(""))
+													::SetWindowText(::GetParent(hClient), strCaption);
 											}
 										}
 									}

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103040042           *
+ *           Web Runtime for Application - Version 1.0.0.202103050043           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -128,8 +128,7 @@ enum GalaxyType
 	EclipseSWTGalaxy = 0x00000009,
 	WinFormControlGalaxy = 0x0000000a,
 	TabbedMDIClientGalaxy = 0x0000000b,
-	ControlBar = 0x0000000c,
-	NOGalaxy = 0x0000000d
+	NOGalaxy = 0x0000000c
 }GalaxyType;
 
 typedef

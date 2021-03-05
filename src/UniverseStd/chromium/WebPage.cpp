@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103040042           *
+ *           Web Runtime for Application - Version 1.0.0.202103050043           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -34,6 +34,76 @@
 #include "Browser.h"
 
 namespace Browser {
+	CExtendWnd::CExtendWnd(void)
+	{
+	}
+
+	void CExtendWnd::OnFinalMessage(HWND hWnd)
+	{
+		CWindowImpl<CExtendWnd, CWindow>::OnFinalMessage(hWnd);
+		delete this;
+	}
+
+	LRESULT CExtendWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	{
+		CDC* dc = CDC::FromHandle((HDC)wParam);
+		RECT rc;
+		::GetClientRect(m_hWnd, &rc);
+		dc->FillSolidRect(0, 0, rc.right, rc.bottom, RGB(255, 255, 255));
+
+		//HDC hDC = ::GetDC(m_pHostPage->m_hWnd);
+		//CDC* pDC = CDC::FromHandle(hDC);
+
+		//RECT rc;
+		//::GetClientRect(m_pHostPage->m_hWnd, &rc);
+
+		////CDC memDC;
+		////CBitmap bitmap;
+		////memDC.CreateCompatibleDC(pDC);
+		////bitmap.CreateCompatibleBitmap(pDC, rc.right, rc.bottom);
+		////dc->SelectObject(&bitmap);
+		////CDC dcMemory;
+		////dcMemory.CreateCompatibleDC(pDC);
+
+		////// Select the bitmap into the in-memory DC
+		////CBitmap* pOldBitmap = dcMemory.SelectObject(&bmp);
+		//dc->BitBlt(0, 0, rc.right, rc.bottom, pDC, 0, 0, SRCCOPY);
+
+		//CBrush br(&bitmap);
+		//RECT rt;
+		//GetClientRect(&rt);
+		//dc->FillRect(&rt, &br);
+
+		//memDC.DeleteDC();
+		//bitmap.DeleteObject();
+
+		//::ReleaseDC(m_pHostPage->m_hWnd, hDC);
+
+		//HDC hDC = ::GetDC(m_pHostPage->m_hWnd);
+		//CDC* pDC = CDC::FromHandle(hDC);
+		//RECT rc;
+		//::GetClientRect(m_pHostPage->m_hWnd, &rc);
+		//CDC memDC;
+		//CBitmap bitmap;
+		//memDC.CreateCompatibleDC(pDC);
+		//bitmap.CreateCompatibleBitmap(pDC, rc.right, rc.bottom);
+		//memDC.SelectObject(&bitmap);
+		//memDC.BitBlt(0, 0, rc.right, rc.bottom, pDC, 0, 0, SRCCOPY);
+
+		//CBrush br(&bitmap);
+		//RECT rt;
+		//GetClientRect(&rt);
+		//dc->FillRect(&rt, &br);
+
+		//memDC.DeleteDC();
+		//bitmap.DeleteObject();
+
+		//RECT rc;
+		//::GetClientRect(m_hWnd, &rc);
+		//dc->FillSolidRect(0, 0, rc.right, rc.bottom, RGB(255, 255, 255));
+		return true;
+	}
+
 	CWebPage::CWebPage() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
@@ -99,6 +169,8 @@ namespace Browser {
 				{
 					::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
 					::ShowWindow(m_hExtendWnd, SW_SHOW);
+					if (m_pChromeRenderFrameHost)
+						m_pChromeRenderFrameHost->ShowWebPage(true);
 				}
 			}
 			else
@@ -545,8 +617,11 @@ namespace Browser {
 				if (pBrowserWnd)
 				{
 					m_pChromeRenderFrameHost->ShowWebPage(true);
-					pBrowserWnd->BrowserLayout();
-					::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 2);
+					if (::GetParent(hPWnd) == nullptr)
+					{
+						pBrowserWnd->BrowserLayout();
+						::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 2);
+					}
 				}
 			}
 			else
@@ -722,31 +797,32 @@ namespace Browser {
 	{
 		HWND hBrowser = ::GetParent(m_hWnd);
 		HWND hPPWnd = ::GetParent(hBrowser);
-		if (m_pCosmosFrameWndInfo == nullptr)
+
+		CBrowser* pBrowserWnd = nullptr;
+		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+		if (it != g_pCosmos->m_mapBrowserWnd.end())
 		{
-			CBrowser* pBrowserWnd = nullptr;
-			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())
+			pBrowserWnd = (CBrowser*)it->second;
+			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
+				::ShowWindow(m_hWnd, SW_HIDE);
+			if (pBrowserWnd->m_pCosmosFrameWndInfo == nullptr)
 			{
-				pBrowserWnd = (CBrowser*)it->second;
-				if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
-					::ShowWindow(m_hWnd, SW_HIDE);
-				if (pBrowserWnd->m_pCosmosFrameWndInfo == nullptr)
+				CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
+				if (pInfo)
 				{
-					CosmosInfo* pInfo = (CosmosInfo*)::GetProp(hPPWnd, _T("CosmosInfo"));
-					if (pInfo)
+					pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
+					HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
+					hPWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hPWnd);
+					if (hPWnd)
 					{
-						pBrowserWnd->m_pParentXobj = (CXobj*)pInfo->m_pXobj;
-						HWND hPWnd = pBrowserWnd->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-						hPWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hPWnd);
-						if (hPWnd)
-						{
-							m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));
-							pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
-						}
+						pBrowserWnd->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));;
 					}
 				}
 			}
+		}
+		if (m_pCosmosFrameWndInfo == nullptr)
+		{
+			m_pCosmosFrameWndInfo = pBrowserWnd->m_pCosmosFrameWndInfo;
 		}
 
 		if (m_pRemoteCosmos)
@@ -768,7 +844,9 @@ namespace Browser {
 
 			m_hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParent, NULL, theApp.m_hInstance, NULL);
 			m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hExtendWnd, (HMENU)1, theApp.m_hInstance, NULL);
-
+			CExtendWnd* pExtendWnd = new CExtendWnd();
+			pExtendWnd->m_pHostPage = this;
+			pExtendWnd->SubclassWindow(m_hChildWnd);
 			::SetWindowLongPtr(m_hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_hChildWnd);
 			::SetWindowLongPtr(m_hChildWnd, GWLP_USERDATA, (LONG_PTR)this);
 		}
@@ -806,6 +884,7 @@ namespace Browser {
 			{
 				IXobj* pXobj = nullptr;
 				CComBSTR bstrKey(strName);
+				m_pGalaxy->m_pWebPageWnd = this;
 				m_pGalaxy->Observe(bstrKey, CComBSTR(strXML), &pXobj);
 				if (pXobj)
 				{
@@ -815,14 +894,14 @@ namespace Browser {
 					{
 						m_hWebHostWnd = m_pGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 					}
+					::PostMessage(m_hExtendWnd,WM_BROWSERLAYOUT, (WPARAM)m_hChildWnd, 0);
 				}
 			}
 		}
-		if (::IsWindowVisible(m_hWnd))
-		{
-			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-		}
+		
+		if(hPPWnd==nullptr)
+			pBrowserWnd->BrowserLayout();
+		::PostMessage(hBrowser, WM_BROWSERLAYOUT, 0, 7);
 	}
 
 	void CWebPage::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
@@ -919,10 +998,10 @@ namespace Browser {
 								for (int i = 0; i < nCount; i++)
 								{
 									CTangramXmlParse* pParse2 = pParse->GetChild(i);
-									CString strCaption = pParse2->attr(_T("caption"), _T(""));
-									if (strCaption != _T(""))
+									int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
+									if (nBarID)
 									{
-										auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(strCaption);
+										auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
 										if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 										{
 											HWND hWnd = it->second;
@@ -939,8 +1018,8 @@ namespace Browser {
 												if (pCluster)
 												{
 													IGalaxy* pGalaxy = nullptr;
-													CString strKey = strCaption;
-													strKey.Replace(_T(""), _T("_"));
+													CString strKey = _T("");
+													strKey.Format(_T("ControlBar_%d"), nBarID);
 													pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
 													if (pGalaxy)
 													{
@@ -948,6 +1027,9 @@ namespace Browser {
 														_pGalaxy->m_pWebPageWnd = this;
 														IXobj* pXobj = nullptr;
 														_pGalaxy->Observe(CComBSTR(strParam1), CComBSTR(strXml), &pXobj);
+														CString strCaption = pParse2->attr(_T("caption"), _T(""));
+														if (strCaption != _T(""))
+															::SetWindowText(::GetParent(hClient), strCaption);
 													}
 												}
 											}
@@ -1141,8 +1223,12 @@ namespace Browser {
 						pBrowserWnd = (CBrowser*)it->second;
 						pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
 					}
-
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
+					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
+					if (pParse)
+					{
+						this->LoadDocument2Viewport(_T("client"), pParse->xml());
+					}
 					CTangramXmlParse* pParseClient = nullptr;
 					if (pCosmosFrameWndInfo->m_nFrameType == 2)
 						pParseClient = xmlParse.GetChild(_T("mdiclient"));
@@ -1164,17 +1250,10 @@ namespace Browser {
 							if (pGalaxy)
 							{
 								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strKey] = _pGalaxy;
+								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
 								_pGalaxy->m_pWebPageWnd = this;
-								IXobj* pXobj = nullptr;
-								_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 							}
 						}
-					}
-					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
-					if (pParse)
-					{
-						this->LoadDocument2Viewport(_T("client"), pParse->xml());
 					}
 					pParse = xmlParse.GetChild(_T("controlbars"));
 					if (pParse)
@@ -1183,10 +1262,10 @@ namespace Browser {
 						for (int i = 0; i < nCount; i++)
 						{
 							CTangramXmlParse* pParse2 = pParse->GetChild(i);
-							CString strCaption = pParse2->attr(_T("caption"), _T(""));
-							if (strCaption != _T(""))
+							int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
+							if (nBarID)
 							{
-								auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(strCaption);
+								auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
 								if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 								{
 									HWND hWnd = it->second;
@@ -1198,17 +1277,20 @@ namespace Browser {
 										if (pCluster)
 										{
 											IGalaxy* pGalaxy = nullptr;
-											CString strName = strCaption;
-											strName.Replace(_T(" "), _T("_"));
-											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
+											CString strKey = _T("");
+											strKey.Format(_T("ControlBar_%d"), nBarID);
+											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
 											if (pGalaxy)
 											{
 												CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-												pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[strName] = _pGalaxy;
+												pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
 												_pGalaxy->m_pWebPageWnd = this;
 												IXobj* pXobj = nullptr;
 												_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 											}
+											CString strCaption = pParse2->attr(_T("caption"), _T(""));
+											if (strCaption != _T(""))
+												::SetWindowText(::GetParent(hClient), strCaption);
 										}
 									}
 								}
