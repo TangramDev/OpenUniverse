@@ -408,7 +408,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	if (!m_bTracking)
 		return;
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-	if(pGalaxy->m_nGalaxyType == CtrlBarGalaxy)
+	if (::IsWindowVisible(pGalaxy->m_hWnd) && pGalaxy->m_nGalaxyType == CtrlBarGalaxy)
 		pGalaxy->SetFocus();
 	CXobj* pXobj = pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)

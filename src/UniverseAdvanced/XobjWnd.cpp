@@ -355,7 +355,8 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	m_pXobj->GetXobj(0, wParam, &pXobj);
 
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-	::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
+	if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy)
+		::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	if (pXobj)
 	{
 		CXobj* _pXobj = (CXobj*)pXobj;
@@ -368,7 +369,8 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 		else
 		{
-			pGalaxy->HostPosChanged();
+			if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy)
+				pGalaxy->HostPosChanged();
 		}
 		if (_pXobj->m_pWebBrowser) {
 			g_pCosmos->m_pActiveHtmlWnd = _pXobj->m_pWebBrowser->m_pVisibleWebWnd;
@@ -403,12 +405,13 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
+
 	if (nOldPage != wParam)
 	{
 		g_pCosmos->m_bSZMode = true;
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
-		if (pGalaxy->m_pWebPageWnd)
+		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
 			if (::IsWindow(hWnd))
@@ -420,14 +423,14 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			{
 				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
 			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
+			CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+			if (pMainWnd && pGalaxy == pMainWnd->m_pGalaxy)
+			{
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
+			}
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
-		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
-		CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
-		if (pMainWnd&&pGalaxy == pMainWnd->m_pGalaxy)
-		{
-			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
-		}
 	}
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	return lRes;
@@ -464,7 +467,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			break;
 		case 20210226:
 		{
-			if(g_pCosmos->m_pMDIMainWnd)
+			if (g_pCosmos->m_pMDIMainWnd)
 			{
 				if (m_pXobj->m_pXobjShareData->m_pGalaxy == g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 				{
@@ -472,12 +475,12 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				}
 			}
 		}
-			break;
+		break;
 		case 20210225:
 		{
 			m_pXobj->put_Attribute(CComBSTR("objid"), TGM_NUCLEUS);
 		}
-			break;
+		break;
 		case 20210202:
 		{
 			HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_hWnd);
@@ -951,6 +954,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
 	CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+	bool bNotCtrlBar = (m_pXobj->m_pXobjShareData->m_pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy);
 	CGalaxy* pGalaxy = nullptr;
 	if (pMainWnd)
 		pGalaxy = pMainWnd->m_pGalaxy;
@@ -958,20 +962,21 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		if (g_pCosmos->m_bSZMode)
 			return;
-		if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
+		if (bNotCtrlBar)
 		{
-			pGalaxy->m_pBindingXobj = m_pXobj;
-			if (pMainWnd->m_pActiveMDIChild)
+			if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
 			{
-				pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
+				pGalaxy->m_pBindingXobj = m_pXobj;
+				if (pMainWnd->m_pActiveMDIChild)
+					pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
+				pGalaxy->HostPosChanged();
 			}
-			pGalaxy->HostPosChanged();
+			else
+				m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 		}
-		else
-			m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 		return;
 	}
-	if (pMainWnd)
+	if (bNotCtrlBar && pMainWnd)
 	{
 		if (pGalaxy && (pMainWnd->m_pClientXobj == m_pXobj || pGalaxy->m_pBindingXobj == m_pXobj))
 		{

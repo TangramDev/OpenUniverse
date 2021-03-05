@@ -41,14 +41,7 @@ protected:
 		CWnd::PostNcDestroy();
 		delete this;
 	}
-	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
-	{
-		if (message == WM_SHOWWINDOW && m_hClient)
-		{
-			::PostMessage(m_hClient, WM_COSMOSMSG, 0, 20180115);
-		}
-		return CWnd::WindowProc(message, wParam, lParam);
-	}
+	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
 // CCosmosTreeCtrl window

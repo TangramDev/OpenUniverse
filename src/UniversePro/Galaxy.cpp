@@ -1599,6 +1599,15 @@ void CWinForm::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
+LRESULT CCosmosHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	if (message == WM_SHOWWINDOW && m_hClient)
+	{
+		::PostMessage(m_hClient, WM_COSMOSMSG, 0, 20180115);
+	}
+	return CWnd::WindowProc(message, wParam, lParam);
+}
+
 // CGalaxy
 CGalaxy::CGalaxy()
 {
@@ -2276,7 +2285,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				::ShowWindow(hwnd, SW_HIDE);
 			}
 		}
-		::SetWindowPos(pWnd->m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
+		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 
 		if (m_pWorkXobj != nullptr) {
 			if (m_pWorkXobj->m_nViewType != Grid) {
@@ -3096,7 +3105,7 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		}
 		else
 		{
-			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_TOP, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
+			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOSENDCHANGING | /*SWP_NOZORDER |*/ SWP_NOACTIVATE | SWP_FRAMECHANGED);
 			lpwndpos->flags &= ~SWP_SHOWWINDOW;
 			lpwndpos->flags |= SWP_HIDEWINDOW;
 		}
