@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103050043
+ *           Web Runtime for Application - Version 1.0.0.202103060044
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1749,8 +1749,8 @@ STDMETHODIMP CGalaxy::get_GalaxyCluster(IGalaxyCluster** pVal)
 
 STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
-	if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
-		m_nGalaxyType = GalaxyType::MDIClientGalaxy;
+	//if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
+	//	m_nGalaxyType = GalaxyType::MDIClientGalaxy;
 	CString _strXml = OLE2T(bstrXml);
 	if (m_pGalaxyCluster->m_strPageFileName == _T(""))
 	{
@@ -1964,6 +1964,13 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		{
 			IXobj* pXobj = nullptr;
 			m_pBKWnd->m_pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L""), &pXobj);
+		}
+	}
+	if (m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
+	{
+		if (m_pWorkXobj->m_strCaption != _T(""))
+		{
+			::SetWindowText(::GetParent(m_hWnd), m_pWorkXobj->m_strCaption);
 		}
 	}
 

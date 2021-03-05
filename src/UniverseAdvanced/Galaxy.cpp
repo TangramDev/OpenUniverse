@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103050043
+ *           Web Runtime for Application - Version 1.0.0.202103060044
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1905,7 +1905,6 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 	pCommonData->m_pCosmosParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
 	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_XOBJ);
-
 	Create();
 	m_mapXobj[strKey] = m_pWorkXobj;
 	if (strKey.CompareNoCase(_T("default")) == 0)
@@ -2160,8 +2159,8 @@ STDMETHODIMP CGalaxy::get_GalaxyCluster(IGalaxyCluster** pVal)
 
 STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
-	if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
-		m_nGalaxyType = GalaxyType::MDIClientGalaxy;
+	//if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
+	//	m_nGalaxyType = GalaxyType::MDIClientGalaxy;
 	CString _strXml = OLE2T(bstrXml);
 	if (m_pGalaxyCluster->m_strPageFileName == _T(""))
 	{
@@ -2413,7 +2412,13 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_pBKWnd->m_pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L""), &pXobj);
 		}
 	}
-
+	if (m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
+	{
+		if(m_pWorkXobj->m_strCaption!=_T(""))
+		{ 
+			::SetWindowText(::GetParent(m_hWnd), m_pWorkXobj->m_strCaption);
+		}
+	}
 	HostPosChanged();
 	//Add 20200218
 	if (m_pBindingXobj)

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103050043           *
+ *           Web Runtime for Application - Version 1.0.0.202103060044           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2015,6 +2015,8 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 	m_strCurrentKey = _T("");
 	if (pRootXobj != nullptr)
 	{
+		if(_pGalaxy->m_nGalaxyType==GalaxyType::CtrlBarGalaxy)
+			pRootXobj->m_strCaption = m_pParse->attr(_T("caption"), _T(""));
 		if (bSizable)
 		{
 			HWND hParent = ::GetParent(pRootXobj->m_pHostWnd->m_hWnd);

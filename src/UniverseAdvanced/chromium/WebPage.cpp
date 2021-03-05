@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103050043           *
+ *           Web Runtime for Application - Version 1.0.0.202103060044           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1015,6 +1015,7 @@ namespace Browser {
 										{
 											HWND hWnd = it->second;
 											int nID = pParse2->attrInt(_T("clientid"), 0);
+											CString strCaption = pParse2->attr(_T("caption"), _T(""));
 											HWND hClient = ::GetDlgItem(hWnd, nID);
 											if (hClient)
 											{
@@ -1026,6 +1027,8 @@ namespace Browser {
 												}
 												if (pCluster)
 												{
+													if (strCaption != _T(""))
+														::SetWindowText(::GetParent(hClient), strCaption);
 													IGalaxy* pGalaxy = nullptr;
 													CString strKey = _T("");
 													strKey.Format(_T("ControlBar_%d"), nBarID);
@@ -1037,9 +1040,6 @@ namespace Browser {
 														IXobj* pXobj = nullptr;
 														_pGalaxy->Observe(CComBSTR(strParam1), CComBSTR(strXml), &pXobj);
 													}
-													CString strCaption = pParse2->attr(_T("caption"), _T(""));
-													if (strCaption != _T(""))
-														::SetWindowText(::GetParent(hClient), strCaption);
 												}
 											}
 										}
