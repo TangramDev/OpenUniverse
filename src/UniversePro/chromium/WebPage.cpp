@@ -224,7 +224,7 @@ namespace Browser {
 					pSession->Insertint64(_T("xobjhandle"), (__int64)pXobj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("xobj"), (__int64)(IXobj*)pXobj);
 					pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
-					if(pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName==_T("default"))
+					if (pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName == _T("default"))
 					{
 						CString strName = pXobj->m_pRootObj->m_pHostParse->attr(_T("galaxy"), _T(""));
 						if (strName != _T(""))
@@ -574,7 +574,7 @@ namespace Browser {
 		}
 		if (m_mapSubWinForm.size())
 		{
-			for (auto &it : m_mapSubWinForm)
+			for (auto& it : m_mapSubWinForm)
 			{
 				::DestroyWindow(it.first);
 			}
@@ -863,7 +863,7 @@ namespace Browser {
 					pGalaxyCluster->m_hWnd = m_hExtendWnd;
 					g_pCosmos->m_mapWindowPage[m_hExtendWnd] = pGalaxyCluster;
 
-					for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
+					for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 					{
 						CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 						if (pProxy)
@@ -894,13 +894,13 @@ namespace Browser {
 					{
 						m_hWebHostWnd = m_pGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 					}
-					::PostMessage(m_hExtendWnd,WM_BROWSERLAYOUT, (WPARAM)m_hChildWnd, 0);
+					::PostMessage(m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_hChildWnd, 0);
 				}
 			}
 		}
-		
+
 		g_pCosmos->m_mapSizingBrowser[hBrowser] = pBrowserWnd;
-		if(hPPWnd==nullptr)
+		if (hPPWnd == nullptr)
 			pBrowserWnd->BrowserLayout();
 		::PostMessage(hBrowser, WM_BROWSERLAYOUT, 0, 7);
 	}
@@ -1015,6 +1015,7 @@ namespace Browser {
 										{
 											HWND hWnd = it->second;
 											int nID = pParse2->attrInt(_T("clientid"), 0);
+											CString strCaption = pParse2->attr(_T("caption"), _T(""));
 											HWND hClient = ::GetDlgItem(hWnd, nID);
 											if (hClient)
 											{
@@ -1026,6 +1027,8 @@ namespace Browser {
 												}
 												if (pCluster)
 												{
+													if (strCaption != _T(""))
+														::SetWindowText(::GetParent(hClient), strCaption);
 													IGalaxy* pGalaxy = nullptr;
 													CString strKey = _T("");
 													strKey.Format(_T("ControlBar_%d"), nBarID);
@@ -1037,9 +1040,6 @@ namespace Browser {
 														IXobj* pXobj = nullptr;
 														_pGalaxy->Observe(CComBSTR(strParam1), CComBSTR(strXml), &pXobj);
 													}
-													CString strCaption = pParse2->attr(_T("caption"), _T(""));
-													if (strCaption != _T(""))
-														::SetWindowText(::GetParent(hClient), strCaption);
 												}
 											}
 										}
@@ -1238,6 +1238,11 @@ namespace Browser {
 					{
 						this->LoadDocument2Viewport(_T("client"), pParse->xml());
 					}
+					CString strCaption = xmlParse.attr(_T("caption"), _T(""));
+					if (strCaption != _T(""))
+					{
+						g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
+					}
 					CTangramXmlParse* pParseClient = nullptr;
 					if (pCosmosFrameWndInfo->m_nFrameType == 2)
 						pParseClient = xmlParse.GetChild(_T("mdiclient"));
@@ -1301,10 +1306,10 @@ namespace Browser {
 												_pGalaxy->m_pWebPageWnd = this;
 												IXobj* pXobj = nullptr;
 												_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-												CString strCaption = pParse2->attr(_T("caption"), _T(""));
-												if (strCaption != _T(""))
-													::SetWindowText(::GetParent(hClient), strCaption);
 											}
+											CString strCaption = pParse2->attr(_T("caption"), _T(""));
+											if (strCaption != _T(""))
+												::SetWindowText(::GetParent(hClient), strCaption);
 										}
 									}
 								}

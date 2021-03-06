@@ -1238,6 +1238,11 @@ namespace Browser {
 					{
 						this->LoadDocument2Viewport(_T("client"), pParse->xml());
 					}
+					CString strCaption = xmlParse.attr(_T("caption"), _T(""));
+					if (strCaption != _T(""))
+					{
+						g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
+					}
 					CTangramXmlParse* pParseClient = nullptr;
 					if (pCosmosFrameWndInfo->m_nFrameType == 2)
 						pParseClient = xmlParse.GetChild(_T("mdiclient"));

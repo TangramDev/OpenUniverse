@@ -2516,6 +2516,11 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(_strKey, pClient->xml());
 			}
 		}
+		CString strCaption = pParse->attr(_T("caption"), _T(""));
+		if (strCaption != _T(""))
+		{
+			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(m_hWnd, strCaption);
+		}
 		pClient = pParse->GetChild(_T("controlbars"));
 		if (pClient)
 		{

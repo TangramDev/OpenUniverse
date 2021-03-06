@@ -180,6 +180,7 @@ namespace CommonUniverse
 		virtual CString QueryWndClassName(HWND hWnd);
 		virtual CString QueryDocType(HWND hWnd);
 		virtual bool EclipseAppInit() { return false; };
+		virtual bool SetFrameCaption(HWND hWnd, CString strCaption);
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);

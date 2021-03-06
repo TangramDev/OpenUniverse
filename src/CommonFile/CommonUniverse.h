@@ -468,8 +468,9 @@ namespace CommonUniverse {
 		HWND								m_hClosingFrame;
 		CString								m_strAppKey;
 		CString								m_strCreatingDOCID = _T("");
-		map<CString, void*>					m_mapMainFrame;
-		map<void*, LONG>					m_mapCosmosDocTemplateID;
+		//CString								m_strCreatingDOCDefaultName = _T("");
+		//map<CString, void*>					m_mapMainFrame;
+		//map<void*, LONG>					m_mapCosmosDocTemplateID;
 
 		virtual BOOL InitCosmos(void* pVoid) {
 			return TRUE;
@@ -484,20 +485,21 @@ namespace CommonUniverse {
 		}
 		virtual LRESULT OnForegroundIdleProc() { return 0; }
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
+		virtual bool EclipseAppInit() { return false; }
+		virtual bool SetFrameCaption(HWND hWnd, CString strCaption) { return false; }
 		virtual void OnCosmosClose() {}
 		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
+		virtual void MouseMoveProxy(HWND hWnd) {}
 		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode) { return nullptr; }
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalaxy) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
-		virtual void MouseMoveProxy(HWND hWnd) {}
 		virtual HWND InitCosmosApp() { return NULL; }
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
-		virtual bool EclipseAppInit() { return false; }
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
 		virtual CString QueryDocType(HWND hWnd) { return _T(""); }
 		virtual CString QueryWndClassName(HWND hWnd) { return _T(""); }

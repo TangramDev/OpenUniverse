@@ -1587,6 +1587,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									pFrameWnd->m_strDocTemplateKey = strKey;
 								else
 									strKey = pFrameWnd->m_strDocTemplateKey;
+								CString strDefaultName = _T("");
+								auto itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
+								if (itName != g_pCosmos->m_mapDocDefaultName.end())
+									strDefaultName = itName->second;
+								g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pFrameWnd->m_hWnd, strDefaultName);
 							}
 							auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
 							if (it != g_pCosmos->m_mapDocTemplate.end())
@@ -1645,6 +1650,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												pWnd->m_pGalaxy->m_nGalaxyType = GalaxyType::MDIChildGalaxy;
 												pWnd->m_strKey = strKey;
 												pWnd->m_pGalaxy->m_strDocTemplateID = strKey;
+												CString strDefaultName = _T("");
+												auto itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
+												if (itName != g_pCosmos->m_mapDocDefaultName.end())
+													strDefaultName = itName->second;
+												g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
 												pClient = m_Parse.GetChild(_T("mdiclient"));
 												if (pClient)
 												{
@@ -1725,7 +1735,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 															//			if (pGalaxyCluster)
 															//			{
 															//				IGalaxy* pGalaxy = nullptr;
-															//				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strName), &pGalaxy);
+															//				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(nBarID), &pGalaxy);
 															//				if (pGalaxy)
 															//				{
 															//					CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;

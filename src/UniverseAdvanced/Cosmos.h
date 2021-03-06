@@ -217,8 +217,9 @@ public:
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
 	map<HWND, CMDTWnd*>						m_mapMDTWindow;
-	map<CString, CString>					m_mapDocTemplate;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
+	map<CString, CString>					m_mapDocTemplate;
+	map<CString, CString>					m_mapDocDefaultName;
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
 		COM_INTERFACE_ENTRY(IDispatch)

@@ -921,7 +921,9 @@ namespace CommonUniverse
 							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
 								pCosmosFrameWndInfo->m_nFrameType = 2;
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+							{
 								pCosmosFrameWndInfo->m_nFrameType = 3;
+							}
 							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
 							{
 								pCosmosFrameWndInfo->m_nFrameType = 1;
@@ -973,6 +975,70 @@ namespace CommonUniverse
 			break;
 		}
 		return NULL;
+	}
+
+	bool CWebRuntimeApp::SetFrameCaption(HWND hWnd, CString strCaption)
+	{
+		if (strCaption == _T("") || !::IsWindow(hWnd))
+			return false;
+		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+		CFrameWnd* pFrame = nullptr;
+		if (pWnd)
+		{
+			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+			{
+				if (pCosmosFrameWndInfo)
+				{
+					CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
+					if (pDoc)
+					{
+						CString strPath = pDoc->GetPathName();
+						if (strPath == _T(""))
+						{
+							CString strTitle = pDoc->GetTitle();
+							CDocTemplate* pTemplate = (CDocTemplate*)pCosmosFrameWndInfo->m_pDocTemplate;
+							CString name = _T("");
+							pTemplate->GetDocString(name, CDocTemplate::docName);
+							strTitle.Replace(name, strCaption);
+							pDoc->SetTitle(strTitle);
+						}
+						return true;
+					}
+				}
+				pFrame = (CFrameWnd*)pWnd;
+			}
+		}
+		else
+		{
+			pWnd = CWnd::FromHandle(hWnd);
+			if (pWnd)
+				pFrame = pWnd->GetParentFrame();
+		}
+		if (pFrame)
+		{
+			CString strText = _T("");
+			pFrame->GetWindowText(strText);
+			CString strTitle = pFrame->GetTitle();
+			int nPos = strText.ReverseFind('-');
+			if (nPos != -1)
+			{
+				CString s1 = strText.Left(nPos + 1);
+				s1 += _T(" ");
+				s1 += strCaption;
+				::SetWindowText(pFrame->m_hWnd, s1);
+				pFrame->SetTitle(strCaption);
+				return true;
+			}
+			else
+			{
+				pFrame->SetTitle(strCaption);
+				::SetWindowText(pFrame->m_hWnd, strCaption);
+			}
+			return true;
+		}
+
+		return false;
 	}
 
 	void CWebRuntimeApp::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
@@ -1081,7 +1147,7 @@ namespace CommonUniverse
 #endif 
 					TRACE(_T("\r\n\r\n********Chrome-Eclipse-CLR Mix-Model is not support MFC Share Dll********\r\n\r\n"));
 #endif
-				}
+			}
 				m_pCosmosImpl->m_hMainWnd = NULL;
 				HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
 				if (hModule == nullptr)
@@ -1096,7 +1162,7 @@ namespace CommonUniverse
 						return false;
 					}
 				}
-			}
+		}
 			break;
 			case APP_ECLIPSE:
 				if (g_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
@@ -1105,10 +1171,10 @@ namespace CommonUniverse
 					return false;
 				}
 				break;
-			}
-		}
-		return true;
 	}
+}
+		return true;
+}
 
 	BOOL CWebRuntimeApp::IsBrowserModel(bool bCrashReporting)
 	{

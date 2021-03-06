@@ -1452,6 +1452,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									pFrameWnd->m_strDocTemplateKey = strKey;
 								else
 									strKey = pFrameWnd->m_strDocTemplateKey;
+								CString strDefaultName = _T("");
+								auto itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
+								if (itName != g_pCosmos->m_mapDocDefaultName.end())
+									strDefaultName = itName->second;
+								g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pFrameWnd->m_hWnd, strDefaultName);
 							}
 							auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
 							if (it != g_pCosmos->m_mapDocTemplate.end())

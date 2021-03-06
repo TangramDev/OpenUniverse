@@ -2147,6 +2147,11 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				}
 			}
 		}
+		CString strCaption = pParse->attr(_T("caption"), _T(""));
+		if (strCaption != _T(""))
+		{
+			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(m_hWnd, strCaption);
+		}
 		pClient = pParse->GetChild(_T("controlbars"));
 		if (pClient)
 		{

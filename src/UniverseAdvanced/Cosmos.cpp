@@ -960,7 +960,10 @@ void CCosmos::TangramInitFromeWeb()
 				for (int i = 0; i < nCount; i++)
 				{
 					CTangramXmlParse* pChild = pParse->GetChild(i);
-					m_mapDocTemplate[pChild->name()] = pChild->xml();
+					CString strName = pChild->name();
+					CString strDefaultName = pChild->attr(_T("defaultname"), strName);
+					m_mapDocTemplate[strName] = pChild->xml();
+					m_mapDocDefaultName[strName] = strDefaultName;
 				}
 				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)g_pCosmos->m_hFirstView, 20210110);
 			}
@@ -4552,7 +4555,7 @@ __declspec(dllexport) ICosmos* __stdcall  GetCosmos()
 __declspec(dllexport) CCosmosImpl* __stdcall  GetCosmosImpl(ICosmos** pCosmos)
 {
 	*pCosmos = static_cast<ICosmos*>(g_pCosmos);
-	return static_cast<CCosmosImpl*>(g_pCosmos);
+	return g_pCosmosImpl;// static_cast<CCosmosImpl*>(g_pCosmos);
 }
 
 __declspec(dllexport) void __stdcall  FreeCLR()

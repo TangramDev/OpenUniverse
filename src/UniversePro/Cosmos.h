@@ -218,7 +218,6 @@ public:
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
 	map<HWND, CMDTWnd*>						m_mapMDTWindow;
-	map<CString, CString>					m_mapDocTemplate;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
@@ -371,6 +370,8 @@ private:
 	CWindow								m_HelperWnd;
 	CComObject<CXobjCollection>*		m_pRootNodes;
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
+	map<CString, CString>				m_mapDocTemplate;
+	map<CString, CString>				m_mapDocDefaultName;
 
 	void CosmosLoad();
 	bool CheckUrl(CString&   url);
