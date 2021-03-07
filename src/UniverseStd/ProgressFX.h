@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103060044
+ *           Web Runtime for Application - Version 1.0.0.202103070045
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
