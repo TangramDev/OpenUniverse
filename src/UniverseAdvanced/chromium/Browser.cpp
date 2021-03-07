@@ -62,16 +62,8 @@ namespace Browser {
 			{
 				m_hOldTab = hOldWnd;
 			}
-			if (g_pCosmos->m_pMDIMainWnd == nullptr)
-			{
-				if (m_pClientGalaxy)
-				{
-					m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
-					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
-					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
-				}
-			}
-			else if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_hClient == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
+			
+			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType==2)
 			{
 				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
 				if (it != g_pCosmos->m_mapHtmlWnd.end())
@@ -82,6 +74,15 @@ namespace Browser {
 						IXobj* pObj = nullptr;
 						pPage->Observe(CComBSTR(pPage->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
 					}
+				}
+			}
+			else
+			{
+				if (m_pClientGalaxy)
+				{
+					m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
+					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 				}
 			}
 			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
@@ -109,10 +110,6 @@ namespace Browser {
 			}
 			if (!m_pClientGalaxy)
 				m_pBrowser->LayoutBrowser();
-			//if (g_pCosmos->m_pMDIMainWnd && m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_hClient == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
-			//{
-			//	::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
-			//}
 			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		return lRes;
@@ -123,12 +120,7 @@ namespace Browser {
 		{
 			return;
 		}
-		if (::IsWindowVisible(hWnd) == false &&
-			(g_pCosmos->m_pMDIMainWnd == nullptr ||
-				!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) ||
-				(g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild == nullptr))
-			)
-			return;
+
 		if (m_hOldTab)
 		{
 			RECT rc;
@@ -152,9 +144,9 @@ namespace Browser {
 				if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
 				{
 					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-					if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd)
+					if (m_pParentXobj && m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 					{
-						g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
+						::SendMessage(m_pCosmosFrameWndInfo->m_hClient, WM_COSMOSMSG, 0, 20180115);
 					}
 				}
 				::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);

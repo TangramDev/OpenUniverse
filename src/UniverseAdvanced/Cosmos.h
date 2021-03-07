@@ -420,4 +420,5 @@ private:
 	IXobj* ObserveXml(HWND hWnd, CString strKey, CString strXml);
 	CWebPageImpl* GetWebPageImpl(HWND hWnd);
 	CBrowserImpl* GetBrowserImpl(HWND hWnd);
+	bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate);
 };

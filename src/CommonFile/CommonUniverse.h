@@ -503,6 +503,7 @@ namespace CommonUniverse {
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
 		virtual CString QueryDocType(HWND hWnd) { return _T(""); }
 		virtual CString QueryWndClassName(HWND hWnd) { return _T(""); }
+		virtual CString QueryParentInfo(HWND hPWnd,void* lpInfo) { return _T(""); }
 	};
 
 	class ICosmosCLRImpl
@@ -708,6 +709,7 @@ namespace CommonUniverse {
 		virtual __int64 GetMsgInt64(HWND hXobj, CString strKey) { return 0; }
 		virtual long GetMsgLong(HWND hXobj, CString strKey) { return 0; }
 		virtual float GetMsgFloat(HWND hXobj, CString strKey) { return 0.0f; }
+		virtual bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate) { return false; }
 	};
 
 	class ICosmosWindowProvider

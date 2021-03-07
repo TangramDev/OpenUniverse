@@ -470,9 +470,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		switch (lParam)
 		{
 		case 20201028:
-		case 20200609:
-		case 20200606:
-		case 20200531:
 		case 19631222:
 		case 20191031:
 		case 20180115:
@@ -551,15 +548,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			{
 				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 			}
-		}
-		break;
-		case 20200601:
-		{
-			for (auto it : m_pXobj->m_vChildNodes)
-			{
-				::PostMessage(it->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200601);//for webruntimeVS Dockabe ToolWindow
-			}
-			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 		}
 		break;
 		default:
@@ -745,7 +733,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
-	if (lParam == 20191031 || lParam == 20200130 || lParam == 20200609 || lParam == 20200606)
+	if (lParam == 20191031 || lParam == 20200130)
 		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	if (lParam == 20200208)
 		return 0;
@@ -1050,8 +1038,6 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		Invalidate(true);
 	}
-	//if (g_pCosmos->m_pMDIMainWnd == nullptr && !g_pCosmos->m_bSZMode && m_pXobj->m_bTopObj)
-	//	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 }
 
 void CXobjWnd::OnSize(UINT nType, int cx, int cy)

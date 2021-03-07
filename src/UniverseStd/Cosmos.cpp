@@ -4614,3 +4614,23 @@ CBrowserImpl* CCosmos::GetBrowserImpl(HWND hWnd)
 	}
 	return nullptr;
 }
+
+bool CCosmos::SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate)
+{
+	CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrame, _T("CosmosFrameWndInfo"));
+	if (pCosmosFrameWndInfo == nullptr)
+	{
+		pCosmosFrameWndInfo = new CosmosFrameWndInfo();
+		pCosmosFrameWndInfo->m_pDoc = pDoc;
+		pCosmosFrameWndInfo->m_pDocTemplate = pDocTemplate;
+		pCosmosFrameWndInfo->m_hClient = hWnd;
+		g_pCosmos->m_mapCosmosFrameWndInfo[hFrame] = pCosmosFrameWndInfo;
+		::SetProp(hFrame, _T("CosmosFrameWndInfo"), pCosmosFrameWndInfo);
+	}
+	auto it = m_mapDocDefaultName.find(strTemplateID);
+	if (it != m_mapDocDefaultName.end())
+	{
+		g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second);
+	}
+	return false;
+}

@@ -1926,8 +1926,13 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 		if (hForm)
 			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 	}
-	if (g_pCosmos->m_pCosmosDelegate)
+	if (g_pCosmos->m_pUniverseAppProxy && m_nGalaxyType != CtrlBarGalaxy)
 	{
+		CString strCaption = _pParse->attr(_T("caption"), _T(""));
+		if (strCaption != _T(""))
+		{
+			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(m_hWnd, strCaption);
+		}
 		::PostMessage(::GetParent(m_hWnd), WM_COSMOSOBSERVED, 0, 0);
 	}
 
@@ -2062,7 +2067,6 @@ STDMETHODIMP CGalaxy::Attach(void)
 		SubclassWindow(m_hHostWnd);
 	}
 	HostPosChanged();
-	//::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	return S_OK;
 }
 
@@ -2159,8 +2163,6 @@ STDMETHODIMP CGalaxy::get_GalaxyCluster(IGalaxyCluster** pVal)
 
 STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
-	//if (::GetWindowLong(m_hWnd, GWL_STYLE) & MDIS_ALLCHILDSTYLES)
-	//	m_nGalaxyType = GalaxyType::MDIClientGalaxy;
 	CString _strXml = OLE2T(bstrXml);
 	if (m_pGalaxyCluster->m_strPageFileName == _T(""))
 	{
@@ -2600,11 +2602,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				g_pCosmos->m_pMDIMainWnd->m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(_strKey, pClient->xml());
 			}
 		}
-		CString strCaption = pParse->attr(_T("caption"), _T(""));
-		if (strCaption != _T(""))
-		{
-			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(m_hWnd, strCaption);
-		}
 		pClient = pParse->GetChild(_T("controlbars"));
 		if (pClient)
 		{
@@ -2923,42 +2920,11 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20180115:
 	{
 		HostPosChanged();
+		//if(m_pCosmosFrameWndInfo&& m_pCosmosFrameWndInfo->m_nFrameType==2)
 		if (g_pCosmos->m_pMDIMainWnd &&
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxy &&
 			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd))
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
-	}
-	break;
-	case 20200601:
-	{
-		HostPosChanged();
-		//for webruntimeVS Dockabe ToolWindow
-		if (m_pWorkXobj)
-		{
-			::PostMessage(m_pWorkXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200601);
-		}
-	}
-	break;
-	case 20200531:
-	{
-		//for webruntimeVS Dockabe ToolWindow
-		if (m_pWorkXobj)
-		{
-			auto t = create_task([this]()
-				{
-					//SleepEx(200, true);
-					try
-					{
-						::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200601);
-					}
-					catch (...)
-					{
-						ATLASSERT(false);
-						return 0;
-					}
-					return 1;
-				});
-		}
 	}
 	break;
 	case WM_BROWSERLAYOUT:
@@ -3052,8 +3018,6 @@ LRESULT CGalaxy::OnBeforeParentDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lPara
 
 LRESULT CGalaxy::OnAfterParentDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	//HostPosChanged();
-	//::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20180115);
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 

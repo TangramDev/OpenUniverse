@@ -203,7 +203,6 @@ public:
 	CMDIParent(void);
 	virtual ~CMDIParent(void);
 
-	BOOL					m_bInit = false;
 	BOOL					m_bDestroy = false;
 	HWND					m_hMDIClient = nullptr;
 

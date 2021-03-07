@@ -439,7 +439,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 20201028:
 		case 20200609:
 		case 20200606:
-		case 20200531:
 		case 19631222:
 		case 20191031:
 		case 20180115:
@@ -494,20 +493,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			{
 				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 			}
-		}
-		break;
-		case 20200601:
-		{
-			for (auto it : m_pXobj->m_vChildNodes)
-			{
-				//if (it->m_nViewType == Grid)
-				//{
-				//	CGridWnd* pWnd = (CGridWnd*)it->m_pHostWnd;
-				//	pWnd->RecalcLayout();
-				//}
-				::PostMessage(it->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20200601);//for webruntimeVS Dockabe ToolWindow
-			}
-			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 		}
 		break;
 		default:
@@ -693,7 +678,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
-	if (lParam == 20191031 || lParam == 20200130 || lParam == 20200609 || lParam == 20200606)
+	if (lParam == 20191031 || lParam == 20200130 )
 		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	if (lParam == 20200208)
 		return 0;

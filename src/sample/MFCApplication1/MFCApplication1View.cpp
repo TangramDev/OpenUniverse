@@ -64,8 +64,10 @@ BOOL CMFCApplication1View::PreCreateWindow(CREATESTRUCT& cs)
 void CMFCApplication1View::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
-	if(GetParentFrame())
-		ResizeParentToFit();
+	if (m_pDocument)
+	{
+		theApp.SetFrameInfo(m_hWnd);
+	}
 }
 
 
@@ -140,7 +142,7 @@ LRESULT CMFCApplication1View::OnCloudMsgReceived(WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRes = CWnd::DefWindowProc(WM_CLOUDMSGRECEIVED, wParam, lParam);
 	CSession* pSession = (CSession*)lParam;
-	CWebPageImpl* m_pOwner= pSession->m_pOwner;
+	CWebPageImpl* m_pOwner = pSession->m_pOwner;
 	CChromeRenderFrameHost* m_pChromeRenderFrameHost = m_pOwner->m_pChromeRenderFrameHost;
 	CString strMsgID = pSession->GetString(L"msgID");
 	pSession->InsertString(_T("msgID"), _T("TEST_MFC_MSG"));

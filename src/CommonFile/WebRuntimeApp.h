@@ -158,6 +158,7 @@ namespace CommonUniverse
 		virtual ~CWebRuntimeApp();
 		CString GetDocTemplateID(CDocument* pDoc);
 		virtual bool InitApp();
+		virtual bool SetFrameInfo(HWND hWnd);
 	private:
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
@@ -166,7 +167,7 @@ namespace CommonUniverse
 		bool ProcessAppType(bool bCrashReporting);
 		virtual int Run();
 		virtual BOOL InitApplication();
-		virtual HWND GetActivePopupMenu(HWND hWnd) ;
+		virtual HWND GetActivePopupMenu(HWND hWnd);
 
 		//IUniverseAppProxy:
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {};
@@ -181,6 +182,7 @@ namespace CommonUniverse
 		virtual CString QueryDocType(HWND hWnd);
 		virtual bool EclipseAppInit() { return false; };
 		virtual bool SetFrameCaption(HWND hWnd, CString strCaption);
+		virtual CString CWebRuntimeApp::QueryParentInfo(HWND hPWnd, void* lpInfo);
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);

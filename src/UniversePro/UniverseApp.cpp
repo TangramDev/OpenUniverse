@@ -780,13 +780,25 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = g_pCosmos->m_szBuffer;
 		memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
-		//::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
-		//CString strPClassName = g_pCosmos->m_szBuffer;
-		//memset(g_pCosmos->m_szBuffer, 0, sizeof(g_pCosmos->m_szBuffer));
 
 		CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 		if (dwID == AFX_IDW_PANE_FIRST)
 		{
+			if (pCreateWnd->lpcs->lpCreateParams && strClassName != _T("MDIClient"))
+			{
+				CString strExt = g_pCosmos->m_pUniverseAppProxy->QueryParentInfo(hPWnd, pCreateWnd->lpcs->lpCreateParams);
+				if (strExt != _T(""))
+				{
+					CString strType = g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID;
+					if (strType == _T(""))
+						strType = _T("default");
+					auto it = g_pCosmos->m_mapDocTemplate.find(strType);
+					if (it != g_pCosmos->m_mapDocTemplate.end())
+					{
+						g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hPWnd, strType);
+					}
+				}
+			}
 			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
 		}
 
@@ -883,7 +895,9 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		else if (strClassName.Find(_T("#32770")) == 0)
 		{
 			if (hPWnd && (pCreateWnd->lpcs->style & WS_CHILD))
+			{
 				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hWnd, 20210110);
+			}
 		}
 
 		if (strClassName == _T("SWT_Window0"))

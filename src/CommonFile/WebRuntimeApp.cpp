@@ -985,9 +985,17 @@ namespace CommonUniverse
 		CFrameWnd* pFrame = nullptr;
 		if (pWnd)
 		{
-			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
 			if (pWnd->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
 			{
+				pFrame = (CFrameWnd*)pWnd;
+			}
+			else
+			{
+				pFrame = pWnd->GetParentFrame();
+			}
+			if (pFrame)
+			{
+				CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
 				if (pCosmosFrameWndInfo)
 				{
 					CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
@@ -1006,7 +1014,6 @@ namespace CommonUniverse
 						return true;
 					}
 				}
-				pFrame = (CFrameWnd*)pWnd;
 			}
 		}
 		else
@@ -1041,6 +1048,32 @@ namespace CommonUniverse
 		return false;
 	}
 
+	CString CWebRuntimeApp::QueryParentInfo(HWND hPWnd, void* lpInfo)
+	{
+		CWnd* pParent = CWnd::FromHandlePermanent(hPWnd);
+		if (pParent)
+		{
+			CFrameWnd* pParentFrame = nullptr;
+			if (pParent->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+				pParentFrame = (CFrameWnd*)pParent;
+			else
+				pParentFrame = pParent->GetParentFrame();
+			if (pParentFrame)
+			{
+				CCreateContext* pContext = (CCreateContext*)lpInfo;
+				CDocument* pDoc = pContext->m_pCurrentDoc;
+				CDocTemplate* pTemplate = pContext->m_pNewDocTemplate;
+				CString strExt = _T("");
+				pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
+				strExt.MakeLower();
+				if (strExt == _T(""))
+					strExt = _T("default");
+				return strExt;
+			}
+		}
+		return _T("");
+	}
+
 	void CWebRuntimeApp::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (strType.CompareNoCase(_T("COSMOS_CREATE_DOC")) == 0)
@@ -1062,6 +1095,29 @@ namespace CommonUniverse
 				}
 			}
 		}
+	}
+
+	bool CWebRuntimeApp::SetFrameInfo(HWND hWnd)
+	{
+		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+		if (pWnd)
+		{
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CFormView)))
+			{
+				CFormView* pFormView = (CFormView*)pWnd;
+				CFrameWnd* pFrameWnd = pWnd->GetParentFrame();
+				if (pFrameWnd)
+				{
+					CString strInfo = m_strCreatingDOCID;
+					if (strInfo == _T(""))
+						strInfo = _T("default");
+					bool bRet =  g_pCosmosImpl->SetFrameInfo(hWnd, pFrameWnd->m_hWnd, strInfo, pFormView->GetDocument(), pFormView->GetDocument()->GetDocTemplate());
+					pFormView->ResizeParentToFit();
+					return bRet;
+				}
+			}
+		}
+		return false;
 	}
 
 	CXobjProxy* CWebRuntimeApp::OnXobjInit(IXobj* pNewNode)
@@ -1147,7 +1203,7 @@ namespace CommonUniverse
 #endif 
 					TRACE(_T("\r\n\r\n********Chrome-Eclipse-CLR Mix-Model is not support MFC Share Dll********\r\n\r\n"));
 #endif
-			}
+				}
 				m_pCosmosImpl->m_hMainWnd = NULL;
 				HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
 				if (hModule == nullptr)
@@ -1162,7 +1218,7 @@ namespace CommonUniverse
 						return false;
 					}
 				}
-		}
+			}
 			break;
 			case APP_ECLIPSE:
 				if (g_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
@@ -1171,10 +1227,10 @@ namespace CommonUniverse
 					return false;
 				}
 				break;
-	}
-}
+			}
+		}
 		return true;
-}
+	}
 
 	BOOL CWebRuntimeApp::IsBrowserModel(bool bCrashReporting)
 	{

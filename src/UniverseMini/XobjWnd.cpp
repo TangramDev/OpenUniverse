@@ -339,7 +339,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	{
 		switch (lParam)
 		{
-		case 20200531:
 		case 19631222:
 		case 20180115:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
