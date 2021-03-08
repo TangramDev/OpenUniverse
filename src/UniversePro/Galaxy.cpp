@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045
+ *           Web Runtime for Application - Version 1.0.0.202103080046
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2788,18 +2788,6 @@ LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		m_pBKWnd->DestroyWindow();
 	m_pGalaxyCluster->BeforeDestory();
 	m_pGalaxyCluster->m_strConfigFileNodeName.MakeLower();//20190116
-	//auto it = g_pCosmos->m_mapWindowPage.find(m_pGalaxyCluster->m_hWnd);
-	//if (it != g_pCosmos->m_mapWindowPage.end())
-	//{
-	//	auto it2 = m_pGalaxyCluster->m_mapNeedSaveGalaxy.find(m_hWnd);
-	//	if (it2 != m_pGalaxyCluster->m_mapNeedSaveGalaxy.end())
-	//	{
-	//		if (!m_pGalaxyCluster->m_bNewVersion)
-	//		{
-	//			m_pGalaxyCluster->put_ConfigName(m_pGalaxyCluster->m_strConfigFileNodeName.AllocSysString());
-	//		}
-	//	}
-	//}
 
 	DWORD dwID = ::GetWindowThreadProcessId(m_hWnd, NULL);
 	TRACE(_T("ObserveEx ThreadInfo:%x\n"), dwID);

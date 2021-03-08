@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045           *
+ *           Web Runtime for Application - Version 1.0.0.202103080046           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -151,7 +151,6 @@ using namespace std;
 #include <ppltasks.h>
 using namespace concurrency;
 
-class CBKWnd;
 class CXobj;
 class CXobjWnd;
 class CCosmos;

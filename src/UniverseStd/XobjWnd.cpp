@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045
+ *           Web Runtime for Application - Version 1.0.0.202103080046
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -834,65 +834,6 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 	}
 
 	return CWnd::WindowProc(message, wParam, lParam);
-}
-
-CBKWnd::CBKWnd(void)
-{
-	m_pGalaxy = nullptr;
-	m_hChild = nullptr;
-	m_pXobj = nullptr;
-	m_strURL = _T("");
-}
-
-void CBKWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl<CBKWnd, CWindow>::OnFinalMessage(hWnd);
-	delete this;
-}
-
-LRESULT CBKWnd::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	if (m_pXobj)
-	{
-		g_pCosmos->m_pActiveXobj = m_pXobj;
-		g_pCosmos->m_bWinFormActived = false;
-	}
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	if (m_hChild)
-	{
-		CGalaxyCluster* pGalaxyCluster = m_pXobj->m_pXobjShareData->m_pGalaxyCluster;
-		IGalaxy* pGalaxy = nullptr;
-		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hChild), CComBSTR(L"ClientFrame"), &pGalaxy);
-		CString strXml = _T("");
-		strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" objid=\"%s\" /></cluster></mdiclient>"), m_strURL);
-		IXobj* pXobj = nullptr;
-		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
-		m_pGalaxy = (CGalaxy*)pGalaxy;
-		g_pCosmos->m_mapBKFrame[m_hChild] = m_pGalaxy;
-	}
-	return 1;
-}
-
-LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
-	if (lpwndpos->cx == 0 && lpwndpos->cy == 0)
-	{
-		RECT rc;
-		::GetClientRect(::GetParent(m_hWnd), &rc);
-		lpwndpos->cx = rc.right;
-		lpwndpos->cy = rc.bottom;
-	}
-	lpwndpos->flags |= SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW;
-	if (::IsWindow(m_hChild))
-	{
-		::SetWindowPos(m_hChild, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOREDRAW | SWP_NOACTIVATE);
-	}
-	return DefWindowProc(uMsg, wParam, lParam);
 }
 
 void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)

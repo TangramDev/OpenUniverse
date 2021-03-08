@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045           *
+ *           Web Runtime for Application - Version 1.0.0.202103080046           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -3817,51 +3817,6 @@ BOOL CCosmos::IsUserAdministrator()
 
 STDMETHODIMP CCosmos::GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppXobj)
 {
-	if (hParent == 0)
-		return S_FALSE;
-	HWND hPWnd = (HWND)hParent;
-	CString strClsName = OLE2T(bstrWndClsName);
-	strClsName.Trim();
-	if (strClsName == _T(""))
-	{
-		strClsName = _T("MDIClient");
-	}
-	strClsName.MakeLower();
-	HWND hWnd = ::FindWindowEx(hPWnd, NULL, strClsName, NULL);
-	if (hWnd == nullptr)
-		return S_FALSE;
-	strClsName = OLE2T(bstrGalaxyClusterName);
-	strClsName.Trim();
-	if (strClsName == _T(""))
-	{
-		strClsName = _T("default");
-	}
-	CGalaxyCluster* pGalaxyCluster = nullptr;
-	auto it = m_mapWindowPage.find(hPWnd);
-	if (it == m_mapWindowPage.end())
-	{
-		pGalaxyCluster = new CComObject<CGalaxyCluster>;
-		pGalaxyCluster->m_hWnd = hPWnd;
-		m_mapWindowPage[hPWnd] = pGalaxyCluster;
-		for (auto it : m_mapCosmosAppProxy)
-		{
-			CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
-			if (pProxy)
-				pGalaxyCluster->m_mapGalaxyClusterProxy[it.second] = pProxy;
-		}
-	}
-	else
-		pGalaxyCluster = (CGalaxyCluster*)it->second;
-	if (pGalaxyCluster != nullptr)
-	{
-		pGalaxyCluster->put_ConfigName(strClsName.AllocSysString());
-		IGalaxy* pGalaxy = nullptr;
-		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hWnd), CComBSTR(L"default"), &pGalaxy);
-		if (pGalaxy)
-		{
-			return pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L"<default><cluster><xobj name=\"Start\" /></cluster></default>"), ppXobj);
-		}
-	}
 	return S_FALSE;
 }
 

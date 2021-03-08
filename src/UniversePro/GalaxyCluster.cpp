@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045           *
+ *           Web Runtime for Application - Version 1.0.0.202103080046           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1616,91 +1616,6 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
-{
-	m_strConfigFileNodeName = OLE2T(newVal);
-	m_strConfigFileNodeName.Trim();
-	m_strConfigFileNodeName.MakeLower();
-	if (m_strConfigFileNodeName == _T(""))
-		m_strConfigFileNodeName = _T("default");
-	if (m_strConfigFileNodeName.Find(_T(" ")))
-		m_strConfigFileNodeName.Replace(_T(" "), _T("_"));
-
-	if (m_strPageFileName == _T("")&&::GetParent(m_hWnd)==nullptr)
-	{
-		m_strPageFileName = g_pCosmos->m_strExeName;
-		m_strPageFilePath = g_pCosmos->m_strConfigDataFile;
-	}
-	
-	if (::PathFileExists(m_strPageFilePath))
-	{
-		CTangramXmlParse m_Parse2;
-		if (m_Parse2.LoadFile(m_strPageFilePath))
-		{
-			CTangramXmlParse* m_pCosmosPageParse = m_Parse2.GetChild(_T("hubblepage"));
-			if (m_pCosmosPageParse == nullptr)
-			{
-				m_Parse2.AddNode(_T("hubblepage"));
-				m_pCosmosPageParse = m_Parse2.GetChild(_T("hubblepage"));
-			}
-			if (m_pCosmosPageParse)
-			{
-				CTangramXmlParse* m_pCosmosPageParse2 = m_pCosmosPageParse->GetChild(m_strConfigFileNodeName);
-				if (m_pCosmosPageParse2 == nullptr)
-				{
-					if(m_pCosmosPageParse->AddNode(m_strConfigFileNodeName)!=nullptr)
-						m_Parse2.SaveFile(m_strPageFilePath);
-				}
-				if (m_pCosmosPageParse2)
-				{
-					int nCount = m_pCosmosPageParse2->GetCount();
-					for (int i = 0; i < nCount; i++)
-					{
-						CTangramXmlParse* _pParse = m_pCosmosPageParse2->GetChild(i);
-						CString _str = _T("@") + _pParse->name() + _T("@") + m_strConfigFileNodeName;
-						int nCount2 = _pParse->GetCount();
-						for (int i = 0; i < nCount2; i++)
-						{
-							CTangramXmlParse* _pParse2 = _pParse->GetChild(i);
-							m_strMapKey[_pParse2->name() + _str] = _pParse2->xml();
-						}
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		if (::PathIsDirectory(g_pCosmos->m_strAppDataPath) == false)
-		{
-			if (::SHCreateDirectoryEx(NULL, g_pCosmos->m_strAppDataPath, NULL))
-				return S_FALSE;
-		}
-		CString strXml = _T("");
-		strXml.Format(_T("<%s><hubblepage><%s /></hubblepage></%s>"), m_strPageFileName, m_strConfigFileNodeName, m_strPageFileName);
-		CTangramXmlParse m_Parse2;
-		m_Parse2.LoadXml(strXml);
-		m_Parse2.SaveFile(m_strPageFilePath);
-	}
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hFrameWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IXobj** ppXobj)
-{
-	CString strXml = OLE2T(bstrXml);
-	strXml.Trim();
-	if (strXml == _T(""))
-		strXml = _T("<default><cluster><xobj name=\"Start\" /></cluster></default>");
-	IGalaxy* pGalaxy = nullptr;
-	CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)hFrameWnd), bstrGalaxyName, &pGalaxy);
-	if (pGalaxy)
-	{
-		pGalaxy->Observe(bstrDefaultNodeKey, strXml.AllocSysString(), ppXobj);
-	}
-
-	return S_OK;
-}
-
 STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile)
 {
 	CString strGalaxys = OLE2T(bstrGalaxys);
@@ -1731,15 +1646,5 @@ STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR
 		}
 	}
 
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::get_CurrentDesignGalaxyType(GalaxyType* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IXobj** pVal)
-{
 	return S_OK;
 }

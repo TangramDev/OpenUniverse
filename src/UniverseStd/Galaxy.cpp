@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045
+ *           Web Runtime for Application - Version 1.0.0.202103080046
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -743,7 +743,6 @@ CWinForm::CWinForm(void)
 {
 	m_nState = -1;
 	m_bMdiForm = false;
-	m_pBKWnd = nullptr;
 	m_pWormhole = nullptr;
 	m_pOwnerHtmlWnd = nullptr;
 	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
@@ -1122,14 +1121,6 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		return (LRESULT)m_pChildFormsInfo;
 	}
 	break;
-	case 20200115:
-	{
-		if (m_pBKWnd)
-		{
-			m_pBKWnd->m_pGalaxy->HostPosChanged();
-		}
-	}
-	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
@@ -1218,40 +1209,6 @@ LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	{
 		::PostMessage(m_hWnd, WM_MDICLIENTCREATED, wParam, 0);
 	}
-	if (lParam == 0 && m_pBKWnd == nullptr && m_strBKID != _T(""))
-	{
-		m_pBKWnd = new CBKWnd();
-		HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T("mdibk"), WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, (HWND)wParam, 0, theApp.m_hInstance, nullptr);
-		m_pBKWnd->SubclassWindow(hwnd);
-		m_pBKWnd->m_hChild = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, hwnd, 0, theApp.m_hInstance, nullptr);
-		CGalaxyCluster* pGalaxyCluster = nullptr;
-		auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
-		if (it != g_pCosmos->m_mapWindowPage.end())
-			pGalaxyCluster = (CGalaxyCluster*)it->second;
-		if (pGalaxyCluster)
-		{
-			IGalaxy* pGalaxy = nullptr;
-			pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_pBKWnd->m_hChild), CComBSTR(L"ClientFrame"), &pGalaxy);
-			CString strXml = _T("");
-			int nPos = m_strBKID.Find(_T(":"));
-			if (nPos == -1)
-				strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" objid=\"%s\" /></cluster></mdiclient>"), m_strBKID);
-			else
-			{
-				m_strBKID = m_strBKID.Mid(nPos + 1);
-				strXml.Format(_T("<mdiclient><cluster><xobj name='mdiclient' url='%s' /></cluster></mdiclient>"), m_strBKID);
-			}
-			IXobj* pXobj = nullptr;
-			pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
-			auto it = pGalaxyCluster->m_mapGalaxy.find((HWND)wParam);
-			if (it != pGalaxyCluster->m_mapGalaxy.end())
-			{
-				it->second->m_pBKWnd = m_pBKWnd;
-			}
-			pGalaxyCluster->m_pBKGalaxy = m_pBKWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
-			g_pCosmos->m_mapBKFrame[m_pBKWnd->m_hChild] = m_pBKWnd->m_pGalaxy;
-		}
-	}
 
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
@@ -1299,7 +1256,6 @@ CGalaxy::CGalaxy()
 	m_pWebPageWnd = nullptr;
 	m_pWorkBenchFrame = nullptr;
 	m_bTabbedMDIClient = false;
-	m_pBKWnd = nullptr;
 	m_pGalaxyCluster = nullptr;
 	m_pWorkXobj = nullptr;
 	m_pRootNodes = nullptr;
@@ -1406,10 +1362,6 @@ void CGalaxy::HostPosChanged()
 		);
 		EndDeferWindowPos(dwh);
 		UpdateVisualWPFMap(hPWnd, false);
-		if (m_pBKWnd && ::IsWindow(m_pBKWnd->m_hWnd))
-		{
-			::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
-		}
 	}
 }
 
@@ -1964,12 +1916,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		{
 			it.second->OnExtend(m_pWorkXobj, m_strCurrentKey, strXml);
 		}
-
-		if (m_pBKWnd && m_pBKWnd->m_pGalaxy)
-		{
-			IXobj* pXobj = nullptr;
-			m_pBKWnd->m_pGalaxy->Observe(CComBSTR(L"default"), CComBSTR(L""), &pXobj);
-		}
 	}
 	if (m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
 	{
@@ -2276,16 +2222,6 @@ void CGalaxy::OnFinalMessage(HWND hWnd)
 LRESULT CGalaxy::OnHScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT hr = DefWindowProc(uMsg, wParam, lParam);
-	if (m_pBKWnd)
-	{
-		RECT rect;
-		::GetClientRect(m_hWnd, &rect);
-		if (::IsWindow(m_pBKWnd->m_hWnd))
-			::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rect.right, rect.bottom, SWP_NOREPOSITION | SWP_NOSENDCHANGING | SWP_NOACTIVATE);
-		else
-			::InvalidateRect(m_hWnd, &rect, true);
-		return hr;
-	}
 	return hr;
 }
 
@@ -2302,13 +2238,10 @@ LRESULT CGalaxy::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	if (m_pBKWnd == nullptr)
-	{
-		g_pCosmos->m_hActiveWnd = 0;
-		g_pCosmos->m_bWinFormActived = false;
-		g_pCosmos->m_pActiveXobj = nullptr;
-		g_pCosmos->m_pGalaxy = nullptr;
-	}
+	g_pCosmos->m_hActiveWnd = 0;
+	g_pCosmos->m_bWinFormActived = false;
+	g_pCosmos->m_pActiveXobj = nullptr;
+	g_pCosmos->m_pGalaxy = nullptr;
 	//bug fix for winform:
 	//++++++++++++++++begin+++++++++++
 	HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
@@ -2372,8 +2305,7 @@ LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	if (g_pCosmos->m_pCLRProxy) {
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGalaxy*)this);
 	}
-	if (m_pBKWnd)
-		m_pBKWnd->DestroyWindow();
+
 	m_pGalaxyCluster->BeforeDestory();
 	m_pGalaxyCluster->m_strConfigFileNodeName.MakeLower();//20190116
 

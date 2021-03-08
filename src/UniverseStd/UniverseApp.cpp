@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045           *
+ *           Web Runtime for Application - Version 1.0.0.202103080046           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -337,9 +337,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 				HWND hWnd = ::GetParent(it.first);
 				IGalaxy* pGalaxy = nullptr;
 				g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
-				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-				if (_pGalaxy)
-					_pGalaxy->m_pBKWnd = nullptr;
 				::DestroyWindow(::GetParent(it.first));
 			}
 

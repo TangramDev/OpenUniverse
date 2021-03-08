@@ -3896,15 +3896,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyClusterXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ConfigName( 
-            /* [in] */ BSTR newVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignGalaxyType( 
-            /* [retval][out] */ GalaxyType *pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDesignNode( 
-            /* [retval][out] */ IXobj **pVal) = 0;
-        
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxy( 
             VARIANT ParentObj,
             VARIANT HostWnd,
@@ -3941,14 +3932,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectCosmosCtrl( 
             ICosmosCtrl *eventSource) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxyWithDefaultNode( 
-            ULONGLONG hGalaxyWnd,
-            BSTR bstrGalaxyName,
-            BSTR bstrDefaultNodeKey,
-            BSTR bstrXml,
-            VARIANT_BOOL bSaveToConfig,
-            /* [retval][out] */ IXobj **ppXobj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
             BSTR bstrGalaxys,
@@ -4094,18 +4077,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IGalaxyCluster * This,
             /* [retval][out] */ BSTR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ConfigName )( 
-            IGalaxyCluster * This,
-            /* [in] */ BSTR newVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignGalaxyType )( 
-            IGalaxyCluster * This,
-            /* [retval][out] */ GalaxyType *pVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDesignNode )( 
-            IGalaxyCluster * This,
-            /* [retval][out] */ IXobj **pVal);
-        
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxy )( 
             IGalaxyCluster * This,
             VARIANT ParentObj,
@@ -4149,15 +4120,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectCosmosCtrl )( 
             IGalaxyCluster * This,
             ICosmosCtrl *eventSource);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxyWithDefaultNode )( 
-            IGalaxyCluster * This,
-            ULONGLONG hGalaxyWnd,
-            BSTR bstrGalaxyName,
-            BSTR bstrDefaultNodeKey,
-            BSTR bstrXml,
-            VARIANT_BOOL bSaveToConfig,
-            /* [retval][out] */ IXobj **ppXobj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
             IGalaxyCluster * This,
@@ -4256,15 +4218,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_get_GalaxyClusterXML(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyClusterXML(This,pVal) ) 
 
-#define IGalaxyCluster_put_ConfigName(This,newVal)	\
-    ( (This)->lpVtbl -> put_ConfigName(This,newVal) ) 
-
-#define IGalaxyCluster_get_CurrentDesignGalaxyType(This,pVal)	\
-    ( (This)->lpVtbl -> get_CurrentDesignGalaxyType(This,pVal) ) 
-
-#define IGalaxyCluster_get_CurrentDesignNode(This,pVal)	\
-    ( (This)->lpVtbl -> get_CurrentDesignNode(This,pVal) ) 
-
 #define IGalaxyCluster_CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy)	\
     ( (This)->lpVtbl -> CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy) ) 
 
@@ -4285,9 +4238,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
 
 #define IGalaxyCluster_ConnectCosmosCtrl(This,eventSource)	\
     ( (This)->lpVtbl -> ConnectCosmosCtrl(This,eventSource) ) 
-
-#define IGalaxyCluster_CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppXobj)	\
-    ( (This)->lpVtbl -> CreateGalaxyWithDefaultNode(This,hGalaxyWnd,bstrGalaxyName,bstrDefaultNodeKey,bstrXml,bSaveToConfig,ppXobj) ) 
 
 #define IGalaxyCluster_ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
     ( (This)->lpVtbl -> ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 

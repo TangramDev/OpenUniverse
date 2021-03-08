@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045
+ *           Web Runtime for Application - Version 1.0.0.202103080046
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -703,27 +703,7 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::put_ConfigName(BSTR newVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IXobj** ppXobj)
-{
-	return S_OK;
-}
-
 STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::get_CurrentDesignGalaxyType(GalaxyType* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::get_CurrentDesignNode(IXobj** pVal)
 {
 	return S_OK;
 }

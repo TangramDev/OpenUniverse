@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045           *
+ *           Web Runtime for Application - Version 1.0.0.202103080046           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -510,10 +510,7 @@ interface IGalaxyCluster : IDispatch {
 	[propput, id(9)] HRESULT Height([in] long newVal);
 	[propget, id(10)] HRESULT XobjNames([out, retval] BSTR* pVal);
 	[propget, id(11)] HRESULT Parent([out, retval] IGalaxyCluster** pVal);
-	[propget, id(13)] HRESULT GalaxyClusterXML([out, retval] BSTR* pVal);
-	[propput, id(14)] HRESULT ConfigName([in] BSTR newVal);
-	[propget, id(15)] HRESULT CurrentDesignGalaxyType([out, retval] GalaxyType* pVal);
-	[propget, id(16)] HRESULT CurrentDesignNode([out, retval] IXobj** pVal);
+	[propget, id(12)] HRESULT GalaxyClusterXML([out, retval] BSTR* pVal);
 
 	[id(101)] HRESULT CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, [out, retval] IGalaxy** pRetGalaxy);
 	[id(102)] HRESULT Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetXobj);
@@ -522,8 +519,7 @@ interface IGalaxyCluster : IDispatch {
 	[id(105)] HRESULT GetCtrlInXobj(BSTR NodeName, BSTR CtrlName, [out, retval] IDispatch** ppCtrl);
 	[id(106)] HRESULT GetGalaxyFromCtrl(IDispatch* ctrl, [out, retval] IGalaxy** ppGalaxy);
 	[id(107)] HRESULT ConnectCosmosCtrl(ICosmosCtrl* eventSource);
-	[id(108)] HRESULT CreateGalaxyWithDefaultNode(ULONGLONG hGalaxyWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, [out, retval] IXobj** ppXobj);
-	[id(109)] HRESULT ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
+	[id(108)] HRESULT ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 };
 
 [

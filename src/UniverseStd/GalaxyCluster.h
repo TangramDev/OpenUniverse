@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045
+ *           Web Runtime for Application - Version 1.0.0.202103080046
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -117,7 +117,6 @@ public:
 	STDMETHOD(get_xtml)(BSTR strKey, BSTR* pVal);
 	STDMETHOD(put_xtml)(BSTR strKey, BSTR newVal);
 	STDMETHOD(get_GalaxyClusterXML)(BSTR* pVal);
-	STDMETHOD(put_ConfigName)(BSTR newVal);
 
 	STDMETHOD(CreateGalaxy)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame);
 	STDMETHOD(GetXobj)(BSTR bstrGalaxyName, BSTR bstrNodeName, IXobj** pRetNode);
@@ -126,9 +125,6 @@ public:
 	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
 	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
 	STDMETHOD(ConnectCosmosCtrl)(ICosmosCtrl* eventSource);
-	STDMETHOD(CreateGalaxyWithDefaultNode)(ULONGLONG hFrameWnd, BSTR bstrGalaxyName, BSTR bstrDefaultNodeKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfig, IXobj** ppXobj);
 	STDMETHOD(ObserveGalaxys)(BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
-	STDMETHOD(get_CurrentDesignGalaxyType)(GalaxyType* pVal);
-	STDMETHOD(get_CurrentDesignNode)(IXobj** pVal);
 };
 

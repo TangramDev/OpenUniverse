@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103070045
+ *           Web Runtime for Application - Version 1.0.0.202103080046
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -26,7 +26,6 @@
 #include "chromium/WebPage.h"
 
 using namespace Browser;
-class CBKWnd;
 class CWormhole;
 
 class CCosmosHelperWnd : public CWnd
@@ -185,7 +184,6 @@ public:
 	CString									m_strBKID;
 	CString									m_strChildFormPath;
 	
-	CBKWnd*									m_pBKWnd;
 	CXobj*									m_pBindMDIXobj = nullptr;
 	CXobj*									m_pWebBindMDIXobj = nullptr;
 	CWebPage*								m_pOwnerHtmlWnd;
@@ -253,7 +251,6 @@ public:
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
-	CBKWnd*											m_pBKWnd;
 	CWebPage*										m_pWebPageWnd;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
