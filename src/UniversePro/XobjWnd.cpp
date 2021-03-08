@@ -578,11 +578,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					if (pIOleInPlaceActiveObject)
 						m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
 					m_Wnd.Detach();
-					if (m_mapDockCtrl.size())
-					{
-						HWND hPage = m_pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-						::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)this, 1963);
-					}
 				}
 				else
 				{
@@ -885,6 +880,12 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			break;
 		}
+		case WM_SETREDRAW:
+		{
+			if (wParam == 0 && m_pXobj->m_nViewType == TabGrid && g_pCosmos->m_bSZMode)
+				return 1;
+			break;
+		}
 		}
 	}
 
@@ -953,6 +954,11 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
+	if (m_pXobj->m_nViewType == TabGrid)
+	{
+		lpwndpos->flags |= SWP_NOREDRAW;
+		return;
+	}
 	CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
 	bool bNotCtrlBar = (m_pXobj->m_pXobjShareData->m_pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy);
 	CGalaxy* pGalaxy = nullptr;
@@ -988,7 +994,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
-		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
+		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOREDRAW);
 		return;
 	}
 	if (m_pXobj && m_pXobj->m_nViewType == CLRCtrl && m_pXobj->m_hHostWnd)

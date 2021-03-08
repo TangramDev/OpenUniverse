@@ -682,29 +682,6 @@ STDMETHODIMP CGalaxyCluster::GetCtrlInXobj(BSTR NodeName, BSTR CtrlName, IDispat
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_xtml(BSTR strKey, BSTR* pVal)
-{
-	map<CString, CString>::iterator it = m_mapXtml.find(OLE2T(strKey));
-	if (it != m_mapXtml.end())
-		*pVal = it->second.AllocSysString();
-
-	return S_OK;
-}
-
-STDMETHODIMP CGalaxyCluster::put_xtml(BSTR strKey, BSTR newVal)
-{
-	CString strkey = OLE2T(strKey);
-	CString strVal = OLE2T(newVal);
-	if (strkey == _T("") || strVal == _T(""))
-		return S_OK;
-	auto it = m_mapXtml.find(strkey);
-	if (it != m_mapXtml.end())
-		m_mapXtml.erase(it);
-
-	m_mapXtml[strkey] = strVal;
-	return S_OK;
-}
-
 STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 {
 	if (g_pCosmos->m_pCLRProxy)

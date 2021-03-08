@@ -262,8 +262,6 @@ public:
 	STDMETHOD(Show)();
 	STDMETHOD(GetXobjByName)(BSTR bstrName, IXobjCollection** pVal);
 	STDMETHOD(GetChildXobjByName)(BSTR bstrName, IXobj** pVal);
-	STDMETHOD(get_DockObj)(BSTR bstrName, LONGLONG* pVal);
-	STDMETHOD(put_DockObj)(BSTR bstrName, LONGLONG newVal);
 	STDMETHOD(NavigateURL)(BSTR bstrURL, IDispatch* dispObjforScript);
 
 	STDMETHOD(SendIPCMessage)(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet);

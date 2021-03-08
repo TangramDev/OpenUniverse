@@ -167,10 +167,13 @@ namespace Browser {
 			{
 				if (::IsWindow(m_hExtendWnd))
 				{
-					::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
-					::ShowWindow(m_hExtendWnd, SW_SHOW);
-					if (m_pChromeRenderFrameHost)
-						m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (::IsChild(m_hWnd, m_hExtendWnd))
+					{
+						::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+						::ShowWindow(m_hExtendWnd, SW_SHOW);
+					}
+					//if (m_pChromeRenderFrameHost)
+					//	m_pChromeRenderFrameHost->ShowWebPage(true);
 				}
 			}
 			else

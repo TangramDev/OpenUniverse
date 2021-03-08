@@ -523,11 +523,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					if (pIOleInPlaceActiveObject)
 						m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
 					m_Wnd.Detach();
-					if (m_mapDockCtrl.size())
-					{
-						HWND hPage = m_pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-						::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)this, 1963);
-					}
 				}
 				else
 				{
@@ -678,7 +673,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		}
 		return 0;
 	}
-	if (lParam == 20191031 || lParam == 20200130 )
+	if (lParam == 20191031 || lParam == 20200130)
 		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	if (lParam == 20200208)
 		return 0;
@@ -828,6 +823,12 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_MOUSEACTIVATE:
 		{
+			break;
+		}
+		case WM_SETREDRAW:
+		{
+			if (wParam == 0 && m_pXobj->m_nViewType == TabGrid)
+				return 1;
 			break;
 		}
 		}

@@ -1950,16 +1950,6 @@ HRESULT CXobj::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 	return hr;
 }
 
-STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CXobj::put_DockObj(BSTR bstrName, LONGLONG newVal)
-{
-	return S_OK;
-}
-
 STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript)
 {
 	if (g_pCosmos->m_pBrowserFactory == nullptr)

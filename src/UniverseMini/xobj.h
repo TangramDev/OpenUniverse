@@ -192,8 +192,6 @@ public:
 	STDMETHOD(LoadXML)(int nType, BSTR bstrXML);
 	STDMETHOD(Show)();
 	STDMETHOD(GetXobjByName)(BSTR bstrName, IXobjCollection** pVal);
-	STDMETHOD(get_DockObj)(BSTR bstrName, LONGLONG* pVal);
-	STDMETHOD(put_DockObj)(BSTR bstrName, LONGLONG newVal);
 	STDMETHOD(NavigateURL)(BSTR bstrURL, IDispatch* dispObjforScript);
 	STDMETHOD(GetUIScript)(BSTR bstrCtrlName, BSTR* bstrVal);
 	STDMETHOD(SendIPCMessage)(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra, BSTR bstrMsgId, BSTR* bstrRet);

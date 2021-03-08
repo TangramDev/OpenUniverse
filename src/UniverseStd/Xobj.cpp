@@ -1294,14 +1294,9 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 			}
 
 			CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
-			if (m_pDisp && pWnd->m_mapDockCtrl.size())
-			{
-				HWND hPage = m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-				::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)m_pHostWnd, 1963);
-			}
 			if (m_pDisp == nullptr)
 			{
-				((CXobjWnd*)m_pHostWnd)->m_bCreateExternal = false;
+				pWnd->m_bCreateExternal = false;
 				m_nViewType = BlankView;
 			}
 			if (m_strID.CollateNoCase(_T("wpfctrl")) == 0)
@@ -2372,36 +2367,6 @@ HRESULT CXobj::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 	//	it.second->OnTabChange(ActivePage, OldPage);
 	//}
 	return hr;
-}
-
-STDMETHODIMP CXobj::get_DockObj(BSTR bstrName, LONGLONG* pVal)
-{
-	CString strName = OLE2T(bstrName);
-	if (m_nViewType == CLRCtrl)
-	{
-		CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
-		auto it = pWnd->m_mapDockCtrl.find(strName);
-		if (it != pWnd->m_mapDockCtrl.end())
-		{
-			*pVal = (LONGLONG)it->second;
-		}
-	}
-	return S_OK;
-}
-
-STDMETHODIMP CXobj::put_DockObj(BSTR bstrName, LONGLONG newVal)
-{
-	CString strName = OLE2T(bstrName);
-	if (/*m_nViewType == CLRCtrl&&*/::IsWindow((HWND)newVal) && strName != _T(""))
-	{
-		CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
-		auto it = pWnd->m_mapDockCtrl.find(strName);
-		if (it == pWnd->m_mapDockCtrl.end())
-		{
-			pWnd->m_mapDockCtrl[strName] = (HWND)newVal;
-		}
-	}
-	return S_OK;
 }
 
 STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript)

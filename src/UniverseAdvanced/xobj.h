@@ -220,8 +220,6 @@ public:
 	STDMETHOD(LoadXML)(int nType, BSTR bstrXML);
 	STDMETHOD(Show)();
 	STDMETHOD(GetXobjByName)(BSTR bstrName, IXobjCollection** pVal);
-	STDMETHOD(get_DockObj)(BSTR bstrName, LONGLONG* pVal);
-	STDMETHOD(put_DockObj)(BSTR bstrName, LONGLONG newVal);
 	STDMETHOD(NavigateURL)(BSTR bstrURL, IDispatch* dispObjforScript);
 	STDMETHOD(get_URL)(BSTR* pVal);
 	STDMETHOD(put_URL)(BSTR newVal);

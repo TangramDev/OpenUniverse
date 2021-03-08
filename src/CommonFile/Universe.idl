@@ -310,8 +310,7 @@ interface IXobj : IDispatch {
 	[propput, id(18), helpstring("property Tag")] HRESULT Tag([in] VARIANT vVar);
 	[propget, id(19), helpstring("property OuterXml")] HRESULT OuterXml([out, retval] BSTR* pVal);
 	[propget, id(20), helpstring("property Key")] HRESULT Key([out, retval] BSTR* pVal);
-	[propget, id(21)] HRESULT DockObj(BSTR bstrName, [out, retval] LONGLONG* pVal);
-	[propput, id(21)] HRESULT DockObj(BSTR bstrName, [in] LONGLONG newVal);
+	[propget, id(21), helpstring("property WebPage")] HRESULT WebPage([out, retval] IWebPage** pVal);
 	[propget, id(22)] HRESULT NameAtWindowPage([out, retval] BSTR* pVal);
 	[propget, id(23), helpstring("property Width")] HRESULT Width([out, retval] LONG* pVal);
 	[propget, id(24), helpstring("property Height")] HRESULT Height([out, retval] LONG* pVal);
@@ -344,7 +343,6 @@ interface IXobj : IDispatch {
 	[propget, id(40)] HRESULT MasterCol([out, retval] int* pVal);
 	[propput, id(40)] HRESULT MasterCol([in] int newVal);
 	[propget, id(41), helpstring("property Office Object")] HRESULT OfficeObj([out, retval] IDispatch** pVal);
-	[propget, id(42), helpstring("property WebPage")] HRESULT WebPage([out, retval] IWebPage** pVal);
 
 	[id(100), hidden] HRESULT ActiveTabPage(IXobj* pXobj);
 	[id(101), helpstring("method GetNodes")] HRESULT GetXobjs([in]BSTR bstrName, [out]IXobj** ppXobj, [out]IXobjCollection** ppXobjs, [out, retval]long* pCount);
@@ -496,8 +494,7 @@ interface IGalaxyCluster : IDispatch {
 	[propget, id(DISPID_VALUE), helpstring("")] HRESULT Galaxy([in]VARIANT vIndex, [out, retval]IGalaxy** ppGalaxy);
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
 	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long* pCount);
-	[propget, id(2)] HRESULT xtml(BSTR strKey, [out, retval] BSTR* pVal);
-	[propput, id(2)] HRESULT xtml(BSTR strKey, [in] BSTR newVal);
+	[propget, id(2)] HRESULT GalaxyClusterXML([out, retval] BSTR* pVal);
 	[propget, id(3)] HRESULT Extender(BSTR bstrExtenderName, [out, retval] IDispatch** pVal);
 	[propput, id(3)] HRESULT Extender(BSTR bstrExtenderName, [in] IDispatch* newVal);
 	[propget, id(4)] HRESULT Xobj(BSTR bstrNodeName, [out, retval] IXobj** pVal);
@@ -510,7 +507,6 @@ interface IGalaxyCluster : IDispatch {
 	[propput, id(9)] HRESULT Height([in] long newVal);
 	[propget, id(10)] HRESULT XobjNames([out, retval] BSTR* pVal);
 	[propget, id(11)] HRESULT Parent([out, retval] IGalaxyCluster** pVal);
-	[propget, id(12)] HRESULT GalaxyClusterXML([out, retval] BSTR* pVal);
 
 	[id(101)] HRESULT CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, [out, retval] IGalaxy** pRetGalaxy);
 	[id(102)] HRESULT Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetXobj);

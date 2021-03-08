@@ -63,7 +63,6 @@ public:
 	map<CString, CXobj*>						m_mapXobj;
 	map<CString, IDispatch*>					m_mapExternalObj;
 	map<HWND, CEclipseCtrl*>					m_mapNotifyCtrl;
-	map<CString, CString>						m_mapXtml;
 	map<__int64, CCosmosEvent*>					m_mapEventObj;
 	map<IUniverseAppProxy*, CGalaxyClusterProxy*> m_mapGalaxyClusterProxy;
 
@@ -115,8 +114,6 @@ public:
 	STDMETHOD(put_Width)(long newVal);
 	STDMETHOD(get_Height)(long* pVal);
 	STDMETHOD(put_Height)(long newVal);
-	STDMETHOD(get_xtml)(BSTR strKey, BSTR* pVal);
-	STDMETHOD(put_xtml)(BSTR strKey, BSTR newVal);
 	STDMETHOD(get_GalaxyClusterXML)(BSTR* pVal);
 
 	STDMETHOD(CreateGalaxy)(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame);

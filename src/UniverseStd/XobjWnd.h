@@ -81,7 +81,6 @@ public:
 	CXobj*					m_pXobj;
 	CXobj*					m_pParentXobj;
 
-	map<CString, HWND>		m_mapDockCtrl;
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
 
 	BOOL PreTranslateMessage(MSG* pMsg);

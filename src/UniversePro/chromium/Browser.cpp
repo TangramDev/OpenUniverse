@@ -62,8 +62,8 @@ namespace Browser {
 			{
 				m_hOldTab = hOldWnd;
 			}
-			
-			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType==2)
+
+			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 			{
 				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
 				if (it != g_pCosmos->m_mapHtmlWnd.end())
@@ -88,7 +88,7 @@ namespace Browser {
 			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
 		}
 	}
-
+	
 	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (m_bDestroy)
@@ -121,6 +121,13 @@ namespace Browser {
 			return;
 		}
 
+		if (::IsWindowVisible(hWnd) == false &&
+			(g_pCosmos->m_pMDIMainWnd == nullptr ||
+				!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) ||
+				(g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild == nullptr))
+			)
+			return;
+
 		if (m_hOldTab)
 		{
 			RECT rc;
@@ -130,28 +137,31 @@ namespace Browser {
 			m_hOldTab = NULL;
 		}
 
+		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+		if (it != g_pCosmos->m_mapHtmlWnd.end())
+		{
+			m_pVisibleWebWnd = (CWebPage*)it->second;
+		}
+		else
+			return;
+
 		if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
 		{
 			m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 		}
 
-		if (m_bTabChange == true || (m_pVisibleWebWnd && m_pVisibleWebWnd->m_hWnd != hWnd))
+		if (m_bTabChange == true)
 		{
-			auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-			if (it != g_pCosmos->m_mapHtmlWnd.end())
+			if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
 			{
-				m_pVisibleWebWnd = (CWebPage*)it->second;
-				if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+				m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+				if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd)
 				{
-					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-					if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd)
-					{
-						g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
-					}
+					g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 				}
-				::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
-				return;
 			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
+			return;
 		}
 
 		BrowserLayout();

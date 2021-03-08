@@ -41,7 +41,6 @@ public:
 	CXobj*					m_pParentXobj;
 	CTangramHtmlTreeWnd*	m_pXHtmlTree;
 
-	map<CString, HWND>		m_mapDockCtrl;
 	IOleInPlaceActiveObject* m_pOleInPlaceActiveObject;
 
 	BOOL PreTranslateMessage(MSG* pMsg);
