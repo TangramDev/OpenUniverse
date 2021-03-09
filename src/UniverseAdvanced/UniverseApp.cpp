@@ -860,12 +860,8 @@ LRESULT CALLBACK CUniverse::CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 			if (::IsWindow(m_hChildWnd))
 			{
 				RECT rc;
-				::GetClientRect(m_hChildWnd, &rc);
-				if (rc.right * rc.bottom == 0)
-				{
-					::GetClientRect(hWnd, &rc);
-					::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, /**/SWP_FRAMECHANGED | SWP_NOREDRAW | SWP_NOACTIVATE);
-				}
+				::GetClientRect(hWnd, &rc);
+				::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, /*SWP_NOREDRAW*/SWP_FRAMECHANGED | SWP_NOACTIVATE);
 			}
 		}
 	}
@@ -1670,6 +1666,21 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
+				case 20210309:
+				{
+					HWND hClient = (HWND)lpMsg->wParam;
+					g_pCosmos->m_bSZMode = false;
+					for (auto& it : g_pCosmos->m_mapSizingBrowser)
+					{
+						if (::IsWindow(it.first))
+						{
+							SendMessage(it.first, WM_BROWSERLAYOUT, 0, 7);
+						}
+					}
+					g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
+					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, hClient);
+				}
+				break;
 				case 20210110:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;

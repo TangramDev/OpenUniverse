@@ -631,12 +631,8 @@ LRESULT CALLBACK CUniverse::CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 			if (::IsWindow(m_hChildWnd))
 			{
 				RECT rc;
-				::GetClientRect(m_hChildWnd, &rc);
-				if (rc.right * rc.bottom == 0)
-				{
-					::GetClientRect(hWnd, &rc);
-					::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, /**/SWP_FRAMECHANGED | SWP_NOREDRAW | SWP_NOACTIVATE);
-				}
+				::GetClientRect(hWnd, &rc);
+				::SetWindowPos(m_hChildWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, /*SWP_NOREDRAW*/SWP_FRAMECHANGED | SWP_NOACTIVATE);
 			}
 		}
 	}

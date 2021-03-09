@@ -62,8 +62,8 @@ namespace Browser {
 			{
 				m_hOldTab = hOldWnd;
 			}
-			
-			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType==2)
+
+			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 			{
 				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
 				if (it != g_pCosmos->m_mapHtmlWnd.end())
@@ -88,7 +88,7 @@ namespace Browser {
 			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
 		}
 	}
-
+	
 	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (m_bDestroy)
@@ -248,6 +248,7 @@ namespace Browser {
 							{
 								if (m_OldRect.left != rc.left || m_OldRect.top != rc.top || m_OldRect.right != rc.right || m_OldRect.bottom != rc.bottom)
 								{
+									::PostMessage(::GetParent(hPWnd), WM_COSMOSMSG, (WPARAM)hPWnd, 20210222);
 									g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 									::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)hPWnd, 20210309);
 								}
@@ -259,146 +260,6 @@ namespace Browser {
 			}
 		}
 	};
-	//void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
-	//	if (m_bDestroy || hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
-	//	{
-	//		return;
-	//	}
-
-	//	if (::IsWindowVisible(hWnd) == false &&
-	//		(g_pCosmos->m_pMDIMainWnd == nullptr ||
-	//			!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) ||
-	//			(g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_pActiveMDIChild == nullptr))
-	//		)
-	//		return;
-
-	//	if (m_hOldTab)
-	//	{
-	//		RECT rc;
-	//		::GetWindowRect(m_hOldTab, &rc);
-	//		ScreenToClient(&rc);
-	//		::SetWindowPos(m_hOldTab, HWND_BOTTOM, rc.left, rc.top, 1, 1, SWP_NOREDRAW | SWP_NOACTIVATE);
-	//		m_hOldTab = NULL;
-	//	}
-
-	//	if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
-	//	{
-	//		m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-	//	}
-
-	//	if (m_bTabChange == true || (m_pVisibleWebWnd && m_pVisibleWebWnd->m_hWnd != hWnd))
-	//	{
-	//		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-	//		if (it != g_pCosmos->m_mapHtmlWnd.end())
-	//		{
-	//			m_pVisibleWebWnd = (CWebPage*)it->second;
-	//			if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
-	//			{
-	//				m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-	//				if (m_pParentXobj && m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
-	//				{
-	//					::SendMessage(m_pCosmosFrameWndInfo->m_hClient, WM_COSMOSMSG, 0, 20180115);
-	//				}
-	//			}
-	//			::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
-	//			return;
-	//		}
-	//	}
-
-	//	BrowserLayout();
-	//	if (m_pVisibleWebWnd)
-	//	{
-	//		HWND hExtendWnd = m_pVisibleWebWnd->m_hExtendWnd;
-	//		if (hExtendWnd == nullptr)
-	//		{
-	//			hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hWnd, NULL, theApp.m_hInstance, NULL);
-	//			m_pVisibleWebWnd->m_hExtendWnd = hExtendWnd;
-	//			m_pVisibleWebWnd->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
-	//			CExtendWnd* pExtendWnd = new CExtendWnd();
-	//			pExtendWnd->m_pHostPage = m_pVisibleWebWnd;
-	//			pExtendWnd->SubclassWindow(m_pVisibleWebWnd->m_hChildWnd);
-	//			::SetWindowLongPtr(hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd->m_hChildWnd);
-	//			::SetWindowLongPtr(m_pVisibleWebWnd->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd);
-	//		}
-	//		if (::IsChild(hWnd, hExtendWnd))
-	//			::SetParent(hExtendWnd, m_hWnd);
-
-	//		if (m_pParentXobj && g_pCosmos->m_pMDIMainWnd && ::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, hWnd))
-	//		{
-	//			g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
-	//		}
-	//		if (m_pVisibleWebWnd->m_strCurKey == _T(""))
-	//		{
-	//			::SetWindowPos(hExtendWnd, m_hDrawWnd,
-	//				rc.left,
-	//				nTopFix * m_fdevice_scale_factor,
-	//				0,
-	//				0,
-	//				SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOACTIVATE);
-	//			return;
-	//		}
-	//		::SetWindowPos(hExtendWnd, m_hDrawWnd,
-	//			rc.left,
-	//			nTopFix * m_fdevice_scale_factor,
-	//			rc.right * m_fdevice_scale_factor,
-	//			(rc.bottom - rc.top) * m_fdevice_scale_factor,
-	//			SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOACTIVATE);
-	//		HWND hWebHostWnd = m_pVisibleWebWnd->m_hWebHostWnd;
-	//		if (hWebHostWnd == NULL)
-	//			hWebHostWnd = m_pVisibleWebWnd->m_hChildWnd;
-	//		if (::IsWindowVisible(hWebHostWnd) == false) {
-	//			rc.right = rc.left + 1;
-	//			rc.bottom = rc.top + 1;
-	//		}
-	//		else {
-	//			RECT rc2;
-	//			::GetWindowRect(hWebHostWnd, &rc2);
-	//			if (::ScreenToClient(hExtendWnd, (LPPOINT)&rc2))
-	//			{
-	//				::ScreenToClient(hExtendWnd, ((LPPOINT)&rc2) + 1);
-	//				RECT rect;
-	//				::GetClientRect(hExtendWnd, &rect);
-	//				if (g_pCosmos->m_bSZMode)
-	//				{
-	//					rc.right = rc.left + 1;
-	//					rc.bottom = rc.top + 1;
-	//				}
-	//				else
-	//				{
-	//					rc.left += rc2.left / m_fdevice_scale_factor;
-	//					rc.right -= (rect.right - rc2.right) / m_fdevice_scale_factor;
-	//					rc.top += (rc2.top - rect.top) / m_fdevice_scale_factor;
-	//					rc.bottom -= (rect.bottom - rc2.bottom) / m_fdevice_scale_factor;
-	//					if (rc.right <= rc.left || rc.bottom <= rc.top)
-	//					{
-	//						rc.right = rc.left + 1;
-	//						rc.bottom = rc.top + 1;
-	//					}
-	//					if (m_pParentXobj && g_pCosmos->m_bChromeNeedClosed == false && m_bDestroy == false)
-	//					{
-	//						HWND hPWnd = m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd;
-	//						if (m_pCosmosFrameWndInfo == nullptr)
-	//						{
-	//							HWND _hPWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hPWnd);
-	//							if (_hPWnd)
-	//							{
-	//								m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(_hPWnd, _T("CosmosFrameWndInfo"));;
-	//							}
-	//						}
-	//						if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 1)
-	//						{
-	//							if (m_OldRect.left != rc.left || m_OldRect.top != rc.top || m_OldRect.right != rc.right || m_OldRect.bottom != rc.bottom)
-	//							{
-	//								::PostMessage(::GetParent(hPWnd), WM_COSMOSMSG, (WPARAM)hPWnd, 20210222);
-	//							}
-	//						}
-	//					}
-	//					m_OldRect = rc;
-	//				}
-	//			}
-	//		}
-	//	}
-	//};
 
 	LRESULT CBrowser::BrowserLayout() {
 		if (m_bDestroy || m_pVisibleWebWnd == nullptr ||
@@ -809,8 +670,6 @@ namespace Browser {
 			case 7:
 			{
 				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
-				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
-					BrowserLayout();
 				for (auto& it : m_mapChildPage)
 				{
 					if (::IsWindow(it.first))
@@ -828,31 +687,19 @@ namespace Browser {
 						}
 					}
 				}
-				m_pBrowser->LayoutBrowser();
-				//for (auto& it : g_pCosmos->m_mapSizingBrowser)
-				//{
-				//	if (::IsWindow(it.first))
-				//	{
-				//		it.second->m_pBrowser->LayoutBrowser();
-				//	}
-				//}
+				for (auto& it : g_pCosmos->m_mapSizingBrowser)
+				{
+					if (::IsWindow(it.first))
+					{
+						it.second->m_pBrowser->LayoutBrowser();
+					}
+				}
 				g_pCosmos->m_bSZMode = false;
+				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
+					BrowserLayout();
 				if (m_pParentXobj)
 				{
 					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
-				}
-				else if (m_pVisibleWebWnd->m_pGalaxy)
-				{
-					CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
-					if (pObj->m_nViewType == Grid)
-					{
-						CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
-						pWnd->RecalcLayout();
-					}
-					else
-					{
-						::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
-					}
 				}
 			}
 			break;

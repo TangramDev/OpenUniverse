@@ -26,6 +26,7 @@
 #include "chromium/WebPage.h"
 
 using namespace Browser;
+
 class CWormhole;
 
 class CCosmosHelperWnd : public CWnd
@@ -40,14 +41,7 @@ protected:
 		CWnd::PostNcDestroy();
 		delete this;
 	}
-	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
-	{
-		if (message == WM_SHOWWINDOW && m_hClient)
-		{
-			::PostMessage(m_hClient, WM_COSMOSMSG, 0, 20180115);
-		}
-		return CWnd::WindowProc(message, wParam, lParam);
-	}
+	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 };
 
 // CCosmosTreeCtrl window
@@ -68,8 +62,8 @@ public:
 	CGalaxy* m_pGalaxy = nullptr;
 	map<HTREEITEM, CosmosUIItemData*> m_mapTreeItemData;
 protected:
-	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnNMClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMDblclk(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMReturn(NMHDR* pNMHDR, LRESULT* pResult);
@@ -101,8 +95,8 @@ public:
 	CGalaxy* m_pGalaxy = nullptr;
 	map<LVITEM, CosmosUIItemData*> m_mapListItemData;
 protected:
-	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnLvnDeleteitem(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnLvnDeleteallitems(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnLvnInsertitem(NMHDR* pNMHDR, LRESULT* pResult);
@@ -134,12 +128,12 @@ protected:
 	// Implementation
 public:
 	virtual ~CCosmosTabCtrl();
-	CGalaxy* m_pGalaxy = nullptr;
 	CXobj* m_pHostObj = nullptr;
+	CGalaxy* m_pGalaxy = nullptr;
 	map<TCITEM, CosmosUIItemData*> m_mapTabItemData;
 protected:
-	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnCloudMsgReceived(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnXobjCreatedMsg(WPARAM wParam, LPARAM lParam);
 	afx_msg BOOL OnNMClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg BOOL OnTcnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
@@ -158,14 +152,16 @@ public:
 	BEGIN_MSG_MAP(CMDTWnd)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 	END_MSG_MAP()
-
 private:
-	void OnFinalMessage(HWND hWnd);
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
+
+	void OnFinalMessage(HWND hWnd);
 };
 
 class CWinForm :
@@ -221,7 +217,6 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
-public:
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 };
 
@@ -251,15 +246,15 @@ public:
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
-	CWebPage*										m_pWebPageWnd;
+	CWebPage*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
-	CGalaxyCluster*									m_pGalaxyCluster;
-	CXobj*											m_pParentXobj;
-	CXobj*											m_pWorkXobj;
-	CXobj*											m_pContainerNode;
-	CXobj*											m_pBindingXobj;
-	GalaxyInfo*										m_pGalaxyInfo;
+	CGalaxyCluster*									m_pGalaxyCluster = nullptr;
+	CXobj*											m_pParentXobj = nullptr;
+	CXobj*											m_pWorkXobj = nullptr;
+	CXobj*											m_pContainerNode = nullptr;
+	CXobj*											m_pBindingXobj = nullptr;
+	GalaxyInfo*										m_pGalaxyInfo = nullptr;
 	CosmosFrameWndInfo*								m_pCosmosFrameWndInfo = nullptr;
 	CWormhole*										m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
@@ -269,8 +264,9 @@ public:
 	void Unlock(){}
 	void Destroy();
 	void HostPosChanged();
-	HWND GetWinForm(HWND hForm);
+	HWND GetWinForm(HWND hWnd);
 	void UpdateVisualWPFMap(HWND, BOOL);
+
 	CTangramXmlParse* UpdateXobj();
 	BOOL Create();
 	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey);

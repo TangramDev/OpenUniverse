@@ -21,6 +21,10 @@ public:
 
 	void AdjustLayout();
 	void OnChangeVisualStyle();
+	virtual void ToggleAutoHide() 
+	{
+		__super::ToggleAutoHide();
+	}
 
 protected:
 	CClassToolBar m_wndToolBar;

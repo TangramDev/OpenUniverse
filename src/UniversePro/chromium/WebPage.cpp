@@ -410,33 +410,6 @@ namespace Browser {
 			}
 		}
 		break;
-		case 20200606:
-		{
-			CString strSelectedInfo = (LPCTSTR)lParam;
-			int nPos = strSelectedInfo.ReverseFind(':');
-			CString strHandle = strSelectedInfo.Mid(nPos + 1);
-			strSelectedInfo = strSelectedInfo.Left(nPos);
-			SendChromeIPCMessage(_T("VS_OBJ_SECECTED"), _T(""), strHandle, _T("VS_OBJ_SECECTED"), strSelectedInfo, strHandle);
-		}
-		break;
-		case 20200607:
-		{
-			CString strSelectedInfo = (LPCTSTR)lParam;
-			int nPos = strSelectedInfo.Find(_T("|"));
-			CString s1 = strSelectedInfo.Mid(nPos + 1);
-			CString s = strSelectedInfo.Left(nPos);
-			nPos = s.Find(_T("@"));
-			CString strSol = s.Left(nPos);
-			s = s.Mid(nPos + 1);
-			nPos = s.Find(_T("@"));
-			CString strPrj = s.Left(nPos);
-			CString _strPrj = strPrj;
-			CString strType = s.Mid(nPos + 1);
-			nPos = strPrj.ReverseFind('\\');
-			strPrj = strPrj.Mid(nPos + 1);
-			SendChromeIPCMessage(_T("VS_EVENT_SOLUTION"), strSol, _strPrj, strPrj, strType, s1);
-		}
-		break;
 		}
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;

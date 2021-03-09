@@ -854,6 +854,13 @@ LRESULT CMDTWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
+LRESULT CMDTWnd::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
+	return l;
+}
+
 LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
@@ -1727,7 +1734,8 @@ LRESULT CCosmosHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (message == WM_SHOWWINDOW && m_hClient)
 	{
-		::PostMessage(m_hClient, WM_COSMOSMSG, 0, 20180115);
+		g_pCosmos->m_bSZMode = true;
+		::PostMessage(m_hClient, WM_COSMOSMSG, 1, 20180115);
 	}
 	return CWnd::WindowProc(message, wParam, lParam);
 }
@@ -2347,7 +2355,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_bMDIChild = true;
 	}
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
-	if (g_pCosmos->m_pMDIMainWnd&& m_nGalaxyType != CtrlBarGalaxy)
+	if (g_pCosmos->m_pMDIMainWnd && m_nGalaxyType != CtrlBarGalaxy)
 	{
 		if (::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) || ::IsChild(g_pCosmos->m_hHostBrowserWnd, m_hWnd))
 		{
@@ -2459,8 +2467,8 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 	}
 	if (m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
 	{
-		if(m_pWorkXobj->m_strCaption!=_T(""))
-		{ 
+		if (m_pWorkXobj->m_strCaption != _T(""))
+		{
 			::SetWindowText(::GetParent(m_hWnd), m_pWorkXobj->m_strCaption);
 		}
 	}
@@ -2950,8 +2958,15 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 20180115:
 	{
+		if (wParam == 1)
+		{
+			g_pCosmos->m_bSZMode = false;
+			if (m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
+			{
+				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210309);
+			}
+		}
 		HostPosChanged();
-		//if(m_pCosmosFrameWndInfo&& m_pCosmosFrameWndInfo->m_nFrameType==2)
 		if (g_pCosmos->m_pMDIMainWnd &&
 			g_pCosmos->m_pMDIMainWnd->m_pGalaxy &&
 			::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd))
