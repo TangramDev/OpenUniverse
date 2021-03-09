@@ -62,8 +62,8 @@ namespace Browser {
 			{
 				m_hOldTab = hOldWnd;
 			}
-			
-			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType==2)
+
+			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 			{
 				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
 				if (it != g_pCosmos->m_mapHtmlWnd.end())
@@ -821,7 +821,7 @@ namespace Browser {
 						else
 						{
 							m_pVisibleWebWnd = it.second;
-							if (/*wParam == 1 && */it.second->m_pChromeRenderFrameHost)
+							if (wParam == 1 && it.second->m_pChromeRenderFrameHost)
 								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						}
 					}
@@ -837,11 +837,12 @@ namespace Browser {
 					}
 				}
 				g_pCosmos->m_bSZMode = false;
+
 				if (m_pParentXobj)
 				{
 					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 				}
-				
+
 				if (m_pVisibleWebWnd->m_pGalaxy)
 				{
 					CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
@@ -849,13 +850,8 @@ namespace Browser {
 					{
 						CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
 						pWnd->RecalcLayout();
-						//BrowserLayout();
-						//m_pBrowser->LayoutBrowser();
 					}
-					else
-					{
-						::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
-					}
+					::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
 				}
 			}
 			break;

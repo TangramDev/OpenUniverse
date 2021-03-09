@@ -809,8 +809,6 @@ namespace Browser {
 			case 7:
 			{
 				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
-				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
-					BrowserLayout();
 				for (auto& it : m_mapChildPage)
 				{
 					if (::IsWindow(it.first))
@@ -828,20 +826,24 @@ namespace Browser {
 						}
 					}
 				}
+				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
+					BrowserLayout();
 				m_pBrowser->LayoutBrowser();
-				//for (auto& it : g_pCosmos->m_mapSizingBrowser)
-				//{
-				//	if (::IsWindow(it.first))
-				//	{
-				//		it.second->m_pBrowser->LayoutBrowser();
-				//	}
-				//}
+				for (auto& it : g_pCosmos->m_mapSizingBrowser)
+				{
+					if (::IsWindow(it.first))
+					{
+						it.second->m_pBrowser->LayoutBrowser();
+					}
+				}
 				g_pCosmos->m_bSZMode = false;
+
 				if (m_pParentXobj)
 				{
 					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 				}
-				else if (m_pVisibleWebWnd->m_pGalaxy)
+
+				if (m_pVisibleWebWnd->m_pGalaxy)
 				{
 					CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
 					if (pObj->m_nViewType == Grid)
@@ -849,10 +851,7 @@ namespace Browser {
 						CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
 						pWnd->RecalcLayout();
 					}
-					else
-					{
-						::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
-					}
+					::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
 				}
 			}
 			break;
