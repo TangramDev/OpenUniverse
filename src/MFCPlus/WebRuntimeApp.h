@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103080046           *
+ *           Web Runtime for Application - Version 1.0.0.202103060044           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -158,6 +158,7 @@ namespace CommonUniverse
 		virtual ~CWebRuntimeApp();
 		CString GetDocTemplateID(CDocument* pDoc);
 		virtual bool InitApp();
+		virtual bool SetFrameInfo(HWND hWnd);
 	private:
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
@@ -166,18 +167,22 @@ namespace CommonUniverse
 		bool ProcessAppType(bool bCrashReporting);
 		virtual int Run();
 		virtual BOOL InitApplication();
-		virtual HWND GetActivePopupMenu(HWND hWnd) ;
+		virtual HWND GetActivePopupMenu(HWND hWnd);
 
 		//IUniverseAppProxy:
-		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj);
-		virtual void OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode);
+		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {};
+		virtual void OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode) {};
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode);
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewFrame);
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager);
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
-		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML);
+		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {};
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
-		virtual bool EclipseAppInit();
+		virtual CString QueryWndClassName(HWND hWnd);
+		virtual CString QueryDocType(HWND hWnd);
+		virtual bool EclipseAppInit() { return false; };
+		virtual bool SetFrameCaption(HWND hWnd, CString strCaption);
+		virtual CString CWebRuntimeApp::QueryParentInfo(HWND hPWnd, void* lpInfo);
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);
@@ -191,8 +196,8 @@ namespace CommonUniverse
 		public CGalaxyClusterProxy
 	{
 	public:
-		CWebMDIFrameWnd();
-		virtual ~CWebMDIFrameWnd();
+		CWebMDIFrameWnd() {};
+		virtual ~CWebMDIFrameWnd() {};
 
 		DECLARE_DYNCREATE(CWebMDIFrameWnd)
 
@@ -210,9 +215,9 @@ namespace CommonUniverse
 		void AdjustClientArea();
 		void OnTabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
 		void OnClrControlCreated(IXobj* Node, IDispatch* Ctrl, CString CtrlName, HWND CtrlHandle);
-		void OnEvent(IDispatch* sender, IDispatch* EventArg);
-		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName);
-		void OnHubbleEvent(ICosmosEventObj* NotifyObj);
+		void OnEvent(IDispatch* sender, IDispatch* EventArg) {};
+		void OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName) {};
+		void OnHubbleEvent(ICosmosEventObj* NotifyObj) {};
 	};
 };
 

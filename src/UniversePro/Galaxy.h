@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103080046
+ *           Web Runtime for Application - Version 1.0.0.202103090047
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -185,6 +185,7 @@ public:
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
+		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
 	END_MSG_MAP()
 private:
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
@@ -192,8 +193,10 @@ private:
 	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
 
 	void OnFinalMessage(HWND hWnd);
+public:
 };
 
 class CMDIParent :
@@ -222,6 +225,7 @@ public:
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
+		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
@@ -229,6 +233,7 @@ public:
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CWinForm :
@@ -271,6 +276,7 @@ public:
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
@@ -290,6 +296,7 @@ private:
 	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class ATL_NO_VTABLE CGalaxy :

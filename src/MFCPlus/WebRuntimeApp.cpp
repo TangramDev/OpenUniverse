@@ -151,9 +151,11 @@ namespace CommonUniverse
 			CWnd::PostNcDestroy();
 			delete this;
 		}
-		BEGIN_MSG_MAP(CTangramHelperWnd)
-		END_MSG_MAP()
+	protected:
+		DECLARE_MESSAGE_MAP()
 	};
+	BEGIN_MESSAGE_MAP(CTangramHelperWnd, CWnd)
+	END_MESSAGE_MAP()
 
 	class CTangramTabCtrlWnd :
 		public CMFCTabCtrl,
@@ -747,21 +749,58 @@ namespace CommonUniverse
 		return true;
 	}
 
+	CString CWebRuntimeApp::QueryDocType(HWND hWnd)
+	{
+		CWnd* pWnd = CWnd::FromHandle(hWnd);
+		CFrameWnd* pFrame = pWnd->GetParentFrame();
+		if (pFrame)
+		{
+			CString strType = (LPCTSTR)::SendMessage(pFrame->m_hWnd, WM_COSMOSMSG, 0, 10000);
+			if (strType == _T("") && pFrame == m_pMainWnd && pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+			{
+				strType = _T("mdiframe");
+			}
+			if (strType == _T("") && pFrame == m_pMainWnd && pFrame->IsKindOf(RUNTIME_CLASS(CMiniFrameWnd)))
+			{
+				strType = _T("miniframe");
+			}
+			return strType;
+		}
+		return _T("");
+	}
+
+	CString CWebRuntimeApp::QueryWndClassName(HWND hWnd)
+	{
+		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+		if (pWnd)
+		{
+			CRuntimeClass* pClassInfo = pWnd->GetRuntimeClass();
+			if (pClassInfo)
+			{
+				return CString(pClassInfo->m_lpszClassName);
+			}
+		}
+		return _T("");
+	}
+
 	HWND CWebRuntimeApp::QueryWndInfo(QueryType nType, HWND hWnd)
 	{
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
-		if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
+		if (pWnd)
 		{
-			BOOL bMDIClient = true;
-			if (nType == RecalcLayout)
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
 			{
-				CFrameWnd* pFrame = pWnd->GetParentFrame();
-				if (pFrame)
+				BOOL bMDIClient = true;
+				if (nType == RecalcLayout)
 				{
-					pFrame->RecalcLayout();
+					CFrameWnd* pFrame = pWnd->GetParentFrame();
+					if (pFrame)
+					{
+						pFrame->RecalcLayout();
+					}
 				}
+				return ::GetParent(hWnd);
 			}
-			return ::GetParent(hWnd);
 		}
 		switch (nType)
 		{
@@ -882,7 +921,9 @@ namespace CommonUniverse
 							if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
 								pCosmosFrameWndInfo->m_nFrameType = 2;
 							else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+							{
 								pCosmosFrameWndInfo->m_nFrameType = 3;
+							}
 							else if (pTemplate->IsKindOf(RUNTIME_CLASS(CMultiDocTemplate)))
 							{
 								pCosmosFrameWndInfo->m_nFrameType = 1;
@@ -936,17 +977,101 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	bool CWebRuntimeApp::EclipseAppInit()
+	bool CWebRuntimeApp::SetFrameCaption(HWND hWnd, CString strCaption)
 	{
+		if (strCaption == _T("") || !::IsWindow(hWnd))
+			return false;
+		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+		CFrameWnd* pFrame = nullptr;
+		if (pWnd)
+		{
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+			{
+				pFrame = (CFrameWnd*)pWnd;
+			}
+			else
+			{
+				pFrame = pWnd->GetParentFrame();
+			}
+			if (pFrame)
+			{
+				CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(pFrame->m_hWnd, _T("CosmosFrameWndInfo"));
+				if (pCosmosFrameWndInfo)
+				{
+					CDocument* pDoc = (CDocument*)pCosmosFrameWndInfo->m_pDoc;
+					if (pDoc)
+					{
+						CString strPath = pDoc->GetPathName();
+						if (strPath == _T(""))
+						{
+							CString strTitle = pDoc->GetTitle();
+							CDocTemplate* pTemplate = (CDocTemplate*)pCosmosFrameWndInfo->m_pDocTemplate;
+							CString name = _T("");
+							pTemplate->GetDocString(name, CDocTemplate::docName);
+							strTitle.Replace(name, strCaption);
+							pDoc->SetTitle(strTitle);
+						}
+						return true;
+					}
+				}
+			}
+		}
+		else
+		{
+			pWnd = CWnd::FromHandle(hWnd);
+			if (pWnd)
+				pFrame = pWnd->GetParentFrame();
+		}
+		if (pFrame)
+		{
+			CString strText = _T("");
+			pFrame->GetWindowText(strText);
+			CString strTitle = pFrame->GetTitle();
+			int nPos = strText.ReverseFind('-');
+			if (nPos != -1)
+			{
+				CString s1 = strText.Left(nPos + 1);
+				s1 += _T(" ");
+				s1 += strCaption;
+				::SetWindowText(pFrame->m_hWnd, s1);
+				pFrame->SetTitle(strCaption);
+				return true;
+			}
+			else
+			{
+				pFrame->SetTitle(strCaption);
+				::SetWindowText(pFrame->m_hWnd, strCaption);
+			}
+			return true;
+		}
+
 		return false;
 	}
 
-	void CWebRuntimeApp::OnObserverComplete(HWND hContentLoaderWnd, CString strUrl, IXobj* pRootNode)
+	CString CWebRuntimeApp::QueryParentInfo(HWND hPWnd, void* lpInfo)
 	{
-	}
-
-	void CWebRuntimeApp::OnCosmosEvent(ICosmosEventObj* NotifyObj)
-	{
+		CWnd* pParent = CWnd::FromHandlePermanent(hPWnd);
+		if (pParent)
+		{
+			CFrameWnd* pParentFrame = nullptr;
+			if (pParent->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+				pParentFrame = (CFrameWnd*)pParent;
+			else
+				pParentFrame = pParent->GetParentFrame();
+			if (pParentFrame)
+			{
+				CCreateContext* pContext = (CCreateContext*)lpInfo;
+				CDocument* pDoc = pContext->m_pCurrentDoc;
+				CDocTemplate* pTemplate = pContext->m_pNewDocTemplate;
+				CString strExt = _T("");
+				pTemplate->GetDocString(strExt, CDocTemplate::filterExt);
+				strExt.MakeLower();
+				if (strExt == _T(""))
+					strExt = _T("default");
+				return strExt;
+			}
+		}
+		return _T("");
 	}
 
 	void CWebRuntimeApp::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
@@ -972,8 +1097,27 @@ namespace CommonUniverse
 		}
 	}
 
-	void CWebRuntimeApp::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
+	bool CWebRuntimeApp::SetFrameInfo(HWND hWnd)
 	{
+		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
+		if (pWnd)
+		{
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CFormView)))
+			{
+				CFormView* pFormView = (CFormView*)pWnd;
+				CFrameWnd* pFrameWnd = pWnd->GetParentFrame();
+				if (pFrameWnd)
+				{
+					CString strInfo = m_strCreatingDOCID;
+					if (strInfo == _T(""))
+						strInfo = _T("default");
+					bool bRet =  g_pCosmosImpl->SetFrameInfo(hWnd, pFrameWnd->m_hWnd, strInfo, pFormView->GetDocument(), pFormView->GetDocument()->GetDocTemplate());
+					pFormView->ResizeParentToFit();
+					return bRet;
+				}
+			}
+		}
+		return false;
 	}
 
 	CXobjProxy* CWebRuntimeApp::OnXobjInit(IXobj* pNewNode)
@@ -994,11 +1138,11 @@ namespace CommonUniverse
 		return nullptr;
 	}
 
-	CGalaxyClusterProxy* CWebRuntimeApp::OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager)
+	CGalaxyClusterProxy* CWebRuntimeApp::OnGalaxyClusterCreated(IGalaxyCluster* pGalaxyCluster)
 	{
 		CGalaxyClusterProxy* pGalaxyClusterProxy = nullptr;
 		__int64 h = 0;
-		pNewContentLoaderManager->get_Handle(&h);
+		pGalaxyCluster->get_Handle(&h);
 		if (h)
 		{
 			CWnd* pWnd = CWnd::FromHandlePermanent((HWND)h);
@@ -1104,7 +1248,6 @@ namespace CommonUniverse
 		return false;
 	};
 
-
 	IMPLEMENT_DYNCREATE(CWebMDIFrameWnd, CMDIFrameWndEx)
 
 	BEGIN_MESSAGE_MAP(CWebMDIFrameWnd, CMDIFrameWndEx)
@@ -1112,25 +1255,10 @@ namespace CommonUniverse
 		ON_WM_NCACTIVATE()
 	END_MESSAGE_MAP()
 
-
-	CWebMDIFrameWnd::CWebMDIFrameWnd()
-	{
-	}
-
-	CWebMDIFrameWnd::~CWebMDIFrameWnd()
-	{
-	}
-
 	BOOL CWebMDIFrameWnd::OnCommand(WPARAM wParam, LPARAM lParam)
 	{
-		//if (m_hClient == nullptr)
-		//{
-		//	AFXSetTopLevelFrame(this);
-		//}
-		//return CFrameWndEx::OnCommand(wParam, lParam);
 		HWND hWndCtrl = (HWND)lParam;
 		UINT nID = LOWORD(wParam);
-		//AFXSetTopLevelFrame(this);
 		CFrameWnd* pFrameWnd = this;
 		ENSURE_VALID(pFrameWnd);
 		if (pFrameWnd->m_bHelpMode && hWndCtrl == NULL &&
@@ -1197,7 +1325,7 @@ namespace CommonUniverse
 				break;
 			}
 		}
-		return 0;// (LRESULT)(IUniverseAppProxy*)&theApp;
+		return 0;
 	}
 
 	BOOL CWebMDIFrameWnd::OnNcActivate(BOOL bActive)
@@ -1226,18 +1354,6 @@ namespace CommonUniverse
 		Node->get_Name(&bstrName);
 		CComBSTR bstrName2("");
 		Node->get_NameAtWindowPage(&bstrName2);
-	}
-
-	void CWebMDIFrameWnd::OnEvent(IDispatch* sender, IDispatch* EventArg)
-	{
-	}
-
-	void CWebMDIFrameWnd::OnControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, HWND CtrlHandle, CString CtrlClassName)
-	{
-	}
-
-	void CWebMDIFrameWnd::OnHubbleEvent(ICosmosEventObj* NotifyObj)
-	{
 	}
 
 	BOOL CWebMDIFrameWnd::OnShowPopupMenu(CMFCPopupMenu* pMenuPopup)

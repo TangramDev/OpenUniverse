@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103080046           *
+ *           Web Runtime for Application - Version 1.0.0.202103090047           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -167,8 +167,11 @@ namespace Browser {
 			{
 				if (::IsWindow(m_hExtendWnd))
 				{
-					::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
-					::ShowWindow(m_hExtendWnd, SW_SHOW);
+					if (::IsChild(m_hWnd, m_hExtendWnd))
+					{
+						::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+						::ShowWindow(m_hExtendWnd, SW_SHOW);
+					}
 					if (m_pChromeRenderFrameHost)
 						m_pChromeRenderFrameHost->ShowWebPage(true);
 				}

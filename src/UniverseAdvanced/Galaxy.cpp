@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103080046
+ *           Web Runtime for Application - Version 1.0.0.202103090047
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -814,6 +814,21 @@ LRESULT CMDTWnd::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	return lRes;
 }
 
+LRESULT CMDTWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	switch (wParam)
+	{
+	case SC_SIZE:
+		g_pCosmos->m_bSZMode = true;
+		break;
+	case SC_MOVE:
+		g_pCosmos->m_bSZMode = false;
+		break;
+	}
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
 LRESULT CMDTWnd::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	g_pCosmos->m_bSZMode = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
@@ -890,6 +905,20 @@ void CMDIParent::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
+}
+
+LRESULT CMDIParent::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	switch (wParam)
+	{
+	case SC_MOVE:
+		g_pCosmos->m_bSZMode = false;
+		break;
+	case SC_SIZE:
+		break;
+	}
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
 }
 
 LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
@@ -1329,6 +1358,20 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
+}
+
+LRESULT CWinForm::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	switch (wParam)
+	{
+	case SC_MOVE:
+		g_pCosmos->m_bSZMode = false;
+		break;
+	case SC_SIZE:
+		break;
+	}
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
 }
 
 LRESULT CWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {

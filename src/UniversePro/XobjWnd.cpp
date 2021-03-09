@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103080046
+ *           Web Runtime for Application - Version 1.0.0.202103090047
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -882,7 +882,7 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_SETREDRAW:
 		{
-			if (wParam == 0 && m_pXobj->m_nViewType == TabGrid && g_pCosmos->m_bSZMode)
+			if (wParam == 0 && m_pXobj->m_nViewType == TabGrid)// && g_pCosmos->m_bSZMode)
 				return 1;
 			break;
 		}
