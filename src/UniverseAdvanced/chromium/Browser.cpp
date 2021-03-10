@@ -821,14 +821,14 @@ namespace Browser {
 						else
 						{
 							m_pVisibleWebWnd = it.second;
-							if (wParam == 1 && it.second->m_pChromeRenderFrameHost)
-								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
+							//if (wParam == 1 && it.second->m_pChromeRenderFrameHost)
+							//	it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						}
 					}
 				}
 
 				m_pBrowser->LayoutBrowser();
-				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
+				if (::GetParent(m_hWnd) == nullptr)/*wParam == 1 || */
 					BrowserLayout();
 				g_pCosmos->m_bSZMode = false;
 				if (m_pParentXobj)

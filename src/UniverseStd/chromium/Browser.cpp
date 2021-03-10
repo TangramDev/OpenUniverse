@@ -64,7 +64,7 @@ namespace Browser {
 				g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
 				m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 			}
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 	}
 

@@ -821,12 +821,10 @@ namespace Browser {
 						else
 						{
 							m_pVisibleWebWnd = it.second;
-							if (wParam == 1 && it.second->m_pChromeRenderFrameHost)
-								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						}
 					}
 				}
-				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
+				if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
 				m_pBrowser->LayoutBrowser();
 				for (auto& it : g_pCosmos->m_mapSizingBrowser)
@@ -841,6 +839,8 @@ namespace Browser {
 				if (m_pParentXobj)
 				{
 					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					if (hWnd)
+						break;
 				}
 
 				if (m_pVisibleWebWnd->m_pGalaxy)
