@@ -817,12 +817,6 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			break;
 		}
-		//case WM_SETREDRAW:
-		//{
-		//	if (wParam == 0 && m_pXobj->m_nViewType == TabGrid)// && g_pCosmos->m_bSZMode)
-		//		return 1;
-		//	break;
-		//}
 		}
 	}
 

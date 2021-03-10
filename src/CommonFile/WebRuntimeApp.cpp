@@ -221,6 +221,12 @@ namespace CommonUniverse
 			InvalidateRect(NULL);
 			return 0;
 		}
+		afx_msg LRESULT OnSetRedraw(WPARAM wParam, LPARAM lParam)
+		{
+			if (wParam == 0)
+				return 1;
+			return CWnd::DefWindowProc(WM_SETREDRAW, wParam, lParam);
+		}
 		afx_msg LRESULT OnActivePage(WPARAM wParam, LPARAM lParam) {
 			int nOldIndex = m_nCurSelTab;
 			int iIndex = (int)wParam;
@@ -310,6 +316,7 @@ namespace CommonUniverse
 
 	BEGIN_MESSAGE_MAP(CTangramTabCtrlWnd, CMFCTabCtrl)
 		ON_MESSAGE(WM_CREATETABPAGE, OnCreatePage)
+		ON_MESSAGE(WM_SETREDRAW, OnSetRedraw)
 		ON_MESSAGE(WM_TABCHANGE, OnActivePage)
 		ON_MESSAGE(WM_MODIFYTABPAGE, OnModifyPage)
 		ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)

@@ -85,7 +85,7 @@ namespace Browser {
 					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 				}
 			}
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 	}
 
@@ -826,21 +826,14 @@ namespace Browser {
 						}
 					}
 				}
+
+				m_pBrowser->LayoutBrowser();
 				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
-				m_pBrowser->LayoutBrowser();
-				for (auto& it : g_pCosmos->m_mapSizingBrowser)
-				{
-					if (::IsWindow(it.first))
-					{
-						it.second->m_pBrowser->LayoutBrowser();
-					}
-				}
 				g_pCosmos->m_bSZMode = false;
-
 				if (m_pParentXobj)
 				{
-					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 				}
 
 				if (m_pVisibleWebWnd->m_pGalaxy)

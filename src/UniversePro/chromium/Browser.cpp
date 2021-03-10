@@ -85,7 +85,7 @@ namespace Browser {
 					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 				}
 			}
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 	}
 
@@ -840,7 +840,7 @@ namespace Browser {
 
 				if (m_pParentXobj)
 				{
-					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 				}
 
 				if (m_pVisibleWebWnd->m_pGalaxy)
