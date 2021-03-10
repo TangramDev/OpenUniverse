@@ -310,21 +310,6 @@ namespace Browser {
 				g_pCosmos->m_mapHtmlWnd[hWnd] = g_pCosmos->m_pHtmlWndCreated;
 				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
 					m_pVisibleWebWnd = g_pCosmos->m_pHtmlWndCreated;
-#ifdef WIN32	
-				if (::IsWindow(hPWnd))
-				{
-					DWORD dwID = 0;
-					::GetWindowThreadProcessId(hPWnd, &dwID);
-					if (dwID != ::GetCurrentProcessId())
-					{
-						auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwID);
-						if (it != g_pCosmos->m_mapRemoteTangramApp.end())
-						{
-							g_pCosmos->m_pHtmlWndCreated->m_pRemoteCosmos = it->second;
-						}
-					}
-				}
-#endif
 			}
 			else
 			{
@@ -575,14 +560,12 @@ namespace Browser {
 						else
 						{
 							m_pVisibleWebWnd = it.second;
-							if (wParam == 1 && it.second->m_pChromeRenderFrameHost)
-								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
 						}
 					}
 				}
 
 				m_pBrowser->LayoutBrowser();
-				if (wParam == 1 || ::GetParent(m_hWnd) == nullptr)
+				if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
 				if (m_pParentXobj)
 				{

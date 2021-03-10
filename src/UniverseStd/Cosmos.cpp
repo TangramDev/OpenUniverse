@@ -104,7 +104,6 @@
 #include "eclipseJni.h"
 #include "eclipseCommon.h"
 
-#include "CloudUtilities\ComponentInstaller.h"
 #include "Markup.h"
 //#include "vcproject2.h"
 
@@ -990,13 +989,6 @@ void CCosmos::CosmosInit()
 		if (m_bEclipse) {
 			_m_Parse.put_attr(_T("eclipseapp"), _T("true"));
 			_m_Parse.SaveFile(m_strConfigDataFile);
-			CString strPath = m_strAppDataPath + _T("default.workbench");
-			if (::PathFileExists(strPath) == false) {
-				CString _strPath = m_strAppPath + _T("default.workbench");
-				if (::PathFileExists(_strPath)) {
-					::CopyFile(_strPath, strPath, true);
-				}
-			}
 		}
 	}
 
@@ -1023,54 +1015,6 @@ void CCosmos::CosmosInit()
 		else
 			m_bEclipse = false;
 	}
-}
-
-DWORD CCosmos::ExecCmd(const CString cmd, const BOOL setCurrentDirectory)
-{
-	BOOL  bReturnVal = false;
-	STARTUPINFO  si;
-	DWORD  dwExitCode = ERROR_NOT_SUPPORTED;
-	SECURITY_ATTRIBUTES saProcess, saThread;
-	PROCESS_INFORMATION process_info;
-
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-
-	saProcess.nLength = sizeof(saProcess);
-	saProcess.lpSecurityDescriptor = NULL;
-	saProcess.bInheritHandle = true;
-
-	saThread.nLength = sizeof(saThread);
-	saThread.lpSecurityDescriptor = NULL;
-	saThread.bInheritHandle = false;
-
-	CString currentDirectory = _T("");
-
-	bReturnVal = CreateProcess(NULL,
-		(LPTSTR)(LPCTSTR)cmd,
-		&saProcess,
-		&saThread,
-		false,
-		DETACHED_PROCESS,
-		NULL,
-		currentDirectory,
-		&si,
-		&process_info);
-
-	if (bReturnVal)
-	{
-		CloseHandle(process_info.hThread);
-		WaitForSingleObject(process_info.hProcess, INFINITE);
-		GetExitCodeProcess(process_info.hProcess, &dwExitCode);
-		CloseHandle(process_info.hProcess);
-	}
-	//else
-	//{
-	//	DWORD dw =  GetLastError();
-	//	dwExitCode = dw;
-	//}
-
-	return dwExitCode;
 }
 
 void CCosmos::ExitInstance()
@@ -1942,93 +1886,7 @@ STDMETHODIMP CCosmos::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 	CString strID = OLE2T(bstrObjID);
 	strID.Trim();
 	strID.MakeLower();
-	int nPos = strID.Find(_T("@"));
-	if (nPos != -1)
-	{
-		CString strAppID = strID.Mid(nPos + 1);
-		if (strAppID != _T(""))
-		{
-			ICosmos* pRemoteTangram = nullptr;
-			auto it = m_mapRemoteCosmos.find(strAppID);
-			if (it == m_mapRemoteCosmos.end())
-			{
-				CComPtr<IDispatch> pApp;
-				pApp.CoCreateInstance(CComBSTR(strAppID), nullptr, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER);
-				if (pApp)
-				{
-					int nPos = m_strOfficeAppIDs.Find(strAppID);
-					if (nPos != -1)
-					{
-					}
-					else
-					{
-						pApp->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-						if (pRemoteTangram)
-						{
-							pRemoteTangram->AddRef();
-							m_mapRemoteCosmos[strAppID] = pRemoteTangram;
-							LONGLONG h = 0;
-							pRemoteTangram->get_RemoteHelperHWND(&h);
-							HWND hWnd = (HWND)h;
-							if (::IsWindow(hWnd))
-							{
-								CHelperWnd* pWnd = new CHelperWnd();
-								pWnd->m_strID = strAppID;
-								pWnd->Create(hWnd, 0, strAppID, WS_VISIBLE | WS_CHILD);
-								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-							}
-						}
-						else
-						{
-							DISPID dispID = 0;
-							DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
-							VARIANT result = { 0 };
-							EXCEPINFO excepInfo;
-							memset(&excepInfo, 0, sizeof excepInfo);
-							UINT nArgErr = (UINT)-1; // initialize to invalid arg
-							LPOLESTR func = L"Tangram";
-							HRESULT hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
-							if (S_OK == hr)
-							{
-								hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
-								if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
-								{
-									result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-									if (pRemoteTangram)
-									{
-										pRemoteTangram->AddRef();
-										m_mapRemoteCosmos[strAppID] = pRemoteTangram;
-
-										LONGLONG h = 0;
-										pRemoteTangram->get_RemoteHelperHWND(&h);
-										HWND hWnd = (HWND)h;
-										if (::IsWindow(hWnd))
-										{
-											CHelperWnd* pWnd = new CHelperWnd();
-											pWnd->m_strID = strAppID;
-											pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-											m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-										}
-										::VariantClear(&result);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				pRemoteTangram = it->second;
-			}
-			if (pRemoteTangram)
-			{
-				strID = strID.Left(nPos);
-				return pRemoteTangram->CreateCLRObj(CComBSTR(strID), ppDisp);
-			}
-		}
-	}
-	nPos = strID.Find(_T(","));
+	int nPos = strID.Find(_T(","));
 	if (nPos != -1 || strID.CompareNoCase(_T("webruntimeproxy")) == 0 || strID.CompareNoCase(_T("chromert")) == 0)
 	{
 		LoadCLR();
@@ -2699,83 +2557,6 @@ STDMETHODIMP CCosmos::SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText)
 
 STDMETHODIMP CCosmos::StartApplication(BSTR bstrAppID, BSTR bstrXml)
 {
-	CString strAppID = OLE2T(bstrAppID);
-	strAppID.Trim();
-	strAppID.MakeLower();
-	if (strAppID == _T(""))
-		return S_FALSE;
-
-	auto it = m_mapRemoteCosmos.find(strAppID);
-	if (it == m_mapRemoteCosmos.end())
-	{
-		CComPtr<IDispatch> pApp;
-		pApp.CoCreateInstance(bstrAppID, nullptr, CLSCTX_SERVER);// | CLSCTX_INPROC_SERVER);
-		if (pApp)
-		{
-			int nPos = m_strOfficeAppIDs.Find(strAppID);
-			if (nPos == -1)
-			{
-				ICosmos* pRemoteTangram = nullptr;
-				HRESULT hr = pApp->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-				if (hr != S_OK)
-				{
-					VARIANT result = { 0 };
-					DISPID dispID = 0;
-					DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
-					EXCEPINFO excepInfo;
-					memset(&excepInfo, 0, sizeof excepInfo);
-					UINT nArgErr = (UINT)-1; // initialize to invalid arg
-					LPOLESTR func = L"Tangram";
-					hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
-					if (S_OK == hr)
-					{
-						hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
-						if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
-						{
-							result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-						}
-					}
-					::VariantClear(&result);
-				}
-				if (pRemoteTangram)
-				{
-					pRemoteTangram->AddRef();
-					CString strModel = OLE2T(bstrXml);
-					m_mapRemoteCosmos[strAppID] = pRemoteTangram;
-					DWORD dwID = ::GetCurrentProcessId();
-					CString str = _T("");
-					str.Format(_T("tangramprocess:%d"), dwID);
-					CComVariant var;
-					var.vt = VT_DISPATCH;
-					var.pdispVal = (IDispatch*)g_pCosmos;
-					pRemoteTangram->put_AppKeyValue(CComBSTR(str), var);
-					LONGLONG h = 0;
-					pRemoteTangram->get_RemoteHelperHWND(&h);
-					HWND hWnd = (HWND)h;
-					if (::IsWindow(hWnd))
-					{
-						CHelperWnd* pWnd = new CHelperWnd();
-						pWnd->m_strID = strAppID;
-						pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-						m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-					}
-				}
-			}
-		}
-		else
-		{
-			int nPos = strAppID.Find(_T(","));
-			if (nPos != -1)
-			{
-
-			}
-			return S_FALSE;
-		}
-	}
-	else// (it != m_mapRemoteCosmos.end())
-	{
-		it->second->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-	}
 	return S_OK;
 }
 
@@ -2821,36 +2602,6 @@ STDMETHODIMP CCosmos::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR b
 
 STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 {
-	CXobj* pWndXobj = (CXobj*)pXobj;
-	if (pWndXobj)
-	{
-		if (pWndXobj->m_pWindow)
-		{
-			if (pWndXobj->m_nActivePage > 0)
-			{
-				CString strVal = _T("");
-				strVal.Format(_T("%d"), pWndXobj->m_nActivePage);
-				pWndXobj->m_pHostParse->put_attr(_T("activepage"), strVal);
-			}
-			pWndXobj->m_pWindow->Save();
-		}
-		if (pWndXobj->m_nViewType == Grid)
-		{
-			((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
-		}
-		for (auto it2 : pWndXobj->m_vChildNodes)
-		{
-			UpdateXobj(it2);
-		}
-		if ((pWndXobj == pWndXobj->m_pRootObj || pWndXobj->m_pParentObj == nullptr) && pWndXobj->m_pXobjShareData->m_pOfficeObj)
-		{
-			CTangramXmlParse* pWndParse = pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER);
-			CString strXml = pWndParse->xml();
-			CString strNodeName = pWndXobj->m_pXobjShareData->m_pCosmosParse->name();
-			UpdateOfficeObj(pWndXobj->m_pXobjShareData->m_pOfficeObj, strXml, strNodeName);
-		}
-	}
-
 	return S_OK;
 }
 
@@ -2910,13 +2661,6 @@ STDMETHODIMP CCosmos::get_HostWnd(LONGLONG* pVal)
 
 STDMETHODIMP CCosmos::get_RemoteCosmos(BSTR bstrID, ICosmos** pVal)
 {
-	CString strID = OLE2T(bstrID);
-	strID.MakeLower();
-	auto it = m_mapRemoteCosmos.find(strID);
-	if (it != m_mapRemoteCosmos.end())
-	{
-		*pVal = it->second;
-	}
 	return S_OK;
 }
 
@@ -2971,65 +2715,6 @@ STDMETHODIMP CCosmos::put_Extender(ICosmosExtender* newVal)
 
 STDMETHODIMP CCosmos::CreateCosmosCtrl(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl)
 {
-	CString strAppID = OLE2T(bstrAppID);
-	strAppID.Trim();
-	strAppID.MakeLower();
-	if (strAppID == _T(""))
-	{
-		return CoCreateInstance(CLSID_CosmosCtrl, NULL, CLSCTX_ALL, IID_ICosmosCtrl, (LPVOID*)ppRetCtrl);
-	}
-	auto it = m_mapRemoteCosmos.find(strAppID);
-	if (it == m_mapRemoteCosmos.end())
-	{
-		CComPtr<IDispatch> pApp;
-		pApp.CoCreateInstance(bstrAppID, nullptr, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER);
-		if (pApp)
-		{
-			int nPos = m_strOfficeAppIDs.Find(strAppID);
-			if (nPos == -1)
-			{
-				DISPID dispID = 0;
-				DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
-				VARIANT result = { 0 };
-				EXCEPINFO excepInfo;
-				memset(&excepInfo, 0, sizeof excepInfo);
-				UINT nArgErr = (UINT)-1; // initialize to invalid arg
-				LPOLESTR func = L"Tangram";
-				HRESULT hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
-				if (S_OK == hr)
-				{
-					hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
-					if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
-					{
-						ICosmos* pCloudAddin = nullptr;
-						result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pCloudAddin);
-						if (pCloudAddin)
-						{
-							pCloudAddin->AddRef();
-							m_mapRemoteCosmos[strAppID] = pCloudAddin;
-
-							LONGLONG h = 0;
-							pCloudAddin->get_RemoteHelperHWND(&h);
-							HWND hWnd = (HWND)h;
-							if (::IsWindow(hWnd))
-							{
-								CHelperWnd* pWnd = new CHelperWnd();
-								pWnd->m_strID = strAppID;
-								pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-							}
-							::VariantClear(&result);
-							return pCloudAddin->CreateCosmosCtrl(CComBSTR(L""), ppRetCtrl);
-						}
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		return it->second->CreateCosmosCtrl(CComBSTR(L""), ppRetCtrl);
-	}
 	return S_OK;
 }
 

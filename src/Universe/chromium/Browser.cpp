@@ -374,7 +374,7 @@ namespace Browser {
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 			return 0;
 		}
 		break;

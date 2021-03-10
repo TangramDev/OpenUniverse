@@ -1659,11 +1659,6 @@ STDMETHODIMP CXobj::get_WebPage(IWebPage** pVal)
 
 STDMETHODIMP CXobj::get_OfficeObj(IDispatch** pVal)
 {
-	if (m_pXobjShareData->m_pOfficeObj)
-	{
-		*pVal = m_pXobjShareData->m_pOfficeObj;
-		(*pVal)->AddRef();
-	}
 	return S_OK;
 }
 

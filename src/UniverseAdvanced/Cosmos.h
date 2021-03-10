@@ -85,19 +85,6 @@ struct CommonThreadInfo
 	map<HWND, CGalaxy*> m_mapGalaxy;
 };
 
-struct TangramFrameInfo
-{
-	CString m_strKey;
-	CString m_strXml;
-};
-
-struct RemoteDebugInfo
-{
-	LONGLONG nHandle;
-	CString m_strKey;
-	void* m_pVoid;
-};
-
 class ATL_NO_VTABLE CCosmosEvent :
 	public CComObjectRootBase,
 	public IDispatchImpl<ICosmosEventObj, &IID_ICosmosEventObj, &LIBID_Universe, 1, 0>
@@ -329,8 +316,6 @@ public:
 	virtual void UpdateOfficeObj(IDispatch* pObj, CString strXml, CString strName) {};
 	virtual void WindowCreated(CString strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {};
 	virtual void WindowDestroy(HWND hWnd) {};
-	virtual HRESULT COMObjCreated(REFCLSID rclsid, LPVOID pv) { return 0; };
-	virtual HRESULT RemoteObjCreated(CString strID, void** ppvObject) { return 0; };
 	IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*);
 	IWebPage* GetWebPageFromForm(HWND);
 

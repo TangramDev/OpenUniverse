@@ -320,7 +320,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CeXDib.cpp" />
     <ClCompile Include="chromium\WebPage.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -347,7 +346,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="eclipseUtil.cpp" />
     <ClCompile Include="eclipseWin.cpp" />
     <ClCompile Include="eclipseWinCommon.cpp" />
-    <ClCompile Include="CreateCheckboxImageList.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -360,25 +358,8 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="Xobj.cpp" />
     <ClCompile Include="GalaxyCluster.cpp" />
     <ClCompile Include="GridWnd.cpp" />
-    <ClCompile Include="CloudUtilities\ComponentInstaller.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="CloudUtilities\XUnzip.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="CloudUtilities\XZip.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="XobjWnd.cpp" />
     <ClCompile Include="VisualStylesXP.cpp" />
-    <ClCompile Include="XString.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</BrowseInformation>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="default.exe.config" />
@@ -387,7 +368,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <None Include="Universe.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CeXDib.h" />
     <ClInclude Include="chromium\WebPage.h" />
     <ClInclude Include="chromium\Browser.h" />
     <ClInclude Include="Wormhole.h" />
@@ -408,9 +388,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="Xobj.h" />
     <ClInclude Include="GalaxyCluster.h" />
     <ClInclude Include="GridWnd.h" />
-    <ClInclude Include="CloudUtilities\ComponentInstaller.h" />
-    <ClInclude Include="CloudUtilities\XUnzip.h" />
-    <ClInclude Include="CloudUtilities\XZip.h" />
     <ClInclude Include="XobjWnd.h" />
   </ItemGroup>
   <ItemGroup>

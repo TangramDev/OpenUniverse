@@ -35,20 +35,6 @@
 #include "EclipsePlus\EclipseAddin.h"
 #include "Wormhole.h"
 
-class CTangramHelperWnd : public CWnd
-{
-public:
-	CTangramHelperWnd() {}
-	virtual ~CTangramHelperWnd() {}
-	void PostNcDestroy()
-	{
-		CWnd::PostNcDestroy();
-		delete this;
-	}
-	BEGIN_MSG_MAP(CTangramHelperWnd)
-	END_MSG_MAP()
-};
-
 /////////////////////////////////////////////////////////////////////////////
 // CCosmosTreeCtrl
 
@@ -1470,10 +1456,6 @@ CTangramXmlParse* CGalaxy::UpdateXobj()
 			for (auto it2 : pWndXobj->m_vChildNodes) {
 				g_pCosmos->UpdateXobj(it2);
 			}
-
-			if (pWndXobj == pWndXobj->m_pRootObj && pWndXobj->m_pXobjShareData->m_pOfficeObj) {
-				g_pCosmos->UpdateOfficeObj(pWndXobj->m_pXobjShareData->m_pOfficeObj, pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER)->xml(), pWndXobj->m_pXobjShareData->m_pCosmosParse->name());
-			}
 		}
 	}
 	if (m_mapXobj.size())
@@ -2843,11 +2825,6 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 			for (auto it2 : pWndXobj->m_vChildNodes)
 			{
 				g_pCosmos->UpdateXobj(it2);
-			}
-
-			if (pWndXobj == pWndXobj->m_pRootObj && pWndXobj->m_pXobjShareData->m_pOfficeObj)
-			{
-				g_pCosmos->UpdateOfficeObj(pWndXobj->m_pXobjShareData->m_pOfficeObj, pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER)->xml(), pWndXobj->m_pXobjShareData->m_pCosmosParse->name());
 			}
 		}
 		CString strXml = pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER)->xml();

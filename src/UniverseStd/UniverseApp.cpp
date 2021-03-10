@@ -88,21 +88,6 @@
 CUniverse theApp;
 CCosmos* g_pCosmos = nullptr;
 
-void CHelperWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl::OnFinalMessage(hWnd);
-	auto it = g_pCosmos->m_mapRemoteCosmos.find(m_strID);
-	if (it != g_pCosmos->m_mapRemoteCosmos.end())
-	{
-		ULONG dw = it->second->Release();
-		while (dw)
-			dw = it->second->Release();
-		g_pCosmos->m_mapRemoteCosmos.erase(m_strID);
-	}
-
-	delete this;
-}
-
 void CWebHelperWnd::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
@@ -332,14 +317,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		if (hWnd == g_pCosmos->m_hHostWnd)
 		{
 			g_pCosmos->m_pActiveAppProxy = nullptr;
-			for (auto it : g_pCosmos->m_mapBKFrame)
-			{
-				HWND hWnd = ::GetParent(it.first);
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
-				::DestroyWindow(::GetParent(it.first));
-			}
-
 			if (g_pCosmos->m_pCLRProxy)
 			{
 				if (g_pCosmos->m_pCosmosAppProxy)
@@ -372,11 +349,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			::SetWindowPos(g_pCosmos->m_hTemplateChildWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
 		break;
-	case WM_OPENDOCUMENT:
-	{
-		g_pCosmos->OnOpenDoc(wParam);
-	}
-	break;
 	case WM_COSMOSMSG:
 		switch (lParam)
 		{

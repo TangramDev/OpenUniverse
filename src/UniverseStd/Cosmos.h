@@ -84,19 +84,6 @@ struct CommonThreadInfo
 	map<HWND, CGalaxy*> m_mapGalaxy;
 };
 
-struct TangramFrameInfo
-{
-	CString m_strKey;
-	CString m_strXml;
-};
-
-struct RemoteDebugInfo
-{
-	LONGLONG nHandle;
-	CString m_strKey;
-	void* m_pVoid;
-};
-
 class ATL_NO_VTABLE CCosmosEvent :
 	public CComObjectRootBase,
 	public IDispatchImpl<ICosmosEventObj, &IID_ICosmosEventObj, &LIBID_Universe, 1, 0>
@@ -200,14 +187,11 @@ public:
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
-	map<HWND, CGalaxy*>						m_mapBKFrame;
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;
 	map<CString, CRuntimeClass*>			m_mapClassInfo;
-	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;
-	map<int, ICosmos*>						m_mapRemoteTangramApp;
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
@@ -317,12 +301,8 @@ public:
 #endif
 
 	virtual void ProcessMsg(LPMSG lpMsg);
-	virtual void OnOpenDoc(WPARAM) {};
-	virtual void UpdateOfficeObj(IDispatch* pObj, CString strXml, CString strName) {};
 	virtual void WindowCreated(CString strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {};
 	virtual void WindowDestroy(HWND hWnd) {};
-	virtual HRESULT COMObjCreated(REFCLSID rclsid, LPVOID pv) { return 0; };
-	virtual HRESULT RemoteObjCreated(CString strID, void** ppvObject) { return 0; };
 	IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*);
 	IWebPage* GetWebPageFromForm(HWND);
 
@@ -397,7 +377,6 @@ private:
 	CSession* CreateCloudSession(CWebPageImpl*);
 	CSession* GetCloudSession(IXobj*);
 	void SetMainWnd(HWND hMain);
-	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
 
 	void SendIPCMsg(HWND hXobj, CString strMsgID);
 	void InsertMsgData(HWND hXobj, CString strKey, CString strVal);

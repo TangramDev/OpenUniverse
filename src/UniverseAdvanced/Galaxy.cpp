@@ -38,19 +38,6 @@
 #include "Wormhole.h"
 
 using namespace OfficePlus::WordPlus;
-class CTangramHelperWnd : public CWnd
-{
-public:
-	CTangramHelperWnd() {}
-	virtual ~CTangramHelperWnd() {}
-	void PostNcDestroy()
-	{
-		CWnd::PostNcDestroy();
-		delete this;
-	}
-	BEGIN_MSG_MAP(CTangramHelperWnd)
-	END_MSG_MAP()
-};
 
 /////////////////////////////////////////////////////////////////////////////
 // CCosmosTreeCtrl

@@ -684,7 +684,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 
 		((CXobj*)pXobj)->m_pRootObj = m_pXobj->m_pRootObj;
 		((CXobj*)pXobj)->m_pParentObj = m_pXobj->m_pParentObj;
-		((CXobj*)pXobj)->m_pXobjShareData->m_pOfficeObj = m_pXobj->m_pXobjShareData->m_pOfficeObj;
 		m_pXobj->m_pXobjShareData->m_mapLayoutNodes[((CXobj*)pXobj)->m_strName] = (CXobj*)pXobj;
 		CString strXml = ((CXobj*)pXobj)->m_pHostParse->xml();
 		CTangramXmlParse* pNew = ((CXobj*)pXobj)->m_pHostParse;

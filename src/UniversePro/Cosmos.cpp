@@ -1033,13 +1033,6 @@ void CCosmos::CosmosInit()
 		if (m_bEclipse) {
 			_m_Parse.put_attr(_T("eclipseapp"), _T("true"));
 			_m_Parse.SaveFile(m_strConfigDataFile);
-			CString strPath = m_strAppDataPath + _T("default.workbench");
-			if (::PathFileExists(strPath) == false) {
-				CString _strPath = m_strAppPath + _T("default.workbench");
-				if (::PathFileExists(_strPath)) {
-					::CopyFile(_strPath, strPath, true);
-				}
-			}
 		}
 	}
 

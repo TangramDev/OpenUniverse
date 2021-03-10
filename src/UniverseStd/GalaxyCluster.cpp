@@ -31,8 +31,7 @@
 
 CXobjShareData::CXobjShareData()
 {
-	m_pOldGalaxy			= nullptr;
-	m_pOfficeObj		= nullptr;
+	m_pOldGalaxy		= nullptr;
 	m_pCosmosParse		= nullptr;
 	m_pHostClientView	= nullptr;
 #ifdef _DEBUG

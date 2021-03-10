@@ -36,20 +36,6 @@
 #include "EclipsePlus\EclipseAddin.h"
 #include "Wormhole.h"
 
-class CTangramHelperWnd : public CWnd
-{
-public:
-	CTangramHelperWnd() {}
-	virtual ~CTangramHelperWnd() {}
-	void PostNcDestroy()
-	{
-		CWnd::PostNcDestroy();
-		delete this;
-	}
-	BEGIN_MSG_MAP(CTangramHelperWnd)
-	END_MSG_MAP()
-};
-
 /////////////////////////////////////////////////////////////////////////////
 // CCosmosTreeCtrl
 
