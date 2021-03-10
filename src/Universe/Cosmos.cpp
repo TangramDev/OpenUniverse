@@ -914,16 +914,6 @@ STDMETHODIMP CCosmos::get_CreatingXobj(IXobj** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_DesignNode(IXobj** pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CCosmos::Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet)
-{
-	return S_OK;
-}
-
 STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
 {
 	return S_OK;
@@ -1213,11 +1203,6 @@ STDMETHODIMP CCosmos::SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText)
 }
 
 STDMETHODIMP CCosmos::StartApplication(BSTR bstrAppID, BSTR bstrXml)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CCosmos::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR bstrActionXml)
 {
 	return S_OK;
 }

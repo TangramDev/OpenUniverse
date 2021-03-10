@@ -636,21 +636,6 @@ namespace Universe
         }
     }
 
-    String^ Cosmos::CurrentDesigningTangramXml::get()
-    {
-        IXobj* pDesignerNode = nullptr;
-        theApp.m_pCosmos->get_DesignNode(&pDesignerNode);
-        if (pDesignerNode == NULL)
-            return L"";
-        if (pDesignerNode)
-        {
-            CComBSTR bstrXml(L"");
-            pDesignerNode->get_DocXml(&bstrXml);
-            return BSTR2STRING(bstrXml);
-        }
-        return nullptr;
-    }
-
     Xobj^ Cosmos::CreatingXobj::get()
     {
         Object^ pRetObject = nullptr;

@@ -29,8 +29,6 @@
 #include "../Galaxy.h"
 #include "../Xobj.h"
 #include "../TangramHtmlTreeWnd.h"
-#include "../CloudUtilities/DownLoad.h"
-//#include "../VisualStudioPlus/VSAddin.h"
 #include "fm20.h"
 #include "OfficeAddin.h"
 #include "excelplus\excel.h"

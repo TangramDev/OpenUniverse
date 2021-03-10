@@ -83,7 +83,6 @@
 #include "OfficePlus\ProjectPlus\MSPrj.h"
 #include "OfficePlus\OutLookPlus\MsOutl.h"
 #include "OfficePlus\PowerpointPlus\msppt.h"
-#include "CloudUtilities\DownLoad.h"
 #include <io.h>
 #include <stdio.h>
 #include <string>
@@ -2324,11 +2323,6 @@ STDMETHODIMP CCosmos::get_CreatingXobj(IXobj** pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::get_DesignNode(IXobj** pVal)
-{
-	return S_OK;
-}
-
 CString CCosmos::EncodeFileToBase64(CString strSRC)
 {
 	DWORD dwDesiredAccess = GENERIC_READ;
@@ -2572,21 +2566,6 @@ CString	CCosmos::GetDataFromStr(CString strCoded, CString& strTime, CString strP
 		strTime = strTime2;
 	}
 	return strRet;
-}
-
-STDMETHODIMP CCosmos::Encode(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet)
-{
-	CString strSRC = OLE2T(bstrSRC);
-	strSRC.Trim();
-	if (::PathFileExists(strSRC))
-		strSRC = EncodeFileToBase64(strSRC);
-	else if (strSRC != _T(""))
-		strSRC = Encode(strSRC, bEncode ? true : false);
-	::SysFreeString(bstrSRC);
-	if (bstrRet != nullptr)
-		::SysFreeString(*bstrRet);
-	*bstrRet = strSRC.AllocSysString();
-	return S_OK;
 }
 
 STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
@@ -3177,43 +3156,6 @@ bool CCosmos::CheckUrl(CString& url)
 		}
 	}
 	return   false;
-}
-
-STDMETHODIMP CCosmos::DownLoadFile(BSTR bstrFileURL, BSTR bstrTargetFile, BSTR bstrActionXml)
-{
-	CString  strFileURL = OLE2T(bstrFileURL);
-	strFileURL.Trim();
-	if (CheckUrl(strFileURL) == false)
-		return S_FALSE;
-	if (strFileURL == _T(""))
-		return S_FALSE;
-	CString strTargetFile = OLE2T(bstrTargetFile);
-	CString _strTarget = _T("");
-	int nPos = strTargetFile.Find(_T("\\"));
-	if (nPos != -1)
-	{
-		_strTarget = strTargetFile.Left(nPos);
-		if (_strTarget.CompareNoCase(_T("TangramData")) == 0)
-		{
-			_strTarget = strTargetFile.Mid(nPos);
-			strTargetFile = m_strAppDataPath + _strTarget;
-		}
-		else
-			_strTarget = _T("");
-	}
-
-	nPos = strTargetFile.ReverseFind('\\');
-	if (nPos != -1)
-	{
-		CString strDir = strTargetFile.Left(nPos);
-		if (::PathIsDirectory(strDir) == false)
-			::SHCreateDirectory(NULL, strDir);
-	}
-
-	Utilities::CDownLoadObj* pDownLoadoObj = new Utilities::CDownLoadObj();
-	pDownLoadoObj->m_strActionXml = OLE2T(bstrActionXml);
-	pDownLoadoObj->DownLoadFile(strFileURL, strTargetFile);
-	return S_OK;
 }
 
 STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
@@ -3969,68 +3911,6 @@ STDMETHODIMP CCosmos::DeletePage(LONGLONG GalaxyClusterHandle)
 		delete pGalaxyCluster;
 	}
 	return S_OK;
-}
-
-CString CCosmos::GetDesignerData(CXobj* pXobj)
-{
-	if (pXobj)
-	{
-		CGalaxy* pGalaxy = pXobj->m_pXobjShareData->m_pGalaxy;
-		if (pGalaxy)
-		{
-			CString strKey = pGalaxy->m_strCurrentKey;
-			switch (pGalaxy->m_nGalaxyType)
-			{
-			case MDIClientGalaxy:
-			{
-			}
-			break;
-			case MDIChildGalaxy:
-			{
-			}
-			break;
-			case SDIGalaxy:
-			{
-			}
-			break;
-			case CtrlBarGalaxy:
-			{
-			}
-			break;
-			case WinFormMDIClientGalaxy:
-			{
-			}
-			break;
-			case WinFormMDIChildGalaxy:
-			{
-			}
-			break;
-			case WinFormGalaxy:
-			{
-			}
-			break;
-			case EclipseWorkBenchGalaxy:
-			{
-			}
-			break;
-			case EclipseViewGalaxy:
-			{
-			}
-			break;
-			case EclipseSWTGalaxy:
-			{
-			}
-			break;
-			case WinFormControlGalaxy:
-			{
-			}
-			break;
-			default:
-				break;
-			}
-		}
-	}
-	return _T("");
 }
 
 _TCHAR* findProgram(_TCHAR* argv[]) {

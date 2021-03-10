@@ -1149,11 +1149,6 @@ namespace Universe
 			Cosmos^ get();
 		}
 
-		static property String^ CurrentDesigningTangramXml
-		{
-			String^ get();
-		}
-
 		static property Xobj^ CreatingXobj
 		{
 			Xobj^ get();

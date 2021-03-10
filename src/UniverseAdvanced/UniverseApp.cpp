@@ -71,7 +71,6 @@
 #include <shellscalingapi.h>
 
 #include "fm20.h"
-#include "CloudUtilities\DownLoad.h"
 #include "EclipsePlus\EclipseAddin.h"
 
 #include "OfficePlus\WordPlus\WordAddin.h"
@@ -1637,13 +1636,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						::PostQuitMessage(0);
 					}
 				}
-			}
-			break;
-			case WM_DOWNLOAD_MSG:
-			{
-				Utilities::CDownLoadObj* pObj = (Utilities::CDownLoadObj*)lpMsg->wParam;
-				if (pObj)
-					delete pObj;
 			}
 			break;
 			case WM_CHROMEDEVTOOLMSG:

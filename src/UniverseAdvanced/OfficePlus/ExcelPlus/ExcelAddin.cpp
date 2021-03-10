@@ -541,14 +541,6 @@ namespace OfficePlus
 			break;
 			case 102:
 			{
-				//CString strXml = _T("");
-				//if (strXml == _T(""))
-				//{
-				//	CString str = m_strExeName;
-				//	CString strCaption = _T("Excel Plus");
-				//	str += _T("\\");
-				//	strXml = GetDocTemplateXml(strCaption, str,_T(""));
-				//}
 			}
 			break;
 			}

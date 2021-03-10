@@ -210,7 +210,6 @@ public:
 	STDMETHOD(get_RootNodes)(IXobjCollection** pXobjColletion);
 	STDMETHOD(get_CurrentActiveXobj)(IXobj** pVal);
 	STDMETHOD(get_CreatingXobj)(IXobj** pVal);
-	STDMETHOD(get_DesignNode)(IXobj** pVal);
 	STDMETHOD(get_AppKeyValue)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_RemoteHelperHWND)(LONGLONG* pVal);
@@ -231,8 +230,6 @@ public:
 	STDMETHOD(CreateGalaxyCluster)(LONGLONG hWnd, IGalaxyCluster** ppCosmos);
 	STDMETHOD(CreateCosmosCtrl)(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl);
 	STDMETHOD(CreateCosmosEventObj)(ICosmosEventObj** ppCosmosEventObj);
-	STDMETHOD(DownLoadFile)(BSTR strFileURL, BSTR bstrTargetFile, BSTR bstrActionXml);
-	STDMETHOD(Encode)(BSTR bstrSRC, VARIANT_BOOL bEncode, BSTR* bstrRet);
 	STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml) { return S_OK; };
 	STDMETHOD(FireCosmosEventObj)(ICosmosEventObj* pCosmosEventObj);
 	STDMETHOD(GetGalaxy)(LONGLONG hHostWnd, IGalaxy** ppGalaxy);
@@ -283,15 +280,11 @@ public:
 	BOOL LoadImageFromResource(ATL::CImage *pImage, HMODULE hMod, UINT nResID, LPCTSTR lpTyp);
 	BOOL InitJNIForTangram();
 	CString ConfigJavaVMInfo(CString strOption);
-	CString EncodeFileToBase64(CString strSRC);
 	CString InitEclipse(_TCHAR* jarFile);
 	CString ComputeHash(CString source);
 	CString GetXmlData(CString strName, CString strXml);
-	CString GetDesignerData(CXobj* pXobj);
 	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
 	CString GetPropertyFromObject(IDispatch* pObj, CString strPropertyName);
-	CString	BuildSipURICodeStr(CString strURI, CString strPrev, CString strFix, CString strData, int n1);
-	CString	GetDataFromStr(CString strCoded, CString& strTime, CString strPrev, CString strFix, int n1);
 	CString tangram_for_eclipse(CString strKey, CString strData, CString strFeatures);
 	LRESULT Close(void);
 	CXobj* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
@@ -350,7 +343,6 @@ private:
 	void CosmosLoad();
 	bool CheckUrl(CString&   url);
 	void AttachXobj(void* pXobjEvents);
-	CString Encode(CString strSRC, BOOL bEnCode);
 	CString GetNewLayoutNodeName(BSTR strObjTypeID, IXobj* pDesignNode);
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
 	IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
