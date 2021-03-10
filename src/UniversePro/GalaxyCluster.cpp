@@ -77,12 +77,6 @@ CGalaxyCluster::~CGalaxyCluster()
 	//if(g_pCosmos->m_nTangram==0)
 	//	return;
 
-	for (auto it2 : m_mapExternalObj)
-	{
-		it2.second->Release();
-	}
-	m_mapExternalObj.erase(m_mapExternalObj.begin(), m_mapExternalObj.end());
-
 	m_mapGalaxy.erase(m_mapGalaxy.begin(), m_mapGalaxy.end());
 	m_mapXobj.erase(m_mapXobj.begin(), m_mapXobj.end());
 	auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
@@ -424,35 +418,6 @@ STDMETHODIMP CGalaxyCluster::GetXobj(BSTR bstrGalaxyName, BSTR bstrNodeName, IXo
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_Extender(BSTR bstrExtenderName, IDispatch** pVal)
-{
-	CString strName = OLE2T(bstrExtenderName);
-	if (strName == _T(""))
-		return S_OK;
-	auto it = m_mapExternalObj.find(strName);
-	if (it != m_mapExternalObj.end())
-	{
-		*pVal = it->second;
-		(*pVal)->AddRef();
-	}
-	return S_OK;
-}
-
-
-STDMETHODIMP CGalaxyCluster::put_Extender(BSTR bstrExtenderName, IDispatch* newVal)
-{
-	CString strName = OLE2T(bstrExtenderName);
-	if (strName == _T(""))
-		return S_OK;
-	auto it = m_mapExternalObj.find(strName);
-	if (it == m_mapExternalObj.end())
-	{
-		m_mapExternalObj[strName] = newVal;
-		newVal->AddRef();
-	}
-	return S_OK;
-}
-
 STDMETHODIMP CGalaxyCluster::get_GalaxyName(LONGLONG hHwnd, BSTR* pVal)
 {
 	HWND _hWnd = (HWND)hHwnd;
@@ -465,48 +430,6 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyName(LONGLONG hHwnd, BSTR* pVal)
 
 	return S_OK;
 }
-
-//STDMETHODIMP CGalaxyCluster::get_Galaxy(BSTR bstrGalaxyName, IGalaxy** pVal)
-//{
-//	CString strName = OLE2T(bstrGalaxyName);
-//	if (strName != _T(""))
-//	{
-//		auto it = m_mapWnd.find(strName);
-//		if (it != m_mapWnd.end())
-//		{
-//			HWND h = it->second;
-//			auto it2 = m_mapGalaxy.find(h);
-//			if (it2 != m_mapGalaxy.end())
-//				*pVal = it2->second;
-//		}
-//	}
-//	return S_OK;
-//}
-//
-//void CGalaxyCluster::OnNodeDocComplete(WPARAM wParam)
-//{
-//	bool bState = false;
-//	for (auto it1 : m_mapGalaxy)
-//	{
-//		for (auto it2 : it1.second->m_mapXobj)
-//		{
-//			if (it2.second->m_bCreated == false)
-//			{
-//				::PostMessage(m_hWnd, WM_HUBBLE__WEBNODEDOCCOMPLETE, wParam, 0);
-//				return;
-//			}
-//		}
-//	}
-//
-//	switch (wParam)
-//	{
-//	case 0:
-//		break;
-//	case 1:
-//	default:
-//		break;
-//	}
-//}
 
 void CGalaxyCluster::UpdateMapKey(CString strXml)
 {

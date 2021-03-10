@@ -1393,24 +1393,6 @@ namespace Universe
 			}
 		}
 
-		property Object^ Extender[String ^]
-		{
-			Object ^ get(String ^ strName)
-			{
-				BSTR bstrName = STRING2BSTR(strName);
-				CComPtr<IDispatch> pDisp;
-				m_pGalaxyCluster->get_Extender(bstrName, &pDisp);
-				::SysFreeString(bstrName);
-				return Marshal::GetObjectForIUnknown((IntPtr)pDisp.p);
-			}
-
-			void set(String ^ strName, Object ^ newObj)
-			{
-				IDispatch* pDisp = (IDispatch*)Marshal::GetIUnknownForObject(newObj).ToPointer();
-				m_pGalaxyCluster->put_Extender(STRING2BSTR(strName), pDisp);
-			}
-		}
-
 		property Galaxy^ Galaxys[Object ^]
 		{
 			Galaxy^ get(Object ^ obj)

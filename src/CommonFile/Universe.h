@@ -3775,13 +3775,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyClusterXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
-            BSTR bstrExtenderName,
-            /* [retval][out] */ IDispatch **pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
-            BSTR bstrExtenderName,
-            /* [in] */ IDispatch *newVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Xobj( 
             BSTR bstrNodeName,
@@ -3812,9 +3807,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XobjNames( 
             /* [retval][out] */ BSTR *pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxy( 
             VARIANT ParentObj,
@@ -3934,15 +3926,9 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IGalaxyCluster * This,
             /* [retval][out] */ BSTR *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IGalaxyCluster * This,
-            BSTR bstrExtenderName,
-            /* [retval][out] */ IDispatch **pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
-            IGalaxyCluster * This,
-            BSTR bstrExtenderName,
-            /* [in] */ IDispatch *newVal);
+            /* [retval][out] */ IGalaxyCluster **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Xobj )( 
             IGalaxyCluster * This,
@@ -3982,10 +3968,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XobjNames )( 
             IGalaxyCluster * This,
             /* [retval][out] */ BSTR *pVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
-            IGalaxyCluster * This,
-            /* [retval][out] */ IGalaxyCluster **pVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxy )( 
             IGalaxyCluster * This,
@@ -4086,11 +4068,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_get_GalaxyClusterXML(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyClusterXML(This,pVal) ) 
 
-#define IGalaxyCluster_get_Extender(This,bstrExtenderName,pVal)	\
-    ( (This)->lpVtbl -> get_Extender(This,bstrExtenderName,pVal) ) 
-
-#define IGalaxyCluster_put_Extender(This,bstrExtenderName,newVal)	\
-    ( (This)->lpVtbl -> put_Extender(This,bstrExtenderName,newVal) ) 
+#define IGalaxyCluster_get_Parent(This,pVal)	\
+    ( (This)->lpVtbl -> get_Parent(This,pVal) ) 
 
 #define IGalaxyCluster_get_Xobj(This,bstrNodeName,pVal)	\
     ( (This)->lpVtbl -> get_Xobj(This,bstrNodeName,pVal) ) 
@@ -4118,9 +4097,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
 
 #define IGalaxyCluster_get_XobjNames(This,pVal)	\
     ( (This)->lpVtbl -> get_XobjNames(This,pVal) ) 
-
-#define IGalaxyCluster_get_Parent(This,pVal)	\
-    ( (This)->lpVtbl -> get_Parent(This,pVal) ) 
 
 #define IGalaxyCluster_CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy)	\
     ( (This)->lpVtbl -> CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy) ) 

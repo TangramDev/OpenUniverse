@@ -491,8 +491,7 @@ interface IGalaxyCluster : IDispatch {
 	[propget, id(DISPID_NEWENUM), helpstring("")] HRESULT _NewEnum([out, retval]IUnknown** ppVal);
 	[propget, id(1), helpstring("")] HRESULT Count([out, retval]long* pCount);
 	[propget, id(2)] HRESULT GalaxyClusterXML([out, retval] BSTR* pVal);
-	[propget, id(3)] HRESULT Extender(BSTR bstrExtenderName, [out, retval] IDispatch** pVal);
-	[propput, id(3)] HRESULT Extender(BSTR bstrExtenderName, [in] IDispatch* newVal);
+	[propget, id(3)] HRESULT Parent([out, retval] IGalaxyCluster** pVal);
 	[propget, id(4)] HRESULT Xobj(BSTR bstrNodeName, [out, retval] IXobj** pVal);
 	[propget, id(5)] HRESULT XObject(BSTR bstrName, [out, retval] IDispatch** pVal);
 	[propget, id(6)] HRESULT GalaxyName(LONGLONG hHwnd, [out, retval] BSTR* pVal);
@@ -502,7 +501,6 @@ interface IGalaxyCluster : IDispatch {
 	[propget, id(9)] HRESULT Height([out, retval] long* pVal);
 	[propput, id(9)] HRESULT Height([in] long newVal);
 	[propget, id(10)] HRESULT XobjNames([out, retval] BSTR* pVal);
-	[propget, id(11)] HRESULT Parent([out, retval] IGalaxyCluster** pVal);
 
 	[id(101)] HRESULT CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, [out, retval] IGalaxy** pRetGalaxy);
 	[id(102)] HRESULT Observe(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, [out, retval] IXobj** ppRetXobj);

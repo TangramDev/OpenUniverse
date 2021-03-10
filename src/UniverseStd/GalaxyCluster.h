@@ -56,12 +56,10 @@ public:
 	CGalaxy*									m_pBKGalaxy;
 	IUniverseAppProxy*							m_pUniverseAppProxy;
 	map<CString, CString>						m_strMapKey;
-	map<HWND, CGalaxy*>							m_mapCtrlBarWndGalaxy;
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CGalaxy*>							m_mapGalaxy;
 	map<HWND, CGalaxy*>							m_mapNeedSaveGalaxy;
 	map<CString, CXobj*>						m_mapXobj;
-	map<CString, IDispatch*>					m_mapExternalObj;
 	map<__int64, CCosmosEvent*>					m_mapEventObj;
 	map<IUniverseAppProxy*, CGalaxyClusterProxy*> m_mapGalaxyClusterProxy;
 
@@ -102,8 +100,6 @@ public:
 	STDMETHOD(get_Galaxy)(VARIANT vIndex, IGalaxy ** ppGalaxy);
 	STDMETHOD(get__NewEnum)(IUnknown** ppVal);
 	STDMETHOD(get_Handle)(LONGLONG* pVal);
-	STDMETHOD(get_Extender)(BSTR bstrExtenderName, IDispatch** pVal);
-	STDMETHOD(put_Extender)(BSTR bstrExtenderName, IDispatch* newVal);
 	STDMETHOD(get_GalaxyName)(LONGLONG hHwnd, BSTR* pVal);
 	STDMETHOD(get_Xobj)(BSTR bstrNodeName, IXobj** pVal);
 	STDMETHOD(get_XobjNames)(BSTR* pVal);

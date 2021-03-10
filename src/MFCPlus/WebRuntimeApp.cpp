@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103080046           *
+ *           Web Runtime for Application - Version 1.0.0.202103100048           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -221,6 +221,12 @@ namespace CommonUniverse
 			InvalidateRect(NULL);
 			return 0;
 		}
+		afx_msg LRESULT OnSetRedraw(WPARAM wParam, LPARAM lParam)
+		{
+			if (wParam == 0)
+				return 1;
+			return CWnd::DefWindowProc(WM_SETREDRAW, wParam, lParam);
+		}
 		afx_msg LRESULT OnActivePage(WPARAM wParam, LPARAM lParam) {
 			int nOldIndex = m_nCurSelTab;
 			int iIndex = (int)wParam;
@@ -310,6 +316,7 @@ namespace CommonUniverse
 
 	BEGIN_MESSAGE_MAP(CTangramTabCtrlWnd, CMFCTabCtrl)
 		ON_MESSAGE(WM_CREATETABPAGE, OnCreatePage)
+		ON_MESSAGE(WM_SETREDRAW, OnSetRedraw)
 		ON_MESSAGE(WM_TABCHANGE, OnActivePage)
 		ON_MESSAGE(WM_MODIFYTABPAGE, OnModifyPage)
 		ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
@@ -1276,12 +1283,12 @@ namespace CommonUniverse
 
 	void CWebMDIFrameWnd::AdjustClientArea()
 	{
-		CMDIFrameWndEx::AdjustClientArea();
 		if (bAdjustClient == false)
 		{
 			bAdjustClient = true;
 			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210214);
 		}
+		//CMDIFrameWndEx::AdjustClientArea();
 	}
 
 	LRESULT CWebMDIFrameWnd::OnQueryAppProxy(WPARAM wp, LPARAM lp)

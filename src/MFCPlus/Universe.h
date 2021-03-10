@@ -2598,8 +2598,8 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootNodes( 
             /* [retval][out] */ IXobjCollection **ppXobjColletion) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostWnd( 
-            /* [retval][out] */ LONGLONG *pVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveChromeBrowserWnd( 
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentActiveXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
@@ -2617,15 +2617,9 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
             /* [in] */ ICosmosExtender *newVal) = 0;
         
-        virtual /* [hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get_DesignNode( 
-            /* [retval][out] */ IXobj **pVal) = 0;
-        
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocTemplate( 
             BSTR bstrID,
             /* [retval][out] */ LONGLONG *pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveChromeBrowserWnd( 
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateNode( 
             IXobj *pXobj,
@@ -2675,10 +2669,8 @@ EXTERN_C const IID IID_ICosmos;
             long nStyle,
             /* [retval][out] */ int *nRet) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Encode( 
-            BSTR bstrSRC,
-            VARIANT_BOOL bEncode,
-            /* [retval][out] */ BSTR *bstrRet) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeletePage( 
+            LONGLONG PageHandle) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetHostFocus( void) = 0;
         
@@ -2696,10 +2688,9 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrURL,
             /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DownLoadFile( 
-            BSTR strFileURL,
-            BSTR bstrTargetFile,
-            BSTR bstrActionXml) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE LoadDocComponent( 
+            BSTR bstrLib,
+            /* [retval][out] */ LONGLONG *llAppProxy) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlByName( 
             IDispatch *pCtrl,
@@ -2762,13 +2753,6 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfigFile) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DeletePage( 
-            LONGLONG PageHandle) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE LoadDocComponent( 
-            BSTR bstrLib,
-            /* [retval][out] */ LONGLONG *llAppProxy) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
@@ -2882,9 +2866,9 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             /* [retval][out] */ IXobjCollection **ppXobjColletion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostWnd )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveChromeBrowserWnd )( 
             ICosmos * This,
-            /* [retval][out] */ LONGLONG *pVal);
+            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveXobj )( 
             ICosmos * This,
@@ -2907,18 +2891,10 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             /* [in] */ ICosmosExtender *newVal);
         
-        /* [hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DesignNode )( 
-            ICosmos * This,
-            /* [retval][out] */ IXobj **pVal);
-        
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocTemplate )( 
             ICosmos * This,
             BSTR bstrID,
             /* [retval][out] */ LONGLONG *pVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveChromeBrowserWnd )( 
-            ICosmos * This,
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateNode )( 
             ICosmos * This,
@@ -2978,11 +2954,9 @@ EXTERN_C const IID IID_ICosmos;
             long nStyle,
             /* [retval][out] */ int *nRet);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Encode )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeletePage )( 
             ICosmos * This,
-            BSTR bstrSRC,
-            VARIANT_BOOL bEncode,
-            /* [retval][out] */ BSTR *bstrRet);
+            LONGLONG PageHandle);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetHostFocus )( 
             ICosmos * This);
@@ -3005,11 +2979,10 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrURL,
             /* [retval][out] */ IDispatch **ppRetDisp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DownLoadFile )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *LoadDocComponent )( 
             ICosmos * This,
-            BSTR strFileURL,
-            BSTR bstrTargetFile,
-            BSTR bstrActionXml);
+            BSTR bstrLib,
+            /* [retval][out] */ LONGLONG *llAppProxy);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
             ICosmos * This,
@@ -3085,15 +3058,6 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrKey,
             BSTR bstrXml,
             VARIANT_BOOL bSaveToConfigFile);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeletePage )( 
-            ICosmos * This,
-            LONGLONG PageHandle);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *LoadDocComponent )( 
-            ICosmos * This,
-            BSTR bstrLib,
-            /* [retval][out] */ LONGLONG *llAppProxy);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
             ICosmos * This,
@@ -3184,8 +3148,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_get_RootNodes(This,ppXobjColletion)	\
     ( (This)->lpVtbl -> get_RootNodes(This,ppXobjColletion) ) 
 
-#define ICosmos_get_HostWnd(This,pVal)	\
-    ( (This)->lpVtbl -> get_HostWnd(This,pVal) ) 
+#define ICosmos_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
+    ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
 #define ICosmos_get_CurrentActiveXobj(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentActiveXobj(This,pVal) ) 
@@ -3202,14 +3166,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_put_Extender(This,newVal)	\
     ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
 
-#define ICosmos_get_DesignNode(This,pVal)	\
-    ( (This)->lpVtbl -> get_DesignNode(This,pVal) ) 
-
 #define ICosmos_get_DocTemplate(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_DocTemplate(This,bstrID,pVal) ) 
-
-#define ICosmos_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
-    ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
 
 #define ICosmos_NavigateNode(This,pXobj,bstrBrowserID,bstrXml,pVal)	\
     ( (This)->lpVtbl -> NavigateNode(This,pXobj,bstrBrowserID,bstrXml,pVal) ) 
@@ -3241,8 +3199,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet)	\
     ( (This)->lpVtbl -> MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet) ) 
 
-#define ICosmos_Encode(This,bstrSRC,bEncode,bstrRet)	\
-    ( (This)->lpVtbl -> Encode(This,bstrSRC,bEncode,bstrRet) ) 
+#define ICosmos_DeletePage(This,PageHandle)	\
+    ( (This)->lpVtbl -> DeletePage(This,PageHandle) ) 
 
 #define ICosmos_SetHostFocus(This)	\
     ( (This)->lpVtbl -> SetHostFocus(This) ) 
@@ -3259,8 +3217,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
     ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
-#define ICosmos_DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml)	\
-    ( (This)->lpVtbl -> DownLoadFile(This,strFileURL,bstrTargetFile,bstrActionXml) ) 
+#define ICosmos_LoadDocComponent(This,bstrLib,llAppProxy)	\
+    ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
 
 #define ICosmos_GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp) ) 
@@ -3300,12 +3258,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
     ( (This)->lpVtbl -> ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 
-
-#define ICosmos_DeletePage(This,PageHandle)	\
-    ( (This)->lpVtbl -> DeletePage(This,PageHandle) ) 
-
-#define ICosmos_LoadDocComponent(This,bstrLib,llAppProxy)	\
-    ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
 
 #define ICosmos_CosmosCommand(This,RibbonControl)	\
     ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 
@@ -3823,13 +3775,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GalaxyClusterXML( 
             /* [retval][out] */ BSTR *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
-            BSTR bstrExtenderName,
-            /* [retval][out] */ IDispatch **pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
-            BSTR bstrExtenderName,
-            /* [in] */ IDispatch *newVal) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
+            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Xobj( 
             BSTR bstrNodeName,
@@ -3860,9 +3807,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XobjNames( 
             /* [retval][out] */ BSTR *pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IGalaxyCluster **pVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateGalaxy( 
             VARIANT ParentObj,
@@ -3982,15 +3926,9 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IGalaxyCluster * This,
             /* [retval][out] */ BSTR *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
             IGalaxyCluster * This,
-            BSTR bstrExtenderName,
-            /* [retval][out] */ IDispatch **pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
-            IGalaxyCluster * This,
-            BSTR bstrExtenderName,
-            /* [in] */ IDispatch *newVal);
+            /* [retval][out] */ IGalaxyCluster **pVal);
         
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Xobj )( 
             IGalaxyCluster * This,
@@ -4030,10 +3968,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
         /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XobjNames )( 
             IGalaxyCluster * This,
             /* [retval][out] */ BSTR *pVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
-            IGalaxyCluster * This,
-            /* [retval][out] */ IGalaxyCluster **pVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateGalaxy )( 
             IGalaxyCluster * This,
@@ -4134,11 +4068,8 @@ EXTERN_C const IID IID_IGalaxyCluster;
 #define IGalaxyCluster_get_GalaxyClusterXML(This,pVal)	\
     ( (This)->lpVtbl -> get_GalaxyClusterXML(This,pVal) ) 
 
-#define IGalaxyCluster_get_Extender(This,bstrExtenderName,pVal)	\
-    ( (This)->lpVtbl -> get_Extender(This,bstrExtenderName,pVal) ) 
-
-#define IGalaxyCluster_put_Extender(This,bstrExtenderName,newVal)	\
-    ( (This)->lpVtbl -> put_Extender(This,bstrExtenderName,newVal) ) 
+#define IGalaxyCluster_get_Parent(This,pVal)	\
+    ( (This)->lpVtbl -> get_Parent(This,pVal) ) 
 
 #define IGalaxyCluster_get_Xobj(This,bstrNodeName,pVal)	\
     ( (This)->lpVtbl -> get_Xobj(This,bstrNodeName,pVal) ) 
@@ -4166,9 +4097,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
 
 #define IGalaxyCluster_get_XobjNames(This,pVal)	\
     ( (This)->lpVtbl -> get_XobjNames(This,pVal) ) 
-
-#define IGalaxyCluster_get_Parent(This,pVal)	\
-    ( (This)->lpVtbl -> get_Parent(This,pVal) ) 
 
 #define IGalaxyCluster_CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy)	\
     ( (This)->lpVtbl -> CreateGalaxy(This,ParentObj,HostWnd,bstrGalaxyName,pRetGalaxy) ) 

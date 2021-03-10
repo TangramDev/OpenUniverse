@@ -1283,12 +1283,12 @@ namespace CommonUniverse
 
 	void CWebMDIFrameWnd::AdjustClientArea()
 	{
-		CMDIFrameWndEx::AdjustClientArea();
 		if (bAdjustClient == false)
 		{
 			bAdjustClient = true;
 			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210214);
 		}
+		//CMDIFrameWndEx::AdjustClientArea();
 	}
 
 	LRESULT CWebMDIFrameWnd::OnQueryAppProxy(WPARAM wp, LPARAM lp)
