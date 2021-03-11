@@ -1193,50 +1193,6 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 			put_Attribute(CComBSTR("id"), str.AllocSysString());
 		}
 		strID.MakeLower();
-		auto nPos = strID.Find(_T("http:"));
-		if (nPos == -1)
-			nPos = strID.Find(_T("https:"));
-		if (m_pXobjShareData->m_pGalaxy)
-		{
-			CComBSTR bstr;
-			get_Attribute(CComBSTR("initInfo"), &bstr);
-			CString str = _T("");
-			str += bstr;
-			if (str != _T("") && m_pXobjShareData->m_pGalaxyCluster)
-			{
-				LRESULT hr = ::SendMessage(m_pXobjShareData->m_pGalaxyCluster->m_hWnd, WM_GETNODEINFO, (WPARAM)OLE2T(bstr), (LPARAM)hParentWnd);
-				if (hr)
-				{
-					CString strInfo = _T("");
-					CWindow m_wnd;
-					m_wnd.Attach(hParentWnd);
-					m_wnd.GetWindowText(strInfo);
-					strID += strInfo;
-					m_wnd.Detach();
-				}
-			}
-		}
-
-		if (strID.Find(_T("http://")) != -1 || strID.Find(_T("https://")) != -1)
-		{
-			bWebCtrl = true;
-			strURL = strID;
-			strID = _T("shell.explorer.2");
-		}
-
-		if (strID.Find(_T("res://")) != -1 || ::PathFileExists(strID))
-		{
-			bWebCtrl = true;
-			strURL = strID;
-			strID = _T("shell.explorer.2");
-		}
-
-		if (strID.CompareNoCase(_T("about:blank")) == 0)
-		{
-			bWebCtrl = true;
-			strURL = strID;
-			strID = _T("shell.explorer.2");
-		}
 
 		if (m_pDisp == nullptr)
 		{
