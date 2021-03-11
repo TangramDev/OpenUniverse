@@ -31,7 +31,8 @@
 
 CXobjShareData::CXobjShareData()
 {
-	m_pOldGalaxy		= nullptr;
+	m_pOldGalaxy			= nullptr;
+	m_pOfficeObj		= nullptr;
 	m_pCosmosParse		= nullptr;
 	m_pHostClientView	= nullptr;
 #ifdef _DEBUG
@@ -74,6 +75,7 @@ CGalaxyCluster::~CGalaxyCluster()
 #endif	
 	//if(g_pCosmos->m_nTangram==0)
 	//	return;
+
 	m_mapGalaxy.erase(m_mapGalaxy.begin(), m_mapGalaxy.end());
 	m_mapXobj.erase(m_mapXobj.begin(), m_mapXobj.end());
 	auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
@@ -191,7 +193,7 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 
 STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame)
 {
-	HWND h = 0; 
+	HWND h = 0;
 	CString strGalaxyName = OLE2T(bstrGalaxyName);
 	//auto it = m_mapWnd.find(strGalaxyName);
 	//if (it != m_mapWnd.end())
@@ -211,7 +213,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 	//	strGalaxyName = s;
 	//}
 	BSTR bstrName = strGalaxyName.MakeLower().AllocSysString();
-	if (ParentObj.vt == VT_DISPATCH&&HostWnd.vt == VT_BSTR)
+	if (ParentObj.vt == VT_DISPATCH && HostWnd.vt == VT_BSTR)
 	{
 		if (g_pCosmos->m_pCLRProxy)
 		{
@@ -246,7 +248,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					strName = OLE2T(bstrGalaxyName);
 					if (strName == _T(""))
 						bstrGalaxyName = CComBSTR(L"Default");
-					
+
 					strGalaxyName = OLE2T(bstrGalaxyName);
 					auto it = m_mapWnd.find(strGalaxyName);
 					if (it != m_mapWnd.end())
@@ -275,13 +277,13 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			}
 		}
 	}
-	else if (HostWnd.vt == VT_I2||HostWnd.vt == VT_I4 || HostWnd.vt == VT_I8)
+	else if (HostWnd.vt == VT_I2 || HostWnd.vt == VT_I4 || HostWnd.vt == VT_I8)
 	{
 		BOOL bIsMDI = FALSE;
 		HWND _hWnd = NULL;
-		if(HostWnd.vt == VT_I4)
+		if (HostWnd.vt == VT_I4)
 			_hWnd = (HWND)HostWnd.lVal;
-		if(HostWnd.vt == VT_I8)
+		if (HostWnd.vt == VT_I8)
 			_hWnd = (HWND)HostWnd.llVal;
 		if (_hWnd == 0)
 		{
@@ -291,7 +293,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			else
 				bIsMDI = TRUE;
 		}
-		if (_hWnd&&::IsWindow(_hWnd))
+		if (_hWnd && ::IsWindow(_hWnd))
 		{
 			auto it = m_mapGalaxy.find(_hWnd);
 			if (it == m_mapGalaxy.end())
@@ -331,13 +333,14 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 						_pWnd->m_hClient = _hWnd;
 					}
 				}
+
 				_pGalaxy->m_pGalaxyCluster = this;
 				_pGalaxy->m_hHostWnd = _hWnd;
 				pThreadInfo->m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapWnd[strName] = _hWnd;
 
-				for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
+				for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 				{
 					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(_pGalaxy);
 					if (pGalaxyProxy)
@@ -352,10 +355,9 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				*pRetFrame = it->second;
 		}
 	}
-		
+
 	return S_OK;
 }
-
 
 STDMETHODIMP CGalaxyCluster::GetGalaxyFromCtrl(IDispatch* CtrlObj, IGalaxy** ppGalaxy)
 {
@@ -770,9 +772,6 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 
 STDMETHODIMP CGalaxyCluster::ConnectCosmosCtrl(ICosmosCtrl* eventSource)
 {
-	if (g_pCosmos->m_bEclipse)
-	{
-	}
 	return S_OK;
 }
 

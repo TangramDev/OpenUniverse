@@ -67,6 +67,7 @@
 
 #include "universe.h"
 #include "ObjSafe.h"
+#include "wpfview.h"
 
 #include "chromium\Browser.h"
 
@@ -170,6 +171,7 @@ public:
 	TCHAR									m_szBuffer[MAX_PATH];
 
 	LPCTSTR									m_lpszSplitterClass;
+	CImageList								m_DocTemplateImageList;
 
 	//.NET Version 4: 
 	ICLRRuntimeHost*						m_pClrHost;
@@ -179,6 +181,7 @@ public:
 	CWebPage*								m_pActiveHtmlWnd;
 
 	CWinForm*								m_pActiveWinFormWnd;
+	CBrowser*								m_pHostBrowser = nullptr;
 
 	CXobj*									m_pActiveXobj;
 	CGalaxy*								m_pGalaxy;
@@ -187,16 +190,19 @@ public:
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
+	map<HWND, CGalaxy*>						m_mapBKFrame;
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;
 	map<CString, CRuntimeClass*>			m_mapClassInfo;
+	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;
+	map<int, ICosmos*>						m_mapRemoteTangramApp;
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
 	map<HWND, CMDTWnd*>						m_mapMDTWindow;
-
+	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
 		COM_INTERFACE_ENTRY(IDispatch)
@@ -276,11 +282,14 @@ public:
 	BOOL LoadImageFromResource(ATL::CImage *pImage, HMODULE hMod, UINT nResID, LPCTSTR lpTyp);
 	BOOL InitJNIForTangram();
 	CString ConfigJavaVMInfo(CString strOption);
+	CString EncodeFileToBase64(CString strSRC);
 	CString InitEclipse(_TCHAR* jarFile);
 	CString ComputeHash(CString source);
 	CString GetXmlData(CString strName, CString strXml);
 	CString GetDocTemplateXml(CString strCaption, CString strPath, CString strFilter);
 	CString GetPropertyFromObject(IDispatch* pObj, CString strPropertyName);
+	CString	BuildSipURICodeStr(CString strURI, CString strPrev, CString strFix, CString strData, int n1);
+	CString	GetDataFromStr(CString strCoded, CString& strTime, CString strPrev, CString strFix, int n1);
 	CString tangram_for_eclipse(CString strKey, CString strData, CString strFeatures);
 	LRESULT Close(void);
 	CXobj* ObserveEx(long hHostMainWnd, CString strExXml, CString strXTMLFile);
@@ -290,6 +299,8 @@ public:
 #endif
 
 	virtual void ProcessMsg(LPMSG lpMsg);
+	virtual void OnOpenDoc(WPARAM) {};
+	virtual void UpdateOfficeObj(IDispatch* pObj, CString strXml, CString strName) {};
 	virtual void WindowCreated(CString strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {};
 	virtual void WindowDestroy(HWND hWnd) {};
 	IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*);
@@ -339,6 +350,7 @@ private:
 	void CosmosLoad();
 	bool CheckUrl(CString&   url);
 	void AttachXobj(void* pXobjEvents);
+	CString Encode(CString strSRC, BOOL bEnCode);
 	CString GetNewLayoutNodeName(BSTR strObjTypeID, IXobj* pDesignNode);
 	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
 	IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
@@ -365,6 +377,7 @@ private:
 	CSession* CreateCloudSession(CWebPageImpl*);
 	CSession* GetCloudSession(IXobj*);
 	void SetMainWnd(HWND hMain);
+	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
 
 	void SendIPCMsg(HWND hXobj, CString strMsgID);
 	void InsertMsgData(HWND hXobj, CString strKey, CString strVal);

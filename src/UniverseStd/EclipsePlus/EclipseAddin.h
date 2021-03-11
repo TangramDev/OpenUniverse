@@ -114,3 +114,4 @@ public:
 	STDMETHOD(Observe)(BSTR bstrKey, BSTR bstrXml, IXobj** ppXobj);
 	void CreatePage(BOOL bSaveToConfigFile);
 };
+

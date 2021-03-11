@@ -22,13 +22,14 @@
  *
  *******************************************************************************/
 
- // Xobj.cpp : implementation file
+// Xobj.cpp : implementation file
 
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "XobjWnd.h"
+#include "WPFView.h"
 #include "GridWnd.h"
 #include "chromium/Browser.h"
 #include "chromium/WebPage.h"
@@ -331,7 +332,7 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 {
 	int _nWidth = 0;
 	SetColumnInfo(lParam, m_nHostWidth >= 0 ? m_nHostWidth : 0, _nWidth);
-	SetRowInfo(wParam, m_nHostHeight >= 0 ? m_nHostHeight : 0, _nWidth);
+	SetRowInfo(wParam, m_nHostHeight >= 0 ? m_nHostHeight:0, _nWidth);
 	//SetColumnInfo(lParam, (m_nHostWidth>=0)? m_nHostWidth:0, _nWidth);
 	//SetRowInfo(wParam, (m_nHostHeight>=0)? m_nHostHeight:0, _nWidth);
 	return 0;
@@ -424,12 +425,13 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	{
 		pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
 		::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
-
+	
 		CWebPage* pWebWnd = nullptr;
 		if (pGalaxy->m_pWebPageWnd)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;
 		}
+
 		pGalaxy->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)

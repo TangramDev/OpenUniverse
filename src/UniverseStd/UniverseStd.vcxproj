@@ -56,6 +56,7 @@
     <UseOfAtl>Static</UseOfAtl>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <UseDebugLibraries>false</UseDebugLibraries>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -320,6 +321,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CeXDib.cpp" />
     <ClCompile Include="chromium\WebPage.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -346,6 +348,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="eclipseUtil.cpp" />
     <ClCompile Include="eclipseWin.cpp" />
     <ClCompile Include="eclipseWinCommon.cpp" />
+    <ClCompile Include="CreateCheckboxImageList.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -360,6 +363,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="GridWnd.cpp" />
     <ClCompile Include="XobjWnd.cpp" />
     <ClCompile Include="VisualStylesXP.cpp" />
+    <ClCompile Include="WPFView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="default.exe.config" />
@@ -368,6 +372,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <None Include="Universe.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CeXDib.h" />
     <ClInclude Include="chromium\WebPage.h" />
     <ClInclude Include="chromium\Browser.h" />
     <ClInclude Include="Wormhole.h" />
@@ -389,6 +394,7 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClInclude Include="GalaxyCluster.h" />
     <ClInclude Include="GridWnd.h" />
     <ClInclude Include="XobjWnd.h" />
+    <ClInclude Include="WPFView.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bitmap_g.bmp" />

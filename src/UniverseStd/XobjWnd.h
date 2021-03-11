@@ -68,3 +68,25 @@ protected:
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	DECLARE_MESSAGE_MAP()
 };
+
+class CBKWnd : public CWindowImpl<CBKWnd, CWindow>
+{
+public:
+	CBKWnd(void);
+	HWND			m_hChild;
+	CString			m_strURL;
+	CXobj*			m_pXobj;
+	CGalaxy*		m_pGalaxy;
+	BEGIN_MSG_MAP(CBKWnd)
+		MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
+		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
+		MESSAGE_HANDLER(WM_WINDOWPOSCHANGED, OnWindowPosChanged)
+		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanged)
+	END_MSG_MAP()
+
+private:
+	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnMdiClientCreated(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnWindowPosChanged(UINT, WPARAM, LPARAM, BOOL&);
+	void OnFinalMessage(HWND hWnd);
+};

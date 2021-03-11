@@ -151,10 +151,13 @@ using namespace std;
 #include <ppltasks.h>
 using namespace concurrency;
 
+class CBKWnd;
 class CXobj;
+class CWPFView;
 class CXobjWnd;
 class CCosmos;
 class CGalaxy;
+class CHelperWnd;
 class CEclipseWnd;
 class CUniverse;
 class CXobjEvents;

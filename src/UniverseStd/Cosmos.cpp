@@ -63,7 +63,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
- // Cosmos.cpp : Implementation of CCosmos
+// Cosmos.cpp : Implementation of CCosmos
 
 #include "stdafx.h"
 #include "Cosmos.h"
@@ -81,6 +81,7 @@
 #include "GridWnd.h"
 #include "XobjWnd.h"
 #include "Xobj.h"
+#include "WpfView.h"
 #include "Wormhole.h"
 #include "Galaxy.h"
 #include "TangramJavaHelper.h"
@@ -228,6 +229,7 @@ CCosmos::CCosmos()
 	g_pCosmosImpl = this;
 	m_mapValInfo[_T("currenteclipeworkBenchid")] = CComVariant(_T(""));
 	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjWnd);
+	m_mapClassInfo[_T("wpfctrl")] = RUNTIME_CLASS(CWPFView);
 	m_mapClassInfo[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
 
 	m_mapIPCMsgIndexDic[IPC_NODE_CREARED_ID] = IPC_NODE_CREARED;
@@ -526,6 +528,7 @@ CCosmos::~CCosmos()
 	m_mapHtmlWnd.clear();
 	m_mapFormWebPage.clear();
 	m_mapUIData.clear();
+
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
 	{
 		OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
@@ -598,7 +601,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 		}
 		else
 		{
-			for (auto& it : pXobj->m_mapWndXobjProxy)
+			for (auto it : pXobj->m_mapWndXobjProxy)
 			{
 				it.second->OnCosmosDocEvent(pObj);
 			}
@@ -607,7 +610,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 	break;
 	case 1:
 	{
-		for (auto& it : pXobj->m_mapWndXobjProxy)
+		for (auto it : pXobj->m_mapWndXobjProxy)
 		{
 			it.second->OnCosmosDocEvent(pObj);
 		}
@@ -615,7 +618,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 	break;
 	case 2:
 	{
-		for (auto& it : pXobj->m_mapWndXobjProxy)
+		for (auto it : pXobj->m_mapWndXobjProxy)
 		{
 			it.second->OnCosmosDocEvent(pObj);
 		}
@@ -641,6 +644,7 @@ void CCosmos::FireAppEvent(CCosmosEvent* pObj)
 		strEventName.MakeLower();
 		HRESULT hr = S_OK;
 		int cConnections = m_vec.GetSize();
+
 		if (cConnections)
 		{
 			CComVariant avarParams[1];
@@ -847,47 +851,56 @@ void CCosmos::TangramInitFromeWeb()
 		if (pParse)
 			m_strDefaultWorkBenchXml = m_Parse[_T("defaultworkbench")].xml();
 
-		m_pMainWebPageImpl = m_pHostHtmlWnd;
-
-		pParse = m_Parse.GetChild(_T("urls"));
-		if (pParse)
+		auto it = m_mapBrowserWnd.find(m_hHostBrowserWnd);
+		if (it != m_mapBrowserWnd.end())
 		{
-			CString strUrls = _T("");
-			int nCount = pParse->GetCount();
-			for (int i = 0; i < nCount; i++)
+			CBrowser* pWnd = (CBrowser*)it->second;
+			if (pWnd->m_pVisibleWebWnd)
 			{
-				CString strURL = pParse->GetChild(i)->attr(_T("url"), _T(""));
-				int nPos2 = strURL.Find(_T(":"));
-				if (nPos2 != -1)
+				m_pMainWebPageImpl = pWnd->m_pVisibleWebWnd;
+
+				pParse = m_Parse.GetChild(_T("urls"));
+				if (pParse)
 				{
-					CString strURLHeader = strURL.Left(nPos2);
-					if (strURLHeader.CompareNoCase(_T("host")) == 0)
+					CString strUrls = _T("");
+					int nCount = pParse->GetCount();
+					for (int i = 0; i < nCount; i++)
 					{
-						strURL = g_pCosmos->m_strAppPath + strURL.Mid(nPos2 + 1);
+						CString strURL = pParse->GetChild(i)->attr(_T("url"), _T(""));
+						int nPos2 = strURL.Find(_T(":"));
+						if (nPos2 != -1)
+						{
+							CString strURLHeader = strURL.Left(nPos2);
+							if (strURLHeader.CompareNoCase(_T("host")) == 0)
+							{
+								strURL = g_pCosmos->m_strAppPath + strURL.Mid(nPos2 + 1);
+							}
+						}
+						if (strURL != _T(""))
+						{
+							strUrls += strURL;
+							if (i < nCount - 1)
+								strUrls += _T("|");
+						}
 					}
-				}
-				if (strURL != _T(""))
-				{
-					strUrls += strURL;
-					if (i < nCount - 1)
-						strUrls += _T("|");
-				}
-			}
-			if (strUrls != _T(""))
-			{
-				CString strDisposition = _T("");
-				strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
-				if (m_pHostHtmlWnd->m_pChromeRenderFrameHost)
-				{
-					IPCMsg msg;
-					msg.m_strId = L"ADD_URL";
-					msg.m_strParam1 = strUrls;
-					msg.m_strParam2 = strDisposition;
-					m_pHostHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
+					if (strUrls != _T(""))
+					{
+						CString strDisposition = _T("");
+						strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
+						if (pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+						{
+							IPCMsg msg;
+							msg.m_strId = L"ADD_URL";
+							msg.m_strParam1 = strUrls;
+							msg.m_strParam2 = strDisposition;
+							pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
+						}
+					}
+					::SetFocus(::GetAncestor(pWnd->m_hWnd,GA_PARENT));
 				}
 			}
-			::SetFocus(::GetAncestor(m_pHostHtmlWnd->m_hWnd, GA_PARENT));
 		}
+
 	}
 }
 
@@ -1015,6 +1028,54 @@ void CCosmos::CosmosInit()
 		else
 			m_bEclipse = false;
 	}
+}
+
+DWORD CCosmos::ExecCmd(const CString cmd, const BOOL setCurrentDirectory)
+{
+	BOOL  bReturnVal = false;
+	STARTUPINFO  si;
+	DWORD  dwExitCode = ERROR_NOT_SUPPORTED;
+	SECURITY_ATTRIBUTES saProcess, saThread;
+	PROCESS_INFORMATION process_info;
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+
+	saProcess.nLength = sizeof(saProcess);
+	saProcess.lpSecurityDescriptor = NULL;
+	saProcess.bInheritHandle = true;
+
+	saThread.nLength = sizeof(saThread);
+	saThread.lpSecurityDescriptor = NULL;
+	saThread.bInheritHandle = false;
+
+	CString currentDirectory = _T("");
+
+	bReturnVal = CreateProcess(NULL,
+		(LPTSTR)(LPCTSTR)cmd,
+		&saProcess,
+		&saThread,
+		false,
+		DETACHED_PROCESS,
+		NULL,
+		currentDirectory,
+		&si,
+		&process_info);
+
+	if (bReturnVal)
+	{
+		CloseHandle(process_info.hThread);
+		WaitForSingleObject(process_info.hProcess, INFINITE);
+		GetExitCodeProcess(process_info.hProcess, &dwExitCode);
+		CloseHandle(process_info.hProcess);
+	}
+	//else
+	//{
+	//	DWORD dw =  GetLastError();
+	//	dwExitCode = dw;
+	//}
+
+	return dwExitCode;
 }
 
 void CCosmos::ExitInstance()
@@ -1325,7 +1386,7 @@ void CCosmos::BrowserAppStart()
 			if (m_nAppType == APP_BROWSERAPP)
 				m_hMainWnd = m_hHostWnd;
 			::PostMessage(m_hHostWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
-			if (g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
+			if(g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
 				g_pCosmos->m_nAppType = APP_BROWSERAPP;
 			CString str = _T("<host popup='true'><url></url></host>");
 			CTangramXmlParse m_Parse;
@@ -1341,7 +1402,14 @@ void CCosmos::BrowserAppStart()
 
 bool CCosmos::IsMDIClientGalaxyNode(IXobj* pXobj)
 {
-	return false;
+	CXobj* _pXobj = (CXobj*)pXobj;
+	HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
+	if (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 IXobj* CCosmos::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
@@ -1423,8 +1491,6 @@ CString CCosmos::InitEclipse(_TCHAR* jarFile)
 {
 	if (m_hForegroundIdleHook == NULL)
 		m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
-	//if (m_hCBTHook == NULL)
-	//	m_hCBTHook = SetWindowsHookEx(WH_CBT, CUniverse::CBTProc, NULL, ::GetCurrentThreadId());
 	m_bEnableProcessFormTabKey = true;
 	if (m_hHostWnd == NULL)
 	{
@@ -1886,7 +1952,93 @@ STDMETHODIMP CCosmos::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 	CString strID = OLE2T(bstrObjID);
 	strID.Trim();
 	strID.MakeLower();
-	int nPos = strID.Find(_T(","));
+	int nPos = strID.Find(_T("@"));
+	if (nPos != -1)
+	{
+		CString strAppID = strID.Mid(nPos + 1);
+		if (strAppID != _T(""))
+		{
+			ICosmos* pRemoteTangram = nullptr;
+			auto it = m_mapRemoteCosmos.find(strAppID);
+			if (it == m_mapRemoteCosmos.end())
+			{
+				CComPtr<IDispatch> pApp;
+				pApp.CoCreateInstance(CComBSTR(strAppID), nullptr, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER);
+				if (pApp)
+				{
+					int nPos = m_strOfficeAppIDs.Find(strAppID);
+					if (nPos != -1)
+					{
+					}
+					else
+					{
+						pApp->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
+						if (pRemoteTangram)
+						{
+							pRemoteTangram->AddRef();
+							m_mapRemoteCosmos[strAppID] = pRemoteTangram;
+							LONGLONG h = 0;
+							pRemoteTangram->get_RemoteHelperHWND(&h);
+							HWND hWnd = (HWND)h;
+							if (::IsWindow(hWnd))
+							{
+								CHelperWnd* pWnd = new CHelperWnd();
+								pWnd->m_strID = strAppID;
+								pWnd->Create(hWnd, 0, strAppID, WS_VISIBLE | WS_CHILD);
+								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
+							}
+						}
+						else
+						{
+							DISPID dispID = 0;
+							DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
+							VARIANT result = { 0 };
+							EXCEPINFO excepInfo;
+							memset(&excepInfo, 0, sizeof excepInfo);
+							UINT nArgErr = (UINT)-1; // initialize to invalid arg
+							LPOLESTR func = L"Tangram";
+							HRESULT hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
+							if (S_OK == hr)
+							{
+								hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
+								if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
+								{
+									result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
+									if (pRemoteTangram)
+									{
+										pRemoteTangram->AddRef();
+										m_mapRemoteCosmos[strAppID] = pRemoteTangram;
+
+										LONGLONG h = 0;
+										pRemoteTangram->get_RemoteHelperHWND(&h);
+										HWND hWnd = (HWND)h;
+										if (::IsWindow(hWnd))
+										{
+											CHelperWnd* pWnd = new CHelperWnd();
+											pWnd->m_strID = strAppID;
+											pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
+											m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
+										}
+										::VariantClear(&result);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				pRemoteTangram = it->second;
+			}
+			if (pRemoteTangram)
+			{
+				strID = strID.Left(nPos);
+				return pRemoteTangram->CreateCLRObj(CComBSTR(strID), ppDisp);
+			}
+		}
+	}
+	nPos = strID.Find(_T(","));
 	if (nPos != -1 || strID.CompareNoCase(_T("webruntimeproxy")) == 0 || strID.CompareNoCase(_T("chromert")) == 0)
 	{
 		LoadCLR();
@@ -1922,9 +2074,249 @@ STDMETHODIMP CCosmos::get_CreatingXobj(IXobj** pVal)
 	return S_OK;
 }
 
+CString CCosmos::EncodeFileToBase64(CString strSRC)
+{
+	DWORD dwDesiredAccess = GENERIC_READ;
+	DWORD dwShareMode = FILE_SHARE_READ;
+	DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
+	HANDLE hFile = ::CreateFile(strSRC, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_RANDOM_ACCESS, NULL);
+
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		TRACE(_T("ERROR: CreateFile failed - %s\n"), strSRC);
+		return _T("");
+	}
+	else
+	{
+		DWORD dwFileSizeHigh = 0;
+		__int64 qwFileSize = GetFileSize(hFile, &dwFileSizeHigh);
+		qwFileSize |= (((__int64)dwFileSizeHigh) << 32);
+		DWORD dwFileSize = qwFileSize;
+		if ((dwFileSize == 0) || (dwFileSize == INVALID_FILE_SIZE))
+		{
+			TRACE(_T("ERROR: GetFileSize failed - %s\n"), strSRC);
+			CloseHandle(hFile);
+			return _T("");
+		}
+		else
+		{
+			BYTE* buffer = new BYTE[dwFileSize];
+			memset(buffer, 0, (dwFileSize) * sizeof(BYTE));
+			DWORD dwBytesRead = 0;
+			if (!ReadFile(hFile, buffer, dwFileSize, &dwBytesRead, NULL))
+			{
+				TRACE(_T("ERROR: ReadFile failed - %s\n"), strSRC);
+				CloseHandle(hFile);
+			}
+			else
+			{
+				int nMaxLineLen = dwFileSize * 2;
+				char* pDstInfo = new char[nMaxLineLen];
+				memset(pDstInfo, 0, dwFileSize * 2);
+				Base64Encode(buffer, dwFileSize, pDstInfo, &nMaxLineLen, 0);
+				CString strInfo = CA2W(pDstInfo);
+				delete[] pDstInfo;
+				delete[] buffer;
+				CloseHandle(hFile);
+				return strInfo;
+			}
+		}
+	}
+
+	return _T("");
+}
+
+CString CCosmos::Encode(CString strSRC, BOOL bEnCode)
+{
+	if (bEnCode)
+	{
+		LPCWSTR srcInfo = strSRC;
+		std::string strSrc = (LPCSTR)CW2A(srcInfo, CP_UTF8);
+		int nSrcLen = strSrc.length();
+		int nDstLen = Base64EncodeGetRequiredLength(nSrcLen);
+		char* pDstInfo = new char[nSrcLen * 2];
+		memset(pDstInfo, 0, nSrcLen * 2);
+		ATL::Base64Encode((BYTE*)strSrc.c_str(), nSrcLen, pDstInfo, &nDstLen);
+		CString strInfo = CA2W(pDstInfo);
+		delete[] pDstInfo;
+		return strInfo;
+	}
+	else
+	{
+		long nSrcSize = strSRC.GetLength();
+		BYTE* pDecodeStr = new BYTE[nSrcSize];
+		memset(pDecodeStr, 0, nSrcSize);
+		int nLen = nSrcSize;
+		ATL::Base64Decode(CW2A(strSRC), nSrcSize, pDecodeStr, &nLen);
+		////直接在内存里面构建CIMAGE,需要使用IStream接口,如何使用
+		////构建内存环境 
+		//HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, nLen); 
+		//void * pData = GlobalLock(hGlobal); 
+		//memcpy(pData, pDecodeStr, nLen); 
+		//// 拷贝位图数据进去 
+		//GlobalUnlock(hGlobal); 
+		//// 创建IStream 
+		//IStream * pStream = NULL; 
+		//if (CreateStreamOnHGlobal(hGlobal, TRUE, &pStream) != S_OK) 
+		//	return _T(""); 
+		//// 使用CImage加载位图内存 
+		//CImage img; 
+		//if (SUCCEEDED(img.Load(pStream)) ) 
+		//{ 
+		//	//CClientDC dc(this);
+		//	////使用内在中构造的图像 直接在对话框上绘图 
+		//	//img.Draw(dc.m_hDC, 0, 0, 500, 300); 
+		//} 
+		////释放内存
+		//pStream->Release(); 
+		//GlobalFree(hGlobal); 
+		CString str = CA2W((char*)pDecodeStr, CP_UTF8);
+		delete[] pDecodeStr;
+		pDecodeStr = NULL;
+		return str;
+	}
+}
+
+CString	CCosmos::BuildSipURICodeStr(CString strURI, CString strPrev, CString strFix, CString strData, int n1)
+{
+	CString strGUID = GetNewGUID();
+	CString strHelp1 = _T("");
+	CString strHelp2 = _T("");
+	int nPos = strGUID.Find(_T("-"));
+	strHelp1 = strGUID.Left(nPos);
+	nPos = strGUID.ReverseFind('-');
+	strHelp2 = strGUID.Mid(nPos + 1);
+	CString strTime = _T("");
+	CString strTime2 = _T("");
+	if (strData == _T(""))
+	{
+		CTime startTime = CTime::GetCurrentTime();
+		strTime.Format(_T("%d-%d-%d"), startTime.GetYear(), startTime.GetMonth(), startTime.GetDay());
+		strTime2.Format(_T("%02d:%02d:%02d"), startTime.GetHour(), startTime.GetMinute(), startTime.GetSecond());
+	}
+	else
+	{
+		nPos = strData.Find(_T(" "));
+		strTime = strData.Left(nPos);
+		strTime2 = strData.Mid(nPos + 1);
+	}
+	int n2 = (rand() + 100) % 7 + 2;
+	CString strRet = _T("");
+	if (strURI != _T("") && strPrev != _T("") && strFix != _T(""))
+	{
+		int nPos = strURI.Find(_T("@"));
+		if (nPos != -1)
+		{
+			CString s = _T("");
+			s.Format(_T("%s%s%s%s%s%s%s%s"), strHelp1, strTime2, strPrev, strURI.Left(nPos), strHelp2, strTime, strFix, strURI.Mid(nPos));
+			CString s1 = Encode(s, true);
+			s1.Replace(_T("\r\n"), _T(""));
+			int n = n1 * 10 + n2;
+			int m = (n2 * 2) % 7 + 2;
+			strGUID = GetNewGUID();
+			strGUID.Replace(_T("-"), _T(""));
+			strGUID = strGUID.Left(m);
+			strRet.Format(_T("%s%d%s%d"), strGUID, n1, s1, n2);
+
+			int nLen = strRet.GetLength();
+			CString str = _T("");
+			int nLen1 = nLen;
+			while (nLen1)
+			{
+				nLen1 -= n;
+				strGUID = GetNewGUID();
+				strGUID.Replace(_T("-"), _T(""));
+				if (nLen1)
+					strGUID = strGUID.Left(m);
+				str += strRet.Left(n);
+				str += strGUID;
+				strRet = strRet.Mid(n);
+				if ((nLen1 < n) && nLen1)
+				{
+					str += strRet;
+					strGUID = GetNewGUID();
+					strGUID.Replace(_T("-"), _T(""));
+					str += strGUID.Left(17);
+					nLen1 = 0;
+				}
+			}
+			strRet = str.MakeReverse();
+			nPos = strRet.Find(_T("="));
+			if (nPos != -1)
+			{
+				strGUID = GetNewGUID();
+				strGUID.Replace(_T("-"), _T(""));
+				CString strGUID2 = GetNewGUID();
+				strGUID2.Replace(_T("-"), _T(""));
+				strRet.Replace(_T("="), strGUID);
+				strRet = strGUID.MakeReverse() + strGUID2.Left(13) + strRet;
+			}
+		}
+	}
+	return strRet;
+}
+
 CString CCosmos::tangram_for_eclipse(CString strKey, CString strData, CString strFeatures)
 {
 	return _T("");
+}
+
+CString	CCosmos::GetDataFromStr(CString strCoded, CString& strTime, CString strPrev, CString strFix, int n1)
+{
+	CString strRet = _T("");
+	if (strCoded != _T(""))
+	{
+		CString strKey = strCoded.Left(32);
+		CString strX = strCoded;
+		int nCount = strX.Replace(strKey.MakeReverse(), _T("="));
+		if (nCount == 1)
+		{
+			strCoded = strX.Mid(32 + 13);
+		}
+		strCoded = strCoded.MakeReverse();
+		int nLen = strCoded.GetLength();
+		strRet = strCoded.Left(nLen - 17);
+		CString s1 = strRet.Mid(nLen - 18);
+		strRet = strCoded.Left(nLen - 18);
+		int n2 = _wtoi(s1);
+		int n = n1 * 10 + n2;
+		int m = (n2 * 2) % 7 + 2;
+		nLen = strCoded.GetLength();
+		int nIndex = -1;
+		CString str = _T("");
+		while (nLen)
+		{
+			str += strRet.Left(n);
+			if (nLen >= m)
+			{
+				strRet = strRet.Mid(n + m);
+				nLen = strRet.GetLength();
+			}
+			else
+			{
+				nLen = 0;
+			}
+		}
+		strRet = str;
+		strRet = strRet.Mid(m + 1);
+		strRet = Encode(strRet, false);
+		strRet = strRet.MakeReverse();
+		strRet.Replace(strPrev, _T(""));
+		strRet.Replace(strFix, _T(""));
+		strRet = strRet.Mid(8);
+		CString strTime1 = strRet.Left(8);
+		strRet = strRet.Mid(8);
+		int nPos = strRet.Find(_T("@"));
+		CString strSip2 = strRet.Mid(nPos);
+		strRet = strRet.Left(nPos);
+		CString strTime2 = strRet.Mid(strRet.GetLength() - 10);
+		strRet = strRet.Left(strRet.GetLength() - 22);
+		strRet += strSip2;
+		strTime2 += _T(" ");
+		strTime2 += strTime1;
+		strTime = strTime2;
+	}
+	return strRet;
 }
 
 STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
@@ -2307,6 +2699,36 @@ bool CCosmos::CheckUrl(CString& url)
 
 STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 {
+	CXobj* pWndXobj = (CXobj*)pXobj;
+	if (pWndXobj)
+	{
+		if (pWndXobj->m_pWindow)
+		{
+			if (pWndXobj->m_nActivePage > 0)
+			{
+				CString strVal = _T("");
+				strVal.Format(_T("%d"), pWndXobj->m_nActivePage);
+				pWndXobj->m_pHostParse->put_attr(_T("activepage"), strVal);
+			}
+			pWndXobj->m_pWindow->Save();
+		}
+		if (pWndXobj->m_nViewType == Grid)
+		{
+			((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
+		}
+		for (auto it2 : pWndXobj->m_vChildNodes)
+		{
+			UpdateXobj(it2);
+		}
+		if ((pWndXobj == pWndXobj->m_pRootObj || pWndXobj->m_pParentObj == nullptr) && pWndXobj->m_pXobjShareData->m_pOfficeObj)
+		{
+			CTangramXmlParse* pWndParse = pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER);
+			CString strXml = pWndParse->xml();
+			CString strNodeName = pWndXobj->m_pXobjShareData->m_pCosmosParse->name();
+			UpdateOfficeObj(pWndXobj->m_pXobjShareData->m_pOfficeObj, strXml, strNodeName);
+		}
+	}
+
 	return S_OK;
 }
 
@@ -2366,6 +2788,13 @@ STDMETHODIMP CCosmos::get_HostWnd(LONGLONG* pVal)
 
 STDMETHODIMP CCosmos::get_RemoteCosmos(BSTR bstrID, ICosmos** pVal)
 {
+	CString strID = OLE2T(bstrID);
+	strID.MakeLower();
+	auto it = m_mapRemoteCosmos.find(strID);
+	if (it != m_mapRemoteCosmos.end())
+	{
+		*pVal = it->second;
+	}
 	return S_OK;
 }
 
@@ -2420,6 +2849,65 @@ STDMETHODIMP CCosmos::put_Extender(ICosmosExtender* newVal)
 
 STDMETHODIMP CCosmos::CreateCosmosCtrl(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl)
 {
+	CString strAppID = OLE2T(bstrAppID);
+	strAppID.Trim();
+	strAppID.MakeLower();
+	if (strAppID == _T(""))
+	{
+		return CoCreateInstance(CLSID_CosmosCtrl, NULL, CLSCTX_ALL, IID_ICosmosCtrl, (LPVOID*)ppRetCtrl);
+	}
+	auto it = m_mapRemoteCosmos.find(strAppID);
+	if (it == m_mapRemoteCosmos.end())
+	{
+		CComPtr<IDispatch> pApp;
+		pApp.CoCreateInstance(bstrAppID, nullptr, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER);
+		if (pApp)
+		{
+			int nPos = m_strOfficeAppIDs.Find(strAppID);
+			if (nPos == -1)
+			{
+				DISPID dispID = 0;
+				DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
+				VARIANT result = { 0 };
+				EXCEPINFO excepInfo;
+				memset(&excepInfo, 0, sizeof excepInfo);
+				UINT nArgErr = (UINT)-1; // initialize to invalid arg
+				LPOLESTR func = L"Tangram";
+				HRESULT hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
+				if (S_OK == hr)
+				{
+					hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
+					if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
+					{
+						ICosmos* pCloudAddin = nullptr;
+						result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pCloudAddin);
+						if (pCloudAddin)
+						{
+							pCloudAddin->AddRef();
+							m_mapRemoteCosmos[strAppID] = pCloudAddin;
+
+							LONGLONG h = 0;
+							pCloudAddin->get_RemoteHelperHWND(&h);
+							HWND hWnd = (HWND)h;
+							if (::IsWindow(hWnd))
+							{
+								CHelperWnd* pWnd = new CHelperWnd();
+								pWnd->m_strID = strAppID;
+								pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
+								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
+							}
+							::VariantClear(&result);
+							return pCloudAddin->CreateCosmosCtrl(CComBSTR(L""), ppRetCtrl);
+						}
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		return it->second->CreateCosmosCtrl(CComBSTR(L""), ppRetCtrl);
+	}
 	return S_OK;
 }
 
@@ -3785,8 +4273,6 @@ IGalaxy* CCosmos::GetGalaxy(HWND hWnd)
 
 IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 {
-	if (hWnd == nullptr || ::GetParent(hWnd) == nullptr)
-		return nullptr;
 	DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
 	CommonThreadInfo* pThreadInfo = GetThreadInfo(dwID);
 
@@ -3802,7 +4288,6 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 	else
 	{
 		HWND hPWnd = ::GetParent(hWnd);
-		HWND _hPWnd = hPWnd;
 		while (hPWnd)
 		{
 			bool bMDIChild = ::GetWindowLong(hPWnd, GWL_EXSTYLE) & WS_EX_MDICHILD;
@@ -3829,6 +4314,7 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 		m_pGalaxy = new CComObject<CGalaxy>();
 		CString strName = _T("default");
 		m_pGalaxy->m_strGalaxyName = strName;
+		HWND _hPWnd = ::GetParent(hWnd);
 		::GetClassName(_hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 		CString strClassName = CString(g_pCosmos->m_szBuffer);
 		if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
@@ -3915,5 +4401,5 @@ bool CCosmos::SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* 
 	{
 		g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second);
 	}
-	return false;
+	return false; 
 }

@@ -3,7 +3,8 @@
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
- * 1. Built-in Modern Web Browser;
+ * 1. Built-in Modern Web Browser: Independent Browser Window and Browser Window
+ *    as sub windows of other windows are supported in the application process;
  * 2. DOM Plus: DOMPlus is a natural extension of the standard DOM system.
  *    It allows the application system to support a kind of generalized web pages,
  *    which are composed of standard DOM elements and binary components supported
@@ -21,34 +22,37 @@
  *
  *******************************************************************************/
 
-#ifndef XSTRING_H
-#define XSTRING_H
+#pragma once
 
-// find
-TCHAR * _tcsistr(const TCHAR * str, const TCHAR * substr);
-int _tcsccnt(const TCHAR *str, TCHAR ch);
 
-// removal
-TCHAR * _tcscrem(TCHAR *str, TCHAR ch);
-TCHAR * _tcsicrem(TCHAR *str, TCHAR ch);
-TCHAR * _tcsstrrem(TCHAR *str, const TCHAR *substr);
-TCHAR * _tcsistrrem(TCHAR *str, const TCHAR *substr);
+// CWPFView view
+class CXobj;
+class CWPFView : public CView
+{
+	DECLARE_DYNCREATE(CWPFView)
 
-// replace
-TCHAR * _tcscrep(TCHAR *str, TCHAR chOld, TCHAR chNew);
-TCHAR * _tcsicrep(TCHAR *str, TCHAR chOld, TCHAR chNew);
-int     _tcsistrrep(const TCHAR * lpszStr, 
-					const TCHAR * lpszOld, 
-					const TCHAR * lpszNew, 
-					TCHAR * lpszResult);
+protected:
+	CWPFView();           // protected constructor used by dynamic creation
+	virtual ~CWPFView();
 
-// trim
-TCHAR *_tcsltrim(TCHAR *str, const TCHAR *targets);
-TCHAR *_tcsrtrim(TCHAR *str, const TCHAR *targets);
-TCHAR *_tcstrim(TCHAR *str, const TCHAR *targets);
+public:
+	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+	BOOL			m_RespondMouseActive;
+	CXobj*		m_pXobj;
+	CWPFObj* m_pCosmosWPFObj;
+protected:
+	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnDestroy();
+	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+};
 
-// copy
-TCHAR *_tcsnzdup(const TCHAR *str, size_t count);
-TCHAR *_tcszdup(const TCHAR * str);
 
-#endif //XSTRING_H

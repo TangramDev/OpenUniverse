@@ -26,7 +26,7 @@
 #include "chromium/WebPage.h"
 
 using namespace Browser;
-
+class CBKWnd;
 class CWormhole;
 
 class CCosmosHelperWnd : public CWnd
@@ -154,12 +154,18 @@ public:
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
+		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
+		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
+		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
 	END_MSG_MAP()
 private:
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
 
 	void OnFinalMessage(HWND hWnd);
 };
@@ -180,6 +186,7 @@ public:
 	CString									m_strBKID;
 	CString									m_strChildFormPath;
 	
+	CBKWnd*									m_pBKWnd;
 	CXobj*									m_pBindMDIXobj = nullptr;
 	CXobj*									m_pWebBindMDIXobj = nullptr;
 	CWebPage*								m_pOwnerHtmlWnd;
@@ -201,6 +208,9 @@ public:
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
+		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
+		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
@@ -217,7 +227,10 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class ATL_NO_VTABLE CGalaxy :
@@ -247,6 +260,7 @@ public:
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
+	CBKWnd*											m_pBKWnd = nullptr;
 	CWebPage*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
@@ -259,6 +273,8 @@ public:
 	CosmosFrameWndInfo*								m_pCosmosFrameWndInfo = nullptr;
 	CWormhole*										m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
+	map<HWND, CWPFView*>							m_mapWPFView;
+	map<HWND, CWPFView*>							m_mapVisibleWPFView;
 	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}
