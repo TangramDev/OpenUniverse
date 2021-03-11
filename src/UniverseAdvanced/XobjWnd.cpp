@@ -650,63 +650,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	if (lParam == 20200208)
 		return 0;
-	CString str = (LPCTSTR)lParam;
-	IXobj* _pXobj = nullptr;
-	CXobj* pOldNode = (CXobj*)m_pXobj;
-	if (m_pXobj->m_hHostWnd == 0)
-	{
-		RECT rc;
-		::GetClientRect(m_hWnd, &rc);
-		m_pXobj->m_hHostWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_hWnd, NULL, AfxGetInstanceHandle(), NULL);
-		m_pXobj->m_hChildHostWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, rc.right, rc.bottom, m_pXobj->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
-		IGalaxy* pGalaxy = nullptr;
-		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pOldNode->m_hChildHostWnd), CComBSTR(L"Design"), &pGalaxy);
-		IXobj* pXobj = nullptr;
-		pGalaxy->Observe(CComBSTR(L""), str.AllocSysString(), &pXobj);
-		m_bEraseBkgnd = false;
-
-		((CXobj*)pXobj)->m_pRootObj = m_pXobj->m_pRootObj;
-		((CXobj*)pXobj)->m_pParentObj = m_pXobj->m_pParentObj;
-		((CXobj*)pXobj)->m_pXobjShareData->m_pOfficeObj = m_pXobj->m_pXobjShareData->m_pOfficeObj;
-		m_pXobj->m_pXobjShareData->m_mapLayoutNodes[((CXobj*)pXobj)->m_strName] = (CXobj*)pXobj;
-		CString strXml = ((CXobj*)pXobj)->m_pHostParse->xml();
-		CTangramXmlParse* pNew = ((CXobj*)pXobj)->m_pHostParse;
-		CTangramXmlParse* pOld = pOldNode->m_pHostParse;
-		CTangramXmlParse* pParent = m_pXobj->m_pHostParse->m_pParentParse;
-		CTangramXmlParse* pRet = nullptr;
-		if (pParent)
-		{
-			pRet = pParent->ReplaceNode(pOld, pNew, _T(""));
-			CString str = pRet->xml();
-			int nCount = pRet->GetCount();
-			((CXobj*)pXobj)->m_pHostParse = pRet;
-			m_pXobj->m_pHostParse = pRet;
-
-			CXobj* pChildNode = nullptr;
-			for (auto it2 : ((CXobj*)pXobj)->m_vChildNodes)
-			{
-				pChildNode = it2;
-				pChildNode->m_pRootObj = m_pXobj->m_pRootObj;
-				CString strName = pChildNode->m_strName;
-				for (int i = 0; i < nCount; i++)
-				{
-					CTangramXmlParse* child = pRet->GetChild(i);
-					CString _strName = child->attr(_T("id"), _T(""));
-					if (_strName.CompareNoCase(strName) == 0)
-					{
-						pChildNode->m_pHostParse = child;
-						break;
-					}
-				}
-			}
-			m_pXobj->m_vChildNodes.push_back(((CXobj*)pXobj));
-		}
-
-		auto it = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_mapGalaxy.find(pOldNode->m_hChildHostWnd);
-		if (it != m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_mapGalaxy.end())
-			m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_mapGalaxy.erase(it);
-	}
-	return -1;
+	return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 }
 
 LRESULT CXobjWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
