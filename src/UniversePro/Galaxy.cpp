@@ -1716,10 +1716,17 @@ void CWinForm::OnFinalMessage(HWND hWnd)
 
 LRESULT CCosmosHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if (message == WM_SHOWWINDOW && m_hClient)
+	switch (message)
 	{
-		g_pCosmos->m_bSZMode = true;
-		::PostMessage(m_hClient, WM_COSMOSMSG, 1, 20180115);
+	case WM_SHOWWINDOW:
+	{
+		if (m_hClient)
+		{
+			g_pCosmos->m_bSZMode = true;
+			::PostMessage(m_hClient, WM_COSMOSMSG, 1, 20180115);
+		}
+	}
+	break;
 	}
 	return CWnd::WindowProc(message, wParam, lParam);
 }
@@ -1840,7 +1847,7 @@ void CGalaxy::HostPosChanged()
 		else
 			flag |= SWP_NOREDRAW;
 
-		if (m_bTabbedMDIClient)
+		if (m_bTabbedMDIClient|| m_bObserveState)
 			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
@@ -1854,6 +1861,10 @@ void CGalaxy::HostPosChanged()
 		if (m_pBKWnd && ::IsWindow(m_pBKWnd->m_hWnd))
 		{
 			::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
+		}
+		if (m_bObserveState)
+		{
+			m_bObserveState = false;
 		}
 	}
 }
@@ -2456,6 +2467,8 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			::SetWindowText(::GetParent(m_hWnd), m_pWorkXobj->m_strCaption);
 		}
 	}
+
+	m_bObserveState = true;
 	HostPosChanged();
 	//Add 20200218
 	if (m_pBindingXobj)

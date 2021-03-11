@@ -229,10 +229,11 @@ public:
 	CGalaxy();           
 	virtual ~CGalaxy();  
 
-	BOOL											m_bTabbedMDIClient;
-	BOOL											m_bDetached;
-	BOOL											m_bNoRedrawState = false;
-	BOOL											m_bMDIChild;
+	bool											m_bTabbedMDIClient;
+	bool											m_bDetached;
+	bool											m_bNoRedrawState = false;
+	bool											m_bMDIChild;
+	bool											m_bObserveState = false;
 	GalaxyType										m_nGalaxyType;
 
 	HWND											m_hHostWnd;

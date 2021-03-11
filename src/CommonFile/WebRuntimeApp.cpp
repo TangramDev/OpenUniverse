@@ -808,6 +808,26 @@ namespace CommonUniverse
 				}
 				return ::GetParent(hWnd);
 			}
+			//if (pWnd->IsKindOf(RUNTIME_CLASS(CDockablePane)))
+			//{
+			//	if (nType == RecalcCtrlBarLayout)
+			//	{
+			//		CDockablePane* pDockablePane = (CDockablePane*)pWnd;
+			//		if (pDockablePane)
+			//		{
+			//			if (pDockablePane->IsFloating())
+			//			{
+			//				pDockablePane->RecalcLayout();
+			//				pDockablePane->GetParentMiniFrame(true)->RedrawAll();
+			//			}
+			//			if (pDockablePane->IsDocked())
+			//			{
+			//				pDockablePane->GetParentFrame()->RecalcLayout();
+			//			}
+			//		}
+			//	}
+			//	return ::GetParent(hWnd);
+			//}
 		}
 		switch (nType)
 		{

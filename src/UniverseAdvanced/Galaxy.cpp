@@ -1174,59 +1174,7 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 		}
 	}
-	//switch (m_nState)
-	//{
-	//case 0:
-	//case 1:
-	//case 3:
-	//{
-	//	//if (!::PathFileExists(m_strPath))
-	//	//{
-	//	//	int nPos = m_strPath.ReverseFind('\\');
-	//	//	CString strPath = m_strPath.Left(nPos);
-	//	//	::SHCreateDirectory(nullptr, strPath);
-	//	//}
-	//	//CGalaxyCluster* pGalaxyCluster = nullptr;
-	//	//auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
-	//	//if (it != g_pCosmos->m_mapWindowPage.end())
-	//	//{
-	//	//	pGalaxyCluster = (CGalaxyCluster*)it->second;
-	//	//	CString strData = _T("<winform>");
-	//	//	CString strIndex = _T("@");
-	//	//	for (auto it2 : pGalaxyCluster->m_mapGalaxy)
-	//	//	{
-	//	//		CComBSTR bstrXml(L"");
-	//	//		strIndex += it2.second->m_strGalaxyName;
-	//	//		strIndex += _T("@");
-	//	//		it2.second->get_GalaxyXML(&bstrXml);
-	//	//		strData += OLE2T(bstrXml);
-	//	//	}
-	//	//	DWORD dw = ::GetWindowLongPtr(m_hWnd, GWL_EXSTYLE);
-	//	//	if (dw & WS_EX_MDICHILD)
-	//	//	{
-	//	//		HWND h = ::GetParent(::GetParent(m_hWnd));
-	//	//		if (h)
-	//	//		{
-	//	//			CWinForm* pParent = (CWinForm*)::SendMessage(h, WM_HUBBLE_DATA, 0, 20190214);
-	//	//			if (pParent)
-	//	//			{
-	//	//				auto it = pParent->m_mapKey.find(m_strKey);
-	//	//				if (it != pParent->m_mapKey.end())
-	//	//				{
-	//	//					strData += it->second;
-	//	//				}
-	//	//			}
-	//	//		}
-	//	//	}
-	//	//	strData += _T("</winform>");
-	//	//	CTangramXmlParse xml;
-	//	//	if (xml.LoadXml(strData))
-	//	//		xml.SaveFile(m_strPath);
-	//	//	// TODO Refresh ListCtrl
-	//	//}
-	//}
-	//break;
-	//}
+
 	if (g_pCosmos->m_pActiveWinFormWnd == this)
 		g_pCosmos->m_pActiveWinFormWnd = nullptr;
 	auto it = g_pCosmos->m_mapNeedQueryOnClose.find(m_hWnd);
@@ -1717,12 +1665,20 @@ void CWinForm::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
+
 LRESULT CCosmosHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if (message == WM_SHOWWINDOW && m_hClient)
+	switch (message)
 	{
-		g_pCosmos->m_bSZMode = true;
-		::PostMessage(m_hClient, WM_COSMOSMSG, 1, 20180115);
+	case WM_SHOWWINDOW:
+	{
+		if (m_hClient)
+		{
+			g_pCosmos->m_bSZMode = true;
+			::PostMessage(m_hClient, WM_COSMOSMSG, 1, 20180115);
+		}
+	}
+	break;
 	}
 	return CWnd::WindowProc(message, wParam, lParam);
 }
@@ -1843,7 +1799,7 @@ void CGalaxy::HostPosChanged()
 		else
 			flag |= SWP_NOREDRAW;
 
-		if (m_bTabbedMDIClient)
+		if (m_bTabbedMDIClient || m_bObserveState)
 			flag &= ~SWP_NOREDRAW;
 		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
 			rt1.left,
@@ -1857,6 +1813,10 @@ void CGalaxy::HostPosChanged()
 		if (m_pBKWnd && ::IsWindow(m_pBKWnd->m_hWnd))
 		{
 			::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
+		}
+		if (m_bObserveState)
+		{
+			m_bObserveState = false;
 		}
 	}
 }
@@ -2459,6 +2419,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			::SetWindowText(::GetParent(m_hWnd), m_pWorkXobj->m_strCaption);
 		}
 	}
+	m_bObserveState = true;
 	HostPosChanged();
 	//Add 20200218
 	if (m_pBindingXobj)
