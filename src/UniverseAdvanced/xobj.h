@@ -62,7 +62,6 @@ public:
 
 	BOOL							m_bTopObj;
 	BOOL							m_bCreated;
-	BOOL							m_bNodeDocComplete;
 
 	XobjType						m_nViewType;
 	int								m_nID;

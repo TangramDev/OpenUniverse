@@ -77,24 +77,6 @@ using namespace Browser;
 
 typedef HRESULT(__stdcall* CosmosCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
 
-class CHelperWnd :
-	public CWindowImpl<CHelperWnd, CWindow>
-{
-public:
-	CHelperWnd(void)
-	{
-		m_strID = _T("");
-	};
-
-	~CHelperWnd(void) {};
-
-	CString m_strID;
-	DECLARE_WND_CLASS(_T("Tangram Helper Window Class"))
-	BEGIN_MSG_MAP(CHelperWnd)
-	END_MSG_MAP()
-	void OnFinalMessage(HWND hWnd);
-};
-
 class CWebHelperWnd :
 	public CWindowImpl<CWebHelperWnd, CWindow>
 {

@@ -2386,44 +2386,6 @@ STDMETHODIMP CGalaxy::get_CurrentNavigateKey(BSTR* pVal)
 
 void CGalaxy::UpdateVisualWPFMap(HWND hParent, BOOL bSized)
 {
-	for (auto it : m_mapWPFView)
-	{
-		HWND hWnd = it.first;
-		if (::IsChild(hParent, hWnd))
-		{
-			auto it2 = m_mapVisibleWPFView.find(hWnd);
-			if (::IsWindowVisible(hWnd) == TRUE)
-			{
-				if (it2 == m_mapVisibleWPFView.end())
-				{
-					m_mapVisibleWPFView[hWnd] = it.second;
-				}
-				it.second->m_pCosmosWPFObj->ShowVisual(false);
-				it.second->m_pCosmosWPFObj->ShowVisual(true);
-				it.second->m_pCosmosWPFObj->InvalidateVisual();
-				long nIndex = (long)::GetWindowLongPtr(it.second->m_hWnd, GWLP_USERDATA);
-				if (bSized || nIndex == 1963)
-				{
-					::SetWindowLongPtr(it.second->m_hWnd, GWLP_USERDATA, 0);
-
-					RECT rc;
-					::GetWindowRect(it.second->m_hWnd, &rc);
-					CWnd* pParent = it.second->GetParent();
-					pParent->ScreenToClient(&rc);
-					::SetWindowPos(it.second->m_hWnd, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + 1, SWP_DRAWFRAME);
-					::SetWindowPos(it.second->m_hWnd, HWND_TOP, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE | SWP_NOREDRAW);
-				}
-			}
-			else
-			{
-				if (it2 != m_mapVisibleWPFView.end())
-				{
-					it.second->m_pCosmosWPFObj->ShowVisual(false);
-					m_mapVisibleWPFView.erase(it2);
-				}
-			}
-		}
-	}
 }
 
 void CGalaxy::Destroy()
@@ -2763,13 +2725,6 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		{
 			RECT rect = { 0,0,0,0 };
 			HWND hPWnd = ::GetParent(m_hWnd);
-			if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)&rect, 19921989) == 19921989)
-			{
-				lpwndpos->x = rect.left;
-				lpwndpos->y = rect.top;
-				lpwndpos->cx = rect.right - rect.left;
-				lpwndpos->cy = rect.bottom - rect.top;
-			}
 			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED);// |SWP_NOREDRAW); 
 
 			CXobj* _pHostNode = m_pBindingXobj;
@@ -2863,8 +2818,6 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	if (::IsWindowVisible(m_hWnd))
 		::InvalidateRect(m_hWnd, nullptr, true);
-	//if (!g_pCosmos->m_bSZMode)
-	//	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 	return hr;
 }
 
@@ -2876,50 +2829,6 @@ LRESULT CGalaxy::OnParentNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 {
-	CString strRootName = OLE2T(bstrRootName);
-	if (strRootName == _T(""))
-		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><cluster><xobj name=\"Start\"/></cluster></Default>");
-	CString strName = _T("");
-	CString strXml = _T("");
-
-	map<CString, CString> m_mapTemp;
-	map<CString, CString>::iterator it2;
-	for (auto it : m_mapXobj)
-	{
-		g_pCosmos->UpdateXobj(it.second);
-		strName = it.first;
-		int nPos = strName.Find(_T("-"));
-		CString str = strName.Mid(nPos + 1);
-		if (str.CompareNoCase(_T("inDesigning")) == 0)
-		{
-			strName = strName.Left(nPos);
-			m_mapTemp[strName] = it.second->m_pXobjShareData->m_pCosmosParse->xml();
-		}
-	}
-
-	for (auto it : m_mapXobj)
-	{
-		strName = it.first;
-		if (strName.Find(_T("-indesigning")) == -1)
-		{
-			it2 = m_mapTemp.find(strName);
-			if (it2 != m_mapTemp.end())
-				strXml = it2->second;
-			else
-				strXml = it.second->m_pXobjShareData->m_pCosmosParse->xml();
-			strXmlData += strXml;
-		}
-	}
-
-	strXml = _T("<");
-	strXml += strRootName;
-	strXml += _T(">");
-	strXml += strXmlData;
-	strXml += _T("</");
-	strXml += strRootName;
-	strXml += _T(">");
-	*bstrRet = strXml.AllocSysString();
 	return S_OK;
 }
 

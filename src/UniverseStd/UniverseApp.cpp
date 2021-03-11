@@ -76,7 +76,6 @@
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "Galaxy.h"
-#include "WPFView.h"
 #include <io.h>
 #include <stdio.h>
 
@@ -88,21 +87,6 @@
 // Description  : the unique App object
 CUniverse theApp;
 CCosmos* g_pCosmos = nullptr;
-
-void CHelperWnd::OnFinalMessage(HWND hWnd)
-{
-	CWindowImpl::OnFinalMessage(hWnd);
-	auto it = g_pCosmos->m_mapRemoteCosmos.find(m_strID);
-	if (it != g_pCosmos->m_mapRemoteCosmos.end())
-	{
-		ULONG dw = it->second->Release();
-		while (dw)
-			dw = it->second->Release();
-		g_pCosmos->m_mapRemoteCosmos.erase(m_strID);
-	}
-
-	delete this;
-}
 
 void CWebHelperWnd::OnFinalMessage(HWND hWnd)
 {
@@ -522,11 +506,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 					for (auto it2 : it.second->m_mapGalaxy)
 					{
 						it2.second->HostPosChanged();
-						for (auto it3 : it2.second->m_mapWPFView)
-						{
-							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
-							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						}
 					}
 				}
 			}
@@ -558,75 +537,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	}
 	break;
 	case WM_COSMOSMSG:
-	{
-		if (wParam)
-		{
-			switch (lParam)
-			{
-			case 19631963:
-			{
-				DocTemplateInfo* pDocTemplateInfo = (DocTemplateInfo*)wParam;
-				CString strPath = g_pCosmos->m_strAppCommonDocPath + _T("Tangramdoctemplate.xml");
-				if (::PathFileExists(strPath))
-				{
-					CTangramXmlParse m_Parse;
-					m_Parse.LoadFile(strPath);
-					CString _strKey = pDocTemplateInfo->strProxyID + pDocTemplateInfo->strExt;
-					if (m_Parse.GetChild(_strKey) == nullptr)
-					{
-						CTangramXmlParse* pParse = m_Parse.AddNode(_strKey);
-						CString strVal = _T("");
-						strVal += pDocTemplateInfo->strFileTypeID;
-						strVal += _T("|");
-						strVal += pDocTemplateInfo->strfilterName;
-						strVal += _T("|");
-						strVal += _T("*") + pDocTemplateInfo->strExt;
-						strVal += _T("|");
-						strVal += pDocTemplateInfo->strProxyName;
-						strVal += _T("|");
-						if (pDocTemplateInfo->nResID != -1)
-						{
-							CString strID = _T("");
-							strID.Format(_T("%d"), pDocTemplateInfo->nResID);
-							pParse->put_attr(_T("ResID"), strID);
-						}
-						pParse->put_text(strVal);
-						m_Parse.SaveFile(strPath);
-						if (pDocTemplateInfo->bDll)
-						{
-							TCHAR	m_szBuffer[MAX_PATH];
-							HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
-							CString strPath = CString(m_szBuffer);
-							strPath += _T("\\TangramCommonDocTemplate\\TangramReg.xml");
-							CTangramXmlParse m_Parse2;
-							if (::PathFileExists(strPath) == FALSE)
-							{
-								m_Parse2.LoadXml(_T("<CosmosDocReg />"));
-								m_Parse2.SaveFile(strPath);
-							}
-							else
-							{
-								m_Parse2.LoadFile(strPath);
-							}
-							if (m_Parse2.GetChild(pDocTemplateInfo->strProxyID) == false)
-							{
-								m_Parse2.AddNode(pDocTemplateInfo->strProxyID);
-								m_Parse2.SaveFile(strPath);
-							}
-						}
-					}
-				}
-				//delete pDocTemplateInfo;
-			}
-			break;
-			default:
-			{
-			}
-			break;
-			}
-			return 0;
-		}
-	}
 	switch (lParam)
 	{
 	case 10001000:
@@ -1041,7 +951,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			case WM_KEYDOWN:
 			{
 				CXobjWnd* pWnd = nullptr;
-				CWPFView* pView = nullptr;
 				if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE && lpMsg->wParam == VK_RETURN)
 				{
 					g_bRecturnPressed = true;
@@ -1056,10 +965,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					//else
 					if (g_pCosmos->m_pActiveXobj->m_nViewType != Grid)
 					{
-						if (g_pCosmos->m_pActiveXobj->m_nViewType == TangramWPFCtrl)
-							pView = (CWPFView*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
-						else
-							pWnd = (CXobjWnd*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
+						pWnd = (CXobjWnd*)g_pCosmos->m_pActiveXobj->m_pHostWnd;
 						if (pWnd && ::IsChild(pWnd->m_hWnd, lpMsg->hwnd) == false)
 						{
 							g_pCosmos->m_pActiveXobj = nullptr;
@@ -1070,17 +976,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								if (pWnd->m_bBKWnd)
 								{
 									if (pWnd->PreTranslateMessage(lpMsg))
-									{
-										lpMsg->hwnd = NULL;
-										lpMsg->lParam = 0;
-										lpMsg->wParam = 0;
-										lpMsg->message = 0;
-										break;
-									}
-								}
-								else if (pView)
-								{
-									if (pView->PreTranslateMessage(lpMsg))
 									{
 										lpMsg->hwnd = NULL;
 										lpMsg->lParam = 0;
@@ -1113,16 +1008,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					else
 					{
 						HWND hwnd = lpMsg->hwnd;
-						if ((pView && pView->PreTranslateMessage(lpMsg))/*|| IsDialogMessage(lpMsg->hwnd, lpMsg)*/)
-						{
-							::DispatchMessage(lpMsg);
-							TranslateMessage(lpMsg);
-							lpMsg->hwnd = NULL;
-							lpMsg->lParam = 0;
-							lpMsg->wParam = 0;
-							lpMsg->message = 0;
-						}
-						else
 						{
 							if (::GetModuleHandle(_T("chrome.dll")))
 							{
@@ -1220,15 +1105,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						lpMsg->message = 0;
 						return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
 					}
-					if (pView)
-					{
-						TranslateMessage(lpMsg);
-						::DispatchMessage(lpMsg);
-						lpMsg->hwnd = NULL;
-						lpMsg->lParam = 0;
-						lpMsg->wParam = 0;
-						lpMsg->message = 0;
-					}
 					if (g_pCosmos->m_pCosmosDelegate)
 					{
 						if (g_pCosmos->m_pCosmosDelegate->OnUniversePreTranslateMessage(lpMsg))
@@ -1304,24 +1180,13 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 							HWND hWnd = nullptr;
 							if (pWnd)
 								hWnd = pWnd->m_hWnd;
-							else if (pView)
-								hWnd = pView->m_hWnd;
+
 							if ((g_pCosmos->m_pActiveXobj->m_nViewType == ActiveX || g_pCosmos->m_pActiveXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0))
 							{
 								if (pWnd)
 									pWnd->PreTranslateMessage(lpMsg);
 								lpMsg->hwnd = NULL;
 								lpMsg->wParam = 0;
-								break;
-							}
-							if (pView)
-							{
-								TranslateMessage(lpMsg);
-								::DispatchMessage(lpMsg);
-								lpMsg->hwnd = NULL;
-								lpMsg->lParam = 0;
-								lpMsg->wParam = 0;
-								lpMsg->message = 0;
 								break;
 							}
 							if (g_pCosmos->m_pActiveHtmlWnd)

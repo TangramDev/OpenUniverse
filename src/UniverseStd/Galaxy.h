@@ -273,8 +273,6 @@ public:
 	CosmosFrameWndInfo*								m_pCosmosFrameWndInfo = nullptr;
 	CWormhole*										m_pWormhole = nullptr;
 	map<CString, CXobj*>							m_mapXobj;
-	map<HWND, CWPFView*>							m_mapWPFView;
-	map<HWND, CWPFView*>							m_mapVisibleWPFView;
 	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}

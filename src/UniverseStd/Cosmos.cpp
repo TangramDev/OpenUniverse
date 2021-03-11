@@ -81,7 +81,6 @@
 #include "GridWnd.h"
 #include "XobjWnd.h"
 #include "Xobj.h"
-#include "WpfView.h"
 #include "Wormhole.h"
 #include "Galaxy.h"
 #include "TangramJavaHelper.h"
@@ -229,7 +228,6 @@ CCosmos::CCosmos()
 	g_pCosmosImpl = this;
 	m_mapValInfo[_T("currenteclipeworkBenchid")] = CComVariant(_T(""));
 	m_mapClassInfo[TGM_NUCLEUS] = RUNTIME_CLASS(CXobjWnd);
-	m_mapClassInfo[_T("wpfctrl")] = RUNTIME_CLASS(CWPFView);
 	m_mapClassInfo[_T("xobj")] = RUNTIME_CLASS(CGridWnd);
 
 	m_mapIPCMsgIndexDic[IPC_NODE_CREARED_ID] = IPC_NODE_CREARED;
@@ -1952,93 +1950,7 @@ STDMETHODIMP CCosmos::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 	CString strID = OLE2T(bstrObjID);
 	strID.Trim();
 	strID.MakeLower();
-	int nPos = strID.Find(_T("@"));
-	if (nPos != -1)
-	{
-		CString strAppID = strID.Mid(nPos + 1);
-		if (strAppID != _T(""))
-		{
-			ICosmos* pRemoteTangram = nullptr;
-			auto it = m_mapRemoteCosmos.find(strAppID);
-			if (it == m_mapRemoteCosmos.end())
-			{
-				CComPtr<IDispatch> pApp;
-				pApp.CoCreateInstance(CComBSTR(strAppID), nullptr, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER);
-				if (pApp)
-				{
-					int nPos = m_strOfficeAppIDs.Find(strAppID);
-					if (nPos != -1)
-					{
-					}
-					else
-					{
-						pApp->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-						if (pRemoteTangram)
-						{
-							pRemoteTangram->AddRef();
-							m_mapRemoteCosmos[strAppID] = pRemoteTangram;
-							LONGLONG h = 0;
-							pRemoteTangram->get_RemoteHelperHWND(&h);
-							HWND hWnd = (HWND)h;
-							if (::IsWindow(hWnd))
-							{
-								CHelperWnd* pWnd = new CHelperWnd();
-								pWnd->m_strID = strAppID;
-								pWnd->Create(hWnd, 0, strAppID, WS_VISIBLE | WS_CHILD);
-								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-							}
-						}
-						else
-						{
-							DISPID dispID = 0;
-							DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
-							VARIANT result = { 0 };
-							EXCEPINFO excepInfo;
-							memset(&excepInfo, 0, sizeof excepInfo);
-							UINT nArgErr = (UINT)-1; // initialize to invalid arg
-							LPOLESTR func = L"Tangram";
-							HRESULT hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
-							if (S_OK == hr)
-							{
-								hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
-								if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
-								{
-									result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-									if (pRemoteTangram)
-									{
-										pRemoteTangram->AddRef();
-										m_mapRemoteCosmos[strAppID] = pRemoteTangram;
-
-										LONGLONG h = 0;
-										pRemoteTangram->get_RemoteHelperHWND(&h);
-										HWND hWnd = (HWND)h;
-										if (::IsWindow(hWnd))
-										{
-											CHelperWnd* pWnd = new CHelperWnd();
-											pWnd->m_strID = strAppID;
-											pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-											m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-										}
-										::VariantClear(&result);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				pRemoteTangram = it->second;
-			}
-			if (pRemoteTangram)
-			{
-				strID = strID.Left(nPos);
-				return pRemoteTangram->CreateCLRObj(CComBSTR(strID), ppDisp);
-			}
-		}
-	}
-	nPos = strID.Find(_T(","));
+	int nPos = strID.Find(_T(","));
 	if (nPos != -1 || strID.CompareNoCase(_T("webruntimeproxy")) == 0 || strID.CompareNoCase(_T("chromert")) == 0)
 	{
 		LoadCLR();
@@ -2177,167 +2089,18 @@ CString CCosmos::Encode(CString strSRC, BOOL bEnCode)
 	}
 }
 
-CString	CCosmos::BuildSipURICodeStr(CString strURI, CString strPrev, CString strFix, CString strData, int n1)
-{
-	CString strGUID = GetNewGUID();
-	CString strHelp1 = _T("");
-	CString strHelp2 = _T("");
-	int nPos = strGUID.Find(_T("-"));
-	strHelp1 = strGUID.Left(nPos);
-	nPos = strGUID.ReverseFind('-');
-	strHelp2 = strGUID.Mid(nPos + 1);
-	CString strTime = _T("");
-	CString strTime2 = _T("");
-	if (strData == _T(""))
-	{
-		CTime startTime = CTime::GetCurrentTime();
-		strTime.Format(_T("%d-%d-%d"), startTime.GetYear(), startTime.GetMonth(), startTime.GetDay());
-		strTime2.Format(_T("%02d:%02d:%02d"), startTime.GetHour(), startTime.GetMinute(), startTime.GetSecond());
-	}
-	else
-	{
-		nPos = strData.Find(_T(" "));
-		strTime = strData.Left(nPos);
-		strTime2 = strData.Mid(nPos + 1);
-	}
-	int n2 = (rand() + 100) % 7 + 2;
-	CString strRet = _T("");
-	if (strURI != _T("") && strPrev != _T("") && strFix != _T(""))
-	{
-		int nPos = strURI.Find(_T("@"));
-		if (nPos != -1)
-		{
-			CString s = _T("");
-			s.Format(_T("%s%s%s%s%s%s%s%s"), strHelp1, strTime2, strPrev, strURI.Left(nPos), strHelp2, strTime, strFix, strURI.Mid(nPos));
-			CString s1 = Encode(s, true);
-			s1.Replace(_T("\r\n"), _T(""));
-			int n = n1 * 10 + n2;
-			int m = (n2 * 2) % 7 + 2;
-			strGUID = GetNewGUID();
-			strGUID.Replace(_T("-"), _T(""));
-			strGUID = strGUID.Left(m);
-			strRet.Format(_T("%s%d%s%d"), strGUID, n1, s1, n2);
-
-			int nLen = strRet.GetLength();
-			CString str = _T("");
-			int nLen1 = nLen;
-			while (nLen1)
-			{
-				nLen1 -= n;
-				strGUID = GetNewGUID();
-				strGUID.Replace(_T("-"), _T(""));
-				if (nLen1)
-					strGUID = strGUID.Left(m);
-				str += strRet.Left(n);
-				str += strGUID;
-				strRet = strRet.Mid(n);
-				if ((nLen1 < n) && nLen1)
-				{
-					str += strRet;
-					strGUID = GetNewGUID();
-					strGUID.Replace(_T("-"), _T(""));
-					str += strGUID.Left(17);
-					nLen1 = 0;
-				}
-			}
-			strRet = str.MakeReverse();
-			nPos = strRet.Find(_T("="));
-			if (nPos != -1)
-			{
-				strGUID = GetNewGUID();
-				strGUID.Replace(_T("-"), _T(""));
-				CString strGUID2 = GetNewGUID();
-				strGUID2.Replace(_T("-"), _T(""));
-				strRet.Replace(_T("="), strGUID);
-				strRet = strGUID.MakeReverse() + strGUID2.Left(13) + strRet;
-			}
-		}
-	}
-	return strRet;
-}
-
 CString CCosmos::tangram_for_eclipse(CString strKey, CString strData, CString strFeatures)
 {
 	return _T("");
 }
 
-CString	CCosmos::GetDataFromStr(CString strCoded, CString& strTime, CString strPrev, CString strFix, int n1)
-{
-	CString strRet = _T("");
-	if (strCoded != _T(""))
-	{
-		CString strKey = strCoded.Left(32);
-		CString strX = strCoded;
-		int nCount = strX.Replace(strKey.MakeReverse(), _T("="));
-		if (nCount == 1)
-		{
-			strCoded = strX.Mid(32 + 13);
-		}
-		strCoded = strCoded.MakeReverse();
-		int nLen = strCoded.GetLength();
-		strRet = strCoded.Left(nLen - 17);
-		CString s1 = strRet.Mid(nLen - 18);
-		strRet = strCoded.Left(nLen - 18);
-		int n2 = _wtoi(s1);
-		int n = n1 * 10 + n2;
-		int m = (n2 * 2) % 7 + 2;
-		nLen = strCoded.GetLength();
-		int nIndex = -1;
-		CString str = _T("");
-		while (nLen)
-		{
-			str += strRet.Left(n);
-			if (nLen >= m)
-			{
-				strRet = strRet.Mid(n + m);
-				nLen = strRet.GetLength();
-			}
-			else
-			{
-				nLen = 0;
-			}
-		}
-		strRet = str;
-		strRet = strRet.Mid(m + 1);
-		strRet = Encode(strRet, false);
-		strRet = strRet.MakeReverse();
-		strRet.Replace(strPrev, _T(""));
-		strRet.Replace(strFix, _T(""));
-		strRet = strRet.Mid(8);
-		CString strTime1 = strRet.Left(8);
-		strRet = strRet.Mid(8);
-		int nPos = strRet.Find(_T("@"));
-		CString strSip2 = strRet.Mid(nPos);
-		strRet = strRet.Left(nPos);
-		CString strTime2 = strRet.Mid(strRet.GetLength() - 10);
-		strRet = strRet.Left(strRet.GetLength() - 22);
-		strRet += strSip2;
-		strTime2 += _T(" ");
-		strTime2 += strTime1;
-		strTime = strTime2;
-	}
-	return strRet;
-}
-
 STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
 {
-	if (::IsWindow(m_hHostWnd) == false)
-	{
-		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-		if (::IsWindow(m_hHostWnd))
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theApp.m_hInstance, NULL);
-	}
-	*pVal = (LONGLONG)m_hHostWnd;
 	return S_OK;
 }
 
 STDMETHODIMP CCosmos::get_DocTemplate(BSTR bstrKey, LONGLONG* pVal)
 {
-	CString strKey = OLE2T(bstrKey);
-	strKey.MakeLower();
-	auto it = m_mapTemplateInfo.find(strKey);
-	if (it != m_mapTemplateInfo.end())
-		*pVal = (LONGLONG)it->second;
 	return S_OK;
 }
 
@@ -2849,65 +2612,6 @@ STDMETHODIMP CCosmos::put_Extender(ICosmosExtender* newVal)
 
 STDMETHODIMP CCosmos::CreateCosmosCtrl(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl)
 {
-	CString strAppID = OLE2T(bstrAppID);
-	strAppID.Trim();
-	strAppID.MakeLower();
-	if (strAppID == _T(""))
-	{
-		return CoCreateInstance(CLSID_CosmosCtrl, NULL, CLSCTX_ALL, IID_ICosmosCtrl, (LPVOID*)ppRetCtrl);
-	}
-	auto it = m_mapRemoteCosmos.find(strAppID);
-	if (it == m_mapRemoteCosmos.end())
-	{
-		CComPtr<IDispatch> pApp;
-		pApp.CoCreateInstance(bstrAppID, nullptr, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER);
-		if (pApp)
-		{
-			int nPos = m_strOfficeAppIDs.Find(strAppID);
-			if (nPos == -1)
-			{
-				DISPID dispID = 0;
-				DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
-				VARIANT result = { 0 };
-				EXCEPINFO excepInfo;
-				memset(&excepInfo, 0, sizeof excepInfo);
-				UINT nArgErr = (UINT)-1; // initialize to invalid arg
-				LPOLESTR func = L"Tangram";
-				HRESULT hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
-				if (S_OK == hr)
-				{
-					hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
-					if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
-					{
-						ICosmos* pCloudAddin = nullptr;
-						result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pCloudAddin);
-						if (pCloudAddin)
-						{
-							pCloudAddin->AddRef();
-							m_mapRemoteCosmos[strAppID] = pCloudAddin;
-
-							LONGLONG h = 0;
-							pCloudAddin->get_RemoteHelperHWND(&h);
-							HWND hWnd = (HWND)h;
-							if (::IsWindow(hWnd))
-							{
-								CHelperWnd* pWnd = new CHelperWnd();
-								pWnd->m_strID = strAppID;
-								pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-							}
-							::VariantClear(&result);
-							return pCloudAddin->CreateCosmosCtrl(CComBSTR(L""), ppRetCtrl);
-						}
-					}
-				}
-			}
-		}
-	}
-	else
-	{
-		return it->second->CreateCosmosCtrl(CComBSTR(L""), ppRetCtrl);
-	}
 	return S_OK;
 }
 

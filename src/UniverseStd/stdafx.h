@@ -153,7 +153,6 @@ using namespace concurrency;
 
 class CBKWnd;
 class CXobj;
-class CWPFView;
 class CXobjWnd;
 class CCosmos;
 class CGalaxy;

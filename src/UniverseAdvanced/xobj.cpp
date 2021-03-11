@@ -61,7 +61,6 @@ CXobj::CXobj()
 	m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
 	m_bCreated = false;
-	m_bNodeDocComplete = false;
 	m_varTag.vt = VT_EMPTY;
 	m_strKey = _T("");
 	m_strURL = _T("");

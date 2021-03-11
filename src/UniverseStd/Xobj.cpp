@@ -34,7 +34,6 @@
 #include "GridWnd.h"
 #include "EclipsePlus\EclipseAddin.h"
 #include "Wormhole.h"
-#include "WPFView.h"
 #include "universe.c"
 #include "chromium/Browser.h"
 #include "chromium/WebPage.h"
@@ -51,7 +50,6 @@ CXobj::CXobj()
 	m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
 	m_bCreated = false;
-	m_bNodeDocComplete = false;
 	m_varTag.vt = VT_EMPTY;
 	m_strKey = _T("");
 	m_strURL = _T("");

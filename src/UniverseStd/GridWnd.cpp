@@ -29,7 +29,6 @@
 #include "Xobj.h"
 #include "Galaxy.h"
 #include "XobjWnd.h"
-#include "WPFView.h"
 #include "GridWnd.h"
 #include "chromium/Browser.h"
 #include "chromium/WebPage.h"
