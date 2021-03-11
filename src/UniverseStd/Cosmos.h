@@ -223,7 +223,6 @@ public:
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 
 	STDMETHOD(NavigateNode)(IXobj* pXobj, BSTR bstrObjID, BSTR bstrXml, IXobj** pVal);
-	STDMETHOD(ActiveCLRMethod)(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData);
 	STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
 	STDMETHOD(CreateCLRObj)(BSTR bstrObjID, IDispatch** ppDisp);
@@ -238,9 +237,7 @@ public:
 	STDMETHOD(GetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR* bstrVal);
 	STDMETHOD(GetWindowClientDefaultNode)(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClsName, BSTR bstrGalaxyClusterName, IXobj** ppXobj);
 	STDMETHOD(GetItemText)(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, BSTR* bstrRet);
-	STDMETHOD(GetCLRControl)(IDispatch* CtrlDisp, BSTR bstrNames, IDispatch** ppRetDisp);
 	STDMETHOD(MessageBox)(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, int* nRet);
-	STDMETHOD(NewGUID)(BSTR* retVal);
 	STDMETHOD(StartApplication)(BSTR bstrAppID, BSTR bstrXml);
 	STDMETHOD(SetCtrlValueByName)(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, BSTR bstrVal);
 	STDMETHOD(SetItemText)(IXobj* pXobj, long nCtrlID, BSTR bstrRet);
@@ -255,7 +252,6 @@ public:
 	STDMETHOD(CosmosGetItemID)(IDispatch* RibbonControl, long nIndex, BSTR* bstrID) { return S_OK; };
 	STDMETHOD(ObserveGalaxys)(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSave);
 	STDMETHOD(DeletePage)(LONGLONG PageHandle);
-	STDMETHOD(LoadDocComponent)(BSTR bstrLib, LONGLONG* llAppProxy);
 	STDMETHOD(NewWorkBench)(BSTR bstrCosmosDoc, IWorkBenchWindow** ppWorkBenchWindow);
 	STDMETHOD(CreateOutLookObj)(BSTR bstrObjType, int nType, BSTR bstrURL, IDispatch** ppRetDisp);
 	STDMETHOD(InitEclipseApp)();

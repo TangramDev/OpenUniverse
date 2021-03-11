@@ -2358,7 +2358,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		CWnd* pWnd = m_pWorkXobj->m_pHostWnd;
 
 		CWnd::FromHandle(hParent)->ScreenToClient(&rc);
-		for (auto it : m_mapXobj)
+		for (auto& it : m_mapXobj)
 		{
 			HWND hwnd = it.second->m_pHostWnd->m_hWnd;
 			BOOL bTop = (it.second == m_pWorkXobj);
@@ -2401,7 +2401,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 
-		for (auto it : m_mapGalaxyProxy)
+		for (auto& it : m_mapGalaxyProxy)
 		{
 			it.second->OnExtend(m_pWorkXobj, m_strCurrentKey, strXml);
 		}
@@ -2417,9 +2417,11 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		if (m_pWorkXobj->m_strCaption != _T(""))
 		{
 			::SetWindowText(::GetParent(m_hWnd), m_pWorkXobj->m_strCaption);
+			m_bObserveState = true;
+			g_pCosmos->m_bSZMode = true;
 		}
 	}
-	m_bObserveState = true;
+
 	HostPosChanged();
 	//Add 20200218
 	if (m_pBindingXobj)
@@ -2461,11 +2463,13 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		IXobj* pXobj = nullptr;
 		m_pWorkXobj->m_pHostGalaxy->Observe(CComBSTR(m_pWorkXobj->m_pHostGalaxy->m_strCurrentKey), CComBSTR(""), &pXobj);
 	}
-	for (auto it : m_pWorkXobj->m_mapExtendNode)
+	for (auto& it : m_pWorkXobj->m_mapExtendNode)
 	{
 		IXobj* pXobj = nullptr;
 		it.first->Observe(CComBSTR(it.second), CComBSTR(""), &pXobj);
 	}
+
+	CGalaxy* pGalaxy = nullptr;
 	if (m_pHostWebBrowserWnd)
 	{
 		IXobj* pXobj = nullptr;
@@ -2509,11 +2513,9 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				}
 			}
 		}
-		::SendMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
+		//::SendMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 		::PostMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 	}
-
-	CGalaxy* pGalaxy = nullptr;
 	if (m_pCosmosFrameWndInfo == nullptr)
 	{
 		HWND hFrameWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, m_hWnd);

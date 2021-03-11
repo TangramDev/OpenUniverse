@@ -1,9 +1,9 @@
 COMPANY_FULLNAME=Tangram Team
 COMPANY_SHORTNAME=Tangram Team
-PRODUCT_FULLNAME=Universe Runtime Component
-PRODUCT_SHORTNAME=Universe Runtime Component
-PRODUCT_INSTALLER_FULLNAME=Universe Installer
-PRODUCT_INSTALLER_SHORTNAME=Universe Installer
+PRODUCT_FULLNAME=WebRuntime Component
+PRODUCT_SHORTNAME=WebRuntime Component
+PRODUCT_INSTALLER_FULLNAME=WebRuntime Installer
+PRODUCT_INSTALLER_SHORTNAME=WebRuntime Installer
 COPYRIGHT=Copyright 2019 Tangram Team. All rights reserved.
 MAC_BUNDLE_ID=org.chromium.Chromium
 MAC_CREATOR_CODE=Cr24

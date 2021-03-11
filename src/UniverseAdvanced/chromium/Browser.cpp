@@ -549,7 +549,7 @@ namespace Browser {
 
 	LRESULT CBrowser::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
-		if (m_bDestroy)
+		if (m_bDestroy || !::IsWindowVisible(m_hWnd) || lpwndpos->flags == (SWP_NOSIZE | SWP_NOMOVE))
 			return DefWindowProc(uMsg, wParam, lParam);
 		if (g_pCosmos->m_pCLRProxy)
 		{

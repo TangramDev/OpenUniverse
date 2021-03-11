@@ -83,8 +83,8 @@ void COutputWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);
 
-	// Tab control should cover the whole client area:
-	m_wndTabs.SetWindowPos (nullptr, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE |SWP_NOREDRAW| SWP_NOZORDER);
+	// Tab control should cover the whole client area:SWP_NOMOVE |
+	m_wndTabs.SetWindowPos (nullptr, -1, -1, cx, cy, SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
 void COutputWnd::AdjustHorzScroll(CListBox& wndListBox)

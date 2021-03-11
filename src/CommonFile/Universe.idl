@@ -403,15 +403,15 @@ interface ICosmos : IDispatch {
 	[id(0x00105), helpstring("method GetGalaxy")] HRESULT GetGalaxy(LONGLONG hHostWnd, [out, retval] IGalaxy** ppGalaxy);
 	[id(0x00106)] HRESULT GetItemText(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, [out, retval] BSTR* bstrRet);
 	[id(0x00107)] HRESULT SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText);
-	[id(0x00108)] HRESULT GetCLRControl(IDispatch* CtrlDisp, BSTR bstrName, [out, retval] IDispatch** ppRetDisp);
+	[id(0x00108)] HRESULT FireCosmosEventObj(ICosmosEventObj* pCosmosEventObj);
 	[id(0x00109), helpstring("method MessageBox")] HRESULT MessageBox(LONGLONG hWnd, BSTR bstrContext, BSTR bstrCaption, long nStyle, [out, retval] int* nRet);
 	[id(0x0010a)] HRESULT DeletePage(LONGLONG PageHandle);
 	[id(0x0010b), helpstring("method SetHostFocus")] HRESULT SetHostFocus(void);
 	[id(0x0010c)] HRESULT UpdateXobj(IXobj* pXobj);
-	[id(0x0010d), helpstring("method NewGUID")] HRESULT NewGUID([out, retval] BSTR* retVal);
+	[id(0x0010d)] HRESULT CreateCosmosEventObj([out, retval]ICosmosEventObj** ppCosmosEventObj);
 	[id(0x0010e)] HRESULT InitEclipseApp();
 	[id(0x0010f), helpstring("method CreateOutLookObj")] HRESULT CreateOutLookObj(BSTR bstrObjType, int nType, BSTR bstrURL, [out, retval] IDispatch** ppRetDisp);
-	[id(0x00110)] HRESULT LoadDocComponent(BSTR bstrLib, [out, retval] LONGLONG* llAppProxy);
+	[id(0x00110)] HRESULT ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 	[id(0x00111)] HRESULT GetCtrlByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] IDispatch** ppCtrlDisp);
 	[id(0x00112)] HRESULT GetXobjFromHandle(LONGLONG hWnd, [out, retval] IXobj** ppRetXobj);
 	[id(0x00113)] HRESULT GetCtrlValueByName(IDispatch* pCtrl, BSTR bstrName, VARIANT_BOOL bFindInChild, [out, retval] BSTR* bstrVal);
@@ -422,9 +422,6 @@ interface ICosmos : IDispatch {
 	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IXobj** ppXobj);
 	[id(0x00119), helpstring("method Create ChromeWebBrowser")] HRESULT CreateBrowser(ULONGLONG hParentWnd, BSTR strUrls, [out, retval]IBrowser** ppRet);
 	[id(0x0011a)] HRESULT NewWorkBench(BSTR bstrCosmosDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
-	[id(0x0011b)] HRESULT CreateCosmosEventObj([out, retval]ICosmosEventObj** ppCosmosEventObj);
-	[id(0x0011c)] HRESULT FireCosmosEventObj(ICosmosEventObj* pCosmosEventObj);
-	[id(0x0011d)] HRESULT ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 
 	[id(0x001000), helpstring("method CosmosCommand")] HRESULT CosmosCommand(IDispatch* RibbonControl);
 	[id(0x001001), helpstring("method CosmosGetImage")] HRESULT CosmosGetImage(BSTR strValue, [out, retval] IPictureDisp** ppdispImage);

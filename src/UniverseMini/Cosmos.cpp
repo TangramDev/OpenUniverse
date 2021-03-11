@@ -874,36 +874,6 @@ CString CCosmos::GetNewGUID()
 	return strGUID;
 }
 
-STDMETHODIMP CCosmos::NewGUID(BSTR* retVal)
-{
-	*retVal = GetNewGUID().AllocSysString();
-	return S_OK;
-}
-
-STDMETHODIMP CCosmos::LoadDocComponent(BSTR bstrLib, LONGLONG* llAppProxy)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CCosmos::GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames, IDispatch** ppRetDisp)
-{
-	//CString strNames = OLE2T(bstrNames);
-	//if (m_pCLRProxy && strNames != _T("") && CtrlDisp)
-	//	*ppRetDisp = m_pCLRProxy->GetCLRControl(CtrlDisp, bstrNames);
-
-	return S_OK;
-}
-//
-//STDMETHODIMP CCosmos::ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData)
-//{
-//	LoadCLR();
-//
-//	if (m_pCLRProxy)
-//		m_pCLRProxy->ActiveCLRMethod(bstrObjID, bstrMethod, bstrParam, bstrData);
-//
-//	return S_OK;
-//}
-
 STDMETHODIMP CCosmos::CreateGalaxyCluster(LONGLONG hWnd, IGalaxyCluster** ppGalaxyCluster)
 {
 	HWND _hWnd = (HWND)hWnd;
