@@ -569,7 +569,7 @@ namespace Browser {
 					BrowserLayout();
 				if (m_pParentXobj)
 				{
-					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 				}
 				
 				if (m_pVisibleWebWnd->m_pGalaxy)
