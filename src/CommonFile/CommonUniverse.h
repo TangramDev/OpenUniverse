@@ -566,7 +566,6 @@ namespace CommonUniverse {
 			m_hMainWnd = nullptr;
 			m_hCosmosWnd = nullptr;
 			m_pCLRProxy = nullptr;
-			m_hChildHostWnd = nullptr;
 			m_pActiveAppProxy = nullptr;
 			m_pCosmosAppProxy = nullptr;
 			m_pUniverseAppProxy = nullptr;
@@ -600,12 +599,10 @@ namespace CommonUniverse {
 		HWND									m_hEclipseHideWnd;
 		HWND									m_hMainWnd;
 		HWND									m_hHostWnd;
-		HWND									m_hChildHostWnd;
 		HWND									m_hCosmosWnd;
 		HWND									m_hFormNodeWnd;
 		HWND									m_hParent;
 		HWND									m_hHostBrowserWnd;
-		HWND									m_hVSToolBoxWnd;
 		HICON									m_hLargeIcon;
 		HICON									m_hSmallIcon;
 

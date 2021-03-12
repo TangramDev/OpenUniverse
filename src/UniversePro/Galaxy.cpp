@@ -2938,7 +2938,7 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 	case 2048:
 	{
-		if (m_hWnd != g_pCosmos->m_hChildHostWnd)
+		if (m_hWnd)
 		{
 			CtrlInfo* pCtrlInfo = (CtrlInfo*)wParam;
 			if (pCtrlInfo && pCtrlInfo->m_pGalaxyCluster)

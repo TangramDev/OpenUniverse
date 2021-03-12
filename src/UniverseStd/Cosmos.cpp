@@ -185,9 +185,7 @@ CCosmos::CCosmos()
 	m_hActiveWnd = NULL;
 	m_hTemplateWnd = NULL;
 	m_hTemplateChildWnd = NULL;
-	m_hChildHostWnd = NULL;
 	m_hCBTHook = NULL;
-	m_hVSToolBoxWnd = NULL;
 	m_hForegroundIdleHook = NULL;
 	m_lpszSplitterClass = nullptr;
 	m_pGalaxyCluster = nullptr;
@@ -428,10 +426,9 @@ void CCosmos::Init()
 		}
 	}
 
-	if (m_nAppID != 9 && m_bOfficeApp == false && ::IsWindow(m_hHostWnd) == false)
+	if (::IsWindow(m_hHostWnd) == false)
 	{
 		m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, HWND_MESSAGE, 0, theApp.m_hInstance, NULL);
-		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
 	}
 }
 
@@ -1286,7 +1283,7 @@ void CCosmos::BrowserAppStart()
 	}
 	if (g_pCosmos->m_strStartupURL != _T(""))
 	{
-		if ((m_nAppType != APP_BROWSER) && g_pCosmos->m_pBrowserFactory && ::IsWindow(m_hChildHostWnd)) {
+		if ((m_nAppType != APP_BROWSER) && g_pCosmos->m_pBrowserFactory && ::IsWindow(m_hCosmosWnd)) {
 			if (m_nAppType == APP_BROWSERAPP)
 				m_hMainWnd = m_hHostWnd;
 			::PostMessage(m_hHostWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
@@ -1298,7 +1295,7 @@ void CCosmos::BrowserAppStart()
 				CTangramXmlParse* pParse = nullptr;
 				m_Parse[_T("url")].put_text(m_strStartupURL);
 			}
-			m_hHostBrowserWnd = m_pBrowserFactory->CreateBrowser((HWND)m_hChildHostWnd, m_Parse.xml());
+			m_hHostBrowserWnd = m_pBrowserFactory->CreateBrowser((HWND)m_hCosmosWnd, m_Parse.xml());
 		}
 		::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 2019111701);
 	}
@@ -1371,7 +1368,6 @@ CString CCosmos::InitEclipse(_TCHAR* jarFile)
 	if (m_hHostWnd == NULL)
 	{
 		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, theApp.m_hInstance, NULL);
 	}
 
 	jclass			jarFileClass = nullptr;
@@ -2335,7 +2331,7 @@ HRESULT CCosmos::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** p
 {
 	HWND hPWnd = (HWND)hParentWnd;
 	if (hParentWnd == 1)
-		hPWnd = g_pCosmos->m_hChildHostWnd;
+		hPWnd = g_pCosmos->m_hCosmosWnd;
 	CString strUrls = OLE2T(bstrUrls);
 	CString strPath = m_strAppPath;
 	strUrls.Replace(_T("host:"), strPath);

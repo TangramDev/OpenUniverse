@@ -1772,7 +1772,7 @@ namespace Universe
             strUrls = strUrls->Replace(L"host:", BSTR2STRING(strPath));
             if (ParentHandle == (IntPtr)1)
             {
-                hPWnd = theApp.m_pCosmosImpl->m_hChildHostWnd;
+                hPWnd = theApp.m_pCosmosImpl->m_hCosmosWnd;
             }
 
             HWND hWnd = theApp.m_pCosmosImpl->m_pBrowserFactory->CreateBrowser(hPWnd, strUrls);

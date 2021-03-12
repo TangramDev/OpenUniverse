@@ -347,13 +347,7 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	}
 	break;
 	case WM_WINDOWPOSCHANGED:
-		if (hWnd == g_pCosmos->m_hHostWnd)
-		{
-			RECT rc;
-			::GetClientRect(g_pCosmos->m_hHostWnd, &rc);
-			::SetWindowPos(g_pCosmos->m_hChildHostWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-		}
-		else if (hWnd == g_pCosmos->m_hTemplateWnd)
+		if (hWnd == g_pCosmos->m_hTemplateWnd)
 		{
 			RECT rc;
 			::GetClientRect(g_pCosmos->m_hTemplateWnd, &rc);

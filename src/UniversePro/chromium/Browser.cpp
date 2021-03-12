@@ -549,7 +549,7 @@ namespace Browser {
 
 	LRESULT CBrowser::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
-		if (m_bDestroy||!::IsWindowVisible(m_hWnd)||lpwndpos->flags == (SWP_NOSIZE | SWP_NOMOVE))
+		if (m_bDestroy || !::IsWindowVisible(m_hWnd) || lpwndpos->flags == (SWP_NOSIZE | SWP_NOMOVE))
 			return DefWindowProc(uMsg, wParam, lParam);
 		if (g_pCosmos->m_pCLRProxy)
 		{
@@ -696,6 +696,12 @@ namespace Browser {
 
 				if (m_pVisibleWebWnd->m_pGalaxy)
 				{
+					//CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
+					//if (pObj->m_nViewType == Grid)
+					//{
+					//	CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+					//	pWnd->RecalcLayout();
+					//}
 					::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
 				}
 			}

@@ -95,11 +95,6 @@ namespace OfficePlus
 		if (_pAddInInst)
 			_pAddInInst->put_Object((ICosmos*)this);
 
-		if (::IsWindow(m_hHostWnd) == false)
-		{
-			m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-			m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, theApp.m_hInstance, NULL);
-		}
 		OnConnection(pApplication, ConnectMode);
 		return S_OK;
 	}

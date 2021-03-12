@@ -364,13 +364,7 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	}
 	break;
 	case WM_WINDOWPOSCHANGED:
-		if (hWnd == g_pCosmos->m_hHostWnd)
-		{
-			RECT rc;
-			::GetClientRect(g_pCosmos->m_hHostWnd, &rc);
-			::SetWindowPos(g_pCosmos->m_hChildHostWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-		}
-		else if (hWnd == g_pCosmos->m_hTemplateWnd)
+		if (hWnd == g_pCosmos->m_hTemplateWnd)
 		{
 			RECT rc;
 			::GetClientRect(g_pCosmos->m_hTemplateWnd, &rc);
@@ -755,7 +749,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
 			{
 				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
-				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
 		}
 		else if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
