@@ -22,7 +22,7 @@
  *
  *******************************************************************************/
 
-// CosmosProxy.cpp : Implementation of CTangramNavigator
+ // CosmosProxy.cpp : Implementation of CTangramNavigator
 
 #include "stdafx.h"
 #include "dllmain.h" 
@@ -420,14 +420,14 @@ CWPFObj* CCosmosProxy::CreateWPFControl(IXobj* pXobj, HWND hPWnd, UINT nID)
 				try {
 					pWpfControlWrapper->m_pSource->RootVisual = pWpfControlWrapper->m_pUIElement;
 				}
-				catch (Markup::XamlParseException ^ e)
+				catch (Markup::XamlParseException^ e)
 				{
 					Debug::WriteLine(L"Cosmos WPFControlWrapper Exception 1: " + e->Message);
 					Debug::WriteLine(L"Cosmos WPFControlWrapper Exception 1: " + e->InnerException->Message);
 				}
 			}
 		}
-		catch (System::Exception ^ ex)
+		catch (System::Exception^ ex)
 		{
 			Debug::WriteLine(L"Cosmos WPFControlWrapper Exception 1: " + ex->Message);
 			Debug::WriteLine(L"Cosmos WPFControlWrapper Exception 1: " + ex->InnerException->Message);
@@ -878,7 +878,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 			if (String::IsNullOrEmpty(name))
 				name = strType;
 			CTangramXmlParse* _pChild = pParse->GetChild(name->ToLower());
-			if (_pChild&&pChild != pActiveCtrl)
+			if (_pChild && pChild != pActiveCtrl)
 			{
 				if (pActiveCtrl == nullptr)
 				{
@@ -942,7 +942,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 									}
 								}
 							}
-							else 
+							else
 							{
 								Control^ pBtn = (Control^)pChild;
 								if (_pChild)
@@ -1158,7 +1158,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 								}
 							}
 						}
-						else 
+						else
 						{
 							Control^ pBtn = (Control^)pChild;
 							CTangramXmlParse* _pChild = pParse->GetChild(pChild->Name);
@@ -1587,7 +1587,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		theApp.InitCosmosApp(false);
 		return nullptr;
 	}
-	if (bstrObjID.Find(_T("<")) != -1) 
+	if (bstrObjID.Find(_T("<")) != -1)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(bstrObjID))
@@ -1611,7 +1611,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 				{
 					pWebPage = (IWebPage*)nHandle;
 					CTangramXmlParse* pChild = m_Parse.GetChild(_T("webui"));
-					if (pChild&&pWebPage != nullptr)
+					if (pChild && pWebPage != nullptr)
 					{
 						pPage = gcnew WebPage(pWebPage);
 						pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
@@ -1633,7 +1633,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							pProxyBase->OnWinFormCreated((HWND)thisForm->Handle.ToPointer());
 						}
 						int nWidth = m_Parse.attrInt(_T("width"), 0);
-						int nHeight= m_Parse.attrInt(_T("height"), 0);
+						int nHeight = m_Parse.attrInt(_T("height"), 0);
 						if (nWidth * nHeight)
 						{
 							thisForm->Width = nWidth;
@@ -1641,7 +1641,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						}
 						if (m_pCurrentPForm)
 						{
-							if(thisForm->IsMdiContainer==false)
+							if (thisForm->IsMdiContainer == false)
 								thisForm->MdiParent = m_pCurrentPForm;
 							m_pCurrentPForm = nullptr;
 						}
@@ -1774,6 +1774,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pCosmosSession);
 								pCosmosSession->SendMessage();
 								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_COSMOSMSG, 0, 20201114);
+								::SetActiveWindow((HWND)thisForm->Handle.ToPointer());
 								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 							}
 							else
@@ -1799,7 +1800,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							int nModel = m_Parse.attrInt(_T("model"), 0);
 							int nAddSubFormMap = m_Parse.attrInt(_T("addsubform"), 0);
-							if(nAddSubFormMap)
+							if (nAddSubFormMap)
 								::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
 							switch (nModel)
 							{
@@ -1812,7 +1813,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							case 2:
 								thisForm->StartPosition = FormStartPosition::CenterParent;
 								thisForm->WindowState = FormWindowState::Minimized;
-								
+
 
 								if (nModel)
 									thisForm->Show(pPage);
@@ -1825,20 +1826,15 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								thisForm->WindowState = FormWindowState::Normal;
 								::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 								thisForm->Focus();
+								::SetActiveWindow((HWND)thisForm->Handle.ToPointer());
 								::PostMessage((HWND)thisForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 20201225);
 								break;
 							}
 						}
 						else
-							thisForm->Show();
-
-						CTangramXmlParse* pChildForms = m_Parse.GetChild(_T("childforms"));
-						if (pChildForms)
 						{
-							::SendMessage((HWND)thisForm->Handle.ToPointer(), WM_COSMOSMSG, (WPARAM)pChildForms, 20190601);
+							thisForm->Show();
 						}
-						thisForm->Focus();
-						::PostMessage((HWND)thisForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 20201225);
 					}
 					return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 				}
@@ -2180,7 +2176,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 				if (it != m_mapForm.end())
 					m_mapForm.erase(it);
 				theApp.m_pCosmosImpl->m_hFormNodeWnd = hWnd;
-				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD );// | WS_VISIBLE);
+				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD);// | WS_VISIBLE);
 				::SetWindowLongPtr(hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & ~(WS_EX_APPWINDOW/*|WS_EX_CLIENTEDGE*/));
 				::SetParent(hWnd, (HWND)hParent);
 				Universe::Cosmos::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pXobj);
@@ -2214,7 +2210,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 				_pXobj->m_pHostObj = pElementHost;
 				return pDisp;
 			}
-			catch (System::Exception ^ ex)
+			catch (System::Exception^ ex)
 			{
 				Debug::WriteLine(L"Cosmos WPFControlWrapper Exception 1: " + ex->Message);
 				if (ex->InnerException)
@@ -2361,7 +2357,7 @@ void CCosmosProxy::ReleaseCosmosObj(IDispatch* pDisp)
 			theApp.m_pCosmosImpl->m_mapXobj.erase(it);
 
 		int dw = Marshal::Release((IntPtr)nValue);
-		while(dw>0)
+		while (dw > 0)
 			dw = Marshal::Release((IntPtr)nValue);
 		//delete pCtrl;
 	}
@@ -2411,7 +2407,7 @@ void CCosmosProxy::SelectObj(IDispatch* CtrlDisp)
 		}
 
 	}
-	catch (System::Exception ^ e)
+	catch (System::Exception^ e)
 	{
 		String^ strInfo = e->Message;
 	}
@@ -2588,7 +2584,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 					CTangramXmlParse* pChild = m_Parse.GetChild(i);
 					IXobj* pRefXobj = nullptr;
 					__int64 hRefWnd = pChild->attrInt64(_T("handle"));
-					CString strName = pChild->attr(_T("refname"),_T(""));
+					CString strName = pChild->attr(_T("refname"), _T(""));
 					CosmosInfo* pInfo = (CosmosInfo*)::GetProp((HWND)hRefWnd, _T("CosmosInfo"));
 					if (pInfo)
 						pRefXobj = pInfo->m_pXobj;
@@ -3824,37 +3820,6 @@ void CCosmosProxy::OnWinFormActivate(HWND hForm, int nState)
 					menuitem->HideDropDown();
 				}
 			}
-			//else
-			//{
-			//	Form^ pForm = (Form^)pCtrl;
-			//	for each (Control ^ ctrl in pForm->Controls)
-			//	{
-			//		if (ctrl->GetType() == (MenuStrip::typeid))
-			//		{
-			//			pMenuStrip = (MenuStrip^)ctrl;
-			//			theAppProxy.m_mapFormMenuStrip[(HWND)pForm->Handle.ToPointer()] = pMenuStrip;
-			//			for each (ToolStripItem ^ item in pMenuStrip->Items)
-			//			{
-			//				ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)item;
-			//				String^ strText = menuitem->Text;
-			//				int nIndex = strText->IndexOf(L"&");
-			//				if (nIndex != -1)
-			//				{
-			//					char s = strText[nIndex + 1];
-			//				}
-			//				System::Windows::Forms::Keys keys = menuitem->ShortcutKeys;
-			//				if(keys!= System::Windows::Forms::Keys::None)
-			//				{ 
-			//				}
-			//			}
-			//			break;
-			//		}
-			//	}
-			//}
-
-			//if (pMenuStrip)
-			//{
-			//}
 		}
 	}
 	break;

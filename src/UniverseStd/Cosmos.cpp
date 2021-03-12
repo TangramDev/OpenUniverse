@@ -346,7 +346,7 @@ void CCosmos::Init()
 	if (m_nAppID != 9)
 	{
 		CosmosInit();
-		HWND hWnd = ::CreateWindowEx(WS_EX_NOACTIVATE, _T("Tangram Message Window Class"), _T(""), WS_VISIBLE | WS_POPUP, 0, 0, 0, 0, nullptr, nullptr, theApp.m_hInstance, nullptr);
+		m_hCosmosWnd = ::CreateWindowEx(WS_EX_NOACTIVATE, _T("Tangram Message Window Class"), _T(""), WS_CHILD, 0, 0, 0, 0, HWND_MESSAGE, nullptr, theApp.m_hInstance, nullptr);
 	}
 
 
@@ -430,7 +430,7 @@ void CCosmos::Init()
 
 	if (m_nAppID != 9 && m_bOfficeApp == false && ::IsWindow(m_hHostWnd) == false)
 	{
-		m_hHostWnd = ::CreateWindowEx(WS_EX_PALETTEWINDOW, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, NULL, 0, theApp.m_hInstance, NULL);
+		m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, HWND_MESSAGE, 0, theApp.m_hInstance, NULL);
 		m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, m_hHostWnd, 0, theApp.m_hInstance, NULL);
 	}
 }
@@ -894,7 +894,8 @@ void CCosmos::TangramInitFromeWeb()
 							pWnd->m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
 						}
 					}
-					::SetFocus(::GetAncestor(pWnd->m_hWnd,GA_PARENT));
+					::SetParent(g_pCosmos->m_hHostWnd, g_pCosmos->m_hMainWnd);
+					//::SetFocus(::GetAncestor(pWnd->m_hWnd,GA_PARENT));
 				}
 			}
 		}

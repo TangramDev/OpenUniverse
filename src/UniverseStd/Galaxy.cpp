@@ -833,6 +833,14 @@ LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	g_pCosmos->m_pActiveWinFormWnd = this;
 	if (g_pCosmos->m_pCLRProxy)
 	{
+		if (LOWORD(wParam) != WA_INACTIVE)
+		{
+
+		}
+		else
+		{
+			TRACE(_T(""));
+		}
 		g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
 	}
 	return lRes;

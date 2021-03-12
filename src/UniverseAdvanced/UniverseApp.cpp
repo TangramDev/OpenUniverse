@@ -899,7 +899,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				pCosmosFrameWndInfo->m_hClient = hWnd;
 			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
 			{
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, hWnd, 0, theApp.m_hInstance, NULL);
+				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, hWnd, 0, theApp.m_hInstance, NULL);
 				g_pCosmos->m_hChildHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, 0, theApp.m_hInstance, NULL);
 			}
 		}

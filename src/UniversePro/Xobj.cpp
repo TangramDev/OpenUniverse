@@ -1270,7 +1270,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	NodeCreated();
-	m_pXobjShareData->m_mapLayoutNodes[m_strName] = this;
 	if (m_strID.CompareNoCase(_T("treeview")))
 	{
 		m_nRows = 1;
@@ -1464,7 +1463,6 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	}
 	if (m_pDisp)
 	{
-		m_pXobjShareData->m_mapLayoutNodes[m_strName] = this;
 		if (m_nViewType == CLRCtrl)
 		{
 			if (g_pCosmos->m_hFormNodeWnd && (::GetWindowLongPtr(g_pCosmos->m_hFormNodeWnd, GWL_STYLE) & WS_CHILD))

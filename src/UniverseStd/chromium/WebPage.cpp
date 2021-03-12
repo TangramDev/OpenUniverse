@@ -906,6 +906,7 @@ namespace Browser {
 
 				g_pCosmos->TangramInitFromeWeb();
 				CustomizedMainWindowElement(g_pCosmos->m_strMainWndXml);
+				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210312);
 			}
 		}
 		else if (strId.CompareNoCase(_T("NEW_TAB_PAGE_LOADED")) == 0)
@@ -1299,6 +1300,13 @@ namespace Browser {
 							}
 						}
 					}
+				}
+			}
+			else
+			{
+				if (g_pCosmos->m_hMainWnd)
+				{
+					::SetForegroundWindow(g_pCosmos->m_hMainWnd);
 				}
 			}
 		}

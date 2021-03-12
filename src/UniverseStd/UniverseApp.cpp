@@ -1360,6 +1360,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
+				case 20210312:
+					::SetActiveWindow(g_pCosmos->m_hMainWnd);
+					::SetFocus(g_pCosmos->m_hMainWnd);
+					break;
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
