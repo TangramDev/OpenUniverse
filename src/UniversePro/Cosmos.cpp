@@ -1492,34 +1492,6 @@ IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
 	return nullptr;
 };
 
-CString CCosmos::GetNewLayoutNodeName(BSTR bstrObjTypeID, IXobj* pDesignNode)
-{
-	BOOL bGetNew = false;
-	CString strNewName = _T("");
-	CString strName = OLE2T(bstrObjTypeID);
-	CString str = m_strExeName + _T(".appwnd.");
-	strName.Replace(str, _T(""));
-	int nIndex = 0;
-	CXobj* _pXobj = ((CXobj*)pDesignNode);
-	CXobj* pXobj = _pXobj->m_pRootObj;
-	auto it = pXobj->m_pXobjShareData->m_mapLayoutNodes.find(strName);
-	if (it == pXobj->m_pXobjShareData->m_mapLayoutNodes.end())
-	{
-		return strName;
-	}
-	while (bGetNew == false)
-	{
-		strNewName.Format(_T("%s%d"), strName, nIndex);
-		it = pXobj->m_pXobjShareData->m_mapLayoutNodes.find(strNewName);
-		if (it == pXobj->m_pXobjShareData->m_mapLayoutNodes.end())
-		{
-			return strNewName;
-		}
-		nIndex++;
-	}
-	return _T("");
-};
-
 CString CCosmos::InitEclipse(_TCHAR* jarFile)
 {
 	if (m_hForegroundIdleHook == NULL)

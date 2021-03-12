@@ -537,7 +537,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 
 				if (m_pXobj->m_pDisp)
 				{
-					m_pXobj->m_pXobjShareData->m_mapLayoutNodes[m_pXobj->m_strName] = m_pXobj;
 					m_pXobj->m_nViewType = CLRCtrl;
 					if (g_pCosmos->m_hFormNodeWnd)
 					{
@@ -577,30 +576,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				{
 					strName = pParent->m_strName + _T("_") + strName;
 				}
-				auto it = pXobj->m_pXobjShareData->m_mapAxNodes.find(strName);
-				if (it != pXobj->m_pXobjShareData->m_mapAxNodes.end())
-				{
-					BOOL bGetNew = false;
-					int nIndex = 0;
-					while (bGetNew == false)
-					{
-						CString strNewName = _T("");
-						strNewName.Format(_T("%s%d"), strName, nIndex);
-						it = pXobj->m_pXobjShareData->m_mapAxNodes.find(strNewName);
-						if (it == pXobj->m_pXobjShareData->m_mapAxNodes.end())
-						{
-							pXobj->m_pXobjShareData->m_mapAxNodes[strNewName] = m_pXobj;
-							strName = strNewName;
-							bGetNew = true;
-							break;
-						}
-						nIndex++;
-					}
-				}
-				else
-				{
-					pXobj->m_pXobjShareData->m_mapAxNodes[strName] = m_pXobj;
-				}
 				m_pXobj->put_Attribute(CComBSTR(L"id"), strName.AllocSysString());
 				m_pXobj->m_strName = strName;
 				BOOL bWebCtrl = false;
@@ -618,7 +593,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				}
 				if (m_pXobj->m_pDisp)
 				{
-					m_pXobj->m_pXobjShareData->m_mapLayoutNodes[m_pXobj->m_strName] = m_pXobj;
 					m_pXobj->m_nViewType = ActiveX;
 					CAxWindow m_Wnd;
 					m_Wnd.Attach(m_hWnd);

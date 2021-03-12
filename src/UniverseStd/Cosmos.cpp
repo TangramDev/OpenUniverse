@@ -1362,11 +1362,6 @@ IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
 	return nullptr;
 };
 
-CString CCosmos::GetNewLayoutNodeName(BSTR bstrObjTypeID, IXobj* pDesignNode)
-{
-	return _T("");
-};
-
 CString CCosmos::InitEclipse(_TCHAR* jarFile)
 {
 	if (m_hForegroundIdleHook == NULL)

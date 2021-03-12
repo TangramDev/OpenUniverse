@@ -758,7 +758,6 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 	m_pXobj->m_nViewType = Grid;
 	m_pXobj->m_nID = nID;
 	m_pXobj->m_pDisp = nullptr;
-	m_pXobj->m_pXobjShareData->m_mapLayoutNodes[m_pXobj->m_strName] = m_pXobj;
 
 	int r, g, b;
 	CComBSTR bstrVal(L"");

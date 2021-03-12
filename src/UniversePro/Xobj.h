@@ -80,13 +80,9 @@ public:
 	CGalaxy*				m_pGalaxy = nullptr;
 	CGalaxy*				m_pOldGalaxy = nullptr;
 	IDispatch*				m_pOfficeObj = nullptr;
-	CXobjWnd*			m_pHostClientView = nullptr;
+	CXobjWnd*				m_pHostClientView = nullptr;
 	CTangramXmlParse*		m_pCosmosParse = nullptr;
 	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
-	map<CString, CXobj*>	m_mapLayoutNodes;
-	map<CString, CXobj*>	m_mapAxNodes;
-	map<CString, CXobj*>	m_mapCLRNodes;
-	map<CString, CXobj*>	m_mapCppXobjs;
 	CMapStringToPtr			m_PlugInDispDictionary;
 };
 

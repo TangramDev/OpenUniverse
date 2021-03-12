@@ -686,7 +686,6 @@ namespace CommonUniverse {
 		virtual IBrowser* GetHostBrowser(HWND hNodeWnd) { return nullptr; }
 		virtual void AttachXobj(void* pXobjEvents) {}
 		virtual void CosmosInit() {}
-		virtual CString GetNewLayoutNodeName(BSTR strObjTypeID, IXobj* pDesignNode) { return _T(""); }
 		virtual IGalaxyCluster* Observe(HWND, CString strName, CString strKey) { return nullptr; }
 		virtual IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag) { return nullptr; }
 		virtual bool IsMDIClientGalaxyNode(IXobj*) { return false; }

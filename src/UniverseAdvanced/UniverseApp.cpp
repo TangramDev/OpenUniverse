@@ -1614,7 +1614,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						if (g_pCosmos->m_mapDocTemplate.size() == 0)
 						{
 							g_pCosmos->m_hFirstView = hClient;
-							break;
 						}
 						CMDTWnd* pFrameWnd = nullptr;
 						CGalaxyCluster* pGalaxyCluster = nullptr;
