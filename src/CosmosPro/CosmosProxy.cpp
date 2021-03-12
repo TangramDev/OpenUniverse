@@ -1053,8 +1053,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 
 Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse)
 {
-	if (::IsChild(theApp.m_pCosmosImpl->m_hHostWnd, (HWND)pCtrl->Handle.ToInt64()))
-		return nullptr;
 	GalaxyCluster^ pGalaxyCluster = nullptr;
 	Universe::Xobj^ pXobj = (Universe::Xobj^)theAppProxy._createObject<IXobj, Universe::Xobj>(_pXobj);
 	if (pXobj)

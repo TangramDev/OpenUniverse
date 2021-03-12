@@ -935,7 +935,6 @@ LRESULT CMDIParent::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	g_pCosmos->m_pMDIMainWnd = nullptr;
 	if (g_pCosmos->m_pHostBrowser)
 		g_pCosmos->m_pHostBrowser->m_bDestroy = true;
-	//::SetParent(g_pCosmos->m_hHostBrowserWnd, g_pCosmos->m_hCosmosWnd);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -1715,8 +1714,6 @@ CGalaxy::~CGalaxy()
 #ifdef _DEBUG
 	g_pCosmos->m_nTangramFrame--;
 #endif	
-	//if (m_pGalaxyInfo)
-	//	delete m_pGalaxyInfo;
 	if (g_pCosmos->m_pGalaxy == this)
 		g_pCosmos->m_pGalaxy = nullptr;
 	for (auto it : g_pCosmos->m_mapThreadInfo)

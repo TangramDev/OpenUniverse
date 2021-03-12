@@ -742,11 +742,6 @@ LRESULT CEclipseWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 	if (it != g_pCosmos->m_mapWorkBenchWnd.end())
 	{
 		g_pCosmos->m_mapWorkBenchWnd.erase(it);
-		//if (g_pCosmos->m_mapWorkBenchWnd.size()==0)
-		//{
-		//	if(::IsWindow(g_pCosmos->m_hHostWnd))
-		//		::DestroyWindow(g_pCosmos->m_hHostWnd);
-		//}
 	}
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	if (g_pCosmos->m_mapWorkBenchWnd.size() == 0)

@@ -394,15 +394,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
 		}
 		break;
-		case 20200120:
-		{
-			HWND h = (HWND)wParam;
-			if (g_pCosmos->m_pCLRProxy)
-			{
-				g_pCosmos->m_pCLRProxy->OnWinFormActivate(h, 4);
-			}
-		}
-		break;
 		}
 		break;
 	case WM_TABCHANGE:
@@ -555,14 +546,17 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	}
 	break;
 	case WM_COSMOSMSG:
-	{
-		if (wParam)
-		{
-			return 0;
-		}
-	}
 	switch (lParam)
 	{
+	case 20200120:
+	{
+		HWND h = (HWND)wParam;
+		if (g_pCosmos->m_pCLRProxy)
+		{
+			g_pCosmos->m_pCLRProxy->OnWinFormActivate(h, 4);
+		}
+	}
+	break;
 	case 10001000:
 	{
 		if (g_pCosmos->m_nAppID != 9 && g_pCosmos->m_bEclipse == false)

@@ -42,7 +42,6 @@ public:
 	bool									m_bVSToolBoxConnected = false;
 	bool									m_bBrowserModeInit = false;
 	DWORD									m_dwThreadID;
-	HWND									m_hHostWnd;
 	ICosmos*								m_pCosmos;
 
 	CString									m_strAppPath;
