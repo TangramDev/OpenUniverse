@@ -56,12 +56,10 @@ protected:
 	LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	afx_msg void OnDestroy();
 	afx_msg void OnWindowPosChanged(WINDOWPOS* lpwndpos);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg int OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnCosmosMsg(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnCosmosData(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnTabChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetCosmosObj(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSplitterReposition(WPARAM wParam, LPARAM lParam);

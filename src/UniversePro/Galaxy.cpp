@@ -1714,7 +1714,7 @@ void CWinForm::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-LRESULT CCosmosHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CCosmosWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{

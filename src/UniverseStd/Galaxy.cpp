@@ -1431,7 +1431,7 @@ void CWinForm::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-LRESULT CCosmosHelperWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CCosmosWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
@@ -1598,10 +1598,6 @@ CTangramXmlParse* CGalaxy::UpdateXobj()
 			for (auto it2 : pWndXobj->m_vChildNodes) {
 				g_pCosmos->UpdateXobj(it2);
 			}
-
-			if (pWndXobj == pWndXobj->m_pRootObj && pWndXobj->m_pXobjShareData->m_pOfficeObj) {
-				g_pCosmos->UpdateOfficeObj(pWndXobj->m_pXobjShareData->m_pOfficeObj, pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER)->xml(), pWndXobj->m_pXobjShareData->m_pCosmosParse->name());
-			}
 		}
 	}
 	if (m_mapXobj.size())
@@ -1667,8 +1663,6 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 	}
 
 	m_pWorkXobj->m_strCosmosXml = _pParse->xml();
-	if (m_pGalaxyCluster)
-		m_pGalaxyCluster->Fire_OpenXmlComplete(CComBSTR(m_pWorkXobj->m_strCosmosXml), (long)m_hHostWnd, m_pWorkXobj);
 	m_pWorkXobj->m_strKey = strKey;
 	m_pWorkXobj->Fire_ObserveComplete();
 	if (g_pCosmos->m_pCLRProxy)
@@ -1717,58 +1711,6 @@ BOOL CGalaxy::Create()
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_DRAWFRAME | SWP_SHOWWINDOW | SWP_NOACTIVATE);//|SWP_NOREDRAWSWP_NOZORDER);
 	}
 
-	CTangramXmlParse* pWndParse = m_pWorkXobj->m_pXobjShareData->m_pCosmosParse->GetChild(_T("docplugin"));
-	if (pWndParse)
-	{
-		CString strPlugID = _T("");
-		HRESULT hr = S_OK;
-		BOOL bHavePlugin = false;
-		int nCount = pWndParse->GetCount();
-		for (int i = 0; i < nCount; i++)
-		{
-			CTangramXmlParse* pChild = pWndParse->GetChild(i);
-			CComBSTR bstrXml(pChild->xml());
-			strPlugID = pChild->text();
-			strPlugID.Trim();
-			strPlugID.MakeLower();
-			if (strPlugID != _T(""))
-			{
-				int nPos = strPlugID.Find(_T(","));
-				CComBSTR bstrPlugIn(strPlugID);
-				CComPtr<IDispatch> pDisp;
-				//for COM Component:
-				if (nPos == -1) {
-					hr = pDisp.CoCreateInstance(strPlugID.AllocSysString());
-					if (hr == S_OK)
-					{
-						m_pWorkXobj->m_pXobjShareData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
-						pDisp.p->AddRef();
-					}
-
-					m_pWorkXobj->Fire_XobjAddInCreated(pDisp.p, bstrPlugIn, bstrXml);
-				}
-				else //for .NET Component
-				{
-					hr = g_pCosmos->CreateCLRObj(bstrPlugIn, &pDisp);
-					if (hr == S_OK)
-					{
-						m_pWorkXobj->m_pXobjShareData->m_PlugInDispDictionary[strPlugID] = pDisp.p;
-
-						bstrPlugIn = strPlugID.AllocSysString();
-						m_pWorkXobj->Fire_XobjAddInCreated(pDisp, bstrPlugIn, bstrXml);
-					}
-				}
-				if (m_pGalaxyCluster && pDisp)
-					m_pGalaxyCluster->Fire_AddInCreated(m_pWorkXobj, pDisp, bstrPlugIn, bstrXml);
-				::SysFreeString(bstrPlugIn);
-				bHavePlugin = true;
-			}
-			::SysFreeString(bstrXml);
-		}
-
-		if (bHavePlugin)
-			m_pWorkXobj->Fire_XobjAddInsCreated();
-	}
 	m_pWorkXobj->m_bCreated = true;
 
 	return true;
@@ -2045,8 +1987,6 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		}
 
 		Unlock();
-		m_pGalaxyCluster->Fire_BeforeOpenXml(CComBSTR(strXml), (long)m_hHostWnd);
-
 		m_bNoRedrawState = false;
 		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkXobj == nullptr)
@@ -2390,41 +2330,6 @@ void CGalaxy::UpdateVisualWPFMap(HWND hParent, BOOL bSized)
 
 void CGalaxy::Destroy()
 {
-	CXobj* pWndXobj = nullptr;
-	CString strPlugID = _T("");
-	for (auto it : m_mapXobj)
-	{
-		pWndXobj = it.second;
-		if (pWndXobj->m_pXobjShareData->m_pCosmosParse)
-		{
-			CTangramXmlParse* pParse = pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(_T("docplugin"));
-			if (pParse)
-			{
-				int nCount = pParse->GetCount();
-				for (int i = 0; i < nCount; i++)
-				{
-					CTangramXmlParse* pChild = pParse->GetChild(i);
-					strPlugID = pChild->text();
-					strPlugID.Trim();
-					if (strPlugID != _T(""))
-					{
-						if (strPlugID.Find(_T(",")) == -1)
-						{
-							strPlugID.MakeLower();
-							IDispatch* pDisp = (IDispatch*)pWndXobj->m_pXobjShareData->m_PlugInDispDictionary[strPlugID];
-							if (pDisp)
-							{
-								pWndXobj->m_pXobjShareData->m_PlugInDispDictionary.RemoveKey(LPCTSTR(strPlugID));
-								pDisp->Release();
-							}
-						}
-					}
-				}
-			}
-
-			pWndXobj->m_pXobjShareData->m_PlugInDispDictionary.RemoveAll();
-		}
-	}
 }
 
 void CGalaxy::OnFinalMessage(HWND hWnd)
@@ -2559,19 +2464,6 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
-	case 2048:
-	{
-		if (m_hWnd != g_pCosmos->m_hChildHostWnd)
-		{
-			CtrlInfo* pCtrlInfo = (CtrlInfo*)wParam;
-			if (pCtrlInfo && pCtrlInfo->m_pGalaxyCluster)
-			{
-				CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)pCtrlInfo->m_pGalaxyCluster;
-				pGalaxyCluster->Fire_ClrControlCreated(pCtrlInfo->m_pXobj, pCtrlInfo->m_pCtrlDisp, pCtrlInfo->m_strName.AllocSysString(), (long)pCtrlInfo->m_hWnd);
-			}
-		}
-	}
-	break;
 	case 20210228:
 	{
 		m_bNoRedrawState = true;
@@ -2941,11 +2833,6 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 			for (auto it2 : pWndXobj->m_vChildNodes)
 			{
 				g_pCosmos->UpdateXobj(it2);
-			}
-
-			if (pWndXobj == pWndXobj->m_pRootObj && pWndXobj->m_pXobjShareData->m_pOfficeObj)
-			{
-				g_pCosmos->UpdateOfficeObj(pWndXobj->m_pXobjShareData->m_pOfficeObj, pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER)->xml(), pWndXobj->m_pXobjShareData->m_pCosmosParse->name());
 			}
 		}
 		CString strXml = pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER)->xml();

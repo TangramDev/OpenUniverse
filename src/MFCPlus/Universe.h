@@ -2657,10 +2657,8 @@ EXTERN_C const IID IID_ICosmos;
             long nCtrlID,
             BSTR bstrText) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCLRControl( 
-            IDispatch *CtrlDisp,
-            BSTR bstrName,
-            /* [retval][out] */ IDispatch **ppRetDisp) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FireCosmosEventObj( 
+            ICosmosEventObj *pCosmosEventObj) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MessageBox( 
             LONGLONG hWnd,
@@ -2677,8 +2675,8 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE UpdateXobj( 
             IXobj *pXobj) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewGUID( 
-            /* [retval][out] */ BSTR *retVal) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateCosmosEventObj( 
+            /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE InitEclipseApp( void) = 0;
         
@@ -2688,9 +2686,12 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrURL,
             /* [retval][out] */ IDispatch **ppRetDisp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE LoadDocComponent( 
-            BSTR bstrLib,
-            /* [retval][out] */ LONGLONG *llAppProxy) = 0;
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
+            LONGLONG hWnd,
+            BSTR bstrGalaxys,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfigFile) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCtrlByName( 
             IDispatch *pCtrl,
@@ -2740,19 +2741,6 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NewWorkBench( 
             BSTR bstrCosmosDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateCosmosEventObj( 
-            /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FireCosmosEventObj( 
-            ICosmosEventObj *pCosmosEventObj) = 0;
-        
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
-            LONGLONG hWnd,
-            BSTR bstrGalaxys,
-            BSTR bstrKey,
-            BSTR bstrXml,
-            VARIANT_BOOL bSaveToConfigFile) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
@@ -2940,11 +2928,9 @@ EXTERN_C const IID IID_ICosmos;
             long nCtrlID,
             BSTR bstrText);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCLRControl )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FireCosmosEventObj )( 
             ICosmos * This,
-            IDispatch *CtrlDisp,
-            BSTR bstrName,
-            /* [retval][out] */ IDispatch **ppRetDisp);
+            ICosmosEventObj *pCosmosEventObj);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MessageBox )( 
             ICosmos * This,
@@ -2965,9 +2951,9 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             IXobj *pXobj);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewGUID )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateCosmosEventObj )( 
             ICosmos * This,
-            /* [retval][out] */ BSTR *retVal);
+            /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEclipseApp )( 
             ICosmos * This);
@@ -2979,10 +2965,13 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrURL,
             /* [retval][out] */ IDispatch **ppRetDisp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *LoadDocComponent )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
             ICosmos * This,
-            BSTR bstrLib,
-            /* [retval][out] */ LONGLONG *llAppProxy);
+            LONGLONG hWnd,
+            BSTR bstrGalaxys,
+            BSTR bstrKey,
+            BSTR bstrXml,
+            VARIANT_BOOL bSaveToConfigFile);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCtrlByName )( 
             ICosmos * This,
@@ -3042,22 +3031,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             BSTR bstrCosmosDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateCosmosEventObj )( 
-            ICosmos * This,
-            /* [retval][out] */ ICosmosEventObj **ppCosmosEventObj);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FireCosmosEventObj )( 
-            ICosmos * This,
-            ICosmosEventObj *pCosmosEventObj);
-        
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
-            ICosmos * This,
-            LONGLONG hWnd,
-            BSTR bstrGalaxys,
-            BSTR bstrKey,
-            BSTR bstrXml,
-            VARIANT_BOOL bSaveToConfigFile);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
             ICosmos * This,
@@ -3193,8 +3166,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_SetItemText(This,pXobj,nCtrlID,bstrText)	\
     ( (This)->lpVtbl -> SetItemText(This,pXobj,nCtrlID,bstrText) ) 
 
-#define ICosmos_GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp)	\
-    ( (This)->lpVtbl -> GetCLRControl(This,CtrlDisp,bstrName,ppRetDisp) ) 
+#define ICosmos_FireCosmosEventObj(This,pCosmosEventObj)	\
+    ( (This)->lpVtbl -> FireCosmosEventObj(This,pCosmosEventObj) ) 
 
 #define ICosmos_MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet)	\
     ( (This)->lpVtbl -> MessageBox(This,hWnd,bstrContext,bstrCaption,nStyle,nRet) ) 
@@ -3208,8 +3181,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_UpdateXobj(This,pXobj)	\
     ( (This)->lpVtbl -> UpdateXobj(This,pXobj) ) 
 
-#define ICosmos_NewGUID(This,retVal)	\
-    ( (This)->lpVtbl -> NewGUID(This,retVal) ) 
+#define ICosmos_CreateCosmosEventObj(This,ppCosmosEventObj)	\
+    ( (This)->lpVtbl -> CreateCosmosEventObj(This,ppCosmosEventObj) ) 
 
 #define ICosmos_InitEclipseApp(This)	\
     ( (This)->lpVtbl -> InitEclipseApp(This) ) 
@@ -3217,8 +3190,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp)	\
     ( (This)->lpVtbl -> CreateOutLookObj(This,bstrObjType,nType,bstrURL,ppRetDisp) ) 
 
-#define ICosmos_LoadDocComponent(This,bstrLib,llAppProxy)	\
-    ( (This)->lpVtbl -> LoadDocComponent(This,bstrLib,llAppProxy) ) 
+#define ICosmos_ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
+    ( (This)->lpVtbl -> ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 
 
 #define ICosmos_GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp)	\
     ( (This)->lpVtbl -> GetCtrlByName(This,pCtrl,bstrName,bFindInChild,ppCtrlDisp) ) 
@@ -3249,15 +3222,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow)	\
     ( (This)->lpVtbl -> NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow) ) 
-
-#define ICosmos_CreateCosmosEventObj(This,ppCosmosEventObj)	\
-    ( (This)->lpVtbl -> CreateCosmosEventObj(This,ppCosmosEventObj) ) 
-
-#define ICosmos_FireCosmosEventObj(This,pCosmosEventObj)	\
-    ( (This)->lpVtbl -> FireCosmosEventObj(This,pCosmosEventObj) ) 
-
-#define ICosmos_ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
-    ( (This)->lpVtbl -> ObserveGalaxys(This,hWnd,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 
 
 #define ICosmos_CosmosCommand(This,RibbonControl)	\
     ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 

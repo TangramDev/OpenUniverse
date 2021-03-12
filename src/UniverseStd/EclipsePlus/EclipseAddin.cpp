@@ -429,7 +429,6 @@ void CEclipseWnd::Show(CString strID)
 				if (pGalaxy)
 				{
 					m_pGalaxy = (CGalaxy*)pGalaxy;
-					m_pGalaxyCluster->m_mapNeedSaveGalaxy[m_hClient] = m_pGalaxy;
 					CString strKey = _T("default");
 					if (m_strDocKey == _T(""))
 					{
@@ -623,24 +622,6 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 							{
 								g_pCosmos->UpdateXobj(it2);
 							}
-						}
-					}
-				}
-				for (auto it : m_pGalaxyCluster->m_mapNeedSaveGalaxy)
-				{
-					CGalaxy* pGalaxy = it.second;
-					auto it2 = pGalaxy->m_mapXobj.find(_T("default"));
-					if (it2 != pGalaxy->m_mapXobj.end())
-					{
-						CXobj* _pXobj = (CXobj*)it2->second;
-						if (pGalaxy->m_strGalaxyName.Find(_T("@")) == -1)
-						{
-							CString strXml = _pXobj->m_pXobjShareData->m_pCosmosParse->xml();
-							strXml.Replace(_T("/><"), _T("/>\r\n<"));
-							strXml.Replace(_T("/>"), _T("></xobj>"));
-							CString s = _T("");
-							s.Format(_T("<%s>%s</%s>"), pGalaxy->m_strGalaxyName, strXml, pGalaxy->m_strGalaxyName);
-							m_strXml += s;
 						}
 					}
 				}

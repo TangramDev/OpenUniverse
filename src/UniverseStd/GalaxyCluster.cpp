@@ -32,7 +32,6 @@
 CXobjShareData::CXobjShareData()
 {
 	m_pOldGalaxy			= nullptr;
-	m_pOfficeObj		= nullptr;
 	m_pCosmosParse		= nullptr;
 	m_pHostClientView	= nullptr;
 #ifdef _DEBUG
@@ -327,7 +326,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
 					if (pWnd == nullptr)
 					{
-						CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
+						CCosmosWnd* _pWnd = new CCosmosWnd();
 						_pWnd->SubclassWindow(hPWnd);
 						//_pWnd->ModifyStyle(0, WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
 						_pWnd->m_hClient = _hWnd;
@@ -842,114 +841,6 @@ HRESULT CGalaxyCluster::Fire_NodeCreated(IXobj * pXobjCreated)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
-{
-	HRESULT hr = S_OK;
-	int cConnections = m_vec.GetSize();
-	if (cConnections)
-	{
-		CComVariant avarParams[4];
-		avarParams[3] = pRootXobj;
-		avarParams[3].vt = VT_DISPATCH;
-		avarParams[2] = pAddIn;
-		avarParams[2].vt = VT_DISPATCH;
-		avarParams[1] = bstrID;
-		avarParams[1].vt = VT_BSTR;
-		avarParams[0] = bstrAddInXml;
-		avarParams[0].vt = VT_BSTR;
-
-		DISPPARAMS params = { avarParams, NULL, 4, 0 };
-		for (int iConnection = 0; iConnection < cConnections; iConnection++)
-		{
-			g_pCosmos->Lock();
-			IUnknown* punkConnection = m_vec.GetAt(iConnection);
-			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
-			if (pConnection)
-			{
-				CComVariant varResult;
-				hr = pConnection->Invoke(3, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-
-	for (auto it : m_mapGalaxyClusterProxy)
-	{
-		it.second->OnAddInCreated(pRootXobj, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
-	}
-	return hr;
-}
-
-HRESULT CGalaxyCluster::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
-{
-	HRESULT hr = S_OK;
-	int cConnections = m_vec.GetSize();
-	if (cConnections)
-	{		
-		CComVariant avarParams[2];
-		avarParams[1] = bstrXml;
-		avarParams[1].vt = VT_BSTR;
-		avarParams[0] = hWnd;
-		avarParams[0].vt = VT_I8;
-
-		DISPPARAMS params = { avarParams, NULL, 2, 0 };
-		for (int iConnection = 0; iConnection < cConnections; iConnection++)
-		{
-			g_pCosmos->Lock();
-			IUnknown* punkConnection = m_vec.GetAt(iConnection);
-			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
-			if (pConnection)
-			{
-				CComVariant varResult;
-				hr = pConnection->Invoke(4, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-	for (auto it : m_mapGalaxyClusterProxy)
-	{
-		it.second->OnBeforeOpenXml(OLE2T(bstrXml), (HWND)hWnd);
-	}
-	return hr;
-}
-
-HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj * pRetRootNode)
-{
-	HRESULT hr = S_OK;
-	int cConnections = m_vec.GetSize();
-	if (cConnections)
-	{
-		CComVariant avarParams[3];
-		avarParams[2] = bstrXml;
-		avarParams[2].vt = VT_BSTR;
-		avarParams[1] = hWnd;
-		avarParams[1].vt = VT_I8;
-		avarParams[0] = pRetRootNode;
-		avarParams[0].vt = VT_DISPATCH;
-
-		DISPPARAMS params = { avarParams, NULL, 3, 0 };
-		for (int iConnection = 0; iConnection < cConnections; iConnection++)
-		{
-			g_pCosmos->Lock();
-			IUnknown* punkConnection = m_vec.GetAt(iConnection);
-			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
-
-			if (pConnection)
-			{
-				CComVariant varResult;
-				hr = pConnection->Invoke(5, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-
-	for (auto it : m_mapGalaxyClusterProxy)
-	{
-		it.second->OnOpenXmlComplete(OLE2T(bstrXml), (HWND)hWnd, pRetRootNode);
-	}
-	return hr;
-}
-
 HRESULT CGalaxyCluster::Fire_Destroy()
 {
 	HRESULT hr = S_OK;
@@ -974,78 +865,6 @@ HRESULT CGalaxyCluster::Fire_Destroy()
 	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnDestroy();
-	}
-	return hr;
-}
-
-HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj * pActiveNode)
-{
-	HRESULT hr = S_OK;
-	int cConnections = m_vec.GetSize();
-	if (cConnections)
-	{
-		CComVariant avarParams[1];
-		avarParams[0] = pActiveNode;
-		avarParams[0].vt = VT_DISPATCH;
-		DISPPARAMS params = { avarParams, NULL, 1, 0 };
-		for (int iConnection = 0; iConnection < cConnections; iConnection++)
-		{
-			g_pCosmos->Lock();
-			CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
-			g_pCosmos->Unlock();
-
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection.p);
-
-			if (pConnection)
-			{
-				CComVariant varResult;
-				hr = pConnection->Invoke(7, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-
-	for (auto it : m_mapGalaxyClusterProxy)
-	{
-		it.second->OnNodeMouseActivate(pActiveNode);
-	}
-	return hr;
-}
-
-HRESULT CGalaxyCluster::Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle)
-{
-	HRESULT hr = S_OK;
-	int cConnections = m_vec.GetSize();
-	if (cConnections)
-	{
-		CComVariant avarParams[4];
-		avarParams[3] = Node;
-		avarParams[3].vt = VT_DISPATCH;
-		avarParams[2] = Ctrl;
-		avarParams[2].vt = VT_DISPATCH;
-		avarParams[1] = CtrlName;
-		avarParams[1].vt = VT_BSTR;
-		avarParams[0] = CtrlHandle;
-		avarParams[0].vt = VT_I8;
-		DISPPARAMS params = { avarParams, NULL, 4, 0 };
-		for (int iConnection = 0; iConnection < cConnections; iConnection++)
-		{
-			g_pCosmos->Lock();
-			IUnknown* punkConnection = m_vec.GetAt(iConnection);
-			g_pCosmos->Unlock();
-
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
-
-			if (pConnection)
-			{
-				CComVariant varResult;
-				hr = pConnection->Invoke(8, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-			}
-		}
-	}
-
-	for (auto it : m_mapGalaxyClusterProxy)
-	{
-		it.second->OnClrControlCreated(Node, Ctrl, OLE2T(CtrlName), (HWND)CtrlHandle);
 	}
 	return hr;
 }

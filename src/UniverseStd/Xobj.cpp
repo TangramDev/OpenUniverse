@@ -622,18 +622,6 @@ STDMETHODIMP CXobj::get_XObject(VARIANT * pVar)
 STDMETHODIMP CXobj::get_AxPlugIn(BSTR bstrPlugInName, IDispatch * *pVal)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-
-	CString strObjName = OLE2T(bstrPlugInName);
-	strObjName.Trim();
-	strObjName.MakeLower();
-	IDispatch* pDisp = nullptr;
-	if (m_pXobjShareData->m_PlugInDispDictionary.Lookup(LPCTSTR(strObjName), (void*&)pDisp))
-	{
-		*pVal = pDisp;
-		(*pVal)->AddRef();
-	}
-	else
-		*pVal = nullptr;
 	return S_OK;
 }
 
@@ -1073,7 +1061,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	NodeCreated();
-	m_pXobjShareData->m_mapLayoutNodes[m_strName] = this;
 	if (m_strID.CompareNoCase(_T("treeview")))
 	{
 		m_nRows = 1;
@@ -1184,26 +1171,6 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	{
 	case ActiveX:
 	{
-		auto it = m_pXobjShareData->m_mapAxNodes.find(strName);
-		if (it == m_pXobjShareData->m_mapAxNodes.end())
-		{
-			m_pXobjShareData->m_mapAxNodes[strName] = this;
-		}
-		else
-		{
-			int nCount = m_pXobjShareData->m_mapAxNodes.size();
-			CString str = _T("");
-			str.Format(_T("%s%d"), strName, nCount);
-			it = m_pXobjShareData->m_mapAxNodes.find(str);
-			while (it != m_pXobjShareData->m_mapAxNodes.end())
-			{
-				nCount++;
-				str.Format(_T("%s%d"), strName, nCount);
-				it = m_pXobjShareData->m_mapAxNodes.find(str);
-			}
-			m_pXobjShareData->m_mapAxNodes[str] = this;
-			put_Attribute(CComBSTR("id"), str.AllocSysString());
-		}
 		strID.MakeLower();
 
 		if (m_pDisp == nullptr)
@@ -1220,27 +1187,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	case CLRCtrl:
 	{
 		g_pCosmos->m_pActiveXobj = this;
-		auto it = m_pXobjShareData->m_mapCLRNodes.find(strName);
-		if (it == m_pXobjShareData->m_mapCLRNodes.end())
-		{
-			m_pXobjShareData->m_mapCLRNodes[strName] = this;
-		}
-		else
-		{
-			int nCount = m_pXobjShareData->m_mapCLRNodes.size();
-			CString str = _T("");
-			str.Format(_T("%s%d"), strName, nCount);
-			it = m_pXobjShareData->m_mapCLRNodes.find(str);
-			while (it != m_pXobjShareData->m_mapCLRNodes.end())
-			{
-				nCount++;
-				str.Format(_T("%s%d"), strName, nCount);
-				it = m_pXobjShareData->m_mapCLRNodes.find(str);
-			}
-			m_pXobjShareData->m_mapCLRNodes[str] = this;
-			put_Attribute(CComBSTR("id"), str.AllocSysString());
-		}
-		
+
 		if (g_pCosmos->m_pCLRProxy)
 		{
 			if (pHtmlWnd)
@@ -1278,7 +1225,6 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	}
 	if (m_pDisp)
 	{
-		m_pXobjShareData->m_mapLayoutNodes[m_strName] = this;
 		if (m_nViewType == CLRCtrl)
 		{
 			if (g_pCosmos->m_hFormNodeWnd && (::GetWindowLongPtr(g_pCosmos->m_hFormNodeWnd, GWL_STYLE) & WS_CHILD))
@@ -1627,11 +1573,6 @@ STDMETHODIMP CXobj::get_WebPage(IWebPage * *pVal)
 
 STDMETHODIMP CXobj::get_OfficeObj(IDispatch * *pVal)
 {
-	if (m_pXobjShareData->m_pOfficeObj)
-	{
-		*pVal = m_pXobjShareData->m_pOfficeObj;
-		(*pVal)->AddRef();
-	}
 	return S_OK;
 }
 

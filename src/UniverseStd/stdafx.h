@@ -156,7 +156,6 @@ class CXobj;
 class CXobjWnd;
 class CCosmos;
 class CGalaxy;
-class CHelperWnd;
 class CEclipseWnd;
 class CUniverse;
 class CXobjEvents;

@@ -702,7 +702,6 @@ namespace Browser {
 					if (pGalaxy)
 					{
 						m_pGalaxy = (CGalaxy*)pGalaxy;
-						m_pGalaxyCluster->m_mapNeedSaveGalaxy[m_hChildWnd] = m_pGalaxy;
 						IXobj* pXobj = nullptr;
 						pGalaxy->Observe(CComBSTR("default"), CComBSTR(L""), &pXobj);
 					}

@@ -29,11 +29,11 @@ using namespace Browser;
 class CBKWnd;
 class CWormhole;
 
-class CCosmosHelperWnd : public CWnd
+class CCosmosWnd : public CWnd
 {
 public:
-	CCosmosHelperWnd() {}
-	virtual ~CCosmosHelperWnd() {}
+	CCosmosWnd() {}
+	virtual ~CCosmosWnd() {}
 	HWND m_hClient = nullptr;
 protected:
 	void PostNcDestroy()

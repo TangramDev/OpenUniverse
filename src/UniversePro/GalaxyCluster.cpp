@@ -328,7 +328,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					CWnd* pWnd = CWnd::FromHandlePermanent(hPWnd);
 					if (pWnd == nullptr)
 					{
-						CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
+						CCosmosWnd* _pWnd = new CCosmosWnd();
 						_pWnd->SubclassWindow(hPWnd);
 						//_pWnd->ModifyStyle(0, WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
 						_pWnd->m_hClient = _hWnd;

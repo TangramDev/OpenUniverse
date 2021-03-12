@@ -58,7 +58,6 @@ public:
 	map<CString, CString>						m_strMapKey;
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CGalaxy*>							m_mapGalaxy;
-	map<HWND, CGalaxy*>							m_mapNeedSaveGalaxy;
 	map<CString, CXobj*>						m_mapXobj;
 	map<__int64, CCosmosEvent*>					m_mapEventObj;
 	map<IUniverseAppProxy*, CGalaxyClusterProxy*> m_mapGalaxyClusterProxy;
@@ -79,17 +78,10 @@ public:
 	void UpdateMapKey(CString);
 	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
 	HRESULT Fire_NodeCreated(IXobj * pXobjCreated);
-	HRESULT Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml);
-	HRESULT Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd);
-	HRESULT Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj * pRetRootNode);
 	HRESULT Fire_Destroy();
-	HRESULT Fire_NodeMouseActivate(IXobj * pActiveNode);
-	HRESULT Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle);
 	HRESULT Fire_TabChange(IXobj* sender, LONG ActivePage, LONG OldPage);
 	HRESULT Fire_CosmosEvent(ICosmosEventObj* pEventObj);
 	HRESULT Fire_IPCMsg(IGalaxy* pSender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature);
-
-	//void OnNodeDocComplete(WPARAM);
 
 protected:
 	ULONG InternalAddRef(){ return 1; }

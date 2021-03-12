@@ -62,7 +62,6 @@ protected:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg LRESULT OnActiveTangramObj(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnCosmosMsg(WPARAM wParam,LPARAM lParam);
-	afx_msg LRESULT OnCosmosData(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnTabChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetCosmosObj(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSplitterReposition(WPARAM wParam, LPARAM lParam);

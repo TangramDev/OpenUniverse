@@ -808,6 +808,26 @@ namespace CommonUniverse
 				}
 				return ::GetParent(hWnd);
 			}
+			//if (pWnd->IsKindOf(RUNTIME_CLASS(CDockablePane)))
+			//{
+			//	if (nType == RecalcCtrlBarLayout)
+			//	{
+			//		CDockablePane* pDockablePane = (CDockablePane*)pWnd;
+			//		if (pDockablePane)
+			//		{
+			//			if (pDockablePane->IsFloating())
+			//			{
+			//				pDockablePane->RecalcLayout();
+			//				pDockablePane->GetParentMiniFrame(true)->RedrawAll();
+			//			}
+			//			if (pDockablePane->IsDocked())
+			//			{
+			//				pDockablePane->GetParentFrame()->RecalcLayout();
+			//			}
+			//		}
+			//	}
+			//	return ::GetParent(hWnd);
+			//}
 		}
 		switch (nType)
 		{
@@ -1109,17 +1129,18 @@ namespace CommonUniverse
 		CWnd* pWnd = CWnd::FromHandlePermanent(hWnd);
 		if (pWnd)
 		{
-			if (pWnd->IsKindOf(RUNTIME_CLASS(CFormView)))
+			if (pWnd->IsKindOf(RUNTIME_CLASS(CView)))
 			{
-				CFormView* pFormView = (CFormView*)pWnd;
+				CView* pView = (CView*)pWnd;
 				CFrameWnd* pFrameWnd = pWnd->GetParentFrame();
 				if (pFrameWnd)
 				{
 					CString strInfo = m_strCreatingDOCID;
 					if (strInfo == _T(""))
 						strInfo = _T("default");
-					bool bRet =  g_pCosmosImpl->SetFrameInfo(hWnd, pFrameWnd->m_hWnd, strInfo, pFormView->GetDocument(), pFormView->GetDocument()->GetDocTemplate());
-					pFormView->ResizeParentToFit();
+					bool bRet =  g_pCosmosImpl->SetFrameInfo(hWnd, pFrameWnd->m_hWnd, strInfo, pView->GetDocument(), pView->GetDocument()->GetDocTemplate());
+					if(pWnd->IsKindOf(RUNTIME_CLASS(CFormView)))
+						((CFormView*)pWnd)->ResizeParentToFit();
 					return bRet;
 				}
 			}

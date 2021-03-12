@@ -107,7 +107,7 @@ public:
 	~CWebHelperWnd(void) {};
 
 	HWND m_hWebHost;
-	BEGIN_MSG_MAP(CHelperWnd)
+	BEGIN_MSG_MAP(CWebHelperWnd)
 		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 	END_MSG_MAP()

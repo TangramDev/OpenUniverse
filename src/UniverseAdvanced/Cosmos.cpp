@@ -4928,7 +4928,7 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 			CWnd* pWnd = CWnd::FromHandlePermanent(_hPWnd);
 			if (pWnd == nullptr)
 			{
-				CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
+				CCosmosWnd* _pWnd = new CCosmosWnd();
 				_pWnd->SubclassWindow(_hPWnd);
 				_pWnd->m_hClient = hWnd;
 			}

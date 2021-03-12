@@ -65,7 +65,6 @@ BEGIN_MESSAGE_MAP(CXobjWnd, CWnd)
 	ON_WM_WINDOWPOSCHANGED()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
 	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
-	ON_MESSAGE(WM_HUBBLE_DATA, OnCosmosData)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 
@@ -432,11 +431,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	}
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	return lRes;
-}
-
-LRESULT CXobjWnd::OnCosmosData(WPARAM wParam, LPARAM lParam)
-{
-	return CWnd::DefWindowProc(WM_HUBBLE_DATA, wParam, lParam);
 }
 
 LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)

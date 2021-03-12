@@ -344,7 +344,6 @@ private:
 	map<CString, CString>				m_mapDocDefaultName;
 
 	void CosmosLoad();
-	bool CheckUrl(CString&   url);
 	void AttachXobj(void* pXobjEvents);
 	CString Encode(CString strSRC, BOOL bEnCode);
 	CString GetNewLayoutNodeName(BSTR strObjTypeID, IXobj* pDesignNode);
@@ -373,7 +372,6 @@ private:
 	CSession* CreateCloudSession(CWebPageImpl*);
 	CSession* GetCloudSession(IXobj*);
 	void SetMainWnd(HWND hMain);
-	DWORD ExecCmd(const CString cmd, const BOOL setCurrentDirectory);
 
 	void SendIPCMsg(HWND hXobj, CString strMsgID);
 	void InsertMsgData(HWND hXobj, CString strKey, CString strVal);

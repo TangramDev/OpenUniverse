@@ -56,14 +56,12 @@ CXobjWnd::~CXobjWnd()
 }
 
 BEGIN_MESSAGE_MAP(CXobjWnd, CWnd)
-	ON_WM_SIZE()
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_MOUSEACTIVATE()
 	ON_WM_WINDOWPOSCHANGED()
 	ON_MESSAGE(WM_TABCHANGE, OnTabChange)
 	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
-	ON_MESSAGE(WM_HUBBLE_DATA, OnCosmosData)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
 
@@ -159,8 +157,6 @@ int CXobjWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 		if (::IsWindow(hMenuWnd))
 			::PostMessage(hMenuWnd, WM_CLOSE, 0, 0);
 	}
-	if (m_pXobj && m_pXobj->m_pXobjShareData->m_pGalaxyCluster)
-		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeMouseActivate(m_pXobj);
 
 	if ((m_pXobj->m_nViewType == TabGrid || m_pXobj->m_nViewType == Grid))
 	{
@@ -407,11 +403,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	return lRes;
 }
 
-LRESULT CXobjWnd::OnCosmosData(WPARAM wParam, LPARAM lParam)
-{
-	return CWnd::DefWindowProc(WM_HUBBLE_DATA, wParam, lParam);
-}
-
 LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam && lParam == 20201028)
@@ -505,7 +496,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 
 				if (m_pXobj->m_pDisp)
 				{
-					m_pXobj->m_pXobjShareData->m_mapLayoutNodes[m_pXobj->m_strName] = m_pXobj;
 					m_pXobj->m_nViewType = CLRCtrl;
 					if (g_pCosmos->m_hFormNodeWnd)
 					{
@@ -545,30 +535,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				{
 					strName = pParent->m_strName + _T("_") + strName;
 				}
-				auto it = pXobj->m_pXobjShareData->m_mapAxNodes.find(strName);
-				if (it != pXobj->m_pXobjShareData->m_mapAxNodes.end())
-				{
-					BOOL bGetNew = false;
-					int nIndex = 0;
-					while (bGetNew == false)
-					{
-						CString strNewName = _T("");
-						strNewName.Format(_T("%s%d"), strName, nIndex);
-						it = pXobj->m_pXobjShareData->m_mapAxNodes.find(strNewName);
-						if (it == pXobj->m_pXobjShareData->m_mapAxNodes.end())
-						{
-							pXobj->m_pXobjShareData->m_mapAxNodes[strNewName] = m_pXobj;
-							strName = strNewName;
-							bGetNew = true;
-							break;
-						}
-						nIndex++;
-					}
-				}
-				else
-				{
-					pXobj->m_pXobjShareData->m_mapAxNodes[strName] = m_pXobj;
-				}
 				m_pXobj->put_Attribute(CComBSTR(L"id"), strName.AllocSysString());
 				m_pXobj->m_strName = strName;
 				BOOL bWebCtrl = false;
@@ -586,7 +552,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				}
 				if (m_pXobj->m_pDisp)
 				{
-					m_pXobj->m_pXobjShareData->m_mapLayoutNodes[m_pXobj->m_strName] = m_pXobj;
 					m_pXobj->m_nViewType = ActiveX;
 					CAxWindow m_Wnd;
 					m_Wnd.Attach(m_hWnd);
@@ -831,11 +796,6 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		Invalidate(true);
 	}
-}
-
-void CXobjWnd::OnSize(UINT nType, int cx, int cy)
-{
-	CWnd::OnSize(nType, cx, cy);
 }
 
 void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)

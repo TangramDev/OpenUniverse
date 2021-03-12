@@ -915,53 +915,6 @@ BOOL DelTree(LPCTSTR lpszPath)
 	return SHFileOperation(&FileOp) == 0;
 }
 
-#ifndef _WIN64
-void CCosmos::ConnectWebAgent()
-{
-	TCHAR m_szBuffer[MAX_PATH];
-	HRESULT hr = SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, 0, m_szBuffer);
-	CString strCASServer = CString(m_szBuffer) + _T("\\WebRuntimeApp\\WebRuntime");
-	CString strWebRuntimeForCfg = strCASServer + _T("\\CASWebAgent.exe.tangram");
-	CString strUrl = _T("https://vscss-prod.herokuapp.com/index");
-	CTangramXmlParse parse;
-	if (parse.LoadFile(strWebRuntimeForCfg))
-	{
-		CString _strUrl = parse.attr(_T("url"), _T(""));
-		if (_strUrl != _T(""))
-			strUrl = _strUrl;
-	}
-	bool bConnect = false;
-	DWORD Description = 0;
-	if (InternetGetConnectedState(&Description, 0))
-		bConnect = CheckUrl(strUrl);
-	if (bConnect)
-	{
-		::PostAppMessage(g_pCosmos->m_dwThreadID, WM_COSMOSMSG, 0, 20200705);
-	}
-	else
-	{
-		auto t = create_task([this, strUrl]()
-			{
-				while (1)
-				{
-					Sleep(2000);
-					CString _strUrl = strUrl;
-					bool bConnect = false;
-					DWORD Description = 0;
-					if (InternetGetConnectedState(&Description, 0))
-						bConnect = CheckUrl(_strUrl);
-					if (bConnect)
-					{
-						::PostAppMessage(g_pCosmos->m_dwThreadID, WM_COSMOSMSG, 0, 20200705);
-						break;
-					}
-				}
-				return 1;
-			});
-	}
-}
-#endif
-
 void CCosmos::CosmosInit()
 {
 	CTangramXmlParse _m_Parse;
@@ -1026,54 +979,6 @@ void CCosmos::CosmosInit()
 		else
 			m_bEclipse = false;
 	}
-}
-
-DWORD CCosmos::ExecCmd(const CString cmd, const BOOL setCurrentDirectory)
-{
-	BOOL  bReturnVal = false;
-	STARTUPINFO  si;
-	DWORD  dwExitCode = ERROR_NOT_SUPPORTED;
-	SECURITY_ATTRIBUTES saProcess, saThread;
-	PROCESS_INFORMATION process_info;
-
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-
-	saProcess.nLength = sizeof(saProcess);
-	saProcess.lpSecurityDescriptor = NULL;
-	saProcess.bInheritHandle = true;
-
-	saThread.nLength = sizeof(saThread);
-	saThread.lpSecurityDescriptor = NULL;
-	saThread.bInheritHandle = false;
-
-	CString currentDirectory = _T("");
-
-	bReturnVal = CreateProcess(NULL,
-		(LPTSTR)(LPCTSTR)cmd,
-		&saProcess,
-		&saThread,
-		false,
-		DETACHED_PROCESS,
-		NULL,
-		currentDirectory,
-		&si,
-		&process_info);
-
-	if (bReturnVal)
-	{
-		CloseHandle(process_info.hThread);
-		WaitForSingleObject(process_info.hProcess, INFINITE);
-		GetExitCodeProcess(process_info.hProcess, &dwExitCode);
-		CloseHandle(process_info.hProcess);
-	}
-	//else
-	//{
-	//	DWORD dw =  GetLastError();
-	//	dwExitCode = dw;
-	//}
-
-	return dwExitCode;
 }
 
 void CCosmos::ExitInstance()
@@ -1459,29 +1364,6 @@ IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
 
 CString CCosmos::GetNewLayoutNodeName(BSTR bstrObjTypeID, IXobj* pDesignNode)
 {
-	BOOL bGetNew = false;
-	CString strNewName = _T("");
-	CString strName = OLE2T(bstrObjTypeID);
-	CString str = m_strExeName + _T(".appwnd.");
-	strName.Replace(str, _T(""));
-	int nIndex = 0;
-	CXobj* _pXobj = ((CXobj*)pDesignNode);
-	CXobj* pXobj = _pXobj->m_pRootObj;
-	auto it = pXobj->m_pXobjShareData->m_mapLayoutNodes.find(strName);
-	if (it == pXobj->m_pXobjShareData->m_mapLayoutNodes.end())
-	{
-		return strName;
-	}
-	while (bGetNew == false)
-	{
-		strNewName.Format(_T("%s%d"), strName, nIndex);
-		it = pXobj->m_pXobjShareData->m_mapLayoutNodes.find(strNewName);
-		if (it == pXobj->m_pXobjShareData->m_mapLayoutNodes.end())
-		{
-			return strNewName;
-		}
-		nIndex++;
-	}
 	return _T("");
 };
 
@@ -2425,41 +2307,6 @@ STDMETHODIMP CCosmos::StartApplication(BSTR bstrAppID, BSTR bstrXml)
 	return S_OK;
 }
 
-bool CCosmos::CheckUrl(CString& url)
-{
-	char* res = nullptr;
-	char		dwCode[20];
-	DWORD		dwIndex, dwCodeLen;
-	HINTERNET   hSession, hFile;
-
-	url.MakeLower();
-
-	hSession = InternetOpen(_T("Tangram"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
-	if (hSession)
-	{
-		//hFile = InternetOpenUrl(hSession, url, NULL, 0, INTERNET_FLAG_RELOAD, 0);
-		hFile = InternetOpenUrl(hSession, url, NULL, 0, INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS, 0);
-		if (hFile == NULL)
-		{
-			InternetCloseHandle(hSession);
-			return false;
-		}
-		dwIndex = 0;
-		dwCodeLen = 10;
-		HttpQueryInfo(hFile, HTTP_QUERY_STATUS_CODE, dwCode, &dwCodeLen, &dwIndex);
-		res = dwCode;
-		if (strcmp(res, "200 ") || strcmp(res, "302 "))
-		{
-			//200,302未重定位标志    
-			if (hFile)
-				InternetCloseHandle(hFile);
-			InternetCloseHandle(hSession);
-			return   true;
-		}
-	}
-	return   false;
-}
-
 STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 {
 	CXobj* pWndXobj = (CXobj*)pXobj;
@@ -2482,13 +2329,6 @@ STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 		for (auto it2 : pWndXobj->m_vChildNodes)
 		{
 			UpdateXobj(it2);
-		}
-		if ((pWndXobj == pWndXobj->m_pRootObj || pWndXobj->m_pParentObj == nullptr) && pWndXobj->m_pXobjShareData->m_pOfficeObj)
-		{
-			CTangramXmlParse* pWndParse = pWndXobj->m_pXobjShareData->m_pCosmosParse->GetChild(TGM_CLUSTER);
-			CString strXml = pWndParse->xml();
-			CString strNodeName = pWndXobj->m_pXobjShareData->m_pCosmosParse->name();
-			UpdateOfficeObj(pWndXobj->m_pXobjShareData->m_pOfficeObj, strXml, strNodeName);
 		}
 	}
 
@@ -4028,7 +3868,7 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 			CWnd* pWnd = CWnd::FromHandlePermanent(_hPWnd);
 			if (pWnd == nullptr)
 			{
-				CCosmosHelperWnd* _pWnd = new CCosmosHelperWnd();
+				CCosmosWnd* _pWnd = new CCosmosWnd();
 				_pWnd->SubclassWindow(_hPWnd);
 				_pWnd->m_hClient = hWnd;
 			}
