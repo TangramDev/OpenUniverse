@@ -33,7 +33,7 @@ protected:
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnPrint(CDC* pDC, CPrintInfo* pInfo);
-
+	CChromeRenderFrameHost* m_pChromeRenderFrameHost = nullptr;
 // Implementation
 public:
 	virtual ~CMFCApplication1View();

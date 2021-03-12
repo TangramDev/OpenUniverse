@@ -734,7 +734,7 @@ LRESULT CMDTWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 }
 
 LRESULT CMDTWnd::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-	g_pCosmos->m_bSZMode = true;
+	//g_pCosmos->m_bSZMode = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }

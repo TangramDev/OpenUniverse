@@ -622,7 +622,7 @@ namespace Browser {
 			{
 				if (lParam == 4)
 				{
-					if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
+					//if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 					{
 						BrowserLayout();
 					}

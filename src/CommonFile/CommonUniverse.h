@@ -928,6 +928,7 @@ namespace CommonUniverse {
 
 		virtual int GetType() { return -1; }
 		virtual void* GetBrowser() { return nullptr; }
+		virtual void Layout() {}
 		virtual void LayoutBrowser() {}
 		virtual void OpenURL(std::wstring strURL,
 			BrowserWndOpenDisposition nPos,
