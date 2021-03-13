@@ -182,8 +182,6 @@ CCosmos::CCosmos()
 	m_hHostBrowserWnd = NULL;
 	m_hEclipseHideWnd = NULL;
 	m_hActiveWnd = NULL;
-	m_hTemplateWnd = NULL;
-	m_hTemplateChildWnd = NULL;
 	m_hCBTHook = NULL;
 	m_hForegroundIdleHook = NULL;
 	m_lpszSplitterClass = nullptr;

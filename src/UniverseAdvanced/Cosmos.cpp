@@ -198,8 +198,6 @@ CCosmos::CCosmos()
 	m_hHostBrowserWnd = NULL;
 	m_hEclipseHideWnd = NULL;
 	m_hActiveWnd = NULL;
-	m_hTemplateWnd = NULL;
-	m_hTemplateChildWnd = NULL;
 	m_hCBTHook = NULL;
 	m_hForegroundIdleHook = NULL;
 	m_lpszSplitterClass = nullptr;
@@ -2523,16 +2521,6 @@ CString	CCosmos::GetDataFromStr(CString strCoded, CString& strTime, CString strP
 STDMETHODIMP CCosmos::get_RemoteHelperHWND(LONGLONG* pVal)
 {
 	*pVal = (LONGLONG)m_hCosmosWnd;
-	return S_OK;
-}
-
-STDMETHODIMP CCosmos::get_DocTemplate(BSTR bstrKey, LONGLONG* pVal)
-{
-	CString strKey = OLE2T(bstrKey);
-	strKey.MakeLower();
-	auto it = m_mapTemplateInfo.find(strKey);
-	if (it != m_mapTemplateInfo.end())
-		*pVal = it->second;
 	return S_OK;
 }
 

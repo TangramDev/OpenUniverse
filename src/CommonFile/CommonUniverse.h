@@ -588,8 +588,6 @@ namespace CommonUniverse {
 		DWORD									m_dwThreadID;
 		DWORD									m_nAppType;
 		HWND									m_hFirstView = nullptr;
-		HWND									m_hTemplateWnd;
-		HWND									m_hTemplateChildWnd;
 		HWND									m_hActiveWnd;
 		HWND									m_hEclipseHideWnd;
 		HWND									m_hMainWnd;
@@ -610,7 +608,6 @@ namespace CommonUniverse {
 		CString									m_strProgramFilePath;
 		CString									m_strAppCommonDocPath;
 		CString									m_strStartView;
-		CString									m_strStartXml;
 		CString									m_strNtpXml;
 		CString									m_strAppXml;
 		CString									m_strMainWndXml;
@@ -647,7 +644,6 @@ namespace CommonUniverse {
 		map<HWND, IGalaxyCluster*>				m_mapGalaxy2GalaxyCluster;
 		map<HWND, IGalaxyCluster*>				m_mapWindowPage;
 		map<CString, CComVariant>				m_mapValInfo;
-		map<CString, __int64>					m_mapTemplateInfo;
 		map<CString, ICosmos*>					m_mapRemoteCosmos;
 		map<CString, IUniverseAppProxy*>		m_mapCosmosAppProxy;
 		map<CString, ICosmosWindowProvider*>	m_mapWindowProvider;

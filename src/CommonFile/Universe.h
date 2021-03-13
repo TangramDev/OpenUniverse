@@ -2617,10 +2617,6 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
             /* [in] */ ICosmosExtender *newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DocTemplate( 
-            BSTR bstrID,
-            /* [retval][out] */ LONGLONG *pVal) = 0;
-        
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateNode( 
             IXobj *pXobj,
             BSTR bstrBrowserID,
@@ -2879,11 +2875,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             /* [in] */ ICosmosExtender *newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocTemplate )( 
-            ICosmos * This,
-            BSTR bstrID,
-            /* [retval][out] */ LONGLONG *pVal);
-        
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateNode )( 
             ICosmos * This,
             IXobj *pXobj,
@@ -3138,9 +3129,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_put_Extender(This,newVal)	\
     ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
-
-#define ICosmos_get_DocTemplate(This,bstrID,pVal)	\
-    ( (This)->lpVtbl -> get_DocTemplate(This,bstrID,pVal) ) 
 
 #define ICosmos_NavigateNode(This,pXobj,bstrBrowserID,bstrXml,pVal)	\
     ( (This)->lpVtbl -> NavigateNode(This,pXobj,bstrBrowserID,bstrXml,pVal) ) 

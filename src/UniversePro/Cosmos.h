@@ -227,7 +227,6 @@ public:
 	STDMETHOD(get_RemoteCosmos)(BSTR bstrID, ICosmos** pVal);
 	STDMETHOD(get_Extender)(ICosmosExtender** pVal);
 	STDMETHOD(put_Extender)(ICosmosExtender* newVal);
-	STDMETHOD(get_DocTemplate)(BSTR bstrKey, LONGLONG* pVal);
 	STDMETHOD(get_ActiveChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 

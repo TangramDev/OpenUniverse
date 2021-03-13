@@ -393,7 +393,6 @@ interface ICosmos : IDispatch {
 	[propget, id(8)] HRESULT RemoteCosmos(BSTR bstrID, [out, retval] ICosmos** pVal);
 	[propget, id(9)] HRESULT Extender([out, retval] ICosmosExtender** pVal);
 	[propput, id(9)] HRESULT Extender([in] ICosmosExtender* newVal);
-	[propget, id(10)] HRESULT DocTemplate(BSTR bstrID, [out, retval] LONGLONG* pVal);
 
 	[id(0x00100)] HRESULT NavigateNode(IXobj* pXobj, BSTR bstrBrowserID, BSTR bstrXml, [out, retval] IXobj** pVal);
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);
