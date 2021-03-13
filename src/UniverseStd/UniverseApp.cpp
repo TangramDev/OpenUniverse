@@ -307,14 +307,9 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 {
 	switch (msg)
 	{
-	case WM_CLOSE:
-	{
-		::ShowWindow(g_pCosmos->m_hHostWnd, SW_HIDE);
-	}
-	return 0;
 	case WM_DESTROY:
 	{
-		if (hWnd == g_pCosmos->m_hHostWnd)
+		if (hWnd == g_pCosmos->m_hCosmosWnd)
 		{
 			g_pCosmos->m_pActiveAppProxy = nullptr;
 			for (auto it : g_pCosmos->m_mapBKFrame)
@@ -362,21 +357,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 	case WM_COSMOSMSG:
 		switch (lParam)
 		{
-		case TANGRAM_CHROME_APP_INIT:
-		{
-			if (g_pCosmos->m_nAppType == APP_BROWSER_ECLIPSE || g_pCosmos->m_bEclipse)
-			{
-				ICosmosCLRImpl* pProxy = g_pCosmos->m_pCLRProxy;
-				g_pCosmos->InitEclipseApp();
-				if (pProxy)
-				{
-					pProxy->CosmosAction(CComBSTR("EndInitEclipseApp"), nullptr);
-				}
-			}
-			else if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
-				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
-		}
-		break;
 		}
 		break;
 	case WM_TABCHANGE:
@@ -524,6 +504,21 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	case WM_COSMOSMSG:
 	switch (lParam)
 	{
+	case TANGRAM_CHROME_APP_INIT:
+	{
+		if (g_pCosmos->m_nAppType == APP_BROWSER_ECLIPSE || g_pCosmos->m_bEclipse)
+		{
+			ICosmosCLRImpl* pProxy = g_pCosmos->m_pCLRProxy;
+			g_pCosmos->InitEclipseApp();
+			if (pProxy)
+			{
+				pProxy->CosmosAction(CComBSTR("EndInitEclipseApp"), nullptr);
+			}
+		}
+		else if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
+			g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
+	}
+	break;
 	case 20200120:
 	{
 		HWND h = (HWND)wParam;
@@ -840,7 +835,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			if (theApp.m_bHostCLR && g_pCosmos->m_nAppType == APP_BROWSERAPP)
 				g_pCosmos->m_nAppType = APP_BROWSER;
 
-			::DestroyWindow(g_pCosmos->m_hHostWnd);
+			::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 			if (theApp.m_bHostCLR && g_pCosmos->m_nAppType == 0)
 				::PostQuitMessage(20191116);
 		}
@@ -1509,7 +1504,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20190511:
 				{
 					if (lpMsg->wParam && g_pCosmos->m_bEclipse == false)
-						::DestroyWindow(g_pCosmos->m_hHostWnd);
+						::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 				}
 				break;
 				case 20191117:

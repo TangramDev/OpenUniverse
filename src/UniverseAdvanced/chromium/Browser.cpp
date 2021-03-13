@@ -502,7 +502,7 @@ namespace Browser {
 			g_pCosmos->m_mapBrowserWnd.erase(it);
 		}
 
-		if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hHostWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
+		if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hCosmosWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
 			g_pCosmos->m_hHostBrowserWnd == m_hWnd)
 		{
 			if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)

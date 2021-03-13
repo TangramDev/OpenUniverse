@@ -1516,8 +1516,8 @@ void CCosmos::BrowserAppStart()
 	{
 		if ((m_nAppType != APP_BROWSER) && g_pCosmos->m_pBrowserFactory && ::IsWindow(m_hCosmosWnd)) {
 			if (m_nAppType == APP_BROWSERAPP)
-				m_hMainWnd = m_hHostWnd;
-			::PostMessage(m_hHostWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
+				m_hMainWnd = m_hCosmosWnd;
+			::PostMessage(m_hCosmosWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
 			if (g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
 				g_pCosmos->m_nAppType = APP_BROWSERAPP;
 			CString str = _T("<host popup='true'><url></url></host>");
@@ -3791,7 +3791,7 @@ STDMETHODIMP CCosmos::DeleteGalaxy(IGalaxy* pGalaxy)
 	CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 	if (_pGalaxy)
 	{
-		HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hCosmosWnd, NULL, AfxGetInstanceHandle(), NULL);
 		_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
 		::DestroyWindow(hwnd);
 	}

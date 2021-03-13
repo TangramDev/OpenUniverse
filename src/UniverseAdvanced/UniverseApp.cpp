@@ -473,21 +473,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			}
 		}
 		break;
-		case TANGRAM_CHROME_APP_INIT:
-		{
-			if (g_pCosmos->m_nAppType == APP_BROWSER_ECLIPSE || g_pCosmos->m_bEclipse)
-			{
-				ICosmosCLRImpl* pProxy = g_pCosmos->m_pCLRProxy;
-				g_pCosmos->InitEclipseApp();
-				if (pProxy)
-				{
-					pProxy->CosmosAction(CComBSTR("EndInitEclipseApp"), nullptr);
-				}
-			}
-			else if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
-				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
-		}
-		break;
 		}
 		break;
 	case WM_TABCHANGE:
@@ -696,6 +681,21 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	case WM_COSMOSMSG:
 	switch (lParam)
 	{
+	case TANGRAM_CHROME_APP_INIT:
+	{
+		if (g_pCosmos->m_nAppType == APP_BROWSER_ECLIPSE || g_pCosmos->m_bEclipse)
+		{
+			ICosmosCLRImpl* pProxy = g_pCosmos->m_pCLRProxy;
+			g_pCosmos->InitEclipseApp();
+			if (pProxy)
+			{
+				pProxy->CosmosAction(CComBSTR("EndInitEclipseApp"), nullptr);
+			}
+		}
+		else if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
+			g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
+	}
+	break;
 	case 20200120:
 	{
 		HWND h = (HWND)wParam;

@@ -761,8 +761,8 @@ LRESULT CEclipseWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 				}
 			}
 		}
-		if (::IsWindow(g_pCosmos->m_hHostWnd))
-			::DestroyWindow(g_pCosmos->m_hHostWnd);
+		if (::IsWindow(g_pCosmos->m_hCosmosWnd))
+			::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 	}
 	return lRes;
 }

@@ -1161,18 +1161,8 @@ namespace OfficePlus
 					{
 						m_pCurOpenItem->m_hWnd = ::GetParent(::GetParent(::GetParent(m_hPWwbWnd)));
 						m_pCurOpenItem->m_hHostWnd = ::GetParent(m_pCurOpenItem->m_hWnd);
-						//auto it = m_mapOutLookPlusExplorerMap.find(m_pCurOpenItem->m_hHostWnd);
-						//if (it == m_mapOutLookPlusExplorerMap.end())
-						//{
-						//	auto it2 = m_mapInspector.find(m_pCurOpenItem->m_hHostWnd);
-						//	if (it2 == m_mapInspector.end())
-						//	{
-						//		m_mapInspector[m_pCurOpenItem->m_hHostWnd] = m_pCurOpenItem;
-						//	}
-						//}
 					}
 				}
-				//::PostMessage(m_hHostWnd, WM_OFFICEOBJECTCREATED, (WPARAM)hWnd, 0);
 			}
 		}
 
@@ -1567,7 +1557,7 @@ namespace OfficePlus
 					{
 						if (m_pInspectorContainerWnd->m_pGalaxy)
 						{
-							HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+							HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hCosmosWnd, NULL, AfxGetInstanceHandle(), NULL);
 							HWND hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL);
 							m_pInspectorContainerWnd->m_pGalaxy->ModifyHost((long)hChildWnd);
 							::DestroyWindow(hwnd);
@@ -2134,7 +2124,7 @@ namespace OfficePlus
 				COutLookAddin* pAddin = (COutLookAddin*)g_pCosmos;
 				if (m_pTaskPaneGalaxyCluster)
 				{
-					HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+					HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hCosmosWnd, NULL, AfxGetInstanceHandle(), NULL);
 					HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
 					if (::IsWindow(m_hWnd))
 					{
@@ -2792,7 +2782,7 @@ namespace OfficePlus
 		{
 			if (m_pGalaxy)
 			{
-				HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+				HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hCosmosWnd, NULL, AfxGetInstanceHandle(), NULL);
 				m_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
 				::DestroyWindow(hwnd);
 				m_pGalaxy = nullptr;

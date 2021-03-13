@@ -849,7 +849,7 @@ static int _run(int argc, _TCHAR * argv[], _TCHAR * vmArgs[])
 	ATLTRACE(_T("begin quit eclipse\n"));
 	if (g_pCosmos)
 	{
-		::DestroyWindow(g_pCosmos->m_hHostWnd);
+		::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 	}
 	ATLTRACE(_T("end quit eclipse\n"));
 	return running;
