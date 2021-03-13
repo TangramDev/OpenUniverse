@@ -130,7 +130,6 @@ public:
 	void SetHook(DWORD ThreadID);
 
 	static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam);
-	static LRESULT CALLBACK CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 	static LRESULT CALLBACK CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 	static LRESULT CALLBACK CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 

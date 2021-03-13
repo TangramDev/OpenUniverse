@@ -256,7 +256,7 @@ BOOL CUniverse::InitInstance()
 	}
 	if (g_pCosmos)
 	{
-		WNDCLASS wndClass;
+		WNDCLASS wndClass{};
 		wndClass.style = CS_DBLCLKS;
 		wndClass.lpfnWndProc = ::DefWindowProc;
 		wndClass.cbClsExtra = 0;
@@ -272,7 +272,6 @@ BOOL CUniverse::InitInstance()
 
 		g_pCosmos->m_lpszSplitterClass = wndClass.lpszClassName;
 
-		wndClass.lpfnWndProc = CosmosWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
 		wndClass.lpszClassName = L"Cosmos Xobj Class";
 
@@ -390,66 +389,66 @@ int CUniverse::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
+LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+	if (g_pCosmos->m_pCosmosDelegate)
+	{
+		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
+	}
+	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+		it.second->OnForegroundIdleProc();
+	return CallNextHookEx(g_pCosmos->m_hForegroundIdleHook, nCode, wParam, lParam);
+}
+
+LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
 {
 	switch (msg)
 	{
-	case WM_WINDOWPOSCHANGED:
-		if (hWnd == g_pCosmos->m_hTemplateWnd)
+	case WM_CREATE:
+	{
+		if (g_pCosmos->m_hCosmosWnd == NULL)
 		{
-			RECT rc;
-			::GetClientRect(g_pCosmos->m_hTemplateWnd, &rc);
-			::SetWindowPos(g_pCosmos->m_hTemplateChildWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+			g_pCosmos->m_hCosmosWnd = hWnd;
+		}
+	}
+	break;
+	case WM_DESTROY:
+	{
+		if (hWnd == g_pCosmos->m_hCosmosWnd)
+		{
+			g_pCosmos->m_pActiveAppProxy = nullptr;
+			for (auto it : g_pCosmos->m_mapBKFrame)
+			{
+				HWND hWnd = ::GetParent(it.first);
+				IGalaxy* pGalaxy = nullptr;
+				g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
+				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+				if (_pGalaxy)
+					_pGalaxy->m_pBKWnd = nullptr;
+				::DestroyWindow(::GetParent(it.first));
+			}
+
+			if (g_pCosmos->m_pCLRProxy)
+			{
+				if (g_pCosmos->m_pCosmosAppProxy)
+					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+				if (g_pCosmos->m_pCLRProxy)
+					g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
+			}
+
+			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
+			{
+				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
+			}
+			if (g_pCosmos->m_hForegroundIdleHook)
+				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
 		}
 		break;
-	case WM_OPENDOCUMENT:
-	{
-		g_pCosmos->OnOpenDoc(wParam);
 	}
 	break;
 	case WM_INITOUTLOOK:
 	{
 		((OfficePlus::OutLookPlus::COutLookAddin*)g_pCosmos)->InitOutLook();
-	}
-	break;
-	case WM_OFFICEOBJECTCREATED:
-	{
-		HWND hWnd = (HWND)wParam;
-		if (::IsWindow(hWnd))
-			((OfficePlus::COfficeAddin*)g_pCosmos)->ConnectOfficeObj(hWnd);
-	}
-	break;
-	case WM_COSMOSMSG:
-		switch (lParam)
-		{
-		case 1222:
-		{
-			if (wParam == 1963)
-			{
-				OfficePlus::OutLookPlus::COutLookAddin* pAddin = (OfficePlus::OutLookPlus::COutLookAddin*)g_pCosmos;
-				if (pAddin->m_pActiveOutlookExplorer)
-				{
-					pAddin->m_pActiveOutlookExplorer->SetDesignState();
-				}
-			}
-		}
-		break;
-		}
-		break;
-	case WM_TABCHANGE:
-	{
-		HWND hwnd = (HWND)wParam;
-		IGalaxy* pGalaxy = nullptr;
-		g_pCosmos->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
-		if (pGalaxy)
-		{
-			IXobj* pXobj = nullptr;
-			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pXobj);
-			LONGLONG h = 0;
-			pXobj->get_Handle(&h);
-			HWND hWnd = (HWND)h;
-			::InvalidateRect(hWnd, nullptr, true);
-		}
 	}
 	break;
 	case WM_HUBBLE_NEWOUTLOOKOBJ:
@@ -465,13 +464,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 			pAddin->m_mapOutLookPlusExplorerMap[hWnd] = pOutLookPlusItemWindow;
 			pOutLookPlusItemWindow->m_hWnd = hWnd;
 		}
-	}
-	break;
-	case WM_HUBBLE_ACTIVEINSPECTORPAGE:
-	{
-		using namespace OfficePlus::OutLookPlus;
-		COutLookInspector* pOutLookPlusItemWindow = (COutLookInspector*)wParam;
-		pOutLookPlusItemWindow->ActivePage();
 	}
 	break;
 	case WM_HUBBLE_ITEMLOAD:
@@ -511,97 +503,18 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		}
 	}
 	break;
-	case WM_HUBBLE_APPINIT:
+	case WM_HUBBLE_ACTIVEINSPECTORPAGE:
 	{
-		if (g_pCosmos->m_bEclipse)
-		{
-			if (wParam == 1963 && lParam == 1222)
-			{
-				break;
-			}
-
-			if (g_pCosmos->m_pActiveEclipseWnd)
-			{
-				IXobj* pXobj = nullptr;
-				if (g_pCosmos->m_strStartView == _T("TopView"))
-				{
-					g_pCosmos->m_pActiveEclipseWnd->Observe(_T("Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pXobj);
-				}
-				else if (g_pCosmos->m_strStartView == _T("EclipseView"))
-				{
-					IEclipseCtrl* pCtrl = nullptr;
-					g_pCosmos->m_pActiveEclipseWnd->get_Ctrl(CComVariant((long)0), &pCtrl);
-					if (pCtrl)
-					{
-						pCtrl->Observe(CComBSTR(L"EclipseView"), CComBSTR(L"Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pXobj);
-					}
-				}
-			}
-		}
+		using namespace OfficePlus::OutLookPlus;
+		COutLookInspector* pOutLookPlusItemWindow = (COutLookInspector*)wParam;
+		pOutLookPlusItemWindow->ActivePage();
 	}
 	break;
-	default:
-		break;
-	}
-	return ::DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
-LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
-{
-	if (g_pCosmos->m_pCosmosDelegate)
+	case WM_OFFICEOBJECTCREATED:
 	{
-		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
-	}
-	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
-		it.second->OnForegroundIdleProc();
-	return CallNextHookEx(g_pCosmos->m_hForegroundIdleHook, nCode, wParam, lParam);
-}
-
-LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_CREATE:
-	{
-		if (g_pCosmos->m_hCosmosWnd == NULL)
-		{
-			g_pCosmos->m_hCosmosWnd = hWnd;
-			//g_pCosmos->CosmosInit();
-		}
-	}
-	break;
-	case WM_DESTROY:
-	{
-		if (hWnd == g_pCosmos->m_hCosmosWnd)
-		{
-			g_pCosmos->m_pActiveAppProxy = nullptr;
-			for (auto it : g_pCosmos->m_mapBKFrame)
-			{
-				HWND hWnd = ::GetParent(it.first);
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
-				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-				if (_pGalaxy)
-					_pGalaxy->m_pBKWnd = nullptr;
-				::DestroyWindow(::GetParent(it.first));
-			}
-
-			if (g_pCosmos->m_pCLRProxy)
-			{
-				if (g_pCosmos->m_pCosmosAppProxy)
-					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
-				if (g_pCosmos->m_pCLRProxy)
-					g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
-			}
-
-			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
-			{
-				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
-			}
-			if (g_pCosmos->m_hForegroundIdleHook)
-				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
-		}
-		break;
+		HWND hWnd = (HWND)wParam;
+		if (::IsWindow(hWnd))
+			((OfficePlus::COfficeAddin*)g_pCosmos)->ConnectOfficeObj(hWnd);
 	}
 	break;
 	case WM_WINFORMCREATED:
@@ -888,10 +801,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 			}
 			if (pCosmosFrameWndInfo->m_hClient == NULL)
 				pCosmosFrameWndInfo->m_hClient = hWnd;
-			if (::IsWindow(g_pCosmos->m_hHostWnd) == false)
-			{
-				g_pCosmos->m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, hWnd, 0, theApp.m_hInstance, NULL);
-			}
 		}
 		else if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
 		{
@@ -1038,7 +947,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			if (theApp.m_bHostCLR && g_pCosmos->m_nAppType == APP_BROWSERAPP)
 				g_pCosmos->m_nAppType = APP_BROWSER;
-			::DestroyWindow(g_pCosmos->m_hHostWnd);
+			::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 			if (theApp.m_bHostCLR && g_pCosmos->m_nAppType == 0)
 				::PostQuitMessage(20191116);
 		}
@@ -1116,8 +1025,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				if (::GetCurrentThreadId() == g_pCosmos->m_dwThreadID)
 				{
-					if (::IsWindow(g_pCosmos->m_hHostWnd))
-						::DestroyWindow(g_pCosmos->m_hHostWnd);
 					if (::IsWindow(g_pCosmos->m_hCosmosWnd))
 						::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 				}
@@ -1864,7 +1771,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20190511:
 				{
 					if (lpMsg->wParam && g_pCosmos->m_bEclipse == false)
-						::DestroyWindow(g_pCosmos->m_hHostWnd);
+						::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 				}
 				break;
 				case 20191117:

@@ -472,7 +472,7 @@ namespace OfficePlus
 				m_pActivePowerPntObject->m_hChildClient = hWnd;
 				m_mapOfficeObjects2[m_pActivePowerPntObject->m_hForm] = m_pActivePowerPntObject;
 				m_mapOfficeObjects[hWnd] = m_pActivePowerPntObject;
-				::PostMessage(m_hHostWnd, WM_OFFICEOBJECTCREATED, (WPARAM)hWnd, 0);
+				::PostMessage(m_hCosmosWnd, WM_OFFICEOBJECTCREATED, (WPARAM)hWnd, 0);
 			}
 		}
 

@@ -222,7 +222,7 @@ public:
 	STDMETHOD(get_AppKeyValue)(BSTR bstrKey, VARIANT* pVal);
 	STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
 	STDMETHOD(get_RemoteHelperHWND)(LONGLONG* pVal);
-	STDMETHOD(put_RemoteHelperHWND)(LONGLONG newVal) { m_hHostWnd = (HWND)newVal; return S_OK; };
+	STDMETHOD(put_RemoteHelperHWND)(LONGLONG newVal) { return S_OK; };
 	STDMETHOD(get_HostWnd)(LONGLONG* pVal);
 	STDMETHOD(get_RemoteCosmos)(BSTR bstrID, ICosmos** pVal);
 	STDMETHOD(get_Extender)(ICosmosExtender** pVal);

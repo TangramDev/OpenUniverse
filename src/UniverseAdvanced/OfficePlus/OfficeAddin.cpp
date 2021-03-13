@@ -57,7 +57,6 @@ namespace OfficePlus
 		{
 			m_hCBTHook = SetWindowsHookEx(WH_CBT, CUniverse::CBTProc, NULL, GetCurrentThreadId());
 		}
-		m_hHostWnd = NULL;
 		m_strLib = _T("");
 		m_strUser = _T("");
 		m_strRibbonXml = _T("");
@@ -107,8 +106,6 @@ namespace OfficePlus
 			m_pCTPFactory.Detach();
 		OnDisconnection(RemoveMode);
 
-		if (::IsWindow(m_hHostWnd))
-			::DestroyWindow(m_hHostWnd);
 		if (::IsWindow(m_hCosmosWnd))
 			::DestroyWindow(m_hCosmosWnd);
 		return S_OK;
@@ -132,10 +129,10 @@ namespace OfficePlus
 		//	UnhookWindowsHookEx(m_hCBTHook);
 		//	m_hCBTHook = nullptr;
 		//}
-		if (::IsWindow(m_hHostWnd))
+		if (::IsWindow(m_hCosmosWnd))
 		{
-			::DestroyWindow(m_hHostWnd);
-			m_hHostWnd = NULL;
+			::DestroyWindow(m_hCosmosWnd);
+			m_hCosmosWnd = NULL;
 		}
 		return S_OK;
 	}
@@ -412,8 +409,8 @@ namespace OfficePlus
 
 	STDMETHODIMP COfficeAddin::get_RemoteHelperHWND(LONGLONG* pVal)
 	{
-		if (::IsWindow(m_hHostWnd))
-			*pVal = (LONGLONG)m_hHostWnd;
+		if (::IsWindow(m_hCosmosWnd))
+			*pVal = (LONGLONG)m_hCosmosWnd;
 		return S_OK;
 	}
 

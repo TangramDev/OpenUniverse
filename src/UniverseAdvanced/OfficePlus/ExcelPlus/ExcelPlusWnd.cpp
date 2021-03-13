@@ -115,7 +115,7 @@ namespace OfficePlus
 					m_mapUserFormScript[strData] = strVal;
 				}
 
-				::PostMessage(pAddin->m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)m_mapExcelWorkBookWnd.begin()->second, 0);
+				//::PostMessage(pAddin->m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)m_mapExcelWorkBookWnd.begin()->second, 0);
 			});
 		}
 

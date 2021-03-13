@@ -143,7 +143,7 @@ namespace OfficePlus
 					nPos = _strXml.Find(_T("<cluster>"));
 					m_mapUserFormScript[strData] = strVal;
 				}
-				::PostMessage(pAddin->m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)this, 0);
+				//::PostMessage(pAddin->m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)this, 0);
 			});
 		}
 
@@ -196,10 +196,6 @@ namespace OfficePlus
 				}
 				if (nCount == 0)
 				{
-					if (m_pWordPlusDoc->m_pGalaxy)
-					{
-						::PostMessage(g_pCosmos->m_hHostWnd, WM_COSMOSMSG, (WPARAM)m_pWordPlusDoc->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd, 1992);
-					}
 					HRESULT hr = S_OK;
 					hr = m_pWordPlusDoc->DispEventUnadvise(m_pWordPlusDoc->m_pDoc);
 					m_pWordPlusDoc->erase(m_pWordPlusDoc->begin(), m_pWordPlusDoc->end());

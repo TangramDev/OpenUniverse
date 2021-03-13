@@ -263,78 +263,78 @@ void CTangramTabCtrl::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 
 void CTangramTabCtrl::FillListCtrl()
 {
-	m_ListCtrl.DeleteAllItems();
-	TCITEM TabCtrlItem;
-	TabCtrlItem.pszText = g_pCosmos->m_szBuffer;
-	TabCtrlItem.mask |= TCIF_TEXT;
-	TabCtrlItem.cchTextMax = 256;
-	int index = GetCurSel();
-	GetItem(index, &TabCtrlItem);
-	CString strItem = TabCtrlItem.pszText;
-	m_ListCtrl.m_strSubDir = strItem;
-	CString m_strDocTemplatePath = m_ListCtrl.m_strDir + strItem + _T("\\") + m_strFilter;
+	//m_ListCtrl.DeleteAllItems();
+	//TCITEM TabCtrlItem;
+	//TabCtrlItem.pszText = g_pCosmos->m_szBuffer;
+	//TabCtrlItem.mask |= TCIF_TEXT;
+	//TabCtrlItem.cchTextMax = 256;
+	//int index = GetCurSel();
+	//GetItem(index, &TabCtrlItem);
+	//CString strItem = TabCtrlItem.pszText;
+	//m_ListCtrl.m_strSubDir = strItem;
+	//CString m_strDocTemplatePath = m_ListCtrl.m_strDir + strItem + _T("\\") + m_strFilter;
 
-	LVITEM item;
-	item.mask = LVFI_PARAM | LVIF_IMAGE | LVIF_TEXT;
-	item.iSubItem = 0;
-	item.iImage = m_nImageIndex;
-	int nItem = 0;
+	//LVITEM item;
+	//item.mask = LVFI_PARAM | LVIF_IMAGE | LVIF_TEXT;
+	//item.iSubItem = 0;
+	//item.iImage = m_nImageIndex;
+	//int nItem = 0;
 
-	// Create `New Template` icon when tab control belong to designer window.
-	if (::IsChild(g_pCosmos->m_hHostWnd, m_hWnd))
-	{
-		item.iItem = nItem;
-		item.pszText = L"New Template";
-		item.lParam = nItem;
-		m_ListCtrl.InsertItem(&item);
-		nItem++;
-	}
+	//// Create `New Template` icon when tab control belong to designer window.
+	//if (::IsChild(g_pCosmos->m_hHostWnd, m_hWnd))
+	//{
+	//	item.iItem = nItem;
+	//	item.pszText = L"New Template";
+	//	item.lParam = nItem;
+	//	m_ListCtrl.InsertItem(&item);
+	//	nItem++;
+	//}
 
-	_wfinddata_t fd;
-	fd.attrib = FILE_ATTRIBUTE_DIRECTORY;
-	intptr_t pf = _wfindfirst(m_strDocTemplatePath, &fd);
-	while (pf!=-1)
-	{
-		if ((fd.attrib&FILE_ATTRIBUTE_DIRECTORY)==0)
-		{
-			CString str = fd.name;
-			if (str != _T(".."))
-			{
-				item.iItem = nItem;
-				if(m_strFilter!=_T("*.*"))
-					str = str.Left(str.ReverseFind('.'));
-				item.pszText = str.GetBuffer();
-				item.lParam = nItem;
-				m_ListCtrl.InsertItem(&item);
-				nItem++;
-			}
-		}
-		if (_wfindnext(pf, &fd) == -1)
-			break;
-	}
-	if (nItem)
-	{
-		m_ListCtrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
-	}
+	//_wfinddata_t fd;
+	//fd.attrib = FILE_ATTRIBUTE_DIRECTORY;
+	//intptr_t pf = _wfindfirst(m_strDocTemplatePath, &fd);
+	//while (pf!=-1)
+	//{
+	//	if ((fd.attrib&FILE_ATTRIBUTE_DIRECTORY)==0)
+	//	{
+	//		CString str = fd.name;
+	//		if (str != _T(".."))
+	//		{
+	//			item.iItem = nItem;
+	//			if(m_strFilter!=_T("*.*"))
+	//				str = str.Left(str.ReverseFind('.'));
+	//			item.pszText = str.GetBuffer();
+	//			item.lParam = nItem;
+	//			m_ListCtrl.InsertItem(&item);
+	//			nItem++;
+	//		}
+	//	}
+	//	if (_wfindnext(pf, &fd) == -1)
+	//		break;
+	//}
+	//if (nItem)
+	//{
+	//	m_ListCtrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
+	//}
 
-	_findclose(pf);
-	RePosition();
-	::InvalidateRect(m_hWnd, nullptr, true);
-	CString strPath = g_pCosmos->m_strAppCommonDocPath + _T("templatedetail.xml");
-	if (::PathFileExists(strPath))
-	{
-		IXobj* pXobj = nullptr;
-		CString strTemplateFile = m_ListCtrl.m_strDir + m_ListCtrl.m_strSubDir + _T("\\") + m_ListCtrl.GetItemText(0, 0)+ _T(".html");
-		if (::PathFileExists(strTemplateFile))
-		{
-			m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pXobj);
-		}
-		else
-		{
-			strPath = g_pCosmos->m_strAppCommonDocPath + _T("default.xml");
-			if(m_pGalaxy)
-				m_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strPath), &pXobj);
-		}
-	}
+	//_findclose(pf);
+	//RePosition();
+	//::InvalidateRect(m_hWnd, nullptr, true);
+	//CString strPath = g_pCosmos->m_strAppCommonDocPath + _T("templatedetail.xml");
+	//if (::PathFileExists(strPath))
+	//{
+	//	IXobj* pXobj = nullptr;
+	//	CString strTemplateFile = m_ListCtrl.m_strDir + m_ListCtrl.m_strSubDir + _T("\\") + m_ListCtrl.GetItemText(0, 0)+ _T(".html");
+	//	if (::PathFileExists(strTemplateFile))
+	//	{
+	//		m_pGalaxy->Observe(CComBSTR("HostListView"), CComBSTR(strPath), &pXobj);
+	//	}
+	//	else
+	//	{
+	//		strPath = g_pCosmos->m_strAppCommonDocPath + _T("default.xml");
+	//		if(m_pGalaxy)
+	//			m_pGalaxy->Observe(CComBSTR("default"), CComBSTR(strPath), &pXobj);
+	//	}
+	//}
 }
 

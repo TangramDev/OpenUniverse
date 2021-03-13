@@ -304,7 +304,7 @@ namespace OfficePlus
 			{
 				pDisp->AddRef();
 				//hr = ((COutLookItemEvents_10*)pCosmosInspectorItem)->DispEventAdvise(pDisp);
-				::PostMessage(m_hHostWnd, WM_HUBBLE_ITEMLOAD, (WPARAM)pCosmosInspectorItem, 0);
+				::PostMessage(m_hCosmosWnd, WM_HUBBLE_ITEMLOAD, (WPARAM)pCosmosInspectorItem, 0);
 			}
 			else
 			{
@@ -770,7 +770,7 @@ namespace OfficePlus
 			COfficeAddin::OnConnection(pHostApp, ConnectMode);
 			pHostApp->QueryInterface(__uuidof(IDispatch), (LPVOID*)&m_pApplication);
 
-			::PostMessage(m_hHostWnd, WM_INITOUTLOOK, 0, 0);
+			::PostMessage(m_hCosmosWnd, WM_INITOUTLOOK, 0, 0);
 
 			return S_OK;
 		}
@@ -818,7 +818,6 @@ namespace OfficePlus
 			pSession->get_Stores(&m_pStores);
 			long nCount;
 			m_pStores->get_Count(&nCount);
-			::PostMessage(m_hHostWnd, WM_COSMOSMSG, 0, 0);
 			//HRESULT hr = ((COutLookApplicationEvents*)this)->DispEventAdvise(m_pApplication);
 			//hr = ((COutLookApplicationEvents_10*)this)->DispEventAdvise(m_pApplication);
 			HRESULT hr = ((COutLookApplicationEvents_11*)this)->DispEventAdvise(m_pApplication);
@@ -1307,7 +1306,7 @@ namespace OfficePlus
 					hr = ((COutLookAccountSelectorEvents*)pOutlookExplorer)->DispEventAdvise(pOutlookExplorer->m_pAccountSelector);
 				}
 			}
-			::PostMessage(m_hHostWnd, WM_HUBBLE_NEWOUTLOOKOBJ, 1, (LPARAM)pOutlookExplorer);
+			::PostMessage(m_hCosmosWnd, WM_HUBBLE_NEWOUTLOOKOBJ, 1, (LPARAM)pOutlookExplorer);
 
 			CCosmosEvent* pObj = new CComObject<CCosmosEvent>;
 			pObj->Init(_T("NewExplorer"), 0x0000f001, m_pApplication.p);
@@ -2086,7 +2085,7 @@ namespace OfficePlus
 			m_strActivePageName = OLE2T(ActivePageName);
 			m_strActivePageName.Trim();
 			m_strActivePageName.Replace(_T(" "), _T("_"));
-			::PostMessage(pAddin->m_hHostWnd, WM_HUBBLE_ACTIVEINSPECTORPAGE, (WPARAM)this, 0);
+			::PostMessage(pAddin->m_hCosmosWnd, WM_HUBBLE_ACTIVEINSPECTORPAGE, (WPARAM)this, 0);
 		}
 
 		void COutLookInspector::OnActivate()

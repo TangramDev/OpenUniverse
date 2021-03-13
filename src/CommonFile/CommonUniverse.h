@@ -76,7 +76,6 @@
 #define WM_CLOUDMSGRECEIVED				(WM_USER + 0x00004007)
 #define WM_OFFICEOBJECTCREATED			(WM_USER + 0x00004008)
 #define WM_MDICHILDMIN					(WM_USER + 0x00004009)
-#define WM_HUBBLE_APPINIT				(WM_USER + 0x0000400a)
 #define WM_HUBBLE_APPQUIT				(WM_USER + 0x0000400b)
 #define WM_HUBBLE_DATA					(WM_USER + 0x0000400c)
 #define WM_DOWNLOAD_MSG					(WM_USER + 0x0000400d)
@@ -469,9 +468,6 @@ namespace CommonUniverse {
 		HWND								m_hClosingFrame;
 		CString								m_strAppKey;
 		CString								m_strCreatingDOCID = _T("");
-		//CString								m_strCreatingDOCDefaultName = _T("");
-		//map<CString, void*>					m_mapMainFrame;
-		//map<void*, LONG>					m_mapCosmosDocTemplateID;
 
 		virtual BOOL InitCosmos(void* pVoid) {
 			return TRUE;
@@ -561,7 +557,6 @@ namespace CommonUniverse {
 			m_hParent = NULL;
 			m_hSmallIcon = nullptr;
 			m_hLargeIcon = nullptr;
-			m_hHostWnd = nullptr;
 			m_hFormNodeWnd = nullptr;
 			m_hMainWnd = nullptr;
 			m_hCosmosWnd = nullptr;
@@ -598,7 +593,6 @@ namespace CommonUniverse {
 		HWND									m_hActiveWnd;
 		HWND									m_hEclipseHideWnd;
 		HWND									m_hMainWnd;
-		HWND									m_hHostWnd;
 		HWND									m_hCosmosWnd;
 		HWND									m_hFormNodeWnd;
 		HWND									m_hParent;

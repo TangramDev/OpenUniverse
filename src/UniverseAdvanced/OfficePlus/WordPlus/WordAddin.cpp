@@ -507,7 +507,7 @@ namespace OfficePlus
 		{
 			if (strClassName == _T("_WwB"))
 			{
-				::PostMessage(m_hHostWnd, WM_OFFICEOBJECTCREATED, (WPARAM)hWnd, 0);
+				::PostMessage(m_hCosmosWnd, WM_OFFICEOBJECTCREATED, (WPARAM)hWnd, 0);
 			}
 		}
 
@@ -682,23 +682,6 @@ namespace OfficePlus
 			}
 			//hr = ((CWordAppEvents3*)this)->DispEventAdvise(m_pApplication);
 			//hr = ((CWordAppEvents4*)this)->DispEventAdvise(m_pApplication);
-			if (::IsWindow(m_hHostWnd))
-			{
-				WNDCLASSEX wcex;
-				wcex.cbSize = sizeof(WNDCLASSEX);
-				wcex.style = CS_HREDRAW | CS_VREDRAW;
-				wcex.lpfnWndProc = ::DefWindowProc;
-				wcex.cbClsExtra = 0;
-				wcex.cbWndExtra = 0;
-				wcex.hInstance = theApp.m_hInstance;
-				wcex.hIcon = NULL;
-				wcex.hCursor = NULL;
-				wcex.hbrBackground = NULL;
-				wcex.lpszMenuName = NULL;
-				wcex.lpszClassName = L"Tangram Word Helper Window";
-				wcex.hIconSm = NULL;
-				RegisterClassEx(&wcex);
-			}
 			return S_OK;
 		}
 

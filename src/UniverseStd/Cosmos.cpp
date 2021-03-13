@@ -180,7 +180,6 @@ CCosmos::CCosmos()
 	m_hCreatingWnd = NULL;
 	m_hCosmosWnd = NULL;
 	m_hHostBrowserWnd = NULL;
-	m_hHostWnd = NULL;
 	m_hEclipseHideWnd = NULL;
 	m_hActiveWnd = NULL;
 	m_hTemplateWnd = NULL;
@@ -424,11 +423,6 @@ void CCosmos::Init()
 				}
 			}
 		}
-	}
-
-	if (::IsWindow(m_hHostWnd) == false)
-	{
-		m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, HWND_MESSAGE, 0, theApp.m_hInstance, NULL);
 	}
 }
 
@@ -1225,8 +1219,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 	if (m_nAppID == 9)
 		return nullptr;
 	CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)_pGalaxyCluster;
-	if (pGalaxyCluster->m_hWnd == m_hHostWnd)
-		return nullptr;
 	CString strGalaxyName = _strGalaxyName;
 
 	IGalaxy* pGalaxy = nullptr;
@@ -1364,10 +1356,6 @@ CString CCosmos::InitEclipse(_TCHAR* jarFile)
 	if (m_hForegroundIdleHook == NULL)
 		m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
 	m_bEnableProcessFormTabKey = true;
-	if (m_hHostWnd == NULL)
-	{
-		m_hHostWnd = ::CreateWindowEx(WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW, _T("Cosmos Xobj Class"), _T(""), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, NULL, NULL, theApp.m_hInstance, NULL);
-	}
 
 	jclass			jarFileClass = nullptr;
 	jclass			manifestClass = nullptr;
@@ -1379,7 +1367,6 @@ CString CCosmos::InitEclipse(_TCHAR* jarFile)
 	jmethodID		closeJarMethod = nullptr;
 	jmethodID		getValueMethod = nullptr;
 
-	::PostMessage(m_hHostWnd, WM_HUBBLE_APPINIT, 1963, 1222);
 	JNIEnv* pJVMenv = m_pCosmosDelegate->m_pJVMenv;
 	jarFileClass = pJVMenv->FindClass("java/util/jar/JarFile");
 	if (jarFileClass != nullptr) {
@@ -2375,7 +2362,7 @@ CString CCosmos::GetDocTemplateXml(CString strCaption, CString _strPath, CString
 
 STDMETHODIMP CCosmos::get_HostWnd(LONGLONG* pVal)
 {
-	*pVal = (LONGLONG)m_hHostWnd;
+	*pVal = (LONGLONG)m_hCosmosWnd;
 
 	return S_OK;
 }
@@ -3061,8 +3048,6 @@ void CCosmos::EclipseInit()
 			//it.second->PostMessageW(WM_CLOSE, 0, 0);
 		}
 
-		if (::IsWindow(m_hHostWnd))
-			::DestroyWindow(m_hHostWnd);
 		if (::IsWindow(m_hCosmosWnd))
 			::DestroyWindow(m_hCosmosWnd);
 		if (::IsWindow(m_hMainWnd))

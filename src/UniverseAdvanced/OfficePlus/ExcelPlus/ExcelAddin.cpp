@@ -604,7 +604,7 @@ namespace OfficePlus
 				m_pActiveExcelObject->m_hExcelEdit2 = ::FindWindowEx(hPWnd, NULL, _T("EXCEL6"), NULL);
 				m_mapOfficeObjects[hWnd] = m_pActiveExcelObject;
 				m_mapOfficeObjects2[m_pActiveExcelObject->m_hForm] = m_pActiveExcelObject;
-				::PostMessage(m_hHostWnd, WM_OFFICEOBJECTCREATED, (WPARAM)hWnd, 0);
+				::PostMessage(m_hCosmosWnd, WM_OFFICEOBJECTCREATED, (WPARAM)hWnd, 0);
 			}
 		}
 
@@ -837,7 +837,7 @@ namespace OfficePlus
 				_pWorkBook->m_strDocXml = m_Parse.xml();
 				AddDocXml(pWorkBook, CComBSTR(_pWorkBook->m_strDocXml), CComBSTR(L"tangram"));
 				_pWorkBook->m_bCreating = FALSE;
-				::PostMessage(m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)pExcelObj, 0);
+				//::PostMessage(m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)pExcelObj, 0);
 			}
 			else
 			{

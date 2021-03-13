@@ -184,7 +184,6 @@ BOOL CUniverse::InitInstance()
 
 		g_pCosmos->m_lpszSplitterClass = wndClass.lpszClassName;
 
-		wndClass.lpfnWndProc = CosmosWndProc;
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
 		wndClass.lpszClassName = L"Cosmos Xobj Class";
 
@@ -301,79 +300,6 @@ int CUniverse::ExitInstance()
 	ATLTRACE(_T("End Tangram ExitInstance :%p\n"), this);
 
 	return CWinApp::ExitInstance();
-}
-
-LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_WINDOWPOSCHANGED:
-		if (hWnd == g_pCosmos->m_hTemplateWnd)
-		{
-			RECT rc;
-			::GetClientRect(g_pCosmos->m_hTemplateWnd, &rc);
-			::SetWindowPos(g_pCosmos->m_hTemplateChildWnd, NULL, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-		}
-		break;
-	case WM_OPENDOCUMENT:
-	{
-		g_pCosmos->OnOpenDoc(wParam);
-	}
-	break;
-	case WM_COSMOSMSG:
-		switch (lParam)
-		{
-		}
-		break;
-	case WM_TABCHANGE:
-	{
-		HWND hwnd = (HWND)wParam;
-		IGalaxy* pGalaxy = nullptr;
-		g_pCosmos->GetGalaxy((LONGLONG)hwnd, &pGalaxy);
-		if (pGalaxy)
-		{
-			IXobj* pXobj = nullptr;
-			pGalaxy->Observe(CComBSTR(L""), CComBSTR(L""), &pXobj);
-			LONGLONG h = 0;
-			pXobj->get_Handle(&h);
-			HWND hWnd = (HWND)h;
-			::InvalidateRect(hWnd, nullptr, true);
-		}
-	}
-	break;
-	case WM_HUBBLE_APPINIT:
-	{
-		if (g_pCosmos->m_bEclipse)
-		{
-			if (wParam == 1963 && lParam == 1222)
-			{
-				break;
-			}
-
-			if (g_pCosmos->m_pActiveEclipseWnd)
-			{
-				IXobj* pXobj = nullptr;
-				if (g_pCosmos->m_strStartView == _T("TopView"))
-				{
-					g_pCosmos->m_pActiveEclipseWnd->Observe(_T("Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pXobj);
-				}
-				else if (g_pCosmos->m_strStartView == _T("EclipseView"))
-				{
-					IEclipseCtrl* pCtrl = nullptr;
-					g_pCosmos->m_pActiveEclipseWnd->get_Ctrl(CComVariant((long)0), &pCtrl);
-					if (pCtrl)
-					{
-						pCtrl->Observe(CComBSTR(L"EclipseView"), CComBSTR(L"Start"), g_pCosmos->m_strStartXml.AllocSysString(), &pXobj);
-					}
-				}
-			}
-		}
-	}
-	break;
-	default:
-		break;
-	}
-	return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
@@ -914,8 +840,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				if (::GetCurrentThreadId() == g_pCosmos->m_dwThreadID)
 				{
-					if (::IsWindow(g_pCosmos->m_hHostWnd))
-						::DestroyWindow(g_pCosmos->m_hHostWnd);
 					if (::IsWindow(g_pCosmos->m_hCosmosWnd))
 						::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 				}

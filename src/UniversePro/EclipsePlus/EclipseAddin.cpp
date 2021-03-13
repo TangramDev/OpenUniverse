@@ -222,7 +222,7 @@ STDMETHODIMP CEclipseWnd::CloseTangramUI()
 {
 	if (m_pGalaxy)
 	{
-		HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		HWND _hWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, g_pCosmos->m_hCosmosWnd, NULL, AfxGetInstanceHandle(), NULL);
 		HWND _hChildWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), L"", WS_CHILD, 0, 0, 0, 0, (HWND)_hWnd, NULL, AfxGetInstanceHandle(), NULL);
 		if (::IsWindow(m_hWnd))
 		{

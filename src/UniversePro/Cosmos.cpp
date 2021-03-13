@@ -190,7 +190,6 @@ CCosmos::CCosmos()
 	m_pMDIMainWnd = nullptr;
 	m_hCosmosWnd = NULL;
 	m_hHostBrowserWnd = NULL;
-	m_hHostWnd = NULL;
 	m_hEclipseHideWnd = NULL;
 	m_hActiveWnd = NULL;
 	m_hTemplateWnd = NULL;
@@ -438,11 +437,6 @@ void CCosmos::Init()
 				}
 			}
 		}
-	}
-
-	if (::IsWindow(m_hHostWnd) == false)
-	{
-		m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 400, 400, HWND_MESSAGE, 0, theApp.m_hInstance, NULL);
 	}
 }
 
@@ -1351,8 +1345,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 	if (m_nAppID == 9)
 		return nullptr;
 	CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)_pGalaxyCluster;
-	if (pGalaxyCluster->m_hWnd == m_hHostWnd)
-		return nullptr;
 	CString strGalaxyName = _strGalaxyName;
 
 	IGalaxy* pGalaxy = nullptr;
@@ -1493,10 +1485,6 @@ CString CCosmos::InitEclipse(_TCHAR* jarFile)
 	if (m_hForegroundIdleHook == NULL)
 		m_hForegroundIdleHook = SetWindowsHookEx(WH_FOREGROUNDIDLE, CUniverse::ForegroundIdleProc, NULL, ::GetCurrentThreadId());
 	m_bEnableProcessFormTabKey = true;
-	if (m_hHostWnd == NULL)
-	{
-		m_hHostWnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, HWND_MESSAGE, NULL, theApp.m_hInstance, NULL);
-	}
 
 	jclass			jarFileClass = nullptr;
 	jclass			manifestClass = nullptr;
@@ -1508,7 +1496,6 @@ CString CCosmos::InitEclipse(_TCHAR* jarFile)
 	jmethodID		closeJarMethod = nullptr;
 	jmethodID		getValueMethod = nullptr;
 
-	::PostMessage(m_hHostWnd, WM_HUBBLE_APPINIT, 1963, 1222);
 	JNIEnv* pJVMenv = m_pCosmosDelegate->m_pJVMenv;
 	jarFileClass = pJVMenv->FindClass("java/util/jar/JarFile");
 	if (jarFileClass != nullptr) {
@@ -2852,7 +2839,7 @@ CString CCosmos::GetDocTemplateXml(CString strCaption, CString _strPath, CString
 
 STDMETHODIMP CCosmos::get_HostWnd(LONGLONG* pVal)
 {
-	*pVal = (LONGLONG)m_hHostWnd;
+	*pVal = (LONGLONG)m_hCosmosWnd;
 
 	return S_OK;
 }
@@ -3353,7 +3340,7 @@ STDMETHODIMP CCosmos::DeleteGalaxy(IGalaxy* pGalaxy)
 	CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 	if (_pGalaxy)
 	{
-		HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hHostWnd, NULL, AfxGetInstanceHandle(), NULL);
+		HWND hwnd = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, m_hCosmosWnd, NULL, AfxGetInstanceHandle(), NULL);
 		_pGalaxy->ModifyHost((LONGLONG)::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD, 0, 0, 0, 0, (HWND)hwnd, NULL, AfxGetInstanceHandle(), NULL));
 		::DestroyWindow(hwnd);
 	}
@@ -3591,14 +3578,12 @@ void CCosmos::EclipseInit()
 
 		m_bChromeNeedClosed = true;
 
-		for (auto it : g_pCosmos->m_mapBrowserWnd)
+		for (auto &it : g_pCosmos->m_mapBrowserWnd)
 		{
 			::PostMessage(it.first, WM_CLOSE, 0, 0);
 			//it.second->PostMessageW(WM_CLOSE, 0, 0);
 		}
 
-		if (::IsWindow(m_hHostWnd))
-			::DestroyWindow(m_hHostWnd);
 		if (::IsWindow(m_hCosmosWnd))
 			::DestroyWindow(m_hCosmosWnd);
 		if (::IsWindow(m_hMainWnd))
