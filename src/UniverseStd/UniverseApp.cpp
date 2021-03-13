@@ -322,7 +322,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		if (g_pCosmos->m_hCosmosWnd == NULL)
 		{
 			g_pCosmos->m_hCosmosWnd = hWnd;
-			//g_pCosmos->CosmosInit();
 		}
 	}
 	break;
@@ -376,50 +375,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	case WM_CONTROLBARCREATED:
 	{
 		return 1;
-	}
-	break;
-	case WM_POWERBROADCAST:
-	{
-		switch (wParam)
-		{
-		case PBT_APMRESUMEAUTOMATIC:
-		case PBT_APMPOWERSTATUSCHANGE:
-		{
-			for (auto it : g_pCosmos->m_mapThreadInfo)
-			{
-				if (it.second)
-				{
-					for (auto it2 : it.second->m_mapGalaxy)
-					{
-						it2.second->HostPosChanged();
-					}
-				}
-			}
-			for (auto& it : g_pCosmos->m_mapBrowserWnd)
-			{
-				if (::IsWindowVisible(it.first))
-				{
-					CBrowser* pWnd = (CBrowser*)it.second;
-					if (pWnd)
-					{
-						HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-						if (hWnd)
-						{
-							auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-							if (it1 != g_pCosmos->m_mapHtmlWnd.end())
-							{
-								pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
-								it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-							}
-						}
-						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
-					}
-					::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
-				}
-			}
-		}
-		break;
-		}
 	}
 	break;
 	case WM_COSMOSMSG:
@@ -1268,6 +1223,50 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					if (it != g_pCosmos->m_mapBrowserWnd.end())
 					{
 						ATLTRACE(_T("\n"));
+					}
+				}
+				break;
+				}
+			}
+			break;
+			case WM_POWERBROADCAST:
+			{
+				switch (wParam)
+				{
+				case PBT_APMRESUMEAUTOMATIC:
+				case PBT_APMPOWERSTATUSCHANGE:
+				{
+					for (auto it : g_pCosmos->m_mapThreadInfo)
+					{
+						if (it.second)
+						{
+							for (auto it2 : it.second->m_mapGalaxy)
+							{
+								it2.second->HostPosChanged();
+							}
+						}
+					}
+					for (auto& it : g_pCosmos->m_mapBrowserWnd)
+					{
+						if (::IsWindowVisible(it.first))
+						{
+							CBrowser* pWnd = (CBrowser*)it.second;
+							if (pWnd)
+							{
+								HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+								if (hWnd)
+								{
+									auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+									if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+									{
+										pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+										it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+									}
+								}
+								::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+							}
+							::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
+						}
 					}
 				}
 				break;
