@@ -493,7 +493,7 @@ void CCosmosProxy::WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPW
 			}
 			if (bMenu == false)
 				m_hCreatingCLRWnd = hWnd;
-			::PostMessage(theApp.m_pCosmosImpl->m_hHostWnd, WM_COSMOSMSG, (WPARAM)hWnd, 20200120);
+			::PostMessage(theApp.m_pCosmosImpl->m_hCosmosWnd, WM_COSMOSMSG, (WPARAM)hWnd, 20200120);
 		}
 	}
 }
@@ -1772,7 +1772,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pCosmosSession);
 								pCosmosSession->SendMessage();
 								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_COSMOSMSG, 0, 20201114);
-								::SetActiveWindow((HWND)thisForm->Handle.ToPointer());
 								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
 							}
 							else
@@ -1818,14 +1817,8 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								else
 								{
 									thisForm->Show();
-									thisForm->Focus();
 								}
-
-								thisForm->WindowState = FormWindowState::Normal;
 								::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-								thisForm->Focus();
-								::SetActiveWindow((HWND)thisForm->Handle.ToPointer());
-								::PostMessage((HWND)thisForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 20201225);
 								break;
 							}
 						}

@@ -329,40 +329,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		::ShowWindow(g_pCosmos->m_hHostWnd, SW_HIDE);
 	}
 	return 0;
-	case WM_DESTROY:
-	{
-		if (hWnd == g_pCosmos->m_hHostWnd)
-		{
-			g_pCosmos->m_pActiveAppProxy = nullptr;
-			for (auto it : g_pCosmos->m_mapBKFrame)
-			{
-				HWND hWnd = ::GetParent(it.first);
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
-				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-				if (_pGalaxy)
-					_pGalaxy->m_pBKWnd = nullptr;
-				::DestroyWindow(::GetParent(it.first));
-			}
-
-			if (g_pCosmos->m_pCLRProxy)
-			{
-				if (g_pCosmos->m_pCosmosAppProxy)
-					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
-				if (g_pCosmos->m_pCLRProxy)
-					g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
-			}
-
-			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
-			{
-				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
-			}
-			if (g_pCosmos->m_hForegroundIdleHook)
-				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
-		}
-		break;
-	}
-	break;
 	case WM_WINDOWPOSCHANGED:
 		if (hWnd == g_pCosmos->m_hTemplateWnd)
 		{
@@ -426,11 +392,6 @@ LRESULT CALLBACK CUniverse::CosmosWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM 
 		}
 	}
 	break;
-	case WM_HUBBLE_APPQUIT:
-	{
-		::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
-	}
-	break;
 	default:
 		break;
 	}
@@ -459,6 +420,40 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			g_pCosmos->m_hCosmosWnd = hWnd;
 			//g_pCosmos->CosmosInit();
 		}
+	}
+	break;
+	case WM_DESTROY:
+	{
+		if (hWnd == g_pCosmos->m_hCosmosWnd)
+		{
+			g_pCosmos->m_pActiveAppProxy = nullptr;
+			for (auto it : g_pCosmos->m_mapBKFrame)
+			{
+				HWND hWnd = ::GetParent(it.first);
+				IGalaxy* pGalaxy = nullptr;
+				g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
+				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+				if (_pGalaxy)
+					_pGalaxy->m_pBKWnd = nullptr;
+				::DestroyWindow(::GetParent(it.first));
+			}
+
+			if (g_pCosmos->m_pCLRProxy)
+			{
+				if (g_pCosmos->m_pCosmosAppProxy)
+					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+				if (g_pCosmos->m_pCLRProxy)
+					g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
+			}
+
+			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
+			{
+				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
+			}
+			if (g_pCosmos->m_hForegroundIdleHook)
+				UnhookWindowsHookEx(g_pCosmos->m_hForegroundIdleHook);
+		}
+		break;
 	}
 	break;
 	case WM_WINFORMCREATED:
@@ -572,8 +567,15 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	break;
 	case WM_HUBBLE_APPQUIT:
 	{
-		if (g_pCosmos->m_bEclipse == false)
+		if (g_pCosmos->m_bEclipse == false && g_pCosmos->m_bOfficeApp == false)
 		{
+			TRACE(_T("======== WM_HUBBLE_APPQUIT=========\n"));
+			if (g_pCosmos->m_mapBrowserWnd.size())
+			{
+				g_pCosmos->m_bChromeNeedClosed = true;
+				auto it = g_pCosmos->m_mapBrowserWnd.begin();
+				((CBrowser*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
+			}
 			if (g_pCosmos->m_pMDIMainWnd == NULL)
 			{
 				::PostAppMessage(::GetCurrentThreadId(), WM_QUIT, 0, 0);
@@ -1807,23 +1809,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					}
 				}
 				break;
-				}
-			}
-			break;
-			case WM_HUBBLE_APPQUIT:
-			{
-				TRACE(_T("======== WM_HUBBLE_APPQUIT=========\n"));
-				if (g_pCosmos->m_bEclipse == false)
-				{
-					if (g_pCosmos->m_pMDIMainWnd == NULL)
-					{
-						if (g_pCosmos->m_mapBrowserWnd.size())
-						{
-							g_pCosmos->m_bChromeNeedClosed = true;
-							auto it = g_pCosmos->m_mapBrowserWnd.begin();
-							((CBrowser*)it->second)->SendMessageW(WM_CLOSE, 0, 0);
-						}
-					}
 				}
 			}
 			break;

@@ -63,7 +63,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// Cosmos.cpp : Implementation of CCosmos
+ // Cosmos.cpp : Implementation of CCosmos
 
 #include "stdafx.h"
 #include "Cosmos.h"
@@ -1283,10 +1283,10 @@ void CCosmos::BrowserAppStart()
 	if (g_pCosmos->m_strStartupURL != _T(""))
 	{
 		if ((m_nAppType != APP_BROWSER) && g_pCosmos->m_pBrowserFactory && ::IsWindow(m_hCosmosWnd)) {
-			if (m_nAppType == APP_BROWSERAPP)
+			if (m_nAppType == APP_BROWSERAPP && m_hMainWnd == NULL)
 				m_hMainWnd = m_hCosmosWnd;
 			::PostMessage(g_pCosmos->m_hCosmosWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
-			if(g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
+			if (g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
 				g_pCosmos->m_nAppType = APP_BROWSERAPP;
 			CString str = _T("<host popup='true'><url></url></host>");
 			CTangramXmlParse m_Parse;
@@ -3936,5 +3936,5 @@ bool CCosmos::SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* 
 	{
 		g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second);
 	}
-	return false; 
+	return false;
 }

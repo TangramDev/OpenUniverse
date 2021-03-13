@@ -1416,24 +1416,5 @@ STDMETHODIMP CEclipseCtrl::get_ActiveTopXobj(IXobj** pVal)
 
 HRESULT CEclipseCtrl::FinalConstruct()
 {
-	CString strKey = _T("startdata");
-	auto it = g_pCosmos->m_mapValInfo.find(strKey);
-	if (it != g_pCosmos->m_mapValInfo.end())
-	{
-		CString strData = OLE2T(it->second.bstrVal);
-		int nPos = strData.Find(_T("|"));
-		if (nPos != -1)
-		{
-			g_pCosmos->m_strStartView = strData.Left(nPos);
-			g_pCosmos->m_strStartXml = strData.Mid(nPos + 1);
-			if (::IsWindow(g_pCosmos->m_hHostWnd))
-			{
-				::PostMessage(g_pCosmos->m_hHostWnd, WM_HUBBLE_APPQUIT, 0, 0);
-			}
-		}
-		::VariantClear(&it->second);
-		g_pCosmos->m_mapValInfo.erase(it);
-	}
-
 	return S_OK;
 }
