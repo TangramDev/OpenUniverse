@@ -1320,7 +1320,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case PBT_APMRESUMEAUTOMATIC:
 				case PBT_APMPOWERSTATUSCHANGE:
 				{
-					for (auto it : g_pCosmos->m_mapThreadInfo)
+					for (auto &it : g_pCosmos->m_mapThreadInfo)
 					{
 						if (it.second)
 						{
@@ -1329,7 +1329,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								it2.second->HostPosChanged();
 								for (auto it3 : it2.second->m_mapWPFView)
 								{
-									ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it3.second->m_hWnd);
 									::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
 								}
 							}
@@ -1354,8 +1353,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								}
 								::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
 							}
-							::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
+							::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 7);
 						}
+						ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
 					}
 					if (g_pCosmos->m_pMDIMainWnd)
 					{

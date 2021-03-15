@@ -155,7 +155,7 @@ public:
 
 	int										m_nTangramObj;
 	bool									m_bOfficeAddinUnLoad;
-
+	bool									m_bMainWebViewShow = false;
 #ifdef _DEBUG
 	int										m_nJsObj;
 	int										m_nTangram;

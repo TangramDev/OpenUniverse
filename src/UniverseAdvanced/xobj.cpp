@@ -592,8 +592,8 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				CWebPage* pWebWnd = pWndXobj->m_pHostGalaxy->m_pWebPageWnd;
 				if (pWebWnd)
 				{
-					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-					::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+					//::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+					//::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 					//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 				}
 				return S_OK;
@@ -611,8 +611,8 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 					pWebWnd->m_hWebHostWnd = pWndXobj->m_pHostGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 				else
 					pWebWnd->m_hWebHostWnd = NULL;
-				::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-				::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+				//::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+				//::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 				//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 			}
 			HWND h = ::GetParent(m_pHostWnd->m_hWnd);
@@ -1024,10 +1024,10 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				m_pWebBrowser = (CBrowser*)it->second;
 				if (m_pWebBrowser->m_pVisibleWebWnd)
 				{
-					::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, hPWnd);
-					::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
-					if (m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
-						m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+					//::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, hPWnd);
+					//::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
+					//if (m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+					//	m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(false);
 				}
 				m_pWebBrowser->BrowserLayout();
 				g_pCosmos->m_hParent = NULL;
@@ -1059,7 +1059,13 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 	{
 		if (_strURL == _T("host"))
 		{
-			::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
+			if (m_pWebBrowser == g_pCosmos->m_pHostBrowser)
+			{
+				if (m_pWebBrowser->m_pParentXobj==this)
+					::SendMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
+			}
+			else
+				::SendMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
 		}
 		else
 		{
@@ -1329,7 +1335,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 					j++;
 				}
 			}
-			::SendMessage(m_pHostWnd->m_hWnd, WM_ACTIVETABPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
+			::SendMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
 			Fire_TabChange(m_nActivePage, -1);
 			m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, -1);
 		}

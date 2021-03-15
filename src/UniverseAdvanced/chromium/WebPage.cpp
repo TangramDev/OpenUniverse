@@ -161,6 +161,14 @@ namespace Browser {
 		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
+		case 20210314:
+		{
+			if (m_pChromeRenderFrameHost)
+			{
+				::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
+			}
+		}
+			break;
 		case 20201109:
 		{
 			if (lParam)
@@ -368,9 +376,10 @@ namespace Browser {
 		{
 			if (bChild && m_pChromeRenderFrameHost)
 			{
-				::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+				HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
+				::SetParent(m_hExtendWnd, hBrowser);
 				m_pChromeRenderFrameHost->ShowWebPage(true);
-				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+				//::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
 		break;
@@ -1244,8 +1253,15 @@ namespace Browser {
 								_pGalaxy->m_pWebPageWnd = this;
 								if (g_pCosmos->m_pMDIMainWnd)
 								{
+									{
+										g_pCosmos->m_pHostBrowser->m_bInTabChange = true;
+										m_bCanShow = false;
+									}
 									IXobj* pXobj = nullptr;
 									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
+									::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
+									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
+									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
 								}
 							}
 						}
@@ -1823,8 +1839,8 @@ namespace Browser {
 		}
 		if (::IsWindowVisible(m_hWnd))
 		{
-			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+			//::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
+			//::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		}
 		return S_OK;
 	}

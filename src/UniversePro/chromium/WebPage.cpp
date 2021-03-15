@@ -368,9 +368,10 @@ namespace Browser {
 		{
 			if (bChild && m_pChromeRenderFrameHost)
 			{
-				::SetParent(m_hExtendWnd, ::GetParent(m_hWnd));
+				HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
+				::SetParent(m_hExtendWnd, hBrowser);
 				m_pChromeRenderFrameHost->ShowWebPage(true);
-				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+				::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
 		break;

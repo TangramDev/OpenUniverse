@@ -667,8 +667,8 @@ namespace CommonUniverse
 						pXobj->get_Attribute(CComBSTR("activepage"), &bstrTag);
 						CString m_strTag = OLE2T(bstrTag);
 						::SysFreeString(bstrTag);
-						int nActivePage = _wtoi(m_strTag);
-						::PostMessage(pTangramTabCtrlWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, nActivePage, 1965);
+						//int nActivePage = _wtoi(m_strTag);
+						//::PostMessage(pTangramTabCtrlWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, nActivePage, 1965);
 					}
 
 					return pTangramTabCtrlWnd->m_hWnd;

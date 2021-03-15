@@ -53,7 +53,7 @@ namespace Browser
 		~CWebPage() override;
 
 		BOOL								m_bDevToolWnd;
-
+		bool								m_bCanShow = false;
 		HWND								m_hChildWnd;
 		HWND								m_hExtendWnd;
 		HWND								m_hWebHostWnd;

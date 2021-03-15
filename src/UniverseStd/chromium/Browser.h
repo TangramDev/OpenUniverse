@@ -83,7 +83,9 @@ namespace Browser {
 		ULONG InternalRelease() { return 1; }
 	private:
 		void UpdateContentRect(HWND hContentWnd, RECT& rc, int nTopFix) override;
+		void BeforeActiveChromeTab(HWND hOldWnd) override;
 		void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
+		void EndActiveChromeTab(HWND hActive) override;
 
 		void OnFinalMessage(HWND hWnd) override;
 		LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);

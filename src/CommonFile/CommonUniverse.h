@@ -932,7 +932,9 @@ namespace CommonUniverse {
 		OmniboxViewViewsProxy* m_pOmniboxViewViews;
 
 		virtual void UpdateContentRect(HWND hWebContent, RECT& rc, int nTopFix) {}
+		virtual void BeforeActiveChromeTab(HWND hOldWnd) {}
 		virtual void ActiveChromeTab(HWND hActive, HWND hOldWnd) {}
+		virtual void EndActiveChromeTab(HWND hActive) {}
 	};
 
 	class CChromeWebContentBase {

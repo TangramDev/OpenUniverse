@@ -322,6 +322,10 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 				}
+				else if (strClassName.Find(_T("Chrome Extended Window Class")) == 0)
+				{
+					_pGalaxy->m_strDocTemplateID = _T("WebPage");
+				}
 				if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == _hWnd)
 				{
 					g_pCosmos->m_pMDIMainWnd->m_pGalaxy = _pGalaxy;

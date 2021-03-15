@@ -378,7 +378,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-	if (nOldPage != wParam)
+	if (lParam != wParam)
 	{
 		g_pCosmos->m_bSZMode = true;
 		m_pXobj->Fire_TabChange(wParam, lParam);

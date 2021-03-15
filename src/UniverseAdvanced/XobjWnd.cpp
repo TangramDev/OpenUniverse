@@ -404,7 +404,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-	if (nOldPage != wParam)
+	if (lParam != wParam)
 	{
 		g_pCosmos->m_bSZMode = true;
 		m_pXobj->Fire_TabChange(wParam, lParam);
@@ -438,10 +438,19 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam && lParam == 20201028)
 	{
-		RECT rect;
-		::GetClientRect(m_hWnd, &rect);
+		RECT rc;
+		::GetClientRect(m_hWnd, &rc);
 		CBrowser* pWnd = (CBrowser*)wParam;
+		if (pWnd->m_pParentXobj != m_pXobj)
+			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 		::SetParent(pWnd->m_hWnd, m_hWnd);
+		::SetWindowPos(m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
+		CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
+		if (pMainWnd)
+		{
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
+		}
 		return -1;
 	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
@@ -455,6 +464,14 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		case 19820911:
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 			break;
+		case 20210315:
+		{
+			RECT rc;
+			::GetClientRect(m_hWnd, &rc);
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_FRAMECHANGED|SWP_NOACTIVATE|SWP_NOREDRAW);
+			::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
+		}
+		break;
 		case 20210226:
 		{
 			if (g_pCosmos->m_pMDIMainWnd)
@@ -814,6 +831,15 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
+		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)
+		{
+			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
+				return;
+			if (g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd == nullptr)
+				return;
+			else if (g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd->m_bCanShow == false)
+				return;
+		}
 		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		return;
 	}
@@ -881,13 +907,22 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 	CWnd::OnShowWindow(bShow, nStatus);
 	if (bShow && m_pXobj->m_pWebBrowser)
 	{
+		if (m_pXobj->m_pWebBrowser->m_pParentXobj != m_pXobj)
+			return;
+		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)
+		{
+			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
+				return;
+			if (g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd && g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd->m_bCanShow == false)
+				return;
+		}
 		if (::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd) == false)
 		{
 			::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-			RECT rc;
-			::GetClientRect(m_hWnd, &rc);
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
+		RECT rc;
+		::GetClientRect(m_hWnd, &rc);
+		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
 		::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 	}
 }

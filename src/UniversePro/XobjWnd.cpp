@@ -883,10 +883,10 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 		if (::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd) == false)
 		{
 			::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-			RECT rc;
-			::GetClientRect(m_hWnd, &rc);
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
+		RECT rc;
+		::GetClientRect(m_hWnd, &rc);
+		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right+24, rc.bottom+18, SWP_NOACTIVATE | SWP_NOREDRAW|SWP_NOSENDCHANGING);
 		::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 	}
 }

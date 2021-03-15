@@ -42,7 +42,7 @@ namespace Browser {
 		bool				m_bDestroy = false;
 		bool				m_bTabChange;
 		bool				m_bSZMode = false;
-
+		bool				m_bInTabChange = false;
 		float				m_fdevice_scale_factor;
 		HWND				m_hDrawWnd;
 		HWND				m_hOldTab;
@@ -83,7 +83,9 @@ namespace Browser {
 		ULONG InternalRelease() { return 1; }
 	private:
 		void UpdateContentRect(HWND hContentWnd, RECT& rc, int nTopFix) override;
+		void BeforeActiveChromeTab(HWND hOldWnd) override;
 		void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
+		void EndActiveChromeTab(HWND hActive) override;
 
 		void OnFinalMessage(HWND hWnd) override;
 		LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);

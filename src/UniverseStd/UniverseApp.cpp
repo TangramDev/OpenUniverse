@@ -1236,7 +1236,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case PBT_APMRESUMEAUTOMATIC:
 				case PBT_APMPOWERSTATUSCHANGE:
 				{
-					for (auto it : g_pCosmos->m_mapThreadInfo)
+					for (auto& it : g_pCosmos->m_mapThreadInfo)
 					{
 						if (it.second)
 						{
@@ -1265,8 +1265,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								}
 								::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
 							}
-							::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 4);
+							::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 7);
 						}
+						ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
 					}
 				}
 				break;
