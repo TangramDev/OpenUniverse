@@ -1302,12 +1302,9 @@ namespace Browser {
 					}
 				}
 			}
-			else
+			if (m_pParentXobj)
 			{
-				if (g_pCosmos->m_hMainWnd)
-				{
-					::SetForegroundWindow(g_pCosmos->m_hMainWnd);
-				}
+				::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
 			}
 		}
 	}

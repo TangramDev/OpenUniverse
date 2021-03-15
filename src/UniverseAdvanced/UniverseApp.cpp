@@ -404,14 +404,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 {
 	switch (msg)
 	{
-	case WM_CREATE:
-	{
-		if (g_pCosmos->m_hCosmosWnd == NULL)
-		{
-			g_pCosmos->m_hCosmosWnd = hWnd;
-		}
-	}
-	break;
 	case WM_DESTROY:
 	{
 		if (hWnd == g_pCosmos->m_hCosmosWnd)
@@ -769,11 +761,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				if (pCosmosFrameWndInfo->m_hClient == NULL)
 					pCosmosFrameWndInfo->m_hClient = hWnd;
 				pCosmosFrameWndInfo->m_mapCtrlBarWnd[dwID] = hWnd;
-				HWND h = ::GetAncestor(hPWnd, GA_ROOT);
-				if (::IsWindow(h))
-				{
-					::PostMessage(g_pCosmos->m_hCosmosWnd, WM_CONTROLBARCREATED, (WPARAM)hWnd, (LPARAM)h);
-				}
 			}
 		}
 		else if (strClassName == _T("Chrome_RenderWidgetHostHWND"))
@@ -819,9 +806,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				CCosmosTabCtrl* pCtrl = new CCosmosTabCtrl();
 				pCtrl->SubclassWindow(hWnd);
 			}
-		}
-		else if (strClassName.Find(_T("Afx:")) == 0 && (pCreateWnd->lpcs->style & WS_POPUP))
-		{
 		}
 		else if (strClassName.Find(_T("#32770")) == 0)
 		{
@@ -1320,7 +1304,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case PBT_APMRESUMEAUTOMATIC:
 				case PBT_APMPOWERSTATUSCHANGE:
 				{
-					for (auto &it : g_pCosmos->m_mapThreadInfo)
+					for (auto& it : g_pCosmos->m_mapThreadInfo)
 					{
 						if (it.second)
 						{
@@ -1359,7 +1343,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					}
 					if (g_pCosmos->m_pMDIMainWnd)
 					{
-						if(g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
+						if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
 							g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 					}
 				}

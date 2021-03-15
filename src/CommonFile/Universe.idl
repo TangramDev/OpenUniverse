@@ -127,7 +127,7 @@ enum GalaxyType
 	EclipseViewGalaxy = 0x00000008,
 	EclipseSWTGalaxy = 0x00000009,
 	WinFormControlGalaxy = 0x0000000a,
-	TabbedMDIClientGalaxy = 0x0000000b,
+	WebPageGalaxy = 0x0000000b,
 	NOGalaxy = 0x0000000c
 }GalaxyType;
 

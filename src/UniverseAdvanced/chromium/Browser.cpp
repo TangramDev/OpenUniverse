@@ -466,11 +466,6 @@ namespace Browser {
 							{
 								IXobj* pObj = nullptr;
 								pPage->Observe(CComBSTR(pPage->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
-				if (m_pParentXobj)
-				{
-					::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
-				}
-					m_pVisibleWebWnd->m_bCanShow = true;
 							}
 						}
 					}
@@ -482,6 +477,11 @@ namespace Browser {
 							g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
 							m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 						}
+					}
+					m_pVisibleWebWnd->m_bCanShow = true;
+					if (m_pParentXobj)
+					{
+						::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
 					}
 					//m_bTabChange = true;
 					//BrowserLayout();

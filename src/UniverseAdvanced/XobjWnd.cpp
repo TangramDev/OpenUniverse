@@ -468,7 +468,9 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		{
 			RECT rc;
 			::GetClientRect(m_hWnd, &rc);
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_FRAMECHANGED|SWP_NOACTIVATE|SWP_NOREDRAW);
+			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
+				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
 			::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 		}
 		break;
@@ -833,12 +835,13 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)
 		{
-			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
+			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
+				g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd == nullptr ||
+				g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd->m_bCanShow == false)
+			{
+				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 				return;
-			if (g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd == nullptr)
-				return;
-			else if (g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd->m_bCanShow == false)
-				return;
+			}
 		}
 		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		return;

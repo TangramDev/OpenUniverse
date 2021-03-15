@@ -975,10 +975,12 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 				m_pWebBrowser = (CBrowser*)it->second;
 				if (m_pWebBrowser->m_pVisibleWebWnd)
 				{
-					::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, hPWnd);
-					::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
-					if(m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
-						m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+					//::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, hPWnd);
+					//::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
+					//if(m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+					//	m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+					m_pWebBrowser->m_pParentXobj = this;
+					m_pWebBrowser->m_pVisibleWebWnd->m_pParentXobj = this;
 				}
 				m_pWebBrowser->BrowserLayout();
 				g_pCosmos->m_hParent = NULL;

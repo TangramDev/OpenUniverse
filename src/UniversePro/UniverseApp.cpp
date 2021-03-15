@@ -334,14 +334,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 {
 	switch (msg)
 	{
-	case WM_CREATE:
-	{
-		if (g_pCosmos->m_hCosmosWnd == NULL)
-		{
-			g_pCosmos->m_hCosmosWnd = hWnd;
-		}
-	}
-	break;
 	case WM_DESTROY:
 	{
 		if (hWnd == g_pCosmos->m_hCosmosWnd)
@@ -387,11 +379,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			pWnd->SubclassWindow((HWND)wParam);
 			::PostMessage(g_pCosmos->m_hFormNodeWnd, WM_WINFORMCREATED, 0, 0);
 		}
-	}
-	break;
-	case WM_CONTROLBARCREATED:
-	{
-		return 1;
 	}
 	break;
 	case WM_COSMOSMSG:
@@ -489,7 +476,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			}
 		}
 	}
-
 	break;
 	}
 
@@ -630,11 +616,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 				if (pCosmosFrameWndInfo->m_hClient == NULL)
 					pCosmosFrameWndInfo->m_hClient = hWnd;
 				pCosmosFrameWndInfo->m_mapCtrlBarWnd[dwID] = hWnd;
-				HWND h = ::GetAncestor(hPWnd, GA_ROOT);
-				if (::IsWindow(h))
-				{
-					::PostMessage(g_pCosmos->m_hCosmosWnd, WM_CONTROLBARCREATED, (WPARAM)hWnd, (LPARAM)h);
-				}
 			}
 		}
 		else if (strClassName == _T("Chrome_RenderWidgetHostHWND"))

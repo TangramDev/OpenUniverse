@@ -1259,7 +1259,7 @@ namespace Browser {
 									}
 									IXobj* pXobj = nullptr;
 									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-									::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
+									//::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
 									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
 									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
 								}
@@ -1323,6 +1323,7 @@ namespace Browser {
 					}
 				}
 			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
 		}
 	}
 

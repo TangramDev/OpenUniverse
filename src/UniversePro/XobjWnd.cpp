@@ -813,6 +813,15 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
+		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)
+		{
+			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
+				g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd == nullptr)
+			{
+				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
+				return;
+			}
+		}
 		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		return;
 	}
