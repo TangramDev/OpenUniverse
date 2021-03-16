@@ -407,17 +407,21 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam && lParam == 20201028)
 	{
-		RECT rect;
-		::GetClientRect(m_hWnd, &rect);
+		RECT rc;
+		::GetClientRect(m_hWnd, &rc);
 		CBrowser* pWnd = (CBrowser*)wParam;
+		//if (pWnd->m_pParentXobj != m_pXobj)
+		//	return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 		::SetParent(pWnd->m_hWnd, m_hWnd);
+		pWnd->m_pParentXobj = m_pXobj;
+		::SetWindowPos(pWnd->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 		return -1;
 	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
 		switch (lParam)
 		{
-		case 20201028:
 		case 19631222:
 		case 20191031:
 		case 20180115:
@@ -825,10 +829,11 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 		if (::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd) == false)
 		{
 			::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-			RECT rc;
-			::GetClientRect(m_hWnd, &rc);
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+			m_pXobj->m_pWebBrowser->m_pParentXobj = m_pXobj;
 		}
+		RECT rc;
+		::GetClientRect(m_hWnd, &rc);
+		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
 		::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 	}
 }

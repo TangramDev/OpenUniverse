@@ -21,8 +21,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-
- // WndXobj.cpp : Implementation of CXobj
+ // Xobj.cpp : Implementation of CXobj
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -45,7 +44,6 @@
 #include "WPFView.h"
 #include "universe.c"
 #include "TangramTabCtrl.h"
-#include "OfficePlus\OfficeAddin.h"
 #include "chromium/Browser.h"
 #include "chromium/WebPage.h"
 
@@ -85,7 +83,6 @@ CXobj::CXobj()
 	m_pXobjShareData = nullptr;
 	g_pCosmos->m_pActiveXobj = this;
 }
-
 
 void CXobj::InitWndXobj()
 {
@@ -343,18 +340,6 @@ CString CXobj::_GetNames(CXobj* pXobj)
 	return strRet;
 }
 
-STDMETHODIMP CXobj::GetChildXobjByName(BSTR bstrName, IXobj** ppXobj)
-{
-	CString strName = OLE2T(bstrName);
-	auto it = m_pRootObj->m_mapChildXobj.find(strName);
-	if (it != m_pRootObj->m_mapChildXobj.end())
-	{
-		*ppXobj = it->second;
-		return S_OK;
-	}
-	return S_FALSE;
-}
-
 CWebPage* CXobj::GetHtmlWnd()
 {
 	if (m_pRootObj)
@@ -561,8 +546,8 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 			m_pXobjShareData->m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)pWndXobj->m_pHostWnd->m_hWnd), strName.AllocSysString(), &pGalaxy);
 			pWndXobj->m_pHostGalaxy = (CGalaxy*)pGalaxy;
 			CGalaxy* _pGalaxy = pWndXobj->m_pHostGalaxy;
-			_pGalaxy->m_strDocTemplateID = m_pXobjShareData->m_pGalaxy->m_strDocTemplateID;
 			_pGalaxy->m_pWebPageWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
+			_pGalaxy->m_strDocTemplateID = m_pXobjShareData->m_pGalaxy->m_strDocTemplateID;
 			if (m_pXobjShareData->m_pGalaxy->m_pParentXobj)
 			{
 				_pGalaxy->m_pParentXobj = m_pXobjShareData->m_pGalaxy->m_pParentXobj;
@@ -592,8 +577,8 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				CWebPage* pWebWnd = pWndXobj->m_pHostGalaxy->m_pWebPageWnd;
 				if (pWebWnd)
 				{
-					//::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-					//::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+					::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+					::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 					//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 				}
 				return S_OK;
@@ -611,8 +596,8 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 					pWebWnd->m_hWebHostWnd = pWndXobj->m_pHostGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 				else
 					pWebWnd->m_hWebHostWnd = NULL;
-				//::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
-				//::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+				::SendMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+				::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 				//::InvalidateRect(::GetParent(pWebWnd->m_hWnd), nullptr, true);
 			}
 			HWND h = ::GetParent(m_pHostWnd->m_hWnd);
@@ -968,13 +953,14 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 						m_pWindow = g_pCosmos->m_pCreatingWindow;
 						g_pCosmos->m_pCreatingWindow = nullptr;
 					}
+
 					//::PostMessage(hWnd, WM_XOBJCREATED, (WPARAM)((IXobj*)this), 10000);
 					m_nID = ::GetWindowLong(hWnd, GWL_ID);
 				}
 			}
 		}
 	}
-
+	CWnd* pTemp = CWnd::FromHandlePermanent(hWnd);
 	if (!::IsWindow(m_pHostWnd->m_hWnd) && hWnd && pCosmosDesignView->SubclassWindow(hWnd))
 	{
 		if (isAppWnd == false)
@@ -1004,7 +990,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 			::SetWindowLongPtr(hWnd, GWLP_ID, nID);
 			::SetParent(hWnd, pParentWnd->m_hWnd);
 			::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD | WS_VISIBLE);
-			//::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hPWnd, GWL_STYLE)& WS_CHILD);
 			g_pCosmos->m_hTempBrowserWnd = NULL;
 			if (::IsWindow(m_pHostWnd->m_hWnd) == false)
 				bRet = m_pHostWnd->SubclassWindow(hWnd);
@@ -1026,8 +1011,8 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				{
 					//::SetParent(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, hPWnd);
 					//::ShowWindow(m_pWebBrowser->m_pVisibleWebWnd->m_hExtendWnd, SW_SHOW);
-					//if (m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
-					//	m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(false);
+					//if(m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+					//	m_pWebBrowser->m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 					m_pWebBrowser->m_pParentXobj = this;
 					m_pWebBrowser->m_pVisibleWebWnd->m_pParentXobj = this;
 				}
@@ -1059,15 +1044,12 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 
 	if (m_nViewType == BlankView && m_pHostParse != nullptr)
 	{
+		CString _strURL = m_pHostParse->attr(_T("url"), _T(""));
+		HWND hPWnd = NULL;
 		if (_strURL == _T("host"))
 		{
-			//if (m_pWebBrowser == g_pCosmos->m_pHostBrowser)
-			//{
-			//	if (m_pWebBrowser->m_pParentXobj==this)
-			//		::SendMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
-			//}
-			//else
-				::SendMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
+			//::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
+			::SendMessage(hWnd, WM_COSMOSMSG, (WPARAM)m_pWebBrowser, 20201028);
 		}
 		else
 		{
@@ -1337,9 +1319,15 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 					j++;
 				}
 			}
-			::SendMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
-			Fire_TabChange(m_nActivePage, -1);
-			m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, -1);
+			::SendMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)0);
+			//HWND hGalaxy = m_pXobjShareData->m_pGalaxy->m_hWnd;
+			//if (g_pCosmos->m_pMDIMainWnd && hGalaxy == g_pCosmos->m_pMDIMainWnd->m_hMDIClient)
+			//	::SendMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)0);
+			//else
+			//	::PostMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)0);
+			::PostMessage(m_pHostWnd->m_hWnd, WM_TABCHANGE, (WPARAM)m_nActivePage, (LPARAM)0);
+			Fire_TabChange(m_nActivePage, 0);
+			m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, 0);
 		}
 	}
 
@@ -1351,6 +1339,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 	}
 	if (g_pCosmos->m_pActiveXobj && g_pCosmos->m_pActiveXobj->m_pXobjShareData->m_pGalaxyCluster)
 		g_pCosmos->m_pActiveXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_NodeCreated(this);
+
 	return bRet;
 }
 
@@ -1410,9 +1399,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	BOOL bWebCtrl = false;
 	CString strURL = _T("");
 	CString strID = strTag;
-	CComBSTR bstr2;
-	get_Attribute(CComBSTR("id"), &bstr2);
-	CString strName = OLE2T(bstr2);
+	CString strName = m_strName;
 
 	CWebPage* pHtmlWnd = nullptr;
 	HWND _hWnd = m_pXobjShareData->m_pGalaxy->m_hWnd;
@@ -1427,7 +1414,6 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	{
 		pHtmlWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	}
-
 	switch (m_nViewType)
 	{
 	case ActiveX:
@@ -1687,6 +1673,18 @@ STDMETHODIMP CXobj::GetXobj(long nRow, long nCol, IXobj** ppXobj)
 	return hr;
 }
 
+STDMETHODIMP CXobj::GetChildXobjByName(BSTR bstrName, IXobj** ppXobj)
+{
+	CString strName = OLE2T(bstrName);
+	auto it = m_pRootObj->m_mapChildXobj.find(strName);
+	if (it != m_pRootObj->m_mapChildXobj.end())
+	{
+		*ppXobj = it->second;
+		return S_OK;
+	}
+	return S_FALSE;
+}
+
 STDMETHODIMP CXobj::GetXobjByName(BSTR bstrName, IXobjCollection** ppXobjs)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1711,6 +1709,12 @@ STDMETHODIMP CXobj::GetXobjByName(BSTR bstrName, IXobjCollection** ppXobjs)
 	if (pXobjs != nullptr)
 		pXobjs->Release();
 
+	return S_OK;
+}
+
+STDMETHODIMP CXobj::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
+{
+	*bstrVal = CComBSTR(m_pHostParse->xml());
 	return S_OK;
 }
 
@@ -1798,6 +1802,19 @@ STDMETHODIMP CXobj::get_Width(LONG* pVal)
 	::GetClientRect(m_pHostWnd->m_hWnd, &rc);
 	*pVal = rc.right;
 
+	return S_OK;
+}
+
+STDMETHODIMP CXobj::get_WebPage(IWebPage** pVal)
+{
+	if (m_pWebPage == nullptr)
+	{
+		m_pWebPage = GetHtmlWnd();
+	}
+	if (m_pWebPage)
+	{
+		*pVal = m_pWebPage;
+	}
 	return S_OK;
 }
 
@@ -2163,18 +2180,6 @@ STDMETHODIMP CXobj::get_ActivePage(int* pVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_WebPage(IWebPage** pVal)
-{
-	if (m_pWebPage == nullptr)
-	{
-		m_pWebPage = GetHtmlWnd();
-	}
-	if (m_pWebPage)
-	{
-		*pVal = m_pWebPage;
-	}
-	return S_OK;
-}
 
 STDMETHODIMP CXobj::put_ActivePage(int newVal)
 {
@@ -2298,7 +2303,6 @@ HRESULT CXobj::Fire_Destroy()
 	{
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IXobj*)this);
 	}
-
 	if (m_nViewType != TangramTreeView && m_nViewType != Grid && m_pDisp)
 	{
 		if (m_nViewType == CLRCtrl)
@@ -2645,12 +2649,6 @@ STDMETHODIMP CXobj::put_URL(BSTR newVal)
 
 		return S_OK;
 	}
-	return S_OK;
-}
-
-STDMETHODIMP CXobj::GetUIScript(BSTR bstrCtrlName, BSTR* bstrVal)
-{
-	*bstrVal = CComBSTR(m_pHostParse->xml());
 	return S_OK;
 }
 

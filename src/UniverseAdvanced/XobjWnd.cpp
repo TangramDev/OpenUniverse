@@ -32,8 +32,6 @@
 #include "XobjWnd.h"
 #include "UniverseApp.h"
 #include "TangramHtmlTreeWnd.h"
-#include "OfficePlus\ExcelPlus\ExcelAddin.h"
-#include "OfficePlus\ExcelPlus\ExcelPlusWnd.h"
 
 #include "chromium/WebPage.h"
 
@@ -69,6 +67,7 @@ BEGIN_MESSAGE_MAP(CXobjWnd, CWnd)
 	ON_MESSAGE(WM_COSMOSMSG, OnCosmosMsg)
 	ON_MESSAGE(WM_HUBBLE_GETNODE, OnGetCosmosObj)
 	ON_MESSAGE(WM_TGM_SETACTIVEPAGE, OnActiveTangramObj)
+
 	ON_MESSAGE(WM_SPLITTERREPOSITION, OnSplitterReposition)
 	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
@@ -404,7 +403,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-	if (lParam != wParam)
+	if (nOldPage != wParam)
 	{
 		g_pCosmos->m_bSZMode = true;
 		m_pXobj->Fire_TabChange(wParam, lParam);
@@ -444,7 +443,9 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		if (pWnd->m_pParentXobj != m_pXobj)
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 		::SetParent(pWnd->m_hWnd, m_hWnd);
-		::SetWindowPos(m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
+		pWnd->m_pVisibleWebWnd->m_bCanShow = false;
+		pWnd->m_pParentXobj = m_pXobj;
+		::SetWindowPos(pWnd->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 		CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
 		if (pMainWnd)
@@ -508,6 +509,9 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					}
 				}
 			}
+			if (m_pXobj->m_pWebBrowser)
+			::PostMessageW(m_pXobj->m_pWebBrowser->m_hWnd, WM_COSMOSMSG, 20210314, 1);
+
 			int nPage = -1;
 			m_pXobj->get_ActivePage(&nPage);
 			IXobj* pObj = nullptr;
@@ -833,15 +837,12 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
-		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)
+		if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
+			g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd == nullptr ||
+			g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd->m_bCanShow == false)
 		{
-			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
-				g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd == nullptr ||
-				g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd->m_bCanShow == false)
-			{
-				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
-				return;
-			}
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
+			return;
 		}
 		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		return;

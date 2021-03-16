@@ -443,7 +443,7 @@ namespace Browser {
 			{
 				if (m_pVisibleWebWnd)
 				{
-					//m_pVisibleWebWnd->m_bCanShow = false;
+					m_pVisibleWebWnd->m_bCanShow = false;
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, (LPARAM)m_pVisibleWebWnd->m_hWnd);
 				}
 			}

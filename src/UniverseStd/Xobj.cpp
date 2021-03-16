@@ -1103,10 +1103,11 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					j++;
 				}
 			}
-			::SendMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
+			::PostMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)0);
+			::PostMessage(m_pHostWnd->m_hWnd, WM_TABCHANGE, (WPARAM)m_nActivePage, (LPARAM)0);
 			//::PostMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
-			Fire_TabChange(m_nActivePage, -1);
-			m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, -1);
+			Fire_TabChange(m_nActivePage, 0);
+			m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(this, m_nActivePage, 0);
 		}
 	}
 
