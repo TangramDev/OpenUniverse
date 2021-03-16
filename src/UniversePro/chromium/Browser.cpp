@@ -697,13 +697,16 @@ namespace Browser {
 
 				if (m_pVisibleWebWnd->m_pGalaxy)
 				{
-					//CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
-					//if (pObj->m_nViewType == Grid)
-					//{
-					//	CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
-					//	pWnd->RecalcLayout();
-					//}
 					::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
+					if (::GetParent(m_hWnd) == nullptr)
+					{
+						CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
+						if (pObj->m_nViewType == Grid)
+						{
+							CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+							pWnd->RecalcLayout();
+						}
+					}
 				}
 			}
 			break;

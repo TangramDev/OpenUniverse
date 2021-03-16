@@ -372,7 +372,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		if (_pXobj->m_pWebBrowser) {
 			g_pCosmos->m_pActiveHtmlWnd = _pXobj->m_pWebBrowser->m_pVisibleWebWnd;
 		}
-		if (nOldPage != wParam)
+		if (lParam != wParam)
 		{
 			::PostMessage(pGalaxy->m_hWnd, WM_HUBBLE_ACTIVEPAGE, wParam, lParam);
 			::SendMessage(_pXobj->m_pHostWnd->m_hWnd, WM_HUBBLE_ACTIVEPAGE, wParam, lParam);
@@ -403,7 +403,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-	if (nOldPage != wParam)
+	if (lParam != wParam)
 	{
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
@@ -417,7 +417,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hWnd);
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				((CBrowser*)it->second)->m_bSZMode = true;
+				//((CBrowser*)it->second)->m_bSZMode = true;
 				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);

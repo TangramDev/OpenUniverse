@@ -51,22 +51,55 @@ namespace Browser {
 
 	void CBrowser::BeforeActiveChromeTab(HWND hOldWnd)
 	{
-		//m_hOldTab = hOldWnd;
-		//RECT rcBrowser;
-		//GetClientRect(&rcBrowser);
-		//if (rcBrowser.right * rcBrowser.left)
-		//	::SetWindowPos(m_pVisibleWebWnd->m_hExtendWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_SHOWWINDOW);
-		//::SetWindowRgn(m_hDrawWnd, NULL, true);
-		m_bInTabChange = true;
+		//if(::GetParent(m_hWnd))
+		//	m_bInTabChange = true;
 	}
 
 	void CBrowser::EndActiveChromeTab(HWND hActive)
 	{
-		::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, (LPARAM)hActive);
+		//if (::GetParent(m_hWnd))
+		//	::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, (LPARAM)hActive);
 	}
 
 	void CBrowser::ActiveChromeTab(HWND hActive, HWND hOldWnd)
 	{
+		if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_bDestroy)
+			return;
+
+		m_bTabChange = true;
+		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
+		{
+			m_bSZMode = true;
+			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+			if (::IsWindow(hOldWnd))
+			{
+				m_hOldTab = hOldWnd;
+			}
+
+			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
+			{
+				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
+				if (it != g_pCosmos->m_mapHtmlWnd.end())
+				{
+					CWebPage* pPage = (CWebPage*)it->second;
+					if (pPage->m_pGalaxy)
+					{
+						IXobj* pObj = nullptr;
+						pPage->Observe(CComBSTR(pPage->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
+					}
+				}
+			}
+			else
+			{
+				if (m_pClientGalaxy)
+				{
+					m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
+					m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
+				}
+			}
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+		}
 	}
 
 	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
@@ -88,12 +121,41 @@ namespace Browser {
 				g_pCosmos->m_pGalaxy = nullptr;
 				g_pCosmos->m_bWinFormActived = false;
 			}
-			//if (!m_pClientGalaxy)
-			//	m_pBrowser->LayoutBrowser();
-			//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			if (!m_pClientGalaxy)
+				m_pBrowser->LayoutBrowser();
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		return lRes;
 	}
+	//void CBrowser::ActiveChromeTab(HWND hActive, HWND hOldWnd)
+	//{
+	//}
+
+	//LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+	//	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	//	if (m_bDestroy)
+	//		return lRes;
+	//	if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
+	//	{
+	//		HWND hActive = m_pBrowser->GetActiveWebContentWnd();
+	//		if (::GetParent(m_hWnd) && m_pVisibleWebWnd->m_hWnd != hActive)
+	//		{
+	//			auto it = m_mapChildPage.find(hActive);
+	//			if (it != m_mapChildPage.end())
+	//				m_pVisibleWebWnd = it->second;
+	//		}
+	//		g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
+	//		if (m_pVisibleWebWnd && g_pCosmos->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
+	//		{
+	//			g_pCosmos->m_pGalaxy = nullptr;
+	//			g_pCosmos->m_bWinFormActived = false;
+	//		}
+	//		//if (!m_pClientGalaxy)
+	//		//	m_pBrowser->LayoutBrowser();
+	//		//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+	//	}
+	//	return lRes;
+	//}
 
 	void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
 		if (m_bDestroy || m_bInTabChange || hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
@@ -787,13 +849,16 @@ namespace Browser {
 
 				if (m_pVisibleWebWnd->m_pGalaxy)
 				{
-					//CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
-					//if (pObj->m_nViewType == Grid)
-					//{
-					//	CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
-					//	pWnd->RecalcLayout();
-					//}
 					::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
+					if (::GetParent(m_hWnd) == nullptr)
+					{
+						CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
+						if (pObj->m_nViewType == Grid)
+						{
+							CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+							pWnd->RecalcLayout();
+						}
+					}
 				}
 			}
 			break;

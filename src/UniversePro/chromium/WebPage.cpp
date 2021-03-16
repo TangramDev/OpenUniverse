@@ -1315,6 +1315,19 @@ namespace Browser {
 					}
 				}
 			}
+			if (m_pParentXobj)
+			{
+				this->LoadDocument2Viewport(m_pGalaxy->m_strCurrentKey, _T(""));
+				::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
+			}
+			if (m_pGalaxy && m_pGalaxy->m_pWorkXobj)
+			{
+				if (m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
+				{
+					CSplitterWnd* pWnd = (CSplitterWnd*)m_pGalaxy->m_pWorkXobj->m_pHostWnd;
+					pWnd->RecalcLayout();
+				}
+			}
 		}
 	}
 
