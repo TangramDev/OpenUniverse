@@ -1103,7 +1103,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT & rect, CWnd * pParentWnd, UINT nID
 					j++;
 				}
 			}
-			::PostMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)0);
+			::SendMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)0);
 			::PostMessage(m_pHostWnd->m_hWnd, WM_TABCHANGE, (WPARAM)m_nActivePage, (LPARAM)0);
 			//::PostMessage(m_pHostWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, (WPARAM)m_nActivePage, (LPARAM)1);
 			Fire_TabChange(m_nActivePage, 0);
