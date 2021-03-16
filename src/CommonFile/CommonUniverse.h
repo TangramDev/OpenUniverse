@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103150050
+ *           Web Runtime for Application - Version 1.0.0.202103160051
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -264,6 +264,7 @@ namespace CommonUniverse {
 		bool bControlBarProessed = false;
 		int m_nFrameType = 0;//0:SDI;1:MDT;2:MDI;3:MDIChild
 		HWND m_hClient = NULL;
+		bool m_bSZMode = false;
 		CString m_strData = _T("");
 		CString m_strDocTemplateID = _T("");
 		IWebPage* m_pWebPage = nullptr;

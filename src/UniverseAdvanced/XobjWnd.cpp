@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103150050           *
+ *           Web Runtime for Application - Version 1.0.0.202103160051           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -931,11 +931,10 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 	CWnd::OnShowWindow(bShow, nStatus);
 	if (bShow && m_pXobj->m_pWebBrowser)
 	{
-		if (m_pXobj->m_pRootObj->m_bCreated == false)
-			return;
 		RECT rc;
 		::GetClientRect(m_hWnd, &rc);
-		if (rc.right * rc.bottom == 0)return;
+		if (m_pXobj->m_pRootObj->m_bCreated == false)//||rc.right * rc.bottom == 0)
+			return;
 		if (m_pXobj->m_pWebBrowser->m_pParentXobj != m_pXobj)
 			return;
 		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)

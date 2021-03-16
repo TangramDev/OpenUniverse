@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103150050           *
+ *           Web Runtime for Application - Version 1.0.0.202103160051           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1199,6 +1199,13 @@ namespace Browser {
 				if (hHandle)
 				{
 					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+					if (g_pCosmos->m_pMDIMainWnd)
+					{
+						RECT rc;
+						::GetClientRect(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, &rc);
+						::SetWindowPos(g_pCosmos->m_hHostBrowserWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
+					}
+
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
 					HWND hBrowser = ::GetParent(m_hWnd);

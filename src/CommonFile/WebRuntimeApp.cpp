@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103150050           *
+ *           Web Runtime for Application - Version 1.0.0.202103160051           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -664,9 +664,9 @@ namespace CommonUniverse
 						{
 							return NULL;
 						}
-						pXobj->get_Attribute(CComBSTR("activepage"), &bstrTag);
-						CString m_strTag = OLE2T(bstrTag);
 						::SysFreeString(bstrTag);
+						//pXobj->get_Attribute(CComBSTR("activepage"), &bstrTag);
+						//CString m_strTag = OLE2T(bstrTag);
 						//int nActivePage = _wtoi(m_strTag);
 						//::PostMessage(pTangramTabCtrlWnd->m_hWnd, WM_TGM_SETACTIVEPAGE, nActivePage, 1965);
 					}
