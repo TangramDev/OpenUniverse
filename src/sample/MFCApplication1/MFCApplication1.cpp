@@ -144,7 +144,7 @@ BOOL CMFCApp::InitInstance()
 	// Enable DDE Execute open
 	EnableShellOpen();
 	RegisterShellFileTypes(TRUE);
-	//cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing;
+	cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing;
 	// Dispatch commands specified on the command line.  Will return FALSE if
 	// app was launched with /RegServer, /Register, /Unregserver or /Unregister.
 	if (!ProcessShellCommand(cmdInfo))

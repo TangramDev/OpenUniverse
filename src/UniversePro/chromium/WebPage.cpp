@@ -161,6 +161,14 @@ namespace Browser {
 		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
+		case 20210314:
+		{
+			if (m_pChromeRenderFrameHost)
+			{
+				::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
+			}
+		}
+			break;
 		case 20201109:
 		{
 			if (lParam)
@@ -371,7 +379,7 @@ namespace Browser {
 				HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
 				::SetParent(m_hExtendWnd, hBrowser);
 				m_pChromeRenderFrameHost->ShowWebPage(true);
-				::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
+				//::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
 			}
 		}
 		break;
@@ -1205,7 +1213,6 @@ namespace Browser {
 						::GetClientRect(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, &rc);
 						::SetWindowPos(g_pCosmos->m_hHostBrowserWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
 					}
-
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
 					HWND hBrowser = ::GetParent(m_hWnd);
@@ -1252,8 +1259,15 @@ namespace Browser {
 								_pGalaxy->m_pWebPageWnd = this;
 								if (g_pCosmos->m_pMDIMainWnd)
 								{
+									{
+										g_pCosmos->m_pHostBrowser->m_bInTabChange = true;
+										m_bCanShow = false;
+									}
 									IXobj* pXobj = nullptr;
 									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
+									//::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
+									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
+									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
 								}
 							}
 						}
@@ -1315,19 +1329,7 @@ namespace Browser {
 					}
 				}
 			}
-			if (m_pParentXobj)
-			{
-				this->LoadDocument2Viewport(m_pGalaxy->m_strCurrentKey, _T(""));
-				::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
-			}
-			if (m_pGalaxy && m_pGalaxy->m_pWorkXobj)
-			{
-				if (m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
-				{
-					CSplitterWnd* pWnd = (CSplitterWnd*)m_pGalaxy->m_pWorkXobj->m_pHostWnd;
-					pWnd->RecalcLayout();
-				}
-			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
 		}
 	}
 
@@ -1844,8 +1846,8 @@ namespace Browser {
 		}
 		if (::IsWindowVisible(m_hWnd))
 		{
-			::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+			//::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
+			//::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		}
 		return S_OK;
 	}
