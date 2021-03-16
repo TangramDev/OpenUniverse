@@ -1263,11 +1263,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
-					g_pCosmos->m_bSZMode = false;
 					for (auto& it : g_pCosmos->m_mapSizingBrowser)
 					{
 						if (::IsWindow(it.first))
 						{
+							it.second->m_bSZMode = false;
 							SendMessage(it.first, WM_BROWSERLAYOUT, 0, 7);
 						}
 					}

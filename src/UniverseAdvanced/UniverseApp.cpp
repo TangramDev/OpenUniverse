@@ -1477,11 +1477,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
-					g_pCosmos->m_bSZMode = false;
 					for (auto& it : g_pCosmos->m_mapSizingBrowser)
 					{
 						if (::IsWindow(it.first))
 						{
+							it.second->m_bSZMode = false;
 							SendMessage(it.first, WM_BROWSERLAYOUT, 0, 7);
 						}
 					}
@@ -1605,7 +1605,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											pWnd->SubclassWindow(hWnd);
 											pWnd->m_pParent = g_pCosmos->m_pMDIMainWnd;
 											g_pCosmos->m_pMDIMainWnd->m_mapMDIChild[hWnd] = pWnd;
-											g_pCosmos->m_bSZMode = true;
+											g_pCosmos->m_pHostBrowser->m_bSZMode = true;
 
 											g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
 											if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)

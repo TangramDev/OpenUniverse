@@ -380,7 +380,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 
 	if (lParam != wParam)
 	{
-		g_pCosmos->m_bSZMode = true;
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
@@ -393,6 +392,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hWnd);
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
+				((CBrowser*)it->second)->m_bSZMode = true;
 				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
@@ -478,11 +478,13 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			{
 				if (::IsWindow(it.first))
 				{
+					it.second->m_bSZMode = false;
 					it.second->m_pBrowser->LayoutBrowser();
 				}
 			}
 			g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
-			g_pCosmos->m_bSZMode = false;
+			if(m_pXobj->m_pWebBrowser)
+				m_pXobj->m_pWebBrowser->m_bSZMode = false;
 			return 0;
 		}
 		break;
@@ -755,8 +757,6 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	CGalaxy* pGalaxy = nullptr;
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
-		if (g_pCosmos->m_bSZMode)
-			return;
 		if (bNotCtrlBar)
 		{
 			m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();

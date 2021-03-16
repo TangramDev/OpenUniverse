@@ -148,6 +148,7 @@ class CMDTWnd :
 public:
 	CMDTWnd(void);
 	virtual ~CMDTWnd(void);
+	bool m_bSZMode = false;
 	CString m_strDocTemplateKey = _T("");
 	BEGIN_MSG_MAP(CMDTWnd)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
@@ -177,6 +178,7 @@ public:
 	CWinForm(void);
 	virtual ~CWinForm(void);
 	bool									m_bReady = false;
+	bool									m_bSZMode = false;
 	int										m_nState;
 	BOOL									m_bMdiForm;
 	BOOL									m_bMainForm = false;

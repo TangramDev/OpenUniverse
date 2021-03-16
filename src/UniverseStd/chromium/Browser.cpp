@@ -64,7 +64,7 @@ namespace Browser {
 		m_bTabChange = true;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
-			g_pCosmos->m_bSZMode = true;
+			m_bSZMode = true;
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 			if (::IsWindow(hOldWnd))
 			{
@@ -213,7 +213,7 @@ namespace Browser {
 					::ScreenToClient(hExtendWnd, ((LPPOINT)&rc2) + 1);
 					RECT rect;
 					::GetClientRect(hExtendWnd, &rect);
-					if (g_pCosmos->m_bSZMode)
+					if (m_bSZMode)
 					{
 						rc.right = rc.left + 1;
 						rc.bottom = rc.top + 1;
@@ -311,7 +311,7 @@ namespace Browser {
 		HRGN hWebExtendWndRgn = ::CreateRectRgn(rcExtendWnd.left, rcExtendWnd.top, rcExtendWnd.right, rcExtendWnd.bottom);
 		//浏览器页面窗口区域：
 		HRGN hWebPage = NULL;
-		if (g_pCosmos->m_bSZMode == false)
+		if (m_bSZMode == false)
 			hWebPage = ::CreateRectRgn(rcWebPage.left, rcWebPage.top, rcWebPage.right, rcWebPage.bottom);
 		if (hWebPage)
 			::CombineRgn(hWebExtendWndRgn, hWebExtendWndRgn, hWebPage, RGN_DIFF);
@@ -552,7 +552,7 @@ namespace Browser {
 			g_pCosmos->m_pCLRProxy->PreWindowPosChanging(m_hWnd, lpwndpos, 0);
 		}
 		HWND hPWnd = ::GetParent(m_hWnd);
-		if (g_pCosmos->m_bSZMode)
+		if (m_bSZMode)
 		{
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 		}
@@ -574,11 +574,12 @@ namespace Browser {
 	}
 
 	LRESULT CBrowser::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		g_pCosmos->m_bSZMode = false;
+		m_bSZMode = false;
 		for (auto& it : g_pCosmos->m_mapSizingBrowser)
 		{
 			if (::IsWindow(it.first))
 			{
+				it.second->m_bSZMode = false;
 				it.second->m_pBrowser->LayoutBrowser();
 			}
 		}
@@ -588,7 +589,7 @@ namespace Browser {
 	}
 
 	LRESULT CBrowser::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		g_pCosmos->m_bSZMode = true;
+		m_bSZMode = true;
 		g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		return lRes;
@@ -684,7 +685,7 @@ namespace Browser {
 				m_pBrowser->LayoutBrowser();
 				if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
-				g_pCosmos->m_bSZMode = false;
+				m_bSZMode = false;
 				if (m_pParentXobj)
 				{
 					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);

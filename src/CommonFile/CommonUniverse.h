@@ -572,7 +572,6 @@ namespace CommonUniverse {
 		virtual ~CCosmosImpl() {
 		}
 
-		bool									m_bSZMode = false;
 		bool									m_bChromeNeedClosed;
 		bool									m_bCreatingDevTool;
 		bool									m_bOMNIBOXPOPUPVISIBLE;
