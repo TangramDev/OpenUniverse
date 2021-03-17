@@ -51,14 +51,18 @@ namespace Browser {
 
 	void CBrowser::BeforeActiveChromeTab(HWND hOldWnd)
 	{
-		//if(::GetParent(m_hWnd))
-		//	m_bInTabChange = true;
+		m_bSZMode = true;
+		m_hBeforeChange = hOldWnd;
+		m_bTabChange = true;
+		g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+		if (::GetParent(m_hWnd))
+			m_bInTabChange = true;
 	}
 
 	void CBrowser::EndActiveChromeTab(HWND hActive)
 	{
 		//if (::GetParent(m_hWnd))
-		//	::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, (LPARAM)hActive);
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, (LPARAM)hActive);
 	}
 
 	void CBrowser::ActiveChromeTab(HWND hActive, HWND hOldWnd)
@@ -123,7 +127,7 @@ namespace Browser {
 			}
 			if (!m_pClientGalaxy)
 				m_pBrowser->LayoutBrowser();
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
 		}
 		return lRes;
 	}
@@ -158,11 +162,24 @@ namespace Browser {
 	//}
 
 	void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
+		if (m_hBeforeChange && hWnd == m_hBeforeChange)
+		{
+			return;
+		}
+		else
+		{
+			if (m_hBeforeChange)
+			{
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 0);
+				return;
+			}
+			m_hBeforeChange = nullptr;
+			m_bInTabChange = false;
+		}
 		if (m_bDestroy || m_bInTabChange || hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 		{
 			return;
 		}
-
 		if (::IsWindowVisible(hWnd) == false &&
 			(g_pCosmos->m_pMDIMainWnd == nullptr ||
 				!::IsChild(g_pCosmos->m_pMDIMainWnd->m_hWnd, m_hWnd) ||
@@ -193,11 +210,6 @@ namespace Browser {
 				if (m_pVisibleWebWnd->m_bCanShow == false)
 					return;
 			}
-		}
-
-		if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
-		{
-			//m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 		}
 
 		if (m_bTabChange == true)
@@ -311,8 +323,7 @@ namespace Browser {
 	};
 
 	LRESULT CBrowser::BrowserLayout() {
-		if (m_bInTabChange || m_bDestroy || m_pVisibleWebWnd == nullptr ||
-			!::IsWindowVisible(m_hWnd) ||
+		if (m_bInTabChange || m_bDestroy || m_pVisibleWebWnd == nullptr || !::IsWindowVisible(m_hWnd) ||
 			g_pCosmos->m_bChromeNeedClosed == TRUE)
 			return 0;
 		if (!::IsWindow(m_hWnd))
@@ -492,6 +503,40 @@ namespace Browser {
 			}
 		}
 		break;
+		case 20210317:
+		{
+			if (lParam)
+			{
+				if (lParam == 1)
+				{
+					::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 2);
+					break;
+				}
+				m_bSZMode = false;
+				m_pBrowser->LayoutBrowser();
+				if (m_pParentXobj)
+				{
+					RECT rc;
+					m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
+					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE);
+					if (m_pVisibleWebWnd->m_pGalaxy && m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
+					{
+						HWND hWnd = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd;
+						HWND hPWnd = ::GetAncestor(hWnd, GA_ROOT);
+						if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
+							::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
+					}
+				}
+			}
+			else
+			{
+				m_hBeforeChange = nullptr;
+				m_bSZMode = true;
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 1);
+			}
+			return 0;
+		}
+		break;
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;
@@ -562,9 +607,9 @@ namespace Browser {
 
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 				}
-				m_bInTabChange = false;
-				m_bTabChange = true;
-				BrowserLayout();
+				//m_bInTabChange = false;
+				//m_bTabChange = true;
+				//BrowserLayout();
 			}
 		}
 		break;
@@ -819,7 +864,13 @@ namespace Browser {
 			break;
 			case 7:
 			{
-				if (m_pVisibleWebWnd->m_bCanShow == false)
+				if (wParam == 1)
+				{
+					m_bTabChange = false;
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					break;
+				}
+				if (m_pVisibleWebWnd->m_bCanShow == false || m_bTabChange || m_bInTabChange)
 					break;
 				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
 				for (auto& it : m_mapChildPage)
@@ -841,7 +892,6 @@ namespace Browser {
 				m_pBrowser->LayoutBrowser();
 				if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
-				m_bSZMode = false;
 				if (m_pParentXobj)
 				{
 					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
@@ -860,6 +910,7 @@ namespace Browser {
 						}
 					}
 				}
+				m_bSZMode = false;
 			}
 			break;
 			}

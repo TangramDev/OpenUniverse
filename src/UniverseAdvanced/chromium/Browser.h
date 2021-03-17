@@ -46,6 +46,7 @@ namespace Browser {
 		float				m_fdevice_scale_factor;
 		HWND				m_hDrawWnd;
 		HWND				m_hOldTab;
+		HWND				m_hBeforeChange = NULL;
 		RECT				m_OldRect;
 		CString				m_strCurKey;
 		CWebPage*			m_pVisibleWebWnd;
