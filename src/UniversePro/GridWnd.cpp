@@ -22,7 +22,7 @@
  *
  *******************************************************************************/
 
-// Xobj.cpp : implementation file
+ // Xobj.cpp : implementation file
 
 #include "stdafx.h"
 #include "UniverseApp.h"
@@ -333,7 +333,7 @@ LRESULT CGridWnd::OnSplitterCreated(WPARAM wParam, LPARAM lParam)
 {
 	int _nWidth = 0;
 	SetColumnInfo(lParam, m_nHostWidth >= 0 ? m_nHostWidth : 0, _nWidth);
-	SetRowInfo(wParam, m_nHostHeight >= 0 ? m_nHostHeight:0, _nWidth);
+	SetRowInfo(wParam, m_nHostHeight >= 0 ? m_nHostHeight : 0, _nWidth);
 	//SetColumnInfo(lParam, (m_nHostWidth>=0)? m_nHostWidth:0, _nWidth);
 	//SetRowInfo(wParam, (m_nHostHeight>=0)? m_nHostHeight:0, _nWidth);
 	return 0;
@@ -426,13 +426,12 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	{
 		pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
 		::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
-	
+
 		CWebPage* pWebWnd = nullptr;
 		if (pGalaxy->m_pWebPageWnd)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;
 		}
-
 		pGalaxy->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
@@ -546,7 +545,7 @@ void CGridWnd::_LayoutRowCol(CSplitterWnd::CRowColInfo* pInfoArray, int nMax, in
 					pInfoHost->nCurSize = _nSize;
 				}
 				else
-					pInfoHost->nCurSize = INT_MAX;  // last row/column takes the rest
+					pInfoHost->nCurSize = INT_MAX;// ; _nSize // last row/column takes the rest
 				if (bCol)
 					m_nHostWidth = _nSize;
 				else
@@ -932,26 +931,29 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 
 		SetWindowText(m_pXobj->m_strNodeName);
 		m_bCreated = true;
-		CXobj* pHostNode = nullptr;
-		CXobj* pParent = nullptr;
-		CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
-		bool bHasHostView = false;
-		if (pGalaxy->m_pBindingXobj)
+		if (m_pHostXobj == nullptr)
 		{
-			pHostNode = pGalaxy->m_pBindingXobj;
-			if (::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
+			CXobj* pHostNode = nullptr;
+			CXobj* pParent = nullptr;
+			CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
+			bool bHasHostView = false;
+			if (pGalaxy->m_pBindingXobj)
 			{
-				bHasHostView = true;
-				pParent = pHostNode->m_pParentObj;
-				while (pParent != m_pXobj)
+				pHostNode = pGalaxy->m_pBindingXobj;
+				if (::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
 				{
-					pHostNode = pParent;
+					bHasHostView = true;
 					pParent = pHostNode->m_pParentObj;
+					while (pParent != m_pXobj)
+					{
+						pHostNode = pParent;
+						pParent = pHostNode->m_pParentObj;
+					}
 				}
 			}
+			if (pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
+				m_pHostXobj = pHostNode;
 		}
-		if (m_pHostXobj == nullptr && pHostNode && ::IsChild(m_hWnd, pHostNode->m_pHostWnd->m_hWnd))
-			m_pHostXobj = pHostNode;
 		_RecalcLayout();
 
 		return true;

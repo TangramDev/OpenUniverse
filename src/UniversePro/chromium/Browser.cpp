@@ -518,7 +518,7 @@ namespace Browser {
 				{
 					RECT rc;
 					m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
-					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE);
+					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE|SWP_NOREDRAW);
 					if (m_pVisibleWebWnd->m_pGalaxy && m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
 					{
 						HWND hWnd = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd;
