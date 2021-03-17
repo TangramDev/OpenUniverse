@@ -282,17 +282,17 @@ namespace blink {
 		switch (nFormType)
 		{
 		case 0:
-			DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kLoadwinform, obj));
+			DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kLoadcloudform, obj));
 			break;
 		case 1:
-			DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kLoadmdiwinform, obj));
+			DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kLoadmdicloudform, obj));
 			break;
 		case 2:
 		{
 			CosmosWinform* parentform = form->mdiParent();
 			if (parentform)
 			{
-				parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kLoadmdichildwinform, obj));
+				parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kLoadmdichildcloudform, obj));
 				//form->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kMdichildactivate, obj));
 				//parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kMdichildactivate, obj));
 			}
@@ -536,7 +536,7 @@ namespace blink {
 									xObj->form()->setMsgID(ctrlName_ + "_" + eventName);
 									xObj->form()->setSender(xObj);
 									bFormMsgProcessed = true;
-									xObj->form()->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforwinform, xObj));
+									xObj->form()->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforcloudform, xObj));
 								}
 							}
 						}
@@ -564,7 +564,7 @@ namespace blink {
 			}
 		}
 		if(xObj->form()&&!bFormMsgProcessed)
-			xObj->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforwinform, xObj));
+			xObj->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforcloudform, xObj));
 		else if(xObj->grid()&&!bXobjMsgProcessed)
 			xObj->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xObj));
 	}
@@ -588,7 +588,7 @@ namespace blink {
 				if (it != m_mapWinForm.end())
 				{
 					form = it->value.Get();
-					form->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforwinform, xobj));
+					form->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforcloudform, xobj));
 					form->ProcessFormMessage(xobj->getStr(L"msgID"));
 				}
 			}
@@ -623,8 +623,8 @@ namespace blink {
 			if (parentmdiform && form)
 			{
 				form->isReady_ = true;
-				form->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kMdichildwinformready, xobj));
-				parentmdiform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kMdichildwinformready, xobj));
+				form->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kMdichildcloudformready, xobj));
+				parentmdiform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kMdichildcloudformready, xobj));
 			}
 		}
 	}
@@ -950,7 +950,7 @@ namespace blink {
 				if (form) {
 					invokeWinFormCreatedCallback(form);
 					DispatchEvent(*blink::CosmosEvent::Create(
-						blink::event_type_names::kLoadwinform, xobj));
+						blink::event_type_names::kLoadcloudform, xobj));
 				}
 			}
 		}

@@ -104,9 +104,9 @@ class CORE_EXPORT CosmosNode final :
 
   DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(CosmosControlCreated, kCosmoscontrolcreated)
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
+  DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadCloudForm, kLoadcloudform)
   DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForXobj, kCloudmessageforxobj)
-  DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
+  DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudFormClosed, kCloudformclosed)
 
   CosmosNode();
   CosmosNode(const String& strNodeXml);

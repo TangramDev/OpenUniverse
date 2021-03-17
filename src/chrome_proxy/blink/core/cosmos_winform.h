@@ -91,13 +91,13 @@ namespace blink {
 	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildActivate, kMdichildactivate)
 	DEFINE_ATTRIBUTE_EVENT_LISTENER(GalaxyCreated, kCosmosgalaxycreated)
 	DEFINE_ATTRIBUTE_EVENT_LISTENER(AllMdiChildRemoved, kAllmdichildremoved)
-	DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildWinForm, kLoadmdichildwinform)
-	DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForWinForm, kCloudmessageforwinform)
-	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildWinFormReady, kMdichildwinformready)
-	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiWinFormReady, kMdiwinformready)
-	DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormReady, kWinformready)
-	DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadWinForm, kLoadwinform)
-	DEFINE_ATTRIBUTE_EVENT_LISTENER(WinFormClosed, kWinformclosed)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadMdiChildCloudForm, kLoadmdichildcloudform)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudMessageForCloudForm, kCloudmessageforcloudform)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiChildCloudFormReady, kMdichildcloudformready)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(MdiCloudFormReady, kMdicloudformready)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudFormReady, kCloudformready)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(LoadCloudForm, kLoadcloudform)
+	DEFINE_ATTRIBUTE_EVENT_LISTENER(CloudFormClosed, kCloudformclosed)
 
 	  CosmosWinform();
 	  CosmosWinform(const String& strNodeXml);

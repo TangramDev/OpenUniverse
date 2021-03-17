@@ -56,10 +56,10 @@ typedef sequence<any> ObjectArray;
 
 	// Event handler attributes
 	attribute EventHandler onXobjCreated;
-	attribute EventHandler onLoadWinForm;
-	attribute EventHandler onLoadMdiWinForm;
+	attribute EventHandler onLoadCloudForm;
+	attribute EventHandler onLoadMdiCloudForm;
 	attribute EventHandler onGalaxyCreated;
-	attribute EventHandler onWinFormClosed;
+	attribute EventHandler onCloudFormClosed;
 	attribute EventHandler onBindCLRObject;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onMessageReceived;

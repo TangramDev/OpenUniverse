@@ -38,7 +38,7 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosWinform parentForm;
 
 	// Event handler attributes
-	attribute EventHandler onWinFormClosed;
+	attribute EventHandler onCloudFormClosed;
 	attribute EventHandler onMdiChildActivate;
 	attribute EventHandler onCosmosControlCreated;
 	attribute EventHandler onCloudMessageForXobj;

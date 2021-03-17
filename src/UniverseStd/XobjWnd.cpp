@@ -416,12 +416,13 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		pWnd->m_pParentXobj = m_pXobj;
 		::SetWindowPos(pWnd->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
-		return -1;
+		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	}
 	if (wParam == 0 && lParam)//Create CLRCtrl Node
 	{
 		switch (lParam)
 		{
+		case 20201028:
 		case 19631222:
 		case 20191031:
 		case 20180115:
@@ -505,92 +506,87 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		break;
 		default:
 		{
-			CString strObjTypeID = (LPCTSTR)lParam;
-			if (strObjTypeID.Find(_T(",")) != -1 && g_pCosmos->m_pCLRProxy)
-			{
-				m_pXobj->m_pDisp = g_pCosmos->m_pCLRProxy->CreateObject(strObjTypeID.AllocSysString(), m_hWnd, m_pXobj);
+			//CString strObjTypeID = (LPCTSTR)lParam;
+			//if (strObjTypeID.Find(_T(",")) != -1 && g_pCosmos->m_pCLRProxy)
+			//{
+			//	m_pXobj->m_pDisp = g_pCosmos->m_pCLRProxy->CreateObject(strObjTypeID.AllocSysString(), m_hWnd, m_pXobj);
 
-				if (m_pXobj->m_pDisp)
-				{
-					m_pXobj->m_nViewType = CLRCtrl;
-					if (g_pCosmos->m_hFormNodeWnd)
-					{
-						m_hFormWnd = g_pCosmos->m_hFormNodeWnd;
-						RECT rc;
-						::GetClientRect(m_hWnd, &rc);
-						::SetWindowPos(m_hFormWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-						g_pCosmos->m_hFormNodeWnd = nullptr;
-						return 0;
-					}
-					CAxWindow m_Wnd;
-					m_Wnd.Attach(m_hWnd);
-					CComPtr<IUnknown> pUnk;
-					m_Wnd.AttachControl(m_pXobj->m_pDisp, &pUnk);
-					CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pXobj->m_pDisp);
-					if (pIOleInPlaceActiveObject)
-						m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
-					m_Wnd.Detach();
-				}
-				else
-				{
-					m_bCreateExternal = true;
-				}
-			}
-			else
-			{
-				CString strName = strObjTypeID;
-				int _nPos = strName.Find(_T("."));
-				if (_nPos != -1)
-					strName = strName.Mid(_nPos + 1);
-				_nPos = strName.ReverseFind('.');
-				if (_nPos != -1)
-					strName = strName.Left(_nPos);
-				CXobj* pXobj = m_pXobj->m_pRootObj;
-				CXobj* pParent = m_pXobj->m_pParentObj;
-				if (pParent)
-				{
-					strName = pParent->m_strName + _T("_") + strName;
-				}
-				m_pXobj->put_Attribute(CComBSTR(L"id"), strName.AllocSysString());
-				m_pXobj->m_strName = strName;
-				BOOL bWebCtrl = false;
-				CString strURL = _T("");
-				strObjTypeID.MakeLower();
+			//	if (m_pXobj->m_pDisp)
+			//	{
+			//		m_pXobj->m_nViewType = CLRCtrl;
+			//		if (g_pCosmos->m_hFormNodeWnd)
+			//		{
+			//			m_hFormWnd = g_pCosmos->m_hFormNodeWnd;
+			//			RECT rc;
+			//			::GetClientRect(m_hWnd, &rc);
+			//			::SetWindowPos(m_hFormWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+			//			g_pCosmos->m_hFormNodeWnd = nullptr;
+			//			return 0;
+			//		}
+			//		CAxWindow m_Wnd;
+			//		m_Wnd.Attach(m_hWnd);
+			//		CComPtr<IUnknown> pUnk;
+			//		m_Wnd.AttachControl(m_pXobj->m_pDisp, &pUnk);
+			//		CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pXobj->m_pDisp);
+			//		if (pIOleInPlaceActiveObject)
+			//			m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
+			//		m_Wnd.Detach();
+			//	}
+			//	else
+			//	{
+			//		m_bCreateExternal = true;
+			//	}
+			//}
+			//else
+			//{
+			//	CString strName = strObjTypeID;
+			//	int _nPos = strName.Find(_T("."));
+			//	if (_nPos != -1)
+			//		strName = strName.Mid(_nPos + 1);
+			//	_nPos = strName.ReverseFind('.');
+			//	if (_nPos != -1)
+			//		strName = strName.Left(_nPos);
+			//	CXobj* pXobj = m_pXobj->m_pRootObj;
+			//	CXobj* pParent = m_pXobj->m_pParentObj;
+			//	if (pParent)
+			//	{
+			//		strName = pParent->m_strName + _T("_") + strName;
+			//	}
+			//	m_pXobj->put_Attribute(CComBSTR(L"id"), strName.AllocSysString());
+			//	m_pXobj->m_strName = strName;
+			//	BOOL bWebCtrl = false;
+			//	CString strURL = _T("");
+			//	strObjTypeID.MakeLower();
 
-				if (m_pXobj->m_pDisp == NULL)
-				{
-					CComPtr<IDispatch> pDisp;
-					HRESULT hr = pDisp.CoCreateInstance(CComBSTR(strObjTypeID));
-					if (hr == S_OK)
-					{
-						m_pXobj->m_pDisp = pDisp.Detach();
-					}
-				}
-				if (m_pXobj->m_pDisp)
-				{
-					m_pXobj->m_nViewType = ActiveX;
-					CAxWindow m_Wnd;
-					m_Wnd.Attach(m_hWnd);
-					CComPtr<IUnknown> pUnk;
-					m_Wnd.AttachControl(m_pXobj->m_pDisp, &pUnk);
-					((CXobjWnd*)m_pXobj->m_pHostWnd)->m_pXobj = m_pXobj;
-					HWND hPage = m_pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-					::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CXobjWnd*)m_pXobj->m_pHostWnd), 1963);
-					CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pXobj->m_pDisp);
-					if (pIOleInPlaceActiveObject)
-						m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
-					m_Wnd.Detach();
-				}
-			}
+			//	if (m_pXobj->m_pDisp == NULL)
+			//	{
+			//		CComPtr<IDispatch> pDisp;
+			//		HRESULT hr = pDisp.CoCreateInstance(CComBSTR(strObjTypeID));
+			//		if (hr == S_OK)
+			//		{
+			//			m_pXobj->m_pDisp = pDisp.Detach();
+			//		}
+			//	}
+			//	if (m_pXobj->m_pDisp)
+			//	{
+			//		m_pXobj->m_nViewType = ActiveX;
+			//		CAxWindow m_Wnd;
+			//		m_Wnd.Attach(m_hWnd);
+			//		CComPtr<IUnknown> pUnk;
+			//		m_Wnd.AttachControl(m_pXobj->m_pDisp, &pUnk);
+			//		((CXobjWnd*)m_pXobj->m_pHostWnd)->m_pXobj = m_pXobj;
+			//		HWND hPage = m_pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
+			//		::SendMessage(hPage, WM_COSMOSMSG, (WPARAM)((CXobjWnd*)m_pXobj->m_pHostWnd), 1963);
+			//		CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pXobj->m_pDisp);
+			//		if (pIOleInPlaceActiveObject)
+			//			m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
+			//		m_Wnd.Detach();
+			//	}
+			//}
 		}
 		break;
 		}
-		return 0;
 	}
-	if (lParam == 20191031 || lParam == 20200130)
-		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
-	if (lParam == 20200208)
-		return 0;
 	return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 }
 
@@ -635,6 +631,7 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 			HWND hWnd = (HWND)lParam;
 			if (::IsWindow(hWnd) && m_pXobj)
 			{
+				//if (m_pXobj->m_nViewType == TabGrid)return res;
 				::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strName = g_pCosmos->m_szBuffer;
 				m_pXobj->Fire_ControlNotify(m_pXobj, HIWORD(wParam), LOWORD(wParam), lParam, CComBSTR(g_pCosmos->m_szBuffer));
@@ -803,7 +800,6 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		else if (m_pXobj->m_nViewType == BlankView)
 		{
 			::SetWindowPos(m_pXobj->m_hHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_FRAMECHANGED | SWP_NOACTIVATE);
-			//::InvalidateRect(m_hWnd, nullptr, true);
 			if (m_pXobj->m_hChildHostWnd)
 				::SetWindowPos(m_pXobj->m_hChildHostWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
 		}

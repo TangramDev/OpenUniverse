@@ -19,13 +19,13 @@
 	[RuntimeEnabled = TrustedDOMTypes, Replaceable] readonly attribute CosmosWinform activeMDIChild;
 
 	// Event handler attributes
-	attribute EventHandler onLoadMdiChildWinForm;
-	attribute EventHandler onCloudMessageForWinForm;
+	attribute EventHandler onLoadMdiChildCloudForm;
+	attribute EventHandler onCloudMessageForCloudForm;
 	attribute EventHandler onGalaxyCreated;
 	attribute EventHandler onAllMdiChildRemoved;
-	attribute EventHandler onMdiChildWinFormReady;
-	attribute EventHandler onMdiWinFormReady;
-	attribute EventHandler onWinFormReady;
-	attribute EventHandler onWinFormClosed;
+	attribute EventHandler onMdiChildCloudFormReady;
+	attribute EventHandler onMdiCloudFormReady;
+	attribute EventHandler onCloudFormReady;
+	attribute EventHandler onCloudFormClosed;
 	attribute EventHandler onMdiChildActivate;
 };
