@@ -213,6 +213,7 @@ void CXobj::InitWndXobj()
 	m_strObjTypeID.Trim();
 	m_pRootObj->m_mapChildXobj[m_strName] = this;
 	m_nActivePage = m_pHostParse->attrInt(TGM_ACTIVE_PAGE, 0);
+	m_bWebCommandMsg = m_pHostParse->attrBool(_T("webcmdmsg"), false);
 	m_strCaption = m_pHostParse->attr(TGM_CAPTION, _T(""));
 	if (m_pXobjShareData->m_pGalaxy && m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster)
 	{

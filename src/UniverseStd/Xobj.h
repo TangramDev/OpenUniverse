@@ -97,6 +97,7 @@ public:
 
 	BOOL							m_bTopObj;
 	BOOL							m_bCreated;
+	BOOL							m_bWebCommandMsg = false;;
 
 	XobjType						m_nViewType;
 	int								m_nID;

@@ -197,7 +197,7 @@ namespace Browser {
 				{
 					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 					if (m_pVisibleWebWnd->m_hExtendWnd)
-						::SetParent(m_pVisibleWebWnd->m_hExtendWnd,m_hWnd);
+						::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 					return;
 				}
@@ -873,53 +873,66 @@ namespace Browser {
 			break;
 			case 7:
 			{
-				if (wParam == 1)
+				switch (wParam)
+				{
+				case 0:
+				case 2:
+				{
+					if (m_pVisibleWebWnd->m_bCanShow == false || m_bTabChange || m_bInTabChange)
+						break;
+					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
+					for (auto& it : m_mapChildPage)
+					{
+						if (::IsWindow(it.first))
+						{
+							if (it.first != hWnd)
+							{
+								if (it.second->m_pChromeRenderFrameHost)
+									it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
+							}
+							else
+							{
+								m_pVisibleWebWnd = it.second;
+							}
+						}
+					}
+
+					m_pBrowser->LayoutBrowser();
+					if (::GetParent(m_hWnd) == nullptr)
+						BrowserLayout();
+					if (m_pParentXobj)
+					{
+						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					}
+
+					if (m_pVisibleWebWnd->m_pGalaxy)
+					{
+						::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
+						if (::GetParent(m_hWnd) == nullptr)
+						{
+							CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
+							if (pObj->m_nViewType == Grid)
+							{
+								CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+								pWnd->RecalcLayout();
+							}
+						}
+					}
+					m_bSZMode = false;
+					if (wParam == 2)
+					{
+						HWND hPWnd = ::GetWindow(m_hWnd, GA_ROOT);
+						::RedrawWindow(hPWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
+					}
+				}
+				break;
+				case 1:
 				{
 					m_bTabChange = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-					break;
 				}
-				if (m_pVisibleWebWnd->m_bCanShow == false || m_bTabChange || m_bInTabChange)
-					break;
-				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
-				for (auto& it : m_mapChildPage)
-				{
-					if (::IsWindow(it.first))
-					{
-						if (it.first != hWnd)
-						{
-							if (it.second->m_pChromeRenderFrameHost)
-								it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
-						}
-						else
-						{
-							m_pVisibleWebWnd = it.second;
-						}
-					}
+				break;
 				}
-
-				m_pBrowser->LayoutBrowser();
-				if (::GetParent(m_hWnd) == nullptr)
-					BrowserLayout();
-				if (m_pParentXobj)
-				{
-					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
-				}
-
-				if (m_pVisibleWebWnd->m_pGalaxy)
-				{
-					::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
-					if (::GetParent(m_hWnd) == nullptr)
-					{
-						CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
-						if (pObj->m_nViewType == Grid)
-						{
-							CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
-							pWnd->RecalcLayout();
-						}
-					}
-				}
-				m_bSZMode = false;
 			}
 			break;
 			}

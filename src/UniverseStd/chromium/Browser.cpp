@@ -118,7 +118,7 @@ namespace Browser {
 			}
 			if (!m_pClientGalaxy)
 				m_pBrowser->LayoutBrowser();
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
 		}
 		return lRes;
 	}
@@ -680,46 +680,64 @@ namespace Browser {
 			break;
 			case 7:
 			{
-				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
-				for (auto& it : m_mapChildPage)
+				switch (wParam)
 				{
-					if (::IsWindow(it.first))
+				case 0:
+				case 2:
+				{
+					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
+					for (auto& it : m_mapChildPage)
 					{
-						if (it.first != hWnd)
+						if (::IsWindow(it.first))
 						{
-							if (it.second->m_pChromeRenderFrameHost)
-								it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
-						}
-						else
-						{
-							m_pVisibleWebWnd = it.second;
+							if (it.first != hWnd)
+							{
+								if (it.second->m_pChromeRenderFrameHost)
+									it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
+							}
+							else
+							{
+								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
+								m_pVisibleWebWnd = it.second;
+							}
 						}
 					}
-				}
 
-				m_pBrowser->LayoutBrowser();
-				if (::GetParent(m_hWnd) == nullptr)
-				{
-					BrowserLayout();
-				}
-				m_bSZMode = false;
-				if (m_pParentXobj)
-				{
-					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
-				}
-
-				if (m_pVisibleWebWnd->m_pGalaxy)
-				{
-					::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
+					m_pBrowser->LayoutBrowser();
 					if (::GetParent(m_hWnd) == nullptr)
+						BrowserLayout();
+					if (m_pParentXobj)
 					{
-						CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
-						if (pObj->m_nViewType == Grid)
+						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					}
+
+					if (m_pVisibleWebWnd->m_pGalaxy)
+					{
+						::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
+						if (::GetParent(m_hWnd) == nullptr)
 						{
-							CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
-							pWnd->RecalcLayout();
+							CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
+							if (pObj->m_nViewType == Grid)
+							{
+								CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+								pWnd->RecalcLayout();
+							}
 						}
 					}
+					m_bSZMode = false;
+					if (wParam == 2)
+					{
+						HWND hPWnd = ::GetWindow(m_hWnd, GA_ROOT);
+						::RedrawWindow(hPWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
+					}
+				}
+				break;
+				case 1:
+				{
+					m_bTabChange = false;
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+				}
+				break;
 				}
 			}
 			break;

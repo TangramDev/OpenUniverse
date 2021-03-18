@@ -1304,6 +1304,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case PBT_APMRESUMEAUTOMATIC:
 				case PBT_APMPOWERSTATUSCHANGE:
 				{
+					HWND hWnd = lpMsg->hwnd;
 					for (auto& it : g_pCosmos->m_mapThreadInfo)
 					{
 						if (it.second)
@@ -1320,31 +1321,31 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					}
 					for (auto& it : g_pCosmos->m_mapBrowserWnd)
 					{
-						if (::IsWindowVisible(it.first))
+						if (it.first == hWnd || ::IsChild(hWnd, it.first))
 						{
-							CBrowser* pWnd = (CBrowser*)it.second;
-							if (pWnd)
+							if (::IsWindowVisible(it.first))
 							{
-								HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-								if (hWnd)
+								CBrowser* pWnd = (CBrowser*)it.second;
+								if (pWnd)
 								{
-									auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-									if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+									HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+									if (hWnd)
 									{
-										pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
-										it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+										auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+										if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+										{
+											pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+											it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+											if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
+												::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+										}
 									}
+									::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
 								}
-								::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+								::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
 							}
-							::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 7);
+							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
 						}
-						ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
-					}
-					if (g_pCosmos->m_pMDIMainWnd)
-					{
-						if (g_pCosmos->m_pMDIMainWnd->m_pGalaxy)
-							g_pCosmos->m_pMDIMainWnd->m_pGalaxy->HostPosChanged();
 					}
 				}
 				break;

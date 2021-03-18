@@ -734,6 +734,48 @@ LRESULT CMDTWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return lRes;
 }
 
+LRESULT CMDTWnd::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	switch (wParam)
+	{
+	case PBT_APMRESUMEAUTOMATIC:
+	case PBT_APMPOWERSTATUSCHANGE:
+	{
+		CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
+		for (auto& it : pCosmosFrameWndInfo->m_mapCtrlBarGalaxys)
+		{
+			if (it.second)
+			{
+				((CGalaxy*)it.second)->HostPosChanged();
+			}
+		}
+
+		if (m_pBrowser)
+		{
+			HWND hWnd = m_pBrowser->m_pBrowser->GetActiveWebContentWnd();
+			if (hWnd)
+			{
+				auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+				if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+				{
+					CWebPage* pWebPage = (CWebPage*)it1->second;
+					m_pBrowser->m_pVisibleWebWnd = pWebPage;
+					pWebPage->m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (pWebPage->m_hExtendWnd)
+						::SetParent(pWebPage->m_hExtendWnd, g_pCosmos->m_pHostBrowser->m_hWnd);
+				}
+			}
+			::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+		}
+		::PostMessage(m_pBrowser->m_hWnd, WM_BROWSERLAYOUT, 2, 7);
+		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
+	}
+	break;
+	}
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
 LRESULT CMDTWnd::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);

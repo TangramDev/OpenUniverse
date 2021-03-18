@@ -1218,6 +1218,35 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				case PBT_APMRESUMEAUTOMATIC:
 				case PBT_APMPOWERSTATUSCHANGE:
 				{
+					HWND hWnd = lpMsg->hwnd;
+					for (auto& it : g_pCosmos->m_mapBrowserWnd)
+					{
+						if (it.first == hWnd || ::IsChild(hWnd, it.first))
+						{
+							if (::IsWindowVisible(it.first))
+							{
+								CBrowser* pWnd = (CBrowser*)it.second;
+								if (pWnd)
+								{
+									HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+									if (hWnd)
+									{
+										auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+										if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+										{
+											pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+											it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+											if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
+												::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+										}
+									}
+									::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+								}
+								::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
+							}
+							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
+						}
+					}
 					for (auto& it : g_pCosmos->m_mapThreadInfo)
 					{
 						if (it.second)
@@ -1227,29 +1256,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								it2.second->HostPosChanged();
 							}
 						}
-					}
-					for (auto& it : g_pCosmos->m_mapBrowserWnd)
-					{
-						if (::IsWindowVisible(it.first))
-						{
-							CBrowser* pWnd = (CBrowser*)it.second;
-							if (pWnd)
-							{
-								HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-								if (hWnd)
-								{
-									auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-									if (it1 != g_pCosmos->m_mapHtmlWnd.end())
-									{
-										pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
-										it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-									}
-								}
-								::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
-							}
-							::PostMessage(it.first, WM_BROWSERLAYOUT, 0, 7);
-						}
-						ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
 					}
 				}
 				break;

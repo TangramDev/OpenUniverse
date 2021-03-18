@@ -181,6 +181,8 @@ public:
 	virtual ~CMDTWnd(void);
 	bool m_bSZMode = false;
 	CString m_strDocTemplateKey = _T("");
+
+	CBrowser* m_pBrowser = nullptr;
 	BEGIN_MSG_MAP(CMDTWnd)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -189,6 +191,7 @@ public:
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
+		MESSAGE_HANDLER(WM_POWERBROADCAST, OnPowerRoadcast)
 	END_MSG_MAP()
 private:
 	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
@@ -198,6 +201,7 @@ private:
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnPowerRoadcast(UINT, WPARAM, LPARAM, BOOL&);
 
 	void OnFinalMessage(HWND hWnd);
 };
@@ -229,6 +233,7 @@ public:
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
+		MESSAGE_HANDLER(WM_POWERBROADCAST, OnPowerRoadcast)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
@@ -237,6 +242,7 @@ public:
 	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnPowerRoadcast(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class CWinForm :

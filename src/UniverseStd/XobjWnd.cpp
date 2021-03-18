@@ -635,7 +635,7 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 				::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strName = g_pCosmos->m_szBuffer;
 				m_pXobj->Fire_ControlNotify(m_pXobj, HIWORD(wParam), LOWORD(wParam), lParam, CComBSTR(g_pCosmos->m_szBuffer));
-				if (m_pXobj->m_pWormhole)
+				if (m_pXobj->m_bWebCommandMsg && m_pXobj->m_pWormhole)
 				{
 					HWND hCtrl = (HWND)lParam;
 					CString strVal = _T("");

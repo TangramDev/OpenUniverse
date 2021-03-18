@@ -158,7 +158,6 @@ namespace Browser {
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
-		bool bChild = ::GetWindowLongPtr(::GetParent(m_hWnd), GWL_STYLE) & WS_CHILD;
 		switch (wParam)
 		{
 		case 20210314:
@@ -374,7 +373,7 @@ namespace Browser {
 		break;
 		case 20200131:
 		{
-			if (bChild && m_pChromeRenderFrameHost)
+			if (m_pChromeRenderFrameHost)
 			{
 				HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
 				::SetParent(m_hExtendWnd, hBrowser);
@@ -801,6 +800,15 @@ namespace Browser {
 					if (hPWnd)
 					{
 						pBrowserWnd->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));;
+						if (pBrowserWnd->m_pCosmosFrameWndInfo->m_nFrameType == 1)
+						{
+							auto it = g_pCosmos->m_mapMDTWindow.find(hPWnd);
+							if (it != g_pCosmos->m_mapMDTWindow.end())
+							{
+								CMDTWnd* pWnd = it->second;
+								pWnd->m_pBrowser = pBrowserWnd;
+							}
+						}
 					}
 				}
 			}
