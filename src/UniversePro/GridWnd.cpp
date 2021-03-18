@@ -393,7 +393,7 @@ void CGridWnd::StartTracking(int ht)
 	SetFocus();
 
 	// make sure no updates are pending
-	RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_UPDATENOW);
+	RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 
 	// set tracking state and appropriate cursor
 	m_bTracking = true;
@@ -414,8 +414,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
 		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
-		::InvalidateRect(pGalaxy->m_hWnd, NULL, false);
-		pXobj->m_pHostWnd->Invalidate();
+		//::InvalidateRect(pGalaxy->m_hWnd, NULL, false);
+		//pXobj->m_pHostWnd->Invalidate();
 	}
 
 	//::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
@@ -425,7 +425,6 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	if (bAccept)
 	{
 		pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
-		::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
 
 		CWebPage* pWebWnd = nullptr;
 		if (pGalaxy->m_pWebPageWnd)
@@ -448,6 +447,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			}
 		}
 		RecalcLayout();
+		//::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
+		RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 		if (pWebWnd)
 		{
 			HWND hPWnd = ::GetParent(pWebWnd->m_hWnd);

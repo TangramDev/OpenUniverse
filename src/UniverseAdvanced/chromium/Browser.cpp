@@ -518,13 +518,13 @@ namespace Browser {
 				{
 					RECT rc;
 					m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
-					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE|SWP_NOREDRAW);
-					if (m_pVisibleWebWnd->m_pGalaxy && m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
+					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+					if (m_pVisibleWebWnd->m_pGalaxy)// && m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
 					{
 						HWND hWnd = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd;
-						HWND hPWnd = ::GetAncestor(hWnd, GA_ROOT);
-						if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
-							::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
+						//HWND hPWnd = ::GetAncestor(hWnd, GA_ROOT);
+						//if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
+						::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
 					}
 				}
 			}
