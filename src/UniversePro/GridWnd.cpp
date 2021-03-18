@@ -348,7 +348,7 @@ void CGridWnd::StartTracking(int ht)
 	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
+		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	}
 
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
@@ -413,25 +413,14 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CXobj* pXobj = pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS);
-		//::InvalidateRect(pGalaxy->m_hWnd, NULL, false);
-		//pXobj->m_pHostWnd->Invalidate();
+		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS|WS_CLIPCHILDREN);
 	}
-
-	//::PostMessage(pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20180115);
 
 	CSplitterWnd::StopTracking(bAccept);
 
 	if (bAccept)
 	{
 		pGalaxy->UpdateVisualWPFMap(::GetParent(m_hWnd), false);
-
-		CWebPage* pWebWnd = nullptr;
-		if (pGalaxy->m_pWebPageWnd)
-		{
-			pWebWnd = pGalaxy->m_pWebPageWnd;
-		}
-		pGalaxy->HostPosChanged();
 		HWND h = ::GetParent(m_hWnd);
 		if (h)
 		{
@@ -446,23 +435,16 @@ void CGridWnd::StopTracking(BOOL bAccept)
 				}
 			}
 		}
-		RecalcLayout();
-		//::InvalidateRect(pGalaxy->m_hWnd, nullptr, true);
-		RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
-		if (pWebWnd)
+
+		CWebPage* pWebWnd = nullptr;
+		if (pGalaxy->m_pWebPageWnd)
 		{
+			pWebWnd = pGalaxy->m_pWebPageWnd;
 			HWND hPWnd = ::GetParent(pWebWnd->m_hWnd);
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
-			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
-		CMDIParent* pMainWnd = g_pCosmos->m_pMDIMainWnd;
-		if (pMainWnd)
-		{
-			if (m_pXobj->m_pXobjShareData->m_pGalaxy == pMainWnd->m_pGalaxy)
-			{
-				::PostMessage(pMainWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
-			}
-		}
+		RecalcLayout();
+		RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 	}
 }
 
