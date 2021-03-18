@@ -129,8 +129,32 @@ namespace Browser {
 			return;
 		}
 
-		if (::IsWindowVisible(hWnd) == false)
+		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+		if (it != g_pCosmos->m_mapHtmlWnd.end())
+		{
+			m_pVisibleWebWnd = (CWebPage*)it->second;
+		}
+		else
 			return;
+
+		if (::IsWindowVisible(hWnd) == false)
+		{
+			if (::IsWindowVisible(m_hWnd))
+			{
+				if (m_pBrowser->GetActiveWebContentWnd() == hWnd)
+				{
+					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (m_pVisibleWebWnd->m_hExtendWnd)
+						::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					return;
+				}
+				else
+					return;
+			}
+			else
+				return;
+		}
 
 		if (m_hOldTab)
 		{
@@ -141,19 +165,6 @@ namespace Browser {
 			m_hOldTab = NULL;
 		}
 
-		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-		if (it != g_pCosmos->m_mapHtmlWnd.end())
-		{
-			m_pVisibleWebWnd = (CWebPage*)it->second;
-		}
-		else
-			return;
-
-		if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
-		{
-			m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-		}
-
 		if (m_bTabChange == true)
 		{
 			if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
@@ -162,6 +173,10 @@ namespace Browser {
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
 			return;
+		}
+		if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
+		{
+			m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
 		}
 
 		BrowserLayout();
