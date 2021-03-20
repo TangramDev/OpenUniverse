@@ -133,6 +133,15 @@ public:
 	STDMETHOD(put_Index)(int newVal);
 };
 
+class CCosmosTabStatsTrackerDelegate : public CTabStatsTrackerDelegate
+{
+public:
+	CCosmosTabStatsTrackerDelegate();
+	virtual ~CCosmosTabStatsTrackerDelegate();
+	
+	void OnCalculateAndRecordNativeWindowVisibilities();
+};
+
 // CCosmos
 class ATL_NO_VTABLE CCosmos :
 	public CCosmosImpl,
@@ -142,8 +151,11 @@ class ATL_NO_VTABLE CCosmos :
 	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
 {
 	friend class CGalaxy;
-	friend class CEclipseWnd;
+	friend class CMDTWnd;
+	friend class CWinForm;
 	friend class CUniverse;
+	friend class CMDIParent;
+	friend class CEclipseWnd;
 public:
 	CCosmos();
 	virtual ~CCosmos();
@@ -190,6 +202,7 @@ public:
 
 	CCosmosAppCtrl* m_pCosmosAppCtrl;
 	CEclipseWnd* m_pActiveEclipseWnd;
+	CCosmosTabStatsTrackerDelegate* m_pTabStatsTrackerDelegate = nullptr;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
 	map<HWND, CGalaxy*>						m_mapBKFrame;
@@ -396,4 +409,5 @@ private:
 	CWebPageImpl* GetWebPageImpl(HWND hWnd);
 	CBrowserImpl* GetBrowserImpl(HWND hWnd);
 	bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate);
+	CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate();
 };

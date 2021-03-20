@@ -375,10 +375,12 @@ namespace Browser {
 		{
 			if (m_pChromeRenderFrameHost)
 			{
+				OutputDebugString(_T("------------------Begin PBT_APMRESUMEAUTOMATIC------------------------\n"));
 				HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
 				::SetParent(m_hExtendWnd, hBrowser);
 				m_pChromeRenderFrameHost->ShowWebPage(true);
 				//::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
+				OutputDebugString(_T("------------------End PBT_APMRESUMEAUTOMATIC------------------------\n"));
 			}
 		}
 		break;
@@ -431,7 +433,7 @@ namespace Browser {
 			HWND hNewPWnd = (HWND)lParam;
 			::GetClassName(hNewPWnd, g_pCosmos->m_szBuffer, 256);
 			CString strName = g_pCosmos->m_szBuffer;
-			if (strName.Find(_T("Chrome_WidgetWin_")) == 0)
+			if (strName.Find(_T("Chrome_WidgetWin_0")) == 0)
 			{
 				if (m_hExtendWnd)
 				{

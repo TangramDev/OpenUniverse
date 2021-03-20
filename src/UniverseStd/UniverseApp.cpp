@@ -1217,6 +1217,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 				case PBT_APMRESUMEAUTOMATIC:
 				case PBT_APMPOWERSTATUSCHANGE:
+				case PBT_APMSUSPEND:
+				case PBT_APMRESUMESUSPEND:
 				{
 					HWND hWnd = lpMsg->hwnd;
 					for (auto& it : g_pCosmos->m_mapBrowserWnd)
@@ -1253,7 +1255,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						{
 							for (auto it2 : it.second->m_mapGalaxy)
 							{
-								it2.second->HostPosChanged();
+								if (::IsChild(hWnd, it2.first))
+									it2.second->HostPosChanged();
 							}
 						}
 					}

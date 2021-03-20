@@ -191,6 +191,7 @@ namespace CommonUniverse {
 	class CChromeChildProcessHostImpl;
 	class CWebPageImpl;
 	class ICosmosWindowProvider;
+	class CTabStatsTrackerDelegate;
 	class CChromeChildProcessHostImplProxy;
 
 	class ICosmosCLRImpl;
@@ -697,6 +698,7 @@ namespace CommonUniverse {
 		virtual long GetMsgLong(HWND hXobj, CString strKey) { return 0; }
 		virtual float GetMsgFloat(HWND hXobj, CString strKey) { return 0.0f; }
 		virtual bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate) { return false; }
+		virtual CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate() { return nullptr; }
 	};
 
 	class ICosmosWindowProvider
@@ -796,6 +798,24 @@ namespace CommonUniverse {
 		virtual ~CCosmosBrowserFactory() {}
 
 		virtual HWND CreateBrowser(HWND hParent, CString strXml) { return NULL; }
+	};
+
+	class CTabStatsTrackerImpl {
+	public:
+		CTabStatsTrackerImpl() { m_pTabStatsTrackerDelegate = nullptr; }
+		virtual ~CTabStatsTrackerImpl() {}
+
+		CTabStatsTrackerDelegate* m_pTabStatsTrackerDelegate;
+
+		virtual void OnInit() {}
+	};
+
+	class CTabStatsTrackerDelegate {
+	public:
+		CTabStatsTrackerDelegate() {}
+		virtual ~CTabStatsTrackerDelegate() {}
+
+		virtual void OnCalculateAndRecordNativeWindowVisibilities() {}
 	};
 
 	class CChromeChildProcessHostImpl {

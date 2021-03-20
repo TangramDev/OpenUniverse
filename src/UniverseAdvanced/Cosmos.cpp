@@ -169,6 +169,30 @@ namespace CommonUniverse
 	CCosmosImpl* g_pCosmosImpl = nullptr;
 }
 
+CCosmosTabStatsTrackerDelegate::CCosmosTabStatsTrackerDelegate() {
+}
+
+CCosmosTabStatsTrackerDelegate::~CCosmosTabStatsTrackerDelegate()
+{
+}
+
+void CCosmosTabStatsTrackerDelegate::OnCalculateAndRecordNativeWindowVisibilities()
+{
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+	TRACE(_T("\n******OnCalculateAndRecordNativeWindowVisibilities : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+	for (auto &it : g_pCosmos->m_mapMDTWindow)
+	{
+		::SendMessage(it.first, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
+		TRACE(_T("\n******CMDTWindow WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+	}
+	if (g_pCosmos->m_pMDIMainWnd)
+	{
+		::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
+		TRACE(_T("\n******g_pCosmos->m_pMDIMainWnd WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+	}
+}
+
 CCosmos::CCosmos()
 {
 	m_pCurrentIPCMsg = nullptr;
@@ -494,7 +518,8 @@ CCosmos::~CCosmos()
 	//    delete m_pBrowserFactory;
 	//    m_pBrowserFactory = nullptr;
 	//}
-
+	if (m_pTabStatsTrackerDelegate)
+		delete m_pTabStatsTrackerDelegate;
 	if (m_pExtender)
 		m_pExtender->Close();
 
@@ -3118,6 +3143,13 @@ HRESULT CCosmos::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** p
 		*ppRet = (IBrowser*)::SendMessage(hRet, WM_COSMOSMSG, 20190527, 0);
 	}
 	return S_OK;
+}
+
+CTabStatsTrackerDelegate* CCosmos::SetTabStatsTrackerDelegate()
+{
+	if (m_pTabStatsTrackerDelegate == nullptr)
+		m_pTabStatsTrackerDelegate = new CCosmosTabStatsTrackerDelegate();
+	return m_pTabStatsTrackerDelegate;
 }
 
 STDMETHODIMP CCosmos::GetXobjFromHandle(LONGLONG hWnd, IXobj** ppRetXobj)

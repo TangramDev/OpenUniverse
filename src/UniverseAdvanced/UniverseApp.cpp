@@ -95,7 +95,7 @@
 using namespace OfficePlus;
 using namespace OfficePlus::WordPlus;
 using namespace OfficePlus::ExcelPlus;
-
+#define _SECOND 10000000
 // Description  : the unique App object
 CUniverse theApp;
 CCosmos* g_pCosmos = nullptr;
@@ -373,13 +373,169 @@ BOOL CUniverse::InitInstance()
 			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
 		}
 	}
+	//DWORD dwID = g_pCosmos->m_dwThreadID;
+	//m_WakeupTask = create_task([this,dwID]()
+	//	{
+	//		m_dwWakeupTask = ::GetCurrentThreadId();
+	//		::PostThreadMessage(m_dwWakeupTask, WM_COSMOSMSG, 0, 0);
+	//		m_hWakeupTask = ::GetCurrentThread();
+	//		MSG msg;
+	//		while (1)
+	//		{
+	//			GetMessage(&msg, NULL, 0, 0);
+	//			TranslateMessage(&msg);
+	//			DispatchMessage(&msg);
+	//			switch (msg.message)
+	//			{
+	//			case WM_QUIT:
+	//			{
+	//				if (m_hWaitableTimer)
+	//					CloseHandle(m_hWaitableTimer);
+	//				TRACE(_T("\n"));
+	//				return 1;
+	//			}
+	//			break;
+	//			case WM_COSMOSMSG:
+	//			{
+	//				BOOL				bSuccess;
+	//				WaitableDATA          testData;
 
+	//				testData.szText = TEXT("This is my data");
+	//				testData.dwValue = dwID;
+	//				m_hWaitableTimer = CreateWaitableTimer(
+	//					NULL,                   // Default security attributes
+	//					FALSE,                  // Create auto-reset timer
+	//					TEXT("MyTimer"));       // Name of waitable timer
+
+	//				if (m_hWaitableTimer != NULL)
+	//				{
+	//					//__try
+	//					{
+	//						// Create an integer that will be used to signal the timer 
+	//						// 5 seconds from now.
+	//						qwDueTime = -200000000;
+
+	//						// Copy the relative time into a LARGE_INTEGER.
+	//						liDueTime.LowPart = (DWORD)(qwDueTime & 0xFFFFFFFF);
+	//						liDueTime.HighPart = (LONG)(qwDueTime >> 32);
+
+	//						bSuccess = SetWaitableTimer(
+	//							m_hWaitableTimer,           // Handle to the timer object
+	//							&liDueTime,       // When timer will become signaled
+	//							90000,             // Periodic timer interval of 15 seconds
+	//							TimerAPCProc,     // Completion routine
+	//							&testData,          // Argument to the completion routine
+	//							TRUE);          // restore a suspended system
+
+	//						if (bSuccess)
+	//						{
+	//							for (; ; )
+	//							{
+	//								SleepEx(
+	//									INFINITE,     // Wait forever
+	//									TRUE);       // Put thread in an alertable state
+	//							}
+	//						}
+	//						else
+	//						{
+	//							printf("SetWaitableTimer failed with error %d\n", GetLastError());
+	//						}
+
+	//					}
+	//					//__finally
+	//					//{
+	//					//	if (m_hWaitableTimer)
+	//					//		CloseHandle(m_hWaitableTimer);
+	//					//}
+	//				}
+	//				else
+	//				{
+	//					printf("CreateWaitableTimer failed with error %d\n", GetLastError());
+	//				}
+
+	//			}
+	//			break;
+	//			}
+
+	//		}
+	//		return 1;
+	//	});
+
+
+	//BOOL				bSuccess;
+	//WaitableDATA          testData;
+
+	//testData.szText = TEXT("This is my data");
+	//testData.dwValue = 100;
+	//m_hWaitableTimer = CreateWaitableTimer(
+	//	NULL,                   // Default security attributes
+	//	FALSE,                  // Create auto-reset timer
+	//	TEXT("MyTimer"));       // Name of waitable timer
+
+	//if (m_hWaitableTimer != NULL)
+	//{
+	//	//__try
+	//	{
+	//		// Create an integer that will be used to signal the timer 
+	//		// 5 seconds from now.
+	//		qwDueTime = -1 * _SECOND;
+
+	//		// Copy the relative time into a LARGE_INTEGER.
+	//		liDueTime.LowPart = (DWORD)(qwDueTime & 0xFFFFFFFF);
+	//		liDueTime.HighPart = (LONG)(qwDueTime >> 32);
+
+	//		bSuccess = SetWaitableTimer(
+	//			m_hWaitableTimer,           // Handle to the timer object
+	//			&liDueTime,       // When timer will become signaled
+	//			2000,             // Periodic timer interval of 2 seconds
+	//			TimerAPCProc,     // Completion routine
+	//			&testData,          // Argument to the completion routine
+	//			TRUE);          // restore a suspended system
+
+	//		if (bSuccess)
+	//		{
+	//			for (; testData.dwValue < 1000; testData.dwValue += 100)
+	//			{
+	//				SleepEx(
+	//					INFINITE,     // Wait forever
+	//					TRUE);       // Put thread in an alertable state
+	//			}
+
+	//		}
+	//		else
+	//		{
+	//			printf("SetWaitableTimer failed with error %d\n", GetLastError());
+	//		}
+
+	//	}
+	//	//__finally
+	//	//{
+	//	//}
+	//}
+	//else
+	//{
+	//	printf("CreateWaitableTimer failed with error %d\n", GetLastError());
+	//}
 	return true;
 }
 
 int CUniverse::ExitInstance()
 {
 	ATLTRACE(_T("Begin Tangram ExitInstance :%p\n"), this);
+	//::PostThreadMessage(m_dwWakeupTask, WM_QUIT, 0, 0);
+	//int ret = m_WakeupTask.get();
+	//if (!m_WakeupTask.is_done())
+	//	m_WakeupTask.wait();
+	//{
+	//ATLTRACE(_T("Begin Tangram ExitInstance :%p\n"), this);
+
+	//}
+	//if (WaitForSingleObject(m_hWakeupTask, INFINITE) != WAIT_OBJECT_0)
+	//{
+	//	DWORD dwID = GetLastError();
+	//}
+	//if(m_hWaitableTimer)
+	//	CloseHandle(m_hWaitableTimer);
 	if (g_pCosmos) {
 		g_pCosmos->ExitInstance();
 	}
@@ -682,6 +838,40 @@ LRESULT CALLBACK CUniverse::CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 }
 
 extern HWND    topWindow;
+
+VOID CALLBACK CUniverse::TimerAPCProc(
+	LPVOID lpArg,               // Data value
+	DWORD dwTimerLowValue,      // Timer low value
+	DWORD dwTimerHighValue)    // Timer high value
+
+{
+	// Formal parameters not used in this example.
+	UNREFERENCED_PARAMETER(dwTimerLowValue);
+	UNREFERENCED_PARAMETER(dwTimerHighValue);
+
+	//if (IsSystemResumeAutomatic())
+	//{
+	//SYSTEMTIME st;
+	//GetLocalTime(&st);
+	//printf("%02d:%02d:%02d    Timer was signaled.\n", st.wHour, st.wMinute, st.wSecond);
+
+	//}
+	if (!SetThreadExecutionState(ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED))
+	{
+		printf("SetThreadExecutionState failed(%d)\n", GetLastError());
+	}
+	else
+	{
+		if (!IsSystemResumeAutomatic())
+		{
+			WaitableDATA* pData = (WaitableDATA*)lpArg;
+			::PostAppMessage(pData->dwValue, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
+			SYSTEMTIME st;
+			GetLocalTime(&st);
+			TRACE(_T("%02d:%02d:%02d    Timer was signaled.\n"), st.wHour, st.wMinute, st.wSecond);
+		}
+	}
+}
 
 LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -1299,29 +1489,22 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_POWERBROADCAST:
 			{
-				switch (wParam)
+				switch (lpMsg->wParam)
 				{
+				case PBT_APMSUSPEND:
+				{
+					OutputDebugString(_T("------------------UniverseAppObj PBT_APMRESUMESUSPEND------------------------\n"));
+				}
+				break;
+				//case PBT_APMPOWERSTATUSCHANGE:
+				case PBT_APMRESUMESUSPEND:
 				case PBT_APMRESUMEAUTOMATIC:
-				case PBT_APMPOWERSTATUSCHANGE:
 				{
+					OutputDebugString(_T("------------------UniverseAppObj PBT_APMRESUMEAUTOMATIC------------------------\n"));
 					HWND hWnd = lpMsg->hwnd;
-					for (auto& it : g_pCosmos->m_mapThreadInfo)
-					{
-						if (it.second)
-						{
-							for (auto it2 : it.second->m_mapGalaxy)
-							{
-								it2.second->HostPosChanged();
-								for (auto it3 : it2.second->m_mapWPFView)
-								{
-									::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-								}
-							}
-						}
-					}
 					for (auto& it : g_pCosmos->m_mapBrowserWnd)
 					{
-						if (it.first == hWnd || ::IsChild(hWnd, it.first))
+						//if (it.first == hWnd || ::IsChild(hWnd, it.first))
 						{
 							if (::IsWindowVisible(it.first))
 							{
@@ -1345,6 +1528,23 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
 							}
 							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
+						}
+					}
+					for (auto& it : g_pCosmos->m_mapThreadInfo)
+					{
+						if (it.second)
+						{
+							for (auto it2 : it.second->m_mapGalaxy)
+							{
+								if (::IsChild(hWnd, it2.first))
+								{
+									it2.second->HostPosChanged();
+									for (auto it3 : it2.second->m_mapWPFView)
+									{
+										::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+									}
+								}
+							}
 						}
 					}
 				}

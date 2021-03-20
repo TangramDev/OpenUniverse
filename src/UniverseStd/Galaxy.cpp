@@ -740,35 +740,50 @@ LRESULT CMDTWnd::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 	case PBT_APMRESUMEAUTOMATIC:
 	case PBT_APMPOWERSTATUSCHANGE:
+	case PBT_APMSUSPEND:
+	case PBT_APMRESUMESUSPEND:
 	{
-		CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(m_hWnd, _T("CosmosFrameWndInfo"));
-		for (auto& it : pCosmosFrameWndInfo->m_mapCtrlBarGalaxys)
+		for (auto& it : g_pCosmos->m_mapThreadInfo)
 		{
 			if (it.second)
 			{
-				((CGalaxy*)it.second)->HostPosChanged();
+				for (auto& it2 : it.second->m_mapGalaxy)
+				{
+					if (::IsChild(m_hWnd, it2.first))
+					{
+						it2.second->HostPosChanged();
+					}
+				}
 			}
 		}
 
-		if (m_pBrowser)
+		for (auto& it : g_pCosmos->m_mapBrowserWnd)
 		{
-			HWND hWnd = m_pBrowser->m_pBrowser->GetActiveWebContentWnd();
-			if (hWnd)
+			if (::IsChild(m_hWnd, it.first))
 			{
-				auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-				if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+				CBrowser* pWnd = (CBrowser*)it.second;
+				if (pWnd)
 				{
-					CWebPage* pWebPage = (CWebPage*)it1->second;
-					m_pBrowser->m_pVisibleWebWnd = pWebPage;
-					pWebPage->m_pChromeRenderFrameHost->ShowWebPage(true);
-					if (pWebPage->m_hExtendWnd)
-						::SetParent(pWebPage->m_hExtendWnd, g_pCosmos->m_pHostBrowser->m_hWnd);
+					HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+					if (hWnd)
+					{
+						auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+						if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+						{
+							pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+							it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+							if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
+								::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+						}
+					}
+					::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
 				}
+				::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
+				ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
 			}
-			::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
 		}
-		::PostMessage(m_pBrowser->m_hWnd, WM_BROWSERLAYOUT, 2, 7);
 		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
+		return 1;
 	}
 	break;
 	}
@@ -904,7 +919,7 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				{
 					pSession->InsertLong(_T("FormAppNeedClosed"), nCount);
 				}
-				for (auto it : g_pCosmos->m_mapNeedQueryOnClose)
+				for (auto& it : g_pCosmos->m_mapNeedQueryOnClose)
 				{
 					if (it.second != this)
 					{
@@ -1450,6 +1465,61 @@ LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	}
 
 	return  DefWindowProc(uMsg, wParam, lParam);
+}
+
+LRESULT CWinForm::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	switch (wParam)
+	{
+	case PBT_APMRESUMEAUTOMATIC:
+	case PBT_APMPOWERSTATUSCHANGE:
+	case PBT_APMSUSPEND:
+	case PBT_APMRESUMESUSPEND:
+	{
+		for (auto& it : g_pCosmos->m_mapBrowserWnd)
+		{
+			if (::IsChild(m_hWnd, it.first))
+			{
+				CBrowser* pWnd = (CBrowser*)it.second;
+				if (pWnd)
+				{
+					HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+					if (hWnd)
+					{
+						auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+						if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+						{
+							pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+							it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+							if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
+								::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+						}
+					}
+					::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+				}
+				::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
+				ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
+			}
+		}
+		for (auto& it : g_pCosmos->m_mapThreadInfo)
+		{
+			if (it.second)
+			{
+				for (auto& it2 : it.second->m_mapGalaxy)
+				{
+					if (::IsChild(m_hWnd, it2.first))
+					{
+						it2.second->HostPosChanged();
+					}
+				}
+			}
+		}
+		return 1;
+	}
+	break;
+	}
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
 }
 
 LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)

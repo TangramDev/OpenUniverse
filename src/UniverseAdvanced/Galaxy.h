@@ -204,6 +204,8 @@ private:
 	LRESULT OnPowerRoadcast(UINT, WPARAM, LPARAM, BOOL&);
 
 	void OnFinalMessage(HWND hWnd);
+public:
+	virtual WNDPROC GetWindowProc();
 };
 
 class CMDIParent :
@@ -287,6 +289,7 @@ public:
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
+		MESSAGE_HANDLER(WM_POWERBROADCAST, OnPowerRoadcast)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
@@ -307,6 +310,7 @@ private:
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnPowerRoadcast(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class ATL_NO_VTABLE CGalaxy :

@@ -142,8 +142,11 @@ class ATL_NO_VTABLE CCosmos :
 	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
 {
 	friend class CGalaxy;
-	friend class CEclipseWnd;
+	friend class CMDTWnd;
+	friend class CWinForm;
 	friend class CUniverse;
+	friend class CMDIParent;
+	friend class CEclipseWnd;
 public:
 	CCosmos();
 	virtual ~CCosmos();
