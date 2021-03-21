@@ -367,10 +367,12 @@ namespace Browser {
 		{
 			if (m_pChromeRenderFrameHost)
 			{
+				OutputDebugString(_T("------------------WebPage Begin PBT_APMRESUMEAUTOMATIC------------------------\n"));
 				HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
 				::SetParent(m_hExtendWnd, hBrowser);
 				m_pChromeRenderFrameHost->ShowWebPage(true);
-				::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
+				//::SendMessage(hBrowser, WM_BROWSERLAYOUT, 0, 4);
+				OutputDebugString(_T("------------------WebPage End PBT_APMRESUMEAUTOMATIC------------------------\n"));
 			}
 		}
 		break;
@@ -423,43 +425,12 @@ namespace Browser {
 			HWND hNewPWnd = (HWND)lParam;
 			::GetClassName(hNewPWnd, g_pCosmos->m_szBuffer, 256);
 			CString strName = g_pCosmos->m_szBuffer;
-			if (strName.Find(_T("Chrome_WidgetWin_")) == 0)
+			if (strName.Find(_T("Chrome_WidgetWin_0")) == 0)
 			{
 				if (m_hExtendWnd)
 				{
 					::SetParent(m_hExtendWnd, m_hWnd);
 					::ShowWindow(m_hExtendWnd, SW_HIDE);
-				}
-				HWND hNewPWnd2 = ::GetParent(m_hWnd);
-				bool bNewParent = false;
-				if (hNewPWnd != hNewPWnd2)
-				{
-					hNewPWnd = hNewPWnd2;
-					bNewParent = true;
-				}
-				CBrowser* pChromeBrowserWnd = nullptr;
-				auto it = g_pCosmos->m_mapBrowserWnd.find(hNewPWnd);
-				if (it == g_pCosmos->m_mapBrowserWnd.end())
-				{
-					if (::IsWindowVisible(hNewPWnd)) {
-						pChromeBrowserWnd = new CComObject<CBrowser>();
-						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
-						g_pCosmos->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
-						pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
-						if (pChromeBrowserWnd->m_pBrowser)
-							pChromeBrowserWnd->m_pBrowser->m_pProxy = pChromeBrowserWnd;
-						if (pChromeBrowserWnd && m_hExtendWnd) {
-							::SetParent(m_hExtendWnd, hNewPWnd);
-							if (::IsWindowVisible(m_hWnd)) {
-								pChromeBrowserWnd->m_pVisibleWebWnd = this;
-								if (bNewParent)
-								{
-									//pChromeBrowserWnd->BrowserLayout();
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
-								}
-							}
-						}
-					}
 				}
 			}
 			else
@@ -481,6 +452,7 @@ namespace Browser {
 				if (it != g_pCosmos->m_mapBrowserWnd.end())
 				{
 					pChromeBrowserWnd = (CBrowser*)it->second;
+					pChromeBrowserWnd->m_bSZMode = true;
 					g_pCosmos->m_pActiveBrowser = pChromeBrowserWnd->m_pBrowser;
 					if (pChromeBrowserWnd && m_hExtendWnd) {
 						if (::IsWindowVisible(m_hWnd)) {
@@ -488,7 +460,7 @@ namespace Browser {
 							if (bNewParent)
 							{
 								g_pCosmos->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
-								pChromeBrowserWnd->BrowserLayout();
+								//pChromeBrowserWnd->BrowserLayout();
 								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 							}
 						}
@@ -506,6 +478,7 @@ namespace Browser {
 				{
 					if (::IsWindowVisible(hNewPWnd)) {
 						pChromeBrowserWnd = new CComObject<CBrowser>();
+						pChromeBrowserWnd->m_bSZMode = true;
 						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
 						g_pCosmos->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
 						pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
@@ -516,7 +489,7 @@ namespace Browser {
 								pChromeBrowserWnd->m_pVisibleWebWnd = this;
 								if (bNewParent)
 								{
-									pChromeBrowserWnd->BrowserLayout();
+									//pChromeBrowserWnd->BrowserLayout();
 									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
 								}
 							}

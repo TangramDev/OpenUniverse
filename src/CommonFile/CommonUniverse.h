@@ -815,6 +815,7 @@ namespace CommonUniverse {
 		CTabStatsTrackerDelegate() {}
 		virtual ~CTabStatsTrackerDelegate() {}
 
+		virtual void HeartbeatEvent() {}
 		virtual void OnCalculateAndRecordNativeWindowVisibilities() {}
 	};
 

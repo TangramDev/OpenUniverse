@@ -136,6 +136,7 @@ public:
 class ATL_NO_VTABLE CCosmos :
 	public CCosmosImpl,
 	public CComObjectRootBase,
+	public CTabStatsTrackerDelegate,
 	public IConnectionPointContainerImpl<CCosmos>,
 	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>,
 	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
@@ -390,4 +391,9 @@ private:
 	CWebPageImpl* GetWebPageImpl(HWND hWnd);
 	CBrowserImpl* GetBrowserImpl(HWND hWnd);
 	bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate);
+	CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate();
+
+	//CTabStatsTrackerDelegate:
+	void HeartbeatEvent();
+	void OnCalculateAndRecordNativeWindowVisibilities();
 };

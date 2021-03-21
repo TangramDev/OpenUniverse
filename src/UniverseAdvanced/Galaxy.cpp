@@ -828,7 +828,6 @@ LRESULT CMDTWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	CMDTWnd* pHelperWnd = nullptr;
 	if (g_pCosmos->m_mapMDTWindow.size() == 1)
 	{
-		//::PostThreadMessage(theApp.m_dwWakeupTask, WM_QUIT, 0, 0);
 		::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_DESTROY, 0, 0);
 	}
 	else
@@ -867,83 +866,77 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-LRESULT CMDTWnd::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	switch (wParam)
-	{
-	case PBT_APMPOWERSTATUSCHANGE:
-	{
-		SYSTEM_POWER_STATUS status;
-		GetSystemPowerStatus(&status);
-		//status.ACLineStatus=
-	}
-	break;
-	case PBT_APMSUSPEND:
-	{
-		TRACE(_T("CMDTWnd HWND %x: PBT_APMSUSPEND\n"),m_hWnd);
-	}
-	break;
-	case PBT_APMRESUMESUSPEND:
-	case PBT_APMRESUMEAUTOMATIC:
-	{
-		for (auto& it : g_pCosmos->m_mapThreadInfo)
-		{
-			if (it.second)
-			{
-				for (auto& it2 : it.second->m_mapGalaxy)
-				{
-					if (::IsChild(m_hWnd, it2.first))
-					{
-						it2.second->HostPosChanged();
-						for (auto it3 : it2.second->m_mapWPFView)
-						{
-							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						}
-					}
-				}
-			}
-		}
-
-		for (auto& it : g_pCosmos->m_mapBrowserWnd)
-		{
-			if (::IsChild(m_hWnd, it.first))
-			{
-				::PostMessage(it.first, WM_POWERBROADCAST, wParam, lParam);
-				CBrowser* pWnd = (CBrowser*)it.second;
-				if (pWnd)
-				{
-					HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-					if (hWnd)
-					{
-						auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-						if (it1 != g_pCosmos->m_mapHtmlWnd.end())
-						{
-							pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
-							it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-							if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
-								::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
-						}
-					}
-					::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
-				}
-				::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
-				ATLTRACE(_T("MDT HWND %x, WM_POWERBROADCAST\n"), it.first);
-			}
-		}
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
-		//if (wParam == PBT_APMRESUMESUSPEND)
-		//{
-		//	RECT rc;
-		//	::GetWindowRect(m_hWnd, &rc);
-		//	::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1, SWP_FRAMECHANGED | SWP_NOZORDER);
-		//}
-	}
-	break;
-	}
-		return 1;
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	return lRes;
-}
+//LRESULT CMDTWnd::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+//{
+//	switch (wParam)
+//	{
+//	case PBT_APMPOWERSTATUSCHANGE:
+//	{
+//	}
+//	break;
+//	case PBT_APMSUSPEND:
+//	{
+//		TRACE(_T("CMDTWnd HWND %x: PBT_APMSUSPEND\n"), m_hWnd);
+//	}
+//	break;
+//	case PBT_APMRESUMESUSPEND:
+//	case PBT_APMRESUMEAUTOMATIC:
+//	{
+//		for (auto& it : g_pCosmos->m_mapThreadInfo)
+//		{
+//			if (it.second)
+//			{
+//				for (auto& it2 : it.second->m_mapGalaxy)
+//				{
+//					if (::IsChild(m_hWnd, it2.first))
+//					{
+//						it2.second->HostPosChanged();
+//						for (auto it3 : it2.second->m_mapWPFView)
+//						{
+//							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+//						}
+//					}
+//				}
+//			}
+//		}
+//
+//		for (auto& it : g_pCosmos->m_mapBrowserWnd)
+//		{
+//			if (::IsChild(m_hWnd, it.first))
+//			{
+//				::PostMessage(it.first, WM_POWERBROADCAST, wParam, lParam);
+//				CBrowser* pWnd = (CBrowser*)it.second;
+//				if (pWnd)
+//				{
+//					HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+//					if (!::IsWindowVisible(hWnd))
+//					{
+//						if (hWnd)
+//						{
+//							auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+//							if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+//							{
+//								pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+//								it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+//								if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
+//									::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+//							}
+//						}
+//						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+//						::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
+//					}
+//				}
+//				ATLTRACE(_T("MDT HWND %x, WM_POWERBROADCAST\n"), it.first);
+//			}
+//		}
+//		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
+//	}
+//	break;
+//	}
+//	return 1;
+//	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+//	return lRes;
+//}
 
 void CMDTWnd::OnFinalMessage(HWND hWnd)
 {
@@ -995,72 +988,69 @@ LRESULT CMDIParent::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return lRes;
 }
 
-LRESULT CMDIParent::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	switch (wParam)
-	{
-	//case PBT_APMPOWERSTATUSCHANGE:
-	case PBT_APMSUSPEND:
-	case PBT_APMRESUMESUSPEND:
-	case PBT_APMRESUMEAUTOMATIC:
-	{
-		for (auto& it : g_pCosmos->m_mapThreadInfo)
-		{
-			if (it.second)
-			{
-				for (auto& it2 : it.second->m_mapGalaxy)
-				{
-					if (::IsChild(m_hWnd, it2.first))
-					{
-						it2.second->HostPosChanged();
-						for (auto it3 : it2.second->m_mapWPFView)
-						{
-							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
-						}
-					}
-				}
-			}
-		}
-
-		for (auto& it : g_pCosmos->m_mapBrowserWnd)
-		{
-			if (::IsChild(m_hWnd, it.first))
-			{
-				::PostMessage(it.first, WM_POWERBROADCAST, wParam, lParam);
-				CBrowser* pWnd = (CBrowser*)it.second;
-				if (pWnd)
-				{
-					HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-					if (hWnd)
-					{
-						auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-						if (it1 != g_pCosmos->m_mapHtmlWnd.end())
-						{
-							pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
-							it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-							if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
-								::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
-						}
-					}
-					::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
-				}
-				::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
-				ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
-			}
-		}
-		//if (wParam == PBT_APMRESUMESUSPEND)
-		//{
-		//	RECT rc;
-		//	::GetWindowRect(m_hWnd, &rc);
-		//	::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left-1, rc.bottom - rc.top-1, SWP_FRAMECHANGED | SWP_NOZORDER);
-		//}
-		return 1;
-	}
-	break;
-	}
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	return lRes;
-}
+//LRESULT CMDIParent::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+//{
+//	switch (wParam)
+//	{
+//		//case PBT_APMPOWERSTATUSCHANGE:
+//	case PBT_APMSUSPEND:
+//	case PBT_APMRESUMESUSPEND:
+//	case PBT_APMRESUMEAUTOMATIC:
+//	{
+//		for (auto& it : g_pCosmos->m_mapThreadInfo)
+//		{
+//			if (it.second)
+//			{
+//				for (auto& it2 : it.second->m_mapGalaxy)
+//				{
+//					if (::IsChild(m_hWnd, it2.first))
+//					{
+//						it2.second->HostPosChanged();
+//						for (auto it3 : it2.second->m_mapWPFView)
+//						{
+//							::SetWindowLongPtr(it3.second->m_hWnd, GWLP_USERDATA, 1963);
+//						}
+//					}
+//				}
+//			}
+//		}
+//
+//		for (auto& it : g_pCosmos->m_mapBrowserWnd)
+//		{
+//			if (::IsChild(m_hWnd, it.first))
+//			{
+//				::PostMessage(it.first, WM_POWERBROADCAST, wParam, lParam);
+//				CBrowser* pWnd = (CBrowser*)it.second;
+//				if (pWnd)
+//				{
+//					HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+//					if (!::IsWindowVisible(hWnd))
+//					{
+//						if (hWnd)
+//						{
+//							auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+//							if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+//							{
+//								pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+//								it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+//								if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
+//									::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+//							}
+//						}
+//						::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+//						::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
+//					}
+//				}
+//				ATLTRACE(_T("MDIParent HWND %x, WM_POWERBROADCAST\n"), it.first);
+//			}
+//		}
+//		return 1;
+//	}
+//	break;
+//	}
+//	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+//	return lRes;
+//}
 
 LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	g_pCosmos->m_pHostBrowser->m_bSZMode = false;
@@ -1501,7 +1491,7 @@ LRESULT CWinForm::OnPowerRoadcast(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 {
 	switch (wParam)
 	{
-	//case PBT_APMPOWERSTATUSCHANGE:
+		//case PBT_APMPOWERSTATUSCHANGE:
 	case PBT_APMSUSPEND:
 	case PBT_APMRESUMESUSPEND:
 	case PBT_APMRESUMEAUTOMATIC:
@@ -2760,7 +2750,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrameWnd, _T("CosmosFrameWndInfo"));
 		}
 	}
-	if (m_pCosmosFrameWndInfo&& m_pWebPageWnd)
+	if (m_pCosmosFrameWndInfo && m_pWebPageWnd)
 	{
 		CString _strKey = m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey;
 		CComBSTR _bstrKey(_strKey);

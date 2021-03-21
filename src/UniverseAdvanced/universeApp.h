@@ -76,10 +76,6 @@ namespace Browser
 using namespace Browser;
 
 typedef HRESULT(__stdcall* CosmosCLRCreateInstance)(REFCLSID clsid, REFIID riid, LPVOID* ppInterface);
-typedef struct _WaitableDATA {
-	TCHAR* szText;
-	DWORD dwValue;
-} WaitableDATA;
 
 class CHelperWnd :
 	public CWindowImpl<CHelperWnd, CWindow>
@@ -131,20 +127,9 @@ public:
 	~CUniverse();
 
 	bool				m_bHostCLR;
-	bool				m_bCanQuit = false;
-	HANDLE				m_hWaitableTimer;
-	task<int>			m_WakeupTask;
-	__int64				qwDueTime;
-	LARGE_INTEGER		liDueTime;
-	DWORD				m_dwWakeupTask = 0;
-	HANDLE				m_hWakeupTask = nullptr;
+
 	CString GetFileVer();
 	void SetHook(DWORD ThreadID);
-
-	static VOID CALLBACK TimerAPCProc(
-		LPVOID lpArg,               // Data value
-		DWORD dwTimerLowValue,      // Timer low value
-		DWORD dwTimerHighValue);   // Timer high value
 
 	static LRESULT CALLBACK CBTProc(int nCode, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPARAM wParam, _In_ LPARAM lParam);

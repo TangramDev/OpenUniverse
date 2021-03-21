@@ -102,6 +102,8 @@
 
 #include <shellapi.h>
 #include <shlobj.h>
+#include <powrprof.h>
+#include <winnt.h>
 #define MAX_LOADSTRING 100
 #ifdef _WIN32
 #include <direct.h>
@@ -163,34 +165,18 @@ _TCHAR* getIniFile(_TCHAR* program, int consoleLauncher);
 
 typedef jint(JNICALL* JNI_GetCreatedJavaVMs_)(JavaVM**, jsize, jsize*);
 
+typedef struct _SYSTEM_POWER_INFORMATION {
+	ULONG MaxIdlenessAllowed;
+	ULONG Idleness;
+	ULONG TimeRemaining;
+	UCHAR CoolingMode;
+} SYSTEM_POWER_INFORMATION, * PSYSTEM_POWER_INFORMATION;
+#pragma comment (lib, "PowrProf.lib")
+
 // CCosmos
 namespace CommonUniverse
 {
 	CCosmosImpl* g_pCosmosImpl = nullptr;
-}
-
-CCosmosTabStatsTrackerDelegate::CCosmosTabStatsTrackerDelegate() {
-}
-
-CCosmosTabStatsTrackerDelegate::~CCosmosTabStatsTrackerDelegate()
-{
-}
-
-void CCosmosTabStatsTrackerDelegate::OnCalculateAndRecordNativeWindowVisibilities()
-{
-	SYSTEMTIME st;
-	GetLocalTime(&st);
-	TRACE(_T("\n******OnCalculateAndRecordNativeWindowVisibilities : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
-	for (auto &it : g_pCosmos->m_mapMDTWindow)
-	{
-		::SendMessage(it.first, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
-		TRACE(_T("\n******CMDTWindow WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
-	}
-	if (g_pCosmos->m_pMDIMainWnd)
-	{
-		::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
-		TRACE(_T("\n******g_pCosmos->m_pMDIMainWnd WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
-	}
 }
 
 CCosmos::CCosmos()
@@ -518,8 +504,7 @@ CCosmos::~CCosmos()
 	//    delete m_pBrowserFactory;
 	//    m_pBrowserFactory = nullptr;
 	//}
-	if (m_pTabStatsTrackerDelegate)
-		delete m_pTabStatsTrackerDelegate;
+
 	if (m_pExtender)
 		m_pExtender->Close();
 
@@ -1985,7 +1970,7 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 	m_strCurrentKey = _T("");
 	if (pRootXobj != nullptr)
 	{
-		if(_pGalaxy->m_nGalaxyType==GalaxyType::CtrlBarGalaxy)
+		if (_pGalaxy->m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
 			pRootXobj->m_strCaption = m_pParse->attr(_T("caption"), _T(""));
 		if (bSizable)
 		{
@@ -3147,9 +3132,7 @@ HRESULT CCosmos::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** p
 
 CTabStatsTrackerDelegate* CCosmos::SetTabStatsTrackerDelegate()
 {
-	if (m_pTabStatsTrackerDelegate == nullptr)
-		m_pTabStatsTrackerDelegate = new CCosmosTabStatsTrackerDelegate();
-	return m_pTabStatsTrackerDelegate;
+	return this;
 }
 
 STDMETHODIMP CCosmos::GetXobjFromHandle(LONGLONG hWnd, IXobj** ppRetXobj)
@@ -4970,4 +4953,54 @@ bool CCosmos::SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* 
 		g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second);
 	}
 	return false;
+}
+
+void CCosmos::HeartbeatEvent()
+{
+	//int num_cpus = 0;
+	//SYSTEM_INFO system_info;
+	//GetSystemInfo(&system_info);
+	//num_cpus = system_info.dwNumberOfProcessors;
+	//std::vector<SYSTEM_POWER_INFORMATION> info(num_cpus);
+	//if (CallNtPowerInformation(SystemPowerInformation,
+	//	nullptr,
+	//	0,
+	//	&info[0],
+	//	sizeof(SYSTEM_POWER_INFORMATION) * num_cpus) !=
+	//	0) 
+	//{
+	//	UCHAR nVal = info[0].CoolingMode;
+	//	switch (nVal)
+	//	{
+	//	case 0:
+	//		break;
+	//	case 1:
+	//	{
+	//	}
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//}
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+	TRACE(_T("\n******HeartbeatEvent : %02d:%02d:%02d OnHeartbeatEvent was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+	::PostAppMessage(m_dwThreadID, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
+}
+
+void CCosmos::OnCalculateAndRecordNativeWindowVisibilities()
+{
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+	TRACE(_T("\n******OnCalculateAndRecordNativeWindowVisibilities : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+	//for (auto& it : g_pCosmos->m_mapMDTWindow)
+	//{
+	//	::SendMessage(it.first, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
+	//	TRACE(_T("\n******CMDTWindow WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+	//}
+	//if (g_pCosmos->m_pMDIMainWnd)
+	//{
+	//	::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
+	//	TRACE(_T("\n******g_pCosmos->m_pMDIMainWnd WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+	//}
 }

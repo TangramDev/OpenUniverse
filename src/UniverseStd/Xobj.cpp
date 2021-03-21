@@ -216,11 +216,16 @@ void CXobj::InitWndXobj()
 		}
 	}
 
-	auto it = g_pCosmos->m_mapClassInfo.find(m_strID);
-	if (it != g_pCosmos->m_mapClassInfo.end())
-		m_pObjClsInfo = it->second;
-	else
+	if (m_strID == _T(""))
 		m_pObjClsInfo = RUNTIME_CLASS(CXobjWnd);
+	else
+	{
+		auto it = g_pCosmos->m_mapClassInfo.find(m_strID);
+		if (it != g_pCosmos->m_mapClassInfo.end())
+			m_pObjClsInfo = it->second;
+		else
+			m_pObjClsInfo = RUNTIME_CLASS(CXobjWnd);
+	}
 
 	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 	{

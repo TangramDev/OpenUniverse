@@ -132,20 +132,21 @@ public:
 	STDMETHOD(get_Index)(int* nVal);
 	STDMETHOD(put_Index)(int newVal);
 };
-
-class CCosmosTabStatsTrackerDelegate : public CTabStatsTrackerDelegate
-{
-public:
-	CCosmosTabStatsTrackerDelegate();
-	virtual ~CCosmosTabStatsTrackerDelegate();
-	
-	void OnCalculateAndRecordNativeWindowVisibilities();
-};
+//
+//class CCosmosTabStatsTrackerDelegate : public CTabStatsTrackerDelegate
+//{
+//public:
+//	CCosmosTabStatsTrackerDelegate();
+//	virtual ~CCosmosTabStatsTrackerDelegate();
+//	
+//	void OnCalculateAndRecordNativeWindowVisibilities();
+//};
 
 // CCosmos
 class ATL_NO_VTABLE CCosmos :
 	public CCosmosImpl,
 	public CComObjectRootBase,
+	public CTabStatsTrackerDelegate,
 	public IConnectionPointContainerImpl<CCosmos>,
 	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>,
 	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
@@ -202,7 +203,6 @@ public:
 
 	CCosmosAppCtrl* m_pCosmosAppCtrl;
 	CEclipseWnd* m_pActiveEclipseWnd;
-	CCosmosTabStatsTrackerDelegate* m_pTabStatsTrackerDelegate = nullptr;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
 	map<HWND, CGalaxy*>						m_mapBKFrame;
@@ -410,4 +410,8 @@ private:
 	CBrowserImpl* GetBrowserImpl(HWND hWnd);
 	bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate);
 	CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate();
+
+	//CTabStatsTrackerDelegate:
+	void HeartbeatEvent();
+	void OnCalculateAndRecordNativeWindowVisibilities();
 };

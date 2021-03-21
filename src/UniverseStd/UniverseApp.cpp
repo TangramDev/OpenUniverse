@@ -1213,50 +1213,48 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			break;
 			case WM_POWERBROADCAST:
 			{
-				switch (wParam)
+				switch (lpMsg->wParam)
 				{
 				case PBT_APMRESUMEAUTOMATIC:
-				case PBT_APMPOWERSTATUSCHANGE:
-				case PBT_APMSUSPEND:
-				case PBT_APMRESUMESUSPEND:
 				{
-					HWND hWnd = lpMsg->hwnd;
+					OutputDebugString(_T("------------------UniverseAppObj PBT_APMRESUMEAUTOMATIC------------------------\n"));
+					//HWND hWnd = lpMsg->hwnd;
 					for (auto& it : g_pCosmos->m_mapBrowserWnd)
 					{
-						if (it.first == hWnd || ::IsChild(hWnd, it.first))
+						if (::IsWindowVisible(it.first))
 						{
-							if (::IsWindowVisible(it.first))
+							CBrowser* pWnd = (CBrowser*)it.second;
+							if (pWnd)
 							{
-								CBrowser* pWnd = (CBrowser*)it.second;
-								if (pWnd)
+								HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
+								if (::IsWindowVisible(hWnd) == false)
 								{
-									HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
-									if (hWnd)
+									auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
+									if (it1 != g_pCosmos->m_mapHtmlWnd.end())
 									{
-										auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-										if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+										pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+										ATLTRACE(_T("WebPage HWND %x, WM_POWERBROADCAST\n"), hWnd);
+										it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
+										if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
 										{
-											pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
-											it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-											if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
-												::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+											ATLTRACE(_T("WebPageExtend HWND %x, WM_POWERBROADCAST\n"), pWnd->m_pVisibleWebWnd->m_hExtendWnd);
+											::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
 										}
 									}
 									::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
+									::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
 								}
-								::PostMessage(it.first, WM_BROWSERLAYOUT, 2, 7);
 							}
-							ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
 						}
+						ATLTRACE(_T("HWND %x, WM_POWERBROADCAST\n"), it.first);
 					}
 					for (auto& it : g_pCosmos->m_mapThreadInfo)
 					{
 						if (it.second)
 						{
-							for (auto it2 : it.second->m_mapGalaxy)
+							for (auto& it2 : it.second->m_mapGalaxy)
 							{
-								if (::IsChild(hWnd, it2.first))
-									it2.second->HostPosChanged();
+								it2.second->HostPosChanged();
 							}
 						}
 					}
