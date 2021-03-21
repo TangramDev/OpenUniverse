@@ -454,53 +454,74 @@ namespace Browser {
 		HWND hWnd = (HWND)lParam;
 		switch (wParam) {
 		case 0: {
-			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebPage>;
-			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
-			if (g_pCosmos->m_pCLRProxy)
-				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
-			HWND hPWnd = ::GetParent(m_hWnd);
-			if (g_pCosmos->m_bCreatingDevTool == false)
+			if (g_pCosmos->m_bCreatingDevTool)
 			{
-				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
-				g_pCosmos->m_mapHtmlWnd[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-				if (g_pCosmos->m_mapHtmlWnd.size() > 1)
-					g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
-				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
-					m_pVisibleWebWnd = g_pCosmos->m_pHtmlWndCreated;
-#ifdef WIN32	
-				if (::IsWindow(hPWnd))
-				{
-					DWORD dwID = 0;
-					::GetWindowThreadProcessId(hPWnd, &dwID);
-					if (dwID != ::GetCurrentProcessId())
-					{
-						auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwID);
-						if (it != g_pCosmos->m_mapRemoteTangramApp.end())
-						{
-							g_pCosmos->m_pHtmlWndCreated->m_pRemoteCosmos = it->second;
-						}
-					}
-				}
-#endif
-			}
-			else
-			{
+				g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebPage>;
+				g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
+				if (g_pCosmos->m_pCLRProxy)
+					g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
 				g_pCosmos->m_bCreatingDevTool = false;
 				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = true;
 				if (m_pVisibleWebWnd) {
 					m_pVisibleWebWnd->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
 					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebWnd;
 				}
-			}
-			if (hPWnd)
-			{
 				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
 				g_pCosmos->m_pGalaxy = nullptr;
 				g_pCosmos->m_bWinFormActived = false;
+				g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
 				m_mapChildPage[hWnd] = g_pCosmos->m_pHtmlWndCreated;
 				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
 			}
 		} break;
+		//		case 0: {
+		//			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebPage>;
+		//			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
+		//			if (g_pCosmos->m_pCLRProxy)
+		//				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
+		//			HWND hPWnd = ::GetParent(m_hWnd);
+		//			if (g_pCosmos->m_bCreatingDevTool == false)
+		//			{
+		//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
+		//				g_pCosmos->m_mapHtmlWnd[hWnd] = g_pCosmos->m_pHtmlWndCreated;
+		//				if (g_pCosmos->m_mapHtmlWnd.size() > 1)
+		//					g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
+		//				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
+		//					m_pVisibleWebWnd = g_pCosmos->m_pHtmlWndCreated;
+		//#ifdef WIN32	
+		//				if (::IsWindow(hPWnd))
+		//				{
+		//					DWORD dwID = 0;
+		//					::GetWindowThreadProcessId(hPWnd, &dwID);
+		//					if (dwID != ::GetCurrentProcessId())
+		//					{
+		//						auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwID);
+		//						if (it != g_pCosmos->m_mapRemoteTangramApp.end())
+		//						{
+		//							g_pCosmos->m_pHtmlWndCreated->m_pRemoteCosmos = it->second;
+		//						}
+		//					}
+		//				}
+		//#endif
+		//			}
+		//			else
+		//			{
+		//				g_pCosmos->m_bCreatingDevTool = false;
+		//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = true;
+		//				if (m_pVisibleWebWnd) {
+		//					m_pVisibleWebWnd->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
+		//					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebWnd;
+		//				}
+		//			}
+		//			if (hPWnd)
+		//			{
+		//				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
+		//				g_pCosmos->m_pGalaxy = nullptr;
+		//				g_pCosmos->m_bWinFormActived = false;
+		//				m_mapChildPage[hWnd] = g_pCosmos->m_pHtmlWndCreated;
+		//				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
+		//			}
+		//		} break;
 		case 1:
 		{
 			if (lParam == 20200115)

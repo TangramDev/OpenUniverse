@@ -412,6 +412,10 @@ private:
 	CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate();
 
 	//CTabStatsTrackerDelegate:
+	void Resume();
 	void HeartbeatEvent();
-	void OnCalculateAndRecordNativeWindowVisibilities();
+	void InitialOrInsertedTab(HWND hWebView, HWND hBrowser);
+	void WebContentsDestroyed(HWND hWebView, HWND hBrowser);
+	void BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser);
+	void BrowserRemoved(CChromeBrowserBase* browser, HWND hBrowser);
 };

@@ -482,28 +482,6 @@ namespace Browser {
 						}
 					}
 				}
-				else
-				{
-					if (::IsWindowVisible(hNewPWnd)) {
-						pChromeBrowserWnd = new CComObject<CBrowser>();
-						pChromeBrowserWnd->m_bSZMode = true;
-						pChromeBrowserWnd->SubclassWindow(hNewPWnd);
-						g_pCosmos->m_mapBrowserWnd[hNewPWnd] = pChromeBrowserWnd;
-						pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
-						pChromeBrowserWnd->m_pBrowser->m_pProxy = pChromeBrowserWnd;
-						if (pChromeBrowserWnd && m_hExtendWnd) {
-							::SetParent(m_hExtendWnd, hNewPWnd);
-							if (::IsWindowVisible(m_hWnd)) {
-								pChromeBrowserWnd->m_pVisibleWebWnd = this;
-								if (bNewParent)
-								{
-									//pChromeBrowserWnd->BrowserLayout();
-									::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);

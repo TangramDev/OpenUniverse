@@ -4487,19 +4487,58 @@ void CCosmos::HeartbeatEvent()
 	::PostAppMessage(m_dwThreadID, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
 }
 
-void CCosmos::OnCalculateAndRecordNativeWindowVisibilities()
+void CCosmos::Resume()
 {
-	SYSTEMTIME st;
-	GetLocalTime(&st);
-	TRACE(_T("\n******OnCalculateAndRecordNativeWindowVisibilities : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
-	//for (auto& it : g_pCosmos->m_mapMDTWindow)
-	//{
-	//	::SendMessage(it.first, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
-	//	TRACE(_T("\n******CMDTWindow WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
-	//}
-	//if (g_pCosmos->m_pMDIMainWnd)
-	//{
-	//	::SendMessage(g_pCosmos->m_pMDIMainWnd->m_hWnd, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
-	//	TRACE(_T("\n******g_pCosmos->m_pMDIMainWnd WakeUp : %02d:%02d:%02d OnCalculateAndRecordNativeWindowVisibilities was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
-	//}
+
+}
+
+void CCosmos::BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser)
+{
+	CBrowser* pBrowserWnd = new CComObject<CBrowser>();
+	pBrowserWnd->SubclassWindow(hBrowser);
+	g_pCosmos->m_mapBrowserWnd[hBrowser] = pBrowserWnd;
+	pBrowserWnd->m_pBrowser = browser;
+	if (pBrowserWnd->m_pBrowser)
+		pBrowserWnd->m_pBrowser->m_pProxy = pBrowserWnd;
+}
+
+void CCosmos::InitialOrInsertedTab(HWND hWebView, HWND hBrowser)
+{
+	CBrowser* pBrowser = nullptr;
+	auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+	if (it != g_pCosmos->m_mapBrowserWnd.end())
+	{
+		pBrowser = (CBrowser*)it->second;
+		auto it2 = g_pCosmos->m_mapHtmlWnd.find(hWebView);
+		if (it2 == g_pCosmos->m_mapHtmlWnd.end())
+		{
+			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebPage>;
+			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWebView);
+			if (g_pCosmos->m_pCLRProxy)
+				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWebView, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
+			g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
+			g_pCosmos->m_mapHtmlWnd[hWebView] = g_pCosmos->m_pHtmlWndCreated;
+			if (g_pCosmos->m_mapHtmlWnd.size() > 1)
+				g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
+			if (pBrowser->m_pBrowser && hWebView == pBrowser->m_pBrowser->GetActiveWebContentWnd())
+				pBrowser->m_pVisibleWebWnd = g_pCosmos->m_pHtmlWndCreated;
+			g_pCosmos->m_pActiveHtmlWnd = pBrowser->m_pVisibleWebWnd;
+			g_pCosmos->m_pGalaxy = nullptr;
+			g_pCosmos->m_bWinFormActived = false;
+			pBrowser->m_mapChildPage[hWebView] = g_pCosmos->m_pHtmlWndCreated;
+			::PostMessage(hWebView, WM_COSMOSMSG, 20190331, 1);
+		}
+	}
+}
+
+void CCosmos::WebContentsDestroyed(HWND hWebView, HWND hBrowser)
+{
+
+}
+
+void CCosmos::BrowserRemoved(CChromeBrowserBase* browser, HWND hBrowser)
+{
+	if (browser)
+	{
+	}
 }

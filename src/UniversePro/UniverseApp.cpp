@@ -620,19 +620,8 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName == _T("Chrome_RenderWidgetHostHWND"))
 		{
-			if ((::GetWindowLong(hPWnd, GWL_STYLE) & WS_POPUP) == 0)
-			{
-				auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-				if (it == g_pCosmos->m_mapBrowserWnd.end()) {
-					CBrowser* pChromeBrowserWnd = new CComObject<CBrowser>();
-					pChromeBrowserWnd->SubclassWindow(hPWnd);
-					g_pCosmos->m_mapBrowserWnd[hPWnd] = pChromeBrowserWnd;
-					pChromeBrowserWnd->m_pBrowser = g_pCosmos->m_pActiveBrowser;
-					if (pChromeBrowserWnd->m_pBrowser)
-						pChromeBrowserWnd->m_pBrowser->m_pProxy = pChromeBrowserWnd;
-				}
+			if (g_pCosmos->m_bCreatingDevTool)
 				::PostMessage(hPWnd, WM_COSMOSMSG, 0, (LPARAM)hWnd);
-			}
 		}
 		else if (strClassName.Find(_T("SysTreeView32")) == 0 || strClassName.Find(_T("SysTabControl32")) == 0 || strClassName.Find(_T("SysListView32")) == 0)
 		{

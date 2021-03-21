@@ -233,16 +233,16 @@ namespace CommonUniverse {
 		CString			m_strXobjXml = _T("");
 		CString			m_strSessionID = _T("");
 		CString			m_strTag = _T("");
-		IXobj*			m_pXobj = nullptr;
-		IGalaxy*		m_pGalaxy = nullptr;
+		IXobj* m_pXobj = nullptr;
+		IGalaxy* m_pGalaxy = nullptr;
 		IGalaxyCluster* m_pGalaxyCluster = nullptr;
 	}CosmosInfo;
 
 	typedef struct GalaxyInfo
 	{
 		HWND			m_hCtrlHandle;
-		IDispatch*		m_pDisp;
-		IDispatch*		m_pParentDisp;
+		IDispatch* m_pDisp;
+		IDispatch* m_pParentDisp;
 		CString			m_strCtrlName;
 		CString			m_strGalaxyName;
 		CString			m_strXobjXml;
@@ -502,7 +502,7 @@ namespace CommonUniverse {
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }
 		virtual CString QueryDocType(HWND hWnd) { return _T(""); }
 		virtual CString QueryWndClassName(HWND hWnd) { return _T(""); }
-		virtual CString QueryParentInfo(HWND hPWnd,void* lpInfo) { return _T(""); }
+		virtual CString QueryParentInfo(HWND hPWnd, void* lpInfo) { return _T(""); }
 	};
 
 	class ICosmosCLRImpl
@@ -815,8 +815,12 @@ namespace CommonUniverse {
 		CTabStatsTrackerDelegate() {}
 		virtual ~CTabStatsTrackerDelegate() {}
 
+		virtual void Resume() {}
 		virtual void HeartbeatEvent() {}
-		virtual void OnCalculateAndRecordNativeWindowVisibilities() {}
+		virtual void InitialOrInsertedTab(HWND hWebView, HWND hBrowser) {}
+		virtual void WebContentsDestroyed(HWND hWebView, HWND hBrowser) {}
+		virtual void BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser) {}
+		virtual void BrowserRemoved(CChromeBrowserBase* browser, HWND hBrowser) {}
 	};
 
 	class CChromeChildProcessHostImpl {
