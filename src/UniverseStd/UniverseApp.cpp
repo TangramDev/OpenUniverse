@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103160051           *
+ *           Web Runtime for Application - Version 1.0.0.202103220052           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -586,7 +586,8 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		else if (strClassName == _T("Chrome_RenderWidgetHostHWND"))
 		{
-			::PostMessage(hPWnd, WM_COSMOSMSG, 0, (LPARAM)hWnd);
+			if (g_pCosmos->m_bCreatingDevTool)
+				::PostMessage(hPWnd, WM_COSMOSMSG, 0, (LPARAM)hWnd);
 		}
 		else if (strClassName.Find(_T("SysTreeView32")) == 0 || strClassName.Find(_T("SysTabControl32")) == 0 || strClassName.Find(_T("SysListView32")) == 0)
 		{

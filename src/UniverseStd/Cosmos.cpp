@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103160051           *
+ *           Web Runtime for Application - Version 1.0.0.202103220052           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -3992,8 +3992,8 @@ void CCosmos::InitialOrInsertedTab(HWND hWebView, HWND hBrowser)
 				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWebView, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
 			g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
 			g_pCosmos->m_mapHtmlWnd[hWebView] = g_pCosmos->m_pHtmlWndCreated;
-			if (g_pCosmos->m_mapHtmlWnd.size() > 1)
-				g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
+			//if (g_pCosmos->m_mapHtmlWnd.size() > 1)
+			//	g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
 			if (pBrowser->m_pBrowser && hWebView == pBrowser->m_pBrowser->GetActiveWebContentWnd())
 				pBrowser->m_pVisibleWebWnd = g_pCosmos->m_pHtmlWndCreated;
 			g_pCosmos->m_pActiveHtmlWnd = pBrowser->m_pVisibleWebWnd;

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103160051           *
+ *           Web Runtime for Application - Version 1.0.0.202103220052           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -132,15 +132,6 @@ public:
 	STDMETHOD(get_Index)(int* nVal);
 	STDMETHOD(put_Index)(int newVal);
 };
-//
-//class CCosmosTabStatsTrackerDelegate : public CTabStatsTrackerDelegate
-//{
-//public:
-//	CCosmosTabStatsTrackerDelegate();
-//	virtual ~CCosmosTabStatsTrackerDelegate();
-//	
-//	void OnCalculateAndRecordNativeWindowVisibilities();
-//};
 
 // CCosmos
 class ATL_NO_VTABLE CCosmos :
