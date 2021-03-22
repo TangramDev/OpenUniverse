@@ -3955,9 +3955,11 @@ void CCosmos::HeartbeatEvent()
 	//		break;
 	//	}
 	//}
+#ifdef _DEBUG
 	SYSTEMTIME st;
 	GetLocalTime(&st);
 	TRACE(_T("\n******HeartbeatEvent : %02d:%02d:%02d OnHeartbeatEvent was signaled. ******\n"), st.wHour, st.wMinute, st.wSecond);
+#endif	
 	::PostAppMessage(m_dwThreadID, WM_POWERBROADCAST, PBT_APMRESUMEAUTOMATIC, 0);
 }
 
