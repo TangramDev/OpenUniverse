@@ -180,11 +180,10 @@ public:
 	//.NET Version 4: 
 	ICLRRuntimeHost*						m_pClrHost;
 
-	CWebPage*								m_pHostHtmlWnd = nullptr;
-	CWebPage*								m_pHtmlWndCreated;
-	CWebPage*								m_pActiveHtmlWnd;
+	CWebView*								m_pHostHtmlWnd = nullptr;
+	CWebView*								m_pHtmlWndCreated;
+	CWebView*								m_pActiveHtmlWnd;
 
-	CMDIParent*								m_pMDIMainWnd;
 	CWinForm*								m_pActiveWinFormWnd;
 	CBrowser*								m_pHostBrowser = nullptr;
 
@@ -209,6 +208,7 @@ public:
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
 	map<HWND, CMDTWnd*>						m_mapMDTWindow;
+	map<HWND, CMDIParent*>					m_mapMDIParent;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)

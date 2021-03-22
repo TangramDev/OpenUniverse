@@ -338,16 +338,33 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				{
 					_pGalaxy->m_nGalaxyType = GalaxyType::WebPageGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("WebPage");
+					HWND _hPWnd = ::GetParent(hPWnd);
+					auto it = g_pCosmos->m_mapBrowserWnd.find(_hPWnd);
+					if (it != g_pCosmos->m_mapBrowserWnd.end())
+					{
+						CBrowser* pBrowser = (CBrowser*)it->second;
+						if (pBrowser->m_pParentXobj)
+							_pGalaxy->m_pCosmosFrameWndInfo = pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
+					}
 				}
 				else if (strClassName.Find(_T("MDIClient")) == 0)
 				{
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 				}
-				if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == _hWnd)
+				CMDIParent* pMDIParent = nullptr;
+				HWND hTopParent = ::GetWindow(hPWnd, GA_ROOT);
+				auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
+				if (it2 != g_pCosmos->m_mapMDIParent.end())
 				{
-					g_pCosmos->m_pMDIMainWnd->m_pGalaxy = _pGalaxy;
-					g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = this;
+					pMDIParent = it2->second;
+				}
+
+				if (pMDIParent && pMDIParent->m_hMDIClient == _hWnd)
+				{
+					_pGalaxy->m_pCosmosFrameWndInfo = pMDIParent->m_pCosmosFrameWndInfo;
+					pMDIParent->m_pGalaxy = _pGalaxy;
+					pMDIParent->m_pGalaxyCluster = this;
 				}
 				_pGalaxy->m_pGalaxyCluster = this;
 				_pGalaxy->m_hHostWnd = _hWnd;

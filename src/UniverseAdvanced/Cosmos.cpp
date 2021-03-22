@@ -203,7 +203,6 @@ CCosmos::CCosmos()
 	m_nAppID = -1;
 	m_nAppType = 0;
 	m_hCreatingWnd = NULL;
-	m_pMDIMainWnd = nullptr;
 	m_hCosmosWnd = NULL;
 	m_hHostBrowserWnd = NULL;
 	m_hEclipseHideWnd = NULL;
@@ -540,7 +539,7 @@ CCosmos::~CCosmos()
 
 	m_mapXobj.clear();
 	m_mapMDTWindow.clear();
-	m_mapHtmlWnd.clear();
+	m_mapWebView.clear();
 	m_mapFormWebPage.clear();
 	m_mapUIData.clear();
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
@@ -1317,7 +1316,7 @@ void CCosmos::ProcessMsg(LPMSG lpMsg)
 					CBrowser* pBrowserWnd = (CBrowser*)it->second;
 					if (pBrowserWnd->m_pOmniboxViewViews && pBrowserWnd->m_pOmniboxViewViews->IsFocused() == false)
 						return;
-					CWebPage* pWnd = pBrowserWnd->m_pVisibleWebWnd;
+					CWebView* pWnd = pBrowserWnd->m_pVisibleWebView;
 					if (pWnd && lpMsg->hwnd != pWnd->m_hWnd)
 					{
 						CXobj* pRetNode = (CXobj*)::SendMessage(lpMsg->hwnd, WM_HUBBLE_GETNODE, 0, 0);
@@ -1534,9 +1533,6 @@ void CCosmos::BrowserAppStart()
 
 bool CCosmos::IsMDIClientGalaxyNode(IXobj* pXobj)
 {
-	if (m_pMDIMainWnd == nullptr)
-		return false;
-
 	CXobj* _pXobj = (CXobj*)pXobj;
 	HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
 	if (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
@@ -4495,10 +4491,10 @@ void CCosmos::OnDocumentOnLoadCompleted(CChromeRenderFrameHost* pFrameHostBase, 
 {
 	CChromeRenderFrameHost* pHost = (CChromeRenderFrameHost*)pFrameHostBase;
 	HWND hPWnd = ::GetParent(hHtmlWnd);
-	auto it = g_pCosmos->m_mapHtmlWnd.find(hHtmlWnd);
-	if (it != g_pCosmos->m_mapHtmlWnd.end())
+	auto it = g_pCosmos->m_mapWebView.find(hHtmlWnd);
+	if (it != g_pCosmos->m_mapWebView.end())
 	{
-		((CWebPage*)it->second)->m_pChromeRenderFrameHost = pFrameHostBase;
+		((CWebView*)it->second)->m_pChromeRenderFrameHost = pFrameHostBase;
 		// Set m_pProxy to CChromeRenderFrameHostProxyBase
 		// TODO: Not work
 		pFrameHostBase->m_pProxy = (CWebPageImpl*)it->second;
@@ -5012,20 +5008,20 @@ void CCosmos::InitialOrInsertedTab(HWND hWebView, HWND hBrowser)
 	if (it != g_pCosmos->m_mapBrowserWnd.end())
 	{
 		pBrowser = (CBrowser*)it->second;
-		auto it2 = g_pCosmos->m_mapHtmlWnd.find(hWebView);
-		if (it2 == g_pCosmos->m_mapHtmlWnd.end())
+		auto it2 = g_pCosmos->m_mapWebView.find(hWebView);
+		if (it2 == g_pCosmos->m_mapWebView.end())
 		{
-			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebPage>;
+			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebView>;
 			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWebView);
 			if (g_pCosmos->m_pCLRProxy)
 				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWebView, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
 			g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
-			g_pCosmos->m_mapHtmlWnd[hWebView] = g_pCosmos->m_pHtmlWndCreated;
-			if (g_pCosmos->m_mapHtmlWnd.size() > 1)
+			g_pCosmos->m_mapWebView[hWebView] = g_pCosmos->m_pHtmlWndCreated;
+			if (g_pCosmos->m_mapWebView.size() > 1)
 				g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
 			if (pBrowser->m_pBrowser && hWebView == pBrowser->m_pBrowser->GetActiveWebContentWnd())
-				pBrowser->m_pVisibleWebWnd = g_pCosmos->m_pHtmlWndCreated;
-			g_pCosmos->m_pActiveHtmlWnd = pBrowser->m_pVisibleWebWnd;
+				pBrowser->m_pVisibleWebView = g_pCosmos->m_pHtmlWndCreated;
+			g_pCosmos->m_pActiveHtmlWnd = pBrowser->m_pVisibleWebView;
 			g_pCosmos->m_pGalaxy = nullptr;
 			g_pCosmos->m_bWinFormActived = false;
 			pBrowser->m_mapChildPage[hWebView] = g_pCosmos->m_pHtmlWndCreated;

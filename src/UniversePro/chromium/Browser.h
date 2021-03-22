@@ -26,7 +26,7 @@
 namespace Browser {
 	using namespace ATL;
 
-	class CWebPage;
+	class CWebView;
 
 	class ATL_NO_VTABLE CBrowser :
 		public CBrowserImpl, 
@@ -49,13 +49,13 @@ namespace Browser {
 		HWND				m_hBeforeChange = NULL;
 		RECT				m_OldRect;
 		CString				m_strCurKey;
-		CWebPage*			m_pVisibleWebWnd;
+		CWebView*			m_pVisibleWebView;
 		IXobj*				m_pRemoteXobj;
 		CXobj*				m_pParentXobj;
 		CGalaxy*			m_pClientGalaxy = nullptr;
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
 
-		map<HWND, CWebPage*> m_mapChildPage;
+		map<HWND, CWebView*> m_mapChildPage;
 
 		LRESULT	BrowserLayout();
 		STDMETHOD(get_RemoteXobj)(IXobj** pVal);

@@ -212,6 +212,17 @@ namespace CommonUniverse {
 		RecalcCtrlBarLayout = 0x00000008
 	}QueryType;
 
+	typedef enum GalaxyParentType
+	{
+		MFCFrame = 0x00000000,
+		MFCMDIFrame = 0x00000001,
+		MFCMDIChild = 0x00000002,
+		WinForm = 0x00000003,
+		MDIWinForm = 0x00000004,
+		MdiChildForm = 0x00000005,
+		Other = 0x00000006
+	}GalaxyParentType;
+
 	typedef struct IPCMsg {
 		CString m_strId = _T("");
 		CString m_strParam1 = _T("");
@@ -241,8 +252,8 @@ namespace CommonUniverse {
 	typedef struct GalaxyInfo
 	{
 		HWND			m_hCtrlHandle;
-		IDispatch* m_pDisp;
-		IDispatch* m_pParentDisp;
+		IDispatch*		m_pDisp;
+		IDispatch*		m_pParentDisp;
 		CString			m_strCtrlName;
 		CString			m_strGalaxyName;
 		CString			m_strXobjXml;
@@ -263,6 +274,7 @@ namespace CommonUniverse {
 	typedef struct CosmosFrameWndInfo
 	{
 		bool bControlBarProessed = false;
+		GalaxyParentType m_nType = Other;
 		int m_nFrameType = 0;//0:SDI;1:MDT;2:MDI;3:MDIChild
 		HWND m_hClient = NULL;
 		bool m_bSZMode = false;
@@ -648,7 +660,7 @@ namespace CommonUniverse {
 		map<CString, ICosmos*>					m_mapRemoteCosmos;
 		map<CString, IUniverseAppProxy*>		m_mapCosmosAppProxy;
 		map<CString, ICosmosWindowProvider*>	m_mapWindowProvider;
-		map<HWND, CWebPageImpl*>				m_mapHtmlWnd;
+		map<HWND, CWebPageImpl*>				m_mapWebView;
 		map<HWND, IXobj*>						m_mapXobj;
 		map<HWND, IWebPage*>					m_mapFormWebPage;
 		map<HWND, CosmosFrameWndInfo*>			m_mapCosmosFrameWndInfo;

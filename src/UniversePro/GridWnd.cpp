@@ -436,7 +436,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			}
 		}
 
-		CWebPage* pWebWnd = nullptr;
+		CWebView* pWebWnd = nullptr;
 		if (pGalaxy->m_pWebPageWnd)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103220052
+ *           Web Runtime for Application - Version 1.0.0.202103220052           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -13,13 +13,12 @@
  *    become a built-in programmable language in the application system, so that
  *    the application system can be expanded and developed for the Internet based
  *    on modern javscript/Web technology.
-// Use of this source code is governed by a BSD-style license that
-// can be found in the LICENSE file.
+ * Use of this source code is governed by a BSD-style license that
+ * can be found in the LICENSE file.
  *
  * CONTACT INFORMATION:
  * mailto:tangramteam@outlook.com or mailto:sunhuizlz@yeah.net
  * https://www.tangram.dev
- *
  *******************************************************************************/
 
 // GalaxyCluster.cpp : Implementation of CGalaxyCluster
@@ -195,10 +194,27 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 
 STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BSTR bstrGalaxyName, IGalaxy** pRetFrame)
 {
-	HWND h = 0; 
+	HWND h = 0;
 	CString strGalaxyName = OLE2T(bstrGalaxyName);
+	//auto it = m_mapWnd.find(strGalaxyName);
+	//if (it != m_mapWnd.end())
+	//{
+	//	int i = 0;
+	//	CString s = _T("");
+	//	s.Format(_T("%s%d"), strGalaxyName,i);
+	//	auto it = m_mapWnd.find(s);
+	//	while (it != m_mapWnd.end())
+	//	{
+	//		i++;
+	//		s.Format(_T("%s%d"), strGalaxyName, i);
+	//		it = m_mapWnd.find(s);
+	//		if (it == m_mapWnd.end())
+	//			break;
+	//	}
+	//	strGalaxyName = s;
+	//}
 	BSTR bstrName = strGalaxyName.MakeLower().AllocSysString();
-	if (ParentObj.vt == VT_DISPATCH&&HostWnd.vt == VT_BSTR)
+	if (ParentObj.vt == VT_DISPATCH && HostWnd.vt == VT_BSTR)
 	{
 		if (g_pCosmos->m_pCLRProxy)
 		{
@@ -233,7 +249,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					strName = OLE2T(bstrGalaxyName);
 					if (strName == _T(""))
 						bstrGalaxyName = CComBSTR(L"Default");
-					
+
 					strGalaxyName = OLE2T(bstrGalaxyName);
 					auto it = m_mapWnd.find(strGalaxyName);
 					if (it != m_mapWnd.end())
@@ -262,13 +278,13 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			}
 		}
 	}
-	else if (HostWnd.vt == VT_I2||HostWnd.vt == VT_I4 || HostWnd.vt == VT_I8)
+	else if (HostWnd.vt == VT_I2 || HostWnd.vt == VT_I4 || HostWnd.vt == VT_I8)
 	{
 		BOOL bIsMDI = FALSE;
 		HWND _hWnd = NULL;
-		if(HostWnd.vt == VT_I4)
+		if (HostWnd.vt == VT_I4)
 			_hWnd = (HWND)HostWnd.lVal;
-		if(HostWnd.vt == VT_I8)
+		if (HostWnd.vt == VT_I8)
 			_hWnd = (HWND)HostWnd.llVal;
 		if (_hWnd == 0)
 		{
@@ -278,7 +294,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			else
 				bIsMDI = TRUE;
 		}
-		if (_hWnd&&::IsWindow(_hWnd))
+		if (_hWnd && ::IsWindow(_hWnd))
 		{
 			auto it = m_mapGalaxy.find(_hWnd);
 			if (it == m_mapGalaxy.end())
@@ -314,7 +330,21 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					{
 						CCosmosWnd* _pWnd = new CCosmosWnd();
 						_pWnd->SubclassWindow(hPWnd);
+						//_pWnd->ModifyStyle(0, WS_CLIPCHILDREN|WS_CLIPSIBLINGS);
 						_pWnd->m_hClient = _hWnd;
+					}
+				}
+				else if (strClassName.Find(_T("Chrome Extended Window Class")) == 0)
+				{
+					_pGalaxy->m_nGalaxyType = GalaxyType::WebPageGalaxy;
+					_pGalaxy->m_strDocTemplateID = _T("WebPage");
+					HWND _hPWnd = ::GetParent(hPWnd);
+					auto it = g_pCosmos->m_mapBrowserWnd.find(_hPWnd);
+					if (it != g_pCosmos->m_mapBrowserWnd.end())
+					{
+						CBrowser* pBrowser = (CBrowser*)it->second;
+						if (pBrowser->m_pParentXobj)
+							_pGalaxy->m_pCosmosFrameWndInfo = pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
 					}
 				}
 				else if (strClassName.Find(_T("MDIClient")) == 0)
@@ -322,15 +352,19 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 				}
-				else if (strClassName.Find(_T("Chrome Extended Window Class")) == 0)
+				CMDIParent* pMDIParent = nullptr;
+				HWND hTopParent = ::GetWindow(hPWnd, GA_ROOT);
+				auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
+				if (it2 != g_pCosmos->m_mapMDIParent.end())
 				{
-					_pGalaxy->m_nGalaxyType = GalaxyType::WebPageGalaxy;
-					_pGalaxy->m_strDocTemplateID = _T("WebPage");
+					pMDIParent = it2->second;
 				}
-				if (g_pCosmos->m_pMDIMainWnd && g_pCosmos->m_pMDIMainWnd->m_hMDIClient == _hWnd)
+
+				if (pMDIParent && pMDIParent->m_hMDIClient == _hWnd)
 				{
-					g_pCosmos->m_pMDIMainWnd->m_pGalaxy = _pGalaxy;
-					g_pCosmos->m_pMDIMainWnd->m_pGalaxyCluster = this;
+					_pGalaxy->m_pCosmosFrameWndInfo = pMDIParent->m_pCosmosFrameWndInfo;
+					pMDIParent->m_pGalaxy = _pGalaxy;
+					pMDIParent->m_pGalaxyCluster = this;
 				}
 				_pGalaxy->m_pGalaxyCluster = this;
 				_pGalaxy->m_hHostWnd = _hWnd;
@@ -353,10 +387,9 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				*pRetFrame = it->second;
 		}
 	}
-		
+
 	return S_OK;
 }
-
 
 STDMETHODIMP CGalaxyCluster::GetGalaxyFromCtrl(IDispatch* CtrlObj, IGalaxy** ppGalaxy)
 {
@@ -457,7 +490,7 @@ void CGalaxyCluster::BeforeDestory()
 {
 	Fire_Destroy();
 
-	for (auto it: m_mapGalaxy)
+	for (auto it : m_mapGalaxy)
 		it.second->Destroy();
 
 	if (g_pCosmos->m_pCLRProxy)
@@ -1238,7 +1271,7 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj * pActiveNode)
 			}
 		}
 	}
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnNodeMouseActivate(pActiveNode);
 	}

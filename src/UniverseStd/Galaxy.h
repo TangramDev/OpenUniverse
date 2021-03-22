@@ -193,7 +193,7 @@ public:
 	CBKWnd*									m_pBKWnd;
 	CXobj*									m_pBindMDIXobj = nullptr;
 	CXobj*									m_pWebBindMDIXobj = nullptr;
-	CWebPage*								m_pOwnerHtmlWnd;
+	CWebView*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
 
@@ -265,7 +265,7 @@ public:
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CBKWnd*											m_pBKWnd = nullptr;
-	CWebPage*										m_pWebPageWnd = nullptr;
+	CWebView*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster = nullptr;

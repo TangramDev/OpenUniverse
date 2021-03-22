@@ -39,7 +39,7 @@ namespace Browser {
 		m_pParentXobj = nullptr;
 		m_fdevice_scale_factor = 1.0f;
 		m_strCurKey = _T("");
-		m_pVisibleWebWnd = nullptr;
+		m_pVisibleWebView = nullptr;
 		m_pOmniboxViewViews = nullptr;
 		if (g_pCosmos->m_pCreatingOmniboxViewViews) {
 			m_pOmniboxViewViews = g_pCosmos->m_pCreatingOmniboxViewViews;
@@ -73,10 +73,10 @@ namespace Browser {
 
 			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 			{
-				auto it = g_pCosmos->m_mapHtmlWnd.find(hActive);
-				if (it != g_pCosmos->m_mapHtmlWnd.end())
+				auto it = g_pCosmos->m_mapWebView.find(hActive);
+				if (it != g_pCosmos->m_mapWebView.end())
 				{
-					CWebPage* pPage = (CWebPage*)it->second;
+					CWebView* pPage = (CWebView*)it->second;
 					if (pPage->m_pGalaxy)
 					{
 						IXobj* pObj = nullptr;
@@ -104,14 +104,14 @@ namespace Browser {
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
 			HWND hActive = m_pBrowser->GetActiveWebContentWnd();
-			if (::GetParent(m_hWnd) && m_pVisibleWebWnd->m_hWnd != hActive)
+			if (::GetParent(m_hWnd) && m_pVisibleWebView->m_hWnd != hActive)
 			{
 				auto it = m_mapChildPage.find(hActive);
 				if (it != m_mapChildPage.end())
-					m_pVisibleWebWnd = it->second;
+					m_pVisibleWebView = it->second;
 			}
-			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
-			if (m_pVisibleWebWnd && g_pCosmos->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
+			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
+			if (m_pVisibleWebView && g_pCosmos->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
 			{
 				g_pCosmos->m_pGalaxy = nullptr;
 				g_pCosmos->m_bWinFormActived = false;
@@ -129,10 +129,10 @@ namespace Browser {
 			return;
 		}
 
-		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-		if (it != g_pCosmos->m_mapHtmlWnd.end())
+		auto it = g_pCosmos->m_mapWebView.find(hWnd);
+		if (it != g_pCosmos->m_mapWebView.end())
 		{
-			m_pVisibleWebWnd = (CWebPage*)it->second;
+			m_pVisibleWebView = (CWebView*)it->second;
 		}
 		else
 			return;
@@ -143,9 +143,9 @@ namespace Browser {
 			{
 				if (m_pBrowser->GetActiveWebContentWnd() == hWnd)
 				{
-					m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-					if (m_pVisibleWebWnd->m_hExtendWnd)
-						::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);
+					m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (m_pVisibleWebView->m_hExtendWnd)
+						::SetParent(m_pVisibleWebView->m_hExtendWnd, m_hWnd);
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 					return;
 				}
@@ -167,37 +167,37 @@ namespace Browser {
 
 		if (m_bTabChange == true)
 		{
-			if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+			if (m_pVisibleWebView->m_pChromeRenderFrameHost)
 			{
-				m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+				m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
 			return;
 		}
-		if (m_pVisibleWebWnd && m_pVisibleWebWnd->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
+		if (m_pVisibleWebView && m_pVisibleWebView->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
 		{
-			m_pVisibleWebWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+			m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
 		}
 
 		BrowserLayout();
-		if (m_pVisibleWebWnd)
+		if (m_pVisibleWebView)
 		{
-			HWND hExtendWnd = m_pVisibleWebWnd->m_hExtendWnd;
+			HWND hExtendWnd = m_pVisibleWebView->m_hExtendWnd;
 			if (hExtendWnd == nullptr)
 			{
 				hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hWnd, NULL, theApp.m_hInstance, NULL);
-				m_pVisibleWebWnd->m_hExtendWnd = hExtendWnd;
-				m_pVisibleWebWnd->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
+				m_pVisibleWebView->m_hExtendWnd = hExtendWnd;
+				m_pVisibleWebView->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
 				CExtendWnd* pExtendWnd = new CExtendWnd();
-				pExtendWnd->m_pHostPage = m_pVisibleWebWnd;
-				pExtendWnd->SubclassWindow(m_pVisibleWebWnd->m_hChildWnd);
-				::SetWindowLongPtr(hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd->m_hChildWnd);
-				::SetWindowLongPtr(m_pVisibleWebWnd->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebWnd);
+				pExtendWnd->m_pHostPage = m_pVisibleWebView;
+				pExtendWnd->SubclassWindow(m_pVisibleWebView->m_hChildWnd);
+				::SetWindowLongPtr(hExtendWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebView->m_hChildWnd);
+				::SetWindowLongPtr(m_pVisibleWebView->m_hChildWnd, GWLP_USERDATA, (LONG_PTR)m_pVisibleWebView);
 			}
 			if (::IsChild(hWnd, hExtendWnd))
 				::SetParent(hExtendWnd, m_hWnd);
 
-			if (m_pVisibleWebWnd->m_strCurKey == _T(""))
+			if (m_pVisibleWebView->m_strCurKey == _T(""))
 			{
 				::SetWindowPos(hExtendWnd, m_hDrawWnd,
 					rc.left,
@@ -213,9 +213,9 @@ namespace Browser {
 				rc.right * m_fdevice_scale_factor,
 				(rc.bottom - rc.top) * m_fdevice_scale_factor,
 				SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOACTIVATE);
-			HWND hWebHostWnd = m_pVisibleWebWnd->m_hWebHostWnd;
+			HWND hWebHostWnd = m_pVisibleWebView->m_hWebHostWnd;
 			if (hWebHostWnd == NULL)
-				hWebHostWnd = m_pVisibleWebWnd->m_hChildWnd;
+				hWebHostWnd = m_pVisibleWebView->m_hChildWnd;
 			if (::IsWindowVisible(hWebHostWnd) == false) {
 				rc.right = rc.left + 1;
 				rc.bottom = rc.top + 1;
@@ -272,7 +272,7 @@ namespace Browser {
 	};
 
 	LRESULT CBrowser::BrowserLayout() {
-		if (m_bDestroy || m_pVisibleWebWnd == nullptr ||
+		if (m_bDestroy || m_pVisibleWebView == nullptr ||
 			!::IsWindowVisible(m_hWnd) ||
 			g_pCosmos->m_bChromeNeedClosed == TRUE)
 			return 0;
@@ -280,40 +280,40 @@ namespace Browser {
 			return 0;
 		RECT rcBrowser;
 		GetClientRect(&rcBrowser);
-		if (m_pVisibleWebWnd->m_pGalaxy == nullptr || m_pVisibleWebWnd->m_strCurKey == _T("")) {
+		if (m_pVisibleWebView->m_pGalaxy == nullptr || m_pVisibleWebView->m_strCurKey == _T("")) {
 			if (rcBrowser.right * rcBrowser.left)
-				::SetWindowPos(m_pVisibleWebWnd->m_hExtendWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_SHOWWINDOW);
+				::SetWindowPos(m_pVisibleWebView->m_hExtendWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_SHOWWINDOW);
 			::SetWindowRgn(m_hDrawWnd, NULL, true);
 			return 0;
 		}
-		if (!::IsWindowVisible(m_pVisibleWebWnd->m_hWnd))
+		if (!::IsWindowVisible(m_pVisibleWebView->m_hWnd))
 		{
-			if (m_pVisibleWebWnd->m_hExtendWnd)
-				::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_pVisibleWebWnd->m_hWnd);
-			auto it = g_pCosmos->m_mapHtmlWnd.find(m_pBrowser->GetActiveWebContentWnd());
-			if (it != g_pCosmos->m_mapHtmlWnd.end())
+			if (m_pVisibleWebView->m_hExtendWnd)
+				::SetParent(m_pVisibleWebView->m_hExtendWnd, m_pVisibleWebView->m_hWnd);
+			auto it = g_pCosmos->m_mapWebView.find(m_pBrowser->GetActiveWebContentWnd());
+			if (it != g_pCosmos->m_mapWebView.end())
 			{
-				m_pVisibleWebWnd = (CWebPage*)it->second;
-				if (m_pVisibleWebWnd->m_hExtendWnd)
-					::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);
+				m_pVisibleWebView = (CWebView*)it->second;
+				if (m_pVisibleWebView->m_hExtendWnd)
+					::SetParent(m_pVisibleWebView->m_hExtendWnd, m_hWnd);
 			}
 		}
 
-		if (::GetParent(m_pVisibleWebWnd->m_hExtendWnd) != m_hWnd) {
-			::SetParent(m_pVisibleWebWnd->m_hExtendWnd, m_hWnd);
+		if (::GetParent(m_pVisibleWebView->m_hExtendWnd) != m_hWnd) {
+			::SetParent(m_pVisibleWebView->m_hExtendWnd, m_hWnd);
 		}
 
 		RECT rcWebPage;
 		RECT rcExtendWnd;
-		::GetWindowRect(m_pVisibleWebWnd->m_hExtendWnd, &rcExtendWnd);
+		::GetWindowRect(m_pVisibleWebView->m_hExtendWnd, &rcExtendWnd);
 		::ScreenToClient(m_hWnd, (LPPOINT)&rcExtendWnd);
 		::ScreenToClient(m_hWnd, ((LPPOINT)&rcExtendWnd) + 1);
-		HWND _hWebPage = m_pVisibleWebWnd->m_hWnd;
-		if (m_pVisibleWebWnd->m_pDevToolWnd)
+		HWND _hWebPage = m_pVisibleWebView->m_hWnd;
+		if (m_pVisibleWebView->m_pDevToolWnd)
 		{
-			if (::GetParent(m_pVisibleWebWnd->m_hWnd) == ::GetParent(m_pVisibleWebWnd->m_pDevToolWnd->m_hWnd))
+			if (::GetParent(m_pVisibleWebView->m_hWnd) == ::GetParent(m_pVisibleWebView->m_pDevToolWnd->m_hWnd))
 			{
-				_hWebPage = m_pVisibleWebWnd->m_pDevToolWnd->m_hWnd;
+				_hWebPage = m_pVisibleWebView->m_pDevToolWnd->m_hWnd;
 				::ShowWindow(_hWebPage, SW_SHOW);
 			}
 		}
@@ -367,9 +367,9 @@ namespace Browser {
 	LRESULT CBrowser::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		if (g_pCosmos->m_pCLRProxy)
 			g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
-		if (m_pVisibleWebWnd)
+		if (m_pVisibleWebView)
 		{
-			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
+			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
 			if (g_pCosmos->m_pActiveHtmlWnd && g_pCosmos->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
 			{
 				g_pCosmos->m_pGalaxy = nullptr;
@@ -389,17 +389,17 @@ namespace Browser {
 		case 0: {
 			if (g_pCosmos->m_bCreatingDevTool)
 			{
-				g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebPage>;
+				g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebView>;
 				g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
 				if (g_pCosmos->m_pCLRProxy)
 					g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
 				g_pCosmos->m_bCreatingDevTool = false;
 				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = true;
-				if (m_pVisibleWebWnd) {
-					m_pVisibleWebWnd->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
-					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebWnd;
+				if (m_pVisibleWebView) {
+					m_pVisibleWebView->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
+					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebView;
 				}
-				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebWnd;
+				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
 				g_pCosmos->m_pGalaxy = nullptr;
 				g_pCosmos->m_bWinFormActived = false;
 				//g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
@@ -441,9 +441,9 @@ namespace Browser {
 		break;
 		case 20200128:
 		{
-			if (m_pVisibleWebWnd)
+			if (m_pVisibleWebView)
 			{
-				CGalaxy* pGalaxy = m_pVisibleWebWnd->m_pGalaxy;
+				CGalaxy* pGalaxy = m_pVisibleWebView->m_pGalaxy;
 				if (pGalaxy)
 				{
 					CXobj* pXobj = pGalaxy->m_pWorkXobj;
@@ -463,7 +463,7 @@ namespace Browser {
 			switch (lParam)
 			{
 			case 1:
-				return m_pVisibleWebWnd && ::IsWindow(m_pVisibleWebWnd->m_hExtendWnd);
+				return m_pVisibleWebView && ::IsWindow(m_pVisibleWebView->m_hExtendWnd);
 				break;
 			}
 		}
@@ -482,7 +482,7 @@ namespace Browser {
 			g_pCosmos->m_pCLRProxy->OnDestroyChromeBrowser(pIBrowser);
 		}
 
-		m_pVisibleWebWnd = nullptr;
+		m_pVisibleWebView = nullptr;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(m_hWnd);
 		if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 			g_pCosmos->m_mapBrowserWnd.erase(it);
@@ -590,7 +590,7 @@ namespace Browser {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (m_bDestroy)
 			return lRes;
-		if (g_pCosmos->m_bChromeNeedClosed == false && m_pVisibleWebWnd)
+		if (g_pCosmos->m_bChromeNeedClosed == false && m_pVisibleWebView)
 		{
 			switch (lParam)
 			{
@@ -646,7 +646,7 @@ namespace Browser {
 							}
 							else
 							{
-								m_pVisibleWebWnd = it.second;
+								m_pVisibleWebView = it.second;
 							}
 						}
 					}
@@ -673,7 +673,7 @@ namespace Browser {
 							else
 							{
 								it.second->m_pChromeRenderFrameHost->ShowWebPage(true);
-								m_pVisibleWebWnd = it.second;
+								m_pVisibleWebView = it.second;
 							}
 						}
 					}
@@ -686,12 +686,12 @@ namespace Browser {
 						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 					}
 
-					if (m_pVisibleWebWnd->m_pGalaxy)
+					if (m_pVisibleWebView->m_pGalaxy)
 					{
-						::SendMessage(m_pVisibleWebWnd->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebWnd->m_hChildWnd, 0);
+						::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
 						if (::GetParent(m_hWnd) == nullptr)
 						{
-							CXobj* pObj = m_pVisibleWebWnd->m_pGalaxy->m_pWorkXobj;
+							CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
 							if (pObj->m_nViewType == Grid)
 							{
 								CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
@@ -757,17 +757,17 @@ namespace Browser {
 
 	STDMETHODIMP CBrowser::AddURLs(BSTR bstrURLs)
 	{
-		if (m_pVisibleWebWnd)
+		if (m_pVisibleWebView)
 		{
 			CString strDisposition = _T("");
 			strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
-			if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+			if (m_pVisibleWebView->m_pChromeRenderFrameHost)
 			{
 				IPCMsg msg;
 				msg.m_strId = L"ADD_URL";
 				msg.m_strParam1 = OLE2T(bstrURLs);
 				msg.m_strParam2 = strDisposition;
-				m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
+				m_pVisibleWebView->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
 			}
 		}
 		return S_OK;
@@ -775,17 +775,17 @@ namespace Browser {
 
 	STDMETHODIMP CBrowser::OpenURL(BSTR bstrURL, BrowserWndOpenDisposition nDisposition, BSTR bstrKey, BSTR bstrXml)
 	{
-		if (m_pVisibleWebWnd)
+		if (m_pVisibleWebView)
 		{
 			CString strDisposition = _T("");
 			strDisposition.Format(_T("%d"), nDisposition);
-			if (m_pVisibleWebWnd->m_pChromeRenderFrameHost)
+			if (m_pVisibleWebView->m_pChromeRenderFrameHost)
 			{
 				IPCMsg msg;
 				msg.m_strId = L"OPEN_URL";
 				msg.m_strParam1 = OLE2T(bstrURL);
 				msg.m_strParam2 = strDisposition;
-				m_pVisibleWebWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
+				m_pVisibleWebView->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
 			}
 		}
 		return S_OK;

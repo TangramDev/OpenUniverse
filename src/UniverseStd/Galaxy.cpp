@@ -117,7 +117,7 @@ HTREEITEM CCosmosTreeCtrl::FillTreeView(CTangramXmlParse* pParse, CTangramXmlPar
 
 BOOL CCosmosTreeCtrl::OnNMRClick(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	CWebPage* pPage = nullptr;
+	CWebView* pPage = nullptr;
 	if (m_pGalaxy)
 	{
 		pPage = m_pGalaxy->m_pWebPageWnd;
@@ -699,6 +699,8 @@ LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CMDTWnd::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = false;
+	if (m_pBrowser)
+		m_pBrowser->m_bSZMode = false;
 	for (auto& it : g_pCosmos->m_mapSizingBrowser)
 	{
 		if (::IsWindow(it.first))
@@ -725,9 +727,13 @@ LRESULT CMDTWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 	case SC_SIZE:
 		m_bSZMode = true;
+		if (m_pBrowser)
+			m_pBrowser->m_bSZMode = true;
 		break;
 	case SC_MOVE:
 		m_bSZMode = false;
+		if (m_pBrowser)
+			m_pBrowser->m_bSZMode = false;
 		break;
 	}
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
@@ -736,6 +742,8 @@ LRESULT CMDTWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CMDTWnd::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = true;
+	if (m_pBrowser)
+		m_pBrowser->m_bSZMode = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -1148,8 +1156,8 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		if (pGalaxy->m_pHostWebBrowserWnd)
 		{
 			HWND hWnd = pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
-			auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-			if (it != g_pCosmos->m_mapHtmlWnd.end())
+			auto it = g_pCosmos->m_mapWebView.find(hWnd);
+			if (it != g_pCosmos->m_mapWebView.end())
 			{
 				pSession->InsertString(_T("msgID"), _T("MdiWinForm_Ready"));
 				pSession->Insertint64(_T("ready_mdichildhandle"), (__int64)m_hWnd);
@@ -1189,11 +1197,11 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				if (pGalaxy->m_pHostWebBrowserWnd)
 				{
 					HWND hWnd = pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
-					auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-					if (it != g_pCosmos->m_mapHtmlWnd.end())
+					auto it = g_pCosmos->m_mapWebView.find(hWnd);
+					if (it != g_pCosmos->m_mapWebView.end())
 					{
 						if (m_pOwnerHtmlWnd == nullptr)
-							m_pOwnerHtmlWnd = (CWebPage*)it->second;
+							m_pOwnerHtmlWnd = (CWebView*)it->second;
 						pSession->InsertString(_T("msgID"), _T("MdiWinForm_ActiveMdiChild"));
 						pSession->Insertint64(_T("active_mdichildhandle"), (__int64)m_hWnd);
 						pSession->InsertString(_T("active_mdichildkey"), m_strKey);
@@ -2223,7 +2231,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrameWnd, _T("CosmosFrameWndInfo"));
 		}
 	}
-	if (m_pCosmosFrameWndInfo&& m_pWebPageWnd)
+	if (m_pCosmosFrameWndInfo && m_pWebPageWnd)
 	{
 		CString _strKey = m_pWebPageWnd->m_strPageName + _T("_") + strCurrentKey;
 		CComBSTR _bstrKey(_strKey);
@@ -2493,7 +2501,7 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case WM_BROWSERLAYOUT:
 	{
-		CWebPage* pWebWnd = (CWebPage*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		CWebView* pWebWnd = (CWebView*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 		::PostMessage(::GetParent(pWebWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 1);
 	}
 	break;

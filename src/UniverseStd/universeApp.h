@@ -70,7 +70,7 @@
 namespace Browser
 {
 	class CBrowser;
-	class CWebPage;
+	class CWebView;
 }
 
 using namespace Browser;

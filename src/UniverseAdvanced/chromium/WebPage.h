@@ -35,22 +35,22 @@ namespace Browser
 		BEGIN_MSG_MAP(CExtendWnd)
 			MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
 		END_MSG_MAP()
-		CWebPage* m_pHostPage = nullptr;
+		CWebView* m_pHostPage = nullptr;
 	private:
 		void OnFinalMessage(HWND hWnd);
 	public:
 		LRESULT OnEraseBkgnd(UINT, WPARAM, LPARAM, BOOL&);
 	};
 
-	class ATL_NO_VTABLE CWebPage :
+	class ATL_NO_VTABLE CWebView :
 		public CWebPageImpl,
-		public CWindowImpl<CWebPage, CWindow>,
+		public CWindowImpl<CWebView, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
 		public IDispatchImpl<IWebPage, &_uuidof(IWebPage), &LIBID_Universe, 1, 0>
 	{
 	public:
-		CWebPage();
-		~CWebPage() override;
+		CWebView();
+		~CWebView() override;
 
 		BOOL								m_bDevToolWnd;
 		bool								m_bCanShow = false;
@@ -72,8 +72,8 @@ namespace Browser
 		CGalaxyCluster*						m_pGalaxyCluster;
 		CosmosFrameWndInfo*					m_pCosmosFrameWndInfo = nullptr;
 
-		CWebPage*							m_pWebWnd;
-		CWebPage*							m_pDevToolWnd;
+		CWebView*							m_pWebWnd;
+		CWebView*							m_pDevToolWnd;
 		map<CString, CString>				m_mapFormsInfo;
 		map<CString, CString>				m_mapeclipsesInfo;
 		map<CString, CString>				m_mapWorkBenchInfo;
@@ -81,7 +81,7 @@ namespace Browser
 		map<HWND, CWinForm*>				m_mapSubWinForm;
 		map<CString, CMDIChildFormInfo*>	m_mapChildFormsInfo;
 
-		BEGIN_MSG_MAP(CWebPage)
+		BEGIN_MSG_MAP(CWebView)
 			MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 			MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
 			MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
@@ -90,7 +90,7 @@ namespace Browser
 			MESSAGE_HANDLER(WM_CHROMEWNDPARENTCHANGED, OnParentChanged)
 		END_MSG_MAP()
 
-		BEGIN_COM_MAP(CWebPage)
+		BEGIN_COM_MAP(CWebView)
 			COM_INTERFACE_ENTRY(IDispatch)
 			COM_INTERFACE_ENTRY(IWebPage)
 		END_COM_MAP()

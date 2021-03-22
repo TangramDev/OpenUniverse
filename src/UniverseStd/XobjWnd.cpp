@@ -181,7 +181,7 @@ int CXobjWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 	g_pCosmos->m_bWinFormActived = false;
 	g_pCosmos->m_pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 
-	CWebPage* pHtmlWnd = g_pCosmos->m_pGalaxy->m_pWebPageWnd;
+	CWebView* pHtmlWnd = g_pCosmos->m_pGalaxy->m_pWebPageWnd;
 	CString strID = m_pXobj->m_strName;
 
 	if ((m_pXobj->m_nViewType == ActiveX || m_pXobj->m_nViewType == CLRCtrl))
@@ -345,7 +345,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 				pGalaxy->HostPosChanged();
 		}
 		if (_pXobj->m_pWebBrowser) {
-			g_pCosmos->m_pActiveHtmlWnd = _pXobj->m_pWebBrowser->m_pVisibleWebWnd;
+			g_pCosmos->m_pActiveHtmlWnd = _pXobj->m_pWebBrowser->m_pVisibleWebView;
 		}
 		if (nOldPage != wParam)
 		{
@@ -765,7 +765,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)
 		{
 			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
-				g_pCosmos->m_pHostBrowser->m_pVisibleWebWnd == nullptr)
+				g_pCosmos->m_pHostBrowser->m_pVisibleWebView == nullptr)
 			{
 				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 				return;

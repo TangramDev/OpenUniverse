@@ -501,7 +501,7 @@ LRESULT CALLBACK CUniverse::CosmosExtendedWndProc(_In_ HWND hWnd, UINT msg, _In_
 		case 20200203:
 		{
 			LRESULT lRes = ::DefWindowProc(hWnd, msg, wParam, lParam);
-			CWebPage* m_pHtmlWnd = (CWebPage*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			CWebView* m_pHtmlWnd = (CWebView*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 			if (m_pHtmlWnd->m_pChromeRenderFrameHost)
 			{
 				IPCMsg* pMsg = (IPCMsg*)wParam;
@@ -1218,16 +1218,16 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								HWND hWnd = pWnd->m_pBrowser->GetActiveWebContentWnd();
 								if (::IsWindowVisible(hWnd) == false)
 								{
-									auto it1 = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-									if (it1 != g_pCosmos->m_mapHtmlWnd.end())
+									auto it1 = g_pCosmos->m_mapWebView.find(hWnd);
+									if (it1 != g_pCosmos->m_mapWebView.end())
 									{
-										pWnd->m_pVisibleWebWnd = (CWebPage*)it1->second;
+										pWnd->m_pVisibleWebView = (CWebView*)it1->second;
 										ATLTRACE(_T("WebPage HWND %x, WM_POWERBROADCAST\n"), hWnd);
 										it1->second->m_pChromeRenderFrameHost->ShowWebPage(true);
-										if (pWnd->m_pVisibleWebWnd->m_hExtendWnd)
+										if (pWnd->m_pVisibleWebView->m_hExtendWnd)
 										{
-											ATLTRACE(_T("WebPageExtend HWND %x, WM_POWERBROADCAST\n"), pWnd->m_pVisibleWebWnd->m_hExtendWnd);
-											::SetParent(pWnd->m_pVisibleWebWnd->m_hExtendWnd, pWnd->m_hWnd);
+											ATLTRACE(_T("WebPageExtend HWND %x, WM_POWERBROADCAST\n"), pWnd->m_pVisibleWebView->m_hExtendWnd);
+											::SetParent(pWnd->m_pVisibleWebView->m_hExtendWnd, pWnd->m_hWnd);
 										}
 									}
 									::PostMessage(hWnd, WM_COSMOSMSG, 20200131, 0);
@@ -1445,7 +1445,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				auto it = g_pCosmos->m_mapBrowserWnd.find((HWND)lpMsg->wParam);
 				if (it != g_pCosmos->m_mapBrowserWnd.end())
 				{
-					CWebPage* pWnd = ((CBrowser*)it->second)->m_pVisibleWebWnd;
+					CWebView* pWnd = ((CBrowser*)it->second)->m_pVisibleWebView;
 					if (pWnd && ::IsWindow(pWnd->m_hWnd) && pWnd->m_pGalaxy)
 					{
 						IXobj* pXobj = nullptr;

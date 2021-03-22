@@ -104,7 +104,7 @@ namespace Browser {
 		return true;
 	}
 
-	CWebPage::CWebPage() {
+	CWebView::CWebView() {
 		m_pWebWnd = nullptr;
 		m_pDevToolWnd = nullptr;
 		m_pBindWinForm = nullptr;
@@ -123,14 +123,14 @@ namespace Browser {
 		g_pCosmos->m_pCreatingChromeRenderFrameHostBase = nullptr;
 	}
 
-	CWebPage::~CWebPage() {
+	CWebView::~CWebView() {
 		for (auto it : m_mapChildFormsInfo)
 		{
 			delete it.second;
 		}
 	}
 
-	LRESULT CWebPage::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT CWebView::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
 		CBrowser* pParent = nullptr;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
@@ -154,7 +154,7 @@ namespace Browser {
 		return DefWindowProc(uMsg, wParam, lParam);
 	}
 
-	LRESULT CWebPage::OnCosmosMsg(UINT uMsg,
+	LRESULT CWebView::OnCosmosMsg(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
@@ -425,7 +425,7 @@ namespace Browser {
 		return lRes;
 	}
 
-	LRESULT CWebPage::OnParentChanged(UINT uMsg,
+	LRESULT CWebView::OnParentChanged(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
@@ -464,7 +464,7 @@ namespace Browser {
 					g_pCosmos->m_pActiveBrowser = pChromeBrowserWnd->m_pBrowser;
 					if (pChromeBrowserWnd && m_hExtendWnd) {
 						if (::IsWindowVisible(m_hWnd)) {
-							pChromeBrowserWnd->m_pVisibleWebWnd = this;
+							pChromeBrowserWnd->m_pVisibleWebView = this;
 							if (bNewParent)
 							{
 								g_pCosmos->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
@@ -473,11 +473,11 @@ namespace Browser {
 							}
 						}
 					}
-					if (pChromeBrowserWnd->m_pVisibleWebWnd && m_bDevToolWnd && pChromeBrowserWnd->m_pVisibleWebWnd->m_bDevToolWnd == false)
+					if (pChromeBrowserWnd->m_pVisibleWebView && m_bDevToolWnd && pChromeBrowserWnd->m_pVisibleWebView->m_bDevToolWnd == false)
 					{
-						if (pChromeBrowserWnd->m_pVisibleWebWnd->m_pDevToolWnd == nullptr)
+						if (pChromeBrowserWnd->m_pVisibleWebView->m_pDevToolWnd == nullptr)
 						{
-							pChromeBrowserWnd->m_pVisibleWebWnd->m_pDevToolWnd = this;
+							pChromeBrowserWnd->m_pVisibleWebView->m_pDevToolWnd = this;
 							::ShowWindow(m_hWnd, SW_SHOW);
 						}
 					}
@@ -488,7 +488,7 @@ namespace Browser {
 		return lRes;
 	}
 
-	LRESULT CWebPage::OnDestroy(UINT uMsg,
+	LRESULT CWebView::OnDestroy(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL& /*bHandled*/) {
@@ -530,7 +530,7 @@ namespace Browser {
 		return lRes;
 	}
 
-	LRESULT CWebPage::OnShowWindow(UINT uMsg,
+	LRESULT CWebView::OnShowWindow(UINT uMsg,
 		WPARAM wParam,
 		LPARAM lParam,
 		BOOL&) {
@@ -544,7 +544,7 @@ namespace Browser {
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
 					if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 						pBrowserWnd = (CBrowser*)it->second;
-						pBrowserWnd->m_pVisibleWebWnd = this;
+						pBrowserWnd->m_pVisibleWebView = this;
 					}
 				}
 				::ShowWindow(m_hExtendWnd, SW_SHOW);
@@ -568,24 +568,24 @@ namespace Browser {
 		return lRes;
 	}
 
-	void CWebPage::OnFinalMessage(HWND hWnd) {
+	void CWebView::OnFinalMessage(HWND hWnd) {
 		CBrowser* pPWnd = nullptr;
 		auto it2 = g_pCosmos->m_mapBrowserWnd.find(::GetParent(hWnd));
 		if (it2 != g_pCosmos->m_mapBrowserWnd.end())
 		{
 			pPWnd = (CBrowser*)it2->second;
-			if (pPWnd->m_pVisibleWebWnd == this)
-				pPWnd->m_pVisibleWebWnd = nullptr;
+			if (pPWnd->m_pVisibleWebView == this)
+				pPWnd->m_pVisibleWebView = nullptr;
 			auto it3 = pPWnd->m_mapChildPage.find(hWnd);
 			if (it3 != pPWnd->m_mapChildPage.end())
 			{
 				pPWnd->m_mapChildPage.erase(it3);
 			}
 		}
-		auto it = g_pCosmos->m_mapHtmlWnd.find(hWnd);
-		if (it != g_pCosmos->m_mapHtmlWnd.end())
+		auto it = g_pCosmos->m_mapWebView.find(hWnd);
+		if (it != g_pCosmos->m_mapWebView.end())
 		{
-			g_pCosmos->m_mapHtmlWnd.erase(it);
+			g_pCosmos->m_mapWebView.erase(it);
 		}
 		if (g_pCosmos->m_pActiveHtmlWnd == this)
 			g_pCosmos->m_pActiveHtmlWnd = nullptr;
@@ -593,7 +593,7 @@ namespace Browser {
 		delete this;
 	}
 
-	void CWebPage::Show(CString strID2)
+	void CWebView::Show(CString strID2)
 	{
 		LONG_PTR data = 0;
 		if (::IsWindow(m_hChildWnd))
@@ -670,7 +670,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
+	void CWebView::SendChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (m_pChromeRenderFrameHost != nullptr)
 		{
@@ -686,7 +686,7 @@ namespace Browser {
 		g_pCosmos->m_pCurrentIPCMsg = nullptr;
 	}
 
-	LRESULT CWebPage::OnChromeIPCMsgReceived(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT CWebView::OnChromeIPCMsgReceived(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		if (lParam)
 		{
@@ -723,12 +723,12 @@ namespace Browser {
 		return lRes;
 	}
 
-	CChromeBrowserBase* CWebPage::GetChromeBrowserBase(HWND hHostWnd)
+	CChromeBrowserBase* CWebView::GetChromeBrowserBase(HWND hHostWnd)
 	{
 		return nullptr;
 	}
 
-	void CWebPage::LoadDocument2Viewport(CString strName, CString strXML)
+	void CWebView::LoadDocument2Viewport(CString strName, CString strXML)
 	{
 		HWND hBrowser = ::GetParent(m_hWnd);
 		HWND hPPWnd = ::GetParent(hBrowser);
@@ -849,7 +849,7 @@ namespace Browser {
 		::PostMessage(hBrowser, WM_BROWSERLAYOUT, 0, 7);
 	}
 
-	void CWebPage::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
+	void CWebView::HandleChromeIPCMessage(CString strId, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)
 	{
 		if (strId.CompareNoCase(_T("RENDER_ELEMENT")) == 0)
 		{
@@ -1011,7 +1011,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::HandleAggregatedMessage(CString strParam1, CString strParam2)
+	void CWebView::HandleAggregatedMessage(CString strParam1, CString strParam2)
 	{
 		int nTokenPos = 0;
 		CString strToken = strParam1.Tokenize(_T("$$$"), nTokenPos);
@@ -1023,7 +1023,7 @@ namespace Browser {
 		}
 	}
 
-	CString CWebPage::FindToken(CString pszContent, CString pszDelimiter, int& nStart)
+	CString CWebView::FindToken(CString pszContent, CString pszDelimiter, int& nStart)
 	{
 		if (nStart == -1) {
 			return _T("");
@@ -1047,7 +1047,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::HandleSingleMessage(CString strParam)
+	void CWebView::HandleSingleMessage(CString strParam)
 	{
 		int nStart = 0;
 		CString strId = FindToken(strParam, _T("%%%"), nStart);
@@ -1059,7 +1059,7 @@ namespace Browser {
 		HandleChromeIPCMessage(strId, strParam1, strParam2, strParam3, strParam4, strParam5);
 	}
 
-	void CWebPage::CustomizedDOMElement(CString strRuleName, CString strHTML)
+	void CWebView::CustomizedDOMElement(CString strRuleName, CString strHTML)
 	{
 		if (strRuleName.CompareNoCase(_T("application")) == 0)
 		{
@@ -1112,7 +1112,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedMainWindowElement(CString strHTML)
+	void CWebView::CustomizedMainWindowElement(CString strHTML)
 	{
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
@@ -1166,10 +1166,10 @@ namespace Browser {
 				if (hHandle)
 				{
 					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-					if (g_pCosmos->m_pMDIMainWnd)
+					if (pCosmosFrameWndInfo->m_nFrameType==2)
 					{
 						RECT rc;
-						::GetClientRect(g_pCosmos->m_pMDIMainWnd->m_hMDIClient, &rc);
+						::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
 						::SetWindowPos(g_pCosmos->m_hHostBrowserWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
 					}
 					pCosmosFrameWndInfo->m_pWebPage = this;
@@ -1225,7 +1225,7 @@ namespace Browser {
 								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
 								_pGalaxy->m_pWebPageWnd = this;
-								if (g_pCosmos->m_pMDIMainWnd)
+								if (pCosmosFrameWndInfo->m_nFrameType==2)
 								{
 									{
 										g_pCosmos->m_pHostBrowser->m_bInTabChange = true;
@@ -1233,9 +1233,6 @@ namespace Browser {
 									}
 									IXobj* pXobj = nullptr;
 									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-									//::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
-									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
-									//::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
 								}
 							}
 						}
@@ -1301,7 +1298,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedIndWindowElement(CString strHTML)
+	void CWebView::CustomizedIndWindowElement(CString strHTML)
 	{
 		CTangramXmlParse xmlParse;
 		if (xmlParse.LoadXml(strHTML))
@@ -1344,7 +1341,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedWebBrowserElement(CString strHTML)
+	void CWebView::CustomizedWebBrowserElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -1377,7 +1374,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedNodeDetailsElement(CString strHTML)
+	void CWebView::CustomizedNodeDetailsElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -1394,7 +1391,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedObjectElement(CString strHTML)
+	void CWebView::CustomizedObjectElement(CString strHTML)
 	{
 		CTangramXmlParse m_Parse;
 		if (m_Parse.LoadXml(strHTML))
@@ -1519,7 +1516,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedExtraElement(CString strHTML)
+	void CWebView::CustomizedExtraElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -1532,7 +1529,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedDataElement(CString strHTML)
+	void CWebView::CustomizedDataElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -1542,7 +1539,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::CustomizedDocElement(CString strHTML)
+	void CWebView::CustomizedDocElement(CString strHTML)
 	{
 		CMarkup rootXML;
 		if (rootXML.SetDoc(strHTML) && rootXML.FindElem())
@@ -1557,7 +1554,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::OnNTPLoaded()
+	void CWebView::OnNTPLoaded()
 	{
 		if (g_pCosmos->m_strNtpXml != _T(""))
 		{
@@ -1565,7 +1562,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::OnWinFormCreated(HWND hwnd)
+	void CWebView::OnWinFormCreated(HWND hwnd)
 	{
 		if (hwnd)
 		{
@@ -1584,7 +1581,7 @@ namespace Browser {
 		}
 	}
 
-	void CWebPage::OnCloudMsgReceived(CSession* pSession)
+	void CWebView::OnCloudMsgReceived(CSession* pSession)
 	{
 		CString strMsgID = pSession->GetString(L"msgID");
 		IXobj* pXobj = (IXobj*)pSession->Getint64(_T("xobj"));
@@ -1747,13 +1744,13 @@ namespace Browser {
 		}
 	}
 
-	STDMETHODIMP CWebPage::get_HostWnd(LONGLONG* Val)
+	STDMETHODIMP CWebView::get_HostWnd(LONGLONG* Val)
 	{
 		*Val = (LONGLONG)m_hWebHostWnd;
 		return S_OK;
 	}
 
-	STDMETHODIMP CWebPage::put_HostWnd(LONGLONG newVal)
+	STDMETHODIMP CWebView::put_HostWnd(LONGLONG newVal)
 	{
 		HWND hWnd = (HWND)newVal;
 		if (::IsWindow(hWnd))
@@ -1761,7 +1758,7 @@ namespace Browser {
 		return S_OK;
 	}
 
-	STDMETHODIMP CWebPage::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** pRetXobj)
+	STDMETHODIMP CWebView::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** pRetXobj)
 	{
 		if (m_pGalaxy == nullptr) {
 			CGalaxyCluster* pGalaxyCluster = nullptr;
@@ -1820,7 +1817,7 @@ namespace Browser {
 		return S_OK;
 	}
 
-	STDMETHODIMP CWebPage::SendXmlMessage(IXobj* sender, BSTR bstrXml)
+	STDMETHODIMP CWebView::SendXmlMessage(IXobj* sender, BSTR bstrXml)
 	{
 		CXobj* pXobj = (CXobj*)sender;
 		if (pXobj)
@@ -1945,7 +1942,7 @@ namespace Browser {
 		return S_FALSE;
 	}
 
-	STDMETHODIMP CWebPage::CreateForm(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm)
+	STDMETHODIMP CWebView::CreateForm(BSTR bstrKey, LONGLONG hParent, IDispatch** pRetForm)
 	{
 		if (g_pCosmos->m_pCLRProxy == nullptr)
 			g_pCosmos->LoadCLR();

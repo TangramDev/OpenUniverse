@@ -178,9 +178,9 @@ public:
 	//.NET Version 4: 
 	ICLRRuntimeHost*						m_pClrHost;
 
-	CWebPage*								m_pHostHtmlWnd = nullptr;
-	CWebPage*								m_pHtmlWndCreated;
-	CWebPage*								m_pActiveHtmlWnd;
+	CWebView*								m_pHostHtmlWnd = nullptr;
+	CWebView*								m_pHtmlWndCreated;
+	CWebView*								m_pActiveHtmlWnd;
 
 	CWinForm*								m_pActiveWinFormWnd;
 	CBrowser*								m_pHostBrowser = nullptr;

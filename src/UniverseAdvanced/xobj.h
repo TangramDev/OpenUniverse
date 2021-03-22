@@ -152,7 +152,7 @@ public:
 	IDispatch*						m_pExtender;
 	CXobjVector						m_vChildNodes;
 	CXobj*							m_pCurrentExNode;
-	CWebPage*						m_pWebPage = nullptr;
+	CWebView*						m_pWebPage = nullptr;
 	CWormhole*						m_pWormhole;
 	map<CString, CGalaxy*>			m_mapSubFrame;
 	map<CXobj*, CString>			m_mapExtendNode;
@@ -167,7 +167,7 @@ public:
 	BOOL	AddChildNode(CXobj* pXobj);
 	BOOL	RemoveChildNode(CXobj* pXobj);
 	CString GetNames();
-	CWebPage* GetHtmlWnd();
+	CWebView* GetHtmlWnd();
 	void NodeCreated();
 	CXobj* GetMdiclientObj();
 	HRESULT Fire_ObserveComplete();

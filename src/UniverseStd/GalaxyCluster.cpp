@@ -336,6 +336,14 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				{
 					_pGalaxy->m_nGalaxyType = GalaxyType::WebPageGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("WebPage");
+					HWND _hPWnd = ::GetParent(hPWnd);
+					auto it = g_pCosmos->m_mapBrowserWnd.find(_hPWnd);
+					if (it != g_pCosmos->m_mapBrowserWnd.end())
+					{
+						CBrowser* pBrowser = (CBrowser*)it->second;
+						if (pBrowser->m_pParentXobj)
+							_pGalaxy->m_pCosmosFrameWndInfo = pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
+					}
 				}
 
 				_pGalaxy->m_pGalaxyCluster = this;

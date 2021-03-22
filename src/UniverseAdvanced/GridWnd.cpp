@@ -348,7 +348,7 @@ void CGridWnd::StartTracking(int ht)
 	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
+		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	}
 
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
@@ -413,7 +413,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CXobj* pXobj = pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
+		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS|WS_CLIPCHILDREN);
 	}
 
 	CSplitterWnd::StopTracking(bAccept);
@@ -436,7 +436,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			}
 		}
 
-		CWebPage* pWebWnd = nullptr;
+		CWebView* pWebWnd = nullptr;
 		if (pGalaxy->m_pWebPageWnd)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;
