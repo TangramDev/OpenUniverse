@@ -391,7 +391,7 @@ void CGridWnd::StartTracking(int ht)
 	SetFocus();
 
 	// make sure no updates are pending
-	RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+	RedrawWindow(NULL, NULL, /*RDW_ERASE | RDW_FRAME | RDW_INVALIDATE |*/ RDW_ALLCHILDREN | RDW_UPDATENOW);
 
 	// set tracking state and appropriate cursor
 	m_bTracking = true;

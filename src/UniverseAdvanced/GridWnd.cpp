@@ -348,7 +348,7 @@ void CGridWnd::StartTracking(int ht)
 	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
+		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS, 0);
 	}
 
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
@@ -393,7 +393,7 @@ void CGridWnd::StartTracking(int ht)
 	SetFocus();
 
 	// make sure no updates are pending
-	RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+	RedrawWindow(NULL, NULL, /*RDW_ERASE | RDW_FRAME | RDW_INVALIDATE |*/ RDW_ALLCHILDREN | RDW_UPDATENOW);
 
 	// set tracking state and appropriate cursor
 	m_bTracking = true;
@@ -413,7 +413,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CXobj* pXobj = pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
+		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
 	}
 
 	CSplitterWnd::StopTracking(bAccept);
