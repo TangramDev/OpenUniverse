@@ -334,6 +334,7 @@ public:
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CBKWnd*											m_pBKWnd = nullptr;
+	CMDIParent*										m_pMDIParent = nullptr;
 	CWebView*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;

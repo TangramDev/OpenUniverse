@@ -21,7 +21,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// GalaxyCluster.cpp : Implementation of CGalaxyCluster
+ // GalaxyCluster.cpp : Implementation of CGalaxyCluster
 
 #include "stdafx.h"
 #include "Xobj.h"
@@ -32,10 +32,10 @@
 
 CXobjShareData::CXobjShareData()
 {
-	m_pOldGalaxy			= nullptr;
-	m_pOfficeObj		= nullptr;
-	m_pCosmosParse		= nullptr;
-	m_pHostClientView	= nullptr;
+	m_pOldGalaxy = nullptr;
+	m_pOfficeObj = nullptr;
+	m_pCosmosParse = nullptr;
+	m_pHostClientView = nullptr;
 #ifdef _DEBUG
 	g_pCosmos->m_nTangramNodeCommonData++;
 #endif	
@@ -53,16 +53,16 @@ CXobjShareData::~CXobjShareData()
 // CGalaxyCluster
 CGalaxyCluster::CGalaxyCluster()
 {
-	m_hWnd								= 0;
-	m_bPageDataLoaded					= false;
-	m_bDoc								= false;
-	m_strXmlHeader						= _T("");
-	m_strPageFileName					= _T("");
-	m_strPageFilePath					= _T("");
-	m_strConfigFileNodeName				= _T("tangramdefaultpage");
-	m_pBKGalaxy							= nullptr;
-	g_pCosmos->m_pGalaxyCluster					= this;
-	m_pUniverseAppProxy					= nullptr;
+	m_hWnd = 0;
+	m_bPageDataLoaded = false;
+	m_bDoc = false;
+	m_strXmlHeader = _T("");
+	m_strPageFileName = _T("");
+	m_strPageFilePath = _T("");
+	m_strConfigFileNodeName = _T("tangramdefaultpage");
+	m_pBKGalaxy = nullptr;
+	g_pCosmos->m_pGalaxyCluster = this;
+	m_pUniverseAppProxy = nullptr;
 
 #ifdef _DEBUG
 	g_pCosmos->m_nTangram++;
@@ -104,7 +104,7 @@ STDMETHODIMP CGalaxyCluster::get_Count(long* pCount)
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::get_Galaxy(VARIANT vIndex, IGalaxy ** ppGalaxy)
+STDMETHODIMP CGalaxyCluster::get_Galaxy(VARIANT vIndex, IGalaxy** ppGalaxy)
 {
 	if (vIndex.vt == VT_I4)
 	{
@@ -161,7 +161,7 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 	typedef CComEnum<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT>>
 		CComEnumVariant;
 
-	CComObject<CComEnumVariant> *pe = 0;
+	CComObject<CComEnumVariant>* pe = 0;
 	HRESULT hr = pe->CreateInstance(&pe);
 
 	if (SUCCEEDED(hr))
@@ -169,7 +169,7 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 		pe->AddRef();
 		long nLen = (long)m_mapGalaxy.size();
 		VARIANT* rgvar = new VARIANT[nLen];
-		ZeroMemory(rgvar, sizeof(VARIANT)*nLen);
+		ZeroMemory(rgvar, sizeof(VARIANT) * nLen);
 		VARIANT* pItem = rgvar;
 		for (auto it : m_mapGalaxy)
 		{
@@ -196,23 +196,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 {
 	HWND h = 0;
 	CString strGalaxyName = OLE2T(bstrGalaxyName);
-	//auto it = m_mapWnd.find(strGalaxyName);
-	//if (it != m_mapWnd.end())
-	//{
-	//	int i = 0;
-	//	CString s = _T("");
-	//	s.Format(_T("%s%d"), strGalaxyName,i);
-	//	auto it = m_mapWnd.find(s);
-	//	while (it != m_mapWnd.end())
-	//	{
-	//		i++;
-	//		s.Format(_T("%s%d"), strGalaxyName, i);
-	//		it = m_mapWnd.find(s);
-	//		if (it == m_mapWnd.end())
-	//			break;
-	//	}
-	//	strGalaxyName = s;
-	//}
 	BSTR bstrName = strGalaxyName.MakeLower().AllocSysString();
 	if (ParentObj.vt == VT_DISPATCH && HostWnd.vt == VT_BSTR)
 	{
@@ -299,6 +282,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 			auto it = m_mapGalaxy.find(_hWnd);
 			if (it == m_mapGalaxy.end())
 			{
+				HWND hPWnd = ::GetParent(_hWnd);
 				DWORD dwID = ::GetWindowThreadProcessId(_hWnd, NULL);
 				CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 
@@ -318,7 +302,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 				}
-				HWND hPWnd = ::GetParent(_hWnd);
 				::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strClassName = g_pCosmos->m_szBuffer;
 				if (strClassName.Find(_T("Afx:ControlBar:")) == 0)
@@ -353,19 +336,24 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 				}
 				CMDIParent* pMDIParent = nullptr;
-				HWND hTopParent = ::GetWindow(hPWnd, GA_ROOT);
+				HWND hTopParent = ::GetAncestor(hPWnd, GA_ROOT);
 				auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
 				if (it2 != g_pCosmos->m_mapMDIParent.end())
 				{
 					pMDIParent = it2->second;
+					if (!::IsChild(pMDIParent->m_hMDIClient, _hWnd))
+					{
+						_pGalaxy->m_pMDIParent = pMDIParent;
+						_pGalaxy->m_pCosmosFrameWndInfo = pMDIParent->m_pCosmosFrameWndInfo;
+					}
+					if (pMDIParent->m_hMDIClient == _hWnd)
+					{
+						_pGalaxy->m_pCosmosFrameWndInfo = pMDIParent->m_pCosmosFrameWndInfo;
+						pMDIParent->m_pGalaxy = _pGalaxy;
+						pMDIParent->m_pGalaxyCluster = this;
+					}
 				}
 
-				if (pMDIParent && pMDIParent->m_hMDIClient == _hWnd)
-				{
-					_pGalaxy->m_pCosmosFrameWndInfo = pMDIParent->m_pCosmosFrameWndInfo;
-					pMDIParent->m_pGalaxy = _pGalaxy;
-					pMDIParent->m_pGalaxyCluster = this;
-				}
 				_pGalaxy->m_pGalaxyCluster = this;
 				_pGalaxy->m_hHostWnd = _hWnd;
 				pThreadInfo->m_mapGalaxy[_hWnd] = _pGalaxy;
@@ -400,7 +388,7 @@ STDMETHODIMP CGalaxyCluster::GetGalaxyFromCtrl(IDispatch* CtrlObj, IGalaxy** ppG
 		{
 			auto it = m_mapGalaxy.find(h);
 			if (it != m_mapGalaxy.end())
-				* ppGalaxy = it->second;
+				*ppGalaxy = it->second;
 		}
 	}
 
@@ -446,7 +434,7 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyName(LONGLONG hHwnd, BSTR* pVal)
 	if (_hWnd)
 	{
 		auto it = m_mapGalaxy.find(_hWnd);
-		if (it!=m_mapGalaxy.end())
+		if (it != m_mapGalaxy.end())
 			*pVal = it->second->m_strGalaxyName.AllocSysString();
 	}
 
@@ -458,7 +446,7 @@ void CGalaxyCluster::UpdateMapKey(CString strXml)
 	if (m_strXmlHeader != _T(""))
 		return;
 	CTangramXmlParse m_Parse;
-	if (m_Parse.LoadXml(strXml)||m_Parse.LoadFile(strXml))
+	if (m_Parse.LoadXml(strXml) || m_Parse.LoadFile(strXml))
 	{
 		strXml = m_Parse.xml();
 		int nPos = strXml.Find(_T(">"));
@@ -544,7 +532,7 @@ STDMETHODIMP CGalaxyCluster::get_Width(long* pVal)
 
 STDMETHODIMP CGalaxyCluster::put_Width(long newVal)
 {
-	if (m_hWnd&&newVal)
+	if (m_hWnd && newVal)
 	{
 		RECT rc;
 		::GetWindowRect(m_hWnd, &rc);
@@ -568,14 +556,14 @@ STDMETHODIMP CGalaxyCluster::get_Height(long* pVal)
 
 STDMETHODIMP CGalaxyCluster::put_Height(long newVal)
 {
-	if (m_hWnd&&newVal)
+	if (m_hWnd && newVal)
 	{
 		RECT rc;
 		::GetWindowRect(m_hWnd, &rc);
 		rc.right = rc.left + newVal;
 		::SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left, newVal, SWP_NOACTIVATE | SWP_NOREDRAW);
 	}
-	return S_OK; 
+	return S_OK;
 }
 
 STDMETHODIMP CGalaxyCluster::get_XobjNames(BSTR* pVal)
@@ -642,7 +630,7 @@ STDMETHODIMP CGalaxyCluster::Observe(IDispatch* Parent, BSTR CtrlName, BSTR Gala
 	if (g_pCosmos->m_pCLRProxy)
 	{
 		IDispatch* pDisp = nullptr;
-		pDisp =g_pCosmos->m_pCLRProxy->GetCtrlByName(Parent, CtrlName, true);
+		pDisp = g_pCosmos->m_pCLRProxy->GetCtrlByName(Parent, CtrlName, true);
 		if (pDisp)
 		{
 			HWND h = 0;
@@ -837,7 +825,7 @@ HRESULT CGalaxyCluster::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 			CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
 
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection.p);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection.p);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -885,7 +873,7 @@ HRESULT CGalaxyCluster::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_NodeCreated(IXobj * pXobjCreated)
+HRESULT CGalaxyCluster::Fire_NodeCreated(IXobj* pXobjCreated)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -901,7 +889,7 @@ HRESULT CGalaxyCluster::Fire_NodeCreated(IXobj * pXobjCreated)
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -949,7 +937,7 @@ HRESULT CGalaxyCluster::Fire_NodeCreated(IXobj * pXobjCreated)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn, BSTR bstrID, BSTR bstrAddInXml)
+HRESULT CGalaxyCluster::Fire_AddInCreated(IXobj* pRootXobj, IDispatch* pAddIn, BSTR bstrID, BSTR bstrAddInXml)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -971,7 +959,7 @@ HRESULT CGalaxyCluster::Fire_AddInCreated(IXobj * pRootXobj, IDispatch * pAddIn,
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -1024,7 +1012,7 @@ HRESULT CGalaxyCluster::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
 	if (cConnections)
-	{		
+	{
 		CComVariant avarParams[2];
 		avarParams[1] = bstrXml;
 		avarParams[1].vt = VT_BSTR;
@@ -1037,7 +1025,7 @@ HRESULT CGalaxyCluster::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -1084,7 +1072,7 @@ HRESULT CGalaxyCluster::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj * pRetRootNode)
+HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj* pRetRootNode)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1104,7 +1092,7 @@ HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj 
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 
 			if (pConnection)
 			{
@@ -1165,7 +1153,7 @@ HRESULT CGalaxyCluster::Fire_Destroy()
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -1213,7 +1201,7 @@ HRESULT CGalaxyCluster::Fire_Destroy()
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj * pActiveNode)
+HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj* pActiveNode)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1229,7 +1217,7 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj * pActiveNode)
 			CComPtr<IUnknown> punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
 
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection.p);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection.p);
 
 			if (pConnection)
 			{
@@ -1278,7 +1266,7 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj * pActiveNode)
 	return hr;
 }
 
-HRESULT CGalaxyCluster::Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, BSTR CtrlName, LONGLONG CtrlHandle)
+HRESULT CGalaxyCluster::Fire_ClrControlCreated(IXobj* Node, IDispatch* Ctrl, BSTR CtrlName, LONGLONG CtrlHandle)
 {
 	HRESULT hr = S_OK;
 	int cConnections = m_vec.GetSize();
@@ -1300,7 +1288,7 @@ HRESULT CGalaxyCluster::Fire_ClrControlCreated(IXobj * Node, IDispatch * Ctrl, B
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
 
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 
 			if (pConnection)
 			{
@@ -1371,7 +1359,7 @@ HRESULT CGalaxyCluster::Fire_IPCMsg(IGalaxy* pSender, BSTR bstrType, BSTR bstrCo
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
 
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 
 			if (pConnection)
 			{
@@ -1403,7 +1391,7 @@ HRESULT CGalaxyCluster::Fire_TabChange(IXobj* sender, LONG ActivePage, LONG OldP
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -1468,7 +1456,7 @@ HRESULT CGalaxyCluster::Fire_CosmosEvent(ICosmosEventObj* pEventObj)
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -1517,7 +1505,7 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 						}
 						else
 						{
-							m_mapTemp[strKey] = it2->second+it.second;
+							m_mapTemp[strKey] = it2->second + it.second;
 						}
 					}
 				}

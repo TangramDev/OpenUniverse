@@ -1071,6 +1071,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					ShowMdiClientXobj();
 				}
 				::SysFreeString(bstrXml);
+				::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 			}
 		}
 	}
@@ -1817,21 +1818,15 @@ void CGalaxy::HostPosChanged()
 	CGalaxy* _pGalaxy = this;
 	if (::IsWindow(hwnd) == false)
 		return;
-	if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
+	if (m_pMDIParent && m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 	{
-		CMDIParent* pMDIParent = nullptr;
-		auto it = g_pCosmos->m_mapMDIParent.find(::GetParent(m_pCosmosFrameWndInfo->m_hClient));
-		if (it != g_pCosmos->m_mapMDIParent.end())
+		if (m_hWnd == m_pCosmosFrameWndInfo->m_hClient &&
+			m_pMDIParent->m_pClientXobj &&
+			m_pBindingXobj != m_pMDIParent->m_pClientXobj)
 		{
-			pMDIParent = it->second;
-			if (m_hWnd == m_pCosmosFrameWndInfo->m_hClient &&
-				pMDIParent->m_pClientXobj &&
-				m_pBindingXobj != pMDIParent->m_pClientXobj)
+			if (m_pBindingXobj && m_pMDIParent->m_pClientXobj->m_pHostWnd->IsWindowVisible())
 			{
-				if (m_pBindingXobj && pMDIParent->m_pClientXobj->m_pHostWnd->IsWindowVisible())
-				{
-					m_pBindingXobj = pMDIParent->m_pClientXobj;
-				}
+				m_pBindingXobj = m_pMDIParent->m_pClientXobj;
 			}
 		}
 	}
@@ -2370,11 +2365,15 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 	m_pBindingXobj = m_pWorkXobj->m_pXobjShareData->m_pHostClientView ? m_pWorkXobj->m_pXobjShareData->m_pHostClientView->m_pXobj : nullptr;
 	if (m_bMDIChild == false && m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2 && m_nGalaxyType != CtrlBarGalaxy)
 	{
-		CMDIParent* pMDIParent = nullptr;
-		auto itFrame = g_pCosmos->m_mapMDIParent.find(::GetParent(m_pCosmosFrameWndInfo->m_hClient));
-		if (itFrame != g_pCosmos->m_mapMDIParent.end())
+		CMDIParent* pMDIParent = m_pMDIParent;
+		if (pMDIParent == nullptr)
 		{
-			pMDIParent = itFrame->second;
+			auto itFrame = g_pCosmos->m_mapMDIParent.find(::GetParent(m_pCosmosFrameWndInfo->m_hClient));
+			if (itFrame != g_pCosmos->m_mapMDIParent.end())
+				m_pMDIParent = pMDIParent = itFrame->second;
+		}
+		if(pMDIParent)
+		{
 			auto itClient = m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
 			if (itClient != m_pWorkXobj->m_mapChildXobj.end())
 			{

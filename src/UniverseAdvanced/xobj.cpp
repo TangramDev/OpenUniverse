@@ -1037,7 +1037,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 		if (::IsWindow(m_pHostWnd->m_hWnd) == false)
 		{
 			bRet = m_pHostWnd->SubclassWindow(hWnd);
-			HWND hTopParent = ::GetWindow(hWnd, GA_ROOT);
+			HWND hTopParent = ::GetAncestor(hWnd, GA_ROOT);
 			CMDIParent* pMDIParent = nullptr;
 			auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
 			if (it != g_pCosmos->m_mapMDIParent.end())
@@ -1354,7 +1354,7 @@ CXobj* CXobj::GetMdiclientObj()
 	if (g_pCosmos->m_mapMDIParent.size() == 0)
 		return nullptr;
 	HWND hWnd = m_pHostWnd->m_hWnd;
-	HWND hTopParent = ::GetWindow(hWnd, GA_ROOT);
+	HWND hTopParent = ::GetAncestor(hWnd, GA_ROOT);
 	CMDIParent* pMDIParent = nullptr;
 	auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
 	if (it != g_pCosmos->m_mapMDIParent.end())

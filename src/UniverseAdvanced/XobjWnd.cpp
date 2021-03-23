@@ -426,17 +426,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
-			HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
-			CMDIParent* pMDIParent = nullptr;
-			auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
-			if (it2 != g_pCosmos->m_mapMDIParent.end())
-			{
-				pMDIParent = it2->second;
-				if (pGalaxy == pMDIParent->m_pGalaxy)
-				{
-					::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
-				}
-			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
 	}
@@ -490,6 +480,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					pMDIParent->ShowMdiClientXobj();
 				}
 			}
+			//::PostMessage(hTopParent, WM_QUERYAPPPROXY, 0, 19651965);
 		}
 		break;
 		case 20210225:
@@ -705,7 +696,7 @@ LRESULT CXobjWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 				::GetClassName(hWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strName = g_pCosmos->m_szBuffer;
 				m_pXobj->Fire_ControlNotify(m_pXobj, HIWORD(wParam), LOWORD(wParam), lParam, CComBSTR(g_pCosmos->m_szBuffer));
-				if (m_pXobj->m_bWebCommandMsg&&m_pXobj->m_pWormhole)
+				if (m_pXobj->m_bWebCommandMsg && m_pXobj->m_pWormhole)
 				{
 					HWND hCtrl = (HWND)lParam;
 					CString strVal = _T("");
@@ -820,18 +811,16 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
+	CGalaxy* pGalaxy = nullptr;
 	CMDIParent* pMainWnd = nullptr;
-	HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
-	auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
+	auto it2 = g_pCosmos->m_mapMDIParent.find(::GetAncestor(m_hWnd, GA_ROOT));
 	if (it2 != g_pCosmos->m_mapMDIParent.end())
 	{
 		pMainWnd = it2->second;
+		pGalaxy = pMainWnd->m_pGalaxy;
 	}
 
 	bool bNotCtrlBar = (m_pXobj->m_pXobjShareData->m_pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy);
-	CGalaxy* pGalaxy = nullptr;
-	if (pMainWnd)
-		pGalaxy = pMainWnd->m_pGalaxy;
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
 		if (bNotCtrlBar)
@@ -940,13 +929,21 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 			return;
 		if (m_pXobj->m_pWebBrowser->m_pParentXobj != m_pXobj)
 			return;
-		if (m_pXobj->m_pWebBrowser == g_pCosmos->m_pHostBrowser)
+
+		CMDIParent* pMDIParent = nullptr;
+		auto it = g_pCosmos->m_mapMDIParent.find(::GetAncestor(m_hWnd, GA_ROOT));
+		if (it != g_pCosmos->m_mapMDIParent.end())
 		{
-			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
-				return;
-			if (m_pXobj->m_pWebBrowser->m_pVisibleWebView && m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)
-				return;
+			pMDIParent = it->second;
+			if (m_pXobj->m_pWebBrowser == pMDIParent->m_pHostBrowser)
+			{
+				if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
+					return;
+			}
 		}
+
+		if (m_pXobj->m_pWebBrowser->m_pVisibleWebView && m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)
+			return;
 		if (::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd) == false)
 		{
 			::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
