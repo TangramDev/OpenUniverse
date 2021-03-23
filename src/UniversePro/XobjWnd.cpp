@@ -426,7 +426,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
-			HWND hTopParent = ::GetWindow(m_hWnd, GA_ROOT);
+			HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
 			CMDIParent* pMDIParent = nullptr;
 			auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
 			if (it2 != g_pCosmos->m_mapMDIParent.end())
@@ -479,7 +479,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		break;
 		case 20210226:
 		{
-			HWND hTopParent = ::GetWindow(m_hWnd, GA_ROOT);
+			HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
 			CMDIParent* pMDIParent = nullptr;
 			auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
 			if (it != g_pCosmos->m_mapMDIParent.end())
@@ -821,12 +821,13 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanged(lpwndpos);
 	CMDIParent* pMainWnd = nullptr;
-	HWND hTopParent = ::GetWindow(m_hWnd, GA_ROOT);
+	HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
 	auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
 	if (it2 != g_pCosmos->m_mapMDIParent.end())
 	{
 		pMainWnd = it2->second;
 	}
+
 	bool bNotCtrlBar = (m_pXobj->m_pXobjShareData->m_pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy);
 	CGalaxy* pGalaxy = nullptr;
 	if (pMainWnd)

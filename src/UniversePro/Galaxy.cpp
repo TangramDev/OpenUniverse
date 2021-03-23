@@ -943,6 +943,7 @@ LRESULT CMDIParent::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		g_pCosmos->m_mapMDIParent.erase(it);
 	if (g_pCosmos->m_pHostBrowser)
 		g_pCosmos->m_pHostBrowser->m_bDestroy = true;
+	//::SetParent(g_pCosmos->m_hHostBrowserWnd, g_pCosmos->m_hCosmosWnd);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -2398,6 +2399,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 					{
 						pMDIParent->m_pClientXobj = pObj;
 					}
+					pMDIParent->m_pGalaxy->m_pBindingXobj = pMDIParent->m_pClientXobj;
 				}
 			}
 		}
@@ -2664,7 +2666,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				}
 			}
 		}
-		if (m_pCosmosFrameWndInfo->m_nFrameType==2)
+		if (m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
 			pClient = pParse->GetChild(_T("hostpage"));
 			CGalaxy* pGalaxy = nullptr;
@@ -2679,7 +2681,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 		pClient = pParse->GetChild(_T("controlbars"));
-		if (pClient&& pGalaxy)
+		if (pClient && pGalaxy)
 		{
 			int nCount = pClient->GetCount();
 			for (int i = 0; i < nCount; i++)

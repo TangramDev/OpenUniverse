@@ -2399,6 +2399,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 					{
 						pMDIParent->m_pClientXobj = pObj;
 					}
+					pMDIParent->m_pGalaxy->m_pBindingXobj = pMDIParent->m_pClientXobj;
 				}
 			}
 		}

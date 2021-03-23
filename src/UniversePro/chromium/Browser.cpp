@@ -502,8 +502,8 @@ namespace Browser {
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 2);
 					break;
 				}
-				m_bSZMode = false;
 				m_pBrowser->LayoutBrowser();
+				m_bSZMode = false;
 				if (m_pParentXobj)
 				{
 					RECT rc;
@@ -516,6 +516,16 @@ namespace Browser {
 						//if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
 						::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
 					}
+					//if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
+					//{
+					//	CMDIParent* pMDIParent = nullptr;
+					//	auto it = g_pCosmos->m_mapMDIParent.find(::GetParent(m_pCosmosFrameWndInfo->m_hClient));
+					//	if (it != g_pCosmos->m_mapMDIParent.end())
+					//	{
+					//		pMDIParent = it->second;
+					//		::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, 0, 20210323);
+					//	}
+					//}
 				}
 			}
 			else

@@ -348,7 +348,7 @@ void CGridWnd::StartTracking(int ht)
 	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
+		ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	}
 
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
@@ -413,7 +413,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CXobj* pXobj = pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS|WS_CLIPCHILDREN);
+		//pXobj->m_pHostWnd->pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
+		ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
 	}
 
 	CSplitterWnd::StopTracking(bAccept);
@@ -444,7 +445,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
 		RecalcLayout();
-		RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+		RedrawWindow(NULL, NULL, RDW_ERASE | /*RDW_FRAME |*/ RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 	}
 }
 
