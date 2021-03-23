@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103220052           *
+ *           Web Runtime for Application - Version 1.0.0.202103230053           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -661,7 +661,6 @@ namespace Browser {
 					if (pGalaxy)
 					{
 						m_pGalaxy = (CGalaxy*)pGalaxy;
-						m_pGalaxyCluster->m_mapNeedSaveGalaxy[m_hChildWnd] = m_pGalaxy;
 						IXobj* pXobj = nullptr;
 						pGalaxy->Observe(CComBSTR("default"), CComBSTR(L""), &pXobj);
 					}
@@ -1178,7 +1177,6 @@ namespace Browser {
 					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-					CMDIParent* pMdiParent = nullptr;
 					pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
 					switch (pCosmosFrameWndInfo->m_nFrameType)
 					{
@@ -1189,20 +1187,6 @@ namespace Browser {
 						{
 							CMDTWnd* pWnd = it->second;
 							pWnd->m_pBrowser = pBrowserWnd;
-						}
-					}
-					break;
-					case 2:
-					{
-						auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
-						if (it != g_pCosmos->m_mapMDIParent.end())
-						{
-							pMdiParent = it->second;
-							pMdiParent->m_pHostBrowser = pBrowserWnd;
-							pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-							RECT rc;
-							::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
-							::SetWindowPos(pBrowserWnd->m_hWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
 						}
 					}
 					break;
@@ -1241,13 +1225,6 @@ namespace Browser {
 								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
 								_pGalaxy->m_pWebPageWnd = this;
-								if (pCosmosFrameWndInfo->m_nFrameType == 2)
-								{
-									pMdiParent->m_pHostBrowser->m_bInTabChange = true;
-									m_bCanShow = false;
-									IXobj* pXobj = nullptr;
-									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-								}
 							}
 						}
 					}

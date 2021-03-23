@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103220052
+ *           Web Runtime for Application - Version 1.0.0.202103230053
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2277,7 +2277,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 		pClient = pParse->GetChild(_T("controlbars"));
-		if (pClient)
+		if (pClient && pGalaxy)
 		{
 			int nCount = pClient->GetCount();
 			for (int i = 0; i < nCount; i++)
