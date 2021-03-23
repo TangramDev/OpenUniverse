@@ -1606,11 +1606,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												{
 													pMDIParent->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrame, _T("CosmosFrameWndInfo"));
 												}
+												pMDIParent->m_pHostBrowser->m_bSZMode = true;
+												pMDIParent->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
 											}
 
-											g_pCosmos->m_pHostBrowser->m_bSZMode = true;
-
-											g_pCosmos->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
 											CGalaxy* pMainGalaxy = nullptr;
 											auto it = pWnd->m_pParent->m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(10000);
 											if (it != pWnd->m_pParent->m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
@@ -1652,7 +1651,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										{
 											HWND hFrame = ::GetParent(hWnd);
 											pGalaxy = static_cast<CGalaxy*>(g_pCosmos->GetGalaxy(::GetParent(hWnd)));
-											if (g_pCosmos->m_pHostBrowser->m_pVisibleWebView != pGalaxy->m_pWebPageWnd) {
+											if (pMDIParent->m_pHostBrowser->m_pVisibleWebView != pGalaxy->m_pWebPageWnd) {
 												bProcessWebPage = false;
 											}
 											else if (pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)

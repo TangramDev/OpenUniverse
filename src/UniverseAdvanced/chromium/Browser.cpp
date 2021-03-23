@@ -184,12 +184,12 @@ namespace Browser {
 			::SetWindowPos(m_hOldTab, HWND_BOTTOM, rc.left, rc.top, 1, 1, SWP_NOREDRAW | SWP_NOACTIVATE);
 			m_hOldTab = NULL;
 		}
-		if (g_pCosmos->m_pHostBrowser == this)
+		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
-			if (m_pVisibleWebView == g_pCosmos->m_pHostHtmlWnd)
+			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
 			{
 				if (m_pVisibleWebView->m_bCanShow == false)
-					return;
+					return ;
 			}
 		}
 
@@ -297,9 +297,9 @@ namespace Browser {
 			return 0;
 		if (!::IsWindow(m_hWnd))
 			return 0;
-		if (g_pCosmos->m_pHostBrowser == this)
+		if (m_pCosmosFrameWndInfo&& m_pCosmosFrameWndInfo->m_nFrameType==2)
 		{
-			if (m_pVisibleWebView == g_pCosmos->m_pHostHtmlWnd)
+			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
 			{
 				if (m_pVisibleWebView->m_bCanShow == false)
 					return 0;

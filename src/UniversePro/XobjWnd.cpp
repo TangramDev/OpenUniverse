@@ -861,8 +861,8 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	if (m_pXobj->m_pWebBrowser)
 	{
 		if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
-			g_pCosmos->m_pHostBrowser->m_pVisibleWebView == nullptr ||
-			g_pCosmos->m_pHostBrowser->m_pVisibleWebView->m_bCanShow == false)
+			m_pXobj->m_pWebBrowser->m_pVisibleWebView == nullptr ||
+			m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)
 		{
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
 			return;
@@ -944,7 +944,7 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 		{
 			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
 				return;
-			if (g_pCosmos->m_pHostBrowser->m_pVisibleWebView && g_pCosmos->m_pHostBrowser->m_pVisibleWebView->m_bCanShow == false)
+			if (m_pXobj->m_pWebBrowser->m_pVisibleWebView && m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)
 				return;
 		}
 		if (::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd) == false)

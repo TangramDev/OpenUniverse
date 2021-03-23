@@ -42,10 +42,11 @@ namespace Browser {
 		bool				m_bDestroy = false;
 		bool				m_bTabChange;
 		bool				m_bSZMode = false;
-
+		bool				m_bInTabChange = false;
 		float				m_fdevice_scale_factor;
 		HWND				m_hDrawWnd;
 		HWND				m_hOldTab;
+		HWND				m_hBeforeChange = NULL;
 		RECT				m_OldRect;
 		CString				m_strCurKey;
 		CWebView*			m_pVisibleWebView;

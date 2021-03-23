@@ -216,10 +216,11 @@ public:
 
 	CXobj*					m_pClientXobj = nullptr;
 	CGalaxy*				m_pGalaxy = nullptr;
-	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
-
+	CBrowser*				m_pHostBrowser = nullptr;
 	CMDIChild*				m_pActiveMDIChild = nullptr;
+	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
 	CosmosFrameWndInfo*		m_pCosmosFrameWndInfo = nullptr;
+
 	CXobjVector				m_vMdiClientXobjs;
 	map<HWND, CMDIChild*>	m_mapMDIChild;
 

@@ -1165,31 +1165,47 @@ namespace Browser {
 				HANDLE hHandle = ::GetProp(hMainWnd, _T("CosmosFrameWndInfo"));
 				if (hHandle)
 				{
-					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-					if (pCosmosFrameWndInfo->m_nFrameType==2)
+					CBrowser* pBrowserWnd = nullptr;
+					if (m_pChromeRenderFrameHost)
 					{
-						RECT rc;
-						::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
-						::SetWindowPos(g_pCosmos->m_hHostBrowserWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
+						HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
+						auto itBrowser = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+						if (itBrowser != g_pCosmos->m_mapBrowserWnd.end())
+						{
+							pBrowserWnd = (CBrowser*)itBrowser->second;;
+						}
 					}
+					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-					HWND hBrowser = ::GetParent(m_hWnd);
-					CBrowser* pBrowserWnd = nullptr;
-					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-					if (it != g_pCosmos->m_mapBrowserWnd.end())
+					CMDIParent* pMdiParent = nullptr;
+					pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
+					switch (pCosmosFrameWndInfo->m_nFrameType)
 					{
-						pBrowserWnd = (CBrowser*)it->second;
-						pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
-						if (pCosmosFrameWndInfo->m_nFrameType == 1)
+					case 1:
+					{
+						auto it = g_pCosmos->m_mapMDTWindow.find(hMainWnd);
+						if (it != g_pCosmos->m_mapMDTWindow.end())
 						{
-							auto it = g_pCosmos->m_mapMDTWindow.find(hMainWnd);
-							if (it != g_pCosmos->m_mapMDTWindow.end())
-							{
-								CMDTWnd* pWnd = it->second;
-								pWnd->m_pBrowser = pBrowserWnd;
-							}
+							CMDTWnd* pWnd = it->second;
+							pWnd->m_pBrowser = pBrowserWnd;
 						}
+					}
+					break;
+					case 2:
+					{
+						auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
+						if (it != g_pCosmos->m_mapMDIParent.end())
+						{
+							pMdiParent = it->second;
+							pMdiParent->m_pHostBrowser = pBrowserWnd;
+							pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
+							RECT rc;
+							::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
+							::SetWindowPos(pBrowserWnd->m_hWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
+						}
+					}
+					break;
 					}
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
 					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
@@ -1227,10 +1243,8 @@ namespace Browser {
 								_pGalaxy->m_pWebPageWnd = this;
 								if (pCosmosFrameWndInfo->m_nFrameType == 2)
 								{
-									{
-										g_pCosmos->m_pHostBrowser->m_bInTabChange = true;
-										m_bCanShow = false;
-									}
+									pMdiParent->m_pHostBrowser->m_bInTabChange = true;
+									m_bCanShow = false;
 									IXobj* pXobj = nullptr;
 									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 								}
