@@ -107,6 +107,12 @@ namespace Browser {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (m_bDestroy)
 			return lRes;
+		if (wParam == lParam)
+		{
+			m_bSZMode = false;
+			return lRes;
+		}
+		m_bSZMode = true;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
 			HWND hActive = m_pBrowser->GetActiveWebContentWnd();
@@ -502,7 +508,7 @@ namespace Browser {
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 2);
 					break;
 				}
-				m_bSZMode = false;
+				//m_bSZMode = false;
 				m_pBrowser->LayoutBrowser();
 				if (m_pParentXobj)
 				{
@@ -835,6 +841,7 @@ namespace Browser {
 				{
 					m_bTabChange = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					m_bSZMode = false;
 					break;
 				}
 				if (m_pVisibleWebView->m_bCanShow == false || m_bTabChange || m_bInTabChange)

@@ -346,7 +346,7 @@ void CGridWnd::StartTracking(int ht)
 	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
+		ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	}
 
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
@@ -405,13 +405,17 @@ void CGridWnd::StopTracking(BOOL bAccept)
 {
 	if (!m_bTracking)
 		return;
+
+	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
+	bool bMdiChild = (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD);
+
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (::IsWindowVisible(pGalaxy->m_hWnd) && pGalaxy->m_nGalaxyType == CtrlBarGalaxy)
 		pGalaxy->SetFocus();
 	CXobj* pXobj = pGalaxy->m_pWorkXobj;
 	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
 	{
-		pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
+		ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
 	}
 
 	CSplitterWnd::StopTracking(bAccept);
@@ -442,7 +446,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
 		RecalcLayout();
-		RedrawWindow(NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+		::RedrawWindow(::GetAncestor(m_hWnd, GA_ROOT), NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 	}
 }
 

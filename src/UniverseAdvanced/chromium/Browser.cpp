@@ -107,6 +107,12 @@ namespace Browser {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (m_bDestroy)
 			return lRes;
+		if (wParam == lParam)
+		{
+			m_bSZMode = false;
+			return lRes;
+		}
+		m_bSZMode = true;
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 		{
 			HWND hActive = m_pBrowser->GetActiveWebContentWnd();
@@ -189,7 +195,7 @@ namespace Browser {
 			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
 			{
 				if (m_pVisibleWebView->m_bCanShow == false)
-					return ;
+					return;
 			}
 		}
 
@@ -297,7 +303,7 @@ namespace Browser {
 			return 0;
 		if (!::IsWindow(m_hWnd))
 			return 0;
-		if (m_pCosmosFrameWndInfo&& m_pCosmosFrameWndInfo->m_nFrameType==2)
+		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
 			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
 			{
@@ -434,54 +440,54 @@ namespace Browser {
 				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
 			}
 		} break;
-		//		case 0: {
-		//			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebView>;
-		//			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
-		//			if (g_pCosmos->m_pCLRProxy)
-		//				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
-		//			HWND hPWnd = ::GetParent(m_hWnd);
-		//			if (g_pCosmos->m_bCreatingDevTool == false)
-		//			{
-		//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
-		//				g_pCosmos->m_mapWebView[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-		//				if (g_pCosmos->m_mapWebView.size() > 1)
-		//					g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
-		//				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
-		//					m_pVisibleWebView = g_pCosmos->m_pHtmlWndCreated;
-		//#ifdef WIN32	
-		//				if (::IsWindow(hPWnd))
-		//				{
-		//					DWORD dwID = 0;
-		//					::GetWindowThreadProcessId(hPWnd, &dwID);
-		//					if (dwID != ::GetCurrentProcessId())
-		//					{
-		//						auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwID);
-		//						if (it != g_pCosmos->m_mapRemoteTangramApp.end())
-		//						{
-		//							g_pCosmos->m_pHtmlWndCreated->m_pRemoteCosmos = it->second;
-		//						}
-		//					}
-		//				}
-		//#endif
-		//			}
-		//			else
-		//			{
-		//				g_pCosmos->m_bCreatingDevTool = false;
-		//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = true;
-		//				if (m_pVisibleWebView) {
-		//					m_pVisibleWebView->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
-		//					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebView;
-		//				}
-		//			}
-		//			if (hPWnd)
-		//			{
-		//				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
-		//				g_pCosmos->m_pGalaxy = nullptr;
-		//				g_pCosmos->m_bWinFormActived = false;
-		//				m_mapChildPage[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-		//				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
-		//			}
-		//		} break;
+			//		case 0: {
+			//			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebView>;
+			//			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
+			//			if (g_pCosmos->m_pCLRProxy)
+			//				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
+			//			HWND hPWnd = ::GetParent(m_hWnd);
+			//			if (g_pCosmos->m_bCreatingDevTool == false)
+			//			{
+			//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
+			//				g_pCosmos->m_mapWebView[hWnd] = g_pCosmos->m_pHtmlWndCreated;
+			//				if (g_pCosmos->m_mapWebView.size() > 1)
+			//					g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
+			//				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
+			//					m_pVisibleWebView = g_pCosmos->m_pHtmlWndCreated;
+			//#ifdef WIN32	
+			//				if (::IsWindow(hPWnd))
+			//				{
+			//					DWORD dwID = 0;
+			//					::GetWindowThreadProcessId(hPWnd, &dwID);
+			//					if (dwID != ::GetCurrentProcessId())
+			//					{
+			//						auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwID);
+			//						if (it != g_pCosmos->m_mapRemoteTangramApp.end())
+			//						{
+			//							g_pCosmos->m_pHtmlWndCreated->m_pRemoteCosmos = it->second;
+			//						}
+			//					}
+			//				}
+			//#endif
+			//			}
+			//			else
+			//			{
+			//				g_pCosmos->m_bCreatingDevTool = false;
+			//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = true;
+			//				if (m_pVisibleWebView) {
+			//					m_pVisibleWebView->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
+			//					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebView;
+			//				}
+			//			}
+			//			if (hPWnd)
+			//			{
+			//				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
+			//				g_pCosmos->m_pGalaxy = nullptr;
+			//				g_pCosmos->m_bWinFormActived = false;
+			//				m_mapChildPage[hWnd] = g_pCosmos->m_pHtmlWndCreated;
+			//				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
+			//			}
+			//		} break;
 		case 1:
 		{
 			if (lParam == 20200115)
@@ -502,7 +508,7 @@ namespace Browser {
 					::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 2);
 					break;
 				}
-				m_bSZMode = false;
+				//m_bSZMode = false;
 				m_pBrowser->LayoutBrowser();
 				if (m_pParentXobj)
 				{
@@ -835,6 +841,7 @@ namespace Browser {
 				{
 					m_bTabChange = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					m_bSZMode = false;
 					break;
 				}
 				if (m_pVisibleWebView->m_bCanShow == false || m_bTabChange || m_bInTabChange)

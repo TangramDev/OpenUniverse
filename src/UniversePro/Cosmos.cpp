@@ -63,7 +63,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// Cosmos.cpp : Implementation of CCosmos
+ // Cosmos.cpp : Implementation of CCosmos
 
 #include "stdafx.h"
 #include "Cosmos.h"
@@ -1401,7 +1401,7 @@ void CCosmos::BrowserAppStart()
 			if (m_nAppType == APP_BROWSERAPP)
 				m_hMainWnd = m_hCosmosWnd;
 			::PostMessage(m_hCosmosWnd, WM_COSMOSMSG, 0, TANGRAM_CHROME_APP_INIT);
-			if(g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
+			if (g_pCosmos->m_nAppType != APP_BROWSER_ECLIPSE)
 				g_pCosmos->m_nAppType = APP_BROWSERAPP;
 			CString str = _T("<host popup='true'><url></url></host>");
 			CTangramXmlParse m_Parse;
@@ -3562,7 +3562,7 @@ void CCosmos::EclipseInit()
 
 		m_bChromeNeedClosed = true;
 
-		for (auto &it : g_pCosmos->m_mapBrowserWnd)
+		for (auto& it : g_pCosmos->m_mapBrowserWnd)
 		{
 			::PostMessage(it.first, WM_CLOSE, 0, 0);
 			//it.second->PostMessageW(WM_CLOSE, 0, 0);
@@ -4441,7 +4441,7 @@ bool CCosmos::SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* 
 	{
 		g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second);
 	}
-	return false; 
+	return false;
 }
 
 CTabStatsTrackerDelegate* CCosmos::SetTabStatsTrackerDelegate()
@@ -4498,6 +4498,30 @@ void CCosmos::BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser)
 	pBrowserWnd->m_pBrowser = browser;
 	if (pBrowserWnd->m_pBrowser)
 		pBrowserWnd->m_pBrowser->m_pProxy = pBrowserWnd;
+}
+
+void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTabChangeType type, void* content)
+{
+	switch (type)
+	{
+	case BrowserTabChangeType::LoadingOnly:
+	{
+
+	}
+	break;
+	case BrowserTabChangeType::All:
+	{
+		auto it = m_mapBrowserWnd.find(hBrowser);
+		if (it != m_mapBrowserWnd.end())
+		{
+			CBrowser* pBrowser = (CBrowser*)it->second;
+			if (pBrowser->m_pCosmosFrameWndInfo && pBrowser->m_pCosmosFrameWndInfo->m_nFrameType == 2)
+				::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
+			::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
+		}
+	}
+	break;
+	}
 }
 
 void CCosmos::InitialOrInsertedTab(HWND hWebView, HWND hBrowser)

@@ -199,6 +199,13 @@ namespace CommonUniverse {
 
 	extern CCosmosImpl* g_pCosmosImpl;
 
+	enum class BrowserTabChangeType {
+		// Everything changed.
+		All,
+		// Only the loading state changed.
+		LoadingOnly,
+	};
+
 	typedef enum QueryType
 	{
 		MainWnd = 0x00000000,
@@ -831,6 +838,7 @@ namespace CommonUniverse {
 		virtual void HeartbeatEvent() {}
 		virtual void InitialOrInsertedTab(HWND hWebView, HWND hBrowser) {}
 		virtual void WebContentsDestroyed(HWND hWebView, HWND hBrowser) {}
+		virtual void OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTabChangeType type, void* content) {}
 		virtual void BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser) {}
 		virtual void BrowserRemoved(CChromeBrowserBase* browser, HWND hBrowser) {}
 	};
