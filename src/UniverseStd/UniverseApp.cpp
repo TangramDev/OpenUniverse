@@ -312,6 +312,16 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 			::PostMessage(it.first, WM_COSMOSMSG, 0, 20210324);
 		}
 	}
+	else
+	{
+		for (auto& it : g_pCosmos->m_mapMDTWindow)
+		{
+			if (it.second->m_pBrowser && it.second->m_pBrowser->m_bSZMode == true)
+			{
+				::PostMessage(it.second->m_pBrowser->m_hWnd, WM_BROWSERLAYOUT, 1, 7);
+			};
+		}
+	}
 	if (g_pCosmos->m_pCosmosDelegate)
 	{
 		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();

@@ -270,6 +270,8 @@ namespace Browser {
 				rc.right * m_fdevice_scale_factor,
 				(rc.bottom - rc.top) * m_fdevice_scale_factor,
 				SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOACTIVATE);
+			if (theApp.m_bAppStarting)
+				return;
 			HWND hWebHostWnd = m_pVisibleWebView->m_hWebHostWnd;
 			if (hWebHostWnd == NULL)
 				hWebHostWnd = m_pVisibleWebView->m_hChildWnd;
@@ -321,6 +323,10 @@ namespace Browser {
 	};
 
 	LRESULT CBrowser::BrowserLayout() {
+		if (theApp.m_bAppStarting == false)
+		{
+			TRACE(_T(""));
+		}
 		if (m_bInTabChange || m_bDestroy || m_pVisibleWebView == nullptr || !::IsWindowVisible(m_hWnd) ||
 			g_pCosmos->m_bChromeNeedClosed == TRUE)
 			return 0;
@@ -336,7 +342,7 @@ namespace Browser {
 		}
 		RECT rcBrowser;
 		GetClientRect(&rcBrowser);
-		if (m_pVisibleWebView->m_pGalaxy == nullptr || m_pVisibleWebView->m_strCurKey == _T("")) {
+		if (theApp.m_bAppStarting || m_pVisibleWebView->m_pGalaxy == nullptr || m_pVisibleWebView->m_strCurKey == _T("")) {
 			if (rcBrowser.right * rcBrowser.left)
 				::SetWindowPos(m_pVisibleWebView->m_hExtendWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_SHOWWINDOW);
 			::SetWindowRgn(m_hDrawWnd, NULL, true);

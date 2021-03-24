@@ -953,12 +953,15 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 	case 20210324:
 	{
-		if (m_pHostBrowser && m_pHostBrowser->m_bSZMode)
+		if (m_pHostBrowser)
 		{
-			m_pHostBrowser->m_bSZMode = false;
+			if (m_pHostBrowser->m_bSZMode)
+			{
+				m_pHostBrowser->m_bSZMode = false;
+				::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 1, 7);
+			}
 			m_pHostBrowser->BrowserLayout();
 			m_pHostBrowser->m_pBrowser->LayoutBrowser();
-			//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		ShowMdiClientXobj();
 	}
