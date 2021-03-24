@@ -160,6 +160,14 @@ namespace Browser {
 		BOOL&) {
 		switch (wParam)
 		{
+		case 20210314:
+		{
+			if (m_pChromeRenderFrameHost)
+			{
+				::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
+			}
+		}
+		break;
 		case 20201109:
 		{
 			if (lParam)
@@ -653,7 +661,6 @@ namespace Browser {
 					if (pGalaxy)
 					{
 						m_pGalaxy = (CGalaxy*)pGalaxy;
-						m_pGalaxyCluster->m_mapNeedSaveGalaxy[m_hChildWnd] = m_pGalaxy;
 						IXobj* pXobj = nullptr;
 						pGalaxy->Observe(CComBSTR("default"), CComBSTR(L""), &pXobj);
 					}
@@ -1152,7 +1159,6 @@ namespace Browser {
 			HWND hMainWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(MainWnd, NULL);
 			if (hMainWnd)
 			{
-				theApp.m_bAppStarting = true;
 				IGalaxyCluster* pCluster = nullptr;
 				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 				HANDLE hHandle = ::GetProp(hMainWnd, _T("CosmosFrameWndInfo"));
@@ -1171,7 +1177,6 @@ namespace Browser {
 					pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-					CMDIParent* pMdiParent = nullptr;
 					pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
 					switch (pCosmosFrameWndInfo->m_nFrameType)
 					{
@@ -1182,20 +1187,6 @@ namespace Browser {
 						{
 							CMDTWnd* pWnd = it->second;
 							pWnd->m_pBrowser = pBrowserWnd;
-						}
-					}
-					break;
-					case 2:
-					{
-						auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
-						if (it != g_pCosmos->m_mapMDIParent.end())
-						{
-							pMdiParent = it->second;
-							pMdiParent->m_pHostBrowser = pBrowserWnd;
-							pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-							RECT rc;
-							::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
-							::SetWindowPos(pBrowserWnd->m_hWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
 						}
 					}
 					break;
@@ -1234,13 +1225,6 @@ namespace Browser {
 								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
 								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
 								_pGalaxy->m_pWebPageWnd = this;
-								if (pCosmosFrameWndInfo->m_nFrameType == 2)
-								{
-									pMdiParent->m_pHostBrowser->m_bInTabChange = true;
-									m_bCanShow = false;
-									IXobj* pXobj = nullptr;
-									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-								}
 							}
 						}
 					}
@@ -1301,6 +1285,7 @@ namespace Browser {
 					}
 				}
 			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
 		}
 	}
 

@@ -407,7 +407,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-
 	if (lParam != wParam)
 	{
 		m_pXobj->Fire_TabChange(wParam, lParam);
@@ -415,18 +414,13 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
-			if (::IsWindow(hWnd))
-			{
-				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
-			}
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hWnd);
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				//((CBrowser*)it->second)->m_bSZMode = true;
+				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
 				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
-			//::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
 	}

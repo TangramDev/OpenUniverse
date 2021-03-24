@@ -407,7 +407,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-
 	if (lParam != wParam)
 	{
 		m_pXobj->Fire_TabChange(wParam, lParam);
@@ -415,18 +414,13 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
-			if (::IsWindow(hWnd))
-			{
-				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
-			}
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hWnd);
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				//((CBrowser*)it->second)->m_bSZMode = true;
+				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
 				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
-			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
 	}
@@ -464,7 +458,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
-			::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
+			//::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 		}
 		break;
 		case 20210226:
@@ -480,7 +474,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					pMDIParent->ShowMdiClientXobj();
 				}
 			}
-			//::PostMessage(hTopParent, WM_QUERYAPPPROXY, 0, 19651965);
 		}
 		break;
 		case 20210225:
@@ -507,7 +500,10 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				}
 			}
 			if (m_pXobj->m_pWebBrowser)
+			{
+				m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow = false;
 				::PostMessageW(m_pXobj->m_pWebBrowser->m_hWnd, WM_COSMOSMSG, 20210314, 1);
+			}
 
 			int nPage = -1;
 			m_pXobj->get_ActivePage(&nPage);

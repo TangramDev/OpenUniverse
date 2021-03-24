@@ -951,6 +951,18 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 20210324:
+	{
+		if (m_pHostBrowser && m_pHostBrowser->m_bSZMode)
+		{
+			m_pHostBrowser->m_bSZMode = false;
+			m_pHostBrowser->BrowserLayout();
+			m_pHostBrowser->m_pBrowser->LayoutBrowser();
+			//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+		}
+		ShowMdiClientXobj();
+	}
+	break;
 	case 20210213:
 	{
 		if (m_bDestroy)
@@ -2372,7 +2384,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			if (itFrame != g_pCosmos->m_mapMDIParent.end())
 				m_pMDIParent = pMDIParent = itFrame->second;
 		}
-		if(pMDIParent)
+		if (pMDIParent)
 		{
 			auto itClient = m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
 			if (itClient != m_pWorkXobj->m_mapChildXobj.end())

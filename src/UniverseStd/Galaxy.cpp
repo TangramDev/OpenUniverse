@@ -665,6 +665,7 @@ void CCosmosTabCtrl::PostNcDestroy()
 	delete this;
 }
 
+
 CMDTWnd::CMDTWnd(void)
 {
 }
@@ -842,14 +843,6 @@ LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	g_pCosmos->m_pActiveWinFormWnd = this;
 	if (g_pCosmos->m_pCLRProxy)
 	{
-		if (LOWORD(wParam) != WA_INACTIVE)
-		{
-
-		}
-		else
-		{
-			TRACE(_T(""));
-		}
 		g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
 	}
 	return lRes;
@@ -870,7 +863,7 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				{
 					pSession->InsertLong(_T("FormAppNeedClosed"), nCount);
 				}
-				for (auto& it : g_pCosmos->m_mapNeedQueryOnClose)
+				for (auto it : g_pCosmos->m_mapNeedQueryOnClose)
 				{
 					if (it.second != this)
 					{
@@ -2004,6 +1997,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		}
 
 		Unlock();
+
 		m_bNoRedrawState = false;
 		m_pWorkXobj = g_pCosmos->ObserveEx((long)m_hHostWnd, _T(""), strXml);
 		if (m_pWorkXobj == nullptr)
@@ -2276,6 +2270,20 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				}
 			}
 		}
+		if (m_pCosmosFrameWndInfo->m_nFrameType == 2)
+		{
+			pClient = pParse->GetChild(_T("hostpage"));
+			CGalaxy* pGalaxy = nullptr;
+			auto it = m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(10000);
+			if (it != m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
+			{
+				pGalaxy = (CGalaxy*)it->second;
+				if (pClient && pGalaxy && pGalaxy->m_pWebPageWnd)
+				{
+					pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(_strKey, pClient->xml());
+				}
+			}
+		}
 		pClient = pParse->GetChild(_T("controlbars"));
 		if (pClient && pGalaxy)
 		{
@@ -2481,6 +2489,10 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 2048:
+	{
+	}
+	break;
 	case 20210228:
 	{
 		m_bNoRedrawState = true;
@@ -2497,6 +2509,19 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 		}
 		HostPosChanged();
+		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
+		{
+			CGalaxy* pGalaxy = nullptr;
+			auto it = m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(100000);
+			if (it != m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
+			{
+				if (::IsChild(::GetParent(m_pCosmosFrameWndInfo->m_hClient), m_hWnd))
+				{
+					pGalaxy = (CGalaxy*)it->second;
+					pGalaxy->HostPosChanged();
+				}
+			}
+		}
 	}
 	break;
 	case WM_BROWSERLAYOUT:
@@ -2634,6 +2659,13 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		{
 			RECT rect = { 0,0,0,0 };
 			HWND hPWnd = ::GetParent(m_hWnd);
+			if (::SendMessage(hPWnd, WM_QUERYAPPPROXY, (WPARAM)&rect, 19921989) == 19921989)
+			{
+				lpwndpos->x = rect.left;
+				lpwndpos->y = rect.top;
+				lpwndpos->cx = rect.right - rect.left;
+				lpwndpos->cy = rect.bottom - rect.top;
+			}
 			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, HWND_BOTTOM, lpwndpos->x, lpwndpos->y, lpwndpos->cx, lpwndpos->cy, lpwndpos->flags | SWP_NOACTIVATE | SWP_FRAMECHANGED);// |SWP_NOREDRAW); 
 
 			CXobj* _pHostNode = m_pBindingXobj;
@@ -2727,6 +2759,8 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	if (::IsWindowVisible(m_hWnd))
 		::InvalidateRect(m_hWnd, nullptr, true);
+	//if (!g_pCosmos->m_bSZMode)
+	//	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 	return hr;
 }
 
@@ -2738,6 +2772,50 @@ LRESULT CGalaxy::OnParentNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 {
+	CString strRootName = OLE2T(bstrRootName);
+	if (strRootName == _T(""))
+		strRootName = _T("DocumentUI");
+	CString strXmlData = _T("<Default><cluster><xobj name=\"Start\"/></cluster></Default>");
+	CString strName = _T("");
+	CString strXml = _T("");
+
+	map<CString, CString> m_mapTemp;
+	map<CString, CString>::iterator it2;
+	for (auto it : m_mapXobj)
+	{
+		g_pCosmos->UpdateXobj(it.second);
+		strName = it.first;
+		int nPos = strName.Find(_T("-"));
+		CString str = strName.Mid(nPos + 1);
+		if (str.CompareNoCase(_T("inDesigning")) == 0)
+		{
+			strName = strName.Left(nPos);
+			m_mapTemp[strName] = it.second->m_pXobjShareData->m_pCosmosParse->xml();
+		}
+	}
+
+	for (auto it : m_mapXobj)
+	{
+		strName = it.first;
+		if (strName.Find(_T("-indesigning")) == -1)
+		{
+			it2 = m_mapTemp.find(strName);
+			if (it2 != m_mapTemp.end())
+				strXml = it2->second;
+			else
+				strXml = it.second->m_pXobjShareData->m_pCosmosParse->xml();
+			strXmlData += strXml;
+		}
+	}
+
+	strXml = _T("<");
+	strXml += strRootName;
+	strXml += _T(">");
+	strXml += strXmlData;
+	strXml += _T("</");
+	strXml += strRootName;
+	strXml += _T(">");
+	*bstrRet = strXml.AllocSysString();
 	return S_OK;
 }
 

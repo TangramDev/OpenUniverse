@@ -125,6 +125,7 @@ public:
 	~CUniverse();
 
 	bool				m_bHostCLR;
+	bool				m_bAppStarting = false;
 
 	CString GetFileVer();
 	void SetHook(DWORD ThreadID);

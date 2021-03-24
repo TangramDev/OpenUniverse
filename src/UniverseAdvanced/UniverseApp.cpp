@@ -402,10 +402,6 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			::PostMessage(it.first, WM_COSMOSMSG, 0, 20210324);
 		}
-		//for (auto &it : g_pCosmos->m_mapf)
-		//{
-		//	::PostMessage(it.first, WM_COSMOSMSG, 0, 20210324);
-		//}
 	}
 	if (g_pCosmos->m_pCosmosDelegate)
 	{

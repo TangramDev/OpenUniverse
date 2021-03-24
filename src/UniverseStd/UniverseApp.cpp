@@ -304,6 +304,14 @@ int CUniverse::ExitInstance()
 
 LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
+	if (theApp.m_bAppStarting == true)
+	{
+		theApp.m_bAppStarting = false;
+		for (auto& it : g_pCosmos->m_mapMDTWindow)
+		{
+			::PostMessage(it.first, WM_COSMOSMSG, 0, 20210324);
+		}
+	}
 	if (g_pCosmos->m_pCosmosDelegate)
 	{
 		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
