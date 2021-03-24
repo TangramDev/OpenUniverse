@@ -160,14 +160,6 @@ namespace Browser {
 		BOOL&) {
 		switch (wParam)
 		{
-		case 20210314:
-		{
-			if (m_pChromeRenderFrameHost)
-			{
-				::PostMessage(m_pChromeRenderFrameHost->GetHostBrowserWnd(), WM_COSMOSMSG, 20210314, 1);
-			}
-		}
-		break;
 		case 20201109:
 		{
 			if (lParam)
@@ -1160,6 +1152,7 @@ namespace Browser {
 			HWND hMainWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(MainWnd, NULL);
 			if (hMainWnd)
 			{
+				theApp.m_bAppStarting = true;
 				IGalaxyCluster* pCluster = nullptr;
 				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 				HANDLE hHandle = ::GetProp(hMainWnd, _T("CosmosFrameWndInfo"));
@@ -1308,7 +1301,6 @@ namespace Browser {
 					}
 				}
 			}
-			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, 0);
 		}
 	}
 

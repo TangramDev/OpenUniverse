@@ -4502,25 +4502,25 @@ void CCosmos::BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser)
 
 void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTabChangeType type, void* content)
 {
-	switch (type)
+	auto it = m_mapBrowserWnd.find(hBrowser);
+	if (it != m_mapBrowserWnd.end())
 	{
-	case BrowserTabChangeType::LoadingOnly:
-	{
-
-	}
-	break;
-	case BrowserTabChangeType::All:
-	{
-		auto it = m_mapBrowserWnd.find(hBrowser);
-		if (it != m_mapBrowserWnd.end())
+		CBrowser* pBrowser = (CBrowser*)it->second;
+		pBrowser->m_bSZMode = true;
+		switch (type)
 		{
-			CBrowser* pBrowser = (CBrowser*)it->second;
+		case BrowserTabChangeType::LoadingOnly:
+		{
+		}
+		break;
+		case BrowserTabChangeType::All:
+		{
 			if (pBrowser->m_pCosmosFrameWndInfo && pBrowser->m_pCosmosFrameWndInfo->m_nFrameType == 2)
 				::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
 			::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
 		}
-	}
-	break;
+		break;
+		}
 	}
 }
 
