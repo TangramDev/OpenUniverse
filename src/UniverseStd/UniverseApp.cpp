@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103230053           *
+ *           Web Runtime for Application - Version 1.0.0.202103250054           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -314,11 +314,12 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 	}
 	else
 	{
-		for (auto& it : g_pCosmos->m_mapMDTWindow)
+		for (auto& it : g_pCosmos->m_mapBrowserWnd)
 		{
-			if (it.second->m_pBrowser && it.second->m_pBrowser->m_bSZMode == true)
+			CBrowser* pBrowser = (CBrowser*)it.second;
+			if (::IsWindowVisible(it.first) && pBrowser->m_bSZMode)
 			{
-				::PostMessage(it.second->m_pBrowser->m_hWnd, WM_BROWSERLAYOUT, 1, 7);
+				::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
 			};
 		}
 	}

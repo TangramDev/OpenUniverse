@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103230053
+ *           Web Runtime for Application - Version 1.0.0.202103250054
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -339,12 +339,12 @@ namespace CommonUniverse {
 	public:
 		CosmosUIItemData() {}
 		~CosmosUIItemData() {}
+		LPARAM lParam = 0;
 		CString m_strType = _T("treectrl");
 		CString m_strKey = _T("");
 		CString m_strData = _T("");
 		CosmosUIItemData* m_pParent = nullptr;
 		void* m_hParentItem = nullptr;
-		LPARAM lParam = 0;
 		map<CString, CosmosUIItemData*> m_mapChild;
 	};
 
@@ -480,9 +480,9 @@ namespace CommonUniverse {
 		LPCTSTR								m_strProxyID;
 		LPCTSTR								m_strCreatingFrameTitle;
 		LPCTSTR								m_strClosingFrameID;
-		void* m_pvoid;
-		CCosmosDocProxy* m_pCurDocProxy;
-		CCosmosImpl* m_pCosmosImpl;
+		void*								m_pvoid;
+		CCosmosDocProxy*					m_pCurDocProxy;
+		CCosmosImpl*						m_pCosmosImpl;
 
 		BOOL								m_bCreatingNewFrame;
 		int									m_nFrameIndex;
@@ -644,21 +644,20 @@ namespace CommonUniverse {
 		CStringA								m_strBridgeJavaClass;
 		CString									m_strStartJarPath;
 
-		IPCMsg* m_pCurrentIPCMsg;
-		ICosmosCLRImpl* m_pCLRProxy;
-		IUniverseAppProxy* m_pActiveAppProxy;
-		IUniverseAppProxy* m_pUniverseAppProxy;
-		IUniverseAppProxy* m_pCosmosAppProxy;
-		CMDIChildFormInfo* m_pCurMDIChildFormInfo;
-		IXobj* m_pHostViewDesignerNode = nullptr;
-		ICosmosExtender* m_pExtender = nullptr;
-		ICosmosDelegate* m_pCosmosDelegate = nullptr;
-		CChromeBrowserBase* m_pActiveBrowser = nullptr;
-		CCosmosBrowserFactory* m_pBrowserFactory = nullptr;
-		ICosmosWindow* m_pCreatingWindow = nullptr;
-		OmniboxViewViewsProxy* m_pCreatingOmniboxViewViews = nullptr;
-		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CWebPageImpl* m_pMainWebPageImpl = nullptr;
+		IPCMsg*									m_pCurrentIPCMsg;
+		ICosmosCLRImpl*							m_pCLRProxy;
+		IUniverseAppProxy*						m_pActiveAppProxy;
+		IUniverseAppProxy*						m_pUniverseAppProxy;
+		IUniverseAppProxy*						m_pCosmosAppProxy;
+		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
+		ICosmosExtender*						m_pExtender = nullptr;
+		ICosmosDelegate*						m_pCosmosDelegate = nullptr;
+		CChromeBrowserBase*						m_pActiveBrowser = nullptr;
+		CCosmosBrowserFactory*					m_pBrowserFactory = nullptr;
+		ICosmosWindow*							m_pCreatingWindow = nullptr;
+		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
+		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
+		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapGalaxy2GalaxyCluster;
@@ -789,8 +788,8 @@ namespace CommonUniverse {
 		virtual ~ICosmosDelegate() {
 		}
 
-		JavaVM* m_pJVM;
-		JNIEnv* m_pJVMenv;
+		JavaVM*				m_pJVM;
+		JNIEnv*				m_pJVMenv;
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
@@ -955,7 +954,7 @@ namespace CommonUniverse {
 		}
 		virtual ~CChromeBrowserBase() {}
 
-		CBrowserImpl* m_pProxy;
+		CBrowserImpl*		m_pProxy;
 
 		virtual int GetType() { return -1; }
 		virtual void* GetBrowser() { return nullptr; }
@@ -973,6 +972,15 @@ namespace CommonUniverse {
 		CBrowserImpl() {}
 		virtual ~CBrowserImpl() {}
 
+		bool				m_bDestroy = false;
+		bool				m_bTabChange;
+		bool				m_bSZMode = false;
+		bool				m_bInTabChange = false;
+		float				m_fdevice_scale_factor;
+		HWND				m_hDrawWnd;
+		HWND				m_hOldTab;
+		HWND				m_hBeforeChange = NULL;
+		RECT				m_OldRect;
 		CChromeBrowserBase* m_pBrowser;
 		OmniboxViewViewsProxy* m_pOmniboxViewViews;
 

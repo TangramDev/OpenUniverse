@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103230053           *
+ *           Web Runtime for Application - Version 1.0.0.202103250054           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -39,15 +39,6 @@ namespace Browser {
 		CBrowser();
 		~CBrowser() override;
 
-		bool				m_bDestroy = false;
-		bool				m_bTabChange;
-		bool				m_bSZMode = false;
-		bool				m_bInTabChange = false;
-		float				m_fdevice_scale_factor;
-		HWND				m_hDrawWnd;
-		HWND				m_hOldTab;
-		HWND				m_hBeforeChange = NULL;
-		RECT				m_OldRect;
 		CString				m_strCurKey;
 		CWebView*			m_pVisibleWebView;
 		IXobj*				m_pRemoteXobj;
