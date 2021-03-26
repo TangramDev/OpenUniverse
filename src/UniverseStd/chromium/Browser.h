@@ -68,7 +68,7 @@ namespace Browser {
 			MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 			MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 			MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
-			MESSAGE_HANDLER(WM_TABCHANGE, OnChromeTabChange)
+			//MESSAGE_HANDLER(WM_TABCHANGE, OnChromeTabChange)
 			MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 			MESSAGE_HANDLER(WM_BROWSERLAYOUT, OnBrowserLayout)
 			MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
@@ -85,7 +85,7 @@ namespace Browser {
 	private:
 		void UpdateContentRect(HWND hContentWnd, RECT& rc, int nTopFix) override;
 		void BeforeActiveChromeTab(HWND hOldWnd) override;
-		void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
+		//void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
 		void EndActiveChromeTab(HWND hActive) override;
 
 		void OnFinalMessage(HWND hWnd) override;
@@ -95,7 +95,7 @@ namespace Browser {
 		LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnBrowserLayout(UINT, WPARAM, LPARAM, BOOL&);
-		LRESULT OnChromeTabChange(UINT, WPARAM, LPARAM, BOOL&);
+		//LRESULT OnChromeTabChange(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnDeviceScaleFactorChanged(UINT, WPARAM, LPARAM, BOOL&);

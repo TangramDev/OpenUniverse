@@ -39,20 +39,12 @@ namespace Browser {
 		CBrowser();
 		~CBrowser() override;
 
-		bool				m_bDestroy = false;
-		bool				m_bTabChange;
-		bool				m_bSZMode = false;
-		bool				m_bInTabChange = false;
-		float				m_fdevice_scale_factor;
-		HWND				m_hDrawWnd;
-		HWND				m_hOldTab;
-		HWND				m_hBeforeChange = NULL;
-		RECT				m_OldRect;
 		CString				m_strCurKey;
 		CWebView*			m_pVisibleWebView;
 		IXobj*				m_pRemoteXobj;
 		CXobj*				m_pParentXobj;
 		CGalaxy*			m_pClientGalaxy = nullptr;
+		CMDIParent*			m_pMDIParent = nullptr;
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
 
 		map<HWND, CWebView*> m_mapChildPage;
@@ -68,7 +60,6 @@ namespace Browser {
 			MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 			MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 			MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
-			MESSAGE_HANDLER(WM_TABCHANGE, OnChromeTabChange)
 			MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 			MESSAGE_HANDLER(WM_BROWSERLAYOUT, OnBrowserLayout)
 			MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
@@ -85,7 +76,6 @@ namespace Browser {
 	private:
 		void UpdateContentRect(HWND hContentWnd, RECT& rc, int nTopFix) override;
 		void BeforeActiveChromeTab(HWND hOldWnd) override;
-		void ActiveChromeTab(HWND hActive, HWND hOldWnd) override;
 		void EndActiveChromeTab(HWND hActive) override;
 
 		void OnFinalMessage(HWND hWnd) override;
@@ -95,7 +85,6 @@ namespace Browser {
 		LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnBrowserLayout(UINT, WPARAM, LPARAM, BOOL&);
-		LRESULT OnChromeTabChange(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnDeviceScaleFactorChanged(UINT, WPARAM, LPARAM, BOOL&);

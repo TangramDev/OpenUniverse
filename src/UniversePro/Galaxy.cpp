@@ -931,7 +931,9 @@ LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 
 LRESULT CMDIParent::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_pHostBrowser->m_bSZMode = true;
-	::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210213);
+	if (m_pHostBrowser->m_pVisibleWebView)
+		m_pHostBrowser->m_pVisibleWebView->m_bCanShow = true;
+	//::PostMessage(m_hWnd, WM_COSMOSMSG, 1, 20210213);
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -977,8 +979,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
 				IXobj* _pXobj = nullptr;
 				m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-				pClient = m_Parse.GetChild(_T("hostpage"));
-				//pVisiblePage->LoadDocument2Viewport(strKey, pClient->xml());
 				pVisiblePage->m_bCanShow = true;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210324);
@@ -989,6 +989,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				if (it != m_pGalaxy->m_pWebPageWnd->m_pGalaxy->m_pWorkXobj->m_mapChildXobj.end())
 				{
 					m_pGalaxy->m_pBindingXobj = it->second;
+					//m_vMdiClientXobjs.push_back(it->second);
 				}
 			}
 		}
@@ -1015,7 +1016,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 			m_pHostBrowser->BrowserLayout();
 			m_pHostBrowser->m_pBrowser->LayoutBrowser();
-			//m_pHostBrowser->m_pVisibleWebView->m_bCanShow = true;
 			::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
 		}
 		ShowMdiClientXobj();
@@ -1148,7 +1148,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 								IXobj* _pXobj = nullptr;
 								m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 								pClient = m_Parse.GetChild(_T("hostpage"));
-								//pVisiblePage->LoadDocument2Viewport(strKey, pClient->xml());
 								pVisiblePage->m_bCanShow = true;
 							}
 						}else
@@ -3317,6 +3316,24 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				if (rc.bottom * rc.right == 0)
 					bVisible = false;
 			}
+			else
+			{
+				if (m_pMDIParent && m_pMDIParent->m_pHostBrowser->m_pVisibleWebView->m_pGalaxy)
+				{
+					CXobj* pObj = m_pMDIParent->m_pHostBrowser->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
+					if (::IsWindowVisible(pObj->m_pHostWnd->m_hWnd))
+					{
+						auto it = pObj->m_mapChildXobj.find(_T("mdiclient"));
+						if (it != pObj->m_mapChildXobj.end())
+						{
+							CXobj* pClientObj = it->second;
+							m_pBindingXobj = pClientObj;
+							hHost = pClientObj->m_pHostWnd->m_hWnd;
+							bVisible = ::IsWindowVisible(hHost);
+						}
+					}
+				}
+			}
 			if (bVisible)
 			{
 				::GetWindowRect(hHost, &rect);
@@ -3376,11 +3393,9 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	if (m_bMDIChild)
 		lpwndpos->flags |= SWP_NOZORDER;
 
-	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
-	if (::IsWindowVisible(m_hWnd))
-		::InvalidateRect(m_hWnd, nullptr, true);
-	//if (!g_pCosmos->m_bSZMode)
-	//	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
+	//::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
+	//if (::IsWindowVisible(m_hWnd))
+	//	::InvalidateRect(m_hWnd, nullptr, true);
 	return hr;
 }
 
@@ -3497,7 +3512,7 @@ STDMETHODIMP CGalaxy::get__NewEnum(IUnknown** ppVal)
 		VARIANT* rgvar = new VARIANT[nLen];
 		ZeroMemory(rgvar, sizeof(VARIANT) * nLen);
 		VARIANT* pItem = rgvar;
-		for (auto it : m_mapXobj)
+		for (auto &it : m_mapXobj)
 		{
 			IUnknown* pDisp = nullptr;
 			CXobj* pObj = it.second;

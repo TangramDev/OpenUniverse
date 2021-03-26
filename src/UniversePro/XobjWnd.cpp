@@ -417,8 +417,11 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hWnd);
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
+				CBrowser* pBrowser = (CBrowser*)it->second;
 				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
-				g_pCosmos->m_mapSizingBrowser[hWnd] = (CBrowser*)it->second;
+				g_pCosmos->m_mapSizingBrowser[hWnd] = pBrowser;
+				//if (m_pXobj->m_pWebBrowser == nullptr)
+				//	m_pXobj->m_pWebBrowser = pBrowser;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 		}
@@ -458,8 +461,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
-			//m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow = true;
-			//::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 		}
 		break;
 		case 20210226:
@@ -848,6 +849,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (m_pXobj->m_pWebBrowser)
 	{
+		m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow = (theApp.m_bAppStarting == false);
 		if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
 			m_pXobj->m_pWebBrowser->m_pVisibleWebView == nullptr ||
 			m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)

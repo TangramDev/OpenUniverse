@@ -65,99 +65,6 @@ namespace Browser {
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, (LPARAM)hActive);
 	}
 
-	void CBrowser::ActiveChromeTab(HWND hActive, HWND hOldWnd)
-	{
-		m_bTabChange = true;
-		m_bSZMode = true;
-		//if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
-		//{
-		//	g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-		//	if (::IsWindow(hOldWnd))
-		//	{
-		//		m_hOldTab = hOldWnd;
-		//	}
-
-		//	if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
-		//	{
-		//		auto it = g_pCosmos->m_mapWebView.find(hActive);
-		//		if (it != g_pCosmos->m_mapWebView.end())
-		//		{
-		//			CWebView* pPage = (CWebView*)it->second;
-		//			if (pPage->m_pGalaxy)
-		//			{
-		//				IXobj* pObj = nullptr;
-		//				pPage->Observe(CComBSTR(pPage->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
-		//			}
-		//		}
-		//	}
-		//	else
-		//	{
-		//		if (m_pClientGalaxy)
-		//		{
-		//			m_pClientGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
-		//			g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(RecalcLayout, m_pClientGalaxy->m_hWnd);
-		//			m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
-		//		}
-		//	}
-		//	::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-		//}
-	}
-
-	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-		if (m_bDestroy)
-			return lRes;
-		if (wParam == lParam)
-		{
-			m_bSZMode = false;
-			return lRes;
-		}
-		m_bSZMode = true;
-		if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
-		{
-			HWND hActive = m_pBrowser->GetActiveWebContentWnd();
-			if (::GetParent(m_hWnd) && m_pVisibleWebView->m_hWnd != hActive)
-			{
-				auto it = m_mapChildPage.find(hActive);
-				if (it != m_mapChildPage.end())
-					m_pVisibleWebView = it->second;
-			}
-
-			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
-			if (m_pVisibleWebView && g_pCosmos->m_pActiveHtmlWnd->m_pChromeRenderFrameHost)
-			{
-				g_pCosmos->m_pGalaxy = nullptr;
-				g_pCosmos->m_bWinFormActived = false;
-			}
-			if (!m_pClientGalaxy)
-				m_pBrowser->LayoutBrowser();
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
-			if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
-			{
-				auto it = g_pCosmos->m_mapWebView.find(hActive);
-				if (it != g_pCosmos->m_mapWebView.end())
-				{
-					CWebView* pPage = (CWebView*)it->second;
-					if (pPage->m_pGalaxy)
-					{
-						IXobj* pObj = nullptr;
-						pPage->Observe(CComBSTR(pPage->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
-					}
-				}
-				HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
-				CMDIParent* pMDIParent = nullptr;
-				auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
-				if (it2 != g_pCosmos->m_mapMDIParent.end())
-				{
-					pMDIParent = it2->second;
-					pMDIParent->ShowMdiClientXobj();
-					BrowserLayout();
-				}
-			}
-		}
-		return lRes;
-	}
-
 	void CBrowser::UpdateContentRect(HWND hWnd, RECT& rc, int nTopFix) {
 		if (m_hBeforeChange && hWnd == m_hBeforeChange)
 		{
@@ -334,6 +241,15 @@ namespace Browser {
 			return 0;
 		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
+			auto it = g_pCosmos->m_mapMDIParent.find(::GetParent(m_pCosmosFrameWndInfo->m_hClient));
+			if (it != g_pCosmos->m_mapMDIParent.end())
+			{
+				if (it->second->m_bCreateNewDoc)
+				{
+					m_bInTabChange = true;
+					return 0;
+				}
+			}
 			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
 			{
 				if (m_pVisibleWebView->m_bCanShow == false)
@@ -469,54 +385,6 @@ namespace Browser {
 				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
 			}
 		} break;
-			//		case 0: {
-			//			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebView>;
-			//			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
-			//			if (g_pCosmos->m_pCLRProxy)
-			//				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
-			//			HWND hPWnd = ::GetParent(m_hWnd);
-			//			if (g_pCosmos->m_bCreatingDevTool == false)
-			//			{
-			//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
-			//				g_pCosmos->m_mapWebView[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-			//				if (g_pCosmos->m_mapWebView.size() > 1)
-			//					g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
-			//				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
-			//					m_pVisibleWebView = g_pCosmos->m_pHtmlWndCreated;
-			//#ifdef WIN32	
-			//				if (::IsWindow(hPWnd))
-			//				{
-			//					DWORD dwID = 0;
-			//					::GetWindowThreadProcessId(hPWnd, &dwID);
-			//					if (dwID != ::GetCurrentProcessId())
-			//					{
-			//						auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwID);
-			//						if (it != g_pCosmos->m_mapRemoteTangramApp.end())
-			//						{
-			//							g_pCosmos->m_pHtmlWndCreated->m_pRemoteCosmos = it->second;
-			//						}
-			//					}
-			//				}
-			//#endif
-			//			}
-			//			else
-			//			{
-			//				g_pCosmos->m_bCreatingDevTool = false;
-			//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = true;
-			//				if (m_pVisibleWebView) {
-			//					m_pVisibleWebView->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
-			//					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebView;
-			//				}
-			//			}
-			//			if (hPWnd)
-			//			{
-			//				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
-			//				g_pCosmos->m_pGalaxy = nullptr;
-			//				g_pCosmos->m_bWinFormActived = false;
-			//				m_mapChildPage[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-			//				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
-			//			}
-			//		} break;
 		case 1:
 		{
 			if (lParam == 20200115)
@@ -581,7 +449,7 @@ namespace Browser {
 			}
 			else
 			{
-				if (g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
+				if (theApp.m_bAppStarting == false && g_pCosmos->m_bChromeNeedClosed == false && m_pBrowser)
 				{
 					m_bSZMode = true;
 					g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
@@ -608,7 +476,24 @@ namespace Browser {
 							m_pClientGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 						}
 					}
-					m_pVisibleWebView->m_bCanShow = true;
+					
+					if (m_pMDIParent == nullptr)
+					{
+						HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
+						auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
+						if (it != g_pCosmos->m_mapMDIParent.end())
+						{
+							m_pMDIParent = it->second;
+						}
+					}
+					if (m_pMDIParent&&m_pMDIParent->m_bCreateNewDoc)
+					{
+						m_bSZMode = true;
+						//m_pMDIParent->m_bCreateNewDoc = false;
+						::PostAppMessage(::GetCurrentThreadId(), WM_HUBBLE_INIT, 20210325, (LPARAM)m_hWnd);
+					}
+					else
+						m_pVisibleWebView->m_bCanShow = true;
 					if (m_pParentXobj)
 					{
 						::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
@@ -786,6 +671,17 @@ namespace Browser {
 		{
 			switch (lParam)
 			{
+			case 8:
+			{
+				RECT rc;
+				::GetClientRect(m_hWnd, &rc);
+				if ((rc.right<rc.left) || (rc.bottom<rc.top))
+				{
+					::GetClientRect(::GetParent(m_hWnd), &rc);
+					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOREDRAW | SWP_NOACTIVATE);
+				}
+			}
+			break;
 			case 1:
 			{
 				if (m_pBrowser)
@@ -847,54 +743,72 @@ namespace Browser {
 			break;
 			case 7:
 			{
-				if (wParam == 1)
+				switch (wParam)
+				{
+				case 3:
+					if(theApp.m_bAppStarting==false)
+					m_pVisibleWebView->m_bCanShow = true;
+					break;
+				case 2:
+					m_bTabChange = false;
+					::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					m_bSZMode = false;
+					::PostAppMessage(::GetCurrentThreadId(), WM_BROWSERLAYOUT, (WPARAM)m_hWnd, 7);
+					break;
+				case 1:
 				{
 					m_bTabChange = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 					m_bSZMode = false;
-					break;
 				}
-				if (m_pVisibleWebView->m_bCanShow == false || m_bTabChange || m_bInTabChange)
-					break;
-				HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
-				for (auto& it : m_mapChildPage)
+				break;
+				default:
 				{
-					if (::IsWindow(it.first))
+					if (/*m_pVisibleWebView->m_bCanShow == false ||*/ m_bTabChange || m_bInTabChange)
+						break;
+					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
+					for (auto& it : m_mapChildPage)
 					{
-						if (it.first != hWnd)
+						if (::IsWindow(it.first))
 						{
-							if (it.second->m_pChromeRenderFrameHost)
-								it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
-						}
-						else
-						{
-							m_pVisibleWebView = it.second;
+							if (it.first != hWnd)
+							{
+								if (it.second->m_pChromeRenderFrameHost)
+									it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
+							}
+							else
+							{
+								m_pVisibleWebView = it.second;
+							}
 						}
 					}
-				}
 
-				m_pBrowser->LayoutBrowser();
-				if (::GetParent(m_hWnd) == nullptr)
-					BrowserLayout();
-				if (m_pParentXobj)
-				{
-					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
-				}
-
-				if (m_pVisibleWebView->m_pGalaxy)
-				{
-					::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
+					m_pBrowser->LayoutBrowser();
 					if (::GetParent(m_hWnd) == nullptr)
+						BrowserLayout();
+					if (m_pParentXobj)
 					{
-						CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
-						if (pObj->m_nViewType == Grid)
+						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					}
+
+					if (m_pVisibleWebView->m_pGalaxy)
+					{
+						::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
+						if (::GetParent(m_hWnd) == nullptr)
 						{
-							CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
-							pWnd->RecalcLayout();
+							CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
+							if (pObj->m_nViewType == Grid)
+							{
+								CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+								pWnd->RecalcLayout();
+							}
 						}
 					}
+					m_bSZMode = false;
+					//::PostAppMessage(::GetCurrentThreadId(), WM_HUBBLE_INIT, 20210325, (LPARAM)m_hWnd);
 				}
-				m_bSZMode = false;
+				break;
+				}
 			}
 			break;
 			}

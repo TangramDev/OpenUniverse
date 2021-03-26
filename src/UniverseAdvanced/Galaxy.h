@@ -212,6 +212,7 @@ public:
 	virtual ~CMDIParent(void);
 
 	BOOL					m_bDestroy = false;
+	BOOL					m_bCreateNewDoc = false;
 	HWND					m_hMDIClient = nullptr;
 
 	CXobj*					m_pClientXobj = nullptr;

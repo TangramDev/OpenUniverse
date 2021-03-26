@@ -342,21 +342,13 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 			{
 				if(pBrowser->m_bSZMode)
 					::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
-				//else if(pBrowser->m_pVisibleWebView->m_bCanShow==false)
-				//	::PostMessage(it.first, WM_BROWSERLAYOUT, 3, 7);
 			}
 		}
 		for (auto& it : g_pCosmos->m_mapMDIParent)
 		{
 			CMDIParent* pMDIParent = (CMDIParent*)it.second;
-			//if (pMDIParent->m_bCreateNewDoc)
-			{
-				if(pMDIParent->m_pHostBrowser)
-					::PostMessage(it.first, WM_COSMOSMSG, 0, 20210325);
-				//::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
-				//else if(pBrowser->m_pVisibleWebView->m_bCanShow==false)
-				//	::PostMessage(it.first, WM_BROWSERLAYOUT, 3, 7);
-			}
+			if (pMDIParent->m_pHostBrowser)
+				::PostMessage(it.first, WM_COSMOSMSG, 0, 20210325);
 		}
 	}
 	if (g_pCosmos->m_pCosmosDelegate)
