@@ -977,6 +977,9 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
 				IXobj* _pXobj = nullptr;
 				m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
+				pClient = m_Parse.GetChild(_T("hostpage"));
+				//pVisiblePage->LoadDocument2Viewport(strKey, pClient->xml());
+				pVisiblePage->m_bCanShow = true;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210324);
 			m_pHostBrowser->m_bSZMode = true;
@@ -1093,7 +1096,8 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 		if (wParam)
 		{
-			m_pActiveMDIChild = (CMDIChild*)wParam;
+			if(m_bCreateNewDoc==false)
+				m_pActiveMDIChild = (CMDIChild*)wParam;
 			if (!::IsWindow(m_pActiveMDIChild->m_hWnd))
 			{
 				m_pActiveMDIChild = nullptr;
@@ -1131,6 +1135,23 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					IXobj* pXobj = nullptr;
 					if (_pGalaxy != m_pGalaxy || bNewKey)
 					{
+						if (it.first == 10000)
+						{
+							CString strXml = _T("");
+							auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
+							if (it != g_pCosmos->m_mapDocTemplate.end())
+							{
+								strXml = it->second;
+								CTangramXmlParse m_Parse;
+								m_Parse.LoadXml(strXml);
+								CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
+								IXobj* _pXobj = nullptr;
+								m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
+								pClient = m_Parse.GetChild(_T("hostpage"));
+								//pVisiblePage->LoadDocument2Viewport(strKey, pClient->xml());
+								pVisiblePage->m_bCanShow = true;
+							}
+						}else
 						_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
 					}
 				}

@@ -1643,6 +1643,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											if (pMainGalaxy)
 											{
 												pMainGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
+												pWnd->m_pParent->m_pActiveMDIChild = pWnd;
 												::PostMessage(pWnd->m_pParent->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 												if (pWnd->m_pGalaxy == nullptr)
 													pWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
