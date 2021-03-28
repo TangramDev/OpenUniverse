@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054
+ *           Web Runtime for Application - Version 1.0.0.202103280055
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -309,14 +309,13 @@ LRESULT CGridWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			}
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
-		return 0;
+		break;
 	}
 	break;
 	}
 	if (wParam == 0 || wParam == 0x01000)
 		return 0;
-
-	return -1;
+	return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 }
 
 LRESULT CGridWnd::OnActiveTangramObj(WPARAM wParam, LPARAM lParam)
@@ -343,14 +342,10 @@ void CGridWnd::StartTracking(int ht)
 	if (ht == noHit)
 		return;
 
-	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
-	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
-	{
-		ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
-	}
-
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
-	if (((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)) || ::GetParent(hWnd) == NULL)
+	bool bMdiChild = (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD);
+	ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
+	if (bMdiChild || ::GetParent(hWnd) == NULL)
 		::BringWindowToTop(hWnd);
 
 	GetInsideRect(m_rectLimit);
@@ -412,11 +407,9 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (::IsWindowVisible(pGalaxy->m_hWnd) && pGalaxy->m_nGalaxyType == CtrlBarGalaxy)
 		pGalaxy->SetFocus();
-	CXobj* pXobj = pGalaxy->m_pWorkXobj;
-	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
-	{
-		ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
-	}
+	HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+	::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+	ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
 
 	CSplitterWnd::StopTracking(bAccept);
 
@@ -446,7 +439,6 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
 		RecalcLayout();
-		::RedrawWindow(::GetAncestor(m_hWnd, GA_ROOT), NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 	}
 }
 

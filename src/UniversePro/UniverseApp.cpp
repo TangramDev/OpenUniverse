@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054           *
+ *           Web Runtime for Application - Version 1.0.0.202103280055           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1492,6 +1492,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										if (pGalaxy)
 										{
 											//pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = pGalaxy;
+											//CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+											//_pGalaxy->m_pWebPageWnd = pFrameWnd->m_pBrowser->m_pVisibleWebView;
 											pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 										}
 										switch (pCosmosFrameWndInfo->m_nFrameType)
@@ -1499,6 +1501,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										case 1:
 										{
 											CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+											//_pGalaxy->m_pWebPageWnd = pFrameWnd->m_pBrowser->m_pVisibleWebView;
 											_pGalaxy->m_strDocTemplateID = strKey;
 										}
 										break;
@@ -1550,12 +1553,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												if (itName != g_pCosmos->m_mapDocDefaultName.end())
 													strDefaultName = itName->second;
 												g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
-												pClient = m_Parse.GetChild(_T("mdiclient"));
-												if (pClient)
-												{
-													//if (pMainGalaxy->m_strCurrentKey != strKey)
-													//	pMainGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-												}
+												//pClient = m_Parse.GetChild(_T("mdiclient"));
+												//if (pClient)
+												//{
+												//	//if (pMainGalaxy->m_strCurrentKey != strKey)
+												//	//	pMainGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
+												//}
 											}
 										}
 										break;

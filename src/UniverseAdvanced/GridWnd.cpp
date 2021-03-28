@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054
+ *           Web Runtime for Application - Version 1.0.0.202103280055
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -346,21 +346,7 @@ void CGridWnd::StartTracking(int ht)
 
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 	bool bMdiChild = (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD);
-
-	CXobj* pXobj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj;
-	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
-	{
-		bool bIsWinForm = g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(::GetAncestor(m_hWnd, GA_ROOT));
-		if (bIsWinForm)
-		{
-			ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
-		}
-		else if (bMdiChild == false)
-			pXobj->m_pHostWnd->ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
-		else
-			ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
-	}
-
+	ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
 	if (bMdiChild || ::GetParent(hWnd) == NULL)
 		::BringWindowToTop(hWnd);
 
@@ -423,21 +409,9 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (::IsWindowVisible(pGalaxy->m_hWnd) && pGalaxy->m_nGalaxyType == CtrlBarGalaxy)
 		pGalaxy->SetFocus();
-	CXobj* pXobj = pGalaxy->m_pWorkXobj;
-	if (pXobj && pXobj->m_pXobjShareData->m_pHostClientView)
-	{
-		bool bIsWinForm = g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(::GetAncestor(m_hWnd, GA_ROOT));
-		if(bIsWinForm)
-		{
-			ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
-		}
-		else if (bMdiChild == false)
-		{
-			pXobj->m_pHostWnd->ModifyStyle(0, WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
-		}
-		else
-			ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
-	}
+	HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+	::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+	ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
 
 	CSplitterWnd::StopTracking(bAccept);
 
@@ -471,7 +445,6 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			::PostMessage(m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 		}
-		::RedrawWindow(::GetAncestor(m_hWnd, GA_ROOT), NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 	}
 }
 

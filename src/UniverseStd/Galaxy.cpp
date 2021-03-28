@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054
+ *           Web Runtime for Application - Version 1.0.0.202103280055
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2285,7 +2285,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 		pClient = pParse->GetChild(_T("controlbars"));
-		if (pClient && pGalaxy)
+		if (pClient)
 		{
 			int nCount = pClient->GetCount();
 			for (int i = 0; i < nCount; i++)
@@ -2303,34 +2303,30 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						if (hClient)
 						{
 							CString strXml = _T("");
-							CGalaxyCluster* pCluster = pGalaxy->m_pGalaxyCluster;
-							if (pCluster)
+							IGalaxy* pGalaxy = nullptr;
+							CString strKey = _T("");
+							strKey.Format(_T("ControlBar_%d"), nBarID);
+							auto it = m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(nBarID);
+							if (it != m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
 							{
-								IGalaxy* pGalaxy = nullptr;
-								CString strKey = _T("");
-								strKey.Format(_T("ControlBar_%d"), nBarID);
-								auto it = m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(nBarID);
-								if (it != m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
-								{
-									pGalaxy = it->second;
-								}
-								else
-								{
-									pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-									strXml = pParse2->xml();
-								}
-								if (pGalaxy)
-								{
-									CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-									m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
-									_pGalaxy->m_pWebPageWnd = m_pWebPageWnd;
-									IXobj* pXobj = nullptr;
-									_pGalaxy->Observe(_bstrKey, CComBSTR(strXml), &pXobj);
-								}
-								CString strCaption = pParse2->attr(_T("caption"), _T(""));
-								if (strCaption != _T(""))
-									::SetWindowText(::GetParent(hClient), strCaption);
+								pGalaxy = it->second;
 							}
+							else
+							{
+								m_pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+								strXml = pParse2->xml();
+							}
+							if (pGalaxy)
+							{
+								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+								m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
+								_pGalaxy->m_pWebPageWnd = m_pWebPageWnd;
+								IXobj* pXobj = nullptr;
+								_pGalaxy->Observe(_bstrKey, CComBSTR(strXml), &pXobj);
+							}
+							CString strCaption = pParse2->attr(_T("caption"), _T(""));
+							if (strCaption != _T(""))
+								::SetWindowText(::GetParent(hClient), strCaption);
 						}
 					}
 				}

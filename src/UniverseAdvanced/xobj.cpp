@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054           *
+ *           Web Runtime for Application - Version 1.0.0.202103280055           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1091,12 +1091,14 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				if (g_pCosmos->m_pBrowserFactory)
 				{
 					HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, s);
+					//::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
 					((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 					g_pCosmos->m_hParent = NULL;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 					if (it != g_pCosmos->m_mapBrowserWnd.end())
 					{
 						m_pWebBrowser = (CBrowser*)it->second;
+						::PostMessage(hWnd, WM_COSMOSMSG, 0, 20210328);
 					}
 				}
 				else

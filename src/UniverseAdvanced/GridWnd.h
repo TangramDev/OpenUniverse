@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054
+ *           Web Runtime for Application - Version 1.0.0.202103280055
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -65,6 +65,7 @@ protected:
 	void PostNcDestroy();
 	void DrawAllSplitBars(CDC* pDC, int cxInside, int cyInside);
 	CWnd* GetActivePane(int* pRow = NULL, int* pCol = NULL);
+	//void OnInvertTracker(const CRect& rect);
 	//void RefreshNode(IXobj*);
 
 	afx_msg void OnPaint();

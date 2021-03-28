@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054
+ *           Web Runtime for Application - Version 1.0.0.202103280055
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -213,6 +213,7 @@ public:
 
 	BOOL					m_bDestroy = false;
 	BOOL					m_bCreateNewDoc = false;
+	BOOL					m_bProcessBrowserPos = false;
 	HWND					m_hMDIClient = nullptr;
 
 	CXobj*					m_pClientXobj = nullptr;

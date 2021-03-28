@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054           *
+ *           Web Runtime for Application - Version 1.0.0.202103280055           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -4517,8 +4517,10 @@ void CCosmos::ChromeChildProcessCreated(
 
 void CCosmos::OnSubBrowserWndCreated(HWND hParent, HWND hBrowser)
 {
-	m_hParent = NULL;
-	LRESULT lRes = ::SendMessage(::GetParent(hBrowser), WM_HUBBLE_GETNODE, 0, (LPARAM)hBrowser);
+	//m_hParent = NULL;
+	//LRESULT lRes = ::SendMessage(::GetParent(hBrowser), WM_HUBBLE_GETNODE, 0, (LPARAM)hBrowser);
+	//::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE);
+	//::PostMessage(hParent, WM_COSMOSMSG, 0, 20210328);
 }
 
 CString CCosmos::GetProcessPath(const char* _ver, CString process_type)
@@ -5017,8 +5019,8 @@ void CCosmos::InitialOrInsertedTab(HWND hWebView, HWND hBrowser)
 				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWebView, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
 			g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
 			g_pCosmos->m_mapWebView[hWebView] = g_pCosmos->m_pHtmlWndCreated;
-			if (g_pCosmos->m_mapWebView.size() > 1)
-				g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
+			//if (g_pCosmos->m_mapWebView.size() > 1)
+			//	g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
 			if (pBrowser->m_pBrowser && hWebView == pBrowser->m_pBrowser->GetActiveWebContentWnd())
 				pBrowser->m_pVisibleWebView = g_pCosmos->m_pHtmlWndCreated;
 			g_pCosmos->m_pActiveHtmlWnd = pBrowser->m_pVisibleWebView;

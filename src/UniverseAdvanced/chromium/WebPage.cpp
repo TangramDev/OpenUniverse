@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103250054           *
+ *           Web Runtime for Application - Version 1.0.0.202103280055           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1191,6 +1191,7 @@ namespace Browser {
 						if (it != g_pCosmos->m_mapMDIParent.end())
 						{
 							pMdiParent = it->second;
+							pBrowserWnd->m_pMDIParent = pMdiParent;
 							pMdiParent->m_pHostBrowser = pBrowserWnd;
 							pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
 							RECT rc;
