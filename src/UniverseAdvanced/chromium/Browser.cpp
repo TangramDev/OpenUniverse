@@ -155,13 +155,6 @@ namespace Browser {
 			HWND hExtendWnd = m_pVisibleWebView->m_hExtendWnd;
 			if (hExtendWnd == nullptr)
 			{
-				//RECT rc;
-				//HWND hParent = ::GetParent(m_hWnd);
-				//if (hParent)
-				//{
-				//	::GetClientRect(hParent, &rc);
-				//	::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.left,SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
-				//}
 				hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hWnd, NULL, theApp.m_hInstance, NULL);
 				m_pVisibleWebView->m_hExtendWnd = hExtendWnd;
 				m_pVisibleWebView->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);

@@ -871,15 +871,10 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				RECT rc;
 				::GetClientRect(m_pBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
 				::SetWindowPos(m_pBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
-				m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
-				m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
+				//m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
+				//m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
 			}
 		}
-	}
-	break;
-	case 20210222:
-	{
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
 	}
 	break;
 	}
@@ -1054,21 +1049,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		case 1:
 			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 			break;
-		}
-	}
-	break;
-	case 20210222:
-	{
-		if (m_bDestroy)
-			break;
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
-	}
-	break;
-	case 20210223:
-	{
-		if (m_pActiveMDIChild)
-		{
-			::PostMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
 		}
 	}
 	break;

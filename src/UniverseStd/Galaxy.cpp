@@ -782,11 +782,6 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 10000:
 		return (LRESULT)LPCTSTR(m_strDocTemplateKey);
 		break;
-	case 20210222:
-	{
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
-	}
-	break;
 	}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	return l;

@@ -877,11 +877,6 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		}
 	}
 	break;
-	case 20210222:
-	{
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
-	}
-	break;
 	}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	return l;
@@ -1054,21 +1049,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		case 1:
 			::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 			break;
-		}
-	}
-	break;
-	case 20210222:
-	{
-		if (m_bDestroy)
-			break;
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, (HWND)wParam);
-	}
-	break;
-	case 20210223:
-	{
-		if (m_pActiveMDIChild)
-		{
-			::PostMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
 		}
 	}
 	break;
