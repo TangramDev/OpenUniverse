@@ -1045,12 +1045,31 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 			if (it != g_pCosmos->m_mapMDIParent.end())
 			{
 				pMDIParent = it->second;
+				if (m_nViewType == BlankView &&
+					m_strID.CompareNoCase(_T("mdiclient")) == 0 &&
+					pMDIParent && !::IsChild(pMDIParent->m_hMDIClient, hWnd))
+				{
+					pMDIParent->m_vMdiClientXobjs.push_back(this);
+				}
 			}
-			if (m_nViewType == BlankView &&
-				m_strID.CompareNoCase(_T("mdiclient")) == 0 &&
-				pMDIParent && !::IsChild(pMDIParent->m_hMDIClient, hWnd))
+			else
 			{
-				pMDIParent->m_vMdiClientXobjs.push_back(this);
+				auto it = g_pCosmos->m_mapMDTWindow.find(hTopParent);
+				if (it != g_pCosmos->m_mapMDTWindow.end())
+				{
+					if (_strURL == _T("host"))
+					{
+						CMDTWnd* pWnd = it->second;
+						if (pWnd->m_pBrowser->m_pParentXobj)
+						{
+							pWnd->m_pBrowser->m_pParentXobj->m_pWebBrowser = nullptr;
+							pWnd->m_pBrowser->m_pParentXobj = this;
+							m_pWebBrowser = pWnd->m_pBrowser;
+							::SetParent(pWnd->m_pBrowser->m_hWnd, hWnd);
+							::SetWindowPos(pWnd->m_pBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1091,14 +1110,13 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				if (g_pCosmos->m_pBrowserFactory)
 				{
 					HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, s);
-					//::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
+					::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
 					((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 					g_pCosmos->m_hParent = NULL;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 					if (it != g_pCosmos->m_mapBrowserWnd.end())
 					{
 						m_pWebBrowser = (CBrowser*)it->second;
-						::PostMessage(hWnd, WM_COSMOSMSG, 0, 20210328);
 					}
 				}
 				else

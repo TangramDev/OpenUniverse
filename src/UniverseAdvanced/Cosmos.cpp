@@ -4517,10 +4517,6 @@ void CCosmos::ChromeChildProcessCreated(
 
 void CCosmos::OnSubBrowserWndCreated(HWND hParent, HWND hBrowser)
 {
-	//m_hParent = NULL;
-	//LRESULT lRes = ::SendMessage(::GetParent(hBrowser), WM_HUBBLE_GETNODE, 0, (LPARAM)hBrowser);
-	//::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE);
-	//::PostMessage(hParent, WM_COSMOSMSG, 0, 20210328);
 }
 
 CString CCosmos::GetProcessPath(const char* _ver, CString process_type)

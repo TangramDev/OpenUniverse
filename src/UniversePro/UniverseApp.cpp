@@ -1414,6 +1414,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								if (it == g_pCosmos->m_mapMDTWindow.end())
 								{
 									pFrameWnd = new CMDTWnd();
+									pFrameWnd->m_bCreateNewDoc = true;
 									pFrameWnd->SubclassWindow(hWnd);
 									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
 								}

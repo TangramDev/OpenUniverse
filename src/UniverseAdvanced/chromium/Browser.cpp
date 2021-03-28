@@ -501,21 +501,32 @@ namespace Browser {
 		case 20210314:
 		{
 			m_pVisibleWebView->m_bCanShow = false;
-			if (theApp.m_bAppStarting == false&& m_pParentXobj)
+			if (theApp.m_bAppStarting == false && m_pParentXobj)
 			{
 				m_bSZMode = true;
 				g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 
-				if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
+				if (m_pCosmosFrameWndInfo)
 				{
-					if (m_pVisibleWebView->m_pGalaxy)
+					switch (m_pCosmosFrameWndInfo->m_nFrameType)
 					{
-						IXobj* pObj = nullptr;
-						m_pVisibleWebView->Observe(CComBSTR(m_pVisibleWebView->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
+					case 1:
+					{
+						if (!::IsChild(m_pParentXobj->m_pHostWnd->m_hWnd, m_hWnd))
+							::SetParent(m_hWnd, m_pParentXobj->m_pHostWnd->m_hWnd);
+					}
+					break;
+					case 2:
+						if (m_pVisibleWebView->m_pGalaxy)
+						{
+							IXobj* pObj = nullptr;
+							m_pVisibleWebView->Observe(CComBSTR(m_pVisibleWebView->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
+							::SendMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
+							m_pVisibleWebView->m_bCanShow = true;
+						}
+						break;
 					}
 				}
-				m_pVisibleWebView->m_bCanShow = true;
-				::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
 			}
 		}
 		break;
