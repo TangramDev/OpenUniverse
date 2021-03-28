@@ -439,7 +439,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		if (pWnd->m_pParentXobj != m_pXobj)
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 		pWnd->m_pParentXobj = m_pXobj;
-		//::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	}
@@ -461,21 +460,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
-		}
-		break;
-		case 20210226:
-		{
-			HWND hTopParent = ::GetAncestor(m_hWnd, GA_ROOT);
-			CMDIParent* pMDIParent = nullptr;
-			auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
-			if (it != g_pCosmos->m_mapMDIParent.end())
-			{
-				pMDIParent = it->second;
-				if (m_pXobj->m_pXobjShareData->m_pGalaxy == pMDIParent->m_pGalaxy)
-				{
-					pMDIParent->ShowMdiClientXobj();
-				}
-			}
 		}
 		break;
 		case 20210225:

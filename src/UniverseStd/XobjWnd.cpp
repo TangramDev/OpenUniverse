@@ -407,7 +407,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		if (pWnd->m_pParentXobj != m_pXobj)
 			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 		pWnd->m_pParentXobj = m_pXobj;
-		//::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210226);
 		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 		return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
 	}

@@ -512,10 +512,10 @@ namespace Browser {
 					case 2:
 						if (m_pVisibleWebView->m_pGalaxy)
 						{
+							m_pVisibleWebView->m_bCanShow = true;
 							IXobj* pObj = nullptr;
 							m_pVisibleWebView->Observe(CComBSTR(m_pVisibleWebView->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
-							::SendMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
-							m_pVisibleWebView->m_bCanShow = true;
+							::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
 						}
 						break;
 					}

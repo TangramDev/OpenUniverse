@@ -1024,6 +1024,10 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
 		}
 		ShowMdiClientXobj();
+		for (auto &it : m_mapMDIChild)
+		{
+			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(it.first, it.second->m_strDocTemplateKey);
+		}
 		::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 	}
 	break;
