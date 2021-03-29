@@ -508,7 +508,6 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		break;
 	}
 	m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
-	::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 	return S_OK;
 }
 
@@ -594,7 +593,6 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				pGalaxy->HostPosChanged();
 			}
 			m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
-			::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 			return hr;
 		}
 	}
@@ -1078,10 +1076,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				}
 			}
 		}
-	}
-	if (m_strObjTypeID.CompareNoCase(_T("docwebhost")) == 0)
-	{
-		::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210225);
 	}
 
 	bRet = true;

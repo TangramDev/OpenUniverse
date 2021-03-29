@@ -1082,7 +1082,11 @@ namespace CommonUniverse
 		{
 			CFrameWnd* pParentFrame = nullptr;
 			if (pParent->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
+			{
+				if (pParent->IsKindOf(RUNTIME_CLASS(CMDIFrameWnd)))
+					return _T("");
 				pParentFrame = (CFrameWnd*)pParent;
+			}
 			else
 				pParentFrame = pParent->GetParentFrame();
 			if (pParentFrame)

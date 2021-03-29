@@ -322,7 +322,6 @@ void CCosmos::Init()
 
 	if (m_bOfficeApp == false && m_nAppID != 9)
 	{
-		//m_strConfigDataFile = m_strAppDataPath;
 		if (::PathIsDirectory(m_strAppDataPath) == false)
 		{
 			::SHCreateDirectory(nullptr, m_strAppDataPath);
@@ -3847,11 +3846,6 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 				_pWnd->m_hClient = hWnd;
 			}
 		}
-		else if (strClassName.Find(_T("MDIClient")) == 0)
-		{
-			m_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
-			m_pGalaxy->m_strDocTemplateID = _T("MDIClient");
-		}
 
 		m_pGalaxy->m_hHostWnd = hWnd;
 		pThreadInfo->m_mapGalaxy[hWnd] = m_pGalaxy;
@@ -3993,8 +3987,6 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 		break;
 		case BrowserTabChangeType::All:
 		{
-			if (pBrowser->m_pCosmosFrameWndInfo && pBrowser->m_pCosmosFrameWndInfo->m_nFrameType == 2)
-				::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
 			::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
 		}
 		break;

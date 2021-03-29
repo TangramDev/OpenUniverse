@@ -317,10 +317,11 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 		for (auto& it : g_pCosmos->m_mapBrowserWnd)
 		{
 			CBrowser* pBrowser = (CBrowser*)it.second;
-			if (::IsWindowVisible(it.first) && pBrowser->m_bSZMode)
+			if (::IsWindowVisible(it.first))
 			{
-				::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
-			};
+				if (pBrowser->m_bSZMode)
+					::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
+			}
 		}
 	}
 	if (g_pCosmos->m_pCosmosDelegate)
@@ -564,19 +565,16 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		{
 			if (pCreateWnd->lpcs->lpCreateParams)
 			{
-				if (strClassName != _T("MDIClient"))
+				CString strExt = g_pCosmos->m_pUniverseAppProxy->QueryParentInfo(hPWnd, pCreateWnd->lpcs->lpCreateParams);
+				if (strExt != _T(""))
 				{
-					CString strExt = g_pCosmos->m_pUniverseAppProxy->QueryParentInfo(hPWnd, pCreateWnd->lpcs->lpCreateParams);
-					if (strExt != _T(""))
+					CString strType = g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID;
+					if (strType == _T(""))
+						strType = _T("default");
+					auto it = g_pCosmos->m_mapDocTemplate.find(strType);
+					if (it != g_pCosmos->m_mapDocTemplate.end())
 					{
-						CString strType = g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID;
-						if (strType == _T(""))
-							strType = _T("default");
-						auto it = g_pCosmos->m_mapDocTemplate.find(strType);
-						if (it != g_pCosmos->m_mapDocTemplate.end())
-						{
-							g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hPWnd, strType);
-						}
+						g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hPWnd, strType);
 					}
 				}
 			}

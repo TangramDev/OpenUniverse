@@ -290,28 +290,6 @@ LRESULT CGridWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 	break;
-	case 20210202:
-	{
-		HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
-		if (::IsWindow(hWnd))
-		{
-			CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
-			if (pCosmosFrameWndInfo)
-			{
-				HWND hClient = pCosmosFrameWndInfo->m_hClient;
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
-				if (pGalaxy)
-				{
-					CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-					_pGalaxy->HostPosChanged();
-				}
-			}
-		}
-		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
-		break;
-	}
-	break;
 	}
 	if (wParam == 0 || wParam == 0x01000)
 		return 0;
@@ -407,8 +385,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (::IsWindowVisible(pGalaxy->m_hWnd) && pGalaxy->m_nGalaxyType == CtrlBarGalaxy)
 		pGalaxy->SetFocus();
-	HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-	::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+	//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+	//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 	ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
 
 	CSplitterWnd::StopTracking(bAccept);
@@ -439,6 +417,8 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
 		}
 		RecalcLayout();
+		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+		::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 	}
 }
 

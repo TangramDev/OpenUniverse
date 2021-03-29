@@ -126,14 +126,6 @@ namespace Browser {
 			::SetWindowPos(m_hOldTab, HWND_BOTTOM, rc.left, rc.top, 1, 1, SWP_NOREDRAW | SWP_NOACTIVATE);
 			m_hOldTab = NULL;
 		}
-		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
-		{
-			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
-			{
-				if (m_pVisibleWebView->m_bCanShow == false)
-					return;
-			}
-		}
 
 		if (m_bTabChange == true)
 		{

@@ -441,39 +441,6 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyName(LONGLONG hHwnd, BSTR* pVal)
 	return S_OK;
 }
 
-void CGalaxyCluster::UpdateMapKey(CString strXml)
-{
-	if (m_strXmlHeader != _T(""))
-		return;
-	CTangramXmlParse m_Parse;
-	if (m_Parse.LoadXml(strXml) || m_Parse.LoadFile(strXml))
-	{
-		strXml = m_Parse.xml();
-		int nPos = strXml.Find(_T(">"));
-		m_strXmlHeader = strXml.Left(nPos + 1);
-		nPos = strXml.ReverseFind('<');
-		if (nPos != -1)
-			m_strXmlBottom = strXml.Mid(nPos);
-		CString strMainKey = _T("tangramdefaultpage");
-		int nCount = m_Parse.GetCount();
-		for (int i = 0; i < nCount; i++)
-		{
-			CTangramXmlParse* pChild = m_Parse.GetChild(i);
-			CString strGalaxyName = pChild->name();
-			int nCount = pChild->GetCount();
-			for (int i = 0; i < nCount; i++)
-			{
-				CTangramXmlParse* _pChild = pChild->GetChild(i);
-				CString strKey = _pChild->name();
-				if (strKey.CompareNoCase(_T("tangram")) == 0)
-					strKey = _T("default");
-				CString _strKey = strKey + _T("@") + strGalaxyName + _T("@") + strMainKey;
-				m_strMapKey[_strKey] = _pChild->xml();
-			}
-		}
-	}
-}
-
 void CGalaxyCluster::BeforeDestory()
 {
 	Fire_Destroy();

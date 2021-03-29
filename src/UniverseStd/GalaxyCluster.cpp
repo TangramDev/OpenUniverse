@@ -311,11 +311,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_nGalaxyType = WinFormMDIClientGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("System.Windows.Forms.MdiClient");
 				}
-				else if (bIsMDI)
-				{
-					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
-					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
-				}
 				HWND hPWnd = ::GetParent(_hWnd);
 				::GetClassName(hPWnd, g_pCosmos->m_szBuffer, MAX_PATH);
 				CString strClassName = g_pCosmos->m_szBuffer;
@@ -433,39 +428,6 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyName(LONGLONG hHwnd, BSTR* pVal)
 	return S_OK;
 }
 
-void CGalaxyCluster::UpdateMapKey(CString strXml)
-{
-	if (m_strXmlHeader != _T(""))
-		return;
-	CTangramXmlParse m_Parse;
-	if (m_Parse.LoadXml(strXml)||m_Parse.LoadFile(strXml))
-	{
-		strXml = m_Parse.xml();
-		int nPos = strXml.Find(_T(">"));
-		m_strXmlHeader = strXml.Left(nPos + 1);
-		nPos = strXml.ReverseFind('<');
-		if (nPos != -1)
-			m_strXmlBottom = strXml.Mid(nPos);
-		CString strMainKey = _T("tangramdefaultpage");
-		int nCount = m_Parse.GetCount();
-		for (int i = 0; i < nCount; i++)
-		{
-			CTangramXmlParse* pChild = m_Parse.GetChild(i);
-			CString strGalaxyName = pChild->name();
-			int nCount = pChild->GetCount();
-			for (int i = 0; i < nCount; i++)
-			{
-				CTangramXmlParse* _pChild = pChild->GetChild(i);
-				CString strKey = _pChild->name();
-				if (strKey.CompareNoCase(_T("tangram")) == 0)
-					strKey = _T("default");
-				CString _strKey = strKey + _T("@") + strGalaxyName + _T("@") + strMainKey;
-				m_strMapKey[_strKey] = _pChild->xml();
-			}
-		}
-	}
-}
-
 void CGalaxyCluster::BeforeDestory()
 {
 	Fire_Destroy();
@@ -560,15 +522,15 @@ STDMETHODIMP CGalaxyCluster::put_Height(long newVal)
 
 STDMETHODIMP CGalaxyCluster::get_XobjNames(BSTR* pVal)
 {
-	CString strNames = _T("");
-	for (auto it : m_mapXobj)
-	{
-		strNames += it.first;
-		strNames += _T(",");
-	}
-	int nPos = strNames.ReverseFind(',');
-	strNames = strNames.Left(nPos);
-	*pVal = strNames.AllocSysString();
+	//CString strNames = _T("");
+	//for (auto it : m_mapXobj)
+	//{
+	//	strNames += it.first;
+	//	strNames += _T(",");
+	//}
+	//int nPos = strNames.ReverseFind(',');
+	//strNames = strNames.Left(nPos);
+	//*pVal = strNames.AllocSysString();
 	return S_OK;
 }
 
@@ -695,15 +657,7 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 		{
 			if (MdiForm.lVal == 0)
 			{
-				hWnd = ::FindWindowEx(m_hWnd, NULL, _T("MDIClient"), NULL);
-				if (hWnd)
-				{
-					bMDI = true;
-				}
-				else
-				{
-					hWnd = ::GetWindow(m_hWnd, GW_CHILD);
-				}
+				hWnd = ::GetWindow(m_hWnd, GW_CHILD);
 			}
 			else
 			{
@@ -716,15 +670,7 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 		{
 			if (MdiForm.llVal == 0)
 			{
-				hWnd = ::FindWindowEx(m_hWnd, NULL, _T("MDIClient"), NULL);
-				if (hWnd)
-				{
-					bMDI = true;
-				}
-				else
-				{
-					hWnd = ::GetWindow(m_hWnd, GW_CHILD);
-				}
+				hWnd = ::GetWindow(m_hWnd, GW_CHILD);
 			}
 			else
 			{
@@ -982,60 +928,60 @@ HRESULT CGalaxyCluster::Fire_CosmosEvent(ICosmosEventObj* pEventObj)
 
 STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 {
-	CString strData = m_strXmlHeader;
-	if (strData == _T(""))
-		strData = _T("<tangramdefaultpage>");
-	CString strIndex = _T("@");
-	for (auto it : m_mapGalaxy)
-	{
-		CComBSTR bstrXml(L"");
-		strIndex += it.second->m_strGalaxyName;
-		strIndex += _T("@");
-		it.second->get_GalaxyXML(&bstrXml);
-		strData += OLE2T(bstrXml);
-	}
-	map<CString, CString> m_mapTemp;
-	for (auto it : m_strMapKey)
-	{
-		CString strKey = it.first;
-		int nPos = strKey.Find(_T("@"));
-		if (nPos != -1)
-		{
-			strKey = strKey.Mid(nPos);
-			nPos = strKey.ReverseFind('@');
-			if (nPos != -1)
-			{
-				strKey = strKey.Left(nPos + 1);
-				if (strIndex.Find(strKey) == -1)
-				{
-					strKey.Replace(_T("@"), _T(""));
-					auto it2 = m_mapTemp.find(strKey);
-					if (strKey != _T(""))
-					{
-						if (it2 == m_mapTemp.end())
-						{
-							m_mapTemp[strKey] = it.second;
-						}
-						else
-						{
-							m_mapTemp[strKey] = it2->second+it.second;
-						}
-					}
-				}
-			}
-		}
-	}
-	for (auto it : m_mapTemp)
-	{
-		CString strXml = _T("");
-		strXml.Format(_T("<%s>%s</%s>"), it.first, it.second, it.first);
-		strData += strXml;
-	}
-	if (m_strXmlBottom != _T(""))
-		strData += m_strXmlBottom;
-	else
-		strData += _T("</tangramdefaultpage>");
-	*pVal = CComBSTR(strData);
+	//CString strData = m_strXmlHeader;
+	//if (strData == _T(""))
+	//	strData = _T("<tangramdefaultpage>");
+	//CString strIndex = _T("@");
+	//for (auto it : m_mapGalaxy)
+	//{
+	//	CComBSTR bstrXml(L"");
+	//	strIndex += it.second->m_strGalaxyName;
+	//	strIndex += _T("@");
+	//	it.second->get_GalaxyXML(&bstrXml);
+	//	strData += OLE2T(bstrXml);
+	//}
+	//map<CString, CString> m_mapTemp;
+	//for (auto it : m_strMapKey)
+	//{
+	//	CString strKey = it.first;
+	//	int nPos = strKey.Find(_T("@"));
+	//	if (nPos != -1)
+	//	{
+	//		strKey = strKey.Mid(nPos);
+	//		nPos = strKey.ReverseFind('@');
+	//		if (nPos != -1)
+	//		{
+	//			strKey = strKey.Left(nPos + 1);
+	//			if (strIndex.Find(strKey) == -1)
+	//			{
+	//				strKey.Replace(_T("@"), _T(""));
+	//				auto it2 = m_mapTemp.find(strKey);
+	//				if (strKey != _T(""))
+	//				{
+	//					if (it2 == m_mapTemp.end())
+	//					{
+	//						m_mapTemp[strKey] = it.second;
+	//					}
+	//					else
+	//					{
+	//						m_mapTemp[strKey] = it2->second+it.second;
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//for (auto it : m_mapTemp)
+	//{
+	//	CString strXml = _T("");
+	//	strXml.Format(_T("<%s>%s</%s>"), it.first, it.second, it.first);
+	//	strData += strXml;
+	//}
+	//if (m_strXmlBottom != _T(""))
+	//	strData += m_strXmlBottom;
+	//else
+	//	strData += _T("</tangramdefaultpage>");
+	//*pVal = CComBSTR(strData);
 	return S_OK;
 }
 

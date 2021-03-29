@@ -75,7 +75,6 @@ public:
 	void Lock(){}
 	void Unlock(){}
 	void BeforeDestory();
-	void UpdateMapKey(CString);
 	HRESULT Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url);
 	HRESULT Fire_NodeCreated(IXobj * pXobjCreated);
 	HRESULT Fire_Destroy();
