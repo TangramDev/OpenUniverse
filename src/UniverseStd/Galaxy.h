@@ -148,6 +148,7 @@ class CMDTWnd :
 public:
 	CMDTWnd(void);
 	virtual ~CMDTWnd(void);
+	BOOL m_bCreateNewDoc = false;
 	bool m_bSZMode = false;
 	CString m_strDocTemplateKey = _T("");
 

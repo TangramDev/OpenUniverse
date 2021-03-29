@@ -871,8 +871,8 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				RECT rc;
 				::GetClientRect(m_pBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
 				::SetWindowPos(m_pBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
-				m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
-				m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
+				//m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
+				//m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
 			}
 		}
 	}
@@ -1024,6 +1024,10 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
 		}
 		ShowMdiClientXobj();
+		for (auto &it : m_mapMDIChild)
+		{
+			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(it.first, it.second->m_strDocTemplateKey);
+		}
 		::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 	}
 	break;

@@ -1313,6 +1313,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								if (it == g_pCosmos->m_mapMDTWindow.end())
 								{
 									pFrameWnd = new CMDTWnd();
+									pFrameWnd->m_bCreateNewDoc = true;
 									pFrameWnd->SubclassWindow(hWnd);
 									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
 								}
@@ -1381,6 +1382,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										if (pGalaxy)
 										{
 											//pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = pGalaxy;
+											//CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+											//_pGalaxy->m_pWebPageWnd = pFrameWnd->m_pBrowser->m_pVisibleWebView;
 											pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 										}
 										switch (pCosmosFrameWndInfo->m_nFrameType)
@@ -1388,9 +1391,83 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										case 1:
 										{
 											CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+											//_pGalaxy->m_pWebPageWnd = pFrameWnd->m_pBrowser->m_pVisibleWebView;
 											_pGalaxy->m_strDocTemplateID = strKey;
 										}
 										break;
+										}
+										pClient = m_Parse.GetChild(_T("hostpage"));
+										CGalaxy* pGalaxy = nullptr;
+										bool bProcessWebPage = false;
+										if (pClient == nullptr)
+											bProcessWebPage = true;
+										if (bProcessWebPage || pCosmosFrameWndInfo->m_nFrameType == 1)
+										{
+											pClient = m_Parse.GetChild(_T("controlbars"));
+											if (pClient)
+											{
+												CosmosFrameWndInfo* _pCosmosFrameWndInfo = nullptr;
+												HANDLE hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
+												_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
+												if (_pCosmosFrameWndInfo)
+												{
+													_pCosmosFrameWndInfo->m_pWebPage = g_pCosmos->m_pHostHtmlWnd;
+
+													int nCount = pClient->GetCount();
+													for (int i = 0; i < nCount; i++)
+													{
+														CTangramXmlParse* pParse2 = pClient->GetChild(i);
+														int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
+														if (nBarID)
+														{
+															if (pCosmosFrameWndInfo->m_nFrameType == 3)
+															{
+																auto itX = _pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(nBarID);
+																if (itX != _pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
+																{
+																	CGalaxy* _pGalaxy = (CGalaxy*)itX->second;
+																	if (_pGalaxy->m_strCurrentKey != strKey)
+																	{
+																		IXobj* pXobj = nullptr;
+																		_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pParse2->xml()), &pXobj);
+																	}
+																}
+															}
+															//else
+															//{
+															//	auto it = _pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
+															//	if (it != _pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
+															//	{
+															//		HWND hWnd = it->second;
+															//		int nID = pParse2->attrInt(_T("clientid"), 0);
+															//		HWND hClient = ::GetDlgItem(hWnd, nID);
+															//		if (hClient)
+															//		{
+															//			_pCosmosFrameWndInfo->bControlBarProessed = true;
+															//			CString strXml = pParse2->xml();
+															//			if (pGalaxyCluster)
+															//			{
+															//				IGalaxy* pGalaxy = nullptr;
+															//				pGalaxyCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(nBarID), &pGalaxy);
+															//				if (pGalaxy)
+															//				{
+															//					CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+															//					pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
+															//					_pGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
+															//					IXobj* pXobj = nullptr;
+															//					_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(strXml), &pXobj);
+															//				}
+															//			}
+															//			CString strCaption = pParse2->attr(_T("caption"), _T(""));
+															//			if (strCaption != _T(""))
+															//				::SetWindowText(::GetParent(hClient), strCaption);
+															//		}
+															//	}
+															//}
+														}
+													}
+												}
+											}
 										}
 									}
 								}

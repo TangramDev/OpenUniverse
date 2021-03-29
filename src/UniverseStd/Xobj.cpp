@@ -630,6 +630,8 @@ STDMETHODIMP CXobj::get_XObject(VARIANT* pVar)
 
 STDMETHODIMP CXobj::get_AxPlugIn(BSTR bstrPlugInName, IDispatch** pVal)
 {
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
 	return S_OK;
 }
 
@@ -1005,6 +1007,23 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 		if (::IsWindow(m_pHostWnd->m_hWnd) == false)
 		{
 			bRet = m_pHostWnd->SubclassWindow(hWnd);
+			HWND hTopParent = ::GetAncestor(hWnd, GA_ROOT);
+			auto it = g_pCosmos->m_mapMDTWindow.find(hTopParent);
+			if (it != g_pCosmos->m_mapMDTWindow.end())
+			{
+				if (_strURL == _T("host"))
+				{
+					CMDTWnd* pWnd = it->second;
+					if (pWnd->m_pBrowser->m_pParentXobj)
+					{
+						pWnd->m_pBrowser->m_pParentXobj->m_pWebBrowser = nullptr;
+						pWnd->m_pBrowser->m_pParentXobj = this;
+						m_pWebBrowser = pWnd->m_pBrowser;
+						::SetParent(pWnd->m_pBrowser->m_hWnd, hWnd);
+						::SetWindowPos(pWnd->m_pBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW);
+					}
+				}
+			}
 		}
 	}
 
@@ -1044,6 +1063,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				if (g_pCosmos->m_pBrowserFactory)
 				{
 					HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, s);
+					::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
 					((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 					g_pCosmos->m_hParent = NULL;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
@@ -2210,7 +2230,7 @@ HRESULT CXobj::Fire_ControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, L
 		}
 	}
 
-	for (auto it : m_mapWndXobjProxy)
+	for (auto& it : m_mapWndXobjProxy)
 	{
 		it.second->OnControlNotify(sender, NotifyCode, CtrlID, (HWND)CtrlHandle, OLE2T(CtrlClassName));
 	}

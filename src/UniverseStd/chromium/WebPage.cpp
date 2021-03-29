@@ -723,7 +723,7 @@ namespace Browser {
 	{
 		HWND hBrowser = ::GetParent(m_hWnd);
 		HWND hPPWnd = ::GetParent(hBrowser);
-
+		CMDTWnd* pMDTWnd = nullptr;
 		CBrowser* pBrowserWnd = nullptr;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pCosmos->m_mapBrowserWnd.end())
@@ -747,8 +747,8 @@ namespace Browser {
 							auto it = g_pCosmos->m_mapMDTWindow.find(hPWnd);
 							if (it != g_pCosmos->m_mapMDTWindow.end())
 							{
-								CMDTWnd* pWnd = it->second;
-								pWnd->m_pBrowser = pBrowserWnd;
+								pMDTWnd = it->second;
+								pMDTWnd->m_pBrowser = pBrowserWnd;
 							}
 						}
 					}
@@ -829,7 +829,11 @@ namespace Browser {
 					{
 						m_hWebHostWnd = m_pGalaxy->m_pBindingXobj->m_pHostWnd->m_hWnd;
 					}
-					::PostMessage(m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_hChildWnd, 0);
+					if (pMDTWnd && pMDTWnd->m_bCreateNewDoc)
+					{
+						::PostMessage(pMDTWnd->m_hWnd, WM_COSMOSMSG, 0, 20210328);
+						return;
+					}
 				}
 			}
 		}
@@ -1171,19 +1175,6 @@ namespace Browser {
 					pCosmosFrameWndInfo->m_pWebPage = this;
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
 					pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
-					switch (pCosmosFrameWndInfo->m_nFrameType)
-					{
-					case 1:
-					{
-						auto it = g_pCosmos->m_mapMDTWindow.find(hMainWnd);
-						if (it != g_pCosmos->m_mapMDTWindow.end())
-						{
-							CMDTWnd* pWnd = it->second;
-							pWnd->m_pBrowser = pBrowserWnd;
-						}
-					}
-					break;
-					}
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
 					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
 					if (pParse)
@@ -1196,10 +1187,7 @@ namespace Browser {
 						g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
 					}
 					CTangramXmlParse* pParseClient = nullptr;
-					if (pCosmosFrameWndInfo->m_nFrameType == 2)
-						pParseClient = xmlParse.GetChild(_T("mdiclient"));
-					else
-						pParseClient = xmlParse.GetChild(_T("client"));
+					pParseClient = xmlParse.GetChild(_T("client"));
 					if (pParseClient)
 					{
 						HWND hClient = pCosmosFrameWndInfo->m_hClient;
