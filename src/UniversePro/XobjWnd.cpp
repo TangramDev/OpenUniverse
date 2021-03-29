@@ -699,8 +699,6 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		pMainWnd = it2->second;
 		pGalaxy = pMainWnd->m_pGalaxy;
-		//if (pMainWnd->m_bCreateNewDoc)
-		//	return;
 	}
 
 	bool bNotCtrlBar = (m_pXobj->m_pXobjShareData->m_pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy);
@@ -827,16 +825,23 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 				return;
 			if (m_pXobj->m_pWebBrowser->m_pParentXobj != m_pXobj)
 				return;
-
-			CMDIParent* pMDIParent = nullptr;
-			auto it = g_pCosmos->m_mapMDIParent.find(::GetAncestor(m_hWnd, GA_ROOT));
-			if (it != g_pCosmos->m_mapMDIParent.end())
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo)
 			{
-				pMDIParent = it->second;
-				if (m_pXobj->m_pWebBrowser == pMDIParent->m_pHostBrowser)
+				int nFrameType = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo->m_nFrameType;
+				switch (nFrameType)
 				{
-					if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
-						return;
+				case 1:
+					break;
+				case 2:
+				{
+					CMDIParent* pMDIParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
+					if (m_pXobj->m_pWebBrowser == pMDIParent->m_pHostBrowser)
+					{
+						if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
+							return;
+					}
+				}
+				break;
 				}
 			}
 
@@ -847,7 +852,7 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			}
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-			::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
+			//::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 		}
 	}
 }

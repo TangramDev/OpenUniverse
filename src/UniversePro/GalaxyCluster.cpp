@@ -1436,60 +1436,60 @@ HRESULT CGalaxyCluster::Fire_CosmosEvent(ICosmosEventObj* pEventObj)
 
 STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 {
-	CString strData = m_strXmlHeader;
-	if (strData == _T(""))
-		strData = _T("<tangramdefaultpage>");
-	CString strIndex = _T("@");
-	for (auto it : m_mapGalaxy)
-	{
-		CComBSTR bstrXml(L"");
-		strIndex += it.second->m_strGalaxyName;
-		strIndex += _T("@");
-		it.second->get_GalaxyXML(&bstrXml);
-		strData += OLE2T(bstrXml);
-	}
-	map<CString, CString> m_mapTemp;
-	for (auto it : m_strMapKey)
-	{
-		CString strKey = it.first;
-		int nPos = strKey.Find(_T("@"));
-		if (nPos != -1)
-		{
-			strKey = strKey.Mid(nPos);
-			nPos = strKey.ReverseFind('@');
-			if (nPos != -1)
-			{
-				strKey = strKey.Left(nPos + 1);
-				if (strIndex.Find(strKey) == -1)
-				{
-					strKey.Replace(_T("@"), _T(""));
-					auto it2 = m_mapTemp.find(strKey);
-					if (strKey != _T(""))
-					{
-						if (it2 == m_mapTemp.end())
-						{
-							m_mapTemp[strKey] = it.second;
-						}
-						else
-						{
-							m_mapTemp[strKey] = it2->second + it.second;
-						}
-					}
-				}
-			}
-		}
-	}
-	for (auto it : m_mapTemp)
-	{
-		CString strXml = _T("");
-		strXml.Format(_T("<%s>%s</%s>"), it.first, it.second, it.first);
-		strData += strXml;
-	}
-	if (m_strXmlBottom != _T(""))
-		strData += m_strXmlBottom;
-	else
-		strData += _T("</tangramdefaultpage>");
-	*pVal = CComBSTR(strData);
+	//CString strData = m_strXmlHeader;
+	//if (strData == _T(""))
+	//	strData = _T("<tangramdefaultpage>");
+	//CString strIndex = _T("@");
+	//for (auto it : m_mapGalaxy)
+	//{
+	//	CComBSTR bstrXml(L"");
+	//	strIndex += it.second->m_strGalaxyName;
+	//	strIndex += _T("@");
+	//	it.second->get_GalaxyXML(&bstrXml);
+	//	strData += OLE2T(bstrXml);
+	//}
+	//map<CString, CString> m_mapTemp;
+	//for (auto it : m_strMapKey)
+	//{
+	//	CString strKey = it.first;
+	//	int nPos = strKey.Find(_T("@"));
+	//	if (nPos != -1)
+	//	{
+	//		strKey = strKey.Mid(nPos);
+	//		nPos = strKey.ReverseFind('@');
+	//		if (nPos != -1)
+	//		{
+	//			strKey = strKey.Left(nPos + 1);
+	//			if (strIndex.Find(strKey) == -1)
+	//			{
+	//				strKey.Replace(_T("@"), _T(""));
+	//				auto it2 = m_mapTemp.find(strKey);
+	//				if (strKey != _T(""))
+	//				{
+	//					if (it2 == m_mapTemp.end())
+	//					{
+	//						m_mapTemp[strKey] = it.second;
+	//					}
+	//					else
+	//					{
+	//						m_mapTemp[strKey] = it2->second + it.second;
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//for (auto it : m_mapTemp)
+	//{
+	//	CString strXml = _T("");
+	//	strXml.Format(_T("<%s>%s</%s>"), it.first, it.second, it.first);
+	//	strData += strXml;
+	//}
+	//if (m_strXmlBottom != _T(""))
+	//	strData += m_strXmlBottom;
+	//else
+	//	strData += _T("</tangramdefaultpage>");
+	//*pVal = CComBSTR(strData);
 	return S_OK;
 }
 

@@ -793,7 +793,7 @@ namespace Browser {
 						if (::GetParent(m_hWnd) == nullptr)
 						{
 							CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
-							if (pObj->m_nViewType == Grid)
+							if (pObj&&pObj->m_nViewType == Grid)
 							{
 								CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
 								pWnd->RecalcLayout();

@@ -1608,9 +1608,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
 										if (pGalaxy)
 										{
-											//pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = pGalaxy;
-											//CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-											//_pGalaxy->m_pWebPageWnd = pFrameWnd->m_pBrowser->m_pVisibleWebView;
 											pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
 										}
 										switch (pCosmosFrameWndInfo->m_nFrameType)
