@@ -1045,12 +1045,12 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 			if (it != g_pCosmos->m_mapMDIParent.end())
 			{
 				pMDIParent = it->second;
-				if (m_nViewType == BlankView &&
-					m_strID.CompareNoCase(_T("mdiclient")) == 0 &&
-					pMDIParent && !::IsChild(pMDIParent->m_hMDIClient, hWnd))
-				{
-					pMDIParent->m_vMdiClientXobjs.push_back(this);
-				}
+				//if (m_nViewType == BlankView &&
+				//	m_strID.CompareNoCase(_T("mdiclient")) == 0 &&
+				//	pMDIParent && !::IsChild(pMDIParent->m_hMDIClient, hWnd))
+				//{
+				//	pMDIParent->m_vMdiClientXobjs.push_back(this);
+				//}
 			}
 			else
 			{
@@ -1110,7 +1110,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				if (g_pCosmos->m_pBrowserFactory)
 				{
 					HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, s);
-					::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
+					::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_HIDEWINDOW);
 					((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 					g_pCosmos->m_hParent = NULL;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
@@ -1371,40 +1371,60 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 	return bRet;
 }
 
-CXobj* CXobj::GetMdiclientObj()
+CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 {
-	if (g_pCosmos->m_mapMDIParent.size() == 0)
-		return nullptr;
-	HWND hWnd = m_pHostWnd->m_hWnd;
-	HWND hTopParent = ::GetAncestor(hWnd, GA_ROOT);
-	CMDIParent* pMDIParent = nullptr;
-	auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
-	if (it != g_pCosmos->m_mapMDIParent.end())
+	if (strXobjName != _T(""))
 	{
-		pMDIParent = it->second;
-		if (::IsChild(pMDIParent->m_hWnd, hWnd) == false)
-			return nullptr;
-	}
-
-	if (m_pHostGalaxy && m_pHostGalaxy->m_nGalaxyType != CtrlBarGalaxy)
-	{
-		auto it = m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.find(_T("mdiclient"));
-		if (it != m_pHostGalaxy->m_pWorkXobj->m_mapChildXobj.end())
+		switch (m_nViewType)
 		{
-			CXobj* pObj = it->second->GetMdiclientObj();
-			if (pObj == nullptr)
-				return it->second;
-			while (pObj)
+		case BlankView:
+		{
+			if (m_strName == strXobjName)
 			{
-				pObj = it->second->GetMdiclientObj();
-				if (pObj == nullptr)
-					return it->second;
+				if (m_pHostGalaxy == nullptr)
+					return this;
+				else
+				{
+					return m_pHostGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
+				}
+			}
+			else if (m_pWebBrowser)
+			{
+				if (m_pWebBrowser->m_pParentXobj == this)
+				{
+					if (m_pWebBrowser->m_pVisibleWebView)
+					{
+						if(m_pWebBrowser->m_pVisibleWebView->m_pGalaxy)
+							return m_pWebBrowser->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
+					}
+				}
 			}
 		}
-		return nullptr;
+		break;
+		case TabGrid:
+		{
+			for (auto it : m_vChildNodes)
+			{
+				if (it->m_nCol == m_nActivePage && it->m_nRow == 0)
+				{
+					return it->GetVisibleChildByName(strXobjName);
+				}
+			}
+		}
+		break;
+		case Grid:
+		{
+			for (auto it : m_vChildNodes)
+			{
+				CXobj* pObj = it->GetVisibleChildByName(strXobjName);
+				if (pObj)
+					return pObj;
+			}
+		}
+		break;
+		}
 	}
-	else
-		return nullptr;
+	return nullptr;
 }
 
 void CXobj::NodeCreated()
@@ -1793,12 +1813,21 @@ BOOL CXobj::AddChildNode(CXobj* pXobj)
 {
 	m_vChildNodes.push_back(pXobj);
 	pXobj->m_pParentObj = this;
+	if (pXobj->m_strName != _T(""))
+		m_mapChildXobj[pXobj->m_strName] = pXobj;
 	pXobj->m_pRootObj = m_pRootObj;
 	return true;
 }
 
 BOOL CXobj::RemoveChildNode(CXobj* pXobj)
 {
+	CString strName = pXobj->m_strName;
+	if (strName != _T(""))
+	{
+		auto it = m_mapChildXobj.find(strName);
+		if (it != m_mapChildXobj.end())
+			m_mapChildXobj.erase(it);
+	}
 	auto it = find(m_vChildNodes.begin(), m_vChildNodes.end(), pXobj);
 	if (it != m_vChildNodes.end())
 	{

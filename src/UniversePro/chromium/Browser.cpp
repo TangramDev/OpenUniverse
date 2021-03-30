@@ -668,6 +668,26 @@ namespace Browser {
 		return lRes;
 	}
 
+	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		if (m_pVisibleWebView && m_pVisibleWebView->m_pGalaxy)
+		{
+#ifdef DEBUG
+			CXobj* pMDIClientObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+			if (pMDIClientObj)
+			{
+				TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
+			}
+			CXobj* pMDIClientObj2 = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(TGM_NUCLEUS);
+			if (pMDIClientObj2)
+			{
+				TRACE(_T("TGM_NUCLEUS : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
+			}
+#endif // DEBUG
+		}
+		return lRes;
+	}
+
 	LRESULT CBrowser::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		m_bSZMode = false;
 		for (auto& it : g_pCosmos->m_mapSizingBrowser)

@@ -4034,3 +4034,9 @@ void CCosmos::BrowserRemoved(CChromeBrowserBase* browser, HWND hBrowser)
 	{
 	}
 }
+
+//NetworkChangeNotify:
+void CCosmos::OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle)
+{
+
+}

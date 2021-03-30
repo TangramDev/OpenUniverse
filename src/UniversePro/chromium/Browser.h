@@ -29,7 +29,7 @@ namespace Browser {
 	class CWebView;
 
 	class ATL_NO_VTABLE CBrowser :
-		public CBrowserImpl, 
+		public CBrowserImpl,
 		public CWindowImpl<CBrowser, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
 		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_Universe, 1, 0>
@@ -39,11 +39,11 @@ namespace Browser {
 		CBrowser();
 		~CBrowser() override;
 		CString				m_strCurKey;
-		CWebView*			m_pVisibleWebView;
-		IXobj*				m_pRemoteXobj;
-		CXobj*				m_pParentXobj;
-		CGalaxy*			m_pClientGalaxy = nullptr;
-		CMDIParent*			m_pMDIParent = nullptr;
+		CWebView* m_pVisibleWebView;
+		IXobj* m_pRemoteXobj;
+		CXobj* m_pParentXobj;
+		CGalaxy* m_pClientGalaxy = nullptr;
+		CMDIParent* m_pMDIParent = nullptr;
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
 
 		map<HWND, CWebView*> m_mapChildPage;
@@ -59,6 +59,7 @@ namespace Browser {
 			MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 			MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 			MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
+			MESSAGE_HANDLER(WM_TABCHANGE, OnChromeTabChange)
 			MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
 			MESSAGE_HANDLER(WM_BROWSERLAYOUT, OnBrowserLayout)
 			MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
@@ -85,6 +86,7 @@ namespace Browser {
 		LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnBrowserLayout(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
+		LRESULT OnChromeTabChange(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 		LRESULT OnDeviceScaleFactorChanged(UINT, WPARAM, LPARAM, BOOL&);
 	};

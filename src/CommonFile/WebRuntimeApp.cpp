@@ -1037,6 +1037,7 @@ namespace CommonUniverse
 							pTemplate->GetDocString(name, CDocTemplate::docName);
 							strTitle.Replace(name, strCaption);
 							pDoc->SetTitle(strTitle);
+							::SetWindowText(pFrame->m_hWnd, strTitle);
 						}
 						return true;
 					}

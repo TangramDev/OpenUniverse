@@ -224,10 +224,8 @@ public:
 	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
 	CosmosFrameWndInfo*		m_pCosmosFrameWndInfo = nullptr;
 
-	CXobjVector				m_vMdiClientXobjs;
+	//CXobjVector				m_vMdiClientXobjs;
 	map<HWND, CMDIChild*>	m_mapMDIChild;
-
-	void ShowMdiClientXobj();
 
 	BEGIN_MSG_MAP(CMDIParent)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)

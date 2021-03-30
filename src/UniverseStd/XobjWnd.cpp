@@ -383,6 +383,20 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	{
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
+
+#ifdef DEBUG
+		CXobj* pMDIClientObj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+		if (pMDIClientObj)
+		{
+			TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
+		}
+		CXobj* pMDIClientObj2 = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(TGM_NUCLEUS);
+		if (pMDIClientObj2)
+		{
+			TRACE(_T("TGM_NUCLEUS : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
+		}
+#endif // DEBUG
+
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);

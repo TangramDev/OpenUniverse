@@ -401,4 +401,7 @@ private:
 	void BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser);
 	void BrowserRemoved(CChromeBrowserBase* browser, HWND hBrowser);
 	void OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTabChangeType type, void* content);
+
+	//NetworkChangeNotify:
+	void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle);
 };

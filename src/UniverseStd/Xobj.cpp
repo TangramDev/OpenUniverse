@@ -1150,6 +1150,64 @@ CXobj* CXobj::GetMdiclientObj()
 	return nullptr;
 }
 
+CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
+{
+	if (strXobjName != _T(""))
+	{
+		switch (m_nViewType)
+		{
+		case BlankView:
+		{
+			if (m_strName == strXobjName)
+			{
+				if (m_pHostGalaxy == nullptr)
+					return this;
+				else
+				{
+					return m_pHostGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
+				}
+			}
+			else if (m_strID == TGM_NUCLEUS)
+				return this;
+			else if (m_pWebBrowser)
+			{
+				if (m_pWebBrowser->m_pParentXobj == this)
+				{
+					if (m_pWebBrowser->m_pVisibleWebView)
+					{
+						if (m_pWebBrowser->m_pVisibleWebView->m_pGalaxy)
+							return m_pWebBrowser->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
+					}
+				}
+			}
+		}
+		break;
+		case TabGrid:
+		{
+			for (auto it : m_vChildNodes)
+			{
+				if (it->m_nCol == m_nActivePage && it->m_nRow == 0)
+				{
+					return it->GetVisibleChildByName(strXobjName);
+				}
+			}
+		}
+		break;
+		case Grid:
+		{
+			for (auto it : m_vChildNodes)
+			{
+				CXobj* pObj = it->GetVisibleChildByName(strXobjName);
+				if (pObj)
+					return pObj;
+			}
+		}
+		break;
+		}
+	}
+	return nullptr;
+}
+
 void CXobj::NodeCreated()
 {
 	CosmosInfo* pInfo = new CosmosInfo();

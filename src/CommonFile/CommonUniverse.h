@@ -717,6 +717,7 @@ namespace CommonUniverse {
 		virtual float GetMsgFloat(HWND hXobj, CString strKey) { return 0.0f; }
 		virtual bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate) { return false; }
 		virtual CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate() { return nullptr; }
+		virtual void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle) {}
 	};
 
 	class ICosmosWindowProvider

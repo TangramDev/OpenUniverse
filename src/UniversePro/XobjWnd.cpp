@@ -109,11 +109,11 @@ BOOL CXobjWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		if (it != g_pCosmos->m_mapMDIParent.end())
 		{
 			pMDIParent = it->second;
-			if (m_pXobj->m_pXobjShareData->m_pGalaxy == it->second->m_pGalaxy &&
-				!::IsChild(it->second->m_hMDIClient, hWnd))
-			{
-				it->second->m_vMdiClientXobjs.push_back(m_pXobj);
-			}
+			//if (m_pXobj->m_pXobjShareData->m_pGalaxy == it->second->m_pGalaxy &&
+			//	!::IsChild(it->second->m_hMDIClient, hWnd))
+			//{
+			//	it->second->m_vMdiClientXobjs.push_back(m_pXobj);
+			//}
 		}
 		if (m_pXobj->m_pParentObj)
 		{
@@ -411,6 +411,33 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	{
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
+		CXobj* pMDIClientObj = m_pXobj->GetVisibleChildByName(_T("mdiclient"));
+		if (pMDIClientObj)
+		{
+			TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo)
+			{
+				CosmosFrameWndInfo* pInfo = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
+				if (pInfo->m_nFrameType == 2)
+				{
+					CMDIParent* pMainParent = nullptr;
+					auto it = g_pCosmos->m_mapMDIParent.find(::GetParent(pInfo->m_hClient));
+					if (it != g_pCosmos->m_mapMDIParent.end())
+					{
+						pMainParent = it->second;
+						if (pMDIClientObj)
+						{
+							pMainParent->m_pGalaxy->m_pBindingXobj = pMDIClientObj;
+						}
+						//if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd == pInfo->m_hClient)
+						//{
+						//	m_pXobj->m_pXobjShareData->m_pGalaxy->m_pBindingXobj = pMainParent->m_pClientXobj = pMDIClientObj;
+						//}
+					}
+
+				}
+			}
+		}
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
@@ -420,8 +447,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 				CBrowser* pBrowser = (CBrowser*)it->second;
 				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
 				g_pCosmos->m_mapSizingBrowser[hWnd] = pBrowser;
-				//if (m_pXobj->m_pWebBrowser == nullptr)
-				//	m_pXobj->m_pWebBrowser = pBrowser;
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
 		}
@@ -488,6 +513,8 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210316);
 			}
+			HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+			::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 		}
 		break;
 		case 20210316:
@@ -704,19 +731,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	bool bNotCtrlBar = (m_pXobj->m_pXobjShareData->m_pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy);
 	if (m_pXobj->m_strID.CompareNoCase(TGM_NUCLEUS) == 0 || m_pXobj->m_strID.CompareNoCase(_T("mdiclient")) == 0)
 	{
-		if (bNotCtrlBar)
-		{
-			if (pMainWnd && m_pXobj->m_pXobjShareData->m_pGalaxy == pGalaxy)
-			{
-				//pMainWnd->m_vMdiClientXobjs.push_back(m_pXobj);
-				pGalaxy->m_pBindingXobj = m_pXobj;
-				if (pMainWnd->m_pActiveMDIChild)
-					pMainWnd->m_pActiveMDIChild->m_pClientBindingObj = m_pXobj;
-				pGalaxy->HostPosChanged();
-			}
-			else
-				m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
-		}
+		m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
 		return;
 	}
 	if (bNotCtrlBar && pMainWnd)

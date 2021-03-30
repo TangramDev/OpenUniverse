@@ -168,6 +168,7 @@ public:
 	CWebView* GetHtmlWnd();
 	void NodeCreated();
 	CXobj* GetMdiclientObj();
+	CXobj* GetVisibleChildByName(CString strXobjName);
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();
 	HRESULT Fire_XobjAddInCreated(IDispatch * pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml);
