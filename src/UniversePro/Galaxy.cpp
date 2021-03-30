@@ -865,7 +865,6 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_bCreateNewDoc)
 		{
-			m_bCreateNewDoc = false;
 			if (m_pBrowser && m_pBrowser->m_pParentXobj)
 			{
 				RECT rc;
@@ -874,6 +873,7 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				//m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
 				//m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
 			}
+			m_bCreateNewDoc = false;
 		}
 	}
 	break;
@@ -954,7 +954,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_bCreateNewDoc)
 		{
-			m_bCreateNewDoc = false;
+			//m_bCreateNewDoc = false;
 			if (m_bDestroy)
 				break;
 			if (m_pActiveMDIChild == nullptr)
@@ -978,37 +978,46 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
 						IXobj* _pXobj = nullptr;
 						m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
+						CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+						if (pClientObj)
+							m_pGalaxy->m_pBindingXobj = pClientObj;
 					}
 				}
-				if (m_pActiveMDIChild->m_pParent->m_mapMDIChild.size() > 1)
-					::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210324);
-				m_pHostBrowser->m_bSZMode = true;
+				//if (m_pActiveMDIChild->m_pParent->m_mapMDIChild.size() > 0)
+				{
+					m_pHostBrowser->m_pBrowser->LayoutBrowser();
+					//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
+					RECT rc;
+					::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
+					if ((rc.right < rc.left) || (rc.bottom < rc.top))
+					{
+						::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
+						::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE);
+						//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
+					}
+				}
+				m_bCreateNewDoc = false;
+				//m_pHostBrowser->m_bSZMode = true;
 			}
 		}
 	}
 	break;
-	case 20210324:
-	{
-		if (m_pHostBrowser)
-		{
-			if (m_pHostBrowser->m_bSZMode)
-			{
-				g_pCosmos->m_mapSizingBrowser[m_pHostBrowser->m_hWnd] = m_pHostBrowser;
-				m_pHostBrowser->m_bSZMode = false;
-				::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 1, 7);
-			}
-			m_pHostBrowser->BrowserLayout();
-			m_pHostBrowser->m_pBrowser->LayoutBrowser();
-			::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
-		}
-
-		for (auto& it : m_mapMDIChild)
-		{
-			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(it.first, it.second->m_strDocTemplateKey);
-		}
-		::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
-	}
-	break;
+	//case 20210324:
+	//{
+	//	if (m_pHostBrowser)
+	//	{
+	//		//if (m_pHostBrowser->m_bSZMode)
+	//		//{
+	//		//	g_pCosmos->m_mapSizingBrowser[m_pHostBrowser->m_hWnd] = m_pHostBrowser;
+	//		//	m_pHostBrowser->m_bSZMode = false;
+	//		//	//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+	//		//}
+	//		//m_pHostBrowser->BrowserLayout();
+	//		m_pHostBrowser->m_pBrowser->LayoutBrowser();
+	//		::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
+	//	}
+	//}
+	//break;
 	case 20210213:
 	{
 		if (m_bDestroy)

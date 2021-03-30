@@ -721,11 +721,6 @@ namespace Browser {
 					::GetClientRect(::GetParent(m_hWnd), &rc);
 					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOREDRAW | SWP_NOACTIVATE);
 				}
-				if (m_pParentXobj && m_pMDIParent && m_pMDIParent->m_bProcessBrowserPos == false)
-				{
-					::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210316);
-					::PostMessage(m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
-				}
 			}
 			break;
 			case 1:

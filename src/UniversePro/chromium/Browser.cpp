@@ -155,13 +155,6 @@ namespace Browser {
 			HWND hExtendWnd = m_pVisibleWebView->m_hExtendWnd;
 			if (hExtendWnd == nullptr)
 			{
-				//RECT rc;
-				//HWND hParent = ::GetParent(m_hWnd);
-				//if (hParent)
-				//{
-				//	::GetClientRect(hParent, &rc);
-				//	::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.left,SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
-				//}
 				hExtendWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, m_hWnd, NULL, theApp.m_hInstance, NULL);
 				m_pVisibleWebView->m_hExtendWnd = hExtendWnd;
 				m_pVisibleWebView->m_hChildWnd = ::CreateWindowEx(NULL, _T("Chrome Extended Window Class"), L"", WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hExtendWnd, (HMENU)2, theApp.m_hInstance, NULL);
@@ -519,10 +512,10 @@ namespace Browser {
 					case 2:
 						if (m_pVisibleWebView->m_pGalaxy)
 						{
+							m_pVisibleWebView->m_bCanShow = true;
 							IXobj* pObj = nullptr;
 							m_pVisibleWebView->Observe(CComBSTR(m_pVisibleWebView->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
-							::SendMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
-							m_pVisibleWebView->m_bCanShow = true;
+							::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
 						}
 						break;
 					}
@@ -638,6 +631,26 @@ namespace Browser {
 		return lRes;
 	}
 
+	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+		if (m_pVisibleWebView && m_pVisibleWebView->m_pGalaxy)
+		{
+#ifdef DEBUG
+			CXobj* pMDIClientObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+			if (pMDIClientObj)
+			{
+				TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
+			}
+			CXobj* pMDIClientObj2 = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(TGM_NUCLEUS);
+			if (pMDIClientObj2)
+			{
+				TRACE(_T("TGM_NUCLEUS : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
+			}
+#endif // DEBUG
+		}
+		return lRes;
+	}
+
 	LRESULT CBrowser::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 		if (m_bInTabChange || m_bDestroy || !::IsWindowVisible(m_hWnd) || lpwndpos->flags == (SWP_NOSIZE | SWP_NOMOVE))
@@ -665,26 +678,6 @@ namespace Browser {
 		else if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
 			::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-		return lRes;
-	}
-
-	LRESULT CBrowser::OnChromeTabChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-		if (m_pVisibleWebView && m_pVisibleWebView->m_pGalaxy)
-		{
-#ifdef DEBUG
-			CXobj* pMDIClientObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-			if (pMDIClientObj)
-			{
-				TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
-			}
-			CXobj* pMDIClientObj2 = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(TGM_NUCLEUS);
-			if (pMDIClientObj2)
-			{
-				TRACE(_T("TGM_NUCLEUS : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
-			}
-#endif // DEBUG
-		}
 		return lRes;
 	}
 
@@ -727,11 +720,6 @@ namespace Browser {
 				{
 					::GetClientRect(::GetParent(m_hWnd), &rc);
 					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOREDRAW | SWP_NOACTIVATE);
-				}
-				if (m_pParentXobj && m_pMDIParent && m_pMDIParent->m_bProcessBrowserPos == false)
-				{
-					::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210316);
-					::PostMessage(m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
 				}
 			}
 			break;

@@ -29,7 +29,7 @@ namespace Browser {
 	class CWebView;
 
 	class ATL_NO_VTABLE CBrowser :
-		public CBrowserImpl,
+		public CBrowserImpl, 
 		public CWindowImpl<CBrowser, CWindow>,
 		public CComObjectRootEx<CComSingleThreadModel>,
 		public IDispatchImpl<IBrowser, &_uuidof(IBrowser), &LIBID_Universe, 1, 0>
@@ -39,11 +39,11 @@ namespace Browser {
 		CBrowser();
 		~CBrowser() override;
 		CString				m_strCurKey;
-		CWebView* m_pVisibleWebView;
-		IXobj* m_pRemoteXobj;
-		CXobj* m_pParentXobj;
-		CGalaxy* m_pClientGalaxy = nullptr;
-		CMDIParent* m_pMDIParent = nullptr;
+		CWebView*			m_pVisibleWebView;
+		IXobj*				m_pRemoteXobj;
+		CXobj*				m_pParentXobj;
+		CGalaxy*			m_pClientGalaxy = nullptr;
+		CMDIParent*			m_pMDIParent = nullptr;
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
 
 		map<HWND, CWebView*> m_mapChildPage;

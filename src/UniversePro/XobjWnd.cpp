@@ -409,8 +409,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	}
 	if (lParam != wParam)
 	{
-		m_pXobj->Fire_TabChange(wParam, lParam);
-		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
 		CXobj* pMDIClientObj = m_pXobj->GetVisibleChildByName(_T("mdiclient"));
 		if (pMDIClientObj)
 		{
@@ -425,19 +423,19 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 					if (it != g_pCosmos->m_mapMDIParent.end())
 					{
 						pMainParent = it->second;
+						if (pMainParent->m_bCreateNewDoc)
+							return CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 						if (pMDIClientObj)
 						{
 							pMainParent->m_pGalaxy->m_pBindingXobj = pMDIClientObj;
 						}
-						//if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd == pInfo->m_hClient)
-						//{
-						//	m_pXobj->m_pXobjShareData->m_pGalaxy->m_pBindingXobj = pMainParent->m_pClientXobj = pMDIClientObj;
-						//}
 					}
 
 				}
 			}
 		}
+		m_pXobj->Fire_TabChange(wParam, lParam);
+		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
@@ -484,7 +482,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			::GetClientRect(m_hWnd, &rc);
 			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
 		break;
 		case 20210225:
@@ -866,7 +864,7 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 			{
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			}
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
 			//::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 		}
 	}
