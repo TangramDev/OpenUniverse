@@ -537,8 +537,16 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(0, WS_CLIPCHILDREN);
 				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210316);
 			}
-			HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-			::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent)
+			{
+				for (auto& it : m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_mapMDIChild)
+				{
+					if (::IsWindowVisible(it.first))
+						::RedrawWindow(it.first, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+				}
+				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+				//::RedrawWindow(m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_hMDIClient, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+			}
 		}
 		break;
 		case 20190602:
@@ -740,7 +748,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (bNotCtrlBar && pMainWnd)
 	{
-		if (pGalaxy && (pMainWnd->m_pClientXobj == m_pXobj || pGalaxy->m_pBindingXobj == m_pXobj))
+		if (pGalaxy && (pGalaxy->m_pBindingXobj == m_pXobj))
 		{
 			pGalaxy->HostPosChanged();
 			if (pMainWnd->m_pActiveMDIChild)

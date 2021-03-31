@@ -692,10 +692,6 @@ LRESULT CMDIChild::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	m_pParent->m_pHostBrowser->m_bSZMode = true;
 	if (m_hWnd == (HWND)lParam)
 	{
-		if (m_pClientBindingObj == nullptr)
-		{
-			m_pClientBindingObj = m_pParent->m_pGalaxy->m_pBindingXobj;
-		}
 		::PostMessage(m_pParent->m_hWnd, WM_COSMOSMSG, (WPARAM)this, 20210202);
 	}
 	return l;
@@ -890,7 +886,6 @@ void CMDTWnd::OnFinalMessage(HWND hWnd)
 
 CMDIParent::CMDIParent(void)
 {
-	m_pGalaxyCluster = nullptr;
 	m_hMDIClient = nullptr;
 }
 
@@ -954,70 +949,46 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_bCreateNewDoc)
 		{
-			//m_bCreateNewDoc = false;
-			if (m_bDestroy)
-				break;
-			if (m_pActiveMDIChild == nullptr)
-				break;
-			if (!::IsWindow(m_pActiveMDIChild->m_hWnd))
-			{
-				m_pActiveMDIChild = nullptr;
-				break;
-			}
-			if (m_pCosmosFrameWndInfo)
-			{
-				CString strKey = m_pActiveMDIChild->m_strKey;
-				CWebView* pVisiblePage = m_pHostBrowser->m_pVisibleWebView;
-				auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
-				if (it != g_pCosmos->m_mapDocTemplate.end())
-				{
-					CTangramXmlParse m_Parse;
-					if (m_Parse.LoadXml(it->second))
-					{
-						pVisiblePage->m_bCanShow = true;
-						CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
-						IXobj* _pXobj = nullptr;
-						m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-						CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-						if (pClientObj)
-							m_pGalaxy->m_pBindingXobj = pClientObj;
-					}
-				}
-				//if (m_pActiveMDIChild->m_pParent->m_mapMDIChild.size() > 0)
-				{
-					m_pHostBrowser->m_pBrowser->LayoutBrowser();
-					//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
-					RECT rc;
-					::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
-					if ((rc.right < rc.left) || (rc.bottom < rc.top))
-					{
-						::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
-						::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE);
-						//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
-					}
-				}
-				m_bCreateNewDoc = false;
-				//m_pHostBrowser->m_bSZMode = true;
-			}
+			::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
+			//if (m_pActiveMDIChild == nullptr)
+			//	break;
+			//if (!::IsWindow(m_pActiveMDIChild->m_hWnd))
+			//{
+			//	m_pActiveMDIChild = nullptr;
+			//	break;
+			//}
+			//if (m_pCosmosFrameWndInfo)
+			//{
+			//	CString strKey = m_pActiveMDIChild->m_strKey;
+			//	CWebView* pVisiblePage = m_pHostBrowser->m_pVisibleWebView;
+			//	auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
+			//	if (it != g_pCosmos->m_mapDocTemplate.end())
+			//	{
+			//		CTangramXmlParse m_Parse;
+			//		if (m_Parse.LoadXml(it->second))
+			//		{
+			//			pVisiblePage->m_bCanShow = true;
+			//			CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
+			//			IXobj* _pXobj = nullptr;
+			//			m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
+			//			CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+			//			if (pClientObj)
+			//				m_pGalaxy->m_pBindingXobj = pClientObj;
+			//		}
+			//	}
+			//	m_pHostBrowser->m_pBrowser->LayoutBrowser();
+			//	RECT rc;
+			//	::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
+			//	if ((rc.right < rc.left) || (rc.bottom < rc.top))
+			//	{
+			//		::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
+			//		::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE);
+			//	}
+			//	m_bCreateNewDoc = false;
+			//}
 		}
 	}
 	break;
-	//case 20210324:
-	//{
-	//	if (m_pHostBrowser)
-	//	{
-	//		//if (m_pHostBrowser->m_bSZMode)
-	//		//{
-	//		//	g_pCosmos->m_mapSizingBrowser[m_pHostBrowser->m_hWnd] = m_pHostBrowser;
-	//		//	m_pHostBrowser->m_bSZMode = false;
-	//		//	//::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-	//		//}
-	//		//m_pHostBrowser->BrowserLayout();
-	//		m_pHostBrowser->m_pBrowser->LayoutBrowser();
-	//		::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 8);
-	//	}
-	//}
-	//break;
 	case 20210213:
 	{
 		if (m_bDestroy)
@@ -1033,7 +1004,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					it.second->m_pBrowser->LayoutBrowser();
 				}
 			}
-			g_pCosmos->m_mapSizingBrowser.erase(g_pCosmos->m_mapSizingBrowser.begin(), g_pCosmos->m_mapSizingBrowser.end());
 			::SendMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 		}
 		break;
@@ -1088,6 +1058,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			if (m_pCosmosFrameWndInfo)
 			{
 				m_pHostBrowser->m_bSZMode = false;
+				//::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 				BSTR bstrXml = ::SysAllocString(L"");
 				CString strKey = m_pActiveMDIChild->m_strKey;
 				CWebView* pVisiblePage = m_pHostBrowser->m_pVisibleWebView;
@@ -1129,7 +1100,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 								CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
 								IXobj* _pXobj = nullptr;
 								m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-								pClient = m_Parse.GetChild(_T("hostpage"));
 								pVisiblePage->m_bCanShow = true;
 							}
 						}
@@ -1141,10 +1111,17 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
 				if (pClientObj)
 					m_pGalaxy->m_pBindingXobj = pClientObj;
-				::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 				if (m_bCreateNewDoc)
 				{
-					::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210325);
+					m_pHostBrowser->m_pBrowser->LayoutBrowser();
+					RECT rc;
+					::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
+					if ((rc.right < rc.left) || (rc.bottom < rc.top))
+					{
+						::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
+						::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE);
+					}
+					m_bCreateNewDoc = false;
 				}
 			}
 		}
@@ -2439,7 +2416,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		{
 			CXobj* pMdiClientObj = m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
 			if (pMdiClientObj)
-				m_pMDIParent->m_pGalaxy->m_pBindingXobj = m_pMDIParent->m_pClientXobj = pMdiClientObj;
+				m_pMDIParent->m_pGalaxy->m_pBindingXobj = pMdiClientObj;
 		}
 	}
 	if (m_strGalaxyName == _T("default"))

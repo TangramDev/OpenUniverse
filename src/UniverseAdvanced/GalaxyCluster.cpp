@@ -350,7 +350,6 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					{
 						_pGalaxy->m_pCosmosFrameWndInfo = pMDIParent->m_pCosmosFrameWndInfo;
 						pMDIParent->m_pGalaxy = _pGalaxy;
-						pMDIParent->m_pGalaxyCluster = this;
 					}
 				}
 

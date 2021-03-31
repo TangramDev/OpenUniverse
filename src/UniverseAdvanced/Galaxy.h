@@ -156,7 +156,6 @@ public:
 	CString		m_strDocTemplateKey = _T("");
 
 	CGalaxy*	m_pGalaxy = nullptr;
-	CXobj*		m_pClientBindingObj = nullptr;
 	CMDIParent* m_pParent = nullptr;
 	BEGIN_MSG_MAP(CMDIChild)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
@@ -217,13 +216,12 @@ public:
 	BOOL					m_bProcessBrowserPos = false;
 	HWND					m_hMDIClient = nullptr;
 
-	CXobj*					m_pClientXobj = nullptr;
 	CGalaxy*				m_pGalaxy = nullptr;
 	CBrowser*				m_pHostBrowser = nullptr;
 	CMDIChild*				m_pActiveMDIChild = nullptr;
-	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
 	CosmosFrameWndInfo*		m_pCosmosFrameWndInfo = nullptr;
 
+	//CGalaxyCluster*			m_pGalaxyCluster = nullptr;
 	//CXobjVector				m_vMdiClientXobjs;
 	map<HWND, CMDIChild*>	m_mapMDIChild;
 
