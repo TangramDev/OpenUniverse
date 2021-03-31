@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103290056           *
+ *           Web Runtime for Application - Version 1.0.0.202103310057           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -640,18 +640,6 @@ namespace Browser {
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (m_pVisibleWebView && m_pVisibleWebView->m_pGalaxy)
 		{
-#ifdef DEBUG
-			CXobj* pMDIClientObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-			if (pMDIClientObj)
-			{
-				TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
-			}
-			CXobj* pMDIClientObj2 = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(TGM_NUCLEUS);
-			if (pMDIClientObj2)
-			{
-				TRACE(_T("TGM_NUCLEUS : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
-			}
-#endif // DEBUG
 		}
 		return lRes;
 	}

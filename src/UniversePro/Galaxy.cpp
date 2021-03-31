@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103290056
+ *           Web Runtime for Application - Version 1.0.0.202103310057
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -865,7 +865,7 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			{
 				RECT rc;
 				::GetClientRect(m_pBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
-				::SetWindowPos(m_pBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
+				::SetWindowPos(m_pBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 				//m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
 				//m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
 			}
@@ -950,42 +950,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		if (m_bCreateNewDoc)
 		{
 			::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
-			//if (m_pActiveMDIChild == nullptr)
-			//	break;
-			//if (!::IsWindow(m_pActiveMDIChild->m_hWnd))
-			//{
-			//	m_pActiveMDIChild = nullptr;
-			//	break;
-			//}
-			//if (m_pCosmosFrameWndInfo)
-			//{
-			//	CString strKey = m_pActiveMDIChild->m_strKey;
-			//	CWebView* pVisiblePage = m_pHostBrowser->m_pVisibleWebView;
-			//	auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
-			//	if (it != g_pCosmos->m_mapDocTemplate.end())
-			//	{
-			//		CTangramXmlParse m_Parse;
-			//		if (m_Parse.LoadXml(it->second))
-			//		{
-			//			pVisiblePage->m_bCanShow = true;
-			//			CTangramXmlParse* pClient = m_Parse.GetChild(_T("mdiclient"));
-			//			IXobj* _pXobj = nullptr;
-			//			m_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-			//			CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-			//			if (pClientObj)
-			//				m_pGalaxy->m_pBindingXobj = pClientObj;
-			//		}
-			//	}
-			//	m_pHostBrowser->m_pBrowser->LayoutBrowser();
-			//	RECT rc;
-			//	::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
-			//	if ((rc.right < rc.left) || (rc.bottom < rc.top))
-			//	{
-			//		::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
-			//		::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE);
-			//	}
-			//	m_bCreateNewDoc = false;
-			//}
 		}
 	}
 	break;
@@ -1058,7 +1022,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			if (m_pCosmosFrameWndInfo)
 			{
 				m_pHostBrowser->m_bSZMode = false;
-				//::PostMessage(m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 				BSTR bstrXml = ::SysAllocString(L"");
 				CString strKey = m_pActiveMDIChild->m_strKey;
 				CWebView* pVisiblePage = m_pHostBrowser->m_pVisibleWebView;
@@ -1113,13 +1076,13 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					m_pGalaxy->m_pBindingXobj = pClientObj;
 				if (m_bCreateNewDoc)
 				{
-					m_pHostBrowser->m_pBrowser->LayoutBrowser();
+					//m_pHostBrowser->m_pBrowser->LayoutBrowser();
 					RECT rc;
 					::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
 					if ((rc.right < rc.left) || (rc.bottom < rc.top))
 					{
 						::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
-						::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE);
+						::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
 					}
 					m_bCreateNewDoc = false;
 				}

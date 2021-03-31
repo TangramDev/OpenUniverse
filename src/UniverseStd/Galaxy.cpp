@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103290056
+ *           Web Runtime for Application - Version 1.0.0.202103310057
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -790,7 +790,7 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			{
 				RECT rc;
 				::GetClientRect(m_pBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
-				::SetWindowPos(m_pBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
+				::SetWindowPos(m_pBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 				//m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
 				//m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
 			}

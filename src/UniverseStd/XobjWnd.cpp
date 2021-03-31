@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103290056           *
+ *           Web Runtime for Application - Version 1.0.0.202103310057           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -384,19 +384,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
 
-#ifdef DEBUG
-		CXobj* pMDIClientObj = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-		if (pMDIClientObj)
-		{
-			TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
-		}
-		CXobj* pMDIClientObj2 = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(TGM_NUCLEUS);
-		if (pMDIClientObj2)
-		{
-			TRACE(_T("TGM_NUCLEUS : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
-		}
-#endif // DEBUG
-
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
 		{
 			HWND hWnd = ::GetParent(pGalaxy->m_pWebPageWnd->m_hWnd);
@@ -721,7 +708,7 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 			{
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			}
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 			//::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 		}
 	}

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103290056           *
+ *           Web Runtime for Application - Version 1.0.0.202103310057           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1633,8 +1633,10 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												pMDIParent = itMdiParent->second;
 												pWnd->m_pParent = pMDIParent;
 												pMDIParent->m_bCreateNewDoc = true;
-												if (pMDIParent->m_pHostBrowser)
-													pMDIParent->m_pHostBrowser->m_bSZMode = true;
+												if (pMDIParent->m_pHostBrowser->m_pVisibleWebView)
+												{
+													pMDIParent->m_pHostBrowser->m_pVisibleWebView->m_bCanShow = false;
+												}
 												pWnd->m_pParent->m_mapMDIChild[hWnd] = pWnd;
 												if (pMDIParent->m_pCosmosFrameWndInfo == nullptr)
 												{

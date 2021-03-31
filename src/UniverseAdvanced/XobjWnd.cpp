@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202103290056           *
+ *           Web Runtime for Application - Version 1.0.0.202103310057           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -409,29 +409,30 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	}
 	if (lParam != wParam)
 	{
-		CXobj* pMDIClientObj = m_pXobj->GetVisibleChildByName(_T("mdiclient"));
-		if (pMDIClientObj)
+		if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo)
 		{
-			TRACE(_T("MDIClientObj : %x\n"), pMDIClientObj->m_pHostWnd->m_hWnd);
-			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo)
+			CosmosFrameWndInfo* pInfo = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
+			switch (pInfo->m_nFrameType)
 			{
-				CosmosFrameWndInfo* pInfo = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
-				if (pInfo->m_nFrameType == 2)
+			case 2:
+			{
+				CMDIParent* pMainParent = nullptr;
+				auto it = g_pCosmos->m_mapMDIParent.find(::GetParent(pInfo->m_hClient));
+				if (it != g_pCosmos->m_mapMDIParent.end())
 				{
-					CMDIParent* pMainParent = nullptr;
-					auto it = g_pCosmos->m_mapMDIParent.find(::GetParent(pInfo->m_hClient));
-					if (it != g_pCosmos->m_mapMDIParent.end())
+					pMainParent = it->second;
+					if (pMainParent->m_bCreateNewDoc)
+						return CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
+					CXobj* pMDIClientObj = m_pXobj->GetVisibleChildByName(_T("mdiclient"));
+					if (pMDIClientObj)
 					{
-						pMainParent = it->second;
-						if (pMainParent->m_bCreateNewDoc)
-							return CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
-						if (pMDIClientObj)
-						{
-							pMainParent->m_pGalaxy->m_pBindingXobj = pMDIClientObj;
-						}
+						pMainParent->m_pGalaxy->m_pBindingXobj = pMDIClientObj;
 					}
-
 				}
+			}
+			break;
+			case 1:
+				break;
 			}
 		}
 		m_pXobj->Fire_TabChange(wParam, lParam);
@@ -482,7 +483,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			::GetClientRect(m_hWnd, &rc);
 			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 		}
 		break;
 		case 20210317:
@@ -505,7 +506,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 						::GetClientRect(m_hWnd, &rc);
 						m_pXobj->m_pWebBrowser->m_bSZMode = true;
 						::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-						::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW);
+						::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW | SWP_NOSENDCHANGING);
 					}
 				}
 			}
@@ -878,7 +879,7 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 			{
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			}
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
+			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 			//::SendMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 5);
 		}
 	}
