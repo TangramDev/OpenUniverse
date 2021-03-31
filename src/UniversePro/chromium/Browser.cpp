@@ -712,6 +712,20 @@ namespace Browser {
 		{
 			switch (lParam)
 			{
+			case 10:
+			{
+				if (m_pVisibleWebView->m_pGalaxy)
+				{
+					HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+					::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+				}
+			}
+			break;
+			case 9:
+			{
+				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 10);
+			}
+			break;
 			case 8:
 			{
 				RECT rc;
@@ -800,6 +814,7 @@ namespace Browser {
 				{
 					m_bTabChange = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 9);
 					m_bSZMode = false;
 				}
 				break;

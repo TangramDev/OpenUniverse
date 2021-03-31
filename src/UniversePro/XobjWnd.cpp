@@ -485,6 +485,32 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
 		break;
+		case 20210317:
+		{
+			HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+			::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+		}
+		break;
+		case 20210316:
+		{
+			if (m_pXobj->m_pWebBrowser)
+			{
+				CMDIParent* pParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
+				if (pParent && pParent->m_bProcessBrowserPos == false)
+				{
+					if (pParent->m_pActiveMDIChild == nullptr)
+					{
+						pParent->m_bProcessBrowserPos = true;
+						RECT rc;
+						::GetClientRect(m_hWnd, &rc);
+						m_pXobj->m_pWebBrowser->m_bSZMode = true;
+						::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
+						::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW);
+					}
+				}
+			}
+		}
+		break;
 		case 20210225:
 		{
 			m_pXobj->put_Attribute(CComBSTR("objid"), TGM_NUCLEUS);
@@ -513,26 +539,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			}
 			HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
 			::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
-		}
-		break;
-		case 20210316:
-		{
-			if (m_pXobj->m_pWebBrowser)
-			{
-				CMDIParent* pParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
-				if (pParent && pParent->m_bProcessBrowserPos == false)
-				{
-					if (pParent->m_pActiveMDIChild == nullptr)
-					{
-						pParent->m_bProcessBrowserPos = true;
-						RECT rc;
-						::GetClientRect(m_hWnd, &rc);
-						m_pXobj->m_pWebBrowser->m_bSZMode = true;
-						::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-						::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW);
-					}
-				}
-			}
 		}
 		break;
 		case 20190602:
