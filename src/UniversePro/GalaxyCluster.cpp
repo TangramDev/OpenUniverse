@@ -352,7 +352,38 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 						pMDIParent->m_pGalaxy = _pGalaxy;
 					}
 				}
-
+				else if (g_pCosmos->m_pCLRProxy)
+				{
+					__int64 nMDIClient = 100;
+					HWND hForm = g_pCosmos->m_pCLRProxy->GetWinForm(_hWnd, nMDIClient);
+					if (::IsWindow(hForm))
+					{
+						CWinForm* pForm = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+						if (pForm)
+						{
+							_pGalaxy->m_pParentWinForm = pForm;
+							if (nMDIClient >= 1)
+							{
+								if (nMDIClient == 1)
+								{
+									_pGalaxy->m_pParentMDIWinForm = _pGalaxy->m_pParentWinForm;
+									pForm->m_bMdiForm = true;
+									pForm->m_hMDIClient = _hWnd;
+								}
+								else
+								{
+									_pGalaxy->m_pParentMDIWinForm = (CWinForm*)::SendMessage(hTopParent, WM_HUBBLE_DATA, 0, 20190214);
+									if (::IsWindow((HWND)nMDIClient))
+										_pGalaxy->m_pParentMDIWinForm->m_hMDIClient = (HWND)nMDIClient;
+								}
+							}
+							else if (pForm->m_bMdiForm)
+								_pGalaxy->m_pParentMDIWinForm = _pGalaxy->m_pParentWinForm;
+							else
+								_pGalaxy->m_pParentMDIWinForm = nullptr;;
+						}
+					}
+				}
 				_pGalaxy->m_pGalaxyCluster = this;
 				_pGalaxy->m_hHostWnd = _hWnd;
 				pThreadInfo->m_mapGalaxy[_hWnd] = _pGalaxy;

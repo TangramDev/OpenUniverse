@@ -538,6 +538,7 @@ namespace CommonUniverse {
 		virtual BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton) { return false; }
 		virtual IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode) { return nullptr; }
 		virtual int IsWinForm(HWND hWnd) { return 0; }
+		virtual HWND GetWinForm(HWND hWnd, __int64& nMDIParent) { return nullptr; }
 		virtual IDispatch* GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames) { return nullptr; }
 		virtual BSTR GetCtrlName(IDispatch* pCtrl) { return CComBSTR(""); }
 		virtual IDispatch* GetCtrlFromHandle(HWND hWnd) { return nullptr; }
@@ -604,6 +605,7 @@ namespace CommonUniverse {
 		bool									m_bDeleteGalaxyCluster;
 		bool									m_bIsSupportCrashReporting = false;
 		bool									m_bIsEclipseInit = false;
+		bool									m_bIsCreatingWPFCtrl = false;
 
 		DWORD									m_dwThreadID;
 		DWORD									m_nAppType;

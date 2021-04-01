@@ -351,6 +351,8 @@ void CXobjWnd::PostNcDestroy()
 
 LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 {
+	if (wParam == lParam)
+		return 0;// CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	int nOldPage = m_pXobj->m_nActivePage;
 	m_pXobj->m_nActivePage = (int)wParam;
 	IXobj* pXobj = nullptr;
@@ -409,6 +411,11 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	}
 	if (lParam != wParam)
 	{
+		if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm)
+		{
+			HWND hClient = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm->m_hMDIClient;
+			::SendMessage(hClient, WM_COSMOSMSG, 0, 20180115);
+		}
 		if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo)
 		{
 			CosmosFrameWndInfo* pInfo = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
@@ -435,6 +442,19 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 				break;
 			}
 		}
+		if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm)
+		{
+			HWND hClient = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm->m_hMDIClient;
+			CXobj* pMDIClientObj = m_pXobj->GetVisibleChildByName(_T("mdiclient"));
+			if (pMDIClientObj)
+			{
+				if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy)
+				{
+					m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMDIClientObj;
+				}
+			}
+			::PostMessage(hClient, WM_COSMOSMSG, 0, 20180115);
+		}
 		m_pXobj->Fire_TabChange(wParam, lParam);
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
 		if (pGalaxy->m_nGalaxyType != GalaxyType::CtrlBarGalaxy && pGalaxy->m_pWebPageWnd)
@@ -447,9 +467,19 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
 				g_pCosmos->m_mapSizingBrowser[hWnd] = pBrowser;
 			}
-			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
+			if (pGalaxy->m_pParentMDIWinForm)
+			{
+				//::PostMessage(pGalaxy->m_pParentMDIWinForm->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
+				HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+				::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+			}
+			else
+			{
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210202);
+			}
 		}
-		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+		if (!m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm)
+			m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
 	}
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
 	return lRes;

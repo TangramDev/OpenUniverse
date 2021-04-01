@@ -250,6 +250,7 @@ public:
 	bool									m_bReady = false;
 	bool									m_bSZMode = false;
 	int										m_nState;
+	HWND									m_hMDIClient = NULL;
 	BOOL									m_bMdiForm;
 	BOOL									m_bMainForm = false;
 	CString									m_strKey;
@@ -257,13 +258,14 @@ public:
 	CString									m_strPath;
 	CString									m_strBKID;
 	CString									m_strChildFormPath;
-	
-	CBKWnd*									m_pBKWnd;
-	CXobj*									m_pBindMDIXobj = nullptr;
-	CXobj*									m_pWebBindMDIXobj = nullptr;
-	CWebView*								m_pOwnerHtmlWnd;
-	CWormhole*								m_pWormhole;
-	CMDIChildFormInfo*						m_pChildFormsInfo;
+
+	CBKWnd* m_pBKWnd;
+	CXobj* m_pBindMDIXobj = nullptr;
+	CXobj* m_pWebBindMDIXobj = nullptr;
+	CGalaxy* m_pClientGalaxy = nullptr;
+	CWebView* m_pOwnerHtmlWnd;
+	CWormhole* m_pWormhole;
+	CMDIChildFormInfo* m_pChildFormsInfo;
 
 	void SendMessage();
 
@@ -278,7 +280,9 @@ public:
 		MESSAGE_HANDLER(WM_MDICLIENTCREATED, OnMdiClientCreated)
 		MESSAGE_HANDLER(WM_WINDOWPOSCHANGING, OnWindowPosChanging)
 		MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnMouseActivate)
+		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
+		MESSAGE_HANDLER(WM_MDICHILDMIN, OnMdiChildMin)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
@@ -289,15 +293,17 @@ public:
 
 private:
 	LRESULT OnDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnFormCreated(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnFormCreated(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosGetXml(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMdiClientCreated(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnMDIActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnMouseActivate(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnMdiChildMin(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnActivate(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnExitSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
@@ -333,6 +339,8 @@ public:
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CBKWnd*											m_pBKWnd = nullptr;
+	CWinForm*										m_pParentWinForm = nullptr;
+	CWinForm*										m_pParentMDIWinForm = nullptr;
 	CMDIParent*										m_pMDIParent = nullptr;
 	CWebView*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;

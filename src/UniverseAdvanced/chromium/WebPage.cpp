@@ -1689,7 +1689,7 @@ namespace Browser {
 					{
 						HWND hWnd = ::CreateWindow(L"Cosmos Xobj Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pCosmos->m_hCosmosWnd, 0, AfxGetInstanceHandle(), NULL);
 						g_pCosmos->m_hTempBrowserWnd = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
-						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 200, 200, SWP_NOACTIVATE);
+						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 3000, 100, SWP_NOACTIVATE);// | SWP_HIDEWINDOW);
 					}
 					else
 						g_pCosmos->m_pBrowserFactory->CreateBrowser(0, strUrl);

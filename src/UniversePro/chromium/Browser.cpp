@@ -473,6 +473,11 @@ namespace Browser {
 						//if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
 						::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
 					}
+					if (m_pParentXobj->m_pParentWinFormWnd)
+					{
+						HWND hClient = m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient;
+						::PostMessage(hClient, WM_COSMOSMSG, 0, 20180115);
+					}
 				}
 			}
 			else
@@ -849,7 +854,7 @@ namespace Browser {
 						}
 					}
 					m_bSZMode = false;
-					//::PostAppMessage(::GetCurrentThreadId(), WM_HUBBLE_INIT, 20210325, (LPARAM)m_hWnd);
+					::PostAppMessage(::GetCurrentThreadId(), WM_HUBBLE_INIT, 20210325, (LPARAM)m_hWnd);
 				}
 				break;
 				}

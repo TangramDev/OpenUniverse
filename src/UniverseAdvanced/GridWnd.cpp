@@ -445,6 +445,10 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			::PostMessage(m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
 		}
+		if (pGalaxy->m_pParentMDIWinForm)
+		{
+			::PostMessage(pGalaxy->m_pParentMDIWinForm->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
+		}
 		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
 		::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 	}

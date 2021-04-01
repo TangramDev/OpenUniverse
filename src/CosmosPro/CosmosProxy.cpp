@@ -46,6 +46,7 @@ using namespace System::Windows;
 CCosmos theApp;
 #pragma managed(pop)
 CCosmosProxy theAppProxy;
+// CCosmos
 
 ICosmos* GetCosmos()
 {
@@ -1221,33 +1222,35 @@ void CCosmosProxy::OnMdiChildActivate(System::Object^ sender, System::EventArgs^
 	if (pForm->ActiveMdiChild != nullptr)
 	{
 		strKey = pForm->ActiveMdiChild->GetType()->FullName->ToLower();
-		LRESULT l = ::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
-		if (l)
-		{
-			CString strPath = (LPCTSTR)l;
-			theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strPath), CComBSTR(L""), false);
-			HWND hWnd = (HWND)pForm->ActiveMdiChild->Handle.ToPointer();
-			::PostMessage(hWnd, WM_COSMOSMSG, 0, 20200216);
-			return;
-		}
-		Object^ objTag = pForm->Tag;
-		if (objTag != nullptr)
-		{
-			String^ strTag = objTag->ToString();
-			if (String::IsNullOrEmpty(strTag) == false)
-			{
-				int nIndex = strTag->IndexOf("|");
-				if (nIndex != -1)
-				{
-					String^ strKey2 = strTag->Substring(0, nIndex);
-					if (String::IsNullOrEmpty(strKey2) == false)
-					{
-						strKey += L"_";
-						strKey += strKey2;
-					}
-				}
-			}
-		}
+		::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
+		return;
+		//LRESULT l = ::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
+		//if (l)
+		//{
+		//	CString strPath = (LPCTSTR)l;
+		//	theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strPath), CComBSTR(L""), false);
+		//	HWND hWnd = (HWND)pForm->ActiveMdiChild->Handle.ToPointer();
+		//	::PostMessage(hWnd, WM_COSMOSMSG, 0, 20200216);
+		//	return;
+		//}
+		//Object^ objTag = pForm->Tag;
+		//if (objTag != nullptr)
+		//{
+		//	String^ strTag = objTag->ToString();
+		//	if (String::IsNullOrEmpty(strTag) == false)
+		//	{
+		//		int nIndex = strTag->IndexOf("|");
+		//		if (nIndex != -1)
+		//		{
+		//			String^ strKey2 = strTag->Substring(0, nIndex);
+		//			if (String::IsNullOrEmpty(strKey2) == false)
+		//			{
+		//				strKey += L"_";
+		//				strKey += strKey2;
+		//			}
+		//		}
+		//	}
+		//}
 	}
 	BSTR bstrKey = STRING2BSTR(strKey);
 	theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), bstrKey, CComBSTR(L""), true);
@@ -2190,6 +2193,10 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 	}
 	else
 	{
+		if (theApp.m_pCosmosImpl)
+		{
+			theApp.m_pCosmosImpl->m_bIsCreatingWPFCtrl = true;
+		}
 		if (_pObj->GetType()->IsSubclassOf(System::Windows::FrameworkElement::typeid))
 		{
 			Universe::Cosmos::m_pFrameworkElementDic[_pObj] = _pXobj;
@@ -2208,6 +2215,59 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 				{
 					Debug::WriteLine(L"Cosmos WPFControlWrapper Exception 1: " + ex->InnerException->Message);
 				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+HWND CCosmosProxy::GetWinForm(HWND hWnd, __int64& nMDIClient)
+{
+	if (::IsWindow(hWnd) == false)
+		return nullptr;
+	HWND hTopParent = ::GetAncestor(hWnd, GA_ROOT);
+	if (hTopParent == NULL)
+		hTopParent = hWnd;
+	Control^ ctrl = Form::FromHandle((IntPtr)hTopParent);
+	if (ctrl != nullptr)
+	{
+		if (ctrl->GetType()->IsSubclassOf(Form::typeid))
+		{
+			Form^ thisForm = static_cast<Form^>(ctrl);
+			if (thisForm->IsMdiContainer)
+			{
+				Control^ ctrl = Universe::Cosmos::GetMDIClient(thisForm);
+				HWND hClient = (HWND)ctrl->Handle.ToPointer();
+				if (hWnd == hClient)
+				{
+					nMDIClient = 1;
+					return hTopParent;
+				}
+				else
+				{
+					if (::IsChild(hClient, hWnd))
+					{
+						nMDIClient = (__int64)10;
+						for each (Control ^ child in ctrl->Controls)
+						{
+							HWND hForm = (HWND)child->Handle.ToPointer();
+							if (::IsChild(hForm, hWnd))
+							{
+								return hForm;
+							}
+						}
+					}
+					else
+					{
+						nMDIClient = (__int64)ctrl->Handle.ToPointer();
+						return hTopParent;
+					}
+				}
+			}
+			else
+			{
+				nMDIClient = 0;
+				return hTopParent;
 			}
 		}
 	}
@@ -3739,6 +3799,15 @@ bool CCosmosProxy::PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nTyp
 			{
 				bFind = true;
 				break;
+			}
+		}
+		Control^ ctrl = Control::FromHandle((IntPtr)hWnd);
+		if (ctrl->GetType()->IsSubclassOf(Form::typeid))
+		{
+			Form^ thisForm = (Form^)ctrl;
+			if (thisForm->IsMdiContainer)
+			{
+				thisForm->LayoutMdi(MdiLayout::ArrangeIcons);
 			}
 		}
 	}
