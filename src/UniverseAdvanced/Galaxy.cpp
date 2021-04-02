@@ -3064,22 +3064,10 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 20180115:
 	{
-		switch (wParam)
+		if (wParam == 1 && m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
 		{
-		case 1:
-		{
-			if (m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
-			{
-				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210309);
-			}
+			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210309);
 		}
-		break;
-		case 2:
-			if (g_pCosmos->m_bIsCreatingWPFCtrl)
-				g_pCosmos->m_bIsCreatingWPFCtrl = false;
-			break;
-		}
-
 		HostPosChanged();
 		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
@@ -3094,6 +3082,8 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				}
 			}
 		}
+		if (wParam == 2 && g_pCosmos->m_bIsCreatingWPFCtrl)
+			g_pCosmos->m_bIsCreatingWPFCtrl = false;
 	}
 	break;
 	case WM_BROWSERLAYOUT:

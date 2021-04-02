@@ -444,12 +444,13 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
 				CBrowser* pBrowser = (CBrowser*)it->second;
-				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
+				pBrowser->m_bSZMode = true;
 				g_pCosmos->m_mapSizingBrowser[hWnd] = pBrowser;
+				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
+				pBrowser->m_pBrowser->LayoutBrowser();
 			}
 			if (pGalaxy->m_pParentMDIWinForm)
 			{
-				//::PostMessage(pGalaxy->m_pParentMDIWinForm->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
 				HWND hClient = pGalaxy->m_pParentMDIWinForm->m_hMDIClient;
 				::SendMessage(hClient, WM_COSMOSMSG, 0, 20180115);
 				HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);

@@ -944,7 +944,6 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				m_pHostXobj = pHostNode;
 		}
 		_RecalcLayout();
-
 		return true;
 	}
 	return false;

@@ -391,8 +391,10 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
 				CBrowser* pBrowser = (CBrowser*)it->second;
-				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
+				pBrowser->m_bSZMode = true;
 				g_pCosmos->m_mapSizingBrowser[hWnd] = pBrowser;
+				::SendMessage(hWnd, WM_BROWSERLAYOUT, 0, 7);
+				pBrowser->m_pBrowser->LayoutBrowser();
 			}
 		}
 		m_pXobj->m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
