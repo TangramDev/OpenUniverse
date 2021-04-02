@@ -1037,7 +1037,10 @@ namespace CommonUniverse
 							pTemplate->GetDocString(name, CDocTemplate::docName);
 							strTitle.Replace(name, strCaption);
 							pDoc->SetTitle(strTitle);
-							::SetWindowText(pFrame->m_hWnd, strTitle);
+							if (pCosmosFrameWndInfo->m_nFrameType == 1)
+								::SetWindowText(pFrame->m_hWnd, strTitle + _T(" - ") + name);
+							else
+								::SetWindowText(pFrame->m_hWnd, strTitle);
 						}
 						return true;
 					}
@@ -1143,8 +1146,8 @@ namespace CommonUniverse
 					CString strInfo = m_strCreatingDOCID;
 					if (strInfo == _T(""))
 						strInfo = _T("default");
-					bool bRet =  g_pCosmosImpl->SetFrameInfo(hWnd, pFrameWnd->m_hWnd, strInfo, pView->GetDocument(), pView->GetDocument()->GetDocTemplate());
-					if(pWnd->IsKindOf(RUNTIME_CLASS(CFormView)))
+					bool bRet = g_pCosmosImpl->SetFrameInfo(hWnd, pFrameWnd->m_hWnd, strInfo, pView->GetDocument(), pView->GetDocument()->GetDocTemplate());
+					if (pWnd->IsKindOf(RUNTIME_CLASS(CFormView)))
 						((CFormView*)pWnd)->ResizeParentToFit();
 					return bRet;
 				}
@@ -1236,7 +1239,7 @@ namespace CommonUniverse
 #endif 
 					TRACE(_T("\r\n\r\n********Chrome-Eclipse-CLR Mix-Model is not support MFC Share Dll********\r\n\r\n"));
 #endif
-				}
+			}
 				m_pCosmosImpl->m_hMainWnd = NULL;
 				HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
 				if (hModule == nullptr)
@@ -1260,10 +1263,10 @@ namespace CommonUniverse
 					return false;
 				}
 				break;
-			}
 		}
-		return true;
 	}
+		return true;
+}
 
 	BOOL CWebRuntimeApp::IsBrowserModel(bool bCrashReporting)
 	{

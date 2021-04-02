@@ -2046,11 +2046,11 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 	}
 	if (g_pCosmos->m_pUniverseAppProxy && m_nGalaxyType != CtrlBarGalaxy)
 	{
-		CString strCaption = _pParse->attr(_T("caption"), _T(""));
-		if (strCaption != _T(""))
-		{
-			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(m_hWnd, strCaption);
-		}
+		//CString strCaption = _pParse->attr(_T("caption"), _T(""));
+		//if (strCaption != _T(""))
+		//{
+		//	g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(m_hWnd, strCaption);
+		//}
 		::PostMessage(::GetParent(m_hWnd), WM_COSMOSOBSERVED, 0, 0);
 	}
 
