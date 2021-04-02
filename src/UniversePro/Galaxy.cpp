@@ -1878,7 +1878,7 @@ CGalaxy::~CGalaxy()
 	}
 	m_mapGalaxyProxy.clear();
 	m_hWnd = NULL;
-	}
+}
 
 void CGalaxy::HostPosChanged()
 {
@@ -2436,7 +2436,10 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		{
 			CXobj* pMdiClientObj = m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
 			if (pMdiClientObj)
+			{
 				m_pMDIParent->m_pGalaxy->m_pBindingXobj = pMdiClientObj;
+				::PostMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)pMdiClientObj, 20210331);
+			}
 		}
 	}
 	else if (m_pParentMDIWinForm)
@@ -3015,7 +3018,10 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20210331:
 	{
 		CXobj* pMdiClientObj = (CXobj*)wParam;
-		m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMdiClientObj;
+		if (m_pParentMDIWinForm)
+			m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMdiClientObj;
+		if(m_pMDIParent)
+			m_pMDIParent->m_pGalaxy->m_pBindingXobj = pMdiClientObj;
 		//HWND hClient = m_pParentMDIWinForm->m_hMDIClient;
 		//CGalaxy* pClientGalaxy = (CGalaxy*)g_pCosmos->GetGalaxy(hClient);
 		//if (pClientGalaxy)

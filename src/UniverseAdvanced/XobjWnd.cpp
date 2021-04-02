@@ -499,6 +499,12 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent)
+			{
+				CXobj* pClientObj = m_pXobj->m_pRootObj->GetVisibleChildByName(_T("mdiclient"));
+				if (pClientObj)
+					m_pXobj->m_pXobjShareData->m_pGalaxy->m_pBindingXobj = pClientObj;
+			}
 		}
 		break;
 		case 20210317:
