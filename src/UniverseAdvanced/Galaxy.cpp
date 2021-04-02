@@ -1433,16 +1433,9 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20210331:
 	{
 		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-		//::RedrawWindow(::GetParent(m_hWnd), NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
-		//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-		//::RedrawWindow(::GetParent(m_hWnd), NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
-
 		CosmosInfo* pInfo = (CosmosInfo*)::GetProp(::GetParent(m_hWnd), _T("CosmosInfo"));
 		if (pInfo)
 		{
-			//CGalaxy* pGalaxy = (CGalaxy*)pInfo->m_pGalaxy;
-			//if (pGalaxy)
-			//	pGalaxy->HostPosChanged();
 			::InvalidateRect(::GetParent(m_hWnd), nullptr, false);
 		}
 	}
@@ -1511,17 +1504,6 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						{
 							pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->LayoutBrowser();
 						}
-						//pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->HostPosChanged();
-						//CXobj* pObj = pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-						//if (pObj )
-						//	pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pObj;
-						//if (pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pWorkXobj->m_nViewType == Grid)
-						//{
-						//	CSplitterWnd* pSpliter = (CSplitterWnd*)pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pWorkXobj->m_pHostWnd;
-						//	pSpliter->RecalcLayout();
-						//}
-						//::InvalidateRect(hTop, nullptr, true);
-						//::PostMessage(::GetParent(m_pOwnerHtmlWnd->m_hWnd), WM_BROWSERLAYOUT, 0, 7);
 					}
 				}
 				if (pGalaxy->m_pHostWebBrowserWnd)
@@ -1919,7 +1901,7 @@ void CGalaxy::HostPosChanged()
 
 		HDWP dwh = BeginDeferWindowPos(1);
 		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
-		CWnd* _pWnd = CWnd::FromHandlePermanent(::GetParent(m_hWnd));
+		//CWnd* _pWnd = CWnd::FromHandlePermanent(hPWnd);
 
 		if (m_bNoRedrawState == false)
 		{
@@ -1947,7 +1929,11 @@ void CGalaxy::HostPosChanged()
 			flag
 		);
 		EndDeferWindowPos(dwh);
-		UpdateVisualWPFMap(hPWnd, false);
+		//UpdateVisualWPFMap(hPWnd, false);
+		//if (m_pBKWnd && ::IsWindow(m_pBKWnd->m_hWnd))
+		//{
+		//	::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
+		//}
 		if (m_bObserveState)
 		{
 			m_bObserveState = false;
@@ -2486,6 +2472,11 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 
 	HostPosChanged();
 	HWND hParent = ::GetParent(m_hWnd);
+	::ShowWindow(m_pWorkXobj->m_pHostWnd->m_hWnd, SW_SHOW);
+	::SetParent(m_pWorkXobj->m_pHostWnd->m_hWnd, hParent);
+	m_pWorkXobj->m_bTopObj = true;
+	if (m_pWorkXobj->m_nViewType == Grid)
+		::SetWindowLongPtr(m_pWorkXobj->m_pHostWnd->m_hWnd, GWLP_ID, m_pWorkXobj->m_nID);
 	if (pOldNode && pOldNode != m_pWorkXobj)
 	{
 		RECT  rc;
@@ -2497,17 +2488,17 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 
 		for (auto& it : m_mapXobj)
 		{
-			HWND hwnd = it.second->m_pHostWnd->m_hWnd;
-			BOOL bTop = (it.second == m_pWorkXobj);
-			it.second->m_bTopObj = bTop;
-			if (m_pWorkXobj->m_nViewType == Grid)
-				::SetWindowLongPtr(hwnd, GWLP_ID, bTop ? m_pWorkXobj->m_nID : 0);
-			::ShowWindow(hwnd, bTop ? SW_SHOW : SW_HIDE);
-			if (!bTop)
+			if (it.second != m_pWorkXobj)
 			{
+				HWND hwnd = it.second->m_pHostWnd->m_hWnd;
+				it.second->m_bTopObj = false;
+				if (m_pWorkXobj->m_nViewType == Grid)
+					::SetWindowLongPtr(hwnd, GWLP_ID, 0);
+				::ShowWindow(hwnd, SW_HIDE);
 				::SetWindowPos(hwnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE);
+				HWND _hParent = pWnd->m_hWnd;
+				::SetParent(hwnd, pWnd->m_hWnd);
 			}
-			::SetParent(hwnd, bTop ? hParent : pWnd->m_hWnd);
 		}
 		::SetWindowPos(pWnd->m_hWnd, HWND_BOTTOM, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
 
@@ -2798,9 +2789,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		m_pCosmosFrameWndInfo->bControlBarProessed = true;
 	}
 
-	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20180115);
-	if (g_pCosmos->m_bIsCreatingWPFCtrl)
-		g_pCosmos->m_bIsCreatingWPFCtrl = false;
+	::PostMessage(m_hWnd, WM_COSMOSMSG, 2, 20180115);
 	return S_OK;
 }
 
@@ -3026,12 +3015,13 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 20210331:
 	{
 		CXobj* pMdiClientObj = (CXobj*)wParam;
-		HWND hClient = m_pParentMDIWinForm->m_hMDIClient;
-		CGalaxy* pClientGalaxy = (CGalaxy*)g_pCosmos->GetGalaxy(hClient);
-		if (pClientGalaxy)
-		{
-			pClientGalaxy->m_pBindingXobj = pMdiClientObj;
-		}
+		m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMdiClientObj;
+		//HWND hClient = m_pParentMDIWinForm->m_hMDIClient;
+		//CGalaxy* pClientGalaxy = (CGalaxy*)g_pCosmos->GetGalaxy(hClient);
+		//if (pClientGalaxy)
+		//{
+		//	pClientGalaxy->m_pBindingXobj = pMdiClientObj;
+		//}
 	}
 	break;
 	//case 20210326:
@@ -3074,14 +3064,22 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 20180115:
 	{
-		if (wParam == 1)
+		switch (wParam)
 		{
-			//g_pCosmos->m_bSZMode = false;
+		case 1:
+		{
 			if (m_nGalaxyType == GalaxyType::CtrlBarGalaxy)
 			{
 				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210309);
 			}
 		}
+		break;
+		case 2:
+			if (g_pCosmos->m_bIsCreatingWPFCtrl)
+				g_pCosmos->m_bIsCreatingWPFCtrl = false;
+			break;
+		}
+
 		HostPosChanged();
 		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
@@ -3353,16 +3351,13 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 	if (m_bMDIChild)
 		lpwndpos->flags |= SWP_NOZORDER;
-	if (m_pBKWnd)
-	{
-		RECT rc;
-		::GetClientRect(m_hWnd, &rc);
-		::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rc.right, rc.bottom, SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
-		//m_pBKWnd->m_pGalaxy->HostPosChanged();
-	}
 	::InvalidateRect(::GetParent(m_hWnd), nullptr, true);
 	if (::IsWindowVisible(m_hWnd))
 		::InvalidateRect(m_hWnd, nullptr, true);
+	if (m_pBKWnd)
+	{
+		::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOZORDER | SWP_NOACTIVATE);
+	}
 	return hr;
 }
 

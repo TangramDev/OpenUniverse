@@ -1801,10 +1801,17 @@ namespace Browser {
 		}
 		if (m_pGalaxy)
 		{
-			m_pGalaxy->Observe(bstrKey, bstrXml, pRetXobj);
+			CString strNewKey = OLE2T(bstrKey);
+			if (m_strCurKey != strNewKey)
+				m_pGalaxy->Observe(bstrKey, bstrXml, pRetXobj);
+			else
+			{
+				*pRetXobj = m_pGalaxy->m_pWorkXobj;
+				return S_OK;
+			}
 			if (*pRetXobj)
 			{
-				m_strCurKey = OLE2T(bstrKey);
+				m_strCurKey = strNewKey;
 				m_hWebHostWnd = NULL;
 				if (m_pGalaxy->m_pBindingXobj)
 				{

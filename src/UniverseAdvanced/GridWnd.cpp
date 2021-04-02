@@ -447,7 +447,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		}
 		if (pGalaxy->m_pParentMDIWinForm)
 		{
-			::PostMessage(pGalaxy->m_pParentMDIWinForm->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
+			::SendMessage(pGalaxy->m_pParentMDIWinForm->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
 		}
 		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
 		::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
@@ -1286,4 +1286,3 @@ void CGridWnd::OnDestroy()
 	}
 	__super::OnDestroy();
 }
-
