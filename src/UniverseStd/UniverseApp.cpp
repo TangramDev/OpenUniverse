@@ -398,15 +398,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
 		}
 		break;
-		case 20200120:
-		{
-			HWND h = (HWND)wParam;
-			if (g_pCosmos->m_pCLRProxy)
-			{
-				g_pCosmos->m_pCLRProxy->OnWinFormActivate(h, 4);
-			}
-		}
-		break;
 		case 10001000:
 		{
 			if (g_pCosmos->m_nAppID != 9 && g_pCosmos->m_bEclipse == false)

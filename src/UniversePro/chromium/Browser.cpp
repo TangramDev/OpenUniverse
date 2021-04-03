@@ -333,12 +333,6 @@ namespace Browser {
 				g_pCosmos->m_pActiveBrowser->m_pProxy = this;
 			}
 		}
-		else
-		{
-			if (g_pCosmos->m_pCLRProxy)
-				g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
-		}
-		//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		return lRes;
 	}
 
@@ -349,8 +343,6 @@ namespace Browser {
 	}
 
 	LRESULT CBrowser::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		if (g_pCosmos->m_pCLRProxy)
-			g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
 		if (m_pVisibleWebView)
 		{
 			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
@@ -648,10 +640,6 @@ namespace Browser {
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 		if (m_bInTabChange || m_bDestroy || !::IsWindowVisible(m_hWnd) || lpwndpos->flags == (SWP_NOSIZE | SWP_NOMOVE))
 			return DefWindowProc(uMsg, wParam, lParam);
-		if (g_pCosmos->m_pCLRProxy)
-		{
-			g_pCosmos->m_pCLRProxy->PreWindowPosChanging(m_hWnd, lpwndpos, 0);
-		}
 		HWND hPWnd = ::GetParent(m_hWnd);
 		if (m_bSZMode)
 		{
@@ -854,7 +842,6 @@ namespace Browser {
 						}
 					}
 					m_bSZMode = false;
-					::PostAppMessage(::GetCurrentThreadId(), WM_HUBBLE_INIT, 20210325, (LPARAM)m_hWnd);
 				}
 				break;
 				}

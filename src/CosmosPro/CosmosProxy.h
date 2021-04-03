@@ -37,24 +37,6 @@ using namespace System::Reflection;
 
 class CTangramWPFObjWrapper;
 
-class CMenuHelperWnd :
-	public CWindowImpl<CMenuHelperWnd, CWindow>
-{
-public:
-	CMenuHelperWnd(void)
-	{
-	};
-
-	~CMenuHelperWnd(void) {};
-	HWND m_hOwner = nullptr;
-	gcroot<ToolStripDropDownMenu^> m_pToolStripDropDownMenu = nullptr;
-	BEGIN_MSG_MAP(CHelperWnd)
-		MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
-	END_MSG_MAP()
-	void OnFinalMessage(HWND hWnd);
-	LRESULT OnShowWindow(UINT, WPARAM, LPARAM, BOOL&);
-};
-
 class FormInfo
 {
 public:
@@ -73,23 +55,14 @@ public:
 	HWND												m_hCreatingCLRWnd = nullptr;
 	gcroot<String^>										m_strExtendableTypes;
 	map<CString, gcroot<Assembly^>>						m_mapAssembly;
-	map<HWND, gcroot<Form^>>							m_mapDesigningForm;
-	map<HWND, gcroot<MenuStrip^>>						m_mapFormMenuStrip;
-	map<HWND, FormInfo*>								m_mapFormInfo;
-	map<HWND, gcroot<MenuStrip^>>						m_mapFormMenuStrip2;
 	map<HWND, gcroot<WebPage^>>							m_mapChromeWebPage;
 	map<HWND, GalaxyInfo*>								m_mapGalaxyInfo;
 	map<HWND, CTangramWPFObjWrapper*>					m_mapWpfControlWrapper;
-	map<HWND, CMenuHelperWnd*>							m_mapMenuHelperWnd;
-	map<HWND, CMenuHelperWnd*>							m_mapVisibleMenuHelperWnd;
 	map<IBrowser*, gcroot<Browser^>>					m_mapWebBrowser;
-	map<HWND, CString>									m_mapEventBindInfo;
 	map<CSession*, gcroot<Wormhole^>>					m_mapSession2Wormhole;
 
-	CMenuHelperWnd*										m_pWorkingMenuHelperWnd = nullptr;
 	gcroot<Form^>										m_pCurrentPForm;
 	gcroot<System::Windows::Application^>				m_pCosmosWpfApp;
-	gcroot<PropertyGrid^>								m_pPropertyGrid;
 	Object^ _getObject(Object^ key);
 	bool _insertObject(Object^ key, Object^ val);
 	bool _removeObject(Object^ key);
@@ -156,9 +129,7 @@ private:
 	void* Extend(CString strKey, CString strData, CString strFeatures);
 	bool IsSupportDesigner();
 	HICON GetAppIcon(int nIndex);
-	void OnWinFormActivate(HWND, int nState);
 	void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage*, int nState);
-	void HideMenuStripPopup();
 	bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType);
 	void ConnectXobjToWebPage(IXobj*, bool);
 	void OnCloudMsgReceived(CSession*);

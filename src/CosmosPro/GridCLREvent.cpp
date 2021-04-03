@@ -50,10 +50,6 @@ void CXobjCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 
 void CXobjCLREvent::OnDestroy()
 {
-	if (theAppProxy.m_pPropertyGrid&&theAppProxy.m_pPropertyGrid->SelectedObject==(Object^)m_pXobj)
-	{
-		theAppProxy.m_pPropertyGrid->SelectedObject = nullptr;
-	}
 	if (m_pXobj->m_pHostObj)
 	{
 		Universe::Xobj^ pXobj = nullptr;

@@ -1139,10 +1139,6 @@ LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	g_pCosmos->m_pActiveWinFormWnd = this;
-	if (g_pCosmos->m_pCLRProxy)
-	{
-		//g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
-	}
 	return lRes;
 }
 

@@ -97,71 +97,6 @@ FormInfo::~FormInfo()
 	m_mapShortcutItem.clear();
 }
 
-void CMenuHelperWnd::OnFinalMessage(HWND hWnd)
-{
-	auto it = theAppProxy.m_mapMenuHelperWnd.find(hWnd);
-	if (it != theAppProxy.m_mapMenuHelperWnd.end())
-		theAppProxy.m_mapMenuHelperWnd.erase(it);
-
-	it = theAppProxy.m_mapVisibleMenuHelperWnd.find(hWnd);
-	if (it != theAppProxy.m_mapVisibleMenuHelperWnd.end())
-		theAppProxy.m_mapVisibleMenuHelperWnd.erase(it);
-	CWindowImpl::OnFinalMessage(hWnd);
-	delete this;
-}
-
-LRESULT CMenuHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
-	if (wParam == 0)
-	{
-		//InputLanguage::CurrentInputLanguage = theAppProxy.m_pCurInputLanguage;
-		if (theAppProxy.m_pWorkingMenuHelperWnd == this)
-		{
-			//ToolStripItem^ pItem = theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu->OwnerItem;
-			//if (pItem != nullptr)
-			//{
-			//	ToolStrip^ pToolStrip = pItem->Owner;
-			//	pItem->PerformClick();
-			//	//if (pToolStrip->Tag != nullptr)
-			//	//{
-			//	//	ToolStripMenuItem^ pItem = (ToolStripMenuItem^)pToolStrip->Tag;
-			//	//	if (pItem)
-			//	//	{
-			//	//		pItem->Visible = true;
-			//	//		pItem->PerformClick();
-			//	//	}
-			//	//}
-			//	//pToolStrip->Focus();
-			//	//pItem->Select();
-			//	//pToolStrip->Items[0]->PerformClick();
-			//}
-			theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu->Items[0]->Select();
-			theAppProxy.m_pWorkingMenuHelperWnd = nullptr;
-		}
-		auto it = theAppProxy.m_mapVisibleMenuHelperWnd.find(m_hWnd);
-		if (it != theAppProxy.m_mapVisibleMenuHelperWnd.end())
-			theAppProxy.m_mapVisibleMenuHelperWnd.erase(it);
-	}
-	else
-	{
-		//theAppProxy.m_pCurInputLanguage = InputLanguage::CurrentInputLanguage;
-		//String^ name = L"";
-		//for each(InputLanguage^ item in InputLanguage::InstalledInputLanguages)
-		//{
-		//	name = item->Culture->Name;
-		//	if (name == L"en-US")
-		//	{
-		//		InputLanguage::CurrentInputLanguage = item;
-		//		break;
-		//	}
-		//}		
-		theAppProxy.m_mapVisibleMenuHelperWnd[m_hWnd] = this;
-		theAppProxy.m_pWorkingMenuHelperWnd = this;
-	}
-	return lRes;
-}
-
 CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);//TabPage|TabControl|
@@ -172,7 +107,6 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 	m_strCurrentWinFormTemplate = _T("");
 	Forms::Application::EnableVisualStyles();
 	m_pCosmosWpfApp = nullptr;
-	m_pPropertyGrid = nullptr;
 	m_pSystemAssembly = nullptr;
 	m_pOnLoad = nullptr;
 	m_pOnMdiChildActivate = nullptr;
@@ -247,21 +181,6 @@ void CCosmosProxy::_GetMenuInfo(FormInfo* pInfo, ToolStripMenuItem^ item)
 }
 
 bool CCosmos::DoIdleWork() {
-	if (theAppProxy.m_mapFormMenuStrip2.size())
-	{
-		auto it = theAppProxy.m_mapFormMenuStrip2.begin();// find(::GetActiveWindow());
-		MenuStrip^ pMenuStrip = it->second;
-		if (pMenuStrip != nullptr)
-		{
-			FormInfo* pInfo = new FormInfo();
-			theAppProxy.m_mapFormInfo[it->first] = pInfo;
-			for each (ToolStripMenuItem ^ item in pMenuStrip->Items)
-			{
-				theAppProxy._GetMenuInfo(pInfo, item);
-			}
-		}
-		theAppProxy.m_mapFormMenuStrip2.erase(it);
-	}
 	Universe::Cosmos::GetCosmos()->Fire_OnCloudAppIdle();
 	return false;
 }
@@ -494,7 +413,6 @@ void CCosmosProxy::WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPW
 			}
 			if (bMenu == false)
 				m_hCreatingCLRWnd = hWnd;
-			::PostMessage(theApp.m_pCosmosImpl->m_hCosmosWnd, WM_COSMOSMSG, (WPARAM)hWnd, 20200120);
 		}
 	}
 }
@@ -512,18 +430,6 @@ void CCosmosProxy::WindowDestroy(HWND hWnd)
 	{
 		delete it3->second;
 		m_mapGalaxyInfo.erase(it3);
-	}
-	auto it4 = m_mapFormMenuStrip.find(hWnd);
-	if (it4 != m_mapFormMenuStrip.end())
-	{
-		m_mapFormMenuStrip.erase(it4);
-	}
-	auto it6 = m_mapFormInfo.find(hWnd);
-	if (it6 != m_mapFormInfo.end())
-	{
-		FormInfo* pInfo = it6->second;
-		delete it6->second;
-		m_mapFormInfo.erase(it6);
 	}
 	auto it7 = theApp.m_pCosmosImpl->m_mapUIData.find(hWnd);
 	if (it7 != theApp.m_pCosmosImpl->m_mapUIData.end())
@@ -837,8 +743,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 			pMenuStrip->Tag = item;
 			item->Visible = false;
 			item->Click += gcnew System::EventHandler(&OnClick);
-			theAppProxy.m_mapFormMenuStrip[hWnd] = pMenuStrip;
-			theAppProxy.m_mapFormMenuStrip2[hWnd] = pMenuStrip;
 			Forms::ToolStripMenuItem^ fileMenu = (Forms::ToolStripMenuItem^)pMenuStrip->Items[L"fileMenu"];
 			if (fileMenu != nullptr)
 			{
@@ -2085,38 +1989,6 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 
 void CCosmosProxy::SelectXobj(IXobj* pXobj)
 {
-	if (pXobj == nullptr)
-	{
-		return;
-	}
-	Object^ pObj = nullptr;
-	try
-	{
-		if (pXobj)
-			pObj = theAppProxy._createObject<IXobj, Universe::Xobj>(pXobj);
-	}
-	catch (...)
-	{
-
-	}
-	finally
-	{
-		if (pObj != nullptr)
-		{
-			try
-			{
-				m_pPropertyGrid->SelectedObject = pObj;
-			}
-			catch (...)
-			{
-
-			}
-		}
-		else
-		{
-			m_pPropertyGrid->SelectedObject = nullptr;
-		}
-	}
 }
 
 IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode)
@@ -2149,13 +2021,6 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 			pHostNode->get_Name(&bstrName);
 			CString strName = OLE2T(bstrName);
 			bool bProperty = false;
-			if (strName.CompareNoCase(_T("TangramPropertyGrid")) == 0)
-			{
-				bProperty = true;
-				m_pPropertyGrid = (PropertyGrid^)pObj;
-				m_pPropertyGrid->ToolbarVisible = false;
-				m_pPropertyGrid->PropertySort = PropertySort::Alphabetical;
-			}
 
 			HWND hWnd = (HWND)pObj->Handle.ToInt64();
 			theApp.m_pCosmosImpl->m_mapXobj[hWnd] = pHostNode;
@@ -2449,19 +2314,6 @@ IDispatch* CCosmosProxy::GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool 
 
 void CCosmosProxy::SelectObj(IDispatch* CtrlDisp)
 {
-	try
-	{
-		Object^ pCtrl = (Object^)Marshal::GetObjectForIUnknown((IntPtr)CtrlDisp);
-		if (pCtrl != nullptr)
-		{
-			m_pPropertyGrid->SelectedObject = pCtrl;
-		}
-
-	}
-	catch (System::Exception^ e)
-	{
-		String^ strInfo = e->Message;
-	}
 }
 
 BSTR CCosmosProxy::GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild)
@@ -3227,401 +3079,6 @@ bool CCosmos::EclipseAppInit()
 
 bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)
 {
-	switch (pMsg->message)
-	{
-	case WM_NCLBUTTONDOWN:
-	case WM_NCRBUTTONDOWN:
-	case WM_LBUTTONDOWN:
-	case WM_RBUTTONDOWN:
-	case WM_POINTERDOWN:
-	case WM_SETWNDFOCUSE:
-	{
-		Form^ m_pCurrentForm = nullptr;
-		Form^ m_pCurrentParentForm = nullptr;
-		IntPtr handle = (IntPtr)pMsg->hwnd;
-		while (handle != IntPtr::Zero)
-		{
-			Control^ ctl = Control::FromHandle(handle);
-			if (ctl != nullptr)
-			{
-				if (ctl->GetType()->IsSubclassOf(Form::typeid))
-				{
-					m_pCurrentForm = (Form^)ctl;
-					if (m_pCurrentForm->MdiParent)
-					{
-						m_pCurrentParentForm = m_pCurrentForm;
-						m_pCurrentForm = nullptr;
-					}
-					else
-						break;
-				}
-			}
-
-			handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
-		}
-		if (m_pCurrentForm)
-		{
-			auto it = theAppProxy.m_mapFormMenuStrip.find((HWND)m_pCurrentForm->Handle.ToPointer());
-			if (it != theAppProxy.m_mapFormMenuStrip.end())
-			{
-				for each (ToolStripItem ^ item in it->second->Items)
-				{
-					ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)item;
-					menuitem->Checked = false;
-					menuitem->HideDropDown();
-				}
-			}
-		}
-		HWND h = pMsg->hwnd;
-		auto it = theAppProxy.m_mapVisibleMenuHelperWnd.find(h);
-		if (it == theAppProxy.m_mapVisibleMenuHelperWnd.end())
-		{
-			theApp.m_pCosmosImpl->m_pCLRProxy->HideMenuStripPopup();
-		}
-		if (m_pCurrentParentForm/*&& WM_LBUTTONDOWN== pMsg->message*/)
-		{
-			System::Windows::Forms::Message Msg = System::Windows::Forms::Message::Create((IntPtr)pMsg->hwnd, pMsg->message, (IntPtr)(__int64)(pMsg->wParam), (IntPtr)pMsg->lParam);
-			//m_pCurrentParentForm->PreProcessMessage(Msg);
-			Control^ pCtrl = Control::FromHandle((IntPtr)pMsg->hwnd);
-			//pCtrl->PreProcessMessage(Msg);
-			//TranslateMessage(pMsg);
-			//::DispatchMessage(pMsg);
-			System::Windows::Forms::PreProcessControlState state = pCtrl->PreProcessControlMessage(Msg);
-			if (state == System::Windows::Forms::PreProcessControlState::MessageProcessed)
-				return true;
-			else
-				return false;
-		}
-	}
-	break;
-	case WM_KEYDOWN:
-	{
-		switch (pMsg->wParam)
-		{
-		case VK_PRIOR:
-		case VK_NEXT:
-		case VK_END:
-		case VK_LEFT:
-		case VK_RIGHT:
-		{
-			Form^ m_pCurrentForm = nullptr;
-			IntPtr handle = (IntPtr)pMsg->hwnd;
-			while (handle != IntPtr::Zero)
-			{
-				Control^ ctl = Control::FromHandle(handle);
-				if (ctl != nullptr)
-				{
-					if (ctl->GetType()->IsSubclassOf(Form::typeid))
-					{
-						m_pCurrentForm = (Form^)ctl;
-						if (m_pCurrentForm->MdiParent)
-							m_pCurrentForm = nullptr;
-						else
-							break;
-					}
-				}
-
-				handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
-			}
-			if (m_pCurrentForm == nullptr)
-			{
-				HWND hWnd = (HWND)::SendMessage(::GetActiveWindow(), WM_COSMOSMSG, 20200128, 0);
-				if (hWnd)
-				{
-					Control^ ctl = Control::FromHandle((IntPtr)hWnd);
-					if (ctl && ctl->GetType()->IsSubclassOf(Form::typeid))
-					{
-						m_pCurrentForm = (Form^)ctl;
-					}
-				}
-			}
-			if (m_pCurrentForm)
-			{
-				auto it = theAppProxy.m_mapFormMenuStrip.find((HWND)m_pCurrentForm->Handle.ToPointer());
-				if (it != theAppProxy.m_mapFormMenuStrip.end())
-				{
-					if (pMsg->wParam != VK_UP && pMsg->wParam != VK_DOWN)
-					{
-						for each (ToolStripItem ^ item in it->second->Items)
-						{
-							if (item->Selected == true)
-							{
-								ArrowDirection direct = ArrowDirection::Right;
-								if (pMsg->wParam == VK_LEFT)
-									direct = ArrowDirection::Left;
-								ToolStripItem^ next = it->second->GetNextItem(item, direct);
-								next->Select();
-								ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)next;
-								menuitem->ShowDropDown();
-								if (menuitem->DropDown->Items->Count)
-									menuitem->DropDown->Items[0]->Select();
-								return false;
-							}
-						}
-					}
-				}
-			}
-		}
-		break;
-		case VK_UP:
-		case VK_DOWN:
-		{
-			if (theAppProxy.m_pWorkingMenuHelperWnd)
-			{
-				ToolStripItem^ pSelectedItem = nullptr;
-				ToolStripDropDownMenu^ pToolStripDropDownMenu = theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu;
-				for each (ToolStripItem ^ item in pToolStripDropDownMenu->Items)
-				{
-					if (item->Selected)
-					{
-						pSelectedItem = item;
-						break;
-					}
-				}
-				if (pSelectedItem == nullptr)
-				{
-					pSelectedItem = pToolStripDropDownMenu->Items[0];
-					pSelectedItem->Select();
-				}
-				else
-				{
-					ArrowDirection direct = ArrowDirection::Up;
-					if (pMsg->wParam == VK_DOWN)
-						direct = ArrowDirection::Down;
-					ToolStripItem^ next = pToolStripDropDownMenu->GetNextItem(pSelectedItem, direct);
-					next->Select();
-				}
-			}
-		}
-		break;
-		case VK_RETURN:
-		{
-			if (theAppProxy.m_pWorkingMenuHelperWnd)
-			{
-				ToolStripDropDownMenu^ pToolStripDropDownMenu = theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu;
-				theAppProxy.m_pWorkingMenuHelperWnd = nullptr;
-				ToolStripItem^ pSelectedItem = nullptr;
-				for each (ToolStripItem ^ item in pToolStripDropDownMenu->Items)
-				{
-					if (item->Selected)
-					{
-						pSelectedItem = item;
-						break;
-					}
-				}
-				if (pSelectedItem)
-					pSelectedItem->PerformClick();
-				return true;
-			}
-		}
-		break;
-		}
-		break;
-	}
-	case WM_SYSKEYDOWN:
-	{
-		if (::GetAsyncKeyState(VK_MENU) < 0)
-		{
-			int key = (int)pMsg->wParam;
-			ToolStripMenuItem^ pSelectedItem = nullptr;
-			HWND hWnd = ::GetActiveWindow();
-			if (theAppProxy.m_pWorkingMenuHelperWnd)
-			{
-				ToolStripDropDownMenu^ pToolStripDropDownMenu = theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu;
-				for each (ToolStripItem ^ item in pToolStripDropDownMenu->Items)
-				{
-					String^ strText = item->Text;
-					int nIndex = strText->IndexOf(L"&");
-					if (nIndex != -1)
-					{
-						wchar_t s = strText[nIndex + 1];
-						if (s == key)
-						{
-							pSelectedItem = (ToolStripMenuItem^)item;
-							break;
-						}
-						strText = strText->ToUpper();
-						s = strText[nIndex + 1];
-						if (s == key)
-						{
-							pSelectedItem = (ToolStripMenuItem^)item;
-							break;
-						}
-						strText = strText->ToLower();
-						s = strText[nIndex + 1];
-						if (s == key)
-						{
-							pSelectedItem = (ToolStripMenuItem^)item;
-							break;
-						}
-					}
-				}
-				if (pSelectedItem)
-				{
-					pSelectedItem->PerformClick();
-					return true;
-				}
-			}
-			if (pSelectedItem == nullptr)
-			{
-				MenuStrip^ pMenuStrip = nullptr;
-				auto it = theAppProxy.m_mapFormMenuStrip.find(hWnd);
-				if (it != theAppProxy.m_mapFormMenuStrip.end())
-				{
-					pMenuStrip = it->second;
-				}
-				else
-				{
-					hWnd = (HWND)::SendMessage(hWnd, WM_COSMOSMSG, 20200128, 0);
-					if (hWnd)
-					{
-						auto it = theAppProxy.m_mapFormMenuStrip.find(hWnd);
-						if (it != theAppProxy.m_mapFormMenuStrip.end())
-						{
-							pMenuStrip = it->second;
-						}
-					}
-				}
-				if (pMenuStrip)
-				{
-					for each (ToolStripItem ^ item in pMenuStrip->Items)
-					{
-						String^ strText = item->Text;
-						int nIndex = strText->IndexOf(L"&");
-						if (nIndex != -1)
-						{
-							ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)item;
-							wchar_t s = strText[nIndex + 1];
-							if (s == key)
-							{
-								pSelectedItem = menuitem;
-								break;
-							}
-							strText = strText->ToUpper();
-							s = strText[nIndex + 1];
-							if (s == key)
-							{
-								pSelectedItem = menuitem;
-								break;
-							}
-							strText = strText->ToLower();
-							s = strText[nIndex + 1];
-							if (s == key)
-							{
-								pSelectedItem = menuitem;
-								break;
-							}
-						}
-					}
-				}
-			}
-			if (pSelectedItem)
-			{
-				pSelectedItem->Select();
-				pSelectedItem->ShowDropDown();
-				if (pSelectedItem->DropDown->Items->Count)
-					pSelectedItem->DropDown->Items[0]->Select();
-				return true;
-			}
-		}
-	}
-	break;
-	case WM_CHAR:
-	{
-		if (::GetKeyState(VK_CONTROL) < 0)
-		{
-			int key = (int)pMsg->wParam + 64 + (int)System::Windows::Forms::Keys::Control;//VK_CONTROL;
-			Form^ m_pCurrentForm = nullptr;
-			FormInfo* pInfo = nullptr;
-			auto it = theAppProxy.m_mapFormInfo.find(::GetActiveWindow());
-			if (it != theAppProxy.m_mapFormInfo.end())
-			{
-				pInfo = it->second;
-				auto it2 = pInfo->m_mapShortcutItem.find(key);
-				if (it2 != pInfo->m_mapShortcutItem.end())
-				{
-					it2->second->PerformClick();
-					break;
-				}
-			}
-			else
-			{
-				IntPtr handle = (IntPtr)pMsg->hwnd;
-				while (handle != IntPtr::Zero)
-				{
-					Control^ ctl = Control::FromHandle(handle);
-					if (ctl != nullptr)
-					{
-						if (ctl->GetType()->IsSubclassOf(Form::typeid))
-						{
-							m_pCurrentForm = (Form^)ctl;
-							if (m_pCurrentForm->MdiParent)
-								m_pCurrentForm = nullptr;
-							else
-								break;
-						}
-					}
-
-					handle = (IntPtr)::GetAncestor((HWND)handle.ToPointer(), GA_PARENT);
-				}
-				if (m_pCurrentForm)
-				{
-					HWND hWnd = (HWND)m_pCurrentForm->Handle.ToPointer();
-					auto it = theAppProxy.m_mapFormInfo.find(hWnd);
-					if (it != theAppProxy.m_mapFormInfo.end())
-					{
-						auto it2 = it->second->m_mapShortcutItem.find(key);
-						if (it2 != it->second->m_mapShortcutItem.end())
-						{
-							it2->second->PerformClick();
-							break;
-						}
-					}
-				}
-			}
-		}
-		if (theAppProxy.m_pWorkingMenuHelperWnd)
-		{
-			int key = (int)pMsg->wParam;
-			ToolStripItem^ pSelectedItem = nullptr;
-			ToolStripDropDownMenu^ pToolStripDropDownMenu = theAppProxy.m_pWorkingMenuHelperWnd->m_pToolStripDropDownMenu;
-			for each (ToolStripItem ^ item in pToolStripDropDownMenu->Items)
-			{
-				String^ strText = item->Text;
-				int nIndex = strText->IndexOf(L"&");
-				if (nIndex != -1)
-				{
-					wchar_t s = strText[nIndex + 1];
-					if (s == key)
-					{
-						pSelectedItem = item;
-						break;
-					}
-					strText = strText->ToUpper();
-					s = strText[nIndex + 1];
-					if (s == key)
-					{
-						pSelectedItem = item;
-						break;
-					}
-					strText = strText->ToLower();
-					s = strText[nIndex + 1];
-					if (s == key)
-					{
-						pSelectedItem = item;
-						break;
-					}
-				}
-			}
-			if (pSelectedItem)
-			{
-				pSelectedItem->PerformClick();
-				return true;
-			}
-		}
-	}
-	break;
-	}
 	return false;
 };
 
@@ -3635,10 +3092,6 @@ void CCosmos::OnCosmosClose()
 		Form^ pForm = pCollection[0];
 		pForm->Close();
 	}
-	//if (theApp.m_pCosmos && theApp.m_pCosmosImpl->m_pCLRProxy) {
-	//	//theApp.m_pCosmos->put_AppKeyValue(CComBSTR(L"CLRProxy"), CComVariant((LONGLONG)0));
-	//	//theApp.m_pCosmos = nullptr;
-	//}
 	if (theAppProxy.m_pCosmosWpfApp)
 	{
 		WindowCollection^ pWnds = theAppProxy.m_pCosmosWpfApp->Windows;
@@ -3648,9 +3101,6 @@ void CCosmos::OnCosmosClose()
 			pWnd->Close();
 		}
 	}
-	Object^ pPro = (Object^)theAppProxy.m_pPropertyGrid;
-	if (pPro && theAppProxy.m_pPropertyGrid->SelectedObject)
-		theAppProxy.m_pPropertyGrid->SelectedObject = nullptr;
 	AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
 }
 
@@ -3777,30 +3227,8 @@ bool CCosmosProxy::PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nTyp
 	bool bFind = false;
 	switch (nType)
 	{
-	case 0:
-	{
-		for (auto it = m_mapVisibleMenuHelperWnd.begin(); it != m_mapVisibleMenuHelperWnd.end(); it++)
-		{
-			CMenuHelperWnd* pWnd = it->second;
-			if (::IsChild(hWnd, pWnd->m_hOwner) == TRUE)
-			{
-				bFind = true;
-				break;
-			}
-		}
-	}
-	break;
 	case 1:
 	{
-		for (auto it = m_mapVisibleMenuHelperWnd.begin(); it != m_mapVisibleMenuHelperWnd.end(); it++)
-		{
-			CMenuHelperWnd* pWnd = it->second;
-			if (pWnd->m_hOwner == hWnd)
-			{
-				bFind = true;
-				break;
-			}
-		}
 		Control^ ctrl = Control::FromHandle((IntPtr)hWnd);
 		if (ctrl->GetType()->IsSubclassOf(Form::typeid))
 		{
@@ -3813,32 +3241,7 @@ bool CCosmosProxy::PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nTyp
 	}
 	break;
 	}
-	if (bFind == false)
-	{
-		if (m_mapVisibleMenuHelperWnd.size())
-			lpwndpos->flags |= SWP_NOZORDER | SWP_NOREPOSITION;
-		else if (m_hCreatingCLRWnd)
-		{
-			Control^ pCtrl = Control::FromHandle((IntPtr)m_hCreatingCLRWnd);
-			if (pCtrl)
-			{
-				String^ name = pCtrl->GetType()->Name;
-				if (name == L"ToolStripDropDownMenu")
-					lpwndpos->flags |= SWP_NOZORDER | SWP_NOREPOSITION;
-			}
-		}
-	}
 	return false;
-}
-
-void CCosmosProxy::HideMenuStripPopup()
-{
-	while (m_mapVisibleMenuHelperWnd.size())
-	{
-		ToolStripDropDownMenu^ pToolStripDropDownMenu = m_mapVisibleMenuHelperWnd.begin()->second->m_pToolStripDropDownMenu;
-		ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)pToolStripDropDownMenu->OwnerItem;
-		menuitem->HideDropDown();
-	}
 }
 
 void CCosmosProxy::OnWebPageCreated(HWND hWnd, CWebPageImpl* pProxy, IWebPage* pChromeWebContent, int nState)
@@ -3857,81 +3260,6 @@ void CCosmosProxy::OnWebPageCreated(HWND hWnd, CWebPageImpl* pProxy, IWebPage* p
 		{
 			m_mapChromeWebPage.erase(it);
 		}
-	}
-}
-
-void CCosmosProxy::OnWinFormActivate(HWND hForm, int nState)
-{
-	switch (nState)
-	{
-	case 0:
-	{
-		Control^ pCtrl = Control::FromHandle((IntPtr)hForm);
-		if (pCtrl && pCtrl->GetType()->IsSubclassOf(Form::typeid))
-		{
-			MenuStrip^ pMenuStrip = nullptr;
-			auto it = theAppProxy.m_mapFormMenuStrip.find(hForm);
-			if (it != theAppProxy.m_mapFormMenuStrip.end())
-			{
-				pMenuStrip = it->second;
-				for each (ToolStripItem ^ item in pMenuStrip->Items)
-				{
-					ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)item;
-					menuitem->HideDropDown();
-				}
-			}
-		}
-	}
-	break;
-	case 4:
-	{
-		Control^ pCtrl = Control::FromHandle((IntPtr)hForm);
-		if (pCtrl)
-		{
-			String^ name = pCtrl->GetType()->Name;
-			CString s = name;
-			if (s == _T("ToolStripDropDownMenu"))
-			{
-				//theAppProxy.m_pCurInputLanguage = InputLanguage::CurrentInputLanguage;
-				//String^ name = L"";
-				//for each (InputLanguage ^ item in InputLanguage::InstalledInputLanguages)
-				//{
-				//	name = item->Culture->Name;
-				//	if (name == L"en-US")
-				//	{
-				//		InputLanguage::CurrentInputLanguage = item;
-				//		break;
-				//	}
-				//}
-				m_hCreatingCLRWnd = nullptr;
-				CMenuHelperWnd* pWnd = new CMenuHelperWnd();
-				theAppProxy.m_mapMenuHelperWnd[hForm] = pWnd;
-				theAppProxy.m_mapVisibleMenuHelperWnd[hForm] = pWnd;
-				pWnd->SubclassWindow(hForm);
-				pWnd->m_pToolStripDropDownMenu = (ToolStripDropDownMenu^)pCtrl;
-				ToolStripItem^ pItem = pWnd->m_pToolStripDropDownMenu->OwnerItem;
-				ToolStrip^ pToolStrip = pItem->Owner;
-				while (pToolStrip == nullptr)
-				{
-					pItem = pItem->OwnerItem;
-					if (pItem == nullptr)
-						break;
-					pToolStrip = pItem->Owner;
-					if (pToolStrip != nullptr)
-						break;
-				}
-				Form^ pForm = nullptr;
-				if (pToolStrip)
-				{
-					Control^ parent = pToolStrip->Parent;
-					if (parent->GetType()->IsSubclassOf(Form::typeid))
-						pForm = (Form^)parent;
-				}
-				theAppProxy.m_pWorkingMenuHelperWnd = pWnd;
-			}
-		}
-	}
-	break;
 	}
 }
 
@@ -3989,11 +3317,4 @@ void CCosmosProxy::OnControlRemoved(Object^ sender, ControlEventArgs^ e)
 
 void CCosmosProxy::OnHandleDestroyed(Object^ sender, EventArgs^ e)
 {
-	Form^ pForm = (Form^)sender;
-	HWND hWnd = (HWND)pForm->Handle.ToInt64();
-	auto it = theAppProxy.m_mapDesigningForm.find(hWnd);
-	if (it != theAppProxy.m_mapDesigningForm.end())
-	{
-		theAppProxy.m_mapDesigningForm.erase(it);
-	}
 }

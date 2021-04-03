@@ -866,8 +866,6 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				RECT rc;
 				::GetClientRect(m_pBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
 				::SetWindowPos(m_pBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
-				//m_pBrowser->m_pVisibleWebView->m_bCanShow = true;
-				//m_pBrowser->m_pParentXobj->m_pWebBrowser = m_pBrowser;
 			}
 			m_bCreateNewDoc = false;
 		}
@@ -951,6 +949,8 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
 		}
+		else
+			theApp.m_bAppStarting = false;
 	}
 	break;
 	case 20210213:
@@ -1076,7 +1076,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					m_pGalaxy->m_pBindingXobj = pClientObj;
 				if (m_bCreateNewDoc)
 				{
-					//m_pHostBrowser->m_pBrowser->LayoutBrowser();
 					RECT rc;
 					::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
 					if ((rc.right < rc.left) || (rc.bottom < rc.top))
@@ -1085,6 +1084,21 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
 					}
 					m_bCreateNewDoc = false;
+					m_pHostBrowser->m_bSZMode = true;
+					if (m_pHostBrowser->m_pParentXobj)
+					{
+						if (!::IsChild(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, m_pHostBrowser->m_hWnd))
+						{
+							theApp.m_bAppStarting = false;
+							RECT rc;
+							::GetClientRect(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
+							::SetParent(m_pHostBrowser->m_hWnd, m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd);
+							::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW | SWP_NOSENDCHANGING);
+							m_pGalaxy->m_pBindingXobj = m_pHostBrowser->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+							break;
+						}
+					}
+					::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 1, 7);
 				}
 			}
 		}
@@ -1135,14 +1149,16 @@ void CWinForm::SendMessage()
 	}
 }
 
+LRESULT CWinForm::OnEnterIdle(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
+	return lRes;
+}
+
 LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	g_pCosmos->m_pActiveWinFormWnd = this;
-	if (g_pCosmos->m_pCLRProxy)
-	{
-		//g_pCosmos->m_pCLRProxy->OnWinFormActivate(m_hWnd, LOWORD(wParam));
-	}
 	return lRes;
 }
 

@@ -564,10 +564,8 @@ namespace CommonUniverse {
 		virtual void* Extend(CString strKey, CString strData, CString strFeatures) { return nullptr; }
 		virtual bool IsSupportDesigner() { return false; }
 		virtual HICON GetAppIcon(int nIndex) { return NULL; }
-		virtual void OnWinFormActivate(HWND, int nState) {}
 		virtual IDispatch* CreateWinForm(HWND hParent, BSTR strXML) { return nullptr; }
 		virtual void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage* pChromeWebContent, int nState) {}
-		virtual void HideMenuStripPopup() {}
 		virtual bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType) { return false; }
 		virtual void OnCloudMsgReceived(CSession*) {}
 		virtual void ConnectXobjToWebPage(IXobj*, bool) {}

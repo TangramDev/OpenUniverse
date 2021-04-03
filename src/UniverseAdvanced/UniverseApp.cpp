@@ -397,24 +397,6 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		theApp.m_bAppStarting = false;
 	}
-	else
-	{
-		for (auto& it : g_pCosmos->m_mapBrowserWnd)
-		{
-			CBrowser* pBrowser = (CBrowser*)it.second;
-			if (::IsWindowVisible(it.first))
-			{
-				if (pBrowser->m_bSZMode)
-					::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
-			}
-		}
-		for (auto& it : g_pCosmos->m_mapMDIParent)
-		{
-			CMDIParent* pMDIParent = (CMDIParent*)it.second;
-			if (pMDIParent->m_pHostBrowser)
-				::PostMessage(it.first, WM_COSMOSMSG, 0, 20210325);
-		}
-	}
 	if (g_pCosmos->m_pCosmosDelegate)
 	{
 		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
@@ -562,15 +544,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			}
 			else if (g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_pUniverseAppProxy)
 				g_pCosmos->m_hMainWnd = g_pCosmos->m_pUniverseAppProxy->InitCosmosApp();
-		}
-		break;
-		case 20200120:
-		{
-			HWND h = (HWND)wParam;
-			if (g_pCosmos->m_pCLRProxy)
-			{
-				g_pCosmos->m_pCLRProxy->OnWinFormActivate(h, 4);
-			}
 		}
 		break;
 		case 10001000:
@@ -983,6 +956,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 		{
 			switch (lpMsg->message)
 			{
+			case WM_ENTERIDLE:
+			{
+				TRACE(_T("WM_ENTERIDLE\n"));
+			}
+			break;
 			case WM_SYSKEYDOWN:
 			{
 				if (::GetAsyncKeyState(VK_MENU) < 0 &&
@@ -1662,12 +1640,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												if (itName != g_pCosmos->m_mapDocDefaultName.end())
 													strDefaultName = itName->second;
 												g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
-												//pClient = m_Parse.GetChild(_T("mdiclient"));
-												//if (pClient)
-												//{
-												//	//if (pMainGalaxy->m_strCurrentKey != strKey)
-												//	//	pMainGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-												//}
 											}
 										}
 										break;
@@ -1765,6 +1737,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													}
 												}
 											}
+											if (pMDIParent)
+												::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, 0, 20210325);
 										}
 									}
 								}

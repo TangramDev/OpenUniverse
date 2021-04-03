@@ -55,8 +55,8 @@ namespace Browser {
 		m_hBeforeChange = hOldWnd;
 		m_bTabChange = true;
 		g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-		if (::GetParent(m_hWnd))
-			m_bInTabChange = true;
+		//if (::GetParent(m_hWnd))
+		m_bInTabChange = true;
 	}
 
 	void CBrowser::EndActiveChromeTab(HWND hActive)
@@ -84,6 +84,12 @@ namespace Browser {
 				return;
 			}
 			m_hBeforeChange = nullptr;
+			if (m_bInTabChange)
+			{
+				::PostMessageW(m_hWnd, WM_BROWSERLAYOUT, 0, 1000);
+				m_bInTabChange = false;
+				return;
+			}
 			m_bInTabChange = false;
 		}
 		if (m_bDestroy || m_bInTabChange || hWnd == 0 || g_pCosmos->m_bChromeNeedClosed == TRUE || g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
@@ -333,12 +339,6 @@ namespace Browser {
 				g_pCosmos->m_pActiveBrowser->m_pProxy = this;
 			}
 		}
-		else
-		{
-			if (g_pCosmos->m_pCLRProxy)
-				g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
-		}
-		//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 4);
 		return lRes;
 	}
 
@@ -349,8 +349,6 @@ namespace Browser {
 	}
 
 	LRESULT CBrowser::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
-		if (g_pCosmos->m_pCLRProxy)
-			g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
 		if (m_pVisibleWebView)
 		{
 			g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
@@ -526,6 +524,9 @@ namespace Browser {
 					}
 				}
 			}
+			////m_bSZMode = true;
+			//g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+			//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		break;
 		case 20190527:
@@ -648,10 +649,6 @@ namespace Browser {
 		WINDOWPOS* lpwndpos = (WINDOWPOS*)lParam;
 		if (m_bInTabChange || m_bDestroy || !::IsWindowVisible(m_hWnd) || lpwndpos->flags == (SWP_NOSIZE | SWP_NOMOVE))
 			return DefWindowProc(uMsg, wParam, lParam);
-		if (g_pCosmos->m_pCLRProxy)
-		{
-			g_pCosmos->m_pCLRProxy->PreWindowPosChanging(m_hWnd, lpwndpos, 0);
-		}
 		HWND hPWnd = ::GetParent(m_hWnd);
 		if (m_bSZMode)
 		{
@@ -705,6 +702,56 @@ namespace Browser {
 		{
 			switch (lParam)
 			{
+			case 1000:
+			{
+				m_bTabChange = false;
+				if (m_pParentXobj)
+				{
+					g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
+					m_pBrowser->LayoutBrowser();
+				}
+				if (::GetParent(m_hWnd) == nullptr)
+				{
+					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
+					if (hWnd == m_pVisibleWebView->m_hWnd)
+					{
+						if (m_pVisibleWebView->m_pGalaxy)
+						{
+							m_pBrowser->LayoutBrowser();
+							BrowserLayout();
+						}
+					}
+					else
+					{
+						auto it = g_pCosmos->m_mapWebView.find(hWnd);
+						if (it != g_pCosmos->m_mapWebView.end())
+						{
+							m_pVisibleWebView = (CWebView*)it->second;
+						}
+						else
+						{
+							m_pVisibleWebView = new CComObject<CWebView>();
+							m_pVisibleWebView->SubclassWindow(hWnd);
+							g_pCosmos->m_mapWebView[hWnd] = m_pVisibleWebView;
+						}
+					}
+				}
+				//if (m_pVisibleWebView->m_pGalaxy)
+				//{
+				//	::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
+				//	if (::GetParent(m_hWnd) == nullptr)
+				//	{
+				//		CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
+				//		if (pObj && pObj->m_nViewType == Grid)
+				//		{
+				//			CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+				//			pWnd->RecalcLayout();
+				//		}
+				//	}
+				//}
+				m_bSZMode = false;
+			}
+			break;
 			case 10:
 			{
 				if (m_pVisibleWebView->m_pGalaxy)
@@ -854,7 +901,6 @@ namespace Browser {
 						}
 					}
 					m_bSZMode = false;
-					::PostAppMessage(::GetCurrentThreadId(), WM_HUBBLE_INIT, 20210325, (LPARAM)m_hWnd);
 				}
 				break;
 				}

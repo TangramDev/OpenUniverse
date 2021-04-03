@@ -156,8 +156,6 @@ LRESULT CXobjWnd::OnSplitterReposition(WPARAM wParam, LPARAM lParam)
 
 int CXobjWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 {
-	if (g_pCosmos->m_pCLRProxy)
-		g_pCosmos->m_pCLRProxy->HideMenuStripPopup();
 	if (g_pCosmos->m_pActiveHtmlWnd)
 	{
 		::PostMessage(g_pCosmos->m_pActiveHtmlWnd->m_hWnd, WM_COSMOSMSG, 20190331, 0);
