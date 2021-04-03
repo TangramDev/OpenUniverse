@@ -3098,8 +3098,6 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				}
 			}
 		}
-		if (wParam == 2 && g_pCosmos->m_bIsCreatingWPFCtrl)
-			g_pCosmos->m_bIsCreatingWPFCtrl = false;
 	}
 	break;
 	case WM_BROWSERLAYOUT:

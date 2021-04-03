@@ -2058,10 +2058,6 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 	}
 	else
 	{
-		if (theApp.m_pCosmosImpl)
-		{
-			theApp.m_pCosmosImpl->m_bIsCreatingWPFCtrl = true;
-		}
 		if (_pObj->GetType()->IsSubclassOf(System::Windows::FrameworkElement::typeid))
 		{
 			Universe::Cosmos::m_pFrameworkElementDic[_pObj] = _pXobj;

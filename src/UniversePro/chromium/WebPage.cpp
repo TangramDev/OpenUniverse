@@ -460,8 +460,14 @@ namespace Browser {
 							if (bNewParent)
 							{
 								g_pCosmos->m_pActiveBrowser->m_pProxy = pChromeBrowserWnd;
-								//pChromeBrowserWnd->BrowserLayout();
 								::PostMessageW(hNewPWnd, WM_BROWSERLAYOUT, 0, 7);
+							}
+							else
+							{
+								if (pChromeBrowserWnd->m_bInTabChange)
+								{
+									::SendMessageW(pChromeBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 1000);
+								}
 							}
 						}
 					}

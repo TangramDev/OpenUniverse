@@ -483,25 +483,21 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 	{
 		switch (lParam)
 		{
-		case 20201028:
-		case 19631222:
-		case 20191031:
-		case 20180115:
-		case 19820911:
-			return CWnd::DefWindowProc(WM_COSMOSMSG, wParam, lParam);
-			break;
 		case 20210315:
 		{
-			RECT rc;
-			::GetClientRect(m_hWnd, &rc);
-			if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
-				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
-			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent)
+			if (m_pXobj->m_pWebBrowser)
 			{
-				CXobj* pClientObj = m_pXobj->m_pRootObj->GetVisibleChildByName(_T("mdiclient"));
-				if (pClientObj)
-					m_pXobj->m_pXobjShareData->m_pGalaxy->m_pBindingXobj = pClientObj;
+				RECT rc;
+				::GetClientRect(m_hWnd, &rc);
+				if (!::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd))
+					::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
+				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
+				if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent)
+				{
+					CXobj* pClientObj = m_pXobj->m_pRootObj->GetVisibleChildByName(_T("mdiclient"));
+					if (pClientObj)
+						m_pXobj->m_pXobjShareData->m_pGalaxy->m_pBindingXobj = pClientObj;
+				}
 			}
 		}
 		break;
@@ -526,6 +522,8 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 						m_pXobj->m_pWebBrowser->m_bSZMode = true;
 						::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 						::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW | SWP_NOSENDCHANGING);
+						if (pParent)
+							::PostMessage(pParent->m_hWnd, WM_COSMOSMSG, 0, 20210325);
 					}
 				}
 			}
@@ -584,6 +582,11 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			}
 		}
 		break;
+		case 20201028:
+		case 19631222:
+		case 20191031:
+		case 20180115:
+		case 19820911:
 		default:
 			break;
 		}

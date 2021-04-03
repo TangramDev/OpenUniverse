@@ -391,12 +391,6 @@ int CUniverse::ExitInstance()
 
 LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	if (g_pCosmos && g_pCosmos->m_bIsCreatingWPFCtrl)
-		return CallNextHookEx(g_pCosmos->m_hForegroundIdleHook, nCode, wParam, lParam);
-	if (theApp.m_bAppStarting == true)
-	{
-		theApp.m_bAppStarting = false;
-	}
 	if (g_pCosmos->m_pCosmosDelegate)
 	{
 		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();

@@ -389,54 +389,6 @@ namespace Browser {
 				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
 			}
 		} break;
-			//		case 0: {
-			//			g_pCosmos->m_pHtmlWndCreated = new CComObject<CWebView>;
-			//			g_pCosmos->m_pHtmlWndCreated->SubclassWindow(hWnd);
-			//			if (g_pCosmos->m_pCLRProxy)
-			//				g_pCosmos->m_pCLRProxy->OnWebPageCreated(hWnd, (CWebPageImpl*)g_pCosmos->m_pHtmlWndCreated, (IWebPage*)g_pCosmos->m_pHtmlWndCreated, 0);
-			//			HWND hPWnd = ::GetParent(m_hWnd);
-			//			if (g_pCosmos->m_bCreatingDevTool == false)
-			//			{
-			//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = false;
-			//				g_pCosmos->m_mapWebView[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-			//				if (g_pCosmos->m_mapWebView.size() > 1)
-			//					g_pCosmos->m_pHtmlWndCreated->m_bCanShow = true;
-			//				if (m_pBrowser && hWnd == m_pBrowser->GetActiveWebContentWnd())
-			//					m_pVisibleWebView = g_pCosmos->m_pHtmlWndCreated;
-			//#ifdef WIN32	
-			//				if (::IsWindow(hPWnd))
-			//				{
-			//					DWORD dwID = 0;
-			//					::GetWindowThreadProcessId(hPWnd, &dwID);
-			//					if (dwID != ::GetCurrentProcessId())
-			//					{
-			//						auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwID);
-			//						if (it != g_pCosmos->m_mapRemoteTangramApp.end())
-			//						{
-			//							g_pCosmos->m_pHtmlWndCreated->m_pRemoteCosmos = it->second;
-			//						}
-			//					}
-			//				}
-			//#endif
-			//			}
-			//			else
-			//			{
-			//				g_pCosmos->m_bCreatingDevTool = false;
-			//				g_pCosmos->m_pHtmlWndCreated->m_bDevToolWnd = true;
-			//				if (m_pVisibleWebView) {
-			//					m_pVisibleWebView->m_pDevToolWnd = g_pCosmos->m_pHtmlWndCreated;
-			//					g_pCosmos->m_pHtmlWndCreated->m_pWebWnd = m_pVisibleWebView;
-			//				}
-			//			}
-			//			if (hPWnd)
-			//			{
-			//				g_pCosmos->m_pActiveHtmlWnd = m_pVisibleWebView;
-			//				g_pCosmos->m_pGalaxy = nullptr;
-			//				g_pCosmos->m_bWinFormActived = false;
-			//				m_mapChildPage[hWnd] = g_pCosmos->m_pHtmlWndCreated;
-			//				::PostMessage(hWnd, WM_COSMOSMSG, 20190331, 1);
-			//			}
-			//		} break;
 		case 1:
 		{
 			if (lParam == 20200115)
@@ -450,43 +402,67 @@ namespace Browser {
 		break;
 		case 20210317:
 		{
-			if (lParam)
+			m_hBeforeChange = nullptr;
+			m_bSZMode = true;
+			m_pBrowser->LayoutBrowser();
+			if (m_pParentXobj)
 			{
-				if (lParam == 1)
+				RECT rc;
+				m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
+				::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+				if (m_pVisibleWebView->m_pGalaxy)// && m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
 				{
-					::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 2);
-					break;
+					HWND hWnd = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd;
+					::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
 				}
-				//m_bSZMode = false;
-				m_pBrowser->LayoutBrowser();
-				if (m_pParentXobj)
+				if (m_pParentXobj->m_pParentWinFormWnd)
 				{
-					RECT rc;
-					m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
-					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-					if (m_pVisibleWebView->m_pGalaxy)// && m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
-					{
-						HWND hWnd = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd;
-						//HWND hPWnd = ::GetAncestor(hWnd, GA_ROOT);
-						//if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
-						::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
-					}
-					if (m_pParentXobj->m_pParentWinFormWnd)
-					{
-						HWND hClient = m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient;
-						::PostMessage(hClient, WM_COSMOSMSG, 0, 20180115);
-					}
+					HWND hClient = m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient;
+					::PostMessage(hClient, WM_COSMOSMSG, 0, 20180115);
 				}
-			}
-			else
-			{
-				m_hBeforeChange = nullptr;
-				m_bSZMode = true;
-				::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 1);
 			}
 			return 0;
 		}
 		break;
+		//case 20210317:
+		//{
+		//	if (lParam)
+		//	{
+		//		if (lParam == 1)
+		//		{
+		//			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 2);
+		//			break;
+		//		}
+		//		//m_bSZMode = false;
+		//		m_pBrowser->LayoutBrowser();
+		//		if (m_pParentXobj)
+		//		{
+		//			RECT rc;
+		//			m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
+		//			::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
+		//			if (m_pVisibleWebView->m_pGalaxy)// && m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
+		//			{
+		//				HWND hWnd = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd;
+		//				//HWND hPWnd = ::GetAncestor(hWnd, GA_ROOT);
+		//				//if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
+		//				::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
+		//			}
+		//			if (m_pParentXobj->m_pParentWinFormWnd)
+		//			{
+		//				HWND hClient = m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient;
+		//				::PostMessage(hClient, WM_COSMOSMSG, 0, 20180115);
+		//			}
+		//		}
+		//	}
+		//	else
+		//	{
+		//		m_hBeforeChange = nullptr;
+		//		m_bSZMode = true;
+		//		::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 1);
+		//	}
+		//	return 0;
+		//}
+		//break;
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;
@@ -750,6 +726,10 @@ namespace Browser {
 				//	}
 				//}
 				m_bSZMode = false;
+				if (theApp.m_bAppStarting == true)
+				{
+					theApp.m_bAppStarting = false;
+				}
 			}
 			break;
 			case 10:

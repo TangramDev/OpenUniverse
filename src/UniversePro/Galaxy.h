@@ -258,14 +258,14 @@ public:
 	CString									m_strPath;
 	CString									m_strBKID;
 	CString									m_strChildFormPath;
-	
-	CBKWnd*									m_pBKWnd;
-	CXobj*									m_pBindMDIXobj = nullptr;
-	CXobj*									m_pWebBindMDIXobj = nullptr;
-	CGalaxy*								m_pClientGalaxy = nullptr;
-	CWebView*								m_pOwnerHtmlWnd;
-	CWormhole*								m_pWormhole;
-	CMDIChildFormInfo*						m_pChildFormsInfo;
+
+	CBKWnd* m_pBKWnd;
+	CXobj* m_pBindMDIXobj = nullptr;
+	CXobj* m_pWebBindMDIXobj = nullptr;
+	CGalaxy* m_pClientGalaxy = nullptr;
+	CWebView* m_pOwnerHtmlWnd;
+	CWormhole* m_pWormhole;
+	CMDIChildFormInfo* m_pChildFormsInfo;
 
 	void SendMessage();
 
@@ -287,15 +287,16 @@ public:
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
 		MESSAGE_HANDLER(WM_ENTERSIZEMOVE, OnEnterSZ)
 		MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
+		MESSAGE_HANDLER(WM_ENTERIDLE, OnEnterIdle)
 	END_MSG_MAP()
 
 	void OnFinalMessage(HWND hWnd);
 
 private:
 	LRESULT OnDpiChanged(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnClose(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnGetMe(UINT, WPARAM, LPARAM, BOOL&);
-	LRESULT OnFormCreated(UINT, WPARAM, LPARAM, BOOL& );
+	LRESULT OnFormCreated(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosMsg(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnCosmosGetXml(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnGetDPIScaledSize(UINT, WPARAM, LPARAM, BOOL&);
@@ -309,6 +310,7 @@ private:
 	LRESULT OnEnterSZ(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnDestroy(UINT, WPARAM, LPARAM, BOOL&);
 	LRESULT OnSysCommand(UINT, WPARAM, LPARAM, BOOL&);
+	LRESULT OnEnterIdle(UINT, WPARAM, LPARAM, BOOL&);
 };
 
 class ATL_NO_VTABLE CGalaxy :
