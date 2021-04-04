@@ -1530,7 +1530,7 @@ STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR
 	CString strXml = OLE2T(bstrXml);
 	if (strGalaxys == _T(""))
 	{
-		for (auto it : m_mapGalaxy)
+		for (auto &it : m_mapGalaxy)
 		{
 			if (it.second != m_pBKGalaxy)
 			{

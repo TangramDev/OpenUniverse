@@ -744,6 +744,10 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		lpwndpos->cy = rc.bottom;
 	}
 	lpwndpos->flags |= SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW;
+	lpwndpos->x += 2;
+	lpwndpos->y += 2;
+	lpwndpos->cx -= 4;
+	lpwndpos->cy -= 4;
 	if (::IsWindow(m_hChild))
 	{
 		::SetWindowPos(m_hChild, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOREDRAW | SWP_NOACTIVATE);
@@ -867,6 +871,10 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 	CWnd::OnShowWindow(bShow, nStatus);
 	if (bShow)
 	{
+		if (m_pXobj->m_strName == _T("mdiclient"))
+		{
+			HWND hWnd = m_hWnd;
+		}
 		if (m_pXobj->m_pWebBrowser)
 		{
 			RECT rc;

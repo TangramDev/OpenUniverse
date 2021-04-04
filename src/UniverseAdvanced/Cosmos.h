@@ -148,6 +148,7 @@ class ATL_NO_VTABLE CCosmos :
 	friend class CUniverse;
 	friend class CMDIParent;
 	friend class CEclipseWnd;
+	friend class CGalaxyCluster;
 public:
 	CCosmos();
 	virtual ~CCosmos();

@@ -550,8 +550,6 @@ namespace CommonUniverse {
 		virtual void CosmosAction(BSTR bstrXml, void*) {}
 		virtual BSTR GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild) { return CComBSTR(""); }
 		virtual void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal) {}
-		virtual void SelectXobj(IXobj*) {}
-		virtual void SelectObj(IDispatch*) {}
 		virtual void ReleaseCosmosObj(IDispatch*) {}
 		virtual void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd) {}
 		virtual void WindowDestroy(HWND hWnd) {}
@@ -559,7 +557,6 @@ namespace CommonUniverse {
 		virtual HRESULT NavigateURL(IXobj* pXobj, CString strURL, IDispatch* dispObjforScript) { return S_FALSE; }
 		virtual void OnCLRHostExit() {}
 		virtual void OnDestroyChromeBrowser(IBrowser*) {}
-		virtual void ExportAllFormsInfo() {}
 		virtual void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue) {}
 		virtual void* Extend(CString strKey, CString strData, CString strFeatures) { return nullptr; }
 		virtual bool IsSupportDesigner() { return false; }

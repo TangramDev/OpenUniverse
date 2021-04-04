@@ -744,6 +744,10 @@ LRESULT CBKWnd::OnWindowPosChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		lpwndpos->cy = rc.bottom;
 	}
 	lpwndpos->flags |= SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW;
+	lpwndpos->x += 2;
+	lpwndpos->y += 2;
+	lpwndpos->cx -= 4;
+	lpwndpos->cy -= 4;
 	if (::IsWindow(m_hChild))
 	{
 		::SetWindowPos(m_hChild, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOREDRAW | SWP_NOACTIVATE);
@@ -901,7 +905,16 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 			{
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			}
+
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 		}
+		//if (m_pXobj->m_strName == m_pXobj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName)
+		//{
+		//	//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+		//	//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);//| RDW_UPDATENOW);
+		//	HWND hWnd = m_hWnd;
+		//	RECT rc;
+		//	::GetClientRect(m_hWnd, &rc);
+		//}
 	}
 }

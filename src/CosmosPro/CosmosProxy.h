@@ -121,7 +121,6 @@ private:
 	void SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild, BSTR strVal);
 	HRESULT NavigateURL(IXobj* pXobj, CString strURL, IDispatch* dispObjforScript);
 	Control^ GetCanSelect(Control^ ctrl, bool direct);
-	void SelectObj(IDispatch*);
 
 	HWND GetHwnd(HWND parent, int x, int y, int width, int height);
 	void OnDestroyChromeBrowser(IBrowser*);
@@ -136,7 +135,6 @@ private:
 
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);
-	void SelectXobj(IXobj* );
 	Object^ InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	Object^ InitXobj(IXobj* pXobj, Control^ pCtrl, bool bSave, CTangramXmlParse* pParse);
 	void SetObjectProperty(IDispatch* pObj, BSTR bstrPropertyName, BSTR bstrPropertyValue);

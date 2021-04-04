@@ -273,6 +273,7 @@ BOOL CUniverse::InitInstance()
 		g_pCosmos->m_lpszSplitterClass = wndClass.lpszClassName;
 
 		wndClass.style = CS_HREDRAW | CS_VREDRAW;
+		wndClass.hbrBackground = (HBRUSH)COLOR_BACKGROUND;
 		wndClass.lpszClassName = L"Cosmos Xobj Class";
 
 		RegisterClass(&wndClass);

@@ -1987,10 +1987,6 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 	return nullptr;
 }
 
-void CCosmosProxy::SelectXobj(IXobj* pXobj)
-{
-}
-
 IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode)
 {
 	String^ strID = BSTR2STRING(bstrObjID);
@@ -2065,6 +2061,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 			{
 				System::Windows::Forms::Integration::ElementHost^ pElementHost = gcnew System::Windows::Forms::Integration::ElementHost();
 				pElementHost->Child = (FrameworkElement^)_pObj;
+				pElementHost->AutoSize = true;
 				IDispatch* pDisp = (IDispatch*)(Marshal::GetIUnknownForObject(pElementHost).ToInt64());
 				_pXobj->m_pHostObj = pElementHost;
 				return pDisp;
@@ -2306,10 +2303,6 @@ IDispatch* CCosmosProxy::GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool 
 
 	}
 	return NULL;
-}
-
-void CCosmosProxy::SelectObj(IDispatch* CtrlDisp)
-{
 }
 
 BSTR CCosmosProxy::GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool bFindInChild)

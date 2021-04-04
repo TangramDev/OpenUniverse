@@ -259,14 +259,14 @@ public:
 	CString									m_strBKID;
 	CString									m_strChildFormPath;
 
-	CBKWnd* m_pBKWnd;
-	CXobj* m_pBindMDIXobj = nullptr;
-	CXobj* m_pWebBindMDIXobj = nullptr;
-	CGalaxy* m_pClientGalaxy = nullptr;
-	CWebView* m_pOwnerHtmlWnd;
-	CWormhole* m_pWormhole;
-	CMDIChildFormInfo* m_pChildFormsInfo;
-
+	CBKWnd*									m_pBKWnd;
+	CXobj*									m_pBindMDIXobj = nullptr;
+	CXobj*									m_pWebBindMDIXobj = nullptr;
+	CGalaxy*								m_pClientGalaxy = nullptr;
+	CWebView*								m_pOwnerHtmlWnd;
+	CWormhole*								m_pWormhole;
+	CMDIChildFormInfo*						m_pChildFormsInfo;
+	map<CString, CXobj*>					m_mapMDIClientXobj;
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CWinForm)
