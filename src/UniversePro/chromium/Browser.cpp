@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104020058           *
+ *           Web Runtime for Application - Version 1.0.0.202104050059           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -424,45 +424,6 @@ namespace Browser {
 			return 0;
 		}
 		break;
-		//case 20210317:
-		//{
-		//	if (lParam)
-		//	{
-		//		if (lParam == 1)
-		//		{
-		//			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 2);
-		//			break;
-		//		}
-		//		//m_bSZMode = false;
-		//		m_pBrowser->LayoutBrowser();
-		//		if (m_pParentXobj)
-		//		{
-		//			RECT rc;
-		//			m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
-		//			::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOREDRAW);
-		//			if (m_pVisibleWebView->m_pGalaxy)// && m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_nViewType == Grid)
-		//			{
-		//				HWND hWnd = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd;
-		//				//HWND hPWnd = ::GetAncestor(hWnd, GA_ROOT);
-		//				//if (g_pCosmos->m_pCLRProxy && g_pCosmos->m_pCLRProxy->IsWinForm(hPWnd) == 1)
-		//				::RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
-		//			}
-		//			if (m_pParentXobj->m_pParentWinFormWnd)
-		//			{
-		//				HWND hClient = m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient;
-		//				::PostMessage(hClient, WM_COSMOSMSG, 0, 20180115);
-		//			}
-		//		}
-		//	}
-		//	else
-		//	{
-		//		m_hBeforeChange = nullptr;
-		//		m_bSZMode = true;
-		//		::PostMessage(m_hWnd, WM_COSMOSMSG, 20210317, 1);
-		//	}
-		//	return 0;
-		//}
-		//break;
 		case 20201101:
 		{
 			m_hDrawWnd = (HWND)lParam;

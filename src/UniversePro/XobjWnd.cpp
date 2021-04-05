@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104020058           *
+ *           Web Runtime for Application - Version 1.0.0.202104050059           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -871,10 +871,6 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 	CWnd::OnShowWindow(bShow, nStatus);
 	if (bShow)
 	{
-		if (m_pXobj->m_strName == _T("mdiclient"))
-		{
-			HWND hWnd = m_hWnd;
-		}
 		if (m_pXobj->m_pWebBrowser)
 		{
 			RECT rc;
@@ -909,7 +905,16 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 			{
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 			}
+
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 		}
+		//if (m_pXobj->m_strName == m_pXobj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName)
+		//{
+		//	//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+		//	//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);//| RDW_UPDATENOW);
+		//	HWND hWnd = m_hWnd;
+		//	RECT rc;
+		//	::GetClientRect(m_hWnd, &rc);
+		//}
 	}
 }
