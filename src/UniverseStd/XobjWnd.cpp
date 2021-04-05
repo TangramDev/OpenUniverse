@@ -642,7 +642,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 			m_pXobj->m_pWebBrowser->m_bSZMode = true;
 			::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 		}
-		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOACTIVATE | SWP_NOREDRAW);
+		::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, lpwndpos->cx + 24, lpwndpos->cy + 18, SWP_NOACTIVATE | SWP_NOREDRAW);
 		return;
 	}
 	if (m_pXobj && m_pXobj->m_nViewType == CLRCtrl && m_pXobj->m_hHostWnd)

@@ -2139,6 +2139,10 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 	pCommonData->m_pCosmosParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
 	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_XOBJ);
+	for (auto it : m_mapXobj)
+	{
+		::ShowWindow(it.second->m_pHostWnd->m_hWnd, SW_HIDE);
+	}
 	Create();
 	m_mapXobj[strKey] = m_pWorkXobj;
 	if (strKey.CompareNoCase(_T("default")) == 0)
@@ -2438,6 +2442,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			pOldNode->m_pHostWnd->ShowWindow(SW_HIDE);
 			GetParent().ScreenToClient(&rc);
 			::SetWindowPos(m_pWorkXobj->m_pHostWnd->m_hWnd, m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_SHOWWINDOW | SWP_FRAMECHANGED);
+			m_pWorkXobj->m_pHostWnd->ShowWindow(SW_SHOW);
 		}
 	}
 	else
@@ -2634,7 +2639,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			}
 		}
 	}
-	
+
 	if (m_strGalaxyName == _T("default"))
 	{
 		CString strName = m_pWorkXobj->m_pHostParse->attr(_T("galaxy"), _T(""));
@@ -2654,7 +2659,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 	HostPosChanged();
 	HWND hParent = ::GetParent(m_hWnd);
 	::ShowWindow(m_pWorkXobj->m_pHostWnd->m_hWnd, SW_SHOW);
-	::SetParent(m_pWorkXobj->m_pHostWnd->m_hWnd, hParent);
+	//::SetParent(m_pWorkXobj->m_pHostWnd->m_hWnd, hParent);
 	m_pWorkXobj->m_bTopObj = true;
 	if (m_pWorkXobj->m_nViewType == Grid)
 		::SetWindowLongPtr(m_pWorkXobj->m_pHostWnd->m_hWnd, GWLP_ID, m_pWorkXobj->m_nID);
@@ -3534,7 +3539,8 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		::InvalidateRect(m_hWnd, nullptr, true);
 	if (m_pBKWnd)
 	{
-		::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 2, 2, lpwndpos->cx - 4, lpwndpos->cy - 4, SWP_NOZORDER | SWP_NOACTIVATE);
+		::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, lpwndpos->cx, lpwndpos->cy, SWP_NOZORDER | SWP_NOACTIVATE);
+		//::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 2, 2, lpwndpos->cx - 4, lpwndpos->cy - 4, SWP_NOZORDER | SWP_NOACTIVATE);
 	}
 	return hr;
 }
