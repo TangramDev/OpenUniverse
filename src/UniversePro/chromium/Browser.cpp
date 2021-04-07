@@ -801,6 +801,8 @@ namespace Browser {
 				break;
 				default:
 				{
+					if (m_pMDIParent && m_pMDIParent->m_bCreateNewDoc)
+						break;
 					if (/*m_pVisibleWebView->m_bCanShow == false ||*/ m_bTabChange || m_bInTabChange)
 						break;
 					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();

@@ -1042,14 +1042,13 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					::SysFreeString(bstrXml);
 					break;
 				}
-				pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
 				CComBSTR bstrKey(strKey);
 				bool bNewKey = m_pGalaxy->m_strCurrentKey != strKey;
 				for (auto& it : m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys)
 				{
 					CGalaxy* _pGalaxy = (CGalaxy*)it.second;
 					IXobj* pXobj = nullptr;
-					if (_pGalaxy != m_pGalaxy || bNewKey)
+					if (m_bCreateNewDoc||_pGalaxy != m_pGalaxy || bNewKey)
 					{
 						if (it.first == 10000)
 						{
@@ -1071,6 +1070,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					}
 				}
 				::SysFreeString(bstrXml);
+				pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
 				CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
 				if (pClientObj)
 					m_pGalaxy->m_pBindingXobj = pClientObj;
@@ -1910,19 +1910,14 @@ CGalaxy::~CGalaxy()
 
 void CGalaxy::HostPosChanged()
 {
-	if (::IsWindow(m_hWnd) == false)
-		return;
-	HWND hwnd = m_hWnd;
-	//CXobj* pTopXobj = m_pWorkXobj;
-	CGalaxy* _pGalaxy = this;
-	if (::IsWindow(hwnd) == false)
+	if (::IsWindow(m_hWnd) == false || m_pWorkXobj == nullptr || m_pWorkXobj->m_pHostWnd == nullptr)
 		return;
 
 	HWND hPWnd = ::GetParent(m_hWnd);
-	if (::IsWindow(_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd))
+	if (::IsWindow(m_pWorkXobj->m_pHostWnd->m_hWnd))
 	{
 		RECT rt1;
-		_pGalaxy->m_pWorkXobj->m_pHostWnd->GetWindowRect(&rt1);
+		m_pWorkXobj->m_pHostWnd->GetWindowRect(&rt1);
 
 		::ScreenToClient(hPWnd, (LPPOINT)&rt1);
 		::ScreenToClient(hPWnd, ((LPPOINT)&rt1) + 1);
@@ -1949,7 +1944,7 @@ void CGalaxy::HostPosChanged()
 
 		if (m_bTabbedMDIClient || m_bObserveState)
 			flag &= ~SWP_NOREDRAW;
-		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
+		dwh = ::DeferWindowPos(dwh, m_hWnd, HWND_TOP,
 			rt1.left,
 			rt1.top,
 			rt1.right - rt1.left,

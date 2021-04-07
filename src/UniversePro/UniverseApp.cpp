@@ -176,7 +176,7 @@ BOOL CUniverse::InitInstance()
 	::OleInitialize(NULL);
 	BOOL bOfficeApp = false;
 
-	//m_bHostCLR = (BOOL)::GetModuleHandle(_T("mscoreei.dll"));
+	m_bHostCLR = (BOOL)::GetModuleHandle(_T("mscoreei.dll"));
 	//CString strExes = _T("");
 	HMODULE hModule = ::GetModuleHandle(_T("mso.dll"));
 	if (hModule)

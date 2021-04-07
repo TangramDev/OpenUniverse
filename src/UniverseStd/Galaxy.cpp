@@ -1533,26 +1533,21 @@ CGalaxy::~CGalaxy()
 
 void CGalaxy::HostPosChanged()
 {
-	if (::IsWindow(m_hWnd) == false)
-		return;
-	HWND hwnd = m_hWnd;
-	CXobj* pTopXobj = m_pWorkXobj;
-	CGalaxy* _pGalaxy = this;
-	if (::IsWindow(hwnd) == false)
+	if (::IsWindow(m_hWnd) == false || m_pWorkXobj == nullptr || m_pWorkXobj->m_pHostWnd == nullptr)
 		return;
 
 	HWND hPWnd = ::GetParent(m_hWnd);
-	if (::IsWindow(_pGalaxy->m_pWorkXobj->m_pHostWnd->m_hWnd))
+	if (::IsWindow(m_pWorkXobj->m_pHostWnd->m_hWnd))
 	{
 		RECT rt1;
-		_pGalaxy->m_pWorkXobj->m_pHostWnd->GetWindowRect(&rt1);
+		m_pWorkXobj->m_pHostWnd->GetWindowRect(&rt1);
 
 		::ScreenToClient(hPWnd, (LPPOINT)&rt1);
 		::ScreenToClient(hPWnd, ((LPPOINT)&rt1) + 1);
 
 		HDWP dwh = BeginDeferWindowPos(1);
 		UINT flag = SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_SHOWWINDOW;
-		CWnd* _pWnd = CWnd::FromHandlePermanent(::GetParent(m_hWnd));
+		//CWnd* _pWnd = CWnd::FromHandlePermanent(hPWnd);
 
 		if (m_bNoRedrawState == false)
 		{
@@ -1572,7 +1567,7 @@ void CGalaxy::HostPosChanged()
 
 		if (m_bTabbedMDIClient || m_bObserveState)
 			flag &= ~SWP_NOREDRAW;
-		dwh = ::DeferWindowPos(dwh, hwnd, HWND_TOP,
+		dwh = ::DeferWindowPos(dwh, m_hWnd, HWND_TOP,
 			rt1.left,
 			rt1.top,
 			rt1.right - rt1.left,
@@ -1580,11 +1575,11 @@ void CGalaxy::HostPosChanged()
 			flag
 		);
 		EndDeferWindowPos(dwh);
-		UpdateVisualWPFMap(hPWnd, false);
-		if (m_pBKWnd && ::IsWindow(m_pBKWnd->m_hWnd))
-		{
-			::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
-		}
+		//UpdateVisualWPFMap(hPWnd, false);
+		//if (m_pBKWnd && ::IsWindow(m_pBKWnd->m_hWnd))
+		//{
+		//	::SetWindowPos(m_pBKWnd->m_hWnd, HWND_BOTTOM, 0, 0, rt1.right - rt1.left, rt1.bottom - rt1.top, SWP_NOACTIVATE | SWP_NOREDRAW);
+		//}
 		if (m_bObserveState)
 		{
 			m_bObserveState = false;
