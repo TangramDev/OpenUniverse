@@ -520,6 +520,26 @@ namespace CommonUniverse
 		return CosmosInit(_T("")) ? CWinAppEx::InitApplication() : false;
 	}
 
+	BOOL CWebRuntimeApp::ProcessShellCommandEx(CCommandLineInfo& CmdInfo)
+	{
+		m_nShellCmd = CmdInfo.m_nShellCommand;
+		switch (CmdInfo.m_nShellCommand)
+		{
+		case CCommandLineInfo::FileNew:
+			m_strStartOpenFile = CmdInfo.m_strFileName;
+			break;
+		case CCommandLineInfo::FileOpen:
+			break;
+		default:
+		{
+			if (!ProcessShellCommand(CmdInfo))
+				return FALSE;
+		}
+		break;
+		}
+		return TRUE;
+	}
+
 	HWND CWebRuntimeApp::GetActivePopupMenu(HWND hWnd)
 	{
 		CMFCPopupMenu* pActivePopupMenu = CMFCPopupMenu::GetSafeActivePopupMenu();
@@ -1107,6 +1127,26 @@ namespace CommonUniverse
 			}
 		}
 		return _T("");
+	}
+	
+	void CWebRuntimeApp::OpenDocFile(CString strFileName, CString strExt, CString strCreatingDOCID)
+	{
+		POSITION nPos = GetFirstDocTemplatePosition();
+		while (nPos)
+		{
+			CDocTemplate* pTemplate = GetNextDocTemplate(nPos);
+			CString _strExt = _T("");
+			pTemplate->GetDocString(_strExt, CDocTemplate::filterExt);
+			_strExt.MakeLower();
+			if (_strExt == _T(""))
+				_strExt = _T("default");
+			if (strExt != _T("") && strExt.CompareNoCase(strExt) == 0)
+			{
+				m_strCreatingDOCID = strCreatingDOCID;
+				pTemplate->OpenDocumentFile(LPCTSTR(strFileName));
+				return;
+			}
+		}
 	}
 
 	void CWebRuntimeApp::OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5)

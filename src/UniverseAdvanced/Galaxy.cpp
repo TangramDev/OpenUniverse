@@ -1065,12 +1065,15 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 								pVisiblePage->m_bCanShow = true;
 							}
 						}
-						else
+						else if(_pGalaxy->m_strCurrentKey!=strKey)
+						{
 							_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
+						}
 					}
 				}
 				::SysFreeString(bstrXml);
-				pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
+				if (pVisiblePage->m_pGalaxy->m_strCurrentKey != strKey)
+					pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
 				CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
 				if (pClientObj)
 					m_pGalaxy->m_pBindingXobj = pClientObj;

@@ -823,7 +823,7 @@ namespace Browser {
 					}
 
 					m_pBrowser->LayoutBrowser();
-					if (::GetParent(m_hWnd) == nullptr)
+					//if (::GetParent(m_hWnd) == nullptr)
 						BrowserLayout();
 					if (m_pParentXobj)
 					{
@@ -833,6 +833,7 @@ namespace Browser {
 					if (m_pVisibleWebView->m_pGalaxy)
 					{
 						::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
+						m_pVisibleWebView->m_pGalaxy->HostPosChanged();
 						if (::GetParent(m_hWnd) == nullptr)
 						{
 							CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
@@ -844,6 +845,10 @@ namespace Browser {
 						}
 					}
 					m_bSZMode = false;
+					if (m_pMDIParent)
+					{
+						::PostMessage(m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+					}
 				}
 				break;
 				}

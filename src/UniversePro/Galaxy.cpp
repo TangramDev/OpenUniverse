@@ -1048,7 +1048,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				{
 					CGalaxy* _pGalaxy = (CGalaxy*)it.second;
 					IXobj* pXobj = nullptr;
-					if (m_bCreateNewDoc||_pGalaxy != m_pGalaxy || bNewKey)
+					if (m_bCreateNewDoc || _pGalaxy != m_pGalaxy || bNewKey)
 					{
 						if (it.first == 10000)
 						{
@@ -1065,12 +1065,15 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 								pVisiblePage->m_bCanShow = true;
 							}
 						}
-						else
+						else if (_pGalaxy->m_strCurrentKey != strKey)
+						{
 							_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
+						}
 					}
 				}
 				::SysFreeString(bstrXml);
-				pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
+				if (pVisiblePage->m_pGalaxy->m_strCurrentKey != strKey)
+					pVisiblePage->LoadDocument2Viewport(strKey, _T(""));
 				CXobj* pClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
 				if (pClientObj)
 					m_pGalaxy->m_pBindingXobj = pClientObj;
@@ -1094,8 +1097,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 							::GetClientRect(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
 							::SetParent(m_pHostBrowser->m_hWnd, m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd);
 							::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW | SWP_NOSENDCHANGING);
-							m_pGalaxy->m_pBindingXobj = m_pHostBrowser->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-							break;
 						}
 					}
 					::PostMessage(m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 1, 7);
@@ -2467,10 +2468,10 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 	{
 		_pXobj = itHostBrowser->second;
 	}
-		
+
 	if (bExists)
 	{
-		if (_pXobj&&m_pHostWebBrowserWnd)
+		if (_pXobj && m_pHostWebBrowserWnd)
 		{
 			if (_pXobj->m_nViewType == BlankView)
 			{
@@ -2691,7 +2692,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 	}
 	if (bExists == false)
 	{
-		if (_pXobj&&m_pHostWebBrowserWnd)
+		if (_pXobj && m_pHostWebBrowserWnd)
 		{
 			if (_pXobj->m_nViewType == BlankView)
 			{

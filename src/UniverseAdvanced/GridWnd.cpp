@@ -438,9 +438,11 @@ void CGridWnd::StopTracking(BOOL bAccept)
 		{
 			pWebWnd = pGalaxy->m_pWebPageWnd;
 			HWND hPWnd = ::GetParent(pWebWnd->m_hWnd);
-			::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
+			//::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 4);
+			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		RecalcLayout();
+
 		if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent)
 		{
 			::PostMessage(m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
@@ -944,6 +946,7 @@ BOOL CGridWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 				m_pHostXobj = pHostNode;
 		}
 		_RecalcLayout();
+
 		return true;
 	}
 	return false;
@@ -1285,3 +1288,4 @@ void CGridWnd::OnDestroy()
 	}
 	__super::OnDestroy();
 }
+

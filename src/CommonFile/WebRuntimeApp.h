@@ -159,6 +159,7 @@ namespace CommonUniverse
 		CString GetDocTemplateID(CDocument* pDoc);
 		virtual bool InitApp();
 		virtual bool SetFrameInfo(HWND hWnd);
+		virtual BOOL ProcessShellCommandEx(CCommandLineInfo& rCmdInfo);
 	private:
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;
@@ -177,6 +178,7 @@ namespace CommonUniverse
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewContentLoaderManager);
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5);
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {};
+		virtual void OpenDocFile(CString strFileName, CString strExt, CString strCreatingDOCID);
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd);
 		virtual CString QueryWndClassName(HWND hWnd);
 		virtual CString QueryDocType(HWND hWnd);

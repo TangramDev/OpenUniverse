@@ -731,6 +731,7 @@ namespace Browser {
 		HWND hBrowser = ::GetParent(m_hWnd);
 		HWND hPPWnd = ::GetParent(hBrowser);
 		CMDTWnd* pMDTWnd = nullptr;
+		CMDIParent* pMDIWnd = nullptr;
 		CBrowser* pBrowserWnd = nullptr;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pCosmos->m_mapBrowserWnd.end())
@@ -749,7 +750,9 @@ namespace Browser {
 					if (hPWnd)
 					{
 						pBrowserWnd->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hPWnd, _T("CosmosFrameWndInfo"));;
-						if (pBrowserWnd->m_pCosmosFrameWndInfo->m_nFrameType == 1)
+						switch (pBrowserWnd->m_pCosmosFrameWndInfo->m_nFrameType)
+						{
+						case 1:
 						{
 							auto it = g_pCosmos->m_mapMDTWindow.find(hPWnd);
 							if (it != g_pCosmos->m_mapMDTWindow.end())
@@ -757,6 +760,18 @@ namespace Browser {
 								pMDTWnd = it->second;
 								pMDTWnd->m_pBrowser = pBrowserWnd;
 							}
+						}
+						break;
+						case 2:
+						{
+							auto it = g_pCosmos->m_mapMDIParent.find(hPWnd);
+							if (it != g_pCosmos->m_mapMDIParent.end())
+							{
+								it->second->m_pHostBrowser = pBrowserWnd;
+								pMDIWnd = it->second;
+							}
+						}
+						break;
 						}
 					}
 				}
@@ -824,6 +839,8 @@ namespace Browser {
 			}
 			if (m_pGalaxy)
 			{
+				if (pMDIWnd && m_pGalaxy->m_pMDIParent == nullptr)
+					m_pGalaxy->m_pMDIParent = pMDIWnd;
 				IXobj* pXobj = nullptr;
 				CComBSTR bstrKey(strName);
 				m_pGalaxy->m_pWebPageWnd = this;

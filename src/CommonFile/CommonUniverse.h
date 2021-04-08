@@ -259,8 +259,8 @@ namespace CommonUniverse {
 	typedef struct GalaxyInfo
 	{
 		HWND			m_hCtrlHandle;
-		IDispatch*		m_pDisp;
-		IDispatch*		m_pParentDisp;
+		IDispatch* m_pDisp;
+		IDispatch* m_pParentDisp;
 		CString			m_strCtrlName;
 		CString			m_strGalaxyName;
 		CString			m_strXobjXml;
@@ -473,22 +473,25 @@ namespace CommonUniverse {
 		virtual ~IUniverseAppProxy() {
 		}
 
+		int									m_nShellCmd = -1;
+		int									m_nFrameIndex;
 		BOOL								m_bAutoDelete;
+		BOOL								m_bCreatingNewFrame;
 		HWND								m_hMainWnd;
 		HWND								m_hCreatingView;
+		HWND								m_hClosingFrame;
 		LPCTSTR								m_strProxyName;
 		LPCTSTR								m_strProxyID;
 		LPCTSTR								m_strCreatingFrameTitle;
 		LPCTSTR								m_strClosingFrameID;
-		void*								m_pvoid;
-		CCosmosDocProxy*					m_pCurDocProxy;
-		CCosmosImpl*						m_pCosmosImpl;
 
-		BOOL								m_bCreatingNewFrame;
-		int									m_nFrameIndex;
-		HWND								m_hClosingFrame;
 		CString								m_strAppKey;
 		CString								m_strCreatingDOCID = _T("");
+		CString								m_strStartOpenFile = _T("");
+
+		void* m_pvoid;
+		CCosmosDocProxy* m_pCurDocProxy;
+		CCosmosImpl* m_pCosmosImpl;
 
 		virtual BOOL InitCosmos(void* pVoid) {
 			return TRUE;
@@ -509,6 +512,7 @@ namespace CommonUniverse {
 		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
 		virtual void MouseMoveProxy(HWND hWnd) {}
+		virtual void OpenDocFile(CString strFileName, CString strExt, CString strCreatingDOCID) {}
 		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
@@ -641,20 +645,20 @@ namespace CommonUniverse {
 		CStringA								m_strBridgeJavaClass;
 		CString									m_strStartJarPath;
 
-		IPCMsg*									m_pCurrentIPCMsg;
-		ICosmosCLRImpl*							m_pCLRProxy;
-		IUniverseAppProxy*						m_pActiveAppProxy;
-		IUniverseAppProxy*						m_pUniverseAppProxy;
-		IUniverseAppProxy*						m_pCosmosAppProxy;
-		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
-		ICosmosExtender*						m_pExtender = nullptr;
-		ICosmosDelegate*						m_pCosmosDelegate = nullptr;
-		CChromeBrowserBase*						m_pActiveBrowser = nullptr;
-		CCosmosBrowserFactory*					m_pBrowserFactory = nullptr;
-		ICosmosWindow*							m_pCreatingWindow = nullptr;
-		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
-		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
+		IPCMsg* m_pCurrentIPCMsg;
+		ICosmosCLRImpl* m_pCLRProxy;
+		IUniverseAppProxy* m_pActiveAppProxy;
+		IUniverseAppProxy* m_pUniverseAppProxy;
+		IUniverseAppProxy* m_pCosmosAppProxy;
+		CMDIChildFormInfo* m_pCurMDIChildFormInfo;
+		ICosmosExtender* m_pExtender = nullptr;
+		ICosmosDelegate* m_pCosmosDelegate = nullptr;
+		CChromeBrowserBase* m_pActiveBrowser = nullptr;
+		CCosmosBrowserFactory* m_pBrowserFactory = nullptr;
+		ICosmosWindow* m_pCreatingWindow = nullptr;
+		OmniboxViewViewsProxy* m_pCreatingOmniboxViewViews = nullptr;
+		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
+		CWebPageImpl* m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapGalaxy2GalaxyCluster;
@@ -786,8 +790,8 @@ namespace CommonUniverse {
 		virtual ~ICosmosDelegate() {
 		}
 
-		JavaVM*				m_pJVM;
-		JNIEnv*				m_pJVMenv;
+		JavaVM* m_pJVM;
+		JNIEnv* m_pJVMenv;
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;
@@ -952,7 +956,7 @@ namespace CommonUniverse {
 		}
 		virtual ~CChromeBrowserBase() {}
 
-		CBrowserImpl*		m_pProxy;
+		CBrowserImpl* m_pProxy;
 
 		virtual int GetType() { return -1; }
 		virtual void* GetBrowser() { return nullptr; }
