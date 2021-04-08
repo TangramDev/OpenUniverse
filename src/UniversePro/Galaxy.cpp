@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104050059
+ *           Web Runtime for Application - Version 1.0.0.202104080060
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -950,7 +950,16 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
 		}
 		else
+		{
 			theApp.m_bAppStarting = false;
+			switch (g_pCosmos->m_pUniverseAppProxy->m_nShellCmd)
+			{
+			case CCommandLineInfo::FileNew:
+			case CCommandLineInfo::FileOpen:
+				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210408);
+				break;
+			}
+		}
 	}
 	break;
 	case 20210213:

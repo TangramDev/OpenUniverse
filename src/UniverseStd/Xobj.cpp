@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104050059           *
+ *           Web Runtime for Application - Version 1.0.0.202104080060           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -956,45 +956,67 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 	CString _strURL = m_pHostParse->attr(_T("url"), _T(""));
 	if (_strURL == _T("host"))
 	{
-		if (g_pCosmos->m_hTempBrowserWnd)
+		CBrowser* pBrowser = m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd;
+		if (pBrowser)
 		{
-			hPWnd = g_pCosmos->m_hTempBrowserWnd;
-			::SetWindowPos(hPWnd, HWND_BOTTOM, 0, 0, rect.right - rect.left, rect.bottom - rect.top, /*|SWP_SHOWWINDOW|SWP_NOSENDCHANGING*/SWP_NOREDRAW | SWP_NOACTIVATE);
-			hWnd = ::GetParent(hPWnd);
-			::SetWindowLongPtr(hWnd, GWLP_ID, nID);
-			::SetParent(hWnd, pParentWnd->m_hWnd);
-			::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD | WS_VISIBLE);
-			g_pCosmos->m_hTempBrowserWnd = NULL;
-			if (::IsWindow(m_pHostWnd->m_hWnd) == false)
-				bRet = m_pHostWnd->SubclassWindow(hWnd);
-		}
-		else if (g_pCosmos->m_pHtmlWndCreated == nullptr)
-		{
-			hPWnd = g_pCosmos->m_hHostBrowserWnd;
+			m_pWebBrowser = pBrowser;
+			if (m_pWebBrowser->m_pVisibleWebView)
+			{
+				//::SetParent(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, hPWnd);
+				//::ShowWindow(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, SW_SHOW);
+				//if(m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost)
+				//	m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
+				m_pWebBrowser->m_pParentXobj = this;
+				m_pWebBrowser->m_pVisibleWebView->m_pParentXobj = this;
+			}
+			m_pWebBrowser->BrowserLayout();
+			g_pCosmos->m_hParent = NULL;
+			m_pRootObj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
+			m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
+			m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 		}
 		else
 		{
-			hPWnd = ::GetParent(g_pCosmos->m_pHtmlWndCreated->m_hWnd);
-		}
-		if (::IsWindow(hPWnd) && (::GetWindowLongPtr(hPWnd, GWL_STYLE) & WS_CHILD)) {
-			auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())
+			if (g_pCosmos->m_hTempBrowserWnd)
 			{
-				m_pWebBrowser = (CBrowser*)it->second;
-				if (m_pWebBrowser->m_pVisibleWebView)
+				hPWnd = g_pCosmos->m_hTempBrowserWnd;
+				::SetWindowPos(hPWnd, HWND_BOTTOM, 0, 0, rect.right - rect.left, rect.bottom - rect.top, /*|SWP_SHOWWINDOW|SWP_NOSENDCHANGING*/SWP_NOREDRAW | SWP_NOACTIVATE);
+				hWnd = ::GetParent(hPWnd);
+				::SetWindowLongPtr(hWnd, GWLP_ID, nID);
+				::SetParent(hWnd, pParentWnd->m_hWnd);
+				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD | WS_VISIBLE);
+				g_pCosmos->m_hTempBrowserWnd = NULL;
+				if (::IsWindow(m_pHostWnd->m_hWnd) == false)
+					bRet = m_pHostWnd->SubclassWindow(hWnd);
+			}
+			else if (g_pCosmos->m_pHtmlWndCreated == nullptr)
+			{
+				hPWnd = g_pCosmos->m_hHostBrowserWnd;
+			}
+			else
+			{
+				hPWnd = ::GetParent(g_pCosmos->m_pHtmlWndCreated->m_hWnd);
+			}
+			if (::IsWindow(hPWnd) && (::GetWindowLongPtr(hPWnd, GWL_STYLE) & WS_CHILD)) {
+				auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
+				if (it != g_pCosmos->m_mapBrowserWnd.end())
 				{
-					//::SetParent(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, hPWnd);
-					//::ShowWindow(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, SW_SHOW);
-					//if(m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost)
-					//	m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
-					m_pWebBrowser->m_pParentXobj = this;
-					m_pWebBrowser->m_pVisibleWebView->m_pParentXobj = this;
+					m_pWebBrowser = (CBrowser*)it->second;
+					if (m_pWebBrowser->m_pVisibleWebView)
+					{
+						//::SetParent(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, hPWnd);
+						//::ShowWindow(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, SW_SHOW);
+						//if(m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost)
+						//	m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
+						m_pWebBrowser->m_pParentXobj = this;
+						m_pWebBrowser->m_pVisibleWebView->m_pParentXobj = this;
+					}
+					m_pWebBrowser->BrowserLayout();
+					g_pCosmos->m_hParent = NULL;
+					m_pRootObj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
+					m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
+					m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 				}
-				m_pWebBrowser->BrowserLayout();
-				g_pCosmos->m_hParent = NULL;
-				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName = m_strName;
-				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserNode = this;
-				m_pRootObj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd = m_pWebBrowser;
 			}
 		}
 	}

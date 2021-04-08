@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104050059           *
+ *           Web Runtime for Application - Version 1.0.0.202104080060           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1200,526 +1200,116 @@ namespace Browser {
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
 					CMDIParent* pMdiParent = nullptr;
 					pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
-					switch (pCosmosFrameWndInfo->m_nFrameType)
+					auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
+					if (it != g_pCosmos->m_mapMDIParent.end())
 					{
-					case 1:
-					{
-						auto it = g_pCosmos->m_mapMDTWindow.find(hMainWnd);
-						if (it != g_pCosmos->m_mapMDTWindow.end())
-						{
-							//CMDTWnd* pWnd = it->second;
-							//pWnd->m_pBrowser = pBrowserWnd;
-						}
-					}
-					break;
-					case 2:
-					{
-						auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
-						if (it != g_pCosmos->m_mapMDIParent.end())
-						{
-							pMdiParent = it->second;
-							pBrowserWnd->m_pMDIParent = pMdiParent;
-							pMdiParent->m_pHostBrowser = pBrowserWnd;
-							pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-							RECT rc;
-							::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
-							::SetWindowPos(pBrowserWnd->m_hWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
-						}
-					}
-					break;
+						pMdiParent = it->second;
+						pBrowserWnd->m_pMDIParent = pMdiParent;
+						pMdiParent->m_pHostBrowser = pBrowserWnd;
+						pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
+						RECT rc;
+						::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
+						::SetWindowPos(pBrowserWnd->m_hWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
 					}
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
-					CTangramXmlParse* pParse = nullptr;
-					switch (g_pCosmos->m_pUniverseAppProxy->m_nShellCmd)
+					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
+					if (pParse)
 					{
-					case CCommandLineInfo::FileNothing:
+						this->LoadDocument2Viewport(_T("client"), pParse->xml());
+					}
+					CString strCaption = xmlParse.attr(_T("caption"), _T(""));
+					if (strCaption != _T(""))
 					{
-						pParse = xmlParse.GetChild(_T("hostpage"));
-						if (pParse)
+						g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
+					}
+					CTangramXmlParse* pParseClient = nullptr;
+					if (pCosmosFrameWndInfo->m_nFrameType == 2)
+						pParseClient = xmlParse.GetChild(_T("mdiclient"));
+					else
+						pParseClient = xmlParse.GetChild(_T("client"));
+					if (pParseClient)
+					{
+						HWND hClient = pCosmosFrameWndInfo->m_hClient;
+						CString strXml = pParseClient->xml();
+						if (pCluster == nullptr)
 						{
-							this->LoadDocument2Viewport(_T("client"), pParse->xml());
+							g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
 						}
-						CString strCaption = xmlParse.attr(_T("caption"), _T(""));
-						if (strCaption != _T(""))
+						if (pCluster)
 						{
-							g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
-						}
-						CTangramXmlParse* pParseClient = nullptr;
-						if (pCosmosFrameWndInfo->m_nFrameType == 2)
-							pParseClient = xmlParse.GetChild(_T("mdiclient"));
-						else
-							pParseClient = xmlParse.GetChild(_T("client"));
-						if (pParseClient)
-						{
-							HWND hClient = pCosmosFrameWndInfo->m_hClient;
-							CString strXml = pParseClient->xml();
-							if (pCluster == nullptr)
+							IGalaxy* pGalaxy = nullptr;
+							CString strKey = _T("client");
+							pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+							if (pGalaxy)
 							{
-								g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
-							}
-							if (pCluster)
-							{
-								IGalaxy* pGalaxy = nullptr;
-								CString strKey = _T("client");
-								pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-								if (pGalaxy)
+								CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+								pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
+								_pGalaxy->m_pWebPageWnd = this;
+								if (pCosmosFrameWndInfo->m_nFrameType == 2)
 								{
-									CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-									pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
-									_pGalaxy->m_pWebPageWnd = this;
-									if (pCosmosFrameWndInfo->m_nFrameType == 2)
-									{
-										pMdiParent->m_pHostBrowser->m_bInTabChange = true;
-										m_bCanShow = false;
-										IXobj* pXobj = nullptr;
-										_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-									}
+									pMdiParent->m_pHostBrowser->m_bInTabChange = true;
+									m_bCanShow = false;
+									IXobj* pXobj = nullptr;
+									_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 								}
 							}
 						}
-						pParse = xmlParse.GetChild(_T("controlbars"));
-						if (pParse)
+					}
+					pParse = xmlParse.GetChild(_T("controlbars"));
+					if (pParse)
+					{
+						int nCount = pParse->GetCount();
+						for (int i = 0; i < nCount; i++)
 						{
-							int nCount = pParse->GetCount();
-							for (int i = 0; i < nCount; i++)
+							CTangramXmlParse* pParse2 = pParse->GetChild(i);
+							int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
+							if (nBarID)
 							{
-								CTangramXmlParse* pParse2 = pParse->GetChild(i);
-								int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
-								if (nBarID)
+								auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
+								if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
 								{
-									auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
-									if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
+									HWND hWnd = it->second;
+									int nID = pParse2->attrInt(_T("clientid"), 0);
+									HWND hClient = ::GetDlgItem(hWnd, nID);
+									if (hClient)
 									{
-										HWND hWnd = it->second;
-										int nID = pParse2->attrInt(_T("clientid"), 0);
-										HWND hClient = ::GetDlgItem(hWnd, nID);
-										if (hClient)
+										CString strXml = pParse2->xml();
+										if (pCluster)
 										{
-											CString strXml = pParse2->xml();
-											if (pCluster)
+											IGalaxy* pGalaxy = nullptr;
+											CString strKey = _T("");
+											strKey.Format(_T("ControlBar_%d"), nBarID);
+											pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
+											if (pGalaxy)
 											{
-												IGalaxy* pGalaxy = nullptr;
-												CString strKey = _T("");
-												strKey.Format(_T("ControlBar_%d"), nBarID);
-												pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-												if (pGalaxy)
-												{
-													CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-													pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
-													_pGalaxy->m_pWebPageWnd = this;
-													IXobj* pXobj = nullptr;
-													_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-												}
-												CString strCaption = pParse2->attr(_T("caption"), _T(""));
-												if (strCaption != _T(""))
-													::SetWindowText(::GetParent(hClient), strCaption);
+												CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+												pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
+												_pGalaxy->m_pWebPageWnd = this;
+												IXobj* pXobj = nullptr;
+												_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
 											}
+											CString strCaption = pParse2->attr(_T("caption"), _T(""));
+											if (strCaption != _T(""))
+												::SetWindowText(::GetParent(hClient), strCaption);
 										}
 									}
 								}
 							}
 						}
-						if (pBrowserWnd->m_pClientGalaxy == nullptr)
-						{
-							if (m_pCosmosFrameWndInfo)
-							{
-								HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
-								IGalaxy* pGalaxy = nullptr;
-								g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
-								if (pGalaxy)
-								{
-									pBrowserWnd->m_pClientGalaxy = (CGalaxy*)pGalaxy;
-								}
-							}
-						}
 					}
-					break;
-					case CCommandLineInfo::FileNew:
-					case CCommandLineInfo::FileOpen:
+					if (pBrowserWnd->m_pClientGalaxy == nullptr)
 					{
-						CString strExt = _T("default");
-						CString strCreatingDocID = g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID;
-						g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID = _T("");
-						if (strCreatingDocID == _T(""))
-							strCreatingDocID = _T("default");
-						CString strFilePath = g_pCosmos->m_pUniverseAppProxy->m_strStartOpenFile;
-						if (::PathFileExists(strFilePath))
+						if (m_pCosmosFrameWndInfo)
 						{
-							int nPos = strFilePath.ReverseFind('.');
-							if (nPos != -1)
+							HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
+							IGalaxy* pGalaxy = nullptr;
+							g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
+							if (pGalaxy)
 							{
-								strExt = strFilePath.Mid(nPos + 1);
+								pBrowserWnd->m_pClientGalaxy = (CGalaxy*)pGalaxy;
 							}
 						}
-						else
-							strFilePath = _T("");
-						g_pCosmos->m_pUniverseAppProxy->OpenDocFile(strFilePath, strExt, strCreatingDocID);
-						//CString strKey = _T("default");
-						//CMDIParent* pMDIParent = nullptr;
-						//auto itMain = g_pCosmos->m_mapMDIParent.find(hMainWnd);
-						//if (itMain != g_pCosmos->m_mapMDIParent.end())
-						//	pMDIParent = itMain->second;
-						//CString strDefaultName = _T("");
-						//auto itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
-						//if (itName != g_pCosmos->m_mapDocDefaultName.end())
-						//	strDefaultName = itName->second;
-						//auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
-						//if (it != g_pCosmos->m_mapDocTemplate.end())
-						//{
-						//	CTangramXmlParse m_Parse;
-						//	if (m_Parse.LoadXml(it->second))
-						//	{
-						//		IGalaxy* pGalaxy = nullptr;
-						//		IXobj* _pXobj = nullptr;
-						//		CTangramXmlParse* pClient = m_Parse.GetChild(_T("client"));
-						//		if (pClient)
-						//		{
-						//		//	CGalaxyCluster*	pGalaxyCluster = new CComObject<CGalaxyCluster>();
-						//		//	pGalaxyCluster->m_hWnd = hWnd;
-						//		//	g_pCosmos->m_mapWindowPage[hWnd] = pGalaxyCluster;
-
-						//		//	for (auto& it2 : g_pCosmos->m_mapCosmosAppProxy)
-						//		//	{
-						//		//		CGalaxyClusterProxy* pCosmosProxy = it2.second->OnGalaxyClusterCreated(pGalaxyCluster);
-						//		//		if (pCosmosProxy)
-						//		//			pGalaxyCluster->m_mapGalaxyClusterProxy[it2.second] = pCosmosProxy;
-						//		//	}
-						//		//	pGalaxyCluster->CreateGalaxy(CComVariant((__int64)hWnd), CComVariant((__int64)hClient), CComBSTR(""), &pGalaxy);
-						//		//	if (pGalaxy)
-						//		//	{
-						//		//		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pClient->xml()), &_pXobj);
-						//		//	}
-						//		//	switch (pCosmosFrameWndInfo->m_nFrameType)
-						//		//	{
-						//		//	case 1:
-						//		//	{
-						//		//		CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-						//		//		//_pGalaxy->m_pWebPageWnd = pFrameWnd->m_pBrowser->m_pVisibleWebView;
-						//		//		_pGalaxy->m_strDocTemplateID = strKey;
-						//		//	}
-						//		//	break;
-						//		//	case 3:
-						//		//	{
-						//		//		CMDIChild* pWnd = new CMDIChild();
-						//		//		if (pWnd->m_strDocTemplateKey == _T(""))
-						//		//			pWnd->m_strDocTemplateKey = strKey;
-
-						//		//		pWnd->SubclassWindow(hWnd);
-						//		//		HWND hFrame = ::GetParent(::GetParent(hWnd));
-						//		//		auto itMdiParent = g_pCosmos->m_mapMDIParent.find(hFrame);
-						//		//		if (itMdiParent != g_pCosmos->m_mapMDIParent.end())
-						//		//		{
-						//		//			pMDIParent = itMdiParent->second;
-						//		//			pWnd->m_pParent = pMDIParent;
-						//		//			pMDIParent->m_bCreateNewDoc = true;
-						//		//			if (pMDIParent->m_pHostBrowser->m_pVisibleWebView)
-						//		//			{
-						//		//				pMDIParent->m_pHostBrowser->m_pVisibleWebView->m_bCanShow = false;
-						//		//			}
-						//		//			pWnd->m_pParent->m_mapMDIChild[hWnd] = pWnd;
-						//		//			if (pMDIParent->m_pCosmosFrameWndInfo == nullptr)
-						//		//			{
-						//		//				pMDIParent->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrame, _T("CosmosFrameWndInfo"));
-						//		//			}
-						//		//			pMDIParent->m_pHostBrowser->m_bSZMode = true;
-						//		//			pMDIParent->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
-						//		//		}
-
-						//		//		CGalaxy* pMainGalaxy = nullptr;
-						//		//		auto it = pWnd->m_pParent->m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(10000);
-						//		//		if (it != pWnd->m_pParent->m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
-						//		//		{
-						//		//			pMainGalaxy = (CGalaxy*)it->second;
-						//		//			pWnd->m_pParent->m_pGalaxy = pMainGalaxy;
-						//		//		}
-						//		//		if (pMainGalaxy)
-						//		//		{
-						//		//			pMainGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
-						//		//			pMDIParent->m_pActiveMDIChild = pWnd;
-						//		//			if (pWnd->m_pGalaxy == nullptr)
-						//		//				pWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
-						//		//			pWnd->m_hClient = hClient;
-						//		//			pWnd->m_pGalaxy->m_nGalaxyType = GalaxyType::MDIChildGalaxy;
-						//		//			pWnd->m_strKey = strKey;
-						//		//			pWnd->m_pGalaxy->m_strDocTemplateID = strKey;
-						//		//			CString strDefaultName = _T("");
-						//		//			auto itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
-						//		//			if (itName != g_pCosmos->m_mapDocDefaultName.end())
-						//		//				strDefaultName = itName->second;
-						//		//			g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
-						//		//		}
-						//		//	}
-						//		//	break;
-						//		//	}
-						//		//	pClient = m_Parse.GetChild(_T("hostpage"));
-						//		//	CGalaxy* pGalaxy = nullptr;
-						//		//	bool bProcessWebPage = false;
-						//		//	if (pClient == nullptr)
-						//		//		bProcessWebPage = true;
-						//		//	if (pClient && pCosmosFrameWndInfo->m_nFrameType == 3 && pMDIParent->m_pGalaxy && pMDIParent->m_pGalaxy->m_pWebPageWnd)
-						//		//	{
-						//		//		HWND hFrame = ::GetParent(hWnd);
-						//		//		pGalaxy = static_cast<CGalaxy*>(g_pCosmos->GetGalaxy(::GetParent(hWnd)));
-						//		//		if (pMDIParent->m_pHostBrowser->m_pVisibleWebView != pGalaxy->m_pWebPageWnd) {
-						//		//			bProcessWebPage = false;
-						//		//		}
-						//		//		else if (pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)
-						//		//		{
-						//		//			pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(strKey, pClient->xml());
-						//		//			bProcessWebPage = true;
-						//		//		}
-						//		//	}
-						//		//	if (bProcessWebPage || pCosmosFrameWndInfo->m_nFrameType == 1)
-						//		//	{
-						//		//		pClient = m_Parse.GetChild(_T("controlbars"));
-						//		//		if (pClient)
-						//		//		{
-						//		//			CosmosFrameWndInfo* _pCosmosFrameWndInfo = nullptr;
-						//		//			HANDLE hHandle = NULL;
-						//		//			if (pCosmosFrameWndInfo->m_nFrameType == 3)
-						//		//			{
-						//		//				_pCosmosFrameWndInfo = pGalaxy->m_pCosmosFrameWndInfo;
-						//		//			}
-						//		//			else
-						//		//			{
-						//		//				hHandle = ::GetProp(hWnd, _T("CosmosFrameWndInfo"));
-						//		//				_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
-						//		//			}
-						//		//			if (_pCosmosFrameWndInfo)
-						//		//			{
-						//		//				_pCosmosFrameWndInfo->m_pWebPage = g_pCosmos->m_pHostHtmlWnd;
-
-						//		//				int nCount = pClient->GetCount();
-						//		//				for (int i = 0; i < nCount; i++)
-						//		//				{
-						//		//					CTangramXmlParse* pParse2 = pClient->GetChild(i);
-						//		//					int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
-						//		//					if (nBarID)
-						//		//					{
-						//		//						if (pCosmosFrameWndInfo->m_nFrameType == 3)
-						//		//						{
-						//		//							auto itX = _pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.find(nBarID);
-						//		//							if (itX != _pCosmosFrameWndInfo->m_mapCtrlBarGalaxys.end())
-						//		//							{
-						//		//								CGalaxy* _pGalaxy = (CGalaxy*)itX->second;
-						//		//								if (_pGalaxy->m_strCurrentKey != strKey)
-						//		//								{
-						//		//									IXobj* pXobj = nullptr;
-						//		//									_pGalaxy->Observe(CComBSTR(strKey), CComBSTR(pParse2->xml()), &pXobj);
-						//		//								}
-						//		//							}
-						//		//						}
-						//		//					}
-						//		//				}
-						//		//			}
-						//		//		}
-						//		//		if (pMDIParent)
-						//		//			::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, 0, 20210325);
-						//		//	}
-						//		}
-						//	}
-						//}
-
-						//pParse = xmlParse.GetChild(_T("hostpage"));
-						//if (pParse)
-						//{
-						//	this->LoadDocument2Viewport(_T("client"), pParse->xml());
-						//}
-						//CString strCaption = xmlParse.attr(_T("caption"), _T(""));
-						//if (strCaption != _T(""))
-						//{
-						//	g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
-						//}
-						//CTangramXmlParse* pParseClient = nullptr;
-						//if (pCosmosFrameWndInfo->m_nFrameType == 2)
-						//	pParseClient = xmlParse.GetChild(_T("mdiclient"));
-						//else
-						//	pParseClient = xmlParse.GetChild(_T("client"));
-						//if (pParseClient)
-						//{
-						//	HWND hClient = pCosmosFrameWndInfo->m_hClient;
-						//	CString strXml = pParseClient->xml();
-						//	if (pCluster == nullptr)
-						//	{
-						//		g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
-						//	}
-						//	if (pCluster)
-						//	{
-						//		IGalaxy* pGalaxy = nullptr;
-						//		CString strKey = _T("client");
-						//		pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-						//		if (pGalaxy)
-						//		{
-						//			CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-						//			pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
-						//			_pGalaxy->m_pWebPageWnd = this;
-						//			if (pCosmosFrameWndInfo->m_nFrameType == 2)
-						//			{
-						//				pMdiParent->m_pHostBrowser->m_bInTabChange = true;
-						//				m_bCanShow = false;
-						//				IXobj* pXobj = nullptr;
-						//				_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-						//			}
-						//		}
-						//	}
-						//}
-						//pParse = xmlParse.GetChild(_T("controlbars"));
-						//if (pParse)
-						//{
-						//	int nCount = pParse->GetCount();
-						//	for (int i = 0; i < nCount; i++)
-						//	{
-						//		CTangramXmlParse* pParse2 = pParse->GetChild(i);
-						//		int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
-						//		if (nBarID)
-						//		{
-						//			auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
-						//			if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
-						//			{
-						//				HWND hWnd = it->second;
-						//				int nID = pParse2->attrInt(_T("clientid"), 0);
-						//				HWND hClient = ::GetDlgItem(hWnd, nID);
-						//				if (hClient)
-						//				{
-						//					CString strXml = pParse2->xml();
-						//					if (pCluster)
-						//					{
-						//						IGalaxy* pGalaxy = nullptr;
-						//						CString strKey = _T("");
-						//						strKey.Format(_T("ControlBar_%d"), nBarID);
-						//						pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-						//						if (pGalaxy)
-						//						{
-						//							CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-						//							pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
-						//							_pGalaxy->m_pWebPageWnd = this;
-						//							IXobj* pXobj = nullptr;
-						//							_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-						//						}
-						//						CString strCaption = pParse2->attr(_T("caption"), _T(""));
-						//						if (strCaption != _T(""))
-						//							::SetWindowText(::GetParent(hClient), strCaption);
-						//					}
-						//				}
-						//			}
-						//		}
-						//	}
-						//}
-						//if (pBrowserWnd->m_pClientGalaxy == nullptr)
-						//{
-						//	if (m_pCosmosFrameWndInfo)
-						//	{
-						//		HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
-						//		IGalaxy* pGalaxy = nullptr;
-						//		g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
-						//		if (pGalaxy)
-						//		{
-						//			pBrowserWnd->m_pClientGalaxy = (CGalaxy*)pGalaxy;
-						//		}
-						//	}
-						//}
-
 					}
-					break;
-					}
-					//pParse = xmlParse.GetChild(_T("hostpage"));
-					//if (pParse)
-					//{
-					//	this->LoadDocument2Viewport(_T("client"), pParse->xml());
-					//}
-					//CString strCaption = xmlParse.attr(_T("caption"), _T(""));
-					//if (strCaption != _T(""))
-					//{
-					//	g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
-					//}
-					//CTangramXmlParse* pParseClient = nullptr;
-					//if (pCosmosFrameWndInfo->m_nFrameType == 2)
-					//	pParseClient = xmlParse.GetChild(_T("mdiclient"));
-					//else
-					//	pParseClient = xmlParse.GetChild(_T("client"));
-					//if (pParseClient)
-					//{
-					//	HWND hClient = pCosmosFrameWndInfo->m_hClient;
-					//	CString strXml = pParseClient->xml();
-					//	if (pCluster == nullptr)
-					//	{
-					//		g_pCosmos->CreateGalaxyCluster((__int64)::GetParent(hClient), &pCluster);
-					//	}
-					//	if (pCluster)
-					//	{
-					//		IGalaxy* pGalaxy = nullptr;
-					//		CString strKey = _T("client");
-					//		pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-					//		if (pGalaxy)
-					//		{
-					//			CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-					//			pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[10000] = _pGalaxy;
-					//			_pGalaxy->m_pWebPageWnd = this;
-					//			if (pCosmosFrameWndInfo->m_nFrameType == 2)
-					//			{
-					//				pMdiParent->m_pHostBrowser->m_bInTabChange = true;
-					//				m_bCanShow = false;
-					//				IXobj* pXobj = nullptr;
-					//				_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-					//			}
-					//		}
-					//	}
-					//}
-					//pParse = xmlParse.GetChild(_T("controlbars"));
-					//if (pParse)
-					//{
-					//	int nCount = pParse->GetCount();
-					//	for (int i = 0; i < nCount; i++)
-					//	{
-					//		CTangramXmlParse* pParse2 = pParse->GetChild(i);
-					//		int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
-					//		if (nBarID)
-					//		{
-					//			auto it = pCosmosFrameWndInfo->m_mapCtrlBarWnd.find(nBarID);
-					//			if (it != pCosmosFrameWndInfo->m_mapCtrlBarWnd.end())
-					//			{
-					//				HWND hWnd = it->second;
-					//				int nID = pParse2->attrInt(_T("clientid"), 0);
-					//				HWND hClient = ::GetDlgItem(hWnd, nID);
-					//				if (hClient)
-					//				{
-					//					CString strXml = pParse2->xml();
-					//					if (pCluster)
-					//					{
-					//						IGalaxy* pGalaxy = nullptr;
-					//						CString strKey = _T("");
-					//						strKey.Format(_T("ControlBar_%d"), nBarID);
-					//						pCluster->CreateGalaxy(CComVariant((__int64)::GetParent(hClient)), CComVariant((__int64)hClient), CComBSTR(strKey), &pGalaxy);
-					//						if (pGalaxy)
-					//						{
-					//							CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-					//							pCosmosFrameWndInfo->m_mapCtrlBarGalaxys[nBarID] = _pGalaxy;
-					//							_pGalaxy->m_pWebPageWnd = this;
-					//							IXobj* pXobj = nullptr;
-					//							_pGalaxy->Observe(CComBSTR("client"), CComBSTR(strXml), &pXobj);
-					//						}
-					//						CString strCaption = pParse2->attr(_T("caption"), _T(""));
-					//						if (strCaption != _T(""))
-					//							::SetWindowText(::GetParent(hClient), strCaption);
-					//					}
-					//				}
-					//			}
-					//		}
-					//	}
-					//}
-					//if (pBrowserWnd->m_pClientGalaxy == nullptr)
-					//{
-					//	if (m_pCosmosFrameWndInfo)
-					//	{
-					//		HWND hClient = m_pCosmosFrameWndInfo->m_hClient;
-					//		IGalaxy* pGalaxy = nullptr;
-					//		g_pCosmos->GetGalaxy((__int64)hClient, &pGalaxy);
-					//		if (pGalaxy)
-					//		{
-					//			pBrowserWnd->m_pClientGalaxy = (CGalaxy*)pGalaxy;
-					//		}
-					//	}
-					//}
 				}
 			}
 		}

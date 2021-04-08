@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104050059           *
+ *           Web Runtime for Application - Version 1.0.0.202104080060           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1330,6 +1330,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
+				case 20210408:
+				{
+					//g_pCosmos->m_pUniverseAppProxy->OpenDocFile(g_pCosmos->m_pUniverseAppProxy->m_strStartOpenFile, _T(""), _T("default"));
+				}
+					break;
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;

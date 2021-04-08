@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104050059           *
+ *           Web Runtime for Application - Version 1.0.0.202104080060           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1200,33 +1200,16 @@ namespace Browser {
 					m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
 					CMDIParent* pMdiParent = nullptr;
 					pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
-					switch (pCosmosFrameWndInfo->m_nFrameType)
+					auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
+					if (it != g_pCosmos->m_mapMDIParent.end())
 					{
-					case 1:
-					{
-						auto it = g_pCosmos->m_mapMDTWindow.find(hMainWnd);
-						if (it != g_pCosmos->m_mapMDTWindow.end())
-						{
-							//CMDTWnd* pWnd = it->second;
-							//pWnd->m_pBrowser = pBrowserWnd;
-						}
-					}
-					break;
-					case 2:
-					{
-						auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
-						if (it != g_pCosmos->m_mapMDIParent.end())
-						{
-							pMdiParent = it->second;
-							pBrowserWnd->m_pMDIParent = pMdiParent;
-							pMdiParent->m_pHostBrowser = pBrowserWnd;
-							pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-							RECT rc;
-							::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
-							::SetWindowPos(pBrowserWnd->m_hWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
-						}
-					}
-					break;
+						pMdiParent = it->second;
+						pBrowserWnd->m_pMDIParent = pMdiParent;
+						pMdiParent->m_pHostBrowser = pBrowserWnd;
+						pMdiParent->m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
+						RECT rc;
+						::GetClientRect(pCosmosFrameWndInfo->m_hClient, &rc);
+						::SetWindowPos(pBrowserWnd->m_hWnd, nullptr, 0, 0, rc.right, rc.bottom, SWP_DRAWFRAME);
 					}
 					pCosmosFrameWndInfo->m_strData = g_pCosmos->m_strMainWndXml;
 					CTangramXmlParse* pParse = xmlParse.GetChild(_T("hostpage"));
