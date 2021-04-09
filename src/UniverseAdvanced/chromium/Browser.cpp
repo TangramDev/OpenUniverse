@@ -103,7 +103,11 @@ namespace Browser {
 			m_pVisibleWebView = (CWebView*)it->second;
 		}
 		else
-			return;
+		{
+			m_pVisibleWebView = new CComObject<CWebView>();
+			m_pVisibleWebView->SubclassWindow(hWnd);
+			g_pCosmos->m_mapWebView[hWnd] = m_pVisibleWebView;
+		}
 
 		if (::IsWindowVisible(hWnd) == false)
 		{
@@ -779,6 +783,8 @@ namespace Browser {
 			break;
 			case 7:
 			{
+				if (m_pVisibleWebView == nullptr)
+					break;
 				switch (wParam)
 				{
 				case 3:
@@ -830,7 +836,7 @@ namespace Browser {
 						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 					}
 
-					if (m_pVisibleWebView->m_pGalaxy)
+					if (m_pVisibleWebView&&m_pVisibleWebView->m_pGalaxy)
 					{
 						::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
 						m_pVisibleWebView->m_pGalaxy->HostPosChanged();

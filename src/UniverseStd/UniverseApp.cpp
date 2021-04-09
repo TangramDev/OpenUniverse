@@ -282,8 +282,8 @@ BOOL CUniverse::InitInstance()
 					}
 				}
 			}
-			//g_pCosmos->Init();
-			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
+			g_pCosmos->Init();
+			//::PostAppMessage(g_pCosmos->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
 		}
 	}
 
@@ -310,15 +310,15 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 	}
 	else
 	{
-		for (auto& it : g_pCosmos->m_mapBrowserWnd)
-		{
-			CBrowser* pBrowser = (CBrowser*)it.second;
-			if (::IsWindowVisible(it.first))
-			{
-				if (pBrowser->m_bSZMode)
-					::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
-			}
-		}
+		//for (auto& it : g_pCosmos->m_mapBrowserWnd)
+		//{
+		//	CBrowser* pBrowser = (CBrowser*)it.second;
+		//	if (::IsWindowVisible(it.first))
+		//	{
+		//		if (pBrowser->m_bSZMode)
+		//			::PostMessage(it.first, WM_BROWSERLAYOUT, 1, 7);
+		//	}
+		//}
 	}
 	if (g_pCosmos->m_pCosmosDelegate)
 	{

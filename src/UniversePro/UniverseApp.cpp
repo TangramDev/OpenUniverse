@@ -321,7 +321,8 @@ BOOL CUniverse::InitInstance()
 					}
 				}
 			}
-			::PostAppMessage(g_pCosmos->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
+			g_pCosmos->Init();
+			//::PostAppMessage(g_pCosmos->m_dwThreadID, WM_HUBBLE_INIT, 20191005, 0);
 		}
 	}
 	return true;
@@ -1334,7 +1335,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					//g_pCosmos->m_pUniverseAppProxy->OpenDocFile(g_pCosmos->m_pUniverseAppProxy->m_strStartOpenFile, _T(""), _T("default"));
 				}
-					break;
+				break;
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
@@ -1477,7 +1478,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												pMDIParent = itMdiParent->second;
 												pWnd->m_pParent = pMDIParent;
 												pMDIParent->m_bCreateNewDoc = true;
-												if (pMDIParent->m_pHostBrowser->m_pVisibleWebView)
+												if (pMDIParent->m_pHostBrowser && pMDIParent->m_pHostBrowser->m_pVisibleWebView)
 												{
 													pMDIParent->m_pHostBrowser->m_pVisibleWebView->m_bCanShow = false;
 												}
@@ -1486,8 +1487,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												{
 													pMDIParent->m_pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hFrame, _T("CosmosFrameWndInfo"));
 												}
-												pMDIParent->m_pHostBrowser->m_bSZMode = true;
-												pMDIParent->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+												if (pMDIParent->m_pHostBrowser)
+												{
+													pMDIParent->m_pHostBrowser->m_bSZMode = true;
+													pMDIParent->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+												}
 											}
 
 											CGalaxy* pMainGalaxy = nullptr;
@@ -1525,7 +1529,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										{
 											HWND hFrame = ::GetParent(hWnd);
 											pGalaxy = static_cast<CGalaxy*>(g_pCosmos->GetGalaxy(::GetParent(hWnd)));
-											if (pMDIParent->m_pHostBrowser->m_pVisibleWebView != pGalaxy->m_pWebPageWnd) {
+											if (pMDIParent->m_pHostBrowser&&pMDIParent->m_pHostBrowser->m_pVisibleWebView != pGalaxy->m_pWebPageWnd) {
 												bProcessWebPage = false;
 											}
 											else if (pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)

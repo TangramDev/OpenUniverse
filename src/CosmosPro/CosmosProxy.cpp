@@ -145,18 +145,6 @@ CCosmosProxy::~CCosmosProxy()
 	if (theApp.m_bHostApp == false)
 		theApp.m_pCosmosImpl->m_pCLRProxy = nullptr;
 
-	//if (m_bHostApp)
-	{
-		//if (theApp.m_pCosmosImpl->m_pObjectFactory)
-		//{
-		//	delete theApp.m_pCosmosImpl->m_pObjectFactory;
-		//	theApp.m_pCosmosImpl->m_pObjectFactory = nullptr;
-		//}
-		//BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
-		//while (bUnload)
-		//	bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
-	}
-
 	ATLTRACE(_T("Release CCosmosProxy :%p\n"), this);
 }
 

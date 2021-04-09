@@ -549,7 +549,8 @@ namespace Browser {
 				::SetParent(m_hExtendWnd, hPWnd);
 				if (pBrowserWnd)
 				{
-					m_pChromeRenderFrameHost->ShowWebPage(true);
+					if (m_pChromeRenderFrameHost)
+						m_pChromeRenderFrameHost->ShowWebPage(true);
 					if (::GetParent(hPWnd) == nullptr)
 					{
 						pBrowserWnd->BrowserLayout();

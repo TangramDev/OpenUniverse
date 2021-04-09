@@ -83,7 +83,6 @@ BOOL CMFCApp::InitInstance()
 		AfxMessageBox(IDP_OLE_INIT_FAILED);
 		return FALSE;
 	}
-
 	AfxEnableControlContainer();
 
 	EnableTaskbarInteraction();
@@ -122,7 +121,7 @@ BOOL CMFCApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
-
+	HWND h = g_pCosmosImpl->m_hCosmosWnd;
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
