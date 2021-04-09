@@ -1308,7 +1308,7 @@ namespace CommonUniverse
 						_pInitAppFunction(bCrashReporting, m_pCosmosImpl->m_pCosmosDelegate);
 						return false;
 					}
-				}
+			}
 			}
 			break;
 			case APP_ECLIPSE:
@@ -1318,10 +1318,10 @@ namespace CommonUniverse
 					return false;
 				}
 				break;
-			}
 		}
-		return true;
 	}
+		return true;
+}
 
 	BOOL CWebRuntimeApp::IsBrowserModel(bool bCrashReporting)
 	{
