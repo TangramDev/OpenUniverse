@@ -860,15 +860,6 @@ namespace CommonUniverse
 		case MainWnd:
 			if (m_pMainWnd)
 			{
-				//CWnd* _pWnd = CWnd::FromHandlePermanent(hWnd);
-				//if (_pWnd && _pWnd->IsKindOf(RUNTIME_CLASS(CWebMDIFrameWnd)))
-				//{
-				//	if (_pWnd != m_pMainWnd)
-				//	{
-				//		m_pMainWnd = _pWnd;
-				//		//return m_pMainWnd->m_hWnd;
-				//	}
-				//}
 				pWnd = m_pMainWnd;
 				if (pWnd)
 				{
