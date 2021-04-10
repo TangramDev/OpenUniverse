@@ -1311,7 +1311,7 @@ namespace Browser {
 								{
 									CTangramXmlParse* pParse2 = pParse->GetChild(i);
 									CTangramXmlParse* pCtrlBarParse2 = nullptr;
-									if(pParseControlBars)
+									if (pParseControlBars)
 										pCtrlBarParse2 = pParseControlBars->GetChild(i);
 									int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
 									if (nBarID)
@@ -1330,7 +1330,7 @@ namespace Browser {
 													IGalaxy* pGalaxy = nullptr;
 													CString strKey = _T("");
 													strKey.Format(_T("ControlBar_%d"), nBarID);
-													if (bNeedClientInfo&& pCtrlBarParse2)
+													if (bNeedClientInfo && pCtrlBarParse2)
 													{
 														pMdiParent->m_mapClientCtrlBarData[strKey.MakeLower()] = pCtrlBarParse2->xml();;
 													}

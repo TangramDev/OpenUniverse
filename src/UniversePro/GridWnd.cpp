@@ -409,8 +409,6 @@ void CGridWnd::StopTracking(BOOL bAccept)
 	CGalaxy* pGalaxy = m_pXobj->m_pXobjShareData->m_pGalaxy;
 	if (::IsWindowVisible(pGalaxy->m_hWnd) && pGalaxy->m_nGalaxyType == CtrlBarGalaxy)
 		pGalaxy->SetFocus();
-	//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-	//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 	ModifyStyle(WS_CLIPCHILDREN, WS_CLIPSIBLINGS);
 
 	CSplitterWnd::StopTracking(bAccept);

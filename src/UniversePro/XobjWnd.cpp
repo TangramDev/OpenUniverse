@@ -513,12 +513,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 			}
 		}
 		break;
-		case 20210317:
-		{
-			HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-			::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
-		}
-		break;
 		case 20210316:
 		{
 			if (m_pXobj->m_pWebBrowser)
@@ -579,8 +573,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 					if (::IsWindowVisible(it.first))
 						::RedrawWindow(it.first, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 				}
-				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				//::RedrawWindow(m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_hMDIClient, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 			}
 		}
 		break;

@@ -1469,6 +1469,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										break;
 										case 3:
 										{
+											theApp.m_bAppStarting = true;
 											CMDIChild* pWnd = new CMDIChild();
 											if (pWnd->m_strDocTemplateKey == _T(""))
 												pWnd->m_strDocTemplateKey = strKey;

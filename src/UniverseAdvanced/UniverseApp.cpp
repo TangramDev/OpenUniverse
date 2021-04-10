@@ -1600,7 +1600,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											CMDIChild* pWnd = new CMDIChild();
 											if (pWnd->m_strDocTemplateKey == _T(""))
 												pWnd->m_strDocTemplateKey = strKey;
-
 											pWnd->SubclassWindow(hWnd);
 											HWND hFrame = ::GetParent(::GetParent(hWnd));
 											auto itMdiParent = g_pCosmos->m_mapMDIParent.find(hFrame);
