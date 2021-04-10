@@ -915,13 +915,5 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 
 			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOREDRAW);
 		}
-		//if (m_pXobj->m_strName == m_pXobj->m_pXobjShareData->m_pGalaxy->m_strHostWebBrowserNodeName)
-		//{
-		//	//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-		//	//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);//| RDW_UPDATENOW);
-		//	HWND hWnd = m_hWnd;
-		//	RECT rc;
-		//	::GetClientRect(m_hWnd, &rc);
-		//}
 	}
 }

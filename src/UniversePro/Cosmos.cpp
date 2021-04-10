@@ -4772,9 +4772,6 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 				if(pBrowser->m_pMDIParent)
 					pBrowser->m_pMDIParent->m_bCreateNewDoc = false;
 				pBrowser->m_pVisibleWebView->m_bCanShow = true;
-				//if (pBrowser->m_pCosmosFrameWndInfo && pBrowser->m_pCosmosFrameWndInfo->m_nFrameType == 2)
-				//	::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
-				//::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
 				::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
 			}
 		}

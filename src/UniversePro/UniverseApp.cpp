@@ -141,6 +141,7 @@ LRESULT CWebHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 CUniverse::CUniverse()
 {
 	m_bHostCLR = false;
+	m_bAppStarting = true;
 }
 
 CUniverse::~CUniverse()
@@ -1331,11 +1332,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
-				case 20210408:
-				{
-					//g_pCosmos->m_pUniverseAppProxy->OpenDocFile(g_pCosmos->m_pUniverseAppProxy->m_strStartOpenFile, _T(""), _T("default"));
-				}
-				break;
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;

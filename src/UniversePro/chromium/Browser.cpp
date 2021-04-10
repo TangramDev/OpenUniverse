@@ -668,20 +668,6 @@ namespace Browser {
 				}
 			}
 			break;
-			case 10:
-			{
-				//if (m_pVisibleWebView->m_pGalaxy)
-				//{
-				//	HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				//	::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
-				//}
-			}
-			break;
-			case 9:
-			{
-				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 10);
-			}
-			break;
 			case 8:
 			{
 				RECT rc;
@@ -733,22 +719,6 @@ namespace Browser {
 				{
 					m_bTabChange = false;
 					m_pBrowser->LayoutBrowser();
-					//HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
-					//for (auto& it : m_mapChildPage)
-					//{
-					//	if (::IsWindow(it.first))
-					//	{
-					//		if (it.first != hWnd)
-					//		{
-					//			if (it.second->m_pChromeRenderFrameHost)
-					//				it.second->m_pChromeRenderFrameHost->ShowWebPage(false);
-					//		}
-					//		else
-					//		{
-					//			m_pVisibleWebView = it.second;
-					//		}
-					//	}
-					//}
 				}
 			}
 			break;
@@ -771,10 +741,11 @@ namespace Browser {
 				case 1:
 				{
 					m_bTabChange = false;
+					if(m_pMDIParent)
+						m_pMDIParent->m_bCreateNewDoc = false;
 					theApp.m_bAppStarting = false;
-					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 9);
 					m_bSZMode = false;
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 				}
 				break;
 				default:

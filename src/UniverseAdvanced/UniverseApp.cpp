@@ -150,6 +150,7 @@ LRESULT CWebHelperWnd::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 CUniverse::CUniverse()
 {
 	m_bHostCLR = false;
+	m_bAppStarting = true;
 }
 
 CUniverse::~CUniverse()
@@ -1459,11 +1460,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
-				case 20210408:
-				{
-					//g_pCosmos->m_pUniverseAppProxy->OpenDocFile(g_pCosmos->m_pUniverseAppProxy->m_strStartOpenFile, _T(""), _T("default"));
-				}
-				break;
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;
@@ -1597,9 +1593,11 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										break;
 										case 3:
 										{
+											theApp.m_bAppStarting = true;
 											CMDIChild* pWnd = new CMDIChild();
 											if (pWnd->m_strDocTemplateKey == _T(""))
 												pWnd->m_strDocTemplateKey = strKey;
+
 											pWnd->SubclassWindow(hWnd);
 											HWND hFrame = ::GetParent(::GetParent(hWnd));
 											auto itMdiParent = g_pCosmos->m_mapMDIParent.find(hFrame);
@@ -1645,6 +1643,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												if (itName != g_pCosmos->m_mapDocDefaultName.end())
 													strDefaultName = itName->second;
 												g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
+												if (pMDIParent)
+													::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 											}
 										}
 										break;
@@ -1743,8 +1743,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												}
 											}
 										}
-										if (pMDIParent)
-											::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, 0, 20210325);
 									}
 								}
 							}

@@ -1121,16 +1121,18 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						m_pGalaxy->m_pBindingXobj = pClientObj;
 					if (m_bCreateNewDoc)
 					{
-						RECT rc;
-						::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
-						if ((rc.right < rc.left) || (rc.bottom < rc.top))
-						{
-							::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
-							::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
-						}
-						m_bCreateNewDoc = false;
-						//theApp.m_bAppStarting = false;
+						//RECT rc;
+						//::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
+						//if ((rc.right < rc.left) || (rc.bottom < rc.top))
+						//{
+						//	::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
+						//	::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
+						//}
 						m_pHostBrowser->m_bSZMode = true;
+						m_pHostBrowser->m_bTabChange = false;
+						m_bCreateNewDoc = false;
+						theApp.m_bAppStarting = false;
+
 						if (m_pHostBrowser->m_pParentXobj)
 						{
 							if (!::IsChild(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, m_pHostBrowser->m_hWnd))
@@ -1330,8 +1332,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					pParent->m_pClientGalaxy->m_pBindingXobj = pTopObj->GetVisibleChildByName(_T("mdiclient"));
 					pParent->m_mapMDIClientXobj[m_strKey] = pParent->m_pClientGalaxy->m_pBindingXobj;
 				}
-				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
 		}

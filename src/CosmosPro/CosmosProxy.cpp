@@ -1116,33 +1116,6 @@ void CCosmosProxy::OnMdiChildActivate(System::Object^ sender, System::EventArgs^
 		strKey = pForm->ActiveMdiChild->GetType()->FullName->ToLower();
 		::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
 		return;
-		//LRESULT l = ::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
-		//if (l)
-		//{
-		//	CString strPath = (LPCTSTR)l;
-		//	theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strPath), CComBSTR(L""), false);
-		//	HWND hWnd = (HWND)pForm->ActiveMdiChild->Handle.ToPointer();
-		//	::PostMessage(hWnd, WM_COSMOSMSG, 0, 20200216);
-		//	return;
-		//}
-		//Object^ objTag = pForm->Tag;
-		//if (objTag != nullptr)
-		//{
-		//	String^ strTag = objTag->ToString();
-		//	if (String::IsNullOrEmpty(strTag) == false)
-		//	{
-		//		int nIndex = strTag->IndexOf("|");
-		//		if (nIndex != -1)
-		//		{
-		//			String^ strKey2 = strTag->Substring(0, nIndex);
-		//			if (String::IsNullOrEmpty(strKey2) == false)
-		//			{
-		//				strKey += L"_";
-		//				strKey += strKey2;
-		//			}
-		//		}
-		//	}
-		//}
 	}
 	BSTR bstrKey = STRING2BSTR(strKey);
 	theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), bstrKey, CComBSTR(L""), true);

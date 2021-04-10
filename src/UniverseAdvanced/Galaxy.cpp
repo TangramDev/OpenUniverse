@@ -979,17 +979,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
 		}
-		else
-		{
-			theApp.m_bAppStarting = false;
-			switch (g_pCosmos->m_pUniverseAppProxy->m_nShellCmd)
-			{
-			case CCommandLineInfo::FileNew:
-			case CCommandLineInfo::FileOpen:
-				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210408);
-				break;
-			}
-		}
 	}
 	break;
 	case 20210213:
@@ -1132,20 +1121,22 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						m_pGalaxy->m_pBindingXobj = pClientObj;
 					if (m_bCreateNewDoc)
 					{
-						RECT rc;
-						::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
-						if ((rc.right < rc.left) || (rc.bottom < rc.top))
-						{
-							::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
-							::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
-						}
-						m_bCreateNewDoc = false;
+						//RECT rc;
+						//::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
+						//if ((rc.right < rc.left) || (rc.bottom < rc.top))
+						//{
+						//	::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
+						//	::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
+						//}
 						m_pHostBrowser->m_bSZMode = true;
+						m_pHostBrowser->m_bTabChange = false;
+						m_bCreateNewDoc = false;
+						theApp.m_bAppStarting = false;
+
 						if (m_pHostBrowser->m_pParentXobj)
 						{
 							if (!::IsChild(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, m_pHostBrowser->m_hWnd))
 							{
-								//theApp.m_bAppStarting = false;
 								RECT rc;
 								::GetClientRect(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
 								::SetParent(m_pHostBrowser->m_hWnd, m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd);
@@ -1315,38 +1306,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 2:
 	{
-		//if (m_strKey != _T(""))
-		//{
-		//	CWinForm* pParent = nullptr;
-		//	CXobj* pTopObj = nullptr;
-		//	if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
-		//	{
-		//		CBrowser* pBrowser = nullptr;
-		//		auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_pOwnerHtmlWnd->m_hWnd));
-		//		if (it != g_pCosmos->m_mapBrowserWnd.end())
-		//		{
-		//			pBrowser = (CBrowser*)it->second;
-		//			pBrowser->m_bSZMode = true;
-		//		}
-		//		m_pOwnerHtmlWnd->LoadDocument2Viewport(m_strKey, _T(""));
-		//		pParent = m_pOwnerHtmlWnd->m_pGalaxy->m_pParentMDIWinForm;
-		//		CString strOldKey = _T("");
-		//		strOldKey = pParent->m_pClientGalaxy->m_strCurrentKey;
-		//		if (strOldKey != m_strKey)
-		//		{
-		//			HWND hClient = ::GetParent(m_hWnd);
-		//			IXobj* pObj = nullptr;
-		//			pParent->m_pClientGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pObj);
-		//			pTopObj = (CXobj*)pObj;
-		//			pParent->m_pClientGalaxy->m_pBindingXobj = pTopObj->GetVisibleChildByName(_T("mdiclient"));
-		//			pParent->m_mapMDIClientXobj[m_strKey] = pParent->m_pClientGalaxy->m_pBindingXobj;
-		//		}
-		//		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-		//		::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
-		//	}
-		//	::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
-		//}
-
 		if (m_strKey != _T(""))
 		{
 			CWinForm* pParent = nullptr;
@@ -1373,8 +1332,6 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					pParent->m_pClientGalaxy->m_pBindingXobj = pTopObj->GetVisibleChildByName(_T("mdiclient"));
 					pParent->m_mapMDIClientXobj[m_strKey] = pParent->m_pClientGalaxy->m_pBindingXobj;
 				}
-				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
 		}
