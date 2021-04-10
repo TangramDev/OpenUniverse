@@ -144,6 +144,7 @@ class ATL_NO_VTABLE CCosmos :
 {
 	friend class CGalaxy;
 	friend class CMDTWnd;
+	friend class CWebView;
 	friend class CWinForm;
 	friend class CUniverse;
 	friend class CMDIParent;

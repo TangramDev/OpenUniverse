@@ -520,6 +520,10 @@ namespace CommonUniverse {
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalaxy) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual HWND InitCosmosApp() { return NULL; }
+		virtual void OnWebAppData(CWebPageImpl*, CString strXml) {}
+		virtual HWND OnMainWindow(CWebPageImpl*, CString strXml) { return NULL; }
+		virtual HWND OnWinFormCreated(CWebPageImpl*, CString strXml) { return NULL; }
+		virtual CWebPageImpl* OnNewWebPage(CBrowserImpl*, CString strXml) { return NULL; }
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}
 		virtual void CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML) {}
 		virtual HWND QueryWndInfo(QueryType nType, HWND hWnd) { return NULL; }

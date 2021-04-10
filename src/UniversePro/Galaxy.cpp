@@ -979,17 +979,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			::SendMessage(m_hWnd, WM_COSMOSMSG, (WPARAM)m_pActiveMDIChild, 20210202);
 		}
-		else
-		{
-			theApp.m_bAppStarting = false;
-			switch (g_pCosmos->m_pUniverseAppProxy->m_nShellCmd)
-			{
-			case CCommandLineInfo::FileNew:
-			case CCommandLineInfo::FileOpen:
-				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210408);
-				break;
-			}
-		}
 	}
 	break;
 	case 20210213:
@@ -1020,23 +1009,29 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_bDestroy)
 			break;
+		CString strXml = _T("");
 		if (m_pCosmosFrameWndInfo)
 		{
-			CComBSTR bstrKey("client");
-			BSTR bstrXml = ::SysAllocString(L"");
+			CComBSTR bstrKey("mainclient");
 			for (auto& it : m_pCosmosFrameWndInfo->m_mapCtrlBarGalaxys)
 			{
-				IGalaxy* _pGalaxy = it.second;
+				CGalaxy* _pGalaxy = (CGalaxy*)it.second;
+				CString strName = _pGalaxy->m_strGalaxyName;
+				auto it = m_mapClientCtrlBarData.find(strName);
+				if (it != m_mapClientCtrlBarData.end())
+					strXml = it->second;
 				IXobj* pXobj = nullptr;
-				_pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
+				_pGalaxy->Observe(bstrKey, CComBSTR(strXml), &pXobj);
 			}
-			::SysFreeString(bstrXml);
 		}
 
 		if (m_pGalaxy && m_pGalaxy->m_pWebPageWnd)
 		{
 			m_pActiveMDIChild = nullptr;
-			m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(_T("client"), _T(""));
+			auto it = m_mapClientCtrlBarData.find(_T("hostpage"));
+			if (it != m_mapClientCtrlBarData.end())
+				strXml = it->second;
+			m_pGalaxy->m_pWebPageWnd->LoadDocument2Viewport(_T("mainclient"), strXml);
 		}
 		if (m_pHostBrowser)
 		{
@@ -1067,6 +1062,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			{
 				if (m_pHostBrowser)
 				{
+					m_pHostBrowser->m_bInTabChange = false;
 					m_pHostBrowser->m_bSZMode = false;
 					BSTR bstrXml = ::SysAllocString(L"");
 					CString strKey = m_pActiveMDIChild->m_strKey;
@@ -1138,7 +1134,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						{
 							if (!::IsChild(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, m_pHostBrowser->m_hWnd))
 							{
-								theApp.m_bAppStarting = false;
 								RECT rc;
 								::GetClientRect(m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd, &rc);
 								::SetParent(m_pHostBrowser->m_hWnd, m_pHostBrowser->m_pParentXobj->m_pHostWnd->m_hWnd);
@@ -1149,6 +1144,18 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 					}
 				}
 			}
+		}
+		else if (m_bCreateNewDoc)
+		{
+			RECT rc;
+			::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
+			if ((rc.right < rc.left) || (rc.bottom < rc.top))
+			{
+				::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
+				::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
+			}
+			m_bCreateNewDoc = false;
+			m_pHostBrowser->m_bSZMode = true;
 		}
 	}
 	break;

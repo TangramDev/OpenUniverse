@@ -149,15 +149,15 @@ namespace Browser {
 		{
 			if (m_pVisibleWebView->m_pChromeRenderFrameHost)
 			{
-				m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
+				//m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 20200205, 1);
 			return;
 		}
-		if (m_pVisibleWebView && m_pVisibleWebView->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
-		{
-			m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
-		}
+		//if (m_pVisibleWebView && m_pVisibleWebView->m_pChromeRenderFrameHost && ::IsWindowVisible(hWnd))
+		//{
+		//	m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
+		//}
 
 		BrowserLayout();
 		if (m_pVisibleWebView)

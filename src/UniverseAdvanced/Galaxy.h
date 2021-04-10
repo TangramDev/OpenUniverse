@@ -220,7 +220,7 @@ public:
 	CBrowser*				m_pHostBrowser = nullptr;
 	CMDIChild*				m_pActiveMDIChild = nullptr;
 	CosmosFrameWndInfo*		m_pCosmosFrameWndInfo = nullptr;
-
+	map<CString, CString>	m_mapClientCtrlBarData;
 	//CGalaxyCluster*			m_pGalaxyCluster = nullptr;
 	//CXobjVector				m_vMdiClientXobjs;
 	map<HWND, CMDIChild*>	m_mapMDIChild;

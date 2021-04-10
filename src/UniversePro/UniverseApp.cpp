@@ -1357,6 +1357,9 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
 					{
+						auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
+						if (it != g_pCosmos->m_mapWindowPage.end())
+							break;
 						if (g_pCosmos->m_mapDocTemplate.size() == 0)
 						{
 							g_pCosmos->m_hFirstView = hClient;
@@ -1503,7 +1506,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 											}
 											if (pMainGalaxy)
 											{
-												pMainGalaxy->m_pWebPageWnd = g_pCosmos->m_pHostHtmlWnd;
 												pMDIParent->m_pActiveMDIChild = pWnd;
 												if (pWnd->m_pGalaxy == nullptr)
 													pWnd->m_pGalaxy = (CGalaxy*)pGalaxy;
@@ -1516,6 +1518,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												if (itName != g_pCosmos->m_mapDocDefaultName.end())
 													strDefaultName = itName->second;
 												g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
+												if (pMDIParent)
+													::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 											}
 										}
 										break;
@@ -1529,7 +1533,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										{
 											HWND hFrame = ::GetParent(hWnd);
 											pGalaxy = static_cast<CGalaxy*>(g_pCosmos->GetGalaxy(::GetParent(hWnd)));
-											if (pMDIParent->m_pHostBrowser&&pMDIParent->m_pHostBrowser->m_pVisibleWebView != pGalaxy->m_pWebPageWnd) {
+											if (pMDIParent->m_pHostBrowser && pMDIParent->m_pHostBrowser->m_pVisibleWebView != pGalaxy->m_pWebPageWnd) {
 												bProcessWebPage = false;
 											}
 											else if (pGalaxy->m_pWebPageWnd->m_pGalaxy->m_strCurrentKey != strKey)
@@ -1613,8 +1617,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 													}
 												}
 											}
-											if (pMDIParent)
-												::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, 0, 20210325);
 										}
 									}
 								}

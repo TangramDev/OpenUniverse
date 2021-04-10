@@ -3520,7 +3520,7 @@ STDMETHODIMP CCosmos::ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrK
 					}
 					else
 					{
-						if(it1.second->m_strCurrentKey!= strKey)
+						if (it1.second->m_strCurrentKey != strKey)
 							it1.second->Observe(bstrKey, bstrXml, &pXobj);
 					}
 				}
@@ -4752,7 +4752,7 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 	if (it != m_mapBrowserWnd.end())
 	{
 		CBrowser* pBrowser = (CBrowser*)it->second;
-		pBrowser->m_bSZMode = true;
+		//pBrowser->m_bSZMode = true;
 		switch (type)
 		{
 		case BrowserTabChangeType::LoadingOnly:
@@ -4761,9 +4761,21 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 		break;
 		case BrowserTabChangeType::All:
 		{
-			if (pBrowser->m_pCosmosFrameWndInfo && pBrowser->m_pCosmosFrameWndInfo->m_nFrameType == 2)
-				::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
-			::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
+			if (pBrowser->m_pVisibleWebView && pBrowser->m_pVisibleWebView->m_hWnd == hWebView)
+			{
+				pBrowser->m_bSZMode = true;
+				if (theApp.m_bAppStarting == true)
+				{
+					theApp.m_bAppStarting = false;
+				}
+				theApp.m_bAppStarting = false;
+				if(pBrowser->m_pMDIParent)
+					pBrowser->m_pMDIParent->m_bCreateNewDoc = false;
+				//if (pBrowser->m_pCosmosFrameWndInfo && pBrowser->m_pCosmosFrameWndInfo->m_nFrameType == 2)
+				//	::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
+				//::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
+				::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
+			}
 		}
 		break;
 		}

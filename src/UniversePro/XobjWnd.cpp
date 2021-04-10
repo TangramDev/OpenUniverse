@@ -534,8 +534,6 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 						m_pXobj->m_pWebBrowser->m_bSZMode = true;
 						::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);
 						::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_SHOWWINDOW | SWP_NOSENDCHANGING);
-						if (pParent)
-							::PostMessage(pParent->m_hWnd, WM_COSMOSMSG, 0, 20210325);
 					}
 				}
 			}

@@ -121,7 +121,6 @@ BOOL CMFCApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
-	HWND h = g_pCosmosImpl->m_hCosmosWnd;
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
@@ -139,14 +138,15 @@ BOOL CMFCApp::InitInstance()
 	// Parse command line for standard shell commands, DDE, file open
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
+	//cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing;
+	m_nShellCmd = cmdInfo.m_nShellCommand;
 
 	// Enable DDE Execute open
 	EnableShellOpen();
 	RegisterShellFileTypes(TRUE);
-	//cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing;
 	// Dispatch commands specified on the command line.  Will return FALSE if
 	// app was launched with /RegServer, /Register, /Unregserver or /Unregister.
-	if (!ProcessShellCommandEx(cmdInfo))
+	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 	// The main window has been initialized, so show and update it
 	pMainFrame->ShowWindow(m_nCmdShow);
