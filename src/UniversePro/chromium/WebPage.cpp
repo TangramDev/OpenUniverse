@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104080060           *
+ *           Web Runtime for Application - Version 1.0.0.202104110061           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -167,6 +167,7 @@ namespace Browser {
 			{
 				g_pCosmos->m_nWaitTabCounts = 0;
 				g_pCosmos->m_hWaitTabWebPageWnd = NULL;
+				m_strLoadingURLs = _T("");
 				theApp.m_bAppStarting = false;
 				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
 				break;
@@ -1438,9 +1439,11 @@ namespace Browser {
 							else
 								theApp.m_bAppStarting = false;
 							if (urlsParse)
+							{
+								theApp.m_bAppStarting = true;
 								m_strLoadingURLs = urlsParse->xml();
-							//::PostMessage(m_hWnd, WM_COSMOSMSG, 20210411, 0);
-							::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210411);
+								::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210411);
+							}
 						}
 					}
 				}
@@ -1871,7 +1874,7 @@ namespace Browser {
 					{
 						HWND hWnd = ::CreateWindow(L"Cosmos Xobj Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pCosmos->m_hCosmosWnd, 0, AfxGetInstanceHandle(), NULL);
 						g_pCosmos->m_hTempBrowserWnd = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
-						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 30000, 100, SWP_NOACTIVATE);// | SWP_HIDEWINDOW);
+						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, ::GetSystemMetrics(SM_CXSCREEN), 100, SWP_NOACTIVATE);// | SWP_HIDEWINDOW);
 					}
 					else
 						g_pCosmos->m_pBrowserFactory->CreateBrowser(0, strUrl);

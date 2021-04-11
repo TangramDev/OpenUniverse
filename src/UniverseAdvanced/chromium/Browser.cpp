@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104080060           *
+ *           Web Runtime for Application - Version 1.0.0.202104110061           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -414,7 +414,7 @@ namespace Browser {
 			return 0;
 		}
 		break;
-		case 20210314:
+		case 20210314://TabChange
 		{
 			m_pVisibleWebView->m_bCanShow = false;
 			if (theApp.m_bAppStarting == false && m_pParentXobj)
@@ -446,9 +446,52 @@ namespace Browser {
 			}
 			//m_bSZMode = true;
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
+			if(m_pParentXobj==nullptr)
+				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
+			else
+			{
+				if(m_pVisibleWebView->m_strLoadingURLs==_T("")&& g_pCosmos->m_hWaitTabWebPageWnd==NULL&&g_pCosmos->m_nWaitTabCounts==0)
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
+				else
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			}
 		}
 		break;
+		//case 20210411:
+		//{
+		//	m_pVisibleWebView->m_bCanShow = false;
+		//	if (theApp.m_bAppStarting == false && m_pParentXobj)
+		//	{
+		//		m_bSZMode = true;
+		//		g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+
+		//		if (m_pCosmosFrameWndInfo)
+		//		{
+		//			switch (m_pCosmosFrameWndInfo->m_nFrameType)
+		//			{
+		//			case 1:
+		//			{
+		//				if (!::IsChild(m_pParentXobj->m_pHostWnd->m_hWnd, m_hWnd))
+		//					::SetParent(m_hWnd, m_pParentXobj->m_pHostWnd->m_hWnd);
+		//			}
+		//			break;
+		//			case 2:
+		//				if (m_pVisibleWebView->m_pGalaxy)
+		//				{
+		//					m_pVisibleWebView->m_bCanShow = true;
+		//					IXobj* pObj = nullptr;
+		//					m_pVisibleWebView->Observe(CComBSTR(m_pVisibleWebView->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
+		//					::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
+		//				}
+		//				break;
+		//			}
+		//		}
+		//	}
+		//	//m_bSZMode = true;
+		//	g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+		//	::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+		//}
+		//break;
 		case 20190527:
 		{
 			return (LRESULT)((IBrowser*)this);
@@ -617,7 +660,10 @@ namespace Browser {
 	{
 		LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 		if (m_bInTabChange || m_bDestroy)
-			return lRes;
+		{
+			if (m_pParentXobj)
+				return lRes;
+		}
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pVisibleWebView)
 		{
 			switch (lParam)
@@ -737,19 +783,27 @@ namespace Browser {
 				switch (wParam)
 				{
 				case 7:
+				{
 					m_bInTabChange = false;
+					if (m_pVisibleWebView)
+						m_pVisibleWebView->m_bCanShow = true;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-					break;
+				}
+				break;
 				case 3:
+				{
 					if (theApp.m_bAppStarting == false)
 						m_pVisibleWebView->m_bCanShow = true;
-					break;
+				}
+				break;
 				case 2:
+				{
 					m_bTabChange = false;
 					::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 					m_bSZMode = false;
 					::PostAppMessage(::GetCurrentThreadId(), WM_BROWSERLAYOUT, (WPARAM)m_hWnd, 7);
-					break;
+				}
+				break;
 				case 1:
 				{
 					m_bTabChange = false;
