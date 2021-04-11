@@ -63,7 +63,7 @@ namespace Browser
 		CString								m_strCurXml;
 		CString								m_strAppProxyID;
 		CString								m_strPageName = _T("");
-
+		CString								m_strLoadingURLs = _T("");
 		CGalaxy*							m_pGalaxy;
 		CXobj*								m_pParentXobj;
 		CXobj*								m_pBindXobj;

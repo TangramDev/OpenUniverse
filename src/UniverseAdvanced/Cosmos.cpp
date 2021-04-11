@@ -196,6 +196,8 @@ CCosmos::CCosmos()
 	m_nRef = 4;
 	m_nAppID = -1;
 	m_nAppType = 0;
+	m_nWaitTabCounts = 0;
+	m_hWaitTabWebPageWnd = NULL;
 	m_hCreatingWnd = NULL;
 	m_hCosmosWnd = NULL;
 	m_hHostBrowserWnd = NULL;
@@ -4776,6 +4778,14 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 				//	::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
 				//::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
 				::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
+			}
+			else if (::IsWindow(m_hWaitTabWebPageWnd)&& m_nWaitTabCounts)
+			{
+				m_nWaitTabCounts--;
+				if (m_nWaitTabCounts == 0)
+				{
+					::PostMessage(m_hWaitTabWebPageWnd, WM_COSMOSMSG, 20210411,1);
+				}
 			}
 		}
 		break;

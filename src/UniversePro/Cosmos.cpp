@@ -4764,10 +4764,10 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 			if (pBrowser->m_pVisibleWebView && pBrowser->m_pVisibleWebView->m_hWnd == hWebView)
 			{
 				pBrowser->m_bSZMode = true;
-				if (theApp.m_bAppStarting == true)
-				{
-					theApp.m_bAppStarting = false;
-				}
+				//if (theApp.m_bAppStarting == true)
+				//{
+				//	theApp.m_bAppStarting = false;
+				//}
 				theApp.m_bAppStarting = false;
 				if(pBrowser->m_pMDIParent)
 					pBrowser->m_pMDIParent->m_bCreateNewDoc = false;

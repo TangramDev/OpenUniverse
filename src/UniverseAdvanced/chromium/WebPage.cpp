@@ -115,6 +115,7 @@ namespace Browser {
 		m_strDocXml = _T("");
 		m_pParentXobj = nullptr;
 		m_strAppProxyID = _T("");
+		m_strLoadingURLs = _T("");
 		m_pBindXobj = nullptr;
 		m_pGalaxyCluster = nullptr;
 		m_pGalaxy = nullptr;
@@ -160,6 +161,72 @@ namespace Browser {
 		BOOL&) {
 		switch (wParam)
 		{
+		case 20210411:
+		{
+			if (lParam)
+			{
+				g_pCosmos->m_nWaitTabCounts = 0;
+				g_pCosmos->m_hWaitTabWebPageWnd = NULL;
+				theApp.m_bAppStarting = false;
+				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
+				break;
+			}
+			if (m_strLoadingURLs != _T(""))
+			{
+				HWND hPWnd = ::GetParent(m_hWnd);
+				auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
+				if (it != g_pCosmos->m_mapBrowserWnd.end())
+				{
+					CBrowser* pWebBrowser = (CBrowser*)it->second;
+					pWebBrowser->m_bSZMode = true;
+					m_bCanShow = false;
+					pWebBrowser->m_bInTabChange = true;
+					theApp.m_bAppStarting = true;
+					CTangramXmlParse m_Parse;
+					if (m_Parse.LoadXml(m_strLoadingURLs))
+					{
+						CString strUrls = _T("");
+						int nCount = m_Parse.GetCount();
+						for (int i = 0; i < nCount; i++)
+						{
+							CString strURL = m_Parse.GetChild(i)->attr(_T("url"), _T(""));
+							int nPos2 = strURL.Find(_T(":"));
+							if (nPos2 != -1)
+							{
+								CString strURLHeader = strURL.Left(nPos2);
+								if (strURLHeader.CompareNoCase(_T("host")) == 0)
+								{
+									strURL = g_pCosmos->m_strAppPath + strURL.Mid(nPos2 + 1);
+								}
+							}
+							if (strURL != _T(""))
+							{
+								strUrls += strURL;
+								if (i < nCount - 1)
+									strUrls += _T("|");
+							}
+						}
+						if (strUrls != _T(""))
+						{
+							g_pCosmos->m_nWaitTabCounts = nCount;
+							g_pCosmos->m_hWaitTabWebPageWnd = m_hWnd;
+							CString strDisposition = _T("");
+							strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
+							if (m_pChromeRenderFrameHost)
+							{
+								IPCMsg msg;
+								msg.m_strId = L"ADD_URL";
+								msg.m_strParam1 = strUrls;
+								msg.m_strParam2 = strDisposition;
+								m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
+								//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210411);
+							}
+						}
+					}
+				}
+			}
+		}
+		break;
 		case 20201109:
 		{
 			if (lParam)
@@ -1143,6 +1210,11 @@ namespace Browser {
 			if (hMainWnd)
 			{
 				theApp.m_bAppStarting = true;
+				CTangramXmlParse* urlsParse = xmlParse.GetChild(_T("urls"));
+				//if (urlsParse)
+				//{
+				//	m_strLoadingURLs
+				//}
 				IGalaxyCluster* pCluster = nullptr;
 				CosmosFrameWndInfo* pCosmosFrameWndInfo = nullptr;
 				HANDLE hHandle = ::GetProp(hMainWnd, _T("CosmosFrameWndInfo"));
@@ -1265,7 +1337,7 @@ namespace Browser {
 								{
 									CTangramXmlParse* pParse2 = pParse->GetChild(i);
 									CTangramXmlParse* pCtrlBarParse2 = nullptr;
-									if(pParseControlBars)
+									if (pParseControlBars)
 										pCtrlBarParse2 = pParseControlBars->GetChild(i);
 									int nBarID = pParse2->attrInt(_T("ctrlbarid"), 0);
 									if (nBarID)
@@ -1284,7 +1356,7 @@ namespace Browser {
 													IGalaxy* pGalaxy = nullptr;
 													CString strKey = _T("");
 													strKey.Format(_T("ControlBar_%d"), nBarID);
-													if (bNeedClientInfo&& pCtrlBarParse2)
+													if (bNeedClientInfo && pCtrlBarParse2)
 													{
 														pMdiParent->m_mapClientCtrlBarData[strKey.MakeLower()] = pCtrlBarParse2->xml();;
 													}
@@ -1365,6 +1437,10 @@ namespace Browser {
 							}
 							else
 								theApp.m_bAppStarting = false;
+							if (urlsParse)
+								m_strLoadingURLs = urlsParse->xml();
+							//::PostMessage(m_hWnd, WM_COSMOSMSG, 20210411, 0);
+							::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210411);
 						}
 					}
 				}
@@ -1795,7 +1871,7 @@ namespace Browser {
 					{
 						HWND hWnd = ::CreateWindow(L"Cosmos Xobj Class", NULL, /*WS_OVERLAPPED |*/ WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 200, 200, g_pCosmos->m_hCosmosWnd, 0, AfxGetInstanceHandle(), NULL);
 						g_pCosmos->m_hTempBrowserWnd = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, strUrl);
-						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 3000, 100, SWP_NOACTIVATE);// | SWP_HIDEWINDOW);
+						::SetWindowPos(g_pCosmos->m_hTempBrowserWnd, HWND_BOTTOM, 0, 0, 30000, 100, SWP_NOACTIVATE);// | SWP_HIDEWINDOW);
 					}
 					else
 						g_pCosmos->m_pBrowserFactory->CreateBrowser(0, strUrl);

@@ -436,9 +436,9 @@ namespace Browser {
 					}
 				}
 			}
-			////m_bSZMode = true;
-			//g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-			//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			//m_bSZMode = true;
+			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		break;
 		case 20190527:
@@ -771,6 +771,7 @@ namespace Browser {
 						}
 					}
 
+					m_bSZMode = false;
 					m_pBrowser->LayoutBrowser();
 					//if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
@@ -793,7 +794,6 @@ namespace Browser {
 							}
 						}
 					}
-					m_bSZMode = false;
 					if (m_pMDIParent)
 					{
 						::PostMessage(m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);

@@ -1460,6 +1460,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
+				case 20210411:
+				{
+					HWND hWebView = (HWND)lpMsg->wParam;
+					::PostMessage(hWebView, WM_COSMOSMSG, 20210411, 0);
+				}
+				break;
 				case 20210309:
 				{
 					HWND hClient = (HWND)lpMsg->wParam;

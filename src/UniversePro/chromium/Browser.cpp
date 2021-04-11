@@ -197,7 +197,8 @@ namespace Browser {
 				rc.right = rc.left + 1;
 				rc.bottom = rc.top + 1;
 			}
-			else {
+			else 
+			{
 				RECT rc2;
 				::GetWindowRect(hWebHostWnd, &rc2);
 				if (::ScreenToClient(hExtendWnd, (LPPOINT)&rc2))
@@ -436,9 +437,9 @@ namespace Browser {
 					}
 				}
 			}
-			////m_bSZMode = true;
-			//g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-			//::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			//m_bSZMode = true;
+			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		break;
 		case 20190527:
@@ -770,10 +771,6 @@ namespace Browser {
 							}
 						}
 					}
-
-					m_pBrowser->LayoutBrowser();
-					//if (::GetParent(m_hWnd) == nullptr)
-						BrowserLayout();
 					if (m_pParentXobj)
 					{
 						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
@@ -794,6 +791,10 @@ namespace Browser {
 						}
 					}
 					m_bSZMode = false;
+
+					m_pBrowser->LayoutBrowser();
+					//if (::GetParent(m_hWnd) == nullptr)
+						BrowserLayout();
 					if (m_pMDIParent)
 					{
 						::PostMessage(m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
