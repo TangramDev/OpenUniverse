@@ -159,6 +159,7 @@ public:
 	int 									m_nJVMVersion;
 
 	int										m_nTangramObj;
+	int										m_nWaitTabCounts = 0;
 	bool									m_bOfficeAddinUnLoad;
 
 #ifdef _DEBUG
@@ -171,6 +172,7 @@ public:
 	int										m_nTangramNodeCommonData;
 #endif
 	HWND									m_hTempBrowserWnd = NULL;
+	HWND									m_hWaitTabWebPageWnd = NULL;
 	HHOOK									m_hCBTHook;
 	HHOOK									m_hForegroundIdleHook;
 	TCHAR									m_szBuffer[MAX_PATH];

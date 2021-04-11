@@ -197,8 +197,7 @@ namespace Browser {
 				rc.right = rc.left + 1;
 				rc.bottom = rc.top + 1;
 			}
-			else 
-			{
+			else {
 				RECT rc2;
 				::GetWindowRect(hWebHostWnd, &rc2);
 				if (::ScreenToClient(hExtendWnd, (LPPOINT)&rc2))
@@ -742,16 +741,16 @@ namespace Browser {
 				case 1:
 				{
 					m_bTabChange = false;
-					if(m_pMDIParent)
+					if (m_pMDIParent)
 						m_pMDIParent->m_bCreateNewDoc = false;
 					theApp.m_bAppStarting = false;
-					m_bSZMode = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					m_bSZMode = false;
 				}
 				break;
 				default:
 				{
-					if (m_pMDIParent && m_pMDIParent->m_bCreateNewDoc)
+					if ((m_pMDIParent && m_pMDIParent->m_bCreateNewDoc) || !::IsWindowVisible(m_hWnd))
 						break;
 					if (/*m_pVisibleWebView->m_bCanShow == false ||*/ m_bTabChange || m_bInTabChange)
 						break;
@@ -771,12 +770,17 @@ namespace Browser {
 							}
 						}
 					}
+
+					m_bSZMode = false;
+					m_pBrowser->LayoutBrowser();
+					//if (::GetParent(m_hWnd) == nullptr)
+					BrowserLayout();
 					if (m_pParentXobj)
 					{
 						HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 					}
 
-					if (m_pVisibleWebView&&m_pVisibleWebView->m_pGalaxy)
+					if (m_pVisibleWebView && m_pVisibleWebView->m_pGalaxy)
 					{
 						::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
 						m_pVisibleWebView->m_pGalaxy->HostPosChanged();
@@ -790,11 +794,6 @@ namespace Browser {
 							}
 						}
 					}
-					m_bSZMode = false;
-
-					m_pBrowser->LayoutBrowser();
-					//if (::GetParent(m_hWnd) == nullptr)
-						BrowserLayout();
 					if (m_pMDIParent)
 					{
 						::PostMessage(m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);

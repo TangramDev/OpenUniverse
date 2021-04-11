@@ -179,6 +179,7 @@ CCosmos::CCosmos()
 	m_pClrHost = nullptr;
 	m_nJVMVersion = JNI_VERSION_10;
 	g_pCosmos = this;
+	m_nWaitTabCounts = 0;
 	m_bOfficeAddinUnLoad = true;
 	m_bWinFormActived = false;
 	m_bCanClose = false;
@@ -203,6 +204,7 @@ CCosmos::CCosmos()
 	m_hActiveWnd = NULL;
 	m_hCBTHook = NULL;
 	m_hForegroundIdleHook = NULL;
+	m_hWaitTabWebPageWnd = NULL;
 	m_lpszSplitterClass = nullptr;
 	m_pGalaxyCluster = nullptr;
 	m_pActiveXobj = nullptr;
@@ -4764,15 +4766,26 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 			if (pBrowser->m_pVisibleWebView && pBrowser->m_pVisibleWebView->m_hWnd == hWebView)
 			{
 				pBrowser->m_bSZMode = true;
-				//if (theApp.m_bAppStarting == true)
-				//{
-				//	theApp.m_bAppStarting = false;
-				//}
+				if (theApp.m_bAppStarting == true)
+				{
+					theApp.m_bAppStarting = false;
+				}
 				theApp.m_bAppStarting = false;
-				if(pBrowser->m_pMDIParent)
+				if (pBrowser->m_pMDIParent)
 					pBrowser->m_pMDIParent->m_bCreateNewDoc = false;
 				pBrowser->m_pVisibleWebView->m_bCanShow = true;
+				//if (pBrowser->m_pCosmosFrameWndInfo && pBrowser->m_pCosmosFrameWndInfo->m_nFrameType == 2)
+				//	::PostMessage(::GetParent(pBrowser->m_pCosmosFrameWndInfo->m_hClient), WM_QUERYAPPPROXY, 0, 20210215);
+				//::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
 				::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
+			}
+			else if (::IsWindow(m_hWaitTabWebPageWnd) && m_nWaitTabCounts)
+			{
+				m_nWaitTabCounts--;
+				if (m_nWaitTabCounts == 0)
+				{
+					::PostMessage(m_hWaitTabWebPageWnd, WM_COSMOSMSG, 20210411, 1);
+				}
 			}
 		}
 		break;
