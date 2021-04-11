@@ -504,6 +504,7 @@ namespace CommonUniverse
 	{
 		g_pAppBase = this;
 		m_strProviderID = _T("");
+		m_nShellCmd = CCommandLineInfo::FileNew;
 	}
 
 	CWebRuntimeApp::~CWebRuntimeApp()
@@ -518,26 +519,6 @@ namespace CommonUniverse
 	BOOL CWebRuntimeApp::InitApplication()
 	{
 		return CosmosInit(_T("")) ? CWinAppEx::InitApplication() : false;
-	}
-
-	BOOL CWebRuntimeApp::ProcessShellCommandEx(CCommandLineInfo& CmdInfo)
-	{
-		m_nShellCmd = CmdInfo.m_nShellCommand;
-		switch (CmdInfo.m_nShellCommand)
-		{
-		case CCommandLineInfo::FileNew:
-			m_strStartOpenFile = CmdInfo.m_strFileName;
-			break;
-		case CCommandLineInfo::FileOpen:
-			break;
-		default:
-		{
-			if (!ProcessShellCommand(CmdInfo))
-				return FALSE;
-		}
-		break;
-		}
-		return TRUE;
 	}
 
 	HWND CWebRuntimeApp::GetActivePopupMenu(HWND hWnd)

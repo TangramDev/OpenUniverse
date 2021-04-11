@@ -79,9 +79,11 @@ public:
 
 	CGalaxy*				m_pGalaxy = nullptr;
 	CGalaxy*				m_pOldGalaxy = nullptr;
+	IDispatch*				m_pOfficeObj = nullptr;
 	CXobjWnd*				m_pHostClientView = nullptr;
 	CTangramXmlParse*		m_pCosmosParse = nullptr;
 	CGalaxyCluster*			m_pGalaxyCluster = nullptr;
+	CMapStringToPtr			m_PlugInDispDictionary;
 };
 
 // CXobj 
@@ -167,7 +169,6 @@ public:
 	CString GetNames();
 	CWebView* GetHtmlWnd();
 	void NodeCreated();
-	CXobj* GetMdiclientObj();
 	CXobj* GetVisibleChildByName(CString strXobjName);
 	HRESULT Fire_ObserveComplete();
 	HRESULT Fire_Destroy();

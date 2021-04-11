@@ -138,7 +138,7 @@ BOOL CMFCApp::InitInstance()
 	// Parse command line for standard shell commands, DDE, file open
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
-	//cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing;
+	cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing;
 	m_nShellCmd = cmdInfo.m_nShellCommand;
 
 	// Enable DDE Execute open

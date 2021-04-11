@@ -508,6 +508,7 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 		break;
 	}
 	m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+	::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 	return S_OK;
 }
 
@@ -593,6 +594,7 @@ STDMETHODIMP CXobj::ObserveEx(int nRow, int nCol, BSTR bstrKey, BSTR bstrXml, IX
 				pGalaxy->HostPosChanged();
 			}
 			m_pXobjShareData->m_pGalaxy->ModifyStyle(WS_CLIPCHILDREN, 0);
+			::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210202);
 			return hr;
 		}
 	}
@@ -630,6 +632,17 @@ STDMETHODIMP CXobj::get_AxPlugIn(BSTR bstrPlugInName, IDispatch** pVal)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
+	CString strObjName = OLE2T(bstrPlugInName);
+	strObjName.Trim();
+	strObjName.MakeLower();
+	IDispatch* pDisp = nullptr;
+	if (m_pXobjShareData->m_PlugInDispDictionary.Lookup(LPCTSTR(strObjName), (void*&)pDisp))
+	{
+		*pVal = pDisp;
+		(*pVal)->AddRef();
+	}
+	else
+		*pVal = nullptr;
 	return S_OK;
 }
 
@@ -962,10 +975,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 			m_pWebBrowser = pBrowser;
 			if (m_pWebBrowser->m_pVisibleWebView)
 			{
-				//::SetParent(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, hPWnd);
-				//::ShowWindow(m_pWebBrowser->m_pVisibleWebView->m_hExtendWnd, SW_SHOW);
-				//if(m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost)
-				//	m_pWebBrowser->m_pVisibleWebView->m_pChromeRenderFrameHost->ShowWebPage(true);
 				m_pWebBrowser->m_pParentXobj = this;
 				m_pWebBrowser->m_pVisibleWebView->m_pParentXobj = this;
 			}
@@ -1083,7 +1092,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				if (g_pCosmos->m_pBrowserFactory)
 				{
 					HWND hBrowser = g_pCosmos->m_pBrowserFactory->CreateBrowser(hWnd, s);
-					::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE|SWP_HIDEWINDOW);
+					::SetWindowPos(hBrowser, HWND_TOP, 0, 0, 0, 0, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_HIDEWINDOW);
 					((CXobjWnd*)m_pHostWnd)->m_hFormWnd = hBrowser;
 					g_pCosmos->m_hParent = NULL;
 					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
@@ -1098,6 +1107,10 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				}
 			}
 		}
+	}
+	if (m_strObjTypeID.CompareNoCase(_T("docwebhost")) == 0)
+	{
+		::PostMessage(m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210225);
 	}
 
 	bRet = true;
@@ -1167,11 +1180,6 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 	return bRet;
 }
 
-CXobj* CXobj::GetMdiclientObj()
-{
-	return nullptr;
-}
-
 CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 {
 	if (strXobjName != _T(""))
@@ -1189,15 +1197,13 @@ CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 					return m_pHostGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
 				}
 			}
-			else if (m_strID == TGM_NUCLEUS)
-				return this;
 			else if (m_pWebBrowser)
 			{
 				if (m_pWebBrowser->m_pParentXobj == this)
 				{
 					if (m_pWebBrowser->m_pVisibleWebView)
 					{
-						if (m_pWebBrowser->m_pVisibleWebView->m_pGalaxy)
+						if(m_pWebBrowser->m_pVisibleWebView->m_pGalaxy)
 							return m_pWebBrowser->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
 					}
 				}
@@ -1616,12 +1622,21 @@ BOOL CXobj::AddChildNode(CXobj* pXobj)
 {
 	m_vChildNodes.push_back(pXobj);
 	pXobj->m_pParentObj = this;
+	if (pXobj->m_strName != _T(""))
+		m_mapChildXobj[pXobj->m_strName] = pXobj;
 	pXobj->m_pRootObj = m_pRootObj;
 	return true;
 }
 
 BOOL CXobj::RemoveChildNode(CXobj* pXobj)
 {
+	CString strName = pXobj->m_strName;
+	if (strName != _T(""))
+	{
+		auto it = m_mapChildXobj.find(strName);
+		if (it != m_mapChildXobj.end())
+			m_mapChildXobj.erase(it);
+	}
 	auto it = find(m_vChildNodes.begin(), m_vChildNodes.end(), pXobj);
 	if (it != m_vChildNodes.end())
 	{
@@ -1679,6 +1694,11 @@ STDMETHODIMP CXobj::get_WebPage(IWebPage** pVal)
 
 STDMETHODIMP CXobj::get_OfficeObj(IDispatch** pVal)
 {
+	if (m_pXobjShareData->m_pOfficeObj)
+	{
+		*pVal = m_pXobjShareData->m_pOfficeObj;
+		(*pVal)->AddRef();
+	}
 	return S_OK;
 }
 
@@ -2304,7 +2324,7 @@ HRESULT CXobj::Fire_ControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, L
 		}
 	}
 
-	for (auto& it : m_mapWndXobjProxy)
+	for (auto it : m_mapWndXobjProxy)
 	{
 		it.second->OnControlNotify(sender, NotifyCode, CtrlID, (HWND)CtrlHandle, OLE2T(CtrlClassName));
 	}

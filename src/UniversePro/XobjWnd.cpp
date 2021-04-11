@@ -562,21 +562,9 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 				//if (m_pXobj->m_pWebBrowser->m_pMDIParent->m_bCreateNewDoc==false)
 				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210316);
 			}
-			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent)
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent || m_pXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm)
 			{
-				//RECT rc;
-				//::GetClientRect(m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_pHostBrowser->m_pVisibleWebView->m_hWnd, &rc);
-				//if ((rc.right - rc.left)==2 && (rc.bottom - rc.top)==2)
-				//{
-				//	m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_pHostBrowser->m_pBrowser->LayoutBrowser();
-				//}
-				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW/**/);
-				//for (auto& it : m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_mapMDIChild)
-				//{
-				//	if (::IsWindowVisible(it.first))
-				//		::RedrawWindow(it.first, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
-				//}
+				::PostMessage(m_pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd, WM_COSMOSMSG, 0, 20210411);
 			}
 		}
 		break;

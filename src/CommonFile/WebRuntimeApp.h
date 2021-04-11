@@ -159,7 +159,7 @@ namespace CommonUniverse
 		CString GetDocTemplateID(CDocument* pDoc);
 		virtual bool InitApp();
 		virtual bool SetFrameInfo(HWND hWnd);
-		virtual BOOL ProcessShellCommandEx(CCommandLineInfo& rCmdInfo);
+
 	private:
 		bool m_bBuiltInBrowser = false;
 		bool m_bCrashReporting = false;

@@ -748,10 +748,7 @@ namespace Browser {
 			{
 				if (lParam == 4)
 				{
-					//if (g_pCosmos->m_bOMNIBOXPOPUPVISIBLE)
-					{
-						BrowserLayout();
-					}
+					BrowserLayout();
 					m_pBrowser->LayoutBrowser();
 				}
 				else if (m_pBrowser)

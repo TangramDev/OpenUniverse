@@ -3121,6 +3121,20 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 20210411:
+	{
+		if (theApp.m_bAppStarting == false)
+		{
+			if (m_pMDIParent)
+			{
+				if (m_pMDIParent->m_bCreateNewDoc || m_pMDIParent->m_pHostBrowser->m_pVisibleWebView->m_bCanShow == false)
+					break;
+			}
+			HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+			::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+		}
+	}
+	break;
 	case 20210331:
 	{
 		CXobj* pMdiClientObj = (CXobj*)wParam;
