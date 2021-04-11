@@ -194,7 +194,7 @@ public:
 	CEclipseWnd*							m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
-	map<HWND, CGalaxy*>						m_mapBKFrame;
+	//map<HWND, CGalaxy*>						m_mapBKFrame;
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;

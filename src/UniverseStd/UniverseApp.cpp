@@ -338,16 +338,16 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		if (hWnd == g_pCosmos->m_hCosmosWnd)
 		{
 			g_pCosmos->m_pActiveAppProxy = nullptr;
-			for (auto it : g_pCosmos->m_mapBKFrame)
-			{
-				HWND hWnd = ::GetParent(it.first);
-				IGalaxy* pGalaxy = nullptr;
-				g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
-				CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-				if (_pGalaxy)
-					_pGalaxy->m_pBKWnd = nullptr;
-				::DestroyWindow(::GetParent(it.first));
-			}
+			//for (auto it : g_pCosmos->m_mapBKFrame)
+			//{
+			//	HWND hWnd = ::GetParent(it.first);
+			//	IGalaxy* pGalaxy = nullptr;
+			//	g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
+			//	CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
+			//	if (_pGalaxy)
+			//		_pGalaxy->m_pBKWnd = nullptr;
+			//	::DestroyWindow(::GetParent(it.first));
+			//}
 
 			if (g_pCosmos->m_pCLRProxy)
 			{

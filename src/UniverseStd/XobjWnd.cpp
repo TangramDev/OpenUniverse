@@ -620,7 +620,7 @@ LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		IXobj* pXobj = nullptr;
 		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
 		m_pGalaxy = (CGalaxy*)pGalaxy;
-		g_pCosmos->m_mapBKFrame[m_hChild] = m_pGalaxy;
+		//g_pCosmos->m_mapBKFrame[m_hChild] = m_pGalaxy;
 	}
 	return 1;
 }

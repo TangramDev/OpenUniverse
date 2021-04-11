@@ -446,12 +446,15 @@ namespace Browser {
 			}
 			//m_bSZMode = true;
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-			if(m_pParentXobj==nullptr)
+			if (m_pParentXobj == nullptr)
 				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
 			else
 			{
-				if(m_pVisibleWebView->m_strLoadingURLs==_T("")&& g_pCosmos->m_hWaitTabWebPageWnd==NULL&&g_pCosmos->m_nWaitTabCounts==0)
+				if (m_pVisibleWebView->m_strLoadingURLs == _T("") && g_pCosmos->m_hWaitTabWebPageWnd == NULL && g_pCosmos->m_nWaitTabCounts == 0)
+				{
+					//m_bInTabChange = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
+				}
 				else
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 			}
@@ -662,7 +665,15 @@ namespace Browser {
 		if (m_bInTabChange || m_bDestroy)
 		{
 			if (m_pParentXobj)
-				return lRes;
+			{
+				if (wParam == 7 && m_pMDIParent == nullptr)
+				{
+					m_bInTabChange = false;
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 1, 7);
+				}
+				else
+					return lRes;
+			}
 		}
 		if (g_pCosmos->m_bChromeNeedClosed == false && m_pVisibleWebView)
 		{
