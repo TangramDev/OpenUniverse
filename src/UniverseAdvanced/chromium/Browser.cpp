@@ -62,7 +62,15 @@ namespace Browser {
 	void CBrowser::EndActiveChromeTab(HWND hActive)
 	{
 		if (m_bDestroy == false)
+		{
+			auto it = g_pCosmos->m_mapWebView.find(hActive);
+			if (it != g_pCosmos->m_mapWebView.end())
+			{
+				m_bInTabChange = true;
+				((CWebView*)it->second)->m_bCanShow = false;
+			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 20210314, (LPARAM)hActive);
+		}
 	}
 
 	//void CBrowser::ActiveChromeTab(HWND hActive, HWND hOldWnd)
@@ -438,7 +446,7 @@ namespace Browser {
 			}
 			//m_bSZMode = true;
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
 		}
 		break;
 		case 20190527:
@@ -728,6 +736,10 @@ namespace Browser {
 					break;
 				switch (wParam)
 				{
+				case 7:
+					m_bInTabChange = false;
+					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					break;
 				case 3:
 					if (theApp.m_bAppStarting == false)
 						m_pVisibleWebView->m_bCanShow = true;
