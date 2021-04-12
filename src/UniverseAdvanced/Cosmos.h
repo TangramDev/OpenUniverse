@@ -186,7 +186,6 @@ public:
 	CWebView* m_pHostHtmlWnd = nullptr;
 	CWebView* m_pHtmlWndCreated;
 	CWebView* m_pActiveHtmlWnd;
-	CBrowser* m_pHostBrowser = nullptr;
 
 	CWinForm* m_pActiveWinFormWnd;
 

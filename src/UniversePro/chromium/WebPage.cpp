@@ -954,13 +954,6 @@ namespace Browser {
 			{
 				g_pCosmos->m_pUniverseAppProxy->OnWebAppData(this, g_pCosmos->m_strAppXml);
 				g_pCosmos->m_pHostHtmlWnd = this;
-				if (g_pCosmos->m_pHostBrowser == nullptr)
-				{
-					HWND hBrowser = ::GetParent(m_hWnd);
-					auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-					if (it != g_pCosmos->m_mapBrowserWnd.end())
-						g_pCosmos->m_pHostBrowser = (CBrowser*)it->second;
-				}
 
 				g_pCosmos->TangramInitFromeWeb();
 				g_pCosmos->m_pUniverseAppProxy->OnMainWindow(this, g_pCosmos->m_strAppXml);

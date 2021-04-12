@@ -943,8 +943,6 @@ LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 LRESULT CMDIParent::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	if (m_pHostBrowser)
 		m_pHostBrowser->m_bSZMode = true;
-	//if (m_pHostBrowser->m_pVisibleWebView)
-	//	m_pHostBrowser->m_pVisibleWebView->m_bCanShow = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
@@ -1121,13 +1119,6 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						m_pGalaxy->m_pBindingXobj = pClientObj;
 					if (m_bCreateNewDoc)
 					{
-						//RECT rc;
-						//::GetClientRect(m_pHostBrowser->m_hWnd, &rc);
-						//if ((rc.right < rc.left) || (rc.bottom < rc.top))
-						//{
-						//	::GetClientRect(::GetParent(m_pHostBrowser->m_hWnd), &rc);
-						//	::SetWindowPos(m_pHostBrowser->m_hWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_NOREDRAW | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
-						//}
 						m_pHostBrowser->m_bSZMode = true;
 						m_pHostBrowser->m_bTabChange = false;
 						m_bCreateNewDoc = false;

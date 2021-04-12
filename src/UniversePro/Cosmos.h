@@ -188,7 +188,6 @@ public:
 	CWebView*								m_pActiveHtmlWnd;
 
 	CWinForm*								m_pActiveWinFormWnd;
-	CBrowser*								m_pHostBrowser = nullptr;
 
 	CXobj*									m_pActiveXobj;
 	CGalaxy*								m_pGalaxy;
