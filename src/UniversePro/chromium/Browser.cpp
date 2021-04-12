@@ -460,41 +460,6 @@ namespace Browser {
 			}
 		}
 		break;
-		//case 20210411:
-		//{
-		//	m_pVisibleWebView->m_bCanShow = false;
-		//	if (theApp.m_bAppStarting == false && m_pParentXobj)
-		//	{
-		//		m_bSZMode = true;
-		//		g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-
-		//		if (m_pCosmosFrameWndInfo)
-		//		{
-		//			switch (m_pCosmosFrameWndInfo->m_nFrameType)
-		//			{
-		//			case 1:
-		//			{
-		//				if (!::IsChild(m_pParentXobj->m_pHostWnd->m_hWnd, m_hWnd))
-		//					::SetParent(m_hWnd, m_pParentXobj->m_pHostWnd->m_hWnd);
-		//			}
-		//			break;
-		//			case 2:
-		//				if (m_pVisibleWebView->m_pGalaxy)
-		//				{
-		//					m_pVisibleWebView->m_bCanShow = true;
-		//					IXobj* pObj = nullptr;
-		//					m_pVisibleWebView->Observe(CComBSTR(m_pVisibleWebView->m_pGalaxy->m_strCurrentKey), CComBSTR(""), &pObj);
-		//					::PostMessage(m_pParentXobj->m_pHostWnd->m_hWnd, WM_COSMOSMSG, 0, 20210315);
-		//				}
-		//				break;
-		//			}
-		//		}
-		//	}
-		//	//m_bSZMode = true;
-		//	g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
-		//	::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-		//}
-		//break;
 		case 20190527:
 		{
 			return (LRESULT)((IBrowser*)this);
@@ -506,21 +471,7 @@ namespace Browser {
 			{
 				m_bTabChange = false;
 			}
-		}
-		return 1;
-		break;
-		case 20200128:
-		{
-			if (m_pVisibleWebView)
-			{
-				CGalaxy* pGalaxy = m_pVisibleWebView->m_pGalaxy;
-				if (pGalaxy)
-				{
-					CXobj* pXobj = pGalaxy->m_pWorkXobj;
-					CXobjWnd* pWnd = (CXobjWnd*)(pXobj->m_pHostWnd);
-					return (LRESULT)(pWnd->m_hWnd);
-				}
-			}
+			return 1;
 		}
 		break;
 		case 1992:
