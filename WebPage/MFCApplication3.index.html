@@ -1,0 +1,325 @@
+﻿<!-- This is "index.html". Normally, it is named "ProjectName.index.html". This webpage is the real entry point of the HTML-driven App. -->
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        table.sunnysolution, td.sunnysolution, th.sunnysolution {
+            border: 2px solid midnightblue;
+        }
+
+        td.sunnysolution {
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <cosmos>
+        <define tagName="application"></define>
+        <application>
+            <modules>
+                <module libname="SunnyForms.dll" objname="Sunny.WebDelegate" functionname="Init"></module>
+            </modules>
+            <ntp>
+                <cluster>
+                    <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                        <xobj xobjtype="main_panel" objid="host"></xobj>
+                        <xobj objid="nucleus"></xobj>
+                    </xobj>
+                </cluster>
+            </ntp>
+            <defaultworkbench>
+                <cluster>
+                    <xobj style="18">
+                        <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
+                        <xobj id='test1 x' caption='Page 2' url="https://www.csdn.net|https://www.tangram.dev"></xobj>
+                        <xobj id='test2 y' caption='Page 3'></xobj>
+                        <xobj id='test3 z' caption='Page 4'></xobj>
+                    </xobj>
+                </cluster>
+            </defaultworkbench>
+            <doctemplate>
+                <default defaultname="Test Doc">
+                    <client>
+                        <cluster>
+                            <xobj caption="xx Web Runtime for Application" url="host:Template/MFCApplication3.html|host:webpage/newweb.html" id="mainclient"></xobj>
+                        </cluster>
+                    </client>
+                </default>
+                <test1  defaultname="Test Document">
+                    <client>
+                        <cluster>
+                            <xobj xobjtype="main_panel" url="host:Template/MFCApplication4.html" id="mainclient" caption="page2"></xobj>
+                        </cluster>
+                    </client>
+                </test1>
+                <test>
+                    <client>
+                        <cluster>
+                            <xobj style="7" activepage="1" xobjtype="tabctrl" objid="host" location="0">
+                                <xobj caption="mfc Application" id='Splitter1' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                                    <xobj objid="nucleus">
+                                        <messagemap>
+                                            <messa></messa>
+                                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                        </messagemap>
+                                        <eventmap></eventmap>
+                                    </xobj>
+                                    <xobj objid="Sunny.NtpCtrl,SunnyCtrl" id="Sunny_ntpctrl">
+                                        <referencemap>
+                                            <test refname="xxxx" target="mainClient" cluster="__viewport_default__" galaxy="default" content="startup" targetcluster="startup"></test>
+                                        </referencemap>
+                                        <eventmap>
+                                            <button1 event="OnClick">
+                                                <btn content="content_using_browser" targetcluster="content_using_browser2">
+                                                    <cluster>
+                                                        <xobj style="29">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </btn>
+                                                <xxxx target="mainClient" cluster="__viewport_default__" galaxy="default" content="content_using_browser" targetcluster="content_using_browser2">
+                                                    <cluster>
+                                                        <xobj style="18">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </xxxx>
+                                            </button1>
+                                            <button2 event="OnClick">
+                                                <btn target="mainClient" cluster="__viewport_default__" galaxy="default" content="startup" targetcluster="content_using_browser3">
+                                                    <cluster>
+                                                        <xobj style="39">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </btn>
+                                            </button2>
+                                        </eventmap>
+                                    </xobj>
+                                </xobj>
+                                <xobj caption="xx Web Runtime for Application" id="mainclient">
+                                </xobj>
+                            </xobj>
+                        </cluster>
+                    </client>
+                    <controlbars>
+                        <controlbar1 caption="Class View" clientid="2">
+                            <cluster>
+                                <xobj id='grid' rows='2' cols='1' height='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar1>
+                        <controlbar2 caption="File View" clientid="4">
+                            <uidata text="test1_测试" id="uidata_tag" treeitem="true">
+                                <xxx text="abcde" id="xxx_tag" treeitem="true">
+                                    <xxxx>
+                                        <jjjj></jjjj>
+                                    </xxxx>
+                                    <jhjhj></jhjhj>
+                                </xxx>
+                                <xxx_tag text="222222222222" sw="true" id="x123root"></xxx_tag>
+                                <xxx1 text="web runtime" id="xxx1_tag" treeitem="true"></xxx1>
+                                <xxx1_tag text="eeeeeeeeeee" sw="true" id="r4"></xxx1_tag>
+                            </uidata>
+                            <uidata_tag id="x123">sssss</uidata_tag>
+                            <cluster>
+                                <xobj style="18" id="test">
+                                    <xobj caption="The mixed world of web and native UI" objid="nucleus"></xobj>
+                                    <xobj caption="Second Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                    <xobj caption="MFC and native UI" xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj caption="Third Page" objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                </xobj>
+                                <xobj id='grid' rows='1' cols='2' height='350,350,' splitterwidth='6'>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar2>
+                        <controlbar3 caption="Output" clientid="1">
+                            <cluster>
+                                <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar3>
+                    </controlbars>
+                </test>
+                <template2>
+                    <doc></doc>
+                    <client>
+                        <cluster>
+                            <xobj style="39" activepage="1">
+                                <xobj caption="Cloudx Application" id='Splitter1' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                                    <xobj objid="nucleus">
+                                        <messagemap>
+                                            <messa></messa>
+                                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                        </messagemap>
+                                        <eventmap></eventmap>
+                                    </xobj>
+                                    <xobj objid="Sunny.NtpCtrl,SunnyCtrl" id="Sunny_ntpctrl">
+                                        <eventmap>
+                                            <button1 event="OnClick">
+                                                <btn content="content_using_browser" targetcluster="content_using_browser2">
+                                                    <cluster>
+                                                        <xobj style="29">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </btn>
+                                                <xxxx target="mainClient" cluster="__viewport_default__" galaxy="default" content="content_using_browser" targetcluster="content_using_browser2">
+                                                    <cluster>
+                                                        <xobj style="18">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </xxxx>
+                                            </button1>
+                                            <button2 event="OnClick">
+                                                <btn target="mainClient" cluster="__viewport_default__" galaxy="default" content="startup" targetcluster="content_using_browser3">
+                                                    <cluster>
+                                                        <xobj style="39">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </btn>
+                                            </button2>
+                                        </eventmap>
+                                    </xobj>
+                                </xobj>
+                                <xobj caption="Common Web Runtime for Application" url="host" id="mainclient"></xobj>
+                            </xobj>
+                        </cluster>
+                    </client>
+                    <controlbars>
+                        <controlbar1 caption="Class View" clientid="2">
+                            <cluster>
+                                <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar1>
+                        <controlbar2 caption="File View" clientid="4">
+                            <cluster>
+                                <xobj id='grid' rows='2' cols='1' height='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar2>
+                        <controlbar3 caption="Output" clientid="1">
+                            <cluster>
+                                <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar3>
+                    </controlbars>
+                </template2>
+                <template3>
+                    <doc></doc>
+                    <client>
+                        <cluster>
+                            <xobj style="39" activepage="1">
+                                <xobj caption="Cloudx Application" id='Splitter1' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
+                                    <xobj objid="nucleus">
+                                        <messagemap>
+                                            <messa></messa>
+                                            <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
+                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                        </messagemap>
+                                        <eventmap></eventmap>
+                                    </xobj>
+                                    <xobj objid="Sunny.NtpCtrl,SunnyCtrl" id="Sunny_ntpctrl">
+                                        <eventmap>
+                                            <button1 event="OnClick">
+                                                <btn content="content_using_browser" targetcluster="content_using_browser2">
+                                                    <cluster>
+                                                        <xobj style="29">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </btn>
+                                                <xxxx target="mainClient" cluster="__viewport_default__" galaxy="default" content="content_using_browser" targetcluster="content_using_browser2">
+                                                    <cluster>
+                                                        <xobj style="18">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </xxxx>
+                                            </button1>
+                                            <button2 event="OnClick">
+                                                <btn target="mainClient" cluster="__viewport_default__" galaxy="default" content="startup" targetcluster="content_using_browser3">
+                                                    <cluster>
+                                                        <xobj style="39">
+                                                            <xobj objid="nucleus" caption="test button onclick 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page 2"></xobj>
+                                                            <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
+                                                        </xobj>
+                                                    </cluster>
+                                                </btn>
+                                            </button2>
+                                        </eventmap>
+                                    </xobj>
+                                </xobj>
+                                <xobj caption="Common Web Runtime for Application" url="host"></xobj>
+                            </xobj>
+                        </cluster>
+                    </client>
+                    <controlbars>
+                        <controlbar1 caption="Class View" clientid="2">
+                            <cluster>
+                                <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar1>
+                        <controlbar2 caption="File View" clientid="4">
+                            <cluster>
+                                <xobj id='grid' rows='2' cols='1' height='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar2>
+                        <controlbar3 caption="Output" clientid="1">
+                            <cluster>
+                                <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
+                                    <xobj xobjtype="main_panel" objid="host"></xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                            </cluster>
+                        </controlbar3>
+                    </controlbars>
+                </template3>
+            </doctemplate>
+        </application>
+    </cosmos>
+</body>
+</html>
