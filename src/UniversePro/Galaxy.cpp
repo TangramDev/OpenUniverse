@@ -1813,20 +1813,20 @@ LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 LRESULT CWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pCosmos->m_hFormNodeWnd = nullptr;
-	if (m_pOwnerHtmlWnd)
-	{
-		HWND hBrowser = ::GetParent(m_pOwnerHtmlWnd->m_hWnd);
-		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-		if (it != g_pCosmos->m_mapBrowserWnd.end())
-		{
-			CBrowser* pBrowser = (CBrowser*)it->second;
-			//pBrowser->m_bSZMode = true;
-			pBrowser->m_pVisibleWebView->m_bCanShow = false;
-			g_pCosmos->m_mapSizingBrowser[hBrowser] = pBrowser;
-			pBrowser->m_pBrowser->LayoutBrowser();
-			pBrowser->BrowserLayout();
-		}
-	}
+	//if (m_pOwnerHtmlWnd)
+	//{
+	//	HWND hBrowser = ::GetParent(m_pOwnerHtmlWnd->m_hWnd);
+	//	auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+	//	if (it != g_pCosmos->m_mapBrowserWnd.end())
+	//	{
+	//		CBrowser* pBrowser = (CBrowser*)it->second;
+	//		//pBrowser->m_bSZMode = true;
+	//		pBrowser->m_pVisibleWebView->m_bCanShow = false;
+	//		g_pCosmos->m_mapSizingBrowser[hBrowser] = pBrowser;
+	//		pBrowser->m_pBrowser->LayoutBrowser();
+	//		pBrowser->BrowserLayout();
+	//	}
+	//}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 

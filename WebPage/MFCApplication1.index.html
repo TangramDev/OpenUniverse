@@ -4,7 +4,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>新技术、新起点，新希望……</title>
+    <title>向经典致敬……</title>
     <link rel="icon" href="webpage/app.png" sizes="32x32">
     <style type="text/css">
         .comments {
@@ -68,6 +68,16 @@
                                             switch (this.msgID) {
                                                 case "button1_OnClick":
                                                     {
+                                                        var xobj = this.sender;
+                                                        if (!!xobj) {
+                                                            //alert(xobj.parent.getLong("gridtype"));
+                                                            //xobj.ObserveEx("key1", cosmos.getElementById("mainwindow_1"));
+                                                            if (xobj.parent != null && xobj.parent.getLong("gridtype") == 4) {
+                                                                xobj.parent.Observe(0, 1, "key1", cosmos.getElementById("mainwindow_2").outerHTML);
+                                                            }
+                                                        } else {
+                                                            alert(this.sender + " sender is form");
+                                                        }
                                                         alert(this.docFragment.firstChild.outerHTML);
                                                     }
                                                     break;
@@ -187,6 +197,7 @@
                                                         case "treeView1_OnAfterSelect":
                                                             break;
                                                         case "button1_OnClick":
+                                                            alert(e.xobj.name);
                                                             break;
                                                         default:
                                                             break;
@@ -218,7 +229,7 @@
                                                             {
                                                                 if (!!this.workElement) {
                                                                     this.Observe(this.workElement.getAttribute("targetcluster"), this.workElement.outerHTML);
-                                                                    if (this.objtype == "nucleus") {
+                                                                    if (this.objtype == "docwebhost") {
                                                                         this.ShowWebContent("contents", this.workElement.getAttribute("content"));
                                                                     }
                                                                 }
@@ -228,7 +239,7 @@
                                                             {
                                                                 if (!!this.workElement) {
                                                                     this.Observe(this.workElement.getAttribute("targetcluster") + "_OnClick", this.workElement.outerHTML);
-                                                                    if (this.objtype == "nucleus") {
+                                                                    if (this.objtype == "docwebhost") {
                                                                         this.ShowWebContent("contents", this.workElement.getAttribute("content"));
                                                                     }
                                                                 }
@@ -548,7 +559,7 @@
                         <controlbar1 caption="类 View" ctrlbarid="134" clientid="2">
                             <cluster>
                                 <xobj style="18">
-                                    <xobj id='grid' rows='2' cols='1' height='550,350,' splitterwidth='6' caption="1111">
+                                    <xobj id='grid' rows='2' cols='1' height='550,350,' splitterwidth='6' caption="基于Web页面描述的控制条">
                                         <xobj objid="SunnyCtrl.NavControl,SunnyCtrl" id="navCtrl">
                                             <eventmap>
                                                 <treeView1 event="OnAfterSelect">
@@ -571,15 +582,6 @@
                                                     <node1 treenode="true" text="这里是一个全新的桌面应用世界"></node1>
                                                     <node1_tag>
                                                         <onafterselect>
-                                                            <tab_grid target="mdiclient" cluster="default" galaxy="webviewport" content="tabgrid" targetcluster="tabgrid">
-                                                                <cluster>
-                                                                    <xobj>
-                                                                        <xobj caption="Introduction to Tabbed Grid" objid=""></xobj>
-                                                                        <xobj caption="Second Page" objid="" id="mdiclient"></xobj>
-                                                                        <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
-                                                                    </xobj>
-                                                                </cluster>
-                                                            </tab_grid>
                                                             <content target="mainClient" cluster="default" galaxy="webviewport" content="content1" targetcluster="content1">
                                                                 <cluster>
                                                                     <xobj style="19" id="test">
@@ -589,6 +591,20 @@
                                                                     </xobj>
                                                                 </cluster>
                                                             </content>
+
+                                                            <mainClient target="mdiclient" cluster="default" galaxy="webviewport">
+                                                                <cluster>
+                                                                    <xobj style="19" id="test">
+                                                                        <xobj caption="Web Page" id="mdiclient"></xobj>
+                                                                        <xobj caption="Second Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                                                        <xobj caption="Third Page" objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                                                    </xobj>
+                                                                </cluster>
+                                                            </mainClient>
+
+
+
+
                                                         </onafterselect>
                                                     </node1_tag>
                                                     <virtuallayoutengine treenode="true" text="Common Layout Engine(CLE)">
@@ -611,6 +627,17 @@
                                                                         <ddd-www-aaa></ddd-www-aaa>
                                                                     </cluster>
                                                                 </mainClient>
+                                                                <content target="mainClient" cluster="default" galaxy="webviewport" content="content_grid" targetcluster="content_grid">
+                                                                    <cluster>
+                                                                        <xobj style="29" id="test">
+                                                                            <xobj caption="Web Page" objid="nucleus"></xobj>
+                                                                            <xobj caption="Second Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
+                                                                            <xobj caption="Third Page" objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
+                                                                        </xobj>
+                                                                    </cluster>
+                                                                </content>
+
+
                                                             </OnAfterSelect>
                                                         </xobj_tag>
                                                         <tabgrid treenode="true" text="标签(选项卡，Tabbed Window)"></tabgrid>
@@ -1029,24 +1056,23 @@
                 </test1>
             </doctemplate>
         </application>
-        <mainWindow caption="Sunny" width="2400" height="1600" id="mainForm">
+        <mainWindow caption="向经典致敬" width="2400" height="1600" id="mainForm" mainframe="hostframe">
             <urls>
                 <url url="https://www.tangram.dev"></url>
                 <url url="host:WebPage/sunny.html"></url>
             </urls>
         </mainWindow>
     </cosmos>
+    <strong style="font-size:28px; color:black"><i style="color:fuchsia">每当我们谈到被称之为</i><i style="color:blue">“经典”</i><b style="color:coral">的那些元素，我们内心充满着感激、忐忑与敬畏……</b></strong>
     <div class="contents">
         <article class="show startup markdown-body">
-            <strong style="font-size:32px; color:black"><i style="color:fuchsia">凤凰涅槃</i><i style="color:blue">浴火重生 </i><b style="color:coral">：新技术重塑桌面互联网应用世界</b>!</strong>
             <p>
                 <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument()">NewDoc</button>
                 <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument2()">NewDoc2</button>
             </p>
             <p style="font-size: 20px; font-weight:bold; color:black">
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspWeb Runtime是一款<i style="color:chocolate">颠覆式的、面向互联网的 </i>开源桌面软件开发框架，
-                其关键特点是通过整合<i style="color:orangered">Microsoft .NET、Chromium Project以及IBM Eclipse</i>三个开源项目，
-                使得Windows桌面应用可以按照一致的方式同时支持.NET、Java、C++、Web软件生态链。
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp科技发展的不同阶段，都会存在对应时代的经典之笔，以点缀那个时代的精彩，经典之所以被称之为经典，不仅仅是因为其价值本身，同时还意味着一种特定时期产生的深远影响……。我们应该怎样表达对经典的致敬？<i style="color:chocolate">让经典顺应时代的节奏得以传承 </i>或许是对经典致敬的一种方式……。
+                我们很幸运，因为我们受益于大量的经典之作，<i style="color:orangered">是造就经典的那些人、那些成果让我们看得更远，激励我们不断的创造……</i>。
             </p>
             <p>
                 <h1 style="font-size: 16px; color:chocolate">
