@@ -440,11 +440,39 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		RecalcLayout();
-
-		if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent)
+		CMDIParent* pMdiParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
+		if (pMdiParent == nullptr)
 		{
-			::PostMessage(m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
+			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd && m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd->m_pChromeRenderFrameHost)
+			{
+				HWND hBrowser = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd->m_pChromeRenderFrameHost->GetHostBrowserWnd();
+				auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+				if (it != g_pCosmos->m_mapBrowserWnd.end())
+				{
+					CBrowser* pBrowser = (CBrowser*)it->second;
+					m_pXobj->m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd = pBrowser;
+					if (pBrowser->m_pMDIParent)
+						m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent = pMdiParent = pBrowser->m_pMDIParent;
+					else if (pBrowser->m_pParentXobj && pBrowser->m_pParentXobj->m_pParentWinFormWnd)
+					{
+						if (pGalaxy->m_pParentWinForm == nullptr)
+						{
+							pGalaxy->m_pParentWinForm = pBrowser->m_pParentXobj->m_pParentWinFormWnd;
+							if (pGalaxy->m_pParentWinForm->m_bMdiForm)
+								pGalaxy->m_pParentMDIWinForm = pGalaxy->m_pParentWinForm;
+						}
+					}
+					::PostMessage(hBrowser, WM_BROWSERLAYOUT, 0, 7);
+				}
+			}
 		}
+		if (pMdiParent)
+		{
+			pMdiParent->m_pHostBrowser->m_bSZMode = true;
+			::SendMessage(pMdiParent->m_pHostBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			::PostMessage(pMdiParent->m_hWnd, WM_QUERYAPPPROXY, 0, 20210215);
+		}
+
 		if (pGalaxy->m_pParentMDIWinForm)
 		{
 			::SendMessage(pGalaxy->m_pParentMDIWinForm->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);

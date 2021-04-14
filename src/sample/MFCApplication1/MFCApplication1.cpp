@@ -86,7 +86,6 @@ BOOL CMFCApp::InitInstance()
 	AfxEnableControlContainer();
 
 	EnableTaskbarInteraction();
-
 	// AfxInitRichEdit2() is required to use RichEdit control
 	// AfxInitRichEdit2();
 
@@ -122,6 +121,7 @@ BOOL CMFCApp::InitInstance()
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
 	// create main MDI Frame window
+	return true;
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
 	{

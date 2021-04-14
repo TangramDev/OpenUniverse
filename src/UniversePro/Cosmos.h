@@ -144,11 +144,13 @@ class ATL_NO_VTABLE CCosmos :
 {
 	friend class CGalaxy;
 	friend class CMDTWnd;
-	friend class CWebView;
+	friend class CXobjWnd;
 	friend class CWinForm;
+	friend class CWebView;
 	friend class CUniverse;
 	friend class CMDIParent;
 	friend class CEclipseWnd;
+	friend class CGalaxyCluster;
 public:
 	CCosmos();
 	virtual ~CCosmos();
@@ -209,6 +211,7 @@ public:
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
+	map<HWND, CWinForm*>					m_mapWinForm;
 	map<HWND, CMDTWnd*>						m_mapMDTWindow;
 	map<HWND, CMDIParent*>					m_mapMDIParent;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;

@@ -140,11 +140,11 @@ namespace Browser {
 			m_hOldTab = NULL;
 		}
 
-		if (theApp.m_bAppStarting&&m_pVisibleWebView->m_bCanShow == false&&
-			m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2&&
-			m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
+		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
-			return;
+			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
+				if (m_pVisibleWebView->m_bCanShow == false)
+					return;
 		}
 
 		if (m_bTabChange == true)
@@ -499,7 +499,10 @@ namespace Browser {
 		if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 			g_pCosmos->m_mapBrowserWnd.erase(it);
 		}
-
+		if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd)
+		{
+			m_pParentXobj->m_pParentWinFormWnd->m_pOwnerHtmlWnd = nullptr;
+		}
 		if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hCosmosWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
 			g_pCosmos->m_hHostBrowserWnd == m_hWnd)
 		{
