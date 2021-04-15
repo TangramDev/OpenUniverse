@@ -834,17 +834,6 @@ namespace Browser {
 				}
 			}
 			break;
-			case 11:
-			{
-				m_bInTabChange = false;
-				if (m_pVisibleWebView)
-					m_pVisibleWebView->m_bCanShow = true;
-				if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd && m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient)
-				{
-					::SendMessage(m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient, WM_COSMOSMSG, 3, 20180115);
-				}
-				::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-			}
 			}
 		}
 		return lRes;

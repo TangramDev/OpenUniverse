@@ -121,7 +121,7 @@ BOOL CMFCApp::InitInstance()
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
 	// create main MDI Frame window
-	return true;
+	//return true;
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
 	{
