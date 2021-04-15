@@ -474,9 +474,12 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			if (pGalaxy->m_pParentMDIWinForm)
 			{
 				HWND hClient = pGalaxy->m_pParentMDIWinForm->m_hMDIClient;
-				::PostMessage(hClient, WM_COSMOSMSG, 3, 20180115);
-				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
+				if (theApp.m_bAppStarting)
+				{
+					::SendMessage(hClient, WM_COSMOSMSG, 3, 20180115);
+				}
+				else
+					::PostMessage(hClient, WM_COSMOSMSG, 3, 20180115);
 			}
 			else
 			{

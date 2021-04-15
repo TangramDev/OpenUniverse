@@ -1433,7 +1433,7 @@ LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_hWnd != g_pCosmos->m_hMainWnd)
 	{
-		if (m_pOwnerHtmlWnd)
+		if (::IsWindow(m_hOwnerWebView)&&m_pOwnerHtmlWnd)
 		{
 			auto it = m_pOwnerHtmlWnd->m_mapWinForm.find(m_hWnd);
 			if (it != m_pOwnerHtmlWnd->m_mapWinForm.end())
@@ -1804,8 +1804,22 @@ LRESULT CWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pCosmos->m_mapWinForm[m_hWnd] = this;
 	g_pCosmos->m_hFormNodeWnd = nullptr;
+	if (m_pOwnerHtmlWnd == nullptr)
+	{
+		if (::GetWindowLong(m_hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
+		{
+			HWND hPWnd = ::GetParent(::GetParent(m_hWnd));
+			auto it = g_pCosmos->m_mapWinForm.find(hPWnd);
+			if (it != g_pCosmos->m_mapWinForm.end())
+			{
+				CWinForm* pMdiParent = it->second;
+				m_pOwnerHtmlWnd = it->second->m_pOwnerHtmlWnd;
+			}
+		}
+	}
 	if (m_pOwnerHtmlWnd)
 	{
+		m_hOwnerWebView = m_pOwnerHtmlWnd->m_hWnd;
 		HWND hBrowser = ::GetParent(m_pOwnerHtmlWnd->m_hWnd);
 		if (::IsChild(m_hWnd, hBrowser))
 		{

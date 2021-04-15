@@ -251,6 +251,7 @@ public:
 	bool									m_bSZMode = false;
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
+	HWND									m_hOwnerWebView = NULL;
 	BOOL									m_bMdiForm;
 	BOOL									m_bMainForm = false;
 	CString									m_strKey;

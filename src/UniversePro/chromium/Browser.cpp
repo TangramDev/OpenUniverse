@@ -443,7 +443,6 @@ namespace Browser {
 			{
 				if (m_pVisibleWebView->m_strLoadingURLs == _T("") && g_pCosmos->m_hWaitTabWebPageWnd == NULL && g_pCosmos->m_nWaitTabCounts == 0)
 				{
-					//m_bInTabChange = false;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
 				}
 				else
@@ -742,6 +741,10 @@ namespace Browser {
 					if (m_pVisibleWebView)
 						m_pVisibleWebView->m_bCanShow = true;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+					if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd && m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient)
+					{
+						::SendMessage(m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
+					}
 				}
 				break;
 				case 3:
@@ -794,7 +797,6 @@ namespace Browser {
 
 					m_bSZMode = false;
 					m_pBrowser->LayoutBrowser();
-					//if (::GetParent(m_hWnd) == nullptr)
 					BrowserLayout();
 					if (m_pParentXobj)
 					{
@@ -824,6 +826,17 @@ namespace Browser {
 				}
 			}
 			break;
+			case 11:
+			{
+				m_bInTabChange = false;
+				if (m_pVisibleWebView)
+					m_pVisibleWebView->m_bCanShow = true;
+				if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd && m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient)
+				{
+					::SendMessage(m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient, WM_COSMOSMSG, 3, 20180115);
+				}
+				::SendMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
+			}
 			}
 		}
 		return lRes;

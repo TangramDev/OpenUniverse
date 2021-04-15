@@ -221,7 +221,7 @@ namespace blink {
 		return form;
 	}
 
-	CosmosXobj* Cosmos::createObject(Element* elem,V8ApplicationCallback* callback)
+	CosmosXobj* Cosmos::createObject(Element* elem, V8ApplicationCallback* callback)
 	{
 		CosmosXobj* var = CosmosXobj::Create("");
 		var->m_pRenderframeImpl = m_pRenderframeImpl;
@@ -342,8 +342,11 @@ namespace blink {
 										m_pVisibleContentElement = contentElement;
 									else
 									{
-										m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
-										m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+										if (m_pVisibleContentElement != contentElement)
+										{
+											m_pVisibleContentElement->classList().remove({ "show" }, exception_state);
+											m_pVisibleContentElement->classList().add({ "hidden" }, exception_state);
+										}
 										m_pVisibleContentElement = contentElement;
 										break;
 									}
@@ -563,9 +566,9 @@ namespace blink {
 				}
 			}
 		}
-		if(xObj->form()&&!bFormMsgProcessed)
+		if (xObj->form() && !bFormMsgProcessed)
 			xObj->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforcloudform, xObj));
-		else if(xObj->grid()&&!bXobjMsgProcessed)
+		else if (xObj->grid() && !bXobjMsgProcessed)
 			xObj->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCloudmessageforxobj, xObj));
 	}
 
@@ -1124,7 +1127,7 @@ namespace blink {
 			}
 			m_pRenderframeImpl->SendCosmosMessageEx(msg->session_);
 		}
-		GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo,"test",true);
+		GetFrame()->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo, "test", true);
 		//((RenderFrame*)m_pRenderframeImpl)->AddMessageToConsole(blink::mojom::ConsoleMessageLevel::kInfo,
 		//	"test");
 		//if (bwait)
