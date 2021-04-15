@@ -2675,6 +2675,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 					}
 					if (String::IsNullOrEmpty(strXml) == false)
 					{
+						::SendMessage((HWND)form->Handle.ToPointer(), WM_COSMOSMSG, 0, 20210415);
 						IDispatch* pFormDisp = theApp.m_pCosmosImpl->m_pCLRProxy->CreateCLRObj(strXml);
 						if (pFormDisp)
 							return;
@@ -2691,7 +2692,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 					pList->LargeImageList = gcnew ImageList();
 					pList->LargeImageList->ImageSize = System::Drawing::Size(48, 48);
 					int nIndex = -1;
-					for (auto it : pInfo->m_mapFormsInfo)
+					for (auto &it : pInfo->m_mapFormsInfo)
 					{
 						CString strXml = it.second;
 						CTangramXmlParse m_Parse;

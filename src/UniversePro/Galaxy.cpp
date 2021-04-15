@@ -1412,7 +1412,7 @@ LRESULT CWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = false;
 	for (auto& it : g_pCosmos->m_mapSizingBrowser)
 	{
-		if (::IsWindow(it.first))
+		if (::IsWindow(it.first)&& it.second)
 		{
 			it.second->m_bSZMode = false;
 			it.second->m_pBrowser->LayoutBrowser();
@@ -1449,6 +1449,19 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 20210415:
+	{
+		if (m_pOwnerHtmlWnd)
+		{
+			HWND hBrowser = m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetHostBrowserWnd();
+			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
+			{
+				it->second->OpenURL(CComBSTR(m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetRenderFrameURL(2)), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+			}
+		}
+	}
+	break;
 	case 20210331:
 	{
 		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);

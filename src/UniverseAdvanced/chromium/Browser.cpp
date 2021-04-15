@@ -434,8 +434,15 @@ namespace Browser {
 						break;
 					}
 				}
+				if (m_pParentXobj->m_pParentWinFormWnd)
+				{
+					CGalaxy* pGalaxy = m_pParentXobj->m_pParentWinFormWnd->m_pClientGalaxy;
+					if (pGalaxy && pGalaxy->m_pWorkXobj)
+					{
+						pGalaxy->m_pBindingXobj = pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+					}
+				}
 			}
-			//m_bSZMode = true;
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 			if (m_pParentXobj == nullptr)
 				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);

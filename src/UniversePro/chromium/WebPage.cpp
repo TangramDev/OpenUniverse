@@ -846,7 +846,7 @@ namespace Browser {
 				}
 			}
 		}
-		if (m_pCosmosFrameWndInfo == nullptr)
+		if (m_pCosmosFrameWndInfo == nullptr&& pBrowserWnd)
 		{
 			m_pCosmosFrameWndInfo = pBrowserWnd->m_pCosmosFrameWndInfo;
 		}

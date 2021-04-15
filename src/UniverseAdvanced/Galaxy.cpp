@@ -1412,7 +1412,7 @@ LRESULT CWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = false;
 	for (auto& it : g_pCosmos->m_mapSizingBrowser)
 	{
-		if (::IsWindow(it.first))
+		if (::IsWindow(it.first) && it.second)
 		{
 			it.second->m_bSZMode = false;
 			it.second->m_pBrowser->LayoutBrowser();
@@ -1433,7 +1433,7 @@ LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_hWnd != g_pCosmos->m_hMainWnd)
 	{
-		if (::IsWindow(m_hOwnerWebView)&&m_pOwnerHtmlWnd)
+		if (::IsWindow(m_hOwnerWebView) && m_pOwnerHtmlWnd)
 		{
 			auto it = m_pOwnerHtmlWnd->m_mapWinForm.find(m_hWnd);
 			if (it != m_pOwnerHtmlWnd->m_mapWinForm.end())
@@ -1449,6 +1449,19 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
+	case 20210415:
+	{
+		if (m_pOwnerHtmlWnd)
+		{
+			HWND hBrowser = m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetHostBrowserWnd();
+			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
+			{
+				it->second->OpenURL(CComBSTR(m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetRenderFrameURL(2)), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+			}
+		}
+	}
+	break;
 	case 20210331:
 	{
 		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
@@ -3176,6 +3189,20 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210309);
 		}
+		//if (m_pParentMDIWinForm)
+		//{
+		//	if (m_pParentMDIWinForm->m_pClientGalaxy)
+		//	{
+		//		if (m_pHostWebBrowserWnd)
+		//		{
+		//			if (m_pHostWebBrowserWnd->m_pVisibleWebView && m_pHostWebBrowserWnd->m_pVisibleWebView->m_pGalaxy)
+		//			{
+		//				CXobj* pObj = m_pHostWebBrowserWnd->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+		//				m_pBindingXobj = pObj;
+		//			}
+		//		}
+		//	}
+		//}
 		HostPosChanged();
 		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{

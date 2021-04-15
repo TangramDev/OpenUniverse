@@ -1031,6 +1031,9 @@ namespace CommonUniverse {
 		}
 
 		CWebPageImpl* m_pProxy;
+		//CString m_strSiteURL = _T("");
+		//CString m_strOriginalURL = _T("");
+		//CString m_strLastCommittedURL = _T("");
 		map<CString, IPCSession*> m_mapCosmosSession;
 		virtual void ShowWebPage(bool bShow) {}
 		virtual void SendCosmosMessage(IPCMsg*) {}
@@ -1045,6 +1048,7 @@ namespace CommonUniverse {
 		virtual long GetLong(IPCSession*, CString key) { return 0; }
 		virtual __int64 Getint64(IPCSession*, CString key) { return 0; }
 		virtual float GetFloat(IPCSession*, CString key) { return 0; }
+		virtual CString GetRenderFrameURL(int nType) { return _T(""); }
 	};
 
 	class CWebPageImpl {
