@@ -179,7 +179,7 @@ CCosmos::CCosmos()
 	m_pClrHost = nullptr;
 	m_nJVMVersion = JNI_VERSION_10;
 	g_pCosmos = this;
-	m_nWaitTabCounts = 0;
+	m_nWaitTabCounts = 1;
 	m_bOfficeAddinUnLoad = true;
 	m_bWinFormActived = false;
 	m_bCanClose = false;

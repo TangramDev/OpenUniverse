@@ -443,7 +443,6 @@ namespace Browser {
 					}
 				}
 			}
-			//m_bSZMode = true;
 			g_pCosmos->m_mapSizingBrowser[m_hWnd] = this;
 			if (m_pParentXobj == nullptr)
 				::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 7, 7);
@@ -785,6 +784,8 @@ namespace Browser {
 					if ((m_pMDIParent && m_pMDIParent->m_bCreateNewDoc) || !::IsWindowVisible(m_hWnd))
 						break;
 					if (/*m_pVisibleWebView->m_bCanShow == false ||*/ m_bTabChange || m_bInTabChange)
+						break;
+					if (g_pCosmos->m_nWaitTabCounts)
 						break;
 					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
 					for (auto& it : m_mapChildPage)

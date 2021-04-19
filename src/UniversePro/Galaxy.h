@@ -264,6 +264,7 @@ public:
 	CXobj*									m_pBindMDIXobj = nullptr;
 	CXobj*									m_pWebBindMDIXobj = nullptr;
 	CGalaxy*								m_pClientGalaxy = nullptr;
+	CBrowser*								m_pBrowser = nullptr;
 	CWebView*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;

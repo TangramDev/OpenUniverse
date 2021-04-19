@@ -752,6 +752,7 @@ void CMDIChild::OnFinalMessage(HWND hWnd)
 
 CMDTWnd::CMDTWnd(void)
 {
+	g_pCosmos->m_nWaitTabCounts = 0;
 }
 
 CMDTWnd::~CMDTWnd(void)
@@ -785,10 +786,13 @@ LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 LRESULT CMDTWnd::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = false;
 	if (m_pBrowser)
+	{
 		m_pBrowser->m_bSZMode = false;
+		m_pBrowser->m_pBrowser->LayoutBrowser();
+	}
 	for (auto& it : g_pCosmos->m_mapSizingBrowser)
 	{
-		if (::IsWindow(it.first))
+		if (::IsWindow(it.first) && it.second != m_pBrowser)
 		{
 			it.second->m_bSZMode = false;
 			it.second->m_pBrowser->LayoutBrowser();
@@ -1412,7 +1416,7 @@ LRESULT CWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = false;
 	for (auto& it : g_pCosmos->m_mapSizingBrowser)
 	{
-		if (::IsWindow(it.first)&& it.second)
+		if (::IsWindow(it.first) && it.second)
 		{
 			it.second->m_bSZMode = false;
 			it.second->m_pBrowser->LayoutBrowser();
@@ -3388,6 +3392,9 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	//}
 	if (m_pWorkXobj)
 	{
+		//CXobj* pObj = m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
+		//if (pObj)
+		//	m_pBindingXobj = pObj;
 		if (m_pBindingXobj)
 		{
 			RECT rect = { 0,0,0,0 };
