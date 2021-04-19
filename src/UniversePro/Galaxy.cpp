@@ -1333,7 +1333,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
 		}
-		return (LRESULT)m_strKey.GetBuffer();
+		return 0;
 	}
 	break;
 	case 3:
@@ -1508,62 +1508,77 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 20200216:
 	{
+		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+		::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
 		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 		if (pSession)
 		{
-			if (m_bMdiForm)
+			pSession->InsertString(_T("msgID"), _T("MdiWinForm_ActiveMdiChild"));
+			pSession->Insertint64(_T("active_mdichildhandle"), (__int64)m_hWnd);
+			pSession->InsertString(_T("active_mdichildkey"), m_strKey);
+			pSession->SendMessage();
+			if (!m_bReady)
 			{
-				//if (m_pOwnerHtmlWnd)
-				//{
-				//	ATLTRACE(_T("\n"));
-				//	CString strHandle = _T("");
-				//	strHandle.Format(_T("%d"), m_hWnd);
-				//	m_pOwnerHtmlWnd->SendChromeIPCMessage(_T("MESSAGE"), m_strKey, strHandle, _T("MainMdiForm:ActiveClient"), m_strKey, L"");
-				//}
-			}
-			else
-			{
-				HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
-				HWND hWnd = ::GetParent(m_hWnd);
-				DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
-				CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
-
-				CGalaxy* pGalaxy = nullptr;
-				auto iter = pThreadInfo->m_mapGalaxy.find(hWnd);
-				if (iter != pThreadInfo->m_mapGalaxy.end())
-				{
-					pGalaxy = (CGalaxy*)iter->second;
-					if (pGalaxy->m_pParentMDIWinForm && pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy)
-					{
-						if (pGalaxy->m_pHostWebBrowserWnd)
-						{
-							pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->LayoutBrowser();
-						}
-					}
-				}
-				if (pGalaxy->m_pHostWebBrowserWnd)
-				{
-					HWND hWnd = pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
-					auto it = g_pCosmos->m_mapWebView.find(hWnd);
-					if (it != g_pCosmos->m_mapWebView.end())
-					{
-						if (m_pOwnerHtmlWnd == nullptr)
-							m_pOwnerHtmlWnd = (CWebView*)it->second;
-						pSession->InsertString(_T("msgID"), _T("MdiWinForm_ActiveMdiChild"));
-						pSession->Insertint64(_T("active_mdichildhandle"), (__int64)m_hWnd);
-						pSession->InsertString(_T("active_mdichildkey"), m_strKey);
-						pSession->SendMessage();
-						if (!m_bReady)
-						{
-							::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20201114);
-						}
-						if (m_pOwnerHtmlWnd)
-							m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
-					}
-				}
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20201114);
 			}
 		}
+
+		//CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
+		//if (pSession)
+		//{
+		//	if (m_bMdiForm)
+		//	{
+		//		//if (m_pOwnerHtmlWnd)
+		//		//{
+		//		//	ATLTRACE(_T("\n"));
+		//		//	CString strHandle = _T("");
+		//		//	strHandle.Format(_T("%d"), m_hWnd);
+		//		//	m_pOwnerHtmlWnd->SendChromeIPCMessage(_T("MESSAGE"), m_strKey, strHandle, _T("MainMdiForm:ActiveClient"), m_strKey, L"");
+		//		//}
+		//	}
+		//	else
+		//	{
+		//		HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+		//		::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+		//		HWND hWnd = ::GetParent(m_hWnd);
+		//		DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
+		//		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
+
+		//		CGalaxy* pGalaxy = nullptr;
+		//		auto iter = pThreadInfo->m_mapGalaxy.find(hWnd);
+		//		if (iter != pThreadInfo->m_mapGalaxy.end())
+		//		{
+		//			pGalaxy = (CGalaxy*)iter->second;
+		//			if (pGalaxy->m_pParentMDIWinForm && pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy)
+		//			{
+		//				if (pGalaxy->m_pHostWebBrowserWnd)
+		//				{
+		//					pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->LayoutBrowser();
+		//				}
+		//			}
+		//		}
+		//		if (pGalaxy->m_pHostWebBrowserWnd)
+		//		{
+		//			HWND hWnd = pGalaxy->m_pHostWebBrowserWnd->m_pBrowser->GetActiveWebContentWnd();
+		//			auto it = g_pCosmos->m_mapWebView.find(hWnd);
+		//			if (it != g_pCosmos->m_mapWebView.end())
+		//			{
+		//				if (m_pOwnerHtmlWnd == nullptr)
+		//					m_pOwnerHtmlWnd = (CWebView*)it->second;
+		//				pSession->InsertString(_T("msgID"), _T("MdiWinForm_ActiveMdiChild"));
+		//				pSession->Insertint64(_T("active_mdichildhandle"), (__int64)m_hWnd);
+		//				pSession->InsertString(_T("active_mdichildkey"), m_strKey);
+		//				pSession->SendMessage();
+		//				if (!m_bReady)
+		//				{
+		//					::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20201114);
+		//				}
+		//				if (m_pOwnerHtmlWnd)
+		//					m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->ShowWebPage(true);
+		//			}
+		//		}
+		//	}
+		//}
 		return 0;
 	}
 	break;
@@ -1843,21 +1858,21 @@ LRESULT CWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				CBrowser* pBrowser = (CBrowser*)it->second;
-				if (pBrowser->m_pParentXobj)
+				m_pBrowser = (CBrowser*)it->second;
+				if (m_pBrowser->m_pParentXobj)
 				{
-					pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentWinForm = this;
+					m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentWinForm = this;
 					if (m_bMdiForm)
-						pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm = this;
+						m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm = this;
 				}
-				pBrowser->m_pVisibleWebView->m_bCanShow = false;
+				m_pBrowser->m_pVisibleWebView->m_bCanShow = false;
 				if (m_hWnd != g_pCosmos->m_hMainWnd)
 				{
-					pBrowser->m_bSZMode = true;
-					g_pCosmos->m_mapSizingBrowser[hBrowser] = pBrowser;
+					m_pBrowser->m_bSZMode = true;
+					g_pCosmos->m_mapSizingBrowser[hBrowser] = m_pBrowser;
 				}
-				pBrowser->m_pBrowser->LayoutBrowser();
-				pBrowser->BrowserLayout();
+				m_pBrowser->m_pBrowser->LayoutBrowser();
+				m_pBrowser->BrowserLayout();
 			}
 		}
 	}

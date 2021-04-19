@@ -58,9 +58,7 @@ public:
 	map<CString, CString>						m_strMapKey;
 	map<CString, HWND>							m_mapWnd;
 	map<HWND, CGalaxy*>							m_mapGalaxy;
-	//map<HWND, CGalaxy*>							m_mapNeedSaveGalaxy;
 	map<CString, CXobj*>						m_mapXobj;
-	map<HWND, CEclipseCtrl*>					m_mapNotifyCtrl;
 	map<__int64, CCosmosEvent*>					m_mapEventObj;
 	map<IUniverseAppProxy*, CGalaxyClusterProxy*> m_mapGalaxyClusterProxy;
 

@@ -163,13 +163,23 @@ namespace Browser {
 		{
 		case 20210411:
 		{
+			//if (lParam)
+			//{
+			//	g_pCosmos->m_nWaitTabCounts = 0;
+			//	g_pCosmos->m_hWaitTabWebPageWnd = NULL;
+			//	m_strLoadingURLs = _T("");
+			//	theApp.m_bAppStarting = false;
+			//	::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
+			//	break;
+			//}
 			if (lParam)
 			{
 				g_pCosmos->m_nWaitTabCounts = 0;
 				g_pCosmos->m_hWaitTabWebPageWnd = NULL;
 				m_strLoadingURLs = _T("");
 				theApp.m_bAppStarting = false;
-				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
+				m_bCanShow = true;
+				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 1);
 				break;
 			}
 			if (m_strLoadingURLs != _T(""))

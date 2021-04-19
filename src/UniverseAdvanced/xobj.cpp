@@ -2527,25 +2527,7 @@ HRESULT CXobj::Fire_ControlNotify(IXobj* sender, LONG NotifyCode, LONG CtrlID, L
 		}
 	}
 
-	if (g_pCosmos->m_bEclipse && m_pXobjShareData->m_pGalaxyCluster && m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl.size())
-	{
-		map<HWND, CEclipseCtrl*> m_mapTemp;
-		for (auto it : m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl)
-		{
-			CEclipseCtrl* pCtrl = it.second;
-			if (::IsWindow(it.first))
-				pCtrl->Fire_ControlNotify(sender, NotifyCode, CtrlID, CtrlHandle, CtrlClassName);
-			else
-				m_mapTemp[it.first] = pCtrl;
-		}
-		if (m_mapTemp.size())
-		{
-			for (auto it : m_mapTemp)
-				m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl.erase(m_pXobjShareData->m_pGalaxyCluster->m_mapNotifyCtrl.find(it.first));
-			m_mapTemp.clear();
-		}
-	}
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		it.second->OnControlNotify(sender, NotifyCode, CtrlID, (HWND)CtrlHandle, OLE2T(CtrlClassName));
 	}

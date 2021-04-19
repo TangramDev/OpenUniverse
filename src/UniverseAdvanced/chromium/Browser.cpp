@@ -698,10 +698,21 @@ namespace Browser {
 			break;
 			case 1:
 			{
-				if (m_pBrowser)
+				m_bInTabChange = false;
+				m_bSZMode = false;
+				if (m_pMDIParent)
 				{
-					m_pBrowser->LayoutBrowser();
-					BrowserLayout();
+					if (g_pCosmos->m_pUniverseAppProxy->m_nShellCmd != CCommandLineInfo::FileNothing)
+					{
+						::PostMessage(m_pMDIParent->m_hWnd, WM_QUERYAPPPROXY, 0, 19651965);
+					}
+				}
+				else
+				{
+					if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd && m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient)
+					{
+						::SendMessage(m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
+					}
 				}
 			}
 			break;

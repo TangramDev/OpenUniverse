@@ -1348,12 +1348,6 @@ LRESULT CEclipseCtrl::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 		auto it2 = m_pEclipseWnd->m_mapCtrl.find(m_hWnd);
 		if (it2 == m_pEclipseWnd->m_mapCtrl.end())
 			m_pEclipseWnd->m_mapCtrl[m_hWnd] = this;
-		if (m_pEclipseWnd->m_pGalaxyCluster)
-		{
-			auto it = m_pEclipseWnd->m_pGalaxyCluster->m_mapNotifyCtrl.find(m_hWnd);
-			if (it == m_pEclipseWnd->m_pGalaxyCluster->m_mapNotifyCtrl.end())
-				m_pEclipseWnd->m_pGalaxyCluster->m_mapNotifyCtrl[m_hWnd] = this;
-		}
 	}
 	return lr;
 }
