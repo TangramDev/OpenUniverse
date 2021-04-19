@@ -32,6 +32,7 @@ public:
 	virtual void PreLoadState();
 	virtual void LoadCustomState();
 	virtual void SaveCustomState();
+	virtual BOOL CreateCosmosApp(CWebPageImpl* pWebPageImpl, CBrowserImpl* pBrowserImpl, CString strObjID, CString strAppData);
 
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()

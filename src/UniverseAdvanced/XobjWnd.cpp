@@ -822,12 +822,10 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 		}
 		if (lpwndpos->cx && lpwndpos->cy)
 		{
-			::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, lpwndpos->cx + 24, lpwndpos->cy + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
-			//m_pXobj->m_pWebBrowser->m_bSZMode = true;
-			//::PostMessage(m_pXobj->m_pWebBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-			//if (m_pXobj->m_pWebBrowser->m_pVisibleWebView && m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_pGalaxy)
-			//	m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_pGalaxy->HostPosChanged();
-			//m_pXobj->m_pXobjShareData->m_pGalaxy->HostPosChanged();
+			if (g_pCosmos->m_nWaitTabCounts)
+				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
+			else
+				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, lpwndpos->cx + 24, lpwndpos->cy + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 		}
 		return;
 	}

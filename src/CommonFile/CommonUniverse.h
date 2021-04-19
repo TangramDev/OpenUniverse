@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.0.202104160062
+ *           Web Runtime for Application - Version 1.0.0.202104180063
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -513,15 +513,14 @@ namespace CommonUniverse {
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
 		virtual void MouseMoveProxy(HWND hWnd) {}
 		virtual void OpenDocFile(CString strFileName, CString strExt, CString strCreatingDOCID) {}
-		virtual HWND CreateNewFrame(CString strFrameKey) { return NULL; }
 		virtual HWND GetActivePopupMenu(HWND) { return NULL; }
 		virtual HRESULT CreateCosmosCtrl(void* pv, REFIID riid, LPVOID* ppv) { return S_OK; }
 		virtual CXobjProxy* OnXobjInit(IXobj* pNewNode) { return nullptr; }
 		virtual CGalaxyProxy* OnGalaxyCreated(IGalaxy* pNewGalaxy) { return nullptr; }
 		virtual CGalaxyClusterProxy* OnGalaxyClusterCreated(IGalaxyCluster* pNewGalaxy) { return nullptr; }
 		virtual HWND InitCosmosApp() { return NULL; }
+		virtual BOOL CreateCosmosApp(CWebPageImpl* pWebPageImpl, CBrowserImpl* pBrowserImpl, CString strObjID, CString strAppData) { return NULL; }
 		virtual void OnWebAppData(CWebPageImpl*, CString strXml) {}
-		virtual HWND OnMainWindow(CWebPageImpl*, CString strXml) { return NULL; }
 		virtual HWND OnWinFormCreated(CWebPageImpl*, CString strXml) { return NULL; }
 		virtual CWebPageImpl* OnNewWebPage(CBrowserImpl*, CString strXml) { return NULL; }
 		virtual void OnIPCMsg(CWebPageImpl* pWebPageImpl, CString strType, CString strParam1, CString strParam2, CString strParam3, CString strParam4, CString strParam5) {}

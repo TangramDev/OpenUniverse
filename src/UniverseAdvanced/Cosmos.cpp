@@ -196,7 +196,7 @@ CCosmos::CCosmos()
 	m_nRef = 4;
 	m_nAppID = -1;
 	m_nAppType = 0;
-	m_nWaitTabCounts = 0;
+	m_nWaitTabCounts = 1;
 	m_hWaitTabWebPageWnd = NULL;
 	m_hCreatingWnd = NULL;
 	m_hCosmosWnd = NULL;

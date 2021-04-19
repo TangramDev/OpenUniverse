@@ -785,6 +785,8 @@ namespace Browser {
 						break;
 					if (/*m_pVisibleWebView->m_bCanShow == false ||*/ m_bTabChange || m_bInTabChange)
 						break;
+					if (g_pCosmos->m_nWaitTabCounts)
+						break;
 					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
 					for (auto& it : m_mapChildPage)
 					{

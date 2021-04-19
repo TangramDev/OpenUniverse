@@ -146,7 +146,7 @@ namespace Universe
 	public:
 		virtual System::Collections::IEnumerator^ GetEnumerator()
 		{
-			return gcnew TangramBaseEnumerator<XobjCollection>(this, StarCount);
+			return gcnew TangramBaseEnumerator<XobjCollection>(this, XobjCount);
 		}
 
 		property Xobj^ default[int]
@@ -154,7 +154,7 @@ namespace Universe
 			Xobj ^ get(int iIndex);
 		}
 
-		property int StarCount
+		property int XobjCount
 		{
 			int get()
 			{
