@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064
+ *           Web Runtime for Application - Version 1.0.1.202104200065
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -137,14 +137,25 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 
 CCosmosProxy::~CCosmosProxy()
 {
-	for (auto it : m_mapGalaxyInfo)
+	for (auto &it : m_mapGalaxyInfo)
 	{
 		delete it.second;
 	}
-
+	m_mapGalaxyInfo.clear();
+	m_mapAssembly.erase(m_mapAssembly.begin(), m_mapAssembly.end());
+	m_mapAssembly.clear();
+	m_mapChromeWebPage.erase(m_mapChromeWebPage.begin(), m_mapChromeWebPage.end());
+	m_mapChromeWebPage.clear();
+	m_mapWpfControlWrapper.erase(m_mapWpfControlWrapper.begin(), m_mapWpfControlWrapper.end());
+	m_mapWpfControlWrapper.clear();
+	m_mapWebBrowser.erase(m_mapWebBrowser.begin(), m_mapWebBrowser.end());
+	m_mapWebBrowser.clear();
+	m_mapSession2Wormhole.erase(m_mapSession2Wormhole.begin(), m_mapSession2Wormhole.end());
+	m_mapSession2Wormhole.clear();
+	m_mapForm.erase(m_mapForm.begin(), m_mapForm.end());
+	m_mapForm.clear();
 	if (theApp.m_bHostApp == false)
 		theApp.m_pCosmosImpl->m_pCLRProxy = nullptr;
-
 	ATLTRACE(_T("Release CCosmosProxy :%p\n"), this);
 }
 
@@ -3053,6 +3064,8 @@ void CCosmos::OnCosmosClose()
 		}
 	}
 	AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
+	//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
+	//theApp.m_pCosmosImpl->OnCLRHostExit();
 }
 
 void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootXobj)

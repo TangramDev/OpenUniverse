@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064           *
+ *           Web Runtime for Application - Version 1.0.1.202104200065           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -472,10 +472,10 @@ CCosmos::~CCosmos()
 		auto it = m_mapWndXobjCollection.begin();
 		delete it->second;
 	}
-
+	m_mapWndXobjCollection.clear();
 	while (m_mapWindowProvider.size())
 		m_mapWindowProvider.erase(m_mapWindowProvider.begin());
-
+	m_mapWindowProvider.clear();
 	if (m_nTangramObj)
 		TRACE(_T("TangramObj Count: %d\n"), m_nTangramObj);
 #ifdef _DEBUG
@@ -4806,4 +4806,27 @@ void CCosmos::OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle)
 
 	}
 	TRACE(_T("\n"));
+}
+
+void CCosmos::OnCLRHostExit()
+{
+	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
+	{
+		//::PostQuitMessage(0);
+		OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
+		HRESULT hr = m_pClrHost->Stop();
+		ASSERT(hr == S_OK);
+		if (hr == S_OK)
+		{
+			OutputDebugString(_T("------------------Stop CLR Successed!------------------------\n"));
+		}
+		DWORD dw = m_pClrHost->Release();
+		ASSERT(dw == 0);
+		if (dw == 0)
+		{
+			m_pClrHost = nullptr;
+			OutputDebugString(_T("------------------ClrHost Release Successed!------------------------\n"));
+		}
+		OutputDebugString(_T("------------------End Stop CLR------------------------\n"));
+	}
 }

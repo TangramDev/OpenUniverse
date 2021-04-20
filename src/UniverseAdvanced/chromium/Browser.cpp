@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064           *
+ *           Web Runtime for Application - Version 1.0.1.202104200065           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -523,7 +523,7 @@ namespace Browser {
 				g_pCosmos->m_mapBrowserWnd.erase(g_pCosmos->m_mapBrowserWnd.begin(), g_pCosmos->m_mapBrowserWnd.end());
 			}
 		}
-
+		bool bExitCLR = false;
 		if ((g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_mapBrowserWnd.size() == 0) ||
 			g_pCosmos->m_hHostBrowserWnd == m_hWnd) {
 			if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
@@ -531,7 +531,11 @@ namespace Browser {
 			if (g_pCosmos->m_pCLRProxy)
 			{
 				if (g_pCosmos->m_pCosmosAppProxy)
-					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+				{
+					bExitCLR = true;
+			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
+					//g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+				}
 			}
 
 			if (g_pCosmos->m_hCBTHook) {
@@ -550,6 +554,10 @@ namespace Browser {
 			g_pCosmos->m_bEclipse == false)
 		{
 			::SendMessageW(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
+		}
+		if (bExitCLR)
+		{
+			g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
 		}
 		return lRes;
 	}

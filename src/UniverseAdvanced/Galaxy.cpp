@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064
+ *           Web Runtime for Application - Version 1.0.1.202104200065
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1264,6 +1264,8 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	auto it = g_pCosmos->m_mapNeedQueryOnClose.find(m_hWnd);
 	if (it != g_pCosmos->m_mapNeedQueryOnClose.end())
 		g_pCosmos->m_mapNeedQueryOnClose.erase(it);
+	if (m_pBKWnd)
+		m_pBKWnd->DestroyWindow();
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -1948,7 +1950,7 @@ CGalaxy::~CGalaxy()
 	//	delete m_pGalaxyInfo;
 	if (g_pCosmos->m_pGalaxy == this)
 		g_pCosmos->m_pGalaxy = nullptr;
-	for (auto it : g_pCosmos->m_mapThreadInfo)
+	for (auto& it : g_pCosmos->m_mapThreadInfo)
 	{
 		if (it.second)
 		{
@@ -1977,6 +1979,10 @@ CGalaxy::~CGalaxy()
 	}
 	m_mapGalaxyProxy.clear();
 	m_hWnd = NULL;
+	if (m_mapXobj.size())
+		m_mapXobj.clear();
+	m_mapWPFView.clear();
+	m_mapVisibleWPFView.clear();
 }
 
 void CGalaxy::HostPosChanged()
@@ -3139,12 +3145,17 @@ LRESULT CGalaxy::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
+	if (m_pBKWnd)
+	{
+		if (::IsWindow(m_pBKWnd->m_hWnd))
+			::DestroyWindow(m_pBKWnd->m_hWnd);
+	}
+
+	//m_pBKWnd->DestroyWindow();
 	::RemoveProp(m_hWnd, _T("CosmosData"));
 	if (g_pCosmos->m_pCLRProxy) {
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGalaxy*)this);
 	}
-	if (m_pBKWnd)
-		m_pBKWnd->DestroyWindow();
 	m_pGalaxyCluster->BeforeDestory();
 	m_pGalaxyCluster->m_strConfigFileNodeName.MakeLower();//20190116
 

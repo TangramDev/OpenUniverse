@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064           *
+ *           Web Runtime for Application - Version 1.0.1.202104200065           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -307,12 +307,15 @@ CXobj::~CXobj()
 			dw = m_pChildNodeCollection->Release();
 		m_pChildNodeCollection = nullptr;
 	}
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;
 	}
 	m_mapWndXobjProxy.clear();
+	m_mapSubFrame.clear();
+	m_mapExtendNode.clear();
+	m_mapChildXobj.clear();
 	ATLTRACE(_T("delete CXobj:%x\n"), this);
 }
 

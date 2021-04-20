@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064
+ *           Web Runtime for Application - Version 1.0.1.202104200065
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -722,6 +722,7 @@ namespace CommonUniverse {
 		virtual bool SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* pDoc, void* pDocTemplate) { return false; }
 		virtual CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate() { return nullptr; }
 		virtual void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle) {}
+		virtual void OnCLRHostExit() {}
 	};
 
 	class ICosmosWindowProvider

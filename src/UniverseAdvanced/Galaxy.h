@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064
+ *           Web Runtime for Application - Version 1.0.1.202104200065
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -337,7 +337,6 @@ public:
 	CString											m_strDocTemplateID = _T("");
 	CString											m_strHostWebBrowserNodeName = _T("");
 	CEclipseWnd*									m_pWorkBenchFrame;
-	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CBKWnd*											m_pBKWnd = nullptr;
@@ -355,10 +354,12 @@ public:
 	GalaxyInfo*										m_pGalaxyInfo = nullptr;
 	CosmosFrameWndInfo*								m_pCosmosFrameWndInfo = nullptr;
 	CWormhole*										m_pWormhole = nullptr;
+
+	CComObject<CXobjCollection>*					m_pRootNodes;
 	map<CString, CXobj*>							m_mapXobj;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;
-	CComObject<CXobjCollection>*					m_pRootNodes;
+	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
 
 	void Lock(){}
 	void Unlock(){}

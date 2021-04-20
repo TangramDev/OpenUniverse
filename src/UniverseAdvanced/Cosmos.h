@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104190064           *
+ *           Web Runtime for Application - Version 1.0.1.202104200065           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -417,4 +417,6 @@ private:
 
 	//NetworkChangeNotify:
 	void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle);
+
+	void OnCLRHostExit();
 };
