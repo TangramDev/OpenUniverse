@@ -1972,7 +1972,7 @@ CGalaxy::~CGalaxy()
 				delete m_pGalaxyCluster;
 		}
 	}
-	for (auto it : m_mapGalaxyProxy)
+	for (auto &it : m_mapGalaxyProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;

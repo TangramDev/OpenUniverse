@@ -163,15 +163,6 @@ namespace Browser {
 		{
 		case 20210411:
 		{
-			//if (lParam)
-			//{
-			//	g_pCosmos->m_nWaitTabCounts = 0;
-			//	g_pCosmos->m_hWaitTabWebPageWnd = NULL;
-			//	m_strLoadingURLs = _T("");
-			//	theApp.m_bAppStarting = false;
-			//	::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
-			//	break;
-			//}
 			if (lParam)
 			{
 				g_pCosmos->m_nWaitTabCounts = 0;
@@ -230,7 +221,6 @@ namespace Browser {
 								msg.m_strParam1 = strUrls;
 								msg.m_strParam2 = strDisposition;
 								m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
-								//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210411);
 							}
 						}
 					}
@@ -1210,6 +1200,7 @@ namespace Browser {
 			g_pCosmos->m_pUniverseAppProxy->CustomizedDOMElement(m_hWnd, strRuleName, strHTML);
 		}
 	}
+
 	void CWebView::CustomizedMainWindowElement(CString strHTML)
 	{
 		CBrowser* pBrowserWnd = nullptr;

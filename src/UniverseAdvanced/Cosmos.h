@@ -162,7 +162,6 @@ public:
 	int										m_nTangramObj;
 	int										m_nWaitTabCounts = 0;
 	bool									m_bOfficeAddinUnLoad;
-	bool									m_bMainWebViewShow = false;
 #ifdef _DEBUG
 	int										m_nJsObj;
 	int										m_nTangram;
@@ -198,7 +197,6 @@ public:
 	CEclipseWnd* m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
-	//map<HWND, CGalaxy*>						m_mapBKFrame;
 
 	map<LONGLONG, CCosmosEvent*>			m_mapEvent;
 	vector<HWND>							m_vecEclipseHideTopWnd;

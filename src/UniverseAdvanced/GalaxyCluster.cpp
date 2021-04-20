@@ -87,13 +87,13 @@ CGalaxyCluster::~CGalaxyCluster()
 	if (g_pCosmos->m_mapWindowPage.size() == 0)
 		g_pCosmos->Close();
 
-	for (auto it : m_mapGalaxyClusterProxy)
+	for (auto &it : m_mapGalaxyClusterProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;
 	}
 	m_mapGalaxyClusterProxy.clear();
-	for (auto it : m_mapEventObj)
+	for (auto &it : m_mapEventObj)
 		delete it.second;
 	m_mapEventObj.clear();
 	m_strMapKey.erase(m_strMapKey.begin(), m_strMapKey.end());
