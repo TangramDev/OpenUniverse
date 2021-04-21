@@ -52,7 +52,6 @@ public:
 	virtual~CCosmosProxy();
 
 	bool												m_bInitApp = false;
-	HWND												m_hCreatingCLRWnd = nullptr;
 	gcroot<String^>										m_strExtendableTypes;
 	map<CString, gcroot<Assembly^>>						m_mapAssembly;
 	map<HWND, gcroot<WebPage^>>							m_mapChromeWebPage;
@@ -154,10 +153,8 @@ private:
 	static void OnClick(Object ^sender, EventArgs ^e);
 	static void OnNodeMouseDoubleClick(System::Object^ sender, System::Windows::Forms::TreeNodeMouseClickEventArgs^ e);
 	static void OnTextChanged(System::Object^ sender, System::EventArgs^ e);
-	static void OnMenuActivate(System::Object^ sender, System::EventArgs^ e);
-	static void OnMenuDeactivate(System::Object^ sender, System::EventArgs^ e);
-	static void OnLostFocus(System::Object^ sender, System::EventArgs^ e);
-	static void OnMenuComplete(System::Object^ sender, System::EventArgs^ e);
+	static void OnDomainUnload(System::Object^ sender, System::EventArgs^ e);
+	static void OnProcessExit(System::Object^ sender, System::EventArgs^ e);
 };
 
 class CTangramWPFObjWrapper : public CWPFObj

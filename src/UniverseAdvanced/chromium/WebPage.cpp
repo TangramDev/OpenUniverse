@@ -2067,7 +2067,6 @@ namespace Browser {
 			if (l == 0)
 			{
 				CWinForm* pWnd = new CWinForm();
-				g_pCosmos->m_hFormNodeWnd = NULL;
 				g_pCosmos->m_hFormNodeWnd = (HWND)hwnd;
 				pWnd->SubclassWindow(hwnd);
 				pWnd->m_pOwnerHtmlWnd = this;

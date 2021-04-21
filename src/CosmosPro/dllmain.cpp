@@ -48,7 +48,10 @@ CCosmos::CCosmos()
 CCosmos::~CCosmos()
 {
 	ATLTRACE(_T("Release CCosmos :%p\n"), this);
-	//BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("universe.dll")));
+	OutputDebugString(_T("------------------Begin Release CCosmos from Cosmos.dll ------------------------\n"));
+	theApp.m_pCosmosImpl->OnCLRHostExit();
+	ATLTRACE(_T("End Release CCosmos feom ~CCosmos():%p\n"), this);
+	OutputDebugString(_T("------------------End Release CCosmos from Cosmos.dll ------------------------\n"));
 }
 
 void CCosmos::InitCosmosApp(bool bCrashReporting)

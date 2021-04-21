@@ -1455,15 +1455,17 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 	case 20210415:
 	{
-		if (m_pOwnerHtmlWnd)
-		{
-			HWND hBrowser = m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetHostBrowserWnd();
-			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())
-			{
-				it->second->OpenURL(CComBSTR(m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetRenderFrameURL(2)), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
-			}
-		}
+		if (m_pBrowser)
+			m_pBrowser->OpenURL(CComBSTR(m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetRenderFrameURL(2)), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+		//if (m_pOwnerHtmlWnd)
+		//{
+		//	HWND hBrowser = m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetHostBrowserWnd();
+		//	auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+		//	if (it != g_pCosmos->m_mapBrowserWnd.end())
+		//	{
+		//		it->second->OpenURL(CComBSTR(m_pOwnerHtmlWnd->m_pChromeRenderFrameHost->GetRenderFrameURL(2)), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+		//	}
+		//}
 	}
 	break;
 	case 20210331:
@@ -1483,6 +1485,8 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		m_bReady = true;
 		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
 		HWND hWnd = ::GetParent(m_hWnd);
+		if (hWnd == NULL)
+			break;
 		DWORD dwID = ::GetWindowThreadProcessId(hWnd, NULL);
 		CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 

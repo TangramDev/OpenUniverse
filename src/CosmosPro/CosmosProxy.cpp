@@ -42,6 +42,7 @@
 
 using namespace Universe;
 using namespace System::Windows;
+using namespace System::Security::Permissions;
 #pragma managed(push, off)
 CCosmos theApp;
 #pragma managed(pop)
@@ -113,6 +114,9 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 	m_pOnCtrlVisible = nullptr;
 	m_htObjects = gcnew Hashtable();
 	Forms::Application::ApplicationExit += gcnew EventHandler(&OnApplicationExit);
+	AppDomain^ thisDomain = AppDomain::CurrentDomain;
+	thisDomain->ProcessExit += gcnew System::EventHandler(&OnProcessExit);
+	thisDomain->DomainUnload += gcnew System::EventHandler(&OnDomainUnload);
 	if (::GetModuleHandle(_T("universe.dll")) == nullptr)
 	{
 		theApp.m_bHostApp = true;
@@ -121,14 +125,6 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 		{
 			theApp.m_pCosmosImpl->m_pCLRProxy = this;
 			theApp.m_pCosmosImpl->m_pCosmosAppProxy = &theApp;
-			//ICosmosExtender* pExtender = nullptr;
-			//theApp.m_pCosmos->get_Extender(&pExtender);
-			//if (pExtender)
-			//{
-			//	CComQIPtr<IVSExtender> pVSExtender(pExtender);
-			//	if (pVSExtender)
-			//		theApp.m_pVSExtender = pVSExtender.Detach();
-			//}
 		}
 	}
 
@@ -157,6 +153,8 @@ CCosmosProxy::~CCosmosProxy()
 	if (theApp.m_bHostApp == false)
 		theApp.m_pCosmosImpl->m_pCLRProxy = nullptr;
 	ATLTRACE(_T("Release CCosmosProxy :%p\n"), this);
+	OutputDebugString(_T("------------------Release CCosmosProxy ------------------------\n"));
+	//theApp.m_pCosmosImpl->OnCLRHostExit();
 }
 
 void CCosmosProxy::_GetMenuInfo(FormInfo* pInfo, ToolStripMenuItem^ item)
@@ -397,21 +395,6 @@ void CCosmosProxy::WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPW
 					}
 				}
 			}
-		}
-
-		if (hPWnd == NULL && _strClassName.Find(_T("WindowsForms")) != -1)
-		{
-			bool bMenu = false;
-			if (m_hCreatingCLRWnd)
-			{
-				Control^ pControl = Control::FromHandle((IntPtr)m_hCreatingCLRWnd);
-				if (pControl)
-				{
-					bMenu = pControl->GetType()->Name == L"ToolStripDropDownMenu";
-				}
-			}
-			if (bMenu == false)
-				m_hCreatingCLRWnd = hWnd;
 		}
 	}
 }
@@ -1296,24 +1279,24 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 			{
 				defaultToolStrip = (ToolStrip^)ctrl;
 
-				ToolStripSeparator^ toolStripSeparator = gcnew ToolStripSeparator();
-				toolStripSeparator->Name = "defaulttoolStripSeparator";
-				toolStripSeparator->Size = System::Drawing::Size(6, 39);
-				defaultToolStrip->Items->Add(toolStripSeparator);
+				//ToolStripSeparator^ toolStripSeparator = gcnew ToolStripSeparator();
+				//toolStripSeparator->Name = "defaulttoolStripSeparator";
+				//toolStripSeparator->Size = System::Drawing::Size(6, 39);
+				//defaultToolStrip->Items->Add(toolStripSeparator);
 
-				ToolStripButton^ pToolStripButton = gcnew ToolStripButton();
-				pToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				pToolStripButton->Image = (System::Drawing::Image^)(pForm->Icon->ToBitmap());
-				pToolStripButton->ImageTransparentColor = System::Drawing::Color::Black;
-				pToolStripButton->Name = L"defaultbtn";
-				pToolStripButton->Size = System::Drawing::Size(36, 36);
-				pToolStripButton->Text = L"default";
-				pToolStripButton->Tag = L"default";
-				pToolStripButton->Checked = true;
-				pToolStripButton->CheckOnClick = true;
-				//pToolStripButton->ToolTipText = BSTR2STRING(strTips);
-				pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
-				defaultToolStrip->Items->Add(pToolStripButton);
+				//ToolStripButton^ pToolStripButton = gcnew ToolStripButton();
+				//pToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				//pToolStripButton->Image = (System::Drawing::Image^)(pForm->Icon->ToBitmap());
+				//pToolStripButton->ImageTransparentColor = System::Drawing::Color::Black;
+				//pToolStripButton->Name = L"defaultbtn";
+				//pToolStripButton->Size = System::Drawing::Size(36, 36);
+				//pToolStripButton->Text = L"default";
+				//pToolStripButton->Tag = L"default";
+				//pToolStripButton->Checked = true;
+				//pToolStripButton->CheckOnClick = true;
+				////pToolStripButton->ToolTipText = BSTR2STRING(strTips);
+				//pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
+				//defaultToolStrip->Items->Add(pToolStripButton);
 
 				break;
 			}
@@ -3281,4 +3264,16 @@ void CCosmosProxy::OnControlRemoved(Object^ sender, ControlEventArgs^ e)
 
 void CCosmosProxy::OnHandleDestroyed(Object^ sender, EventArgs^ e)
 {
+}
+
+void CCosmosProxy::OnDomainUnload(System::Object^ sender, System::EventArgs^ e)
+{
+	//throw gcnew System::NotImplementedException();
+}
+
+
+void CCosmosProxy::OnProcessExit(System::Object^ sender, System::EventArgs^ e)
+{
+	//throw gcnew System::NotImplementedException();
+	//theApp.m_pCosmosImpl->OnCLRHostExit();
 }

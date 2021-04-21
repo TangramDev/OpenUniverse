@@ -1643,7 +1643,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												if (pMDIParent->m_pHostBrowser)
 												{
 													pMDIParent->m_pHostBrowser->m_bSZMode = true;
-													pMDIParent->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+													pMDIParent->m_pHostBrowser->OpenURL(CComBSTR(pMDIParent->m_pGalaxy->m_pWebPageWnd->m_pChromeRenderFrameHost->GetRenderFrameURL(2)), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+													//pMDIParent->m_pHostBrowser->OpenURL(CComBSTR(g_pCosmos->m_strStartupURL), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
 												}
 											}
 

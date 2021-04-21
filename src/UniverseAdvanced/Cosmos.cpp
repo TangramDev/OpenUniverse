@@ -451,7 +451,7 @@ void CCosmos::Init()
 
 CCosmos::~CCosmos()
 {
-	OutputDebugString(_T("------------------Begin Release CCosmos------------------------\n"));
+	OutputDebugString(_T("------------------Begin Release CCosmos at Universe.dll------------------------\n"));
 
 	if (m_mapWindowPage.size())
 	{
@@ -540,25 +540,51 @@ CCosmos::~CCosmos()
 	m_mapUIData.clear();
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
 	{
-		OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
-		HRESULT hr = m_pClrHost->Stop();
-		ASSERT(hr == S_OK);
-		if (hr == S_OK)
-		{
-			OutputDebugString(_T("------------------Stop CLR Successed!------------------------\n"));
-		}
+		//OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
+		//HRESULT hr = m_pClrHost->Stop();
+		//ASSERT(hr == S_OK);
+		//if (hr == S_OK)
+		//{
+		//	OutputDebugString(_T("------------------Stop CLR Successed!------------------------\n"));
+		//}
 		DWORD dw = m_pClrHost->Release();
+		TRACE(_T("\n***************ClrHost Release Count:%d**************\n"), dw);
 		ASSERT(dw == 0);
 		if (dw == 0)
 		{
 			m_pClrHost = nullptr;
-			OutputDebugString(_T("------------------ClrHost Release Successed!------------------------\n"));
+			OutputDebugString(_T("------------------ClrHost Release from ~CCosmos() Successed at Universe.dll!------------------------\n"));
 		}
-		OutputDebugString(_T("------------------End Stop CLR------------------------\n"));
+		OutputDebugString(_T("------------------End Stop CLR from ~CCosmos() at Universe.dll------------------------\n"));
 	}
 	g_pCosmos = nullptr;
-	OutputDebugString(_T("------------------End Release CCosmos------------------------\n"));
-	//BOOL bUnload = ::FreeLibrary(::GetModuleHandle(_T("cosmos.dll")));
+	OutputDebugString(_T("------------------End Release CCosmos from ~CCosmos()------------------------\n"));
+}
+
+void CCosmos::OnCLRHostExit()
+{
+	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
+	{
+		//::PostQuitMessage(0);
+		OutputDebugString(_T("------------------Begin Stop CLR from OnCLRHostExit------------------------\n"));
+		HRESULT hr = m_pClrHost->Stop();
+		ASSERT(hr == S_OK);
+		if (hr == S_OK)
+		{
+			OutputDebugString(_T("------------------Stop CLR  from OnCLRHostExit Successed!------------------------\n"));
+		}
+		//DWORD dw = m_pClrHost->Release();
+		//TRACE(_T("\n***************ClrHost Release Count at OnCLRHostExit :%d**************\n"), dw);
+		//while(dw)
+		//	dw = m_pClrHost->Release();
+		//ASSERT(dw == 0);
+		//if (dw == 0)
+		//{
+		//	m_pClrHost = nullptr;
+		//	OutputDebugString(_T("------------------ClrHost Release from OnCLRHostExit Successed!------------------------\n"));
+		//}
+		//OutputDebugString(_T("------------------End Stop CLR from OnCLRHostExit------------------------\n"));
+	}
 }
 
 LRESULT CCosmos::Close(void)
@@ -4806,27 +4832,4 @@ void CCosmos::OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle)
 
 	}
 	TRACE(_T("\n"));
-}
-
-void CCosmos::OnCLRHostExit()
-{
-	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
-	{
-		//::PostQuitMessage(0);
-		OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
-		HRESULT hr = m_pClrHost->Stop();
-		ASSERT(hr == S_OK);
-		if (hr == S_OK)
-		{
-			OutputDebugString(_T("------------------Stop CLR Successed!------------------------\n"));
-		}
-		DWORD dw = m_pClrHost->Release();
-		ASSERT(dw == 0);
-		if (dw == 0)
-		{
-			m_pClrHost = nullptr;
-			OutputDebugString(_T("------------------ClrHost Release Successed!------------------------\n"));
-		}
-		OutputDebugString(_T("------------------End Stop CLR------------------------\n"));
-	}
 }

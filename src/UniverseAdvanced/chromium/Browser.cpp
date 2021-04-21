@@ -764,13 +764,16 @@ namespace Browser {
 				case 7:
 				{
 					m_bInTabChange = false;
+					if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd && m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient)
+					{
+						m_pVisibleWebView->m_bCanShow = false;
+						m_bSZMode = true;
+						::SendMessage(m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient, WM_COSMOSMSG, 3, 20180115);
+						::PostMessage(m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
+					}
 					if (m_pVisibleWebView)
 						m_pVisibleWebView->m_bCanShow = true;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
-					if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd && m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient)
-					{
-						::SendMessage(m_pParentXobj->m_pParentWinFormWnd->m_hMDIClient, WM_COSMOSMSG, 3, 20180115);
-					}
 				}
 				break;
 				case 3:
