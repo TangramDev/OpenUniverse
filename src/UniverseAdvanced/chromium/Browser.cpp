@@ -533,7 +533,7 @@ namespace Browser {
 				if (g_pCosmos->m_pCosmosAppProxy)
 				{
 					bExitCLR = true;
-			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
+					::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
 					//g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
 				}
 			}

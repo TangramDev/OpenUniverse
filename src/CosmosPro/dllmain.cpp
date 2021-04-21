@@ -47,11 +47,12 @@ CCosmos::CCosmos()
 
 CCosmos::~CCosmos()
 {
-	ATLTRACE(_T("Release CCosmos :%p\n"), this);
-	OutputDebugString(_T("------------------Begin Release CCosmos from Cosmos.dll ------------------------\n"));
+	CString strInfo = _T("");
+	strInfo.Format(_T("------------------Begin Release CCosmos: %p from Cosmos.dll ------------------------\n"), this);
+	OutputDebugString(strInfo);
 	theApp.m_pCosmosImpl->OnCLRHostExit();
-	ATLTRACE(_T("End Release CCosmos feom ~CCosmos():%p\n"), this);
-	OutputDebugString(_T("------------------End Release CCosmos from Cosmos.dll ------------------------\n"));
+	strInfo.Format(_T("------------------End Release CCosmos: %p from Cosmos.dll ------------------------\n"), this);
+	OutputDebugString(strInfo);
 }
 
 void CCosmos::InitCosmosApp(bool bCrashReporting)

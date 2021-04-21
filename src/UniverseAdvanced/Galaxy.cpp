@@ -1264,8 +1264,8 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	auto it = g_pCosmos->m_mapNeedQueryOnClose.find(m_hWnd);
 	if (it != g_pCosmos->m_mapNeedQueryOnClose.end())
 		g_pCosmos->m_mapNeedQueryOnClose.erase(it);
-	if (m_pBKWnd)
-		m_pBKWnd->DestroyWindow();
+	//if (m_pBKWnd)
+	//	m_pBKWnd->DestroyWindow();
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 

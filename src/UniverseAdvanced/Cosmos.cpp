@@ -236,6 +236,7 @@ CCosmos::CCosmos()
 #ifdef _DEBUG
 	m_nTangram = 0;
 	m_nJsObj = 0;
+	m_nSessionCount = 0;
 	m_nTangramCtrl = 0;
 	m_nTangramFrame = 0;
 	m_nOfficeDocs = 0;
@@ -479,6 +480,8 @@ CCosmos::~CCosmos()
 	if (m_nTangramObj)
 		TRACE(_T("TangramObj Count: %d\n"), m_nTangramObj);
 #ifdef _DEBUG
+	if (m_nSessionCount)
+		TRACE(_T("Tangram SessionCount Count: %d\n"), m_nSessionCount);
 	if (m_nTangram)
 		TRACE(_T("Tangram Count: %d\n"), m_nTangram);
 	if (m_nJsObj)
@@ -533,6 +536,17 @@ CCosmos::~CCosmos()
 		m_mapClassInfo.clear();
 	}
 
+	if (m_mapWormhole.size())
+	{
+		while (m_mapWormhole.size())
+		{
+			auto it = m_mapWormhole.begin();
+			delete it->second;
+			if (m_mapWormhole.size() == 0)
+				break;
+		}
+	}
+
 	m_mapXobj.clear();
 	m_mapMDTWindow.clear();
 	m_mapWebView.clear();
@@ -540,22 +554,13 @@ CCosmos::~CCosmos()
 	m_mapUIData.clear();
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
 	{
-		//OutputDebugString(_T("------------------Begin Stop CLR------------------------\n"));
-		//HRESULT hr = m_pClrHost->Stop();
-		//ASSERT(hr == S_OK);
-		//if (hr == S_OK)
-		//{
-		//	OutputDebugString(_T("------------------Stop CLR Successed!------------------------\n"));
-		//}
 		DWORD dw = m_pClrHost->Release();
-		TRACE(_T("\n***************ClrHost Release Count:%d**************\n"), dw);
 		ASSERT(dw == 0);
 		if (dw == 0)
 		{
 			m_pClrHost = nullptr;
 			OutputDebugString(_T("------------------ClrHost Release from ~CCosmos() Successed at Universe.dll!------------------------\n"));
 		}
-		OutputDebugString(_T("------------------End Stop CLR from ~CCosmos() at Universe.dll------------------------\n"));
 	}
 	g_pCosmos = nullptr;
 	OutputDebugString(_T("------------------End Release CCosmos from ~CCosmos()------------------------\n"));
@@ -565,7 +570,6 @@ void CCosmos::OnCLRHostExit()
 {
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
 	{
-		//::PostQuitMessage(0);
 		OutputDebugString(_T("------------------Begin Stop CLR from OnCLRHostExit------------------------\n"));
 		HRESULT hr = m_pClrHost->Stop();
 		ASSERT(hr == S_OK);
@@ -573,17 +577,6 @@ void CCosmos::OnCLRHostExit()
 		{
 			OutputDebugString(_T("------------------Stop CLR  from OnCLRHostExit Successed!------------------------\n"));
 		}
-		//DWORD dw = m_pClrHost->Release();
-		//TRACE(_T("\n***************ClrHost Release Count at OnCLRHostExit :%d**************\n"), dw);
-		//while(dw)
-		//	dw = m_pClrHost->Release();
-		//ASSERT(dw == 0);
-		//if (dw == 0)
-		//{
-		//	m_pClrHost = nullptr;
-		//	OutputDebugString(_T("------------------ClrHost Release from OnCLRHostExit Successed!------------------------\n"));
-		//}
-		//OutputDebugString(_T("------------------End Stop CLR from OnCLRHostExit------------------------\n"));
 	}
 }
 
@@ -1356,11 +1349,21 @@ long CCosmos::GetIPCMsgIndex(CString strMsgID)
 
 CSession* CCosmos::CreateCloudSession(CWebPageImpl* pOwner)
 {
-	CWormhole* pSession = new CWormhole();
-	pSession->m_pOwner = pOwner ? pOwner : m_pMainWebPageImpl;
-	pSession->m_pSession = pSession->m_pOwner->m_pChromeRenderFrameHost->GetIPCSession();
-	pSession->Insertint64(_T("domhandle"), (__int64)pSession);
-	pSession->InsertString(L"sessionid", GetNewGUID());
+	CWebPageImpl* _pOwner = pOwner ? pOwner : m_pMainWebPageImpl;
+	IPCSession* _pSession = _pOwner->m_pChromeRenderFrameHost->GetIPCSession();
+	CWormhole* pSession = nullptr;
+	auto it = m_mapWormhole.find(_pSession);
+	if (it == m_mapWormhole.end())
+	{
+		pSession = new CWormhole();
+		pSession->m_pOwner = _pOwner;
+		pSession->m_pSession = _pSession;
+		pSession->Insertint64(_T("domhandle"), (__int64)pSession);
+		pSession->InsertString(L"sessionid", GetNewGUID());
+		m_mapWormhole[_pSession] = pSession;
+	}
+	else
+		pSession = it->second;
 	return pSession;
 }
 

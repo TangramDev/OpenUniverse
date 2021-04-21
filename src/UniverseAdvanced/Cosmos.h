@@ -78,6 +78,7 @@ using namespace Browser;
 using namespace CommonUniverse;
 class CWinForm;
 class CMDTWnd;
+class CWormhole;
 
 struct CommonThreadInfo
 {
@@ -168,6 +169,7 @@ public:
 	int										m_nTangramCtrl;
 	int										m_nTangramFrame;
 	int										m_nOfficeDocs;
+	int										m_nSessionCount;
 	int										m_nOfficeDocsSheet;
 	int										m_nTangramNodeCommonData;
 #endif
@@ -213,6 +215,7 @@ public:
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	map<CString, CString>					m_mapDocTemplate;
 	map<CString, CString>					m_mapDocDefaultName;
+	map<IPCSession*, CWormhole*>			m_mapWormhole;
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
 		COM_INTERFACE_ENTRY(IDispatch)
@@ -373,6 +376,7 @@ private:
 	void OnDocumentOnLoadCompleted(CChromeRenderFrameHost*, HWND hHtmlWnd, void*);
 	void ChromeChildProcessCreated(CChromeChildProcessHostImpl* pChromeChildProcessHostImpl);
 	void OnSubBrowserWndCreated(HWND hParent, HWND hBrowser);
+	void OnCLRHostExit();
 	CString GetProcessPath(const char* _ver, CString process_type);
 	CString GetSchemeBaseName();
 	HICON GetAppIcon(int nIndex);
@@ -415,6 +419,4 @@ private:
 
 	//NetworkChangeNotify:
 	void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle);
-
-	void OnCLRHostExit();
 };

@@ -29,10 +29,21 @@
 CWormhole::CWormhole()
 {
 	m_pSession = nullptr;
+#ifdef _DEBUG
+	g_pCosmos->m_nSessionCount++;
+#endif	
 }
 
 CWormhole::~CWormhole()
 {
+	auto it = g_pCosmos->m_mapWormhole.find(m_pSession);
+	if (it != g_pCosmos->m_mapWormhole.end())
+	{
+		g_pCosmos->m_mapWormhole.erase(it);
+	}
+#ifdef _DEBUG
+	g_pCosmos->m_nSessionCount--;
+#endif	
 }
 
 void CWormhole::InsertString(CString key, CString value)

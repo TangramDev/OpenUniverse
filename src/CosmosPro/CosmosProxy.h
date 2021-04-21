@@ -149,7 +149,6 @@ private:
 	static void OnItemSelectionChanged(Object ^sender, ListViewItemSelectionChangedEventArgs ^e);
 	static void OnControlAdded(Object ^sender, ControlEventArgs ^e);
 	static void OnControlRemoved(Object ^sender, ControlEventArgs ^e);
-	static void OnHandleDestroyed(Object ^sender, EventArgs ^e);
 	static void OnClick(Object ^sender, EventArgs ^e);
 	static void OnNodeMouseDoubleClick(System::Object^ sender, System::Windows::Forms::TreeNodeMouseClickEventArgs^ e);
 	static void OnTextChanged(System::Object^ sender, System::EventArgs^ e);

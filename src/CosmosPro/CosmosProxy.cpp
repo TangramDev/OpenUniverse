@@ -152,7 +152,6 @@ CCosmosProxy::~CCosmosProxy()
 	m_mapForm.clear();
 	if (theApp.m_bHostApp == false)
 		theApp.m_pCosmosImpl->m_pCLRProxy = nullptr;
-	ATLTRACE(_T("Release CCosmosProxy :%p\n"), this);
 	OutputDebugString(_T("------------------Release CCosmosProxy ------------------------\n"));
 	//theApp.m_pCosmosImpl->OnCLRHostExit();
 }
@@ -3255,25 +3254,14 @@ void CCosmosProxy::OnControlRemoved(Object^ sender, ControlEventArgs^ e)
 				pCloudSession->InsertString(L"msgID", L"MDIFORM_ALLMDICHILDREMOVED");
 				pCloudSession->SendMessage();
 			}
-			//BSTR bstrKey = CComBSTR("default");
-			//theApp.m_pCosmos->ObserveGalaxys(thisForm->Handle.ToInt64(), CComBSTR(L""), bstrKey, CComBSTR(L""), true);
-			//::SysFreeString(bstrKey);
 		}
 	}
 }
 
-void CCosmosProxy::OnHandleDestroyed(Object^ sender, EventArgs^ e)
-{
-}
-
 void CCosmosProxy::OnDomainUnload(System::Object^ sender, System::EventArgs^ e)
 {
-	//throw gcnew System::NotImplementedException();
 }
-
 
 void CCosmosProxy::OnProcessExit(System::Object^ sender, System::EventArgs^ e)
 {
-	//throw gcnew System::NotImplementedException();
-	//theApp.m_pCosmosImpl->OnCLRHostExit();
 }
