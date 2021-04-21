@@ -1328,8 +1328,8 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 						IXobj* pObj = nullptr;
 						pParent->m_pClientGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pObj);
 						pTopObj = (CXobj*)pObj;
-						pParent->m_pClientGalaxy->m_pBindingXobj = pTopObj->GetVisibleChildByName(_T("mdiclient"));
-						pParent->m_mapMDIClientXobj[m_strKey] = pParent->m_pClientGalaxy->m_pBindingXobj;
+						//pParent->m_pClientGalaxy->m_pBindingXobj = pTopObj->GetVisibleChildByName(_T("mdiclient"));
+						//pParent->m_mapMDIClientXobj[m_strKey] = pParent->m_pClientGalaxy->m_pBindingXobj;
 					}
 				}
 			}
@@ -1690,20 +1690,21 @@ LRESULT CWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_hWnd == (HWND)lParam)
 	{
-		HWND hPWnd = ::GetParent(m_hWnd);
-		HWND hPPWnd = ::GetParent(hPWnd);
-		if (hPPWnd)
-		{
-			CWinForm* pWnd = (CWinForm*)::SendMessage(hPPWnd, WM_HUBBLE_DATA, 0, 20190214);
-			if (pWnd && pWnd->m_bMdiForm)
-			{
-				auto it = pWnd->m_mapMDIClientXobj.find(m_strKey);
-				if (it != pWnd->m_mapMDIClientXobj.end())
-				{
-					pWnd->m_pClientGalaxy->m_pBindingXobj = it->second;
-				}
-			}
-		}
+		::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 2);
+		//HWND hPWnd = ::GetParent(m_hWnd);
+		//HWND hPPWnd = ::GetParent(hPWnd);
+		//if (hPPWnd)
+		//{
+		//	CWinForm* pWnd = (CWinForm*)::SendMessage(hPPWnd, WM_HUBBLE_DATA, 0, 20190214);
+		//	if (pWnd && pWnd->m_bMdiForm)
+		//	{
+		//		auto it = pWnd->m_mapMDIClientXobj.find(m_strKey);
+		//		if (it != pWnd->m_mapMDIClientXobj.end())
+		//		{
+		//			pWnd->m_pClientGalaxy->m_pBindingXobj = it->second;
+		//		}
+		//	}
+		//}
 	}
 	return  DefWindowProc(uMsg, wParam, lParam);
 }

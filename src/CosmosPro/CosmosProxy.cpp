@@ -1103,16 +1103,13 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 void CCosmosProxy::OnMdiChildActivate(System::Object^ sender, System::EventArgs^ e)
 {
 	Form^ pForm = static_cast<Form^>(sender);
-	String^ strKey = L"";
 	if (pForm->ActiveMdiChild != nullptr)
 	{
-		strKey = pForm->ActiveMdiChild->GetType()->FullName->ToLower();
-		::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
+		//::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
 		return;
 	}
-	BSTR bstrKey = STRING2BSTR(strKey);
-	theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), bstrKey, CComBSTR(L""), true);
-	::SysFreeString(bstrKey);
+	CComBSTR bstrKey("");
+	theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), bstrKey, bstrKey, bstrKey, true);
 }
 
 void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyCluster)

@@ -226,6 +226,7 @@ CCosmos::CCosmos()
 	m_strCurrentAppID = _T("");
 	m_strConfigFile = _T("");
 	m_strConfigDataFile = _T("");
+	m_strSubProcessPath = _T("");
 	m_strAppCommonDocPath = _T("");
 	m_strStartJarPath = _T("");
 	m_strBridgeJavaClass = "";
@@ -4271,19 +4272,15 @@ void CCosmos::OnSubBrowserWndCreated(HWND hParent, HWND hBrowser)
 
 CString CCosmos::GetProcessPath(const char* _ver, CString process_type)
 {
-	if (g_pCosmos == nullptr)
-		return _T("");
-	CString strRet = _T("");
-	strRet.Format(_T("%suniverse.exe"), m_strAppPath, process_type);
-	//strRet.Format(_T("%stangram%s.exe"), m_strAppPath, process_type);
-	if (::PathFileExists(strRet))
-		return strRet;
-	USES_CONVERSION;
-	strRet.Format(_T("%s%s\\universe.exe"), m_strAppPath, A2W(_ver), process_type);
-	//strRet.Format(_T("%s%s\\tangram%s.exe"), m_strAppPath, A2W(_ver), process_type);
-	if (::PathFileExists(strRet))
-		return strRet;
-	return _T("");
+	if (m_strSubProcessPath == _T(""))
+	{
+		USES_CONVERSION;
+		m_strSubProcessPath.Format(_T("%s%s\\universe.exe"), m_strAppPath, A2W(_ver), process_type);
+		if (!::PathFileExists(m_strSubProcessPath))
+			m_strSubProcessPath = _T("");
+	}
+
+	return m_strSubProcessPath;
 }
 
 CString CCosmos::GetSchemeBaseName()

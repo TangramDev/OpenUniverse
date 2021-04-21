@@ -353,9 +353,10 @@ protected:
 private:
 	HWND								m_hCreatingWnd;
 	CString								m_strOfficeAppIDs;
+	CString								m_strSubProcessPath;
 	CString								m_strExcludeAppExtenderIDs;
 	CWindow								m_HelperWnd;
-	CComObject<CXobjCollection>* m_pRootNodes;
+	CComObject<CXobjCollection>*		m_pRootNodes;
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
 
 	void CosmosLoad();

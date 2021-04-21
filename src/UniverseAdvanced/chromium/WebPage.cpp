@@ -927,11 +927,14 @@ namespace Browser {
 						::PostMessage(pMDTWnd->m_hWnd, WM_COSMOSMSG, 0, 20210328);
 						return;
 					}
-					if (m_pGalaxy->m_pParentMDIWinForm&& m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy)
+					if (m_pGalaxy->m_pParentMDIWinForm && m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy)
 					{
 						CXobj* pMDIClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-						m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMDIClientObj;
-						m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->HostPosChanged();
+						if (m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj != pMDIClientObj)
+						{
+							m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMDIClientObj;
+							m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->HostPosChanged();
+						}
 					}
 				}
 			}

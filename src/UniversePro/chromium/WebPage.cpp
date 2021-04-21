@@ -276,7 +276,6 @@ namespace Browser {
 						strDocType = g_pCosmos->m_pUniverseAppProxy->QueryDocType(pXobj->m_pHostWnd->m_hWnd);
 						pXobj->m_pXobjShareData->m_pGalaxy->m_strDocTemplateID = strDocType;
 					}
-					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
 					pSession->InsertString(_T("DocTypeID"), strDocType);
 					pSession->InsertLong(_T("autodelete"), 0);
 					pSession->InsertLong(_T("gridtype"), pXobj->m_nViewType);
