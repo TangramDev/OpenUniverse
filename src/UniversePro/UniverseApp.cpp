@@ -365,10 +365,9 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 
 			if (g_pCosmos->m_pCLRProxy)
 			{
-				//if (g_pCosmos->m_pCosmosAppProxy)
-				//	g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
-				if (g_pCosmos->m_pCLRProxy)
-					g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
+				if (g_pCosmos->m_pCosmosAppProxy)
+					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose(CosmosCloseState::StartClose);
+				g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
 			}
 
 			//for (auto &it : g_pCosmos->m_mapBKFrame)
@@ -818,8 +817,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					if (::IsWindow(g_pCosmos->m_hCosmosWnd))
 						::DestroyWindow(g_pCosmos->m_hCosmosWnd);
 				}
-				//if (g_pCosmos->m_pCosmosAppProxy)
-				//	g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+				if (g_pCosmos->m_pCosmosAppProxy)
+					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose(CosmosCloseState::ProcessQuit);
 			}
 			break;
 			default:

@@ -3023,26 +3023,36 @@ bool CCosmos::OnUniversePreTranslateMessage(MSG* pMsg)
 	return false;
 };
 
-void CCosmos::OnCosmosClose()
+void CCosmos::OnCosmosClose(CosmosCloseState state)
 {
-	AtlTrace(_T("*************Begin CCosmos::OnClose:  ****************\n"));
-	Universe::Cosmos::GetCosmos()->Fire_OnClose();
-	FormCollection^ pCollection = Forms::Application::OpenForms;
-	int nCount = pCollection->Count;
-	while (pCollection->Count > 0) {
-		Form^ pForm = pCollection[0];
-		pForm->Close();
-	}
-	if (theAppProxy.m_pCosmosWpfApp)
+	switch (state)
 	{
-		WindowCollection^ pWnds = theAppProxy.m_pCosmosWpfApp->Windows;
-		int nCount = pWnds->Count;
-		for (int i = 0; i < pWnds->Count; i++) {
-			Window^ pWnd = pWnds[i];
-			pWnd->Close();
+	case CosmosCloseState::StartClose:
+	{
+		AtlTrace(_T("*************Begin CCosmos::OnClose:  ****************\n"));
+		Universe::Cosmos::GetCosmos()->Fire_OnClose();
+		FormCollection^ pCollection = Forms::Application::OpenForms;
+		int nCount = pCollection->Count;
+		while (pCollection->Count > 0) {
+			Form^ pForm = pCollection[0];
+			pForm->Close();
 		}
+		if (theAppProxy.m_pCosmosWpfApp)
+		{
+			WindowCollection^ pWnds = theAppProxy.m_pCosmosWpfApp->Windows;
+			int nCount = pWnds->Count;
+			for (int i = 0; i < pWnds->Count; i++) {
+				Window^ pWnd = pWnds[i];
+				pWnd->Close();
+			}
+		}
+		AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
 	}
-	AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
+	case CosmosCloseState::FinalBrowserClose:
+		break;
+	case CosmosCloseState::ProcessQuit:
+		break;
+	}
 	//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
 	//theApp.m_pCosmosImpl->OnCLRHostExit();
 }

@@ -557,7 +557,7 @@ namespace Browser {
 		}
 		if (bExitCLR)
 		{
-			g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+			g_pCosmos->m_pCosmosAppProxy->OnCosmosClose(CosmosCloseState::FinalBrowserClose);
 		}
 		return lRes;
 	}

@@ -206,6 +206,12 @@ namespace CommonUniverse {
 		LoadingOnly,
 	};
 
+	enum class CosmosCloseState {
+		StartClose,
+		FinalBrowserClose,
+		ProcessQuit,
+	};
+
 	typedef enum QueryType
 	{
 		MainWnd = 0x00000000,
@@ -508,7 +514,7 @@ namespace CommonUniverse {
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
 		virtual bool EclipseAppInit() { return false; }
 		virtual bool SetFrameCaption(HWND hWnd, CString strCaption) { return false; }
-		virtual void OnCosmosClose() {}
+		virtual void OnCosmosClose(CosmosCloseState state) { }
 		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}
 		virtual void MouseMoveProxy(HWND hWnd) {}

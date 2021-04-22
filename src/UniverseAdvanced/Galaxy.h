@@ -268,7 +268,6 @@ public:
 	CWebView*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
-	map<CString, CXobj*>					m_mapMDIClientXobj;
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CWinForm)

@@ -73,7 +73,7 @@ public:
 	void ExitJVM();
 private:
 	//CCosmosEvents:
-	void OnCosmosClose();
+	void OnCosmosClose(CosmosCloseState state);
 	void OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootXobj);
 	HWND InitCosmosApp();
 	CString _GetLibPathFromAssemblyQualifiedName(CString strDir, CString strLibName);
