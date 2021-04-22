@@ -133,7 +133,7 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 
 CCosmosProxy::~CCosmosProxy()
 {
-	for (auto &it : m_mapGalaxyInfo)
+	for (auto& it : m_mapGalaxyInfo)
 	{
 		delete it.second;
 	}
@@ -1484,10 +1484,6 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						m_strCurrentWinFormTemplate = bstrObjID;
 						CString strCaption = m_Parse.attr(_T("caption"), _T(""));
 						Form^ thisForm = (Form^)pObj;
-						if (nHandle)
-						{
-							pProxyBase->OnWinFormCreated((HWND)thisForm->Handle.ToPointer());
-						}
 						int nWidth = m_Parse.attrInt(_T("width"), 0);
 						int nHeight = m_Parse.attrInt(_T("height"), 0);
 						if (nWidth * nHeight)
@@ -1500,6 +1496,10 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							if (thisForm->IsMdiContainer == false)
 								thisForm->MdiParent = m_pCurrentPForm;
 							m_pCurrentPForm = nullptr;
+						}
+						if (nHandle && thisForm->MdiParent == nullptr)
+						{
+							pProxyBase->OnWinFormCreated((HWND)thisForm->Handle.ToPointer());
 						}
 
 						if (strCaption != _T(""))
@@ -2682,7 +2682,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 					pList->LargeImageList = gcnew ImageList();
 					pList->LargeImageList->ImageSize = System::Drawing::Size(48, 48);
 					int nIndex = -1;
-					for (auto &it : pInfo->m_mapFormsInfo)
+					for (auto& it : pInfo->m_mapFormsInfo)
 					{
 						CString strXml = it.second;
 						CTangramXmlParse m_Parse;
