@@ -1380,7 +1380,7 @@ CSession* CCosmos::GetCloudSession(IXobj* _pXobj)
 void CCosmos::SetMainWnd(HWND hMain)
 {
 	m_hMainWnd = hMain;
-	CWinForm* pWnd = new CWinForm();
+	CCloudWinForm* pWnd = new CCloudWinForm();
 	pWnd->SubclassWindow(g_pCosmos->m_hMainWnd);
 }
 
@@ -1417,7 +1417,7 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		{
 			CXobj* _pXobj = (CXobj*)pXobj;
 			HWND hWnd = _pXobj->m_pXobjShareData->m_pGalaxyCluster->m_hWnd;
-			CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
+			CCloudWinForm* pWnd = (CCloudWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (pWnd)
 			{
 				if ((::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD) || (pWnd->m_bMdiForm && pWnd->m_strChildFormPath != _T("")))
@@ -3522,10 +3522,10 @@ STDMETHODIMP CCosmos::ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrK
 	LRESULT lRes = ::SendMessage((HWND)hWnd, WM_HUBBLE_DATA, 0, 20190214);
 	CString _strXml = _T("<");
 	CString strKey = OLE2T(bstrKey);
-	CWinForm* pWnd = nullptr;
+	CCloudWinForm* pWnd = nullptr;
 	if (lRes)
 	{
-		pWnd = (CWinForm*)lRes;
+		pWnd = (CCloudWinForm*)lRes;
 	}
 	if (pWnd)
 	{

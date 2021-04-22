@@ -342,7 +342,7 @@ namespace Browser {
 						pSession->Insertint64(_T("parenthandle"), (__int64)pXobj->m_pParentObj->m_pHostWnd->m_hWnd);
 					}
 
-					CWinForm* pMDIPForm = nullptr;
+					CCloudWinForm* pMDIPForm = nullptr;
 					bool bMDIChild = false;
 					{
 						pXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy->GetWinForm(pXobj->m_pRootObj->m_pXobjShareData->m_pGalaxy->m_hWnd);
@@ -355,7 +355,7 @@ namespace Browser {
 								{
 									bMDIChild = true;
 									hPWnd = ::GetParent(::GetParent(hPWnd));
-									pMDIPForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
+									pMDIPForm = (CCloudWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
 								}
 							}
 						}
@@ -459,7 +459,7 @@ namespace Browser {
 			HWND hWnd = (HWND)lParam;
 			if (::IsWindow(hWnd))
 			{
-				CWinForm* pWnd = (CWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
+				CCloudWinForm* pWnd = (CCloudWinForm*)::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 20190214);
 				if (pWnd)
 				{
 					m_mapSubWinForm[hWnd] = pWnd;
@@ -799,8 +799,8 @@ namespace Browser {
 	{
 		HWND hBrowser = ::GetParent(m_hWnd);
 		HWND hPPWnd = ::GetParent(hBrowser);
-		CMDTWnd* pMDTWnd = nullptr;
-		CMDIParent* pMDIWnd = nullptr;
+		CCloudMDTFrame* pMDTWnd = nullptr;
+		CCloudMDIFrame* pMDIWnd = nullptr;
 		CBrowser* pBrowserWnd = nullptr;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
 		if (it != g_pCosmos->m_mapBrowserWnd.end())
@@ -1289,7 +1289,7 @@ namespace Browser {
 						pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 						pCosmosFrameWndInfo->m_pWebPage = this;
 						m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-						CMDIParent* pMdiParent = nullptr;
+						CCloudMDIFrame* pMdiParent = nullptr;
 						pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
 						auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
 						if (it != g_pCosmos->m_mapMDIParent.end())
@@ -1471,7 +1471,7 @@ namespace Browser {
 											pGalaxy->Observe(CComBSTR(strTemplateID), CComBSTR(pParseClient->xml()), &_pXobj);
 										}
 										pParseClient = m_DocParse.GetChild(_T("client"));
-										CMDIChild* pWnd = new CMDIChild();
+										CCloudMDIChild* pWnd = new CCloudMDIChild();
 										pWnd->SubclassWindow(hWnd);
 										pWnd->m_strDocTemplateKey = strTemplateID;
 										pWnd->m_pParent = pMdiParent;
@@ -1539,7 +1539,7 @@ namespace Browser {
 	//				pCosmosFrameWndInfo = (CosmosFrameWndInfo*)hHandle;
 	//				pCosmosFrameWndInfo->m_pWebPage = this;
 	//				m_pCosmosFrameWndInfo = pCosmosFrameWndInfo;
-	//				CMDIParent* pMdiParent = nullptr;
+	//				CCloudMDIFrame* pMdiParent = nullptr;
 	//				pBrowserWnd->m_pCosmosFrameWndInfo = m_pCosmosFrameWndInfo;
 	//				auto it = g_pCosmos->m_mapMDIParent.find(hMainWnd);
 	//				if (it != g_pCosmos->m_mapMDIParent.end())
@@ -1721,7 +1721,7 @@ namespace Browser {
 	//									pGalaxy->Observe(CComBSTR(strTemplateID), CComBSTR(pParseClient->xml()), &_pXobj);
 	//								}
 	//								pParseClient = m_DocParse.GetChild(_T("client"));
-	//								CMDIChild* pWnd = new CMDIChild();
+	//								CCloudMDIChild* pWnd = new CCloudMDIChild();
 	//								pWnd->SubclassWindow(hWnd);
 	//								pWnd->m_strDocTemplateKey = strTemplateID;
 	//								pWnd->m_pParent = pMdiParent;
@@ -1951,7 +1951,7 @@ namespace Browser {
 							HWND hwnd = g_pCosmos->m_pCLRProxy->GetCtrlHandle(pDisp);
 							if (hwnd)
 							{
-								CWinForm* pForm = (CWinForm*)::SendMessage(hwnd, WM_HUBBLE_DATA, 0, 20190214);
+								CCloudWinForm* pForm = (CCloudWinForm*)::SendMessage(hwnd, WM_HUBBLE_DATA, 0, 20190214);
 								if (pForm)
 								{
 									pForm->m_pOwnerHtmlWnd = this;
@@ -2069,7 +2069,7 @@ namespace Browser {
 			LRESULT l = ::SendMessage(hwnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (l == 0)
 			{
-				CWinForm* pWnd = new CWinForm();
+				CCloudWinForm* pWnd = new CCloudWinForm();
 				g_pCosmos->m_hFormNodeWnd = (HWND)hwnd;
 				pWnd->SubclassWindow(hwnd);
 				pWnd->m_pOwnerHtmlWnd = this;

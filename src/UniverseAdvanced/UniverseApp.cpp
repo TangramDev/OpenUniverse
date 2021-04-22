@@ -516,7 +516,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		LRESULT l = ::SendMessage((HWND)wParam, WM_HUBBLE_DATA, 0, 20190214);
 		if (l == 0)
 		{
-			CWinForm* pWnd = new CWinForm();
+			CCloudWinForm* pWnd = new CCloudWinForm();
 			g_pCosmos->m_hFormNodeWnd = NULL;
 			g_pCosmos->m_hFormNodeWnd = (HWND)wParam;
 			pWnd->SubclassWindow((HWND)wParam);
@@ -716,7 +716,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 		if (strClassName == _T("MDIClient"))
 		{
-			CMDIParent* pMDIParent = new CMDIParent();
+			CCloudMDIFrame* pMDIParent = new CCloudMDIFrame();
 			pMDIParent->m_hMDIClient = hWnd;
 			pMDIParent->SubclassWindow(hPWnd);
 			g_pCosmos->m_mapMDIParent[hPWnd] = pMDIParent;
@@ -1505,8 +1505,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 						{
 							g_pCosmos->m_hFirstView = hClient;
 						}
-						CMDTWnd* pFrameWnd = nullptr;
-						CMDIParent* pMDIParent = nullptr;
+						CCloudMDTFrame* pFrameWnd = nullptr;
+						CCloudMDIFrame* pMDIParent = nullptr;
 						CGalaxyCluster* pGalaxyCluster = nullptr;
 						CosmosFrameWndInfo* pCosmosFrameWndInfo = (CosmosFrameWndInfo*)::GetProp(hWnd, _T("CosmosFrameWndInfo"));
 						if (pCosmosFrameWndInfo)
@@ -1518,7 +1518,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 								auto it = g_pCosmos->m_mapMDTWindow.find(hWnd);
 								if (it == g_pCosmos->m_mapMDTWindow.end())
 								{
-									pFrameWnd = new CMDTWnd();
+									pFrameWnd = new CCloudMDTFrame();
 									pFrameWnd->m_bCreateNewDoc = true;
 									pFrameWnd->SubclassWindow(hWnd);
 									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
@@ -1611,7 +1611,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 										case 3:
 										{
 											theApp.m_bAppStarting = true;
-											CMDIChild* pWnd = new CMDIChild();
+											CCloudMDIChild* pWnd = new CCloudMDIChild();
 											if (pWnd->m_strDocTemplateKey == _T(""))
 												pWnd->m_strDocTemplateKey = strKey;
 

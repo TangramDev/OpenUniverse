@@ -440,7 +440,7 @@ void CGridWnd::StopTracking(BOOL bAccept)
 			::PostMessage(hPWnd, WM_BROWSERLAYOUT, 0, 7);
 		}
 		RecalcLayout();
-		CMDIParent* pMdiParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
+		CCloudMDIFrame* pMdiParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
 		if (pMdiParent == nullptr)
 		{
 			if (m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd && m_pXobj->m_pXobjShareData->m_pGalaxy->m_pWebPageWnd->m_pChromeRenderFrameHost)

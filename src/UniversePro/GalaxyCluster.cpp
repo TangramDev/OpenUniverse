@@ -336,7 +336,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					_pGalaxy->m_nGalaxyType = MDIClientGalaxy;
 					_pGalaxy->m_strDocTemplateID = _T("MDIClient");
 				}
-				CMDIParent* pMDIParent = nullptr;
+				CCloudMDIFrame* pMDIParent = nullptr;
 				HWND hTopParent = ::GetAncestor(hPWnd, GA_ROOT);
 				auto it2 = g_pCosmos->m_mapMDIParent.find(hTopParent);
 				if (it2 != g_pCosmos->m_mapMDIParent.end())
@@ -359,7 +359,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 					HWND hForm = g_pCosmos->m_pCLRProxy->GetWinForm(_hWnd, nMDIClient);
 					if (::IsWindow(hForm))
 					{
-						CWinForm* pForm = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+						CCloudWinForm* pForm = (CCloudWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 						if (pForm)
 						{
 							_pGalaxy->m_pParentWinForm = pForm;
@@ -373,7 +373,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 								}
 								else
 								{
-									_pGalaxy->m_pParentMDIWinForm = (CWinForm*)::SendMessage(hTopParent, WM_HUBBLE_DATA, 0, 20190214);
+									_pGalaxy->m_pParentMDIWinForm = (CCloudWinForm*)::SendMessage(hTopParent, WM_HUBBLE_DATA, 0, 20190214);
 									if (::IsWindow((HWND)nMDIClient))
 										_pGalaxy->m_pParentMDIWinForm->m_hMDIClient = (HWND)nMDIClient;
 								}

@@ -666,18 +666,18 @@ void CCosmosTabCtrl::PostNcDestroy()
 	delete this;
 }
 
-CMDIChild::CMDIChild(void)
+CCloudMDIChild::CCloudMDIChild(void)
 {
 	m_hClient = nullptr;
 	m_strKey = _T("");
 	m_pParent = nullptr;
 }
 
-CMDIChild::~CMDIChild(void)
+CCloudMDIChild::~CCloudMDIChild(void)
 {
 }
 
-LRESULT CMDIChild::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDIChild::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (::IsIconic(m_hWnd))
@@ -685,7 +685,7 @@ LRESULT CMDIChild::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	return l;
 }
 
-LRESULT CMDIChild::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDIChild::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (m_pParent->m_bDestroy)
@@ -702,13 +702,13 @@ LRESULT CMDIChild::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-LRESULT CMDIChild::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDIChild::OnCosmosDocObserved(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(ObserveComplete, 0);
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CMDIChild::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDIChild::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	switch (lParam)
@@ -732,7 +732,7 @@ LRESULT CMDIChild::OnCosmosMg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-void CMDIChild::OnFinalMessage(HWND hWnd)
+void CCloudMDIChild::OnFinalMessage(HWND hWnd)
 {
 	if (m_pParent)
 	{
@@ -750,18 +750,18 @@ void CMDIChild::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-CMDTWnd::CMDTWnd(void)
+CCloudMDTFrame::CCloudMDTFrame(void)
 {
 	g_pCosmos->m_nWaitTabCounts = 0;
 }
 
-CMDTWnd::~CMDTWnd(void)
+CCloudMDTFrame::~CCloudMDTFrame(void)
 {
 }
 
-LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDTFrame::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CMDTWnd* pHelperWnd = nullptr;
+	CCloudMDTFrame* pHelperWnd = nullptr;
 	auto it = g_pCosmos->m_mapMDTWindow.find(m_hWnd);
 	if (it != g_pCosmos->m_mapMDTWindow.end())
 	{
@@ -783,7 +783,7 @@ LRESULT CMDTWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-LRESULT CMDTWnd::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CCloudMDTFrame::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = false;
 	if (m_pBrowser)
 	{
@@ -810,7 +810,7 @@ LRESULT CMDTWnd::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	return lRes;
 }
 
-LRESULT CMDTWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDTFrame::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (wParam)
 	{
@@ -829,7 +829,7 @@ LRESULT CMDTWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return lRes;
 }
 
-LRESULT CMDTWnd::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CCloudMDTFrame::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = true;
 	if (m_pBrowser)
 		m_pBrowser->m_bSZMode = true;
@@ -837,9 +837,9 @@ LRESULT CMDTWnd::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	return lRes;
 }
 
-LRESULT CMDTWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDTFrame::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CMDTWnd* pHelperWnd = nullptr;
+	CCloudMDTFrame* pHelperWnd = nullptr;
 	if (g_pCosmos->m_mapMDTWindow.size() == 1)
 	{
 		::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_DESTROY, 0, 0);
@@ -856,14 +856,14 @@ LRESULT CMDTWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-LRESULT CMDTWnd::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDTFrame::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::RecalcLayout, m_hWnd);
 	return l;
 }
 
-LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDTFrame::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
@@ -889,13 +889,13 @@ LRESULT CMDTWnd::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-void CMDTWnd::OnFinalMessage(HWND hWnd)
+void CCloudMDTFrame::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
 }
 
-CMDIParent::CMDIParent(void)
+CCloudMDIFrame::CCloudMDIFrame(void)
 {
 	m_hMDIClient = nullptr;
 
@@ -905,18 +905,18 @@ CMDIParent::CMDIParent(void)
 	m_pCosmosFrameWndInfo = nullptr;
 }
 
-CMDIParent::~CMDIParent(void)
+CCloudMDIFrame::~CCloudMDIFrame(void)
 {
-	OutputDebugString(_T("------------------Release CMDIParent------------------------\n"));
+	OutputDebugString(_T("------------------Release CCloudMDIFrame------------------------\n"));
 }
 
-void CMDIParent::OnFinalMessage(HWND hWnd)
+void CCloudMDIFrame::OnFinalMessage(HWND hWnd)
 {
 	CWindowImpl::OnFinalMessage(hWnd);
 	delete this;
 }
 
-LRESULT CMDIParent::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDIFrame::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_pHostBrowser)
 	{
@@ -933,7 +933,7 @@ LRESULT CMDIParent::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return lRes;
 }
 
-LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CCloudMDIFrame::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	if (m_pHostBrowser)
 	{
 		m_pHostBrowser->m_bSZMode = false;
@@ -944,14 +944,14 @@ LRESULT CMDIParent::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	return lRes;
 }
 
-LRESULT CMDIParent::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CCloudMDIFrame::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	if (m_pHostBrowser)
 		m_pHostBrowser->m_bSZMode = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
 
-LRESULT CMDIParent::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDIFrame::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	if (LOWORD(wParam) != WA_INACTIVE) {
@@ -960,7 +960,7 @@ LRESULT CMDIParent::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return l;
 }
 
-LRESULT CMDIParent::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CCloudMDIFrame::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bDestroy = true;
 	auto it = g_pCosmos->m_mapMDIParent.find(m_hWnd);
 	if (it != g_pCosmos->m_mapMDIParent.end())
@@ -971,7 +971,7 @@ LRESULT CMDIParent::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	return lRes;
 }
 
-LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudMDIFrame::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
@@ -1052,7 +1052,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		if (wParam)
 		{
 			if (m_bCreateNewDoc == false)
-				m_pActiveMDIChild = (CMDIChild*)wParam;
+				m_pActiveMDIChild = (CCloudMDIChild*)wParam;
 			if (m_pActiveMDIChild == nullptr)
 				break;
 			if (!::IsWindow(m_pActiveMDIChild->m_hWnd))
@@ -1163,7 +1163,7 @@ LRESULT CMDIParent::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-CWinForm::CWinForm(void)
+CCloudWinForm::CCloudWinForm(void)
 {
 	m_nState = -1;
 	m_bMdiForm = false;
@@ -1184,13 +1184,13 @@ CWinForm::CWinForm(void)
 	}
 }
 
-CWinForm::~CWinForm(void)
+CCloudWinForm::~CCloudWinForm(void)
 {
 	if (m_pChildFormsInfo)
 		delete m_pChildFormsInfo;
 }
 
-void CWinForm::SendMessage()
+void CCloudWinForm::SendMessage()
 {
 	if (m_pWormhole == nullptr)
 	{
@@ -1202,14 +1202,14 @@ void CWinForm::SendMessage()
 	}
 }
 
-LRESULT CWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	g_pCosmos->m_pActiveWinFormWnd = this;
 	return lRes;
 }
 
-LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (g_pCosmos->m_mapBrowserWnd.size())
 	{
@@ -1267,7 +1267,7 @@ LRESULT CWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
@@ -1303,7 +1303,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (m_strKey != _T(""))
 		{
-			CWinForm* pParent = nullptr;
+			CCloudWinForm* pParent = nullptr;
 			CXobj* pTopObj = nullptr;
 			if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
 			{
@@ -1394,7 +1394,7 @@ LRESULT CWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (wParam)
 	{
@@ -1408,7 +1408,7 @@ LRESULT CWinForm::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return lRes;
 }
 
-LRESULT CWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CCloudWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = false;
 	for (auto& it : g_pCosmos->m_mapSizingBrowser)
 	{
@@ -1423,13 +1423,13 @@ LRESULT CWinForm::OnExitSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	return lRes;
 }
 
-LRESULT CWinForm::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
+LRESULT CCloudWinForm::OnEnterSZ(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&) {
 	m_bSZMode = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
 	return lRes;
 }
 
-LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_hWnd != g_pCosmos->m_hMainWnd)
 	{
@@ -1445,7 +1445,7 @@ LRESULT CWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	switch (lParam)
 	{
@@ -1640,7 +1640,7 @@ LRESULT CWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	CString strGalaxyName = (LPCTSTR)wParam;
 	CString currentKey = (LPCTSTR)lParam;
@@ -1696,7 +1696,7 @@ LRESULT CWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	DWORD dwY = HIWORD(wParam);
 	DWORD dwX = LOWORD(wParam);
@@ -1713,7 +1713,7 @@ LRESULT CWinForm::OnDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnGetDPIScaledSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnGetDPIScaledSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	DWORD dwY = HIWORD(wParam);
 	DWORD dwX = LOWORD(wParam);
@@ -1728,7 +1728,7 @@ LRESULT CWinForm::OnGetDPIScaledSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	return  false;//DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnMdiChildMin(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnMdiChildMin(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (::GetWindowLong(m_hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
 	{
@@ -1737,16 +1737,24 @@ LRESULT CWinForm::OnMdiChildMin(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_hWnd == (HWND)lParam)
 	{
 		::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 2);
 	}
+	else
+		if (lParam == 0)
+		{
+			HWND hPWnd = ::GetParent(m_hWnd);
+			CComBSTR bstrKey("");
+			g_pCosmos->ObserveGalaxys((__int64)hPWnd, bstrKey, bstrKey, bstrKey, true);
+		}
+
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pCosmos->m_pActiveHtmlWnd = nullptr;
 	g_pCosmos->m_pActiveWinFormWnd = this;
@@ -1756,7 +1764,7 @@ LRESULT CWinForm::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	CString strID = (LPCTSTR)lParam;
 	if (m_strBKID == _T(""))
@@ -1803,7 +1811,7 @@ LRESULT CWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+LRESULT CCloudWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 {
 	WINDOWPLACEMENT wndPlacement;
 	GetWindowPlacement(&wndPlacement);
@@ -1819,7 +1827,7 @@ LRESULT CWinForm::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+LRESULT CCloudWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	g_pCosmos->m_mapWinForm[m_hWnd] = this;
 	g_pCosmos->m_hFormNodeWnd = nullptr;
@@ -1831,7 +1839,7 @@ LRESULT CWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			auto it = g_pCosmos->m_mapWinForm.find(hPWnd);
 			if (it != g_pCosmos->m_mapWinForm.end())
 			{
-				CWinForm* pMdiParent = it->second;
+				CCloudWinForm* pMdiParent = it->second;
 				m_pOwnerHtmlWnd = it->second->m_pOwnerHtmlWnd;
 			}
 		}
@@ -1866,7 +1874,7 @@ LRESULT CWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-void CWinForm::OnFinalMessage(HWND hWnd)
+void CCloudWinForm::OnFinalMessage(HWND hWnd)
 {
 	auto it = g_pCosmos->m_mapFormWebPage.find(hWnd);
 	if (it != g_pCosmos->m_mapFormWebPage.end())
@@ -2058,7 +2066,7 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 		int nForm = g_pCosmos->m_pCLRProxy->IsWinForm(hForm);
 		while (nForm >= 1)
 		{
-			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+			m_pWorkXobj->m_pParentWinFormWnd = (CCloudWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 			LRESULT lRes = ::SendMessage(hForm, WM_HUBBLE_GETNODE, 0, 0);
 			if (lRes)
 			{
@@ -2123,7 +2131,7 @@ CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
 		HWND hForm = pGalaxyCluster->m_hWnd;
 		hForm = GetWinForm(hForm);
 		if (hForm)
-			m_pWorkXobj->m_pParentWinFormWnd = (CWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
+			m_pWorkXobj->m_pParentWinFormWnd = (CCloudWinForm*)::SendMessage(hForm, WM_HUBBLE_DATA, 0, 20190214);
 	}
 	if (g_pCosmos->m_pUniverseAppProxy && m_nGalaxyType != CtrlBarGalaxy)
 	{
@@ -3351,7 +3359,7 @@ LRESULT CGalaxy::OnQueryAppProxy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_pCosmosFrameWndInfo)
 	{
-		CMDIParent* pMDIParent = nullptr;
+		CCloudMDIFrame* pMDIParent = nullptr;
 		auto it = g_pCosmos->m_mapMDIParent.find(::GetParent(m_pCosmosFrameWndInfo->m_hClient));
 		if (it != g_pCosmos->m_mapMDIParent.end())
 		{

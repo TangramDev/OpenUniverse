@@ -76,8 +76,8 @@
 
 using namespace Browser;
 using namespace CommonUniverse;
-class CWinForm;
-class CMDTWnd;
+class CCloudWinForm;
+class CCloudMDTFrame;
 class CWormhole;
 
 struct CommonThreadInfo
@@ -144,12 +144,12 @@ class ATL_NO_VTABLE CCosmos :
 	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
 {
 	friend class CGalaxy;
-	friend class CMDTWnd;
+	friend class CCloudMDTFrame;
 	friend class CXobjWnd;
-	friend class CWinForm;
+	friend class CCloudWinForm;
 	friend class CWebView;
 	friend class CUniverse;
-	friend class CMDIParent;
+	friend class CCloudMDIFrame;
 	friend class CEclipseWnd;
 	friend class CGalaxyCluster;
 public:
@@ -191,7 +191,7 @@ public:
 	CWebView*								m_pHtmlWndCreated;
 	CWebView*								m_pActiveHtmlWnd;
 
-	CWinForm*								m_pActiveWinFormWnd;
+	CCloudWinForm*								m_pActiveWinFormWnd;
 
 	CXobj*									m_pActiveXobj;
 	CGalaxy*								m_pGalaxy;
@@ -212,10 +212,10 @@ public:
 	map<int, ICosmos*>						m_mapRemoteTangramApp;
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
-	map<HWND, CWinForm*>					m_mapNeedQueryOnClose;
-	map<HWND, CWinForm*>					m_mapWinForm;
-	map<HWND, CMDTWnd*>						m_mapMDTWindow;
-	map<HWND, CMDIParent*>					m_mapMDIParent;
+	map<HWND, CCloudWinForm*>				m_mapNeedQueryOnClose;
+	map<HWND, CCloudWinForm*>				m_mapWinForm;
+	map<HWND, CCloudMDTFrame*>				m_mapMDTWindow;
+	map<HWND, CCloudMDIFrame*>				m_mapMDIParent;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
 	map<IPCSession*, CWormhole*>			m_mapWormhole;
 	BEGIN_COM_MAP(CCosmos)

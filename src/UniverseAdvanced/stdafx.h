@@ -130,7 +130,7 @@ class CCosmosAppCtrl;
 class CTangramListView;
 class CCosmosEvent;
 class CGalaxyCluster;
-class CMDIParent;
+class CCloudMDIFrame;
 class CXobjCollection;
 class CTangramHtmlTreeWnd;
 

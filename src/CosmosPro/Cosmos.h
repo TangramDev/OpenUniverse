@@ -911,13 +911,6 @@ namespace Universe
 			IGalaxy* m_pGalaxy;
 	};
 
-	public ref class WpfApplication : public System::Windows::Application
-	{
-	public:
-		WpfApplication();
-		~WpfApplication() {};
-	};
-
 	public ref class Cosmos
 	{
 	public:

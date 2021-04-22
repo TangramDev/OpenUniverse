@@ -142,12 +142,12 @@ protected:
 	virtual void PostNcDestroy();
 };
 
-class CMDIChild :
-	public CWindowImpl<CMDIChild, CWindow>
+class CCloudMDIChild :
+	public CWindowImpl<CCloudMDIChild, CWindow>
 {
 public:
-	CMDIChild(void);
-	virtual ~CMDIChild(void);
+	CCloudMDIChild(void);
+	virtual ~CCloudMDIChild(void);
 
 	HWND		m_hClient;
 
@@ -156,8 +156,8 @@ public:
 	CString		m_strDocTemplateKey = _T("");
 
 	CGalaxy*	m_pGalaxy = nullptr;
-	CMDIParent* m_pParent = nullptr;
-	BEGIN_MSG_MAP(CMDIChild)
+	CCloudMDIFrame* m_pParent = nullptr;
+	BEGIN_MSG_MAP(CCloudMDIChild)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMg)
 		MESSAGE_HANDLER(WM_MDIACTIVATE, OnMDIActivate)
 		MESSAGE_HANDLER(WM_COSMOSOBSERVED, OnCosmosDocObserved)
@@ -172,18 +172,18 @@ private:
 	LRESULT OnWindowPosChanging(UINT, WPARAM, LPARAM, BOOL&);
 };
 
-class CMDTWnd :
-	public CWindowImpl<CMDTWnd, CWindow>
+class CCloudMDTFrame :
+	public CWindowImpl<CCloudMDTFrame, CWindow>
 {
 public:
-	CMDTWnd(void);
-	virtual ~CMDTWnd(void);
+	CCloudMDTFrame(void);
+	virtual ~CCloudMDTFrame(void);
 	BOOL m_bCreateNewDoc = false;
 	bool m_bSZMode = false;
 	CString m_strDocTemplateKey = _T("");
 
 	CBrowser* m_pBrowser = nullptr;
-	BEGIN_MSG_MAP(CMDTWnd)
+	BEGIN_MSG_MAP(CCloudMDTFrame)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_ACTIVATE, OnActivate)
@@ -204,12 +204,12 @@ private:
 	void OnFinalMessage(HWND hWnd);
 };
 
-class CMDIParent :
-	public CWindowImpl<CMDIParent, CWindow>
+class CCloudMDIFrame :
+	public CWindowImpl<CCloudMDIFrame, CWindow>
 {
 public:
-	CMDIParent(void);
-	virtual ~CMDIParent(void);
+	CCloudMDIFrame(void);
+	virtual ~CCloudMDIFrame(void);
 
 	BOOL					m_bDestroy = false;
 	BOOL					m_bCreateNewDoc = false;
@@ -218,12 +218,12 @@ public:
 
 	CGalaxy*				m_pGalaxy = nullptr;
 	CBrowser*				m_pHostBrowser = nullptr;
-	CMDIChild*				m_pActiveMDIChild = nullptr;
+	CCloudMDIChild*				m_pActiveMDIChild = nullptr;
 	CosmosFrameWndInfo*		m_pCosmosFrameWndInfo = nullptr;
 	map<CString, CString>	m_mapClientCtrlBarData;
-	map<HWND, CMDIChild*>	m_mapMDIChild;
+	map<HWND, CCloudMDIChild*>	m_mapMDIChild;
 
-	BEGIN_MSG_MAP(CMDIParent)
+	BEGIN_MSG_MAP(CCloudMDIFrame)
 		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_EXITSIZEMOVE, OnExitSZ)
@@ -241,12 +241,12 @@ public:
 	LRESULT OnActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
-class CWinForm :
-	public CWindowImpl<CWinForm, CWindow>
+class CCloudWinForm :
+	public CWindowImpl<CCloudWinForm, CWindow>
 {
 public:
-	CWinForm(void);
-	virtual ~CWinForm(void);
+	CCloudWinForm(void);
+	virtual ~CCloudWinForm(void);
 	bool									m_bReady = false;
 	bool									m_bSZMode = false;
 	int										m_nState;
@@ -270,7 +270,7 @@ public:
 	CMDIChildFormInfo*						m_pChildFormsInfo;
 	void SendMessage();
 
-	BEGIN_MSG_MAP(CWinForm)
+	BEGIN_MSG_MAP(CCloudWinForm)
 		MESSAGE_HANDLER(WM_CLOSE, OnClose)
 		MESSAGE_HANDLER(WM_COSMOSMSG, OnCosmosMsg)
 		MESSAGE_HANDLER(WM_HUBBLE_DATA, OnGetMe)
@@ -339,9 +339,9 @@ public:
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CBKWnd*											m_pBKWnd = nullptr;
-	CWinForm*										m_pParentWinForm = nullptr;
-	CWinForm*										m_pParentMDIWinForm = nullptr;
-	CMDIParent*										m_pMDIParent = nullptr;
+	CCloudWinForm*										m_pParentWinForm = nullptr;
+	CCloudWinForm*										m_pParentMDIWinForm = nullptr;
+	CCloudMDIFrame*										m_pMDIParent = nullptr;
 	CWebView*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;

@@ -88,14 +88,12 @@ public:
 	void ExportAllCLRObjInfo(CString _strPath);
 	IDispatch* CreateCLRObj(CString bstrObjID);
 	void CosmosAction(BSTR bstrXml, void*);
-	void _GetMenuInfo(FormInfo*, ToolStripMenuItem^);
 private:
 	map<HWND, gcroot<Form^>>				m_mapForm;
 	gcroot<Hashtable^>						m_htObjects;
 	gcroot<Object^>							m_pCosmosObj;
 	gcroot<Assembly^>						m_pSystemAssembly;
 	gcroot<EventHandler^>					m_pOnLoad;
-	gcroot<EventHandler^>					m_pOnMdiChildActivate;
 	gcroot<EventHandler^>					m_pOnCtrlVisible;
 
 	virtual void OnCLRHostExit();
@@ -142,7 +140,6 @@ private:
 	void CtrlInit(int nType, Control^ treeview, IGalaxyCluster* pGalaxyCluster);
 	System::Void LoadNode(TreeView^ pTreeView, TreeNode^ pXobj, IGalaxyCluster* pGalaxyCluster, CTangramXmlParse* pParse);
 	static void OnLoad(Object ^sender, EventArgs ^e);
-	static void OnMdiChildActivate(Object ^sender, EventArgs ^e);
 	static void OnApplicationExit(Object ^sender, EventArgs ^e);
 	static void OnVisibleChanged(Object ^sender, EventArgs ^e);
 	static void OnAfterSelect(Object ^sender, TreeViewEventArgs ^e);

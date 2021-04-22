@@ -350,15 +350,6 @@ namespace Universe
         return nullptr;
     }
 
-    WpfApplication::WpfApplication()
-    {
-        if (theAppProxy.m_bInitApp == false)
-        {
-            theAppProxy.m_pCosmosWpfApp = this;
-            ::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20191022);
-        }
-    }
-
     Cosmos::Cosmos()
     {
         m_pUniverseAppProxy = nullptr;

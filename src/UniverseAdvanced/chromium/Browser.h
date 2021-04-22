@@ -43,7 +43,7 @@ namespace Browser {
 		IXobj*				m_pRemoteXobj;
 		CXobj*				m_pParentXobj;
 		CGalaxy*			m_pClientGalaxy = nullptr;
-		CMDIParent*			m_pMDIParent = nullptr;
+		CCloudMDIFrame*			m_pMDIParent = nullptr;
 		CosmosFrameWndInfo* m_pCosmosFrameWndInfo = nullptr;
 
 		map<HWND, CWebView*> m_mapChildPage;

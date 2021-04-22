@@ -135,7 +135,7 @@ public:
 	IDispatch*						m_pDisp;
 	CXobj* 							m_pRootObj;
 	CXobj* 							m_pParentObj;
-	CWinForm*						m_pParentWinFormWnd;
+	CCloudWinForm*						m_pParentWinFormWnd;
 	CTangramXmlParse*				m_pHostParse;
 	CTangramXmlParse* 				m_pDocXmlParseNode;
 	ICosmosWindow*					m_pWindow;

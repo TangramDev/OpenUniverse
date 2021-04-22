@@ -379,7 +379,7 @@ CWebView* CXobj::GetHtmlWnd()
 						if ((::GetWindowLong(hPWnd, GWL_EXSTYLE) & WS_EX_MDICHILD))
 						{
 							hPWnd = ::GetParent(::GetParent(hPWnd));
-							CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
+							CCloudWinForm* pForm = (CCloudWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
 							if (pForm)
 							{
 								return pForm->m_pOwnerHtmlWnd;
@@ -387,7 +387,7 @@ CWebView* CXobj::GetHtmlWnd()
 						}
 					}
 				}
-				CWinForm* pForm = (CWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
+				CCloudWinForm* pForm = (CCloudWinForm*)::SendMessage(hPWnd, WM_HUBBLE_DATA, 0, 20190214);
 				if (pForm)
 				{
 					m_pParentWinFormWnd = pForm;
@@ -1061,7 +1061,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 		{
 			bRet = m_pHostWnd->SubclassWindow(hWnd);
 			HWND hTopParent = ::GetAncestor(hWnd, GA_ROOT);
-			CMDIParent* pMDIParent = nullptr;
+			CCloudMDIFrame* pMDIParent = nullptr;
 			auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
 			if (it != g_pCosmos->m_mapMDIParent.end())
 			{
@@ -1074,7 +1074,7 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 				{
 					if (_strURL == _T("host"))
 					{
-						CMDTWnd* pWnd = it->second;
+						CCloudMDTFrame* pWnd = it->second;
 						if (pWnd->m_pBrowser->m_pParentXobj)
 						{
 							pWnd->m_pBrowser->m_pParentXobj->m_pWebBrowser = nullptr;
@@ -1576,7 +1576,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 					auto it = pHtmlWnd->m_mapWinForm.find(g_pCosmos->m_hFormNodeWnd);
 					if (it == pHtmlWnd->m_mapWinForm.end())
 					{
-						pHtmlWnd->m_mapWinForm[g_pCosmos->m_hFormNodeWnd] = (CWinForm*)l;
+						pHtmlWnd->m_mapWinForm[g_pCosmos->m_hFormNodeWnd] = (CCloudWinForm*)l;
 					}
 				}
 			}

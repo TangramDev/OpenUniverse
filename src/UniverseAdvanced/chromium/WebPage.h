@@ -25,7 +25,7 @@
 
 #include "../stdafx.h"
 
-class CWinForm;
+class CCloudWinForm;
 namespace Browser
 {
 	class CExtendWnd : public CWindowImpl<CExtendWnd, CWindow>
@@ -67,7 +67,7 @@ namespace Browser
 		CGalaxy*							m_pGalaxy;
 		CXobj*								m_pParentXobj;
 		CXobj*								m_pBindXobj;
-		CWinForm*							m_pBindWinForm;
+		CCloudWinForm*							m_pBindWinForm;
 		IUniverseAppProxy*					m_pAppProxy;
 		CGalaxyCluster*						m_pGalaxyCluster;
 		CosmosFrameWndInfo*					m_pCosmosFrameWndInfo = nullptr;
@@ -77,8 +77,8 @@ namespace Browser
 		map<CString, CString>				m_mapFormsInfo;
 		map<CString, CString>				m_mapeclipsesInfo;
 		map<CString, CString>				m_mapWorkBenchInfo;
-		map<HWND, CWinForm*>				m_mapWinForm;
-		map<HWND, CWinForm*>				m_mapSubWinForm;
+		map<HWND, CCloudWinForm*>				m_mapWinForm;
+		map<HWND, CCloudWinForm*>				m_mapSubWinForm;
 		map<CString, CMDIChildFormInfo*>	m_mapChildFormsInfo;
 
 		BEGIN_MSG_MAP(CWebView)

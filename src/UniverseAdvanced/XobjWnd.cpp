@@ -104,7 +104,7 @@ BOOL CXobjWnd::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwSty
 		HWND hWnd = CreateWindow(L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, AfxGetInstanceHandle(), NULL);
 		BOOL bRet = SubclassWindow(hWnd);
 		HWND hTopParent = ::GetWindow(hWnd, GA_ROOT);
-		CMDIParent* pMDIParent = nullptr;
+		CCloudMDIFrame* pMDIParent = nullptr;
 		auto it = g_pCosmos->m_mapMDIParent.find(hTopParent);
 		if (it != g_pCosmos->m_mapMDIParent.end())
 		{
@@ -409,7 +409,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 	}
 	if (lParam != wParam)
 	{
-		CMDIParent* pMainParent = nullptr;
+		CCloudMDIFrame* pMainParent = nullptr;
 		CXobj* pMDIClientObj = m_pXobj->GetVisibleChildByName(_T("mdiclient"));
 		CosmosFrameWndInfo* pInfo = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pCosmosFrameWndInfo;
 		if (pInfo)
@@ -532,7 +532,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		{
 			if (m_pXobj->m_pWebBrowser)
 			{
-				CMDIParent* pParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
+				CCloudMDIFrame* pParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
 				if (pParent && pParent->m_bProcessBrowserPos == false)
 				{
 					if (pParent->m_pActiveMDIChild == nullptr)
@@ -585,7 +585,7 @@ LRESULT CXobjWnd::OnCosmosMsg(WPARAM wParam, LPARAM lParam)
 		break;
 		case 20190602:
 		{
-			CWinForm* pCosmosWinFormWnd = (CWinForm*)::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 20190214);
+			CCloudWinForm* pCosmosWinFormWnd = (CCloudWinForm*)::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 20190214);
 			if (pCosmosWinFormWnd)
 				return (LRESULT)pCosmosWinFormWnd->m_pChildFormsInfo;
 			return 0;
@@ -783,7 +783,7 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	}
 	if (bNotCtrlBar)
 	{
-		CMDIParent* pMainWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
+		CCloudMDIFrame* pMainWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
 		if (pMainWnd)
 		{
 			CGalaxy* pGalaxy = pMainWnd->m_pGalaxy;
@@ -910,7 +910,7 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 					break;
 				case 2:
 				{
-					CMDIParent* pMDIParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
+					CCloudMDIFrame* pMDIParent = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pMDIParent;
 					if (m_pXobj->m_pWebBrowser == pMDIParent->m_pHostBrowser)
 					{
 						if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)

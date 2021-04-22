@@ -110,7 +110,6 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 	m_pCosmosWpfApp = nullptr;
 	m_pSystemAssembly = nullptr;
 	m_pOnLoad = nullptr;
-	m_pOnMdiChildActivate = nullptr;
 	m_pOnCtrlVisible = nullptr;
 	m_htObjects = gcnew Hashtable();
 	Forms::Application::ApplicationExit += gcnew EventHandler(&OnApplicationExit);
@@ -153,27 +152,6 @@ CCosmosProxy::~CCosmosProxy()
 	if (theApp.m_bHostApp == false)
 		theApp.m_pCosmosImpl->m_pCLRProxy = nullptr;
 	OutputDebugString(_T("------------------Release CCosmosProxy ------------------------\n"));
-	//theApp.m_pCosmosImpl->OnCLRHostExit();
-}
-
-void CCosmosProxy::_GetMenuInfo(FormInfo* pInfo, ToolStripMenuItem^ item)
-{
-	ToolStripMenuItem^ menuitem = (ToolStripMenuItem^)item;
-	System::Windows::Forms::Keys keys = menuitem->ShortcutKeys;
-	if (keys != System::Windows::Forms::Keys::None)
-	{
-		pInfo->m_mapShortcutItem[(int)keys] = menuitem;
-	}
-	if (menuitem->HasDropDownItems)
-	{
-		ToolStripDropDownItem^ pItem = (ToolStripDropDownItem^)menuitem;
-		int Count = pItem->DropDownItems->Count;
-		for each (ToolStripItem ^ _item in pItem->DropDownItems)
-		{
-			if (_item->Text->IndexOf("&") != -1)
-				_GetMenuInfo(pInfo, (ToolStripMenuItem^)_item);
-		}
-	}
 }
 
 bool CCosmos::DoIdleWork() {
@@ -752,14 +730,6 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 			{
 				name = "MdiClient";
 				::SendMessage((HWND)pForm->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 4);
-				if (m_pOnMdiChildActivate)
-				{
-				}
-				else
-				{
-					m_pOnMdiChildActivate = gcnew EventHandler(CCosmosProxy::OnMdiChildActivate);
-				}
-				pForm->MdiChildActivate += m_pOnMdiChildActivate;
 			}
 			if (String::IsNullOrEmpty(name))
 				name = strType;
@@ -1098,18 +1068,6 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 	}
 
 	return pGalaxyCluster;
-}
-
-void CCosmosProxy::OnMdiChildActivate(System::Object^ sender, System::EventArgs^ e)
-{
-	Form^ pForm = static_cast<Form^>(sender);
-	if (pForm->ActiveMdiChild != nullptr)
-	{
-		//::SendMessage((HWND)pForm->ActiveMdiChild->Handle.ToPointer(), WM_HUBBLE_DATA, 0, 2);
-		return;
-	}
-	CComBSTR bstrKey("");
-	theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), bstrKey, bstrKey, bstrKey, true);
 }
 
 void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyCluster)
@@ -3054,7 +3012,6 @@ void CCosmos::OnCosmosClose(CosmosCloseState state)
 		break;
 	}
 	//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
-	//theApp.m_pCosmosImpl->OnCLRHostExit();
 }
 
 void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootXobj)
