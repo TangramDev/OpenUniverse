@@ -129,6 +129,7 @@ public:
 
 	bool				m_bHostCLR;
 	bool				m_bAppStarting = false;
+	bool				m_bProcessMsgByMe = false;
 	CString GetFileVer();
 	void SetHook(DWORD ThreadID);
 

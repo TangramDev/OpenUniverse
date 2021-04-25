@@ -152,6 +152,7 @@ CCosmosProxy::~CCosmosProxy()
 	if (theApp.m_bHostApp == false)
 		theApp.m_pCosmosImpl->m_pCLRProxy = nullptr;
 	OutputDebugString(_T("------------------Release CCosmosProxy ------------------------\n"));
+	CString strInfo = _T("");
 }
 
 bool CCosmos::DoIdleWork() {

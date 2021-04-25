@@ -239,7 +239,6 @@ public:
 	STDMETHOD(get_RemoteCosmos)(BSTR bstrID, ICosmos** pVal);
 	STDMETHOD(get_Extender)(ICosmosExtender** pVal);
 	STDMETHOD(put_Extender)(ICosmosExtender* newVal);
-	STDMETHOD(get_ActiveChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 	STDMETHOD(get_HostChromeBrowserWnd)(IBrowser** ppChromeWebBrowser);
 
 	STDMETHOD(NavigateNode)(IXobj* pXobj, BSTR bstrObjID, BSTR bstrXml, IXobj** pVal);

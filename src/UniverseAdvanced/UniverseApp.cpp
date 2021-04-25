@@ -398,8 +398,10 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
 	}
-	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+	for (auto &it : g_pCosmos->m_mapCosmosAppProxy)
 		it.second->OnForegroundIdleProc();
+	if (g_pCosmos && g_pCosmos->m_pMessagePumpForUI && g_pCosmos->m_pMessagePumpForUI->m_bStartRun)
+		g_pCosmos->m_pMessagePumpForUI->OnAppIdle();
 	return CallNextHookEx(g_pCosmos->m_hForegroundIdleHook, nCode, wParam, lParam);
 }
 
@@ -921,6 +923,15 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 {
 	LPMSG lpMsg = (LPMSG)lParam;
 	DWORD dwID = ::GetCurrentThreadId();
+
+	//while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	//{
+	//	break;
+	//}
+	//if (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE)
+	//{
+
+	//}
 	CommonThreadInfo* pThreadInfo = g_pCosmos->GetThreadInfo(dwID);
 	if (lpMsg->message == WM_TIMER)
 		return CallNextHookEx(pThreadInfo->m_hGetMessageHook, nCode, wParam, lParam);
@@ -950,6 +961,19 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 		break;
 		case PM_REMOVE:
 		{
+			//bool sent_messages_in_queue = false;
+			//DWORD queue_status = ::GetQueueStatus(QS_SENDMESSAGE);
+			//if (HIWORD(queue_status) & QS_SENDMESSAGE)
+			//	sent_messages_in_queue = true;
+			//theApp.m_bProcessMsgByMe = !theApp.m_bProcessMsgByMe;
+			//if (theApp.m_bProcessMsgByMe)
+			//{
+			//	MSG msg;
+			//	if (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE)
+			//	{
+
+			//	}
+			//}
 			switch (lpMsg->message)
 			{
 			case WM_ENTERIDLE:

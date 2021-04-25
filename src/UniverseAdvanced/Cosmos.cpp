@@ -1926,29 +1926,6 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 	return pRootXobj;
 }
 
-STDMETHODIMP CCosmos::get_ActiveChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
-{
-	if (m_pActiveBrowser->m_pProxy)
-	{
-		CBrowser* pBrowserWnd = (CBrowser*)m_pActiveBrowser->m_pProxy;
-		pBrowserWnd->QueryInterface(__uuidof(IBrowser), (void**)ppChromeWebBrowser);
-	}
-	return S_OK;
-}
-
-STDMETHODIMP CCosmos::get_HostChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
-{
-	if (::GetModuleHandle(L"chrome_elf.dll"))
-	{
-		auto it = m_mapBrowserWnd.find(m_hHostBrowserWnd);
-		if (it != m_mapBrowserWnd.end())
-		{
-			*ppChromeWebBrowser = it->second;
-		}
-	}
-	return S_OK;
-}
-
 STDMETHODIMP CCosmos::get_RootNodes(IXobjCollection** pXobjColletion)
 {
 	if (m_pRootNodes == nullptr)
@@ -2975,6 +2952,19 @@ STDMETHODIMP CCosmos::GetXobjFromHandle(LONGLONG hWnd, IXobj** ppRetXobj)
 		*ppRetXobj = pInfo->m_pXobj;
 	else
 		return S_FALSE;
+	return S_OK;
+}
+
+STDMETHODIMP CCosmos::get_HostChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
+{
+	if (::GetModuleHandle(L"chrome_elf.dll"))
+	{
+		auto it = m_mapBrowserWnd.find(m_hHostBrowserWnd);
+		if (it != m_mapBrowserWnd.end())
+		{
+			*ppChromeWebBrowser = it->second;
+		}
+	}
 	return S_OK;
 }
 

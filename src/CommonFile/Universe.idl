@@ -387,12 +387,11 @@ interface ICosmos : IDispatch {
 	[propget, id(3)] HRESULT RemoteHelperHWND([out, retval] LONGLONG* pVal);
 	[propput, id(3)] HRESULT RemoteHelperHWND([in]LONGLONG newVal);
 	[propget, id(4), helpstring("property RootNodes")] HRESULT RootNodes([out, retval]IXobjCollection** ppXobjColletion);
-	[propget, id(5)] HRESULT ActiveChromeBrowserWnd([out, retval] IBrowser** ppChromeWebBrowser);
+	[propget, id(5)] HRESULT Extender([out, retval] ICosmosExtender** pVal);
+	[propput, id(5)] HRESULT Extender([in] ICosmosExtender* newVal);
 	[propget, id(6), helpstring("property CurrentActiveNode")] HRESULT CurrentActiveXobj([out, retval] IXobj** pVal);
 	[propget, id(7), helpstring("property CreatingNode")] HRESULT CreatingXobj([out, retval] IXobj** pVal);
 	[propget, id(8)] HRESULT RemoteCosmos(BSTR bstrID, [out, retval] ICosmos** pVal);
-	[propget, id(9)] HRESULT Extender([out, retval] ICosmosExtender** pVal);
-	[propput, id(9)] HRESULT Extender([in] ICosmosExtender* newVal);
 
 	[id(0x00100)] HRESULT NavigateNode(IXobj* pXobj, BSTR bstrBrowserID, BSTR bstrXml, [out, retval] IXobj** pVal);
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);

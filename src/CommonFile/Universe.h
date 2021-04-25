@@ -2598,8 +2598,11 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootNodes( 
             /* [retval][out] */ IXobjCollection **ppXobjColletion) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveChromeBrowserWnd( 
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser) = 0;
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
+            /* [retval][out] */ ICosmosExtender **pVal) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
+            /* [in] */ ICosmosExtender *newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentActiveXobj( 
             /* [retval][out] */ IXobj **pVal) = 0;
@@ -2610,12 +2613,6 @@ EXTERN_C const IID IID_ICosmos;
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteCosmos( 
             BSTR bstrID,
             /* [retval][out] */ ICosmos **pVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Extender( 
-            /* [retval][out] */ ICosmosExtender **pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Extender( 
-            /* [in] */ ICosmosExtender *newVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateNode( 
             IXobj *pXobj,
@@ -2850,9 +2847,13 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             /* [retval][out] */ IXobjCollection **ppXobjColletion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveChromeBrowserWnd )( 
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
             ICosmos * This,
-            /* [retval][out] */ IBrowser **ppChromeWebBrowser);
+            /* [retval][out] */ ICosmosExtender **pVal);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
+            ICosmos * This,
+            /* [in] */ ICosmosExtender *newVal);
         
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentActiveXobj )( 
             ICosmos * This,
@@ -2866,14 +2867,6 @@ EXTERN_C const IID IID_ICosmos;
             ICosmos * This,
             BSTR bstrID,
             /* [retval][out] */ ICosmos **pVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Extender )( 
-            ICosmos * This,
-            /* [retval][out] */ ICosmosExtender **pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Extender )( 
-            ICosmos * This,
-            /* [in] */ ICosmosExtender *newVal);
         
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateNode )( 
             ICosmos * This,
@@ -3112,8 +3105,11 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_get_RootNodes(This,ppXobjColletion)	\
     ( (This)->lpVtbl -> get_RootNodes(This,ppXobjColletion) ) 
 
-#define ICosmos_get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser)	\
-    ( (This)->lpVtbl -> get_ActiveChromeBrowserWnd(This,ppChromeWebBrowser) ) 
+#define ICosmos_get_Extender(This,pVal)	\
+    ( (This)->lpVtbl -> get_Extender(This,pVal) ) 
+
+#define ICosmos_put_Extender(This,newVal)	\
+    ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
 
 #define ICosmos_get_CurrentActiveXobj(This,pVal)	\
     ( (This)->lpVtbl -> get_CurrentActiveXobj(This,pVal) ) 
@@ -3123,12 +3119,6 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_get_RemoteCosmos(This,bstrID,pVal)	\
     ( (This)->lpVtbl -> get_RemoteCosmos(This,bstrID,pVal) ) 
-
-#define ICosmos_get_Extender(This,pVal)	\
-    ( (This)->lpVtbl -> get_Extender(This,pVal) ) 
-
-#define ICosmos_put_Extender(This,newVal)	\
-    ( (This)->lpVtbl -> put_Extender(This,newVal) ) 
 
 #define ICosmos_NavigateNode(This,pXobj,bstrBrowserID,bstrXml,pVal)	\
     ( (This)->lpVtbl -> NavigateNode(This,pXobj,bstrBrowserID,bstrXml,pVal) ) 

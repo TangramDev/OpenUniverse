@@ -192,6 +192,7 @@ namespace CommonUniverse {
 	class CWebPageImpl;
 	class ICosmosWindowProvider;
 	class CTabStatsTrackerDelegate;
+	class CosmosAppMessagePumpForUI;
 	class CChromeChildProcessHostImplProxy;
 
 	class ICosmosCLRImpl;
@@ -661,13 +662,14 @@ namespace CommonUniverse {
 		IUniverseAppProxy* m_pCosmosAppProxy;
 		CMDIChildFormInfo* m_pCurMDIChildFormInfo;
 		ICosmosExtender* m_pExtender = nullptr;
+		ICosmosWindow* m_pCreatingWindow = nullptr;
+		CWebPageImpl* m_pMainWebPageImpl = nullptr;
 		ICosmosDelegate* m_pCosmosDelegate = nullptr;
 		CChromeBrowserBase* m_pActiveBrowser = nullptr;
 		CCosmosBrowserFactory* m_pBrowserFactory = nullptr;
-		ICosmosWindow* m_pCreatingWindow = nullptr;
+		CosmosAppMessagePumpForUI* m_pMessagePumpForUI = nullptr;
 		OmniboxViewViewsProxy* m_pCreatingOmniboxViewViews = nullptr;
 		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
-		CWebPageImpl* m_pMainWebPageImpl = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<HWND, IGalaxyCluster*>				m_mapGalaxy2GalaxyCluster;
@@ -1083,6 +1085,22 @@ namespace CommonUniverse {
 		CChromeRendererFrameBase() {}
 
 		virtual ~CChromeRendererFrameBase() {}
+	};
+
+	class CosmosAppMessagePumpForUI
+	{
+	public:
+		CosmosAppMessagePumpForUI() {
+			bIdle = TRUE;
+			lIdleCount = 0;
+		}
+
+		virtual ~CosmosAppMessagePumpForUI() {}
+		virtual void OnAppIdle() {}
+		bool m_bStartRun = false;
+		BOOL bIdle = TRUE;
+		LONG lIdleCount = 0;
+		bool more_work_is_plausible = false;
 	};
 
 }  // namespace CommonUniverse

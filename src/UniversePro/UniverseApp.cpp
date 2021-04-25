@@ -348,8 +348,10 @@ LRESULT CUniverse::ForegroundIdleProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		g_pCosmos->m_pCosmosDelegate->ForegroundIdleProc();
 	}
-	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+	for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 		it.second->OnForegroundIdleProc();
+	if (g_pCosmos && g_pCosmos->m_pMessagePumpForUI && g_pCosmos->m_pMessagePumpForUI->m_bStartRun)
+		g_pCosmos->m_pMessagePumpForUI->OnAppIdle();
 	return CallNextHookEx(g_pCosmos->m_hForegroundIdleHook, nCode, wParam, lParam);
 }
 

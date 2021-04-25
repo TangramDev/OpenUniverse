@@ -583,12 +583,26 @@ namespace Browser {
 		}
 		if (m_mapWinForm.size())
 		{
-			for (auto& it : m_mapWinForm)
+			while (m_mapWinForm.size())
 			{
-				if (it.second->m_bMainForm == false)
-					::DestroyWindow(it.first);
+				auto it = m_mapWinForm.begin();
+				CCloudWinForm* pForm = it->second;
+				if (pForm->m_bMainForm == false)
+				{
+					if (::IsChild(pForm->m_hWnd, m_hWnd)||::IsWindow(pForm->m_hWnd)==false)
+					{
+						m_mapWinForm.erase(it);
+					}
+					else
+						::DestroyWindow(pForm->m_hWnd);
+				}
 				else
-					it.second->m_pOwnerHtmlWnd = nullptr;
+				{
+					pForm->m_pOwnerHtmlWnd = nullptr;
+					m_mapWinForm.erase(it);
+				}
+				if (m_mapWinForm.size() == 0)
+					break;
 			}
 			m_mapWinForm.erase(m_mapWinForm.begin(), m_mapWinForm.end());
 		}

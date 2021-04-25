@@ -565,7 +565,7 @@ CCosmos::~CCosmos()
 		OutputDebugString(_T("------------------End Stop CLR from ~CCosmos() at Universe.dll------------------------\n"));
 	}
 	g_pCosmos = nullptr;
-	OutputDebugString(_T("------------------End Release CCosmo at Universe.dlls------------------------\n"));
+	OutputDebugString(_T("------------------End Release CCosmos at Universe.dll------------------------\n"));
 }
 
 void CCosmos::OnCLRHostExit()
@@ -1926,16 +1926,6 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 		}
 	}
 	return pRootXobj;
-}
-
-STDMETHODIMP CCosmos::get_ActiveChromeBrowserWnd(IBrowser** ppChromeWebBrowser)
-{
-	if (m_pActiveBrowser->m_pProxy)
-	{
-		CBrowser* pBrowserWnd = (CBrowser*)m_pActiveBrowser->m_pProxy;
-		pBrowserWnd->QueryInterface(__uuidof(IBrowser), (void**)ppChromeWebBrowser);
-	}
-	return S_OK;
 }
 
 STDMETHODIMP CCosmos::get_HostChromeBrowserWnd(IBrowser** ppChromeWebBrowser)

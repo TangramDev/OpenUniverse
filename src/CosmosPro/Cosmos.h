@@ -962,7 +962,6 @@ namespace Universe
 		static Dictionary<String^, Type^>^ GetFormTypesFromAssembly(String^ assemblyFilePath);
 		static Dictionary<String^, Type^>^ GetFormTypesFromDirectory(String^ directoryPath);
 		static List<String^>^ FindFiles(String^ rootPath, String^ fileSpec, bool recursive);
-		static Browser^ ActiveBrowser();
 		static Browser^ GetHostBrowser(Object^ obj);
 		static Xobj^ GetXobjFromHandle(IntPtr handle);
 		static Xobj^ GetXobjFromControl(Control^ ctrl);

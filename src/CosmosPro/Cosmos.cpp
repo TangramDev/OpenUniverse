@@ -863,25 +863,6 @@ namespace Universe
         return nullptr;
     }
 
-    Browser^ Cosmos::ActiveBrowser()
-    {
-        IBrowser* pBrowser = nullptr;
-        theApp.m_pCosmos->get_ActiveChromeBrowserWnd(&pBrowser);
-        if (pBrowser)
-        {
-            auto it = theAppProxy.m_mapWebBrowser.find(pBrowser);
-            if (it != theAppProxy.m_mapWebBrowser.end())
-                return it->second;
-            else
-            {
-                Browser^ _pBrowser = gcnew Browser(pBrowser);
-                theAppProxy.m_mapWebBrowser[pBrowser] = _pBrowser;
-                return _pBrowser;
-            }
-        }
-        return nullptr;
-    }
-
     Browser^ Cosmos::GetHostBrowser(Object^ obj)
     {
         if (obj == nullptr)
