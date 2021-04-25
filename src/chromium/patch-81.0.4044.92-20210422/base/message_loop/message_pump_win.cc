@@ -14,6 +14,7 @@
 #include "base/numerics/ranges.h"
 #include "base/numerics/safe_conversions.h"
 #include "base/trace_event/trace_event.h"
+
 // begin Add by TangramTeam
 #include "c:/universework/openuniverse/src/chrome_proxy/third_party/UniverseForChromium.h"
 // end Add by TangramTeam
@@ -60,7 +61,10 @@ static const int kMsgHaveWork = WM_USER + 1;
 //-----------------------------------------------------------------------------
 // MessagePumpWin public:
 
-MessagePumpWin::MessagePumpWin() = default;
+MessagePumpWin::MessagePumpWin() {
+  m_pCosmosDelegate = nullptr;
+}
+
 MessagePumpWin::~MessagePumpWin() = default;
 
 void MessagePumpWin::Run(Delegate* delegate) {
@@ -93,9 +97,38 @@ MessagePumpForUI::MessagePumpForUI() {
   bool succeeded = message_window_.Create(
       BindRepeating(&MessagePumpForUI::MessageCallback, Unretained(this)));
   DCHECK(succeeded);
+  // begin Add by TangramTeam
+  m_pCosmosDelegate = nullptr;
+  if (g_pCosmosImpl == nullptr) {
+    HMODULE hModule = ::GetModuleHandle(L"universe.dll");
+    if (hModule != nullptr) {
+      CommonUniverse::GetCosmosImplFunction GetCosmosImplFunction =
+          (CommonUniverse::GetCosmosImplFunction)GetProcAddress(
+              hModule, "GetCosmosImpl");
+      if (GetCosmosImplFunction != NULL) {
+        ICosmos* pCosmos = nullptr;
+        g_pCosmosImpl = GetCosmosImplFunction(&pCosmos);
+      }
+    }
+  }
+  if (g_pCosmosImpl && g_pCosmosImpl->m_dwThreadID == ::GetCurrentThreadId()) {
+    m_pCosmosDelegate = g_pCosmosImpl->m_pCosmosDelegate;
+    g_pCosmosImpl->m_pMessagePumpForUI =
+        (CommonUniverse::CosmosAppMessagePumpForUI*)((
+            AppMessagePumpForUI*)this);
+  }
+  // end Add by TangramTeam
 }
 
 MessagePumpForUI::~MessagePumpForUI() = default;
+
+void MessagePumpForUI::OnAppIdle() {
+  m_pCosmosDelegate->OnAppIdle(bIdle, lIdleCount);
+
+  in_native_loop_ = false;
+  state_->delegate->BeforeDoInternalWork();
+  DCHECK(!in_native_loop_);
+}
 
 void MessagePumpForUI::ScheduleWork() {
   // This is the only MessagePumpForUI method which can be called outside of
@@ -168,8 +201,10 @@ void MessagePumpForUI::RemoveObserver(Observer* observer) {
 //-----------------------------------------------------------------------------
 // MessagePumpForUI private:
 
-bool MessagePumpForUI::MessageCallback(
-    UINT message, WPARAM wparam, LPARAM lparam, LRESULT* result) {
+bool MessagePumpForUI::MessageCallback(UINT message,
+                                       WPARAM wparam,
+                                       LPARAM lparam,
+                                       LRESULT* result) {
   DCHECK_CALLED_ON_VALID_THREAD(bound_thread_);
   switch (message) {
     case kMsgHaveWork:
@@ -199,105 +234,131 @@ void MessagePumpForUI::DoRunLoop() {
   // the chance of being processed (i.e., reduced service time).
 
   // begin Add by TangramTeam
-  if (g_pCosmosImpl == nullptr) {
-	  HMODULE hModule = ::GetModuleHandle(L"universe.dll");
-	  if (hModule != nullptr) {
-		  CommonUniverse::GetCosmosImplFunction GetCosmosImplFunction =
-			  (CommonUniverse::GetCosmosImplFunction)GetProcAddress(
-				  hModule, "GetCosmosImpl");
-		  if (GetCosmosImplFunction != NULL) {
-			  ICosmos* pCosmos = nullptr;
-			  g_pCosmosImpl = GetCosmosImplFunction(&pCosmos);
-		  }
-	  }
-  }
+  if (m_pCosmosDelegate) {
+    m_bStartRun = true;
+    for (;;) {
+      // If we do any work, we may create more messages etc., and more work may
+      // possibly be waiting in another task group.  When we (for example)
+      // ProcessNextWindowsMessage(), there is a good chance there are still
+      // more messages waiting.  On the other hand, when any of these methods
+      // return having done no work, then it is pretty unlikely that calling
+      // them again quickly will find any work to do.  Finally, if they all say
+      // they had no work, then it is a good time to consider sleeping (waiting)
+      // for more work.
 
-  CommonUniverse::ICosmosDelegate* pDelegate = nullptr;
-  if (g_pCosmosImpl && g_pCosmosImpl->m_dwThreadID == ::GetCurrentThreadId())
-  {
-	  pDelegate = g_pCosmosImpl->m_pCosmosDelegate;
-  }
-  // for tracking the idle time state
-  BOOL bIdle = TRUE;
-  LONG lIdleCount = 0;
-  // end Add by TangramTeam
+      //m_pCosmosDelegate->OnAppIdle(bIdle, lIdleCount);
 
-  for (;;) {
-    // If we do any work, we may create more messages etc., and more work may
-    // possibly be waiting in another task group.  When we (for example)
-    // ProcessNextWindowsMessage(), there is a good chance there are still more
-    // messages waiting.  On the other hand, when any of these methods return
-    // having done no work, then it is pretty unlikely that calling them again
-    // quickly will find any work to do.  Finally, if they all say they had no
-    // work, then it is a good time to consider sleeping (waiting) for more
-    // work.
+      //in_native_loop_ = false;
+      //state_->delegate->BeforeDoInternalWork();
+      //DCHECK(!in_native_loop_);
 
-	// begin Add by TangramTeam
-	  if (pDelegate)
-		  pDelegate->OnAppIdle(bIdle, lIdleCount);
-	// end Add by TangramTeam
+      more_work_is_plausible = ProcessNextWindowsMessage();
+      in_native_loop_ = false;
+      if (state_->should_quit)
+        break;
 
-    in_native_loop_ = false;
-    state_->delegate->BeforeDoInternalWork();
-    DCHECK(!in_native_loop_);
+      Delegate::NextWorkInfo next_work_info = state_->delegate->DoSomeWork();
+      in_native_loop_ = false;
+      more_work_is_plausible |= next_work_info.is_immediate();
+      if (state_->should_quit)
+        break;
 
-    bool more_work_is_plausible = ProcessNextWindowsMessage();
-    in_native_loop_ = false;
-    if (state_->should_quit)
-      break;
+      if (installed_native_timer_) {
+        // As described in ScheduleNativeTimer(), the native timer is only
+        // installed and needed while in a nested native loop. If it is
+        // installed, it means the above work entered such a loop. Having now
+        // resumed, the native timer is no longer needed.
+        KillNativeTimer();
+      }
 
-    Delegate::NextWorkInfo next_work_info = state_->delegate->DoSomeWork();
-    in_native_loop_ = false;
-    more_work_is_plausible |= next_work_info.is_immediate();
-    if (state_->should_quit)
-      break;
+      if (more_work_is_plausible)
+        continue;
 
-    if (installed_native_timer_) {
-      // As described in ScheduleNativeTimer(), the native timer is only
-      // installed and needed while in a nested native loop. If it is installed,
-      // it means the above work entered such a loop. Having now resumed, the
-      // native timer is no longer needed.
-      KillNativeTimer();
+      more_work_is_plausible = state_->delegate->DoIdleWork();
+      // DoIdleWork() shouldn't end up in native nested loops and thus shouldn't
+      // have any chance of reinstalling a native timer.
+      DCHECK(!in_native_loop_);
+      DCHECK(!installed_native_timer_);
+      if (state_->should_quit)
+        break;
+
+      if (more_work_is_plausible)
+        continue;
+
+      if (g_pCosmosImpl->m_nAppType != APP_BROWSER &&
+          g_pCosmosImpl->m_nAppType != APP_ECLIPSE &&
+          g_pCosmosImpl->m_nAppType != APP_BROWSER_ECLIPSE &&
+          g_pCosmosImpl->m_hMainWnd == 0) {
+        state_->should_quit = true;
+        break;
+      }
+
+      more_work_is_plausible = m_pCosmosDelegate->IsAppIdleMessage();
+      if (more_work_is_plausible) {
+        bIdle = TRUE;
+        lIdleCount = 0;
+      }
+      more_work_is_plausible = m_pCosmosDelegate->DoIdleWork();
+      if (more_work_is_plausible)
+        continue;
+
+      // WaitForWork() does some work itself, so notify the delegate of it.
+      state_->delegate->BeforeDoInternalWork();
+      WaitForWork(next_work_info);
     }
+  }
+  // end Add by TangramTeam
+  else {
+    for (;;) {
+      // If we do any work, we may create more messages etc., and more work may
+      // possibly be waiting in another task group.  When we (for example)
+      // ProcessNextWindowsMessage(), there is a good chance there are still
+      // more messages waiting.  On the other hand, when any of these methods
+      // return having done no work, then it is pretty unlikely that calling
+      // them again quickly will find any work to do.  Finally, if they all say
+      // they had no work, then it is a good time to consider sleeping (waiting)
+      // for more work.
+      in_native_loop_ = false;
+      state_->delegate->BeforeDoInternalWork();
+      DCHECK(!in_native_loop_);
 
-    if (more_work_is_plausible)
-      continue;
+      bool more_work_is_plausible = ProcessNextWindowsMessage();
+      in_native_loop_ = false;
+      if (state_->should_quit)
+        break;
 
-    more_work_is_plausible = state_->delegate->DoIdleWork();
-    // DoIdleWork() shouldn't end up in native nested loops and thus shouldn't
-    // have any chance of reinstalling a native timer.
-    DCHECK(!in_native_loop_);
-    DCHECK(!installed_native_timer_);
-    if (state_->should_quit)
-      break;
+      Delegate::NextWorkInfo next_work_info = state_->delegate->DoSomeWork();
+      in_native_loop_ = false;
+      more_work_is_plausible |= next_work_info.is_immediate();
+      if (state_->should_quit)
+        break;
 
-    if (more_work_is_plausible)
-      continue;
+      if (installed_native_timer_) {
+        // As described in ScheduleNativeTimer(), the native timer is only
+        // installed and needed while in a nested native loop. If it is
+        // installed, it means the above work entered such a loop. Having now
+        // resumed, the native timer is no longer needed.
+        KillNativeTimer();
+      }
 
-	// begin Add by TangramTeam
-	if (pDelegate) {
-		if (g_pCosmosImpl->m_nAppType != APP_BROWSER &&
-			g_pCosmosImpl->m_nAppType != APP_ECLIPSE &&
-			g_pCosmosImpl->m_nAppType != APP_BROWSER_ECLIPSE &&
-			g_pCosmosImpl->m_hMainWnd == 0)
-		{
-			state_->should_quit = true;
-			break;
-		}
-		more_work_is_plausible = pDelegate->IsAppIdleMessage();
-		if (more_work_is_plausible) {
-			bIdle = TRUE;
-			lIdleCount = 0;
-		}
-		more_work_is_plausible = pDelegate->DoIdleWork();
-	}
-	if (more_work_is_plausible)
-		continue;
-	// end Add by TangramTeam
+      if (more_work_is_plausible)
+        continue;
 
-    // WaitForWork() does some work itself, so notify the delegate of it.
-    state_->delegate->BeforeDoInternalWork();
-    WaitForWork(next_work_info);
+      more_work_is_plausible = state_->delegate->DoIdleWork();
+      // DoIdleWork() shouldn't end up in native nested loops and thus shouldn't
+      // have any chance of reinstalling a native timer.
+      DCHECK(!in_native_loop_);
+      DCHECK(!installed_native_timer_);
+      if (state_->should_quit)
+        break;
+
+      if (more_work_is_plausible)
+        continue;
+
+      // WaitForWork() does some work itself, so notify the delegate of it.
+      state_->delegate->BeforeDoInternalWork();
+      WaitForWork(next_work_info);
+    }
   }
 }
 
@@ -313,8 +374,8 @@ void MessagePumpForUI::WaitForWork(Delegate::NextWorkInfo next_work_info) {
     // Tell the optimizer to retain these values to simplify analyzing hangs.
     base::debug::Alias(&delay);
     base::debug::Alias(&wait_flags);
-    DWORD result = MsgWaitForMultipleObjectsEx(0, nullptr, delay, QS_ALLINPUT,
-                                               wait_flags);
+    DWORD result =
+        MsgWaitForMultipleObjectsEx(0, nullptr, delay, QS_ALLINPUT, wait_flags);
 
     if (WAIT_OBJECT_0 == result) {
       // A WM_* message is available.
@@ -494,8 +555,50 @@ bool MessagePumpForUI::ProcessNextWindowsMessage() {
     sent_messages_in_queue = true;
 
   MSG msg;
-  if (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE)
-    return ProcessMessageHelper(msg);
+  if (m_pCosmosDelegate) {
+    if (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE) {
+      DCHECK_CALLED_ON_VALID_THREAD(bound_thread_);
+
+      TRACE_EVENT1("base,toplevel", "MessagePumpForUI::ProcessMessageHelper",
+                   "message", msg.message);
+      if (WM_QUIT == msg.message) {
+        // WM_QUIT is the standard way to exit a ::GetMessage() loop. Our
+        // MessageLoop has its own quit mechanism, so WM_QUIT should only
+        // terminate it if |enable_wm_quit_| is explicitly set (and is generally
+        // unexpected otherwise).
+        if (enable_wm_quit_) {
+          state_->should_quit = true;
+          return false;
+        }
+        UMA_HISTOGRAM_ENUMERATION("Chrome.MessageLoopProblem",
+                                  RECEIVED_WM_QUIT_ERROR,
+                                  MESSAGE_LOOP_PROBLEM_MAX);
+        return true;
+      }
+
+      // While running our main message pump, we discard kMsgHaveWork messages.
+      if (msg.message == kMsgHaveWork && msg.hwnd == message_window_.hwnd())
+        return ProcessPumpReplacementMessage();
+
+      for (Observer& observer : observers_)
+        observer.WillDispatchMSG(msg);
+      // begin Add by TangramTeam
+      if (m_pCosmosDelegate) {
+        m_pCosmosDelegate->ProcessMsg((MSG*)&msg);
+      } else {
+        // end Add by TangramTeam
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+      }
+      for (Observer& observer : observers_)
+        observer.DidDispatchMSG(msg);
+      return true;
+      //return ProcessMessageHelper(msg);
+    }
+  } else {
+    if (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) != FALSE)
+      return ProcessMessageHelper(msg);
+  }
 
   return sent_messages_in_queue;
 }
@@ -524,23 +627,17 @@ bool MessagePumpForUI::ProcessMessageHelper(const MSG& msg) {
     return ProcessPumpReplacementMessage();
 
   for (Observer& observer : observers_)
-	  observer.WillDispatchMSG(msg);
+    observer.WillDispatchMSG(msg);
   // begin Add by TangramTeam
-  CommonUniverse::ICosmosDelegate* pDelegate = nullptr;
-  if (g_pCosmosImpl && g_pCosmosImpl->m_dwThreadID == ::GetCurrentThreadId())
-  {
-	  pDelegate = g_pCosmosImpl->m_pCosmosDelegate;
-  }
-  if (pDelegate) {
-	  pDelegate->ProcessMsg((MSG*)&msg);
-  }
-  else {
-	  // end Add by TangramTeam
-	  ::TranslateMessage(&msg);
-	  ::DispatchMessage(&msg);
+  if (m_pCosmosDelegate) {
+    m_pCosmosDelegate->ProcessMsg((MSG*)&msg);
+  } else {
+    // end Add by TangramTeam
+    ::TranslateMessage(&msg);
+    ::DispatchMessage(&msg);
   }
   for (Observer& observer : observers_)
-	  observer.DidDispatchMSG(msg);
+    observer.DidDispatchMSG(msg);
 
   return true;
 }
