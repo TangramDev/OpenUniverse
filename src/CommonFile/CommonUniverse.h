@@ -792,6 +792,7 @@ namespace CommonUniverse {
 	class ICosmosDelegate {
 	public:
 		ICosmosDelegate() {
+			m_hMsgWnd = nullptr;
 			m_pJVM = nullptr;
 			m_pJVMenv = nullptr;
 			systemClass = nullptr;
@@ -802,8 +803,9 @@ namespace CommonUniverse {
 		virtual ~ICosmosDelegate() {
 		}
 
-		JavaVM* m_pJVM;
-		JNIEnv* m_pJVMenv;
+		HWND				m_hMsgWnd;
+		JavaVM*				m_pJVM;
+		JNIEnv*				m_pJVMenv;
 		jclass				systemClass;
 		jmethodID			exitMethod;
 		jmethodID			loadMethod;

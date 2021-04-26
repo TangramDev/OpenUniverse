@@ -116,6 +116,7 @@ MessagePumpForUI::MessagePumpForUI() {
     g_pCosmosImpl->m_pMessagePumpForUI =
         (CommonUniverse::CosmosAppMessagePumpForUI*)((
             AppMessagePumpForUI*)this);
+    m_pCosmosDelegate->m_hMsgWnd = message_window_.hwnd();
   }
   // end Add by TangramTeam
 }

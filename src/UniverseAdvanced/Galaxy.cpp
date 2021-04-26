@@ -1693,6 +1693,12 @@ LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		if (lParam == 0)
 		{
 			HWND hPWnd = ::GetParent(m_hWnd);
+			CCloudWinForm* pParent = (CCloudWinForm*)::SendMessage(::GetParent(hPWnd), WM_HUBBLE_DATA, 0, 20190214);
+			if (pParent)
+			{
+				IXobj* pObj = nullptr;
+				pParent->m_pClientGalaxy->Observe(CComBSTR(""), CComBSTR(""), &pObj);
+			}
 			CComBSTR bstrKey("");
 			g_pCosmos->ObserveGalaxys((__int64)hPWnd, bstrKey, bstrKey, bstrKey, true);
 		}
@@ -1907,7 +1913,7 @@ CGalaxy::~CGalaxy()
 				delete m_pGalaxyCluster;
 		}
 	}
-	for (auto &it : m_mapGalaxyProxy)
+	for (auto& it : m_mapGalaxyProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;
