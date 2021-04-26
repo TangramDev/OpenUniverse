@@ -1685,6 +1685,8 @@ LRESULT CCloudWinForm::OnMdiChildMin(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
+	if (m_pBrowser)
+		m_pBrowser->m_bSZMode = true;
 	if (m_hWnd == (HWND)lParam)
 	{
 		::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 2);

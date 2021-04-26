@@ -407,6 +407,16 @@ namespace Browser {
 		break;
 		case 20210314://TabChange
 		{
+			HWND hActiveWebView = m_pBrowser->GetActiveWebContentWnd();
+			auto it = m_mapChildPage.find(hActiveWebView);
+			if (it != m_mapChildPage.end())
+				m_pVisibleWebView = it->second;
+			else
+			{
+				auto it = g_pCosmos->m_mapWebView.find(hActiveWebView);
+				if (it != g_pCosmos->m_mapWebView.end())
+					m_pVisibleWebView = (CWebView*)it->second;
+			}
 			m_pVisibleWebView->m_bCanShow = false;
 			if (theApp.m_bAppStarting == false && m_pParentXobj)
 			{

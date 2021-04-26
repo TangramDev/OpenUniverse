@@ -335,30 +335,31 @@ public:
 	CString											m_strCurrentXml;
 	CString											m_strDocTemplateID = _T("");
 	CString											m_strHostWebBrowserNodeName = _T("");
-	CEclipseWnd*									m_pWorkBenchFrame;
 
 	IPCMsg*											m_pCurrentIPCMsg;
 	CBKWnd*											m_pBKWnd = nullptr;
-	CCloudWinForm*										m_pParentWinForm = nullptr;
-	CCloudWinForm*										m_pParentMDIWinForm = nullptr;
-	CCloudMDIFrame*										m_pMDIParent = nullptr;
+	CEclipseWnd*									m_pWorkBenchFrame;
+	CCloudWinForm*									m_pParentWinForm = nullptr;
+	CCloudWinForm*									m_pParentMDIWinForm = nullptr;
+	CCloudMDTFrame*									m_pCloudMDTFrame = nullptr;
+	CCloudMDIChild*									m_pCloudMDIChild = nullptr;
+	CCloudMDIFrame*									m_pMDIParent = nullptr;
 	CWebView*										m_pWebPageWnd = nullptr;
 	CXobj*											m_pHostWebBrowserNode = nullptr;
 	CBrowser*										m_pHostWebBrowserWnd = nullptr;
 	CGalaxyCluster*									m_pGalaxyCluster = nullptr;
-	CXobj*											m_pParentXobj = nullptr;
 	CXobj*											m_pWorkXobj = nullptr;
-	CXobj*											m_pContainerNode = nullptr;
+	CXobj*											m_pParentXobj = nullptr;
 	CXobj*											m_pBindingXobj = nullptr;
+	CXobj*											m_pContainerNode = nullptr;
 	GalaxyInfo*										m_pGalaxyInfo = nullptr;
 	CosmosFrameWndInfo*								m_pCosmosFrameWndInfo = nullptr;
 	CWormhole*										m_pWormhole = nullptr;
-
-	CComObject<CXobjCollection>*					m_pRootNodes;
 	map<CString, CXobj*>							m_mapXobj;
 	map<HWND, CWPFView*>							m_mapWPFView;
 	map<HWND, CWPFView*>							m_mapVisibleWPFView;
 	map<IUniverseAppProxy*, CGalaxyProxy*>			m_mapGalaxyProxy;
+	CComObject<CXobjCollection>*					m_pRootNodes;
 
 	void Lock(){}
 	void Unlock(){}
