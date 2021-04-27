@@ -268,6 +268,7 @@ public:
 	CBrowser*								m_pBrowser = nullptr;
 	CWebView*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
+	CCloudWinForm*							m_pOldActiveChild = nullptr;
 	CCloudWinForm*							m_pActiveChild = nullptr;
 	CCloudWinForm*							m_pMDIParent = nullptr;
 	map<HWND, CCloudWinForm*>				m_mapMDIChild;

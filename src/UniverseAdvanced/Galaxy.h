@@ -249,7 +249,6 @@ public:
 	virtual ~CCloudWinForm(void);
 	bool									m_bReady = false;
 	bool									m_bSZMode = false;
-	bool									m_bInitXmlData = false;
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
 	HWND									m_hOwnerWebView = NULL;
@@ -269,10 +268,12 @@ public:
 	CBrowser*								m_pBrowser = nullptr;
 	CWebView*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
+	CCloudWinForm*							m_pOldActiveChild = nullptr;
 	CCloudWinForm*							m_pActiveChild = nullptr;
 	CCloudWinForm*							m_pMDIParent = nullptr;
 	map<HWND, CCloudWinForm*>				m_mapMDIChild;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
+	map<CString, CString>					m_mapData;
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CCloudWinForm)
