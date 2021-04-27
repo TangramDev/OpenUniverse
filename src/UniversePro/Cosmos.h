@@ -365,7 +365,6 @@ private:
 	bool CheckUrl(CString&   url);
 	void AttachXobj(void* pXobjEvents);
 	CString Encode(CString strSRC, BOOL bEnCode);
-	IGalaxyCluster* Observe(HWND, CString strName, CString strKey);
 	IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
 	bool IsMDIClientGalaxyNode(IXobj*);

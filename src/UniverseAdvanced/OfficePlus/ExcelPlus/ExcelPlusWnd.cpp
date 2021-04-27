@@ -453,7 +453,7 @@ namespace OfficePlus
 
 								m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 								m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-								g_pCosmos->m_mapWindowPage[hPWnd] = m_pTaskPaneGalaxyCluster;
+								g_pCosmos->m_mapGalaxyCluster[hPWnd] = m_pTaskPaneGalaxyCluster;
 
 								IGalaxy* pTaskPaneFrame = nullptr;
 								m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hWnd), CComBSTR(L"TaskPane"), &pTaskPaneFrame);

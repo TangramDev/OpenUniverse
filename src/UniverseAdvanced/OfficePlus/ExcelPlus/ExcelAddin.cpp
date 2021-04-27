@@ -493,7 +493,7 @@ namespace OfficePlus
 											m_Wnd.Detach();
 											m_pWorkBook->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 											m_pWorkBook->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-											g_pCosmos->m_mapWindowPage[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
+											g_pCosmos->m_mapGalaxyCluster[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
 											IGalaxy* pTaskPaneFrame = nullptr;
 											m_pWorkBook->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hWnd), CComBSTR(L"TaskPane"), &pTaskPaneFrame);
 											m_pWorkBook->m_pTaskPaneGalaxy = (CGalaxy*)pTaskPaneFrame;
@@ -873,14 +873,14 @@ namespace OfficePlus
 				return;
 			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
 
-			auto it = g_pCosmos->m_mapWindowPage.find(m_hClient);
-			if (it != g_pCosmos->m_mapWindowPage.end())
+			auto it = g_pCosmos->m_mapGalaxyCluster.find(m_hClient);
+			if (it != g_pCosmos->m_mapGalaxyCluster.end())
 				m_pWorkBook->m_pDocGalaxyCluster = (CGalaxyCluster*)it->second;
 			else
 			{
 				m_pWorkBook->m_pDocGalaxyCluster = new CComObject<CGalaxyCluster>();
 				m_pWorkBook->m_pDocGalaxyCluster->m_hWnd = m_hClient;
-				g_pCosmos->m_mapWindowPage[m_hClient] = m_pWorkBook->m_pDocGalaxyCluster;
+				g_pCosmos->m_mapGalaxyCluster[m_hClient] = m_pWorkBook->m_pDocGalaxyCluster;
 			}
 
 			if (m_pWorkBook->m_pDocGalaxyCluster)
@@ -976,7 +976,7 @@ namespace OfficePlus
 										m_Wnd.Detach();
 										m_pWorkBook->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 										m_pWorkBook->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pCosmos->m_mapWindowPage[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
+										g_pCosmos->m_mapGalaxyCluster[hPWnd] = m_pWorkBook->m_pTaskPaneGalaxyCluster;
 
 										IGalaxy* pTaskPaneFrame = nullptr;
 										m_pWorkBook->m_pTaskPaneGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hWnd), CComBSTR(L"TaskPane"), &pTaskPaneFrame);

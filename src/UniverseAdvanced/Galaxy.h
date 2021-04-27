@@ -249,6 +249,7 @@ public:
 	virtual ~CCloudWinForm(void);
 	bool									m_bReady = false;
 	bool									m_bSZMode = false;
+	bool									m_bInitXmlData = false;
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
 	HWND									m_hOwnerWebView = NULL;
@@ -370,7 +371,7 @@ public:
 
 	CTangramXmlParse* UpdateXobj();
 	BOOL Create();
-	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey);
+	CXobj* ObserveInternal(CTangramXmlParse* pParse, CString strKey);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);

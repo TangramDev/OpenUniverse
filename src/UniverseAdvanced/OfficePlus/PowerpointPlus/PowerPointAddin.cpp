@@ -334,14 +334,14 @@ namespace OfficePlus
 								pPntObject->m_hTaskPane = (HWND)hWnd;
 								if (pCosmosPresentation->m_pTaskPaneGalaxyCluster == nullptr)
 								{
-									auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
-									if (it != g_pCosmos->m_mapWindowPage.end())
+									auto it = g_pCosmos->m_mapGalaxyCluster.find(hPWnd);
+									if (it != g_pCosmos->m_mapGalaxyCluster.end())
 										pCosmosPresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 									else
 									{
 										pCosmosPresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 										pCosmosPresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pCosmos->m_mapWindowPage[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
+										g_pCosmos->m_mapGalaxyCluster[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
 									}
 
 									if (pCosmosPresentation->m_pTaskPaneGalaxyCluster)
@@ -564,14 +564,14 @@ namespace OfficePlus
 								pPowerPntWndObj->m_hTaskPane = (HWND)hWnd;
 								if (pCosmosPresentation->m_pTaskPaneGalaxyCluster == nullptr)
 								{
-									auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
-									if (it != g_pCosmos->m_mapWindowPage.end())
+									auto it = g_pCosmos->m_mapGalaxyCluster.find(hPWnd);
+									if (it != g_pCosmos->m_mapGalaxyCluster.end())
 										pCosmosPresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 									else
 									{
 										pCosmosPresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 										pCosmosPresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pCosmos->m_mapWindowPage[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
+										g_pCosmos->m_mapGalaxyCluster[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
 									}
 
 									if (pCosmosPresentation->m_pTaskPaneGalaxyCluster)
@@ -650,14 +650,14 @@ namespace OfficePlus
 										pPowerPntWndObj->m_hTaskPane = (HWND)hWnd;
 										if (pCosmosPresentation->m_pTaskPaneGalaxyCluster == nullptr)
 										{
-											auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
-											if (it != g_pCosmos->m_mapWindowPage.end())
+											auto it = g_pCosmos->m_mapGalaxyCluster.find(hPWnd);
+											if (it != g_pCosmos->m_mapGalaxyCluster.end())
 												pCosmosPresentation->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 											else
 											{
 												pCosmosPresentation->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 												pCosmosPresentation->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-												g_pCosmos->m_mapWindowPage[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
+												g_pCosmos->m_mapGalaxyCluster[hPWnd] = pCosmosPresentation->m_pTaskPaneGalaxyCluster;
 											}
 
 											if (pCosmosPresentation->m_pTaskPaneGalaxyCluster)

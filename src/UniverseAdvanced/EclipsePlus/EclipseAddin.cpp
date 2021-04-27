@@ -108,8 +108,8 @@ CEclipseWnd::~CEclipseWnd(void)
 	if (m_pGalaxyCluster)
 	{
 		HWND hWnd = m_pGalaxyCluster->m_hWnd;
-		auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
-		if (it != g_pCosmos->m_mapWindowPage.end())
+		auto it = g_pCosmos->m_mapGalaxyCluster.find(hWnd);
+		if (it != g_pCosmos->m_mapGalaxyCluster.end())
 		delete m_pGalaxyCluster;
 	}
 	ATLTRACE(_T("delete CEclipseWnd:%x\n"), this);
@@ -405,16 +405,16 @@ void CEclipseWnd::Show(CString strID)
 		if (::IsChild(m_hWnd, m_hClient))
 		{
 			m_strAppProxyID = _T("");
-			auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
+			auto it = g_pCosmos->m_mapGalaxyCluster.find(m_hWnd);
 			if (m_pGalaxyCluster == nullptr)
 			{
-				if (it != g_pCosmos->m_mapWindowPage.end())
+				if (it != g_pCosmos->m_mapGalaxyCluster.end())
 					m_pGalaxyCluster = (CGalaxyCluster*)it->second;
 				else
 				{
 					m_pGalaxyCluster = new CComObject<CGalaxyCluster>();
 					m_pGalaxyCluster->m_hWnd = m_hWnd;
-					g_pCosmos->m_mapWindowPage[m_hWnd] = m_pGalaxyCluster;
+					g_pCosmos->m_mapGalaxyCluster[m_hWnd] = m_pGalaxyCluster;
 
 					for (auto it : g_pCosmos->m_mapCosmosAppProxy)
 					{

@@ -454,18 +454,18 @@ CCosmos::~CCosmos()
 {
 	OutputDebugString(_T("------------------Begin Release CCosmos at Universe.dll------------------------\n"));
 
-	if (m_mapWindowPage.size())
+	if (m_mapGalaxyCluster.size())
 	{
-		auto it = m_mapWindowPage.begin();
-		while (it != m_mapWindowPage.end())
+		auto it = m_mapGalaxyCluster.begin();
+		while (it != m_mapGalaxyCluster.end())
 		{
 			CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)it->second;
 			delete pGalaxyCluster;
-			m_mapWindowPage.erase(it);
-			if (m_mapWindowPage.size())
-				it = m_mapWindowPage.begin();
+			m_mapGalaxyCluster.erase(it);
+			if (m_mapGalaxyCluster.size())
+				it = m_mapGalaxyCluster.begin();
 			else
-				it = m_mapWindowPage.end();
+				it = m_mapGalaxyCluster.end();
 		}
 	}
 	while (m_mapWndXobjCollection.size())
@@ -1166,14 +1166,14 @@ void CCosmos::ExitInstance()
 	}
 	m_mapThreadInfo.erase(m_mapThreadInfo.begin(), m_mapThreadInfo.end());
 	_clearObjects();
-	if (m_mapWindowPage.size() > 1)
+	if (m_mapGalaxyCluster.size() > 1)
 	{
-		for (auto it2 = m_mapWindowPage.begin(); it2 != m_mapWindowPage.end(); ++it2)
+		for (auto it2 = m_mapGalaxyCluster.begin(); it2 != m_mapGalaxyCluster.end(); ++it2)
 		{
 			delete it2->second;
 		}
 	}
-	m_mapWindowPage.clear();
+	m_mapGalaxyCluster.clear();
 
 	if (m_mapObjDic.size())
 	{
@@ -1409,7 +1409,6 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		CComQIPtr<IXobj> pParentNode(pInfo->m_pParentDisp);
 		IXobj* pXobj = nullptr;
 		CString str = _T("");
-		m_mapGalaxy2GalaxyCluster[hGalaxy] = pGalaxyCluster;
 		CString strKey = _T("default");
 		str.Format(_T("<%s><cluster><xobj name='%s' /></cluster></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(_pGalaxy->m_strCurrentXml), &pXobj);
@@ -1507,27 +1506,6 @@ IXobj* CCosmos::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 		IXobj* pXobj = nullptr;
 		pGalaxy->Observe(NodeTag.AllocSysString(), strPath.AllocSysString(), &pXobj);
 		return pXobj;
-	}
-	return nullptr;
-};
-
-IGalaxyCluster* CCosmos::Observe(HWND hGalaxy, CString strName, CString strKey)
-{
-	auto it = m_mapGalaxy2GalaxyCluster.find(hGalaxy);
-	if (it != m_mapGalaxy2GalaxyCluster.end())
-	{
-		CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)it->second;
-		IGalaxy* pGalaxy = nullptr;
-		auto it2 = pGalaxyCluster->m_mapGalaxy.find(hGalaxy);
-		if (it2 == pGalaxyCluster->m_mapGalaxy.end())
-			pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((__int64)hGalaxy), CComBSTR(strName), &pGalaxy);
-		else
-			pGalaxy = it2->second;
-		IXobj* pXobj = nullptr;
-		CString str = _T("");
-		str.Format(_T("<default><cluster><xobj name='%s' /></cluster></default>"), strName);
-		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(str), &pXobj);
-		return pGalaxyCluster;
 	}
 	return nullptr;
 };
@@ -1904,7 +1882,7 @@ CXobj* CCosmos::ObserveEx(long hWnd, CString strExXml, CString strXml)
 
 	CXobj* pRootXobj = nullptr;
 	m_pGalaxyCluster = nullptr;
-	pRootXobj = _pGalaxy->ObserveXtmlDocument(m_pParse, m_strCurrentKey);
+	pRootXobj = _pGalaxy->ObserveInternal(m_pParse, m_strCurrentKey);
 	m_strCurrentKey = _T("");
 	if (pRootXobj != nullptr)
 	{
@@ -1936,7 +1914,7 @@ STDMETHODIMP CCosmos::get_RootNodes(IXobjCollection** pXobjColletion)
 
 	m_pRootNodes->m_pXobjs->clear();
 
-	for (auto& it : m_mapWindowPage)
+	for (auto& it : m_mapGalaxyCluster)
 	{
 		CGalaxyCluster* pGalaxy = (CGalaxyCluster*)it.second;
 		for (auto fit : pGalaxy->m_mapGalaxy)
@@ -2570,14 +2548,14 @@ STDMETHODIMP CCosmos::CreateGalaxyCluster(LONGLONG hWnd, IGalaxyCluster** ppGala
 	if (::IsWindow(_hWnd))
 	{
 		CGalaxyCluster* pGalaxyCluster = nullptr;
-		auto it = m_mapWindowPage.find(_hWnd);
-		if (it != m_mapWindowPage.end())
+		auto it = m_mapGalaxyCluster.find(_hWnd);
+		if (it != m_mapGalaxyCluster.end())
 			pGalaxyCluster = (CGalaxyCluster*)it->second;
 		else
 		{
 			pGalaxyCluster = new CComObject<CGalaxyCluster>();
 			pGalaxyCluster->m_hWnd = _hWnd;
-			m_mapWindowPage[_hWnd] = pGalaxyCluster;
+			m_mapGalaxyCluster[_hWnd] = pGalaxyCluster;
 
 			for (auto it : m_mapCosmosAppProxy)
 			{
@@ -3522,8 +3500,8 @@ STDMETHODIMP CCosmos::ObserveGalaxys(LONGLONG hWnd, BSTR bstrGalaxys, BSTR bstrK
 		_strXml += strKey;
 		_strXml += _T(">");
 	}
-	auto it = g_pCosmos->m_mapWindowPage.find((HWND)hWnd);
-	if (it != g_pCosmos->m_mapWindowPage.end())
+	auto it = g_pCosmos->m_mapGalaxyCluster.find((HWND)hWnd);
+	if (it != g_pCosmos->m_mapGalaxyCluster.end())
 	{
 		CString strFrames = OLE2T(bstrGalaxys);
 		CString strKey = OLE2T(bstrKey);
@@ -3581,8 +3559,8 @@ STDMETHODIMP CCosmos::DeletePage(LONGLONG GalaxyClusterHandle)
 {
 	m_bDeleteGalaxyCluster = TRUE;
 	HWND hPage = (HWND)GalaxyClusterHandle;
-	auto it = g_pCosmos->m_mapWindowPage.find(hPage);
-	if (it != g_pCosmos->m_mapWindowPage.end())
+	auto it = g_pCosmos->m_mapGalaxyCluster.find(hPage);
+	if (it != g_pCosmos->m_mapGalaxyCluster.end())
 	{
 		CGalaxyCluster* pGalaxyCluster = (CGalaxyCluster*)it->second;
 		auto it2 = pGalaxyCluster->m_mapGalaxy.begin();
@@ -4581,14 +4559,14 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 			hPWnd = _hPWnd;
 		}
 		CGalaxyCluster* pGalaxyCluster = nullptr;
-		auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
-		if (it != g_pCosmos->m_mapWindowPage.end())
+		auto it = g_pCosmos->m_mapGalaxyCluster.find(hPWnd);
+		if (it != g_pCosmos->m_mapGalaxyCluster.end())
 			pGalaxyCluster = (CGalaxyCluster*)it->second;
 		else
 		{
 			pGalaxyCluster = new CComObject<CGalaxyCluster>();
 			pGalaxyCluster->m_hWnd = hPWnd;
-			g_pCosmos->m_mapWindowPage[hPWnd] = pGalaxyCluster;
+			g_pCosmos->m_mapGalaxyCluster[hPWnd] = pGalaxyCluster;
 		}
 
 		m_pGalaxy = new CComObject<CGalaxy>();
@@ -4781,17 +4759,17 @@ void CCosmos::OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTa
 			{
 				pBrowser->m_bSZMode = true;
 				theApp.m_bAppStarting = false;
-				if(pBrowser->m_pMDIParent)
+				if (pBrowser->m_pMDIParent)
 					pBrowser->m_pMDIParent->m_bCreateNewDoc = false;
 				pBrowser->m_pVisibleWebView->m_bCanShow = true;
 				::PostMessage(hBrowser, WM_BROWSERLAYOUT, 1, 7);
 			}
-			else if (::IsWindow(m_hWaitTabWebPageWnd)&& m_nWaitTabCounts)
+			else if (::IsWindow(m_hWaitTabWebPageWnd) && m_nWaitTabCounts)
 			{
 				m_nWaitTabCounts--;
 				if (m_nWaitTabCounts == 0)
 				{
-					::PostMessage(m_hWaitTabWebPageWnd, WM_COSMOSMSG, 20210411,1);
+					::PostMessage(m_hWaitTabWebPageWnd, WM_COSMOSMSG, 20210411, 1);
 				}
 			}
 		}

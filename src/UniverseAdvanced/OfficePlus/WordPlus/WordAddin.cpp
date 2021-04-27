@@ -83,14 +83,14 @@ namespace OfficePlus
 			CWordDocument* pWordDoc = (CWordDocument*)wParam;
 			CWordObject* pWordWnd = pWordDoc->begin()->second;
 
-			auto it = g_pCosmos->m_mapWindowPage.find(pWordWnd->m_hChildClient);
-			if (it != g_pCosmos->m_mapWindowPage.end())
+			auto it = g_pCosmos->m_mapGalaxyCluster.find(pWordWnd->m_hChildClient);
+			if (it != g_pCosmos->m_mapGalaxyCluster.end())
 				pWordDoc->m_pDocGalaxyCluster = (CGalaxyCluster*)it->second;
 			else
 			{
 				pWordDoc->m_pDocGalaxyCluster = new CComObject<CGalaxyCluster>();
 				pWordDoc->m_pDocGalaxyCluster->m_hWnd = pWordWnd->m_hChildClient;
-				g_pCosmos->m_mapWindowPage[pWordWnd->m_hChildClient] = pWordWnd->m_pGalaxyCluster;
+				g_pCosmos->m_mapGalaxyCluster[pWordWnd->m_hChildClient] = pWordWnd->m_pGalaxyCluster;
 			}
 
 			if (pWordDoc->m_pDocGalaxyCluster)
@@ -156,14 +156,14 @@ namespace OfficePlus
 								CWordDocument* m_pDoc = pWordWnd->m_pWordPlusDoc;
 								if (m_pDoc->m_pTaskPaneGalaxyCluster == nullptr)
 								{
-									auto it = g_pCosmos->m_mapWindowPage.find(hPWnd);
-									if (it != g_pCosmos->m_mapWindowPage.end())
+									auto it = g_pCosmos->m_mapGalaxyCluster.find(hPWnd);
+									if (it != g_pCosmos->m_mapGalaxyCluster.end())
 										m_pDoc->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 									else
 									{
 										m_pDoc->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 										m_pDoc->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										g_pCosmos->m_mapWindowPage[hPWnd] = m_pDoc->m_pTaskPaneGalaxyCluster;
+										g_pCosmos->m_mapGalaxyCluster[hPWnd] = m_pDoc->m_pTaskPaneGalaxyCluster;
 									}
 
 									if (m_pDoc->m_pTaskPaneGalaxyCluster)
@@ -601,14 +601,14 @@ namespace OfficePlus
 								CWordDocument* m_pDoc = pWnd->m_pWordPlusDoc;
 								if (m_pDoc->m_pTaskPaneGalaxyCluster == nullptr)
 								{
-									auto it = m_mapWindowPage.find(hPWnd);
-									if (it != m_mapWindowPage.end())
+									auto it = m_mapGalaxyCluster.find(hPWnd);
+									if (it != m_mapGalaxyCluster.end())
 										m_pDoc->m_pTaskPaneGalaxyCluster = (CGalaxyCluster*)it->second;
 									else
 									{
 										m_pDoc->m_pTaskPaneGalaxyCluster = new CComObject<CGalaxyCluster>();
 										m_pDoc->m_pTaskPaneGalaxyCluster->m_hWnd = hPWnd;
-										m_mapWindowPage[hPWnd] = m_pDoc->m_pTaskPaneGalaxyCluster;
+										m_mapGalaxyCluster[hPWnd] = m_pDoc->m_pTaskPaneGalaxyCluster;
 									}
 
 									if (m_pDoc->m_pTaskPaneGalaxyCluster)

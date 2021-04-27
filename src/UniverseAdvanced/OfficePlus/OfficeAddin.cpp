@@ -503,14 +503,14 @@ namespace OfficePlus
 					HWND hChild = ::GetWindow(hWnd, GW_CHILD);
 					IGalaxy* pGalaxy = nullptr;
 					CGalaxyCluster* pGalaxyCluster = nullptr;
-					auto it = g_pCosmos->m_mapWindowPage.find(hChild);
-					if (it != g_pCosmos->m_mapWindowPage.end())
+					auto it = g_pCosmos->m_mapGalaxyCluster.find(hChild);
+					if (it != g_pCosmos->m_mapGalaxyCluster.end())
 						pGalaxyCluster = (CGalaxyCluster*)it->second;
 					else
 					{
 						pGalaxyCluster = new CComObject<CGalaxyCluster>();
 						pGalaxyCluster->m_hWnd = hChild;
-						g_pCosmos->m_mapWindowPage[hChild] = pGalaxyCluster;
+						g_pCosmos->m_mapGalaxyCluster[hChild] = pGalaxyCluster;
 					}
 
 					pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)hChild), CComBSTR(L"UserForm"), &pGalaxy);
@@ -718,14 +718,14 @@ namespace OfficePlus
 			m_hClient = ::CreateWindowEx(NULL, L"Tangram Remote Helper Window", _T("Tangram Office Plus Addin Helper Window"), WS_CHILD, 0, 0, 0, 0, (HWND)m_hForm, NULL, theApp.m_hInstance, NULL);
 			m_hChildClient = ::CreateWindowEx(NULL, L"Tangram Remote Helper Window", _T("Tangram Excel Helper Window"), WS_CHILD, 0, 0, 0, 0, (HWND)m_hClient, NULL, AfxGetInstanceHandle(), NULL);
 
-			auto it = g_pCosmos->m_mapWindowPage.find(m_hClient);
-			if (it != g_pCosmos->m_mapWindowPage.end())
+			auto it = g_pCosmos->m_mapGalaxyCluster.find(m_hClient);
+			if (it != g_pCosmos->m_mapGalaxyCluster.end())
 				m_pGalaxyCluster = (CGalaxyCluster*)it->second;
 			else
 			{
 				m_pGalaxyCluster = new CComObject<CGalaxyCluster>();
 				m_pGalaxyCluster->m_hWnd = m_hClient;
-				g_pCosmos->m_mapWindowPage[m_hClient] = m_pGalaxyCluster;
+				g_pCosmos->m_mapGalaxyCluster[m_hClient] = m_pGalaxyCluster;
 			}
 
 			if (m_pGalaxyCluster == nullptr)

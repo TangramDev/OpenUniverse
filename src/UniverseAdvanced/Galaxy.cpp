@@ -1167,6 +1167,7 @@ CCloudWinForm::CCloudWinForm(void)
 {
 	m_nState = -1;
 	m_bMdiForm = false;
+	m_bInitXmlData = false;
 	m_pBKWnd = nullptr;
 	m_pWormhole = nullptr;
 	m_pOwnerHtmlWnd = nullptr;
@@ -1620,25 +1621,31 @@ LRESULT CCloudWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 		//	}
 		//}
 	}
-	CTangramXmlParse parse;
-	if (parse.LoadXml(m_strXml) || parse.LoadFile(m_strXml))
+	//if (m_bInitXmlData == false)
 	{
-		CTangramXmlParse* pParse = parse.GetChild(strGalaxyName);
-		if (pParse)
+		CTangramXmlParse parse;
+		if (parse.LoadXml(m_strXml) || parse.LoadFile(m_strXml))
 		{
-			CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
-			if (pParse2)
+			CTangramXmlParse* pParse = parse.GetChild(strGalaxyName);
+			if (pParse)
 			{
-				auto it = g_pCosmos->m_mapValInfo.find(strIndex);
-				if (it != g_pCosmos->m_mapValInfo.end())
+				CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
+				if (pParse2)
 				{
-					g_pCosmos->m_mapValInfo.erase(it);
+					auto it = g_pCosmos->m_mapValInfo.find(strIndex);
+					if (it != g_pCosmos->m_mapValInfo.end())
+					{
+						g_pCosmos->m_mapValInfo.erase(it);
+					}
+					m_bInitXmlData = true;
+					g_pCosmos->m_mapValInfo[strIndex] = CComVariant(pParse2->xml());
+					return 1;
 				}
-				g_pCosmos->m_mapValInfo[strIndex] = CComVariant(pParse2->xml());
-				return 1;
 			}
 		}
 	}
+	//else
+	//	return 1;
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
@@ -1734,8 +1741,8 @@ LRESULT CCloudWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lPara
 		m_pBKWnd->SubclassWindow(hwnd);
 		m_pBKWnd->m_hChild = ::CreateWindowEx(NULL, _T("Cosmos Xobj Class"), _T(""), WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0, 0, 0, hwnd, 0, theApp.m_hInstance, nullptr);
 		CGalaxyCluster* pGalaxyCluster = nullptr;
-		auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
-		if (it != g_pCosmos->m_mapWindowPage.end())
+		auto it = g_pCosmos->m_mapGalaxyCluster.find(m_hWnd);
+		if (it != g_pCosmos->m_mapGalaxyCluster.end())
 			pGalaxyCluster = (CGalaxyCluster*)it->second;
 		if (pGalaxyCluster)
 		{
@@ -2055,7 +2062,7 @@ HWND CGalaxy::GetWinForm(HWND hForm)
 	return hForm;
 }
 
-CXobj* CGalaxy::ObserveXtmlDocument(CTangramXmlParse* _pParse, CString strKey)
+CXobj* CGalaxy::ObserveInternal(CTangramXmlParse* _pParse, CString strKey)
 {
 	m_pWorkXobj = new CComObject<CXobj>;
 	m_pWorkXobj->m_pRootObj = m_pWorkXobj;
@@ -2250,11 +2257,11 @@ STDMETHODIMP CGalaxy::ModifyHost(LONGLONG hHostWnd)
 	m_pWorkXobj->m_pHostWnd->GetWindowRect(&rc);
 	if (::IsWindow(m_hWnd)) {
 		HWND hTangramWnd = m_pGalaxyCluster->m_hWnd;
-		auto it = g_pCosmos->m_mapWindowPage.find(hTangramWnd);
-		if (it != g_pCosmos->m_mapWindowPage.end())
-			g_pCosmos->m_mapWindowPage.erase(it);
+		auto it = g_pCosmos->m_mapGalaxyCluster.find(hTangramWnd);
+		if (it != g_pCosmos->m_mapGalaxyCluster.end())
+			g_pCosmos->m_mapGalaxyCluster.erase(it);
 		m_pGalaxyCluster->m_hWnd = hTangramWnd;
-		g_pCosmos->m_mapWindowPage[hTangramWnd] = m_pGalaxyCluster;
+		g_pCosmos->m_mapGalaxyCluster[hTangramWnd] = m_pGalaxyCluster;
 
 		auto it2 = m_pGalaxyCluster->m_mapGalaxy.find(m_hWnd);
 		if (it2 != m_pGalaxyCluster->m_mapGalaxy.end()) {

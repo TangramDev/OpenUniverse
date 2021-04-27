@@ -714,10 +714,6 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		else if (g_pCosmos->m_pCLRProxy)
 			g_pCosmos->m_pCLRProxy->WindowDestroy(hWnd);
 
-		auto it = g_pCosmos->m_mapGalaxy2GalaxyCluster.find(hWnd);
-		if (it != g_pCosmos->m_mapGalaxy2GalaxyCluster.end())
-			g_pCosmos->m_mapGalaxy2GalaxyCluster.erase(it);
-
 		auto itXobj = g_pCosmos->m_mapXobj.find(hWnd);
 		if (itXobj != g_pCosmos->m_mapXobj.end())
 		{
@@ -1367,8 +1363,8 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 					HWND hWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, hClient);
 					if (::IsWindow(hWnd))
 					{
-						auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
-						if (it != g_pCosmos->m_mapWindowPage.end())
+						auto it = g_pCosmos->m_mapGalaxyCluster.find(hWnd);
+						if (it != g_pCosmos->m_mapGalaxyCluster.end())
 							break;
 						if (g_pCosmos->m_mapDocTemplate.size() == 0)
 						{
@@ -1455,7 +1451,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									{
 										pGalaxyCluster = new CComObject<CGalaxyCluster>();
 										pGalaxyCluster->m_hWnd = hWnd;
-										g_pCosmos->m_mapWindowPage[hWnd] = pGalaxyCluster;
+										g_pCosmos->m_mapGalaxyCluster[hWnd] = pGalaxyCluster;
 
 										for (auto& it2 : g_pCosmos->m_mapCosmosAppProxy)
 										{

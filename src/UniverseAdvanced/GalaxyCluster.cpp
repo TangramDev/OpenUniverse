@@ -79,12 +79,12 @@ CGalaxyCluster::~CGalaxyCluster()
 
 	m_mapGalaxy.erase(m_mapGalaxy.begin(), m_mapGalaxy.end());
 	m_mapXobj.erase(m_mapXobj.begin(), m_mapXobj.end());
-	auto it = g_pCosmos->m_mapWindowPage.find(m_hWnd);
-	if (it != g_pCosmos->m_mapWindowPage.end())
+	auto it = g_pCosmos->m_mapGalaxyCluster.find(m_hWnd);
+	if (it != g_pCosmos->m_mapGalaxyCluster.end())
 	{
-		g_pCosmos->m_mapWindowPage.erase(it);
+		g_pCosmos->m_mapGalaxyCluster.erase(it);
 	}
-	if (g_pCosmos->m_mapWindowPage.size() == 0)
+	if (g_pCosmos->m_mapGalaxyCluster.size() == 0)
 		g_pCosmos->Close();
 
 	for (auto &it : m_mapGalaxyClusterProxy)
@@ -584,14 +584,14 @@ STDMETHODIMP CGalaxyCluster::get_Parent(IGalaxyCluster** pVal)
 	if (hWnd == NULL)
 		return S_OK;
 
-	auto it = g_pCosmos->m_mapWindowPage.find(hWnd);
-	while (it == g_pCosmos->m_mapWindowPage.end())
+	auto it = g_pCosmos->m_mapGalaxyCluster.find(hWnd);
+	while (it == g_pCosmos->m_mapGalaxyCluster.end())
 	{
 		hWnd = ::GetParent(hWnd);
 		if (hWnd == NULL)
 			return S_OK;
-		it = g_pCosmos->m_mapWindowPage.find(hWnd);
-		if (it != g_pCosmos->m_mapWindowPage.end())
+		it = g_pCosmos->m_mapGalaxyCluster.find(hWnd);
+		if (it != g_pCosmos->m_mapGalaxyCluster.end())
 		{
 			*pVal = it->second;
 			return S_OK;

@@ -672,24 +672,24 @@ namespace CommonUniverse {
 		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
 
 		map<CString, IDispatch*>				m_mapObjDic;
-		map<HWND, IGalaxyCluster*>				m_mapGalaxy2GalaxyCluster;
-		map<HWND, IGalaxyCluster*>				m_mapWindowPage;
 		map<CString, CComVariant>				m_mapValInfo;
 		map<CString, ICosmos*>					m_mapRemoteCosmos;
 		map<CString, IUniverseAppProxy*>		m_mapCosmosAppProxy;
 		map<CString, ICosmosWindowProvider*>	m_mapWindowProvider;
-		map<HWND, CWebPageImpl*>				m_mapWebView;
-		map<HWND, IXobj*>						m_mapXobj;
-		map<HWND, IWebPage*>					m_mapFormWebPage;
-		map<HWND, CosmosFrameWndInfo*>			m_mapCosmosFrameWndInfo;
-		map<HWND, IBrowser*>					m_mapBrowserWnd;
-		map<HWND, IWorkBenchWindow*>			m_mapWorkBenchWnd;
-		map<void*, IUnknown*>					m_mapObjects;
-		map<IDispatch*, CString>				m_mapObjEventDic;
 		map<CString, CString>					m_mapJavaNativeInfo;
 		map<CString, CString>					m_mapCreatingWorkBenchInfo;
+
+		map<HWND, IXobj*>						m_mapXobj;
 		map<HWND, CString>						m_mapUIData;
 		map<HWND, CString>						m_mapCtrlTag;
+		map<HWND, CWebPageImpl*>				m_mapWebView;
+		map<HWND, IBrowser*>					m_mapBrowserWnd;
+		map<HWND, IWebPage*>					m_mapFormWebPage;
+		map<HWND, IWorkBenchWindow*>			m_mapWorkBenchWnd;
+		map<HWND, IGalaxyCluster*>				m_mapGalaxyCluster;
+		map<HWND, CosmosFrameWndInfo*>			m_mapCosmosFrameWndInfo;
+		map<void*, IUnknown*>					m_mapObjects;
+		map<IDispatch*, CString>				m_mapObjEventDic;
 
 		virtual void BrowserAppStart() {}
 		virtual IGalaxy* ConnectGalaxyCluster(HWND, CString, IGalaxyCluster* pGalaxyCluster, GalaxyInfo*) { return nullptr; }

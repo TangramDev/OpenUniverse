@@ -351,6 +351,8 @@ CString CXobj::_GetNames(CXobj* pXobj)
 
 CWebView* CXobj::GetHtmlWnd()
 {
+	if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
+		return m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	if (m_pRootObj)
 	{
 		HWND hPWnd = m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;

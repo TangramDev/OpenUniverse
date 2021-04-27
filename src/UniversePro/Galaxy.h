@@ -268,6 +268,7 @@ public:
 	CWebView*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
+	map<CString, CString>					m_mapData;
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CCloudWinForm)
@@ -370,7 +371,7 @@ public:
 
 	CTangramXmlParse* UpdateXobj();
 	BOOL Create();
-	CXobj* ObserveXtmlDocument(CTangramXmlParse* pParse, CString strKey);
+	CXobj* ObserveInternal(CTangramXmlParse* pParse, CString strKey);
 
 	STDMETHOD(get_GalaxyXML)(BSTR* pVal);
 	STDMETHOD(ModifyHost)(LONGLONG hHostWnd);
