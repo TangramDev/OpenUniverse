@@ -1211,6 +1211,8 @@ LRESULT CCloudWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 LRESULT CCloudWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
+	if (m_pMDIParent)
+		m_pMDIParent->m_hMDIChildBeingClosed = m_hWnd;
 	if (g_pCosmos->m_mapBrowserWnd.size())
 	{
 		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
@@ -1441,6 +1443,12 @@ LRESULT CCloudWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				m_pOwnerHtmlWnd->m_mapWinForm.erase(it);
 			}
 		}
+	}
+	if (m_pMDIParent)
+	{
+		auto it = m_pMDIParent->m_mapMDIChild.find(m_hWnd);
+		if (it != m_pMDIParent->m_mapMDIChild.end())
+			m_pMDIParent->m_mapMDIChild.erase(it);
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
@@ -1715,7 +1723,16 @@ LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		m_pBrowser->m_bSZMode = true;
 	if (m_hWnd == (HWND)lParam)
 	{
-		::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 2);
+		if (m_pMDIParent)
+		{
+			m_pMDIParent->m_pActiveChild = this;
+			if (m_hMDIChildBeingClosed == NULL)
+				::SendMessage((HWND)lParam, WM_HUBBLE_DATA, 0, 2);
+			else
+			{
+				TRACE("\n");
+			}
+		}
 	}
 	else
 		if (lParam == 0)
@@ -1819,7 +1836,8 @@ LRESULT CCloudWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			auto it = g_pCosmos->m_mapWinForm.find(hPWnd);
 			if (it != g_pCosmos->m_mapWinForm.end())
 			{
-				CCloudWinForm* pMdiParent = it->second;
+				m_pMDIParent = it->second;
+				m_pMDIParent->m_mapMDIChild[m_hWnd] = this;
 				m_pOwnerHtmlWnd = it->second->m_pOwnerHtmlWnd;
 			}
 		}
@@ -1856,6 +1874,11 @@ LRESULT CCloudWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 void CCloudWinForm::OnFinalMessage(HWND hWnd)
 {
+	if (m_pMDIParent)
+	{
+		if (m_pMDIParent->m_hMDIChildBeingClosed == hWnd)
+			m_pMDIParent->m_hMDIChildBeingClosed = nullptr;
+	}
 	auto it = g_pCosmos->m_mapFormWebPage.find(hWnd);
 	if (it != g_pCosmos->m_mapFormWebPage.end())
 		g_pCosmos->m_mapFormWebPage.erase(it);

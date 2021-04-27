@@ -253,6 +253,7 @@ public:
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
 	HWND									m_hOwnerWebView = NULL;
+	HWND									m_hMDIChildBeingClosed = NULL;
 	BOOL									m_bMdiForm;
 	BOOL									m_bMainForm = false;
 	CString									m_strKey;
@@ -268,6 +269,9 @@ public:
 	CBrowser*								m_pBrowser = nullptr;
 	CWebView*								m_pOwnerHtmlWnd;
 	CWormhole*								m_pWormhole;
+	CCloudWinForm*							m_pActiveChild = nullptr;
+	CCloudWinForm*							m_pMDIParent = nullptr;
+	map<HWND, CCloudWinForm*>				m_mapMDIChild;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
 	void SendMessage();
 
