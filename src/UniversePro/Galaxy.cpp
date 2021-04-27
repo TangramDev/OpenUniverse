@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104260068
+ *           Web Runtime for Application - Version 1.0.1.202104270069
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1645,35 +1645,6 @@ LRESULT CCloudWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	CString strGalaxyName = (LPCTSTR)wParam;
 	CString currentKey = (LPCTSTR)lParam;
 	CString strIndex = strGalaxyName + L"_" + currentKey;
-	if (m_bMdiForm)
-	{
-		//auto it = m_mapKey.find(currentKey);
-		//if (it != m_mapKey.end())
-		//{
-		//	CString strXml = it->second;
-		//	CTangramXmlParse parse;
-		//	if (parse.LoadXml(strXml))
-		//	{
-		//		CTangramXmlParse* pParse = parse.GetChild(strGalaxyName);
-		//		if (pParse)
-		//		{
-		//			CTangramXmlParse* pParse2 = pParse->GetChild(currentKey);
-		//			if (pParse2)
-		//			{
-		//				CString s = pParse2->xml();
-		//				//LRESULT res = (LRESULT)LPSTR(LPCTSTR(s));
-		//				auto it = g_pCosmos->m_mapValInfo.find(strIndex);
-		//				if (it != g_pCosmos->m_mapValInfo.end())
-		//				{
-		//					g_pCosmos->m_mapValInfo.erase(it);
-		//				}
-		//				g_pCosmos->m_mapValInfo[strIndex] = CComVariant(s);
-		//				return 1;
-		//			}
-		//		}
-		//	}
-		//}
-	}
 	CTangramXmlParse parse;
 	if (parse.LoadXml(m_strXml) || parse.LoadFile(m_strXml))
 	{

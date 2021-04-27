@@ -10,7 +10,7 @@
  *     Silenio Quarti
  *******************************************************************************/
  /********************************************************************************
-  *           Web Runtime for Application - Version 1.0.1.202104260068           *
+  *           Web Runtime for Application - Version 1.0.1.202104270069           *
   ********************************************************************************
   * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
   * There are Three Key Features of Webruntime:
