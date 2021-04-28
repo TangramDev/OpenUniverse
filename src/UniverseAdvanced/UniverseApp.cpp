@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104270069           *
+ *           Web Runtime for Application - Version 1.0.1.202104280070           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -421,17 +421,6 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 				g_pCosmos->m_pCLRProxy->CosmosAction(_T("<begin_quit_eclipse/>"), nullptr);
 			}
 
-			//for (auto &it : g_pCosmos->m_mapBKFrame)
-			//{
-			//	HWND hWnd = ::GetParent(it.first);
-			//	IGalaxy* pGalaxy = nullptr;
-			//	g_pCosmos->GetGalaxy((__int64)::GetParent(hWnd), &pGalaxy);
-			//	CGalaxy* _pGalaxy = (CGalaxy*)pGalaxy;
-			//	if (_pGalaxy)
-			//		_pGalaxy->m_pBKWnd = nullptr;
-			//	::DestroyWindow(::GetParent(it.first));
-			//}
-
 			if (::IsWindow(g_pCosmos->m_hHostBrowserWnd))
 			{
 				::SendMessage(g_pCosmos->m_hHostBrowserWnd, WM_CLOSE, 0, 0);
@@ -520,7 +509,19 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 		{
 			CCloudWinForm* pWnd = new CCloudWinForm();
 			g_pCosmos->m_hFormNodeWnd = NULL;
-			g_pCosmos->m_hFormNodeWnd = (HWND)wParam;
+			HWND hWnd = (HWND)wParam;
+			g_pCosmos->m_hFormNodeWnd = hWnd;
+			if (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
+			{
+				HWND hPWnd = ::GetParent(::GetParent(g_pCosmos->m_hFormNodeWnd));
+				auto it = g_pCosmos->m_mapWinForm.find(hPWnd);
+				if (it != g_pCosmos->m_mapWinForm.end())
+				{
+					pWnd->m_pMDIParent = it->second;
+					pWnd->m_pMDIParent->m_mapMDIChild[hWnd] = pWnd;
+					pWnd->m_pOwnerHtmlWnd = it->second->m_pOwnerHtmlWnd;
+				}
+			}
 			pWnd->SubclassWindow((HWND)wParam);
 			::PostMessage(g_pCosmos->m_hFormNodeWnd, WM_WINFORMCREATED, 0, 0);
 		}

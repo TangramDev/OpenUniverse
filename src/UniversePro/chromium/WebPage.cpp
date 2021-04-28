@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104270069           *
+ *           Web Runtime for Application - Version 1.0.1.202104280070           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1675,7 +1675,13 @@ namespace Browser {
 								CCloudWinForm* pForm = (CCloudWinForm*)::SendMessage(hwnd, WM_HUBBLE_DATA, 0, 20190214);
 								if (pForm)
 								{
-									pForm->m_pOwnerHtmlWnd = this;
+									HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
+									auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+									if (it != g_pCosmos->m_mapBrowserWnd.end())
+									{
+										pForm->m_pOwnerHtmlWnd = this;
+										pForm->m_pBrowser = (CBrowser*)it->second;
+									}
 								}
 							}
 						}
@@ -1791,10 +1797,15 @@ namespace Browser {
 			if (l == 0)
 			{
 				CCloudWinForm* pWnd = new CCloudWinForm();
-				g_pCosmos->m_hFormNodeWnd = NULL;
 				g_pCosmos->m_hFormNodeWnd = (HWND)hwnd;
 				pWnd->SubclassWindow(hwnd);
-				pWnd->m_pOwnerHtmlWnd = this;
+				HWND hBrowser = m_pChromeRenderFrameHost->GetHostBrowserWnd();
+				auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
+				if (it != g_pCosmos->m_mapBrowserWnd.end())
+				{
+					pWnd->m_pOwnerHtmlWnd = this;
+					pWnd->m_pBrowser = (CBrowser*)it->second;
+				}
 				g_pCosmos->m_mapFormWebPage[hwnd] = this;
 				m_mapWinForm[hwnd] = pWnd;
 				::PostMessage(g_pCosmos->m_hFormNodeWnd, WM_WINFORMCREATED, 0, 0);
