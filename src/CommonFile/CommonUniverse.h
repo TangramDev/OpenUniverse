@@ -536,6 +536,7 @@ namespace CommonUniverse {
 		virtual CString QueryDocType(HWND hWnd) { return _T(""); }
 		virtual CString QueryWndClassName(HWND hWnd) { return _T(""); }
 		virtual CString QueryParentInfo(HWND hPWnd, void* lpInfo) { return _T(""); }
+		virtual HWND GetFrameWnd(HWND hWnd, int& nType) { return NULL; }
 	};
 
 	class ICosmosCLRImpl
@@ -731,6 +732,7 @@ namespace CommonUniverse {
 		virtual CTabStatsTrackerDelegate* SetTabStatsTrackerDelegate() { return nullptr; }
 		virtual void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle) {}
 		virtual void OnCLRHostExit() {}
+		virtual void ConnectMsgLoop(HWND hMsg) {}
 	};
 
 	class ICosmosWindowProvider
@@ -792,7 +794,6 @@ namespace CommonUniverse {
 	class ICosmosDelegate {
 	public:
 		ICosmosDelegate() {
-			m_hMsgWnd = nullptr;
 			m_pJVM = nullptr;
 			m_pJVMenv = nullptr;
 			systemClass = nullptr;
@@ -803,7 +804,6 @@ namespace CommonUniverse {
 		virtual ~ICosmosDelegate() {
 		}
 
-		HWND				m_hMsgWnd;
 		JavaVM*				m_pJVM;
 		JNIEnv*				m_pJVMenv;
 		jclass				systemClass;

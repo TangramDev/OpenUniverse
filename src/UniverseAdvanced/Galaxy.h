@@ -252,7 +252,7 @@ public:
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
 	HWND									m_hOwnerWebView = NULL;
-	HWND									m_hMDIChildBeingClosed = NULL;
+	HWND									m_hMDIChildBeingClosedOrMinimized = NULL;
 	BOOL									m_bMdiForm;
 	BOOL									m_bMainForm = false;
 	CString									m_strKey;

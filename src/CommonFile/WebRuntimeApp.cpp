@@ -753,12 +753,6 @@ namespace CommonUniverse
 					g_pCosmosImpl->InserttoDataMap(1, m_strProviderID, static_cast<ICosmosWindowProvider*>(this));
 				}
 			}
-			//if (::IsWindow(g_pCosmosImpl->m_hCosmosWnd))
-			//{
-			//	CTangramHelperWnd* pWnd = new CTangramHelperWnd();
-			//	pWnd->SubclassWindow(g_pCosmosImpl->m_hCosmosWnd);
-			//	m_pMainWnd = pWnd;
-			//}
 		}
 		return true;
 	}
@@ -795,6 +789,28 @@ namespace CommonUniverse
 			}
 		}
 		return _T("");
+	}
+	
+	HWND CWebRuntimeApp::GetFrameWnd(HWND hWnd, int& nType)
+	{
+		CWnd* pWnd = CWnd::FromHandle(hWnd);
+		if (pWnd)
+		{
+			CFrameWnd* pFrame = pWnd->GetParentFrame();
+			if (pFrame)
+			{
+				if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+					nType = 1;
+				else if (pFrame->IsKindOf(RUNTIME_CLASS(CMDIChildWnd)))
+					nType = 2;
+				else if (pFrame->IsKindOf(RUNTIME_CLASS(CMiniFrameWnd)))
+					nType = 4;
+				else
+					nType = 3;
+				return pFrame->m_hWnd;
+			}
+		}
+		return NULL; 
 	}
 
 	HWND CWebRuntimeApp::QueryWndInfo(QueryType nType, HWND hWnd)

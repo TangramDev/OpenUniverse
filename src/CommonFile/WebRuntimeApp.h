@@ -184,7 +184,8 @@ namespace CommonUniverse
 		virtual CString QueryDocType(HWND hWnd);
 		virtual bool EclipseAppInit() { return false; };
 		virtual bool SetFrameCaption(HWND hWnd, CString strCaption);
-		virtual CString CWebRuntimeApp::QueryParentInfo(HWND hPWnd, void* lpInfo);
+		virtual CString QueryParentInfo(HWND hPWnd, void* lpInfo);
+		virtual HWND GetFrameWnd(HWND hWnd, int& nType);
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);

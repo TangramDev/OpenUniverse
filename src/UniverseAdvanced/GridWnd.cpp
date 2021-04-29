@@ -347,8 +347,8 @@ void CGridWnd::StartTracking(int ht)
 	HWND hWnd = m_pXobj->m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
 	bool bMdiChild = (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD);
 	ModifyStyle(WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0);
-	if (bMdiChild || ::GetParent(hWnd) == NULL)
-		::BringWindowToTop(hWnd);
+	//if (bMdiChild || ::GetParent(hWnd) == NULL)
+	//	::BringWindowToTop(hWnd);
 
 	GetInsideRect(m_rectLimit);
 

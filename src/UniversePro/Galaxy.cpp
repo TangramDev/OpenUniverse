@@ -1212,7 +1212,7 @@ LRESULT CCloudWinForm::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 LRESULT CCloudWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
 	if (m_pMDIParent)
-		m_pMDIParent->m_hMDIChildBeingClosed = m_hWnd;
+		m_pMDIParent->m_hMDIChildBeingClosedOrMinimized = m_hWnd;
 	if (g_pCosmos->m_mapBrowserWnd.size())
 	{
 		CSession* pSession = (CSession*)::GetWindowLongPtr(m_hWnd, GWLP_USERDATA);
@@ -1498,7 +1498,7 @@ LRESULT CCloudWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		{
 			if (m_pActiveChild && ::IsWindow(m_pActiveChild->m_hWnd))
 			{
-				m_hMDIChildBeingClosed = NULL;
+				m_hMDIChildBeingClosedOrMinimized = NULL;
 				::PostMessage(m_pActiveChild->m_hWnd, WM_HUBBLE_DATA, 0, 2);
 			}
 		}
@@ -1707,6 +1707,8 @@ LRESULT CCloudWinForm::OnMdiChildMin(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 {
 	if (::GetWindowLong(m_hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
 	{
+		if (m_pMDIParent)
+			m_pMDIParent->m_hMDIChildBeingClosedOrMinimized = m_hWnd;
 		::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 0, 20180115);
 	}
 	return  DefWindowProc(uMsg, wParam, lParam);
@@ -1721,7 +1723,7 @@ LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		if (m_pMDIParent)
 		{
 			m_pMDIParent->m_pActiveChild = this;
-			if (m_pMDIParent->m_hMDIChildBeingClosed == NULL)
+			if (m_pMDIParent->m_hMDIChildBeingClosedOrMinimized == NULL)
 				::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 2);
 			else
 			{
@@ -1818,29 +1820,17 @@ LRESULT CCloudWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	if (m_pOwnerHtmlWnd)
 	{
 		m_hOwnerWebView = m_pOwnerHtmlWnd->m_hWnd;
-		HWND hBrowser = ::GetParent(m_pOwnerHtmlWnd->m_hWnd);
-		if (::IsChild(m_hWnd, hBrowser))
+		if (m_bMdiForm && m_pBrowser)
+			m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm = this;
+		m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentWinForm = this;
+		m_pBrowser->m_pVisibleWebView->m_bCanShow = false;
+		if (m_hWnd != g_pCosmos->m_hMainWnd)
 		{
-			auto it = g_pCosmos->m_mapBrowserWnd.find(hBrowser);
-			if (it != g_pCosmos->m_mapBrowserWnd.end())
-			{
-				CBrowser* pBrowser = (CBrowser*)it->second;
-				if (pBrowser->m_pParentXobj)
-				{
-					pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentWinForm = this;
-					if (m_bMdiForm)
-						pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm = this;
-				}
-				pBrowser->m_pVisibleWebView->m_bCanShow = false;
-				if (m_hWnd != g_pCosmos->m_hMainWnd)
-				{
-					pBrowser->m_bSZMode = true;
-					g_pCosmos->m_mapSizingBrowser[hBrowser] = pBrowser;
-				}
-				pBrowser->m_pBrowser->LayoutBrowser();
-				pBrowser->BrowserLayout();
-			}
+			m_pBrowser->m_bSZMode = true;
+			g_pCosmos->m_mapSizingBrowser[m_pBrowser->m_hWnd] = m_pBrowser;
 		}
+		m_pBrowser->m_pBrowser->LayoutBrowser();
+		m_pBrowser->BrowserLayout();
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }

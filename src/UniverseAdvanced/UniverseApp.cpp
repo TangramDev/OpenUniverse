@@ -519,6 +519,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 				{
 					pWnd->m_pMDIParent = it->second;
 					pWnd->m_pMDIParent->m_mapMDIChild[hWnd] = pWnd;
+					pWnd->m_pBrowser = it->second->m_pBrowser;
 					pWnd->m_pOwnerHtmlWnd = it->second->m_pOwnerHtmlWnd;
 				}
 			}
@@ -869,7 +870,7 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 		case SW_MINIMIZE:
 		{
 			if (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
-				::PostMessage(hWnd, WM_MDICHILDMIN, 0, 0);
+				::SendMessage(hWnd, WM_MDICHILDMIN, 0, 0);
 		}
 		break;
 		case SW_RESTORE:
