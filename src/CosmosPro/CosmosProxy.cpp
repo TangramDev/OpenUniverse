@@ -1434,7 +1434,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						pWebPage->Observe(CComBSTR(strTagName), CComBSTR(pChild->xml()), &pXobj);
 					}
 				}
-				Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(strObjID));
+				Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(strObjID));
 
 				if (pObj != nullptr)
 				{
@@ -1470,7 +1470,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
 							if (strBKPage != _T(""))
 							{
-								Universe::Cosmos::CreateBKPage(thisForm, BSTR2STRING(strBKPage));
+								Universe::Cosmos::CreateBKPage(thisForm, marshal_as<String^>(strBKPage));
 							}
 						}
 						if (strTagName.CompareNoCase(_T("mainwindow")) == 0)

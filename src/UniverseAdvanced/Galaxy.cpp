@@ -1376,20 +1376,7 @@ LRESULT CCloudWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 4:
 	{
-		m_bMdiForm = true;//design
-		if (m_bMdiForm)
-		{
-			//int nPos = m_strPath.ReverseFind('.');
-			//if (nPos != -1)
-			//{
-			//	CString strDir = m_strPath.Left(nPos) + _T("\\");
-			//	m_strChildFormPath = strDir;
-			//	if (::PathIsDirectory(strDir) == false)
-			//	{
-			//		::SHCreateDirectory(nullptr, strDir);
-			//	}
-			//}
-		}
+		m_bMdiForm = true;
 	}
 	break;
 	case 20190214:
@@ -1470,6 +1457,9 @@ LRESULT CCloudWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 {
 	switch (lParam)
 	{
+	case 20210430:
+		::BringWindowToTop(m_hWnd);
+		break;
 	case 20210428:
 	{
 		if (m_bMdiForm && m_mapMDIChild.size() == 0)
@@ -1580,7 +1570,7 @@ LRESULT CCloudWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 			{
 				::SendMessage(m_pMDIParent->m_pBrowser->m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 			}
-		} 
+		}
 		::SendMessage(m_hWnd, WM_COSMOSMSG, 0, 20210420);
 		return 0;
 	}
@@ -1671,45 +1661,13 @@ LRESULT CCloudWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 
-LRESULT CCloudWinForm::OnDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	DWORD dwY = HIWORD(wParam);
-	DWORD dwX = LOWORD(wParam);
-	RECT* const prcNewWindow = (RECT*)lParam;
-	float fScale = (float)dwX / USER_DEFAULT_SCREEN_DPI;
-
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CCloudWinForm::OnGetDPIScaledSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	DWORD dwY = HIWORD(wParam);
-	DWORD dwX = LOWORD(wParam);
-	RECT* const prcNewWindow = (RECT*)lParam;
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return  false;//DefWindowProc(uMsg, wParam, lParam);
-}
-
 LRESULT CCloudWinForm::OnMdiChildMin(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	if (::GetWindowLong(m_hWnd, GWL_EXSTYLE) & WS_EX_MDICHILD)
+	if (m_pMDIParent)
 	{
-		if (m_pMDIParent)
-			m_pMDIParent->m_hMDIChildBeingClosedOrMinimized = m_hWnd;
-		::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 0, 20180115);
+		m_pMDIParent->m_hMDIChildBeingClosedOrMinimized = m_hWnd;
+		::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210430);
+		::PostMessage(m_pMDIParent->m_hMDIClient, WM_COSMOSMSG, 0, 20180115);
 	}
 	return  DefWindowProc(uMsg, wParam, lParam);
 }
@@ -1720,7 +1678,6 @@ LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		m_pBrowser->m_bSZMode = true;
 	if (m_hWnd == (HWND)lParam)
 	{
-		TRACE(_T("\n**************Current MDIActivate :%x **************\n"),lParam);
 		if (m_pMDIParent)
 		{
 			m_pMDIParent->m_pActiveChild = this;
@@ -3256,42 +3213,6 @@ LRESULT CGalaxy::OnTabChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			}
 		}
 	}
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CGalaxy::OnDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	//RECT* const prcNewWindow = (RECT*)lParam;
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CGalaxy::OnGetDPIScaledSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	//RECT* const prcNewWindow = (RECT*)lParam;
-	//::SetWindowPos(m_hWnd,
-	//	NULL,
-	//	prcNewWindow->left,
-	//	prcNewWindow->top,
-	//	prcNewWindow->right - prcNewWindow->left,
-	//	prcNewWindow->bottom - prcNewWindow->top,
-	//	SWP_NOZORDER | SWP_NOACTIVATE);
-	return false;// DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CGalaxy::OnBeforeParentDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
-	return DefWindowProc(uMsg, wParam, lParam);
-}
-
-LRESULT CGalaxy::OnAfterParentDpiChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
-{
 	return DefWindowProc(uMsg, wParam, lParam);
 }
 

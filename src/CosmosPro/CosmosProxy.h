@@ -29,8 +29,11 @@
 #include "TangramBase.h"       
 #include "Browser.h"
 #include "resource.h"       // main symbols
+#include <msclr\marshal.h>
+#include <msclr\marshal_atl.h>
 
 using namespace Universe;
+using namespace msclr::interop;
 using namespace System::Collections;
 using namespace System::Diagnostics;
 using namespace System::Reflection;
