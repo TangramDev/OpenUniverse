@@ -25,7 +25,6 @@
 #include <atlstr.h>
 
 #define STRING2BSTR(x) (static_cast<BSTR>(Marshal::StringToBSTR(x).ToPointer()))
-#define BSTR2STRING(x) (Marshal::PtrToStringUni((System::IntPtr)LPTSTR(LPCTSTR(x))))
 
 class CCommonFunction
 {

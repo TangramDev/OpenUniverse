@@ -45,7 +45,7 @@ void CXobjCLREvent::OnObserverComplete(IXobj* pXobj)
 void CXobjCLREvent::OnDocumentComplete(IDispatch* pDocdisp, BSTR bstrUrl)
 {
 	Object^ pObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pDocdisp)));
-	m_pXobj->Fire_OnDocumentComplete(m_pXobj, pObj, BSTR2STRING(bstrUrl));
+	m_pXobj->Fire_OnDocumentComplete(m_pXobj, pObj, marshal_as<String^>(bstrUrl));
 }
 
 void CXobjCLREvent::OnDestroy()
@@ -64,7 +64,7 @@ void CXobjCLREvent::OnDestroy()
 void CXobjCLREvent::OnXobjAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BSTR bstrAddInXml)
 {
 	Object^ pAddinObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pAddIndisp)));
-	m_pXobj->Fire_XobjAddInCreated(m_pXobj, pAddinObj, BSTR2STRING(bstrAddInID), BSTR2STRING(bstrAddInXml));
+	m_pXobj->Fire_XobjAddInCreated(m_pXobj, pAddinObj, marshal_as<String^>(bstrAddInID), marshal_as<String^>(bstrAddInXml));
 }
 
 void CXobjCLREvent::OnXobjAddInsCreated()
@@ -81,5 +81,5 @@ void CXobjCLREvent::OnTabChange(int nActivePage, int nOldPage)
 
 void CXobjCLREvent::OnIPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgId, BSTR bstrPayload, BSTR bstrExtra)
 {
-	m_pXobj->Fire_OnIPCMessageReceived(BSTR2STRING(bstrFrom), BSTR2STRING(bstrTo), BSTR2STRING(bstrMsgId), BSTR2STRING(bstrPayload), BSTR2STRING(bstrExtra));
+	m_pXobj->Fire_OnIPCMessageReceived(marshal_as<String^>(bstrFrom), marshal_as<String^>(bstrTo), marshal_as<String^>(bstrMsgId), marshal_as<String^>(bstrPayload), marshal_as<String^>(bstrExtra));
 }

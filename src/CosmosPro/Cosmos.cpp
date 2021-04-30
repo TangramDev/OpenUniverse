@@ -119,7 +119,7 @@ namespace Universe
         {
             CComBSTR bstrCap("");
             m_pXobj->get_Caption(&bstrCap);
-            String^ strCap = BSTR2STRING(bstrCap);
+            String^ strCap = marshal_as<String^>(bstrCap);
             return strCap;
         }
         return "";
@@ -137,7 +137,7 @@ namespace Universe
             case BlankView:
             {
                 m_pXobj->get_URL(&bstrCap);
-                return BSTR2STRING(bstrCap);
+                return marshal_as<String^>(bstrCap);
             }
             break;
             case ActiveX:
@@ -508,7 +508,7 @@ namespace Universe
         CString strRet = _T("");
         theApp.CalculateByteMD5((BYTE*)strSrc.c_str(), nSrcLen, strRet);
         ::SysFreeString(bstrSRC);
-        return BSTR2STRING(strRet);
+        return marshal_as<String^>(strRet);
     }
 
     bool Cosmos::SupportCrashReporting::get()
@@ -684,7 +684,7 @@ namespace Universe
     String^ Cosmos::NTPXml::get()
     {
         BSTR bstrNtpXml = theApp.m_pCosmosImpl->m_strNtpXml.AllocSysString();
-        String^ strResult = BSTR2STRING(bstrNtpXml);
+        String^ strResult = marshal_as<String^>(bstrNtpXml);
         ::SysFreeString(bstrNtpXml);
         return strResult;
     }
@@ -748,11 +748,11 @@ namespace Universe
         auto it = theApp.m_pCosmosImpl->m_mapValInfo.find(STRING2BSTR(iIndex));
         if (it != theApp.m_pCosmosImpl->m_mapValInfo.end())
         {
-            return BSTR2STRING(it->second.bstrVal);
+            return marshal_as<String^>(it->second.bstrVal);
         }
         //CComVariant bstrVal(::SysAllocString(L""));
         //theApp.m_pCosmos->get_AppKeyValue(STRING2BSTR(iIndex), &bstrVal);
-        //String^ strVal = BSTR2STRING(bstrVal.bstrVal);
+        //String^ strVal = marshal_as<String^>(bstrVal.bstrVal);
         //::SysFreeString(bstrVal);
         return L"";
     }
@@ -1097,7 +1097,7 @@ namespace Universe
                     if (fd.attrib ^ FILE_ATTRIBUTE_DIRECTORY)
                     {
                         CString strFullName = rootPath + L"\\" + strFileName;
-                        String^ fullName = BSTR2STRING(CComBSTR(strFullName));
+                        String^ fullName = marshal_as<String^>(CComBSTR(strFullName));
                         pFiles->Add(fullName);
                     }
                 }
@@ -1146,7 +1146,7 @@ namespace Universe
                             {
                                 CString strType = xml.GetChildAttrib(L"type");
                                 BSTR bstrType = strType.AllocSysString();
-                                String^ type = BSTR2STRING(bstrType);
+                                String^ type = marshal_as<String^>(bstrType);
                                 Type^ pType = pAssembly->GetType(type);
                                 SysFreeString(bstrType);
                                 if (pType != nullptr)
@@ -1230,7 +1230,7 @@ namespace Universe
             int nPos = filePath.ReverseFind('.');
             CString strLib = filePath.Left(nPos).MakeLower();
             CString strAssemblys = _T("");
-            String^ _strLib = BSTR2STRING(filePath);
+            String^ _strLib = marshal_as<String^>(filePath);
             String^ strAssemblyLib = L"";
             strLib = filePath.MakeLower();
             Assembly^ m_pDotNetAssembly = nullptr;
@@ -1288,7 +1288,7 @@ namespace Universe
                                     strPath2 += strNmae;
                                     strPath2 += _T(".ico");
                                     //Write Icon to File Stream
-                                    System::IO::FileStream^ fs = gcnew System::IO::FileStream(BSTR2STRING(strPath2), System::IO::FileMode::OpenOrCreate);
+                                    System::IO::FileStream^ fs = gcnew System::IO::FileStream(marshal_as<String^>(strPath2), System::IO::FileMode::OpenOrCreate);
                                     m_pObj->Icon->Save(fs);
                                     fs->Close();
                                     //System::IO::Stream^ p = nullptr;
@@ -1356,7 +1356,7 @@ namespace Universe
     String^ Cosmos::AppDataPath::get()
     {
         BSTR bstrAppDataPath = theApp.m_pCosmosImpl->m_strAppDataPath.AllocSysString();
-        String^ strResult = BSTR2STRING(bstrAppDataPath);
+        String^ strResult = marshal_as<String^>(bstrAppDataPath);
         ::SysFreeString(bstrAppDataPath);
         return strResult;
     }
@@ -1632,9 +1632,9 @@ namespace Universe
                     CString strObjName = _strID.Left(nPos);
                     _strID = _strID.Mid(nPos + 1);
                     nPos = _strID.Find(_T("|"));
-                    strID = BSTR2STRING(_strID);
+                    strID = marshal_as<String^>(_strID);
                     CString strLibName = _strID.Left(nPos);
-                    strLib = BSTR2STRING(_strID.Mid(nPos + 1));
+                    strLib = marshal_as<String^>(_strID.Mid(nPos + 1));
                     Assembly^ m_pDotNetAssembly = nullptr;
                     bool bSystemObj = false;
                     int nIndex = m_strID->IndexOf(L"system.windows.forms");;
@@ -1687,7 +1687,7 @@ namespace Universe
                     {
                         try
                         {
-                            pType = m_pDotNetAssembly->GetType(BSTR2STRING(strObjName), true, true);
+                            pType = m_pDotNetAssembly->GetType(marshal_as<String^>(strObjName), true, true);
                         }
                         catch (TypeLoadException ^ e)
                         {
@@ -1741,7 +1741,7 @@ namespace Universe
             strUrls = strUrls->Replace(L"||", L"|");
             CString strPath = theApp.m_pCosmosImpl->m_strAppPath;
 
-            strUrls = strUrls->Replace(L"host:", BSTR2STRING(strPath));
+            strUrls = strUrls->Replace(L"host:", marshal_as<String^>(strPath));
             if (ParentHandle == (IntPtr)1)
             {
                 hPWnd = theApp.m_pCosmosImpl->m_hCosmosWnd;
@@ -1792,7 +1792,7 @@ namespace Universe
                                 }
                             }
                         }
-                        Object^ pObj = CreateObject(BSTR2STRING(strID));
+                        Object^ pObj = CreateObject(marshal_as<String^>(strID));
                         if (pObj != nullptr)
                         {
                             if (pObj->GetType()->IsSubclassOf(Form::typeid))
@@ -1832,7 +1832,7 @@ namespace Universe
         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
         auto it = theApp.m_pCosmosImpl->m_mapUIData.find(hWnd);
         if (it != theApp.m_pCosmosImpl->m_mapUIData.end())
-            return BSTR2STRING(it->second);
+            return marshal_as<String^>(it->second);
         return L"";
     }
 
@@ -1841,7 +1841,7 @@ namespace Universe
         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
         auto it = theApp.m_pCosmosImpl->m_mapCtrlTag.find(hWnd);
         if (it != theApp.m_pCosmosImpl->m_mapCtrlTag.end())
-            return BSTR2STRING(it->second);
+            return marshal_as<String^>(it->second);
         return L"";
     }
 
@@ -1879,7 +1879,7 @@ namespace Universe
                                 }
                             }
                         }
-                        Object^ pObj = CreateObject(BSTR2STRING(strID));
+                        Object^ pObj = CreateObject(marshal_as<String^>(strID));
                         if (pObj != nullptr)
                         {
                             if (pObj->GetType()->IsSubclassOf(Form::typeid))
@@ -1889,13 +1889,13 @@ namespace Universe
                                 if (m_Parse.attrBool(_T("mainwindow")))
                                     theApp.m_pCosmosImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
                                 if (strCaption != _T(""))
-                                    thisForm->Text = BSTR2STRING(strCaption);
+                                    thisForm->Text = marshal_as<String^>(strCaption);
                                 if (thisForm->IsMdiContainer)
                                 {
                                     CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
                                     if (strBKPage != _T(""))
                                     {
-                                        Cosmos::CreateBKPage(thisForm, BSTR2STRING(strBKPage));
+                                        Cosmos::CreateBKPage(thisForm, marshal_as<String^>(strBKPage));
                                     }
                                 }
                                 thisForm->Show();
@@ -2013,7 +2013,7 @@ namespace Universe
                         pGalaxy->get_Name(&bstrName);
                         String^ name = pXobj->Name + L".";
                         name += m_pBindTreeView->Name;
-                        name += L"." + BSTR2STRING(bstrName);
+                        name += L"." + marshal_as<String^>(bstrName);
                         BSTR strName = STRING2BSTR(name->ToLower());
                         Universe::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
                         pGalaxy->Observe(L"default", CComBSTR(_pParse->xml()), &_pXobj);
@@ -2024,14 +2024,14 @@ namespace Universe
                         bool isTreeNode = _pParse->attrBool(_T("treenode"), false);
                         if (isTreeNode)
                         {
-                            TreeNode^ pChildNode = pXobj->Nodes->Add(BSTR2STRING(_pParse->text()));
+                            TreeNode^ pChildNode = pXobj->Nodes->Add(marshal_as<String^>(_pParse->text()));
                             if (pChildNode)
                             {
                                 CString strTagName = name + _T("_tag");
                                 CTangramXmlParse* pChild2 = pParse->GetChild(strTagName);
                                 if (pChild2)
                                 {
-                                    pChildNode->Tag = BSTR2STRING(pChild2->xml());
+                                    pChildNode->Tag = marshal_as<String^>(pChild2->xml());
                                 }
                                 LoadNode(pChildNode, pParse->GetChild(i));
                             }
@@ -2060,7 +2060,7 @@ namespace Universe
                 {
                     if (this->m_pBindTreeView->Nodes->Count == 0)
                     {
-                        LoadNode(m_pBindTreeView->Nodes->Add(BSTR2STRING(m_Parse.text())), &m_Parse);
+                        LoadNode(m_pBindTreeView->Nodes->Add(marshal_as<String^>(m_Parse.text())), &m_Parse);
                     }
                 }
                 ::SysFreeString(bstrXml);
@@ -2109,10 +2109,10 @@ namespace Universe
                             if (pChild)
                             {
                                 if (strAction == _T("doubleclick"))
-                                    pHostNode->Observe(BSTR2STRING(m_Parse.name()), BSTR2STRING(pChild->xml()));
+                                    pHostNode->Observe(marshal_as<String^>(m_Parse.name()), marshal_as<String^>(pChild->xml()));
                                 else if (strAction == _T("openurl"))
                                 {
-                                    Universe::Cosmos::CreateBrowser(System::IntPtr::Zero, BSTR2STRING(pChild->attr(_T("url"), _T("")) + _T("|")));
+                                    Universe::Cosmos::CreateBrowser(System::IntPtr::Zero, marshal_as<String^>(pChild->attr(_T("url"), _T("")) + _T("|")));
                                 }
                             }
 
@@ -2158,7 +2158,7 @@ namespace Universe
                     {
                         CTangramXmlParse* pChild = m_Parse.GetChild(_T("afterselected"));
                         if (pChild)
-                            pHostNode->Observe(BSTR2STRING(m_Parse.name()), BSTR2STRING(pChild->xml()));
+                            pHostNode->Observe(marshal_as<String^>(m_Parse.name()), marshal_as<String^>(pChild->xml()));
                     }
                 }
             }
@@ -2269,7 +2269,7 @@ namespace Universe
     {
         BSTR bstrXML;
         m_pGalaxyCluster->get_GalaxyClusterXML(&bstrXML);
-        String^ strXML = BSTR2STRING(bstrXML);
+        String^ strXML = marshal_as<String^>(bstrXML);
         return strXML;
     }
 

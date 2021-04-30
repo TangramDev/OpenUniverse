@@ -262,7 +262,7 @@ namespace Universe
 			HRESULT hr = m_pXobj->SendIPCMessage(STRING2BSTR(strTo), STRING2BSTR(strPayload), STRING2BSTR(strExtra), STRING2BSTR(strMsgId), &bstrRet);
 			if (hr == S_OK)
 			{
-				return BSTR2STRING(bstrRet);
+				return marshal_as<String^>(bstrRet);
 			}
 			return "";
 		}
@@ -369,7 +369,7 @@ namespace Universe
 				{
 					CComBSTR bstrCap("");
 					m_pXobj->get_Name(&bstrCap);
-					return BSTR2STRING(bstrCap);
+					return marshal_as<String^>(bstrCap);
 				}
 				return "";
 			}
@@ -741,7 +741,7 @@ namespace Universe
 				BSTR bstrVal;
 				m_pXobj->get_Attribute(STRING2BSTR(strKey),&bstrVal);
 
-				return BSTR2STRING(bstrVal);
+				return marshal_as<String^>(bstrVal);
 			}
 
 			void set(String ^ strKey, String ^ strVal)
@@ -850,7 +850,7 @@ namespace Universe
 			{
 				CComBSTR bstrName("");
 				m_pGalaxy->get_Name(&bstrName);
-				return BSTR2STRING(bstrName);
+				return marshal_as<String^>(bstrName);
 			}
 		}
 
@@ -1361,7 +1361,7 @@ namespace Universe
 					LONGLONG hWnd = ctrl->Handle.ToInt64();
 					BSTR bstrName = ::SysAllocString(L"");
 					m_pGalaxyCluster->get_GalaxyName(hWnd, &bstrName);
-					String^ strRet = BSTR2STRING(bstrName);
+					String^ strRet = marshal_as<String^>(bstrName);
 					::SysFreeString(bstrName);
 					return strRet;
 				}
@@ -1377,7 +1377,7 @@ namespace Universe
 				{
 					BSTR bstrName = ::SysAllocString(L"");
 					m_pGalaxyCluster->get_GalaxyName(handle.ToInt32(), &bstrName);
-					String^ strRet = BSTR2STRING(bstrName);
+					String^ strRet = marshal_as<String^>(bstrName);
 					::SysFreeString(bstrName);
 					return strRet;
 				}

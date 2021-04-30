@@ -167,12 +167,12 @@ HWND CCosmos::InitCosmosApp()
 
 void CCosmos::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2)
 {
-	Universe::Cosmos::Fire_OnCosmosMsg((IntPtr)hWnd, BSTR2STRING(strType), BSTR2STRING(strParam1), BSTR2STRING(strParam2));
+	Universe::Cosmos::Fire_OnCosmosMsg((IntPtr)hWnd, marshal_as<String^>(strType), marshal_as<String^>(strParam1), marshal_as<String^>(strParam2));
 }
 
 void CCosmos::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
 {
-	Universe::Cosmos::Fire_OnCustomizedDOMElement((IntPtr)hWnd, BSTR2STRING(strRuleName), BSTR2STRING(strHTML));
+	Universe::Cosmos::Fire_OnCustomizedDOMElement((IntPtr)hWnd, marshal_as<String^>(strRuleName), marshal_as<String^>(strHTML));
 }
 
 void CCosmos::ProcessMsg(MSG* msg) {
@@ -268,7 +268,7 @@ IDispatch* CCosmosProxy::CreateWinForm(HWND hParent, BSTR strXML)
 	auto it = m_mapChromeWebPage.find(hParent);
 	if (it != m_mapChromeWebPage.end())
 	{
-		Form^ pForm = Universe::Cosmos::CreateForm(it->second, BSTR2STRING(strXML));
+		Form^ pForm = Universe::Cosmos::CreateForm(it->second, marshal_as<String^>(strXML));
 		if (pForm)
 		{
 			return (IDispatch*)Marshal::GetIUnknownForObject(pForm).ToPointer();
@@ -299,7 +299,7 @@ CWPFObj* CCosmosProxy::CreateWPFControl(IXobj* pXobj, HWND hPWnd, UINT nID)
 		CComBSTR bstrObjTypeID(L"");
 		pXobj->get_Attribute(CComBSTR(L"objid"), &bstrObjTypeID);
 
-		Type^ pType = Universe::Cosmos::GetType(BSTR2STRING(bstrObjTypeID));
+		Type^ pType = Universe::Cosmos::GetType(marshal_as<String^>(bstrObjTypeID));
 		::SysFreeString(bstrObjTypeID);
 
 		CTangramWPFObjWrapper* pWpfControlWrapper = nullptr;
@@ -532,7 +532,7 @@ void CCosmosProxy::OnItemSelectionChanged(System::Object^ sender, Forms::ListVie
 					CString strBindName = m_Parse.attr(_T("target"), _T(""));
 					if (strBindName != _T(""))
 					{
-						pGalaxy->SendMessage(pCtrl->Name, pCtrl->Handle.ToInt64().ToString("d"), L"ControlBindMessage:MouseDoubleClick", strTag, BSTR2STRING(strBindName));
+						pGalaxy->SendMessage(pCtrl->Name, pCtrl->Handle.ToInt64().ToString("d"), L"ControlBindMessage:MouseDoubleClick", strTag, marshal_as<String^>(strBindName));
 					}
 				}
 			}
@@ -589,7 +589,7 @@ void CCosmosProxy::OnNodeMouseDoubleClick(Object^ sender, TreeNodeMouseClickEven
 				if (strBindName != _T(""))
 				{
 					CString strActionName = m_Parse.attr(_T("onnodemousedoubleclick"), pCtrl->Name);
-					pGalaxy->SendMessage(BSTR2STRING(strActionName), pCtrl->Handle.ToInt64().ToString("d"), L"ControlBindMessage:MouseDoubleClick", strTag, BSTR2STRING(strBindName));
+					pGalaxy->SendMessage(marshal_as<String^>(strActionName), pCtrl->Handle.ToInt64().ToString("d"), L"ControlBindMessage:MouseDoubleClick", strTag, marshal_as<String^>(strBindName));
 				}
 			}
 		}
@@ -650,10 +650,10 @@ void CCosmosProxy::SetObjectProperty(IDispatch* pDisp, BSTR bstrPropertyName, BS
 		Object^ pObj = (Object^)Marshal::GetObjectForIUnknown((IntPtr)pDisp);
 		if (pObj != nullptr)
 		{
-			PropertyInfo^ ppi = pObj->GetType()->GetProperty(BSTR2STRING(bstrPropertyName));
+			PropertyInfo^ ppi = pObj->GetType()->GetProperty(marshal_as<String^>(bstrPropertyName));
 			if (ppi != nullptr)
 			{
-				ppi->SetValue(pObj, BSTR2STRING(bstrPropertyValue), nullptr);
+				ppi->SetValue(pObj, marshal_as<String^>(bstrPropertyValue), nullptr);
 			}
 		}
 	}
@@ -768,7 +768,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 									if (_pChild2)
 									{
-										pTreeView->Tag = BSTR2STRING(_pChild2->xml());
+										pTreeView->Tag = marshal_as<String^>(_pChild2->xml());
 									}
 									_pChild2 = _pChild->GetChild(_T("uidata"));
 									if (_pChild2)
@@ -788,7 +788,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 									if (_pChild2)
 									{
-										pListView->Tag = BSTR2STRING(_pChild2->xml());
+										pListView->Tag = marshal_as<String^>(_pChild2->xml());
 									}
 									_pChild2 = _pChild->GetChild(_T("uidata"));
 									if (_pChild2)
@@ -807,7 +807,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 									CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 									if (_pChild2)
 									{
-										pBtn->Tag = BSTR2STRING(_pChild2->xml());
+										pBtn->Tag = marshal_as<String^>(_pChild2->xml());
 									}
 								}
 							}
@@ -941,7 +941,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 						name += strType;
 					else
 						name += pChild->Name;
-					name += L"." + BSTR2STRING(bstrName);
+					name += L"." + marshal_as<String^>(bstrName);
 					BSTR strName = STRING2BSTR(name->ToLower());//OK!
 					if (pParse)
 					{
@@ -981,7 +981,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 								if (_pChild2)
 								{
-									pTreeView->Tag = BSTR2STRING(_pChild2->xml());
+									pTreeView->Tag = marshal_as<String^>(_pChild2->xml());
 								}
 								_pChild2 = _pChild->GetChild(_T("uidata"));
 								if (_pChild2)
@@ -1002,7 +1002,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 								CTangramXmlParse* _pChild2 = _pChild->GetChild(_T("eventmap"));
 								if (_pChild2)
 								{
-									pListView->Tag = BSTR2STRING(_pChild2->xml());
+									pListView->Tag = marshal_as<String^>(_pChild2->xml());
 								}
 								_pChild2 = _pChild->GetChild(_T("uidata"));
 								if (_pChild2)
@@ -1022,7 +1022,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 								_pChild = _pChild->GetChild(_T("eventmap"));
 								if (_pChild)
 								{
-									pBtn->Tag = BSTR2STRING(_pChild->xml());
+									pBtn->Tag = marshal_as<String^>(_pChild->xml());
 								}
 							}
 						}
@@ -1090,14 +1090,14 @@ void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyClu
 				{
 					if (pTreeView->Nodes->Count == 0)
 					{
-						TreeNode^ pXobj = pTreeView->Nodes->Add(BSTR2STRING(m_Parse.attr(_T("text"), _T(""))));
+						TreeNode^ pXobj = pTreeView->Nodes->Add(marshal_as<String^>(m_Parse.attr(_T("text"), _T(""))));
 						pXobj->ImageIndex = m_Parse.attrInt(_T("imageindex"), 0);
 						pXobj->SelectedImageIndex = m_Parse.attrInt(_T("selectedimageindex"), 0);
 						CString strTagName = ctrl->Name->ToLower() + _T("_tag");
 						CTangramXmlParse* pChild = m_Parse.GetChild(strTagName);
 						if (pChild)
 						{
-							pXobj->Tag = BSTR2STRING(pChild->xml());
+							pXobj->Tag = marshal_as<String^>(pChild->xml());
 						}
 						LoadNode(pTreeView, pXobj, pGalaxyCluster, &m_Parse);
 					}
@@ -1121,9 +1121,9 @@ void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyClu
 						for (int i = 0; i < nCount; i++)
 						{
 							CTangramXmlParse* pChildParse = m_Parse.GetChild(i);
-							ListViewItem^ pItem = pListView->Items->Add(BSTR2STRING(pChildParse->attr(_T("text"), _T(""))), pChildParse->attrInt(_T("imageindex")));
-							pItem->Tag = BSTR2STRING(pChildParse->xml());
-							pItem->ToolTipText = BSTR2STRING(pChildParse->attr(_T("tooptips"), _T("")));
+							ListViewItem^ pItem = pListView->Items->Add(marshal_as<String^>(pChildParse->attr(_T("text"), _T(""))), pChildParse->attrInt(_T("imageindex")));
+							pItem->Tag = marshal_as<String^>(pChildParse->xml());
+							pItem->ToolTipText = marshal_as<String^>(pChildParse->attr(_T("tooptips"), _T("")));
 						}
 					}
 				}
@@ -1156,7 +1156,7 @@ System::Void CCosmosProxy::LoadNode(TreeView^ pTreeView, TreeNode^ pXobj, IGalax
 					bool isTreeNode = _pParse->attrBool(_T("treenode"), false);
 					if (isTreeNode)
 					{
-						TreeNode^ pChildNode = pXobj->Nodes->Add(BSTR2STRING(_pParse->attr(_T("text"), _T(""))));
+						TreeNode^ pChildNode = pXobj->Nodes->Add(marshal_as<String^>(_pParse->attr(_T("text"), _T(""))));
 						if (pChildNode)
 						{
 							pChildNode->ImageIndex = _pParse->attrInt(_T("imageindex"), 0);
@@ -1165,7 +1165,7 @@ System::Void CCosmosProxy::LoadNode(TreeView^ pTreeView, TreeNode^ pXobj, IGalax
 							CTangramXmlParse* pChild2 = pParse->GetChild(strTagName);
 							if (pChild2)
 							{
-								pChildNode->Tag = BSTR2STRING(pChild2->xml());
+								pChildNode->Tag = marshal_as<String^>(pChild2->xml());
 							}
 							LoadNode(pTreeView, pChildNode, pGalaxyCluster, pParse->GetChild(i));
 						}
@@ -1249,7 +1249,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 				//pToolStripButton->Tag = L"default";
 				//pToolStripButton->Checked = true;
 				//pToolStripButton->CheckOnClick = true;
-				////pToolStripButton->ToolTipText = BSTR2STRING(strTips);
+				////pToolStripButton->ToolTipText = marshal_as<String^>(strTips);
 				//pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
 				//defaultToolStrip->Items->Add(pToolStripButton);
 
@@ -1270,7 +1270,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 					CString strID = m_Parse.attr(_T("objid"), _T(""));
 					if (strID != _T(""))
 					{
-						Type^ pType = Universe::Cosmos::GetType(BSTR2STRING(strID));
+						Type^ pType = Universe::Cosmos::GetType(marshal_as<String^>(strID));
 						System::Drawing::Icon^ pIcon = nullptr;
 						if (pType && pType->IsSubclassOf(Form::typeid))
 						{
@@ -1293,18 +1293,18 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 									pToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
 									pToolStripButton->Image = (System::Drawing::Image^)(pIcon->ToBitmap());
 									pToolStripButton->ImageTransparentColor = System::Drawing::Color::Black;
-									pToolStripButton->Name = BSTR2STRING(it.first);
+									pToolStripButton->Name = marshal_as<String^>(it.first);
 									pToolStripButton->Size = System::Drawing::Size(36, 36);
-									pToolStripButton->Text = BSTR2STRING(it.first);
-									pToolStripButton->Tag = BSTR2STRING(it.second);
+									pToolStripButton->Text = marshal_as<String^>(it.first);
+									pToolStripButton->Tag = marshal_as<String^>(it.second);
 									CString strTips = m_Parse.attr(_T("tooltips"), _T(""));
 									if (strTips != _T(""))
-										pToolStripButton->ToolTipText = BSTR2STRING(strTips);
+										pToolStripButton->ToolTipText = marshal_as<String^>(strTips);
 									else
 									{
 										strTips = m_Parse.text();
 										if (strTips != _T(""))
-											pToolStripButton->ToolTipText = BSTR2STRING(strTips);
+											pToolStripButton->ToolTipText = marshal_as<String^>(strTips);
 									}
 									pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
 									nIndex++;
@@ -1342,7 +1342,7 @@ void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 		int nPos = strKey.Find(_T(","));
 		if (nPos != -1)
 		{
-			Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(strKey));
+			Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(strKey));
 			if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
 			{
 				Form^ pForm = (Form^)pObj;
@@ -1360,7 +1360,7 @@ void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 			nPos = strKey.Find(_T(","));
 			if (nPos != -1)
 			{
-				Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(strKey));
+				Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(strKey));
 				if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
 				{
 					Form^ pForm = (Form^)pObj;
@@ -1377,10 +1377,10 @@ void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 
 HRESULT CCosmosProxy::ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData)
 {
-	String^ strObjID = BSTR2STRING(bstrObjID);
-	String^ strMethod = BSTR2STRING(bstrMethod);
-	String^ strData = BSTR2STRING(bstrData);
-	cli::array<Object^, 1>^ pObjs = { BSTR2STRING(bstrParam), BSTR2STRING(bstrData) };
+	String^ strObjID = marshal_as<String^>(bstrObjID);
+	String^ strMethod = marshal_as<String^>(bstrMethod);
+	String^ strData = marshal_as<String^>(bstrData);
+	cli::array<Object^, 1>^ pObjs = { marshal_as<String^>(bstrParam), marshal_as<String^>(bstrData) };
 	Universe::Cosmos::ActiveMethod(strObjID, strMethod, pObjs);
 	return S_OK;
 }
@@ -1388,8 +1388,8 @@ HRESULT CCosmosProxy::ActiveCLRMethod(BSTR bstrObjID, BSTR bstrMethod, BSTR bstr
 HRESULT CCosmosProxy::ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR bstrParam, BSTR bstrData)
 {
 	Object^ obj = Marshal::GetObjectForIUnknown((IntPtr)pCLRObj);
-	String^ strMethod = BSTR2STRING(bstrMethod);
-	String^ strData = BSTR2STRING(bstrData);
+	String^ strMethod = marshal_as<String^>(bstrMethod);
+	String^ strData = marshal_as<String^>(bstrData);
 	cli::array<Object^, 1>^ pObjs = {};
 	Universe::Cosmos::ActiveObjectMethod(obj, strMethod, pObjs);
 	return S_OK;
@@ -1462,7 +1462,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						}
 
 						if (strCaption != _T(""))
-							thisForm->Text = BSTR2STRING(strCaption);
+							thisForm->Text = marshal_as<String^>(strCaption);
 						if (thisForm->IsMdiContainer)
 						{
 							Control^ mdiclient = Universe::Cosmos::GetMDIClient(thisForm);
@@ -1477,7 +1477,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							theApp.m_pCosmosImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
 						}
-						thisForm->Tag = BSTR2STRING(m_Parse.name());
+						thisForm->Tag = marshal_as<String^>(m_Parse.name());
 						__int64 nIpcSession = m_Parse.attrInt64(_T("ipcsession"), 0);
 						if (nIpcSession)
 						{
@@ -1656,7 +1656,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 					Form^ mainForm = Universe::Cosmos::MainForm;
 					CString strCaption = m_Parse.attr(_T("caption"), _T(""));
 					if (strCaption != _T(""))
-						mainForm->Text = BSTR2STRING(strCaption);
+						mainForm->Text = marshal_as<String^>(strCaption);
 					int nWidth = m_Parse.attrInt(_T("width"), 0);
 					int nHeight = m_Parse.attrInt(_T("height"), 0);
 					if (nWidth * nHeight)
@@ -1672,7 +1672,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
 						if (strBKPage != _T(""))
 						{
-							Universe::Cosmos::CreateBKPage(mainForm, BSTR2STRING(strBKPage));
+							Universe::Cosmos::CreateBKPage(mainForm, marshal_as<String^>(strBKPage));
 						}
 						client = Universe::Cosmos::GetMDIClient(mainForm);
 					}
@@ -1736,7 +1736,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		return nullptr;
 	}
 
-	Object^ pObj = Universe::Cosmos::CreateObject(BSTR2STRING(bstrObjID));
+	Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(bstrObjID));
 
 	if (pObj != nullptr)
 	{
@@ -1899,7 +1899,7 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 
 IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode)
 {
-	String^ strID = BSTR2STRING(bstrObjID);
+	String^ strID = marshal_as<String^>(bstrObjID);
 	Object^ _pObj = Universe::Cosmos::CreateObject(strID);
 	Universe::Xobj^ _pXobj = (Universe::Xobj^)_createObject<IXobj, Universe::Xobj>(pHostNode);
 	if (_pObj == nullptr)
@@ -1913,7 +1913,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 		label->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 		CString strInfo = _T("");
 		strInfo.Format(_T("Error Information: the Component \"%s\" don't exists,Please install it correctly."), OLE2T(bstrObjID));
-		label->Text = BSTR2STRING(strInfo);
+		label->Text = marshal_as<String^>(strInfo);
 		return (IDispatch*)(Marshal::GetIUnknownForObject(label).ToInt64());
 	}
 	if (_pObj->GetType()->IsSubclassOf(Control::typeid))
@@ -1944,7 +1944,7 @@ IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHost
 				::SetWindowLongPtr(hWnd, GWL_STYLE, ::GetWindowLongPtr(hWnd, GWL_STYLE) & ~(WS_SIZEBOX | WS_BORDER | WS_OVERLAPPED | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_THICKFRAME | WS_CAPTION) | WS_CHILD);// | WS_VISIBLE);
 				::SetWindowLongPtr(hWnd, GWL_EXSTYLE, ::GetWindowLongPtr(hWnd, GWL_EXSTYLE) & ~(WS_EX_APPWINDOW/*|WS_EX_CLIENTEDGE*/));
 				::SetParent(hWnd, (HWND)hParent);
-				Universe::Cosmos::Fire_OnFormNodeCreated(BSTR2STRING(bstrObjID), (Form^)pObj, _pXobj);
+				Universe::Cosmos::Fire_OnFormNodeCreated(marshal_as<String^>(bstrObjID), (Form^)pObj, _pXobj);
 				form->Show(_pXobj);
 				return pDisp;
 			}
@@ -2089,7 +2089,7 @@ IDispatch* CCosmosProxy::GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames)
 			if (pCtrl != nullptr)
 			{
 				Control::ControlCollection^ Ctrls = pCtrl->Controls;
-				pCtrl = Ctrls[BSTR2STRING(bstrNames)];
+				pCtrl = Ctrls[marshal_as<String^>(bstrNames)];
 				if (pCtrl == nullptr)
 				{
 					int nIndex = _wtoi(OLE2T(bstrNames));
@@ -2109,7 +2109,7 @@ IDispatch* CCosmosProxy::GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames)
 			{
 				if (pCtrl != nullptr)
 				{
-					Control^ pCtrl2 = pCtrl->Controls[BSTR2STRING(strName)];
+					Control^ pCtrl2 = pCtrl->Controls[marshal_as<String^>(strName)];
 					if (pCtrl2 == nullptr)
 					{
 						if (pCtrl->Controls->Count > 0)
@@ -2129,7 +2129,7 @@ IDispatch* CCosmosProxy::GetCLRControl(IDispatch* CtrlDisp, BSTR bstrNames)
 			{
 				if (pCtrl != nullptr)
 				{
-					Control^ pCtrl2 = pCtrl->Controls[BSTR2STRING(strNames)];
+					Control^ pCtrl2 = pCtrl->Controls[marshal_as<String^>(strNames)];
 					if (pCtrl2 == nullptr)
 					{
 						if (pCtrl->Controls->Count > 0)
@@ -2202,7 +2202,7 @@ IDispatch* CCosmosProxy::GetCtrlByName(IDispatch* CtrlDisp, BSTR bstrName, bool 
 		Control^ pCtrl = (Control^)Marshal::GetObjectForIUnknown((IntPtr)CtrlDisp);
 		if (pCtrl != nullptr)
 		{
-			cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(BSTR2STRING(bstrName), bFindInChild);
+			cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(marshal_as<String^>(bstrName), bFindInChild);
 			if (pArray != nullptr && pArray->Length)
 				return (IDispatch*)Marshal::GetIUnknownForObject(pArray[0]).ToPointer();
 		}
@@ -2224,7 +2224,7 @@ BSTR CCosmosProxy::GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool b
 		{
 			if (bstrName != L"")
 			{
-				cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(BSTR2STRING(bstrName), bFindInChild);
+				cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(marshal_as<String^>(bstrName), bFindInChild);
 				if (pArray != nullptr && pArray->Length)
 				{
 					return STRING2BSTR(pArray[0]->Text);
@@ -2253,16 +2253,16 @@ void CCosmosProxy::SetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool b
 		{
 			if (pCtrl != nullptr)
 			{
-				cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(BSTR2STRING(bstrName), bFindInChild);
+				cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(marshal_as<String^>(bstrName), bFindInChild);
 				if (pArray != nullptr && pArray->Length)
 				{
-					pArray[0]->Text = BSTR2STRING(strVal);
+					pArray[0]->Text = marshal_as<String^>(strVal);
 					return;
 				}
 			}
 		}
 		else
-			pCtrl->Text = BSTR2STRING(strVal);
+			pCtrl->Text = marshal_as<String^>(strVal);
 	}
 	catch (System::Exception^)
 	{
@@ -2323,13 +2323,13 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 			CString strName = pSession->GetString(_T("ctrlName"));
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
-			String^ ctrlName = BSTR2STRING(strName);
+			String^ ctrlName = marshal_as<String^>(strName);
 			Control^ ctrl = (Control^)thisNode->XObject;
 			cli::array<Control^, 1>^ pArray = ctrl->Controls->Find(ctrlName, true);
 			if (pArray != nullptr && pArray->Length)
 			{
 				Control^ _ctrl = pArray[0];
-				Universe::Cosmos::Observe(_ctrl, BSTR2STRING(strKey), BSTR2STRING(strXml));
+				Universe::Cosmos::Observe(_ctrl, marshal_as<String^>(strKey), marshal_as<String^>(strXml));
 			}
 		}
 	}
@@ -2355,7 +2355,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 					Control^ pSubCtrl = nullptr;
 					if (pCtrl != nullptr)
 					{
-						cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(BSTR2STRING(strObjName), true);
+						cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(marshal_as<String^>(strObjName), true);
 						if (pArray != nullptr && pArray->Length)
 						{
 							pSubCtrl = pArray[0];
@@ -2364,7 +2364,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 							{
 								Universe::Cosmos::Wormholes[pSubCtrl] = pCloudSession;
 							}
-							Universe::Cosmos::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, BSTR2STRING(strEventName));
+							Universe::Cosmos::Fire_OnBindCLRObjToWebPage(pSubCtrl, pCloudSession, marshal_as<String^>(strEventName));
 
 							return;
 						}
@@ -2392,7 +2392,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 						pRefXobj = pInfo->m_pXobj;
 					if (pRefXobj)
 					{
-						thisNode[BSTR2STRING(strName)] = theAppProxy._createObject<IXobj, Universe::Xobj>(pRefXobj);
+						thisNode[marshal_as<String^>(strName)] = theAppProxy._createObject<IXobj, Universe::Xobj>(pRefXobj);
 					}
 				}
 			}
@@ -2420,20 +2420,20 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 			CString strSubObj = pSession->GetString(L"currentsubobjformodify");
 			if (strSubObj == _T("caption"))
 			{
-				thisNode->Caption = BSTR2STRING(pSession->GetString(L"caption"));
+				thisNode->Caption = marshal_as<String^>(pSession->GetString(L"caption"));
 			}
 			else if (pObj->GetType()->IsSubclassOf(Control::typeid))
 			{
 				Control^ pCtrl = (Control^)pObj;
 				Control^ pSubCtrl = nullptr;
-				String^ _strSubObjName = BSTR2STRING(strSubObj);
+				String^ _strSubObjName = marshal_as<String^>(strSubObj);
 				if (String::IsNullOrEmpty(_strSubObjName) == false)
 				{
 					cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(_strSubObjName, true);
 					if (pArray != nullptr && pArray->Length)
 					{
 						pSubCtrl = pArray[0];
-						pSubCtrl->Text = BSTR2STRING(pSession->GetString(strSubObj));
+						pSubCtrl->Text = marshal_as<String^>(pSession->GetString(strSubObj));
 					}
 				}
 			}
@@ -2452,7 +2452,7 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 						Control^ pCtrl = (Control^)pObj;
 						Control^ pSubCtrl = nullptr;
 						CString strCtrls = pSession->GetString(L"ctrls");
-						String^ _strCtrls = BSTR2STRING(strCtrls);
+						String^ _strCtrls = marshal_as<String^>(strCtrls);
 						cli::array<String^, 1>^ s = _strCtrls->Split(';');
 						for each (String ^ _strSubObjName in s)
 						{
@@ -2481,12 +2481,12 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 				int nPos = strEventName.Find(_T("@"));
 				if (nPos != -1)
 				{
-					_strEventName = BSTR2STRING(strEventName.Left(nPos));
-					_strSubObjName = BSTR2STRING(strEventName.Mid(nPos + 1));
+					_strEventName = marshal_as<String^>(strEventName.Left(nPos));
+					_strSubObjName = marshal_as<String^>(strEventName.Mid(nPos + 1));
 				}
 				else
 				{
-					_strEventName = BSTR2STRING(strEventName);
+					_strEventName = marshal_as<String^>(strEventName);
 				}
 				if (!String::IsNullOrEmpty(_strSubObjName))
 				{
@@ -2650,7 +2650,7 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 							CString strID = m_Parse.attr(_T("objid"), _T(""));
 							if (strID != _T(""))
 							{
-								Type^ pType = Universe::Cosmos::GetType(BSTR2STRING(strID));
+								Type^ pType = Universe::Cosmos::GetType(marshal_as<String^>(strID));
 								System::Drawing::Icon^ pIcon = nullptr;
 								if (pType && pType->IsSubclassOf(Form::typeid))
 								{
@@ -2673,9 +2673,9 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 											pList->LargeImageList->Images->Add(pIcon);
 										}
 									}
-									ListViewItem^ pItem = pList->Items->Add(BSTR2STRING(it.first));
+									ListViewItem^ pItem = pList->Items->Add(marshal_as<String^>(it.first));
 									pItem->ImageIndex = nIndex;
-									pItem->Tag = BSTR2STRING(strXml);
+									pItem->Tag = marshal_as<String^>(strXml);
 								}
 								else {
 									CString strInfo = _T("");
@@ -2839,7 +2839,7 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 			Universe::Xobj^ pWndXobj = (Universe::Xobj^)theAppProxy._createObject<IXobj, Universe::Xobj>((IXobj*)pvoid);
 			if (pWndXobj != nullptr)
 			{
-				pWndXobj->ActionData = BSTR2STRING(bstrXml);
+				pWndXobj->ActionData = marshal_as<String^>(bstrXml);
 				Universe::Cosmos::Fire_OnCosmosActionDelegate(pWndXobj, L"");
 			}
 			return;
@@ -2847,7 +2847,7 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 		if (strXml.CompareNoCase(_T("Debug:")) >= 0)
 		{
 			strXml.Replace(_T("Debug:"), _T(""));
-			Universe::Cosmos::Fire_OnCosmosDebugDelegate(BSTR2STRING(strXml));
+			Universe::Cosmos::Fire_OnCosmosDebugDelegate(marshal_as<String^>(strXml));
 			return;
 		}
 
@@ -2876,8 +2876,8 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 						CString strMethod = m_Parse.attr(_T("Method"), _T(""));
 						if (strID != _T("") && strMethod != _T(""))
 						{
-							cli::array<Object^, 1>^ pObjs = { BSTR2STRING(strXml), pWndXobj };
-							Universe::Cosmos::ActiveMethod(BSTR2STRING(strID), BSTR2STRING(strMethod), pObjs);
+							cli::array<Object^, 1>^ pObjs = { marshal_as<String^>(strXml), pWndXobj };
+							Universe::Cosmos::ActiveMethod(marshal_as<String^>(strID), marshal_as<String^>(strMethod), pObjs);
 						}
 					}
 					break;
@@ -2894,10 +2894,10 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 		//		int nPos = strXml.Find(strToken);
 		//		if (nPos != -1)
 		//		{
-		//			Universe::Cosmos::Fire_OnCosmosIPCMessage(pWndXobj, BSTR2STRING(strXml));
+		//			Universe::Cosmos::Fire_OnCosmosIPCMessage(pWndXobj, marshal_as<String^>(strXml));
 		//		}
 		//		else
-		//			Universe::Cosmos::Fire_OnCosmosLoadDocument2Viewport(pWndXobj, BSTR2STRING(strXml));
+		//			Universe::Cosmos::Fire_OnCosmosLoadDocument2Viewport(pWndXobj, marshal_as<String^>(strXml));
 		//	}
 		//}
 	}
@@ -3020,9 +3020,9 @@ void CCosmos::OnObserverComplete(HWND hWnd, CString strUrl, IXobj* pRootXobj)
 	Universe::Cosmos^ pManager = Universe::Cosmos::GetCosmos();
 	Universe::Xobj^ _pRootNode = theAppProxy._createObject<IXobj, Universe::Xobj>(pRootXobj);
 	IntPtr nHandle = (IntPtr)hWnd;
-	pManager->Fire_OnObserverComplete(nHandle, BSTR2STRING(strUrl), _pRootNode);
+	pManager->Fire_OnObserverComplete(nHandle, marshal_as<String^>(strUrl), _pRootNode);
 	// Notify all descendant nodes under the root node.
-	_pRootNode->Fire_RootXobjCreated(nHandle, BSTR2STRING(strUrl), _pRootNode);
+	_pRootNode->Fire_RootXobjCreated(nHandle, marshal_as<String^>(strUrl), _pRootNode);
 }
 
 CGalaxyClusterEvent::CGalaxyClusterEvent()
@@ -3052,7 +3052,7 @@ void CGalaxyClusterEvent::OnInitialize(IDispatch* pHtmlWnd, BSTR bstrUrl)
 {
 	Object^ pObj = m_pGalaxyCluster;
 	Universe::GalaxyCluster^ pGalaxyCluster = static_cast<Universe::GalaxyCluster^>(pObj);
-	pGalaxyCluster->Fire_OnDocumentComplete(pGalaxyCluster, Marshal::GetObjectForIUnknown((IntPtr)pHtmlWnd), BSTR2STRING(bstrUrl));
+	pGalaxyCluster->Fire_OnDocumentComplete(pGalaxyCluster, Marshal::GetObjectForIUnknown((IntPtr)pHtmlWnd), marshal_as<String^>(bstrUrl));
 }
 
 void CGalaxyClusterEvent::OnIPCMsg(IGalaxy* sender, BSTR bstrType, BSTR bstrContent, BSTR bstrFeature)
@@ -3060,7 +3060,7 @@ void CGalaxyClusterEvent::OnIPCMsg(IGalaxy* sender, BSTR bstrType, BSTR bstrCont
 	Object^ pObj = m_pGalaxyCluster;
 	Universe::GalaxyCluster^ pGalaxyCluster = static_cast<Universe::GalaxyCluster^>(pObj);
 	Galaxy^ pGalaxy = (Galaxy^)theAppProxy._createObject<IGalaxy, Galaxy>(sender);
-	pGalaxyCluster->Fire_OnIPCMsg(pGalaxy, BSTR2STRING(bstrType), BSTR2STRING(bstrContent), BSTR2STRING(bstrFeature));
+	pGalaxyCluster->Fire_OnIPCMsg(pGalaxy, marshal_as<String^>(bstrType), marshal_as<String^>(bstrContent), marshal_as<String^>(bstrFeature));
 }
 
 void CCosmosProxy::OnApplicationExit(System::Object^ sender, System::EventArgs^ e)

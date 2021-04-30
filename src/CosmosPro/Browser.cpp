@@ -100,7 +100,7 @@ namespace Universe
 	String^ Wormhole::GetString(String^ key)
 	{
 		if(m_pCosmosSession)
-			return BSTR2STRING(m_pCosmosSession->GetString(key));
+			return marshal_as<String^>(m_pCosmosSession->GetString(key));
 		return L"";
 	}
 
