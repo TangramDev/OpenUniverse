@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104280070
+ *           Web Runtime for Application - Version 1.0.1.202105010000
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -259,7 +259,7 @@ namespace Universe
 		String^ SendIPCMessage(String^ strTo, String^ strPayload, String^ strExtra, String^ strMsgId)
 		{
 			BSTR bstrRet;
-			HRESULT hr = m_pXobj->SendIPCMessage(STRING2BSTR(strTo), STRING2BSTR(strPayload), STRING2BSTR(strExtra), STRING2BSTR(strMsgId), &bstrRet);
+			HRESULT hr = m_pXobj->SendIPCMessage(marshal_as<CComBSTR>(strTo), marshal_as<CComBSTR>(strPayload), marshal_as<CComBSTR>(strExtra), marshal_as<CComBSTR>(strMsgId), &bstrRet);
 			if (hr == S_OK)
 			{
 				return marshal_as<String^>(bstrRet);
@@ -351,7 +351,7 @@ namespace Universe
 			String^ get();
 			void set(String^ strCaption)
 			{
-				m_pXobj->put_Caption(STRING2BSTR(strCaption));
+				m_pXobj->put_Caption(marshal_as<CComBSTR>(strCaption));
 			}
 		}
 
@@ -378,7 +378,7 @@ namespace Universe
 			{
 				if (m_pXobj)
 				{
-					m_pXobj->put_Name(STRING2BSTR(newVal));
+					m_pXobj->put_Name(marshal_as<CComBSTR>(newVal));
 				}
 			}
 		}
@@ -739,7 +739,7 @@ namespace Universe
 			String ^ get(String ^ strKey)
 			{
 				BSTR bstrVal;
-				m_pXobj->get_Attribute(STRING2BSTR(strKey),&bstrVal);
+				m_pXobj->get_Attribute(marshal_as<CComBSTR>(strKey),&bstrVal);
 
 				return marshal_as<String^>(bstrVal);
 			}
@@ -747,8 +747,8 @@ namespace Universe
 			void set(String ^ strKey, String ^ strVal)
 			{
 				m_pXobj->put_Attribute(
-					STRING2BSTR(strKey),
-					STRING2BSTR(strVal));
+					marshal_as<CComBSTR>(strKey),
+					marshal_as<CComBSTR>(strVal));
 			}
 		}
 
@@ -763,9 +763,8 @@ namespace Universe
 		Xobj^ GetChildXobj(String^ strName)
 		{
 			IXobj* pXobj;
-			BSTR bstrName = STRING2BSTR(strName);
+			CComBSTR bstrName = marshal_as<CComBSTR>(strName);
 			m_pXobj->GetChildXobjByName(bstrName, &pXobj);
-			::SysFreeString(bstrName);
 			return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 		}
 
@@ -778,7 +777,7 @@ namespace Universe
 			pXobjCollection = nullptr;
 
 			long nCount;
-			m_pXobj->GetXobjs(STRING2BSTR(strName),
+			m_pXobj->GetXobjs(marshal_as<CComBSTR>(strName),
 				&pTNode, &pXobjs, &nCount);
 
 			pXobj = theAppProxy._createObject<IXobj, Xobj>(pTNode);
@@ -943,7 +942,6 @@ namespace Universe
 		//static Dictionary<String^, TangramAppProxy^>^ m_pCosmosAppProxyDic = gcnew Dictionary<String^, TangramAppProxy^>();
 		static Dictionary<Object^, Xobj^>^ m_pFrameworkElementDic = gcnew Dictionary<Object^, Xobj^>();
 
-		static String^ ComputeHash(String^ source);
 		static int CosmosInit(String^ strInit);
 		static GalaxyCluster^ CreateGalaxyCluster(IntPtr nPageHandle);
 		static GalaxyCluster^ CreateGalaxyCluster(Control^ ctrl, Object^ ExternalObj);
@@ -1414,7 +1412,7 @@ namespace Universe
 					return pRetGalaxy;
 				}
 				CComPtr<IGalaxy> pGalaxy;
-				m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)ctrl->Handle.ToInt64()), STRING2BSTR(strName), &pGalaxy);
+				m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)ctrl->Handle.ToInt64()), marshal_as<CComBSTR>(strName), &pGalaxy);
 				if (pGalaxy)
 				{
 					pRetGalaxy = theAppProxy._createObject<IGalaxy, Galaxy>(pGalaxy);
@@ -1435,7 +1433,7 @@ namespace Universe
 					return pRetGalaxy;
 				}
 				CComPtr<IGalaxy> pGalaxy;
-				m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)handle.ToInt64()), STRING2BSTR(strName), &pGalaxy);
+				m_pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)handle.ToInt64()), marshal_as<CComBSTR>(strName), &pGalaxy);
 				if (pGalaxy)
 				{
 					pRetGalaxy = theAppProxy._createObject<IGalaxy, Galaxy>(pGalaxy);
@@ -1524,7 +1522,7 @@ namespace Universe
 			if (m_pCtrl)
 			{
 				IXobj* pXobj = nullptr;
-				m_pCtrl->Observe(STRING2BSTR(strGalaxyName), STRING2BSTR(strKey), STRING2BSTR(strXml), &pXobj);
+				m_pCtrl->Observe(marshal_as<CComBSTR>(strGalaxyName), marshal_as<CComBSTR>(strKey), marshal_as<CComBSTR>(strXml), &pXobj);
 				if (pXobj)
 				{
 					return theAppProxy._createObject<IXobj, Xobj>(pXobj);
@@ -1565,7 +1563,7 @@ namespace Universe
 			if (m_pWorkBenchWindow)
 			{
 				IXobj* pXobj = nullptr;
-				m_pWorkBenchWindow->Observe(STRING2BSTR(strKey), STRING2BSTR(strXml), &pXobj);
+				m_pWorkBenchWindow->Observe(marshal_as<CComBSTR>(strKey), marshal_as<CComBSTR>(strXml), &pXobj);
 				if (pXobj)
 					return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 			}
@@ -1581,7 +1579,7 @@ namespace Universe
 				if (pCtrl)
 				{
 					IXobj* pXobj = nullptr;
-					pCtrl->Observe(CComBSTR(L"EclipseView"), STRING2BSTR(strKey), STRING2BSTR(strXml), &pXobj);
+					pCtrl->Observe(CComBSTR(L"EclipseView"), marshal_as<CComBSTR>(strKey), marshal_as<CComBSTR>(strXml), &pXobj);
 					if (pXobj)
 						return theAppProxy._createObject<IXobj, Xobj>(pXobj);
 				}

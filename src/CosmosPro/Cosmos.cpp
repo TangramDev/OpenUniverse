@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104280070
+ *           Web Runtime for Application - Version 1.0.1.202105010000
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -164,7 +164,7 @@ namespace Universe
             case BlankView:
                 if (nType == BlankView)
                 {
-                    m_pXobj->put_URL(STRING2BSTR(newVal));
+                    m_pXobj->put_URL(marshal_as<CComBSTR>(newVal));
 
                 }
                 break;
@@ -201,7 +201,7 @@ namespace Universe
             if (pRootXobj->m_pPlugInDic->TryGetValue(strObjName, pObj) == false)
             {
                 IDispatch* pDisp = nullptr;
-                LRESULT hr = m_pXobj->get_AxPlugIn(STRING2BSTR(strObjName), &pDisp);
+                LRESULT hr = m_pXobj->get_AxPlugIn(marshal_as<CComBSTR>(strObjName), &pDisp);
                 if (SUCCEEDED(hr) && pDisp)
                 {
                     Object^ pObj = reinterpret_cast<Object^>(Marshal::GetObjectForIUnknown((System::IntPtr)(pDisp)));
@@ -229,11 +229,9 @@ namespace Universe
             if (pGalaxy)
             {
                 IXobj* pXobj = nullptr;
-                BSTR bstrKey = STRING2BSTR(key);
-                BSTR bstrXml = STRING2BSTR(strXobjXml);
+                CComBSTR bstrKey = marshal_as<CComBSTR>(key);
+                CComBSTR bstrXml = marshal_as<CComBSTR>(strXobjXml);
                 pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
-                ::SysFreeString(bstrKey);
-                ::SysFreeString(bstrXml);
                 if (pXobj)
                     return theAppProxy._createObject<IXobj, Xobj>(pXobj);
                 return nullptr;
@@ -316,22 +314,19 @@ namespace Universe
                     if (pIGalaxyCluster)
                     {
                         String^ strName = ctrl->Name;
-                        BSTR bstrName = STRING2BSTR(strName);
+                        CComBSTR bstrName = marshal_as<CComBSTR>(strName);
                         Xobj^ _pRetXobj = nullptr;
                         HWND hWnd = (HWND)ctrl->Handle.ToPointer();
                         pIGalaxyCluster->CreateGalaxy(CComVariant((__int64)0), CComVariant((__int64)hWnd), bstrName, &pGalaxy);
                         if (pGalaxy)
                         {
                             IXobj* pXobj = nullptr;
-                            BSTR bstrKey = STRING2BSTR(key);
-                            BSTR bstrXml = STRING2BSTR(strXobjXml);
+                            CComBSTR bstrKey = marshal_as<CComBSTR>(key);
+                            CComBSTR bstrXml = marshal_as<CComBSTR>(strXobjXml);
                             pGalaxy->Observe(bstrKey, bstrXml, &pXobj);
-                            ::SysFreeString(bstrKey);
-                            ::SysFreeString(bstrXml);
                             if (pXobj)
                                 _pRetXobj = theAppProxy._createObject<IXobj, Xobj>(pXobj);
                         }
-                        ::SysFreeString(bstrName);
                         ::InvalidateRect(hWnd, nullptr, true);
                         return _pRetXobj;
                     }
@@ -499,18 +494,6 @@ namespace Universe
         return m_pCosmos;
     }
 
-    String^ Cosmos::ComputeHash(String^ source)
-    {
-        BSTR bstrSRC = STRING2BSTR(source);
-        LPCWSTR srcInfo = OLE2T(bstrSRC);
-        std::string strSrc = (LPCSTR)CW2A(srcInfo, CP_UTF8);
-        int nSrcLen = (int)strSrc.length();
-        CString strRet = _T("");
-        theApp.CalculateByteMD5((BYTE*)strSrc.c_str(), nSrcLen, strRet);
-        ::SysFreeString(bstrSRC);
-        return marshal_as<String^>(strRet);
-    }
-
     bool Cosmos::SupportCrashReporting::get()
     {
         return theApp.m_pCosmosImpl->m_bIsSupportCrashReporting;
@@ -670,7 +653,7 @@ namespace Universe
         if (theApp.m_pCosmos)
         {
             ICosmos* pCosmos = nullptr;
-            BSTR bstrID = STRING2BSTR(strID);
+            CComBSTR bstrID = marshal_as<CComBSTR>(strID);
             theApp.m_pCosmos->get_RemoteCosmos(bstrID, &pCosmos);
             if (pCosmos)
             {
@@ -745,21 +728,17 @@ namespace Universe
 
     String^ Cosmos::AppKeyValue::get(String^ iIndex)
     {
-        auto it = theApp.m_pCosmosImpl->m_mapValInfo.find(STRING2BSTR(iIndex));
+        auto it = theApp.m_pCosmosImpl->m_mapValInfo.find(marshal_as<CString>(iIndex));
         if (it != theApp.m_pCosmosImpl->m_mapValInfo.end())
         {
             return marshal_as<String^>(it->second.bstrVal);
         }
-        //CComVariant bstrVal(::SysAllocString(L""));
-        //theApp.m_pCosmos->get_AppKeyValue(STRING2BSTR(iIndex), &bstrVal);
-        //String^ strVal = marshal_as<String^>(bstrVal.bstrVal);
-        //::SysFreeString(bstrVal);
         return L"";
     }
 
     void Cosmos::AppKeyValue::set(String^ iIndex, String^ newVal)
     {
-        theApp.m_pCosmos->put_AppKeyValue(STRING2BSTR(iIndex), CComVariant(STRING2BSTR(newVal)));
+        theApp.m_pCosmos->put_AppKeyValue(marshal_as<CComBSTR>(iIndex), CComVariant(marshal_as<CComBSTR>(newVal)));
     }
 
     void Cosmos::Fire_OnCloudAppIdle()
@@ -821,7 +800,7 @@ namespace Universe
 
             CString _strTag = _T("");
             if (String::IsNullOrEmpty(strTag) == false)
-                _strTag = STRING2BSTR(strTag);
+                _strTag = marshal_as<CString>(strTag);
             if (_strTag == _T(""))
                 _strTag = _T("default");
             int nCount = pForm->Controls->Count;
@@ -844,7 +823,7 @@ namespace Universe
         Control^ mdiclient = Cosmos::GetMDIClient(form);
         if (mdiclient)
         {
-            ::SendMessage((HWND)form->Handle.ToPointer(), WM_MDICLIENTCREATED, (WPARAM)mdiclient->Handle.ToInt64(), (LPARAM)STRING2BSTR(strID));
+            ::SendMessage((HWND)form->Handle.ToPointer(), WM_MDICLIENTCREATED, (WPARAM)mdiclient->Handle.ToInt64(), (LPARAM)LPCTSTR(marshal_as<CString>(strID)));
         }
     }
 
@@ -1009,17 +988,13 @@ namespace Universe
 
     void Cosmos::SendXmlMessage(Xobj^ sender, String^ strXml)
     {
-        BSTR bstrXml = STRING2BSTR(strXml);
         IWebPage* pPage = nullptr;
         sender->m_pXobj->get_WebPage(&pPage);
         if (pPage)
         {
-            BSTR bstrXml = STRING2BSTR(strXml);
+            CComBSTR bstrXml = marshal_as<CComBSTR>(strXml);
             pPage->SendXmlMessage(sender->m_pXobj, bstrXml);
-            ::SysFreeString(bstrXml);
         }
-        //theApp.m_pCosmos->SendXmlMessage(sender->m_pXobj, bstrXml);
-        ::SysFreeString(bstrXml);
     }
 
     void Cosmos::BindObjToWebPage(IntPtr hWebPage, Object^ pObj, String^ strWebName)
@@ -1079,10 +1054,8 @@ namespace Universe
     List<String^>^ Cosmos::FindFiles(String^ rootPath, String^ fileSpec, bool recursive)
     {
         List<String^>^ pFiles = gcnew List<String^>();
-        BSTR bstrRootPath = STRING2BSTR(rootPath);
-        BSTR bstrFileSpec = STRING2BSTR(fileSpec);
-        CString strRootPath = OLE2T(bstrRootPath);
-        CString strFileSpec = OLE2T(bstrFileSpec);
+        CString strRootPath = marshal_as<CString>(rootPath);
+        CString strFileSpec = marshal_as<CString>(fileSpec);
         wchar_t strSearch[MAX_PATH] = L"";
         ::PathCombineW(strSearch, (LPCTSTR)strRootPath, (LPCTSTR)strFileSpec);
         _wfinddata_t fd;
@@ -1124,8 +1097,7 @@ namespace Universe
     Dictionary<String^, Type^>^ Cosmos::GetFormTypesFromAssembly(String^ assemblyFilePath)
     {
         Dictionary<String^, Type^>^ pFormTypes = gcnew Dictionary<String^, Type^>();
-        BSTR bstrFile = STRING2BSTR(assemblyFilePath);
-        CString strFile = OLE2T(bstrFile);
+        CString strFile = marshal_as<CString>(assemblyFilePath);
         CString strXMLFile = strFile + L".xml";
         CMarkup xml;
         if (xml.Load(strXMLFile) && xml.FindElem())
@@ -1168,8 +1140,7 @@ namespace Universe
             CMarkup xml;
             xml.AddElem(L"forms");
             xml.IntoElem();
-            BSTR bstrAssemblyFilePath = STRING2BSTR(assemblyFilePath);
-            CString filePath = OLE2T(bstrAssemblyFilePath);
+            CString filePath = marshal_as<CString>(assemblyFilePath);
             Assembly^ pAssembly = nullptr;
             try
             {
@@ -1204,8 +1175,7 @@ namespace Universe
                                 else
                                 {
                                     pFormTypes[type->FullName] = type;
-                                    BSTR bstrFormType = STRING2BSTR(type->FullName);
-                                    CString strFormType = OLE2T(bstrFormType);
+                                    CString strFormType = marshal_as<CString>(type->FullName);
                                     xml.AddElem(L"form");
                                     xml.SetAttrib(L"type", strFormType);
                                 }
@@ -1283,7 +1253,7 @@ namespace Universe
                                     CString strPath = strPath2.Left(nPos + 1);
                                     CString strNmae = strPath2.Mid(nPos + 1);
                                     strPath2 = strPath;
-                                    strPath2 += STRING2BSTR(type->FullName);
+                                    strPath2 += marshal_as<CString>(type->FullName);
                                     strPath2 += _T(" ");
                                     strPath2 += strNmae;
                                     strPath2 += _T(".ico");
@@ -1291,16 +1261,6 @@ namespace Universe
                                     System::IO::FileStream^ fs = gcnew System::IO::FileStream(marshal_as<String^>(strPath2), System::IO::FileMode::OpenOrCreate);
                                     m_pObj->Icon->Save(fs);
                                     fs->Close();
-                                    //System::IO::Stream^ p = nullptr;
-                                    //m_pObj->Icon->Save(p);
-                                    //if (p)
-                                    //{
-                                    //	p->Close();
-                                    //}
-                                    //CString strPath = strLib;
-                                    //strPath += STRING2BSTR(type->FullName);
-                                    //strPath += _T(".ico");
-                                    //theAppProxy.SaveIcon(hIcon, strPath);
                                     delete fs;
                                 }
                             }
@@ -1343,10 +1303,6 @@ namespace Universe
 
     void Cosmos::ExtractToDirectory(String^ strSRC, String^ strTarget)
     {
-        BSTR bstrSRC = STRING2BSTR(strSRC);
-        BSTR bstrTarget = STRING2BSTR(strTarget);
-        ::SysFreeString(bstrSRC);
-        ::SysFreeString(bstrTarget);
     }
 
     void Cosmos::ExportAllCLRObjInfo()
@@ -1385,7 +1341,7 @@ namespace Universe
         {
             CString str1 = strIDs;
             str1 += _T(";");
-            str1 += STRING2BSTR(strTypes);
+            str1 += marshal_as<CString>(strTypes);
             str1 += _T(";");
             str1 += _T(";") + str1;
             str1.Replace(_T(";;"), _T(";"));
@@ -1475,10 +1431,9 @@ namespace Universe
 
     WorkBenchWindow^ Cosmos::RemoteActiveWorkBenchWindow(String^ appID)
     {
-        BSTR _strID = STRING2BSTR(appID);
+        CComBSTR _strID = marshal_as<CComBSTR>(appID);
         ICosmos* pCosmos = nullptr;
         theApp.m_pCosmos->get_RemoteCosmos(_strID, &pCosmos);
-        ::SysFreeString(_strID);
         if (pCosmos)
         {
             IWorkBenchWindow* pTopWnd = nullptr;
@@ -1500,8 +1455,8 @@ namespace Universe
 
     void Cosmos::StartApplication(String^ appID, String^ strXml)
     {
-        BSTR _strID = STRING2BSTR(appID);
-        BSTR _strXml = STRING2BSTR(strXml);
+        CComBSTR _strID = marshal_as<CComBSTR>(appID);
+        CComBSTR _strXml = marshal_as<CComBSTR>(strXml);
         //if (appID->ToLower() == L"caswebagent.server.1")
         //{
         //    CComPtr<ICosmos> pApp;
@@ -1521,8 +1476,6 @@ namespace Universe
         {
             theApp.m_pCosmos->StartApplication(_strID, _strXml);
         }
-        ::SysFreeString(_strID);
-        ::SysFreeString(_strXml);
     }
 
     Object^ Cosmos::ActiveObjectMethod(Object^ pObj, String^ strMethod, cli::array<Object^, 1>^ p)
@@ -1611,9 +1564,7 @@ namespace Universe
             String^ strID = nullptr;
             if (pApp->m_pCosmosCLRTypeDic->TryGetValue(m_strID, pType) == false)
             {
-                BSTR bstrID = STRING2BSTR(m_strID);
-                CString _strID = OLE2T(bstrID);
-                ::SysFreeString(bstrID);
+                CString _strID = marshal_as<CString>(m_strID);
                 int nIndex = _strID.Find(_T(","));
                 if (nIndex != -1)
                 {
@@ -1959,12 +1910,10 @@ namespace Universe
     {
         if (m_pXobj)
         {
-            BSTR blayerName = STRING2BSTR(layerName);
-            BSTR blayerXML = STRING2BSTR(layerXML);
+            CComBSTR blayerName = marshal_as<CComBSTR>(layerName);
+            CComBSTR blayerXML = marshal_as<CComBSTR>(layerXML);
             IXobj* pXobj = nullptr;
             m_pXobj->Observe(blayerName, blayerXML, &pXobj);
-            ::SysFreeString(blayerName);
-            ::SysFreeString(blayerXML);
             if (pXobj)
             {
                 return theAppProxy._createObject<IXobj, Xobj>(pXobj);
@@ -1977,12 +1926,10 @@ namespace Universe
     {
         if (m_pXobj)
         {
-            BSTR blayerName = STRING2BSTR(layerName);
-            BSTR blayerXML = STRING2BSTR(layerXML);
+            CComBSTR blayerName = marshal_as<CComBSTR>(layerName);
+            CComBSTR blayerXML = marshal_as<CComBSTR>(layerXML);
             IXobj* pXobj = nullptr;
             m_pXobj->ObserveEx(rowNum, colNum, blayerName, blayerXML, &pXobj);
-            ::SysFreeString(blayerName);
-            ::SysFreeString(blayerXML);
             if (pXobj)
             {
                 return theAppProxy._createObject<IXobj, Xobj>(pXobj);
@@ -2014,10 +1961,9 @@ namespace Universe
                         String^ name = pXobj->Name + L".";
                         name += m_pBindTreeView->Name;
                         name += L"." + marshal_as<String^>(bstrName);
-                        BSTR strName = STRING2BSTR(name->ToLower());
+                        CComBSTR strName = marshal_as<CComBSTR>(name->ToLower());
                         Universe::Galaxy^ _pGalaxy = GalaxyCluster->CreateGalaxy(m_pBindTreeView->Handle, name);
                         pGalaxy->Observe(L"default", CComBSTR(_pParse->xml()), &_pXobj);
-                        ::SysFreeString(strName);
                     }
                     else
                     {
@@ -2053,8 +1999,8 @@ namespace Universe
                 m_strTreeViewData = Universe::Cosmos::m_strWizData;
             if (String::IsNullOrEmpty(m_strTreeViewData) == false)
             {
-                BSTR bstrXml = STRING2BSTR(m_strTreeViewData);
-                CString strXml = OLE2T(bstrXml);
+                String^ strData = m_strTreeViewData;
+                CString strXml = marshal_as<CString>(strData);
                 CTangramXmlParse m_Parse;
                 if (m_Parse.LoadXml(strXml) || m_Parse.LoadFile(strXml))
                 {
@@ -2063,7 +2009,6 @@ namespace Universe
                         LoadNode(m_pBindTreeView->Nodes->Add(marshal_as<String^>(m_Parse.text())), &m_Parse);
                     }
                 }
-                ::SysFreeString(bstrXml);
                 m_pBindTreeView->ExpandAll();
             }
         }
@@ -2244,15 +2189,15 @@ namespace Universe
 
     void GalaxyCluster::ObserveGalaxys(String^ strFrames, String^ strKey, String^ bstrXml, bool bSaveToConfigFile)
     {
-        m_pGalaxyCluster->ObserveGalaxys(STRING2BSTR(strFrames), STRING2BSTR(strKey), STRING2BSTR(bstrXml), bSaveToConfigFile);
+        m_pGalaxyCluster->ObserveGalaxys(marshal_as<CComBSTR>(strFrames), marshal_as<CComBSTR>(strKey), marshal_as<CComBSTR>(bstrXml), bSaveToConfigFile);
     }
 
     Xobj^ GalaxyCluster::GetXobj(String^ strName, String^ strGalaxyName)
     {
         if (String::IsNullOrEmpty(strName) || String::IsNullOrEmpty(strGalaxyName))
             return nullptr;
-        BSTR bstrXml = STRING2BSTR(strName);
-        BSTR bstrGalaxyName = STRING2BSTR(strGalaxyName);
+        CComBSTR bstrXml = marshal_as<CComBSTR>(strName);
+        CComBSTR bstrGalaxyName = marshal_as<CComBSTR>(strGalaxyName);
         CComPtr<IXobj> pXobj;
         m_pGalaxyCluster->GetXobj(bstrXml, bstrGalaxyName, &pXobj);
         Xobj^ pRetNode = nullptr;
@@ -2260,8 +2205,6 @@ namespace Universe
         {
             pRetNode = theAppProxy._createObject<IXobj, Xobj>(pXobj);
         }
-        ::SysFreeString(bstrXml);
-        ::SysFreeString(bstrGalaxyName);
         return pRetNode;
     }
 
@@ -2296,8 +2239,8 @@ namespace Universe
     Xobj^ Galaxy::Observe(String^ layerName, String^ layerXML)
     {
         Universe::Xobj^ pRetNode = nullptr;
-        BSTR blayerName = STRING2BSTR(layerName);
-        BSTR blayerXML = STRING2BSTR(layerXML);
+        CComBSTR blayerName = marshal_as<CComBSTR>(layerName);
+        CComBSTR blayerXML = marshal_as<CComBSTR>(layerXML);
         CComPtr<IXobj> pXobj;
         m_pGalaxy->Observe(blayerName, blayerXML, &pXobj);
         if (pXobj)
@@ -2309,8 +2252,6 @@ namespace Universe
                 Add(layerName, pRetNode);
             }
         }
-        ::SysFreeString(blayerName);
-        ::SysFreeString(blayerXML);
         return pRetNode;
     }
 }

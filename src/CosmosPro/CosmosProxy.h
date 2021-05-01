@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104280070
+ *           Web Runtime for Application - Version 1.0.1.202105010000
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -31,6 +31,7 @@
 #include "resource.h"       // main symbols
 #include <msclr\marshal.h>
 #include <msclr\marshal_atl.h>
+#include <msclr\marshal_cppstd.h>
 
 using namespace Universe;
 using namespace msclr::interop;

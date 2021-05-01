@@ -24,8 +24,6 @@
 #pragma once
 #include <atlstr.h>
 
-#define STRING2BSTR(x) (static_cast<BSTR>(Marshal::StringToBSTR(x).ToPointer()))
-
 class CCommonFunction
 {
 public:

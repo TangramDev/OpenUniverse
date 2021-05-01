@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104280070
+ *           Web Runtime for Application - Version 1.0.1.202105010000
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -23,7 +23,7 @@
  *******************************************************************************/
  
  /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104280070
+ *           Web Runtime for Application - Version 1.0.1.202105010000
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -167,25 +167,21 @@ namespace Universe
 
 	void Browser::AddURLs(String^ urls)
 	{
-		BSTR bstrUrl = STRING2BSTR(urls);
 		if (m_pWebBrowser)
 		{
-			m_pWebBrowser->OpenURL(bstrUrl, BrowserWndOpenDisposition::NEW_FOREGROUND_TAB, L"", L"");
+			m_pWebBrowser->OpenURL(marshal_as<CComBSTR>(urls), BrowserWndOpenDisposition::NEW_FOREGROUND_TAB, L"", L"");
 		}
 	}
 
 	void Browser::OpenURL(String^ url, Disposition disposition, String^ key, String^ xml)
 	{
-		BSTR bstrUrl = STRING2BSTR(url);
-		BSTR bstrKey = STRING2BSTR(key);
-		BSTR bstrXml = STRING2BSTR(xml);
+		CComBSTR bstrUrl = marshal_as<CComBSTR>(url);
+		CComBSTR bstrKey = marshal_as<CComBSTR>(key);
+		CComBSTR bstrXml = marshal_as<CComBSTR>(xml);
 		if (m_pWebBrowser)
 		{
 			m_pWebBrowser->OpenURL(bstrUrl, (BrowserWndOpenDisposition)disposition, bstrKey, bstrXml);
 		}
-		::SysFreeString(bstrUrl);
-		::SysFreeString(bstrKey);
-		::SysFreeString(bstrXml);
 	}
 
 	WebPage::WebPage(IWebPage* pWebPage)
@@ -213,7 +209,7 @@ namespace Universe
 		if (m_pWebPage)
 		{
 			IDispatch* pFormDisp = nullptr;
-			pFormDisp = theApp.m_pCosmosImpl->m_pCLRProxy->CreateWinForm(m_hWnd, STRING2BSTR(strFormKey));
+			pFormDisp = theApp.m_pCosmosImpl->m_pCLRProxy->CreateWinForm(m_hWnd, marshal_as<CComBSTR>(strFormKey));
 			return (Form^)Marshal::GetObjectForIUnknown((IntPtr)pFormDisp);
 		}
 		return nullptr;

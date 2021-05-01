@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104280070
+ *           Web Runtime for Application - Version 1.0.1.202105010000
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -452,7 +452,7 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 						String^ name = pChild->Name;
 						if (String::IsNullOrEmpty(name))
 							name = strType;
-						BSTR strName = STRING2BSTR(name->ToLower());
+						CString strName = marshal_as<CString>(name->ToLower());
 						GalaxyInfo* pInfo = new GalaxyInfo;
 						pInfo->m_strXobjXml = _T("");
 						pInfo->m_hCtrlHandle = (HWND)pChild->Handle.ToInt64();
@@ -461,8 +461,7 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 						theAppProxy.m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 						pInfo->m_strCtrlName = pChild->Name->ToLower();
 						pInfo->m_strParentCtrlName = pChild->Name->ToLower();
-						theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
-						::SysFreeString(strName);
+						theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), strName, pGalaxyCluster->m_pGalaxyCluster, pInfo);
 					}
 				}
 				::SetWindowLongPtr((HWND)pChild->Handle.ToInt64(), GWLP_USERDATA, 0);
@@ -473,9 +472,8 @@ void CCosmosProxy::OnVisibleChanged(System::Object^ sender, System::EventArgs^ e
 				IXobj* pXobj = (IXobj*)lp;
 			}
 		}
-		BSTR bstrName = STRING2BSTR(pChild->Name); //OK!
-		IGalaxyCluster* pXobj = theApp.m_pCosmosImpl->Observe((HWND)pChild->Handle.ToInt64(), OLE2T(bstrName), _T("default"));
-		::SysFreeString(bstrName);
+
+		IGalaxyCluster* pXobj = theApp.m_pCosmosImpl->Observe((HWND)pChild->Handle.ToInt64(), marshal_as<CString>(pChild->Name), _T("default"));
 	}
 }
 
@@ -812,7 +810,8 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								}
 							}
 
-							BSTR strName = STRING2BSTR(name->ToLower());
+							//strFormName = marshal_as<CString>(thisForm->Name);
+							CString strName = marshal_as<CString>(name->ToLower());
 							if (name == L"htmlclient")
 							{
 								::PostMessage(hWnd, WM_COSMOSMSG, (WPARAM)pChild->Handle.ToInt64(), 20200130);
@@ -834,8 +833,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 								pInfo->m_strCtrlName = name->ToLower();
 								pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-								IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
-								::SysFreeString(strName);
+								IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), strName, pGalaxyCluster->m_pGalaxyCluster, pInfo);
 
 							}
 							else
@@ -860,7 +858,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 											m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 											pInfo->m_strCtrlName = name->ToLower();
 											pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-											IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
+											IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), strName, pGalaxyCluster->m_pGalaxyCluster, pInfo);
 										}
 									}
 									else
@@ -873,11 +871,10 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 										m_mapGalaxyInfo[pInfo->m_hCtrlHandle] = pInfo;
 										pInfo->m_strCtrlName = name->ToLower();
 										pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-										IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
+										IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), strName, pGalaxyCluster->m_pGalaxyCluster, pInfo);
 									}
 								}
 							}
-							::SysFreeString(strName);
 						}
 					}
 				}
@@ -942,7 +939,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 					else
 						name += pChild->Name;
 					name += L"." + marshal_as<String^>(bstrName);
-					BSTR strName = STRING2BSTR(name->ToLower());//OK!
+					CString strName = marshal_as<CString>(name->ToLower());//OK!
 					if (pParse)
 					{
 						CString _strName = pChild->Name->ToLower();
@@ -962,7 +959,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 							pInfo->m_strXobjXml = pChildParse2->xml();
 							pInfo->m_strCtrlName = _strName;
 							pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-							IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
+							IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), strName, pGalaxyCluster->m_pGalaxyCluster, pInfo);
 							if (m_pOnCtrlVisible)
 							{
 							}
@@ -1039,7 +1036,7 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 							pInfo->m_strXobjXml = _T("");
 							pInfo->m_strCtrlName = pChild->Name->ToLower();
 							pInfo->m_strParentCtrlName = pCtrl->Name->ToLower();
-							IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), OLE2T(strName), pGalaxyCluster->m_pGalaxyCluster, pInfo);
+							IGalaxy* _pGalaxy = theApp.m_pCosmosImpl->ConnectGalaxyCluster((HWND)pChild->Handle.ToInt64(), strName, pGalaxyCluster->m_pGalaxyCluster, pInfo);
 							if (m_pOnCtrlVisible)
 							{
 							}
@@ -1060,8 +1057,6 @@ Object^ CCosmosProxy::InitXobj(IXobj* _pXobj, Control^ pCtrl, bool bSave, CTangr
 							}
 						}
 					}
-
-					::SysFreeString(strName);
 				}
 			}
 			InitXobj(_pXobj, pChild, bSave, pParse);
@@ -1222,7 +1217,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 					}
 				}
 			}
-			theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), STRING2BSTR(strKey), CComBSTR(L""), true);
+			theApp.m_pCosmos->ObserveGalaxys(pForm->Handle.ToInt64(), CComBSTR(L""), marshal_as<CComBSTR>(strKey), CComBSTR(L""), true);
 		}
 	}
 	if (pForm->IsMdiContainer)
@@ -1494,9 +1489,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
 							if (strFormName == _T(""))
 							{
-								BSTR bstrName = STRING2BSTR(thisForm->Name);
-								strFormName = OLE2T(bstrName);
-								::SysFreeString(bstrName);
+								strFormName = marshal_as<CString>(thisForm->Name);
 							}
 							pCosmosSession->InsertString(_T("formname"), strFormName);
 							pCosmosSession->InsertString(_T("tagName"), strTagName);
@@ -1554,9 +1547,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
 							if (strFormName == _T(""))
 							{
-								BSTR bstrName = STRING2BSTR(thisForm->Name);
-								strFormName = OLE2T(bstrName);
-								::SysFreeString(bstrName);
+								strFormName = marshal_as<CString>(thisForm->Name);
 							}
 							pCosmosSession->InsertString(_T("tagName"), strTagName);
 							pCosmosSession->InsertString(_T("formname"), strFormName);
@@ -2150,7 +2141,7 @@ BSTR CCosmosProxy::GetCtrlName(IDispatch* _pCtrl)
 {
 	Control^ pCtrl = (Control^)Marshal::GetObjectForIUnknown((IntPtr)_pCtrl);
 	if (pCtrl != nullptr)
-		return STRING2BSTR(pCtrl->Name);
+		return marshal_as<CComBSTR>(pCtrl->Name);
 	return L"";
 }
 
@@ -2227,11 +2218,11 @@ BSTR CCosmosProxy::GetCtrlValueByName(IDispatch* CtrlDisp, BSTR bstrName, bool b
 				cli::array<Control^, 1>^ pArray = pCtrl->Controls->Find(marshal_as<String^>(bstrName), bFindInChild);
 				if (pArray != nullptr && pArray->Length)
 				{
-					return STRING2BSTR(pArray[0]->Text);
+					return marshal_as<CComBSTR>(pArray[0]->Text);
 				}
 			}
 			else
-				return STRING2BSTR(pCtrl->Text);
+				return marshal_as<CComBSTR>(pCtrl->Text);
 		}
 	}
 	catch (System::Exception^)
@@ -2737,7 +2728,7 @@ BSTR CCosmosProxy::GetCtrlType(IDispatch* _pCtrl)
 {
 	Control^ pCtrl = (Control^)Marshal::GetObjectForIUnknown((IntPtr)_pCtrl);
 	if (pCtrl != nullptr)
-		return STRING2BSTR(pCtrl->GetType()->FullName);
+		return marshal_as<CComBSTR>(pCtrl->GetType()->FullName);
 	return L"";
 }
 

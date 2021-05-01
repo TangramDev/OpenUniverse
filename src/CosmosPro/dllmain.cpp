@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202104280070
+ *           Web Runtime for Application - Version 1.0.1.202105010000
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -366,58 +366,6 @@ CString CCosmos::_GetLibPathFromAssemblyQualifiedName(CString strDir, CString st
 
 	FindClose(hFind); // closing file handle
 	return _T("");
-}
-
-#include <wincrypt.h>
-
-int CCosmos::CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5)
-{
-	HCRYPTPROV hProv;
-	// Acquire a cryptographic provider context handle.
-	if (CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, 0))
-	{
-		HCRYPTHASH hHash;
-		// Create the hash object.
-		if (CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash))
-		{
-			// Compute the cryptographic hash of the buffer.
-			if (CryptHashData(hHash, pBuffer, BufferSize, 0))
-			{
-				DWORD dwCount = 16;
-				unsigned char digest[16];
-				CryptGetHashParam(hHash, HP_HASHVAL, digest, &dwCount, 0);
-
-				if (hHash)
-					CryptDestroyHash(hHash);
-
-				// Release the provider handle.
-				if (hProv)
-					CryptReleaseContext(hProv, 0);
-
-				unsigned char b;
-				char c;
-				char *Value = new char[1024];
-				int k = 0;
-				for (int i = 0; i < 16; i++)
-				{
-					b = digest[i];
-					for (int j = 4; j >= 0; j -= 4)
-					{
-						c = ((char)(b >> j) & 0x0F);
-						if (c < 10) c += '0';
-						else c = ('a' + (c - 10));
-						Value[k] = c;
-						k++;
-					}
-				}
-				Value[k] = '\0';
-				MD5 = CString(Value);
-				delete Value;
-			}
-		}
-	}
-
-	return 1;
 }
 
 CCosmosXobjEvent::CCosmosXobjEvent()
