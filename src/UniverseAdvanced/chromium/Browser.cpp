@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105010000           *
+ *           Web Runtime for Application - Version 1.0.1.202105020001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -700,17 +700,6 @@ namespace Browser {
 				{
 					theApp.m_bAppStarting = false;
 					m_pVisibleWebView->m_bCanShow = true;
-				}
-			}
-			break;
-			case 8:
-			{
-				RECT rc;
-				::GetClientRect(m_hWnd, &rc);
-				if ((rc.right < rc.left) || (rc.bottom < rc.top))
-				{
-					::GetClientRect(::GetParent(m_hWnd), &rc);
-					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOREDRAW | SWP_NOACTIVATE);
 				}
 			}
 			break;

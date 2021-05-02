@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105010000           *
+ *           Web Runtime for Application - Version 1.0.1.202105020001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -904,32 +904,66 @@ namespace CommonUniverse
 			break;
 		case CanClose:
 		{
-			if (pWnd && pWnd == m_pMainWnd)
+			if (pWnd)
 			{
-				POSITION nPos = GetFirstDocTemplatePosition();
-				while (nPos)
+				if (pWnd->IsKindOf(RUNTIME_CLASS(CFrameWnd)))
 				{
-					CDocTemplate* pTemplate = GetNextDocTemplate(nPos);
-					POSITION pos = pTemplate->GetFirstDocPosition();
-					while (pos != NULL)
+					CFrameWnd* _pFrame = (CFrameWnd*)pWnd;
+					POSITION nPos = GetFirstDocTemplatePosition();
+					while (nPos)
 					{
-						CDocument* pDoc = pTemplate->GetNextDoc(pos);
-						POSITION pos2 = pDoc->GetFirstViewPosition();
-						while (pos2 != NULL)
+						CDocTemplate* pTemplate = GetNextDocTemplate(nPos);
+						POSITION pos = pTemplate->GetFirstDocPosition();
+						while (pos != NULL)
 						{
-							CView* pView = pDoc->GetNextView(pos2);
-							ASSERT_VALID(pView);
-							CFrameWnd* pFrame = pView->GetParentFrame();
-							if (m_pMainWnd != pFrame)
+							CDocument* pDoc = pTemplate->GetNextDoc(pos);
+							POSITION pos2 = pDoc->GetFirstViewPosition();
+							while (pos2 != NULL)
 							{
-								m_pMainWnd = pFrame;
-								g_pCosmosImpl->m_hMainWnd = m_pMainWnd->m_hWnd;
-								return pFrame->m_hWnd;
+								CView* pView = pDoc->GetNextView(pos2);
+								ASSERT_VALID(pView);
+								CFrameWnd* pFrame = pView->GetParentFrame();
+								if (_pFrame == pFrame)
+								{
+									if (pDoc->CanCloseFrame(pFrame))
+									{
+										return pFrame->m_hWnd;
+									}
+									else
+										return NULL;
+								}
 							}
 						}
 					}
 				}
 			}
+			//if (pWnd)// && pWnd == m_pMainWnd)
+			//{
+			//	POSITION nPos = GetFirstDocTemplatePosition();
+			//	while (nPos)
+			//	{
+			//		CDocTemplate* pTemplate = GetNextDocTemplate(nPos);
+			//		POSITION pos = pTemplate->GetFirstDocPosition();
+			//		while (pos != NULL)
+			//		{
+			//			CDocument* pDoc = pTemplate->GetNextDoc(pos);
+			//			POSITION pos2 = pDoc->GetFirstViewPosition();
+			//			while (pos2 != NULL)
+			//			{
+			//				CView* pView = pDoc->GetNextView(pos2);
+			//				ASSERT_VALID(pView);
+			//				CFrameWnd* pFrame = pView->GetParentFrame();
+			//				if (m_pMainWnd != pFrame)
+			//				{
+			//					//pDoc->CanCloseFrame(pFrame);
+			//					m_pMainWnd = pFrame;
+			//					g_pCosmosImpl->m_hMainWnd = m_pMainWnd->m_hWnd;
+			//					return pFrame->m_hWnd;
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
 			return NULL;
 		}
 		break;

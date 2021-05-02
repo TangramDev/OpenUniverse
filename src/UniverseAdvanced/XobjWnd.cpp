@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105010000           *
+ *           Web Runtime for Application - Version 1.0.1.202105020001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -825,7 +825,11 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 			if (g_pCosmos->m_nWaitTabCounts)
 				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
 			else
+			{
+				if (!::IsWindowVisible(m_pXobj->m_pWebBrowser->m_hWnd))
+					::ShowWindow(m_pXobj->m_pWebBrowser->m_hWnd, SW_SHOW);
 				::SetWindowPos(m_pXobj->m_pWebBrowser->m_hWnd, HWND_TOP, -12, -6, lpwndpos->cx + 24, lpwndpos->cy + 18, SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING);
+			}
 		}
 		return;
 	}

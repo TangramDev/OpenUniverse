@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>CosmosPro</ProjectName>
+    <ProjectName>Cosmos</ProjectName>
     <ProjectGuid>{7B3BE494-B1AE-4341-9D85-2B2399AB3103}</ProjectGuid>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <RootNamespace>Cosmos</RootNamespace>

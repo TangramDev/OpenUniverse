@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105010000
+ *           Web Runtime for Application - Version 1.0.1.202105020001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -167,12 +167,12 @@ HWND CCosmos::InitCosmosApp()
 
 void CCosmos::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2)
 {
-	Universe::Cosmos::Fire_OnCosmosMsg((IntPtr)hWnd, marshal_as<String^>(strType), marshal_as<String^>(strParam1), marshal_as<String^>(strParam2));
+	Universe::Cosmos::Fire_OnCosmosMsg(marshal_as<IntPtr>((HANDLE)hWnd), marshal_as<String^>(strType), marshal_as<String^>(strParam1), marshal_as<String^>(strParam2));
 }
 
 void CCosmos::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
 {
-	Universe::Cosmos::Fire_OnCustomizedDOMElement((IntPtr)hWnd, marshal_as<String^>(strRuleName), marshal_as<String^>(strHTML));
+	Universe::Cosmos::Fire_OnCustomizedDOMElement(marshal_as<IntPtr>((HANDLE)hWnd), marshal_as<String^>(strRuleName), marshal_as<String^>(strHTML));
 }
 
 void CCosmos::ProcessMsg(MSG* msg) {
@@ -3131,7 +3131,7 @@ bool CCosmosProxy::PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nTyp
 	{
 	case 1:
 	{
-		Control^ ctrl = Control::FromHandle((IntPtr)hWnd);
+		Control^ ctrl = Control::FromHandle(marshal_as<IntPtr>((HANDLE)hWnd)); 
 		if (ctrl->GetType()->IsSubclassOf(Form::typeid))
 		{
 			Form^ thisForm = (Form^)ctrl;
@@ -3186,9 +3186,8 @@ void CCosmosProxy::OnControlAdded(Object^ sender, ControlEventArgs^ e)
 	String^ strType = e->Control->GetType()->ToString();
 	if (strType == L"System.Windows.Forms.MdiClient")
 	{
-		__int64 nHandle = e->Control->Handle.ToInt64();
-		HWND hWnd = (HWND)((Form^)sender)->Handle.ToInt64();
-		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)nHandle);
+		HWND hWnd = (HWND)marshal_as<HANDLE>(((Form^)sender)->Handle); 
+		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)e->Control->Handle.ToInt64());
 	}
 }
 

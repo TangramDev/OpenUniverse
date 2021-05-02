@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105010000           *
+ *           Web Runtime for Application - Version 1.0.1.202105020001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -510,48 +510,44 @@ namespace Browser {
 			g_pCosmos->m_pCLRProxy->OnDestroyChromeBrowser(pIBrowser);
 		}
 
+		bool bExitCLR = false;
 		m_pVisibleWebView = nullptr;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(m_hWnd);
 		if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 			g_pCosmos->m_mapBrowserWnd.erase(it);
-		}
-		if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd)
-		{
-			m_pParentXobj->m_pParentWinFormWnd->m_pOwnerHtmlWnd = nullptr;
-		}
-		if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hCosmosWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
-			g_pCosmos->m_hHostBrowserWnd == m_hWnd)
-		{
-			if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
+			if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hCosmosWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
+				g_pCosmos->m_hHostBrowserWnd == m_hWnd)
 			{
-				g_pCosmos->m_bChromeNeedClosed = true;
-				for (auto it : g_pCosmos->m_mapBrowserWnd)
+				if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
 				{
-					if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
-						((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
-				}
-				g_pCosmos->m_mapBrowserWnd.erase(g_pCosmos->m_mapBrowserWnd.begin(), g_pCosmos->m_mapBrowserWnd.end());
-			}
-		}
-
-		bool bExitCLR = false;
-		if ((g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_mapBrowserWnd.size() == 0) ||
-			g_pCosmos->m_hHostBrowserWnd == m_hWnd) {
-			if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
-				g_pCosmos->m_hHostBrowserWnd = NULL;
-			if (g_pCosmos->m_pCLRProxy)
-			{
-				if (g_pCosmos->m_pCosmosAppProxy)
-				{
-					bExitCLR = true;
-					::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
-					//g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+					g_pCosmos->m_bChromeNeedClosed = true;
+					for (auto it : g_pCosmos->m_mapBrowserWnd)
+					{
+						if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
+							((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+					}
+					g_pCosmos->m_mapBrowserWnd.erase(g_pCosmos->m_mapBrowserWnd.begin(), g_pCosmos->m_mapBrowserWnd.end());
 				}
 			}
 
-			if (g_pCosmos->m_hCBTHook) {
-				UnhookWindowsHookEx(g_pCosmos->m_hCBTHook);
-				g_pCosmos->m_hCBTHook = nullptr;
+			if ((g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_mapBrowserWnd.size() == 0) ||
+				g_pCosmos->m_hHostBrowserWnd == m_hWnd) {
+				if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
+					g_pCosmos->m_hHostBrowserWnd = NULL;
+				if (g_pCosmos->m_pCLRProxy)
+				{
+					if (g_pCosmos->m_pCosmosAppProxy)
+					{
+						bExitCLR = true;
+						::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
+						//g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
+					}
+				}
+
+				if (g_pCosmos->m_hCBTHook) {
+					UnhookWindowsHookEx(g_pCosmos->m_hCBTHook);
+					g_pCosmos->m_hCBTHook = nullptr;
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105010000
+ *           Web Runtime for Application - Version 1.0.1.202105020001
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -249,6 +249,7 @@ public:
 	virtual ~CCloudWinForm(void);
 	bool									m_bReady = false;
 	bool									m_bSZMode = false;
+	bool									m_bNewMDIKey = false;
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
 	HWND									m_hOwnerWebView = NULL;

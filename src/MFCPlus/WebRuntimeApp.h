@@ -183,6 +183,7 @@ namespace CommonUniverse
 		virtual bool EclipseAppInit() { return false; };
 		virtual bool SetFrameCaption(HWND hWnd, CString strCaption);
 		virtual CString CWebRuntimeApp::QueryParentInfo(HWND hPWnd, void* lpInfo);
+		virtual BOOL CreateCosmosApp(CWebPageImpl* pWebPageImpl, CBrowserImpl* pBrowserImpl, CString strObjID, CString strAppData) { return false; };
 
 		//ICosmosWindowProvider:
 		virtual bool CosmosInit(CString strID);

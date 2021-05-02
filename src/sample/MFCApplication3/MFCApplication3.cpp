@@ -89,6 +89,7 @@ BOOL CMFCApplication3App::InitInstance()
 
 	EnableTaskbarInteraction(FALSE);
 
+
 	// AfxInitRichEdit2() is required to use RichEdit control
 	// AfxInitRichEdit2();
 
@@ -126,30 +127,30 @@ BOOL CMFCApplication3App::InitInstance()
 	m_pDocTemplate = pDocTemplate;
 	AddDocTemplate(pDocTemplate);
 
-
-	// Parse command line for standard shell commands, DDE, file open
-	CCommandLineInfo cmdInfo;
-	ParseCommandLine(cmdInfo);
-
-	// Enable DDE Execute open
-	EnableShellOpen();
-	RegisterShellFileTypes(TRUE);
-
-
-	// Dispatch commands specified on the command line.  Will return FALSE if
-	// app was launched with /RegServer, /Register, /Unregserver or /Unregister.
-	if (!ProcessShellCommand(cmdInfo))
-		return FALSE;
-
-	// The one and only window has been initialized, so show and update it
-	m_pMainWnd->ShowWindow(SW_SHOW);
-	m_pMainWnd->UpdateWindow();
-	
-	// call DragAcceptFiles only if there's a suffix
-	//  In an SDI app, this should occur after ProcessShellCommand
-	// Enable drag/drop open
-	m_pMainWnd->DragAcceptFiles();
 	return TRUE;
+	// Parse command line for standard shell commands, DDE, file open
+	//CCommandLineInfo cmdInfo;
+	//ParseCommandLine(cmdInfo);
+
+	//// Enable DDE Execute open
+	//EnableShellOpen();
+	//RegisterShellFileTypes(TRUE);
+
+	//// Dispatch commands specified on the command line.  Will return FALSE if
+	//// app was launched with /RegServer, /Register, /Unregserver or /Unregister.
+	//if (!ProcessShellCommand(cmdInfo))
+	//	return FALSE;
+
+	//// The one and only window has been initialized, so show and update it
+	//m_pMainWnd->ShowWindow(SW_SHOW);
+	//m_pMainWnd->UpdateWindow();
+
+	//// call DragAcceptFiles only if there's a suffix
+	////  In an SDI app, this should occur after ProcessShellCommand
+	//// Enable drag/drop open
+	//m_pMainWnd->DragAcceptFiles();
+
+	//return TRUE;
 }
 
 int CMFCApplication3App::ExitInstance()

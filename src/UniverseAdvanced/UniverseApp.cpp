@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105010000           *
+ *           Web Runtime for Application - Version 1.0.1.202105020001           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -947,6 +947,16 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (::IsWindow(g_pCosmos->m_hCosmosWnd))
 						::DestroyWindow(g_pCosmos->m_hCosmosWnd);
+				}
+				if (g_pCosmos->m_mapMDTWindow.size())
+				{
+					while (g_pCosmos->m_mapMDTWindow.size())
+					{
+						auto it = g_pCosmos->m_mapMDTWindow.begin();
+						it->second->DestroyWindow();
+						if (g_pCosmos->m_mapMDTWindow.size() == 0)
+							break;
+					}
 				}
 				if (g_pCosmos->m_pCosmosAppProxy)
 					g_pCosmos->m_pCosmosAppProxy->OnCosmosClose(CosmosCloseState::ProcessQuit);

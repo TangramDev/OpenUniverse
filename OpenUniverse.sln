@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UniverseProfessional", "UniverseProfessional", "{49B9D573-27C1-4EBF-80CD-FEBC29957D03}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Universe", "Universe", "{49B9D573-27C1-4EBF-80CD-FEBC29957D03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Net Sample", ".Net Sample", "{8B249CD0-D8A1-47F2-8E64-2F229FE57D55}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UniversePro", "src\UniversePro\UniversePro.vcxproj", "{1FE0A9AB-CE78-4109-94FC-25806D373846}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Universe", "src\UniversePro\UniversePro.vcxproj", "{1FE0A9AB-CE78-4109-94FC-25806D373846}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CosmosPro", "src\CosmosPro\CosmosPro.vcxproj", "{7B3BE494-B1AE-4341-9D85-2B2399AB3103}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cosmos", "src\CosmosPro\CosmosPro.vcxproj", "{7B3BE494-B1AE-4341-9D85-2B2399AB3103}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionApi", "src\sample\SessionApi\SessionApi.csproj", "{2519D5B3-0EE4-4740-8AD0-A377F9341A62}"
 EndProject
