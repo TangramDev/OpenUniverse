@@ -1554,6 +1554,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									pFrameWnd->m_bCreateNewDoc = true;
 									pFrameWnd->SubclassWindow(hWnd);
 									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
+									HWND hMain = g_pCosmos->m_hMainWnd;
+									auto itForm = g_pCosmos->m_mapWinForm.find(hMain);
+									if (itForm != g_pCosmos->m_mapWinForm.end())
+									{
+										g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::SetMainWndNULL, hWnd);
+									}
 								}
 								else
 									pFrameWnd = it->second;

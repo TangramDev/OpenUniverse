@@ -761,23 +761,28 @@ CCloudMDTFrame::~CCloudMDTFrame(void)
 
 LRESULT CCloudMDTFrame::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CCloudMDTFrame* pHelperWnd = nullptr;
-	auto it = g_pCosmos->m_mapMDTWindow.find(m_hWnd);
-	if (it != g_pCosmos->m_mapMDTWindow.end())
+	HWND hMain = g_pCosmos->m_hMainWnd;
+	auto itForm = g_pCosmos->m_mapWinForm.find(hMain);
+	if (itForm == g_pCosmos->m_mapWinForm.end())
 	{
-		for (auto& itX : g_pCosmos->m_mapMDTWindow)
+		CCloudMDTFrame* pHelperWnd = nullptr;
+		auto it = g_pCosmos->m_mapMDTWindow.find(m_hWnd);
+		if (it != g_pCosmos->m_mapMDTWindow.end())
 		{
-			if (itX.second->m_hWnd != m_hWnd)
+			for (auto& itX : g_pCosmos->m_mapMDTWindow)
 			{
-				pHelperWnd = itX.second;
-				break;
+				if (itX.second->m_hWnd != m_hWnd)
+				{
+					pHelperWnd = itX.second;
+					break;
+				}
 			}
 		}
-	}
-	if (pHelperWnd)
-	{
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryDestroy, pHelperWnd->m_hWnd);
-		g_pCosmos->m_hMainWnd = pHelperWnd->m_hWnd;
+		if (pHelperWnd)
+		{
+			g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryDestroy, pHelperWnd->m_hWnd);
+			g_pCosmos->m_hMainWnd = pHelperWnd->m_hWnd;
+		}
 	}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	return l;
@@ -1215,7 +1220,7 @@ LRESULT CCloudWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	{
 		if (g_pCosmos->m_mapMDTWindow.size())
 		{
-			for (auto &it : g_pCosmos->m_mapMDTWindow)
+			for (auto& it : g_pCosmos->m_mapMDTWindow)
 			{
 				CCloudMDTFrame* pFrame = it.second;
 				if (g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::CanClose, pFrame->m_hWnd) == NULL)

@@ -761,23 +761,28 @@ CCloudMDTFrame::~CCloudMDTFrame(void)
 
 LRESULT CCloudMDTFrame::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-	CCloudMDTFrame* pHelperWnd = nullptr;
-	auto it = g_pCosmos->m_mapMDTWindow.find(m_hWnd);
-	if (it != g_pCosmos->m_mapMDTWindow.end())
+	HWND hMain = g_pCosmos->m_hMainWnd;
+	auto itForm = g_pCosmos->m_mapWinForm.find(hMain);
+	if (itForm == g_pCosmos->m_mapWinForm.end())
 	{
-		for (auto& itX : g_pCosmos->m_mapMDTWindow)
+		CCloudMDTFrame* pHelperWnd = nullptr;
+		auto it = g_pCosmos->m_mapMDTWindow.find(m_hWnd);
+		if (it != g_pCosmos->m_mapMDTWindow.end())
 		{
-			if (itX.second->m_hWnd != m_hWnd)
+			for (auto& itX : g_pCosmos->m_mapMDTWindow)
 			{
-				pHelperWnd = itX.second;
-				break;
+				if (itX.second->m_hWnd != m_hWnd)
+				{
+					pHelperWnd = itX.second;
+					break;
+				}
 			}
 		}
-	}
-	if (pHelperWnd)
-	{
-		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryDestroy, pHelperWnd->m_hWnd);
-		g_pCosmos->m_hMainWnd = pHelperWnd->m_hWnd;
+		if (pHelperWnd)
+		{
+			g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryDestroy, pHelperWnd->m_hWnd);
+			g_pCosmos->m_hMainWnd = pHelperWnd->m_hWnd;
+		}
 	}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
 	return l;
@@ -1328,36 +1333,39 @@ LRESULT CCloudWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				::PostMessage(m_pMDIParent->m_pActiveChild->m_hWnd, WM_HUBBLE_DATA, 0, 2);
 				break;
 			}
-			if (m_strKey != _T(""))
+		}
+		if (m_strKey != _T(""))
+		{
+			CCloudWinForm* pParent = nullptr;
+			CXobj* pTopObj = nullptr;
+			if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
 			{
-				CXobj* pTopObj = nullptr;
-				if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
+				CBrowser* pBrowser = nullptr;
+				auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_pOwnerHtmlWnd->m_hWnd));
+				if (it != g_pCosmos->m_mapBrowserWnd.end())
 				{
-					CBrowser* pBrowser = nullptr;
-					auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_pOwnerHtmlWnd->m_hWnd));
-					if (it != g_pCosmos->m_mapBrowserWnd.end())
-					{
-						pBrowser = (CBrowser*)it->second;
-						pBrowser->m_bSZMode = true;
-					}
-					if (m_pOwnerHtmlWnd->m_pGalaxy->m_strCurrentKey != m_strKey)
-						m_pOwnerHtmlWnd->LoadDocument2Viewport(m_strKey, _T(""));
-					else
-					{
-						m_pOwnerHtmlWnd->m_pGalaxy->HostPosChanged();
-					}
-
+					pBrowser = (CBrowser*)it->second;
+					pBrowser->m_bSZMode = true;
+				}
+				if (m_pOwnerHtmlWnd->m_pGalaxy->m_strCurrentKey != m_strKey)
+					m_pOwnerHtmlWnd->LoadDocument2Viewport(m_strKey, _T(""));
+				else
+				{
+					m_pOwnerHtmlWnd->m_pGalaxy->HostPosChanged();
+				}
+				pParent = m_pOwnerHtmlWnd->m_pGalaxy->m_pParentMDIWinForm;
+				if (pParent)
+				{
 					CString strOldKey = _T("");
-					strOldKey = m_pMDIParent->m_pClientGalaxy->m_strCurrentKey;
+					strOldKey = pParent->m_pClientGalaxy->m_strCurrentKey;
 					if (strOldKey != m_strKey)
 					{
-						m_pMDIParent->m_bNewMDIKey = true;
 						IXobj* pObj = nullptr;
-						m_pMDIParent->m_pClientGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pObj);
+						pParent->m_pClientGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pObj);
 					}
 				}
-				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
 			}
+			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
 		}
 		return 0;
 	}

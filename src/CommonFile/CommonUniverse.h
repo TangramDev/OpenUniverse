@@ -223,7 +223,8 @@ namespace CommonUniverse {
 		CanAddView = 0x00000005,
 		ObserveComplete = 0x00000006,
 		RecalcLayout = 0x00000007,
-		RecalcCtrlBarLayout = 0x00000008
+		RecalcCtrlBarLayout = 0x00000008,
+		SetMainWndNULL = 0x00000009
 	}QueryType;
 
 	typedef enum GalaxyParentType

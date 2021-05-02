@@ -1050,6 +1050,11 @@ namespace CommonUniverse
 			}
 		}
 		break;
+		case SetMainWndNULL:
+		{
+			m_pMainWnd = nullptr;
+		}
+		break;
 		default:
 			if (pWnd && pWnd->IsKindOf(RUNTIME_CLASS(CMDIClientAreaWnd)))
 			{
