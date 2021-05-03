@@ -589,7 +589,7 @@ namespace Browser {
 				CCloudWinForm* pForm = it->second;
 				if (pForm->m_bMainForm == false)
 				{
-					if (::IsChild(pForm->m_hWnd, m_hWnd)||::IsWindow(pForm->m_hWnd)==false)
+					if (::IsChild(pForm->m_hWnd, m_hWnd) || ::IsWindow(pForm->m_hWnd) == false)
 					{
 						m_mapWinForm.erase(it);
 					}
@@ -1513,7 +1513,9 @@ namespace Browser {
 				}
 				else
 				{
-					g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), _T(""), _T("default"));
+					CString strExt = xmlParse.attr(_T("ext"), _T(""));
+					CString strDocID = xmlParse.attr(_T("docid"), _T("default"));
+					g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), strExt, strDocID);
 				}
 			}
 			if (urlsParse)

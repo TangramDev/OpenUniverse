@@ -123,7 +123,6 @@
 #endif
 #include "inc.h"
 #include <atlwin.h>
-#include "CommonFunction.h"
 #include "msaddndr.h"
 
 using namespace ATL;

@@ -342,6 +342,24 @@ namespace CommonUniverse {
 		virtual void removeEventListener(CString ListenerName) {}
 	};
 
+	class CCommonFunction
+	{
+	public:
+		template<class T>
+		static BOOL ClearObject(T* pObject)
+		{
+			BOOL bRet = FALSE;
+			if (pObject != NULL)
+			{
+				ULONG dw = pObject->Release();
+				while (dw > 0)
+					dw = pObject->Release();
+				bRet = TRUE;
+			}
+			return bRet;
+		}
+	};
+
 	class CosmosUIItemData
 	{
 	public:

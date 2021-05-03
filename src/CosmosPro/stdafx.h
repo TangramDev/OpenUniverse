@@ -55,7 +55,6 @@ using namespace ATL;
 using namespace std;
 
 #include "TangramBase.h"
-#include "CommonFunction.h"
 
 //#ifdef _UNICODE
 //#if defined _M_IX86
