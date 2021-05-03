@@ -1333,39 +1333,31 @@ LRESULT CCloudWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				::PostMessage(m_pMDIParent->m_pActiveChild->m_hWnd, WM_HUBBLE_DATA, 0, 2);
 				break;
 			}
-		}
-		if (m_strKey != _T(""))
-		{
-			CCloudWinForm* pParent = nullptr;
-			CXobj* pTopObj = nullptr;
-			if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
+			if (m_strKey != _T(""))
 			{
-				CBrowser* pBrowser = nullptr;
-				auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_pOwnerHtmlWnd->m_hWnd));
-				if (it != g_pCosmos->m_mapBrowserWnd.end())
+				if (m_pOwnerHtmlWnd && m_pOwnerHtmlWnd->m_pGalaxy)
 				{
-					pBrowser = (CBrowser*)it->second;
-					pBrowser->m_bSZMode = true;
-				}
-				if (m_pOwnerHtmlWnd->m_pGalaxy->m_strCurrentKey != m_strKey)
-					m_pOwnerHtmlWnd->LoadDocument2Viewport(m_strKey, _T(""));
-				else
-				{
-					m_pOwnerHtmlWnd->m_pGalaxy->HostPosChanged();
-				}
-				pParent = m_pOwnerHtmlWnd->m_pGalaxy->m_pParentMDIWinForm;
-				if (pParent)
-				{
+					if (m_pBrowser)
+					{
+						m_pBrowser->m_bSZMode = true;
+					}
+					if (m_pOwnerHtmlWnd->m_pGalaxy->m_strCurrentKey != m_strKey)
+						m_pOwnerHtmlWnd->LoadDocument2Viewport(m_strKey, _T(""));
+					else
+					{
+						m_pOwnerHtmlWnd->m_pGalaxy->HostPosChanged();
+					}
+
 					CString strOldKey = _T("");
-					strOldKey = pParent->m_pClientGalaxy->m_strCurrentKey;
+					strOldKey = m_pMDIParent->m_pClientGalaxy->m_strCurrentKey;
 					if (strOldKey != m_strKey)
 					{
 						IXobj* pObj = nullptr;
-						pParent->m_pClientGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pObj);
+						m_pMDIParent->m_pClientGalaxy->Observe(CComBSTR(m_strKey), CComBSTR(""), &pObj);
 					}
 				}
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
 			}
-			::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20200216);
 		}
 		return 0;
 	}
@@ -1803,11 +1795,14 @@ LRESULT CCloudWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 		m_pBrowser->m_pVisibleWebView->m_bCanShow = false;
 		if (m_hWnd != g_pCosmos->m_hMainWnd)
 		{
-			m_pBrowser->m_bSZMode = true;
-			g_pCosmos->m_mapSizingBrowser[m_pBrowser->m_hWnd] = m_pBrowser;
+			if (::IsChild(m_hWnd, m_pBrowser->m_hWnd))
+			{
+				m_pBrowser->m_bSZMode = true;
+				g_pCosmos->m_mapSizingBrowser[m_pBrowser->m_hWnd] = m_pBrowser;
+				m_pBrowser->m_pBrowser->LayoutBrowser();
+				m_pBrowser->BrowserLayout();
+			}
 		}
-		m_pBrowser->m_pBrowser->LayoutBrowser();
-		m_pBrowser->BrowserLayout();
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
