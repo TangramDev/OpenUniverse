@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105020001           *
+ *           Web Runtime for Application - Version 1.0.1.202105050002           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -239,10 +239,6 @@ public:
 	STDMETHOD(put_rgbRightBottom)(OLE_COLOR newVal);
 	STDMETHOD(get_rgbLeftTop)(OLE_COLOR* pVal);
 	STDMETHOD(put_rgbLeftTop)(OLE_COLOR newVal);
-	STDMETHOD(get_MasterRow)(int* pVal);
-	STDMETHOD(put_MasterRow)(int newVal);
-	STDMETHOD(get_MasterCol)(int* pVal);
-	STDMETHOD(put_MasterCol)(int newVal);
 	STDMETHOD(get_URL)(BSTR* pVal);
 	STDMETHOD(put_URL)(BSTR newVal);
 

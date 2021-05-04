@@ -1711,18 +1711,6 @@ EXTERN_C const IID IID_IXobj;
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HostGalaxy( 
             /* [retval][out] */ IGalaxy **pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MasterRow( 
-            /* [retval][out] */ int *pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MasterRow( 
-            /* [in] */ int newVal) = 0;
-        
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MasterCol( 
-            /* [retval][out] */ int *pVal) = 0;
-        
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MasterCol( 
-            /* [in] */ int newVal) = 0;
-        
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OfficeObj( 
             /* [retval][out] */ IDispatch **pVal) = 0;
         
@@ -2068,22 +2056,6 @@ EXTERN_C const IID IID_IXobj;
             IXobj * This,
             /* [retval][out] */ IGalaxy **pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MasterRow )( 
-            IXobj * This,
-            /* [retval][out] */ int *pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MasterRow )( 
-            IXobj * This,
-            /* [in] */ int newVal);
-        
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MasterCol )( 
-            IXobj * This,
-            /* [retval][out] */ int *pVal);
-        
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MasterCol )( 
-            IXobj * This,
-            /* [in] */ int newVal);
-        
         /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfficeObj )( 
             IXobj * This,
             /* [retval][out] */ IDispatch **pVal);
@@ -2364,18 +2336,6 @@ EXTERN_C const IID IID_IXobj;
 
 #define IXobj_get_HostGalaxy(This,pVal)	\
     ( (This)->lpVtbl -> get_HostGalaxy(This,pVal) ) 
-
-#define IXobj_get_MasterRow(This,pVal)	\
-    ( (This)->lpVtbl -> get_MasterRow(This,pVal) ) 
-
-#define IXobj_put_MasterRow(This,newVal)	\
-    ( (This)->lpVtbl -> put_MasterRow(This,newVal) ) 
-
-#define IXobj_get_MasterCol(This,pVal)	\
-    ( (This)->lpVtbl -> get_MasterCol(This,pVal) ) 
-
-#define IXobj_put_MasterCol(This,newVal)	\
-    ( (This)->lpVtbl -> put_MasterCol(This,newVal) ) 
 
 #define IXobj_get_OfficeObj(This,pVal)	\
     ( (This)->lpVtbl -> get_OfficeObj(This,pVal) ) 

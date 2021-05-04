@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105020001           *
+ *           Web Runtime for Application - Version 1.0.1.202105050002           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -338,11 +338,7 @@ interface IXobj : IDispatch {
 	[propget, id(37)] HRESULT ActivePage([out, retval] int* pVal);
 	[propput, id(37)] HRESULT ActivePage([in] int newVal);
 	[propget, id(38), helpstring("property HostGalaxy")] HRESULT HostGalaxy([out, retval] IGalaxy** pVal);
-	[propget, id(39)] HRESULT MasterRow([out, retval] int* pVal);
-	[propput, id(39)] HRESULT MasterRow([in] int newVal);
-	[propget, id(40)] HRESULT MasterCol([out, retval] int* pVal);
-	[propput, id(40)] HRESULT MasterCol([in] int newVal);
-	[propget, id(41), helpstring("property Office Object")] HRESULT OfficeObj([out, retval] IDispatch** pVal);
+	[propget, id(39), helpstring("property Office Object")] HRESULT OfficeObj([out, retval] IDispatch** pVal);
 
 	[id(100), hidden] HRESULT ActiveTabPage(IXobj* pXobj);
 	[id(101), helpstring("method GetNodes")] HRESULT GetXobjs([in]BSTR bstrName, [out]IXobj** ppXobj, [out]IXobjCollection** ppXobjs, [out, retval]long* pCount);

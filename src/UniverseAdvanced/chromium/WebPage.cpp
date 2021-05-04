@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105020001           *
+ *           Web Runtime for Application - Version 1.0.1.202105050002           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -133,14 +133,7 @@ namespace Browser {
 
 	LRESULT CWebView::OnMouseActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
 	{
-		CBrowser* pParent = nullptr;
-		auto it = g_pCosmos->m_mapBrowserWnd.find(::GetParent(m_hWnd));
-		if (it != g_pCosmos->m_mapBrowserWnd.end())
-		{
-			pParent = (CBrowser*)it->second;
-		}
-		HWND hPWnd = ::GetParent(pParent->m_hWnd);
-		if (hPWnd != NULL)
+		if (::GetWindowLongPtr(m_pChromeRenderFrameHost->GetHostBrowserWnd(), GWL_STYLE) & WS_CHILD)
 		{
 			g_pCosmos->m_pActiveHtmlWnd = this;
 			g_pCosmos->m_pGalaxy = nullptr;
@@ -2058,11 +2051,6 @@ namespace Browser {
 			pBrowserWnd = (CBrowser*)it->second;
 			if (pBrowserWnd->m_pBrowser->GetActiveWebContentWnd() != m_hWnd)
 				::ShowWindow(m_hWnd, SW_HIDE);
-		}
-		if (::IsWindowVisible(m_hWnd))
-		{
-			//::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 2);
-			//::PostMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 		}
 		return S_OK;
 	}

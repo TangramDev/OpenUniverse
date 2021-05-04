@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105020001           *
+ *           Web Runtime for Application - Version 1.0.1.202105050002           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2352,26 +2352,6 @@ STDMETHODIMP CXobj::put_ActivePage(int newVal)
 	return S_OK;
 }
 
-STDMETHODIMP CXobj::get_MasterRow(int* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CXobj::put_MasterRow(int newVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CXobj::get_MasterCol(int* pVal)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CXobj::put_MasterCol(int newVal)
-{
-	return S_OK;
-}
-
 HRESULT CXobj::Fire_ObserveComplete()
 {
 	HRESULT hr = S_OK;
@@ -2395,7 +2375,7 @@ HRESULT CXobj::Fire_ObserveComplete()
 		}
 	}
 
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		it.second->OnObserverComplete();
 	}
@@ -2431,7 +2411,7 @@ HRESULT CXobj::Fire_Destroy()
 			}
 		}
 	}
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		it.second->OnDestroy();
 	}
@@ -2480,7 +2460,7 @@ HRESULT CXobj::Fire_XobjAddInCreated(IDispatch* pAddIndisp, BSTR bstrAddInID, BS
 		}
 	}
 
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		it.second->OnXobjAddInCreated(pAddIndisp, OLE2T(bstrAddInID), OLE2T(bstrAddInXml));
 	}
@@ -2510,7 +2490,7 @@ HRESULT CXobj::Fire_XobjAddInsCreated()
 			}
 		}
 	}
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		it.second->OnXobjAddInsCreated();
 	}
@@ -2545,7 +2525,7 @@ HRESULT CXobj::Fire_XobjDocumentComplete(IDispatch* ExtenderDisp, BSTR bstrURL)
 		}
 	}
 
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		it.second->OnXobjDocumentComplete(ExtenderDisp, OLE2T(bstrURL));
 	}
@@ -2620,7 +2600,7 @@ HRESULT CXobj::Fire_TabChange(LONG ActivePage, LONG OldPage)
 			}
 		}
 	}
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		it.second->OnTabChange(ActivePage, OldPage);
 	}
@@ -2659,7 +2639,7 @@ HRESULT CXobj::Fire_IPCMessageReceived(BSTR bstrFrom, BSTR bstrTo, BSTR bstrMsgI
 			}
 		}
 	}
-	//for (auto it : m_mapWndXobjProxy)
+	//for (auto &it : m_mapWndXobjProxy)
 	//{
 	//	it.second->OnTabChange(ActivePage, OldPage);
 	//}
@@ -2701,9 +2681,7 @@ STDMETHODIMP CXobj::NavigateURL(BSTR bstrURL, IDispatch* dispObjforScript)
 		if (it != g_pCosmos->m_mapBrowserWnd.end())
 		{
 			m_pWebBrowser = (CBrowser*)it->second;
-			//m_pWebBrowser->m_pXobj = this;
 		}
-		//g_pCosmos->m_pCurWebNode = nullptr;
 		return S_OK;
 	}
 	else if (m_pWebBrowser)
