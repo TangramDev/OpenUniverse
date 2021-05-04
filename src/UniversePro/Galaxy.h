@@ -249,6 +249,7 @@ public:
 	virtual ~CCloudWinForm(void);
 	bool									m_bReady = false;
 	bool									m_bSZMode = false;
+	bool									m_bNewMDIKey = false;
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
 	HWND									m_hOwnerWebView = NULL;

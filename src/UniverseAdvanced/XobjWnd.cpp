@@ -800,8 +800,10 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 	{
 		if (m_pXobj->m_pWebBrowser->m_pParentXobj != m_pXobj)
 		{
-			m_pXobj->m_pWebBrowser = nullptr;
-			return;
+			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
+				m_pXobj->m_pWebBrowser->m_pParentXobj = m_pXobj;
+			else
+				return;
 		}
 		if (m_pXobj->m_pWebBrowser->m_pVisibleWebView)
 		{

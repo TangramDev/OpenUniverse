@@ -682,21 +682,7 @@ namespace Browser {
 						}
 					}
 				}
-				//if (m_pVisibleWebView->m_pGalaxy)
-				//{
-				//	::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
-				//	if (::GetParent(m_hWnd) == nullptr)
-				//	{
-				//		CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
-				//		if (pObj && pObj->m_nViewType == Grid)
-				//		{
-				//			CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
-				//			pWnd->RecalcLayout();
-				//		}
-				//	}
-				//}
-				//m_bSZMode = false;
-				if (theApp.m_bAppStarting == true)
+				if (theApp.m_bAppStarting == true/* && g_pCosmos->m_nWaitTabCounts == 0*/)
 				{
 					theApp.m_bAppStarting = false;
 					m_pVisibleWebView->m_bCanShow = true;

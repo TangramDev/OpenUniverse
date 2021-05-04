@@ -65,6 +65,7 @@ protected:
 	void PostNcDestroy();
 	void DrawAllSplitBars(CDC* pDC, int cxInside, int cyInside);
 	CWnd* GetActivePane(int* pRow = NULL, int* pCol = NULL);
+	//void OnInvertTracker(const CRect& rect);
 	//void RefreshNode(IXobj*);
 
 	afx_msg void OnPaint();

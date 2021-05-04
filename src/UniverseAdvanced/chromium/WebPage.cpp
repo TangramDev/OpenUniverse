@@ -1239,7 +1239,6 @@ namespace Browser {
 			int nPos = strObjID.Find(_T(","));
 			if (strObjID != _T("") && nPos != -1)
 			{
-				//g_pCosmos->m_bCLRApp = true;
 				CTangramXmlParse* pMdiChildXmlParse = xmlParse.GetChild(_T("mdichild"));
 				if (pMdiChildXmlParse)
 				{
@@ -1511,12 +1510,12 @@ namespace Browser {
 						}
 					}
 				}
-				else
-				{
-					CString strExt = xmlParse.attr(_T("ext"), _T(""));
-					CString strDocID = xmlParse.attr(_T("docid"), _T("default"));
-					g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), strExt, strDocID);
-				}
+				//else
+				//{
+				//	CString strExt = xmlParse.attr(_T("ext"), _T(""));
+				//	CString strDocID = xmlParse.attr(_T("docid"), _T("default"));
+				//	g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), strExt, strDocID);
+				//}
 			}
 			if (urlsParse)
 			{

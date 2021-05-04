@@ -790,7 +790,7 @@ namespace CommonUniverse
 		}
 		return _T("");
 	}
-	
+
 	HWND CWebRuntimeApp::GetFrameWnd(HWND hWnd, int& nType)
 	{
 		CWnd* pWnd = CWnd::FromHandle(hWnd);
@@ -810,7 +810,7 @@ namespace CommonUniverse
 				return pFrame->m_hWnd;
 			}
 		}
-		return NULL; 
+		return NULL;
 	}
 
 	HWND CWebRuntimeApp::QueryWndInfo(QueryType nType, HWND hWnd)
@@ -1023,7 +1023,7 @@ namespace CommonUniverse
 		break;
 		case QueryDestroy:
 		{
-			if (::GetParent(hWnd) == NULL && m_pMainWnd && m_pMainWnd != pWnd)
+			if (::GetParent(hWnd) == NULL)// && m_pMainWnd && m_pMainWnd != pWnd)
 			{
 				m_pMainWnd = pWnd;
 				return pWnd->m_hWnd;
@@ -1052,7 +1052,10 @@ namespace CommonUniverse
 		break;
 		case SetMainWndNULL:
 		{
-			m_pMainWnd = nullptr;
+			if (g_pCosmosImpl->m_hMainWnd)
+			{
+				m_pMainWnd = nullptr;
+			}
 		}
 		break;
 		default:
@@ -1330,7 +1333,7 @@ namespace CommonUniverse
 #endif 
 					TRACE(_T("\r\n\r\n********Chrome-Eclipse-CLR Mix-Model is not support MFC Share Dll********\r\n\r\n"));
 #endif
-				}
+			}
 				m_pCosmosImpl->m_hMainWnd = NULL;
 				HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
 				if (hModule == nullptr)
@@ -1344,8 +1347,8 @@ namespace CommonUniverse
 						_pInitAppFunction(bCrashReporting, m_pCosmosImpl->m_pCosmosDelegate);
 						return false;
 					}
-			}
-			}
+				}
+		}
 			break;
 			case APP_ECLIPSE:
 				if (g_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
@@ -1354,8 +1357,8 @@ namespace CommonUniverse
 					return false;
 				}
 				break;
-		}
 	}
+}
 		return true;
 }
 

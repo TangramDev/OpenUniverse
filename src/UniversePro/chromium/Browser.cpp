@@ -510,44 +510,47 @@ namespace Browser {
 			g_pCosmos->m_pCLRProxy->OnDestroyChromeBrowser(pIBrowser);
 		}
 
-		bool bExitCLR = false;
 		m_pVisibleWebView = nullptr;
 		auto it = g_pCosmos->m_mapBrowserWnd.find(m_hWnd);
 		if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 			g_pCosmos->m_mapBrowserWnd.erase(it);
-			if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hCosmosWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
-				g_pCosmos->m_hHostBrowserWnd == m_hWnd)
+		}
+		if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd)
+		{
+			m_pParentXobj->m_pParentWinFormWnd->m_pOwnerHtmlWnd = nullptr;
+		}
+		if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hCosmosWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
+			g_pCosmos->m_hHostBrowserWnd == m_hWnd)
+		{
+			if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
 			{
-				if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
+				g_pCosmos->m_bChromeNeedClosed = true;
+				for (auto it : g_pCosmos->m_mapBrowserWnd)
 				{
-					g_pCosmos->m_bChromeNeedClosed = true;
-					for (auto it : g_pCosmos->m_mapBrowserWnd)
-					{
-						if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
-							((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
-					}
-					g_pCosmos->m_mapBrowserWnd.erase(g_pCosmos->m_mapBrowserWnd.begin(), g_pCosmos->m_mapBrowserWnd.end());
+					if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
+						((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);
+				}
+				g_pCosmos->m_mapBrowserWnd.erase(g_pCosmos->m_mapBrowserWnd.begin(), g_pCosmos->m_mapBrowserWnd.end());
+			}
+		}
+		bool bExitCLR = false;
+		if ((g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_mapBrowserWnd.size() == 0) ||
+			g_pCosmos->m_hHostBrowserWnd == m_hWnd) {
+			if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
+				g_pCosmos->m_hHostBrowserWnd = NULL;
+			if (g_pCosmos->m_pCLRProxy)
+			{
+				if (g_pCosmos->m_pCosmosAppProxy)
+				{
+					bExitCLR = true;
+					::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
+					//g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
 				}
 			}
 
-			if ((g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_mapBrowserWnd.size() == 0) ||
-				g_pCosmos->m_hHostBrowserWnd == m_hWnd) {
-				if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
-					g_pCosmos->m_hHostBrowserWnd = NULL;
-				if (g_pCosmos->m_pCLRProxy)
-				{
-					if (g_pCosmos->m_pCosmosAppProxy)
-					{
-						bExitCLR = true;
-						::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210420);
-						//g_pCosmos->m_pCosmosAppProxy->OnCosmosClose();
-					}
-				}
-
-				if (g_pCosmos->m_hCBTHook) {
-					UnhookWindowsHookEx(g_pCosmos->m_hCBTHook);
-					g_pCosmos->m_hCBTHook = nullptr;
-				}
+			if (g_pCosmos->m_hCBTHook) {
+				UnhookWindowsHookEx(g_pCosmos->m_hCBTHook);
+				g_pCosmos->m_hCBTHook = nullptr;
 			}
 		}
 
@@ -679,21 +682,24 @@ namespace Browser {
 						}
 					}
 				}
+				//if (m_pVisibleWebView->m_pGalaxy)
+				//{
+				//	::SendMessage(m_pVisibleWebView->m_hExtendWnd, WM_BROWSERLAYOUT, (WPARAM)m_pVisibleWebView->m_hChildWnd, 0);
+				//	if (::GetParent(m_hWnd) == nullptr)
+				//	{
+				//		CXobj* pObj = m_pVisibleWebView->m_pGalaxy->m_pWorkXobj;
+				//		if (pObj && pObj->m_nViewType == Grid)
+				//		{
+				//			CSplitterWnd* pWnd = (CSplitterWnd*)pObj->m_pHostWnd;
+				//			pWnd->RecalcLayout();
+				//		}
+				//	}
+				//}
+				//m_bSZMode = false;
 				if (theApp.m_bAppStarting == true)
 				{
 					theApp.m_bAppStarting = false;
 					m_pVisibleWebView->m_bCanShow = true;
-				}
-			}
-			break;
-			case 8:
-			{
-				RECT rc;
-				::GetClientRect(m_hWnd, &rc);
-				if ((rc.right < rc.left) || (rc.bottom < rc.top))
-				{
-					::GetClientRect(::GetParent(m_hWnd), &rc);
-					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOREDRAW | SWP_NOACTIVATE);
 				}
 			}
 			break;

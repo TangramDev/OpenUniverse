@@ -784,7 +784,12 @@ LRESULT CCloudMDTFrame::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 			g_pCosmos->m_hMainWnd = pHelperWnd->m_hWnd;
 		}
 	}
+	else
+	{
+		g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::SetMainWndNULL, m_hWnd);
+	}
 	LRESULT l = DefWindowProc(uMsg, wParam, lParam);
+	::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, 0, 20210503);
 	return l;
 }
 

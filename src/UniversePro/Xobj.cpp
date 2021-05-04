@@ -80,7 +80,6 @@ CXobj::CXobj()
 	m_pHostParse = nullptr;
 	m_pDocXmlParseNode = nullptr;
 	m_pWebBrowser = nullptr;
-	m_pParentWinFormWnd = nullptr;
 	m_pXobjShareData = nullptr;
 	g_pCosmos->m_pActiveXobj = this;
 }
@@ -308,12 +307,15 @@ CXobj::~CXobj()
 			dw = m_pChildNodeCollection->Release();
 		m_pChildNodeCollection = nullptr;
 	}
-	for (auto it : m_mapWndXobjProxy)
+	for (auto &it : m_mapWndXobjProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;
 	}
 	m_mapWndXobjProxy.clear();
+	m_mapSubFrame.clear();
+	m_mapExtendNode.clear();
+	m_mapChildXobj.clear();
 	ATLTRACE(_T("delete CXobj:%x\n"), this);
 }
 
@@ -349,6 +351,8 @@ CString CXobj::_GetNames(CXobj* pXobj)
 
 CWebView* CXobj::GetHtmlWnd()
 {
+	if (m_pXobjShareData->m_pGalaxy->m_pWebPageWnd)
+		return m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	if (m_pRootObj)
 	{
 		HWND hPWnd = m_pXobjShareData->m_pGalaxy->m_pGalaxyCluster->m_hWnd;
@@ -1403,7 +1407,7 @@ CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 			}
 			else if (m_pWebBrowser)
 			{
-				if (m_pWebBrowser->m_pParentXobj == this)
+				if (m_pWebBrowser->m_pParentXobj == this)//&&::IsWindowVisible(m_pHostWnd->m_hWnd))
 				{
 					if (m_pWebBrowser->m_pVisibleWebView)
 					{
@@ -1439,6 +1443,61 @@ CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 	}
 	return nullptr;
 }
+//CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
+//{
+//	if (strXobjName != _T(""))
+//	{
+//		switch (m_nViewType)
+//		{
+//		case BlankView:
+//		{
+//			if (m_strName == strXobjName)
+//			{
+//				if (m_pHostGalaxy == nullptr)
+//					return this;
+//				else
+//				{
+//					return m_pHostGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
+//				}
+//			}
+//			else if (m_pWebBrowser)
+//			{
+//				if (m_pWebBrowser->m_pParentXobj == this)//&&::IsWindowVisible(m_pHostWnd->m_hWnd))
+//				{
+//					if (m_pWebBrowser->m_pVisibleWebView)
+//					{
+//						if(m_pWebBrowser->m_pVisibleWebView->m_pGalaxy)
+//							return m_pWebBrowser->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(strXobjName);
+//					}
+//				}
+//			}
+//		}
+//		break;
+//		case TabGrid:
+//		{
+//			for (auto it : m_vChildNodes)
+//			{
+//				if (it->m_nCol == m_nActivePage && it->m_nRow == 0)
+//				{
+//					return it->GetVisibleChildByName(strXobjName);
+//				}
+//			}
+//		}
+//		break;
+//		case Grid:
+//		{
+//			for (auto it : m_vChildNodes)
+//			{
+//				CXobj* pObj = it->GetVisibleChildByName(strXobjName);
+//				if (pObj)
+//					return pObj;
+//			}
+//		}
+//		break;
+//		}
+//	}
+//	return nullptr;
+//}
 
 void CXobj::NodeCreated()
 {

@@ -169,7 +169,8 @@ namespace Browser {
 				g_pCosmos->m_hWaitTabWebPageWnd = NULL;
 				m_strLoadingURLs = _T("");
 				theApp.m_bAppStarting = false;
-				::PostMessage(::GetParent(m_hWnd), WM_COSMOSMSG, 20210314, (LPARAM)m_hWnd);
+				m_bCanShow = true;
+				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 1);
 				break;
 			}
 			if (m_strLoadingURLs != _T(""))
@@ -220,7 +221,6 @@ namespace Browser {
 								msg.m_strParam1 = strUrls;
 								msg.m_strParam2 = strDisposition;
 								m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
-								//::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210411);
 							}
 						}
 					}
@@ -276,6 +276,7 @@ namespace Browser {
 						strDocType = g_pCosmos->m_pUniverseAppProxy->QueryDocType(pXobj->m_pHostWnd->m_hWnd);
 						pXobj->m_pXobjShareData->m_pGalaxy->m_strDocTemplateID = strDocType;
 					}
+					pSession->InsertString(_T("msgID"), IPC_NODE_CREARED_ID);
 					pSession->InsertString(_T("DocTypeID"), strDocType);
 					pSession->InsertLong(_T("autodelete"), 0);
 					pSession->InsertLong(_T("gridtype"), pXobj->m_nViewType);
@@ -943,8 +944,11 @@ namespace Browser {
 					if (m_pGalaxy->m_pParentMDIWinForm && m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy)
 					{
 						CXobj* pMDIClientObj = m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-						m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMDIClientObj;
-						m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->HostPosChanged();
+						if (m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj != pMDIClientObj)
+						{
+							m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->m_pBindingXobj = pMDIClientObj;
+							m_pGalaxy->m_pParentMDIWinForm->m_pClientGalaxy->HostPosChanged();
+						}
 					}
 				}
 			}
@@ -1507,12 +1511,12 @@ namespace Browser {
 						}
 					}
 				}
-				else
-				{
-					CString strExt = xmlParse.attr(_T("ext"), _T(""));
-					CString strDocID = xmlParse.attr(_T("docid"), _T("default"));
-					g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), strExt, strDocID);
-				}
+				//else
+				//{
+				//	CString strExt = xmlParse.attr(_T("ext"), _T(""));
+				//	CString strDocID = xmlParse.attr(_T("docid"), _T("default"));
+				//	g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), strExt, strDocID);
+				//}
 			}
 			if (urlsParse)
 			{

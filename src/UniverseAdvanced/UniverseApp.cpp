@@ -1491,10 +1491,13 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 			{
 				switch (lpMsg->lParam)
 				{
-				case 20210420:
+				case 20210503:
 				{
-					//g_pCosmos->OnCLRHostExit();
-					ATLTRACE(_T("Exit CLR\n"));
+					if (g_pCosmos->m_mapMDTWindow.size())
+					{
+						auto it = g_pCosmos->m_mapMDTWindow.begin();
+						g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::QueryDestroy, it->first);
+					}
 				}
 				break;
 				case 20210418:
@@ -1554,12 +1557,6 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									pFrameWnd->m_bCreateNewDoc = true;
 									pFrameWnd->SubclassWindow(hWnd);
 									g_pCosmos->m_mapMDTWindow[hWnd] = pFrameWnd;
-									HWND hMain = g_pCosmos->m_hMainWnd;
-									auto itForm = g_pCosmos->m_mapWinForm.find(hMain);
-									if (itForm != g_pCosmos->m_mapWinForm.end())
-									{
-										g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(QueryType::SetMainWndNULL, hWnd);
-									}
 								}
 								else
 									pFrameWnd = it->second;
