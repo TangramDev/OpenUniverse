@@ -923,11 +923,7 @@ namespace Universe
 		static Cosmos^ m_pCosmos;
 		static Dictionary<String^, MethodInfo^>^ m_pCosmosCLRMethodDic = gcnew Dictionary<String^, MethodInfo^>();
 		static Dictionary<String^, Type^>^ m_pCosmosCLRTypeDic = gcnew Dictionary<String^, Type^>();
-		static Dictionary<String^, Type^>^ m_pAppFormTypeDic = nullptr;
-		static Dictionary<String^, Type^>^ m_pAppMDIFormTypeDic = nullptr;
-		static Dictionary<Control^, String^>^ m_pControlRelationDic = nullptr;
 		static Dictionary<Object^, Wormhole^>^ m_pWormholes = gcnew Dictionary<Object^, Wormhole^>();
-		static Dictionary<String^, String^>^ CustomizeDictionary = gcnew Dictionary<String^, String^>();
 		static Dictionary<String^, Object^>^ m_pCosmosCLRObjDic = gcnew Dictionary<String^, Object^>();
 	public:
 #ifndef _WIN64
@@ -956,9 +952,6 @@ namespace Universe
 		static WorkBenchWindow^ RemoteActiveWorkBenchWindow(String^ appID);
 		static Control^ GetMDIClient(Form^ pForm);
 		static Xobj^ ExtendMDIClient(Form^ pForm, String^ strKey, String^ strXml);
-		static Dictionary<String^, Type^>^ InitAppFormTypeDic();
-		static Dictionary<String^, Type^>^ GetFormTypesFromAssembly(String^ assemblyFilePath);
-		static Dictionary<String^, Type^>^ GetFormTypesFromDirectory(String^ directoryPath);
 		static List<String^>^ FindFiles(String^ rootPath, String^ fileSpec, bool recursive);
 		static Browser^ GetHostBrowser(Object^ obj);
 		static Xobj^ GetXobjFromHandle(IntPtr handle);
@@ -971,10 +964,6 @@ namespace Universe
 
 		Universe::ICosmosApp^ m_pUniverseAppProxy;
 
-		static void SetControlRelation(Control^ ctrl, String^ strTypes);
-
-		static void ExportAllCLRObjInfo();
-
 		static Cosmos^ GetCosmos();
 
 		static Cosmos^ InitCosmosApp(bool bSupportCrashReporting, CosmosAppType AppType);
@@ -986,7 +975,6 @@ namespace Universe
 		static void Run();
 		static void Run(Form^ Mainform);
 		static void Run(ApplicationContext^ context);
-		static void ExtractToDirectory(String^ strSRC, String^ strTarget);
 		static Xobj^ GetXobjFromObj(Object ^ obj)
 		{
 			Xobj^ pXobj = nullptr;
@@ -1088,14 +1076,6 @@ namespace Universe
 		static void Fire_OnCosmosActionDelegate(Xobj^ SourceObj, String^ strInfo)
 		{
 			OnCosmosActionDelegate(SourceObj, strInfo);
-		}
-
-		static property Dictionary<String^, String^>^ CustomizeDic
-		{
-			Dictionary<String^, String^>^ get()
-			{
-				return CustomizeDictionary;
-			};
 		}
 
 		static property Dictionary<Object^, Universe::Wormhole^>^ Wormholes

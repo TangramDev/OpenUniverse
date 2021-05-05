@@ -32,7 +32,6 @@
 #include <msclr\marshal.h>
 #include <msclr\marshal_atl.h>
 #include <msclr\marshal_cppstd.h>
-#include <msclr\marshal_windows.h>
 
 using namespace Universe;
 using namespace msclr::interop;
@@ -128,7 +127,6 @@ private:
 	void OnDestroyChromeBrowser(IBrowser*);
 
 	void* Extend(CString strKey, CString strData, CString strFeatures);
-	bool IsSupportDesigner();
 	HICON GetAppIcon(int nIndex);
 	void OnWebPageCreated(HWND, CWebPageImpl*, IWebPage*, int nState);
 	bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType);

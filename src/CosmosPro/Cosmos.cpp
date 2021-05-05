@@ -1079,235 +1079,123 @@ namespace Universe
         return pFiles;
     }
 
-    Dictionary<String^, Type^>^ Cosmos::GetFormTypesFromDirectory(String^ directoryPath)
-    {
-        Dictionary<String^, Type^>^ pFormTypes = gcnew Dictionary<String^, Type^>();
-        List<String^>^ pFiles = FindFiles(directoryPath, "*.dll", false);
-        for each (String ^ file in pFiles)
-        {
-            Dictionary<String^, Type^>^ _pFormTypes = GetFormTypesFromAssembly(file);
-            for each (KeyValuePair<String^, Type^>^ formType in _pFormTypes)
-            {
-                pFormTypes[formType->Key] = formType->Value;
-            }
-        }
-        return pFormTypes;
-    }
+    //Dictionary<String^, Type^>^ Cosmos::InitAppFormTypeDic()
+    //{
+    //    if (m_pAppFormTypeDic == nullptr)
+    //    {
+    //        m_pAppFormTypeDic = gcnew Dictionary<String^, Type^>();
+    //        CString filePath = System::Windows::Forms::Application::ExecutablePath->ToLower();
+    //        int nPos = filePath.ReverseFind('.');
+    //        CString strLib = filePath.Left(nPos).MakeLower();
+    //        CString strAssemblys = _T("");
+    //        String^ _strLib = marshal_as<String^>(filePath);
+    //        String^ strAssemblyLib = L"";
+    //        strLib = filePath.MakeLower();
+    //        Assembly^ m_pDotNetAssembly = nullptr;
+    //        try
+    //        {
+    //            m_pDotNetAssembly = Assembly::LoadFile(System::Windows::Forms::Application::ExecutablePath->ToLower());
+    //            if (m_pDotNetAssembly == nullptr)
+    //                return nullptr;
+    //        }
+    //        catch (ArgumentNullException ^ e)
+    //        {
+    //            Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
+    //        }
+    //        catch (ArgumentException ^ e)
+    //        {
+    //            Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
+    //        }
+    //        catch (FileNotFoundException ^ e)
+    //        {
+    //            Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
+    //        }
+    //        catch (FileLoadException ^ e)
+    //        {
+    //            Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
+    //        }
+    //        catch (BadImageFormatException ^ e)
+    //        {
+    //            Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
+    //        }
+    //        finally
+    //        {
+    //            if (m_pDotNetAssembly != nullptr)
+    //            {
+    //                cli::array<Type^>^ pArray = m_pDotNetAssembly->GetExportedTypes();
+    //                for each (Type ^ type in pArray)
+    //                {
+    //                    if (type->IsSubclassOf(Form::typeid))
+    //                    {
+    //                        Form^ m_pObj = nullptr;
+    //                        try
+    //                        {
+    //                            m_pObj = (Form^)Activator::CreateInstance(type);
+    //                            HICON hIcon = (HICON)m_pObj->Icon->Handle.ToPointer();
+    //                            if (hIcon)
+    //                            {
+    //                                int nPos = filePath.ReverseFind('.');
+    //                                CString strLib = filePath.Left(nPos).MakeLower();
+    //                                CString strPath2 = strLib;
+    //                                nPos = strPath2.ReverseFind('\\');
+    //                                CString strPath = strPath2.Left(nPos + 1);
+    //                                CString strNmae = strPath2.Mid(nPos + 1);
+    //                                strPath2 = strPath;
+    //                                strPath2 += marshal_as<CString>(type->FullName);
+    //                                strPath2 += _T(" ");
+    //                                strPath2 += strNmae;
+    //                                strPath2 += _T(".ico");
+    //                                //Write Icon to File Stream
+    //                                System::IO::FileStream^ fs = gcnew System::IO::FileStream(marshal_as<String^>(strPath2), System::IO::FileMode::OpenOrCreate);
+    //                                m_pObj->Icon->Save(fs);
+    //                                fs->Close();
+    //                                delete fs;
+    //                            }
+    //                        }
+    //                        catch (Exception^)
+    //                        {
 
-    Dictionary<String^, Type^>^ Cosmos::GetFormTypesFromAssembly(String^ assemblyFilePath)
-    {
-        Dictionary<String^, Type^>^ pFormTypes = gcnew Dictionary<String^, Type^>();
-        CString strFile = marshal_as<CString>(assemblyFilePath);
-        CString strXMLFile = strFile + L".xml";
-        CMarkup xml;
-        if (xml.Load(strXMLFile) && xml.FindElem())
-        {
-            CString tagName = xml.GetTagName();
-            if (tagName.CompareNoCase(L"FORMS") == 0)
-            {
-                Assembly^ pAssembly = nullptr;
-                try
-                {
-                    pAssembly = Assembly::LoadFile(assemblyFilePath);
-                    if (pAssembly != nullptr)
-                    {
-                        while (xml.FindChildElem())
-                        {
-                            CString tagName = xml.GetChildTagName();
-                            if (tagName.CompareNoCase(L"FORM") == 0)
-                            {
-                                CString strType = xml.GetChildAttrib(L"type");
-                                BSTR bstrType = strType.AllocSysString();
-                                String^ type = marshal_as<String^>(bstrType);
-                                Type^ pType = pAssembly->GetType(type);
-                                SysFreeString(bstrType);
-                                if (pType != nullptr)
-                                {
-                                    pFormTypes[pType->FullName] = pType;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ^ e)
-                {
-                    Debug::WriteLine(L"GetFormTypesFromAssembly: {0}", e->Message);
-                }
-            }
-        }
-        else
-        {
-            CMarkup xml;
-            xml.AddElem(L"forms");
-            xml.IntoElem();
-            CString filePath = marshal_as<CString>(assemblyFilePath);
-            Assembly^ pAssembly = nullptr;
-            try
-            {
-                pAssembly = Assembly::LoadFile(assemblyFilePath);
-            }
-            catch (Exception ^ e)
-            {
-                Debug::WriteLine(L"GetFormTypesFromAssembly: {0}", e->Message);
-            }
-            if (pAssembly != nullptr)
-            {
-                cli::array<Type^>^ pTypes = pAssembly->GetExportedTypes();
-                for each (Type ^ type in pTypes)
-                {
-                    if (type->IsSubclassOf(Form::typeid))
-                    {
-                        Form^ pTempInstance = nullptr;
-                        try
-                        {
-                            pTempInstance = (Form^)Activator::CreateInstance(type);
-                        }
-                        finally
-                        {
-                            if (pTempInstance)
-                            {
-                                if (pTempInstance->FormBorderStyle == FormBorderStyle::FixedToolWindow ||
-                                    pTempInstance->FormBorderStyle == FormBorderStyle::None ||
-                                    pTempInstance->FormBorderStyle == FormBorderStyle::SizableToolWindow)
-                                {
-                                    // Nothing to do.
-                                }
-                                else
-                                {
-                                    pFormTypes[type->FullName] = type;
-                                    CString strFormType = marshal_as<CString>(type->FullName);
-                                    xml.AddElem(L"form");
-                                    xml.SetAttrib(L"type", strFormType);
-                                }
-                                pTempInstance->Close();
-                            }
-                        }
-                    }
-                }
-            }
-            xml.OutOfElem();
-            xml.Save(strXMLFile);
-        }
-        return pFormTypes;
-    }
+    //                        }
+    //                        finally
+    //                        {
+    //                            if (m_pObj && m_pObj->IsMdiContainer)
+    //                            {
+    //                                if (m_pAppMDIFormTypeDic == nullptr)
+    //                                {
+    //                                    m_pAppMDIFormTypeDic = gcnew Dictionary<String^, Type^>();
+    //                                }
+    //                                m_pAppMDIFormTypeDic[type->FullName] = type;
+    //                            }
+    //                            else
+    //                            {
+    //                                if (m_pObj && (m_pObj->FormBorderStyle == FormBorderStyle::FixedToolWindow || m_pObj->FormBorderStyle == FormBorderStyle::None || m_pObj->FormBorderStyle == FormBorderStyle::SizableToolWindow))
+    //                                {
+    //                                }
+    //                                else
+    //                                    m_pAppFormTypeDic[type->FullName] = type;
+    //                            }
+    //                            if (m_pObj)
+    //                                m_pObj->Close();
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        if (m_pDotNetAssembly == nullptr)
+    //        {
+    //            return nullptr;
+    //        }
+    //    }
+    //    return m_pAppFormTypeDic;
+    //}
 
-    Dictionary<String^, Type^>^ Cosmos::InitAppFormTypeDic()
-    {
-        if (m_pAppFormTypeDic == nullptr)
-        {
-            m_pAppFormTypeDic = gcnew Dictionary<String^, Type^>();
-            CString filePath = System::Windows::Forms::Application::ExecutablePath->ToLower();
-            int nPos = filePath.ReverseFind('.');
-            CString strLib = filePath.Left(nPos).MakeLower();
-            CString strAssemblys = _T("");
-            String^ _strLib = marshal_as<String^>(filePath);
-            String^ strAssemblyLib = L"";
-            strLib = filePath.MakeLower();
-            Assembly^ m_pDotNetAssembly = nullptr;
-            try
-            {
-                m_pDotNetAssembly = Assembly::LoadFile(System::Windows::Forms::Application::ExecutablePath->ToLower());
-                if (m_pDotNetAssembly == nullptr)
-                    return nullptr;
-            }
-            catch (ArgumentNullException ^ e)
-            {
-                Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
-            }
-            catch (ArgumentException ^ e)
-            {
-                Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
-            }
-            catch (FileNotFoundException ^ e)
-            {
-                Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
-            }
-            catch (FileLoadException ^ e)
-            {
-                Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
-            }
-            catch (BadImageFormatException ^ e)
-            {
-                Debug::WriteLine(L"Cosmos InitAppFormTypeDic: " + e->Message);
-            }
-            finally
-            {
-                if (m_pDotNetAssembly != nullptr)
-                {
-                    cli::array<Type^>^ pArray = m_pDotNetAssembly->GetExportedTypes();
-                    for each (Type ^ type in pArray)
-                    {
-                        if (type->IsSubclassOf(Form::typeid))
-                        {
-                            Form^ m_pObj = nullptr;
-                            try
-                            {
-                                m_pObj = (Form^)Activator::CreateInstance(type);
-                                HICON hIcon = (HICON)m_pObj->Icon->Handle.ToPointer();
-                                if (hIcon)
-                                {
-                                    int nPos = filePath.ReverseFind('.');
-                                    CString strLib = filePath.Left(nPos).MakeLower();
-                                    CString strPath2 = strLib;
-                                    nPos = strPath2.ReverseFind('\\');
-                                    CString strPath = strPath2.Left(nPos + 1);
-                                    CString strNmae = strPath2.Mid(nPos + 1);
-                                    strPath2 = strPath;
-                                    strPath2 += marshal_as<CString>(type->FullName);
-                                    strPath2 += _T(" ");
-                                    strPath2 += strNmae;
-                                    strPath2 += _T(".ico");
-                                    //Write Icon to File Stream
-                                    System::IO::FileStream^ fs = gcnew System::IO::FileStream(marshal_as<String^>(strPath2), System::IO::FileMode::OpenOrCreate);
-                                    m_pObj->Icon->Save(fs);
-                                    fs->Close();
-                                    delete fs;
-                                }
-                            }
-                            catch (Exception^)
-                            {
+    //void Cosmos::ExtractToDirectory(String^ strSRC, String^ strTarget)
+    //{
+    //}
 
-                            }
-                            finally
-                            {
-                                if (m_pObj && m_pObj->IsMdiContainer)
-                                {
-                                    if (m_pAppMDIFormTypeDic == nullptr)
-                                    {
-                                        m_pAppMDIFormTypeDic = gcnew Dictionary<String^, Type^>();
-                                    }
-                                    m_pAppMDIFormTypeDic[type->FullName] = type;
-                                }
-                                else
-                                {
-                                    if (m_pObj && (m_pObj->FormBorderStyle == FormBorderStyle::FixedToolWindow || m_pObj->FormBorderStyle == FormBorderStyle::None || m_pObj->FormBorderStyle == FormBorderStyle::SizableToolWindow))
-                                    {
-                                    }
-                                    else
-                                        m_pAppFormTypeDic[type->FullName] = type;
-                                }
-                                if (m_pObj)
-                                    m_pObj->Close();
-                            }
-                        }
-                    }
-                }
-            }
-            if (m_pDotNetAssembly == nullptr)
-            {
-                return nullptr;
-            }
-        }
-        return m_pAppFormTypeDic;
-    }
-
-    void Cosmos::ExtractToDirectory(String^ strSRC, String^ strTarget)
-    {
-    }
-
-    void Cosmos::ExportAllCLRObjInfo()
-    {
-    }
+    //void Cosmos::ExportAllCLRObjInfo()
+    //{
+    //}
 
     String^ Cosmos::AppDataPath::get()
     {
@@ -1325,27 +1213,6 @@ namespace Universe
     String^ Cosmos::AppFormsPath::get()
     {
         return L"";
-    }
-
-    void Cosmos::SetControlRelation(Control^ ctrl, String^ strTypes)
-    {
-        if (m_pControlRelationDic == nullptr)
-            m_pControlRelationDic = gcnew Dictionary<Control^, String^>();
-
-        String^ strIDs = nullptr;
-        if (m_pControlRelationDic->TryGetValue(ctrl, strIDs) == false)
-        {
-            m_pControlRelationDic[ctrl] = strTypes;
-        }
-        else
-        {
-            CString str1 = strIDs;
-            str1 += _T(";");
-            str1 += marshal_as<CString>(strTypes);
-            str1 += _T(";");
-            str1 += _T(";") + str1;
-            str1.Replace(_T(";;"), _T(";"));
-        }
     }
 
     void Cosmos::BindToCtrl(Control^ source, Control^ target, String^ strXmlData)

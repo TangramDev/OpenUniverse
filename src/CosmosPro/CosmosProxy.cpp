@@ -33,7 +33,6 @@
 #include <io.h>
 #include <stdio.h>
 #include "Markup.h"
-#include "AssemblyLocalor.h"
 
 #include <string>
 #include <iostream>
@@ -167,12 +166,12 @@ HWND CCosmos::InitCosmosApp()
 
 void CCosmos::IPCMsg(HWND hWnd, CString strType, CString strParam1, CString strParam2)
 {
-	Universe::Cosmos::Fire_OnCosmosMsg(marshal_as<IntPtr>((HANDLE)hWnd), marshal_as<String^>(strType), marshal_as<String^>(strParam1), marshal_as<String^>(strParam2));
+	Universe::Cosmos::Fire_OnCosmosMsg((IntPtr)hWnd, marshal_as<String^>(strType), marshal_as<String^>(strParam1), marshal_as<String^>(strParam2));
 }
 
 void CCosmos::CustomizedDOMElement(HWND hWnd, CString strRuleName, CString strHTML)
 {
-	Universe::Cosmos::Fire_OnCustomizedDOMElement(marshal_as<IntPtr>((HANDLE)hWnd), marshal_as<String^>(strRuleName), marshal_as<String^>(strHTML));
+	Universe::Cosmos::Fire_OnCustomizedDOMElement((IntPtr)hWnd, marshal_as<String^>(strRuleName), marshal_as<String^>(strHTML));
 }
 
 void CCosmos::ProcessMsg(MSG* msg) {
@@ -275,11 +274,6 @@ IDispatch* CCosmosProxy::CreateWinForm(HWND hParent, BSTR strXML)
 		}
 	}
 	return nullptr;
-}
-
-bool CCosmosProxy::IsSupportDesigner()
-{
-	return true;
 }
 
 void CCosmosProxy::OnDestroyChromeBrowser(IBrowser* pBrowser)
@@ -1087,6 +1081,7 @@ void CCosmosProxy::CtrlInit(int nType, Control^ ctrl, IGalaxyCluster* pGalaxyClu
 					{
 						TreeNode^ pXobj = pTreeView->Nodes->Add(marshal_as<String^>(m_Parse.attr(_T("text"), _T(""))));
 						pXobj->ImageIndex = m_Parse.attrInt(_T("imageindex"), 0);
+						pXobj->ToolTipText = marshal_as<String^>(m_Parse.text());
 						pXobj->SelectedImageIndex = m_Parse.attrInt(_T("selectedimageindex"), 0);
 						CString strTagName = ctrl->Name->ToLower() + _T("_tag");
 						CTangramXmlParse* pChild = m_Parse.GetChild(strTagName);
@@ -1155,6 +1150,7 @@ System::Void CCosmosProxy::LoadNode(TreeView^ pTreeView, TreeNode^ pXobj, IGalax
 						if (pChildNode)
 						{
 							pChildNode->ImageIndex = _pParse->attrInt(_T("imageindex"), 0);
+							pChildNode->ToolTipText = marshal_as<String^>(_pParse->text());
 							pChildNode->SelectedImageIndex = _pParse->attrInt(_T("selectedimageindex"), 0);
 							CString strTagName = name + _T("_tag");
 							CTangramXmlParse* pChild2 = pParse->GetChild(strTagName);
@@ -1222,35 +1218,8 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 	}
 	if (pForm->IsMdiContainer)
 	{
-		ToolStrip^ defaultToolStrip = nullptr;
-		for each (Control ^ ctrl in pForm->Controls)
-		{
-			if (ctrl->Name == L"toolStrip")
-			{
-				defaultToolStrip = (ToolStrip^)ctrl;
-
-				//ToolStripSeparator^ toolStripSeparator = gcnew ToolStripSeparator();
-				//toolStripSeparator->Name = "defaulttoolStripSeparator";
-				//toolStripSeparator->Size = System::Drawing::Size(6, 39);
-				//defaultToolStrip->Items->Add(toolStripSeparator);
-
-				//ToolStripButton^ pToolStripButton = gcnew ToolStripButton();
-				//pToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				//pToolStripButton->Image = (System::Drawing::Image^)(pForm->Icon->ToBitmap());
-				//pToolStripButton->ImageTransparentColor = System::Drawing::Color::Black;
-				//pToolStripButton->Name = L"defaultbtn";
-				//pToolStripButton->Size = System::Drawing::Size(36, 36);
-				//pToolStripButton->Text = L"default";
-				//pToolStripButton->Tag = L"default";
-				//pToolStripButton->Checked = true;
-				//pToolStripButton->CheckOnClick = true;
-				////pToolStripButton->ToolTipText = marshal_as<String^>(strTips);
-				//pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
-				//defaultToolStrip->Items->Add(pToolStripButton);
-
-				break;
-			}
-		}
+		
+		ToolStrip^ defaultToolStrip = static_cast<ToolStrip^>(pForm->Controls[L"toolStrip"]);
 		HWND hForm = (HWND)pForm->Handle.ToPointer();
 		CMDIChildFormInfo* pInfo = (CMDIChildFormInfo*)::SendMessage(hForm, WM_COSMOSMSG, (WPARAM)0, 20190602);
 		if (pInfo && defaultToolStrip)
@@ -1315,9 +1284,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 					}
 				}
 			}
-			//delete pInfo;
 		}
-		//_pInfo->m_mapFormsInfo.clear();
 	}
 
 	theAppProxy.m_strCurrentWinFormTemplate = _T("");
@@ -1332,41 +1299,6 @@ void CCosmosProxy::OnCLRHostExit()
 
 void* CCosmosProxy::Extend(CString strKey, CString strData, CString strFeatures)
 {
-	if (strFeatures.CompareNoCase(_T("tangram:creatingform")) == 0)
-	{
-		int nPos = strKey.Find(_T(","));
-		if (nPos != -1)
-		{
-			Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(strKey));
-			if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
-			{
-				Form^ pForm = (Form^)pObj;
-				pForm->Show();
-			}
-		}
-	}
-	else if (strFeatures.CompareNoCase(_T("tangram:creatingmdichildform")) == 0)
-	{
-		int nPos = strKey.Find(_T(":"));
-		Form^ pParentForm = static_cast<Form^>(Form::FromHandle((IntPtr)_wtol(strKey.Mid(nPos + 1))));
-		if (pParentForm && pParentForm->IsMdiContainer)
-		{
-			strKey = strKey.Left(nPos);
-			nPos = strKey.Find(_T(","));
-			if (nPos != -1)
-			{
-				Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(strKey));
-				if (pObj && pObj->GetType()->IsSubclassOf(Form::typeid))
-				{
-					Form^ pForm = (Form^)pObj;
-					pForm->MdiParent = pParentForm;
-					m_strCurrentWinFormTemplate = strData;
-					pForm->Show();
-				}
-			}
-		}
-	}
-
 	return nullptr;
 }
 
@@ -3131,7 +3063,7 @@ bool CCosmosProxy::PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nTyp
 	{
 	case 1:
 	{
-		Control^ ctrl = Control::FromHandle(marshal_as<IntPtr>((HANDLE)hWnd)); 
+		Control^ ctrl = Control::FromHandle((IntPtr)hWnd);
 		if (ctrl->GetType()->IsSubclassOf(Form::typeid))
 		{
 			Form^ thisForm = (Form^)ctrl;
@@ -3186,8 +3118,9 @@ void CCosmosProxy::OnControlAdded(Object^ sender, ControlEventArgs^ e)
 	String^ strType = e->Control->GetType()->ToString();
 	if (strType == L"System.Windows.Forms.MdiClient")
 	{
-		HWND hWnd = (HWND)marshal_as<HANDLE>(((Form^)sender)->Handle); 
-		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)e->Control->Handle.ToInt64());
+		__int64 nHandle = e->Control->Handle.ToInt64();
+		HWND hWnd = (HWND)((Form^)sender)->Handle.ToInt64();
+		::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)nHandle);
 	}
 }
 

@@ -156,23 +156,27 @@ namespace Browser {
 		{
 		case 20210411:
 		{
-			if (lParam)
+			CBrowser* pWebBrowser = nullptr;
+			HWND hPWnd = ::GetParent(m_hWnd);
+			auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
+			if (it != g_pCosmos->m_mapBrowserWnd.end())
 			{
-				g_pCosmos->m_nWaitTabCounts = 0;
-				g_pCosmos->m_hWaitTabWebPageWnd = NULL;
-				m_strLoadingURLs = _T("");
-				theApp.m_bAppStarting = false;
-				m_bCanShow = true;
-				::SendMessage(::GetParent(m_hWnd), WM_BROWSERLAYOUT, 0, 1);
-				break;
-			}
-			if (m_strLoadingURLs != _T(""))
-			{
-				HWND hPWnd = ::GetParent(m_hWnd);
-				auto it = g_pCosmos->m_mapBrowserWnd.find(hPWnd);
-				if (it != g_pCosmos->m_mapBrowserWnd.end())
+				pWebBrowser = (CBrowser*)it->second;
+				if (lParam)
 				{
-					CBrowser* pWebBrowser = (CBrowser*)it->second;
+					g_pCosmos->m_nWaitTabCounts = 0;
+					g_pCosmos->m_hWaitTabWebPageWnd = NULL;
+					m_strLoadingURLs = _T("");
+					theApp.m_bAppStarting = false;
+					m_bCanShow = true;
+					if (pWebBrowser->m_pMDIParent)
+						::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 7);
+					else
+						::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 1);
+					break;
+				}
+				if (m_strLoadingURLs != _T(""))
+				{
 					pWebBrowser->m_bSZMode = true;
 					m_bCanShow = false;
 					pWebBrowser->m_bInTabChange = true;
@@ -2161,18 +2165,6 @@ namespace Browser {
 									}
 								}
 							}
-						}
-					}
-				}
-				pChild = m_Parse.GetChild(_T("parentform"));
-				if (pChild)
-				{
-					int nCount = pChild->GetCount();
-					if (nCount)
-					{
-						for (int i = 0; i < nCount; i++)
-						{
-
 						}
 					}
 				}

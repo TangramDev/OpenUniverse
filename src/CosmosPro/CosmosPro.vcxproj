@@ -380,7 +380,6 @@ copy "$(TargetPath)" "C:\ProgramData\WebRuntimeApp\WebRuntime\$(TargetName)$(Tar
     <ClCompile Include="Cosmos.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssemblyLocalor.h" />
     <ClInclude Include="BrowserWndOpenDisposition.h" />
     <ClInclude Include="Browser.h" />
     <ClInclude Include="dllmain.h" />
