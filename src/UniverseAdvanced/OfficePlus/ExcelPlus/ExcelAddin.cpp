@@ -1098,7 +1098,7 @@ namespace OfficePlus
 				}
 				if (nCount == 0)
 				{
-					for (auto it : *m_pWorkBook)
+					for (auto& it : *m_pWorkBook)
 					{
 						delete it.second;
 					}

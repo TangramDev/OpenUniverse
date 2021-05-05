@@ -525,7 +525,7 @@ namespace Browser {
 			if (g_pCosmos->m_hHostBrowserWnd == m_hWnd)
 			{
 				g_pCosmos->m_bChromeNeedClosed = true;
-				for (auto it : g_pCosmos->m_mapBrowserWnd)
+				for (auto& it : g_pCosmos->m_mapBrowserWnd)
 				{
 					if (((CBrowser*)it.second)->m_hWnd != m_hWnd)
 						((CBrowser*)it.second)->PostMessageW(WM_CLOSE, 0, 0);

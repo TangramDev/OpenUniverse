@@ -252,7 +252,7 @@ STDMETHODIMP CEclipseWnd::get__NewEnum(IUnknown** ppVal)
 		VARIANT* rgvar = new VARIANT[nLen];
 		ZeroMemory(rgvar, sizeof(VARIANT)*nLen);
 		VARIANT* pItem = rgvar;
-		for (auto it : m_mapCtrl)
+		for (auto& it : m_mapCtrl)
 		{
 			IUnknown* pDisp = nullptr;
 			CEclipseCtrl* pObj = it.second;
@@ -417,7 +417,7 @@ void CEclipseWnd::Show(CString strID)
 					m_pGalaxyCluster->m_hWnd = m_hWnd;
 					g_pCosmos->m_mapGalaxyCluster[m_hWnd] = m_pGalaxyCluster;
 
-					for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+					for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 					{
 						CGalaxyClusterProxy* pCosmosProxy = it.second->OnGalaxyClusterCreated(m_pGalaxyCluster);
 						if (pCosmosProxy)
@@ -654,10 +654,10 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 			if (m_pGalaxyCluster)
 			{
 				m_strXml = _T("<eclipseplus>");
-				for (auto it : m_pGalaxyCluster->m_mapGalaxy)
+				for (auto& it : m_pGalaxyCluster->m_mapGalaxy)
 				{
 					CGalaxy* pGalaxy = it.second;
-					for (auto it2 : pGalaxy->m_mapXobj)
+					for (auto& it2 :pGalaxy->m_mapXobj)
 					{
 						CXobj* pWndXobj = (CXobj*)it2.second;
 						if (pWndXobj)
@@ -677,14 +677,14 @@ LRESULT CEclipseWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& )
 								((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
 							}
 							g_pCosmos->UpdateXobj(pWndXobj);
-							for (auto it2 : pWndXobj->m_vChildNodes)
+							for (auto& it2 :pWndXobj->m_vChildNodes)
 							{
 								g_pCosmos->UpdateXobj(it2);
 							}
 						}
 					}
 				}
-				//for (auto it : m_pGalaxyCluster->m_mapNeedSaveGalaxy)
+				//for (auto& it : m_pGalaxyCluster->m_mapNeedSaveGalaxy)
 				//{
 				//	CGalaxy* pGalaxy = it.second;
 				//	auto it2 = pGalaxy->m_mapXobj.find(_T("default"));

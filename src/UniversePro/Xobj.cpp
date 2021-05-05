@@ -236,7 +236,7 @@ void CXobj::InitWndXobj()
 			m_pObjClsInfo = RUNTIME_CLASS(CXobjWnd);
 	}
 
-	for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+	for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 	{
 		CXobjProxy* pCosmosWndXobjProxy = it.second->OnXobjInit(this);
 		if (pCosmosWndXobjProxy)
@@ -338,7 +338,7 @@ CString CXobj::_GetNames(CXobj* pXobj)
 	CString strRet = _T("");
 	if (pXobj)
 	{
-		for (auto it : pXobj->m_vChildNodes)
+		for (auto& it : pXobj->m_vChildNodes)
 		{
 			CXobj* pChildNode = it;
 			strRet += pChildNode->m_strName;
@@ -408,7 +408,7 @@ BOOL CXobj::PreTranslateMessage(MSG* pMsg)
 	{
 		m_pHostWnd->PreTranslateMessage(pMsg);
 
-		for (auto it : m_vChildNodes)
+		for (auto& it : m_vChildNodes)
 		{
 			it->PreTranslateMessage(pMsg);
 		}
@@ -1420,7 +1420,7 @@ CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 		break;
 		case TabGrid:
 		{
-			for (auto it : m_vChildNodes)
+			for (auto& it : m_vChildNodes)
 			{
 				if (it->m_nCol == m_nActivePage && it->m_nRow == 0)
 				{
@@ -1431,7 +1431,7 @@ CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 		break;
 		case Grid:
 		{
-			for (auto it : m_vChildNodes)
+			for (auto& it : m_vChildNodes)
 			{
 				CXobj* pObj = it->GetVisibleChildByName(strXobjName);
 				if (pObj)
@@ -1475,7 +1475,7 @@ CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 //		break;
 //		case TabGrid:
 //		{
-//			for (auto it : m_vChildNodes)
+//			for (auto& it : m_vChildNodes)
 //			{
 //				if (it->m_nCol == m_nActivePage && it->m_nRow == 0)
 //				{
@@ -1486,7 +1486,7 @@ CXobj* CXobj::GetVisibleChildByName(CString strXobjName)
 //		break;
 //		case Grid:
 //		{
-//			for (auto it : m_vChildNodes)
+//			for (auto& it : m_vChildNodes)
 //			{
 //				CXobj* pObj = it->GetVisibleChildByName(strXobjName);
 //				if (pObj)
@@ -1661,7 +1661,7 @@ int CXobj::_getNodes(CXobj* pXobj, CString& strName, CXobj** ppRetXobj, CXobjCol
 		return 1;
 	}
 
-	for (auto it : pXobj->m_vChildNodes)
+	for (auto& it : pXobj->m_vChildNodes)
 	{
 		iCount += _getNodes(it, strName, ppRetXobj, pXobjs);
 	}
@@ -1713,7 +1713,7 @@ void CXobj::_get_Objects(CXobj* pXobj, UINT32& nType, CXobjCollection* pXobjColl
 	}
 
 	CXobj* pChildNode = nullptr;
-	for (auto it : pXobj->m_vChildNodes)
+	for (auto& it : pXobj->m_vChildNodes)
 	{
 		pChildNode = it;
 		_get_Objects(pChildNode, nType, pXobjColletion);
@@ -1784,7 +1784,7 @@ STDMETHODIMP CXobj::GetXobj(long nRow, long nCol, IXobj** ppXobj)
 	//	return S_FALSE;
 	//}
 
-	for (auto it : m_vChildNodes)
+	for (auto& it : m_vChildNodes)
 	{
 		if (it->m_nCol == nCol && it->m_nRow == nRow)
 		{
@@ -2762,7 +2762,7 @@ STDMETHODIMP CXobj::SendIPCMessage(BSTR bstrTo, BSTR bstrPayload, BSTR bstrExtra
 			if (m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd)
 			{
 				HWND hPWnd = m_pXobjShareData->m_pGalaxy->m_pHostWebBrowserWnd->m_hWnd;
-				for (auto it : g_pCosmos->m_mapWebView)
+				for (auto& it : g_pCosmos->m_mapWebView)
 				{
 					if (::IsChild(hPWnd, it.first))
 					{

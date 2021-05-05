@@ -125,7 +125,7 @@ namespace Browser {
 	}
 
 	CWebView::~CWebView() {
-		for (auto it : m_mapChildFormsInfo)
+		for (auto& it : m_mapChildFormsInfo)
 		{
 			delete it.second;
 		}
@@ -319,7 +319,7 @@ namespace Browser {
 					break;
 					case TabGrid:
 					{
-						for (auto it : pXobj->m_vChildNodes)
+						for (auto& it : pXobj->m_vChildNodes)
 						{
 							CString strIndex = _T("");
 							strIndex.Format(_T("%d"), it->m_nCol);
@@ -687,7 +687,7 @@ namespace Browser {
 					m_pGalaxyCluster->m_hWnd = m_hWnd;
 					g_pCosmos->m_mapGalaxyCluster[m_hWnd] = m_pGalaxyCluster;
 
-					for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+					for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 					{
 						CGalaxyClusterProxy* pCosmosProxy = it.second->OnGalaxyClusterCreated(m_pGalaxyCluster);
 						if (pCosmosProxy)
@@ -2008,7 +2008,7 @@ namespace Browser {
 				pGalaxyCluster->m_hWnd = m_hExtendWnd;
 				g_pCosmos->m_mapGalaxyCluster[m_hExtendWnd] = pGalaxyCluster;
 
-				for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+				for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 				{
 					CGalaxyClusterProxy* pProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 					if (pProxy)
@@ -2122,7 +2122,7 @@ namespace Browser {
 											break;
 											case TabGrid:
 											{
-												for (auto it : pXobj->m_vChildNodes)
+												for (auto& it : pXobj->m_vChildNodes)
 												{
 													CString strIndex = _T("");
 													strIndex.Format(_T("%d"), it->m_nCol);

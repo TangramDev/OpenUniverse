@@ -194,7 +194,7 @@ namespace OfficePlus
 				}
 				if (vec.size())
 				{
-					for (auto it : vec)
+					for (auto& it : vec)
 					{
 						it->Delete();
 					}

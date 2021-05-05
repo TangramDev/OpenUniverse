@@ -7039,7 +7039,7 @@ void RenderFrameImpl::OnCosmosRendererIPCMsg(
   for (auto it1 : mapString) {
     var->session_.m_mapString[it1.first] = it1.second;
   }
-  for (auto it2 : mapLong) {
+  for (auto& it2 :mapLong) {
     var->session_.m_mapLong[it2.first] = it2.second;
   }
   for (auto it3 : mapint64) {

@@ -171,7 +171,7 @@ LRESULT CTangramTabCtrl::OnInitialUpdate(WPARAM wParam, LPARAM lParam)
 	{
 		CXobjCollection* pWndXobjCollection = (CXobjCollection*)pColl.p;
 
-		for (auto it : *pWndXobjCollection->m_pXobjs)
+		for (auto& it : *pWndXobjCollection->m_pXobjs)
 		{
 			CTangramListView* pWnd = (CTangramListView*)(it)->m_pHostWnd;
 			pWnd->m_pCosmosTabCtrl = this;

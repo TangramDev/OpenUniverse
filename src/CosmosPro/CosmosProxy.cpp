@@ -1256,7 +1256,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 		if (pInfo && defaultToolStrip)
 		{
 			int nIndex = 0;
-			for (auto it : pInfo->m_mapFormsInfo)
+			for (auto& it : pInfo->m_mapFormsInfo)
 			{
 				CString strXml = it.second;
 				CTangramXmlParse m_Parse;

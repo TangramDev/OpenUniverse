@@ -623,14 +623,14 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 		XobjType type = pXobj->m_nViewType;
 		if (type == Grid || type == TabGrid)
 		{
-			for (auto it : pXobj->m_vChildNodes)
+			for (auto& it : pXobj->m_vChildNodes)
 			{
 				FireNodeEvent(nIndex, it, pObj);
 			}
 		}
 		else
 		{
-			for (auto it : pXobj->m_mapWndXobjProxy)
+			for (auto& it : pXobj->m_mapWndXobjProxy)
 			{
 				it.second->OnCosmosDocEvent(pObj);
 			}
@@ -639,7 +639,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 	break;
 	case 1:
 	{
-		for (auto it : pXobj->m_mapWndXobjProxy)
+		for (auto& it : pXobj->m_mapWndXobjProxy)
 		{
 			it.second->OnCosmosDocEvent(pObj);
 		}
@@ -647,7 +647,7 @@ void CCosmos::FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj)
 	break;
 	case 2:
 	{
-		for (auto it : pXobj->m_mapWndXobjProxy)
+		for (auto& it : pXobj->m_mapWndXobjProxy)
 		{
 			it.second->OnCosmosDocEvent(pObj);
 		}
@@ -662,7 +662,7 @@ void CCosmos::FireAppEvent(CCosmosEvent* pObj)
 	{
 		if (m_pUniverseAppProxy)
 			m_pUniverseAppProxy->OnCosmosEvent(pObj);
-		for (auto it : m_mapCosmosAppProxy)
+		for (auto& it : m_mapCosmosAppProxy)
 		{
 			if (it.second != m_pUniverseAppProxy)
 				it.second->OnCosmosEvent(pObj);
@@ -1155,7 +1155,7 @@ void CCosmos::ExitInstance()
 		UnhookWindowsHookEx(m_hCBTHook);
 	if (m_hForegroundIdleHook)
 		UnhookWindowsHookEx(m_hForegroundIdleHook);
-	for (auto it : m_mapThreadInfo)
+	for (auto& it : m_mapThreadInfo)
 	{
 		if (it.second->m_hGetMessageHook)
 		{
@@ -1177,7 +1177,7 @@ void CCosmos::ExitInstance()
 
 	if (m_mapObjDic.size())
 	{
-		for (auto it : m_mapObjDic)
+		for (auto& it : m_mapObjDic)
 		{
 			it.second->Release();
 		}
@@ -1185,7 +1185,7 @@ void CCosmos::ExitInstance()
 	}
 
 
-	for (auto it : m_mapValInfo)
+	for (auto& it : m_mapValInfo)
 	{
 		if (it.first != _T("dtetangram"))
 			::VariantClear(&it.second);
@@ -1920,7 +1920,7 @@ STDMETHODIMP CCosmos::get_RootNodes(IXobjCollection** pXobjColletion)
 		for (auto fit : pGalaxy->m_mapGalaxy)
 		{
 			CGalaxy* pGalaxy = fit.second;
-			for (auto it : pGalaxy->m_mapXobj)
+			for (auto& it : pGalaxy->m_mapXobj)
 			{
 				m_pRootNodes->m_pXobjs->push_back(it.second);
 			}
@@ -2396,7 +2396,7 @@ STDMETHODIMP CCosmos::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 	{
 		if (newVal.llVal == 0 && m_pCLRProxy)
 		{
-			for (auto it : m_mapThreadInfo)
+			for (auto& it : m_mapThreadInfo)
 			{
 				if (it.second->m_hGetMessageHook)
 				{
@@ -2557,7 +2557,7 @@ STDMETHODIMP CCosmos::CreateGalaxyCluster(LONGLONG hWnd, IGalaxyCluster** ppGala
 			pGalaxyCluster->m_hWnd = _hWnd;
 			m_mapGalaxyCluster[_hWnd] = pGalaxyCluster;
 
-			for (auto it : m_mapCosmosAppProxy)
+			for (auto& it : m_mapCosmosAppProxy)
 			{
 				CGalaxyClusterProxy* pCosmosProxy = it.second->OnGalaxyClusterCreated(pGalaxyCluster);
 				if (pCosmosProxy)
@@ -2871,7 +2871,7 @@ STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 		{
 			((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
 		}
-		for (auto it2 : pWndXobj->m_vChildNodes)
+		for (auto& it2 :pWndXobj->m_vChildNodes)
 		{
 			UpdateXobj(it2);
 		}
@@ -3203,12 +3203,12 @@ CCosmosEvent::~CCosmosEvent()
 	m_strEventName = _T("");
 	//m_pSourceObj->Release();
 	m_pSourceObj = nullptr;
-	for (auto it : m_mapVar)
+	for (auto& it : m_mapVar)
 	{
 		::VariantClear(&it.second);
 	}
 	m_mapVar.clear();
-	for (auto it : m_mapDisp)
+	for (auto& it : m_mapDisp)
 	{
 		//it.second->Release();
 	}
@@ -3576,7 +3576,7 @@ STDMETHODIMP CCosmos::DeletePage(LONGLONG GalaxyClusterHandle)
 				int nSize = pGalaxy->m_mapXobj.size();
 				if (nSize > 1)
 				{
-					for (auto it : pGalaxy->m_mapXobj)
+					for (auto& it : pGalaxy->m_mapXobj)
 					{
 						if (it.second != pGalaxy->m_pWorkXobj)
 						{
@@ -3786,7 +3786,7 @@ void CCosmos::EclipseInit()
 
 		m_bChromeNeedClosed = true;
 
-		for (auto it : g_pCosmos->m_mapBrowserWnd)
+		for (auto& it : g_pCosmos->m_mapBrowserWnd)
 		{
 			::PostMessage(it.first, WM_CLOSE, 0, 0);
 			//it.second->PostMessageW(WM_CLOSE, 0, 0);
@@ -4598,7 +4598,7 @@ IXobj* CCosmos::ObserveXml(HWND hWnd, CString strKey, CString strXml)
 		pGalaxyCluster->m_mapGalaxy[hWnd] = m_pGalaxy;
 		pGalaxyCluster->m_mapWnd[strName] = hWnd;
 
-		for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+		for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 		{
 			CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(m_pGalaxy);
 			if (pGalaxyProxy)

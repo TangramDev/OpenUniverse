@@ -587,7 +587,7 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 			{
 				if (g_pCosmos->m_hEclipseHideWnd == nullptr)
 				{
-					for (auto it : g_pCosmos->m_vecEclipseHideTopWnd)
+					for (auto& it : g_pCosmos->m_vecEclipseHideTopWnd)
 					{
 						::GetWindowText(it, g_pCosmos->m_szBuffer, MAX_PATH);
 						CString strText = CString(g_pCosmos->m_szBuffer);
@@ -1812,7 +1812,7 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				{
 					if (g_pCosmos->m_mapXobjForHtml.size())
 					{
-						for (auto it : g_pCosmos->m_mapXobjForHtml)
+						for (auto& it : g_pCosmos->m_mapXobjForHtml)
 						{
 							it.first->put_URL(CComBSTR(it.second));
 						}

@@ -1052,7 +1052,7 @@ namespace CommonUniverse {
 		}
 
 		virtual ~CChromeRenderFrameHost() {
-			for (auto it : m_mapCosmosSession)
+			for (auto& it : m_mapCosmosSession)
 			{
 				delete it.second;
 			}

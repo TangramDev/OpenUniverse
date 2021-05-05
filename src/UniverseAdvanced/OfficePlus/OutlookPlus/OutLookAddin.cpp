@@ -65,7 +65,7 @@ namespace OfficePlus
 		{
 			if (m_mapEvent.size())
 			{
-				for (auto it : m_mapEvent)
+				for (auto& it : m_mapEvent)
 				{
 					CCosmosEvent* pObj = it.second;
 					delete pObj;
@@ -2519,7 +2519,7 @@ namespace OfficePlus
 					CString strKeys = _T(",");
 					CString strXml = _T("");
 					//theApp.Lock();
-					for (auto it : m_mapOutLookPage)
+					for (auto& it : m_mapOutLookPage)
 					{
 						CGalaxy* pGalaxy = (CGalaxy*)it.second->m_pGalaxy;
 						if (pGalaxy)

@@ -45,7 +45,7 @@ CCosmosTreeCtrl::CCosmosTreeCtrl() noexcept
 
 CCosmosTreeCtrl::~CCosmosTreeCtrl()
 {
-	for (auto it : m_mapTreeItemData)
+	for (auto& it : m_mapTreeItemData)
 	{
 		delete it.second;
 	}
@@ -314,7 +314,7 @@ CCosmosListCtrl::CCosmosListCtrl() noexcept
 
 CCosmosListCtrl::~CCosmosListCtrl()
 {
-	for (auto it : m_mapListItemData)
+	for (auto& it : m_mapListItemData)
 	{
 		delete it.second;
 	}
@@ -529,7 +529,7 @@ CCosmosTabCtrl::CCosmosTabCtrl() noexcept
 
 CCosmosTabCtrl::~CCosmosTabCtrl()
 {
-	for (auto it : m_mapTabItemData)
+	for (auto& it : m_mapTabItemData)
 	{
 		delete it.second;
 	}
@@ -1254,7 +1254,7 @@ LRESULT CCloudWinForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 				{
 					pSession->InsertLong(_T("FormAppNeedClosed"), nCount);
 				}
-				for (auto it : g_pCosmos->m_mapNeedQueryOnClose)
+				for (auto& it : g_pCosmos->m_mapNeedQueryOnClose)
 				{
 					if (it.second != this)
 					{
@@ -1877,7 +1877,7 @@ CGalaxy::~CGalaxy()
 	//	delete m_pGalaxyInfo;
 	if (g_pCosmos->m_pGalaxy == this)
 		g_pCosmos->m_pGalaxy = nullptr;
-	for (auto it : g_pCosmos->m_mapThreadInfo)
+	for (auto& it : g_pCosmos->m_mapThreadInfo)
 	{
 		if (it.second)
 		{
@@ -1899,7 +1899,7 @@ CGalaxy::~CGalaxy()
 				delete m_pGalaxyCluster;
 		}
 	}
-	for (auto it : m_mapGalaxyProxy)
+	for (auto& it : m_mapGalaxyProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;
@@ -1966,7 +1966,7 @@ void CGalaxy::HostPosChanged()
 
 CTangramXmlParse* CGalaxy::UpdateXobj()
 {
-	for (auto it : m_mapXobj) {
+	for (auto& it : m_mapXobj) {
 		CXobj* pWndXobj = (CXobj*)it.second;
 		if (pWndXobj)
 		{
@@ -1983,7 +1983,7 @@ CTangramXmlParse* CGalaxy::UpdateXobj()
 				((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
 			}
 
-			for (auto it2 : pWndXobj->m_vChildNodes) {
+			for (auto& it2 :pWndXobj->m_vChildNodes) {
 				g_pCosmos->UpdateXobj(it2);
 			}
 
@@ -2046,7 +2046,7 @@ CXobj* CGalaxy::ObserveInternal(CTangramXmlParse* _pParse, CString strKey)
 	pCommonData->m_pCosmosParse = _pParse;
 	CTangramXmlParse* pParse = _pParse->GetChild(TGM_CLUSTER);
 	m_pWorkXobj->m_pHostParse = pParse->GetChild(TGM_XOBJ);
-	for (auto it : m_mapXobj)
+	for (auto& it : m_mapXobj)
 	{
 		::ShowWindow(it.second->m_pHostWnd->m_hWnd, SW_HIDE);
 	}
@@ -2886,7 +2886,7 @@ STDMETHODIMP CGalaxy::get_CurrentNavigateKey(BSTR* pVal)
 
 void CGalaxy::UpdateVisualWPFMap(HWND hParent, BOOL bSized)
 {
-	for (auto it : m_mapWPFView)
+	for (auto& it : m_mapWPFView)
 	{
 		HWND hWnd = it.first;
 		if (::IsChild(hParent, hWnd))
@@ -2930,7 +2930,7 @@ void CGalaxy::Destroy()
 {
 	CXobj* pWndXobj = nullptr;
 	CString strPlugID = _T("");
-	for (auto it : m_mapXobj)
+	for (auto& it : m_mapXobj)
 	{
 		pWndXobj = it.second;
 		if (pWndXobj->m_pXobjShareData->m_pCosmosParse)
@@ -3185,7 +3185,7 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	break;
 	case 19651965:
 	{
-		for (auto it : m_pGalaxyCluster->m_mapGalaxy)
+		for (auto& it : m_pGalaxyCluster->m_mapGalaxy)
 		{
 			it.second->UpdateVisualWPFMap((HWND)wParam, false);
 		}
@@ -3434,7 +3434,7 @@ STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 
 	map<CString, CString> m_mapTemp;
 	map<CString, CString>::iterator it2;
-	for (auto it : m_mapXobj)
+	for (auto& it : m_mapXobj)
 	{
 		g_pCosmos->UpdateXobj(it.second);
 		strName = it.first;
@@ -3447,7 +3447,7 @@ STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 		}
 	}
 
-	for (auto it : m_mapXobj)
+	for (auto& it : m_mapXobj)
 	{
 		strName = it.first;
 		if (strName.Find(_T("-indesigning")) == -1)
@@ -3558,7 +3558,7 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 	strName.Replace(_T("@"), _T("_"));
 	strData += strName;
 	strData += _T(">");
-	for (auto it : m_mapXobj)
+	for (auto& it : m_mapXobj)
 	{
 		CXobj* pWndXobj = (CXobj*)it.second;
 		if (pWndXobj)
@@ -3578,7 +3578,7 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 				((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
 			}
 
-			for (auto it2 : pWndXobj->m_vChildNodes)
+			for (auto& it2 :pWndXobj->m_vChildNodes)
 			{
 				g_pCosmos->UpdateXobj(it2);
 			}
@@ -3605,7 +3605,7 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 	CString strXml = _T("<");
 	strXml += strName;
 	strXml += _T(">");
-	for (auto it : m_pGalaxyCluster->m_strMapKey)
+	for (auto& it : m_pGalaxyCluster->m_strMapKey)
 	{
 		CString strKey = it.first;
 		if (strKey.Find(_T("@") + m_strGalaxyName + _T("@")) != -1)

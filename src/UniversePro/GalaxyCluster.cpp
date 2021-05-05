@@ -87,13 +87,13 @@ CGalaxyCluster::~CGalaxyCluster()
 	if (g_pCosmos->m_mapGalaxyCluster.size() == 0)
 		g_pCosmos->Close();
 
-	for (auto it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;
 	}
 	m_mapGalaxyClusterProxy.clear();
-	for (auto it : m_mapEventObj)
+	for (auto& it : m_mapEventObj)
 		delete it.second;
 	m_mapEventObj.clear();
 	m_strMapKey.clear();
@@ -172,7 +172,7 @@ STDMETHODIMP CGalaxyCluster::get__NewEnum(IUnknown** ppVal)
 		VARIANT* rgvar = new VARIANT[nLen];
 		ZeroMemory(rgvar, sizeof(VARIANT) * nLen);
 		VARIANT* pItem = rgvar;
-		for (auto it : m_mapGalaxy)
+		for (auto& it : m_mapGalaxy)
 		{
 			IUnknown* pDisp = nullptr;
 			CGalaxy* pObj = it.second;
@@ -391,7 +391,7 @@ STDMETHODIMP CGalaxyCluster::CreateGalaxy(VARIANT ParentObj, VARIANT HostWnd, BS
 				m_mapGalaxy[_hWnd] = _pGalaxy;
 				m_mapWnd[strName] = _hWnd;
 
-				for (auto it : g_pCosmos->m_mapCosmosAppProxy)
+				for (auto& it : g_pCosmos->m_mapCosmosAppProxy)
 				{
 					CGalaxyProxy* pGalaxyProxy = it.second->OnGalaxyCreated(_pGalaxy);
 					if (pGalaxyProxy)
@@ -476,7 +476,7 @@ void CGalaxyCluster::BeforeDestory()
 {
 	Fire_Destroy();
 
-	for (auto it : m_mapGalaxy)
+	for (auto& it : m_mapGalaxy)
 		it.second->Destroy();
 
 	if (g_pCosmos->m_pCLRProxy)
@@ -567,7 +567,7 @@ STDMETHODIMP CGalaxyCluster::put_Height(long newVal)
 STDMETHODIMP CGalaxyCluster::get_XobjNames(BSTR* pVal)
 {
 	CString strNames = _T("");
-	for (auto it : m_mapXobj)
+	for (auto& it : m_mapXobj)
 	{
 		strNames += it.first;
 		strNames += _T(",");
@@ -821,7 +821,7 @@ HRESULT CGalaxyCluster::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 		}
 	}
 
-	for (auto it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnGalaxyClusterLoaded(sender, OLE2T(url));
 	}
@@ -961,7 +961,7 @@ HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj*
 			}
 		}
 	}
-	for (auto it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnOpenXmlComplete(OLE2T(bstrXml), (HWND)hWnd, pRetRootNode);
 	}
@@ -1022,7 +1022,7 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj* pActiveNode)
 		}
 	}
 
-	for (auto it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnNodeMouseActivate(pActiveNode);
 	}
@@ -1172,7 +1172,7 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 	//if (strData == _T(""))
 	//	strData = _T("<tangramdefaultpage>");
 	//CString strIndex = _T("@");
-	//for (auto it : m_mapGalaxy)
+	//for (auto& it : m_mapGalaxy)
 	//{
 	//	CComBSTR bstrXml(L"");
 	//	strIndex += it.second->m_strGalaxyName;
@@ -1181,7 +1181,7 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 	//	strData += OLE2T(bstrXml);
 	//}
 	//map<CString, CString> m_mapTemp;
-	//for (auto it : m_strMapKey)
+	//for (auto& it : m_strMapKey)
 	//{
 	//	CString strKey = it.first;
 	//	int nPos = strKey.Find(_T("@"));
@@ -1211,7 +1211,7 @@ STDMETHODIMP CGalaxyCluster::get_GalaxyClusterXML(BSTR* pVal)
 	//		}
 	//	}
 	//}
-	//for (auto it : m_mapTemp)
+	//for (auto& it : m_mapTemp)
 	//{
 	//	CString strXml = _T("");
 	//	strXml.Format(_T("<%s>%s</%s>"), it.first, it.second, it.first);
@@ -1244,7 +1244,7 @@ STDMETHODIMP CGalaxyCluster::ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR
 	else
 	{
 		strGalaxys = _T(",") + strGalaxys;
-		for (auto it : m_mapGalaxy)
+		for (auto& it : m_mapGalaxy)
 		{
 			CString strName = _T(",") + it.second->m_strGalaxyName + _T(",");
 			if (strGalaxys.Find(strName) != -1)

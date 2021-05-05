@@ -1177,7 +1177,7 @@ namespace blink {
 
 	void Cosmos::NamedPropertyEnumerator(Vector<String>& names,
 		ExceptionState&) const {
-		for (auto it : mapCloudSession_) {
+		for (auto& it : mapCloudSession_) {
 			names.UncheckedAppend(it.value->name());
 		}
 	}

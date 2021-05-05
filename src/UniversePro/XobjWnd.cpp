@@ -384,7 +384,7 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		}
 		if (m_pXobj->m_nViewType == TabGrid)
 		{
-			for (auto it : m_pXobj->m_vChildNodes)
+			for (auto& it : m_pXobj->m_vChildNodes)
 			{
 				CXobj* pXobj = it;
 				if (pXobj->m_nCol != m_pXobj->m_nActivePage)

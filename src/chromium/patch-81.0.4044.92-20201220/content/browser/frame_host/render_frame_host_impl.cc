@@ -865,7 +865,7 @@ RenderFrameHostImpl* RenderFrameHostImpl::FromOverlayRoutingToken(
 void RenderFrameHostImpl::ClearAllPrefetchedSignedExchangeCache() {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
   RoutingIDFrameMap* frames = g_routing_id_frame_map.Pointer();
-  for (auto it : *frames)
+  for (auto& it : *frames)
     it.second->ClearPrefetchedSignedExchangeCache();
 }
 
@@ -1169,7 +1169,7 @@ RenderFrameHostImpl::~RenderFrameHostImpl() {
   if (prefetched_signed_exchange_cache_)
     prefetched_signed_exchange_cache_->RecordHistograms();
   // begin Add by TangramTeam
-  for (auto it : m_mapCosmosSession)
+  for (auto& it : m_mapCosmosSession)
   {
       auto itX = it.second->m_mapint64.find(L"domhandle");
       if (itX != it.second->m_mapint64.end())
@@ -8376,7 +8376,7 @@ void RenderFrameHostImpl::OnCosmosHostIPCMsg(
                 pSession->InsertString(it1.first.c_str(), it1.second.c_str());
             }
         }
-        for (auto it2 : mapLong)
+        for (auto& it2 :mapLong)
         {
             pSession->InsertLong(it2.first.c_str(), it2.second);
         }
@@ -8404,7 +8404,7 @@ void RenderFrameHostImpl::OnCosmosHostIPCMsg(
     //    {
     //        var.m_mapString[it1.first] = it1.second;
     //    }
-    //    for (auto it2 : mapLong)
+    //    for (auto& it2 :mapLong)
     //    {
     //        var.m_mapLong[it2.first] = it2.second;
     //    }
