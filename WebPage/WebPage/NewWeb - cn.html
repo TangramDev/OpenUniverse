@@ -171,6 +171,14 @@
                     break;
             }
         }
+        function NewDocument() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".xxxx", "test1", "");
+        }
+
+        function NewDocument2() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".xxxx", "test", "");
+        }
+
         function OnDockdemo() {
             cosmos.Observe("dockdemo", document.getElementById("dockdemo").outerHTML);
         }

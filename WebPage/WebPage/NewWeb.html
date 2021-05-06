@@ -3,8 +3,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>New Web, New World</title>
-    <link rel="icon" href="tangram.png" sizes="32x32">
+    <title>全新的Web，全新的世界</title>
+    <link rel="icon" href="universe.png" sizes="32x32">
     <style type="text/css">
         .comments {
             width: 100%; /*自动适应父布局宽度*/
@@ -190,16 +190,23 @@
         function OnDockdemo3() {
             cosmos.Observe("dockdemo3", cosmos.getElementById("dockdemo3").outerHTML);
         }
-    </script>
+        function NewDocument() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "test1", "");
+        }
+
+        function NewDocument2() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "default", "");
+        }
+   </script>
 </head>
 <body background="newworld.jpg">
     <cosmos>
         <define tagName="webViewport"></define>
         <define tagName="gridTemplate"></define>
 
-        <cluster> 
+        <cluster>
             <dockdemo id="dockdemo">
-                <cluster> 
+                <cluster>
                     <xobj style="17">
                         <xobj rows="1" cols="2" width="200,600" caption="New Web,New World">
                             <xobj rows="2" cols="1" height="200,600">
@@ -213,23 +220,23 @@
                             </xobj>
                         </xobj>
                     </xobj>
-                </cluster> 
+                </cluster>
             </dockdemo>
             <dockdemo id="dockdemo2">
-                <cluster> 
+                <cluster>
                     <xobj style="17">
                         <xobj rows="1" cols="2" width="400,600" caption="New Web,New World">
                             <xobj style="18" caption="Introduction to Open Universe">
                                 <xobj objid="SunnyForms.Form1,SunnyForms" caption="SunnyForm-Form1" id="SunnyForm_Form1">
                                     <panel1>
                                         <default>
-                                            <cluster> 
+                                            <cluster>
                                                 <xobj rows="3" cols="1" height="200,300,100">
                                                     <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl"></xobj>
                                                     <xobj objid="nucleus"></xobj>
                                                     <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl"></xobj>
                                                 </xobj>
-                                            </cluster> 
+                                            </cluster>
                                         </default>
                                     </panel1>
                                 </xobj>
@@ -254,10 +261,10 @@
                         <xobj objid="SunnyForms.Form9,SunnyForms" caption="SunnyForm-Form9" id="SunnyForm_Form9"></xobj>
                         <xobj objid="SunnyForms.Form10,SunnyForms" caption="SunnyForm-Form10" id="SunnyForm_Form10"></xobj>
                     </xobj>
-                </cluster> 
+                </cluster>
             </dockdemo>
             <dockdemo id="dockdemo3">
-                <cluster> 
+                <cluster>
                     <xobj style="19">
                         <xobj rows="1" cols="2" width="200,600" caption="New Web,New World">
                             <xobj rows="2" cols="1" height="300,600">
@@ -284,45 +291,51 @@
                         <xobj objid="SunnyCtrl.Usercontrol10,SunnyCtrl" caption="SunnyCtrl-UserControl10" id="SunnyCtrl_UserControl10"></xobj>
                         <xobj caption="Introduction of Open Universe"></xobj>
                     </xobj>
-                </cluster> 
+                </cluster>
             </dockdemo>
             <testpanel id="form_panel1_0">
-                <cluster> 
+                <cluster>
                     <xobj rows="3" cols="1" height="200,300,100">
                         <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl"></xobj>
                         <xobj objid="nucleus"></xobj>
                         <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl"></xobj>
                     </xobj>
-                </cluster> 
+                </cluster>
             </testpanel>
             <testpanel id="form_panel1_1">
-                <cluster> 
+                <cluster>
                     <xobj style="33">
                         <xobj objid="nucleus" caption="I'm panel1"></xobj>
                         <xobj objid="SunnyForms.Form6,SunnyForms" caption="SunnyForms-Form6"></xobj>
                         <xobj objid="SunnyForms.Form9,SunnyForms" caption="SunnyForms-Form9"></xobj>
                     </xobj>
-                </cluster> 
+                </cluster>
             </testpanel>
             <testpanel id="form_panel1_2">
-                <cluster> 
+                <cluster>
                     <xobj style="23">
                         <xobj objid="nucleus" caption="I'm panel1"></xobj>
                         <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl" caption="SunnyCtrl-UserControl2"></xobj>
                         <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl" caption="SunnyCtrl-UserControl3"></xobj>
                     </xobj>
-                </cluster> 
+                </cluster>
             </testpanel>
-        </cluster> 
+        </cluster>
 
     </cosmos>
-    <strong style="font-size:40px; color:indianred">Sunny's <i style="font-size:40px; color:fuchsia">New </i>World of .NET</strong>
-    <p><center><strong style="font-size:36px; color:blue">A Brand New Web is here...</strong></center></p>
+    <strong style="font-size:40px; color:indianred">The Universe: <i style="font-size:40px; color:fuchsia">给开发者的 </i>全新应用世界</strong>
+    <p><center><strong style="font-size:36px; color:blue">这里是通向新Web世界的入口...</strong></center></p>
     <p>
         <button style="font-size: 18px; font-weight:bold; color:darkgreen" onclick="OnDockdemo()"><i>Press me to continus</i>...</button>&nbsp
-        <button style="font-size: 18px; font-weight:bold; color:crimson" onclick="OnDockdemo2()"><i>See how Sunny organizes WinForm objects dynamically</i>...</button>&nbsp
-        <button style="font-size: 18px; font-weight:bold; color:darkmagenta" onclick="OnDockdemo3()"><i>See how Sunny organizes Usercontrol objects</i>...</button>
+        <button style="font-size: 18px; font-weight:bold; color:crimson" onclick="OnDockdemo2()"><i>看看The Universe是怎样动态组织WinForm对象</i>...</button>&nbsp
+        <button style="font-size: 18px; font-weight:bold; color:darkmagenta" onclick="OnDockdemo3()"><i>看看The Universe是怎样动态组织Usercontrol对象</i>...</button>
     </p>
+    <hr />
+    <p><strong style="font-size:24px; color:blue">看看建立在Web技术之上的Doc/View...</strong>
+        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument()">NewDoc</button>
+        <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument2()">NewDoc2</button>
+    </p>
+    <hr />
     <br />
     <strong style="font-size:32px; color:darkred">Dock: The attribute of being familiar and unfamiliar</strong>
     <p style="font-size: 20px; font-weight:bold; color:midnightblue">
@@ -337,7 +350,7 @@
                 <tbody>
                     <tr>
                         <td>
-<p style="font-size: 20px; font-weight:bold; color:midnightblue">
+    <p style="font-size: 20px; font-weight:bold; color:midnightblue">
         Because the Dock attribute is the second type of control, it must depend on a specific control. This dependency determines that <i style=" font-weight: bold; color: red; text-decoration: underline">this type of control generally cannot be the main bearing control of a certain type of content</i>.
     </p>
     <p style="font-size: 20px; font-weight:bold; color:midnightblue">

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105050002           *
+ *           Web Runtime for Application - Version 1.0.1.202105070003           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -888,6 +888,7 @@ namespace blink {
 			if (bNewGalaxy)
 				parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kCosmosgalaxycreated, xobj));
 
+			parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kXobjcreated, xobj));
 			if (parentmdiform && parentform)
 			{
 				CosmosNode* pNode = parentform->mdibindgrid();
@@ -914,19 +915,21 @@ namespace blink {
 						}
 					}
 				}
-				parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kXobjcreated, xobj));
-				return node;
 			}
-			else if (parentmdiform)
-			{
-				parentmdiform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kXobjcreated, xobj));
-				return node;
-			}
-			else if (parentform)
-			{
-				parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kXobjcreated, xobj));
-				return node;
-			}
+			return node;
+			//else
+			//{
+			//	if (parentmdiform)
+			//	{
+			//		parentmdiform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kXobjcreated, xobj));
+			//		return node;
+			//	}
+			//	if (parentform)
+			//	{
+			//		parentform->DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kXobjcreated, xobj));
+			//		return node;
+			//	}
+			//}
 		}
 		DispatchEvent(*blink::CosmosEvent::Create(blink::event_type_names::kXobjcreated, xobj));
 

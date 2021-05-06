@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105050002
+ *           Web Runtime for Application - Version 1.0.1.202105070003
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -812,7 +812,7 @@ Object^ CCosmosProxy::InitControl(Form^ pForm, Control^ pCtrl, bool bSave, CTang
 								pChild->Tag = name;
 								pChild->VisibleChanged += gcnew System::EventHandler(&OnVisibleChanged);
 							}
-							else if (name == L"mdiclient")
+							else if (name->ToLower() == L"mdiclient")
 							{
 								CTangramXmlParse* pChildParse2 = nullptr;
 								if (_pChild)
@@ -1170,6 +1170,7 @@ System::Void CCosmosProxy::LoadNode(TreeView^ pTreeView, TreeNode^ pXobj, IGalax
 void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 {
 	Form^ pForm = static_cast<Form^>(sender);
+	CString strXml = theAppProxy.m_strCurrentWinFormTemplate;
 	CTangramXmlParse* pParse = nullptr;
 	CTangramXmlParse m_Parse;
 	if (theAppProxy.m_strCurrentWinFormTemplate != _T(""))
@@ -1185,6 +1186,9 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 		pForm->Load -= theAppProxy.m_pOnLoad;
 		return;
 	}
+
+	HWND hForm = (HWND)pForm->Handle.ToPointer();
+	CMDIChildFormInfo* pInfo = (CMDIChildFormInfo*)::SendMessage(hForm, WM_COSMOSMSG, (WPARAM)0, 20190602);
 	GalaxyCluster^ pGalaxyCluster = static_cast<GalaxyCluster^>(theAppProxy.InitControl(pForm, pForm, true, pParse));
 	if (pGalaxyCluster)
 		pGalaxyCluster->Fire_OnGalaxyClusterLoad(pGalaxyCluster);
@@ -1218,10 +1222,7 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 	}
 	if (pForm->IsMdiContainer)
 	{
-		
 		ToolStrip^ defaultToolStrip = static_cast<ToolStrip^>(pForm->Controls[L"toolStrip"]);
-		HWND hForm = (HWND)pForm->Handle.ToPointer();
-		CMDIChildFormInfo* pInfo = (CMDIChildFormInfo*)::SendMessage(hForm, WM_COSMOSMSG, (WPARAM)0, 20190602);
 		if (pInfo && defaultToolStrip)
 		{
 			int nIndex = 0;
@@ -1329,6 +1330,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 		theApp.InitCosmosApp(false);
 		return nullptr;
 	}
+
 	if (bstrObjID.Find(_T("<")) != -1)
 	{
 		CTangramXmlParse m_Parse;
@@ -1823,6 +1825,34 @@ HWND CCosmosProxy::GetHwnd(HWND parent, int x, int y, int width, int height)
 IDispatch* CCosmosProxy::CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode)
 {
 	String^ strID = marshal_as<String^>(bstrObjID);
+	//if(m_strCurrentWinFormTemplate!=_T(""))
+	//{
+	//	CTangramXmlParse m_Parse;
+	//	if (m_Parse.LoadXml(m_strCurrentWinFormTemplate))
+	//	{
+	//		CString strID = m_Parse.attr(_T("objid"), _T(""));
+	//		CString strName = m_Parse.name();
+	//		if (strID != _T(""))
+	//		{
+	//			CTangramXmlParse* pChild3 = m_Parse.GetChild(_T("mdichild"));
+	//			if (pChild3)
+	//			{
+	//				CTangramXmlParse* pChild4 = m_Parse.GetChild(_T("mdiclient"));
+	//				int nCount = pChild3->GetCount();
+	//				if (nCount && pChild4)
+	//				{
+	//					theApp.m_pCosmosImpl->m_pCurMDIChildFormInfo = new CMDIChildFormInfo();
+	//					for (int i = 0; i < nCount; i++)
+	//					{
+	//						CString strName = pChild3->GetChild(i)->name().MakeLower();
+	//						if (pChild4->GetChild(strName))
+	//							theApp.m_pCosmosImpl->m_pCurMDIChildFormInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 	Object^ _pObj = Universe::Cosmos::CreateObject(strID);
 	Universe::Xobj^ _pXobj = (Universe::Xobj^)_createObject<IXobj, Universe::Xobj>(pHostNode);
 	if (_pObj == nullptr)

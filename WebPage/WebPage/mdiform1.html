@@ -25,10 +25,10 @@
         cosmos.onLoadWinForm = function (e) {
         };
         cosmos.onGalaxyCreated = function (e) {
-            alert(e.galaxy());
         };
-        cosmos.onLoadMdiWinForm = function (e) {
-            switch (e.form.name) {
+        cosmos.onLoadMdiCloudForm = function (e) {
+            alert(e);
+           switch (e.form.name) {
                 case "Mainform":
                     {
                         e.form.onXobjCreated = function (e) {
@@ -124,14 +124,14 @@
         }
 
         cosmos.onBindCLRObject = function (e) {
-            alert(e.name);
-            alert(e.objtype);
-            alert(e.hwnd);
-            e.xobj.addEventListener("SizeChanged", function (x) {
-                alert(x.getStr("currentevent") + " " +
-                    "Form width:" + x.getLong("width") +
-                    "\nheight:" + x.getLong("height"));
-            });
+        //    alert(e.name);
+        //    alert(e.objtype);
+        //    alert(e.hwnd);
+        //    e.xobj.addEventListener("SizeChanged", function (x) {
+        //        alert(x.getStr("currentevent") + " " +
+        //            "Form width:" + x.getLong("width") +
+        //            "\nheight:" + x.getLong("height"));
+        //    });
         }
 
         function open_win1() {
