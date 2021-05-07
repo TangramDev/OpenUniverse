@@ -1794,9 +1794,12 @@ LRESULT CCloudWinForm::OnFormCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	if (m_pOwnerHtmlWnd)
 	{
 		m_hOwnerWebView = m_pOwnerHtmlWnd->m_hWnd;
-		if (m_bMdiForm && m_pBrowser)
-			m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm = this;
-		m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentWinForm = this;
+		if (m_pBrowser->m_pParentXobj)
+		{
+			if (m_bMdiForm && m_pBrowser)
+				m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentMDIWinForm = this;
+			m_pBrowser->m_pParentXobj->m_pXobjShareData->m_pGalaxy->m_pParentWinForm = this;
+		}
 		m_pBrowser->m_pVisibleWebView->m_bCanShow = false;
 		if (m_hWnd != g_pCosmos->m_hMainWnd)
 		{

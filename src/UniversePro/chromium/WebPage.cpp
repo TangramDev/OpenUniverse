@@ -1508,12 +1508,12 @@ namespace Browser {
 						}
 					}
 				}
-				//else
-				//{
-				//	CString strExt = xmlParse.attr(_T("ext"), _T(""));
-				//	CString strDocID = xmlParse.attr(_T("docid"), _T("default"));
-				//	g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), strExt, strDocID);
-				//}
+				else
+				{
+					CString strExt = xmlParse.attr(_T("ext"), _T(""));
+					CString strDocID = xmlParse.attr(_T("docid"), _T("default"));
+					g_pCosmosImpl->m_pUniverseAppProxy->OpenDocFile(_T(""), strExt, strDocID);
+				}
 			}
 			if (urlsParse)
 			{
