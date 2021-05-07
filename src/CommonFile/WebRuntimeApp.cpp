@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105070003           *
+ *           Web Runtime for Application - Version 1.0.1.202105080004           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1069,7 +1069,7 @@ namespace CommonUniverse
 		return NULL;
 	}
 
-	bool CWebRuntimeApp::SetFrameCaption(HWND hWnd, CString strCaption)
+	bool CWebRuntimeApp::SetFrameCaption(HWND hWnd, CString strCaption, CString strAppName)
 	{
 		if (strCaption == _T("") || !::IsWindow(hWnd))
 			return false;
@@ -1103,7 +1103,7 @@ namespace CommonUniverse
 							strTitle.Replace(name, strCaption);
 							pDoc->SetTitle(strTitle);
 							if (pCosmosFrameWndInfo->m_nFrameType == 1)
-								::SetWindowText(pFrame->m_hWnd, strTitle + _T(" - ") + name);
+								::SetWindowText(pFrame->m_hWnd, strTitle + _T(" - ") + strAppName + _T(" - ") + g_pCosmosImpl->m_strAppName);
 							else
 								::SetWindowText(pFrame->m_hWnd, strTitle);
 						}
@@ -1333,7 +1333,7 @@ namespace CommonUniverse
 #endif 
 					TRACE(_T("\r\n\r\n********Chrome-Eclipse-CLR Mix-Model is not support MFC Share Dll********\r\n\r\n"));
 #endif
-			}
+				}
 				m_pCosmosImpl->m_hMainWnd = NULL;
 				HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
 				if (hModule == nullptr)
@@ -1348,7 +1348,7 @@ namespace CommonUniverse
 						return false;
 					}
 				}
-		}
+			}
 			break;
 			case APP_ECLIPSE:
 				if (g_pCosmos && !m_pCosmosImpl->m_bIsEclipseInit)
@@ -1357,10 +1357,10 @@ namespace CommonUniverse
 					return false;
 				}
 				break;
-	}
-}
+			}
+		}
 		return true;
-}
+	}
 
 	BOOL CWebRuntimeApp::IsBrowserModel(bool bCrashReporting)
 	{

@@ -164,23 +164,23 @@
                         </cluster>
                     </default>
                     <sunnymdiforms_mdichild_1>
-                        <cluster> 
-                            <xobj id='properties' rows='2' cols='1' masterrow="0" mastercol="0"  width='300,200,' height='300,250,' middlecolor='RGB(255,224,192)'>
+                        <cluster>
+                            <xobj id='properties' rows='2' cols='1' masterrow="0" mastercol="0" width='300,200,' height='300,250,' middlecolor='RGB(255,224,192)'>
                                 <xobj id="mainworkclient"></xobj>
                                 <xobj id=''></xobj>
                             </xobj>
-                        </cluster> 
+                        </cluster>
                     </sunnymdiforms_mdichild_1>
                     <sunnymdiforms_mdichild_2>
-                        <cluster> 
+                        <cluster>
                             <xobj id='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
-                                <xobj id='' ></xobj>
+                                <xobj id=''></xobj>
                                 <xobj id="mainworkclient"></xobj>
                             </xobj>
-                        </cluster> 
+                        </cluster>
                     </sunnymdiforms_mdichild_2>
                     <sunnymdiforms_mdichild_3>
-                        <cluster> 
+                        <cluster>
                             <xobj id='properties' rows='1' cols='2' width='300,200,' middlecolor='RGB(255,224,192)'>
                                 <xobj id="mainworkclient"></xobj>
                                 <xobj id="tangramtabctrl" style="18">
@@ -198,52 +198,60 @@
                                     </xobj>
                                 </xobj>
                             </xobj>
-                        </cluster> 
+                        </cluster>
                     </sunnymdiforms_mdichild_3>
                 </mdiclient>
                 <mdichild>
-                    <sunnymdiforms_mdichild_1 objid="sunnymdiforms.Form1,SunnyMDIForms" caption="test child form1" >
+                    <sunnymdiforms_mdichild_1 objid="sunnymdiforms.Form1,SunnyMDIForms" caption="test child form1">
+                        关于.NET WinForm MDI子窗体：
+                        Universe支持基于Web DOM的自定义MDI Child WinForm，不同于传统的.NET技术，
+                        The Universe使用Web DOM描述WinForm，基于这个考虑的最直接的效果是：开发者
+                        可以自定义任意多个MDI Child类型，进而使得软件结构变得更加丰富、灵活……。
+                        都可以页面化的时候，软件的固有边界被突破了，边界的模糊性凸现，使得软件架构
+                        极大的弹性。点击这里，您将看到第一个基于Web技术的WinForm MDI子窗体……
                         <mainpanel>
                             <default>
-                                <cluster> 
+                                <cluster>
                                     <xobj id="tangramtabctrl" style="19">
                                         <xobj id='splitter' rows='1' cols='2' height='250,' width='400,100,' caption="Tangram Solution for sunnymdiforms">
                                             <xobj id="mfc" objid='nucleus' caption="Tangram for sunnymdiforms_mdichild_1"></xobj>
                                             <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                         </xobj>
                                     </xobj>
-                                </cluster> 
+                                </cluster>
                             </default>
                         </mainpanel>
                         <webui>
-                            <cluster> 
+                            <cluster>
                                 <xobj id="tangramtabctrl" style="27" activepage="1">
                                     <xobj id="" caption="sunnymdiforms_mdichild_1" objid=""></xobj>
-                                    <xobj id='properties'  caption="MDIClient for Universe" rows='1' cols='2' masterrow="0" mastercol="0" width='600,400,' height='300,250,' middlecolor='RGB(255,224,192)'>
+                                    <xobj id='properties' caption="MDIClient for Universe" rows='1' cols='2' masterrow="0" mastercol="0" width='600,400,' height='300,250,' middlecolor='RGB(255,224,192)'>
                                         <xobj id="mdiclient"></xobj>
                                         <xobj objid='docwebhost'></xobj>
                                     </xobj>
                                     <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                 </xobj>
-                            </cluster> 
+                            </cluster>
                         </webui>
                     </sunnymdiforms_mdichild_1>
-                    <sunnymdiforms_mdichild_2 objid="sunnymdiforms.Form2,SunnyMDIForms" tooltips="test sunnymdiforms_mdichild_2" caption="test child form2">
+                    <sunnymdiforms_mdichild_2 objid="sunnymdiforms.Form2,SunnyMDIForms" caption="test child form2">
+                        这里是第二个基于Web的MDI WinForm子窗体，
+                        不用说，这个设计是前所未有的，按照这个思路，更多的窗体类型可以以此类推的展开
                         <mainpanel>
                             <default>
-                                <cluster> 
+                                <cluster>
                                     <xobj id="tangramtabctrl" style="19">
                                         <xobj id='splitter' rows='1' cols='2' height='250,' width='400,100,' caption="Tangram Solution for sunnymdiforms">
                                             <xobj id="mfc" caption="Tangram for sunnymdiforms_mdichild_1"></xobj>
                                             <xobj id="eclipse" caption="Tangram for Eclipse" objid='nucleus'></xobj>
                                         </xobj>
                                     </xobj>
-                                </cluster> 
+                                </cluster>
                             </default>
                         </mainpanel>
                         <webui>
-                            <cluster> 
-                                <xobj id="tangramtabctrl" style="43" activepage="1">
+                            <cluster>
+                                <xobj style="5" activepage="1" xobjtype="tabctrl" objid="host" location="3">
                                     <xobj id="winform" caption="sunnymdiforms_mdichild_2" objid=""></xobj>
                                     <xobj id='properties' caption="MDIClient for Universe" rows='2' cols='1' masterrow="0" mastercol="0" width='600,400,' height='300,250,' middlecolor='RGB(255,224,192)'>
                                         <xobj id="mdiclient"></xobj>
@@ -251,13 +259,17 @@
                                     </xobj>
                                     <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                 </xobj>
-                            </cluster> 
+                            </cluster>
                         </webui>
                     </sunnymdiforms_mdichild_2>
                     <sunnymdiforms_mdichild_3 objid="sunnymdiforms.Form3,SunnyMDIForms" caption="test child mdi form 3">
+                        对MDI客户区的利用，也是The Universe明显不同于传统.NET开发的环节：
+                        我们赋予MDI更多的Web可描述性以及独特的Web上下文机制，每个不同的窗体类型，拥有自己的
+                        Web上下文以及MDI轮廓结构……
+                        点击这里，看一下与众不同的The Universe会给您带来什么……
                         <mainpanel>
                             <default>
-                                <cluster> 
+                                <cluster>
                                     <xobj id='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                         <xobj id='tangramtabctrl_Page2' objid='nucleus'></xobj>
                                         <xobj id="tangramtabctrl" style="19">
@@ -266,11 +278,11 @@
                                             <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                         </xobj>
                                     </xobj>
-                                </cluster> 
+                                </cluster>
                             </default>
                         </mainpanel>
                         <webui>
-                            <cluster> 
+                            <cluster>
                                 <xobj id="tangramtabctrl" style="29" activepage="1">
                                     <xobj id="winform" caption="sunnymdiforms_mdichild_3"></xobj>
                                     <xobj id='MDIClientforUniverse' caption="MDIClient for Universe" rows='1' cols='2' masterrow="0" mastercol="0" width='600,400,' height='300,250,' middlecolor='RGB(255,224,192)'>
@@ -279,7 +291,7 @@
                                     </xobj>
                                     <xobj id="eclipse" caption="zzzzzzzz"></xobj>
                                 </xobj>
-                            </cluster> 
+                            </cluster>
                         </webui>
                     </sunnymdiforms_mdichild_3>
                 </mdichild>

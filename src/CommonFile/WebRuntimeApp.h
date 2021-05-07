@@ -183,7 +183,7 @@ namespace CommonUniverse
 		virtual CString QueryWndClassName(HWND hWnd);
 		virtual CString QueryDocType(HWND hWnd);
 		virtual bool EclipseAppInit() { return false; };
-		virtual bool SetFrameCaption(HWND hWnd, CString strCaption);
+		virtual bool SetFrameCaption(HWND hWnd, CString strCaption, CString strAppName);
 		virtual CString QueryParentInfo(HWND hPWnd, void* lpInfo);
 		virtual HWND GetFrameWnd(HWND hWnd, int& nType);
 

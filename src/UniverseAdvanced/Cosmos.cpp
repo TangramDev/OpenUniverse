@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105070003           *
+ *           Web Runtime for Application - Version 1.0.1.202105080004           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -859,6 +859,7 @@ void CCosmos::TangramInitFromeWeb()
 	CTangramXmlParse m_Parse;
 	if (m_Parse.LoadXml(m_strAppXml))
 	{
+		m_strAppName = m_Parse.attr(_T("appname"), _T("The Universe System"));
 		m_pHostHtmlWnd->m_strPageName = m_Parse.attr(_T("pagename"), _T("default"));
 		CTangramXmlParse* pParse = nullptr;
 		pParse = m_Parse.GetChild(_T("modules"));
