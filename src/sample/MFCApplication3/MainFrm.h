@@ -57,6 +57,7 @@ protected:
 
 	BOOL CreateDockingWindows();
 	void SetDockingWindowIcons(BOOL bHiColorIcons);
+	virtual void OnUpdateFrameTitle(BOOL bAddToTitle);
 };
 
 

@@ -589,10 +589,12 @@ LRESULT CUniverse::CBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 					CString strType = g_pCosmos->m_pUniverseAppProxy->m_strCreatingDOCID;
 					if (strType == _T(""))
 						strType = _T("default");
-					auto it = g_pCosmos->m_mapDocTemplate.find(strType);
-					if (it != g_pCosmos->m_mapDocTemplate.end())
+					auto it = g_pCosmos->m_mapDocDefaultName.find(strType);
+					if (it != g_pCosmos->m_mapDocDefaultName.end())
 					{
-						g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hPWnd, strType);
+						auto it2 = g_pCosmos->m_mapDocAppName.find(strType);
+						if (it2 != g_pCosmos->m_mapDocAppName.end())
+							g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hPWnd, strType, it2->second);
 					}
 				}
 			}
@@ -1453,11 +1455,15 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 									pFrameWnd->m_strDocTemplateKey = strKey;
 								else
 									strKey = pFrameWnd->m_strDocTemplateKey;
+								CString strAppName = _T("");
+								auto itName = g_pCosmos->m_mapDocAppName.find(strKey);
+								if (itName != g_pCosmos->m_mapDocAppName.end())
+									strAppName = itName->second;
 								CString strDefaultName = _T("");
-								auto itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
+								itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
 								if (itName != g_pCosmos->m_mapDocDefaultName.end())
 									strDefaultName = itName->second;
-								g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pFrameWnd->m_hWnd, strDefaultName);
+								g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pFrameWnd->m_hWnd, strDefaultName, strAppName);
 							}
 							auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
 							if (it != g_pCosmos->m_mapDocTemplate.end())
@@ -1541,11 +1547,15 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 												pWnd->m_pGalaxy->m_nGalaxyType = GalaxyType::MDIChildGalaxy;
 												pWnd->m_strKey = strKey;
 												pWnd->m_pGalaxy->m_strDocTemplateID = strKey;
+												CString strAppName = _T("");
+												auto itName = g_pCosmos->m_mapDocAppName.find(strKey);
+												if (itName != g_pCosmos->m_mapDocAppName.end())
+													strAppName = itName->second;
 												CString strDefaultName = _T("");
-												auto itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
+												itName = g_pCosmos->m_mapDocDefaultName.find(strKey);
 												if (itName != g_pCosmos->m_mapDocDefaultName.end())
 													strDefaultName = itName->second;
-												g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
+												g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName, strAppName);
 												if (pMDIParent)
 													::PostMessage(pMDIParent->m_hWnd, WM_COSMOSMSG, (WPARAM)pWnd, 20210202);
 											}

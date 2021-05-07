@@ -338,36 +338,13 @@
         }
 
         //****************************************************************
-        function NewDocument() {
-            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "test1", "");
-        }
-        function OpenNewWebURL(e) {
-            cosmos.openUrl("host:WebPage/newweb.html", 2);
-        }
-
-        function OpenCLEURL() {
-            cosmos.openUrl("host:webpage/CLE.html", 2);
-        }
-
-        function OpenAppURL(e) {
-            alert(e + "123");
-            cosmos.openUrl("host:sunny2.html|host:WebPage/newweb.html", 200);
-        }
-
-        function OpenMdiApp1() {
-            cosmos.openUrl("host:WebPage/mdiform1.html|host:webpage/CWR.html", 200);
-        }
-
-        function OpenMdiApp2() {
-            cosmos.openUrl("host:WebPage/mdiform2.html", 200);
-        }
-
-        function OpenMdiApp3() {
-            cosmos.openUrl("host:WebPage/mdiform3.html", 200);
-        }
-
-        function OpenAppURL2() {
-            cosmos.openUrl("host:webpage/newweb.html", 100);
+        function CompositeGrid1() {
+            var grid = cosmos.getXobj("default", "__viewport_default__", "navCtrl");
+            alert(grid);
+            var node = cosmos.getXobj("mainclient@webviewport@default_frame", "compositegrid", "CompositeGrid_Splitter");
+            if (node) {
+                node.getChild(0, 1).Observe("layout_1", document.getElementById("layout_1").outerHTML);
+            }
         }
 
         function OnCreate_Form1_SunnyForms2() {
@@ -421,79 +398,124 @@
                 });
         }
 
+        function OpenMdiApp1() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiform1.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp1() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp1.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp2() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp2.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp3() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp3.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp4() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp4.html|host:webpage/sunny.html", 200);
+        }
+
+        function OpenNewWebURL(e) {
+            cosmos.openUrl("host:WebPage/newweb.html", 2);
+        }
+
+        //function NewDocument() {
+        //    cosmos.sendMessage("COSMOS_CREATE_DOC", ".xxxx", "test1", "");
+        //}
+        function NewDocument() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "test1", "");
+        }
+
+        function NewDocTemplate1() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate1", "");
+        }
+        function NewDocTemplate2() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate2", "");
+        }
+        function NewDocTemplate3() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate3", "");
+        }
+        function NewDocTemplate4() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate4", "");
+        }
+        function NewDocTemplate5() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate5", "");
+        }
+
+        function NewDocTemplate1() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate1", "");
+        }
+        function NewDocTemplate2() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate2", "");
+        }
+        function NewDocTemplate3() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate3", "");
+        }
+        function NewDocTemplate4() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate4", "");
+        }
+        function NewDocTemplate5() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate5", "");
+        }
+        function NewDocTemplate6() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate6", "");
+        }
+        function NewDocTemplate7() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate7", "");
+        }
+        function NewDocTemplate8() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate8", "");
+        }
+        function NewDocTemplate9() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate9", "");
+        }
+        function NewDocTemplate10() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "doctemplate10", "");
+        }
+
+        function NewDocument2() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "default", "");
+        }
+
+        function OpenCLEURL() {
+            cosmos.openUrl("host:webpage/CLE.html", 2);
+        }
+
+        function OpenAppURL(e) {
+            alert(e + "123");
+            cosmos.openUrl("host:sunny2.html|host:WebPage/newweb.html", 200);
+        }
+
+        function OpenAppURL2() {
+            cosmos.openUrl("host:webpage/newweb.html", 100);
+        }
+
+        function OpenAppURL1() {
+            cosmos.openUrl("host:webpage/WebApp1.html", 100);
+        }
+        function OpenAppURL2() {
+            cosmos.openUrl("host:webpage/WebApp2.html", 100);
+        }
+        function OpenAppURL3() {
+            cosmos.openUrl("host:webpage/WebApp3.html", 100);
+        }
+        function OpenAppURL4() {
+            cosmos.openUrl("host:webpage/WebApp4.html", 100);
+        }
+        function OpenAppURL5() {
+            cosmos.openUrl("host:webpage/WebApp5.html", 100);
+        }
+
         function OpenCWRURL() {
             cosmos.openUrl("host:webpage/CWR.html", 2);
         }
 
         function OpenCERURL() {
             cosmos.openUrl("host:webpage/CER.html", 2);
-        }
-
-        function CompositeGrid1() {
-            var grid = cosmos.getXobj("default", "__viewport_default__", "navCtrl");
-            var node = form.getXobj("mainclient@__viewport_default__@default_frame", "compositegrid", "CompositeGrid_Splitter");
-            if (node) {
-                node.getChild(0, 1).Observe("layout_1", document.getElementById("layout_1").outerHTML);
-            }
-        }
-
-        function CompositeGrid2() {
-            if (CompositeGrid_Splitter_) {
-                CompositeGrid_Splitter_.getChild(0, 1).Observe("layout_2", cosmos.getElementById("layout_2").outerHTML);
-            }
-        }
-
-        function CompositeGrid3() {
-            if (CompositeGrid_Splitter_) {
-                CompositeGrid_Splitter_.getChild(0, 1).Observe("layout_3", cosmos.getElementById("layout_3").outerHTML);
-            }
-        }
-
-        function CompositeGrid4() {
-            if (CompositeGrid_Splitter_) {
-                CompositeGrid_Splitter_.getChild(0, 1).Observe("layout_4", cosmos.getElementById("layout_4").outerHTML);
-            }
-        }
-
-        //**********************************************
-        function DynLayout() {
-            alert(2);
-            if (treegrid) {
-                treegrid.parent.Observe(0, 0, "layout_1", cosmos.getElementById("layout_1").outerHTML, 0, 1);
-                cosmos.getElementById("dynlayoutdomelement").value = cosmos.getElementById("layout_1").outerHTML;
-            }
-        }
-
-        function DynLayout1(e) {
-            cosmos.OnMessage(e, "OnClick");
-        }
-
-        function DynLayout2() {
-            if (treegrid) {
-                treegrid.parent.Observe(0, 0, "layout_3", cosmos.getElementById("layout_3").outerHTML, 0, 1);
-                cosmos.getElementById("dynlayoutdomelement").value = cosmos.getElementById("layout_3").outerHTML;
-            }
-        }
-
-        function DynLayout3() {
-            if (treegrid) {
-                treegrid.parent.Observe(0, 0, "layout_4", cosmos.getElementById("layout_4").outerHTML, 0, 1);
-                cosmos.getElementById("dynlayoutdomelement").value = cosmos.getElementById("layout_4").outerHTML;
-            }
-        }
-
-        function DynLayout4() {
-            if (treegrid) {
-                treegrid.parent.Observe(0, 0, "layout_5", cosmos.getElementById("layout_5").outerHTML, 0, 1);
-                cosmos.getElementById("dynlayoutdomelement").value = cosmos.getElementById("layout_5").outerHTML;
-            }
-        }
-
-        function DynLayout5() {
-            if (treegrid) {
-                treegrid.parent.Observe(0, 0, "layout_6", cosmos.getElementById("layout_6").outerHTML, 0, 1);
-                cosmos.getElementById("dynlayoutdomelement").value = cosmos.getElementById("layout_6").outerHTML;
-            }
         }
     </script>
 </head>
@@ -531,8 +553,8 @@
                         <treeView1>
                             <uidata key="uidata" treenode="true" text="欢迎您来到Web Runtime新世界...">
                                 Web技术大行其道的今天，桌面软件开发面临着巨大的挑战，
-        为此，我们需要一场变革，让桌面软件开发成为互联网时代的中心……
-        The Universe希望成为这一次变革的先行者，那么变革从哪里开始呢？
+                                为此，我们需要一场变革，让桌面软件开发成为互联网时代的中心……
+                                The Universe希望成为这一次变革的先行者，那么变革从哪里开始呢？
                                 <treeView1_tag>
                                     <onafterselect>
                                         <startup target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="startup" targetcluster="startup">
@@ -546,9 +568,10 @@
                                     </onafterselect>
                                 </treeView1_tag>
                                 <node1 treenode="true" text="这里是一个全新的桌面应用世界">
-                                一个全新的世界意味着您可以用更加灵活、强大的技术组织应用内容；
-        意味着可以充分利用已存在的软件资源更好的组织应用；
-        意味着更加符合互联网模式的生态链的建立……</node1>
+                                    一个全新的世界意味着您可以用更加灵活、强大的技术组织应用内容；
+                                    意味着可以充分利用已存在的软件资源更好的组织应用；
+                                    意味着更加符合互联网模式的生态链的建立……
+                                </node1>
                                 <node1_tag>
                                     <onafterselect>
                                         <content target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content1" targetcluster="content1">
@@ -1050,28 +1073,71 @@
     </cosmos>
     <div class="contents">
         <article class="show startup markdown-body">
-            <strong style="font-size:32px; color:black">欢迎<i style="color:fuchsia">您来到</i><i style="color:blue">The Universe的 </i><b style="color:coral">应用开发世界</b>!</strong>
+            <strong style="font-size:28px; color:black"><i style="color:fuchsia">每当我们谈起被称之为</i><i style="color:blue">“经典”</i><b style="color:coral">的那些技术，我们内心充满着感激、忐忑与敬畏……</b></strong>
             <p style="font-size: 20px; font-weight:bold; color:black">
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe Universe是一款<i style="color:chocolate">颠覆式的、面向互联网的 </i>开源桌面软件开发框架，
-                其关键特点是通过整合<i style="color:orangered">Microsoft .NET、Chromium Project以及IBM Eclipse</i>三个开源项目，
-                使得.NET桌面应用可以按照一致的方式同时支持.NET、Java、Web软件生态链。
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp科技发展的不同阶段，都会存在对应时代的经典之笔，以点缀那个时代的精彩，经典之所以被称之为“经典”，不仅仅是因为其价值本身，同时还意味着一种特定时期产生的深远影响……。我们应该怎样表达对经典的致敬？
+                <i style="color:chocolate">让经典顺应时代的节奏得以传承 </i>或许是向经典致敬的一种方式……。
+                我们很幸运，因为我们受益于大量的经典之作，<i style="color:orangered">是造就经典的那些人、那些成果让我们看得更远，激励我们不断的创造……</i>。
+            </p>   <hr />
+            <p>
+            <p style="font-size: 20px; font-weight:bold; color:black">
+                我们希望新的架构是一种传承，并不都是一种淘汰。那些曾经的经典之笔，例如MFC，是不是可以在Web时代重新辉煌？
             </p>
-            <p><button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument()">NewDoc</button></p>
+            <p>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument()">NewDoc</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate1()">CustomizedDoc1</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate2()">CustomizedDoc2</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate3()">CustomizedDoc3</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate4()">CustomizedDoc4</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate5()">CustomizedDoc5</button>
+            </p>
+            <hr />
+            <p style="font-size: 20px; font-weight:bold; color:black">
+                浏览器窗口同样是一种传承，同时更加具备包容性，应该具有更加强大的可加载能力，适配更多的应用场景……
+            </p>
+
+            <a href="#" onclick="OpenAppURL2();" style="font-size:16px;color:forestgreen"><b>WebPage</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL1();" style="font-size:16px;color:forestgreen"><b>WebPage1</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL2();" style="font-size:16px;color:forestgreen"><b>WebPage2</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL3();" style="font-size:16px;color:forestgreen"><b>WebPage3</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL4();" style="font-size:16px;color:forestgreen"><b>WebPage4</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL5();" style="font-size:16px;color:forestgreen"><b>WebPage5</b></a>
+            </p>
+
             <p>
                 <h1 style="font-size: 16px; color:chocolate">
                     <a href="#" onclick="OpenNewWebURL(this);"><i style="font-size:64px; color:darkgreen">点击</i>这里开始...</a>
+                    &nbsp&nbsp&nbsp
                     <a href="#" onclick="OpenCLEURL();" style="color:forestgreen">Common Layout Engine</a>
+                    &nbsp&nbsp&nbsp
                     <a href="#" onclick="OpenCWRURL();" style="color:blue"><i style="font-size: 20px;">Common Web Runtime</i></a>
+                    &nbsp&nbsp&nbsp
                     <a href="#" onclick="OpenCERURL();" style="color:forestgreen">Common Eclipse Runtime</a>
-                </h1>
+                    <hr />
+            <p style="font-size: 20px; font-weight:bold; color:black">
+                WinForm对象应该是可以基于Web或者云端定义的，这个设想应该是应用系统的公共特征，不局限与您的应用类型。如同VBA一样……
+            </p>
+            <a href="#" onclick="OpenMdiFormApp1();" style="font-size:24px;color:forestgreen"><b>CloudMDIForm1</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenMdiFormApp2();" style="font-size:24px;color:forestgreen"><b>CloudMDIForm2</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenMdiFormApp3();" style="font-size:24px;color:forestgreen"><b>CloudMDIForm3</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenMdiFormApp4();" style="font-size:24px;color:forestgreen"><b>CloudMDIForm4</b></a>
+            </h1>
             </p>
             <center>
                 <table class="sunnysolution" border="1" cellpadding="10">
                     <thead>
                         <tr style="font-size: 16px; font-weight:bold; color:midnightblue">
                             <th> 现代桌面软件面临的<i style="color:crimson">三个关键问题</i>
-                            <th> The Universe的解决方案
-</tr>
+                            <th> Web Runtime的解决方案
+                        </tr>
                     <tbody>
                         <tr>
                             <td class="sunnysolution" width="50%">
@@ -1112,7 +1178,7 @@
                             </td>
                             <td class="sunnysolution" width="50%" rowspan=5>
                                 <p style="font-size: 16px; font-weight:bold; color:blueviolet">
-                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe Universe定义了一个应用程序的<i style="color:brown">基础结构</i>，
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspWebRuntime定义了一个应用程序的<i style="color:brown">基础结构</i>，
                                     给出了一站式的解决方案，一步到位的将：
                                 </p>
                                 <ol style="font-size: 16px; font-weight:bold; color:midnightblue">
@@ -1121,7 +1187,7 @@
                                     <li><b>集成现代浏览器全部功能（全功能Built-in WebBrowser 支持）</b></li>
                                 </ol>
                                 <p style="font-size: 16px; font-weight:bold; color:blueviolet">
-                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp通过一个单一的技术架构，一次性的提供给软件架构者，使得每一款基于The Universe技术开发
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp通过一个单一的技术架构，一次性的提供给软件架构者，使得每一款基于WebRuntime技术开发
                                     的.NET桌面应用，直接具备以下几个关键特征：
                                 </p>
                                 <ol style="font-size: 16px; font-weight:bold; color:midnightblue">
@@ -1156,11 +1222,11 @@
                                     <li>
                                         <b>支持<a href="#" onclick="OpenCERURL();" style="font-size: 20px; color:forestgreen">Common Eclipse Runtime</a></b>：Bulit-in Eclips支持，
                                         使得您可以自由驾驭Java组件，将Java、.Net、JavaScript巧妙的融合在一起，实现强大的“Web-桌面端”的互操作。
-                                        结合Eclipse本身的生态技术，The Universe借助于CER，使得应用开发者可以构建以Java基础的应用生态。
+                                        结合Eclipse本身的生态技术，WebRuntime借助于CER，使得应用开发者可以构建以Java基础的应用生态。
                                     </li>
                                 </ol>
                                 <p style="font-size: 16px; font-weight:bold; color:blueviolet">
-                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe Universe试图通过一个单一的技术架构，整合:
+                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSunny试图通过一个单一的技术架构，整合:
                                     <ul style="font-size: 16px; font-weight:bold; color:midnightblue">
                                         <li>Microsoft .NET(Core)</li>
                                         <li>Google Chromium</li>
@@ -1176,9 +1242,9 @@
             </center>
         </article>
         <article class="hidden content1 markdown-body">
-            <x style="font-size:40px; color:crimson">WebRuntime的.NET<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></x>
-            <center><p style="font-size: 32px; font-weight: bold; color: blue"><i style="color:brown">DOM </i>定义.NET</p></center>
-            <h4>用DOM定义新的.NET元素，使得我们可以在一个软件系统之外借助Web页面给应用系统增加新元素</h4>
+            <x style="font-size:40px; color:crimson">WebRuntime的Desktop应用<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></x>
+            <center><p style="font-size: 32px; font-weight: bold; color: blue"><i style="color:brown">DOM </i>定义Application</p></center>
+            <h4>用DOM定义新的桌面应用元素，使得我们可以在一个软件系统之外借助Web页面给应用系统增加新元素</h4>
             <p>
                 Common Web Runtime constructs a new mixed world of native UI elements and web elements.
                 In this world, a new web page is defined. While taking into account the standard web page,
@@ -1186,7 +1252,7 @@
             </p>
         </article>
         <article class="hidden contentcle markdown-body">
-            <x style="font-size:40px; color:crimson">WebRuntime的.NET<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></x>
+            <x style="font-size:40px; color:crimson">WebRuntime的桌面应用<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></x>
             <center style="font-size:40px; color:green"><h2>Common Layout Engine</h2></center>
             <p style="font-size: 28px;font-weight: bold; color: black">Common Layout Engine是一个多层次、网格化、可嵌套、易于描述的UI布局描述引擎。</p>
             <p style="font-size: 24px;font-weight: bold; color: blue">
@@ -1249,7 +1315,7 @@
                 当我们明确需要一个网格可以承载具体对象的时候，我们需要指定对象的“objid”属性。
             </h3>
             <h3>
-                当前Sunny可以支持几类可编程对象，具体包括：
+                当前WebRuntime可以支持几类可编程对象，具体包括：
                 <ol style="font-size:28px; color:red">
                     <li><b>.NET UI对象</b></li>
                     <li><b>ActiveX控件对象</b></li>
@@ -1272,7 +1338,7 @@
             <center style="font-size:36px; color:blue"><b>标签（选项卡）</b></center>
             <p style="font-size:24px; color:black">
                 <b>
-                    如果一个网格元素包含子节点，同时这个网格没有“rows”、“cols”属性，Sunny将其解释为一个“选项卡（标签）”，
+                    如果一个网格元素包含子节点，同时这个网格没有“rows”、“cols”属性，我们将其解释为一个“选项卡（标签）”，
                     其包含的选项卡个数就是其子节点个数。
                 </b>
             </p>
@@ -1398,7 +1464,7 @@
             </center>
         </article>
         <article class="hidden content_cwr markdown-body">
-            <p style="font-size:40px; color:forestgreen">WebRuntime的.NET<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></p>
+            <p style="font-size:40px; color:forestgreen">WebRuntime的桌面应用<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></p>
             <center style="font-size:40px; color:tomato"><h2>Common Web Runtime</h2></center>
             <p style="font-size:32px; color:darkblue">Common Web Runtime(CWR)是<strong><i style="font-size:32px; color:darkviolet">Google Chromium </i>项目的动态链接库版本</strong></p>
             <p>
@@ -1518,7 +1584,7 @@
             <hr />
         </article>
         <article class="hidden content_cer markdown-body">
-            <p style="font-size:40px; color:blue">WebRuntime的.NET<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></p>
+            <p style="font-size:40px; color:blue">WebRuntime的桌面应用<strong><i style="font-size:40px; color:fuchsia">新 </i>世界</strong></p>
             <center style="font-size:40px; color:blue"><h2>Common Eclipse Runtime</h2></center>
             <p style="font-size:32px; color:crimson">Common Eclipse Runtime(CER)是<strong><i style="font-size:32px; color:fuchsia">Eclipse </i>项目的动态链接库版本</strong></p>
             <h3>
@@ -1546,7 +1612,6 @@
         <article class="hidden content_using_swt markdown-body">
             <p style="font-size:40px; color:crimson">使用<strong><i style="font-size:40px; color:fuchsia">SWT </i>Form</strong></p>
         </article>
-
         <article class="hidden content_using_winform markdown-body">
             <p style="font-size:40px; color:darkgreen">Web页面中使用<strong><i style="font-size:40px; color:fuchsia">WinForm </i>窗口</strong></p>
             <content_using_winform target="mainClient">
@@ -1564,5 +1629,58 @@
             <button style="font-size:32px; font-weight: 900; color:darkgreen" onclick="BrowserFormApp2()">Form App 4</button>
         </article>
     </div>
+    <div class="applicationcontents">
+        <div class="show Mainform maincontent">
+            <input type=button value="Test Tangram 1" onclick="open_win1()" />
+            <input type=button value="Test Tangram 2" onclick="open_win2()" />
+            <input type=button value="Test Tangram 3" onclick="open_win3()" />
+            <input type=button value="Test Tangram 4" onclick="open_win4()" />
+            test: <input id="textName" type="text"><br>
+            <h1 align=center style='text-align:center'>About Cloud MDI WinForm</h1>
+            <p><b><span lang=EN-US style='font-size:20.0pt;font-family: "Times New Roman",serif'>Welcome to a Wonderful Web-Desktop Hybrid Programming World, where you will experience an Extended DOM Environment for developing desktop software using web-desktop mixed technology.</span></b></p>
+            <p><b><span lang=EN-US style='font-size:20.0pt;font-family: "Times New Roman",serif'>This is a New and Dynamic Desktop Software World where you can combine most of the existing component frameworks, such as .NET, Java, COM, C++, Web and Office etc. ...</span></b></p>
+        </div>
+        <div class="hidden sunnymdiforms">
+            <h1>About Cloud Form</h1>
+            <p>
+                <b>
+                    <span lang=EN-US style='font-size:14.0pt'>
+                        <a href="test.html">Click me to see what will happen ...</a>
+                    </span>
+                </b>
+                <input type="button" value="Send Message" onclick="" />
+            <p />
+        </div>
+        <div class="hidden sunnymdiforms_mdichild_1">
+            <h1 align=center style='text-align:center'>About Cloud MDI Child WinForm 1</h1>
+            <p>
+                <b>
+                    <span lang=EN-US style='font-size:14.0pt'>
+                        <a href="test.html">Hi, Im a Active Child Form</a>
+                    </span>
+                </b>
+                <input type="button" value="Send Message" onclick="" />
+            <p />
+        </div>
+        <div class="hidden sunnymdiforms_mdichild_2">
+            <h1 align=center style='text-align:center'>About Cloud MDI Child WinForm 2</h1>
+            <p>
+                First name: <input type="text" id="fname"><br>
+                Last name: <input type="text" id="lname"><br>
+            <p />
+        </div>
+        <div class="hidden sunnymdiforms_mdichild_3">
+            <h1 align=center style='text-align:center'>About Cloud MDI Child WinForm 3</h1>
+            <p>
+                <b>
+                    <span lang=EN-US style='font-size:14.0pt'>
+                        <a href="test.html">Hi, Im a Active Child Form</a>
+                    </span>
+                </b>
+                <input type="button" value="Send Message" onclick="" />
+            <p />
+        </div>
+    </div>
+
 </body>
 </html>

@@ -499,8 +499,7 @@ interface IGalaxyCluster : IDispatch {
 	[id(104)] HRESULT GetXobj(BSTR bstrGalaxyName, BSTR bstrNodeName, [out, retval] IXobj** pRetNode);
 	[id(105)] HRESULT GetCtrlInXobj(BSTR NodeName, BSTR CtrlName, [out, retval] IDispatch** ppCtrl);
 	[id(106)] HRESULT GetGalaxyFromCtrl(IDispatch* ctrl, [out, retval] IGalaxy** ppGalaxy);
-	[id(107)] HRESULT ConnectCosmosCtrl(ICosmosCtrl* eventSource);
-	[id(108)] HRESULT ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
+	[id(107)] HRESULT ObserveGalaxys(BSTR bstrGalaxys, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 };
 
 [

@@ -115,7 +115,6 @@ public:
 	STDMETHOD(GetCtrlInXobj)(BSTR NodeName, BSTR CtrlName, IDispatch** ppCtrl);
 	STDMETHOD(Observe)(IDispatch* Parent, BSTR CtrlName, BSTR GalaxyName, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
 	STDMETHOD(ObserveCtrl)(VARIANT MdiForm, BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj);
-	STDMETHOD(ConnectCosmosCtrl)(ICosmosCtrl* eventSource);
 	STDMETHOD(ObserveGalaxys)(BSTR bstrFrames, BSTR bstrKey, BSTR bstrXml, VARIANT_BOOL bSaveToConfigFile);
 };
 

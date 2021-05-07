@@ -682,8 +682,7 @@ namespace Browser {
 						}
 					}
 				}
-
-				if (theApp.m_bAppStarting == true)
+				if (theApp.m_bAppStarting == true/* && g_pCosmos->m_nWaitTabCounts == 0*/)
 				{
 					theApp.m_bAppStarting = false;
 					m_pVisibleWebView->m_bCanShow = true;

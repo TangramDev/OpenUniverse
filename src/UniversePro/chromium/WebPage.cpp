@@ -1352,7 +1352,9 @@ namespace Browser {
 									CString strCaption = xmlParse.attr(_T("caption"), _T(""));
 									if (strCaption != _T(""))
 									{
-										g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption);
+										auto it2 = g_pCosmos->m_mapDocAppName.find(strTemplateID);
+										if(it2!= g_pCosmos->m_mapDocAppName.end())
+											g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(hMainWnd, strCaption,it2->second);
 									}
 									CTangramXmlParse* pParseClient = nullptr;
 									if (pCosmosFrameWndInfo->m_nFrameType == 2)
@@ -1493,11 +1495,17 @@ namespace Browser {
 											pWnd->m_hClient = g_pCosmos->m_hFirstView;
 											g_pCosmos->m_hFirstView = nullptr;
 											pWnd->m_pParent->m_mapMDIChild[hWnd] = pWnd;
+											CString strAppName = _T("");
 											CString strDefaultName = _T("");
 											auto itName = g_pCosmos->m_mapDocDefaultName.find(strTemplateID);
 											if (itName != g_pCosmos->m_mapDocDefaultName.end())
 												strDefaultName = itName->second;
-											g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName);
+											
+											itName = g_pCosmos->m_mapDocAppName.find(strTemplateID);
+											if (itName != g_pCosmos->m_mapDocAppName.end())
+												strAppName = itName->second;
+
+											g_pCosmos->m_pUniverseAppProxy->SetFrameCaption(pWnd->m_hWnd, strDefaultName, strAppName);
 											theApp.m_bAppStarting = false;
 										}
 									}

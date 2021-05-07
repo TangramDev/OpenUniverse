@@ -533,7 +533,7 @@ namespace CommonUniverse {
 		virtual LRESULT OnForegroundIdleProc() { return 0; }
 		virtual BOOL UniversePreTranslateMessage(MSG* pMsg) { return false; }
 		virtual bool EclipseAppInit() { return false; }
-		virtual bool SetFrameCaption(HWND hWnd, CString strCaption) { return false; }
+		virtual bool SetFrameCaption(HWND hWnd, CString strCaption, CString strAppName) { return false; }
 		virtual void OnCosmosClose(CosmosCloseState state) { }
 		virtual void OnObserverComplete(HWND hWnd, CString bstrUrl, IXobj* pRootXobj) {}
 		virtual void OnCosmosEvent(ICosmosEventObj* NotifyObj) {}

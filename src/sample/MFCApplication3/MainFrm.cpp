@@ -416,3 +416,11 @@ void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 	CFrameWndEx::OnSettingChange(uFlags, lpszSection);
 	m_wndOutput.UpdateFonts();
 }
+
+
+void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CFrameWndEx::OnUpdateFrameTitle(bAddToTitle);
+}

@@ -358,6 +358,7 @@ private:
 	CWindow								m_HelperWnd;
 	CComObject<CXobjCollection>*		m_pRootNodes;
 	map<DWORD, CommonThreadInfo*>		m_mapThreadInfo;
+	map<CString, CString>				m_mapDocAppName;
 	map<CString, CString>				m_mapDocTemplate;
 	map<CString, CString>				m_mapDocDefaultName;
 

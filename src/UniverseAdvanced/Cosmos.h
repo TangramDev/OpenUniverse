@@ -213,6 +213,7 @@ public:
 	map<HWND, CCloudMDTFrame*>				m_mapMDTWindow;
 	map<HWND, CCloudMDIFrame*>				m_mapMDIParent;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
+	map<CString, CString>					m_mapDocAppName;
 	map<CString, CString>					m_mapDocTemplate;
 	map<CString, CString>					m_mapDocDefaultName;
 	map<IPCSession*, CWormhole*>			m_mapWormhole;

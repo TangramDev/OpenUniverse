@@ -891,6 +891,8 @@ void CCosmos::TangramInitFromeWeb()
 					CTangramXmlParse* pChild = pParse->GetChild(i);
 					CString strName = pChild->name();
 					CString strDefaultName = pChild->attr(_T("defaultname"), strName);
+					CString strAppName = pChild->attr(_T("appname"), strName);
+					m_mapDocAppName[strName] = strAppName;
 					m_mapDocTemplate[strName] = pChild->xml();
 					m_mapDocDefaultName[strName] = strDefaultName;
 				}
@@ -4659,7 +4661,10 @@ bool CCosmos::SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* 
 	auto it = m_mapDocDefaultName.find(strTemplateID);
 	if (it != m_mapDocDefaultName.end())
 	{
-		g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second);
+		CString strApp = _T("");
+		auto it2 = m_mapDocAppName.find(strTemplateID);
+		if(it2!= m_mapDocAppName.end())
+			g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second,it2->second);
 	}
 	return false;
 }

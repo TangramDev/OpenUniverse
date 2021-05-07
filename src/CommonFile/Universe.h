@@ -3744,9 +3744,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IDispatch *ctrl,
             /* [retval][out] */ IGalaxy **ppGalaxy) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectCosmosCtrl( 
-            ICosmosCtrl *eventSource) = 0;
-        
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ObserveGalaxys( 
             BSTR bstrGalaxys,
             BSTR bstrKey,
@@ -3911,10 +3908,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
             IDispatch *ctrl,
             /* [retval][out] */ IGalaxy **ppGalaxy);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectCosmosCtrl )( 
-            IGalaxyCluster * This,
-            ICosmosCtrl *eventSource);
-        
         /* [id] */ HRESULT ( STDMETHODCALLTYPE *ObserveGalaxys )( 
             IGalaxyCluster * This,
             BSTR bstrGalaxys,
@@ -4017,9 +4010,6 @@ EXTERN_C const IID IID_IGalaxyCluster;
 
 #define IGalaxyCluster_GetGalaxyFromCtrl(This,ctrl,ppGalaxy)	\
     ( (This)->lpVtbl -> GetGalaxyFromCtrl(This,ctrl,ppGalaxy) ) 
-
-#define IGalaxyCluster_ConnectCosmosCtrl(This,eventSource)	\
-    ( (This)->lpVtbl -> ConnectCosmosCtrl(This,eventSource) ) 
 
 #define IGalaxyCluster_ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile)	\
     ( (This)->lpVtbl -> ObserveGalaxys(This,bstrGalaxys,bstrKey,bstrXml,bSaveToConfigFile) ) 

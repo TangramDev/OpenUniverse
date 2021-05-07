@@ -211,16 +211,16 @@ public:
 	CCloudMDIFrame(void);
 	virtual ~CCloudMDIFrame(void);
 
-	BOOL					m_bDestroy = false;
-	BOOL					m_bCreateNewDoc = false;
-	BOOL					m_bProcessBrowserPos = false;
-	HWND					m_hMDIClient = nullptr;
+	BOOL						m_bDestroy = false;
+	BOOL						m_bCreateNewDoc = false;
+	BOOL						m_bProcessBrowserPos = false;
+	HWND						m_hMDIClient = nullptr;
 
-	CGalaxy*				m_pGalaxy = nullptr;
-	CBrowser*				m_pHostBrowser = nullptr;
+	CGalaxy*					m_pGalaxy = nullptr;
+	CBrowser*					m_pHostBrowser = nullptr;
 	CCloudMDIChild*				m_pActiveMDIChild = nullptr;
-	CosmosFrameWndInfo*		m_pCosmosFrameWndInfo = nullptr;
-	map<CString, CString>	m_mapClientCtrlBarData;
+	CosmosFrameWndInfo*			m_pCosmosFrameWndInfo = nullptr;
+	map<CString, CString>		m_mapClientCtrlBarData;
 	map<HWND, CCloudMDIChild*>	m_mapMDIChild;
 
 	BEGIN_MSG_MAP(CCloudMDIFrame)

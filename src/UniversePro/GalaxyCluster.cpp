@@ -788,11 +788,6 @@ STDMETHODIMP CGalaxyCluster::ObserveCtrl(VARIANT MdiForm, BSTR bstrKey, BSTR bst
 	return S_OK;
 }
 
-STDMETHODIMP CGalaxyCluster::ConnectCosmosCtrl(ICosmosCtrl* eventSource)
-{
-	return S_OK;
-}
-
 HRESULT CGalaxyCluster::Fire_GalaxyClusterLoaded(IDispatch* sender, BSTR url)
 {
 	HRESULT hr = S_OK;
