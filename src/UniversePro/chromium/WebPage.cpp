@@ -169,10 +169,13 @@ namespace Browser {
 					m_strLoadingURLs = _T("");
 					theApp.m_bAppStarting = false;
 					m_bCanShow = true;
-					if (pWebBrowser->m_pMDIParent)
-						::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 7);
-					else
-						::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, 1);
+					::SendMessage(hPWnd, WM_BROWSERLAYOUT, 0, pWebBrowser->m_pMDIParent ? 7 : 1);
+					if (pWebBrowser->m_pParentXobj)
+					{
+						RECT rc;
+						pWebBrowser->m_pParentXobj->m_pHostWnd->GetClientRect(&rc);
+						::SetWindowPos(hPWnd, HWND_TOP, -12, -6, rc.right + 24, rc.bottom + 18, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOREDRAW);
+					}
 					break;
 				}
 				if (m_strLoadingURLs != _T(""))
