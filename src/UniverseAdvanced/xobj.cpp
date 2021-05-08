@@ -462,6 +462,17 @@ STDMETHODIMP CXobj::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 				HRESULT hr = m_pParentObj->ObserveEx(m_nRow, m_nCol, bstrKey, bstrXml, ppRetXobj);
 				return hr;
 			}
+			if (m_pWebBrowser)
+			{
+				auto it = m_pWebBrowser->m_mapChildPage.begin();
+				CWebView* pHostWebView = it->second;
+				if (pHostWebView)
+				{
+					m_pWebBrowser->OpenURL(CComBSTR(pHostWebView->m_pChromeRenderFrameHost->GetRenderFrameURL(2)), BrowserWndOpenDisposition::SWITCH_TO_TAB, CComBSTR(""), CComBSTR(""));
+					pHostWebView->LoadDocument2Viewport(OLE2T(bstrKey), OLE2T(bstrXml));
+					return S_OK;
+				}
+			}
 		}
 		if (m_pXobjShareData->m_pGalaxyCluster)
 		{

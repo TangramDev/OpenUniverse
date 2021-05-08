@@ -1954,7 +1954,13 @@ namespace Browser {
 			if (pXobj)
 			{
 				IXobj* _pXobj = nullptr;
-				pXobj->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pXobj);
+				if (pObj->m_pParentObj == nullptr && pObj->m_strID == TGM_NUCLEUS && pObj->m_pWebPage == this)
+				{
+					LoadDocument2Viewport(strKey, strXml);
+					_pXobj = m_pGalaxy->m_pWorkXobj;
+				}
+				else
+					pXobj->Observe(CComBSTR(strKey), CComBSTR(strXml), &_pXobj);
 				if (_pXobj)
 				{
 					__int64 nHandle = 0;

@@ -1370,6 +1370,8 @@ LRESULT CCloudWinForm::OnGetMe(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 	case 3:
 	{
 		m_nState = 3;//design
+		if (m_strXml != _T(""))
+			break;
 		m_strXml = (LPCTSTR)wParam;
 		if (::PathFileExists(m_strXml))
 		{
