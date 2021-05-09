@@ -599,6 +599,7 @@ namespace CommonUniverse {
 		virtual bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType) { return false; }
 		virtual void OnCloudMsgReceived(CSession*) {}
 		virtual void ConnectXobjToWebPage(IXobj*, bool) {}
+		virtual void ProcessFormWorkState(HWND hForm, int nState) {}
 	};
 
 	class CCosmosImpl {

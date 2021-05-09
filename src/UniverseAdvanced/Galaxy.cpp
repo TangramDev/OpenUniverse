@@ -1178,7 +1178,7 @@ CCloudWinForm::CCloudWinForm(void)
 	m_pBKWnd = nullptr;
 	m_pWormhole = nullptr;
 	m_pOwnerHtmlWnd = nullptr;
-	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
+	m_strChildFormPath = m_strXml = m_strKey = m_strOldKey = m_strBKID = _T("");
 	if (g_pCosmos->m_pCurMDIChildFormInfo)
 	{
 		m_pChildFormsInfo = g_pCosmos->m_pCurMDIChildFormInfo;
@@ -1479,6 +1479,36 @@ LRESULT CCloudWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 {
 	switch (lParam)
 	{
+	case 20210509:
+	{
+		if (m_pActiveChild == nullptr)
+			return 0;
+		if (m_strOldKey == _T(""))
+		{
+			if (m_pClientGalaxy)
+			{
+				m_strOldKey = m_pClientGalaxy->m_strCurrentKey;
+				m_pBrowser->m_bSZMode = true;
+				IXobj* pObj = nullptr;
+				m_pClientGalaxy->Observe(CComBSTR(""), CComBSTR(""), &pObj);
+				m_pBrowser->m_bSZMode = true;
+				CComBSTR bstrKey("");
+				g_pCosmos->ObserveGalaxys((__int64)m_hMDIClient, bstrKey, bstrKey, bstrKey, true);
+				m_pOwnerHtmlWnd->LoadDocument2Viewport(_T("__VIEWPORT_DEFAULT__"), _T(""));
+			}
+			return 0;
+		}
+		else
+		{
+			if (m_pActiveChild)
+			{
+				m_strOldKey = _T("");
+				::SendMessage(m_pActiveChild->m_hWnd, WM_HUBBLE_DATA, 0, 2);
+			}
+		}
+		return 1;
+	}
+	break;
 	case 20210430:
 		::BringWindowToTop(m_hWnd);
 		break;
@@ -1492,6 +1522,8 @@ LRESULT CCloudWinForm::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 			m_pBrowser->m_bSZMode = true;
 			CComBSTR bstrKey("");
 			g_pCosmos->ObserveGalaxys((__int64)m_hMDIClient, bstrKey, bstrKey, bstrKey, true);
+			if (g_pCosmos->m_pCLRProxy)
+				g_pCosmos->m_pCLRProxy->ProcessFormWorkState(m_hWnd, 1);
 		}
 	}
 	break;
@@ -1705,6 +1737,8 @@ LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			{
 				::PostMessage(m_pMDIParent->m_hWnd, WM_COSMOSMSG, 0, 20210427);
 			}
+			if (g_pCosmos->m_pCLRProxy)
+				g_pCosmos->m_pCLRProxy->ProcessFormWorkState(m_pMDIParent->m_hWnd, 0);
 		}
 	}
 	else
@@ -1988,7 +2022,7 @@ CTangramXmlParse* CGalaxy::UpdateXobj()
 				((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
 			}
 
-			for (auto& it2 :pWndXobj->m_vChildNodes) {
+			for (auto& it2 : pWndXobj->m_vChildNodes) {
 				g_pCosmos->UpdateXobj(it2);
 			}
 
@@ -3583,7 +3617,7 @@ STDMETHODIMP CGalaxy::get_GalaxyXML(BSTR* pVal)
 				((CGridWnd*)pWndXobj->m_pHostWnd)->Save();
 			}
 
-			for (auto& it2 :pWndXobj->m_vChildNodes)
+			for (auto& it2 : pWndXobj->m_vChildNodes)
 			{
 				g_pCosmos->UpdateXobj(it2);
 			}

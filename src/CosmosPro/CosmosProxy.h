@@ -63,6 +63,7 @@ public:
 	map<HWND, CTangramWPFObjWrapper*>					m_mapWpfControlWrapper;
 	map<IBrowser*, gcroot<Browser^>>					m_mapWebBrowser;
 	map<CSession*, gcroot<Wormhole^>>					m_mapSession2Wormhole;
+	map<HWND, gcroot<ToolStripButton^>>					m_mapToolStripButton;
 
 	gcroot<Form^>										m_pCurrentPForm;
 	gcroot<System::Windows::Application^>				m_pCosmosWpfApp;
@@ -132,6 +133,7 @@ private:
 	bool PreWindowPosChanging(HWND hWnd, WINDOWPOS* lpwndpos, int nType);
 	void ConnectXobjToWebPage(IXobj*, bool);
 	void OnCloudMsgReceived(CSession*);
+	void ProcessFormWorkState(HWND hForm, int nState);
 
 	void WindowCreated(LPCTSTR strClassName, LPCTSTR strName, HWND hPWnd, HWND hWnd);
 	void WindowDestroy(HWND hWnd);

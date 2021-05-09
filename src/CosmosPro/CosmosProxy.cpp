@@ -1285,6 +1285,28 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 					}
 				}
 			}
+			if (nIndex)
+			{
+				ToolStripSeparator^ toolStripSeparator = gcnew ToolStripSeparator();
+				toolStripSeparator->Name = "defaulttoolStripSeparator";
+				toolStripSeparator->Size = System::Drawing::Size(6, 39);
+				defaultToolStrip->Items->Add(toolStripSeparator);
+
+				ToolStripButton^ pToolStripButton = gcnew ToolStripButton();
+				pToolStripButton->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				pToolStripButton->Image = (System::Drawing::Image^)(pForm->Icon->ToBitmap());
+				pToolStripButton->ImageTransparentColor = System::Drawing::Color::Black;
+				pToolStripButton->Name = L"defaultbtn";
+				pToolStripButton->Size = System::Drawing::Size(36, 36);
+				pToolStripButton->Text = L"default";
+				pToolStripButton->Tag = L"default";
+				pToolStripButton->Checked = true;
+				//pToolStripButton->CheckOnClick = true;
+				//pToolStripButton->ToolTipText = BSTR2STRING(strTips);
+				pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
+				defaultToolStrip->Items->Add(pToolStripButton);
+				theAppProxy.m_mapToolStripButton[(HWND)pForm->Handle.ToPointer()] = pToolStripButton;
+			}
 		}
 	}
 
@@ -2509,6 +2531,31 @@ void CCosmosProxy::OnCloudMsgReceived(CSession* pSession)
 	Universe::Cosmos::Fire_OnCosmosMsgReceived(pCloudSession);
 }
 
+void CCosmosProxy::ProcessFormWorkState(HWND hForm, int nState)
+{
+	switch (nState)
+	{
+	case 0:
+	{
+		auto it = theAppProxy.m_mapToolStripButton.find(hForm);
+		if (it != theAppProxy.m_mapToolStripButton.end())
+		{
+			it->second->CheckState = CheckState::Unchecked;
+		}
+	}
+	break;
+	case 1:
+	{
+		auto it = theAppProxy.m_mapToolStripButton.find(hForm);
+		if (it != theAppProxy.m_mapToolStripButton.end())
+		{
+			it->second->CheckState = CheckState::Checked;
+		}
+	}
+	break;
+	}
+}
+
 void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 {
 	Type^ type = sender->GetType();
@@ -2532,55 +2579,42 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 				theAppProxy.m_pCurrentPForm = form;
 				if (button->Tag != nullptr)
 				{
+					HWND hForm = (HWND)form->Handle.ToPointer();
 					String^ strXml = button->Tag->ToString();
 					if (strXml == L"default")
 					{
 						ToolStripButton^ pBtn = (ToolStripButton^)button;
 						if (pBtn->Name == L"defaultbtn")
 						{
-							switch (pBtn->CheckState)
-							{
-							case CheckState::Checked:
-							{
-								//Wormhole^ pCloudSession = nullptr;
-								//bool bExists = Universe::Cosmos::Wormholes->TryGetValue(form, pCloudSession);
-								//if (bExists)
-								//{
-								//	pCloudSession->InsertLong(L"MDIChildCount", 0);
-								//	pCloudSession->InsertString(L"msgID", L"MDIFORM_ALLMDICHILDREMOVED");
-								//	pCloudSession->SendMessage();
-								//	return;
-								//}
-
-								String^ strKey = L"";
-								if (form->ActiveMdiChild != nullptr)
-								{
-									HWND hWnd = (HWND)form->ActiveMdiChild->Handle.ToPointer();
-									LRESULT l = ::SendMessage(hWnd, WM_HUBBLE_DATA, 0, 2);
-									if (l)
-									{
-										CString strPath = (LPCTSTR)l;
-										theApp.m_pCosmos->ObserveGalaxys(form->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strPath), CComBSTR(L""), false);
-										::SendMessage(hWnd, WM_COSMOSMSG, 0, 20200216);
-										return;
-									}
-								}
-							}
-							break;
-							case CheckState::Unchecked:
-								Universe::Cosmos::ExtendMDIClient(form, L"default", L"");
-								::SendMessage((HWND)form->Handle.ToInt64(), WM_COSMOSMSG, 0, 20200216);
-								break;
-							}
+							LRESULT lRes = ::SendMessage(hForm, WM_COSMOSMSG, 0, 20210509);
+							if (lRes == 0)
+								pBtn->CheckState = CheckState::Checked;
+							else
+								pBtn->CheckState = CheckState::Unchecked;
+							//if (pBtn->CheckState == CheckState::Checked)
+							//{
+							//	pBtn->CheckState = CheckState::Unchecked;
+							//}
+							//else
+							//{
+							//	pBtn->CheckState = CheckState::Checked;
+							//}
 						}
 						return;
 					}
 					if (String::IsNullOrEmpty(strXml) == false)
 					{
-						::SendMessage((HWND)form->Handle.ToPointer(), WM_COSMOSMSG, 0, 20210415);
+						::SendMessage(hForm, WM_COSMOSMSG, 0, 20210415);
 						IDispatch* pFormDisp = theApp.m_pCosmosImpl->m_pCLRProxy->CreateCLRObj(strXml);
 						if (pFormDisp)
-							return;
+						{
+							auto it = theAppProxy.m_mapToolStripButton.find(hForm);
+							if (it != theAppProxy.m_mapToolStripButton.end())
+							{
+								it->second->CheckState = CheckState::Unchecked;
+							}
+						}
+						return;
 					}
 				}
 				HWND hForm = (HWND)form->Handle.ToPointer();
