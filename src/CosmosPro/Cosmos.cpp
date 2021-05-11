@@ -29,7 +29,6 @@
 #include "GridCLREvent.h"
 #include "Cosmos.h"
 #include "Browser.h"
-#include "Markup.h"
 
 #ifdef _WIN32
 #ifdef ReplaceText

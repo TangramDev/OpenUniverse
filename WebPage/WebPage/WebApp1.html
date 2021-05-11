@@ -4,7 +4,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>欢迎您进入一个全新的.NET世界, 我是您的朋友WebRuntime</title>
+    <title>欢迎您进入一个全新的桌面软件世界……</title>
     <link rel="icon" href="webpage/app.png" sizes="32x32">
     <style type="text/css">
         .comments {
@@ -269,6 +269,105 @@
                     }
                     break;
             }
+
+            switch (e.xobj.name) {
+                case "SunnyForm_Form1":
+                case "SunnyForm_Form3":
+                case "SunnyForm_Form5":
+                    {
+                        e.xobj.addEventListener("button1", "OnClick", function (e) {
+                            switch (e.name) {
+                                case "SunnyForm_Form1":
+                                    {
+                                        e.grid.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_0").outerHTML);
+                                        var grid_ = e.getXobj("SunnyForm_Form6");
+                                        if (!!grid_) {
+                                            grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_1").outerHTML);
+                                        }
+
+                                        grid_ = e.getXobj("SunnyForm_Form4");
+                                        if (!!grid_) {
+                                            grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_2").outerHTML);
+                                        }
+                                    }
+                                    break;
+                                case "SunnyForm_Form3":
+                                    {
+                                        e.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_0").outerHTML);
+                                    }
+                                    break;
+                            }
+                        });
+                        e.xobj.onCloudMessageForXobj = function (e) {
+                            switch (e.name) {
+                                case "SunnyForm_Form1":
+                                    {
+                                        switch (e.msgID) {
+                                            case "testButton1_click":
+                                                {
+                                                    var grid_ = e.xobj.getXobj("SunnyForm_Form10");
+                                                    if (!!grid_) {
+                                                        grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_1").outerHTML);
+                                                    }
+                                                    grid_ = e.xobj.getXobj("SunnyForm_Form5");
+                                                    if (!!grid_) {
+
+                                                        grid_.setStr("msgID", "testButtonClickCallback");
+                                                        grid_.setStr("callbackval", "just a test");
+                                                        grid_.sendMessage(grid_);
+                                                    }
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                case "SunnyCtrl_UserControl1":
+                    {
+                        e.xobj.onCloudMessageForXobj = function (e) {
+                            switch (e.msgID) {
+                                case "UserControl1_testButton1_click":
+                                    {
+                                        var grid_ = e.xobj.getXobj("SunnyCtrl_UserControl6");
+                                        if (!!grid_) {
+
+                                            grid_.setStr("msgID", "UserControl6_testButtonClickCallback");
+                                            grid_.setStr("callbackval", "just a test");
+                                            grid_.sendMessage(grid_);
+                                        }
+                                        grid_ = e.xobj.getXobj("SunnyCtrl_UserControl1")
+                                        if (!!grid_) {
+                                            grid_.setStr("msgID", "UserControl6_testButtonClickCallback");
+                                            grid_.setStr("callbackval", "just a test");
+                                            grid_.sendMessage(grid_);
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                case "SunnyCtrl_UserControl4":
+                    e.xobj.addEventListener("button1", "OnClick", function (xobj) {
+                        xobj.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_0").outerHTML);
+                        var grid_ = xobj.getXobj("SunnyCtrl_UserControl6");
+                        if (!!grid_) {
+                            grid_.Observe("panel1", "xxx", cosmos.getElementById("form_panel1_1").outerHTML);
+                        }
+
+                        grid_ = xobj.getXobj("SunnyCtrl_UserControl1");
+                        if (!!grid_) {
+                            grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_2").outerHTML);
+                        }
+                    });
+                    e.xobj.onCloudMessageForXobj = function (e) {
+                    }
+                    break;
+            }
+
         }
 
         //var visibleElem = null;
@@ -495,6 +594,20 @@
                 cosmos.getElementById("dynlayoutdomelement").value = cosmos.getElementById("layout_6").outerHTML;
             }
         }
+
+        function OnDockdemo() {
+            cosmos.Observe("dockdemo", cosmos.getElementById("dockdemo").outerHTML);
+        }
+        function OnDockdemo2() {
+            cosmos.Observe("dockdemo2", cosmos.getElementById("dockdemo2").outerHTML);
+        }
+        function OnDockdemo3() {
+            cosmos.Observe("dockdemo3", cosmos.getElementById("dockdemo3").outerHTML);
+        }
+        function OnDefault() {
+            cosmos.Observe("dockdemo", cosmos.getElementById("dockdemo").outerHTML);
+        }
+
     </script>
 </head>
 <body background="image/sunny.jpg">
@@ -932,7 +1045,7 @@
             </subversion>
         </cluster>
         <Forms>
-            <Form1 objid="sunnyForms2.Form1,sunnyForms2" caption="Form1@SunnyForm2" id="create_form_1" width="1600" height="1200">
+            <Form1 objid="sunnyForms2.Form1,sunnyForms2" caption="Form1@SunnyForm2" id="create_form_1" width="1600" height="1200" model="2">
                 <mainpanel id="123">
                     <default>
                         <cluster>
@@ -1003,15 +1116,206 @@
                 </mainpanel>
             </Form4>
         </Forms>
+        <dockdemo id="dockdemo">
+            <cluster>
+                <xobj style="17">
+                    <xobj rows="1" cols="2" width="200,600" caption="New Web,New World">
+                        <xobj rows="2" cols="1" height="200,600">
+                            <xobj objid="nucleus"></xobj>
+                            <xobj objid="SunnyCtrl.democtrl,SunnyCtrl"></xobj>
+                        </xobj>
+                        <xobj style="18" caption="Introduction to Open Universe">
+                            <xobj caption="Using WinForm"></xobj>
+                            <xobj caption="Using WPF Control"></xobj>
+                            <xobj caption="Using UserControl"></xobj>
+                        </xobj>
+                    </xobj>
+                </xobj>
+            </cluster>
+        </dockdemo>
+        <dockdemo id="dockdemo2">
+            <cluster>
+                <xobj style="17">
+                    <xobj rows="1" cols="2" width="400,600" caption="New Web,New World">
+                        <xobj style="18" caption="Introduction to Open Universe">
+                            <xobj objid="SunnyForms.Form1,SunnyForms" caption="SunnyForm-Form1" id="SunnyForm_Form1">
+                                <panel1>
+                                    <default>
+                                        <cluster>
+                                            <xobj rows="3" cols="1" height="200,300,100">
+                                                <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl"></xobj>
+                                                <xobj objid="nucleus"></xobj>
+                                                <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl"></xobj>
+                                            </xobj>
+                                        </cluster>
+                                    </default>
+                                </panel1>
+                            </xobj>
+                            <xobj objid="SunnyForms.Form2,SunnyForms" caption="SunnyForm-Form2" id="SunnyForm_Form2"></xobj>
+                            <xobj objid="SunnyForms.Form3,SunnyForms" caption="SunnyForm-Form3" id="SunnyForm_Form3"></xobj>
+                        </xobj>
+                        <xobj rows="2" cols="1" height="400,600">
+                            <xobj rows="1" cols="2" width="400,300">
+                                <xobj objid="nucleus"></xobj>
+                                <xobj style="47">
+                                    <xobj objid="SunnyForms.Form4,SunnyForms" caption="SunnyForm-Form4" id="SunnyForm_Form4"></xobj>
+                                    <xobj objid="SunnyForms.Form5,SunnyForms" caption="SunnyForm-Form5" id="SunnyForm_Form5"></xobj>
+                                </xobj>
+                            </xobj>
+                            <xobj style="17">
+                                <xobj objid="SunnyForms.Form6,SunnyForms" caption="SunnyForm-Form6" id="SunnyForm_Form6"></xobj>
+                                <xobj objid="SunnyForms.Form7,SunnyForms" caption="SunnyForm-Form7" id="SunnyForm_Form7"></xobj>
+                                <xobj objid="SunnyForms.Form8,SunnyForms" caption="SunnyForm-Form8" id="SunnyForm_Form8"></xobj>
+                            </xobj>
+                        </xobj>
+                    </xobj>
+                    <xobj objid="SunnyForms.Form9,SunnyForms" caption="SunnyForm-Form9" id="SunnyForm_Form9"></xobj>
+                    <xobj objid="SunnyForms.Form10,SunnyForms" caption="SunnyForm-Form10" id="SunnyForm_Form10"></xobj>
+                </xobj>
+            </cluster>
+        </dockdemo>
+        <dockdemo id="dockdemo3">
+            <cluster>
+                <xobj style="19">
+                    <xobj rows="1" cols="2" width="200,600" caption="New Web,New World">
+                        <xobj rows="2" cols="1" height="300,600">
+                            <xobj rows="1" cols="2" width="400,300">
+                                <xobj style="29">
+                                    <xobj objid="SunnyCtrl.Usercontrol4,SunnyCtrl" caption="SunnyCtrl-UserControl4" id="SunnyCtrl_UserControl4"></xobj>
+                                    <xobj objid="" caption="SunnyCtrl-UserControl5" id="mdiclient"></xobj>
+                                </xobj>
+                                <xobj objid="nucleus"></xobj>
+                            </xobj>
+                            <xobj style="13">
+                                <xobj objid="SunnyCtrl.Usercontrol6,SunnyCtrl" caption="SunnyCtrl-UserControl6" id="SunnyCtrl_UserControl6"></xobj>
+                                <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl" caption="SunnyCtrl-UserControl7" id="SunnyCtrl_UserControl7"></xobj>
+                                <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl" caption="SunnyCtrl-UserControl8" id="SunnyCtrl_UserControl8"></xobj>
+                            </xobj>
+                        </xobj>
+                        <xobj style="18" caption="Introduction to Open Universe">
+                            <xobj objid="SunnyCtrl.Usercontrol1,SunnyCtrl" caption="SunnyCtrl-UserControl1" id="SunnyCtrl_UserControl1"></xobj>
+                            <xobj objid="SunnyCtrl.Usercontrol2,SunnyCtrl" caption="SunnyCtrl-UserControl2" id="SunnyCtrl_UserControl2"></xobj>
+                            <xobj objid="SunnyCtrl.Usercontrol3,SunnyCtrl" caption="SunnyCtrl-UserControl3" id="SunnyCtrl_UserControl3"></xobj>
+                        </xobj>
+                    </xobj>
+                    <xobj objid="SunnyCtrl.Usercontrol9,SunnyCtrl" caption="SunnyCtrl-UserControl9" id="SunnyCtrl_UserControl9"></xobj>
+                    <xobj objid="SunnyCtrl.Usercontrol10,SunnyCtrl" caption="SunnyCtrl-UserControl10" id="SunnyCtrl_UserControl10"></xobj>
+                    <xobj caption="Introduction of Open Universe"></xobj>
+                </xobj>
+            </cluster>
+        </dockdemo>
+        <testpanel id="form_panel1_0">
+            <cluster>
+                <xobj rows="3" cols="1" height="200,300,100">
+                    <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl"></xobj>
+                    <xobj objid="nucleus"></xobj>
+                    <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl"></xobj>
+                </xobj>
+            </cluster>
+        </testpanel>
+        <testpanel id="form_panel1_1">
+            <cluster>
+                <xobj style="33">
+                    <xobj objid="nucleus" caption="I'm panel1"></xobj>
+                    <xobj objid="SunnyForms.Form6,SunnyForms" caption="SunnyForms-Form6"></xobj>
+                    <xobj objid="SunnyForms.Form9,SunnyForms" caption="SunnyForms-Form9"></xobj>
+                </xobj>
+            </cluster>
+        </testpanel>
+        <testpanel id="form_panel1_2">
+            <cluster>
+                <xobj style="23">
+                    <xobj objid="nucleus" caption="I'm panel1"></xobj>
+                    <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl" caption="SunnyCtrl-UserControl2"></xobj>
+                    <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl" caption="SunnyCtrl-UserControl3"></xobj>
+                </xobj>
+            </cluster>
+        </testpanel>
     </cosmos>
     <div class="contents">
         <article class="show startup markdown-body">
             <strong style="font-size:32px; color:black">欢迎<i style="color:fuchsia">您来到</i><i style="color:blue">The Universe的 </i><b style="color:coral">应用开发世界</b>!</strong>
             <p style="font-size: 20px; font-weight:bold; color:black">
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe Universe是一款<i style="color:chocolate">颠覆式的、面向互联网的 </i>开源桌面软件开发框架，
-                其关键特点是通过整合<i style="color:orangered">Microsoft .NET、Chromium Project以及IBM Eclipse</i>三个开源项目，
-                使得.NET桌面应用可以按照一致的方式同时支持.NET、Java、Web软件生态链。
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp这是您看到的<i style="color:chocolate">第一个面向应用的 </i>Web页面，
+                不同于传统的标准页面，<i style="color:orangered">面向应用的Web页面包含更多的</i>应用组件，使得开发者拥有更多的灵活性组织应用……
             </p>
+
+            <p style="font-size: 20px; font-weight:bold; color:black">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp让我们看看，您可以在Web页面上怎么组织.NET UserControl对象，我们将UserControl对象看作扩展的DOM元素，这样开发者就会拥有一个比标准DOM大得多的DOM元素集合，
+                这个设想相当于“有理数系”向“实数系”的自然过渡，由于是基于DOM描述的，因此，开发者可以在软件运行时发行大量的页面做为应用系统的内容，这一点将极大的扩展了宿主系统的应用边界……
+            </p>
+            <p>
+                <button style="font-size: 24px; font-weight:bold; color:darkmagenta" onclick="OnDockdemo3()"><i>Click me，看看The Universe是怎样动态组织Usercontrol对象</i>...</button>
+            </p><hr />
+            <p style="font-size: 20px; font-weight:bold; color:blueviolet">
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp类似的设想，您可以将WinForm对象看作扩展的DOM元素，这样开发者就会拥有一个比“如上描述的DOM”更大的DOM元素集合，与将UserControl看作DOM元素类似，
+                如果将UserControl看作DOM元素类比为从“有理数系”向“实数系”的自然过渡，那么将WinForm看作DOM元素就可以媲美于“实数系”到“复数域”的扩张，从现象上看，WinForm可以作为独立的UI单元呈现，
+                这一点是UserControl不具备的……
+            </p>
+            <p>
+                <button style="font-size: 24px; font-weight:bold; color:crimson" onclick="OnDockdemo2()"><i>看看The Universe是怎样动态组织WinForm对象</i>...</button>&nbsp
+            </p><hr />
+            <strong style="font-size:32px; color:navy">Using <i style="font-size:32px; color:fuchsia">Browser as Child Window </i>Object</strong>
+            <center>
+                <table class="sunnysolution" border="1" cellpadding="10">
+                    <thead>
+                        <tr style="font-size: 16px; font-weight:bold; color:midnightblue">
+                            <th> Create BrowserForm
+                            <th> Introduction
+                        </tr>
+                    <tbody>
+                        <tr>
+                            <td class="sunnysolution" width="50%">
+                                <button onclick="BrowserFormApp1()"><b style="font-size:24px; color:darkgreen">Browser Form App 1</b></button>
+                            </td>
+                            <td class="sunnysolution" width="50%" rowspan=5>
+                            </td>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="sunnysolution" width="50%">
+                                <button onclick="BrowserFormApp2()"><b style="font-size:24px; color:darkgreen">Browser Form App 2</b></button>
+                            </td>
+                            <td class="sunnysolution" width="50%" rowspan=5>
+                            </td>
+                    </tbody>
+                </table>
+            </center>
+            <hr />
+            <strong style="font-size:32px; color:navy">Using <i style="font-size:32px; color:fuchsia">.NET UI </i>Object</strong>
+            <center>
+                <table class="sunnysolution" border="1" cellpadding="10">
+                    <thead>
+                        <tr style="font-size: 16px; font-weight:bold; color:midnightblue">
+                            <th> Create Win Form
+                            <th> Introduction
+                        </tr>
+                    <tbody>
+                        <tr>
+                            <td class="sunnysolution" width="50%">
+                                <button onclick="OnCreate_Form1_SunnyForms2()"><b style="font-size:24px; color:darkgreen">Form App 1</b></button>
+                            </td>
+                            <td class="sunnysolution" width="50%" rowspan=5>
+                            </td>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="sunnysolution" width="50%">
+                                <button onclick="OnCreate_Form2_SunnyForms2()"><b style="font-size:24px; color:darkgreen">Form App 2</b></button>
+                            </td>
+                            <td class="sunnysolution" width="50%" rowspan=5>
+                            </td>
+                    </tbody>
+                </table>
+            </center>
+            <hr />
+
+
+
+            <p>
+                <button style="font-size: 18px; font-weight:bold; color:darkgreen" onclick="OnDockdemo()"><i>Press me to continus</i>...</button>&nbsp
+            </p>
+
             <p><button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument()">NewDoc</button></p>
             <p>
                 <h1 style="font-size: 16px; color:chocolate">
@@ -1027,7 +1331,7 @@
                         <tr style="font-size: 16px; font-weight:bold; color:midnightblue">
                             <th> 现代桌面软件面临的<i style="color:crimson">三个关键问题</i>
                             <th> The Universe的解决方案
-</tr>
+                        </tr>
                     <tbody>
                         <tr>
                             <td class="sunnysolution" width="50%">

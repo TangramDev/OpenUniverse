@@ -155,12 +155,19 @@
         <define tagName="gridTemplate"></define>
         <define tagName="cloud-form"></define>
         <ui>
-            <cloud-form objid="sunnymdiforms.MDIForm1,SunnyMDIForms" mdibkpageid="sunnymdiforms.bk,SunnyMDIForms" caption="Your First WinForm MDI Application Using Chromium Anywhere" id="Mainform">
+            <cloud-form objid="sunnymdiforms.MDIForm1,SunnyMDIForms" mdibkpageid="sunnymdiforms.bk,SunnyMDIForms" caption="Your Third Customized Cloud WinForm MDI Application" id="Mainform">
                 <mdiclient>
                     <default>
                         <cluster>
-                            <xobj id="tangramtabctrl" style="19">
-                                <xobj url="host" id="mainworkclient" caption="The Universe">
+                            <xobj id="tangramtabctrl" style="27">
+                                <xobj id='properties' rows='1' cols='2' height='300,0,' width='300,200,' middlecolor='RGB(255,224,192)' caption="Cloud CLR Form">
+                                    <xobj id="tangramtabctrl" style="18">
+                                        <xobj objid='' caption="test 1"></xobj>
+                                        <xobj id="" caption="test 2"></xobj>
+                                        <xobj objid='' caption="test 3"></xobj>
+                                    </xobj>
+                                    <xobj url="host" id="mainworkclient" caption="The Universe">
+                                    </xobj>
                                 </xobj>
                                 <xobj id="mfc" caption="Tangram for Application"></xobj>
                                 <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>

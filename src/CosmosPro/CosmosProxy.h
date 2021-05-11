@@ -41,14 +41,6 @@ using namespace System::Reflection;
 
 class CTangramWPFObjWrapper;
 
-class FormInfo
-{
-public:
-	FormInfo();
-	~FormInfo();
-	map<int, gcroot<ToolStripMenuItem^>> m_mapShortcutItem;
-};
-
 class CCosmosProxy : public ICosmosCLRImpl
 {
 public: 
@@ -66,7 +58,7 @@ public:
 	map<HWND, gcroot<ToolStripButton^>>					m_mapToolStripButton;
 
 	gcroot<Form^>										m_pCurrentPForm;
-	gcroot<System::Windows::Application^>				m_pCosmosWpfApp;
+
 	Object^ _getObject(Object^ key);
 	bool _insertObject(Object^ key, Object^ val);
 	bool _removeObject(Object^ key);

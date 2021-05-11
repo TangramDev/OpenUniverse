@@ -610,6 +610,10 @@
             //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
             cosmos.openUrl("host:WebPage/mdiformapp1.html|host:webpage/sunny.html", 200);
         }
+        function OpenMdiFormApp2() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp2.html|host:webpage/sunny.html", 200);
+        }
         function OpenMdiFormApp3() {
             //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
             cosmos.openUrl("host:WebPage/mdiformapp3.html|host:webpage/sunny.html", 200);
@@ -690,15 +694,23 @@
             cosmos.openUrl("host:sunny2.html|host:WebPage/newweb.html", 200);
         }
 
-        function OpenAppURL2() {
-            cosmos.openUrl("host:webpage/newweb.html", 100);
+        function OpenAppURL1() {
+            cosmos.openUrl("host:webpage/WebApp1.html", 100);
         }
-
+        function OpenAppURL2() {
+            cosmos.openUrl("host:webpage/WebApp2.html", 100);
+        }
+        function OpenAppURL3() {
+            cosmos.openUrl("host:webpage/WebApp3.html", 100);
+        }
         function OpenAppURL4() {
             cosmos.openUrl("host:webpage/WebApp4.html", 100);
         }
         function OpenAppURL5() {
             cosmos.openUrl("host:webpage/WebApp5.html", 100);
+        }
+        function OpenAppURL6() {
+            cosmos.openUrl("host:webpage/WebApp6.html", 100);
         }
 
         function OpenCWRURL() {
@@ -718,11 +730,11 @@
         <define tagName="gridTemplate"></define>
         <define tagName="cloud-form"></define>
         <ui>
-            <cloud-form objid="sunnymdiforms.MDIForm1,SunnyMDIForms" mdibkpageid="sunnymdiforms.bk,SunnyMDIForms" caption="Your First WinForm MDI Application Using Chromium Anywhere" id="Mainform">
+            <cloud-form objid="sunnymdiforms.MDIForm1,SunnyMDIForms" mdibkpageid="sunnymdiforms.bk,SunnyMDIForms" caption="Your Fouth Customized Cloud WinForm MDI Application" id="Mainform">
                 <mdiclient>
                     <default>
                         <cluster>
-                            <xobj id="tangramtabctrl" style="19">
+                            <xobj id="tangramtabctrl" style="13">
                                 <xobj url="host" id="mainworkclient" caption="The Universe">
                                 </xobj>
                                 <xobj id="mfc" caption="Tangram for Application"></xobj>
@@ -1229,26 +1241,29 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp科技发展的不同阶段，都会存在对应时代的经典之笔，以点缀那个时代的精彩，经典之所以被称之为“经典”，不仅仅是因为其价值本身，同时还意味着一种特定时期产生的深远影响……。我们应该怎样表达对经典的致敬？
                 <i style="color:chocolate">让经典顺应时代的节奏得以传承 </i>或许是向经典致敬的一种方式……。
                 我们很幸运，因为我们受益于大量的经典之作，<i style="color:orangered">是造就经典的那些人、那些成果让我们看得更远，激励我们不断的创造……</i>。
-            </p>   <hr />
-            <p>
+            </p>
+            <hr />
             <p>
                 <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument()">NewDoc</button>
-                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate1()">New Customized Doc1</button>
-                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate2()">New Customized Doc2</button>
-                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate3()">New Customized Doc3</button>
-                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate4()">New Customized Doc4</button>
-                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate5()">New Customized Doc5</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument2()">NewDoc2</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate1()">Cloud Doc1</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate2()">Cloud Doc2</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate3()">Cloud Doc3</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate4()">Cloud Doc4</button>
+                <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate5()">Cloud Doc5</button>
             </p>
-            <!--<button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument()">NewDoc</button>-->
-            <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocument2()">NewDoc2</button>
-            <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate6()">New Customized Doc6</button>
-            <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate7()">New Customized Doc7</button>
-            <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate8()">New Customized Doc8</button>
-            <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate9()">New Customized Doc9</button>
-            <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="NewDocTemplate10()">New Customized Doc10</button><hr />
-            <a href="#" onclick="OpenAppURL2();" style="font-size:24px;color:forestgreen"><b>Create a WebPage App</b></a>
-            <a href="#" onclick="OpenAppURL4();" style="font-size:24px;color:forestgreen"><b>Create a WebPage App4</b></a>
-            <a href="#" onclick="OpenAppURL5();" style="font-size:24px;color:forestgreen"><b>Create a WebPage App5</b></a>
+            <hr />
+            <a href="#" onclick="OpenAppURL1();" style="font-size:16px;color:forestgreen"><b>WebPage1</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL2();" style="font-size:16px;color:forestgreen"><b>WebPage2</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL3();" style="font-size:16px;color:forestgreen"><b>WebPage3</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL4();" style="font-size:16px;color:forestgreen"><b>WebPage4</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL5();" style="font-size:16px;color:forestgreen"><b>WebPage5</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="#" onclick="OpenAppURL6();" style="font-size:16px;color:forestgreen"><b>WebPage6</b></a>
             </p>
 
             <p>
@@ -1259,12 +1274,15 @@
                     &nbsp&nbsp&nbsp
                     <a href="#" onclick="OpenCWRURL();" style="color:blue"><i style="font-size: 20px;">Common Web Runtime</i></a>
                     &nbsp&nbsp&nbsp
-                    <a href="#" onclick="OpenCERURL();" style="color:forestgreen">Common Eclipse Runtime</a><hr />
-                    <a href="#" onclick="OpenMdiApp1();" style="font-size:24px;color:forestgreen"><b>Create WinMDIForm App 1</b></a>
-                    &nbsp&nbsp&nbsp
-                    <a href="#" onclick="OpenMdiFormApp1();" style="font-size:24px;color:forestgreen"><b>Create WinMDIForm App 2</b></a>
-                    &nbsp&nbsp&nbsp
-                    <a href="#" onclick="OpenMdiFormApp3();" style="font-size:24px;color:forestgreen"><b>Create WinMDIForm App 3</b></a>
+                    <a href="#" onclick="OpenCERURL();" style="color:forestgreen">Common Eclipse Runtime</a>
+                    <hr />
+                    <a href="#" onclick="OpenMdiFormApp1();" style="font-size:24px;color:forestgreen"><b>Cloud WinForm1</b></a>
+                    &nbsp&nbsp&nbsp                                                                            
+                    <a href="#" onclick="OpenMdiFormApp2();" style="font-size:24px;color:forestgreen"><b>Cloud WinForm2</b></a>
+                    &nbsp&nbsp&nbsp                                                                            
+                    <a href="#" onclick="OpenMdiFormApp3();" style="font-size:24px;color:forestgreen"><b>Cloud WinForm3</b></a>
+                    &nbsp&nbsp&nbsp                                                                            
+                    <a href="#" onclick="OpenMdiFormApp4();" style="font-size:24px;color:forestgreen"><b>Cloud WinForm4</b></a>
                 </h1>
             </p>
             <center>

@@ -32,7 +32,6 @@
 
 #include <io.h>
 #include <stdio.h>
-#include "Markup.h"
 
 #include <string>
 #include <iostream>
@@ -87,16 +86,6 @@ ICosmos* GetCosmos()
 	return theApp.m_pCosmos;
 }
 
-FormInfo::FormInfo()
-{
-
-}
-
-FormInfo::~FormInfo()
-{
-	m_mapShortcutItem.clear();
-}
-
 CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);//TabPage|TabControl|
@@ -106,7 +95,6 @@ CCosmosProxy::CCosmosProxy() : ICosmosCLRImpl()
 	m_pCurrentPForm = nullptr;
 	m_strCurrentWinFormTemplate = _T("");
 	Forms::Application::EnableVisualStyles();
-	m_pCosmosWpfApp = nullptr;
 	m_pSystemAssembly = nullptr;
 	m_pOnLoad = nullptr;
 	m_pOnCtrlVisible = nullptr;
@@ -1301,6 +1289,13 @@ void CCosmosProxy::OnLoad(System::Object^ sender, System::EventArgs^ e)
 				pToolStripButton->Text = L"default";
 				pToolStripButton->Tag = L"default";
 				pToolStripButton->Checked = true;
+				CTangramXmlParse* pChild = m_Parse.GetChild(_T("defaultbtntips"));
+				if (pChild)
+					pToolStripButton->ToolTipText = marshal_as<String^>(pChild->text());
+
+				pChild = m_Parse.GetChild(_T("defaultbtntag"));
+				if (pChild)
+					pToolStripButton->Tag = marshal_as<String^>(pChild->text());
 				//pToolStripButton->CheckOnClick = true;
 				//pToolStripButton->ToolTipText = BSTR2STRING(strTips);
 				pToolStripButton->Click += gcnew System::EventHandler(&OnClick);
@@ -1377,12 +1372,15 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 				{
 					pWebPage = (IWebPage*)nHandle;
 					CTangramXmlParse* pChild = m_Parse.GetChild(_T("webui"));
-					if (pChild && pWebPage != nullptr)
+					if (pWebPage != nullptr)
 					{
 						pPage = gcnew WebPage(pWebPage);
 						pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
-						IXobj* pXobj = nullptr;
-						pWebPage->Observe(CComBSTR(strTagName), CComBSTR(pChild->xml()), &pXobj);
+						if (pChild)
+						{
+							IXobj* pXobj = nullptr;
+							pWebPage->Observe(CComBSTR(strTagName), CComBSTR(pChild->xml()), &pXobj);
+						}
 					}
 				}
 				Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(strObjID));
@@ -1572,16 +1570,14 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								break;
 							case 0:
 							case 2:
-								thisForm->StartPosition = FormStartPosition::CenterParent;
-								thisForm->WindowState = FormWindowState::Minimized;
-
-
 								if (nModel)
 									thisForm->Show(pPage);
 								else
-								{
 									thisForm->Show();
-								}
+
+								RECT rc;
+								::GetWindowRect(pPage->m_hWnd, &rc);
+								thisForm->SetDesktopLocation(rc.left, rc.top);
 								::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 								break;
 							}
@@ -2578,30 +2574,27 @@ void CCosmosProxy::OnClick(Object^ sender, EventArgs^ e)
 			{
 				theAppProxy.m_pCurrentPForm = form;
 				if (button->Tag != nullptr)
+					//if (button->Name == L"defaultbtn")
 				{
 					HWND hForm = (HWND)form->Handle.ToPointer();
-					String^ strXml = button->Tag->ToString();
-					if (strXml == L"default")
+					ToolStripButton^ pBtn = (ToolStripButton^)button;
+					if (pBtn->Name == L"defaultbtn")
 					{
-						ToolStripButton^ pBtn = (ToolStripButton^)button;
-						if (pBtn->Name == L"defaultbtn")
+						LRESULT lRes = ::SendMessage(hForm, WM_COSMOSMSG, 0, 20210509);
+						if (lRes == 0)
 						{
-							LRESULT lRes = ::SendMessage(hForm, WM_COSMOSMSG, 0, 20210509);
-							if (lRes == 0)
-								pBtn->CheckState = CheckState::Checked;
-							else
-								pBtn->CheckState = CheckState::Unchecked;
-							//if (pBtn->CheckState == CheckState::Checked)
-							//{
-							//	pBtn->CheckState = CheckState::Unchecked;
-							//}
-							//else
-							//{
-							//	pBtn->CheckState = CheckState::Checked;
-							//}
+							pBtn->CheckState = CheckState::Checked;
 						}
+						else
+						{
+							pBtn->CheckState = CheckState::Unchecked;
+						}
+						String^ strTips = pBtn->ToolTipText;
+						pBtn->ToolTipText = button->Tag->ToString();
+						pBtn->Tag = strTips;
 						return;
 					}
+					String^ strXml = button->Tag->ToString();
 					if (String::IsNullOrEmpty(strXml) == false)
 					{
 						::SendMessage(hForm, WM_COSMOSMSG, 0, 20210415);
@@ -2789,10 +2782,6 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 					if (theApp.m_pCosmos && !theApp.m_pCosmosImpl->m_bIsEclipseInit)
 					{
 						theApp.m_pCosmos->InitEclipseApp();
-						if (theApp.m_bHostApp && theAppProxy.m_pCosmosWpfApp)
-						{
-							theApp.ExitJVM();
-						}
 					}
 				}
 				break;
@@ -2815,10 +2804,6 @@ void CCosmosProxy::CosmosAction(BSTR bstrXml, void* pvoid)
 		}
 		if (strXml.CompareNoCase(_T("EndInitEclipseApp")) == 0)
 		{
-			if (theApp.m_bHostApp && m_pCosmosWpfApp)
-			{
-				theApp.ExitJVM();
-			}
 			return;
 		}
 		if (strXml.CompareNoCase(_T("ExternAction:")) >= 0)
@@ -2982,15 +2967,6 @@ void CCosmos::OnCosmosClose(CosmosCloseState state)
 		while (pCollection->Count > 0) {
 			Form^ pForm = pCollection[0];
 			pForm->Close();
-		}
-		if (theAppProxy.m_pCosmosWpfApp)
-		{
-			WindowCollection^ pWnds = theAppProxy.m_pCosmosWpfApp->Windows;
-			int nCount = pWnds->Count;
-			for (int i = 0; i < pWnds->Count; i++) {
-				Window^ pWnd = pWnds[i];
-				pWnd->Close();
-			}
 		}
 		AtlTrace(_T("*************End CCosmos::OnClose:  ****************\n"));
 	}
