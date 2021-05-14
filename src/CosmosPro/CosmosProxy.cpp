@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105080004
+ *           Web Runtime for Application - Version 1.0.1.202105140005
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1578,7 +1578,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 								RECT rc;
 								::GetWindowRect(pPage->m_hWnd, &rc);
 								thisForm->SetDesktopLocation(rc.left, rc.top);
-								::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+								//::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
 								break;
 							}
 						}

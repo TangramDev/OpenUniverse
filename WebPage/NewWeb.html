@@ -1,0 +1,532 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>全新的Web，全新的世界</title>
+    <link rel="icon" href="universe.png" sizes="32x32">
+    <style type="text/css">
+        .comments {
+            width: 100%; /*自动适应父布局宽度*/
+            height: auto;
+            overflow: auto;
+            word-break: break-all;
+        }
+
+        <style type="text/css" >
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+    <style type="text/css">
+        table.dock, td.sunnysolution, th.sunnysolution {
+            border: 5px solid blue
+        }
+
+        table.dock2 {
+            border: 1px solid blue;
+            border-collapse: collapse;
+        }
+
+        .outTable {
+            width: 100%;
+            height: auto;
+        }
+
+        .inTable {
+            width: 100%;
+            height: 100%;
+        }
+
+        .outTable td {
+            border: 1px solid #ccc;
+        }
+
+        .div {
+            width: 600px;
+            height: auto;
+        }
+
+        td.dotnetuitype {
+            height: 50px;
+            vertical-align: top;
+        }
+    </style>
+    <script type="text/javascript">
+        cosmos.onXobjCreated = function (e) {
+            switch (e.xobj.name) {
+                case "SunnyForm_Form1":
+                case "SunnyForm_Form3":
+                case "SunnyForm_Form5":
+                    {
+                        e.xobj.addEventListener("button1", "OnClick", function (e) {
+                            switch (e.name) {
+                                case "SunnyForm_Form1":
+                                    {
+                                        e.grid.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_0").outerHTML);
+                                        var grid_ = e.getXobj("SunnyForm_Form6");
+                                        if (!!grid_) {
+                                            grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_1").outerHTML);
+                                        }
+
+                                        grid_ = e.getXobj("SunnyForm_Form4");
+                                        if (!!grid_) {
+                                            grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_2").outerHTML);
+                                        }
+                                    }
+                                    break;
+                                case "SunnyForm_Form3":
+                                    {
+                                        e.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_0").outerHTML);
+                                    }
+                                    break;
+                            }
+                        });
+                        e.xobj.onCloudMessageForXobj = function (e) {
+                            switch (e.name) {
+                                case "SunnyForm_Form1":
+                                    {
+                                        switch (e.msgID) {
+                                            case "testButton1_click":
+                                                {
+                                                    var grid_ = e.xobj.getXobj("SunnyForm_Form10");
+                                                    if (!!grid_) {
+                                                        grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_1").outerHTML);
+                                                    }
+                                                    grid_ = e.xobj.getXobj("SunnyForm_Form5");
+                                                    if (!!grid_) {
+
+                                                        grid_.setStr("msgID", "testButtonClickCallback");
+                                                        grid_.setStr("callbackval", "just a test");
+                                                        grid_.sendMessage(grid_);
+                                                    }
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                case "SunnyCtrl_UserControl1":
+                    {
+                        e.xobj.onCloudMessageForXobj = function (e) {
+                            switch (e.msgID) {
+                                case "UserControl1_testButton1_click":
+                                    {
+                                        var grid_ = e.xobj.getXobj("SunnyCtrl_UserControl6");
+                                        if (!!grid_) {
+
+                                            grid_.setStr("msgID", "UserControl6_testButtonClickCallback");
+                                            grid_.setStr("callbackval", "just a test");
+                                            grid_.sendMessage(grid_);
+                                        }
+                                        grid_ = e.xobj.getXobj("SunnyCtrl_UserControl1")
+                                        if (!!grid_) {
+                                            grid_.setStr("msgID", "UserControl6_testButtonClickCallback");
+                                            grid_.setStr("callbackval", "just a test");
+                                            grid_.sendMessage(grid_);
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                case "SunnyCtrl_UserControl4":
+                    e.xobj.addEventListener("button1", "OnClick", function (xobj) {
+                        xobj.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_0").outerHTML);
+                        var grid_ = xobj.getXobj("SunnyCtrl_UserControl6");
+                        if (!!grid_) {
+                            grid_.Observe("panel1", "xxx", cosmos.getElementById("form_panel1_1").outerHTML);
+                        }
+
+                        grid_ = xobj.getXobj("SunnyCtrl_UserControl1");
+                        if (!!grid_) {
+                            grid_.Observe("panel1", "panel1", cosmos.getElementById("form_panel1_2").outerHTML);
+                        }
+                    });
+                    e.xobj.onCloudMessageForXobj = function (e) {
+                    }
+                    break;
+            }
+        }
+
+        cosmos.onCosmosMessageReceived = function (e) {
+            switch (e.xobj.getStr("msgID")) {
+                case "TANGRAMAPP_READY":
+                    {
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        function OnDockdemo() {
+            cosmos.Observe("dockdemo", cosmos.getElementById("dockdemo").outerHTML);
+        }
+        function OnDockdemo2() {
+            cosmos.Observe("dockdemo2", cosmos.getElementById("dockdemo2").outerHTML);
+        }
+        function OnDockdemo3() {
+            cosmos.Observe("dockdemo3", cosmos.getElementById("dockdemo3").outerHTML);
+        }
+        function NewDocument() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "test1", "");
+        }
+
+        function NewDocument2() {
+            cosmos.sendMessage("COSMOS_CREATE_DOC", ".abc", "default", "");
+        }
+        function OpenAppURL1() {
+            cosmos.openUrl("host:webpage/WebApp1.html", 100);
+        }
+        function OpenAppURL2() {
+            cosmos.openUrl("host:webpage/WebApp2.html", 100);
+        }
+        function OpenAppURL3() {
+            cosmos.openUrl("host:webpage/WebApp3.html", 100);
+        }
+        function OpenAppURL4() {
+            cosmos.openUrl("host:webpage/WebApp4.html", 100);
+        }
+        function OpenAppURL5() {
+            cosmos.openUrl("host:webpage/WebApp5.html", 100);
+        }
+        function OpenAppURL6() {
+            cosmos.openUrl("host:webpage/WebApp6.html", 100);
+        }
+        function OpenMdiApp1() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiform1.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp1() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp1.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp2() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp2.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp3() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp3.html|host:webpage/sunny.html", 200);
+        }
+        function OpenMdiFormApp4() {
+            //    cosmos.openUrl("host:WebPage/mdiform1.html", 200);
+            cosmos.openUrl("host:WebPage/mdiformapp4.html|host:webpage/sunny.html", 200);
+        }
+    </script>
+</head>
+<body background="newworld.jpg">
+    <cosmos>
+        <define tagName="webViewport"></define>
+        <define tagName="gridTemplate"></define>
+
+        <cluster>
+            <dockdemo id="dockdemo">
+                <cluster>
+                    <xobj style="17">
+                        <xobj rows="1" cols="2" width="200,600" caption="New Web,New World">
+                            <xobj rows="2" cols="1" height="200,600">
+                                <xobj objid="nucleus"></xobj>
+                                <xobj objid="SunnyCtrl.democtrl,SunnyCtrl"></xobj>
+                            </xobj>
+                            <xobj style="18" caption="Introduction to Open Universe">
+                                <xobj caption="Using WinForm"></xobj>
+                                <xobj caption="Using WPF Control"></xobj>
+                                <xobj caption="Using UserControl"></xobj>
+                            </xobj>
+                        </xobj>
+                    </xobj>
+                </cluster>
+            </dockdemo>
+            <dockdemo id="dockdemo2">
+                <cluster>
+                    <xobj style="17">
+                        <xobj rows="1" cols="2" width="400,600" caption="New Web,New World">
+                            <xobj style="18" caption="Introduction to Open Universe">
+                                <xobj objid="SunnyForms.Form1,SunnyForms" caption="SunnyForm-Form1" id="SunnyForm_Form1">
+                                    <panel1>
+                                        <default>
+                                            <cluster>
+                                                <xobj rows="3" cols="1" height="200,300,100">
+                                                    <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl"></xobj>
+                                                    <xobj objid="nucleus"></xobj>
+                                                    <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl"></xobj>
+                                                </xobj>
+                                            </cluster>
+                                        </default>
+                                    </panel1>
+                                </xobj>
+                                <xobj objid="SunnyForms.Form2,SunnyForms" caption="SunnyForm-Form2" id="SunnyForm_Form2"></xobj>
+                                <xobj objid="SunnyForms.Form3,SunnyForms" caption="SunnyForm-Form3" id="SunnyForm_Form3"></xobj>
+                            </xobj>
+                            <xobj rows="2" cols="1" height="400,600">
+                                <xobj rows="1" cols="2" width="400,300">
+                                    <xobj objid="nucleus"></xobj>
+                                    <xobj style="47">
+                                        <xobj objid="SunnyForms.Form4,SunnyForms" caption="SunnyForm-Form4" id="SunnyForm_Form4"></xobj>
+                                        <xobj objid="SunnyForms.Form5,SunnyForms" caption="SunnyForm-Form5" id="SunnyForm_Form5"></xobj>
+                                    </xobj>
+                                </xobj>
+                                <xobj style="17">
+                                    <xobj objid="SunnyForms.Form6,SunnyForms" caption="SunnyForm-Form6" id="SunnyForm_Form6"></xobj>
+                                    <xobj objid="SunnyForms.Form7,SunnyForms" caption="SunnyForm-Form7" id="SunnyForm_Form7"></xobj>
+                                    <xobj objid="SunnyForms.Form8,SunnyForms" caption="SunnyForm-Form8" id="SunnyForm_Form8"></xobj>
+                                </xobj>
+                            </xobj>
+                        </xobj>
+                        <xobj objid="SunnyForms.Form9,SunnyForms" caption="SunnyForm-Form9" id="SunnyForm_Form9"></xobj>
+                        <xobj objid="SunnyForms.Form10,SunnyForms" caption="SunnyForm-Form10" id="SunnyForm_Form10"></xobj>
+                    </xobj>
+                </cluster>
+            </dockdemo>
+            <dockdemo id="dockdemo3">
+                <cluster>
+                    <xobj style="19">
+                        <xobj rows="1" cols="2" width="200,600" caption="New Web,New World">
+                            <xobj rows="2" cols="1" height="300,600">
+                                <xobj rows="1" cols="2" width="400,300">
+                                    <xobj style="29">
+                                        <xobj objid="SunnyCtrl.Usercontrol4,SunnyCtrl" caption="SunnyCtrl-UserControl4" id="SunnyCtrl_UserControl4"></xobj>
+                                        <xobj objid="" caption="SunnyCtrl-UserControl5" id="mdiclient"></xobj>
+                                    </xobj>
+                                    <xobj objid="nucleus"></xobj>
+                                </xobj>
+                                <xobj style="13">
+                                    <xobj objid="SunnyCtrl.Usercontrol6,SunnyCtrl" caption="SunnyCtrl-UserControl6" id="SunnyCtrl_UserControl6"></xobj>
+                                    <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl" caption="SunnyCtrl-UserControl7" id="SunnyCtrl_UserControl7"></xobj>
+                                    <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl" caption="SunnyCtrl-UserControl8" id="SunnyCtrl_UserControl8"></xobj>
+                                </xobj>
+                            </xobj>
+                            <xobj style="18" caption="Introduction to Open Universe">
+                                <xobj objid="SunnyCtrl.Usercontrol1,SunnyCtrl" caption="SunnyCtrl-UserControl1" id="SunnyCtrl_UserControl1"></xobj>
+                                <xobj objid="SunnyCtrl.Usercontrol2,SunnyCtrl" caption="SunnyCtrl-UserControl2" id="SunnyCtrl_UserControl2"></xobj>
+                                <xobj objid="SunnyCtrl.Usercontrol3,SunnyCtrl" caption="SunnyCtrl-UserControl3" id="SunnyCtrl_UserControl3"></xobj>
+                            </xobj>
+                        </xobj>
+                        <xobj objid="SunnyCtrl.Usercontrol9,SunnyCtrl" caption="SunnyCtrl-UserControl9" id="SunnyCtrl_UserControl9"></xobj>
+                        <xobj objid="SunnyCtrl.Usercontrol10,SunnyCtrl" caption="SunnyCtrl-UserControl10" id="SunnyCtrl_UserControl10"></xobj>
+                        <xobj caption="Introduction of Open Universe"></xobj>
+                    </xobj>
+                </cluster>
+            </dockdemo>
+            <testpanel id="form_panel1_0">
+                <cluster>
+                    <xobj rows="3" cols="1" height="200,300,100">
+                        <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl"></xobj>
+                        <xobj objid="nucleus"></xobj>
+                        <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl"></xobj>
+                    </xobj>
+                </cluster>
+            </testpanel>
+            <testpanel id="form_panel1_1">
+                <cluster>
+                    <xobj style="33">
+                        <xobj objid="nucleus" caption="I'm panel1"></xobj>
+                        <xobj objid="SunnyForms.Form6,SunnyForms" caption="SunnyForms-Form6"></xobj>
+                        <xobj objid="SunnyForms.Form9,SunnyForms" caption="SunnyForms-Form9"></xobj>
+                    </xobj>
+                </cluster>
+            </testpanel>
+            <testpanel id="form_panel1_2">
+                <cluster>
+                    <xobj style="23">
+                        <xobj objid="nucleus" caption="I'm panel1"></xobj>
+                        <xobj objid="SunnyCtrl.Usercontrol7,SunnyCtrl" caption="SunnyCtrl-UserControl2"></xobj>
+                        <xobj objid="SunnyCtrl.Usercontrol8,SunnyCtrl" caption="SunnyCtrl-UserControl3"></xobj>
+                    </xobj>
+                </cluster>
+            </testpanel>
+        </cluster>
+
+    </cosmos>
+    <strong style="font-size:40px; color:indianred">The Universe: <i style="font-size:40px; color:fuchsia">给开发者的 </i>全新应用世界</strong>
+    <p><center><strong style="font-size:36px; color:blue">这里是通向新Web世界的入口...</strong></center></p>
+    <p>
+        <button style="font-size: 18px; font-weight:bold; color:darkgreen" onclick="OnDockdemo()"><i>Press me to continus</i>...</button>&nbsp
+        <button style="font-size: 18px; font-weight:bold; color:crimson" onclick="OnDockdemo2()"><i>看看The Universe是怎样动态组织WinForm对象</i>...</button>&nbsp
+        <button style="font-size: 18px; font-weight:bold; color:darkmagenta" onclick="OnDockdemo3()"><i>看看The Universe是怎样动态组织Usercontrol对象</i>...</button>
+    </p>
+    <hr />
+    <p>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp标准的Web页面，已经缔造了一个丰富多彩的互联网世界，其丰富的表现力使得桌面应用显得相形见绌，
+            其灵活、易于制作等诸多优势也充分的展现了互联网的威力。不容否认，互联网浏览器是形成这一切的推动者；如何在桌面应用系统之上复制这个模式？
+            这个考虑正是我们的切入点。将互联网浏览器编译成桌面应用的可加载模块，这样就可以延续Web的表现力，为此我们需要一种新的兼容于标准页面的WebPage……
+        </b>
+    </p>
+    <p>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp如果我们需要一种新的页面，那么如何体现这个“新”？让我们看看数学的发展是怎样的一种模式。我们知道，最初的人类，
+            应该只有自然数的概念，随着社会的发展，人们需要物质交换，进而产生了“分数”、“负数”等基本元素，这样数的概念被扩展了，现代代数理论基于此形成了“代数数论”
+            这个优雅的理论，其基本要点是：为了使得某一类代数方程“可解”，人们必须遵循一种“代数扩张”的原则，使得对应的方程的解可以存在，从有理数到无理数、由无理数
+            到复数，都可以按照这类规范逐步形成。我们知道，一系列经典的桌面客户端开发技术，已经形成了大量的组件，例如：ActiveX控件、.NET控件、C++View等等，
+            能否将其逐一加入到Web DOM，使得页面更加“应用化”？
+        </b>
+    </p>
+    <center>
+        <p>
+            <a href="javascript:void(0);" onclick="OpenAppURL1();" style="font-size:24px;color:blue"><b>WebPage1</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenAppURL2();" style="font-size:24px;color:blue"><b>WebPage2</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenAppURL3();" style="font-size:24px;color:blue"><b>WebPage3</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenAppURL4();" style="font-size:24px;color:blue"><b>WebPage4</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenAppURL5();" style="font-size:24px;color:blue"><b>WebPage5</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenAppURL6();" style="font-size:24px;color:blue"><b>WebPage6</b></a>
+            <hr />
+        </p>
+    </center>
+    <p>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp数学发展的历史，其实就是一种“扩张”史，为了满足某种需要，人们不断的增加新的元素，“数”的发展史是这样，微分方程也是这样，
+            为了使得某类微分方程是可解的，人们发明了“广义”函数；纵观数学的发展，可以说没有“扩张”的概念，就不会有今日的数学。回到互联网大行其道的今天，桌面应用与Web应用
+            之间明显的存在一个“鸿沟”，由于这个鸿沟的存在，我们不得不面对“桌面”与“Web”两个世界，从桌面应用的角度看桌面应用缺失很多东西，显得非常的“尴尬”……
+        </b>
+    </p>
+    <p>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspWeb页面的“扩张”，相当于代数数论中的代数域扩张，我们需要一种新的页面技术，使得那些可编程组件可以“友好”的成为DOM元素，
+            同时不破坏Web技术赖以支撑的“沙箱”机制，这一点是The Universe的核心问题，随着可编程组件不断的融入DOM，应用页面的表现力就会变得越发生动，由于兼顾了“Web”与“桌面”
+            的双重优势，因此一个全新的Web帷幕逐步拉开了……
+        </b>
+    </p>
+    <p>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThe Universe本质上是一种“Web扩张”技术，其基本要点是将一切都看作“DOM”，或者“DOM元素形成的页面”，针对不同的场景，
+            人们需要不同的页面，以此来确保应用系统的互联网弹性。为此，我们需要改良标准Web页面的作用域，我们需要一种广义的“浏览器”，可以说WinForm窗体、MFC、Eclipse View等等
+            都可能是WebPage的加载器，都是某种意义上的浏览器，为此我们需要借鉴数学上的某种抽象能力，需要将传统意义上根本不是页面的对象（例如WinForm）看作为一种页面，
+            颇有“波粒二象性”的意味，即：任何一种可编程组件本身就具备“Web”与“桌面”双重特征，只不过目前我们仅仅挖掘了其中的一个侧面，德布罗意的“物质波”是打破观念的一次巨大推动，
+            现在需要我们用类似的观念来统一“桌面”与“Web”，只有这样，我们才可能让经典得以延续……
+        </b>
+    </p>
+    <p>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp基于互联网的应用生态概念就是建立在这样的背景之下：我们首先看到了Web页面的表现力、灵活性、易于发布等诸多优势；我们也
+            注意到了桌面软件庞大的技术积累，这两个方面恰好是“本地”与“网络”两个侧面，如何将二者的优势恰到好处的结合，我们认为这个结合点是形成互联网应用生态的关键。我们的具体
+            思路是，将标准的DOM元素、COM组件、.NET组件、C++组件甚至考虑到Java组件合并为一个巨大的“组件空间”，看看能否有一个更好的页面合成规范，这一考虑方式很接近于近代数学的
+            基本方式，在数学里，人们习惯于将所有的多项式（基于某个域的多项式）放在一起，由此形成的数学理论是极具典型的理论，例如，代数几何就是这样的出发点发展起来的；类似的思维
+            在数学理论里面是司空见惯的。那么，如果我们考虑一个小一点的模型，例如，将Web DOM与所有的.NET控件放在一起会怎么样？以此为“基”，会形成什么样的结构？虽然这样的考虑
+            作用域相对小，但也会促进一种页面的形成，The Universe就是类似的这样的出发点，我们充分的评估了Windows平台上的几大类典型的组件，以此形成了一类应用的公共基础……
+        </b>
+    </p>
+
+    <p>
+        <strong style="font-size:24px; color:blue">应用页面概念的形成，或许会彻底改变人们组织桌面应用的方式...</strong><br />
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp从组织方式上看，应用事实上就是一组页面，其第一个页面或许就是应用系统形态的具体体现，不同于传统的桌面系统，大多数情况下，传统桌面系统的第一个窗口差不多决定了应用类型，
+            例如，如果你的第一个窗体是WinForm，那么我们基本可以断定这个系统是.NET应用，现在的情况是，你的第一个页面是由页面描述决定的，这一点很像线性微分方程或者线性代数的线性方程组，
+            通常情况下这类方程都有无穷多解，有通解、特解之说，例如，偏微分方程，我们通常需要边值条件、初值条件才能够确定有意义的解，类似的，一个特定的应用系统，一般说来需要一个或者几个初始化页面，这意味着，一个程序的启动窗口，会随着初始化页面的不同而不同……
+        </b>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp我们知道，对.NET而言，通常一个dll库，可以包含任意数量的控件或者Form，如果这些元素都可以做为Web DOM元素，那么每一个Form或者控件会对应无穷多个具体的运行太，
+            以下示范给出了一个单一的MDI窗体，在Web页面描述之后，对应的四种运行时状态：
+        </b>
+    </p>
+    <center>
+        <p>
+            <a href="javascript:void(0);" onclick="OpenMdiFormApp1();" style="font-size:24px;color:blue"><b>CloudMDIForm1</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenMdiFormApp2();" style="font-size:24px;color:blue"><b>CloudMDIForm2</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenMdiFormApp3();" style="font-size:24px;color:blue"><b>CloudMDIForm3</b></a>
+            &nbsp&nbsp&nbsp
+            <a href="javascript:void(0);" onclick="OpenMdiFormApp4();" style="font-size:24px;color:blue"><b>CloudMDIForm4</b></a>
+        </p>
+    </center>
+    <hr />
+    <p>
+        <b style="font-size:20px; color:darkgreen">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp一旦各种窗体、UI可以用DOM描述，那么“DOM Define Software”的基本设想就会逐步成为现实，我们将这个过程称之为“应用页面化”。
+            由于页面可以在应用系统运营的过程中动态在家啊，以此，页面化赋予应用系统一个天然的“应用生态”，而且这个生态依赖的元素要远远多于标准的DOM，应用系统的弹性也就自然而然的形成了……
+        </b>
+    </p>
+    <hr />
+    <br />
+    <strong style="font-size:32px; color:darkred">Dock: The attribute of being familiar and unfamiliar</strong>
+    <p style="font-size: 20px; font-weight:bold; color:midnightblue">
+        Every .NET UI (WinForm, Usercontrol, WPF) object has a Dock property, which has always existed since the birth of the .NET Framework. Over the years, we have become accustomed to the mature use of the Dock attribute, and our thinking has fallen into inertia, forming a blind spot. Generally speaking, the Dock property divides UI objects into two categories, as shown in the table on the right.
+        <center>
+            <table class="dock" border="5">
+                <thead>
+                    <tr style="font-size: 18px; font-weight:bold; color:midnightblue">
+                        <th> About Dock Attribute
+                        <th width="300"> Controls are classified by Dock Attribute
+                    </tr>
+                <tbody>
+                    <tr>
+                        <td>
+    <p style="font-size: 20px; font-weight:bold; color:midnightblue">
+        Because the Dock attribute is the second type of control, it must depend on a specific control. This dependency determines that <i style=" font-weight: bold; color: red; text-decoration: underline">this type of control generally cannot be the main bearing control of a certain type of content</i>.
+    </p>
+    <p style="font-size: 20px; font-weight:bold; color:midnightblue">
+        The first type of control includes the following two situations:
+        <ul style="font-size: 18px; font-weight:900; color:mediumvioletred">
+            <li>The control itself is a child object of another .NET UI control</li>
+            <li>Is Another Child Window of a non-.NET UI object (DockStyle.None)</li>
+        </ul>
+    </p>
+    </td>
+    <td class="dotnetuitype">
+        <center>
+            <table border="1" frame="void" class="dock2">
+                <thead>
+                    <tr style="font-size: 18px; font-weight:bold; color:midnightblue">
+                        <th> Dock attribute value of the first type
+                        <th> Dock attribute value of the second type
+                    </tr>
+                <tbody>
+                    <tr>
+                        <td class="dotnetuitype">
+                            <ol style="font-size: 20px; font-weight:900; color:darkblue">
+                                <li>DockStyle.None</li>
+                                <li>DockStyle.Fill</li>
+                            </ol>
+                        </td>
+                        <td class="dotnetuitype">
+                            <ol style="font-size: 18px; font-weight:900; color:mediumvioletred">
+                                <li>DockStyle.Left</li>
+                                <li>DockStyle.Top</li>
+                                <li>DockStyle.Right</li>
+                                <li>DockStyle.Bottom</li>
+                            </ol>
+                        </td>
+                </tbody>
+            </table>
+        </center>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    </center>
+    <br />
+    <strong style="font-size:32px; color:darkblue">Dynamic, Descriptive Programming Model starts from the first type of control...</strong>
+    <p style="font-size: 20px; font-weight:bold; color:midnightblue">
+        Under normal circumstances, a WinForm form will contain at least one first-class .NET UI object. Let us see what is hidden by the Dock property?
+    </p>
+</body>
+</html>
