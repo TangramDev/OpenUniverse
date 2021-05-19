@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -40,17 +40,16 @@ namespace OfficePlus
 #ifdef _DEBUG
 			g_pCosmos->m_nOfficeDocs++;
 #endif			
-			m_bCreating						= FALSE;
-			m_pDocGalaxyCluster				= nullptr;
-			m_pGalaxy						= nullptr;
-			m_pWorkBook						= nullptr;
-			m_pSheetNode					= nullptr;
-			m_pTaskPaneGalaxyCluster		= nullptr;
-			m_pTaskPaneGalaxy				= nullptr;
-			m_strDocXml						= _T("");
-			m_strTaskPaneXml				= _T("");
-			m_strDefaultSheetXml			= _T("");
-
+			m_bCreating = FALSE;
+			m_pDocGalaxyCluster = nullptr;
+			m_pGalaxy = nullptr;
+			m_pWorkBook = nullptr;
+			m_pSheetNode = nullptr;
+			m_pTaskPaneGalaxyCluster = nullptr;
+			m_pTaskPaneGalaxy = nullptr;
+			m_strDocXml = _T("");
+			m_strTaskPaneXml = _T("");
+			m_strDefaultSheetXml = _T("");
 		}
 
 		CExcelWorkBook::~CExcelWorkBook(void)
@@ -63,60 +62,60 @@ namespace OfficePlus
 		void CExcelWorkBook::InitWorkBook()
 		{
 			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
-			 
+
 			auto t = create_task([pAddin, this]()
-			{
-				CoInitializeEx(NULL, COINIT_MULTITHREADED);
-				if (m_strDocXml==_T(""))
 				{
-					m_strDocXml = pAddin->GetDocXmlByKey(m_pWorkBook, CComBSTR(L"tangram"));
-					CTangramXmlParse m_Parse;
-					m_Parse.LoadXml(m_strDocXml);
-					m_strTaskPaneTitle = m_Parse.attr(_T("title"), _T("TaskPane"));
-					m_nWidth = m_Parse.attrInt(_T("width"), 200);
-					m_nHeight = m_Parse.attrInt(_T("height"), 300);
-					m_nMsoCTPDockPosition = (MsoCTPDockPosition)m_Parse.attrInt(_T("dockposition"), 4);
-					m_nMsoCTPDockPositionRestrict = (MsoCTPDockPositionRestrict)m_Parse.attrInt(_T("dockpositionrestrict"), 3);
-
-					CTangramXmlParse* pChild = m_Parse.GetChild(_T("default"));
-					if (pChild == nullptr)
+					CoInitializeEx(NULL, COINIT_MULTITHREADED);
+					if (m_strDocXml == _T(""))
 					{
-						CoUninitialize();
-						return;
+						m_strDocXml = pAddin->GetDocXmlByKey(m_pWorkBook, CComBSTR(L"tangram"));
+						CTangramXmlParse m_Parse;
+						m_Parse.LoadXml(m_strDocXml);
+						m_strTaskPaneTitle = m_Parse.attr(_T("title"), _T("TaskPane"));
+						m_nWidth = m_Parse.attrInt(_T("width"), 200);
+						m_nHeight = m_Parse.attrInt(_T("height"), 300);
+						m_nMsoCTPDockPosition = (MsoCTPDockPosition)m_Parse.attrInt(_T("dockposition"), 4);
+						m_nMsoCTPDockPositionRestrict = (MsoCTPDockPositionRestrict)m_Parse.attrInt(_T("dockpositionrestrict"), 3);
+
+						CTangramXmlParse* pChild = m_Parse.GetChild(_T("default"));
+						if (pChild == nullptr)
+						{
+							CoUninitialize();
+							return;
+						}
+						m_strDefaultSheetXml = pChild->xml();
 					}
-					m_strDefaultSheetXml = pChild->xml();
-				}
-				else
-				{
-					pAddin->AddDocXml(m_pWorkBook, CComBSTR(m_strDocXml), CComBSTR(L"tangram"));
-				}
-				CoUninitialize();
-			}).then([pAddin,this]()
-			{
-				CString strKey = _T("<cluster>");
-				CString strData = _T("");
-				CString strVal = _T("");
+					else
+					{
+						pAddin->AddDocXml(m_pWorkBook, CComBSTR(m_strDocXml), CComBSTR(L"tangram"));
+					}
+					CoUninitialize();
+				}).then([pAddin, this]()
+					{
+						CString strKey = _T("<cluster>");
+						CString strData = _T("");
+						CString strVal = _T("");
 
-				CString _strXml = pAddin->GetXmlData(_T("userforms"), m_strDocXml);
-				int nPos = _strXml.Find(strKey);
-				while (nPos != -1)
-				{
-					strData = _strXml.Left(nPos);
-					nPos = strData.ReverseFind('<');
-					strData = strData.Mid(nPos + 1);
-					nPos = strData.ReverseFind('>');
-					strData = strData.Left(nPos);
-					strData.Trim();
-					strVal = pAddin->GetXmlData(strData, _strXml);
-					strKey = _T("</cluster>");
-					nPos = _strXml.Find(strKey);
-					_strXml = _strXml.Mid(nPos + 9);
-					nPos = _strXml.Find(_T("<cluster>"));
-					m_mapUserFormScript[strData] = strVal;
-				}
+						CString _strXml = pAddin->GetXmlData(_T("userforms"), m_strDocXml);
+						int nPos = _strXml.Find(strKey);
+						while (nPos != -1)
+						{
+							strData = _strXml.Left(nPos);
+							nPos = strData.ReverseFind('<');
+							strData = strData.Mid(nPos + 1);
+							nPos = strData.ReverseFind('>');
+							strData = strData.Left(nPos);
+							strData.Trim();
+							strVal = pAddin->GetXmlData(strData, _strXml);
+							strKey = _T("</cluster>");
+							nPos = _strXml.Find(strKey);
+							_strXml = _strXml.Mid(nPos + 9);
+							nPos = _strXml.Find(_T("<cluster>"));
+							m_mapUserFormScript[strData] = strVal;
+						}
 
-				//::PostMessage(pAddin->m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)m_mapExcelWorkBookWnd.begin()->second, 0);
-			});
+						::PostMessage(pAddin->m_hCosmosWnd, WM_OPENDOCUMENT, (WPARAM)m_mapExcelWorkBookWnd.begin()->second, 0);
+					});
 		}
 
 		//void CExcelWorkBook::ModifySheetForTangram(IDispatch* Sh, CString strSheetXml, CString strTaskPaneXml)
@@ -187,8 +186,25 @@ namespace OfficePlus
 			CString strSheetTaskPanelXml = _T("");
 			CString _strSheetXml = _T("");
 			CString strSheetName = _T("");
-
-			if (m_bCreating==false)
+			CComQIPtr<_Worksheet> pSheet(Sh);
+			//auto it = find(pSheet.p);
+			//if (it != end())
+			//{
+			//	CComPtr<CustomProperties> _pProps;
+			//	pSheet->get_CustomProperties(&_pProps);
+			//	ICustomProperties* pProps = (ICustomProperties*)_pProps.p;
+			//	CComPtr<CustomProperty> pProp;
+			//	pProps->get_Item(CComVariant(L"Tangram"), &pProp);
+			//	if (pProp)
+			//	{
+			//		Excel::ICustomProperty* _pProp = (ICustomProperty*)pProp.p;
+			//		CComVariant var;
+			//		_pProp->get_Value(&var);
+			//		_strSheetXml = OLE2T(var.bstrVal);
+			//	}
+			//}
+			CExcelAddin* pAddin = (CExcelAddin*)g_pCosmos;
+			if (m_bCreating == false)
 			{
 				VARIANT_BOOL bDesignState = false;
 				strSheetName = g_pCosmos->GetNewGUID();
@@ -212,7 +228,7 @@ namespace OfficePlus
 				}
 				if (strTemplate == _T(""))
 				{
-					if(bDesignState)
+					if (bDesignState)
 						strTemplate = _T("<sheet><cluster><xobj name=\"start\" /></cluster></sheet>");
 					else
 					{
@@ -223,7 +239,7 @@ namespace OfficePlus
 				if (m_Parse.LoadXml(strTemplate) || m_Parse.LoadFile(strTemplate))
 				{
 					strTemplate = m_Parse.xml();
-					CString strName = _T("<")+m_Parse.name();
+					CString strName = _T("<") + m_Parse.name();
 					int nPos = strTemplate.ReverseFind('<');
 					CString str = strTemplate.Left(nPos);
 					nPos = str.Find(strName);
@@ -235,7 +251,7 @@ namespace OfficePlus
 					strSheetXml += _T("</");
 					strSheetXml += strName;
 					strSheetXml += _T(">");
-					if (bDesignState&&::MessageBox(::GetActiveWindow(), _T("Do you want to create a taskpane Object with this sheet?"), _T("New Sheet"), MB_YESNO) == IDYES)
+					if (bDesignState && ::MessageBox(::GetActiveWindow(), _T("Do you want to create a taskpane Object with this sheet?"), _T("New Sheet"), MB_YESNO) == IDYES)
 					{
 						strPath = g_pCosmos->m_strExeName;
 						strPath += _T("worksheetTaskPanel");
@@ -253,7 +269,7 @@ namespace OfficePlus
 						if (m_Parse2.LoadXml(strTemplate) || m_Parse2.LoadFile(strTemplate))
 						{
 							strTemplate = m_Parse2.xml();
-							CString strName = _T("<")+m_Parse.name();
+							CString strName = _T("<") + m_Parse.name();
 							int nPos = strTemplate.ReverseFind('<');
 							CString str = strTemplate.Left(nPos);
 							nPos = str.Find(strName);
@@ -268,14 +284,13 @@ namespace OfficePlus
 						}
 					}
 				}
-				
-				if(strSheetTaskPanelXml!=_T(""))
+
+				if (strSheetTaskPanelXml != _T(""))
 					_strSheetXml.Format(_T("<%s><default>%s%s</default></%s>"), strSheetName, strSheetXml, strSheetTaskPanelXml, strSheetName);
 				else
 					_strSheetXml.Format(_T("<%s><default>%s</default></%s>"), strSheetName, strSheetXml, strSheetName);
 			}
-			CComQIPtr<_Worksheet> pSheet(Sh);
-			if(pSheet)
+			if (pSheet)
 			{
 				auto it = find(pSheet.p);
 				if (it == end())
@@ -303,10 +318,10 @@ namespace OfficePlus
 		void CExcelWorkBook::OnSheetBeforeDelete(IDispatch* Sh)
 		{
 			CComQIPtr<_Worksheet> pSheet(Sh);
-			if(pSheet)
+			if (pSheet)
 			{
 				auto it = find(pSheet.p);
-				if(it!=end())
+				if (it != end())
 				{
 					delete it->second;
 					erase(it);
@@ -493,9 +508,9 @@ namespace OfficePlus
 #ifdef _DEBUG
 			g_pCosmos->m_nOfficeDocsSheet++;
 #endif	
-			m_pSheet			= nullptr;
-			m_strKey			= _T("");
-			m_strSheetName		= _T("");
+			m_pSheet = nullptr;
+			m_strKey = _T("");
+			m_strSheetName = _T("");
 		}
 
 		CExcelWorkSheet::~CExcelWorkSheet(void)
@@ -503,9 +518,9 @@ namespace OfficePlus
 #ifdef _DEBUG
 			g_pCosmos->m_nOfficeDocsSheet--;
 #endif	
-			m_pSheet			= nullptr;
-			m_strKey			= _T("");
-			m_strSheetName		= _T("");
+			m_pSheet = nullptr;
+			m_strKey = _T("");
+			m_strSheetName = _T("");
 		}
 	}
 }

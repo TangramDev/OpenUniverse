@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -93,8 +93,8 @@ namespace OfficePlus
 		CComQIPtr<COMAddIn> _pAddInInst(pAddInInst);
 		if (_pAddInInst)
 			_pAddInInst->put_Object((ICosmos*)this);
-
 		OnConnection(pApplication, ConnectMode);
+		m_pHostCOMAddIn = _pAddInInst.Detach();
 		return S_OK;
 	}
 
@@ -156,7 +156,6 @@ namespace OfficePlus
 
 	void COfficeAddin::_AddDocXml(Office::_CustomXMLParts* pCustomXMLParts, BSTR bstrXml, BSTR bstrKey)
 	{
-#ifdef TANGRAMCOMMERCIALDITION
 		CString strXml = OLE2T(bstrXml);
 		CString strKey = OLE2T(bstrKey);
 		if (strXml == _T("") || strKey == _T(""))
@@ -206,7 +205,6 @@ namespace OfficePlus
 				}
 			}
 		}
-#endif
 	}
 
 	HRESULT COfficeAddin::OnConnection(IDispatch* pHostApp, int ConnectMode)

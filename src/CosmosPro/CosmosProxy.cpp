@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1402,7 +1402,10 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						if (m_pCurrentPForm)
 						{
 							if (thisForm->IsMdiContainer == false)
-								thisForm->MdiParent = m_pCurrentPForm;
+							{
+								if(m_Parse.attrBool(_T("mdichild"),false))
+									thisForm->MdiParent = m_pCurrentPForm;
+							}
 							m_pCurrentPForm = nullptr;
 						}
 						if (nHandle && thisForm->MdiParent == nullptr)

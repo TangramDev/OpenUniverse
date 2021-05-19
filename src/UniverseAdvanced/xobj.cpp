@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005           *
+ *           Web Runtime for Application - Version 1.0.1.202105190006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -900,31 +900,38 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 					{
 						if (m_strID.CompareNoCase(_T("TreeView")))
 						{
-							if (g_pCosmos->m_strExeName.CompareNoCase(_T("devenv")) == 0)
+							if (m_strObjTypeID.CompareNoCase(_T("tabbedwnd")) == 0)
 							{
+								if (g_pCosmos->m_strExeName.CompareNoCase(_T("devenv")) == 0)
+								{
 #ifdef _WIN32
-								CString strLib = g_pCosmos->m_strAppPath + _T("PublicAssemblies\\TabbedWnd.dll");
-								if (::PathFileExists(strLib))
-								{
-									::LoadLibrary(strLib);
-									auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
-									if (it != g_pCosmos->m_mapWindowProvider.end())
-									{
-										pViewFactoryDisp = it->second;
-									}
-								}
+									CString strLib = g_pCosmos->m_strAppPath + _T("PublicAssemblies\\TabbedWnd.dll");
+										if (::PathFileExists(strLib))
+										{
+											::LoadLibrary(strLib);
+												auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
+												if (it != g_pCosmos->m_mapWindowProvider.end())
+												{
+													pViewFactoryDisp = it->second;
+												}
+										}
 #endif
-							}
-							else
-							{
-								CString strLib = g_pCosmos->m_strAppPath + _T("TangramTabbedWnd.dll");
-								if (::PathFileExists(strLib))
+								}
+								else
 								{
-									::LoadLibrary(strLib);
-									auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
-									if (it != g_pCosmos->m_mapWindowProvider.end())
+									CString strLib = g_pCosmos->m_strAppPath + _T("TabbedWnd.dll");
+									if (!::PathFileExists(strLib))
 									{
-										pViewFactoryDisp = it->second;
+										strLib = g_pCosmos->m_strProgramFilePath + _T("\\tangram\\TabbedWnd.dll");
+									}
+									if (::PathFileExists(strLib))
+									{
+										::LoadLibrary(strLib);
+										auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
+										if (it != g_pCosmos->m_mapWindowProvider.end())
+										{
+											pViewFactoryDisp = it->second;
+										}
 									}
 								}
 							}

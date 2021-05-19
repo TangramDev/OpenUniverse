@@ -185,7 +185,7 @@ AFX_IDC_HSPLITBAR       CURSOR                  "splith.cur"
 // TYPELIB
 //
 
-1                       TYPELIB                 "Universe.tlb"
+1                       TYPELIB                 "UniverseAdv.tlb"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

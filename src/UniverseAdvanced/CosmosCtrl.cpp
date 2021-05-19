@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005           *
+ *           Web Runtime for Application - Version 1.0.1.202105190006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -33,7 +33,7 @@ HRESULT WINAPI CCosmosCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
 {
 	if (g_pCosmos->m_strCurrentAppID == _T(""))
 	{
-		if(g_pCosmos->m_pCosmosDelegate->m_pJVM)
+		if(g_pCosmos->m_pCosmosDelegate&&g_pCosmos->m_pCosmosDelegate->m_pJVM)
 		{
 			return CEclipseCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}
@@ -85,10 +85,10 @@ CCosmosCtrlBase::~CCosmosCtrlBase()
 
 void CCosmosCtrlBase::OnFinalMessage(HWND hWnd)
 {
-	if (g_pCosmos->m_pCLRProxy)
-	{
-		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((ICosmosCtrl*)this);
-	}
+	//if (g_pCosmos->m_pCLRProxy)
+	//{
+	//	g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((ICosmosCtrl*)this);
+	//}
 	__super::OnFinalMessage(hWnd);
 }
 

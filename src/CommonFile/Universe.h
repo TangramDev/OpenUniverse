@@ -2591,7 +2591,7 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrObjID,
             /* [retval][out] */ IDispatch **ppDisp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartApplication( 
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateApplication( 
             BSTR bstrAppID,
             BSTR bstrXml) = 0;
         
@@ -2849,7 +2849,7 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrObjID,
             /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartApplication )( 
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateApplication )( 
             ICosmos * This,
             BSTR bstrAppID,
             BSTR bstrXml);
@@ -3092,8 +3092,8 @@ EXTERN_C const IID IID_ICosmos;
 #define ICosmos_CreateCLRObj(This,bstrObjID,ppDisp)	\
     ( (This)->lpVtbl -> CreateCLRObj(This,bstrObjID,ppDisp) ) 
 
-#define ICosmos_StartApplication(This,bstrAppID,bstrXml)	\
-    ( (This)->lpVtbl -> StartApplication(This,bstrAppID,bstrXml) ) 
+#define ICosmos_CreateApplication(This,bstrAppID,bstrXml)	\
+    ( (This)->lpVtbl -> CreateApplication(This,bstrAppID,bstrXml) ) 
 
 #define ICosmos_GetGalaxy(This,hHostWnd,ppGalaxy)	\
     ( (This)->lpVtbl -> GetGalaxy(This,hHostWnd,ppGalaxy) ) 

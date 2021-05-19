@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -45,7 +45,7 @@ namespace OfficePlus
 			CWordAddin();
 			virtual ~CWordAddin();
 
-			CComPtr<_Application>		m_pApplication;
+			CComPtr<Word::_Application>		m_pApplication;
 			CWordObject*				m_pActiveWordObject;
 			CString GetDocXmlByKey(IDispatch* pDocdisp, BSTR bstrKey);
 			void AddDocXml(IDispatch* pDocdisp, BSTR bstrXml, BSTR bstrKey);
@@ -74,7 +74,7 @@ namespace OfficePlus
 			STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml);
 			STDMETHOD(GetCustomUI)(BSTR RibbonID, BSTR * RibbonXml);
 			STDMETHOD(CosmosCommand)(IDispatch* RibbonControl);
-			STDMETHOD(StartApplication)(BSTR bstrAppID, BSTR bstrXml);
+			STDMETHOD(CreateApplication)(BSTR bstrAppID, BSTR bstrXml);
 
 			HRESULT OnConnection(IDispatch* pHostApp, int ConnectMode);
 			HRESULT OnDisconnection(int DisConnectMode);
@@ -119,12 +119,12 @@ namespace OfficePlus
 			void __stdcall OnXMLValidationError(XMLNode* XMLNode);
 			void __stdcall OnDocumentSync(_Document* Doc, MsoSyncEventType SyncEvent);
 			void __stdcall OnMailMergeDataSourceValidate2(_Document* Doc, VARIANT_BOOL* Handled);
-			void __stdcall OnProtectedViewWindowOpen(ProtectedViewWindow* PvWindow);
-			void __stdcall OnProtectedViewWindowBeforeEdit(ProtectedViewWindow* PvWindow, VARIANT_BOOL* Cancel);
-			void __stdcall OnProtectedViewWindowBeforeClose(ProtectedViewWindow* PvWindow, int CloseReason, VARIANT_BOOL* Cancel);
-			void __stdcall OnProtectedViewWindowSize(ProtectedViewWindow* PvWindow);
-			void __stdcall OnProtectedViewWindowActivate(ProtectedViewWindow* PvWindow);
-			void __stdcall OnProtectedViewWindowDeactivate(ProtectedViewWindow* PvWindow);
+			void __stdcall OnProtectedViewWindowOpen(Word::ProtectedViewWindow* PvWindow);
+			void __stdcall OnProtectedViewWindowBeforeEdit(Word::ProtectedViewWindow* PvWindow, VARIANT_BOOL* Cancel);
+			void __stdcall OnProtectedViewWindowBeforeClose(Word::ProtectedViewWindow* PvWindow, int CloseReason, VARIANT_BOOL* Cancel);
+			void __stdcall OnProtectedViewWindowSize(Word::ProtectedViewWindow* PvWindow);
+			void __stdcall OnProtectedViewWindowActivate(Word::ProtectedViewWindow* PvWindow);
+			void __stdcall OnProtectedViewWindowDeactivate(Word::ProtectedViewWindow* PvWindow);
 		};
 
 		// CWordAppCtrl

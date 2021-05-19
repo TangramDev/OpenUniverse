@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -511,13 +511,13 @@ namespace OfficePlus
 			}
 		}
 
-		STDMETHODIMP CWordAddin::StartApplication(BSTR bstrAppID, BSTR bstrXml)
+		STDMETHODIMP CWordAddin::CreateApplication(BSTR bstrAppID, BSTR bstrXml)
 		{
 			CString strID = OLE2T(bstrAppID);
 			strID.MakeLower();
 			if (strID.Find(_T("word.application")) == 0)
 				return put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-			return CCosmos::StartApplication(bstrAppID, bstrXml);
+			return CCosmos::CreateApplication(bstrAppID, bstrXml);
 		}
 
 		STDMETHODIMP CWordAddin::CosmosCommand(IDispatch* RibbonControl)

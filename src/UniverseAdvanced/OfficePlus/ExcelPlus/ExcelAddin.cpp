@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -68,7 +68,7 @@ namespace OfficePlus
 			}
 		}
 
-		STDMETHODIMP CExcelAddin::StartApplication(BSTR bstrAppID, BSTR bstrXml)
+		STDMETHODIMP CExcelAddin::CreateApplication(BSTR bstrAppID, BSTR bstrXml)
 		{
 			CString strID = OLE2T(bstrAppID);
 			strID.MakeLower();
@@ -79,7 +79,7 @@ namespace OfficePlus
 					m_mapValInfo[_T("exceldesignstate")] = CComVariant((VARIANT_BOOL)true);
 				return put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
 			}
-			return CCosmos::StartApplication(bstrAppID, bstrXml);
+			return CCosmos::CreateApplication(bstrAppID, bstrXml);
 		}
 
 		STDMETHODIMP CExcelAddin::AttachObjEvent(IDispatch* pDisp, int nEventIndex)
@@ -566,7 +566,9 @@ namespace OfficePlus
 				CTangramXmlParse m_Parse;
 				if (m_Parse.LoadXml(m_strConfigFile) || m_Parse.LoadFile(m_strConfigFile))
 				{
-					m_strRibbonXml = m_Parse[_T("RibbonUI")][_T("customUI")].xml();
+					CTangramXmlParse* pRibbonUIXmlParse = m_Parse.GetChild(_T("RibbonUI"));
+					if (pRibbonUIXmlParse)
+						m_strRibbonXml = m_Parse[_T("RibbonUI")][_T("customUI")].xml();
 				}
 			}
 			if (m_pExcelAppObjEvents != nullptr)
@@ -642,25 +644,24 @@ namespace OfficePlus
 		STDMETHODIMP CExcelAddin::put_AppKeyValue(BSTR bstrKey, VARIANT newVal)
 		{
 			CString strKey = OLE2T(bstrKey);
-
 			if (strKey == _T(""))
 				return S_OK;
 			strKey.Trim();
 			strKey.MakeLower();
 			if (strKey == _T("doctemplate"))
 			{
-				auto it = g_pCosmos->m_mapValInfo.find(_T("doctemplate"));
-				if (it != g_pCosmos->m_mapValInfo.end())
+				auto it = m_mapValInfo.find(_T("doctemplate"));
+				if (it != m_mapValInfo.end())
 				{
 					::VariantClear(&it->second);
-					g_pCosmos->m_mapValInfo.erase(it);
+					m_mapValInfo.erase(it);
 				}
 				CComPtr<Workbooks> pWorkBooks;
 				m_pExcelApplication->get_Workbooks(&pWorkBooks);
 				if (pWorkBooks)
 				{
-					CString strXml = OLE2T(newVal.bstrVal);
-					g_pCosmos->m_mapValInfo[strKey] = newVal;
+					m_strNewWorkBookData = OLE2T(newVal.bstrVal);
+					m_mapValInfo[strKey] = newVal;
 					CComPtr<_Workbook> pWorkbook;
 					CComVariant varTemplate(L"");
 					pWorkBooks->Add(varTemplate, 0, &pWorkbook);
@@ -726,118 +727,123 @@ namespace OfficePlus
 			CString strPath = OLE2T(bstrPath);
 			if (strPath == _T(""))
 			{
-				CString strTemplate = GetDocTemplateXml(_T("Please select WorkBook Template:"), m_strExeName, _T(""));
+				//CString strTemplate = GetDocTemplateXml(_T("Please select WorkBook Template:"), m_strExeName, _T(""));
 				CTangramXmlParse m_Parse;
-				if (m_Parse.LoadXml(strTemplate) == false && m_Parse.LoadFile(strTemplate) == false)
+				if (m_Parse.LoadXml(m_strNewWorkBookData) == false && m_Parse.LoadFile(m_strNewWorkBookData) == false)
 					return;
-
-				CComPtr<Sheets> pSheets;
-				pWorkBook->get_Sheets(&pSheets);
-				CComPtr<IDispatch> pActive;
-				pWorkBook->get_ActiveSheet(&pActive);
-				_pWorkBook->m_bCreating = TRUE;
-				_pWorkBook->m_strTaskPaneTitle = m_Parse.attr(_T("title"), _T("TaskPane"));
-				_pWorkBook->m_nWidth = m_Parse.attrInt(_T("width"), 200);
-				_pWorkBook->m_nHeight = m_Parse.attrInt(_T("height"), 300);
-				_pWorkBook->m_nMsoCTPDockPosition = (MsoCTPDockPosition)m_Parse.attrInt(_T("dockposition"), 4);
-				_pWorkBook->m_nMsoCTPDockPositionRestrict = (MsoCTPDockPositionRestrict)m_Parse.attrInt(_T("dockpositionrestrict"), 3);
-				vector<CTangramXmlParse*> vec;
-				int nCount = m_Parse.GetCount();
-				for (int i = nCount - 1; i >= 0; i--)
+				CTangramXmlParse* pTangramsParse = m_Parse.GetChild(_T("Tangrams"));
+				if (pTangramsParse)
 				{
-					CTangramXmlParse* pChild = m_Parse.GetChild(i);
-					CString strName = pChild->name();
-					if (strName.CompareNoCase(_T("userforms")) && strName.CompareNoCase(_T("default")))
+					CComPtr<Sheets> pSheets;
+					pWorkBook->get_Sheets(&pSheets);
+					CComPtr<IDispatch> pActive;
+					pWorkBook->get_ActiveSheet(&pActive);
+					_pWorkBook->m_bCreating = TRUE;
+					_pWorkBook->m_strTaskPaneTitle = pTangramsParse->attr(_T("title"), _T("TaskPane"));
+					_pWorkBook->m_nWidth = pTangramsParse->attrInt(_T("width"), 200);
+					_pWorkBook->m_nHeight = pTangramsParse->attrInt(_T("height"), 300);
+					_pWorkBook->m_nMsoCTPDockPosition = (MsoCTPDockPosition)pTangramsParse->attrInt(_T("dockposition"), 4);
+					_pWorkBook->m_nMsoCTPDockPositionRestrict = (MsoCTPDockPositionRestrict)pTangramsParse->attrInt(_T("dockpositionrestrict"), 3);
+					vector<CTangramXmlParse*> vec;
+					int nCount = pTangramsParse->GetCount();
+					for (int i = nCount - 1; i >= 0; i--)
 					{
-						CString strType = pChild->attr(_T("type"), _T(""));
-						XlSheetType nType = xlWorksheet;
-						if (strType.CompareNoCase(_T("Chart")) == 0)
+						CTangramXmlParse* pChild = pTangramsParse->GetChild(i);
+						CString strName = pChild->name();
+						if (strName.CompareNoCase(_T("userforms")) && strName.CompareNoCase(_T("default")))
 						{
-							nType = xlChart;
-						}
-						CTangramXmlParse* pChild2 = pChild->GetChild(_T("default"));
-						if (pChild2)
-						{
-							pChild2 = pChild2->GetChild(_T("sheet"));
-							CComPtr<IDispatch> pDisp;
-							if (pActive && nType == xlWorksheet)
+							CString strType = pChild->attr(_T("type"), _T(""));
+							XlSheetType nType = xlWorksheet;
+							if (strType.CompareNoCase(_T("Chart")) == 0)
 							{
-								pDisp.Attach(pActive);
-								pActive.Detach();
+								nType = xlChart;
 							}
-							else
-								pSheets->Add(vtMissing, vtMissing, vtMissing, CComVariant(nType), 0, &pDisp);
-
-							CComQIPtr<_Worksheet> pSh(pDisp);
-							CString _strName = pChild2->attr(_T("caption"), _T(""));
-							if (_strName == _T(""))
-								_strName = pChild2->name();
-
-							if (pSh)
+							CTangramXmlParse* pChild2 = pChild->GetChild(_T("default"));
+							if (pChild2)
 							{
-								pSh->put_Name(_strName.AllocSysString());
-								CComPtr<CustomProperties> _pProps;
-								pSh->get_CustomProperties(&_pProps);
-								ICustomProperties* pProps = (ICustomProperties*)_pProps.p;
-								CComPtr<CustomProperty> pProp;
-								pProps->Add(CComBSTR(L"Tangram"), CComVariant(pChild->xml()), &pProp);
-								vec.push_back(pChild);
-
-								auto it = pExcelObj->m_pWorkBook->find(pSh.p);
-								if (it == pExcelObj->m_pWorkBook->end())
+								//m_strNewWorkSheetData = pChild->xml();
+								pChild2 = pChild2->GetChild(_T("sheet"));
+								CComPtr<IDispatch> pDisp;
+								if (pActive && nType == xlWorksheet)
 								{
-									CExcelWorkSheet* pExcelWorkSheet = new CExcelWorkSheet();
-									pExcelWorkSheet->m_strSheetName = _strName;
-									pExcelWorkSheet->m_pSheet = pSh.p;
-									pExcelWorkSheet->m_pSheet->AddRef();
-									(*_pWorkBook)[pExcelWorkSheet->m_pSheet] = pExcelWorkSheet;
+									pDisp.Attach(pActive);
+									pActive.Detach();
+								}
+								else
+									pSheets->Add(vtMissing, vtMissing, vtMissing, CComVariant(nType), 0, &pDisp);
 
-									int nCount = pChild->GetCount();
-									for (int i = 0; i < nCount; i++)
+								CComQIPtr<_Worksheet> pSh(pDisp);
+								CString _strName = pChild2->attr(_T("caption"), _T(""));
+								if (_strName == _T(""))
+									_strName = pChild2->name();
+
+								if (pSh)
+								{
+									pSh->put_Name(_strName.AllocSysString());
+									CComPtr<CustomProperties> _pProps;
+									pSh->get_CustomProperties(&_pProps);
+									ICustomProperties* pProps = (ICustomProperties*)_pProps.p;
+									CComPtr<CustomProperty> pProp;
+									pProps->Add(CComBSTR(L"Tangram"), CComVariant(pChild->xml()), &pProp);
+									vec.push_back(pChild);
+
+									auto it = pExcelObj->m_pWorkBook->find(pSh.p);
+									if (it == pExcelObj->m_pWorkBook->end())
 									{
-										CTangramXmlParse* _pChild = pChild->GetChild(i);
-										(*pExcelWorkSheet)[_pChild->name()] = _pChild->xml();
+										CExcelWorkSheet* pExcelWorkSheet = new CExcelWorkSheet();
+										pExcelWorkSheet->m_strSheetName = _strName;
+										pExcelWorkSheet->m_pSheet = pSh.p;
+										pExcelWorkSheet->m_pSheet->AddRef();
+										(*_pWorkBook)[pExcelWorkSheet->m_pSheet] = pExcelWorkSheet;
+
+										int nCount = pChild->GetCount();
+										for (int i = 0; i < nCount; i++)
+										{
+											CTangramXmlParse* _pChild = pChild->GetChild(i);
+											(*pExcelWorkSheet)[_pChild->name()] = _pChild->xml();
+										}
+									}
+								}
+								else
+								{
+									CComQIPtr<_Chart> pChart(pDisp);
+									if (pChart)
+									{
+										pChart->put_Name(_strName.AllocSysString());
 									}
 								}
 							}
-							else
+						}
+						else if (strName.CompareNoCase(_T("userforms")) == 0)
+						{
+							int nCount = pChild->GetCount();
+							for (int i = 0; i < nCount; i++)
 							{
-								CComQIPtr<_Chart> pChart(pDisp);
-								if (pChart)
-								{
-									pChart->put_Name(_strName.AllocSysString());
-								}
+								CTangramXmlParse* _pChild = pChild->GetChild(i);
+								_pWorkBook->m_mapUserFormScript[_pChild->name()] = _pChild->xml();
+							}
+						}
+						else
+						{
+							if (pChild)
+							{
+								_pWorkBook->m_strDefaultSheetXml = pChild->xml();
 							}
 						}
 					}
-					else if (strName.CompareNoCase(_T("userforms")) == 0)
-					{
-						int nCount = pChild->GetCount();
-						for (int i = 0; i < nCount; i++)
-						{
-							CTangramXmlParse* _pChild = pChild->GetChild(i);
-							_pWorkBook->m_mapUserFormScript[_pChild->name()] = _pChild->xml();
-						}
-					}
-					else
-					{
-						if (pChild)
-						{
-							_pWorkBook->m_strDefaultSheetXml = pChild->xml();
-						}
-					}
-				}
 
-				while (vec.size())
-				{
-					m_Parse.RemoveNode(*vec.begin());
-					vec.erase(vec.begin());
-				}
+					while (vec.size())
+					{
+						pTangramsParse->RemoveNode(*vec.begin());
+						vec.erase(vec.begin());
+					}
 
-				_pWorkBook->m_strDocXml = m_Parse.xml();
-				AddDocXml(pWorkBook, CComBSTR(_pWorkBook->m_strDocXml), CComBSTR(L"tangram"));
-				_pWorkBook->m_bCreating = FALSE;
-				//::PostMessage(m_hHostWnd, WM_OPENDOCUMENT, (WPARAM)pExcelObj, 0);
+					_pWorkBook->m_strDocXml = pTangramsParse->xml();
+					AddDocXml(pWorkBook, CComBSTR(_pWorkBook->m_strDocXml), CComBSTR(L"tangram"));
+					_pWorkBook->m_bCreating = FALSE;
+					::PostMessage(m_hCosmosWnd, WM_OPENDOCUMENT, (WPARAM)pExcelObj, 0);
+				}
+				m_strNewWorkBookData = _T("");
 			}
 			else
 			{

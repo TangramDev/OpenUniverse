@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005           *
+ *           Web Runtime for Application - Version 1.0.1.202105190006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1259,6 +1259,7 @@ namespace Browser {
 								IWebPage* pChromeWebPage = (IWebPage*)this;
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("mdichild"), true);
 								pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
 							}
 						}
@@ -1563,6 +1564,7 @@ namespace Browser {
 							IWebPage* pChromeWebPage = (IWebPage*)this;
 							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("mdichild"), true);
 							pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
 						}
 					}
@@ -1670,6 +1672,7 @@ namespace Browser {
 								IWebPage* pChromeWebPage = (IWebPage*)this;
 								pChild3->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 								pChild3->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+								pChild3->GetChild(i)->put_attr(_T("mdichild"), true);
 								pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
 							}
 						}
@@ -1881,6 +1884,7 @@ namespace Browser {
 								IWebPage* pChromeWebPage = (IWebPage*)this;
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("mdichild"), true);
 								pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
 							}
 						}

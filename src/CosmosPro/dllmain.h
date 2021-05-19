@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -45,6 +45,7 @@ public:
 	ICosmos*								m_pCosmos;
 
 	CString									m_strAppPath;
+	CString									m_strOfficeComponentPath;
 
 	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
 	CString GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifiedName);

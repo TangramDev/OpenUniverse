@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005           *
+ *           Web Runtime for Application - Version 1.0.1.202105190006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -989,6 +989,22 @@ namespace Browser {
 		}
 		else if (strId.CompareNoCase(_T("TANGRAM_UI_MESSAGE")) == 0)
 		{
+			CString strKey = strParam1;
+			int nPos = strKey.Find(_T(":"));
+			if (nPos != -1)
+			{
+				CString strAppID = strKey.Left(nPos);
+				if (strAppID.CompareNoCase(_T("officeapp")) == 0)
+				{
+					strAppID = strKey.Mid(nPos + 1);
+					if (strAppID != _T(""))
+					{
+						g_pCosmos->CreateApplication(CComBSTR(strAppID), CComBSTR(strParam3));
+						return;
+					}
+				}
+			}
+
 			// Param1: Frame Name, Param2: HWND, Param3: XML, Param4: BindWebObj Name
 			HWND hWndSource = (HWND)_wtoi(LPCTSTR(strParam2));
 			if (::IsWindow(hWndSource))
@@ -1259,6 +1275,7 @@ namespace Browser {
 								IWebPage* pChromeWebPage = (IWebPage*)this;
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("mdichild"), true);
 								pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
 							}
 						}
@@ -1563,6 +1580,7 @@ namespace Browser {
 							IWebPage* pChromeWebPage = (IWebPage*)this;
 							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 							pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+							pMdiChildXmlParse->GetChild(i)->put_attr(_T("mdichild"), true);
 							pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
 						}
 					}
@@ -1670,6 +1688,7 @@ namespace Browser {
 								IWebPage* pChromeWebPage = (IWebPage*)this;
 								pChild3->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 								pChild3->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+								pChild3->GetChild(i)->put_attr(_T("mdichild"), true);
 								pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
 							}
 						}
@@ -1881,6 +1900,7 @@ namespace Browser {
 								IWebPage* pChromeWebPage = (IWebPage*)this;
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpage"), (__int64)pChromeWebPage);
 								pMdiChildXmlParse->GetChild(i)->put_attr(_T("webpagehandle"), (__int64)m_hWnd);
+								pMdiChildXmlParse->GetChild(i)->put_attr(_T("mdichild"), true);
 								pInfo->m_mapFormsInfo[strName] = pMdiChildXmlParse->GetChild(i)->xml();
 							}
 						}
@@ -1951,6 +1971,20 @@ namespace Browser {
 		{
 			CString strKey = pSession->GetString(_T("openkey"));
 			CString strXml = pSession->GetString(_T("openxml"));
+			int nPos = strKey.Find(_T(":"));
+			if (nPos != -1)
+			{
+				CString strAppID = strKey.Left(nPos);
+				if (strAppID.CompareNoCase(_T("officeapp")) == 0)
+				{
+					strAppID = strKey.Mid(nPos + 1);
+					if (strAppID != _T(""))
+					{
+						g_pCosmos->CreateApplication(CComBSTR(strAppID), CComBSTR(strXml));
+						return;
+					}
+				}
+			}
 			if (pXobj)
 			{
 				IXobj* _pXobj = nullptr;

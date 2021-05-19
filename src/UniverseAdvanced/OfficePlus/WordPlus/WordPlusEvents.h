@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -153,12 +153,12 @@ namespace OfficePlus
 				virtual void __stdcall OnXMLValidationError(XMLNode* XMLNode) {}
 				virtual void __stdcall OnDocumentSync(_Document* Doc, MsoSyncEventType SyncEvent) {}
 				virtual void __stdcall OnMailMergeDataSourceValidate2(_Document* Doc, VARIANT_BOOL* Handled) {}
-				virtual void __stdcall OnProtectedViewWindowOpen(ProtectedViewWindow* PvWindow) {}
-				virtual void __stdcall OnProtectedViewWindowBeforeEdit(ProtectedViewWindow* PvWindow, VARIANT_BOOL* Cancel) {}
-				virtual void __stdcall OnProtectedViewWindowBeforeClose(ProtectedViewWindow* PvWindow, int CloseReason, VARIANT_BOOL* Cancel) {}
-				virtual void __stdcall OnProtectedViewWindowSize(ProtectedViewWindow* PvWindow) {}
-				virtual void __stdcall OnProtectedViewWindowActivate(ProtectedViewWindow* PvWindow) {}
-				virtual void __stdcall OnProtectedViewWindowDeactivate(ProtectedViewWindow* PvWindow) {}
+				virtual void __stdcall OnProtectedViewWindowOpen(Word::ProtectedViewWindow* PvWindow) {}
+				virtual void __stdcall OnProtectedViewWindowBeforeEdit(Word::ProtectedViewWindow* PvWindow, VARIANT_BOOL* Cancel) {}
+				virtual void __stdcall OnProtectedViewWindowBeforeClose(Word::ProtectedViewWindow* PvWindow, int CloseReason, VARIANT_BOOL* Cancel) {}
+				virtual void __stdcall OnProtectedViewWindowSize(Word::ProtectedViewWindow* PvWindow) {}
+				virtual void __stdcall OnProtectedViewWindowActivate(Word::ProtectedViewWindow* PvWindow) {}
+				virtual void __stdcall OnProtectedViewWindowDeactivate(Word::ProtectedViewWindow* PvWindow) {}
 
 				BEGIN_SINK_MAP(CWordAppEvents4)
 					SINK_ENTRY_INFO(/*nID =*/ 1, __uuidof(ApplicationEvents4), /*dispid =*/ 0x0000001a, OnXMLSelectionChange, &XMLSelectionChange)

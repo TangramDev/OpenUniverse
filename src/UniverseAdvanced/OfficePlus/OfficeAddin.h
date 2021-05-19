@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -68,8 +68,8 @@ namespace OfficePlus
 
 	// COfficeAddin
 	class ATL_NO_VTABLE COfficeAddin :
-		public CCosmos
-		,public IDispatchImpl<IRibbonExtensibility, &__uuidof(IRibbonExtensibility), &LIBID_Office, /* wMajor = */ 2, /* wMinor = */ 4>,
+		public CCosmos,
+		public IDispatchImpl<IRibbonExtensibility, &__uuidof(IRibbonExtensibility), &LIBID_Office, /* wMajor = */ 2, /* wMinor = */ 4>,
 		public IDispatchImpl<ICustomTaskPaneConsumer, &__uuidof(ICustomTaskPaneConsumer), &LIBID_Office, /* wMajor = */ 2, /* wMinor = */ 4>,
 		public IDispatchImpl<AddInDesignerObjects::_IDTExtensibility2, &AddInDesignerObjects::IID__IDTExtensibility2, &AddInDesignerObjects::LIBID_AddInDesignerObjects, 1, 0>
 	{
@@ -81,6 +81,7 @@ namespace OfficePlus
 		CString							m_strRibbonXml;
 		CString							m_strRibbonXmlFile;
 
+		CComPtr<COMAddIn>				m_pHostCOMAddIn;
 		CComPtr<ICTPFactory>			m_pCTPFactory;
 		CTaskPaneMap					m_mapTaskPaneMap;
 		map<HWND, CGalaxy*>	m_mapVBAForm;

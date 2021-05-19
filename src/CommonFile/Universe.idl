@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005           *
+ *           Web Runtime for Application - Version 1.0.1.202105190006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -393,7 +393,7 @@ interface ICosmos : IDispatch {
 	[id(0x00101)] HRESULT CreateGalaxyCluster(LONGLONG hWnd, [out, retval]IGalaxyCluster** ppGalaxyCluster);
 	[id(0x00102)] HRESULT CreateOfficeDocument(BSTR bstrXml);
 	[id(0x00103), helpstring("method Create CLR Object")] HRESULT CreateCLRObj(BSTR bstrObjID, [out, retval]IDispatch** ppDisp);
-	[id(0x00104)] HRESULT StartApplication(BSTR bstrAppID, BSTR bstrXml);
+	[id(0x00104)] HRESULT CreateApplication(BSTR bstrAppID, BSTR bstrXml);
 	[id(0x00105), helpstring("method GetGalaxy")] HRESULT GetGalaxy(LONGLONG hHostWnd, [out, retval] IGalaxy** ppGalaxy);
 	[id(0x00106)] HRESULT GetItemText(IXobj* pXobj, long nCtrlID, LONG nMaxLengeh, [out, retval] BSTR* bstrRet);
 	[id(0x00107)] HRESULT SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText);

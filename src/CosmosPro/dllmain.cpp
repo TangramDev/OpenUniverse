@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -22,7 +22,7 @@
  *
  *******************************************************************************/
 
-// dllmain.cpp : Implementation of DllMain.
+ // dllmain.cpp : Implementation of DllMain.
 
 #include "stdafx.h"
 #include "resource.h"
@@ -60,10 +60,10 @@ void CCosmos::InitCosmosApp(bool bCrashReporting)
 	if (m_bBrowserModeInit)
 		return;
 	HMODULE hModule = ::GetModuleHandle(L"chrome_rt.dll");
-	if(hModule==nullptr)
+	if (hModule == nullptr)
 		hModule = ::LoadLibrary(L"chrome_rt.dll");
 	if (hModule) {
-		typedef int(__stdcall * _InitApp)(bool bSupportCrashReporting);
+		typedef int(__stdcall* _InitApp)(bool bSupportCrashReporting);
 		_InitApp _pInitAppFunction;
 		_pInitAppFunction = (_InitApp)GetProcAddress(hModule, "InitApp");
 		if (_pInitAppFunction != NULL) {
@@ -132,7 +132,7 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 			strLib = strAssemblyQualifiedName.Mid(nPos + 1);
 			strLib.Trim();
 			strObjName.Trim();
-			if (strLib == _T("Cosmos")|| strLib == _T("tangram"))
+			if (strLib == _T("Cosmos") || strLib == _T("tangram"))
 			{
 				return strObjName + _T("|") + strLib + _T("|");
 			}
@@ -150,7 +150,7 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 					strLib = szPath;
 					nPos = strLib.ReverseFind('\\');
 					strLib = strLib.Left(nPos + 1);
-					strLib+=_T("PublicAssemblies\\tangramwizard");
+					strLib += _T("PublicAssemblies\\tangramwizard");
 					return strObjName + _T("|") + strLib + _T("|");
 				}
 			}
@@ -191,7 +191,7 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 				strLib.Trim();
 				TCHAR m_szBuffer[MAX_PATH];
 				HRESULT hr = SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, 0, m_szBuffer);
-				strPath.Format(_T("%s\\Microsoft.NET\\assembly\\GAC_MSIL\\%s\\v4.0_%s__%s\\%s.dll"), m_szBuffer, strLib, strVersion, strPublickeytoken,strLib);
+				strPath.Format(_T("%s\\Microsoft.NET\\assembly\\GAC_MSIL\\%s\\v4.0_%s__%s\\%s.dll"), m_szBuffer, strLib, strVersion, strPublickeytoken, strLib);
 				if (::PathFileExists(strPath))
 					return strObjName + _T("|") + strLib + _T("|") + strPath;
 				else
@@ -214,7 +214,26 @@ CString CCosmos::GetLibPathFromAssemblyQualifiedName(CString strAssemblyQualifie
 			strPath = m_strAppPath + strLib + _T(".exe");
 		}
 		else
-			strPath = m_strAppPath + strLib + _T(".dll");
+		{
+			if (theApp.m_pCosmosImpl->m_bOfficeApp)
+			{
+				if (m_strOfficeComponentPath == _T(""))
+				{
+					TCHAR m_szBuffer[MAX_PATH];
+					if (SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, 0, m_szBuffer) == S_OK) {
+						m_strOfficeComponentPath = CString(m_szBuffer);
+						m_strOfficeComponentPath += _T("\\tangram\\");
+						m_strOfficeComponentPath += theApp.m_pCosmosImpl->m_strExeName;
+						m_strOfficeComponentPath += _T("\\");
+					}
+				}
+				strPath = m_strOfficeComponentPath + strLib + _T(".dll");
+			}
+			else
+			{
+				strPath = m_strAppPath + strLib + _T(".dll");
+			}
+		}
 		if (::PathFileExists(strPath))
 			return strObjName + _T("|") + strLib + _T("|") + strPath;
 		else
@@ -370,7 +389,7 @@ CString CCosmos::_GetLibPathFromAssemblyQualifiedName(CString strDir, CString st
 
 CCosmosXobjEvent::CCosmosXobjEvent()
 {
-	m_pXobj			= nullptr;
+	m_pXobj = nullptr;
 	m_pXobjCLREvent = nullptr;
 }
 

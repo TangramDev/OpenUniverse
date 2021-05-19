@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -2768,7 +2768,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 			::PostMessage(m_pHostWebBrowserWnd->m_hWnd, WM_BROWSERLAYOUT, 0, 2);
 		}
 	}
-	if (m_pCosmosFrameWndInfo == nullptr)
+	if (m_pCosmosFrameWndInfo == nullptr&& g_pCosmos->m_pUniverseAppProxy)
 	{
 		HWND hFrameWnd = g_pCosmos->m_pUniverseAppProxy->QueryWndInfo(DocView, m_hWnd);
 		if (hFrameWnd == NULL)

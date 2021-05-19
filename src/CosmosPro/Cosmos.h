@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -948,7 +948,7 @@ namespace Universe
 		static Type^ GetType(String^ ObjID);
 		static Object^ ActiveMethod(String^ strObjID, String^ strMethod, cli::array<Object^, 1>^ p);
 		static Object^ ActiveObjectMethod(Object^ pObj, String^ strMethod, cli::array<Object^, 1>^ p);
-		static void StartApplication(String^ appID, String^ strXML);
+		static void CreateApplication(String^ appID, String^ strXML);
 		static WorkBenchWindow^ RemoteActiveWorkBenchWindow(String^ appID);
 		static Control^ GetMDIClient(Form^ pForm);
 		static Xobj^ ExtendMDIClient(Form^ pForm, String^ strKey, String^ strXml);

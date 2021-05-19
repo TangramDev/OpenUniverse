@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1319,7 +1319,7 @@ namespace Universe
         return nullptr;
     }
 
-    void Cosmos::StartApplication(String^ appID, String^ strXml)
+    void Cosmos::CreateApplication(String^ appID, String^ strXml)
     {
         CComBSTR _strID = marshal_as<CComBSTR>(appID);
         CComBSTR _strXml = marshal_as<CComBSTR>(strXml);
@@ -1340,7 +1340,7 @@ namespace Universe
         //}
         //else
         {
-            theApp.m_pCosmos->StartApplication(_strID, _strXml);
+            theApp.m_pCosmos->CreateApplication(_strID, _strXml);
         }
     }
 
@@ -1605,7 +1605,10 @@ namespace Universe
                                 {
                                     CString strName = pChild3->GetChild(i)->name().MakeLower();
                                     if (pChild4->GetChild(strName))
+                                    {
+                                        pChild3->GetChild(i)->put_attr(_T("mdichild"), true);
                                         pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
+                                    }
                                 }
                             }
                         }
@@ -1692,7 +1695,10 @@ namespace Universe
                                 {
                                     CString strName = pChild3->GetChild(i)->name().MakeLower();
                                     if (pChild4->GetChild(strName))
+                                    {
+                                        pChild3->GetChild(i)->put_attr(_T("mdichild"), true);
                                         pInfo->m_mapFormsInfo[strName] = pChild3->GetChild(i)->xml();
+                                    }
                                 }
                             }
                         }

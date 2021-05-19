@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005
+ *           Web Runtime for Application - Version 1.0.1.202105190006
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -102,6 +102,8 @@ namespace OfficePlus
 			CExcelAddin();
 			virtual ~CExcelAddin();
 
+			CString							m_strNewWorkBookData = _T("");
+			//CString							m_strNewWorkSheetData = _T("");
 			CExcelAppCtrl*					m_pExcelAppCtrl;
 			CExcelObject*					m_pActiveExcelObject;
 			CComPtr<Excel::_Application>	m_pExcelApplication;
@@ -113,7 +115,7 @@ namespace OfficePlus
 			STDMETHOD(put_AppKeyValue)(BSTR bstrKey, VARIANT newVal);
 			STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
 			STDMETHOD(ExportOfficeObjXml)(IDispatch* OfficeObject, BSTR* bstrXml);
-			STDMETHOD(StartApplication)(BSTR bstrAppID, BSTR bstrXml);
+			STDMETHOD(CreateApplication)(BSTR bstrAppID, BSTR bstrXml);
 
 		private:
 			bool							m_bOldVer;
