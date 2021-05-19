@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105140005           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -2647,7 +2647,7 @@ STDMETHODIMP CCosmos::SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::CreateApplication(BSTR bstrAppID, BSTR bstrXml)
+STDMETHODIMP CCosmos::StartApplication(BSTR bstrAppID, BSTR bstrXml)
 {
 	CString strAppID = OLE2T(bstrAppID);
 	strAppID.Trim();
