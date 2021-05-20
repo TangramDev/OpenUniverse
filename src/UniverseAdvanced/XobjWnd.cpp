@@ -475,8 +475,6 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			{
 				HWND hClient = pGalaxy->m_pParentMDIWinForm->m_hMDIClient;
 				::PostMessage(hClient, WM_COSMOSMSG, 3, 20180115);
-				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
-				//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 			}
 			else
 			{
@@ -489,6 +487,8 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 		m_pXobj->m_pXobjShareData->m_pGalaxyCluster->Fire_TabChange(m_pXobj, wParam, lParam);
 	}
 	LRESULT lRes = CWnd::DefWindowProc(WM_TABCHANGE, wParam, lParam);
+	HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+	::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 	return lRes;
 }
 
