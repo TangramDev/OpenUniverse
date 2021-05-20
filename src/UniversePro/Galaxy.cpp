@@ -972,7 +972,22 @@ LRESULT CCloudMDIFrame::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 	m_bDestroy = true;
 	auto it = g_pCosmos->m_mapMDIParent.find(m_hWnd);
 	if (it != g_pCosmos->m_mapMDIParent.end())
+	{
 		g_pCosmos->m_mapMDIParent.erase(it);
+		if (g_pCosmos->m_mapMDIParent.size())
+		{
+			CCloudMDIFrame* pWnd = g_pCosmos->m_mapMDIParent.begin()->second;
+			if (pWnd && ::IsWindow(pWnd->m_hWnd))
+			{
+				LRESULT lRes = ::SendMessage(pWnd->m_hWnd, WM_QUERYAPPPROXY, 0, 0);
+				if (lRes > 0)
+				{
+					g_pCosmos->m_pActiveAppProxy = (IUniverseAppProxy*)lRes;
+					g_pCosmos->m_pActiveAppProxy->OnActiveMainFrame(pWnd->m_hWnd);
+				}
+			}
+		}
+	}
 	if (m_pHostBrowser)
 		m_pHostBrowser->m_bDestroy = true;
 	LRESULT lRes = DefWindowProc(uMsg, wParam, lParam);
@@ -1105,8 +1120,8 @@ LRESULT CCloudMDIFrame::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 							if (it.first == 10000)
 							{
 								CString strXml = _T("");
-								auto it = g_pCosmos->m_mapDocTemplate.find(strKey);
-								if (it != g_pCosmos->m_mapDocTemplate.end())
+								auto it = m_mapDocTemplate.find(strKey);
+								if (it != m_mapDocTemplate.end())
 								{
 									strXml = it->second;
 									CTangramXmlParse m_Parse;
@@ -1175,10 +1190,11 @@ CCloudWinForm::CCloudWinForm(void)
 {
 	m_nState = -1;
 	m_bMdiForm = false;
+	m_strOldKey = _T("");
 	m_pBKWnd = nullptr;
 	m_pWormhole = nullptr;
 	m_pOwnerHtmlWnd = nullptr;
-	m_strChildFormPath = m_strXml = m_strKey = m_strOldKey = m_strBKID = _T("");
+	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
 	if (g_pCosmos->m_pCurMDIChildFormInfo)
 	{
 		m_pChildFormsInfo = g_pCosmos->m_pCurMDIChildFormInfo;
@@ -1702,7 +1718,6 @@ LRESULT CCloudWinForm::OnCosmosGetXml(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 				{
 					g_pCosmos->m_mapValInfo.erase(it);
 				}
-				m_mapData[strIndex] = pParse2->xml();
 				g_pCosmos->m_mapValInfo[strIndex] = CComVariant(pParse2->xml());
 				return 1;
 			}
@@ -1730,6 +1745,7 @@ LRESULT CCloudWinForm::OnMDIActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	{
 		if (m_pMDIParent)
 		{
+			m_pMDIParent->m_strOldKey = _T("");
 			m_pMDIParent->m_pActiveChild = this;
 			if (m_pMDIParent->m_hMDIChildBeingClosedOrMinimized == NULL)
 				::SendMessage(m_hWnd, WM_HUBBLE_DATA, 0, 2);
@@ -1945,6 +1961,10 @@ CGalaxy::~CGalaxy()
 	}
 	m_mapGalaxyProxy.clear();
 	m_hWnd = NULL;
+	if (m_mapXobj.size())
+		m_mapXobj.clear();
+	m_mapWPFView.clear();
+	m_mapVisibleWPFView.clear();
 }
 
 void CGalaxy::HostPosChanged()
@@ -3107,12 +3127,15 @@ LRESULT CGalaxy::OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 LRESULT CGalaxy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
+	if (m_pBKWnd)
+	{
+		if (::IsWindow(m_pBKWnd->m_hWnd))
+			::DestroyWindow(m_pBKWnd->m_hWnd);
+	}
 	::RemoveProp(m_hWnd, _T("CosmosData"));
 	if (g_pCosmos->m_pCLRProxy) {
 		g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((IGalaxy*)this);
 	}
-	if (m_pBKWnd)
-		m_pBKWnd->DestroyWindow();
 	m_pGalaxyCluster->BeforeDestory();
 	m_pGalaxyCluster->m_strConfigFileNodeName.MakeLower();//20190116
 
@@ -3180,20 +3203,6 @@ LRESULT CGalaxy::OnCosmosMsg(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		{
 			::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)m_hWnd, 20210309);
 		}
-		//if (m_pParentMDIWinForm)
-		//{
-		//	if (m_pParentMDIWinForm->m_pClientGalaxy)
-		//	{
-		//		if (m_pHostWebBrowserWnd)
-		//		{
-		//			if (m_pHostWebBrowserWnd->m_pVisibleWebView && m_pHostWebBrowserWnd->m_pVisibleWebView->m_pGalaxy)
-		//			{
-		//				CXobj* pObj = m_pHostWebBrowserWnd->m_pVisibleWebView->m_pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-		//				m_pBindingXobj = pObj;
-		//			}
-		//		}
-		//	}
-		//}
 		HostPosChanged();
 		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
 		{
@@ -3343,9 +3352,6 @@ LRESULT CGalaxy::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	//}
 	if (m_pWorkXobj)
 	{
-		//CXobj* pObj = m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
-		//if (pObj)
-		//	m_pBindingXobj = pObj;
 		if (m_pBindingXobj)
 		{
 			RECT rect = { 0,0,0,0 };

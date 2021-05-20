@@ -122,14 +122,12 @@ class CUniverse :
 	public CComCoClass<CUniverse>,
 	public CAtlDllModuleT< CUniverse >
 {
-	friend class CCosmos;
 public:
 	CUniverse();
 	~CUniverse();
 
 	bool				m_bHostCLR;
 	bool				m_bAppStarting = false;
-	bool				m_bProcessMsgByMe = false;
 	CString GetFileVer();
 	void SetHook(DWORD ThreadID);
 

@@ -156,6 +156,7 @@ namespace OfficePlus
 
 	void COfficeAddin::_AddDocXml(Office::_CustomXMLParts* pCustomXMLParts, BSTR bstrXml, BSTR bstrKey)
 	{
+#ifdef TANGRAMCOMMERCIALDITION
 		CString strXml = OLE2T(bstrXml);
 		CString strKey = OLE2T(bstrKey);
 		if (strXml == _T("") || strKey == _T(""))
@@ -205,6 +206,7 @@ namespace OfficePlus
 				}
 			}
 		}
+#endif
 	}
 
 	HRESULT COfficeAddin::OnConnection(IDispatch* pHostApp, int ConnectMode)

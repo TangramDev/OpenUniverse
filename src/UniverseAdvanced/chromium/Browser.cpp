@@ -139,12 +139,11 @@ namespace Browser {
 			::SetWindowPos(m_hOldTab, HWND_BOTTOM, rc.left, rc.top, 1, 1, SWP_NOREDRAW | SWP_NOACTIVATE);
 			m_hOldTab = NULL;
 		}
-
-		if (m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2)
+		if (theApp.m_bAppStarting && m_pVisibleWebView->m_bCanShow == false &&
+			m_pCosmosFrameWndInfo && m_pCosmosFrameWndInfo->m_nFrameType == 2 &&
+			m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
 		{
-			if (m_pVisibleWebView == m_pCosmosFrameWndInfo->m_pWebPage)
-				if (m_pVisibleWebView->m_bCanShow == false)
-					return;
+			return;
 		}
 
 		if (m_bTabChange == true)
@@ -447,7 +446,7 @@ namespace Browser {
 				if (m_pParentXobj->m_pParentWinFormWnd)
 				{
 					CGalaxy* pGalaxy = m_pParentXobj->m_pParentWinFormWnd->m_pClientGalaxy;
-					if (pGalaxy && pGalaxy->m_pWorkXobj)
+					if (pGalaxy&&pGalaxy->m_pWorkXobj)
 					{
 						pGalaxy->m_pBindingXobj = pGalaxy->m_pWorkXobj->GetVisibleChildByName(_T("mdiclient"));
 					}
@@ -478,7 +477,21 @@ namespace Browser {
 			{
 				m_bTabChange = false;
 			}
-			return 1;
+		}
+		return 1;
+		break;
+		case 20200128:
+		{
+			if (m_pVisibleWebView)
+			{
+				CGalaxy* pGalaxy = m_pVisibleWebView->m_pGalaxy;
+				if (pGalaxy)
+				{
+					CXobj* pXobj = pGalaxy->m_pWorkXobj;
+					CXobjWnd* pWnd = (CXobjWnd*)(pXobj->m_pHostWnd);
+					return (LRESULT)(pWnd->m_hWnd);
+				}
+			}
 		}
 		break;
 		case 1992:
@@ -515,10 +528,7 @@ namespace Browser {
 		if (it != g_pCosmos->m_mapBrowserWnd.end()) {
 			g_pCosmos->m_mapBrowserWnd.erase(it);
 		}
-		if (m_pParentXobj && m_pParentXobj->m_pParentWinFormWnd)
-		{
-			m_pParentXobj->m_pParentWinFormWnd->m_pOwnerHtmlWnd = nullptr;
-		}
+
 		if ((g_pCosmos->m_hMainWnd == g_pCosmos->m_hCosmosWnd && g_pCosmos->m_mapBrowserWnd.size() == 1) ||
 			g_pCosmos->m_hHostBrowserWnd == m_hWnd)
 		{
@@ -533,6 +543,7 @@ namespace Browser {
 				g_pCosmos->m_mapBrowserWnd.erase(g_pCosmos->m_mapBrowserWnd.begin(), g_pCosmos->m_mapBrowserWnd.end());
 			}
 		}
+
 		bool bExitCLR = false;
 		if ((g_pCosmos->m_hMainWnd == NULL && g_pCosmos->m_mapBrowserWnd.size() == 0) ||
 			g_pCosmos->m_hHostBrowserWnd == m_hWnd) {
@@ -682,10 +693,20 @@ namespace Browser {
 						}
 					}
 				}
-				if (theApp.m_bAppStarting == true/* && g_pCosmos->m_nWaitTabCounts == 0*/)
+				//if (theApp.m_bAppStarting == true)
+				//{
+				//	theApp.m_bAppStarting = false;
+				//}
+			}
+			break;
+			case 8:
+			{
+				RECT rc;
+				::GetClientRect(m_hWnd, &rc);
+				if ((rc.right < rc.left) || (rc.bottom < rc.top))
 				{
-					theApp.m_bAppStarting = false;
-					m_pVisibleWebView->m_bCanShow = true;
+					::GetClientRect(::GetParent(m_hWnd), &rc);
+					::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rc.right, rc.bottom, SWP_NOREDRAW | SWP_NOACTIVATE);
 				}
 			}
 			break;
@@ -781,7 +802,6 @@ namespace Browser {
 					if (m_pMDIParent)
 						m_pMDIParent->m_bCreateNewDoc = false;
 					theApp.m_bAppStarting = false;
-					m_pVisibleWebView->m_bCanShow = true;
 					::PostMessage(m_hWnd, WM_BROWSERLAYOUT, 0, 7);
 					m_bSZMode = false;
 				}
@@ -790,9 +810,7 @@ namespace Browser {
 				{
 					if ((m_pMDIParent && m_pMDIParent->m_bCreateNewDoc) || !::IsWindowVisible(m_hWnd))
 						break;
-					if (/*m_pVisibleWebView->m_bCanShow == false ||*/ m_bTabChange || m_bInTabChange)
-						break;
-					if (g_pCosmos->m_nWaitTabCounts)
+					if (g_pCosmos->m_nWaitTabCounts || m_bTabChange || m_bInTabChange)
 						break;
 					HWND hWnd = m_pBrowser->GetActiveWebContentWnd();
 					for (auto& it : m_mapChildPage)

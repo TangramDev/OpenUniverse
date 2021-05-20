@@ -474,12 +474,9 @@ LRESULT CXobjWnd::OnTabChange(WPARAM wParam, LPARAM lParam)
 			if (pGalaxy->m_pParentMDIWinForm)
 			{
 				HWND hClient = pGalaxy->m_pParentMDIWinForm->m_hMDIClient;
-				if (theApp.m_bAppStarting)
-				{
-					::SendMessage(hClient, WM_COSMOSMSG, 3, 20180115);
-				}
-				else
-					::PostMessage(hClient, WM_COSMOSMSG, 3, 20180115);
+				::PostMessage(hClient, WM_COSMOSMSG, 3, 20180115);
+				//HWND hTop = ::GetAncestor(m_hWnd, GA_ROOT);
+				//::RedrawWindow(hTop, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN /*| RDW_UPDATENOW*/);
 			}
 			else
 			{
@@ -803,19 +800,17 @@ void CXobjWnd::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr)
 				m_pXobj->m_pWebBrowser->m_pParentXobj = m_pXobj;
 			else
-				return;
+				m_pXobj->m_pWebBrowser = nullptr;
+			return;
 		}
-		if (m_pXobj->m_pWebBrowser->m_pVisibleWebView)
+		m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow = (theApp.m_bAppStarting == false);
+		if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
+			m_pXobj->m_pWebBrowser->m_pVisibleWebView == nullptr ||
+			m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)
 		{
-			m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow = (theApp.m_bAppStarting == false);
-			if (m_pXobj->m_pWebBrowser->m_pParentXobj == nullptr ||
-				m_pXobj->m_pWebBrowser->m_pVisibleWebView == nullptr ||
-				m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)
-			{
-				if (m_pXobj->m_pWebBrowser->m_pParentXobj && m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow)
-					::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210316);
-				return;
-			}
+			if (m_pXobj->m_pWebBrowser->m_pParentXobj && m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow)
+				::PostMessage(m_hWnd, WM_COSMOSMSG, 0, 20210316);
+			return;
 		}
 		if (::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd) == false)
 		{
@@ -927,8 +922,6 @@ void CXobjWnd::OnShowWindow(BOOL bShow, UINT nStatus)
 				}
 			}
 
-			//if (m_pXobj->m_pWebBrowser->m_pVisibleWebView && m_pXobj->m_pWebBrowser->m_pVisibleWebView->m_bCanShow == false)
-			//	return;
 			if (::IsChild(m_hWnd, m_pXobj->m_pWebBrowser->m_hWnd) == false)
 			{
 				::SetParent(m_pXobj->m_pWebBrowser->m_hWnd, m_hWnd);

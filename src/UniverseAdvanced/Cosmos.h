@@ -168,8 +168,8 @@ public:
 	int										m_nTangram;
 	int										m_nTangramCtrl;
 	int										m_nTangramFrame;
-	int										m_nOfficeDocs;
 	int										m_nSessionCount;
+	int										m_nOfficeDocs;
 	int										m_nOfficeDocsSheet;
 	int										m_nTangramNodeCommonData;
 #endif
@@ -281,7 +281,6 @@ public:
 	void Lock() {}
 	void Unlock() {}
 	void CosmosInit();
-	void TangramInitFromeWeb();
 	void EclipseInit();
 	void ExitInstance();
 	void InitCosmosDocManager();
@@ -376,7 +375,6 @@ private:
 	void OnDocumentOnLoadCompleted(CChromeRenderFrameHost*, HWND hHtmlWnd, void*);
 	void ChromeChildProcessCreated(CChromeChildProcessHostImpl* pChromeChildProcessHostImpl);
 	void OnSubBrowserWndCreated(HWND hParent, HWND hBrowser);
-	void OnCLRHostExit();
 	CString GetProcessPath(const char* _ver, CString process_type);
 	CString GetSchemeBaseName();
 	HICON GetAppIcon(int nIndex);
@@ -419,4 +417,6 @@ private:
 
 	//NetworkChangeNotify:
 	void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle);
+
+	void OnCLRHostExit();
 };

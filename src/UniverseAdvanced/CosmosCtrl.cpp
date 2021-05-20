@@ -33,7 +33,7 @@ HRESULT WINAPI CCosmosCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
 {
 	if (g_pCosmos->m_strCurrentAppID == _T(""))
 	{
-		if(g_pCosmos->m_pCosmosDelegate&&g_pCosmos->m_pCosmosDelegate->m_pJVM)
+		if (g_pCosmos->m_pCosmosDelegate && g_pCosmos->m_pCosmosDelegate->m_pJVM)
 		{
 			return CEclipseCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 		}

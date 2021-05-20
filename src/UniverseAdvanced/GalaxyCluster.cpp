@@ -87,16 +87,20 @@ CGalaxyCluster::~CGalaxyCluster()
 	if (g_pCosmos->m_mapGalaxyCluster.size() == 0)
 		g_pCosmos->Close();
 
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		if (it.second->m_bAutoDelete)
 			delete it.second;
 	}
 	m_mapGalaxyClusterProxy.clear();
-	for (auto &it : m_mapEventObj)
-		delete it.second;
-	m_mapEventObj.clear();
-	m_strMapKey.erase(m_strMapKey.begin(), m_strMapKey.end());
+	if (m_mapEventObj.size())
+	{
+		for (auto& it : m_mapEventObj)
+			delete it.second;
+		m_mapEventObj.clear();
+	}
+	if (m_strMapKey.size())
+		m_strMapKey.erase(m_strMapKey.begin(), m_strMapKey.end());
 }
 
 STDMETHODIMP CGalaxyCluster::get_Count(long* pCount)
@@ -886,7 +890,7 @@ HRESULT CGalaxyCluster::Fire_AddInCreated(IXobj* pRootXobj, IDispatch* pAddIn, B
 		}
 	}
 
-	for (auto& it : m_mapGalaxyClusterProxy)
+	for (auto &it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnAddInCreated(pRootXobj, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
 	}
@@ -985,7 +989,7 @@ HRESULT CGalaxyCluster::Fire_Destroy()
 		}
 	}
 
-	for (auto& it : m_mapGalaxyClusterProxy)
+	for (auto &it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnDestroy();
 	}
@@ -1018,7 +1022,7 @@ HRESULT CGalaxyCluster::Fire_NodeMouseActivate(IXobj* pActiveNode)
 		}
 	}
 
-	for (auto& it : m_mapGalaxyClusterProxy)
+	for (auto &it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnNodeMouseActivate(pActiveNode);
 	}

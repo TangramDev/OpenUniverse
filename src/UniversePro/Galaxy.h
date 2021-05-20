@@ -221,6 +221,9 @@ public:
 	CCloudMDIChild*				m_pActiveMDIChild = nullptr;
 	CosmosFrameWndInfo*			m_pCosmosFrameWndInfo = nullptr;
 	map<CString, CString>		m_mapClientCtrlBarData;
+	map<CString, CString>		m_mapDocAppName;
+	map<CString, CString>		m_mapDocTemplate;
+	map<CString, CString>		m_mapDocDefaultName;
 	map<HWND, CCloudMDIChild*>	m_mapMDIChild;
 
 	BEGIN_MSG_MAP(CCloudMDIFrame)
@@ -249,7 +252,6 @@ public:
 	virtual ~CCloudWinForm(void);
 	bool									m_bReady = false;
 	bool									m_bSZMode = false;
-	bool									m_bNewMDIKey = false;
 	int										m_nState;
 	HWND									m_hMDIClient = NULL;
 	HWND									m_hOwnerWebView = NULL;
@@ -274,7 +276,6 @@ public:
 	CCloudWinForm*							m_pMDIParent = nullptr;
 	map<HWND, CCloudWinForm*>				m_mapMDIChild;
 	CMDIChildFormInfo*						m_pChildFormsInfo;
-	map<CString, CString>					m_mapData;
 	void SendMessage();
 
 	BEGIN_MSG_MAP(CCloudWinForm)

@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105140005           *
+ *           Web Runtime for Application - Version 1.0.1.202105190006           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -179,7 +179,7 @@ CCosmos::CCosmos()
 	m_pClrHost = nullptr;
 	m_nJVMVersion = JNI_VERSION_10;
 	g_pCosmos = this;
-	m_nWaitTabCounts = 1;
+	m_nWaitTabCounts = 0;
 	m_bOfficeAddinUnLoad = true;
 	m_bWinFormActived = false;
 	m_bCanClose = false;
@@ -226,9 +226,9 @@ CCosmos::CCosmos()
 	m_strCurrentAppID = _T("");
 	m_strConfigFile = _T("");
 	m_strConfigDataFile = _T("");
-	m_strSubProcessPath = _T("");
 	m_strAppCommonDocPath = _T("");
 	m_strStartJarPath = _T("");
+	m_strSubProcessPath = _T("");
 	m_strBridgeJavaClass = "";
 	m_strCurrentEclipsePagePath = _T("");
 	m_strOfficeAppIDs = _T("word.application,excel.application,outlook.application,onenote.application,infopath.application,project.application,visio.application,access.application,powerpoint.application,lync.ucofficeintegration.1,");
@@ -237,9 +237,9 @@ CCosmos::CCosmos()
 #ifdef _DEBUG
 	m_nTangram = 0;
 	m_nJsObj = 0;
+	m_nSessionCount = 0;
 	m_nTangramCtrl = 0;
 	m_nTangramFrame = 0;
-	m_nSessionCount = 0;
 	m_nOfficeDocs = 0;
 	m_nOfficeDocsSheet = 0;
 	m_nTangramNodeCommonData = 0;
@@ -453,7 +453,7 @@ void CCosmos::Init()
 
 CCosmos::~CCosmos()
 {
-	OutputDebugString(_T("------------------Begin Release CCosmos------------------------\n"));
+	OutputDebugString(_T("------------------Begin Release CCosmos at Universe.dll------------------------\n"));
 
 	if (m_mapGalaxyCluster.size())
 	{
@@ -536,7 +536,6 @@ CCosmos::~CCosmos()
 
 		m_mapClassInfo.clear();
 	}
-
 	if (m_mapWormhole.size())
 	{
 		while (m_mapWormhole.size())
@@ -547,7 +546,6 @@ CCosmos::~CCosmos()
 				break;
 		}
 	}
-
 	m_mapXobj.clear();
 	m_mapMDTWindow.clear();
 	m_mapWebView.clear();
@@ -562,22 +560,21 @@ CCosmos::~CCosmos()
 			m_pClrHost = nullptr;
 			OutputDebugString(_T("------------------ClrHost Release from ~CCosmos() Successed at Universe.dll!------------------------\n"));
 		}
-		OutputDebugString(_T("------------------End Stop CLR from ~CCosmos() at Universe.dll------------------------\n"));
 	}
 	g_pCosmos = nullptr;
-	OutputDebugString(_T("------------------End Release CCosmos at Universe.dll------------------------\n"));
+	OutputDebugString(_T("------------------End Release CCosmos from ~CCosmos() at Universe.dll------------------------\n"));
 }
 
 void CCosmos::OnCLRHostExit()
 {
 	if (m_pClrHost && m_nAppID == -1 && theApp.m_bHostCLR == false)
 	{
-		OutputDebugString(_T("------------------Begin Stop CLR from OnCLRHostExit at Universe.dll------------------------\n"));
+		OutputDebugString(_T("------------------Begin Stop CLR from OnCLRHostExit------------------------\n"));
 		HRESULT hr = m_pClrHost->Stop();
 		ASSERT(hr == S_OK);
 		if (hr == S_OK)
 		{
-			OutputDebugString(_T("------------------End Stop CLR  from OnCLRHostExit Successed at Universe.dll!------------------------\n"));
+			OutputDebugString(_T("------------------Stop CLR  from OnCLRHostExit Successed!------------------------\n"));
 		}
 	}
 }
@@ -854,97 +851,6 @@ void CCosmos::CosmosLoad()
 	m_strAppDataPath += _T("\\");
 	m_strAppDataPath += m_strAppKey;
 	m_strAppDataPath += _T("\\");
-}
-
-void CCosmos::TangramInitFromeWeb()
-{
-	CTangramXmlParse m_Parse;
-	if (m_Parse.LoadXml(m_strAppXml))
-	{
-		m_strAppName = m_Parse.attr(_T("appname"), _T("The Universe System"));
-		m_pHostHtmlWnd->m_strPageName = m_Parse.attr(_T("pagename"), _T("default"));
-		CTangramXmlParse* pParse = nullptr;
-		pParse = m_Parse.GetChild(_T("modules"));
-		if (pParse)
-		{
-			int nCount = pParse->GetCount();
-			LONGLONG hHandle = 0;
-			for (int i = 0; i < nCount; i++)
-			{
-				CTangramXmlParse* pCLRApp = pParse->GetChild(i);
-				BSTR bstrAppXML = pCLRApp->xml().AllocSysString();
-				InitCLRApp(bstrAppXML, &hHandle);
-				::SysFreeString(bstrAppXML);
-			}
-		}
-
-		pParse = m_Parse.GetChild(_T("ntp"));
-		if (pParse)
-			m_strNtpXml = m_Parse[_T("ntp")].xml();
-		pParse = m_Parse.GetChild(_T("doctemplate"));
-		if (pParse)
-		{
-			int nCount = pParse->GetCount();
-			if (nCount)
-			{
-				for (int i = 0; i < nCount; i++)
-				{
-					CTangramXmlParse* pChild = pParse->GetChild(i);
-					CString strName = pChild->name();
-					CString strDefaultName = pChild->attr(_T("defaultname"), strName);
-					CString strAppName = pChild->attr(_T("appname"), strName);
-					m_mapDocAppName[strName] = strAppName;
-					m_mapDocTemplate[strName] = pChild->xml();
-					m_mapDocDefaultName[strName] = strDefaultName;
-				}
-				::PostAppMessage(::GetCurrentThreadId(), WM_COSMOSMSG, (WPARAM)g_pCosmos->m_hFirstView, 20210110);
-			}
-		}
-		pParse = m_Parse.GetChild(_T("defaultworkbench"));
-		if (pParse)
-			m_strDefaultWorkBenchXml = m_Parse[_T("defaultworkbench")].xml();
-
-		m_pMainWebPageImpl = m_pHostHtmlWnd;
-
-		pParse = m_Parse.GetChild(_T("urls"));
-		if (pParse)
-		{
-			CString strUrls = _T("");
-			int nCount = pParse->GetCount();
-			for (int i = 0; i < nCount; i++)
-			{
-				CString strURL = pParse->GetChild(i)->attr(_T("url"), _T(""));
-				int nPos2 = strURL.Find(_T(":"));
-				if (nPos2 != -1)
-				{
-					CString strURLHeader = strURL.Left(nPos2);
-					if (strURLHeader.CompareNoCase(_T("host")) == 0)
-					{
-						strURL = m_strAppPath + strURL.Mid(nPos2 + 1);
-					}
-				}
-				if (strURL != _T(""))
-				{
-					strUrls += strURL;
-					if (i < nCount - 1)
-						strUrls += _T("|");
-				}
-			}
-			if (strUrls != _T(""))
-			{
-				CString strDisposition = _T("");
-				strDisposition.Format(_T("%d"), NEW_BACKGROUND_TAB);
-				if (m_pHostHtmlWnd->m_pChromeRenderFrameHost)
-				{
-					IPCMsg msg;
-					msg.m_strId = L"ADD_URL";
-					msg.m_strParam1 = strUrls;
-					msg.m_strParam2 = strDisposition;
-					m_pHostHtmlWnd->m_pChromeRenderFrameHost->SendCosmosMessage(&msg);
-				}
-			}
-		}
-	}
 }
 
 BOOL DelTree(LPCTSTR lpszPath)
@@ -2647,7 +2553,7 @@ STDMETHODIMP CCosmos::SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText)
 	return S_OK;
 }
 
-STDMETHODIMP CCosmos::StartApplication(BSTR bstrAppID, BSTR bstrXml)
+STDMETHODIMP CCosmos::CreateApplication(BSTR bstrAppID, BSTR bstrXml)
 {
 	CString strAppID = OLE2T(bstrAppID);
 	strAppID.Trim();
@@ -4662,11 +4568,11 @@ bool CCosmos::SetFrameInfo(HWND hWnd, HWND hFrame, CString strTemplateID, void* 
 	auto it = m_mapDocDefaultName.find(strTemplateID);
 	if (it != m_mapDocDefaultName.end())
 	{
-		CString strApp = _T("");
-		auto it2 = m_mapDocAppName.find(strTemplateID);
-		if(it2!= m_mapDocAppName.end())
-			g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second,it2->second);
+		auto it2 = g_pCosmos->m_mapDocAppName.find(strTemplateID);
+		if (it2 != g_pCosmos->m_mapDocAppName.end())
+			g_pCosmosImpl->m_pUniverseAppProxy->SetFrameCaption(hWnd, it->second, it2->second);
 	}
+
 	return false;
 }
 

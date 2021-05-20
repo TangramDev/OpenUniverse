@@ -93,10 +93,14 @@ CGalaxyCluster::~CGalaxyCluster()
 			delete it.second;
 	}
 	m_mapGalaxyClusterProxy.clear();
-	for (auto& it : m_mapEventObj)
-		delete it.second;
-	m_mapEventObj.clear();
-	m_strMapKey.clear();
+	if (m_mapEventObj.size())
+	{
+		for (auto& it : m_mapEventObj)
+			delete it.second;
+		m_mapEventObj.clear();
+	}
+	if (m_strMapKey.size())
+		m_strMapKey.erase(m_strMapKey.begin(), m_strMapKey.end());
 }
 
 STDMETHODIMP CGalaxyCluster::get_Count(long* pCount)
@@ -848,7 +852,7 @@ HRESULT CGalaxyCluster::Fire_NodeCreated(IXobj* pXobjCreated)
 		}
 	}
 
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnXobjCreated(pXobjCreated);
 	}
@@ -886,7 +890,7 @@ HRESULT CGalaxyCluster::Fire_AddInCreated(IXobj* pRootXobj, IDispatch* pAddIn, B
 		}
 	}
 
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnAddInCreated(pRootXobj, pAddIn, OLE2T(bstrID), OLE2T(bstrAddInXml));
 	}
@@ -920,7 +924,7 @@ HRESULT CGalaxyCluster::Fire_BeforeOpenXml(BSTR bstrXml, LONGLONG hWnd)
 		}
 	}
 
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnBeforeOpenXml(OLE2T(bstrXml), (HWND)hWnd);
 	}
@@ -956,6 +960,7 @@ HRESULT CGalaxyCluster::Fire_OpenXmlComplete(BSTR bstrXml, LONGLONG hWnd, IXobj*
 			}
 		}
 	}
+
 	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnOpenXmlComplete(OLE2T(bstrXml), (HWND)hWnd, pRetRootNode);
@@ -984,7 +989,7 @@ HRESULT CGalaxyCluster::Fire_Destroy()
 		}
 	}
 
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnDestroy();
 	}
@@ -1056,7 +1061,7 @@ HRESULT CGalaxyCluster::Fire_ClrControlCreated(IXobj* Node, IDispatch* Ctrl, BST
 		}
 	}
 
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnClrControlCreated(Node, Ctrl, OLE2T(CtrlName), (HWND)CtrlHandle);
 	}
@@ -1126,7 +1131,7 @@ HRESULT CGalaxyCluster::Fire_TabChange(IXobj* sender, LONG ActivePage, LONG OldP
 		}
 	}
 
-	for (auto &it : m_mapGalaxyClusterProxy)
+	for (auto& it : m_mapGalaxyClusterProxy)
 	{
 		it.second->OnTabChange(sender, ActivePage, OldPage);
 	}

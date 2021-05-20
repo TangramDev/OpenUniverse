@@ -48,7 +48,6 @@
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>false</CLRSupport>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <VCToolsVersion>14.28.29910</VCToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -136,8 +135,6 @@
       <BrowseInformation>false</BrowseInformation>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -161,7 +158,7 @@
       </AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
-      <PreserveSbr>false</PreserveSbr>
+      <PreserveSbr>true</PreserveSbr>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
     <PostBuildEvent>
@@ -248,7 +245,7 @@ copy "$(TargetPath)" "C:\src\Tangram\chromium_root_81\src\out\tangram_non_static
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <RegisterOutput>true</RegisterOutput>
+      <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>xmllite.lib;Winhttp.lib;httpapi.lib;bcrypt.lib;crypt32.lib;ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\Universe.def</ModuleDefinitionFile>
       <TypeLibraryFile />
@@ -307,7 +304,7 @@ copy "$(TargetPath)" "$(DevEnvDir)PublicAssemblies\$(TargetName)$(TargetExt)"</C
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <RegisterOutput>true</RegisterOutput>
+      <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>xmllite.lib;Winhttp.lib;httpapi.lib;bcrypt.lib;crypt32.lib;ComCtl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\Universe.def</ModuleDefinitionFile>
       <OptimizeReferences>true</OptimizeReferences>

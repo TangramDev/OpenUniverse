@@ -63,7 +63,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// Cosmos.h : Declaration of the CCosmos
+ // Cosmos.h : Declaration of the CCosmos
 
 #include "universe.h"
 #include "ObjSafe.h"
@@ -79,7 +79,6 @@ using namespace CommonUniverse;
 class CCloudWinForm;
 class CCloudMDTFrame;
 class CWormhole;
-
 struct CommonThreadInfo
 {
 	HHOOK				m_hGetMessageHook;
@@ -115,7 +114,7 @@ public:
 	BOOL m_bNotFired;
 	int m_nEventIndex;
 	CString m_strEventName;
-	IDispatch*	m_pSourceObj;
+	IDispatch* m_pSourceObj;
 	map<int, IDispatch*> m_mapDisp;
 	map<int, VARIANT> m_mapVar;
 protected:
@@ -185,21 +184,21 @@ public:
 	CImageList								m_DocTemplateImageList;
 
 	//.NET Version 4: 
-	ICLRRuntimeHost*						m_pClrHost;
+	ICLRRuntimeHost* m_pClrHost;
 
-	CWebView*								m_pHostHtmlWnd = nullptr;
-	CWebView*								m_pHtmlWndCreated;
-	CWebView*								m_pActiveHtmlWnd;
+	CWebView* m_pHostHtmlWnd = nullptr;
+	CWebView* m_pHtmlWndCreated;
+	CWebView* m_pActiveHtmlWnd;
 
-	CCloudWinForm*								m_pActiveWinFormWnd;
+	CCloudWinForm* m_pActiveWinFormWnd;
 
-	CXobj*									m_pActiveXobj;
-	CGalaxy*								m_pGalaxy;
-	CGalaxyCluster*							m_pGalaxyCluster;
+	CXobj* m_pActiveXobj;
+	CGalaxy* m_pGalaxy;
+	CGalaxyCluster* m_pGalaxyCluster;
 
-	CCosmosAppCtrl*							m_pCosmosAppCtrl;
+	CCosmosAppCtrl* m_pCosmosAppCtrl;
 
-	CEclipseWnd*							m_pActiveEclipseWnd;
+	CEclipseWnd* m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
 	//map<HWND, CGalaxy*>						m_mapBKFrame;
@@ -263,7 +262,7 @@ public:
 	STDMETHOD(SetHostFocus)(void);
 	STDMETHOD(UpdateXobj)(IXobj* pXobj);
 	STDMETHOD(CosmosCommand)(IDispatch* RibbonControl) { return S_OK; };
-	STDMETHOD(CosmosGetImage)(BSTR strValue, IPictureDisp ** ppDispImage) { return S_OK; };
+	STDMETHOD(CosmosGetImage)(BSTR strValue, IPictureDisp** ppDispImage) { return S_OK; };
 	STDMETHOD(CosmosGetVisible)(IDispatch* RibbonControl, VARIANT* varVisible) { return S_OK; };
 	STDMETHOD(CosmosOnLoad)(IDispatch* RibbonControl) { return S_OK; };
 	STDMETHOD(CosmosGetItemCount)(IDispatch* RibbonControl, long* nCount) { return S_OK; };
@@ -282,7 +281,6 @@ public:
 	void Lock() {}
 	void Unlock() {}
 	void CosmosInit();
-	void TangramInitFromeWeb();
 	void EclipseInit();
 	void ExitInstance();
 	void InitCosmosDocManager();
@@ -291,8 +289,8 @@ public:
 	int	 LoadCLR();
 	BOOL CopyFolder(CString strSrcPath, CString strDesPath);
 	BOOL IsUserAdministrator();
-	BOOL LoadImageFromResource(ATL::CImage *pImage, HMODULE hMod, CString strResID, LPCTSTR lpTyp);
-	BOOL LoadImageFromResource(ATL::CImage *pImage, HMODULE hMod, UINT nResID, LPCTSTR lpTyp);
+	BOOL LoadImageFromResource(ATL::CImage* pImage, HMODULE hMod, CString strResID, LPCTSTR lpTyp);
+	BOOL LoadImageFromResource(ATL::CImage* pImage, HMODULE hMod, UINT nResID, LPCTSTR lpTyp);
 	BOOL InitJNIForTangram();
 	CString ConfigJavaVMInfo(CString strOption);
 	CString EncodeFileToBase64(CString strSRC);
@@ -363,13 +361,13 @@ private:
 	map<CString, CString>				m_mapDocDefaultName;
 
 	void CosmosLoad();
-	bool CheckUrl(CString&   url);
+	bool CheckUrl(CString& url);
 	void AttachXobj(void* pXobjEvents);
 	CString Encode(CString strSRC, BOOL bEnCode);
 	IXobj* ObserveCtrl(__int64 handle, CString name, CString NodeTag);
 	void BrowserAppStart();
 	bool IsMDIClientGalaxyNode(IXobj*);
-	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString &MD5);
+	int CalculateByteMD5(BYTE* pBuffer, int BufferSize, CString& MD5);
 	void FireNodeEvent(int nIndex, CXobj* pXobj, CCosmosEvent* pObj);
 
 	CString RemoveUTF8BOM(CString strUTF8);
@@ -377,9 +375,8 @@ private:
 	void ChromeTabCreated(CChromeTab* pTab);
 	void OnRenderProcessCreated(CChromeRenderProcess* pProcess);
 	void OnDocumentOnLoadCompleted(CChromeRenderFrameHost*, HWND hHtmlWnd, void*);
-	void ChromeChildProcessCreated(CChromeChildProcessHostImpl*	pChromeChildProcessHostImpl);
+	void ChromeChildProcessCreated(CChromeChildProcessHostImpl* pChromeChildProcessHostImpl);
 	void OnSubBrowserWndCreated(HWND hParent, HWND hBrowser);
-	void OnCLRHostExit();
 	CString GetProcessPath(const char* _ver, CString process_type);
 	CString GetSchemeBaseName();
 	HICON GetAppIcon(int nIndex);
@@ -419,7 +416,9 @@ private:
 	void BrowserAdded(CChromeBrowserBase* browser, HWND hBrowser);
 	void BrowserRemoved(CChromeBrowserBase* browser, HWND hBrowser);
 	void OnTabChangedAt(HWND hWebView, HWND hBrowser, int nIndex, BrowserTabChangeType type, void* content);
-	
+
 	//NetworkChangeNotify:
 	void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle);
+
+	void OnCLRHostExit();
 };
