@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -416,6 +416,8 @@ interface ICosmos : IDispatch {
 	[id(0x00118)] HRESULT GetWindowClientDefaultNode(IDispatch* pAddDisp, LONGLONG hParent, BSTR bstrWndClaName, BSTR bstrGalaxyClusterName, [out, retval] IXobj** ppXobj);
 	[id(0x00119), helpstring("method Create ChromeWebBrowser")] HRESULT CreateBrowser(ULONGLONG hParentWnd, BSTR strUrls, [out, retval]IBrowser** ppRet);
 	[id(0x0011a)] HRESULT NewWorkBench(BSTR bstrCosmosDoc, [out, retval] IWorkBenchWindow** ppWorkBenchWindow);
+	[id(0x0011b), helpstring("method Create CLR Object Remote")] HRESULT CreateCLRObjRemote(BSTR bstrObjID, LONGLONG hWnd, [out, retval]IDispatch** ppDisp);
+	[id(0x0011c)] HRESULT DestroyCtrl(LONGLONG hWnd);
 
 	[id(0x001000), helpstring("method CosmosCommand")] HRESULT CosmosCommand(IDispatch* RibbonControl);
 	[id(0x001001), helpstring("method CosmosGetImage")] HRESULT CosmosGetImage(BSTR strValue, [out, retval] IPictureDisp** ppdispImage);

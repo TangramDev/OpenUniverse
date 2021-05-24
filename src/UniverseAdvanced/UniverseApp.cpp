@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -502,9 +502,10 @@ LRESULT CALLBACK CUniverse::CosmosMsgWndProc(_In_ HWND hWnd, UINT msg, _In_ WPAR
 	break;
 	case WM_OFFICEOBJECTCREATED:
 	{
-		HWND hWnd = (HWND)wParam;
-		if (::IsWindow(hWnd))
-			((OfficePlus::COfficeAddin*)g_pCosmos)->ConnectOfficeObj(hWnd);
+		::PostAppMessage(::GetCurrentThreadId(), WM_OFFICEOBJECTCREATED, wParam, 0);
+		//HWND hWnd = (HWND)wParam;
+		//if (::IsWindow(hWnd))
+		//	((OfficePlus::COfficeAddin*)g_pCosmos)->ConnectOfficeObj(hWnd);
 	}
 	break;
 	case WM_WINFORMCREATED:
@@ -1476,6 +1477,12 @@ LRESULT CALLBACK CUniverse::GetMessageProc(int nCode, WPARAM wParam, LPARAM lPar
 				}
 			}
 			break;
+			case WM_OFFICEOBJECTCREATED:
+			{
+				HWND hWnd = (HWND)lpMsg->wParam;
+				if (::IsWindow(hWnd))
+					((OfficePlus::COfficeAddin*)g_pCosmos)->ConnectOfficeObj(hWnd);
+			}
 			case WM_COSMOSMSG:
 			{
 				switch (lpMsg->lParam)

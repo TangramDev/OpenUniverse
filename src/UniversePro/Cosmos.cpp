@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -672,11 +672,7 @@ void CCosmos::FireAppEvent(CCosmosEvent* pObj)
 		strEventName.MakeLower();
 		HRESULT hr = S_OK;
 		int cConnections = m_vec.GetSize();
-		int cConnections2 = 0;
-		if (m_pCosmosAppCtrl)
-			cConnections2 = m_pCosmosAppCtrl->m_vec.GetSize();
-
-		if (cConnections + cConnections2)
+		if (cConnections)
 		{
 			CComVariant avarParams[1];
 			avarParams[0] = (ICosmosEventObj*)pObj;
@@ -695,21 +691,6 @@ void CCosmos::FireAppEvent(CCosmosEvent* pObj)
 					{
 						CComVariant varResult;
 						hr = pConnection->Invoke(3, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
-					}
-				}
-			}
-			if (cConnections2)
-			{
-				for (int iConnection = 0; iConnection < cConnections2; iConnection++)
-				{
-					Lock();
-					CComPtr<IUnknown> punkConnection = m_pCosmosAppCtrl->m_vec.GetAt(iConnection);
-					Unlock();
-					pConnection = static_cast<IDispatch*>(punkConnection.p);
-					if (pConnection)
-					{
-						CComVariant varResult;
-						hr = pConnection->Invoke(1, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &params, &varResult, NULL, NULL);
 					}
 				}
 			}
@@ -2555,189 +2536,6 @@ STDMETHODIMP CCosmos::SetItemText(IXobj* pXobj, long nCtrlID, BSTR bstrText)
 
 STDMETHODIMP CCosmos::CreateApplication(BSTR bstrAppID, BSTR bstrXml)
 {
-	CString strAppID = OLE2T(bstrAppID);
-	strAppID.Trim();
-	strAppID.MakeLower();
-	if (strAppID == _T(""))
-		return S_FALSE;
-
-	auto it = m_mapRemoteCosmos.find(strAppID);
-	if (it == m_mapRemoteCosmos.end())
-	{
-		//CComPtr<IDispatch> pApp;
-		//pApp.CoCreateInstance(bstrAppID, nullptr, CLSCTX_SERVER);// | CLSCTX_INPROC_SERVER);
-		//if (pApp)
-		//{
-		//	int nPos = m_strOfficeAppIDs.Find(strAppID);
-		//	if (nPos != -1)
-		//	{
-		//		CString str = m_strOfficeAppIDs.Left(nPos);
-		//		CComPtr<Office::COMAddIns> pAddins;
-		//		int nIndex = str.Replace(_T(","), _T(""));
-		//		switch (nIndex)
-		//		{
-		//		case 0:
-		//		{
-		//			CComQIPtr<Word::_Application> pWordApp(pApp);
-		//			if (pWordApp)
-		//			{
-		//				pWordApp->put_Visible(true);
-		//				pWordApp->get_COMAddIns(&pAddins);
-		//			}
-		//		}
-		//		break;
-		//		case 1:
-		//		{
-		//			CComQIPtr<Excel::_Application> pExcelApp(pApp);
-		//			pExcelApp->put_UserControl(true);
-		//			pExcelApp->get_COMAddIns(&pAddins);
-		//			pExcelApp->put_Visible(0, true);
-		//		}
-		//		break;
-		//		case 2:
-		//		{
-		//			CComQIPtr<OutLook::_Application> pOutLookApp(pApp);
-		//			pOutLookApp->get_COMAddIns(&pAddins);
-		//		}
-		//		break;
-		//		case 3:
-		//		{
-		//			//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-		//			//pOneNoteApp->get_COMAddIns(&pAddins);
-		//		}
-		//		break;
-		//		case 4:
-		//		{
-		//			//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-		//			//pOneNoteApp->get_COMAddIns(&pAddins);
-		//		}
-		//		break;
-		//		case 5:
-		//		{
-		//			CComQIPtr<MSProject::_MSProject> pProjectApp(pApp);
-		//			//pProjectApp->get_COMAddIns(&pAddins);
-		//		}
-		//		break;
-		//		case 6:
-		//		{
-		//			//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-		//			//pOneNoteApp->get_COMAddIns(&pAddins);
-		//		}
-		//		break;
-		//		case 7:
-		//		{
-		//			//CComQIPtr<OneNote::_Application> pOneNoteApp(pApp);
-		//			//pOneNoteApp->get_COMAddIns(&pAddins);
-		//		}
-		//		break;
-		//		case 8:
-		//		{
-		//			CComQIPtr<PowerPoint::_Application> pPptApp(pApp);
-		//			pPptApp->get_COMAddIns(&pAddins);
-		//			pPptApp->put_Visible(Office::MsoTriState::msoTrue);
-		//		}
-		//		break;
-		//		case 9:
-		//		{
-		//		}
-		//		break;
-		//		default:
-		//			break;
-		//		}
-
-		//		if (pAddins)
-		//		{
-		//			CComPtr<Office::COMAddIn> pAddin;
-		//			pAddins->Item(&CComVariant(_T("Cosmos.hubble")), &pAddin);
-		//			if (pAddin)
-		//			{
-		//				CComPtr<IDispatch> pAddin2;
-		//				pAddin->get_Object(&pAddin2);
-		//				CComQIPtr<ICosmos> _pCosmosAddin(pAddin2);
-		//				if (_pCosmosAddin)
-		//				{
-		//					if (::GetModuleHandle(_T("CloudAppStudioToolWnd.dll")))
-		//						_pCosmosAddin->put_AppKeyValue(CComBSTR(L"fromvisualstudio"), CComVariant((VARIANT_BOOL)true));
-		//					_pCosmosAddin->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-		//					m_mapRemoteCosmos[strAppID] = _pCosmosAddin.p;
-		//					_pCosmosAddin.p->AddRef();
-		//					LONGLONG h = 0;
-		//					_pCosmosAddin->get_RemoteHelperHWND(&h);
-		//					if (h)
-		//					{
-		//						HWND hWnd = (HWND)h;
-		//						CHelperWnd* pWnd = new CHelperWnd();
-		//						pWnd->m_strID = strAppID;
-		//						pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-		//						m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-		//					}
-		//				}
-		//			}
-		//		}
-		//	}
-		//	else
-		//	{
-		//		ICosmos* pRemoteTangram = nullptr;
-		//		HRESULT hr = pApp->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-		//		if (hr != S_OK)
-		//		{
-		//			VARIANT result = { 0 };
-		//			DISPID dispID = 0;
-		//			DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
-		//			EXCEPINFO excepInfo;
-		//			memset(&excepInfo, 0, sizeof excepInfo);
-		//			UINT nArgErr = (UINT)-1; // initialize to invalid arg
-		//			LPOLESTR func = L"Tangram";
-		//			hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
-		//			if (S_OK == hr)
-		//			{
-		//				hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
-		//				if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
-		//				{
-		//					result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
-		//				}
-		//			}
-		//			::VariantClear(&result);
-		//		}
-		//		if (pRemoteTangram)
-		//		{
-		//			pRemoteTangram->AddRef();
-		//			CString strModel = OLE2T(bstrXml);
-		//			m_mapRemoteCosmos[strAppID] = pRemoteTangram;
-		//			DWORD dwID = ::GetCurrentProcessId();
-		//			CString str = _T("");
-		//			str.Format(_T("tangramprocess:%d"), dwID);
-		//			CComVariant var;
-		//			var.vt = VT_DISPATCH;
-		//			var.pdispVal = (IDispatch*)g_pCosmos;
-		//			pRemoteTangram->put_AppKeyValue(CComBSTR(str), var);
-		//			LONGLONG h = 0;
-		//			pRemoteTangram->get_RemoteHelperHWND(&h);
-		//			HWND hWnd = (HWND)h;
-		//			if (::IsWindow(hWnd))
-		//			{
-		//				CHelperWnd* pWnd = new CHelperWnd();
-		//				pWnd->m_strID = strAppID;
-		//				pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-		//				m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
-		//			}
-		//		}
-		//	}
-		//}
-		//else
-		//{
-		//	int nPos = strAppID.Find(_T(","));
-		//	if (nPos != -1)
-		//	{
-
-		//	}
-		//	return S_FALSE;
-		//}
-	}
-	else// (it != m_mapRemoteCosmos.end())
-	{
-		it->second->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-	}
 	return S_OK;
 }
 

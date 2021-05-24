@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006
+ *           Web Runtime for Application - Version 1.0.1.202105250007
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -568,6 +568,7 @@ namespace CommonUniverse {
 		CString							m_strCurrentWinFormTemplate;
 
 		virtual IDispatch* CreateCLRObj(CString bstrObjID) { return nullptr; }
+		virtual IDispatch* CreateCLRObjRemote(CString bstrObjID, HWND hHostWnd) { return nullptr; }
 		virtual HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey) { return 0; }
 		virtual BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton) { return false; }
 		virtual IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode) { return nullptr; }
@@ -646,6 +647,8 @@ namespace CommonUniverse {
 		HWND									m_hFormNodeWnd;
 		HWND									m_hParent;
 		HWND									m_hHostBrowserWnd;
+		HWND									m_hTempBrowserWnd = NULL;
+		HWND									m_hWaitTabWebPageWnd = NULL;
 		HICON									m_hLargeIcon;
 		HICON									m_hSmallIcon;
 
@@ -675,33 +678,38 @@ namespace CommonUniverse {
 		CStringA								m_strBridgeJavaClass;
 		CString									m_strStartJarPath;
 
-		IPCMsg* m_pCurrentIPCMsg;
-		ICosmosCLRImpl* m_pCLRProxy;
-		IUniverseAppProxy* m_pActiveAppProxy;
-		IUniverseAppProxy* m_pUniverseAppProxy;
-		IUniverseAppProxy* m_pCosmosAppProxy;
-		CMDIChildFormInfo* m_pCurMDIChildFormInfo;
-		ICosmosExtender* m_pExtender = nullptr;
-		ICosmosWindow* m_pCreatingWindow = nullptr;
-		CWebPageImpl* m_pMainWebPageImpl = nullptr;
-		ICosmosDelegate* m_pCosmosDelegate = nullptr;
-		CChromeBrowserBase* m_pActiveBrowser = nullptr;
-		CCosmosBrowserFactory* m_pBrowserFactory = nullptr;
-		CosmosAppMessagePumpForUI* m_pMessagePumpForUI = nullptr;
-		OmniboxViewViewsProxy* m_pCreatingOmniboxViewViews = nullptr;
-		CChromeRenderFrameHost* m_pCreatingChromeRenderFrameHostBase = nullptr;
+		IPCMsg*									m_pCurrentIPCMsg;
+		ICosmosCLRImpl*							m_pCLRProxy;
+		IUniverseAppProxy*						m_pActiveAppProxy;
+		IUniverseAppProxy*						m_pUniverseAppProxy;
+		IUniverseAppProxy*						m_pCosmosAppProxy;
+		CMDIChildFormInfo*						m_pCurMDIChildFormInfo;
+		ICosmosExtender*						m_pExtender = nullptr;
+		ICosmosWindow*							m_pCreatingWindow = nullptr;
+		CWebPageImpl*							m_pMainWebPageImpl = nullptr;
+		ICosmosDelegate*						m_pCosmosDelegate = nullptr;
+		CChromeBrowserBase*						m_pActiveBrowser = nullptr;
+		CCosmosBrowserFactory*					m_pBrowserFactory = nullptr;
+		CosmosAppMessagePumpForUI*				m_pMessagePumpForUI = nullptr;
+		OmniboxViewViewsProxy*					m_pCreatingOmniboxViewViews = nullptr;
+		CChromeRenderFrameHost*					m_pCreatingChromeRenderFrameHostBase = nullptr;
 
+		map<HWND, CString>						m_mapUIData;
+		map<HWND, CString>						m_mapCtrlTag;
+		map<DWORD, ICosmos*>					m_mapRemoteTangramApp;
 		map<CString, IDispatch*>				m_mapObjDic;
 		map<CString, CComVariant>				m_mapValInfo;
 		map<CString, ICosmos*>					m_mapRemoteCosmos;
-		map<CString, IUniverseAppProxy*>		m_mapCosmosAppProxy;
-		map<CString, ICosmosWindowProvider*>	m_mapWindowProvider;
+		map<CString, CString>					m_mapDocAppName;
+		map<CString, CString>					m_mapDocTemplate;
+		map<CString, CString>					m_mapDocDefaultName;
 		map<CString, CString>					m_mapJavaNativeInfo;
 		map<CString, CString>					m_mapCreatingWorkBenchInfo;
+		map<CString, HWND>						m_mapSingleWndApp;
+		map<CString, IUniverseAppProxy*>		m_mapCosmosAppProxy;
+		map<CString, ICosmosWindowProvider*>	m_mapWindowProvider;
 
 		map<HWND, IXobj*>						m_mapXobj;
-		map<HWND, CString>						m_mapUIData;
-		map<HWND, CString>						m_mapCtrlTag;
 		map<HWND, CWebPageImpl*>				m_mapWebView;
 		map<HWND, IBrowser*>					m_mapBrowserWnd;
 		map<HWND, IWebPage*>					m_mapFormWebPage;

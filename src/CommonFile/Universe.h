@@ -2695,6 +2695,14 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrCosmosDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow) = 0;
         
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateCLRObjRemote( 
+            BSTR bstrObjID,
+            LONGLONG hWnd,
+            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DestroyCtrl( 
+            LONGLONG hWnd) = 0;
+        
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CosmosCommand( 
             IDispatch *RibbonControl) = 0;
         
@@ -2976,6 +2984,16 @@ EXTERN_C const IID IID_ICosmos;
             BSTR bstrCosmosDoc,
             /* [retval][out] */ IWorkBenchWindow **ppWorkBenchWindow);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateCLRObjRemote )( 
+            ICosmos * This,
+            BSTR bstrObjID,
+            LONGLONG hWnd,
+            /* [retval][out] */ IDispatch **ppDisp);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DestroyCtrl )( 
+            ICosmos * This,
+            LONGLONG hWnd);
+        
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CosmosCommand )( 
             ICosmos * This,
             IDispatch *RibbonControl);
@@ -3160,6 +3178,12 @@ EXTERN_C const IID IID_ICosmos;
 
 #define ICosmos_NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow)	\
     ( (This)->lpVtbl -> NewWorkBench(This,bstrCosmosDoc,ppWorkBenchWindow) ) 
+
+#define ICosmos_CreateCLRObjRemote(This,bstrObjID,hWnd,ppDisp)	\
+    ( (This)->lpVtbl -> CreateCLRObjRemote(This,bstrObjID,hWnd,ppDisp) ) 
+
+#define ICosmos_DestroyCtrl(This,hWnd)	\
+    ( (This)->lpVtbl -> DestroyCtrl(This,hWnd) ) 
 
 #define ICosmos_CosmosCommand(This,RibbonControl)	\
     ( (This)->lpVtbl -> CosmosCommand(This,RibbonControl) ) 

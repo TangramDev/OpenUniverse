@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -65,6 +65,7 @@ CXobj::CXobj()
 	m_strNodeName = _T("");
 	m_strExtenderID = _T("");
 	m_hHostWnd = NULL;
+	m_hHostCtrlWnd = NULL;
 	m_hChildHostWnd = NULL;
 	m_pDisp = nullptr;
 	m_pHostGalaxy = nullptr;
@@ -127,6 +128,11 @@ void CXobj::InitWndXobj()
 					m_strID = _T("clrctrl");
 					m_nViewType = CLRCtrl;
 				}
+			}
+			else if (m_strObjTypeID != _T("") && m_strObjTypeID.Find(_T(".")) != -1)
+			{
+				m_strID = _T("activex");
+				m_nViewType = ActiveX;
 			}
 		}
 	}
@@ -904,15 +910,15 @@ BOOL CXobj::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, 
 								{
 #ifdef _WIN32
 									CString strLib = g_pCosmos->m_strAppPath + _T("PublicAssemblies\\TabbedWnd.dll");
-										if (::PathFileExists(strLib))
+									if (::PathFileExists(strLib))
+									{
+										::LoadLibrary(strLib);
+										auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
+										if (it != g_pCosmos->m_mapWindowProvider.end())
 										{
-											::LoadLibrary(strLib);
-												auto it = g_pCosmos->m_mapWindowProvider.find(m_strObjTypeID);
-												if (it != g_pCosmos->m_mapWindowProvider.end())
-												{
-													pViewFactoryDisp = it->second;
-												}
+											pViewFactoryDisp = it->second;
 										}
+									}
 #endif
 								}
 								else
@@ -1489,7 +1495,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	CString strURL = _T("");
 	CString strID = strTag;
 	CString strName = m_strName;
-
+	HWND hWnd = NULL;
 	CWebView* pHtmlWnd = nullptr;
 	HWND _hWnd = m_pXobjShareData->m_pGalaxy->m_hWnd;
 	{
@@ -1503,6 +1509,7 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 	{
 		pHtmlWnd = m_pXobjShareData->m_pGalaxy->m_pWebPageWnd;
 	}
+	ICosmosCtrl* pCtrlDisp = nullptr;
 	switch (m_nViewType)
 	{
 	case ActiveX:
@@ -1511,11 +1518,34 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 
 		if (m_pDisp == nullptr)
 		{
-			CComPtr<IDispatch> pDisp;
-			HRESULT hr = pDisp.CoCreateInstance(CComBSTR(strID));
-			if (hr == S_OK)
+			int nPos = strID.Find(_T("@hostapp"));
+			if (nPos != -1)
 			{
-				m_pDisp = pDisp.Detach();
+				strID = strID.Left(nPos);
+				DWORD dwProcessID = m_pXobjShareData->m_pGalaxy->m_dwHostProcessID;
+				if (dwProcessID)
+				{
+					auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwProcessID);
+					if (it != g_pCosmos->m_mapRemoteTangramApp.end())
+					{
+						hWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
+						IDispatch* pCtrlDisp = nullptr;
+						it->second->CreateCLRObjRemote(CComBSTR(strID), (__int64)hWnd, &pCtrlDisp);
+						m_pDisp = pCtrlDisp;
+						HWND _hWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+						::SetParent(_hWnd, hParentWnd);
+						hWnd = _hWnd;
+					}
+				}
+			}
+			else
+			{
+				CComPtr<IDispatch> pDisp;
+				HRESULT hr = pDisp.CoCreateInstance(CComBSTR(strID));
+				if (hr == S_OK)
+				{
+					m_pDisp = pDisp.Detach();
+				}
 			}
 		}
 	}
@@ -1526,34 +1556,57 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 
 		if (g_pCosmos->m_pCLRProxy)
 		{
-			if (pHtmlWnd)
+			int nPos = strID.Find(_T("@hostapp"));
+			if (nPos != -1)
 			{
-				g_pCosmos->m_pCLRProxy->m_strCurrentWinFormTemplate = m_pHostParse->xml();
-			}
-			m_pDisp = g_pCosmos->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
-			if (g_pCosmos->m_hFormNodeWnd)
-			{
-				LRESULT l = ::SendMessage((HWND)g_pCosmos->m_hFormNodeWnd, WM_HUBBLE_DATA, 0, 20190214);
-				if (l && pHtmlWnd)
+				strID = strID.Left(nPos);
+				DWORD dwProcessID = m_pXobjShareData->m_pGalaxy->m_dwHostProcessID;
+				if (dwProcessID)
 				{
-					auto it = pHtmlWnd->m_mapWinForm.find(g_pCosmos->m_hFormNodeWnd);
-					if (it == pHtmlWnd->m_mapWinForm.end())
+					IDispatch* pCtrlDisp = nullptr;
+					auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwProcessID);
+					if (it != g_pCosmos->m_mapRemoteTangramApp.end())
 					{
-						pHtmlWnd->m_mapWinForm[g_pCosmos->m_hFormNodeWnd] = (CCloudWinForm*)l;
+						hWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
+						it->second->CreateCLRObjRemote(CComBSTR(strID), (__int64)hWnd, &pCtrlDisp);
+						m_pDisp = pCtrlDisp;
+						HWND _hWnd = (HWND)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
+						::SetParent(_hWnd, hParentWnd);
+						hWnd = _hWnd;
 					}
 				}
 			}
+			else
+			{
+				if (pHtmlWnd)
+				{
+					g_pCosmos->m_pCLRProxy->m_strCurrentWinFormTemplate = m_pHostParse->xml();
+				}
+				m_pDisp = g_pCosmos->m_pCLRProxy->CreateObject(strTag.AllocSysString(), hParentWnd, this);
+				if (g_pCosmos->m_hFormNodeWnd)
+				{
+					LRESULT l = ::SendMessage((HWND)g_pCosmos->m_hFormNodeWnd, WM_HUBBLE_DATA, 0, 20190214);
+					if (l && pHtmlWnd)
+					{
+						auto it = pHtmlWnd->m_mapWinForm.find(g_pCosmos->m_hFormNodeWnd);
+						if (it == pHtmlWnd->m_mapWinForm.end())
+						{
+							pHtmlWnd->m_mapWinForm[g_pCosmos->m_hFormNodeWnd] = (CCloudWinForm*)l;
+						}
+					}
+				}
 
-			CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
-			if (m_pDisp == nullptr)
-			{
-				pWnd->m_bCreateExternal = false;
-				m_nViewType = BlankView;
-			}
-			if (m_strID.CollateNoCase(_T("wpfctrl")) == 0)
-			{
-				pWnd->m_hFormWnd = g_pCosmos->m_hFormNodeWnd;
-				g_pCosmos->m_hFormNodeWnd = NULL;
+				CXobjWnd* pWnd = (CXobjWnd*)m_pHostWnd;
+				if (m_pDisp == nullptr)
+				{
+					pWnd->m_bCreateExternal = false;
+					m_nViewType = BlankView;
+				}
+				if (m_strID.CollateNoCase(_T("wpfctrl")) == 0)
+				{
+					pWnd->m_hFormWnd = g_pCosmos->m_hFormNodeWnd;
+					g_pCosmos->m_hFormNodeWnd = NULL;
+				}
 			}
 		}
 	}
@@ -1576,11 +1629,15 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 				}
 			}
 		}
-		auto hWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
-		CAxWindow m_Wnd;
-		m_Wnd.Attach(hWnd);
-		CComPtr<IUnknown> pUnk;
-		m_Wnd.AttachControl(m_pDisp, &pUnk);
+		if (hWnd == nullptr)
+		{
+			hWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, hParentWnd, NULL, AfxGetInstanceHandle(), NULL);
+			CAxWindow m_Wnd;
+			m_Wnd.Attach(hWnd);
+			CComPtr<IUnknown> pUnk;
+			m_Wnd.AttachControl(m_pDisp, &pUnk);
+			m_Wnd.Detach();
+		}
 		if (m_nViewType == ActiveX)
 		{
 			((CXobjWnd*)m_pHostWnd)->m_pXobj = this;
@@ -1591,7 +1648,6 @@ HWND CXobj::CreateView(HWND hParentWnd, CString strTag)
 		CComQIPtr<IOleInPlaceActiveObject> pIOleInPlaceActiveObject(m_pDisp);
 		if (pIOleInPlaceActiveObject)
 			((CXobjWnd*)m_pHostWnd)->m_pOleInPlaceActiveObject = pIOleInPlaceActiveObject.Detach();
-		m_Wnd.Detach();
 		return hWnd;
 	}
 
@@ -2346,6 +2402,19 @@ HRESULT CXobj::Fire_ObserveComplete()
 
 HRESULT CXobj::Fire_Destroy()
 {
+	if (::IsWindow(m_hHostCtrlWnd))
+	{
+		DWORD dwProcessID = m_pXobjShareData->m_pGalaxy->m_dwHostProcessID;
+		if (dwProcessID)
+		{
+			auto it = g_pCosmos->m_mapRemoteTangramApp.find(dwProcessID);
+			if (it != g_pCosmos->m_mapRemoteTangramApp.end())
+			{
+				it->second->DestroyCtrl((__int64)m_hHostCtrlWnd);
+			}
+		}
+		//::DestroyWindow(m_hHostCtrlWnd);
+	}
 	if (m_pWebBrowser)
 	{
 		if (::IsChild(m_pHostWnd->m_hWnd, m_pWebBrowser->m_hWnd))

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -38,7 +38,6 @@
 #include "CosmosEvents.h"
 #include "GridWnd.h"
 #include "EclipsePlus\EclipseAddin.h"
-#include "CosmosCtrl.h"
 #include "TangramListView.h"
 #include "Wormhole.h"
 #include "WPFView.h"

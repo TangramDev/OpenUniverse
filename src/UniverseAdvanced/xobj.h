@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -111,6 +111,7 @@ public:
 	int								m_nRows;
 	int								m_nCols;
 	HWND							m_hHostWnd;
+	HWND							m_hHostCtrlWnd;
 	HWND							m_hChildHostWnd;
 
 	CString 						m_strID;

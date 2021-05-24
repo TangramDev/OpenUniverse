@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006
+ *           Web Runtime for Application - Version 1.0.1.202105250007
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1340,6 +1340,368 @@ HRESULT CCosmosProxy::ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR 
 	return S_OK;
 }
 
+IDispatch* CCosmosProxy::CreateCLRObjRemote(CString bstrObjID, HWND hHostWnd)
+{
+	if (bstrObjID.CompareNoCase(_T("chromert")) == 0)
+	{
+		theApp.InitCosmosApp(false);
+		return nullptr;
+	}
+
+	if (bstrObjID.Find(_T("<")) != -1)
+	{
+		CTangramXmlParse m_Parse;
+		if (m_Parse.LoadXml(bstrObjID))
+		{
+			CString strTagName = m_Parse.name();
+			CWebPageImpl* pProxyBase = nullptr;
+			Universe::Wormhole^ pCloudSession = nullptr;
+			CSession* pCosmosSession = nullptr;
+			__int64 nHandle = m_Parse.attrInt64(_T("renderframehostproxy"), 0);
+			if (nHandle)
+			{
+				pProxyBase = (CWebPageImpl*)nHandle;
+			}
+			CString strObjID = m_Parse.attr(_T("objid"), _T(""));
+			if (strObjID != _T(""))
+			{
+				WebPage^ pPage = nullptr;
+				IWebPage* pWebPage = nullptr;
+				nHandle = m_Parse.attrInt64(_T("webpage"), 0);
+				if (nHandle)
+				{
+					pWebPage = (IWebPage*)nHandle;
+					CTangramXmlParse* pChild = m_Parse.GetChild(_T("webui"));
+					if (pWebPage != nullptr)
+					{
+						pPage = gcnew WebPage(pWebPage);
+						pPage->m_hWnd = (HWND)m_Parse.attrInt64(_T("webpagehandle"), 0);
+						if (pChild)
+						{
+							IXobj* pXobj = nullptr;
+							pWebPage->Observe(CComBSTR(strTagName), CComBSTR(pChild->xml()), &pXobj);
+						}
+					}
+				}
+				Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(strObjID));
+
+				if (pObj != nullptr)
+				{
+					if (pObj->GetType()->IsSubclassOf(Form::typeid))
+					{
+						m_strCurrentWinFormTemplate = bstrObjID;
+						CString strCaption = m_Parse.attr(_T("caption"), _T(""));
+						Form^ thisForm = (Form^)pObj;
+						int nWidth = m_Parse.attrInt(_T("width"), 0);
+						int nHeight = m_Parse.attrInt(_T("height"), 0);
+						if (nWidth * nHeight)
+						{
+							thisForm->Width = nWidth;
+							thisForm->Height = nHeight;
+						}
+						if (m_pCurrentPForm)
+						{
+							if (thisForm->IsMdiContainer == false)
+							{
+								if (m_Parse.attrBool(_T("mdichild"), false))
+									thisForm->MdiParent = m_pCurrentPForm;
+							}
+							m_pCurrentPForm = nullptr;
+						}
+						if (nHandle && thisForm->MdiParent == nullptr)
+						{
+							pProxyBase->OnWinFormCreated((HWND)thisForm->Handle.ToPointer());
+						}
+
+						if (strCaption != _T(""))
+							thisForm->Text = marshal_as<String^>(strCaption);
+						if (thisForm->IsMdiContainer)
+						{
+							Control^ mdiclient = Universe::Cosmos::GetMDIClient(thisForm);
+							mdiclient->ControlRemoved += gcnew System::Windows::Forms::ControlEventHandler(&OnControlRemoved);
+							CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
+							if (strBKPage != _T(""))
+							{
+								Universe::Cosmos::CreateBKPage(thisForm, marshal_as<String^>(strBKPage));
+							}
+						}
+						if (strTagName.CompareNoCase(_T("mainwindow")) == 0)
+						{
+							theApp.m_pCosmosImpl->m_hMainWnd = (HWND)thisForm->Handle.ToPointer();
+						}
+						thisForm->Tag = marshal_as<String^>(m_Parse.name());
+						__int64 nIpcSession = m_Parse.attrInt64(_T("ipcsession"), 0);
+						if (nIpcSession)
+						{
+							pCosmosSession = (CSession*)nIpcSession;
+							bool bExists = Universe::Cosmos::Wormholes->TryGetValue(pObj, pCloudSession);
+							if (bExists == false)
+							{
+								pCloudSession = gcnew Wormhole(pCosmosSession);
+								Universe::Cosmos::Wormholes[pObj] = pCloudSession;
+								pCloudSession->m_pHostObj = pObj;
+							}
+							theAppProxy.m_mapSession2Wormhole[pCosmosSession] = pCloudSession;
+
+							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
+							if (strFormName == _T(""))
+							{
+								strFormName = marshal_as<CString>(thisForm->Name);
+							}
+							pCosmosSession->InsertString(_T("formname"), strFormName);
+							pCosmosSession->InsertString(_T("tagName"), strTagName);
+							//pCosmosSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							CString strFormID = m_Parse.attr(_T("id"), _T(""));
+							if (strFormID != _T(""))
+							{
+								pCosmosSession->InsertString(_T("id"), strFormID);
+							}
+							strFormID = m_Parse.attr(_T("objid"), _T(""));
+							pCosmosSession->InsertString(_T("objid"), strFormID);
+
+							if (thisForm->IsMdiContainer)
+							{
+								pCosmosSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								pCosmosSession->InsertLong(_T("WinFormType"), 1);
+							}
+							else if (thisForm->MdiParent)
+							{
+								pCosmosSession->InsertLong(_T("WinFormType"), 2);
+								pCosmosSession->Insertint64(_T("mdiformhandle"), thisForm->MdiParent->Handle.ToInt64());
+								theApp.m_pCosmos->ObserveGalaxys(thisForm->MdiParent->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strTagName.MakeLower()), CComBSTR(L""), false);
+								thisForm->Show();
+								pCosmosSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+								pCosmosSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+								if (bNeedQueryOnCloseEvent)
+									::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
+								pCosmosSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+								::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pCosmosSession);
+								pCosmosSession->SendMessage();
+								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
+							}
+							else
+							{
+								pCosmosSession->InsertLong(_T("WinFormType"), 0);
+								pCosmosSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							}
+
+							bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+							pCosmosSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+							pCosmosSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+							pCosmosSession->InsertString(_T("cosmosxml"), m_strCurrentWinFormTemplate);
+							::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pCosmosSession);
+							if (bNeedQueryOnCloseEvent)
+								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
+							pCosmosSession->SendMessage();
+						}
+						else
+						{
+							pCosmosSession = theApp.m_pCosmosImpl->CreateCloudSession(pProxyBase);
+							pCloudSession = gcnew Wormhole(pCosmosSession);
+							Universe::Cosmos::Wormholes[pObj] = pCloudSession;
+							pCloudSession->m_pHostObj = pObj;
+							CString strFormName = m_Parse.attr(_T("formname"), _T(""));
+							if (strFormName == _T(""))
+							{
+								strFormName = marshal_as<CString>(thisForm->Name);
+							}
+							pCosmosSession->InsertString(_T("tagName"), strTagName);
+							pCosmosSession->InsertString(_T("formname"), strFormName);
+							pCosmosSession->InsertLong(_T("autodelete"), 0);
+							pCosmosSession->Insertint64(_T("domhandle"), (__int64)pCosmosSession);
+							CString strFormID = m_Parse.attr(_T("id"), _T(""));
+							pCosmosSession->InsertString(_T("id"), strFormID);
+
+							strFormID = m_Parse.attr(_T("objid"), _T(""));
+							pCosmosSession->InsertString(_T("objid"), strFormID);
+							pCosmosSession->InsertString(_T("cosmosxml"), m_strCurrentWinFormTemplate);
+							theAppProxy.m_mapSession2Wormhole[pCosmosSession] = pCloudSession;
+							if (thisForm->IsMdiContainer)
+							{
+								pCosmosSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								pCosmosSession->InsertLong(_T("WinFormType"), 1);
+							}
+							else if (thisForm->MdiParent)
+							{
+								pCosmosSession->InsertLong(_T("WinFormType"), 2);
+								pCosmosSession->Insertint64(_T("mdiformhandle"), thisForm->MdiParent->Handle.ToInt64());
+								theApp.m_pCosmos->ObserveGalaxys(thisForm->MdiParent->Handle.ToInt64(), CComBSTR(L""), CComBSTR(strTagName.MakeLower()), CComBSTR(L""), false);
+								thisForm->Show();
+								pCosmosSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+								pCosmosSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+								bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+								if (bNeedQueryOnCloseEvent)
+									::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
+								pCosmosSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+								::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pCosmosSession);
+								pCosmosSession->SendMessage();
+								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_COSMOSMSG, 0, 20201114);
+								return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
+							}
+							else
+							{
+								pCosmosSession->InsertLong(_T("WinFormType"), 0);
+								pCosmosSession->Insertint64(_T("formhandle"), thisForm->Handle.ToInt64());
+							}
+							pCosmosSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+							bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+							pCosmosSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+							int nMainWnd = m_Parse.attrInt(_T("IsMainCosmosWnd"), 0);
+							if (nMainWnd == 1)
+							{
+								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 0, 20201029);
+							}
+							if (bNeedQueryOnCloseEvent)
+								::PostMessage((HWND)(thisForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
+							::SetWindowLongPtr((HWND)(thisForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pCosmosSession);
+							pCosmosSession->SendMessage();
+						}
+
+						if (pPage)
+						{
+							int nModel = m_Parse.attrInt(_T("model"), 0);
+							int nAddSubFormMap = m_Parse.attrInt(_T("addsubform"), 0);
+							if (nAddSubFormMap)
+								::PostMessage(pPage->m_hWnd, WM_COSMOSMSG, 20200213, (LPARAM)thisForm->Handle.ToPointer());
+							switch (nModel)
+							{
+							case 1:
+								thisForm->ShowInTaskbar = false;
+								thisForm->ShowDialog();
+								thisForm->StartPosition = FormStartPosition::CenterScreen;
+								break;
+							case 0:
+							case 2:
+								if (nModel)
+									thisForm->Show(pPage);
+								else
+									thisForm->Show();
+
+								RECT rc;
+								::GetWindowRect(pPage->m_hWnd, &rc);
+								thisForm->SetDesktopLocation(rc.left, rc.top);
+								//::PostMessage(::GetParent(pPage->m_hWnd), WM_BROWSERLAYOUT, 0, 4);
+								break;
+							}
+						}
+						else
+						{
+							thisForm->Show();
+						}
+					}
+					return (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
+				}
+			}
+			else
+			{
+				if (Universe::Cosmos::m_pMainForm)
+				{
+					HWND hWnd = (HWND)Universe::Cosmos::m_pMainForm->Handle.ToPointer();
+					theApp.m_pCosmosImpl->m_hMainWnd = hWnd;
+					Form^ mainForm = Universe::Cosmos::MainForm;
+					CString strCaption = m_Parse.attr(_T("caption"), _T(""));
+					if (strCaption != _T(""))
+						mainForm->Text = marshal_as<String^>(strCaption);
+					int nWidth = m_Parse.attrInt(_T("width"), 0);
+					int nHeight = m_Parse.attrInt(_T("height"), 0);
+					if (nWidth * nHeight)
+					{
+						mainForm->Width = nWidth;
+						mainForm->Height = nHeight;
+					}
+					Control^ client = nullptr;
+					if (mainForm->IsMdiContainer)
+					{
+						Control^ mdiclient = Universe::Cosmos::GetMDIClient(mainForm);
+						mdiclient->ControlRemoved += gcnew System::Windows::Forms::ControlEventHandler(&OnControlRemoved);
+						CString strBKPage = m_Parse.attr(_T("mdibkpageid"), _T(""));
+						if (strBKPage != _T(""))
+						{
+							Universe::Cosmos::CreateBKPage(mainForm, marshal_as<String^>(strBKPage));
+						}
+						client = Universe::Cosmos::GetMDIClient(mainForm);
+					}
+					else
+					{
+						if (mainForm && mainForm->Controls->Count == 0)
+						{
+							Panel^ panel = gcnew Panel();
+							panel->Dock = DockStyle::Fill;
+							panel->Visible = true;
+							panel->Name = L"mainclient";
+							mainForm->Controls->Add(panel);
+							//mainForm->Width = 1500;
+							//mainForm->Height = 1200;
+							mainForm->ResumeLayout();
+						}
+						for each (Control ^ pChild in mainForm->Controls)
+						{
+							if (pChild->Dock == DockStyle::Fill)
+							{
+								if (pChild->Parent == mainForm)
+								{
+									client = pChild;
+									break;
+								}
+							}
+						}
+					}
+					pCosmosSession = theApp.m_pCosmosImpl->CreateCloudSession(pProxyBase);
+					pCloudSession = gcnew Wormhole(pCosmosSession);
+					Universe::Cosmos::Wormholes[mainForm] = pCloudSession;
+					pCloudSession->m_pHostObj = mainForm;
+					CString strFormName = mainForm->Name;
+					pCosmosSession->InsertLong(_T("autodelete"), 0);
+					pCosmosSession->Insertint64(_T("domhandle"), (__int64)pCosmosSession);
+					pCosmosSession->InsertString(_T("objid"), _T("mainForm"));
+					pCosmosSession->InsertString(_T("formname"), strFormName);
+					theAppProxy.m_mapSession2Wormhole[pCosmosSession] = pCloudSession;
+
+					CString strFormID = m_Parse.attr(_T("id"), _T(""));
+					pCosmosSession->InsertString(_T("id"), strFormID);
+
+					pCosmosSession->Insertint64(_T("formhandle"), mainForm->Handle.ToInt64());
+					pCosmosSession->InsertString(_T("msgID"), _T("WINFORM_CREATED"));
+					bool bNeedQueryOnCloseEvent = m_Parse.attrBool(_T("queryonclose"), false);
+					pCosmosSession->InsertLong(_T("queryonclose"), bNeedQueryOnCloseEvent ? 1 : 0);
+					::SetWindowLongPtr((HWND)(mainForm->Handle.ToInt64()), GWLP_USERDATA, (LONG_PTR)pCosmosSession);
+					if (bNeedQueryOnCloseEvent)
+						::PostMessage((HWND)(mainForm->Handle.ToInt64()), WM_HUBBLE_DATA, 1, 20201029);
+
+					pCosmosSession->SendMessage();
+					CTangramXmlParse* pChildForms = m_Parse.GetChild(_T("childforms"));
+					if (pChildForms)
+					{
+						::SendMessage((HWND)mainForm->Handle.ToPointer(), WM_COSMOSMSG, (WPARAM)pChildForms, 20190601);
+					}
+					GalaxyCluster^ pGalaxyCluster = static_cast<GalaxyCluster^>(theAppProxy.InitControl(mainForm, mainForm, true, &m_Parse));
+				}
+			}
+		}
+		return nullptr;
+	}
+
+	Object^ pObj = Universe::Cosmos::CreateObject(marshal_as<String^>(bstrObjID));
+
+	if (pObj != nullptr)
+	{
+		bool bForm = false;
+		if (pObj->GetType()->IsSubclassOf(Form::typeid))
+		{
+			bForm = true;
+			Form^ thisForm = (Form^)pObj;
+		}
+		IDispatch* pDisp = (IDispatch*)Marshal::GetIUnknownForObject(pObj).ToPointer();
+		if (bForm == false)
+		{
+		}
+
+		return pDisp;
+	}
+	return nullptr;
+}
+
 IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 {
 	if (bstrObjID.CompareNoCase(_T("chromert")) == 0)
@@ -1403,7 +1765,7 @@ IDispatch* CCosmosProxy::CreateCLRObj(CString bstrObjID)
 						{
 							if (thisForm->IsMdiContainer == false)
 							{
-								if(m_Parse.attrBool(_T("mdichild"),false))
+								if (m_Parse.attrBool(_T("mdichild"), false))
 									thisForm->MdiParent = m_pCurrentPForm;
 							}
 							m_pCurrentPForm = nullptr;

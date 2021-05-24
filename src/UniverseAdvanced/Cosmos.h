@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -144,13 +144,13 @@ class ATL_NO_VTABLE CCosmos :
 	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
 {
 	friend class CGalaxy;
-	friend class CCloudMDTFrame;
 	friend class CXobjWnd;
-	friend class CCloudWinForm;
 	friend class CUniverse;
-	friend class CCloudMDIFrame;
 	friend class CEclipseWnd;
+	friend class CCloudWinForm;
 	friend class CGalaxyCluster;
+	friend class CCloudMDIFrame;
+	friend class CCloudMDTFrame;
 public:
 	CCosmos();
 	virtual ~CCosmos();
@@ -173,8 +173,7 @@ public:
 	int										m_nOfficeDocsSheet;
 	int										m_nTangramNodeCommonData;
 #endif
-	HWND									m_hTempBrowserWnd = NULL;
-	HWND									m_hWaitTabWebPageWnd = NULL;
+
 	HHOOK									m_hCBTHook;
 	HHOOK									m_hForegroundIdleHook;
 	TCHAR									m_szBuffer[MAX_PATH];
@@ -205,7 +204,6 @@ public:
 	map<CString, CRuntimeClass*>			m_mapClassInfo;
 	map<CString, CHelperWnd*>				m_mapRemoteTangramHelperWnd;
 	map<__int64, CXobjCollection*>			m_mapWndXobjCollection;
-	map<int, ICosmos*>						m_mapRemoteTangramApp;
 	map<CXobj*, CString>					m_mapXobjForHtml;
 	map<CString, HWND>						m_mapSingleWndApp;
 	map<HWND, CCloudWinForm*>				m_mapNeedQueryOnClose;
@@ -213,9 +211,6 @@ public:
 	map<HWND, CCloudMDTFrame*>				m_mapMDTWindow;
 	map<HWND, CCloudMDIFrame*>				m_mapMDIParent;
 	map<HWND, CBrowser*>					m_mapSizingBrowser;
-	map<CString, CString>					m_mapDocAppName;
-	map<CString, CString>					m_mapDocTemplate;
-	map<CString, CString>					m_mapDocDefaultName;
 	map<IPCSession*, CWormhole*>			m_mapWormhole;
 	BEGIN_COM_MAP(CCosmos)
 		COM_INTERFACE_ENTRY(ICosmos)
@@ -244,6 +239,7 @@ public:
 	STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
 	STDMETHOD(CreateCLRObj)(BSTR bstrObjID, IDispatch** ppDisp);
+	STDMETHOD(CreateCLRObjRemote)(BSTR bstrObjID, LONGLONG hWnd, IDispatch** ppDisp);
 	STDMETHOD(CreateGalaxyCluster)(LONGLONG hWnd, IGalaxyCluster** ppCosmos);
 	STDMETHOD(CreateCosmosCtrl)(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl);
 	STDMETHOD(CreateCosmosEventObj)(ICosmosEventObj** ppCosmosEventObj);
@@ -276,6 +272,7 @@ public:
 	STDMETHOD(DeleteGalaxy)(IGalaxy* pGalaxy);
 	STDMETHOD(InitCLRApp)(BSTR strInitXml, LONGLONG* llHandle);
 	STDMETHOD(CreateBrowser)(ULONGLONG hParentWnd, BSTR strUrls, IBrowser** ppRet);
+	STDMETHOD(DestroyCtrl)(LONGLONG hWnd);
 
 	void Init();
 	void Lock() {}

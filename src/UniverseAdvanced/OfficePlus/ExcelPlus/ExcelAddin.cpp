@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006
+ *           Web Runtime for Application - Version 1.0.1.202105250007
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -648,6 +648,16 @@ namespace OfficePlus
 				return S_OK;
 			strKey.Trim();
 			strKey.MakeLower();
+			if (strKey.Find(_T("tangramprocess:")) == 0)
+			{
+				CComQIPtr<ICosmos> pCosmos(newVal.pdispVal);
+				if (pCosmos)
+				{
+					int nIndex = strKey.Replace(_T("tangramprocess:"), _T(""));
+					DWORD dw = (DWORD)_wtoi64(strKey);
+					this->m_mapRemoteTangramApp[dw] = pCosmos.Detach();
+				}
+			}
 			if (strKey == _T("doctemplate"))
 			{
 				auto it = m_mapValInfo.find(_T("doctemplate"));
@@ -731,6 +741,8 @@ namespace OfficePlus
 				CTangramXmlParse m_Parse;
 				if (m_Parse.LoadXml(m_strNewWorkBookData) == false && m_Parse.LoadFile(m_strNewWorkBookData) == false)
 					return;
+				DWORD dwProcessID = (DWORD)m_Parse.attrInt(_T("processid"), 0);
+				pExcelObj->m_dwHostProcessID = dwProcessID;
 				CTangramXmlParse* pTangramsParse = m_Parse.GetChild(_T("Tangrams"));
 				if (pTangramsParse)
 				{
@@ -841,6 +853,14 @@ namespace OfficePlus
 					_pWorkBook->m_strDocXml = pTangramsParse->xml();
 					AddDocXml(pWorkBook, CComBSTR(_pWorkBook->m_strDocXml), CComBSTR(L"tangram"));
 					_pWorkBook->m_bCreating = FALSE;
+					//auto t = create_task([pExcelObj,this]()
+					//	{
+					//		CoInitializeEx(NULL, COINIT_MULTITHREADED);
+					//		::Sleep(1000);
+					//::PostMessage(m_hCosmosWnd, WM_OPENDOCUMENT, (WPARAM)pExcelObj, 0);
+					//		CoUninitialize();
+					//	});
+					//	//pExcelObj->OnOpenDoc();
 					::PostMessage(m_hCosmosWnd, WM_OPENDOCUMENT, (WPARAM)pExcelObj, 0);
 				}
 				m_strNewWorkBookData = _T("");
@@ -853,6 +873,7 @@ namespace OfficePlus
 
 		CExcelObject::CExcelObject(void)
 		{
+			m_dwHostProcessID = 0;
 			m_hExcelEdit = NULL;
 			m_hExcelEdit2 = NULL;
 			m_pWorkBook = nullptr;
@@ -894,6 +915,7 @@ namespace OfficePlus
 				IGalaxy* pGalaxy = nullptr;
 				m_pWorkBook->m_pDocGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((long)m_hChildClient), CComBSTR(L"Document"), &pGalaxy);
 				m_pWorkBook->m_pGalaxy = (CGalaxy*)pGalaxy;
+				m_pWorkBook->m_pGalaxy->m_dwHostProcessID = m_dwHostProcessID;
 				if (m_pWorkBook->m_pGalaxy)
 				{
 					//if (m_bOldVer) 

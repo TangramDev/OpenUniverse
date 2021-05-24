@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1070,6 +1070,21 @@ namespace Browser {
 		}
 		else if (strId.CompareNoCase(_T("TANGRAM_UI_MESSAGE")) == 0)
 		{
+			CString strKey = strParam1;
+			int nPos = strKey.Find(_T(":"));
+			if (nPos != -1)
+			{
+				CString strAppID = strKey.Left(nPos);
+				if (strAppID.CompareNoCase(_T("officeapp")) == 0)
+				{
+					strAppID = strKey.Mid(nPos + 1);
+					if (strAppID != _T(""))
+					{
+						g_pCosmos->CreateApplication(CComBSTR(strAppID), CComBSTR(strParam3));
+						return;
+					}
+				}
+			}
 			// Param1: Frame Name, Param2: HWND, Param3: XML, Param4: BindWebObj Name
 			HWND hWndSource = (HWND)_wtoi(LPCTSTR(strParam2));
 			if (::IsWindow(hWndSource))
@@ -2036,7 +2051,7 @@ namespace Browser {
 			if (pXobj)
 			{
 				IXobj* _pXobj = nullptr;
-				if (pObj->m_pParentObj==nullptr&&pObj->m_strID == TGM_NUCLEUS && pObj->m_pWebPage == this)
+				if (pObj->m_pParentObj == nullptr && pObj->m_strID == TGM_NUCLEUS && pObj->m_pWebPage == this)
 				{
 					LoadDocument2Viewport(strKey, strXml);
 					_pXobj = m_pGalaxy->m_pWorkXobj;

@@ -21,12 +21,6 @@ HKCR
 				val ThreadingModel = s 'Apartment'
 			}
 			'TypeLib' = s '{19631222-1992-0612-1965-060119820911}'
-			'Implemented Categories' = s '' 
-			{ 
-				{59FB2056-D625-48D0-A944-1A85B5AB2640} = s '' 
-				{ 
-				} 
-			}
 		}
 	}
 }
@@ -36,73 +30,8 @@ HKLM
     {
         Microsoft
         {
-            Visio
-            {
-                Addins
-                {
-                    'Universe.Cosmos'
-                    {
-                        val FriendlyName = s 'Visio Plus Addin'
-                        val Description = s 'Tangram Visio Addin'
-                        val LoadBehavior = d '00000003'
-                        val CommandLineSafe = d '00000000' 
-                    }
-                }
-            }
             Office
             {
-                'MS Project'
-                {
-                    Addins
-                    {
-                        'Universe.Cosmos'
-                        {
-                            val FriendlyName = s 'Project Plus Addin'
-                            val Description = s 'Tangram Project Addin'
-                            val LoadBehavior = d '00000003'
-                            val CommandLineSafe = d '00000000' 
-                        }
-                    }
-                }
-                Access
-                {
-                    Addins
-                    {
-                        'Universe.Cosmos'
-                        {
-                            val FriendlyName = s 'Access Plus Addin'
-                            val Description = s 'Tangram Access Addin'
-                            val LoadBehavior = d '00000003'
-                            val CommandLineSafe = d '00000000' 
-                        }
-                    }
-                }
-                OneNote
-                {
-                    Addins
-                    {
-                        'Universe.Cosmos'
-                        {
-                            val FriendlyName = s 'OneNote Plus Addin'
-                            val Description = s 'Tangram OneNote Addin'
-                            val LoadBehavior = d '00000003'
-                            val CommandLineSafe = d '00000000' 
-                        }
-                    }
-                }
-                PowerPoint
-                {
-                    Addins
-                    {
-                        'Universe.Cosmos'
-                        {
-                            val FriendlyName = s 'PowerPoint Plus Addin'
-                            val Description = s 'Tangram PowerPoint Addin'
-                            val LoadBehavior = d '00000003'
-                            val CommandLineSafe = d '00000000' 
-                        }
-                    }
-                }
                 Outlook
                 {
                     Addins

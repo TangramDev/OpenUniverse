@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -1882,6 +1882,147 @@ STDMETHODIMP CCosmos::SetHostFocus(void)
 	return S_OK;
 }
 
+STDMETHODIMP CCosmos::CreateCLRObjRemote(BSTR bstrObjID, LONGLONG hWnd, IDispatch** ppDisp)
+{
+	CString strID = OLE2T(bstrObjID);
+	strID.Trim();
+	strID.MakeLower();
+	int nPos = strID.Find(_T("@"));
+	if (nPos != -1)
+	{
+		CString strAppID = strID.Mid(nPos + 1);
+		if (strAppID != _T("")&& strAppID.Find(_T(","))==-1)
+		{
+			CComPtr<IDispatch> pCtrlDisp;
+			HRESULT hr = pCtrlDisp.CoCreateInstance(CComBSTR(strAppID));
+			if (hr == S_OK)
+			{
+				*ppDisp = pCtrlDisp.Detach();
+				HWND _hWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, (HWND)hWnd, NULL, AfxGetInstanceHandle(), NULL);
+				CAxWindow m_Wnd;
+				m_Wnd.Attach((HWND)_hWnd);
+				CComPtr<IUnknown> pUnk;
+				m_Wnd.AttachControl(*ppDisp, &pUnk);
+				::SetWindowLongPtr((HWND)hWnd, GWLP_USERDATA, (LONG_PTR)_hWnd);
+				CComQIPtr<ICosmosCtrl> _pCtrl(*ppDisp);
+				if (_pCtrl)
+				{
+					CCosmosCtrl* pCtrl = (CCosmosCtrl*)(*ppDisp);
+					pCtrl->m_bTaskPane = true;
+				}
+
+
+				if (*ppDisp)
+					(*ppDisp)->AddRef();
+			}
+			return hr;
+			//ICosmos* pRemoteTangram = nullptr;
+			//auto it = m_mapRemoteCosmos.find(strAppID);
+			//if (it == m_mapRemoteCosmos.end())
+			//{
+			//	CComPtr<IDispatch> pApp;
+			//	pApp.CoCreateInstance(CComBSTR(strAppID), nullptr, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER);
+			//	if (pApp)
+			//	{
+			//		pApp->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
+			//		if (pRemoteTangram)
+			//		{
+			//			pRemoteTangram->AddRef();
+			//			m_mapRemoteCosmos[strAppID] = pRemoteTangram;
+			//			LONGLONG h = 0;
+			//			pRemoteTangram->get_RemoteHelperHWND(&h);
+			//			HWND hWnd = (HWND)h;
+			//			if (::IsWindow(hWnd))
+			//			{
+			//				CHelperWnd* pWnd = new CHelperWnd();
+			//				pWnd->m_strID = strAppID;
+			//				pWnd->Create(hWnd, 0, strAppID, WS_VISIBLE | WS_CHILD);
+			//				m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
+			//			}
+			//		}
+			//		else
+			//		{
+			//			DISPID dispID = 0;
+			//			DISPPARAMS dispParams = { NULL, NULL, 0, 0 };
+			//			VARIANT result = { 0 };
+			//			EXCEPINFO excepInfo;
+			//			memset(&excepInfo, 0, sizeof excepInfo);
+			//			UINT nArgErr = (UINT)-1; // initialize to invalid arg
+			//			LPOLESTR func = L"Tangram";
+			//			HRESULT hr = pApp->GetIDsOfNames(GUID_NULL, &func, 1, LOCALE_SYSTEM_DEFAULT, &dispID);
+			//			if (S_OK == hr)
+			//			{
+			//				hr = pApp->Invoke(dispID, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dispParams, &result, &excepInfo, &nArgErr);
+			//				if (S_OK == hr && VT_DISPATCH == result.vt && result.pdispVal)
+			//				{
+			//					result.pdispVal->QueryInterface(IID_ICosmos, (void**)&pRemoteTangram);
+			//					if (pRemoteTangram)
+			//					{
+			//						pRemoteTangram->AddRef();
+			//						m_mapRemoteCosmos[strAppID] = pRemoteTangram;
+
+			//						LONGLONG h = 0;
+			//						pRemoteTangram->get_RemoteHelperHWND(&h);
+			//						HWND hWnd = (HWND)h;
+			//						if (::IsWindow(hWnd))
+			//						{
+			//							CHelperWnd* pWnd = new CHelperWnd();
+			//							pWnd->m_strID = strAppID;
+			//							pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
+			//							m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
+			//						}
+			//						::VariantClear(&result);
+			//					}
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
+			//else
+			//{
+			//	pRemoteTangram = it->second;
+			//}
+			//if (pRemoteTangram)
+			//{
+			//	strID = strID.Left(nPos);
+			//	return pRemoteTangram->CreateCLRObj(CComBSTR(strID), ppDisp);
+			//}
+		}
+	}
+	nPos = strID.Find(_T(","));
+	if (nPos != -1 || strID.CompareNoCase(_T("webruntimeproxy")) == 0 || strID.CompareNoCase(_T("chromert")) == 0)
+	{
+		LoadCLR();
+
+		if (m_pCLRProxy && bstrObjID != L"")
+		{
+			*ppDisp = m_pCLRProxy->CreateCLRObj(OLE2T(bstrObjID));
+			HWND _hWnd = ::CreateWindowEx(NULL, L"Cosmos Xobj Class", NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 0, 0, 0, 0, (HWND)hWnd, NULL, AfxGetInstanceHandle(), NULL);
+			CAxWindow m_Wnd;
+			m_Wnd.Attach((HWND)_hWnd);
+			CComPtr<IUnknown> pUnk;
+			m_Wnd.AttachControl(*ppDisp, &pUnk);
+			::SetWindowLongPtr((HWND)hWnd, GWLP_USERDATA, (LONG_PTR)_hWnd);
+			if (*ppDisp)
+				(*ppDisp)->AddRef();
+		}
+	}
+	else
+	{
+		CComPtr<IDispatch> pDisp;
+		pDisp.CoCreateInstance(CComBSTR(strID));
+		*ppDisp = pDisp.Detach();
+		if (*ppDisp)
+		{
+			(*ppDisp)->AddRef();
+			return S_OK;
+		}
+		else
+			return S_FALSE;
+	}
+	return S_OK;
+}
+
 STDMETHODIMP CCosmos::CreateCLRObj(BSTR bstrObjID, IDispatch** ppDisp)
 {
 	CString strID = OLE2T(bstrObjID);
@@ -2673,23 +2814,32 @@ STDMETHODIMP CCosmos::CreateApplication(BSTR bstrAppID, BSTR bstrXml)
 						{
 							//if (::GetModuleHandle(_T("CloudAppStudioToolWnd.dll")))
 							//	_pCosmosAddin->put_AppKeyValue(CComBSTR(L"fromvisualstudio"), CComVariant((VARIANT_BOOL)true));
-							HRESULT hr = _pCosmosAddin->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
-							m_mapRemoteCosmos[strAppID] = _pCosmosAddin.p;
-							_pCosmosAddin.p->AddRef();
-							LONGLONG h = 0;
-							_pCosmosAddin->get_RemoteHelperHWND(&h);
-							if (h)
+
+							CTangramXmlParse m_Parse;
+							if (m_Parse.LoadXml(OLE2T(bstrXml)))
 							{
-								HWND hWnd = (HWND)h;
-								CHelperWnd* pWnd = new CHelperWnd();
-								pWnd->m_strID = strAppID;
-								pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
-								m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
+								DWORD dwID = ::GetCurrentProcessId();
+								CString str = _T("");
+								str.Format(_T("tangramprocess:%d"), dwID);
+								CComVariant var;
+								var.vt = VT_DISPATCH;
+								var.pdispVal = (IDispatch*)g_pCosmos;
+								_pCosmosAddin->put_AppKeyValue(CComBSTR(str), var);
+								m_Parse.put_attr(_T("processid"), (__int64)dwID);
+								HRESULT hr = _pCosmosAddin->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(m_Parse.xml()));
+								m_mapRemoteCosmos[strAppID] = _pCosmosAddin.p;
+								_pCosmosAddin.p->AddRef();
+								LONGLONG h = 0;
+								_pCosmosAddin->get_RemoteHelperHWND(&h);
+								if (h)
+								{
+									HWND hWnd = (HWND)h;
+									CHelperWnd* pWnd = new CHelperWnd();
+									pWnd->m_strID = strAppID;
+									pWnd->Create(hWnd, 0, _T(""), WS_CHILD);
+									m_mapRemoteTangramHelperWnd[strAppID] = pWnd;
+								}
 							}
-						}
-						else
-						{
-							pAddin->put_Object(g_pCosmos);
 						}
 					}
 				}
@@ -2755,7 +2905,14 @@ STDMETHODIMP CCosmos::CreateApplication(BSTR bstrAppID, BSTR bstrXml)
 	}
 	else
 	{
-		it->second->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(bstrXml));
+		DWORD dwID = ::GetCurrentProcessId();
+		CTangramXmlParse m_Parse;
+		if (m_Parse.LoadXml(OLE2T(bstrXml)))
+		{
+			m_Parse.put_attr(_T("processid"), (__int64)dwID);
+
+			it->second->put_AppKeyValue(CComBSTR(L"doctemplate"), CComVariant(m_Parse.xml()));
+		}
 	}
 	return S_OK;
 }
@@ -2829,6 +2986,12 @@ STDMETHODIMP CCosmos::UpdateXobj(IXobj* pXobj)
 
 	return S_OK;
 }
+
+STDMETHODIMP CCosmos::DestroyCtrl(LONGLONG hWnd)
+{
+	::DestroyWindow((HWND)hWnd);
+	return S_OK;
+};
 
 HRESULT CCosmos::CreateBrowser(ULONGLONG hParentWnd, BSTR bstrUrls, IBrowser** ppRet)
 {

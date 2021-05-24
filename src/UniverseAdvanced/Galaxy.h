@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006
+ *           Web Runtime for Application - Version 1.0.1.202105250007
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -331,7 +331,7 @@ public:
 	bool											m_bMDIChild;
 	bool											m_bObserveState = false;
 	GalaxyType										m_nGalaxyType;
-
+	DWORD											m_dwHostProcessID;
 	HWND											m_hHostWnd;
 	CString											m_strLastKey;
 	CString											m_strGalaxyName;

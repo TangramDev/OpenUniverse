@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -41,7 +41,7 @@ public:
 
 	CCosmosCtrlBase();
 	virtual ~CCosmosCtrlBase();
-
+	bool m_bTaskPane;
 #pragma warning(pop)
 
 	DECLARE_OLEMISC_STATUS(OLEMISC_RECOMPOSEONRESIZE |OLEMISC_CANTLINKINSIDE |OLEMISC_INSIDEOUT)
@@ -98,6 +98,7 @@ class ATL_NO_VTABLE CCosmosCtrl :
 {
 public:
 	DECLARE_REGISTRY_RESOURCEID(IDR_TANGRAMCTRL)
+	CBrowser* m_pWebBrowser = nullptr;
 
 	BEGIN_COM_MAP(CCosmosCtrl)
 		COM_INTERFACE_ENTRY(ICosmosCtrl)
@@ -109,6 +110,10 @@ public:
 		COM_INTERFACE_ENTRY(IOleInPlaceActiveObject)
 	END_COM_MAP()
 
+	BEGIN_MSG_MAP(CCosmosCtrl)
+		MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+	END_MSG_MAP()
+
 public:
 	STDMETHOD(get_HWND)(LONGLONG* pVal);
 	STDMETHOD(get_Cosmos)(ICosmos** pVal);
@@ -116,6 +121,7 @@ public:
 	STDMETHOD(put_tag)(VARIANT newVal);
 
 	static HRESULT WINAPI CreateInstance(void* pv, REFIID riid, LPVOID* ppv);
+	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };
 
 OBJECT_ENTRY_AUTO_EX(__uuidof(CosmosCtrl), CCosmosCtrl)

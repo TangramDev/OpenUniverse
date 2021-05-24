@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -21,7 +21,7 @@
  * https://www.tangram.dev
  *******************************************************************************/
 
-// TangramCtrl.cpp : Implementation of CCosmosCtrl
+ // TangramCtrl.cpp : Implementation of CCosmosCtrl
 #include "stdafx.h"
 #include "UniverseApp.h"
 #include "Xobj.h"
@@ -46,9 +46,9 @@ HRESULT WINAPI CCosmosCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
 		}
 		if (g_pCosmos->m_pUniverseAppProxy)
 		{
-			HRESULT hr = g_pCosmos->m_pUniverseAppProxy->CreateCosmosCtrl(pv, riid, ppv);
-			if (hr == S_OK)
-				return hr;
+			//HRESULT hr = g_pCosmos->m_pUniverseAppProxy->CreateCosmosCtrl(pv, riid, ppv);
+			//if (hr == S_OK)
+			//	return hr;
 		}
 		return CCosmosCtrl::_CreatorClass::CreateInstance(pv, riid, ppv);
 	}
@@ -70,6 +70,7 @@ HRESULT WINAPI CCosmosCtrl::CreateInstance(void* pv, REFIID riid, LPVOID* ppv)
 CCosmosCtrlBase::CCosmosCtrlBase()
 {
 	m_bWindowOnly = true;
+	m_bTaskPane = false;
 	m_hWnd = NULL;
 #ifdef _DEBUG
 	g_pCosmos->m_nTangramCtrl++;
@@ -90,6 +91,8 @@ void CCosmosCtrlBase::OnFinalMessage(HWND hWnd)
 	//	g_pCosmos->m_pCLRProxy->ReleaseCosmosObj((ICosmosCtrl*)this);
 	//}
 	__super::OnFinalMessage(hWnd);
+	if (m_bTaskPane)
+		delete this;
 }
 
 STDMETHODIMP CCosmosCtrl::get_HWND(LONGLONG* pVal)
@@ -129,7 +132,7 @@ HRESULT CCosmosAppCtrl::Fire_CosmosEvent(ICosmosEventObj* pEventObj)
 			g_pCosmos->Lock();
 			IUnknown* punkConnection = m_vec.GetAt(iConnection);
 			g_pCosmos->Unlock();
-			IDispatch * pConnection = static_cast<IDispatch *>(punkConnection);
+			IDispatch* pConnection = static_cast<IDispatch*>(punkConnection);
 			if (pConnection)
 			{
 				CComVariant varResult;
@@ -149,4 +152,12 @@ STDMETHODIMP CCosmosCtrl::get_tag(VARIANT* pVal)
 STDMETHODIMP CCosmosCtrl::put_tag(VARIANT newVal)
 {
 	return S_OK;
+}
+
+
+LRESULT CCosmosCtrl::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	return DefWindowProc(uMsg, wParam, lParam);
 }

@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105190006           *
+ *           Web Runtime for Application - Version 1.0.1.202105250007           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -26,7 +26,6 @@
 #include "stdafx.h"
 #include "Xobj.h"
 #include "Galaxy.h"
-#include "CosmosCtrl.h"
 #include "UniverseApp.h"
 #include "Cosmos.h"
 
