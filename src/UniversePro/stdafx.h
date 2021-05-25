@@ -161,7 +161,6 @@ class CEclipseWnd;
 class CUniverse;
 class CXobjEvents;
 class CTangramTabCtrl;
-class CCosmosAppCtrl;
 class CTangramListView;
 class CCosmosEvent;
 class CGalaxyCluster;

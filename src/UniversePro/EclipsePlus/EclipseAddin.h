@@ -27,8 +27,6 @@
 #include "tangrambase.h"
 
 class CEclipseWnd;
-class CEclipseCtrl;
-
 class ATL_NO_VTABLE CEclipseExtender :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IEclipseExtender, &IID_IEclipseExtender, &LIBID_Universe, /*wMajor =*/ 1, /*wMinor =*/ 0>

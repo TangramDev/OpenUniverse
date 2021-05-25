@@ -210,7 +210,6 @@ CCosmos::CCosmos()
 	m_pActiveXobj = nullptr;
 	m_pGalaxy = nullptr;
 	m_pRootNodes = nullptr;
-	m_pCosmosAppCtrl = nullptr;
 	m_pUniverseAppProxy = nullptr;
 	m_pCosmosAppProxy = nullptr;
 	m_pActiveAppProxy = nullptr;

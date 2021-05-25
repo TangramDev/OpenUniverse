@@ -194,8 +194,6 @@ public:
 	CGalaxy* m_pGalaxy;
 	CGalaxyCluster* m_pGalaxyCluster;
 
-	CCosmosAppCtrl* m_pCosmosAppCtrl;
-
 	CEclipseWnd* m_pActiveEclipseWnd;
 
 	map<CString, long>						m_mapIPCMsgIndexDic;
