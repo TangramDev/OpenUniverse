@@ -91,7 +91,7 @@ class ATL_NO_VTABLE CXobj :
 	public CComObjectRootBase,
 	public IConnectionPointContainerImpl<CXobj>,
 	public IConnectionPointImpl<CXobj, &__uuidof(_IXobjEvents)>,
-	public IDispatchImpl<IXobj, &IID_IXobj, &LIBID_Universe, 1, 0>
+	public IDispatchImpl<IXobj>
 {
 public:
 	CXobj();
@@ -139,7 +139,7 @@ public:
 	CTangramXmlParse*				m_pHostParse;
 	CTangramXmlParse* 				m_pDocXmlParseNode;
 	ICosmosWindow*					m_pWindow;
-	CMDIChildFormInfo*				m_pChildFormsInfo;
+	//CMDIChildFormInfo*				m_pChildFormsInfo;
 	CXobjShareData*					m_pXobjShareData;
 	CBrowser*						m_pWebBrowser;
 	CWnd*							m_pHostWnd;

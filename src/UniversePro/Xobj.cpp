@@ -55,7 +55,7 @@ CXobj::CXobj()
 	m_nRows = 1;
 	m_nCols = 1;
 	m_nViewType = BlankView;
-	m_pChildFormsInfo = nullptr;
+	//m_pChildFormsInfo = nullptr;
 	m_bTopObj = false;
 	m_bCreated = false;
 	m_varTag.vt = VT_EMPTY;
@@ -126,6 +126,11 @@ void CXobj::InitWndXobj()
 					m_strID = _T("clrctrl");
 					m_nViewType = CLRCtrl;
 				}
+			}
+			else if (m_strObjTypeID != _T("") && m_strObjTypeID.Find(_T(".")) != -1)
+			{
+				m_strID = _T("activex");
+				m_nViewType = ActiveX;
 			}
 		}
 	}

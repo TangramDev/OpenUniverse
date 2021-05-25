@@ -137,10 +137,10 @@ public:
 class ATL_NO_VTABLE CCosmos :
 	public CCosmosImpl,
 	public CComObjectRootBase,
+	public IDispatchImpl<ICosmos>,
 	public CTabStatsTrackerDelegate,
 	public IConnectionPointContainerImpl<CCosmos>,
-	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>,
-	public IDispatchImpl<ICosmos, &IID_ICosmos, &LIBID_Universe, 1, 0>
+	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>
 {
 	friend class CGalaxy;
 	friend class CCloudMDTFrame;

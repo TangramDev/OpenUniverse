@@ -1194,24 +1194,19 @@ CCloudWinForm::CCloudWinForm(void)
 	m_pBKWnd = nullptr;
 	m_pWormhole = nullptr;
 	m_pOwnerHtmlWnd = nullptr;
+	m_pChildFormsInfo = nullptr;
 	m_strChildFormPath = m_strXml = m_strKey = m_strBKID = _T("");
 	if (g_pCosmos->m_pCurMDIChildFormInfo)
 	{
 		m_pChildFormsInfo = g_pCosmos->m_pCurMDIChildFormInfo;
-		if (g_pCosmos->m_pActiveXobj)
-			g_pCosmos->m_pActiveXobj->m_pChildFormsInfo = m_pChildFormsInfo;
+		//if (g_pCosmos->m_pActiveXobj)
+		//	g_pCosmos->m_pActiveXobj->m_pChildFormsInfo = m_pChildFormsInfo;
 		g_pCosmos->m_pCurMDIChildFormInfo = nullptr;
-	}
-	else
-	{
-		m_pChildFormsInfo = nullptr;
 	}
 }
 
 CCloudWinForm::~CCloudWinForm(void)
 {
-	if (m_pChildFormsInfo)
-		delete m_pChildFormsInfo;
 }
 
 void CCloudWinForm::SendMessage()
@@ -1487,6 +1482,11 @@ LRESULT CCloudWinForm::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 		auto it = m_pMDIParent->m_mapMDIChild.find(m_hWnd);
 		if (it != m_pMDIParent->m_mapMDIChild.end())
 			m_pMDIParent->m_mapMDIChild.erase(it);
+	}
+	if (m_bMdiForm)
+	{
+		if (m_pChildFormsInfo)
+			delete m_pChildFormsInfo;
 	}
 	return DefWindowProc(uMsg, wParam, lParam);
 }
