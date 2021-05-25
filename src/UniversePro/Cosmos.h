@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105250007           *
+ *           Web Runtime for Application - Version 1.0.1.202105260008           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -143,13 +143,13 @@ class ATL_NO_VTABLE CCosmos :
 	public IConnectionPointImpl<CCosmos, &__uuidof(_ICosmos)>
 {
 	friend class CGalaxy;
-	friend class CCloudMDTFrame;
 	friend class CXobjWnd;
-	friend class CCloudWinForm;
 	friend class CWebView;
 	friend class CUniverse;
-	friend class CCloudMDIFrame;
 	friend class CEclipseWnd;
+	friend class CCloudWinForm;
+	friend class CCloudMDTFrame;
+	friend class CCloudMDIFrame;
 	friend class CGalaxyCluster;
 public:
 	CCosmos();
