@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008
+ *           Web Runtime for Application - Version 1.0.1.202106070010
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -156,7 +156,7 @@
 #define TGM_STYLE				_T("style")
 #define TGM_ACTIVE_PAGE			_T("activepage")
 #define TGM_TAG					_T("tag")
-#define TGM_CLUSTER				_T("cluster")
+#define TGM_CLUSTER				_T("appViewport")
 #define TGM_XOBJ				_T("xobj")
 #define TGM_NUCLEUS				_T("nucleus")
 
@@ -568,7 +568,7 @@ namespace CommonUniverse {
 		CString							m_strCurrentWinFormTemplate;
 
 		virtual IDispatch* CreateCLRObj(CString bstrObjID) { return nullptr; }
-		virtual IDispatch* CreateCLRObjRemote(CString bstrObjID, HWND hHostWnd) { return nullptr; }
+		virtual IDispatch* CreateCLRObjRemote(CString bstrObjID, CString strXmlData, HWND hHostWnd) { return nullptr; }
 		virtual HRESULT ProcessCtrlMsg(HWND hCtrl, bool bShiftKey) { return 0; }
 		virtual BOOL ProcessFormMsg(HWND hFormWnd, LPMSG lpMsg, int nMouseButton) { return false; }
 		virtual IDispatch* CreateObject(BSTR bstrObjID, HWND hParent, IXobj* pHostNode) { return nullptr; }
@@ -617,6 +617,7 @@ namespace CommonUniverse {
 			m_pCosmosAppProxy = nullptr;
 			m_pUniverseAppProxy = nullptr;
 			m_pCurMDIChildFormInfo = nullptr;
+			m_strAppID = _T("");
 			m_strNtpXml = _T("");
 		}
 
@@ -652,6 +653,7 @@ namespace CommonUniverse {
 		HICON									m_hLargeIcon;
 		HICON									m_hSmallIcon;
 
+		CString									m_strAppID = _T("");
 		CString									m_strAppKey;
 		CString									m_strAppName;
 		CString									m_strExeName;
@@ -760,6 +762,7 @@ namespace CommonUniverse {
 		virtual void OnNetworkChangeNotify(int ConnectType, __int64 NetworkHandle) {}
 		virtual void OnCLRHostExit() {}
 		virtual void ConnectMsgLoop(HWND hMsg) {}
+		virtual float GetScaleFactorForHWND(HWND hWnd) { return 0.0f; }
 	};
 
 	class ICosmosWindowProvider

@@ -67,12 +67,12 @@
     <define tagName="webViewport"></define>
     <define tagName="gridTemplate"></define>
     <webViewport>
-        <cluster> 
+        <appViewport> 
             <xobj rows="1" cols="2" width="550,">
                 <xobj objid="SunnyCtrl.CLECtrl,SunnyCtrl" id="navCtrl"></xobj>
                 <xobj objid="nucleus" id="mainClient"></xobj>
             </xobj>
-        </cluster> 
+        </appViewport> 
     </webViewport>
     <x style="font-size:40px; color:crimson">Sunny's <i style="font-size:40px; color:fuchsia">New </i>World of .NET<strong></strong></x>
     <center style="font-size:40px; color:green"><h2>Common Layout Engine</h2></center>
@@ -90,9 +90,9 @@
         The advantage of this scheme is that it is easy to connect with mainstream Internet technology.
     </p>
     <contentcle target="mainClient">
-        <cluster> 
+        <appViewport> 
             <xobj objid="nucleus"></xobj>
-        </cluster> 
+        </appViewport> 
     </contentcle>
     <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout()">Dynamic Layout One</button>
     <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout1()">Dynamic Layout Two</button>
@@ -101,9 +101,9 @@
     <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout4()">Dynamic Layout Five</button>
     <button style="font-size: 24px;font-weight: bold; color:crimson" onclick="DynLayout5()">Dynamic Layout Six</button>
     <h3>Dynamic layout DOM description (press a button to see DOM output):</h3>
-    <cluster> 
+    <appViewport> 
         <layout_1 id="layout_1">
-            <cluster> 
+            <appViewport> 
                 <xobj style="18">
                     <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -123,10 +123,10 @@
                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </layout_1>
         <layout_2 id="layout_2">
-            <cluster> 
+            <appViewport> 
                 <xobj style="33">
                     <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" id="SunnyCtrl_UserControl1"></xobj>
@@ -146,10 +146,10 @@
                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" id="SunnyCtrl_UserControl31" caption="Second Page"></xobj>
                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" id="SunnyCtrl_UserControl21" caption="Third Page"></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </layout_2>
         <layout_3 id="layout_3">
-            <cluster> 
+            <appViewport> 
                 <xobj style="23">
                     <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -169,10 +169,10 @@
                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </layout_3>
         <layout_4 id="layout_4">
-            <cluster> 
+            <appViewport> 
                 <xobj style="43">
                     <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -192,10 +192,10 @@
                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </layout_4>
         <layout_5 id="layout_5">
-            <cluster> 
+            <appViewport> 
                 <xobj style="37">
                     <xobj caption="Start Page" rows="2" cols="2" width="150,100,100" height="200,180,100">
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -210,10 +210,10 @@
                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </layout_5>
         <layout_6 id="layout_6">
-            <cluster> 
+            <appViewport> 
                 <xobj style="23">
                     <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -233,8 +233,8 @@
                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </layout_6>
-    </cluster> 
+    </appViewport> 
 </body>
 </html>

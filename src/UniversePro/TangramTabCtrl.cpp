@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008
+ *           Web Runtime for Application - Version 1.0.1.202106070010
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -97,7 +97,7 @@ void CTangramListCtrl::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	else
 	{
-		CString strXml = _T("<tangram><cluster><xobj name=\"start\" objid=\"nucleus\" /></cluster></tangram>"); 
+		CString strXml = _T("<tangram><appViewport><xobj name=\"start\" objid=\"nucleus\" /></appViewport></tangram>"); 
 		m_pCosmosTabCtrl->m_pGalaxy->Observe(CComBSTR("defaultListView"), CComBSTR(strXml), &pXobj);
 	}
 

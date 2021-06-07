@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008           *
+ *           Web Runtime for Application - Version 1.0.1.202106070010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -174,17 +174,17 @@ namespace blink {
 			if (pNode->getNodeType() == 1) {
 				AtomicString target = elem->getAttribute("target");
 				AtomicString galaxy = elem->getAttribute("galaxy");
-				AtomicString cluster = elem->getAttribute("cluster");
+				AtomicString appViewport = elem->getAttribute("appViewport");
 				if (galaxy == "" || galaxy.IsNull() == true)
 					galaxy = "default";
-				if (cluster == "" || cluster.IsNull() == true)
-					cluster = "default";
+				if (appViewport == "" || appViewport.IsNull() == true)
+					appViewport = "default";
 				if (target.IsNull() == true || target == "")
 				{
 					auto it = m_mapCosmosGalaxy.find(WebString(galaxy).Utf16());
 					if (it != m_mapCosmosGalaxy.end())
 					{
-						auto it2 = it->second->m_mapRootNode.find(WebString(cluster).Utf16());
+						auto it2 = it->second->m_mapRootNode.find(WebString(appViewport).Utf16());
 						if (it2 != it->second->m_mapRootNode.end())
 							return it2->second;
 						return nullptr;
@@ -192,7 +192,7 @@ namespace blink {
 				}
 				else
 				{
-					CosmosNode* xobjfortarget = getXobj(galaxy, cluster, target);
+					CosmosNode* xobjfortarget = getXobj(galaxy, appViewport, target);
 					if (!!xobjfortarget) {
 						return xobjfortarget;
 					}
@@ -240,14 +240,14 @@ namespace blink {
 							target = elem->getAttribute("target");
 							if (target != "") {
 								AtomicString galaxy = elem->getAttribute("galaxy");
-								AtomicString cluster = elem->getAttribute("cluster");
+								AtomicString appViewport = elem->getAttribute("appViewport");
 								if (galaxy == "")
 									galaxy = "default";
-								if (cluster == "")
-									cluster = "default";
-								CosmosNode* xobjfortarget = getXobj(galaxy, cluster, target);
+								if (appViewport == "")
+									appViewport = "default";
+								CosmosNode* xobjfortarget = getXobj(galaxy, appViewport, target);
 								if (xobjfortarget == nullptr)
-									xobjfortarget = cosmos_.Get()->getXobj(galaxy, cluster, target);
+									xobjfortarget = cosmos_.Get()->getXobj(galaxy, appViewport, target);
 								if (!!xobjfortarget) {
 									xobjfortarget->setWorkElement(elem);
 									String msgID = e->GetIdAttribute() + "_" + eventName;
@@ -388,20 +388,20 @@ namespace blink {
 					}
 					else {
 						AtomicString galaxy = elem->getAttribute("galaxy");
-						AtomicString cluster = elem->getAttribute("cluster");
+						AtomicString appViewport = elem->getAttribute("appViewport");
 						if (galaxy == "")
 							galaxy = "default";
-						if (cluster == "")
-							cluster = "default";
+						if (appViewport == "")
+							appViewport = "default";
 
-						xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
+						xobjfortarget = cosmos_->getXobj(galaxy, appViewport, target);
 						if (xobjfortarget == nullptr) {
-							xobjfortarget = getXobj(galaxy, cluster, target);
+							xobjfortarget = getXobj(galaxy, appViewport, target);
 						}
 						if (xobjfortarget == nullptr) {
 							CosmosWinform* Parentform = mdiParent();
 							if (Parentform)
-								xobjfortarget = Parentform->getXobj(galaxy, cluster, target);
+								xobjfortarget = Parentform->getXobj(galaxy, appViewport, target);
 						}
 						if (xobjfortarget == nullptr) {
 							long nFormType = getLong(L"WinFormType");
@@ -409,7 +409,7 @@ namespace blink {
 							{
 								CosmosWinform* childform = activeMDIChild();
 								if (childform)
-									xobjfortarget = childform->getXobj(galaxy, cluster, target);
+									xobjfortarget = childform->getXobj(galaxy, appViewport, target);
 							}
 						}
 					}

@@ -806,8 +806,8 @@ void WebLocalFrameImpl::SetIsolatedWorldInfo(int32_t world_id,
   CHECK_GT(world_id, DOMWrapperWorld::kMainWorldId);
   CHECK_LT(world_id, DOMWrapperWorld::kDOMWrapperWorldEmbedderWorldIdLimit);
 
-  // The security origin received via IPC doesn't contain the agent cluster
-  // ID so we need to make sure it contains the cluster agent ID from
+  // The security origin received via IPC doesn't contain the agent appViewport
+  // ID so we need to make sure it contains the appViewport agent ID from
   // the current document.
   scoped_refptr<SecurityOrigin> security_origin =
       info.security_origin.Get()
@@ -2484,7 +2484,7 @@ void WebLocalFrameImpl::OnPortalActivated(
 
   auto blink_data = ToBlinkTransferableMessage(std::move(data));
   DCHECK(!blink_data.locked_agent_cluster_id)
-      << "portal activation is always cross-agent-cluster and should be "
+      << "portal activation is always cross-agent-appViewport and should be "
          "diagnosed early";
   MessagePortArray* ports = MessagePort::EntanglePorts(
       *window->document(), std::move(blink_data.ports));
@@ -2598,7 +2598,7 @@ void WebLocalFrameImpl::SetAllowsCrossBrowsingInstanceFrameLookup() {
   DCHECK(GetFrame());
 
   // Allow the frame's security origin to access other SecurityOrigins
-  // that match everything except the agent cluster check. This is needed
+  // that match everything except the agent appViewport check. This is needed
   // for embedders that hand out frame references outside of a browsing
   // instance, for example extensions and webview tag.
   GetFrame()

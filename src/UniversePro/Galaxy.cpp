@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008
+ *           Web Runtime for Application - Version 1.0.1.202106070010
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1802,11 +1802,11 @@ LRESULT CCloudWinForm::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lPara
 			CString strXml = _T("");
 			int nPos = m_strBKID.Find(_T(":"));
 			if (nPos == -1)
-				strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" gridtype=\"clrctrl\" objid=\"%s\" /></cluster></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><appViewport><xobj name=\"mdiclient\" gridtype=\"clrctrl\" objid=\"%s\" /></appViewport></mdiclient>"), m_strBKID);
 			else
 			{
 				m_strBKID = m_strBKID.Mid(nPos + 1);
-				strXml.Format(_T("<mdiclient><cluster><xobj name='mdiclient' gridtype='' url='%s' /></cluster></mdiclient>"), m_strBKID);
+				strXml.Format(_T("<mdiclient><appViewport><xobj name='mdiclient' gridtype='' url='%s' /></appViewport></mdiclient>"), m_strBKID);
 			}
 			IXobj* pXobj = nullptr;
 			pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
@@ -2499,7 +2499,7 @@ STDMETHODIMP CGalaxy::Observe(BSTR bstrKey, BSTR bstrXml, IXobj** ppRetXobj)
 						if (strXml == _T(""))
 							strXml = _strXml;
 						if (strXml == _T(""))
-							strXml = _T("<default><cluster><xobj  objid='nucleus' /></cluster></default>");;
+							strXml = _T("<default><appViewport><xobj  objid='nucleus' /></appViewport></default>");;
 					}
 					else
 						strXml = _strXml;
@@ -3473,7 +3473,7 @@ STDMETHODIMP CGalaxy::GetXml(BSTR bstrRootName, BSTR* bstrRet)
 	CString strRootName = OLE2T(bstrRootName);
 	if (strRootName == _T(""))
 		strRootName = _T("DocumentUI");
-	CString strXmlData = _T("<Default><cluster><xobj name=\"Start\"/></cluster></Default>");
+	CString strXmlData = _T("<Default><appViewport><xobj name=\"Start\"/></appViewport></Default>");
 	CString strName = _T("");
 	CString strXml = _T("");
 

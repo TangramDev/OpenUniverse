@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008           *
+ *           Web Runtime for Application - Version 1.0.1.202106070010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -238,7 +238,7 @@ public:
 	STDMETHOD(AttachObjEvent)(IDispatch* pDisp, int nEventIndex);
 	STDMETHOD(CreateOfficeDocument)(BSTR bstrXml);// { return S_OK; };
 	STDMETHOD(CreateCLRObj)(BSTR bstrObjID, IDispatch** ppDisp);
-	STDMETHOD(CreateCLRObjRemote)(BSTR bstrObjID, LONGLONG hWnd, IDispatch** ppDisp) { return S_OK; };
+	STDMETHOD(CreateCLRObjRemote)(BSTR bstrObjID, BSTR bstrXmlData, LONGLONG hWnd, IDispatch** ppDisp) { return S_OK; };
 	STDMETHOD(CreateGalaxyCluster)(LONGLONG hWnd, IGalaxyCluster** ppCosmos);
 	STDMETHOD(CreateCosmosCtrl)(BSTR bstrAppID, ICosmosCtrl** ppRetCtrl);
 	STDMETHOD(CreateCosmosEventObj)(ICosmosEventObj** ppCosmosEventObj);
@@ -272,6 +272,7 @@ public:
 	STDMETHOD(InitCLRApp)(BSTR strInitXml, LONGLONG* llHandle);
 	STDMETHOD(CreateBrowser)(ULONGLONG hParentWnd, BSTR strUrls, IBrowser** ppRet);
 	STDMETHOD(DestroyCtrl)(LONGLONG hWnd) { return S_OK; };
+	STDMETHOD(GetRemoteHostViewRect)(LONGLONG hHostWnd, BSTR* strData) { return S_OK; };
 
 	void Init();
 	void Lock() {}

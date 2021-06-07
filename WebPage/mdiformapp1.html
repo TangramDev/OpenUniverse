@@ -70,11 +70,11 @@
                         }
                         form.onXobjCreated = function (e) {
                             var galaxy = e.xobj.getStr("galaxy");
-                            var cluster = e.xobj.getStr("cluster");
+                            var appViewport = e.xobj.getStr("appViewport");
                             switch (galaxy) {
                                 case "webviewport":
                                     {
-                                        switch (cluster) {
+                                        switch (appViewport) {
                                             case "__viewport_default__":
                                                 {
                                                     switch (e.xobj.name) {
@@ -168,7 +168,7 @@
                                 case "panel1":
                                     {
                                         panel1_ = e.galaxy;
-                                        switch (cluster) {
+                                        switch (appViewport) {
                                             case "default":
                                                 {
                                                     switch (e.xobj.name) {
@@ -198,7 +198,7 @@
                                     break;
                                 case "mainclient@__viewport_default__@default_frame":
                                     {
-                                        switch (cluster) {
+                                        switch (appViewport) {
                                             case "startup":
                                                 break;
                                             case "compositegrid":
@@ -243,10 +243,10 @@
         cosmos.onXobjCreated = function (e) {
             alert(e);
             var galaxy = e.xobj.getStr("galaxy");
-            var cluster = e.xobj.getStr("cluster");
+            var appViewport = e.xobj.getStr("appViewport");
             switch (galaxy) {
                 case "client":
-                    switch (cluster) {
+                    switch (appViewport) {
                         case "default":
                             switch (e.xobj.name) {
                                 case "Sunny_ntpctrl":
@@ -288,7 +288,7 @@
                     break;
                 case "webviewport":
                     {
-                        switch (cluster) {
+                        switch (appViewport) {
                             case "__viewport_default__":
                                 {
                                     switch (e.xobj.name) {
@@ -512,7 +512,7 @@
                                 {
                                     alert("DocType:" + e.xobj.getStr("DocTypeID"));
                                     alert("galaxy:" + e.xobj.getStr("galaxy"));
-                                    alert("cluster:" + e.xobj.getStr("cluster"));
+                                    alert("appViewport:" + e.xobj.getStr("appViewport"));
                                     alert(e.xobj.name);
                                     console.log("WM_COMMAND_button\n");
                                     //cosmos.sendMessage("COSMOS_CREATE_DOC", ".xxxx", "test", "33");
@@ -735,13 +735,13 @@
             <cloud-form objid="sunnymdiforms.MDIForm1,SunnyMDIForms" mdibkpageid="sunnymdiforms.bk,SunnyMDIForms"  width="2400" height="1600" caption="Your First Customized Cloud WinForm MDI Application" id="Mainform">
                 <mdiclient>
                     <default>
-                        <cluster>
+                        <appViewport>
                             <xobj id='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                 <xobj objid="SunnyCtrl.NavControl,SunnyCtrl" id="navCtrl">
                                     <eventmap>
                                         <treeView1 event="OnAfterSelect">
-                                            <Client target="mainClient" cluster="__viewport_default__" galaxy="default" content="content_grid" targetcluster="content_grid">
-                                                <cluster>
+                                            <Client target="mainClient" appViewport="__viewport_default__" galaxy="default" content="content_grid" targetcluster="content_grid">
+                                                <appViewport>
                                                     <xobj rows="3" cols="3" width="150,100,100" height="200,180,100">
                                                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
@@ -753,7 +753,7 @@
                                                         <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
                                                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                                     </xobj>
-                                                </cluster>
+                                                </appViewport>
                                             </Client>
                                         </treeView1>
                                     </eventmap>
@@ -766,13 +766,13 @@
                                             模式徐徐展开了……
                                             <treeView1_tag>
                                                 <onafterselect>
-                                                    <startup target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="startup" targetcluster="startup">
-                                                        <cluster>
+                                                    <startup target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="startup" targetcluster="startup">
+                                                        <appViewport>
                                                             <xobj>
                                                                 <xobj caption="New Web, New Desktop World" objid="nucleus"></xobj>
                                                                 <xobj caption="New Start point" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                                             </xobj>
-                                                        </cluster>
+                                                        </appViewport>
                                                     </startup>
                                                 </onafterselect>
                                             </treeView1_tag>
@@ -785,14 +785,14 @@
                                             </node1>
                                             <node1_tag>
                                                 <onafterselect>
-                                                    <content target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content1" targetcluster="content1">
-                                                        <cluster>
+                                                    <content target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="content1" targetcluster="content1">
+                                                        <appViewport>
                                                             <xobj style="18" id="test">
                                                                 <xobj caption="The mixed world of web and native UI" objid="nucleus"></xobj>
                                                                 <xobj caption="Second Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                                                 <xobj caption="Third Page" objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
                                                             </xobj>
-                                                        </cluster>
+                                                        </appViewport>
                                                     </content>
                                                 </onafterselect>
                                             </node1_tag>
@@ -804,8 +804,8 @@
                                                 <xobj treenode="true" text="网格(Grid)"></xobj>
                                                 <xobj_tag>
                                                     <OnAfterSelect>
-                                                        <mainClient target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content_grid" targetcluster="content_grid">
-                                                            <cluster>
+                                                        <mainClient target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="content_grid" targetcluster="content_grid">
+                                                            <appViewport>
                                                                 <xobj rows="3" cols="3" width="150,100,100" height="200,180,100">
                                                                     <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
@@ -818,29 +818,29 @@
                                                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                                                 </xobj>
                                                                 <ddd-www-aaa></ddd-www-aaa>
-                                                            </cluster>
+                                                            </appViewport>
                                                         </mainClient>
                                                     </OnAfterSelect>
                                                 </xobj_tag>
                                                 <tabgrid treenode="true" text="标签(选项卡，Tabbed Window)"></tabgrid>
                                                 <tabgrid_tag>
                                                     <onafterselect>
-                                                        <tab_grid target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="tabgrid" targetcluster="tabgrid">
-                                                            <cluster>
+                                                        <tab_grid target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="tabgrid" targetcluster="tabgrid">
+                                                            <appViewport>
                                                                 <xobj>
                                                                     <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
                                                                     <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                                                     <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                                                 </xobj>
-                                                            </cluster>
+                                                            </appViewport>
                                                         </tab_grid>
                                                     </onafterselect>
                                                 </tabgrid_tag>
                                                 <node6 treenode="true" text="多层网格嵌套(Multi-Level Grid)"></node6>
                                                 <node6_tag>
                                                     <onafterselect>
-                                                        <compositegrid target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="compositegrid" targetcluster="compositegrid">
-                                                            <cluster>
+                                                        <compositegrid target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="compositegrid" targetcluster="compositegrid">
+                                                            <appViewport>
                                                                 <xobj style="23">
                                                                     <xobj caption="Start Page" id="CompositeGrid_Splitter" rows="3" cols="3" width="150,100,100" height="200,180,100">
                                                                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -860,17 +860,17 @@
                                                                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                                                                 </xobj>
-                                                            </cluster>
+                                                            </appViewport>
                                                         </compositegrid>
                                                     </onafterselect>
                                                 </node6_tag>
                                             </virtuallayoutengine>
                                             <virtuallayoutengine_tag>
                                                 <onafterselect>
-                                                    <contentcle target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="contentcle" targetcluster="contentcle">
-                                                        <cluster>
+                                                    <contentcle target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="contentcle" targetcluster="contentcle">
+                                                        <appViewport>
                                                             <xobj objid="nucleus"></xobj>
-                                                        </cluster>
+                                                        </appViewport>
                                                     </contentcle>
                                                 </onafterselect>
                                             </virtuallayoutengine_tag>
@@ -878,28 +878,28 @@
                                                 <usingbuiltbrowser treenode="true" text="使用应用Web页面"></usingbuiltbrowser>
                                                 <usingbuiltbrowser_tag>
                                                     <onafterselect>
-                                                        <content_using_browser target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content_using_browser" targetcluster="content_using_browser">
-                                                            <cluster>
+                                                        <content_using_browser target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="content_using_browser" targetcluster="content_using_browser">
+                                                            <appViewport>
                                                                 <xobj style="43">
                                                                     <xobj objid="nucleus" caption="Using Browser Window"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                                                                 </xobj>
-                                                            </cluster>
+                                                            </appViewport>
                                                         </content_using_browser>
                                                     </onafterselect>
                                                 </usingbuiltbrowser_tag>
                                             </openwebruntime>
                                             <openwebruntime_tag>
                                                 <OnAfterSelect>
-                                                    <content_cwr target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content_cwr" targetcluster="content_cwr">
-                                                        <cluster>
+                                                    <content_cwr target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="content_cwr" targetcluster="content_cwr">
+                                                        <appViewport>
                                                             <xobj style="27">
                                                                 <xobj objid="nucleus" caption="Common WebBrowser Runtime"></xobj>
                                                                 <xobj caption="Page1"></xobj>
                                                                 <xobj caption="Page2"></xobj>
                                                             </xobj>
-                                                        </cluster>
+                                                        </appViewport>
                                                     </content_cwr>
                                                 </OnAfterSelect>
                                             </openwebruntime_tag>
@@ -907,38 +907,38 @@
                                                 <node_workbench treenode="true" text="使用WorkBench"></node_workbench>
                                                 <node_workbench_tag>
                                                     <onafterselect>
-                                                        <content_using_workbench target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content_using_workbench" targetcluster="content_using_workbench">
-                                                            <cluster>
+                                                        <content_using_workbench target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="content_using_workbench" targetcluster="content_using_workbench">
+                                                            <appViewport>
                                                                 <xobj style="29">
                                                                     <xobj objid="nucleus" caption="Using Eclipse Workbench"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                                                                 </xobj>
-                                                            </cluster>
+                                                            </appViewport>
                                                         </content_using_workbench>
                                                     </onafterselect>
                                                 </node_workbench_tag>
                                                 <node_swt treenode="true" text="使用SWT"></node_swt>
                                                 <node_swt_tag>
                                                     <OnAfterSelect>
-                                                        <content_using_swt target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content_using_swt">
-                                                            <cluster>
+                                                        <content_using_swt target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="content_using_swt">
+                                                            <appViewport>
                                                                 <xobj style="18">
                                                                     <xobj objid="nucleus" caption="Using java swt"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                                                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                                                                 </xobj>
-                                                            </cluster>
+                                                            </appViewport>
                                                         </content_using_swt>
                                                     </OnAfterSelect>
                                                 </node_swt_tag>
                                             </openeclipseruntime>
                                             <openeclipseruntime_tag>
                                                 <onafterselect>
-                                                    <content_cer target="mainClient" cluster="__viewport_default__" galaxy="webviewport" content="content_cer">
-                                                        <cluster>
+                                                    <content_cer target="mainClient" appViewport="__viewport_default__" galaxy="webviewport" content="content_cer">
+                                                        <appViewport>
                                                             <xobj objid="nucleus"></xobj>
-                                                        </cluster>
+                                                        </appViewport>
                                                     </content_cer>
                                                 </onafterselect>
                                             </openeclipseruntime_tag>
@@ -952,26 +952,26 @@
                                     <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                 </xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </default>
                     <sunnymdiforms_mdichild_1>
-                        <cluster>
+                        <appViewport>
                             <xobj id='properties' rows='2' cols='1' masterrow="0" mastercol="0" width='300,200,' height='300,250,' middlecolor='RGB(255,224,192)'>
                                 <xobj id="mainworkclient"></xobj>
                                 <xobj id=''></xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </sunnymdiforms_mdichild_1>
                     <sunnymdiforms_mdichild_2>
-                        <cluster>
+                        <appViewport>
                             <xobj id='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                 <xobj id=''></xobj>
                                 <xobj id="mainworkclient"></xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </sunnymdiforms_mdichild_2>
                     <sunnymdiforms_mdichild_3>
-                        <cluster>
+                        <appViewport>
                             <xobj id='properties' rows='1' cols='2' width='300,200,' middlecolor='RGB(255,224,192)'>
                                 <xobj id="mainworkclient"></xobj>
                                 <xobj id="tangramtabctrl" style="18">
@@ -989,7 +989,7 @@
                                     </xobj>
                                 </xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </sunnymdiforms_mdichild_3>
                 </mdiclient>
                 <mdichild>
@@ -1002,18 +1002,18 @@
                         极大的弹性。点击这里，您将看到第一个基于Web技术的WinForm MDI子窗体……
                         <mainpanel>
                             <default>
-                                <cluster>
+                                <appViewport>
                                     <xobj id="tangramtabctrl" style="19">
                                         <xobj id='splitter' rows='1' cols='2' height='250,' width='400,100,' caption="Tangram Solution for sunnymdiforms">
                                             <xobj id="mfc" objid='nucleus'></xobj>
                                             <xobj id="eclipse"></xobj>
                                         </xobj>
                                     </xobj>
-                                </cluster>
+                                </appViewport>
                             </default>
                         </mainpanel>
                         <webui>
-                            <cluster>
+                            <appViewport>
                                 <xobj id="tangramtabctrl" style="27" activepage="1">
                                     <xobj id="" caption="sunnymdiforms_mdichild_1" objid=""></xobj>
                                     <xobj id='properties' caption="MDIClient for Universe" rows='1' cols='2' masterrow="0" mastercol="0" width='600,400,' height='300,250,' middlecolor='RGB(255,224,192)'>
@@ -1022,7 +1022,7 @@
                                     </xobj>
                                     <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </webui>
                     </sunnymdiforms_mdichild_1>
                     <sunnymdiforms_mdichild_2 objid="sunnymdiforms.Form2,SunnyMDIForms" caption="test child form2">
@@ -1030,18 +1030,18 @@
                         不用说，这个设计是前所未有的，按照这个思路，更多的窗体类型可以以此类推的展开
                         <mainpanel>
                             <default>
-                                <cluster>
+                                <appViewport>
                                     <xobj id="tangramtabctrl" style="19">
                                         <xobj id='splitter' rows='1' cols='2' height='250,' width='400,100,' caption="Tangram Solution for sunnymdiforms">
                                             <xobj id="mfc" caption="Tangram for sunnymdiforms_mdichild_1"></xobj>
                                             <xobj id="eclipse" caption="Tangram for Eclipse" objid='nucleus'></xobj>
                                         </xobj>
                                     </xobj>
-                                </cluster>
+                                </appViewport>
                             </default>
                         </mainpanel>
                         <webui>
-                            <cluster>
+                            <appViewport>
                                 <xobj style="5" activepage="1" xobjtype="tabctrl" objid="host" location="3">
                                     <xobj id="winform" caption="sunnymdiforms_mdichild_2" objid=""></xobj>
                                     <xobj id='properties' caption="MDIClient for Universe" rows='2' cols='1' masterrow="0" mastercol="0" width='600,400,' height='300,250,' middlecolor='RGB(255,224,192)'>
@@ -1050,7 +1050,7 @@
                                     </xobj>
                                     <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </webui>
                     </sunnymdiforms_mdichild_2>
                     <sunnymdiforms_mdichild_3 objid="sunnymdiforms.Form3,SunnyMDIForms" caption="test child mdi form 3">
@@ -1060,7 +1060,7 @@
                         点击这里，看一下与众不同的The Universe会给您带来什么……
                         <mainpanel>
                             <default>
-                                <cluster>
+                                <appViewport>
                                     <xobj id='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                         <xobj id='tangramtabctrl_Page2' objid='nucleus'></xobj>
                                         <xobj id="tangramtabctrl" style="19">
@@ -1069,11 +1069,11 @@
                                             <xobj id="eclipse" caption="Tangram for Eclipse"></xobj>
                                         </xobj>
                                     </xobj>
-                                </cluster>
+                                </appViewport>
                             </default>
                         </mainpanel>
                         <webui>
-                            <cluster>
+                            <appViewport>
                                 <xobj id="tangramtabctrl" style="29" activepage="1">
                                     <xobj id="winform" caption="sunnymdiforms_mdichild_3"></xobj>
                                     <xobj id='MDIClientforUniverse' caption="MDIClient for Universe" rows='1' cols='2' masterrow="0" mastercol="0" width='600,400,' height='300,250,' middlecolor='RGB(255,224,192)'>
@@ -1082,7 +1082,7 @@
                                     </xobj>
                                     <xobj id="eclipse" caption="zzzzzzzz"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </webui>
                     </sunnymdiforms_mdichild_3>
                 </mdichild>
@@ -1090,12 +1090,12 @@
             <gridTemplate type="winform" objid="sunnymdiforms.Form1,SunnyMDIForms" uikey="form1" caption="test child form1" id="testform">
                 <mainpanel>
                     <default>
-                        <cluster>
+                        <appViewport>
                             <xobj id='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                 <xobj id='tangramtabctrl_Page2' objid='nucleus'></xobj>
                                 <xobj id='test1'></xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </default>
                 </mainpanel>
                 <panel1 id="test3">
@@ -1103,57 +1103,57 @@
                 <treeView1>
                     <treeview1_onafterselect>
                         <maincontent target="test1">
-                            <cluster>
+                            <appViewport>
                                 <xobj id='properties' rows='2' cols='1' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                     <xobj id='tangramtabctrl_Page2' objid='nucleus'></xobj>
                                     <xobj id='test1'></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </maincontent>
                         <maincontent target="test3">
-                            <cluster>
+                            <appViewport>
                                 <xobj id="Start_S0001" style="19">
                                     <xobj id="Page3" caption="Create your own NTP Page" objid="sunnymdiforms.UserControl1,SunnyMDIForms"></xobj>
                                     <xobj id="Page4" caption="Customize your own WebBrowser"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </maincontent>
                         <maincontent target="hostclient">
-                            <cluster>
+                            <appViewport>
                                 <xobj id="Start_S0001" style="39">
                                     <xobj id="Page1" caption="xxxxxxx" objid="nucleus"></xobj>
                                     <xobj id="Page2" caption="yyy"></xobj>
                                     <xobj id="Page3" caption="Create your own NTP Page"></xobj>
                                     <xobj id="Page4" caption="Customize your own WebBrowser"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </maincontent>
                         <sunnymdiforms target="test1">
-                            <cluster>
+                            <appViewport>
                                 <xobj id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                     <xobj id='tangramtabctrl_Page2' objid='nucleus'></xobj>
                                     <xobj id='test1'></xobj>
                                     <xobj id='test2'></xobj>
                                     <xobj id='test3'></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </sunnymdiforms>
                         <sunnymdiforms target="test3">
-                            <cluster>
+                            <appViewport>
                                 <xobj id="Start_S0001" style="17">
                                     <xobj id="Page3" caption="sunnymdiforms Page"></xobj>
                                     <xobj id="Page4" caption="sunnymdiforms Page2"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </sunnymdiforms>
                         <sunnymdiforms target="hostclient">
-                            <cluster>
+                            <appViewport>
                                 <xobj id="Start_S0001" style="18">
                                     <xobj id="Page1" caption="111111" objid="nucleus"></xobj>
                                     <xobj id="Page2" caption="222222"></xobj>
                                     <xobj id="Page3" caption="33333 your own NTP Page"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </sunnymdiforms>
                     </treeview1_onafterselect>
                     <treeview1_onnodemousedoubleclick></treeview1_onnodemousedoubleclick>
@@ -1205,12 +1205,12 @@
                         </Samples>
                     </uidata>
                     <default>
-                        <cluster>
+                        <appViewport>
                             <xobj id='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                 <xobj id='tangramtabctrl_Page2' objid='nucleus'></xobj>
                                 <xobj id='test1'></xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </default>
                 </treeView1>
             </gridTemplate>
@@ -1219,21 +1219,21 @@
                 </button1>
                 <listview1 id="test1">
                     <default>
-                        <cluster>
+                        <appViewport>
                             <xobj id='properties' rows='1' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                                 <xobj id='tangramtabctrl_Page2' objid='nucleus'></xobj>
                                 <xobj id='test1'></xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </default>
                 </listview1>
             </gridTemplate>
         </ui>
         <webViewport>
-            <cluster>
+            <appViewport>
                 <xobj objid="nucleus" id="mainClient">
                 </xobj>
-            </cluster>
+            </appViewport>
         </webViewport>
     </cosmos>
     <div class="contents">
@@ -1356,14 +1356,14 @@
                                         <button style="font-size: 16px; font-weight:bold; color:chocolate" onclick="cosmos.OnMessage(this, 'OnClick')" id="DynLayoutBtn">
                                             动态布局二
                                             <yyyyyy>
-                                                <btn target="mainClient" cluster="__viewport_default__" galaxy="default" content="content_using_browser" targetcluster="content_using_browser">
-                                                    <cluster>
+                                                <btn target="mainClient" appViewport="__viewport_default__" galaxy="default" content="content_using_browser" targetcluster="content_using_browser">
+                                                    <appViewport>
                                                         <xobj style="18">
                                                             <xobj objid="nucleus" caption="test button onclick"></xobj>
                                                             <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                                                             <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                                                         </xobj>
-                                                    </cluster>
+                                                    </appViewport>
                                                 </btn>
                                             </yyyyyy>
                                         </button>
@@ -1451,7 +1451,7 @@
                     这里给出一个3行3列的网格结构对应的DOM描述，具体请参考Sunny.index.html
                     <xmp style="font-size:28px; color:red">
                         <content_grid target="mainClient">
-                            <cluster>
+                            <appViewport>
                                 <xobj rows="3" cols="3" width="150,100,100" height="200,180,100">
                                     <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
@@ -1463,7 +1463,7 @@
                                     <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
                                     <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                 </xobj>
-                            </cluster>
+                            </appViewport>
                         </content_grid>
                     </xmp>
                 </b>
@@ -1526,13 +1526,13 @@
                                         在Web页面上或者XML中，可以按照如下方式描述一个标签(选项卡)：
                                         <xmp style=" font-size: 10px; font-weight: 900; color: blue">
                                             <tabgrid target="mainClient">
-                                                <cluster>
+                                                <appViewport>
                                                     <xobj style="23">
                                                         <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
                                                         <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                                         <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                                     </xobj>
-                                                </cluster>
+                                                </appViewport>
                                             </tabgrid>
                                         </xmp>
                                     </p>
@@ -1546,13 +1546,13 @@
                                         在Web页面上或者XML中，可以按照如下方式描述一个Tabbed Grid：
                                         <xmp style=" font-size: 10px; font-weight: 900; color: blue">
                                             <tabgrid target="mainClient">
-                                                <cluster>
+                                                <appViewport>
                                                     <xobj style="19">
                                                         <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
                                                         <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                                         <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                                     </xobj>
-                                                </cluster>
+                                                </appViewport>
                                             </tabgrid>
                                         </xmp>
                                     </p>
@@ -1566,13 +1566,13 @@
                                         在Web页面上或者XML中，可以按照如下方式描述一个标签结构：
                                         <xmp style=" font-size: 10px; font-weight: 900; color: blue">
                                             <tabgrid target="mainClient">
-                                                <cluster>
+                                                <appViewport>
                                                     <xobj style="18">
                                                         <xobj caption="Introduction to Tabbed Grid" objid="nucleus"></xobj>
                                                         <xobj caption="Second Page" objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                                                         <xobj caption="Third Page" objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                                                     </xobj>
-                                                </cluster>
+                                                </appViewport>
                                             </tabgrid>
                                         </xmp>
                                     </p>
@@ -1589,7 +1589,7 @@
                 中如何表达一个“三级复合”网格的DOM结构：
                 <xmp style=" font-size: 24px; font-weight: 900; color: blue">
                     <compositegrid target="mainClient">
-                        <cluster>
+                        <appViewport>
                             <xobj style="23">
                                 <xobj caption="Start Page" rows="3" cols="3" width="150,100,100" height="200,180,100">
                                     <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -1609,7 +1609,7 @@
                                 <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                                 <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                             </xobj>
-                        </cluster>
+                        </appViewport>
                     </compositegrid>
                 </xmp>
             </p>
@@ -1773,13 +1773,13 @@
         <article class="hidden content_using_winform markdown-body">
             <p style="font-size:40px; color:darkgreen">Web页面中使用<strong><i style="font-size:40px; color:fuchsia">WinForm </i>窗口</strong></p>
             <content_using_winform target="mainClient">
-                <cluster>
+                <appViewport>
                     <xobj style="29">
                         <xobj objid="nucleus" caption="Using Window Form"></xobj>
                         <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                     </xobj>
-                </cluster>
+                </appViewport>
             </content_using_winform>
             <button style="font-size:32px; font-weight: 900; color:darkgreen" onclick="OnCreate_Form1_SunnyForms2()">Form App 1</button>
             <button style="font-size:32px; font-weight: 900; color:darkgreen" onclick="OnCreate_Form2_SunnyForms2()">Form App 2</button>

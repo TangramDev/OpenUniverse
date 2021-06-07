@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008           *
+ *           Web Runtime for Application - Version 1.0.1.202106070010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -553,18 +553,18 @@ namespace blink {
 						}
 						else {
 							AtomicString galaxy = elem->getAttribute("galaxy");
-							AtomicString cluster = elem->getAttribute("cluster");
+							AtomicString appViewport = elem->getAttribute("appViewport");
 							if (galaxy == "")
 								galaxy = "default";
-							if (cluster == "")
-								cluster = "__viewport_default__";
+							if (appViewport == "")
+								appViewport = "__viewport_default__";
 
-							xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
+							xobjfortarget = cosmos_->getXobj(galaxy, appViewport, target);
 							if (xobjfortarget == nullptr) {
 								CosmosWinform* form = thisXobj->parentForm();
 								if (form)
 								{
-									xobjfortarget = form->getXobj(galaxy, cluster, target);
+									xobjfortarget = form->getXobj(galaxy, appViewport, target);
 								}
 							}
 						}
@@ -604,23 +604,23 @@ namespace blink {
 							target = elem->getAttribute("target");
 							if (target != "") {
 								AtomicString galaxy = elem->getAttribute("galaxy");
-								AtomicString cluster = elem->getAttribute("cluster");
+								AtomicString appViewport = elem->getAttribute("appViewport");
 								if (galaxy == "")
 									galaxy = "default";
-								if (cluster == "")
-									cluster = "__viewport_default__";
+								if (appViewport == "")
+									appViewport = "__viewport_default__";
 
-								CosmosNode* xobjfortarget = cosmos_->getXobj(galaxy, cluster, target);
+								CosmosNode* xobjfortarget = cosmos_->getXobj(galaxy, appViewport, target);
 								if (xobjfortarget == nullptr)
 								{
 									CosmosNode* thisXobj = grid();
 									if (thisXobj && thisXobj->m_pParentForm)
-										xobjfortarget = thisXobj->m_pParentForm->getXobj(galaxy, cluster, target);
+										xobjfortarget = thisXobj->m_pParentForm->getXobj(galaxy, appViewport, target);
 									else
 									{
 										CosmosWinform* form_ = form();
 										if (form_)
-											xobjfortarget = form_->getXobj(galaxy, cluster, target);
+											xobjfortarget = form_->getXobj(galaxy, appViewport, target);
 									}
 								}
 								if (!!xobjfortarget) {
@@ -643,9 +643,9 @@ namespace blink {
 		//        if (elem.nodeType == 1) {
 		//           var target = elem.getAttribute("target");
 		//           var galaxy = elem.getAttribute("galaxy");
-		//           var cluster = elem.getAttribute("cluster");
-		//            if (!!target && !!galaxy && !!cluster) {
-		//                var xobjfortarget = apppage.getXobj(galaxy, cluster, target);
+		//           var appViewport = elem.getAttribute("appViewport");
+		//            if (!!target && !!galaxy && !!appViewport) {
+		//                var xobjfortarget = apppage.getXobj(galaxy, appViewport, target);
 		//                if (!!xobjfortarget) {
 		//                    xobjfortarget.workElement = elem;
 		//                    xobjfortarget.msgID = e.id + "_OnClick";

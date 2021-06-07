@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008           *
+ *           Web Runtime for Application - Version 1.0.1.202106070010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  *
@@ -193,7 +193,7 @@ CCosmos::CCosmos()
 	m_pHostHtmlWnd = nullptr;
 	m_pHtmlWndCreated = nullptr;
 	m_strAppXml = _T("");
-	m_strDefaultXml = _T("<default><cluster><xobj name=\"tangram\" gridtype=\"nucleus\"/></cluster></default>");
+	m_strDefaultXml = _T("<default><appViewport><xobj name=\"tangram\" gridtype=\"nucleus\"/></appViewport></default>");
 	m_nRef = 4;
 	m_nAppID = -1;
 	m_nAppType = 0;
@@ -1301,7 +1301,7 @@ IGalaxy* CCosmos::ConnectGalaxyCluster(HWND hGalaxy, CString _strGalaxyName, IGa
 		IXobj* pXobj = nullptr;
 		CString str = _T("");
 		CString strKey = _T("default");
-		str.Format(_T("<%s><cluster><xobj name='%s' /></cluster></%s>"), strKey, _strGalaxyName, strKey);
+		str.Format(_T("<%s><appViewport><xobj name='%s' /></appViewport></%s>"), strKey, _strGalaxyName, strKey);
 		pGalaxy->Observe(CComBSTR(strKey), CComBSTR(_pGalaxy->m_strCurrentXml), &pXobj);
 		if (pXobj)
 		{
@@ -1389,7 +1389,7 @@ IXobj* CCosmos::ObserveCtrl(__int64 handle, CString name, CString NodeTag)
 		strPath += NodeTag + _T(".nodexml");
 		if (::PathFileExists(strPath) == false)
 		{
-			CString strXml = _T("<nodexml><cluster><xobj name='StartNode' /></cluster></nodexml>");
+			CString strXml = _T("<nodexml><appViewport><xobj name='StartNode' /></appViewport></nodexml>");
 			CTangramXmlParse m_Parse;
 			m_Parse.LoadXml(strXml);
 			m_Parse.SaveFile(strPath);

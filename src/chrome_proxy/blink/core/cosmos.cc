@@ -1,5 +1,5 @@
 ﻿/********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008           *
+ *           Web Runtime for Application - Version 1.0.1.202106070010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -681,7 +681,7 @@ namespace blink {
 		CosmosWinform* parentform = nullptr;
 		CosmosWinform* parentmdiform = nullptr;
 		String strGalaxyname = xobj->getStr(L"galaxy");
-		String strClustername = xobj->getStr(L"cluster");;
+		String strClustername = xobj->getStr(L"appViewport");;
 		String strname = xobj->getStr(L"name@page");
 		m_mapCosmosNode.insert(handle, node);
 
@@ -976,17 +976,17 @@ namespace blink {
 			if (pNode->getNodeType() == 1) {
 				AtomicString target = elem->getAttribute("target");
 				AtomicString galaxy = elem->getAttribute("galaxy");
-				AtomicString cluster = elem->getAttribute("cluster");
+				AtomicString appViewport = elem->getAttribute("appViewport");
 				if (galaxy == "" || galaxy.IsNull() == true)
 					galaxy = "default";
-				if (cluster == "" || cluster.IsNull() == true)
-					cluster = "__viewport_default__";
+				if (appViewport == "" || appViewport.IsNull() == true)
+					appViewport = "__viewport_default__";
 				if (target.IsNull() == true || target == "")
 				{
 					auto it = m_mapCosmosGalaxy2.find(WebString(galaxy).Utf16());
 					if (it != m_mapCosmosGalaxy2.end())
 					{
-						auto it2 = it->second->m_mapRootNode.find(WebString(cluster).Utf16());
+						auto it2 = it->second->m_mapRootNode.find(WebString(appViewport).Utf16());
 						if (it2 != it->second->m_mapRootNode.end())
 							return it2->second;
 						return nullptr;
@@ -994,7 +994,7 @@ namespace blink {
 				}
 				else
 				{
-					CosmosNode* xobjfortarget = getXobj(galaxy, cluster, target);
+					CosmosNode* xobjfortarget = getXobj(galaxy, appViewport, target);
 					if (xobjfortarget == nullptr && grid)
 					{
 						CosmosWinform* form = grid->form();
@@ -1004,10 +1004,10 @@ namespace blink {
 						}
 						if (form)
 						{
-							xobjfortarget = form->getXobj(galaxy, cluster, target);
+							xobjfortarget = form->getXobj(galaxy, appViewport, target);
 							if (xobjfortarget == nullptr && form->mdiParent())
 							{
-								xobjfortarget = form->mdiParent()->getXobj(galaxy, cluster, target);
+								xobjfortarget = form->mdiParent()->getXobj(galaxy, appViewport, target);
 							}
 						}
 					}

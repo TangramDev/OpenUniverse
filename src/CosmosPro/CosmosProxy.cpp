@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008
+ *           Web Runtime for Application - Version 1.0.1.202106070010
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -1340,7 +1340,7 @@ HRESULT CCosmosProxy::ActiveCLRMethod(IDispatch* pCLRObj, BSTR bstrMethod, BSTR 
 	return S_OK;
 }
 
-IDispatch* CCosmosProxy::CreateCLRObjRemote(CString bstrObjID, HWND hHostWnd)
+IDispatch* CCosmosProxy::CreateCLRObjRemote(CString bstrObjID, CString strXmlData, HWND hHostWnd)
 {
 	if (bstrObjID.CompareNoCase(_T("chromert")) == 0)
 	{

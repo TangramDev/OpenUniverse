@@ -122,22 +122,22 @@
             <module libname="Sunny.exe" objname="Sunny.WebDelegate" functionname="Init"></module>
         </modules>
         <ntp>
-            <cluster> 
+            <appViewport> 
                 <xobj id='grid' rows='1' cols='2' width='350,350,' splitterwidth='6'>
                     <xobj objid="nucleus"></xobj>
                     <xobj objid="Sunny.ntpctrl,Sunny"></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </ntp>
         <defaultworkbench>
-            <cluster> 
+            <appViewport> 
                 <xobj style="18">
                     <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
                     <xobj id='test1 x' caption='Page 2' url="https://www.csdn.net|https://www.tangram.dev"></xobj>
                     <xobj id='test2 y' caption='Page 3'></xobj>
                     <xobj id='test3 z' caption='Page 4'></xobj>
                 </xobj>
-            </cluster> 
+            </appViewport> 
         </defaultworkbench>
         <urls><url url="https://www.tangram.dev"></url></urls>
     </application>
@@ -146,7 +146,7 @@
     <mainWindow objid="Sunny.form1,Sunny" caption="My Windows Forms App" width="1200" height="800">
         <mainclient id="mainworkclient">
             <default>
-                <cluster> 
+                <appViewport> 
                     <xobj style="39" activepage="1">
                         <xobj caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <xobj objid="nucleus"></xobj>
@@ -154,12 +154,12 @@
                         </xobj>
                         <xobj caption="Virtual Web Browser Engine for Application" url="host"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </default>
         </mainclient>
         <panel1 id="mainworkclient">
             <default>
-                <cluster> 
+                <appViewport> 
                     <xobj style="39" activepage="1">
                         <xobj caption="Cloud Application" id='grid' rows='1' cols='2' height='250,' width='350,350,' borderwidth='0' splitterwidth='6'>
                             <xobj objid="nucleus"></xobj>
@@ -167,7 +167,7 @@
                         </xobj>
                         <xobj caption="Virtual Web Browser Engine for Application" url="host"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </default>
         </panel1>
     </mainWindow>
@@ -191,31 +191,31 @@
         </treeView1>
     </gridTemplate>
     <webViewport>
-        <cluster> 
+        <appViewport> 
             <xobj rows="1" cols="2" width="350,100,">
                 <xobj objid="navDetails" id="navCtrl"></xobj>
                 <xobj objid="nucleus" id="mainClient"></xobj>
             </xobj>
-        </cluster> 
+        </appViewport> 
     </webViewport>
 
     <form1 id="mainwindow_1">
-        <cluster> 
+        <appViewport> 
             <xobj id='properties' rows='2' cols='2' height='300,250,100,' width='300,200,100,' middlecolor='RGB(255,224,192)'>
                 <xobj id='tangramtabctrl_Page2' objid="nucleus" caption=''></xobj>
                 <xobj id='test1'></xobj>
             </xobj>
-        </cluster> 
+        </appViewport> 
     </form1>
     <form id="mainwindow_2">
-        <cluster> 
+        <appViewport> 
             <xobj style="18">
                 <xobj id='tangramtabctrl_Page2' objid="nucleus" caption='Page 1'></xobj>
                 <xobj id='test1' caption='Page 2'></xobj>
                 <xobj id='test2' caption='Page 3'></xobj>
                 <xobj id='test3' caption='Page 4'></xobj>
             </xobj>
-        </cluster> 
+        </appViewport> 
     </form>
 
     <div class="contents">
@@ -224,32 +224,32 @@
             <p>Virtual Web Browser Engine for Application is a software runtime service that enables developers to organize software in the form of Web pages, it extends Java, COM, .NET, Win32 components into DOM elements of Web pages, allowing developers to develop application-oriented-web-page, each specific function of the application software is embodied in one or a group of application-oriented-web-pages, consumers can access each specific application function by accessing the URL.</p>
             <p>This is a New and Dynamic Desktop Software World where you can combine most of the existing component frameworks, such as .NET, Java, COM, C++, Web and Office etc. ...</p>
             <content target="mainClient">
-                <cluster> 
+                <appViewport> 
                     <xobj style="39">
                         <xobj caption="Virtual Web Browser Engine for Application" objid="nucleus"></xobj>
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Customize your own WebBrowser"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </content>
         </article>
         <article class="hidden content1 markdown-body">
             <h1>New Web, New Application World!</h1>
             <p>Virtual Web Browser Engine for Application constructs a new mixed world of native UI elements and web elements. In this world, a new web page is defined. While taking into account the standard web page, the ability to use native components as DOM elements is added ...</p>
             <content1 target="mainClient">
-                <cluster> 
+                <appViewport> 
                     <xobj style="18">
                         <xobj caption="The mixed world of web and native UI" objid="nucleus"></xobj>
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></xobj>
                         <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </content1>
         </article>
         <article class="hidden content2 markdown-body">
             <h1>About Grid grid</h1>
             <p>Grid grid refers to a grid structure with m rows and n columns. As a container grid, each child grid can carry a specific programmable object ...</p>
             <content2 target="mainClient">
-                <cluster> 
+                <appViewport> 
                     <xobj rows="3" cols="3" width="150,100,50" height="200,180,50">
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
@@ -261,14 +261,14 @@
                         <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl"></xobj>
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </content2>
         </article>
         <article class="hidden content3 markdown-body">
             <h1>Nested Grid grid</h1>
             <p>Nested Grid means that a Grid can be a child grid of another Grid. We allow nested structures to mean that developers can use "lines" to plan the layout of a rectangular structure ... ...</p>
             <content3 target="mainClient">
-                <cluster> 
+                <appViewport> 
                     <xobj rows="1" cols="2" width="200,100,">
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                         <xobj caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
@@ -283,27 +283,27 @@
                             <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl"></xobj>
                         </xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </content3>
         </article>
         <article class="hidden content4 markdown-body">
             <h1>Tabbed grid</h1>
             <p>A Tabbed grid is a container grid which include a group of titled “tab structures". A tabbed grid with n tabs is equivalent to a "1 row and n columns" Grid ...</p>
             <content4 target="mainClient">
-                <cluster> 
+                <appViewport> 
                     <xobj style="23">
                         <xobj caption="Introduction to Tabbed grid" objid="nucleus"></xobj>
                         <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl" caption="Second Page"></xobj>
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </content4>
         </article>
         <article class="hidden content5 markdown-body">
             <h1>Compound grid: Tabbed grid with a Grid grid as a Child grid</h1>
             <p>Compound grid refers to the "composite structure" formed by various container nodes. We allow Tabbed grid and Grid grid to "composite nest" so that developers can implement a more comprehensive UI layout ...</p>
             <content5 target="mainClient">
-                <cluster> 
+                <appViewport> 
                     <xobj style="23">
                         <xobj caption="Nested grid" rows="3" cols="3" width="150,100,150" height="200,180,150">
                             <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -319,14 +319,14 @@
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Second Page"></xobj>
                         <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Third Page"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </content5>
         </article>
         <article class="hidden content6 markdown-body">
             <h1>More complex compound grid</h1>
             <p>What is shown here is a three times composite page structure. Because the "tab structure" can have various "styles", each specific sub grid can carry various programmable objects, based on this, a comprehensive page structure can be formed. Thanks to the flexible and powerful description mechanism of HTML, so that the web page can present a page with dual advantages of native-web application...</p>
             <content6 target="mainClient">
-                <cluster> 
+                <appViewport> 
                     <xobj style="23">
                         <xobj caption="Start Page" rows="3" cols="3" width="150,100,150" height="200,180,150">
                             <xobj objid="SunnyCtrl.UserControl1,SunnyCtrl"></xobj>
@@ -346,7 +346,7 @@
                         <xobj objid="SunnyCtrl.UserControl3,SunnyCtrl" caption="Second Page"></xobj>
                         <xobj objid="SunnyCtrl.UserControl2,SunnyCtrl" caption="Third Page"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </content6>
         </article>
     </div>

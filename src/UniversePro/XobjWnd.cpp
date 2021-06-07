@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008           *
+ *           Web Runtime for Application - Version 1.0.1.202106070010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -230,11 +230,11 @@ int CXobjWnd::OnMouseActivate(CWnd* pDesktopWnd, UINT nHitTest, UINT message)
 			pIPCInfo.m_strId = IPC_NODE_ONMOUSEACTIVATE_ID;
 			pIPCInfo.m_strParam1 = strID;
 			CString strHandle = _T("");
-			strHandle.Format(_T("%d"), m_hWnd);
+			strHandle.Format(_T("%I64d"), (__int64)m_hWnd);
 			pIPCInfo.m_strParam2 = strHandle;
 			strHandle.Format(_T("%d"), m_pXobj->m_nViewType);
 			pIPCInfo.m_strParam3 = strHandle;
-			strHandle.Format(_T("%d"), pGalaxy->m_hWnd);
+			strHandle.Format(_T("%I64d"), (__int64)pGalaxy->m_hWnd);
 			pIPCInfo.m_strParam4 = strHandle;
 			//strHandle.Format(_T("%d"), m_pRootObj->m_pHostWnd->m_hWnd);
 			pIPCInfo.m_strParam5 = _T("wndnode");
@@ -737,7 +737,7 @@ LRESULT CBKWnd::OnMdiClientCreated(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		IGalaxy* pGalaxy = nullptr;
 		pGalaxyCluster->CreateGalaxy(CComVariant(0), CComVariant((LONGLONG)m_hChild), CComBSTR(L"ClientFrame"), &pGalaxy);
 		CString strXml = _T("");
-		strXml.Format(_T("<mdiclient><cluster><xobj name=\"mdiclient\" gridtype=\"activex\" objid=\"%s\" /></cluster></mdiclient>"), m_strURL);
+		strXml.Format(_T("<mdiclient><appViewport><xobj name=\"mdiclient\" gridtype=\"activex\" objid=\"%s\" /></appViewport></mdiclient>"), m_strURL);
 		IXobj* pXobj = nullptr;
 		pGalaxy->Observe(CComBSTR(L"default"), strXml.AllocSysString(), &pXobj);
 		m_pGalaxy = (CGalaxy*)pGalaxy;

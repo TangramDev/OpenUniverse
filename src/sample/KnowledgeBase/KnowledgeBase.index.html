@@ -85,9 +85,9 @@
     <mainwindow objid="KnowledgeBase.Form1,KnowledgeBase" width="1200" height="800">
         <panel1>
             <default>
-                <cluster> 
+                <appViewport> 
                     <xobj url="host"></xobj>
-                </cluster> 
+                </appViewport> 
             </default>
         </panel1>
     </mainwindow>
@@ -117,12 +117,12 @@
         </treeView1>
     </gridTemplate>
     <webviewport>
-        <cluster> 
+        <appViewport> 
             <xobj rows="1" cols="2" width="400,400,">
                 <xobj objid="navcontrol" id="navcontrol"></xobj>
                 <xobj objid="nucleus" id="main"></xobj>
             </xobj>
-        </cluster> 
+        </appViewport> 
     </webviewport>
     <div class="contents">
         <div class="show index markdown-body">
@@ -137,12 +137,12 @@
                 <li><a href="javascript:;" data-label-text="We recommend using the latest version of Visual Studio and Windows. (Now Visual Studio 2019 and Windows 10)" onclick="system_requirements_extra(this);">Windows 7 or newer.</a></li>
             </ul>
             <native>
-                <cluster> 
+                <appViewport> 
                     <xobj rows="2" cols="1" height="400,400,">
                         <xobj objid="nucleus"></xobj>
                         <xobj id="system_requirements_extra" objid="KnowledgeBase.SystemRequirementsExtra,KnowledgeBase"></xobj>
                     </xobj>
-                </cluster> 
+                </appViewport> 
             </native>
         </div>
         <div class="hidden setting_up_windows markdown-body">

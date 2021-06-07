@@ -1,5 +1,5 @@
 /********************************************************************************
- *           Web Runtime for Application - Version 1.0.1.202105260008           *
+ *           Web Runtime for Application - Version 1.0.1.202106070010           *
  ********************************************************************************
  * Copyright (C) 2002-2021 by Tangram Team.   All Rights Reserved.
  * There are Three Key Features of Webruntime:
@@ -299,7 +299,7 @@ namespace Browser {
 							pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName = strName;
 					}
 					pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
-					pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
+					pSession->InsertString(_T("appViewport"), pXobj->m_pRootObj->m_strKey);
 					pSession->Insertint64(_T("rootgridhandle"), (__int64)pXobj->m_pRootObj->m_pHostWnd->m_hWnd);
 					pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pWormhole);
 					if (pXobj->m_pXobjShareData->m_pHostClientView)
@@ -2217,7 +2217,7 @@ namespace Browser {
 											pSession->Insertint64(_T("xobj"), (__int64)(IXobj*)pXobj);
 											pSession->Insertint64(_T("Galaxyhandle"), (__int64)pXobj->m_pXobjShareData->m_pGalaxy->m_hWnd);
 											pSession->InsertString(_T("galaxy"), pXobj->m_pXobjShareData->m_pGalaxy->m_strGalaxyName);
-											pSession->InsertString(_T("cluster"), pXobj->m_pRootObj->m_strKey);
+											pSession->InsertString(_T("appViewport"), pXobj->m_pRootObj->m_strKey);
 											pSession->Insertint64(_T("rootgridhandle"), (__int64)pXobj->m_pRootObj->m_pHostWnd->m_hWnd);
 											pSession->Insertint64(_T("domhandle"), (__int64)pXobj->m_pWormhole);
 											pSession->InsertString(_T("objID"), _T("wndnode"));
